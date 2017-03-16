@@ -22,6 +22,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
             context: [<% if (authenticationType === 'oauth2') { %>
                 '/oauth',<% } %><% if (authenticationType === 'uaa') { %>
                 '/uaa',<% } %>
+                <!-- jhipster-needle-add-entity-to-webpack - JHipster will add entity api paths here -->
                 '/api',
                 '/management',
                 '/swagger-resources',

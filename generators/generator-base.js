@@ -19,6 +19,7 @@ const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
+const CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
@@ -102,6 +103,25 @@ module.exports = class extends Generator {
         } catch (e) {
             this.log(`${chalk.yellow('\nUnable to find ') + navbarAdminPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName} ${chalk.yellow('not added to admin menu.\n')}`);
         }
+    }
+
+    /**
+     * Add a new entity route path to webpacks config
+     *
+     * @param {string} microserviceName - The name of the microservice to put into the url
+     * @param {string} clientFramework - The name of the client framework
+     */
+    addEntityToWebpack(microserviceName, clientFramework) {
+        if (clientFramework === 'angular1') {
+            return;
+        }
+
+        const webpackDevPath = `${CLIENT_WEBPACK_DIR}/webpack.dev.js`;
+        jhipsterUtils.rewriteFile({
+            file: webpackDevPath,
+            needle: 'jhipster-needle-add-entity-to-webpack',
+            splicable: [`'/${microserviceName.toLowerCase()}',`]
+        }, this);
     }
 
     /**
