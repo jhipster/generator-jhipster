@@ -112,7 +112,7 @@
         <npm.version><%= NPM_VERSION %></npm.version>
         <%_ } _%>
         <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
-        <oracle.version>12.1.0.2.0</oracle.version>
+        <oracle.version>12.1.0.2</oracle.version>
         <%_ } _%>
         <%_ if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { _%>
         <postgresql.version>9.4.1212</postgresql.version>
