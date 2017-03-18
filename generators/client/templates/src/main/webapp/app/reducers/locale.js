@@ -1,6 +1,6 @@
 const SET_LOCALE = 'locale/SET_LOCALE';
 
-export default function reducer(state = { locale: 'en' }, action) {
+export default function reducer(state = { locale: '<%= nativeLanguage %>' }, action) {
   switch (action.type) {
     case SET_LOCALE:
       return {

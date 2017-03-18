@@ -8,14 +8,17 @@ const mergeTranslations = (requireContext) => {
   });
   return merged;
 };
+
 /* eslint-disable */
 const translations = {
-  en: mergeTranslations(require.context('i18n/en', false, /.json$/))
+<%_ languages.forEach((lang, index) => { _%>
+  <%= lang %>: mergeTranslations(require.context('i18n/<%= lang %>', false, /.json$/))<%= index !== languages.length - 1 ? ',' : '' %>
+<%_ }); _%>
 };
 /* eslint-enable */
 
 let currentLocale;
-const savedLocale = localStorage.getItem('locale') || 'en';
+const savedLocale = localStorage.getItem('locale') || '<%= nativeLanguage %>';
 
 export const locales = Object.keys(translations);
 
