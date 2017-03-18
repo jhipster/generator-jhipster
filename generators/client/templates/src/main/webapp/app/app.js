@@ -7,8 +7,8 @@ import { locales } from './config/translation';
 import appTheme from './config/theme';
 import { setLocale } from './reducers/locale';
 import { getSession, logout } from './reducers/authentication';
-import Header from './shared/components/header/Header';
-import Footer from './shared/components/footer/Footer';
+import Header from './shared/components/header/header';
+import Footer from './shared/components/footer/footer';
 
 import './app.scss';
 

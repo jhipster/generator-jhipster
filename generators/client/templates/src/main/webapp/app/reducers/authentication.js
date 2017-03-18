@@ -80,16 +80,52 @@ export function getSession() {
   };
 }
 
-
 export function clearAuthToken() {
-  if (localStorage.getItem('authenticationToken')) {
-    localStorage.removeItem('authenticationToken');
+  if (localStorage.getItem('jhi-authenticationToken')) {
+    localStorage.removeItem('jhi-authenticationToken');
   }
-  if (sessionStorage.getItem('authenticationToken')) {
-    sessionStorage.removeItem('authenticationToken');
+  if (sessionStorage.getItem('jhi-authenticationToken')) {
+    sessionStorage.removeItem('jhi-authenticationToken');
   }
 }
 
+<%_ if (authenticationType === 'oauth2') { _%>
+export function login(username, password, rememberMe = false) {
+  const data = `username=${encodeURIComponent(username)}&password=${
+      encodeURIComponent(password)}&grant_type=password&scope=read%20write&` +
+      'client_secret=my-secret-token-to-change-in-production&client_id=<%= baseName%>app';
+  const headers = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json',
+      'Authorization': 'Basic ' + this.base64.encode('<%= baseName%>app' + ':' + 'my-secret-token-to-change-in-production')
+  };
+
+  return {
+    types: [LOGIN, LOGIN_SUCCESS, LOGIN_FAIL],
+    promise: client => client.post('oauth/token', data, { headers: headers }),
+    afterSuccess: (dispatch, getState, response) => {
+      const expiredAt = new Date();
+      expiredAt.setSeconds(expiredAt.getSeconds() + response.expires_in);
+      response.expires_at = expiredAt.getTime();
+      localStorage.setItem('jhi-authenticationToken', response);
+      const routingState = getState().routing.locationBeforeTransitions.state || {};
+      browserHistory.push(routingState.nextPathname || '/#/');
+      dispatch(getSession());
+    }
+  };
+}
+
+export function logout() {
+  return {
+    types: [LOGOUT, LOGOUT_SUCCESS, LOGOUT_FAIL],
+    promise: client => client.post('/api/logout', {}),
+    afterSuccess: () => {
+      clearAuthToken();
+      browserHistory.push('/#/');
+    }
+  };
+}
+<%_ } else if (authenticationType === 'jwt') { _%>
 export function login(username, password, rememberMe = false) {
   return {
     types: [LOGIN, LOGIN_SUCCESS, LOGIN_FAIL],
@@ -99,9 +135,9 @@ export function login(username, password, rememberMe = false) {
       if (bearerToken && bearerToken.slice(0, 7) === 'Bearer ') {
         const jwt = bearerToken.slice(7, bearerToken.length);
         if (rememberMe) {
-          localStorage.setItem('authenticationToken', jwt);
+          localStorage.setItem('jhi-authenticationToken', jwt);
         } else {
-          sessionStorage.setItem('authenticationToken', jwt);
+          sessionStorage.setItem('jhi-authenticationToken', jwt);
         }
       }
       const routingState = getState().routing.locationBeforeTransitions.state || {};
@@ -121,6 +157,36 @@ export function logout() {
     }
   };
 }
+<%_ } else if (authenticationType === 'session') { _%>
+export function login(username, password, rememberMe = false) {
+  const data = `j_username=${encodeURIComponent(username)
+      }&j_password=${encodeURIComponent(password)
+      }&remember-me=${rememberMe}&submit=Login`;
+  const headers = {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  };
+  return {
+    types: [LOGIN, LOGIN_SUCCESS, LOGIN_FAIL],
+    promise: client => client.post('/api/authentication', data, { headers }),
+    afterSuccess: (dispatch, getState, response) => {
+      const routingState = getState().routing.locationBeforeTransitions.state || {};
+      browserHistory.push(routingState.nextPathname || '/#/');
+      dispatch(getSession());
+    }
+  };
+}
+
+export function logout() {
+  return {
+    types: [LOGOUT, LOGOUT_SUCCESS, LOGOUT_FAIL],
+    promise: client => client.post('/api/logout', {}),
+    afterSuccess: (dispatch, getState, response) => {
+      dispatch(getSession());
+      browserHistory.push('/#/');
+    }
+  };
+}
+<%_ } _%>
 
 export function redirectToLoginWithMessage(messageKey) {
   return (dispatch, getState) => {

@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+
 import { redirectToLoginWithMessage, getSession } from '../../../reducers/authentication';
 
 const mapStateToProps = state => ({
