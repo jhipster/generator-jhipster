@@ -18,9 +18,9 @@
 eureka:
     instance:
         appname: <%= baseName %>
-        instanceId: <%= baseName %>:${spring.application.instance_id:${random.value}}
-        statusPageUrlPath: ${management.context-path}/info
-        healthCheckUrlPath: ${management.context-path}/health
+        instanceId: <%= baseName %>:${spring.application.instance-id:${random.value}}
+        status-page-url-path: ${management.context-path}/info
+        health-check-url-path: ${management.context-path}/health
         metadata-map:
             profile: ${spring.profiles.active}
             version: ${info.project.version}
@@ -77,7 +77,7 @@ spring:
         consul:
             discovery:
                 healthCheckPath: /management/health
-                instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+                instanceId: ${spring.application.name}:${spring.application.instance-id:${random.value}}
     <%_ } _%>
     <%_ if (applicationType === 'monolith') { _%>
     profiles:

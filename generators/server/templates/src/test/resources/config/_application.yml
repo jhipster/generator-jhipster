@@ -19,7 +19,7 @@ eureka:
         enabled: false
     instance:
         appname: <%= baseName %>
-        instanceId: <%= baseName %>:${spring.application.instance_id:${random.value}}
+        instanceId: <%= baseName %>:${spring.application.instance-id:${random.value}}
 <%_ } _%>
 
 spring:
