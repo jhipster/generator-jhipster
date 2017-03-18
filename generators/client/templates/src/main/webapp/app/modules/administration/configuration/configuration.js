@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+
 import { getConfigurations, getEnv } from '../../reducers/administration';
 
 export class ConfigurationPage extends Component {

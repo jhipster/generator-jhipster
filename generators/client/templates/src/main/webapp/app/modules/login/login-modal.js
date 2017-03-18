@@ -48,7 +48,7 @@ class LoginModal extends Component {
     const { authenticationError, handleClose } = this.props;
     const actions = [
       <FlatButton
-        label={<Translate content="global.buttons.cancel" />}
+        label={<Translate content="entity.action.cancel" />}
         onTouchTap={handleClose}
       />,
       <FlatButton
@@ -78,15 +78,15 @@ class LoginModal extends Component {
           <div className="col-md-12">
             <TextField
               id="username" name="username" fullWidth
-              hintText={<Translate content="global.form.username-placeholder" />}
+              hintText="Username"
               floatingLabelText={<Translate content="global.form.username" />}
               floatingLabelFixed
               onChange={this.handleUsernameChange}
             /><br />
             <TextField
               id="password" name="password" fullWidth type="password"
-              hintText={<Translate content="global.form.password-placeholder" />}
-              floatingLabelText={<Translate content="global.form.password" />}
+              hintText="Password"
+              floatingLabelText={<Translate content="login.form.password" />}
               floatingLabelFixed
               onChange={this.handlePasswordChange}
             /><br />
@@ -96,7 +96,7 @@ class LoginModal extends Component {
             </div>
             <div className="alert alert-warning">
               You do not have an account yet?
-              <a className="alert-link" onClick={() => this.props.handleRegister}><Translate content="global.messages.info.register" /></a>
+              <a className="alert-link" onClick={() => this.props.handleRegister}><Translate content="global.messages.info.register.link" /></a>
             </div>
           </div>
         </div>
@@ -106,4 +106,3 @@ class LoginModal extends Component {
 }
 
 export default LoginModal;
-
