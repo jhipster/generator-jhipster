@@ -2,7 +2,7 @@ export const LoginRoute = {
   path: 'login',
   getComponent(nextState, cb) {
     require.ensure([], (require) => {
-      cb(null, require('./Login'));
+      cb(null, require('./login'));
     });
   }
 };
@@ -14,7 +14,7 @@ export const LogoutRoute = {
   },
   getComponent(nextState, cb) {
     require.ensure([], (require) => {
-      cb(null, require('./Login'));
+      cb(null, require('./login'));
     });
   }
 };
