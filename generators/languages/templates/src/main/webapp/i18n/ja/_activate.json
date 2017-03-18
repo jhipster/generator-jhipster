@@ -4,7 +4,7 @@
         "messages": {
             <%_ if (clientFramework === 'angular1') { _%>
             "success": "<strong>あなたのアカウントはアクティベートされました。</strong> <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">ログイン</a>してください。</a>",
-            <%_ } else if (clientFramework === 'angular2') { _%>
+            <%_ } else { _%>
             "success": "<strong>あなたのアカウントはアクティベートされました。</strong> ",
             <%_ } _%>
             "error": "<strong>あなたのアカウントはアクティベートされませんでした。</strong>サインアップするために登録フォームを使ってサインアップしてください。"

@@ -1,5 +1,3 @@
-
-
 const chalk = require('chalk');
 const path = require('path');
 const _ = require('lodash');
@@ -362,7 +360,7 @@ function askForPagination() {
         }
     ];
     // TODO this should be removed when https://github.com/jhipster/generator-jhipster/issues/5007 is done
-    if (this.clientFramework === 'angular2') {
+    if (this.clientFramework !== 'angular1') {
         prompts = [
             {
                 type: 'list',

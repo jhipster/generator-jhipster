@@ -1,5 +1,3 @@
-
-
 const path = require('path');
 const shelljs = require('shelljs');
 const crypto = require('crypto');

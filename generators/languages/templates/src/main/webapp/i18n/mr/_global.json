@@ -51,7 +51,7 @@
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "आपण <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">साइन इन</a> करू इच्छित असल्यास, तुम्ही मुलभूत खाती प्रयत्न करू शकता:<br/>- प्रशासक (लॉग इन=\"admin\" आणि पासवर्ड=\"admin\") <br/>- वापरकर्ता (लॉग इन=\"user\" आणि पासवर्ड=\"user\").",
                 "register": "आपण खाते नाही? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">नवीन खाते नोंदणी करू</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "आपण ",
                     "link": "साइन इन",

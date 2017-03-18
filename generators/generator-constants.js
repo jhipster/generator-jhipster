@@ -1,5 +1,3 @@
-
-
 // version of docker images
 const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v2.5.8';
 const DOCKER_JAVA_JRE = 'openjdk:8-jre-alpine';

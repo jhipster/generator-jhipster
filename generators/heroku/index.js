@@ -1,4 +1,3 @@
-
 const util = require('util');
 const fs = require('fs');
 const generator = require('yeoman-generator');
@@ -6,13 +5,13 @@ const exec = require('child_process').exec;
 const chalk = require('chalk');
 const _ = require('lodash');
 const glob = require('glob');
-const scriptBase = require('../generator-base');
+const BaseGenerator = require('../generator-base');
 
 const constants = require('../generator-constants');
 
 const HerokuGenerator = generator.extend({});
 
-util.inherits(HerokuGenerator, scriptBase);
+util.inherits(HerokuGenerator, BaseGenerator);
 
 module.exports = HerokuGenerator.extend({
     constructor: function (...args) { // eslint-disable-line object-shorthand

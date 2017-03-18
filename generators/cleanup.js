@@ -1,4 +1,3 @@
-
 const constants = require('./generator-constants');
 
 const ANGULAR_DIR = constants.ANGULAR_DIR;

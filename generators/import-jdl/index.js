@@ -1,15 +1,13 @@
-
-
 const util = require('util');
 const shelljs = require('shelljs');
 const generator = require('yeoman-generator');
 const chalk = require('chalk');
 const jhiCore = require('jhipster-core');
-const scriptBase = require('../generator-base');
+const BaseGenerator = require('../generator-base');
 
 const JDLGenerator = generator.extend({});
 
-util.inherits(JDLGenerator, scriptBase);
+util.inherits(JDLGenerator, BaseGenerator);
 
 module.exports = JDLGenerator.extend({
     constructor: function (...args) { // eslint-disable-line object-shorthand
@@ -91,17 +89,18 @@ module.exports = JDLGenerator.extend({
             this.log(`\n${chalk.bold.green('Running gulp Inject to add javascript to index\n')}`);
             this.spawnCommand('gulp', ['inject:app']);
         };
-        if (!this.options['skip-install'] && !this.skipClient && this.clientFramework === 'angular1') {
-            injectJsFilesToIndex();
-        }
-
         // rebuild client for Angular
         const rebuildClient = () => {
             this.log(`\n${chalk.bold.green('Running `webpack:build:dev` to update client app')}\n`);
             this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build:dev']);
         };
-        if (!this.options['skip-install'] && !this.skipClient && this.clientFramework === 'angular2') {
-            rebuildClient();
+
+        if (!this.options['skip-install'] && !this.skipClient) {
+            if (this.clientFramework === 'angular1') {
+                injectJsFilesToIndex();
+            } else {
+                rebuildClient();
+            }
         }
     }
 });

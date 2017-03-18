@@ -1,4 +1,3 @@
-
 const generator = require('yeoman-generator');
 const chalk = require('chalk');
 const shelljs = require('shelljs');
@@ -9,11 +8,11 @@ const pathjs = require('path');
 const util = require('util');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
-const scriptBase = require('../generator-base');
+const BaseGenerator = require('../generator-base');
 
 const DockerComposeGenerator = generator.extend({});
 
-util.inherits(DockerComposeGenerator, scriptBase);
+util.inherits(DockerComposeGenerator, BaseGenerator);
 
 const constants = require('../generator-constants');
 

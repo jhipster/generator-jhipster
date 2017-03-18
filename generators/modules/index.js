@@ -1,15 +1,14 @@
-
 const util = require('util');
 const generator = require('yeoman-generator');
 const _ = require('lodash');
 const chalk = require('chalk');
-const scriptBase = require('../generator-base');
+const BaseGenerator = require('../generator-base');
 
 const constants = require('../generator-constants');
 
 const ModulesGenerator = generator.extend({});
 
-util.inherits(ModulesGenerator, scriptBase);
+util.inherits(ModulesGenerator, BaseGenerator);
 
 module.exports = ModulesGenerator.extend({
     constructor: function (...args) { // eslint-disable-line object-shorthand

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 const generator = require('yeoman-generator');
 const chalk = require('chalk');
 const shelljs = require('shelljs');
@@ -23,10 +22,10 @@ const _ = require('lodash');
 const util = require('util');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
-const scriptBase = require('../generator-base');
+const BaseGenerator = require('../generator-base');
 
 const KubernetesGenerator = generator.extend({});
-util.inherits(KubernetesGenerator, scriptBase);
+util.inherits(KubernetesGenerator, BaseGenerator);
 
 /* Constants used throughout */
 const constants = require('../generator-constants');

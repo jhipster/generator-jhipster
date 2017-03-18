@@ -1831,11 +1831,11 @@ module.exports = class extends Generator {
         }
     }
 
-    insight() {
+    insight(trackingCode = 'UA-46075199-2', packageName = packagejs.name, packageVersion = packagejs.version) {
         const insight = new Insight({
-            trackingCode: 'UA-46075199-2',
-            packageName: packagejs.name,
-            packageVersion: packagejs.version
+            trackingCode,
+            packageName,
+            packageVersion
         });
 
         insight.trackWithEvent = (category, action) => {
@@ -2045,5 +2045,76 @@ module.exports = class extends Generator {
      */
     debug(msg) {
         this.log(`${chalk.yellow.bold('DEBUG!')} ${msg}`);
+    }
+
+    checkJava() {
+        if (this.skipChecks || this.skipServer) return;
+        const done = this.async();
+        exec('java -version', (err, stdout, stderr) => {
+            if (err) {
+                this.warning('Java 8 is not found on your computer.');
+            } else {
+                const javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
+                if (!javaVersion.match(/1\.8/)) {
+                    this.warning(`Java 8 is not found on your computer. Your Java version is: ${chalk.yellow(javaVersion)}`);
+                }
+            }
+            done();
+        });
+    }
+
+    checkNode() {
+        if (this.skipChecks || this.skipServer) return;
+        const done = this.async();
+        exec('node -v', (err, stdout, stderr) => {
+            if (err) {
+                this.warning('NodeJS is not found on your system.');
+            } else {
+                const nodeVersion = semver.clean(stdout);
+                const nodeFromPackageJson = packagejs.engines.node;
+                if (!semver.satisfies(nodeVersion, nodeFromPackageJson)) {
+                    this.warning(`Your NodeJS version is too old (${nodeVersion}). You should use at least NodeJS ${chalk.bold(nodeFromPackageJson)}`);
+                }
+            }
+            done();
+        });
+    }
+
+    checkGit() {
+        if (this.skipChecks || this.skipClient) return;
+        const done = this.async();
+        this.isGitInstalled((code) => {
+            this.gitInstalled = code === 0;
+            done();
+        });
+    }
+
+    checkGitConnection() {
+        if (!this.gitInstalled) return;
+        const done = this.async();
+        exec('git ls-remote git://github.com/jhipster/generator-jhipster.git HEAD', { timeout: 15000 }, (error) => {
+            if (error) {
+                this.warning(`Failed to connect to "git://github.com"
+                     1. Check your Internet connection.
+                     2. If you are using an HTTP proxy, try this command: ${chalk.yellow('git config --global url."https://".insteadOf git://')}`
+                );
+            }
+            done();
+        });
+    }
+
+    checkYarn() {
+        if (this.skipChecks || !this.useYarn) return;
+        const done = this.async();
+        exec('yarn --version', (err) => {
+            if (err) {
+                this.warning('yarn is not found on your computer.\n',
+                    ' Using npm instead');
+                this.useYarn = false;
+            } else {
+                this.useYarn = true;
+            }
+            done();
+        });
     }
 };

@@ -4,7 +4,7 @@
         "messages": {
             <%_ if (clientFramework === 'angular1') { _%>
             "success": "<strong>Din bruger er blevet aktiveret.</strong> Du bedes venligst <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">autentificere</a>.",
-            <%_ } else if (clientFramework === 'angular2') { _%>
+            <%_ } else { _%>
             "success": "<strong>Din bruger er blevet aktiveret.</strong> Du bedes venligst ",
             <%_ } _%>
             "error": "<strong>Din bruger kunne ikke blive aktiveret.</strong> Anvend venligst registeringsformularen for at oprette en bruger."

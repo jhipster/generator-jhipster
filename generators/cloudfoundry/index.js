@@ -5,7 +5,7 @@ const childProcess = require('child_process');
 const chalk = require('chalk');
 const glob = require('glob');
 const prompts = require('./prompts');
-const scriptBase = require('../generator-base');
+const BaseGenerator = require('../generator-base');
 
 const constants = require('../generator-constants');
 
@@ -13,7 +13,7 @@ const exec = childProcess.exec;
 
 const CloudFoundryGenerator = generator.extend({});
 
-util.inherits(CloudFoundryGenerator, scriptBase);
+util.inherits(CloudFoundryGenerator, BaseGenerator);
 
 module.exports = CloudFoundryGenerator.extend({
     constructor: function (...args) { // eslint-disable-line object-shorthand

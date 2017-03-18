@@ -1,15 +1,14 @@
-
 const util = require('util');
 const generator = require('yeoman-generator');
 const chalk = require('chalk');
 const _ = require('lodash');
-const scriptBase = require('../generator-base');
+const BaseGenerator = require('../generator-base');
 
 const constants = require('../generator-constants');
 
 const LanguagesGenerator = generator.extend({});
 
-util.inherits(LanguagesGenerator, scriptBase);
+util.inherits(LanguagesGenerator, BaseGenerator);
 
 let configOptions = {};
 
@@ -171,10 +170,12 @@ module.exports = LanguagesGenerator.extend({
             }
             insight.track('languages/language', language);
         });
-        if (!this.skipClient && this.clientFramework === 'angular1') {
-            this.updateLanguagesInLanguageConstant(this.config.get('languages'));
-        } else if (!this.skipClient && this.clientFramework === 'angular2') {
-            this.updateLanguagesInLanguageConstantNG2(this.config.get('languages'));
+        if (!this.skipClient) {
+            if (this.clientFramework === 'angular1') {
+                this.updateLanguagesInLanguageConstant(this.config.get('languages'));
+            } else {
+                this.updateLanguagesInLanguageConstantNG2(this.config.get('languages'));
+            }
         }
     }
 });

@@ -51,7 +51,7 @@
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "Ha be akar <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">lépni</a>, kipróbálás céljából használható felhasználók:<br/>- Adminisztrátor (azonosító=\"admin\" és a jelszó=\"admin\") <br/>- Felhasználó (azonosító=\"user\" és jelszó=\"user\").",
                 "register": "Nincs még hozzáférése? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Regisztráljon</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Ha be akar ",
                     "link": "lépni",

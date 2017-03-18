@@ -7,7 +7,7 @@ const pluralize = require('pluralize');
 const prompts = require('./prompts');
 const jhiCore = require('jhipster-core');
 const writeFiles = require('./files').writeFiles;
-const scriptBase = require('../generator-base');
+const BaseGenerator = require('../generator-base');
 const constants = require('../generator-constants');
 
 /* constants used throughout */
@@ -15,7 +15,7 @@ const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
 
 const EntityGenerator = generator.extend({});
 
-util.inherits(EntityGenerator, scriptBase);
+util.inherits(EntityGenerator, BaseGenerator);
 
 module.exports = EntityGenerator.extend({
     constructor: function (...args) { // eslint-disable-line object-shorthand
@@ -659,17 +659,17 @@ module.exports = EntityGenerator.extend({
             this.log(`\n${chalk.bold.green('Running `gulp inject` to add JavaScript to index.html\n')}`);
             this.spawnCommand('gulp', ['inject:app']);
         };
-        if (!this.options['skip-install'] && !this.skipClient && this.clientFramework === 'angular1') {
-            injectJsFilesToIndex();
-        }
-
         // rebuild client for Angular
         const rebuildClient = () => {
             this.log(`\n${chalk.bold.green('Running `webpack:build:dev` to update client app\n')}`);
             this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build:dev']);
         };
-        if (!this.options['skip-install'] && !this.skipClient && this.clientFramework === 'angular2') {
-            rebuildClient();
+        if (!this.options['skip-install'] && !this.skipClient) {
+            if (this.clientFramework === 'angular1') {
+                injectJsFilesToIndex();
+            } else {
+                rebuildClient();
+            }
         }
     },
 

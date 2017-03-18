@@ -1,13 +1,13 @@
 const util = require('util');
 const generator = require('yeoman-generator');
 const chalk = require('chalk');
-const scriptBase = require('../generator-base');
+const BaseGenerator = require('../generator-base');
 const prompts = require('./prompts');
 const AwsFactory = require('./lib/aws.js');
 
 const AwsGenerator = generator.extend({});
 
-util.inherits(AwsGenerator, scriptBase);
+util.inherits(AwsGenerator, BaseGenerator);
 
 module.exports = AwsGenerator.extend({
     initializing: {

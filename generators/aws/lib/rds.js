@@ -1,5 +1,3 @@
-
-
 let aws;
 
 const Rds = module.exports = function Rds(Aws) {

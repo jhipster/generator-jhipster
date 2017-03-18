@@ -1,13 +1,13 @@
 const util = require('util');
 const generator = require('yeoman-generator');
 const chalk = require('chalk');
-const scriptBase = require('../generator-base');
+const BaseGenerator = require('../generator-base');
 const shelljs = require('shelljs');
 const semver = require('semver');
 
 const UpgradeGenerator = generator.extend({});
 
-util.inherits(UpgradeGenerator, scriptBase);
+util.inherits(UpgradeGenerator, BaseGenerator);
 
 /* Constants used throughout */
 const GENERATOR_JHIPSTER = 'generator-jhipster';
@@ -279,7 +279,7 @@ module.exports = UpgradeGenerator.extend({
                 done();
             });
         } else {
-            if (this.clientFramework === 'angular2') {
+            if (this.clientFramework !== 'angular1') {
                 const logMsg =
                     `Start your Webpack development server with:\n${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
                 this.log(chalk.green(logMsg));

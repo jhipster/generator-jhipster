@@ -51,7 +51,7 @@
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "如果您要<a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">登入</a>，可以使用預設帳號:<br/>- 管理員 (帳號是 \"admin\"，密碼 \"admin\") <br/>- 使用者 (帳號 \"user\"，密碼是 \"user\")。",
                 "register": "還沒有帳號嗎? <a class=\"alert-link\" ng-click=\"vm.register()\">註冊一個吧</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "如果您要",
                     "link": "登入",

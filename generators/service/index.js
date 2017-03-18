@@ -1,15 +1,14 @@
-
 const util = require('util');
 const generator = require('yeoman-generator');
 const _ = require('lodash');
-const scriptBase = require('../generator-base');
+const BaseGenerator = require('../generator-base');
 const constants = require('../generator-constants');
 
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
 const ServiceGenerator = generator.extend({});
 
-util.inherits(ServiceGenerator, scriptBase);
+util.inherits(ServiceGenerator, BaseGenerator);
 
 module.exports = ServiceGenerator.extend({
     constructor: function (...args) { // eslint-disable-line object-shorthand

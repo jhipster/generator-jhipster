@@ -1166,7 +1166,7 @@
                 <profile.swagger>,swagger</profile.swagger>
             </properties>
         </profile>
-        <%_ if (!skipClient && clientFramework === 'angular2') { _%>
+        <%_ if (!skipClient && clientFramework !== 'angular1') { _%>
         <profile>
             <id>webpack</id>
             <build>
@@ -1386,7 +1386,7 @@
                                 </configuration>
                             </execution>
                             <%_ } _%>
-                            <%_ if (clientFramework === 'angular2') { _%>
+                            <%_ if (clientFramework !== 'angular1') { _%>
                             <execution>
                                 <id>webpack build prod</id>
                                 <goals>

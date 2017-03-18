@@ -4,7 +4,7 @@
         "messages": {
             <%_ if (clientFramework === 'angular1') { _%>
             "success": "<strong>Váš používateľský účet bol aktivovaný.</strong> <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">Prihláste sa</a>.",
-            <%_ } else if (clientFramework === 'angular2') { _%>
+            <%_ } else { _%>
             "success": "<strong>Váš používateľský účet bol aktivovaný.</strong> ",
             <%_ } _%>
             "error": "<strong>Váš používateľský účet nemohol byť aktivovaný.</strong> Prosím použite registračný formulár pre prihlásenie."

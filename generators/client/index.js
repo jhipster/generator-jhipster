@@ -1,9 +1,8 @@
-
 const util = require('util');
 const generator = require('yeoman-generator');
 const chalk = require('chalk');
 const _ = require('lodash');
-const scriptBase = require('../generator-base');
+const BaseGenerator = require('../generator-base');
 const prompts = require('./prompts');
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeAngularJsFiles = require('./files-angularjs').writeFiles;
@@ -12,7 +11,7 @@ const constants = require('../generator-constants');
 
 const JhipsterClientGenerator = generator.extend({});
 
-util.inherits(JhipsterClientGenerator, scriptBase);
+util.inherits(JhipsterClientGenerator, BaseGenerator);
 
 /* Constants used throughout */
 const QUESTIONS = constants.CLIENT_QUESTIONS;

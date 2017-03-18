@@ -1,13 +1,12 @@
-
 const util = require('util');
 const chalk = require('chalk');
 const generator = require('yeoman-generator');
 const prompts = require('./prompts');
-const scriptBase = require('../generator-base');
+const BaseGenerator = require('../generator-base');
 
 const PipelineGenerator = generator.extend({});
 
-util.inherits(PipelineGenerator, scriptBase);
+util.inherits(PipelineGenerator, BaseGenerator);
 
 const constants = require('../generator-constants');
 

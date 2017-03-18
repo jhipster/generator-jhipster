@@ -4,7 +4,7 @@
         "messages": {
             <%_ if (clientFramework === 'angular1') { _%>
             "success": "<strong>Vaš nalog je aktiviran.</strong> Molimo Vas <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">prijavite se</a>.",
-            <%_ } else if (clientFramework === 'angular2') { _%>
+            <%_ } else { _%>
             "success": "<strong>Vaš nalog je aktiviran.</strong> Molimo Vas ",
             <%_ } _%>
             "error": "<strong>Vaš nalog ne može biti aktiviran.</strong> Molimo vas popunite registracioni formular kako biste se prijavili."

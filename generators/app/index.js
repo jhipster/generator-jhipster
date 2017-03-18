@@ -1,19 +1,15 @@
 const util = require('util');
 const generator = require('yeoman-generator');
 const chalk = require('chalk');
-const scriptBase = require('../generator-base');
+const BaseGenerator = require('../generator-base');
 const cleanup = require('../cleanup');
 const prompts = require('./prompts');
 const packagejs = require('../../package.json');
-const exec = require('child_process').exec;
-const semver = require('semver');
+const constants = require('../generator-constants');
 
 const JhipsterGenerator = generator.extend({});
 
-util.inherits(JhipsterGenerator, scriptBase);
-
-/* Constants use throughout */
-const constants = require('../generator-constants');
+util.inherits(JhipsterGenerator, BaseGenerator);
 
 module.exports = JhipsterGenerator.extend({
     constructor: function (...args) { // eslint-disable-line object-shorthand
@@ -94,74 +90,23 @@ module.exports = JhipsterGenerator.extend({
         },
 
         checkJava() {
-            if (this.skipChecks || this.skipServer) return;
-            const done = this.async();
-            exec('java -version', (err, stdout, stderr) => {
-                if (err) {
-                    this.warning('Java 8 is not found on your computer.');
-                } else {
-                    const javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
-                    if (!javaVersion.match(/1\.8/)) {
-                        this.warning(`Java 8 is not found on your computer. Your Java version is: ${chalk.yellow(javaVersion)}`);
-                    }
-                }
-                done();
-            });
+            this.checkJava();
         },
 
         checkNode() {
-            if (this.skipChecks || this.skipServer) return;
-            const done = this.async();
-            exec('node -v', (err, stdout, stderr) => {
-                if (err) {
-                    this.warning('NodeJS is not found on your system.');
-                } else {
-                    const nodeVersion = semver.clean(stdout);
-                    const nodeFromPackageJson = packagejs.engines.node;
-                    if (!semver.satisfies(nodeVersion, nodeFromPackageJson)) {
-                        this.warning(`Your NodeJS version is too old (${nodeVersion}). You should use at least NodeJS ${chalk.bold(nodeFromPackageJson)}`);
-                    }
-                }
-                done();
-            });
+            this.checkNode();
         },
 
         checkGit() {
-            if (this.skipChecks || this.skipClient) return;
-            const done = this.async();
-            this.isGitInstalled((code) => {
-                this.gitInstalled = code === 0;
-                done();
-            });
+            this.checkGit();
         },
 
         checkGitConnection() {
-            if (!this.gitInstalled) return;
-            const done = this.async();
-            exec('git ls-remote git://github.com/jhipster/generator-jhipster.git HEAD', { timeout: 15000 }, (error) => {
-                if (error) {
-                    this.warning(`Failed to connect to "git://github.com"
-                         1. Check your Internet connection.
-                         2. If you are using an HTTP proxy, try this command: ${chalk.yellow('git config --global url."https://".insteadOf git://')}`
-                    );
-                }
-                done();
-            });
+            this.checkGitConnection();
         },
 
         checkYarn() {
-            if (this.skipChecks || !this.useYarn) return;
-            const done = this.async();
-            exec('yarn --version', (err) => {
-                if (err) {
-                    this.warning('yarn is not found on your computer.\n',
-                        ' Using npm instead');
-                    this.useYarn = false;
-                } else {
-                    this.useYarn = true;
-                }
-                done();
-            });
+            this.checkYarn();
         },
 
         checkForNewVersion() {

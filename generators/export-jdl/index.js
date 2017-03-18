@@ -1,13 +1,12 @@
-
 const util = require('util');
 const chalk = require('chalk');
 const generator = require('yeoman-generator');
 const jhiCore = require('jhipster-core');
-const scriptBase = require('../generator-base');
+const BaseGenerator = require('../generator-base');
 
 const ExportJDLGenerator = generator.extend({});
 
-util.inherits(ExportJDLGenerator, scriptBase);
+util.inherits(ExportJDLGenerator, BaseGenerator);
 
 module.exports = ExportJDLGenerator.extend({
     constructor: function (...args) { // eslint-disable-line object-shorthand

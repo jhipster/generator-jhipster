@@ -3,7 +3,7 @@ const generator = require('yeoman-generator');
 const chalk = require('chalk');
 const _ = require('lodash');
 const prompts = require('./prompts');
-const scriptBase = require('../generator-base');
+const BaseGenerator = require('../generator-base');
 const writeFiles = require('./files').writeFiles;
 const packagejs = require('../../package.json');
 const crypto = require('crypto');
@@ -12,7 +12,7 @@ const constants = require('../generator-constants');
 
 const JhipsterServerGenerator = generator.extend({});
 
-util.inherits(JhipsterServerGenerator, scriptBase);
+util.inherits(JhipsterServerGenerator, BaseGenerator);
 
 /* Constants used throughout */
 const QUESTIONS = constants.SERVER_QUESTIONS;
