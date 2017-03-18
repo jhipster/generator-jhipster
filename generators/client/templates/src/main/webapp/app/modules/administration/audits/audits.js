@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
 import Translate from 'react-translate-component';
+
 import { getAudits } from '../../reducers/administration';
 
 export class AuditsPage extends Component {

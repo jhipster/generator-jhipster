@@ -36,9 +36,7 @@ const files = {
     {
       path: MAIN_SRC_DIR,
       templates: [
-        { file: 'static/images/_hipster.png', method: 'copy' },
-        { file: 'static/images/_hipster2x.png', method: 'copy' },
-        { file: 'static/images/_logo-jhipster.png', method: 'copy' }
+        { file: 'static/images/logo-jhipster-react.svg', method: 'copy' }
       ]
     }
   ],
@@ -66,10 +64,10 @@ const files = {
     {
       path: REACT_DIR,
       templates: [
-        'App.js',
+        'app.js',
         'index.js',
         'routes.js',
-        'config/app.js',
+        'config/constants.js',
         'config/theme.js',
         'config/devtools.js',
         'config/promise-middleware.js',
@@ -111,11 +109,11 @@ const files = {
       templates: [
         // home module
         'modules/home/index.js',
-        { file: 'modules/home/Home.js', method: 'processJsx' },
+        { file: 'modules/home/home.js', method: 'processJsx' },
         // login module
         'modules/login/index.js',
-        { file: 'modules/login/Login.js', method: 'processJsx' },
-        { file: 'modules/login/LoginModal.js', method: 'processJsx' }
+        { file: 'modules/login/login.js', method: 'processJsx' },
+        { file: 'modules/login/login-modal.js', method: 'processJsx' }
       ]
     },
     {
@@ -207,72 +205,52 @@ const files = {
     //   ]
     // }
   // ],
-  // adminModule: [
-  //   {
-  //     path: REACT_DIR,
-  //     templates: [
-  //       'admin/_index.js',
-  //       { file: 'admin/_admin.route.js', method: 'processJsx' },
-  //       // admin modules
-  //       { file: 'admin/audits/_audits.route.js', method: 'processJsx' },
-  //       { file: 'admin/audits/_audits.component.js', method: 'processJsx' },
-  //       { file: 'admin/configuration/_configuration.route.js', method: 'processJsx' },
-  //       { file: 'admin/configuration/_configuration.component.js', method: 'processJsx' },
-  //       { file: 'admin/docs/_docs.route.js', method: 'processJsx' },
-  //       { file: 'admin/docs/_docs.component.js', method: 'processJsx' },
-  //       { file: 'admin/health/_health.route.js', method: 'processJsx' },
-  //       { file: 'admin/health/_health.component.js', method: 'processJsx' },
-  //       { file: 'admin/logs/_logs.route.js', method: 'processJsx' },
-  //       { file: 'admin/logs/_logs.component.js', method: 'processJsx' },
-  //       { file: 'admin/metrics/_metrics.route.js', method: 'processJsx' },
-  //       { file: 'admin/metrics/_metrics.component.js', method: 'processJsx' },
-  //     ]
-  //   },
-  //   {
-  //     condition: generator => generator.websocket === 'spring-websocket',
-  //     path: REACT_DIR,
-  //     templates: [
-  //       { file: 'admin/tracker/_tracker.route.js', method: 'processJsx' },
-  //       { file: 'admin/tracker/_tracker.component.js', method: 'processJsx' },
-  //       { file: 'admin/tracker/_tracker.component.html', method: 'processHtml' },
-  //       'shared/tracker/_tracker.service.js'
-  //     ]
-  //   },
-  //   {
-  //     condition: generator => !generator.skipUserManagement,
-  //     path: REACT_DIR,
-  //     templates: [
-  //       { file: 'admin/user-management/_user-management.route.js', method: 'processJsx' },
-  //       { file: 'admin/user-management/_user-management.component.js', method: 'processJsx' },
-  //       { file: 'admin/user-management/_user-management.component.html', method: 'processHtml' },
-  //       { file: 'admin/user-management/_user-management-detail.component.js', method: 'processJsx' },
-  //       { file: 'admin/user-management/_user-management-detail.component.html', method: 'processHtml' },
-  //       { file: 'admin/user-management/_user-management-dialog.component.js', method: 'processJsx' },
-  //       { file: 'admin/user-management/_user-management-dialog.component.html', method: 'processHtml' },
-  //       { file: 'admin/user-management/_user-management-delete-dialog.component.js', method: 'processJsx' },
-  //       { file: 'admin/user-management/_user-management-delete-dialog.component.html', method: 'processHtml' },
-  //       'admin/user-management/_user-modal.service.js'
-  //     ]
-  //   },
-  //   {
-  //     condition: generator => generator.applicationType === 'gateway',
-  //     path: REACT_DIR,
-  //     templates: [
-  //       { file: 'admin/gateway/_gateway.route.js', method: 'processJsx' },
-  //       { file: 'admin/gateway/_gateway.component.js', method: 'processJsx' },
-  //       { file: 'admin/gateway/_gateway.component.html', method: 'processHtml' },
-  //       'admin/gateway/_gateway-routes.service.js'
-  //     ]
-  //   }
-  // ],
+  adminModule: [
+    {
+      path: REACT_DIR,
+      templates: [
+        // admin modules
+        { file: 'modules/administration/audits/audits.js', method: 'processJsx' },
+        { file: 'modules/administration/configuration/configuration.js', method: 'processJsx' },
+        { file: 'modules/administration/docs/docs.js', method: 'processJsx' },
+        { file: 'modules/administration/health/health.js', method: 'processJsx' },
+        { file: 'modules/administration/logs/logs.js', method: 'processJsx' },
+        { file: 'modules/administration/metrics/metrics.js', method: 'processJsx' },
+      ]
+    },
+    // {
+    //   condition: generator => generator.websocket === 'spring-websocket',
+    //   path: REACT_DIR,
+    //   templates: [
+    //     { file: 'modules/administration/tracker/Tracker.js', method: 'processJsx' }
+    //   ]
+    // },
+    {
+      condition: generator => !generator.skipUserManagement,
+      path: REACT_DIR,
+      templates: [
+        { file: 'modules/administration/user-management/user-management.js', method: 'processJsx' },
+        // { file: 'modules/administration/user-management/UserManagementDetail.js', method: 'processJsx' },
+        // { file: 'modules/administration/user-management/UserManagementDialog.js', method: 'processJsx' },
+        // { file: 'modules/administration/user-management/UserManagementDeleteDialog.js', method: 'processJsx' }
+      ]
+    },
+    {
+      condition: generator => generator.applicationType === 'gateway',
+      path: REACT_DIR,
+      templates: [
+        { file: 'modules/administration/gateway/gateway.js', method: 'processJsx' }
+      ]
+    }
+  ],
   angularShared: [
     {
       path: REACT_DIR,
       templates: [
         // layouts
-        'shared/components/footer/Footer.js',
-        'shared/components/header/Header.js',
-        'shared/components/private-route/PrivateRoute.js',
+        'shared/components/footer/footer.js',
+        'shared/components/header/header.js',
+        'shared/components/private-route/private-route.js',
         // interceptors
         'shared/interceptors/axios.js',
         // util

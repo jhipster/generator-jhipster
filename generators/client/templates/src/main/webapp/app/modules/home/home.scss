@@ -1,24 +1,16 @@
-.jenkins-job-instances {
-  .avatar {
-    &.succeeded {
-      background-color: #338633 !important;
-    }
-    &.failed {
-      background-color: #e64949 !important;
-    }
-  }
-  .job-details {
-    height: auto !important;
-    p {
-      margin: 3px 0px;
-    }
-    .job-status {
-      &.succeeded {
-        color: #338633;
-      }
-      &.failed {
-        color: #e64949;
-      }
-    }
-  }
+
+/* ==========================================================================
+Main page styles
+========================================================================== */
+.img-fluid {
+    max-width: 100%;
+    height: auto;
+}
+
+.hipster {
+    display: inline-block;
+    width: 347px;
+    height: 497px;
+    background: url("../../../static/images/logo-jhipster-react.svg") no-repeat center top;
+    background-size: contain;
 }

@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
-import LoginModal from './LoginModal';
+
+import LoginModal from './login-modal';
 import { login } from '../../reducers/authentication';
 
 export class Login extends Component {
