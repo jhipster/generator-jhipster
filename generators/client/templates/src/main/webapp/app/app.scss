@@ -1,0 +1,203 @@
+@import 'shared/variables';
+
+body {
+  background: #fafafa;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: $text-color;
+  margin: 0;
+}
+
+* {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  &:after, &::before {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+}
+
+a {
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+/* ==========================================================================
+Browser Upgrade Prompt
+========================================================================== */
+.browserupgrade {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
+
+/* ==========================================================================
+Generic styles
+========================================================================== */
+/* other generic styles */
+
+.vertical {
+  flex-direction: column;
+}
+
+.card {
+    padding: 1.5%;
+    margin-top: 20px;
+    border: none;
+}
+
+.error {
+    color: white;
+    background-color: red;
+}
+
+.pad {
+    padding: 10px;
+}
+
+.break {
+    white-space: normal;
+    word-break:break-all;
+}
+
+.voffset  { margin-top: 2px; }
+.voffset1 { margin-top: 5px; }
+.voffset2 { margin-top: 10px; }
+.voffset3 { margin-top: 15px; }
+.voffset4 { margin-top: 30px; }
+.voffset5 { margin-top: 40px; }
+.voffset6 { margin-top: 60px; }
+.voffset7 { margin-top: 80px; }
+.voffset8 { margin-top: 100px; }
+.voffset9 { margin-top: 150px; }
+
+.readonly {
+  background-color: #eee;
+  opacity: 1;
+}
+
+/* ==========================================================================
+make sure browsers use the pointer cursor for anchors, even with no href
+========================================================================== */
+a:hover {
+  cursor: pointer;
+}
+
+.hand {
+  cursor: pointer;
+}
+
+button.anchorBtn {
+  background: none;
+  border: none;
+  padding: 0;
+  align-items: initial;
+  text-align: initial;
+  width: 100%;
+}
+
+a.anchorBtn:hover {
+  text-decoration: none;
+}
+
+/* ==========================================================================
+Metrics and Health styles
+========================================================================== */
+#threadDump .popover, #healthCheck .popover {
+  top: inherit;
+  display: block;
+  font-size: 10px;
+  max-width: 1024px;
+}
+
+#healthCheck .popover {
+  margin-left: -50px;
+}
+
+.health-details {
+  min-width: 400px;
+}
+
+/* ==========================================================================
+start Password strength bar style
+========================================================================== */
+ul#strengthBar {
+  display:inline;
+  list-style:none;
+  margin:0;
+  margin-left:15px;
+  padding:0;
+  vertical-align:2px;
+}
+
+.point:last {
+  margin:0 !important;
+}
+.point {
+  background:#DDD;
+  border-radius:2px;
+  display:inline-block;
+  height:5px;
+  margin-right:1px;
+  width:20px;
+}
+
+/* ==========================================================================
+entity tables helpers
+========================================================================== */
+/* Remove Bootstrap padding from the element
+   http://stackoverflow.com/questions/19562903/remove-padding-from-columns-in-bootstrap-3 */
+@mixin no-padding($side) {
+    @if $side == 'all' {
+        .no-padding {
+            padding: 0 !important;
+        }
+    } @else {
+        .no-padding-#{$side} {
+            padding-#{$side}: 0 !important;
+        }
+    }
+}
+@include no-padding("left");
+@include no-padding("right");
+@include no-padding("top");
+@include no-padding("bottom");
+@include no-padding("all");
+
+/* bootstrap 3 input-group 100% width
+   http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
+.width-min { width: 1% !important; }
+
+/* Makes toolbar not wrap on smaller screens
+ http://www.sketchingwithcss.com/samplechapter/cheatsheet.html#right */
+.flex-btn-group-container {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  -webkit-justify-content: flex-end;
+  justify-content: flex-end;
+}
+
+.jh-table > {
+    tbody > tr > td {
+        /* Align text in td verifically (top aligned by Bootstrap) */
+        vertical-align: middle;
+    }
+    thead > tr > th > {
+        .glyphicon-sort, .glyphicon-sort-by-attributes, .glyphicon-sort-by-attributes-alt {
+            /* less visible sorting icons */
+            opacity: 0.5;
+            &:hover {
+                /* full visible sorting icons and pointer when mouse is over them */
+                opacity: 1;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+/* jhipster-needle-css-add-main JHipster will add new css style */
