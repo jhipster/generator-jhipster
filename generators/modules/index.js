@@ -57,6 +57,7 @@ module.exports = ModulesGenerator.extend({
         jhipsterVar.jhipsterVersion = this.config.get('jhipsterVersion');
         jhipsterVar.serverPort = this.config.get('serverPort');
         jhipsterVar.clientFramework = this.config.get('clientFramework');
+        jhipsterVar.clientPackageManager = this.config.get('clientPackageManager');
 
         jhipsterVar.angularAppName = this.getAngularAppName();
         jhipsterVar.mainClassName = this.getMainClassName();
