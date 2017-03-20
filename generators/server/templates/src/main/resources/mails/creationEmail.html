@@ -12,8 +12,8 @@
             Your JHipster account has been created, please click on the URL below to access it:
         </p>
         <p>
-          <a th:href="@{|${baseUrl}/#/reset/finish?key=${user.resetKey}|}"
-             th:text="|${user.login}|">login</a>
+            <a th:href="@{|${baseUrl}/#/activate?key=${user.activationKey}|}"
+               th:text="|${user.login}|">login</a>
         </p>
         <p>
             <span th:text="#{email.activation.text2}">Regards, </span>

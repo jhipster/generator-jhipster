@@ -29,7 +29,7 @@ public class ManagedUserVM extends UserDTO {
                          <% if (databaseType == 'mongodb' || databaseType == 'sql') { %>String createdBy, ZonedDateTime createdDate, String lastModifiedBy, ZonedDateTime lastModifiedDate,
                         <% } %>Set<String> authorities) {
 
-        super(id, login, firstName, lastName, email, activated<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,  imageUrl<% } %>, langKey,
+        super(id, login, firstName, lastName, email, activated<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>, imageUrl<% } %>, langKey,
             <% if (databaseType == 'mongodb' || databaseType == 'sql') { %>createdBy, createdDate, lastModifiedBy, lastModifiedDate,  <% } %>authorities);
 
         this.password = password;
