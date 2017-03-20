@@ -308,7 +308,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
             <%_ } _%>
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)));
 
-        // Duplicate login, different e-mail
+        // Duplicate login, different email
         ManagedUserVM duplicatedUser = new ManagedUserVM(validUser.getId(), validUser.getLogin(), validUser.getPassword(), validUser.getFirstName(), validUser.getLastName(),
             "alicejr@example.com", true<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>, validUser.getImageUrl()<% } %>, validUser.getLangKey()<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>, validUser.getCreatedBy(), validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate()<% } %>, validUser.getAuthorities());
 
