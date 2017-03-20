@@ -15,7 +15,7 @@
                 <th<% if (databaseType !== 'cassandra') { %> jhiSortBy="email"<% } %>><span jhiTranslate="userManagement.email">Email</span><% if (databaseType !== 'cassandra') { %> <span class="fa fa-sort"></span><% } %></th>
                 <th></th>
                 <%_ if (enableTranslation) { _%>
-                <th <% if (databaseType !== 'cassandra') { %> jhiSortBy="langKey"<% } %>> <span jhiTranslate="userManagement.langKey">Lang Key</span><% if (databaseType !== 'cassandra') { %> <span class="fa fa-sort"></span><% } %></th>
+                <th<% if (databaseType !== 'cassandra') { %> jhiSortBy="langKey"<% } %>> <span jhiTranslate="userManagement.langKey">Lang Key</span><% if (databaseType !== 'cassandra') { %> <span class="fa fa-sort"></span><% } %></th>
                 <%_ } _%>
                 <th><span jhiTranslate="userManagement.profiles">Profiles</span></th>
                 <%_ if (databaseType !== 'cassandra') { _%>

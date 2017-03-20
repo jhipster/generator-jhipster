@@ -124,6 +124,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
         <%_ if (databaseType == 'mongodb' || databaseType == 'sql') { _%>
         user.setImageUrl("http://placehold.it/50x50");
         <%_ } _%>
+        user.setLangKey("en");
         user.setAuthorities(authorities);
         when(mockUserService.getUserWithAuthorities()).thenReturn(user);
 
@@ -138,6 +139,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
             <%_ if (databaseType == 'mongodb' || databaseType == 'sql') { _%>
             .andExpect(jsonPath("$.imageUrl").value("http://placehold.it/50x50"))
             <%_ } _%>
+            .andExpect(jsonPath("$.langKey").value("en"))
             .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
     }
 
@@ -307,7 +309,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)));
 
         // Duplicate login, different e-mail
-        ManagedUserVM duplicatedUser = new ManagedUserVM(validUser.getId(), validUser.getLogin(), validUser.getPassword(), validUser.getLogin(), validUser.getLastName(),
+        ManagedUserVM duplicatedUser = new ManagedUserVM(validUser.getId(), validUser.getLogin(), validUser.getPassword(), validUser.getFirstName(), validUser.getLastName(),
             "alicejr@example.com", true<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>, validUser.getImageUrl()<% } %>, validUser.getLangKey()<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>, validUser.getCreatedBy(), validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate()<% } %>, validUser.getAuthorities());
 
         // Good user

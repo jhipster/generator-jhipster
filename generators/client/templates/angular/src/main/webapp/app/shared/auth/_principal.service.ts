@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { AccountService } from './account.service';
 <%_ if (websocket === 'spring-websocket') { _%>
-import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.service'; // Barrel doesnt work here. No idea why!
+import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.service'; // Barrel doesn't work here. No idea why!
 <%_ } _%>
 
 @Injectable()
