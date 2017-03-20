@@ -85,7 +85,7 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     private String lastName;
 
     @Email
-    @Size(max = 100)<% if (databaseType == 'sql') { %>
+    @Size(min = 5, max = 100)<% if (databaseType == 'sql') { %>
     @Column(length = 100, unique = true)<% } %><% if (databaseType == 'mongodb') { %>
     @Indexed<% } %>
     private String email;
@@ -279,11 +279,7 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 
         User user = (User) o;
 
-        if (!login.equals(user.login)) {
-            return false;
-        }
-
-        return true;
+        return login.equals(user.login);
     }
 
     @Override
