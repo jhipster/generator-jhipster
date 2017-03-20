@@ -1,6 +1,4 @@
-import { Routes, CanActivate } from '@angular/router';
-
-import { UserRouteAccessService } from '../shared';
+import { Routes } from '@angular/router';
 
 import {
     activateRoute,
