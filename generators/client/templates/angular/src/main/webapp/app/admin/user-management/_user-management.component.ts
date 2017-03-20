@@ -34,7 +34,8 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
         private parseLinks: ParseLinks,
         private alertService: AlertService,
         private principal: Principal,
-        private eventManager: EventManager,<%_ if (databaseType !== 'cassandra') { _%>
+        private eventManager: EventManager,
+        <%_ if (databaseType !== 'cassandra') { _%>
         private paginationUtil: PaginationUtil,
         private paginationConfig: PaginationConfig,
         <%_ } _%>
