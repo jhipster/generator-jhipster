@@ -78,6 +78,9 @@ public class AsyncSpringLiquibase extends SpringLiquibase {
         watch.start();
         super.afterPropertiesSet();
         watch.stop();
-        logger.debug("Started Liquibase in {} ms", watch.getTotalTimeMillis());
+        logger.debug("Liquibase has updated your database in {} ms", watch.getTotalTimeMillis());
+        if (watch.getTotalTimeMillis() > 5_000) {
+            logger.warn("Warning, Liquibase took more than 5 seconds to start up!");
+        }
     }
 }
