@@ -167,8 +167,8 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         // Create the User
-        Set<String> autorities = new HashSet<>();
-        autorities.add("ROLE_USER");
+        Set<String> authorities = new HashSet<>();
+        authorities.add("ROLE_USER");
         ManagedUserVM managedUserVM = new ManagedUserVM(
             null,
             DEFAULT_LOGIN,
@@ -187,7 +187,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
             null,
             null,
             <%_ } _%>
-            autorities);
+            authorities);
 
         restUserMockMvc.perform(post("/api/users")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -215,8 +215,8 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
     public void createUserWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
-        Set<String> autorities = new HashSet<>();
-        autorities.add("ROLE_USER");
+        Set<String> authorities = new HashSet<>();
+        authorities.add("ROLE_USER");
         ManagedUserVM managedUserVM = new ManagedUserVM(
             <%_ if (databaseType === 'cassandra') { _%>
             UUID.randomUUID().toString(),
@@ -241,7 +241,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
             null,
             null,
             <%_ } _%>
-            autorities);
+            authorities);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restUserMockMvc.perform(post("/api/users")
@@ -266,8 +266,8 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         <%_ } _%>
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
-        Set<String> autorities = new HashSet<>();
-        autorities.add("ROLE_USER");
+        Set<String> authorities = new HashSet<>();
+        authorities.add("ROLE_USER");
         ManagedUserVM managedUserVM = new ManagedUserVM(
             null,
             DEFAULT_LOGIN, // this login should already be used
@@ -286,7 +286,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
             null,
             null,
             <%_ } _%>
-            autorities);
+            authorities);
 
         // Create the User
         restUserMockMvc.perform(post("/api/users")
@@ -311,8 +311,8 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         <%_ } _%>
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
-        Set<String> autorities = new HashSet<>();
-        autorities.add("ROLE_USER");
+        Set<String> authorities = new HashSet<>();
+        authorities.add("ROLE_USER");
         ManagedUserVM managedUserVM = new ManagedUserVM(
             null,
             "anotherlogin",
@@ -331,7 +331,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
             null,
             null,
             <%_ } _%>
-            autorities);
+            authorities);
 
         // Create the User
         restUserMockMvc.perform(post("/api/users")
@@ -419,8 +419,8 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         // Update the user
         User updatedUser = userRepository.findOne(user.getId());
 
-        Set<String> autorities = new HashSet<>();
-        autorities.add("ROLE_USER");
+        Set<String> authorities = new HashSet<>();
+        authorities.add("ROLE_USER");
         ManagedUserVM managedUserVM = new ManagedUserVM(
             updatedUser.getId(),
             updatedUser.getLogin(),
@@ -439,7 +439,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
             updatedUser.getLastModifiedBy(),
             updatedUser.getLastModifiedDate(),
             <%_ } _%>
-            autorities);
+            authorities);
 
         restUserMockMvc.perform(put("/api/users")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -474,8 +474,8 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         // Update the user
         User updatedUser = userRepository.findOne(user.getId());
 
-        Set<String> autorities = new HashSet<>();
-        autorities.add("ROLE_USER");
+        Set<String> authorities = new HashSet<>();
+        authorities.add("ROLE_USER");
         ManagedUserVM managedUserVM = new ManagedUserVM(
             updatedUser.getId(),
             UPDATED_LOGIN,
@@ -494,7 +494,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
             updatedUser.getLastModifiedBy(),
             updatedUser.getLastModifiedDate(),
             <%_ } _%>
-            autorities);
+            authorities);
 
         restUserMockMvc.perform(put("/api/users")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -545,13 +545,11 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         userSearchRepository.save(anotherUser);
         <%_ } _%>
 
-        int databaseSizeBeforeUpdate = userRepository.findAll().size();
-
         // Update the user
         User updatedUser = userRepository.findOne(user.getId());
 
-        Set<String> autorities = new HashSet<>();
-        autorities.add("ROLE_USER");
+        Set<String> authorities = new HashSet<>();
+        authorities.add("ROLE_USER");
         ManagedUserVM managedUserVM = new ManagedUserVM(
             updatedUser.getId(),
             updatedUser.getLogin(),
@@ -570,7 +568,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
             updatedUser.getLastModifiedBy(),
             updatedUser.getLastModifiedDate(),
             <%_ } _%>
-            autorities);
+            authorities);
 
         restUserMockMvc.perform(put("/api/users")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -607,13 +605,12 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         <%_ if (searchEngine === 'elasticsearch') { _%>
         userSearchRepository.save(anotherUser);
         <%_ } _%>
-        int databaseSizeBeforeUpdate = userRepository.findAll().size();
 
         // Update the user
         User updatedUser = userRepository.findOne(user.getId());
 
-        Set<String> autorities = new HashSet<>();
-        autorities.add("ROLE_USER");
+        Set<String> authorities = new HashSet<>();
+        authorities.add("ROLE_USER");
         ManagedUserVM managedUserVM = new ManagedUserVM(
             updatedUser.getId(),
             "jhipster", // this login should already be used by anotherUser
@@ -632,7 +629,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
             updatedUser.getLastModifiedBy(),
             updatedUser.getLastModifiedDate(),
             <%_ } _%>
-            autorities);
+            authorities);
 
         restUserMockMvc.perform(put("/api/users")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
