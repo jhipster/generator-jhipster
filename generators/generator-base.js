@@ -1509,7 +1509,7 @@ module.exports = class extends Generator {
                 done();
             });
         } catch (err) {
-            // fail silently as this function doesnt affect normal generator flow
+            // fail silently as this function doesn't affect normal generator flow
         }
     }
 
