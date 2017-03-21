@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes, CanActivate } from '@angular/router';
 
-import { UserRouteAccessService } from '../../shared';
 import { PaginationUtil } from 'ng-jhipster';
 
 import { UserMgmtComponent } from './user-management.component';
