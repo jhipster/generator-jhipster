@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { Observable } from 'rxjs/Rx';
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageHelper } from '../../../../../../main/webapp/app/shared';
