@@ -271,13 +271,13 @@ The Header contains a succinct description of the change:
 * don't capitalize first letter
 * no dot (.) at the end
 
-###Body
+### Body
 If your change is simple, the Body is optional.
 
 Just as in the Header, use the imperative, present tense: "change" not "changed" nor "changes".
 The Body should include the motivation for the change and contrast this with previous behavior.
 
-###Footer
+### Footer
 The footer is the place to reference GitHub issues that this commit **Closes**.
 
 You **must** use the [Github keywords](https://help.github.com/articles/closing-issues-via-commit-messages) for
