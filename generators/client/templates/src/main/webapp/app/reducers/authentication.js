@@ -1,4 +1,4 @@
-import { browserHistory } from 'react-router';
+import { hashHistory } from 'react-router';
 
 const LOGIN = 'authentication/LOGIN';
 const LOGIN_SUCCESS = 'authentication/LOGIN_SUCCESS';
@@ -15,7 +15,7 @@ const LOGOUT_FAIL = 'authentication/LOGOUT_FAIL';
 const ERROR_MESSAGE = 'authentication/ERROR_MESSAGE';
 
 const initialState = {
-  isFetching: false,
+  loading: false,
   isAuthenticated: false,
   account: {},
   errorMessage: null, // Errors returned from server side
@@ -28,6 +28,11 @@ const initialState = {
 export default function reducer(state = initialState, action) {
   let isAuthenticated = false;
   switch (action.type) {
+    case LOGIN:
+      return {
+        ...initialState,
+        loading: true
+      };
     case LOGIN_SUCCESS:
       return {
         ...initialState,
@@ -45,7 +50,7 @@ export default function reducer(state = initialState, action) {
     case GET_SESSION:
       return {
         ...state,
-        isFetching: true
+        loading: true
       };
     case GET_SESSION_SUCCESS:
       isAuthenticated = action.result.data ? action.result.data.activated : false;
@@ -109,7 +114,7 @@ export function login(username, password, rememberMe = false) {
       response.expires_at = expiredAt.getTime();
       localStorage.setItem('jhi-authenticationToken', response);
       const routingState = getState().routing.locationBeforeTransitions.state || {};
-      browserHistory.push(routingState.nextPathname || '/#/');
+      hashHistory.push(routingState.nextPathname || '/');
       dispatch(getSession());
     }
   };
@@ -121,7 +126,7 @@ export function logout() {
     promise: client => client.post('/api/logout', {}),
     afterSuccess: () => {
       clearAuthToken();
-      browserHistory.push('/#/');
+      hashHistory.push('/');
     }
   };
 }
@@ -141,7 +146,7 @@ export function login(username, password, rememberMe = false) {
         }
       }
       const routingState = getState().routing.locationBeforeTransitions.state || {};
-      browserHistory.push(routingState.nextPathname || '/#/');
+      hashHistory.push(routingState.nextPathname || '/');
       dispatch(getSession());
     }
   };
@@ -153,7 +158,7 @@ export function logout() {
     promise: client => client.get('/api/account'),
     afterSuccess: () => {
       clearAuthToken();
-      browserHistory.push('/#/');
+      hashHistory.push('/');
     }
   };
 }
@@ -170,7 +175,7 @@ export function login(username, password, rememberMe = false) {
     promise: client => client.post('/api/authentication', data, { headers }),
     afterSuccess: (dispatch, getState, response) => {
       const routingState = getState().routing.locationBeforeTransitions.state || {};
-      browserHistory.push(routingState.nextPathname || '/#/');
+      hashHistory.push(routingState.nextPathname || '/');
       dispatch(getSession());
     }
   };
@@ -182,7 +187,7 @@ export function logout() {
     promise: client => client.post('/api/logout', {}),
     afterSuccess: (dispatch, getState, response) => {
       dispatch(getSession());
-      browserHistory.push('/#/');
+      hashHistory.push('/');
     }
   };
 }
@@ -191,8 +196,11 @@ export function logout() {
 export function redirectToLoginWithMessage(messageKey) {
   return (dispatch, getState) => {
     dispatch(displayAuthError(messageKey));
-    const currentPath = getState().routing.locationBeforeTransitions.pathname;
-    browserHistory.replace({
+    let currentPath = getState().routing.locationBeforeTransitions.pathname;
+    if (currentPath === '/login') {
+      currentPath = getState().routing.locationBeforeTransitions.state.nextPathname || '/';
+    }
+    hashHistory.replace({
       pathname: '/login',
       state: { nextPathname: currentPath }
     });

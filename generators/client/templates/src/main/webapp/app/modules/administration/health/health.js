@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Translate from 'react-translate-component';
 
-import { systemHealth } from '../../reducers/administration';
+import { systemHealth } from '../../../reducers/administration';
 
 export class HealthPage extends Component {
 

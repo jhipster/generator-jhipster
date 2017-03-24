@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Translate from 'react-translate-component';
 
-import { gatewayRoutes } from '../../reducers/administration';
+import { gatewayRoutes } from '../../../reducers/administration';
 
 export class GatewayPage extends Component {
 
