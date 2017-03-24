@@ -470,6 +470,15 @@ module.exports = EntityGenerator.extend({
                     field.fieldNameUnderscored = _.snakeCase(field.fieldName);
                 }
 
+                if (_.isUndefined(field.fieldNameAsDatabaseColumn)) {
+                    let fieldNameUnderscored = _.snakeCase(field.fieldName);
+                    if (jhiCore.isReservedTableName(fieldNameUnderscored, this.databaseType)) {
+                        field.fieldNameAsDatabaseColumn = '\\"' + fieldNameUnderscored + '\\"';
+                    } else {
+                        field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
+                    }
+                }
+
                 if (_.isUndefined(field.fieldNameHumanized)) {
                     field.fieldNameHumanized = _.startCase(field.fieldName);
                 }

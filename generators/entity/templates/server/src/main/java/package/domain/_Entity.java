@@ -73,6 +73,7 @@ public class <%= entityClass %> implements Serializable {
     const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
     const fieldName = fields[idx].fieldName;
     const fieldNameUnderscored = fields[idx].fieldNameUnderscored;
+    const fieldNameAsDatabaseColumn = fields[idx].fieldNameAsDatabaseColumn;
     if (fieldValidate == true) {
         if (fieldValidate == true && fieldValidateRules.indexOf('required') != -1) {
             required = true;
@@ -90,11 +91,11 @@ public class <%= entityClass %> implements Serializable {
     @Lob
         <%_ }
         if (fieldType == 'LocalDate' || fieldType == 'ZonedDateTime') { _%>
-    @Column(name = "<%=fieldNameUnderscored %>"<% if (required) { %>, nullable = false<% } %>)
+    @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (required) { %>, nullable = false<% } %>)
         <%_ } else if (fieldType == 'BigDecimal') { _%>
-    @Column(name = "<%=fieldNameUnderscored %>", precision=10, scale=2<% if (required) { %>, nullable = false<% } %>)
+    @Column(name = "<%-fieldNameAsDatabaseColumn %>", precision=10, scale=2<% if (required) { %>, nullable = false<% } %>)
         <%_ } else { _%>
-    @Column(name = "<%=fieldNameUnderscored %>"<% if (fieldValidate == true) { %><% if (fieldValidateRules.indexOf('maxlength') != -1) { %>, length = <%= fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% } %>)
+    @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (fieldValidate == true) { %><% if (fieldValidateRules.indexOf('maxlength') != -1) { %>, length = <%= fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% } %>)
     <%_     }
         } _%>
     <%_ if (databaseType == 'mongodb') { _%>
@@ -108,7 +109,7 @@ public class <%= entityClass %> implements Serializable {
 
     <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
       <%_ if (databaseType == 'sql' || databaseType === 'cassandra') { _%>
-    @Column(name = "<%=fieldNameUnderscored %>_content_type"<% if (required && databaseType !== 'cassandra') { %>, nullable = false<% } %>)
+    @Column(name = "<%-fieldNameAsDatabaseColumn %>_content_type"<% if (required && databaseType !== 'cassandra') { %>, nullable = false<% } %>)
         <%_ if (required && databaseType === 'cassandra') { _%>
     @NotNull
         <%_ } _%>
