@@ -471,9 +471,9 @@ module.exports = EntityGenerator.extend({
                 }
 
                 if (_.isUndefined(field.fieldNameAsDatabaseColumn)) {
-                    let fieldNameUnderscored = _.snakeCase(field.fieldName);
+                    const fieldNameUnderscored = _.snakeCase(field.fieldName);
                     if (jhiCore.isReservedTableName(fieldNameUnderscored, this.databaseType)) {
-                        field.fieldNameAsDatabaseColumn = '\\"' + fieldNameUnderscored + '\\"';
+                        field.fieldNameAsDatabaseColumn = `\\"${fieldNameUnderscored}\\"`;
                     } else {
                         field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
                     }
