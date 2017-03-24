@@ -79,7 +79,6 @@ module.exports = EntityGenerator.extend({
         this.entityTableName = this.getTableName(this.options['table-name'] || this.name);
         this.entityNameCapitalized = _.upperFirst(this.name);
         this.entityAngularJSSuffix = this.options['angular-suffix'];
-        this.skipServer = this.config.get('skipServer') || this.options['skip-server'];
         this.isDebugEnabled = this.options.debug;
         if (this.entityAngularJSSuffix && !this.entityAngularJSSuffix.startsWith('-')) {
             this.entityAngularJSSuffix = `-${this.entityAngularJSSuffix}`;
@@ -97,7 +96,7 @@ module.exports = EntityGenerator.extend({
     },
     initializing: {
 
-        getConfig(args) {
+        getConfig() {
             this.useConfigurationFile = false;
             this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
             this.baseName = this.config.get('baseName');
@@ -138,6 +137,7 @@ module.exports = EntityGenerator.extend({
             }
 
             this.skipClient = this.applicationType === 'microservice' || this.config.get('skipClient') || this.options['skip-client'];
+            this.skipServer = this.config.get('skipServer') || this.options['skip-server'];
 
             this.angularAppName = this.getAngularAppName();
             this.angular2AppName = this.getAngular2AppName();
