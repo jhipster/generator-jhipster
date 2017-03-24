@@ -1,18 +1,19 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 import { redirectToLoginWithMessage, getSession } from '../../../reducers/authentication';
 
-const mapStateToProps = state => ({
-  loading: state.authentication.loading,
-  isAuthenticated: state.authentication.isAuthenticated
+const mapStoreToProps = store => ({
+  loading: store.authentication.loading,
+  isAuthenticated: store.authentication.isAuthenticated
 });
 const mapDispatchToProps = {
   redirectToLoginWithMessage,
   getSession
 };
 
-const privateRoute = Wrapped => connect(mapStateToProps, mapDispatchToProps)(class extends React.Component {
+const privateRoute = Wrapped => connect(mapStoreToProps, mapDispatchToProps)(class extends React.Component {
   static propTypes = {
     getSession: PropTypes.func.isRequired,
     redirectToLoginWithMessage: PropTypes.func.isRequired,
@@ -22,26 +23,28 @@ const privateRoute = Wrapped => connect(mapStateToProps, mapDispatchToProps)(cla
 
   componentDidMount() {
     this.props.getSession();
-    this.redirectIfNotLogged(this.props);
+    // this.redirectIfNotLogged(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.redirectIfNotLogged(nextProps);
+    // this.redirectIfNotLogged(nextProps);
   }
 
-  redirectIfNotLogged(props) {
-    const { loading, isAuthenticated } = props;
-    if (loading === false && !isAuthenticated) {
-      this.props.redirectToLoginWithMessage('login.messages.error.authentication');
-    }
-  }
+  // redirectIfNotLogged(props) {
+  //   const { loading, isAuthenticated } = props;
+  //   if (loading === false && !isAuthenticated) {
+  //     // TODO fix issue with authentication redirect
+  //     this.props.redirectToLoginWithMessage('login.messages.error.authentication');
+  //   }
+  // }
 
   render() {
     const { loading, isAuthenticated } = this.props;
-    if (loading || !isAuthenticated) {
+    if (loading && !isAuthenticated) {
       return (
         <div className="center loader">
           <div>Loading...</div>
+          <div>You are not authorized to view this page... <Link to="/login" className="alert-link">sign in</Link></div>
         </div>
       );
     }

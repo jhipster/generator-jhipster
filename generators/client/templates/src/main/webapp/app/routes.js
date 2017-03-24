@@ -15,6 +15,8 @@ if (process.env.NODE_ENV !== 'production') {
   // Require async routes only in development for react-hot-reloader to work.
   require('./modules/home/home');
   require('./modules/login/login');
+  require('./modules/account/settings');
+  require('./modules/account/password');
   // require('./modules/administration/gateway/gateway');
   require('./modules/administration/logs/logs');
   // require('./modules/administration/health/health');
@@ -55,12 +57,28 @@ export default (onLogout) => {
           });
         }}
       />
+      <Route
+        path="/account/settings"
+        getComponent={(nextState, cb) => {
+          require.ensure([], (require) => {
+            cb(null, PrivateRoute(require('./modules/account/settings/settings').default));
+          });
+        }}
+      />
+      <Route
+        path="/account/password"
+        getComponent={(nextState, cb) => {
+          require.ensure([], (require) => {
+            cb(null, PrivateRoute(require('./modules/account/password/password').default));
+          });
+        }}
+      />
       {/*
       <Route
         path="/admin/gateway"
         getComponent={(nextState, cb) => {
           require.ensure([], (require) => {
-            cb(null, PrivateRoute(require('./modules/administration/gateway/Gateway').default));
+            cb(null, PrivateRoute(require('./modules/administration/gateway/gateway').default));
           });
         }}
       />
@@ -68,7 +86,7 @@ export default (onLogout) => {
         path="/admin/health"
         getComponent={(nextState, cb) => {
           require.ensure([], (require) => {
-            cb(null, PrivateRoute(require('./modules/administration/health/Health').default));
+            cb(null, PrivateRoute(require('./modules/administration/health/health').default));
           });
         }}
       />
@@ -76,7 +94,7 @@ export default (onLogout) => {
         path="/admin/metrics"
         getComponent={(nextState, cb) => {
           require.ensure([], (require) => {
-            cb(null, PrivateRoute(require('./modules/administration/metrics/Metrics').default));
+            cb(null, PrivateRoute(require('./modules/administration/metrics/metrics').default));
           });
         }}
       />
@@ -84,7 +102,7 @@ export default (onLogout) => {
         path="/admin/user-management"
         getComponent={(nextState, cb) => {
           require.ensure([], (require) => {
-            cb(null, PrivateRoute(require('./modules/administration/user-management/UserManagement').default));
+            cb(null, PrivateRoute(require('./modules/administration/user-management/user-management').default));
           });
         }}
       />
@@ -101,7 +119,7 @@ export default (onLogout) => {
         path="/admin/audits"
         getComponent={(nextState, cb) => {
           require.ensure([], (require) => {
-            cb(null, PrivateRoute(require('./modules/administration/audits/Audits').default));
+            cb(null, PrivateRoute(require('./modules/administration/audits/audits').default));
           });
         }}
       />
@@ -109,8 +127,7 @@ export default (onLogout) => {
         path="/admin/logs"
         getComponent={(nextState, cb) => {
           require.ensure([], (require) => {
-            // cb(null, PrivateRoute(require('./modules/administration/Logs').default));
-            cb(null, (require('./modules/administration/logs/logs').default));
+            cb(null, PrivateRoute(require('./modules/administration/logs/logs').default));
           });
         }}
       />
@@ -118,8 +135,7 @@ export default (onLogout) => {
         path="/admin/docs"
         getComponent={(nextState, cb) => {
           require.ensure([], (require) => {
-            // cb(null, PrivateRoute(require('./modules/administration/docs/Docs').default));
-            cb(null, require('./modules/administration/docs/docs').default);
+            cb(null, PrivateRoute(require('./modules/administration/docs/docs').default));
           });
         }}
       />
