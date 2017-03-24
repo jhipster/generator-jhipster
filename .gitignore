@@ -11,3 +11,13 @@ test/temp/
 yarn.lock
 .DS_Store
 .vscode/
+.idea
+*.iml
+*.ipr
+*.iws
+atlassian-ide-plugin.xml
+/.project
+test/temp/
+*debug.log*
+.vscode
+yarn.lock

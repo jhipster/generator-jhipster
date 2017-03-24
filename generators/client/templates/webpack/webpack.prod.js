@@ -9,7 +9,7 @@ const commonConfig = require('./webpack.common.js');
 module.exports = webpackMerge(commonConfig(), {
   devtool: 'source-map',
   output: {
-    path: path.resolve('./target/www'),
+    path: path.resolve('./<%= BUILD_DIR %>www'),
     filename: '[name].js'
   },
   plugins: [

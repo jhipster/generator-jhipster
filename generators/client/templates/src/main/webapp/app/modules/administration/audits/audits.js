@@ -4,7 +4,7 @@ import Translate from 'react-translate-component';
 
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 
-import { getAudits } from '../../reducers/administration';
+import { getAudits } from '../../../reducers/administration';
 
 export class AuditsPage extends Component {
 

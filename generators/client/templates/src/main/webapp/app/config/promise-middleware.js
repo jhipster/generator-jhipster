@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { logError } from '../shared/util/log-util';
 
 export default function promiseMiddleware({ dispatch, getState }) {
   return next => (action) => {
@@ -25,7 +26,7 @@ export default function promiseMiddleware({ dispatch, getState }) {
     return promise(axios)
       .then(onFulfilled, onRejected)
       .catch((error) => {
-        console.error('MIDDLEWARE ERROR:', error); // TODO remove console log
+        logError('MIDDLEWARE ERROR:', error);
         onRejected(error);
       });
   };
