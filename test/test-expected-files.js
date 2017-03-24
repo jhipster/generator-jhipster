@@ -393,6 +393,7 @@ const expectedFiles = {
     ],
 
     microservice: [
+        `${SERVER_MAIN_RES_DIR}static/index.html`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/MicroserviceSecurityConfiguration.java`,
         'package.json'
     ],

@@ -289,6 +289,7 @@ function writeFiles() {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/client/_AuthorizedFeignClient.java`, `${javaDir}client/AuthorizedFeignClient.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/client/_OAuth2InterceptedFeignConfiguration.java`, `${javaDir}client/OAuth2InterceptedFeignConfiguration.java`);
             }
+            this.copy(`${SERVER_MAIN_RES_DIR}static/microservices_index.html`, `${SERVER_MAIN_RES_DIR}static/index.html`);
         },
 
         writeServerMicroserviceAndGatewayFiles() {
