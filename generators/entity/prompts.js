@@ -239,8 +239,6 @@ function askForTableName() {
                     return 'The table name cannot contain special characters';
                 } else if (input === '') {
                     return 'The table name cannot be empty';
-                } else if (jhiCore.isReservedTableName(input, prodDatabaseType)) {
-                    return `The table name cannot contain a ${prodDatabaseType.toUpperCase()} reserved keyword`;
                 } else if (prodDatabaseType === 'oracle' && input.length > 14) {
                     return 'The table name is too long for Oracle, try a shorter name';
                 } else if (input.length > 30) {
@@ -420,8 +418,8 @@ function askForField(done) {
                     return 'Your field name cannot start with a upper case letter';
                 } else if (input === 'id' || fieldNamesUnderscored.indexOf(_.snakeCase(input)) !== -1) {
                     return 'Your field name cannot use an already existing field name';
-                } else if (!skipServer && jhiCore.isReservedFieldName(input, prodDatabaseType)) {
-                    return `Your field name cannot contain a Java, Angular or ${prodDatabaseType.toUpperCase()} reserved keyword`;
+                } else if (!skipServer && jhiCore.isReservedFieldName(input)) {
+                    return 'Your field name cannot contain a Java or Angular reserved keyword';
                 } else if (prodDatabaseType === 'oracle' && input.length > 30) {
                     return 'The field name cannot be of more than 30 characters';
                 }
