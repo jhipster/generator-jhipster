@@ -57,14 +57,14 @@ describe('ReservedKeywords', () => {
   describe('::isReservedFieldName', () => {
     describe('when passing a valid field name', () => {
       it('returns false', () => {
-        expect(isReservedFieldName('item', 'sql')).to.be.false;
-        expect(isReservedFieldName('mySuperField', 'cassandra')).to.be.false;
+        expect(isReservedFieldName('item')).to.be.false;
+        expect(isReservedFieldName('mySuperField')).to.be.false;
       });
     });
     describe('when passing an invalid field name', () => {
       it('returns true', () => {
-        expect(isReservedFieldName('ANALYZE', 'sql')).to.be.true;
-        expect(isReservedFieldName('CONTINUE', 'sql')).to.be.true;
+        expect(isReservedFieldName('private')).to.be.true;
+        expect(isReservedFieldName('class')).to.be.true;
       });
     });
   });
