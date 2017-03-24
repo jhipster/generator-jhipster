@@ -266,6 +266,9 @@ public class UserService {
                 <%_ } else { // Cassandra _%>
                 user.setAuthorities(userDTO.getAuthorities());
                 <%_ } _%>
+                <%_ if (databaseType == 'mongodb' || databaseType == 'cassandra') { _%>
+                userRepository.save(user);
+                <%_ } _%>
                 log.debug("Changed Information for User: {}", user);
                 return user;
             })
