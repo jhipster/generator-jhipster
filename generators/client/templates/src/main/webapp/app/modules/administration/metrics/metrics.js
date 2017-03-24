@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import Translate from 'react-translate-component';
-import { systemMetrics } from '../../reducers/administration';
+import { systemMetrics } from '../../../reducers/administration';
 
 export class MetricsPage extends Component {
 

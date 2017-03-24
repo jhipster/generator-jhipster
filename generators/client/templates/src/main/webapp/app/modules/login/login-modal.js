@@ -7,12 +7,12 @@ import Translate from 'react-translate-component';
 class LoginModal extends Component {
 
   static propTypes = {
-    showModal: PropTypes.bool.isRequired,
     authenticationError: PropTypes.bool,
     handleLogin: PropTypes.func.isRequired,
     handleClose: PropTypes.func.isRequired,
-    handleForgottenPass: PropTypes.func,
-    handleRegister: PropTypes.func
+    handleForgottenPass: PropTypes.func.isRequired,
+    handleRegister: PropTypes.func.isRequired,
+    showModal: PropTypes.bool.isRequired
   };
 
   static defaultProps = {

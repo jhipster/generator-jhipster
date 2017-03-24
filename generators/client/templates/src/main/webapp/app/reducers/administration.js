@@ -13,7 +13,7 @@ const FETCH_AUDITS = 'administration/FETCH_AUDITS';
 const FETCH_API_DOCS = 'administration/FETCH_API_DOCS';
 
 const initialState = {
-  isFetching: false,
+  loading: false,
   gateway: {
     routes: []
   },
@@ -46,12 +46,12 @@ export default function reducer(state = initialState, action) {
     case FETCH:
       return {
         ...state,
-        isFetching: true
+        loading: true
       };
     case FETCH_SUCCESS:
       return {
         ...state,
-        isFetching: false
+        loading: false
       };
     case FETCH_GATEWAY_ROUTE:
       return {
@@ -59,13 +59,13 @@ export default function reducer(state = initialState, action) {
         gateway: {
           routes: action.result.data
         },
-        isFetching: false
+        loading: false
       };
     case FETCH_METRICS:
       return {
         ...state,
         metrics: action.result.data,
-        isFetching: false
+        loading: false
       };
     case FETCH_LOGS:
       return {
@@ -73,7 +73,7 @@ export default function reducer(state = initialState, action) {
         logs: {
           loggers: action.result.data
         },
-        isFetching: false
+        loading: false
       };
     case FETCH_USERS:
       return {
@@ -81,7 +81,7 @@ export default function reducer(state = initialState, action) {
         userManagement: {
           users: action.result.data
         },
-        isFetching: false
+        loading: false
       };
     case FETCH_CONFIGURATIONS:
       return {
@@ -90,7 +90,7 @@ export default function reducer(state = initialState, action) {
           ...state.configuration,
           configProps: action.result.data
         },
-        isFetching: false
+        loading: false
       };
     case FETCH_ENV:
       return {
@@ -99,25 +99,25 @@ export default function reducer(state = initialState, action) {
           ...state.configuration,
           env: action.result.data
         },
-        isFetching: false
+        loading: false
       };
     case FETCH_AUDITS:
       return {
         ...state,
         audits: action.result.data,
-        isFetching: false
+        loading: false
       };
     case FETCH_HEALTH:
       return {
         ...state,
         health: action.result.data,
-        isFetching: false
+        loading: false
       };
     case FETCH_API_DOCS:
       return {
         ...state,
         apiDocs: action.result.data,
-        isFetching: false
+        loading: false
       };
     default:
       return state;
