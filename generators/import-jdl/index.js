@@ -75,7 +75,11 @@ module.exports = JDLGenerator.extend({
                     this.composeWith(require.resolve('../entity'), {
                         regenerate: true,
                         'skip-install': true,
-                        arguments: [entity.name]
+                        'skip-client': entity.definition.skipClient,
+                        'skip-server': entity.definition.skipServer,
+                        'no-fluent-methods': entity.definition.noFluentMethod,
+                        'skip-user-management': entity.definition.skipUserManagement,
+                        arguments: [entity.name],
                     });
                 });
             } catch (e) {
