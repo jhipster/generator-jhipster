@@ -9,7 +9,7 @@ const commonConfig = require('./webpack.common.js');
 module.exports = webpackMerge(commonConfig(), {
   devtool: 'inline-source-map',
   output: {
-    path: path.resolve('./target/www'),
+    path: path.resolve('./<%= BUILD_DIR %>www'),
     filename: '[name].bundle.js',
     chunkFilename: '[id].chunk.js'
   },
@@ -31,7 +31,7 @@ module.exports = webpackMerge(commonConfig(), {
     ]
   },
   devServer: {
-    contentBase: './target/www',
+    contentBase: './<%= BUILD_DIR %>www',
     proxy: [
       {
         context: [
