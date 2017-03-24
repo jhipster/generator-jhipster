@@ -152,7 +152,7 @@ public class AccountResource {
             .findOneByLogin(SecurityUtils.getCurrentUserLogin())
             .map(u -> {
                 userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
-                    userDTO.getLangKey()<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>, userDTO.getImageUrl()<% } %>);
+                    userDTO.getLangKey()<% if (databaseType === 'mongodb' || databaseType === 'sql') { %>, userDTO.getImageUrl()<% } %>);
                 return new ResponseEntity(HttpStatus.OK);
             })
             .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
