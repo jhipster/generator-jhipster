@@ -3,7 +3,6 @@
 const expect = require('chai').expect,
   isReserved = require('../../../../lib/core/jhipster/reserved_keywords').isReserved,
   isReservedClassName = require('../../../../lib/core/jhipster/reserved_keywords').isReservedClassName,
-  isReservedTableName = require('../../../../lib/core/jhipster/reserved_keywords').isReservedTableName,
   isReservedFieldName = require('../../../../lib/core/jhipster/reserved_keywords').isReservedFieldName;
 
 describe('ReservedKeywords', () => {
@@ -66,28 +65,6 @@ describe('ReservedKeywords', () => {
       it('returns true', () => {
         expect(isReservedFieldName('ANALYZE', 'sql')).to.be.true;
         expect(isReservedFieldName('CONTINUE', 'sql')).to.be.true;
-      });
-    });
-  });
-  describe('::isReservedTableName', () => {
-    describe('when passing a valid table name', () => {
-      it('returns false', () => {
-        expect(isReservedTableName('job_history', 'sql')).to.be.false;
-        expect(isReservedTableName('job', 'mysql')).to.be.false;
-        expect(isReservedTableName('document', 'postgresql')).to.be.false;
-        expect(isReservedTableName('region', 'oracle')).to.be.false;
-        expect(isReservedTableName('item', 'cassandra')).to.be.false;
-        expect(isReservedTableName('person', 'mongodb')).to.be.false;
-      });
-    });
-    describe('when passing an invalid table name', () => {
-      it('returns true', () => {
-        expect(isReservedTableName('ANALYZE', 'sql')).to.be.true;
-        expect(isReservedTableName('ANALYZE', 'mysql')).to.be.true;
-        expect(isReservedTableName('ANALYZE', 'postgresql')).to.be.true;
-        expect(isReservedTableName('ACCESS', 'oracle')).to.be.true;
-        expect(isReservedTableName('ADD', 'cassandra')).to.be.true;
-        expect(isReservedTableName('DOCUMENT', 'mongodb')).to.be.true;
       });
     });
   });
