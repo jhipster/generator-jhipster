@@ -45,5 +45,7 @@
     "entityTableName": "job_history",
     "dto": "no",
     "pagination": "infinite-scroll",
-    "service": "no"
+    "service": "no",
+    "skipClient": true,
+    "skipServer": true
 }

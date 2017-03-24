@@ -36,5 +36,7 @@
     "entityTableName": "location",
     "dto": "no",
     "pagination": "no",
-    "service": "no"
+    "service": "no",
+    "skipClient": true,
+    "skipServer": true
 }

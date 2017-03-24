@@ -38,5 +38,7 @@
     "entityTableName": "job",
     "dto": "no",
     "pagination": "pagination",
-    "service": "no"
+    "service": "no",
+    "skipClient": true,
+    "skipServer": true
 }
