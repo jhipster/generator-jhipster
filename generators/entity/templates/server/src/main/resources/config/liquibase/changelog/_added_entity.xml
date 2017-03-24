@@ -104,7 +104,7 @@
         </createTable>
         <%_ for (const idx in fields) {
             if (fields[idx].fieldType == 'ZonedDateTime') { _%>
-        <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%=fields[idx].fieldNameUnderscored %>" columnDataType="datetime"/>
+        <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%=fields[idx].fieldNameAsDatabaseColumn %>" columnDataType="datetime"/>
         <%_ }
         } _%>
         <% for (idx in relationships) {
