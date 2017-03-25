@@ -35,6 +35,12 @@ module.exports = JhipsterClientGenerator.extend({
             type: String
         });
 
+        // This adds support for a `--uaa-base-name` flag
+        this.option('uaa-base-name', {
+            desc: 'Provide the name of UAA server, when using --auth uaa',
+            type: String
+        });
+
         // This adds support for a `--build` flag
         this.option('build', {
             desc: 'Provide build tool for the application',
@@ -102,6 +108,12 @@ module.exports = JhipsterClientGenerator.extend({
         this.skipServer = this.configOptions.skipServer || this.config.get('skipServer');
         this.skipUserManagement = this.configOptions.skipUserManagement || this.options['skip-user-management'] || this.config.get('skipUserManagement');
         this.authenticationType = this.options.auth;
+        let uaaBaseName = this.options.uaaBaseName || this.configOptions.uaaBaseName || this.options['uaa-base-name'] || this.config.get('uaaBaseName');
+        if(this.options.auth === 'uaa' && _.isNil(uaaBaseName)) {
+            this.error("when using --auth uaa, a UAA basename must be provided with --uaa-base-name");
+        }
+        this.uaaBaseName = uaaBaseName;
+
         this.buildTool = this.options.build;
         this.websocket = this.options.websocket;
         this.devDatabaseType = this.options['dev-db'];
