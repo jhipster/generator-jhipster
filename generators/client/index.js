@@ -109,8 +109,8 @@ module.exports = JhipsterClientGenerator.extend({
         this.skipUserManagement = this.configOptions.skipUserManagement || this.options['skip-user-management'] || this.config.get('skipUserManagement');
         this.authenticationType = this.options.auth;
         const uaaBaseName = this.options.uaaBaseName || this.configOptions.uaaBaseName || this.options['uaa-base-name'] || this.config.get('uaaBaseName');
-        if(this.options.auth === 'uaa' && _.isNil(uaaBaseName)) {
-            this.error("when using --auth uaa, a UAA basename must be provided with --uaa-base-name");
+        if (this.options.auth === 'uaa' && _.isNil(uaaBaseName)) {
+            this.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
         }
         this.uaaBaseName = uaaBaseName;
 
