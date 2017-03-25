@@ -7,15 +7,15 @@
     "node_modules"
   ],
   "dependencies": {
-    "@angular/common": "2.4.9",
-    "@angular/compiler": "2.4.9",
-    "@angular/core": "2.4.9",
-    "@angular/forms": "2.4.9",
-    "@angular/http": "2.4.9",
-    "@angular/platform-browser": "2.4.9",
-    "@angular/platform-browser-dynamic": "2.4.9",
-    "@angular/router": "3.4.9",
-    "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.21",
+    "@angular/common": "4.0.0",
+    "@angular/compiler": "4.0.0",
+    "@angular/core": "4.0.0",
+    "@angular/forms": "4.0.0",
+    "@angular/http": "4.0.0",
+    "@angular/platform-browser": "4.0.0",
+    "@angular/platform-browser-dynamic": "4.0.0",
+    "@angular/router": "4.0.0",
+    "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.22",
     "angular2-infinite-scroll": "0.3.4",
     "bootstrap": "4.0.0-alpha.6",
     "font-awesome": "4.7.0",
@@ -35,7 +35,7 @@
     "zone.js": "0.8.2"
   },
   "devDependencies": {
-    "@angular/cli": "1.0.0-rc.2",
+    "@angular/cli": "1.0.0",
     "@types/jasmine": "2.5.45",
     "@types/node": "7.0.8",
     <%_ if (protractorTests) { _%>

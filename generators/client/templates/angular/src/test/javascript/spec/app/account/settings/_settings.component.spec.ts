@@ -20,8 +20,8 @@ describe('Component Tests', () => {
 
         let comp: SettingsComponent;
         let fixture: ComponentFixture<SettingsComponent>;
-        let mockAuth: MockAccountService;
-        let mockPrincipal: MockPrincipal;
+        let mockAuth: any;
+        let mockPrincipal: any;
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
