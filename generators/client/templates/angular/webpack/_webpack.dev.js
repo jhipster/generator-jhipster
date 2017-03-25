@@ -21,7 +21,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         proxy: [{
             context: [<% if (authenticationType === 'oauth2') { %>
                 '/oauth',<% } %><% if (authenticationType === 'uaa') { %>
-                '/uaa',<% } %>
+                '/<%= uaaBaseName.toLowerCase() %>',<% } %>
                 <!-- jhipster-needle-add-entity-to-webpack - JHipster will add entity api paths here -->
                 '/api',
                 '/management',
