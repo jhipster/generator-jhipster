@@ -11,7 +11,7 @@ public class ParameterizedErrorVM implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String PARAMS = "params";
+    private static final String PARAM = "param";
 
     private final String message;
     private Map<String, String> paramMap;
@@ -26,7 +26,7 @@ public class ParameterizedErrorVM implements Serializable {
         if (params != null && params.length > 0) {
             paramMap = new HashMap<>();
             for (int i = 0; i < params.length; i++) {
-                paramMap.put(PARAMS + i, params[i]);
+                paramMap.put(PARAM + i, params[i]);
             }
         }
     }
