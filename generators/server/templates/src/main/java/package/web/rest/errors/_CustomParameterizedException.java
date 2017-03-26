@@ -11,7 +11,7 @@ package <%=packageName%>.web.rest.errors;
  * Can be translated with:
  *
  * <pre>
- * "error.myCustomError" :  "The server says {{params.param0}} to {{params.param1}}"
+ * "error.myCustomError" :  "The server says {{param0}} to {{param1}}"
  * </pre>
  */
 public class CustomParameterizedException extends RuntimeException {
