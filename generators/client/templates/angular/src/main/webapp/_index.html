@@ -15,10 +15,10 @@
     <![endif]-->
     <<%= jhiPrefix %>-main></<%= jhiPrefix %>-main>
     <script>
-        // load shim for IE 11
+        // load shim for IE
         if (window.navigator.userAgent.indexOf('Trident/') > 0) {
             var script = document.createElement('script');
-            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.3/es6-shim.min.js';
+            script.src = 'core-js-shim.min.js';
             script.type = 'text/javascript';
             document.getElementsByTagName('head')[0].appendChild(script)
         }

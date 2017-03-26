@@ -106,6 +106,7 @@ module.exports = function (options) {
                 manifest: require(path.resolve('./<%= BUILD_DIR %>www/vendor.json')),
             }),
             new CopyWebpackPlugin([
+                { from: './node_modules/core-js/client/shim.min.js', to: 'core-js-shim.min.js' },
                 { from: './node_modules/swagger-ui/dist', to: 'swagger-ui/dist' },
                 { from: './src/main/webapp/swagger-ui/', to: 'swagger-ui' },
                 { from: './src/main/webapp/favicon.ico', to: 'favicon.ico' },
