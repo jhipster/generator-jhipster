@@ -11,7 +11,7 @@ public class ParameterizedErrorVM implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static final String PARAMS = "params";
+    private static final String PARAMS = "params";
 
     private final String message;
     private Map<String, String> paramMap;
@@ -35,8 +35,8 @@ public class ParameterizedErrorVM implements Serializable {
         return message;
     }
 
-    public String[] getParams() {
-        return params;
+    public Map<String, String> getParams() {
+        return paramMap;
     }
 
 }
