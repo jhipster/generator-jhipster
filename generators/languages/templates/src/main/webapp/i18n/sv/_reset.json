@@ -20,7 +20,7 @@
                 "info": "Välj ett nytt lösenord",
                 <%_ if (clientFramework === 'angular1') { _%>
                 "success": "<strong>Ditt lösenord är återställt.</strong> Vänligen <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">logga in</a>.",
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "success": "<strong>Ditt lösenord är återställt.</strong> Vänligen ",
                 <%_ } _%>
                 "keymissing": "Återställningsnyckeln saknas.",

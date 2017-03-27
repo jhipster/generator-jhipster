@@ -1,8 +1,6 @@
-'use strict';
-
-var path = require('path'),
-    shelljs = require('shelljs'),
-    crypto = require('crypto');
+const path = require('path');
+const shelljs = require('shelljs');
+const crypto = require('crypto');
 
 module.exports = {
     askForModuleName,
@@ -15,53 +13,43 @@ function askForModuleName() {
     if (this.baseName) return;
 
     this.askModuleName(this);
-
 }
 
 function askForServerSideOpts() {
     if (this.existingProject) return;
 
-    var done = this.async();
-    var getNumberedQuestion = this.getNumberedQuestion.bind(this);
-    var applicationType = this.applicationType;
-    var prompts = [
+    const done = this.async();
+    const applicationType = this.applicationType;
+    let defaultPort = applicationType === 'gateway' ? '8080' : '8081';
+    if (applicationType === 'uaa') {
+        defaultPort = '9999';
+    }
+    const prompts = [
         {
-            when: function (response) {
-                return (applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa');
-            },
+            when: response => (applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa'),
             type: 'input',
             name: 'serverPort',
-            validate: function (input) {
-                if (/^([0-9]*)$/.test(input)) return true;
-                return 'This is not a valid port number.';
-            },
-            message: function (response) {
-                return getNumberedQuestion('As you are running in a microservice architecture, on which port would like your server to run? It should be unique to avoid port conflicts.', applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa');
-            },
-            default: applicationType === 'gateway' ? '8080' : applicationType === 'uaa' ? '9999' : '8081'
+            validate: input => (/^([0-9]*)$/.test(input) ? true : 'This is not a valid port number.'),
+            message: response => this.getNumberedQuestion(
+                'As you are running in a microservice architecture, on which port would like your server to run? It should be unique to avoid port conflicts.',
+                applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa'
+            ),
+            default: defaultPort
         },
         {
             type: 'input',
             name: 'packageName',
-            validate: function (input) {
-                if (/^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input)) return true;
-                return 'The package name you have provided is not a valid Java package name.';
-            },
-            message: function (response) {
-                return getNumberedQuestion('What is your default Java package name?', true);
-            },
+            validate: input => (/^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input) ?
+                true : 'The package name you have provided is not a valid Java package name.'),
+            message: response => this.getNumberedQuestion('What is your default Java package name?', true),
             default: 'com.mycompany.myapp',
             store: true
         },
         {
-            when: function (response) {
-                return applicationType === 'monolith';
-            },
+            when: response => applicationType === 'monolith',
             type: 'list',
             name: 'authenticationType',
-            message: function (response) {
-                return getNumberedQuestion('Which *type* of authentication would you like to use?', applicationType === 'monolith');
-            },
+            message: response => this.getNumberedQuestion('Which *type* of authentication would you like to use?', applicationType === 'monolith'),
             choices: [
                 {
                     value: 'session',
@@ -79,14 +67,13 @@ function askForServerSideOpts() {
             default: 0
         },
         {
-            when: function (response) {
-                return applicationType === 'gateway' || applicationType === 'microservice';
-            },
+            when: response => applicationType === 'gateway' || applicationType === 'microservice',
             type: 'list',
             name: 'authenticationType',
-            message: function (response) {
-                return getNumberedQuestion('Which *type* of authentication would you like to use?', applicationType === 'gateway' || applicationType === 'microservice');
-            },
+            message: response => this.getNumberedQuestion(
+                'Which *type* of authentication would you like to use?',
+                applicationType === 'gateway' || applicationType === 'microservice'
+            ),
             choices: [
                 {
                     value: 'jwt',
@@ -100,34 +87,31 @@ function askForServerSideOpts() {
             default: 0
         },
         {
-            when: function (response) {
-                return ((applicationType === 'gateway' || applicationType === 'microservice') && response.authenticationType === 'uaa');
-            },
+            when: response => ((applicationType === 'gateway' || applicationType === 'microservice') && response.authenticationType === 'uaa'),
             type: 'input',
             name: 'uaaBaseName',
-            message: function (response) {
-                return getNumberedQuestion('What is the folder path of your UAA application?.', (applicationType === 'gateway' || applicationType === 'microservice') && response.authenticationType === 'uaa');
-            },
+            message: response => this.getNumberedQuestion(
+                'What is the folder path of your UAA application?.',
+                (applicationType === 'gateway' || applicationType === 'microservice') && response.authenticationType === 'uaa'
+            ),
             default: '../uaa',
-            validate: function (input) {
-                var uaaAppData = getUaaAppName.call(this, input);
+            validate: (input) => {
+                const uaaAppData = getUaaAppName.call(this, input);
 
                 if (uaaAppData && uaaAppData.baseName && uaaAppData.applicationType === 'uaa') {
                     return true;
-                } else {
-                    return 'Could not find a valid JHipster UAA server in path "' + input + '"';
                 }
-            }.bind(this)
+                return `Could not find a valid JHipster UAA server in path "${input}"`;
+            }
         },
         {
-            when: function (response) {
-                return applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa';
-            },
+            when: response => applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa',
             type: 'list',
             name: 'serviceDiscoveryType',
-            message: function (response) {
-                return getNumberedQuestion('Which Service Discovery and Configuration solution would you like to use?', applicationType === 'gateway' || applicationType === 'microservice' ||  applicationType === 'uaa');
-            },
+            message: response => this.getNumberedQuestion(
+                'Which Service Discovery and Configuration solution would you like to use?',
+                applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa'
+            ),
             choices: [
                 {
                     value: 'eureka',
@@ -145,14 +129,13 @@ function askForServerSideOpts() {
             default: 'eureka'
         },
         {
-            when: function (response) {
-                return applicationType === 'microservice' || (response.authenticationType === 'uaa' && applicationType === 'gateway');
-            },
+            when: response => applicationType === 'microservice' || (response.authenticationType === 'uaa' && applicationType === 'gateway'),
             type: 'list',
             name: 'databaseType',
-            message: function (response) {
-                return getNumberedQuestion('Which *type* of database would you like to use?', applicationType === 'microservice' || (response.authenticationType === 'uaa' && applicationType === 'gateway'));
-            },
+            message: response => this.getNumberedQuestion(
+                'Which *type* of database would you like to use?',
+                applicationType === 'microservice' || (response.authenticationType === 'uaa' && applicationType === 'gateway')
+            ),
             choices: [
                 {
                     value: 'no',
@@ -174,14 +157,12 @@ function askForServerSideOpts() {
             default: 1
         },
         {
-            when: function (response) {
-                return response.authenticationType === 'oauth2' && !response.databaseType;
-            },
+            when: response => response.authenticationType === 'oauth2' && !response.databaseType,
             type: 'list',
             name: 'databaseType',
-            message: function (response) {
-                return getNumberedQuestion('Which *type* of database would you like to use?', response.authenticationType === 'oauth2' && !response.databaseType);
-            },
+            message: response => this.getNumberedQuestion(
+                'Which *type* of database would you like to use?', response.authenticationType === 'oauth2' && !response.databaseType
+            ),
             choices: [
                 {
                     value: 'sql',
@@ -195,14 +176,10 @@ function askForServerSideOpts() {
             default: 0
         },
         {
-            when: function (response) {
-                return !response.databaseType;
-            },
+            when: response => !response.databaseType,
             type: 'list',
             name: 'databaseType',
-            message: function (response) {
-                return getNumberedQuestion('Which *type* of database would you like to use?', !response.databaseType);
-            },
+            message: response => this.getNumberedQuestion('Which *type* of database would you like to use?', !response.databaseType),
             choices: [
                 {
                     value: 'sql',
@@ -220,14 +197,10 @@ function askForServerSideOpts() {
             default: 0
         },
         {
-            when: function (response) {
-                return response.databaseType === 'sql';
-            },
+            when: response => response.databaseType === 'sql',
             type: 'list',
             name: 'prodDatabaseType',
-            message: function (response) {
-                return getNumberedQuestion('Which *production* database would you like to use?', response.databaseType === 'sql');
-            },
+            message: response => this.getNumberedQuestion('Which *production* database would you like to use?', response.databaseType === 'sql'),
             choices: [
                 {
                     value: 'mysql',
@@ -253,14 +226,13 @@ function askForServerSideOpts() {
             default: 0
         },
         {
-            when: function (response) {
-                return (response.databaseType === 'sql' && response.prodDatabaseType === 'mysql');
-            },
+            when: response => (response.databaseType === 'sql' && response.prodDatabaseType === 'mysql'),
             type: 'list',
             name: 'devDatabaseType',
-            message: function (response) {
-                return getNumberedQuestion('Which *development* database would you like to use?', response.databaseType === 'sql' && response.prodDatabaseType === 'mysql');
-            },
+            message: response => this.getNumberedQuestion(
+                'Which *development* database would you like to use?',
+                response.databaseType === 'sql' && response.prodDatabaseType === 'mysql'
+            ),
             choices: [
                 {
                     value: 'h2Disk',
@@ -278,14 +250,12 @@ function askForServerSideOpts() {
             default: 0
         },
         {
-            when: function (response) {
-                return (response.databaseType === 'sql' && response.prodDatabaseType === 'mariadb');
-            },
+            when: response => (response.databaseType === 'sql' && response.prodDatabaseType === 'mariadb'),
             type: 'list',
             name: 'devDatabaseType',
-            message: function (response) {
-                return getNumberedQuestion('Which *development* database would you like to use?', response.databaseType === 'sql' && response.prodDatabaseType === 'mariadb');
-            },
+            message: response => this.getNumberedQuestion(
+                'Which *development* database would you like to use?', response.databaseType === 'sql' && response.prodDatabaseType === 'mariadb'
+            ),
             choices: [
                 {
                     value: 'h2Disk',
@@ -303,14 +273,13 @@ function askForServerSideOpts() {
             default: 0
         },
         {
-            when: function (response) {
-                return (response.databaseType === 'sql' && response.prodDatabaseType === 'postgresql');
-            },
+            when: response => (response.databaseType === 'sql' && response.prodDatabaseType === 'postgresql'),
             type: 'list',
             name: 'devDatabaseType',
-            message: function (response) {
-                return getNumberedQuestion('Which *development* database would you like to use?', response.databaseType === 'sql' && response.prodDatabaseType === 'postgresql');
-            },
+            message: response => this.getNumberedQuestion(
+                'Which *development* database would you like to use?',
+                response.databaseType === 'sql' && response.prodDatabaseType === 'postgresql'
+            ),
             choices: [
                 {
                     value: 'h2Disk',
@@ -328,14 +297,13 @@ function askForServerSideOpts() {
             default: 0
         },
         {
-            when: function (response) {
-                return (response.databaseType === 'sql' && response.prodDatabaseType === 'oracle');
-            },
+            when: response => (response.databaseType === 'sql' && response.prodDatabaseType === 'oracle'),
             type: 'list',
             name: 'devDatabaseType',
-            message: function (response) {
-                return getNumberedQuestion('Which *development* database would you like to use?', response.databaseType === 'sql' && response.prodDatabaseType === 'oracle');
-            },
+            message: response => this.getNumberedQuestion(
+                'Which *development* database would you like to use?',
+                response.databaseType === 'sql' && response.prodDatabaseType === 'oracle'
+            ),
             choices: [
                 {
                     value: 'h2Disk',
@@ -353,14 +321,13 @@ function askForServerSideOpts() {
             default: 0
         },
         {
-            when: function (response) {
-                return (response.databaseType === 'sql' && response.prodDatabaseType === 'mssql');
-            },
+            when: response => (response.databaseType === 'sql' && response.prodDatabaseType === 'mssql'),
             type: 'list',
             name: 'devDatabaseType',
-            message: function (response) {
-                return getNumberedQuestion('Which *development* database would you like to use?', response.databaseType === 'sql' && response.prodDatabaseType === 'mssql');
-            },
+            message: response => this.getNumberedQuestion(
+                'Which *development* database would you like to use?',
+                response.databaseType === 'sql' && response.prodDatabaseType === 'mssql'
+            ),
             choices: [
                 {
                     value: 'h2Disk',
@@ -378,14 +345,10 @@ function askForServerSideOpts() {
             default: 0
         },
         {
-            when: function (response) {
-                return response.databaseType === 'sql';
-            },
+            when: response => response.databaseType === 'sql',
             type: 'list',
             name: 'hibernateCache',
-            message: function (response) {
-                return getNumberedQuestion('Do you want to use Hibernate 2nd level cache?', response.databaseType === 'sql');
-            },
+            message: response => this.getNumberedQuestion('Do you want to use Hibernate 2nd level cache?', response.databaseType === 'sql'),
             choices: [
                 {
                     value: 'no',
@@ -405,9 +368,7 @@ function askForServerSideOpts() {
         {
             type: 'list',
             name: 'buildTool',
-            message: function (response) {
-                return getNumberedQuestion('Would you like to use Maven or Gradle for building the backend?', true);
-            },
+            message: response => this.getNumberedQuestion('Would you like to use Maven or Gradle for building the backend?', true),
             choices: [
                 {
                     value: 'maven',
@@ -422,7 +383,7 @@ function askForServerSideOpts() {
         }
     ];
 
-    this.prompt(prompts).then(function (props) {
+    this.prompt(prompts).then((props) => {
         this.authenticationType = props.authenticationType;
 
         if (this.authenticationType === 'session') {
@@ -433,12 +394,12 @@ function askForServerSideOpts() {
             this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
         }
 
-        //this will be handled by the UAA app
-        if(this.applicationType === 'gateway' && this.authenticationType === 'uaa') {
+        // this will be handled by the UAA app
+        if (this.applicationType === 'gateway' && this.authenticationType === 'uaa') {
             this.skipUserManagement = true;
         }
 
-        if(this.applicationType === 'uaa') {
+        if (this.applicationType === 'uaa') {
             this.authenticationType = 'uaa';
         }
 
@@ -471,17 +432,16 @@ function askForServerSideOpts() {
         }
 
         done();
-    }.bind(this));
+    });
 }
 
 function askForOptionalItems() {
     if (this.existingProject) return;
 
-    var done = this.async();
-    var getNumberedQuestion = this.getNumberedQuestion.bind(this);
-    var applicationType = this.applicationType;
-    var choices = [];
-    var defaultChoice = [];
+    const done = this.async();
+    const applicationType = this.applicationType;
+    const choices = [];
+    const defaultChoice = [];
     if (this.databaseType !== 'cassandra' && applicationType === 'monolith' && (this.authenticationType === 'session' || this.authenticationType === 'jwt')) {
         choices.push(
             {
@@ -544,12 +504,10 @@ function askForOptionalItems() {
         this.prompt({
             type: 'checkbox',
             name: 'serverSideOptions',
-            message: function (response) {
-                return getNumberedQuestion('Which other technologies would you like to use?', true);
-            },
-            choices: choices,
+            message: response => this.getNumberedQuestion('Which other technologies would you like to use?', true),
+            choices,
             default: defaultChoice
-        }).then(function (prompt) {
+        }).then((prompt) => {
             this.serverSideOptions = prompt.serverSideOptions;
             this.clusteredHttpSession = this.getOptionFromArray(this.serverSideOptions, 'clusteredHttpSession');
             this.websocket = this.getOptionFromArray(this.serverSideOptions, 'websocket');
@@ -561,7 +519,7 @@ function askForOptionalItems() {
                 this.serviceDiscoveryType = this.getOptionFromArray(this.serverSideOptions, 'serviceDiscoveryType');
             }
             done();
-        }.bind(this));
+        });
     } else {
         done();
     }
@@ -577,19 +535,18 @@ function getUaaAppName(input) {
     if (!input) return false;
 
     input = input.trim();
-    var fromPath = '';
-    if(path.isAbsolute(input)) {
-        fromPath = input + '/' + '.yo-rc.json';
+    let fromPath = '';
+    if (path.isAbsolute(input)) {
+        fromPath = `${input}/.yo-rc.json`;
     } else {
-        fromPath = this.destinationPath(input + '/' + '.yo-rc.json');
+        fromPath = this.destinationPath(`${input}/.yo-rc.json`);
     }
 
     if (shelljs.test('-f', fromPath)) {
-        var fileData = this.fs.readJSON(fromPath);
+        const fileData = this.fs.readJSON(fromPath);
         if (fileData && fileData['generator-jhipster']) {
             return fileData['generator-jhipster'];
-        } else return false;
-    } else {
-        return false;
+        } return false;
     }
+    return false;
 }

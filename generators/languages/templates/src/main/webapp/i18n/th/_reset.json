@@ -22,7 +22,7 @@
                 "info": "เลือกรหัสผ่านใหม่",
                 <%_ if (clientFramework === 'angular1') { _%>
                 "success": "<strong>รีเซตรหัสผ่านของคุณแล้ว.</strong> กรุณา <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">ลงชื่อเข้าใช้</a>.",
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "success": "<strong>รีเซตรหัสผ่านของคุณแล้ว.</strong> กรุณา ",
                 <%_ } _%>
                 "keymissing": "ไม่พบ reset key.",

@@ -3,7 +3,12 @@ package <%=packageName%>.web.rest.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
-
+<%_
+let createdMessage;
+let updatedMessage;
+let deletedMessage;
+let errorMessage;
+_%>
 /**
  * Utility class for HTTP headers creation.
  */
@@ -26,15 +31,15 @@ public final class HeaderUtil {
     }
 <%
     if (enableTranslation) {
-        var createdMessage = 'APPLICATION_NAME + "." + entityName + ".created"';
-        var updatedMessage = 'APPLICATION_NAME + "." + entityName + ".updated"';
-        var deletedMessage = 'APPLICATION_NAME + "." + entityName + ".deleted"';
-        var errorMessage = '"error." + errorKey';
+        createdMessage = 'APPLICATION_NAME + "." + entityName + ".created"';
+        updatedMessage = 'APPLICATION_NAME + "." + entityName + ".updated"';
+        deletedMessage = 'APPLICATION_NAME + "." + entityName + ".deleted"';
+        errorMessage = '"error." + errorKey';
     } else {
-        var createdMessage = '"A new " + entityName + " is created with identifier " + param';
-        var updatedMessage = '"A " + entityName + " is updated with identifier " + param';
-        var deletedMessage = '"A " + entityName + " is deleted with identifier " + param';
-        var errorMessage = 'defaultMessage';
+        createdMessage = '"A new " + entityName + " is created with identifier " + param';
+        updatedMessage = '"A " + entityName + " is updated with identifier " + param';
+        deletedMessage = '"A " + entityName + " is deleted with identifier " + param';
+        errorMessage = 'defaultMessage';
     }
 %>
     public static HttpHeaders createEntityCreationAlert(String entityName, String param) {

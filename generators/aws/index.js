@@ -1,28 +1,27 @@
-'use strict';
-var util = require('util'),
-    generators = require('yeoman-generator'),
-    chalk = require('chalk'),
-    scriptBase = require('../generator-base'),
-    prompts = require('./prompts'),
-    AwsFactory = require('./lib/aws.js');
+const util = require('util');
+const generator = require('yeoman-generator');
+const chalk = require('chalk');
+const BaseGenerator = require('../generator-base');
+const prompts = require('./prompts');
+const AwsFactory = require('./lib/aws.js');
 
-var AwsGenerator = generators.Base.extend({});
+const AwsGenerator = generator.extend({});
 
-util.inherits(AwsGenerator, scriptBase);
+util.inherits(AwsGenerator, BaseGenerator);
 
 module.exports = AwsGenerator.extend({
     initializing: {
-        initAws: function () {
-            var done = this.async();
+        initAws() {
+            const done = this.async();
             this.awsFactory = new AwsFactory(this, done);
         },
-        getGlobalConfig: function () {
+        getGlobalConfig() {
             this.existingProject = false;
             this.baseName = this.config.get('baseName');
             this.buildTool = this.config.get('buildTool');
         },
-        getAwsConfig: function () {
-            var awsConfig = this.config.get('aws');
+        getAwsConfig() {
+            const awsConfig = this.config.get('aws');
 
             if (awsConfig) {
                 this.existingProject = true;
@@ -38,8 +37,8 @@ module.exports = AwsGenerator.extend({
                     'to deploy your application...\n'));
             }
         },
-        checkDatabase: function () {
-            var prodDatabaseType = this.config.get('prodDatabaseType');
+        checkDatabase() {
+            const prodDatabaseType = this.config.get('prodDatabaseType');
 
             switch (prodDatabaseType.toLowerCase()) {
             case 'mysql':
@@ -57,16 +56,16 @@ module.exports = AwsGenerator.extend({
     prompting: prompts.prompting,
 
     configuring: {
-        insight: function () {
-            var insight = this.insight();
+        insight() {
+            const insight = this.insight();
             insight.trackWithEvent('generator', 'aws');
         },
-        createAwsFactory: function () {
-            var cb = this.async();
-            this.awsFactory.init({region: this.awsRegion});
+        createAwsFactory() {
+            const cb = this.async();
+            this.awsFactory.init({ region: this.awsRegion });
             cb();
         },
-        saveConfig: function () {
+        saveConfig() {
             this.config.set('aws', {
                 applicationName: this.applicationName,
                 environmentName: this.environmentName,
@@ -80,51 +79,51 @@ module.exports = AwsGenerator.extend({
     },
 
     default: {
-        productionBuild: function () {
-            var cb = this.async();
+        productionBuild() {
+            const cb = this.async();
             this.log(chalk.bold('Building application'));
 
-            var child = this.buildApplication(this.buildTool, 'prod', function (err) {
+            const child = this.buildApplication(this.buildTool, 'prod', (err) => {
                 if (err) {
                     this.error(chalk.red(err));
                 } else {
                     cb();
                 }
-            }.bind(this));
+            });
 
-            child.stdout.on('data', function (data) {
+            child.stdout.on('data', (data) => {
                 this.log(data.toString());
-            }.bind(this));
+            });
         },
-        createBucket: function () {
-            var cb = this.async();
+        createBucket() {
+            const cb = this.async();
             this.log();
             this.log(chalk.bold('Create S3 bucket'));
 
-            var s3 = this.awsFactory.getS3();
+            const s3 = this.awsFactory.getS3();
 
-            s3.createBucket({bucket: this.bucketName}, function (err, data) {
+            s3.createBucket({ bucket: this.bucketName }, (err, data) => {
                 if (err) {
                     this.error(chalk.red(err.message));
                 } else {
                     this.log(data.message);
                     cb();
                 }
-            }.bind(this));
+            });
         },
-        uploadWar: function () {
-            var cb = this.async();
+        uploadWar() {
+            const cb = this.async();
             this.log();
             this.log(chalk.bold('Upload WAR to S3'));
 
-            var s3 = this.awsFactory.getS3();
+            const s3 = this.awsFactory.getS3();
 
-            var params = {
+            const params = {
                 bucket: this.bucketName,
                 buildTool: this.buildTool
             };
 
-            s3.uploadWar(params, function (err, data) {
+            s3.uploadWar(params, (err, data) => {
                 if (err) {
                     this.error(chalk.red(err.message));
                 } else {
@@ -132,16 +131,16 @@ module.exports = AwsGenerator.extend({
                     this.log(data.message);
                     cb();
                 }
-            }.bind(this));
+            });
         },
-        createDatabase: function () {
-            var cb = this.async();
+        createDatabase() {
+            const cb = this.async();
             this.log();
             this.log(chalk.bold('Create database'));
 
-            var rds = this.awsFactory.getRds();
+            const rds = this.awsFactory.getRds();
 
-            var params = {
+            const params = {
                 dbInstanceClass: this.dbInstanceClass,
                 dbName: this.dbName,
                 dbEngine: this.dbEngine,
@@ -149,17 +148,17 @@ module.exports = AwsGenerator.extend({
                 dbUsername: this.dbUsername
             };
 
-            rds.createDatabase(params, function (err, data) {
+            rds.createDatabase(params, (err, data) => {
                 if (err) {
                     this.error(chalk.red(err.message));
                 } else {
                     this.log(data.message);
                     cb();
                 }
-            }.bind(this));
+            });
         },
-        createDatabaseUrl: function () {
-            var cb = this.async();
+        createDatabaseUrl() {
+            const cb = this.async();
             this.log();
             this.log(chalk.bold('Waiting for database (This may take several minutes)'));
 
@@ -167,14 +166,14 @@ module.exports = AwsGenerator.extend({
                 this.dbEngine = 'postgresql';
             }
 
-            var rds = this.awsFactory.getRds();
+            const rds = this.awsFactory.getRds();
 
-            var params = {
+            const params = {
                 dbName: this.dbName,
                 dbEngine: this.dbEngine
             };
 
-            rds.createDatabaseUrl(params, function (err, data) {
+            rds.createDatabaseUrl(params, (err, data) => {
                 if (err) {
                     this.error(chalk.red(err.message));
                 } else {
@@ -182,16 +181,16 @@ module.exports = AwsGenerator.extend({
                     this.log(data.message);
                     cb();
                 }
-            }.bind(this));
+            });
         },
-        createApplication: function () {
-            var cb = this.async();
+        createApplication() {
+            const cb = this.async();
             this.log();
             this.log(chalk.bold('Create/Update application'));
 
-            var eb = this.awsFactory.getEb();
+            const eb = this.awsFactory.getEb();
 
-            var params = {
+            const params = {
                 applicationName: this.applicationName,
                 bucketName: this.bucketName,
                 warKey: this.warKey,
@@ -202,14 +201,14 @@ module.exports = AwsGenerator.extend({
                 instanceType: this.instanceType
             };
 
-            eb.createApplication(params, function (err, data) {
+            eb.createApplication(params, (err, data) => {
                 if (err) {
                     this.error(chalk.red(err.message));
                 } else {
                     this.log(data.message);
                     cb();
                 }
-            }.bind(this));
+            });
         }
     }
 });

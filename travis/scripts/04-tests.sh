@@ -4,6 +4,7 @@ set -e
 #-------------------------------------------------------------------------------
 # Check Javadoc generation
 #-------------------------------------------------------------------------------
+cd "$APP_FOLDER"
 if [ -f "mvnw" ]; then
     ./mvnw javadoc:javadoc
 elif [ -f "gradlew" ]; then
@@ -14,14 +15,14 @@ fi
 # Launch UAA tests
 #-------------------------------------------------------------------------------
 if [ "$JHIPSTER" == "app-ng2-gateway-uaa" ]; then
-    cd "$HOME"/uaa
+    cd "$UAA_APP_FOLDER"
     ./mvnw test
 fi
 
 #-------------------------------------------------------------------------------
 # Launch tests
 #-------------------------------------------------------------------------------
-cd "$HOME"/app
+cd "$APP_FOLDER"
 if [ -f "mvnw" ]; then
     ./mvnw test \
         -Dlogging.level.io.github.jhipster.sample=ERROR \

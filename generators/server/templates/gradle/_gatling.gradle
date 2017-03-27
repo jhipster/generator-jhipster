@@ -22,10 +22,10 @@ task manifestJar(dependsOn:'compileTestScala',type: Jar) {
 
 task gatlingRun(dependsOn:'manifestJar') {
     group = 'gatling'
-    description = 'Run a single gatling simulation. By default the simulation is *.'
+    description = 'Run a single Gatling simulation. You must write the name of your Gatling simulation.'
 
     doLast {
-        def String gatlingSimulationClass = "*"
+        def String gatlingSimulationClass = "WriteTheNameOfYourGatlingSimulation"
         if (project.hasProperty('gatlingSimulationClass')) {
             gatlingSimulationClass = project.property('gatlingSimulationClass')
         }
@@ -36,7 +36,7 @@ task gatlingRun(dependsOn:'manifestJar') {
 
 task gatlingRunAll(dependsOn: 'manifestJar') {
     group = 'gatling'
-    description = 'Run all available gatling simulation.'
+    description = 'Run all available Gatling simulations.'
 
     doLast {
         FileTree tree = fileTree(dir: './src/test/gatling/simulations')

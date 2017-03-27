@@ -1,10 +1,10 @@
-/*global describe, beforeEach, it*/
-'use strict';
+/* global describe, beforeEach, it*/
 
-var path = require('path');
-var assert = require('yeoman-assert');
-var helpers = require('yeoman-test');
-var fse = require('fs-extra');
+
+const path = require('path');
+const assert = require('yeoman-assert');
+const helpers = require('yeoman-test');
+const fse = require('fs-extra');
 
 const expectedFiles = {
     travis: [
@@ -16,20 +16,23 @@ const expectedFiles = {
     gitlab: [
         '.gitlab-ci.yml'
     ],
-    circle : [
+    circle: [
         'circle.yml'
+    ],
+    dockerRegistry: [
+        'src/main/docker/docker-registry.yml'
     ]
 };
 
-describe('JHipster CI-CD Sub Generator', function () {
-    describe('Gradle Angular1 NPM', function () {
-        beforeEach(function (done) {
+describe('JHipster CI-CD Sub Generator', () => {
+    describe('Gradle Angular1 NPM', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ng1-npm'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipelines: [
                         'jenkins',
@@ -40,7 +43,7 @@ describe('JHipster CI-CD Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected files', function () {
+        it('creates expected files', () => {
             assert.file(expectedFiles.travis);
             assert.file(expectedFiles.jenkins);
             assert.file(expectedFiles.gitlab);
@@ -48,14 +51,14 @@ describe('JHipster CI-CD Sub Generator', function () {
         });
     });
 
-    describe('Gradle Angular1 Yarn', function () {
-        beforeEach(function (done) {
+    describe('Gradle Angular1 Yarn', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ng1-yarn'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipelines: [
                         'jenkins',
@@ -66,7 +69,7 @@ describe('JHipster CI-CD Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected files', function () {
+        it('creates expected files', () => {
             assert.file(expectedFiles.travis);
             assert.file(expectedFiles.jenkins);
             assert.file(expectedFiles.gitlab);
@@ -74,14 +77,14 @@ describe('JHipster CI-CD Sub Generator', function () {
         });
     });
 
-    describe('Gradle Angular2 NPM', function () {
-        beforeEach(function (done) {
+    describe('Gradle Angular2 NPM', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ng2-npm'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipelines: [
                         'jenkins',
@@ -92,7 +95,7 @@ describe('JHipster CI-CD Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected files', function () {
+        it('creates expected files', () => {
             assert.file(expectedFiles.travis);
             assert.file(expectedFiles.jenkins);
             assert.file(expectedFiles.gitlab);
@@ -100,14 +103,14 @@ describe('JHipster CI-CD Sub Generator', function () {
         });
     });
 
-    describe('Gradle Angular2 Yarn', function () {
-        beforeEach(function (done) {
+    describe('Gradle Angular2 Yarn', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ng2-yarn'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipelines: [
                         'jenkins',
@@ -118,7 +121,7 @@ describe('JHipster CI-CD Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected files', function () {
+        it('creates expected files', () => {
             assert.file(expectedFiles.travis);
             assert.file(expectedFiles.jenkins);
             assert.file(expectedFiles.gitlab);
@@ -126,14 +129,14 @@ describe('JHipster CI-CD Sub Generator', function () {
         });
     });
 
-    describe('Maven Angular1 NPM', function () {
-        beforeEach(function (done) {
+    describe('Maven Angular1 NPM', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ng1-npm'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipelines: [
                         'jenkins',
@@ -144,7 +147,7 @@ describe('JHipster CI-CD Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected files', function () {
+        it('creates expected files', () => {
             assert.file(expectedFiles.travis);
             assert.file(expectedFiles.jenkins);
             assert.file(expectedFiles.gitlab);
@@ -152,14 +155,14 @@ describe('JHipster CI-CD Sub Generator', function () {
         });
     });
 
-    describe('Maven Angular1 Yarn', function () {
-        beforeEach(function (done) {
+    describe('Maven Angular1 Yarn', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ng1-yarn'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipelines: [
                         'jenkins',
@@ -170,7 +173,7 @@ describe('JHipster CI-CD Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected files', function () {
+        it('creates expected files', () => {
             assert.file(expectedFiles.travis);
             assert.file(expectedFiles.jenkins);
             assert.file(expectedFiles.gitlab);
@@ -178,14 +181,14 @@ describe('JHipster CI-CD Sub Generator', function () {
         });
     });
 
-    describe('Maven Angular2 NPM', function () {
-        beforeEach(function (done) {
+    describe('Maven Angular2 NPM', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ng2-npm'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipelines: [
                         'jenkins',
@@ -196,7 +199,7 @@ describe('JHipster CI-CD Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected files', function () {
+        it('creates expected files', () => {
             assert.file(expectedFiles.travis);
             assert.file(expectedFiles.jenkins);
             assert.file(expectedFiles.gitlab);
@@ -204,14 +207,14 @@ describe('JHipster CI-CD Sub Generator', function () {
         });
     });
 
-    describe('Maven Angular2 Yarn', function () {
-        beforeEach(function (done) {
+    describe('Maven Angular2 Yarn', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ng2-yarn'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipelines: [
                         'jenkins',
@@ -222,13 +225,13 @@ describe('JHipster CI-CD Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected files', function () {
+        it('creates expected files', () => {
             assert.file(expectedFiles.travis);
             assert.file(expectedFiles.jenkins);
             assert.file(expectedFiles.gitlab);
             assert.file(expectedFiles.circle);
         });
-        it('doesn\'t contain Docker, Sonar, Heroku', function () {
+        it('doesn\'t contain Docker, Sonar, Heroku', () => {
             assert.noFileContent('Jenkinsfile', /docker/);
             assert.noFileContent('Jenkinsfile', /sonar/);
             assert.noFileContent('Jenkinsfile', /heroku/);
@@ -239,14 +242,14 @@ describe('JHipster CI-CD Sub Generator', function () {
         });
     });
 
-    describe('Jenkins', function () {
-        beforeEach(function (done) {
+    describe('Jenkins', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ng2-yarn'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipelines: [
                         'jenkins'
@@ -262,13 +265,13 @@ describe('JHipster CI-CD Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected files', function () {
+        it('creates expected files', () => {
             assert.file(expectedFiles.jenkins);
             assert.noFile(expectedFiles.gitlab);
             assert.noFile(expectedFiles.travis);
             assert.noFile(expectedFiles.circle);
         });
-        it('contains Docker, Sonar, Heroku', function () {
+        it('contains Docker, Sonar, Heroku', () => {
             assert.fileContent('Jenkinsfile', /docker/);
             assert.fileContent('Jenkinsfile', /sonar/);
             assert.fileContent('Jenkinsfile', /heroku/);
@@ -276,14 +279,14 @@ describe('JHipster CI-CD Sub Generator', function () {
         });
     });
 
-    describe('Jenkins with pushing to Docker Registry', function () {
-        beforeEach(function (done) {
+    describe('Jenkins with pushing to Docker Registry', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ng2-yarn'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipelines: [
                         'jenkins'
@@ -296,25 +299,26 @@ describe('JHipster CI-CD Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected files', function () {
+        it('creates expected files', () => {
             assert.file(expectedFiles.jenkins);
+            assert.file(expectedFiles.dockerRegistry);
             assert.noFile(expectedFiles.gitlab);
             assert.noFile(expectedFiles.travis);
             assert.noFile(expectedFiles.circle);
         });
-        it('contains def dockerImage', function () {
+        it('contains def dockerImage', () => {
             assert.fileContent('Jenkinsfile', /def dockerImage/);
         });
     });
 
-    describe('GitLab CI', function () {
-        beforeEach(function (done) {
+    describe('GitLab CI', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ng2-yarn'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipelines: [
                         'gitlab'
@@ -326,26 +330,26 @@ describe('JHipster CI-CD Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected files', function () {
+        it('creates expected files', () => {
             assert.file(expectedFiles.gitlab);
             assert.noFile(expectedFiles.jenkins);
             assert.noFile(expectedFiles.travis);
             assert.noFile(expectedFiles.circle);
         });
-        it('contains image openjdk, heroku', function () {
+        it('contains image openjdk, heroku', () => {
             assert.fileContent('.gitlab-ci.yml', /image: openjdk/);
             assert.fileContent('.gitlab-ci.yml', /heroku/);
         });
     });
 
-    describe('Circle CI', function () {
-        beforeEach(function (done) {
+    describe('Circle CI', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ng2-yarn'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipelines: [
                         'circle'
@@ -357,25 +361,25 @@ describe('JHipster CI-CD Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected files', function () {
+        it('creates expected files', () => {
             assert.file(expectedFiles.circle);
             assert.noFile(expectedFiles.jenkins);
             assert.noFile(expectedFiles.travis);
             assert.noFile(expectedFiles.gitlab);
         });
-        it('contains heroku', function () {
+        it('contains heroku', () => {
             assert.fileContent('circle.yml', /heroku/);
         });
     });
 
-    describe('Travis CI', function () {
-        beforeEach(function (done) {
+    describe('Travis CI', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ng2-yarn'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipelines: [
                         'travis'
@@ -386,13 +390,13 @@ describe('JHipster CI-CD Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected files', function () {
+        it('creates expected files', () => {
             assert.file(expectedFiles.travis);
             assert.noFile(expectedFiles.jenkins);
             assert.noFile(expectedFiles.circle);
             assert.noFile(expectedFiles.gitlab);
         });
-        it('contains heroku', function () {
+        it('contains heroku', () => {
             assert.fileContent('.travis.yml', /heroku/);
         });
     });

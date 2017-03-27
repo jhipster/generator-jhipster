@@ -69,8 +69,7 @@ script:
 <%_ if (applicationType !== 'microservice') { _%>
     <%_ if (clientFramework === 'angular1') { _%>
   - gulp test
-    <%_ } _%>
-    <%_ if (clientFramework === 'angular2') { _%>
+    <%_ } else { _%>
         <%_ if (clientPackageManager === 'yarn') { _%>
   - yarn test
         <%_ } else if (clientPackageManager === 'npm') { _%>

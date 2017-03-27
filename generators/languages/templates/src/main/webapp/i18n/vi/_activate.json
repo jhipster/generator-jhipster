@@ -4,7 +4,7 @@
         "messages": {
             <%_ if (clientFramework === 'angular1') { _%>
             "success": "<strong>Tài khoản của bạn đã được kích hoạt.</strong> Bạn vui lòng <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">đăng nhập</a>.",
-            <%_ } else if (clientFramework === 'angular2') { _%>
+            <%_ } else { _%>
             "success": "<strong>Tài khoản của bạn đã được kích hoạt.</strong> Bạn vui lòng ",
             <%_ } _%>
             "error": "<strong>Không thể kích hoạt tài khoản của bạn.</strong> Vui lòng quay lại trang đăng ký để tạo tài khoản."

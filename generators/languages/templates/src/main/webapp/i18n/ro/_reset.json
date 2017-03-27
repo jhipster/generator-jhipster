@@ -20,7 +20,7 @@
                 "info": "Alegeți o nouă parolă",
                 <%_ if (clientFramework === 'angular1') { _%>
                 "success": "<strong>Parola dumneavoastra a fost resetata.</strong> Vă rugăm să vă <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">autentificați</a>.",
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "success": "<strong>Parola dumneavoastra a fost resetata.</strong> Vă rugăm să vă ",
                 <%_ } _%>
                 "keymissing": "Cheia de resetare lipsește.",

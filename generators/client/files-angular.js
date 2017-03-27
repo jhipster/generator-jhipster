@@ -1,11 +1,10 @@
-'use strict';
-
 const mkdirp = require('mkdirp');
+const constants = require('../generator-constants');
+
 /* Constants use throughout */
-const constants = require('../generator-constants'),
-    MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
-    TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR,
-    ANGULAR_DIR = constants.ANGULAR_DIR;
+const MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
+const TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
+const ANGULAR_DIR = constants.ANGULAR_DIR;
 
 /**
  * The default is to use a file path string. It implies use of the template method.
@@ -18,7 +17,7 @@ const files = {
                 '_package.json',
                 '_tsconfig.json',
                 '_tslint.json',
-                '_angular-cli.json',
+                '_.angular-cli.json',
                 'webpack/_webpack.common.js',
                 'webpack/_webpack.dev.js',
                 'webpack/_webpack.prod.js',
@@ -79,9 +78,9 @@ const files = {
             path: MAIN_SRC_DIR,
             templates: [
                 { file: '_favicon.ico', method: 'copy' },
-                { file: '_robots.txt', method: 'copy' },
-                { file: '_404.html', method: 'copy' },
-                { file: '_index.html', method: 'template'}
+                '_robots.txt',
+                '_404.html',
+                '_index.html'
             ]
         }
     ],
@@ -97,7 +96,7 @@ const files = {
                 '_vendor.ts',
                 'blocks/config/_prod.config.ts',
                 'blocks/config/_uib-pagination.config.ts',
-                //interceptors
+                // interceptors
                 'blocks/interceptor/_errorhandler.interceptor.ts',
                 'blocks/interceptor/_notification.interceptor.ts',
                 'blocks/interceptor/_http.provider.ts'
@@ -142,7 +141,7 @@ const files = {
                 { file: 'layouts/navbar/_navbar.component.html', method: 'processHtml' },
                 'layouts/footer/_footer.component.ts',
                 { file: 'layouts/footer/_footer.component.html', method: 'processHtml' },
-                { file:'layouts/error/_error.route.ts', method: 'processJs' },
+                { file: 'layouts/error/_error.route.ts', method: 'processJs' },
                 { file: 'layouts/error/_error.component.ts', method: 'processJs' },
                 { file: 'layouts/error/_error.component.html', method: 'processHtml' }
             ]
@@ -184,7 +183,7 @@ const files = {
                 { file: 'account/activate/_activate.component.ts', method: 'processJs' },
                 { file: 'account/activate/_activate.component.html', method: 'processHtml' },
                 'account/activate/_activate.service.ts',
-                { file:'account/password/_password.route.ts', method: 'processJs' },
+                { file: 'account/password/_password.route.ts', method: 'processJs' },
                 'account/password/_password-strength-bar.component.ts',
                 { file: 'account/password/_password.component.ts', method: 'processJs' },
                 { file: 'account/password/_password.component.html', method: 'processHtml' },
@@ -338,14 +337,14 @@ const files = {
                 'shared/_shared-libs.module.ts',
                 'shared/_shared-common.module.ts',
                 'shared/constants/_pagination.constants.ts',
-                //models
+                // models
                 'shared/user/_account.model.ts',
-                //login
+                // login
                 'shared/login/_login.component.ts',
                 { file: 'shared/login/_login.component.html', method: 'processHtml' },
                 'shared/login/_login.service.ts',
                 'shared/login/_login-modal.service.ts',
-                //alert service code
+                // alert service code
                 'shared/alert/_alert.component.ts',
                 'shared/alert/_alert-error.component.ts'
             ]

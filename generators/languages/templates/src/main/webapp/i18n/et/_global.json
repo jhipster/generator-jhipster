@@ -51,7 +51,7 @@
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "Kui te soovite <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">sisse logida</a>, siis võite kasutada vaikekontosid:<br/>- Administraator (kasutajanimi=\"admin\" ja salasõna=\"admin\") <br/>- Kasutaja (kasutajanimi=\"user\" ja salasõna=\"user\").",
                 "register": "Teil pole veel kontot? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Registreerige uus konto</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Kui te soovite ",
                     "link": "sisse logida",

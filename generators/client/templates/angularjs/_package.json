@@ -77,7 +77,7 @@
     <%_ }
       otherModules.forEach(function(module) { _%>
     "<%= module.name %>": "<%= module.version %>",
-    <%_ }); %>
+    <%_ }); _%>
     "yargs": "5.0.0"
   },
   "engines": {

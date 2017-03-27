@@ -1,13 +1,13 @@
-<% var keyPrefix = angularAppName + '.' + entityTranslationKey; %>
+<% const keyPrefix = angularAppName + '.' + entityTranslationKey; %>
 <div *ngIf="<%= entityInstance %>">
     <h2><span jhiTranslate="<%= keyPrefix %>.detail.title"><%= entityClassHumanized %></span> {{<%= entityInstance %>.id}}</h2>
     <hr>
     <jhi-alert-error></jhi-alert-error>
     <dl class="row-md jh-entity-details">
         <%_ for (idx in fields) {
-        var fieldName = fields[idx].fieldName;
-        var fieldType = fields[idx].fieldType;
-        var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent; _%>
+        const fieldName = fields[idx].fieldName;
+        const fieldType = fields[idx].fieldType;
+        const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent; _%>
         <dt><span jhiTranslate="<%= keyPrefix %>.<%= fieldName %>"><%= fields[idx].fieldNameHumanized %></span></dt>
         <dd>
             <%_ if (fields[idx].fieldIsEnum) { _%>
@@ -34,16 +34,16 @@
         </dd>
         <%_ } _%>
         <%_ for (idx in relationships) {
-        var relationshipType = relationships[idx].relationshipType;
-        var ownerSide = relationships[idx].ownerSide;
-        var relationshipName = relationships[idx].relationshipName;
-        var relationshipFieldName = relationships[idx].relationshipFieldName;
-        var relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-        var relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
-        var otherEntityName = relationships[idx].otherEntityName;
-        var otherEntityStateName = relationships[idx].otherEntityStateName;
-        var otherEntityField = relationships[idx].otherEntityField;
-        var otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
+        const relationshipType = relationships[idx].relationshipType;
+        const ownerSide = relationships[idx].ownerSide;
+        const relationshipName = relationships[idx].relationshipName;
+        const relationshipFieldName = relationships[idx].relationshipFieldName;
+        const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+        const relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
+        const otherEntityName = relationships[idx].otherEntityName;
+        const otherEntityStateName = relationships[idx].otherEntityStateName;
+        const otherEntityField = relationships[idx].otherEntityField;
+        const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
         if (relationshipType == 'many-to-one'
         || (relationshipType == 'one-to-one' && ownerSide == true)
         || (relationshipType == 'many-to-many' && ownerSide == true)) { _%>

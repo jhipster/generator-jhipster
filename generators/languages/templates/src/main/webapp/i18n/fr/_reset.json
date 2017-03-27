@@ -6,9 +6,9 @@
                 "button": "Réinitialiser le mot de passe"
             },
             "messages": {
-                "info": "Veuillez renseigner l'addresse email utilisée pour vous enregistrer",
+                "info": "Veuillez renseigner l'adresse email utilisée pour vous enregistrer",
                 "success": "Veuillez vérifier vos nouveaux emails et suivre les instructions pour réinitialiser votre mot de passe.",
-                "notfound": "<strong>L'adresse email n'existe pas !</strong> Merci de la vérifier et de rééssayer."
+                "notfound": "<strong>L'adresse email n'existe pas !</strong> Merci de la vérifier et de réessayer."
             }
         },
         "finish" : {
@@ -20,11 +20,11 @@
                 "info": "Choisir un nouveau mot de passe",
                 <%_ if (clientFramework === 'angular1') { _%>
                 "success": "<strong>Votre mot de passe a été réinitialisé.</strong> Merci de <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">vous authentifier</a>.",
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "success": "<strong>Votre mot de passe a été réinitialisé.</strong> Merci de ",
                 <%_ } _%>
                 "keymissing": "La clef de réinitilisation est manquante",
-                "error": "Votre mot de passe n'a pas pu être réinitialisée. La demande de réinitialisation n'est valable que 24 heures."
+                "error": "Votre mot de passe n'a pas pu être réinitialisé. La demande de réinitialisation n'est valable que 24 heures."
             }
         }
     }

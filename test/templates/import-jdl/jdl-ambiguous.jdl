@@ -1,0 +1,54 @@
+
+entity WishList {
+    name String,
+    description String
+}
+
+relationship OneToMany {
+    Profile {
+        wishList
+    }
+    to WishList
+}
+
+relationship ManyToMany {
+    WishList {
+        listing
+    }
+    to Listing
+}
+
+
+entity Profile {
+    name String,
+    description String
+}
+
+relationship OneToOne {
+    Profile {
+        user
+    }
+    to User
+}
+
+relationship ManyToOne {
+    Listing {
+        host(name)
+    }
+    to Profile
+}
+
+
+entity Listing {
+    name String,
+    description String
+}
+
+
+
+dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl 
+// Set an angular suffix
+angularSuffix * with mySuffix

@@ -4,7 +4,7 @@
         "messages": {
             <%_ if (clientFramework === 'angular1') { _%>
             "success": "<strong>A hozzáférése aktiválásra került.</strong> Kérjük <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">lépjen be</a>.",
-            <%_ } else if (clientFramework === 'angular2') { _%>
+            <%_ } else { _%>
             "success": "<strong>A hozzáférése aktiválásra került.</strong> Kérjük ",
             <%_ } _%>
             "error": "<strong>A hozzáférését nem sikerült aktiválni.</strong> Kérjük használja a regisztrációs oldalt, hogy hozzáférést igényeljen."

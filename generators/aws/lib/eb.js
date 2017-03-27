@@ -1,69 +1,66 @@
-'use strict';
-var aws;
-var uuidV4;
+let aws;
+let uuidV4;
 
-var Eb = module.exports = function Eb(Aws, generator) {
+const Eb = module.exports = function Eb(Aws, generator) {
     aws = Aws;
     try {
-        uuidV4 = require('uuid/v4');
+        uuidV4 = require('uuid/v4'); // eslint-disable-line
     } catch (e) {
-        generator.error('Something went wrong while running jhipster:aws:\n' + e);
+        generator.error(`Something went wrong while running jhipster:aws:\n${e}`);
     }
 };
 
 Eb.prototype.createApplication = function createApplication(params, callback) {
-    var applicationName = params.applicationName,
-        bucketName = params.bucketName,
-        warKey = params.warKey,
-        versionLabel = this.warKey + '-' + uuidV4(),
-        environmentName = params.environmentName,
-        dbUrl = params.dbUrl,
-        dbUsername = params.dbUsername,
-        dbPassword = params.dbPassword,
-        instanceType = params.instanceType;
+    const applicationName = params.applicationName;
+    const bucketName = params.bucketName;
+    const warKey = params.warKey;
+    const versionLabel = `${this.warKey}-${uuidV4()}`;
+    const environmentName = params.environmentName;
+    const dbUrl = params.dbUrl;
+    const dbUsername = params.dbUsername;
+    const dbPassword = params.dbPassword;
+    const instanceType = params.instanceType;
 
-    var applicationParams = {
-        applicationName: applicationName,
-        versionLabel: versionLabel,
-        bucketName: bucketName,
-        warKey: warKey
+    const applicationParams = {
+        applicationName,
+        versionLabel,
+        bucketName,
+        warKey
     };
 
-    createApplicationVersion(applicationParams, function (err) {
+    createApplicationVersion(applicationParams, (err) => {
         if (err) {
-            callback({message: err.message}, null);
+            callback({ message: err.message }, null);
         } else {
-            var environmentParams = {
-                applicationName: applicationName,
-                environmentName: environmentName,
-                versionLabel: versionLabel,
-                dbUrl: dbUrl,
-                dbUsername: dbUsername,
-                dbPassword: dbPassword,
-                instanceType: instanceType
+            const environmentParams = {
+                applicationName,
+                environmentName,
+                versionLabel,
+                dbUrl,
+                dbUsername,
+                dbPassword,
+                instanceType
             };
 
-            checkEnvironment(environmentParams, function (err, data) {
+            checkEnvironment(environmentParams, (err, data) => {
                 if (err) {
-                    callback({message: err.message}, null);
+                    callback({ message: err.message }, null);
+                } else if (data.environmentExists) {
+                    updateEnvironment(environmentParams, (err, data) => {
+                        if (err) {
+                            callback({ message: err.message }, null);
+                        } else {
+                            callback(null, { message: data.message });
+                        }
+                    });
                 } else {
-                    if (data.environmentExists) {
-                        updateEnvironment(environmentParams, function (err, data) {
-                            if (err) {
-                                callback({message: err.message}, null);
-                            } else {
-                                callback(null, {message: data.message});
-                            }
-                        });
-                    } else {
-                        createEnvironment(environmentParams, function (err, data) {
-                            if (err) {
-                                callback({message: err.message}, null);
-                            } else {
-                                callback(null, {message: data.message});
-                            }
-                        });
-                    }
+                    createEnvironment(environmentParams, (err, data) => {
+                        if (err) {
+                            callback({ message: err.message }, null);
+                        } else {
+                            callback(null, { message: data.message });
+                        }
+                    });
                 }
             });
         }
@@ -71,14 +68,14 @@ Eb.prototype.createApplication = function createApplication(params, callback) {
 };
 
 function createApplicationVersion(params, callback) {
-    var applicationName = params.applicationName,
-        versionLabel = params.versionLabel,
-        bucketName = params.bucketName,
-        warKey = params.warKey;
+    const applicationName = params.applicationName;
+    const versionLabel = params.versionLabel;
+    const bucketName = params.bucketName;
+    const warKey = params.warKey;
 
-    var elasticbeanstalk = new aws.ElasticBeanstalk();
+    const elasticbeanstalk = new aws.ElasticBeanstalk();
 
-    var applicationParams = {
+    const applicationParams = {
         ApplicationName: applicationName,
         VersionLabel: versionLabel,
         AutoCreateApplication: true,
@@ -88,114 +85,113 @@ function createApplicationVersion(params, callback) {
         }
     };
 
-    elasticbeanstalk.createApplicationVersion(applicationParams, function (err) {
+    elasticbeanstalk.createApplicationVersion(applicationParams, (err) => {
         if (err) {
             callback(err, null);
         } else {
-            callback(null, {message: 'Application version ' + applicationName + ' created successful'});
+            callback(null, { message: `Application version ${applicationName} created successful` });
         }
     });
 }
 
 function checkEnvironment(params, callback) {
-    var applicationName = params.applicationName,
-        environmentName = params.environmentName;
+    const applicationName = params.applicationName;
+    const environmentName = params.environmentName;
 
-    var elasticbeanstalk = new aws.ElasticBeanstalk();
+    const elasticbeanstalk = new aws.ElasticBeanstalk();
 
-    var environmentParams = {
+    const environmentParams = {
         ApplicationName: applicationName,
         EnvironmentNames: [environmentName]
     };
 
-    elasticbeanstalk.describeEnvironments(environmentParams, function (err, data) {
+    elasticbeanstalk.describeEnvironments(environmentParams, (err, data) => {
         if (data.Environments.length === 0) {
-            callback(null, {message: 'Environment ' + environmentName + ' not exists', environmentExists: false});
+            callback(null, { message: `Environment ${environmentName} not exists`, environmentExists: false });
         } else if (err) {
             callback(err, null);
         } else {
-            callback(null, {message: 'Environment ' + environmentName + ' already exists', environmentExists: true});
+            callback(null, { message: `Environment ${environmentName} already exists`, environmentExists: true });
         }
     });
-
 }
 
 function createEnvironment(params, callback) {
-    var applicationName = params.applicationName,
-        environmentName = params.environmentName,
-        dbUrl = params.dbUrl,
-        dbUsername = params.dbUsername,
-        dbPassword = params.dbPassword,
-        instanceType = params.instanceType,
-        versionLabel = params.versionLabel;
+    const applicationName = params.applicationName;
+    const environmentName = params.environmentName;
+    const dbUrl = params.dbUrl;
+    const dbUsername = params.dbUsername;
+    const dbPassword = params.dbPassword;
+    const instanceType = params.instanceType;
+    const versionLabel = params.versionLabel;
 
-    var elasticbeanstalk = new aws.ElasticBeanstalk();
+    const elasticbeanstalk = new aws.ElasticBeanstalk();
 
-    getLatestSolutionStackName(function (err, data) {
+    getLatestSolutionStackName((err, data) => {
         if (err) callback(err, null);
 
-        var solutionStackName = data.solutionStackName,
-            environmentParams = {
-                ApplicationName: applicationName,
-                EnvironmentName: environmentName,
-                OptionSettings: [
-                    {
-                        Namespace: 'aws:elasticbeanstalk:application:environment',
-                        OptionName: 'spring.profiles.active',
-                        Value: 'prod'
-                    },
-                    {
-                        Namespace: 'aws:elasticbeanstalk:application:environment',
-                        OptionName: 'spring.datasource.url',
-                        Value: dbUrl
-                    },
-                    {
-                        Namespace: 'aws:elasticbeanstalk:application:environment',
-                        OptionName: 'spring.datasource.username',
-                        Value: dbUsername
-                    },
-                    {
-                        Namespace: 'aws:elasticbeanstalk:application:environment',
-                        OptionName: 'spring.datasource.password',
-                        Value: dbPassword
-                    },
-                    {
-                        Namespace: 'aws:autoscaling:launchconfiguration',
-                        OptionName: 'InstanceType',
-                        Value: instanceType
-                    },
-                    {
-                        Namespace: 'aws:autoscaling:launchconfiguration',
-                        OptionName: 'IamInstanceProfile',
-                        Value: 'aws-elasticbeanstalk-ec2-role'
-                    }
-                ],
-                SolutionStackName: solutionStackName,
-                VersionLabel: versionLabel,
-                Tier: {
-                    Name: 'WebServer',
-                    Type: 'Standard'
+        const solutionStackName = data.solutionStackName;
+        const environmentParams = {
+            ApplicationName: applicationName,
+            EnvironmentName: environmentName,
+            OptionSettings: [
+                {
+                    Namespace: 'aws:elasticbeanstalk:application:environment',
+                    OptionName: 'spring.profiles.active',
+                    Value: 'prod'
+                },
+                {
+                    Namespace: 'aws:elasticbeanstalk:application:environment',
+                    OptionName: 'spring.datasource.url',
+                    Value: dbUrl
+                },
+                {
+                    Namespace: 'aws:elasticbeanstalk:application:environment',
+                    OptionName: 'spring.datasource.username',
+                    Value: dbUsername
+                },
+                {
+                    Namespace: 'aws:elasticbeanstalk:application:environment',
+                    OptionName: 'spring.datasource.password',
+                    Value: dbPassword
+                },
+                {
+                    Namespace: 'aws:autoscaling:launchconfiguration',
+                    OptionName: 'InstanceType',
+                    Value: instanceType
+                },
+                {
+                    Namespace: 'aws:autoscaling:launchconfiguration',
+                    OptionName: 'IamInstanceProfile',
+                    Value: 'aws-elasticbeanstalk-ec2-role'
                 }
-            };
+            ],
+            SolutionStackName: solutionStackName,
+            VersionLabel: versionLabel,
+            Tier: {
+                Name: 'WebServer',
+                Type: 'Standard'
+            }
+        };
 
-        elasticbeanstalk.createEnvironment(environmentParams, function (err) {
+        elasticbeanstalk.createEnvironment(environmentParams, (err) => {
             if (err) callback(err, null);
-            else callback(null, {message: 'Environment ' + environmentName + ' created successful'});
+            else callback(null, { message: `Environment ${environmentName} created successful` });
         });
     });
 }
 
 function getLatestSolutionStackName(callback) {
-    var elasticbeanstalk = new aws.ElasticBeanstalk();
+    const elasticbeanstalk = new aws.ElasticBeanstalk();
 
-    elasticbeanstalk.listAvailableSolutionStacks(function (err, data) {
+    elasticbeanstalk.listAvailableSolutionStacks((err, data) => {
         if (err) callback(err, null);
         filterSolutionStackNames(data, callback);
     });
 
     function filterSolutionStackNames(data, callback) {
-        var filteredArray = data.SolutionStacks.filter(filterCriteria);
-        callback(null, {solutionStackName: filteredArray[0]});
+        const filteredArray = data.SolutionStacks.filter(filterCriteria);
+        callback(null, { solutionStackName: filteredArray[0] });
     }
 
     function filterCriteria(element) {
@@ -204,13 +200,13 @@ function getLatestSolutionStackName(callback) {
 }
 
 function updateEnvironment(params, callback) {
-    var environmentName = params.environmentName,
-        instanceType = params.instanceType,
-        versionLabel = params.versionLabel;
+    const environmentName = params.environmentName;
+    const instanceType = params.instanceType;
+    const versionLabel = params.versionLabel;
 
-    var elasticbeanstalk = new aws.ElasticBeanstalk();
+    const elasticbeanstalk = new aws.ElasticBeanstalk();
 
-    var environmentParams = {
+    const environmentParams = {
         EnvironmentName: environmentName,
         OptionSettings: [
             {
@@ -222,11 +218,11 @@ function updateEnvironment(params, callback) {
         VersionLabel: versionLabel
     };
 
-    elasticbeanstalk.updateEnvironment(environmentParams, function (err) {
+    elasticbeanstalk.updateEnvironment(environmentParams, (err) => {
         if (err) {
             callback(err, null);
         } else {
-            callback(null, {message: 'Environment ' + environmentName + ' updated successful'});
+            callback(null, { message: `Environment ${environmentName} updated successful` });
         }
     });
 }

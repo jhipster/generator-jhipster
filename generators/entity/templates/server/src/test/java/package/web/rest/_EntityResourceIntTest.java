@@ -7,8 +7,8 @@ import <%=packageName%>.config.SecurityBeanOverrideConfiguration;
 <% } %>
 import <%=packageName%>.domain.<%= entityClass %>;
 <%_ for (idx in relationships) { // import entities in required relationships
-        var relationshipValidate = relationships[idx].relationshipValidate;
-        var otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
+        const relationshipValidate = relationships[idx].relationshipValidate;
+        const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
         if (relationshipValidate != null && relationshipValidate === true) { _%>
 import <%=packageName%>.domain.<%= otherEntityNameCapitalized %>;
 <%_ } } _%>
@@ -66,17 +66,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ } _%>
 public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 <%_
-    var oldSource = '';
+    let oldSource = '';
     try {
         oldSource = this.fs.readFileSync(this.SERVER_TEST_SRC_DIR + packageFolder + '/web/rest/' + entityClass + 'ResourceIntTest.java', 'utf8');
     } catch (e) {}
 _%>
     <%_ for (idx in fields) {
-    var defaultValueName = 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase();
-    var updatedValueName = 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase();
+    const defaultValueName = 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase();
+    const updatedValueName = 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase();
 
-    var defaultValue = 1;
-    var updatedValue = 2;
+    let defaultValue = 1;
+    let updatedValue = 2;
 
     if (fields[idx].fieldValidate == true) {
         if (fields[idx].fieldValidateRules.indexOf('max') != -1) {
@@ -96,13 +96,13 @@ _%>
         }
     }
 
-    var fieldType = fields[idx].fieldType;
-    var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
-    var isEnum = fields[idx].fieldIsEnum;
-    var enumValue1;
-    var enumValue2;
+    const fieldType = fields[idx].fieldType;
+    const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
+    const isEnum = fields[idx].fieldIsEnum;
+    let enumValue1;
+    let enumValue2;
     if (isEnum) {
-        var values = fields[idx].fieldValues.replace(/\s/g, '').split(',');
+        const values = fields[idx].fieldValues.replace(/\s/g, '').split(',');
         enumValue1 = values[0];
         if (values.length > 1) {
             enumValue2 = values[1];
@@ -113,35 +113,35 @@ _%>
 
     if (fieldType == 'String' || fieldTypeBlobContent == 'text') {
         // Generate Strings, using the min and max string length if they are configured
-        var sampleTextString = "";
-        var updatedTextString = "";
-        var sampleTextLength = 10;
+        let sampleTextString = "";
+        let updatedTextString = "";
+        let sampleTextLength = 10;
         if (fields[idx].fieldValidateRulesMinlength > sampleTextLength) {
             sampleTextLength = fields[idx].fieldValidateRulesMinlength;
         }
         if (fields[idx].fieldValidateRulesMaxlength < sampleTextLength) {
             sampleTextLength = fields[idx].fieldValidateRulesMaxlength;
         }
-        for (var i = 0; i < sampleTextLength; i++) {
+        for (let i = 0; i < sampleTextLength; i++) {
             sampleTextString += "A";
             updatedTextString += "B";
         }
         if (!this._.isUndefined(fields[idx].fieldValidateRulesPattern)) {
             if (oldSource !== '') {
                 // Check for old values
-                var sampleTextStringSearchResult = new RegExp('private static final String ' + defaultValueName + ' = "(.*)";', 'm').exec(oldSource);
+                const sampleTextStringSearchResult = new RegExp('private static final String ' + defaultValueName + ' = "(.*)";', 'm').exec(oldSource);
                 if (sampleTextStringSearchResult != null) {
                     sampleTextString = sampleTextStringSearchResult[1];
                 }
-                var updatedTextStringSearchResult = new RegExp('private static final String ' + updatedValueName + ' = "(.*)";', 'm').exec(oldSource);
+                const updatedTextStringSearchResult = new RegExp('private static final String ' + updatedValueName + ' = "(.*)";', 'm').exec(oldSource);
                 if (updatedTextStringSearchResult != null) {
                     updatedTextString = updatedTextStringSearchResult[1];
                 }
             }
             // Generate Strings, using pattern
             try {
-                var patternRegExp = new RegExp(fields[idx].fieldValidateRulesPattern);
-                var randExp = new this.randexp(fields[idx].fieldValidateRulesPattern);
+                const patternRegExp = new RegExp(fields[idx].fieldValidateRulesPattern);
+                const randExp = new this.randexp(fields[idx].fieldValidateRulesPattern);
                 // set infinite repetitionals max range
                 randExp.max = 1;
                 if (!patternRegExp.test(sampleTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
@@ -283,12 +283,12 @@ _%>
             <%_ } _%>
         <%_ } _%>
         <%_ for (idx in relationships) {
-            var relationshipValidate = relationships[idx].relationshipValidate;
-            var otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
-            var relationshipFieldName = relationships[idx].relationshipFieldName;
-            var relationshipType = relationships[idx].relationshipType;
-            var relationshipNameCapitalizedPlural = relationships[idx].relationshipNameCapitalizedPlural;
-            var relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized;
+            const relationshipValidate = relationships[idx].relationshipValidate;
+            const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
+            const relationshipFieldName = relationships[idx].relationshipFieldName;
+            const relationshipType = relationships[idx].relationshipType;
+            const relationshipNameCapitalizedPlural = relationships[idx].relationshipNameCapitalizedPlural;
+            const relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized;
             if (relationshipValidate != null && relationshipValidate === true) { _%>
         // Add required entity
         <%= otherEntityNameCapitalized %> <%= relationshipFieldName %> = <%= otherEntityNameCapitalized %>ResourceIntTest.createEntity(em);
@@ -370,7 +370,7 @@ _%>
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeCreate);
     }
 <% for (idx in fields) { %><% if (fields[idx].fieldValidate == true) {
-    var required = false;
+    let required = false;
     if (fields[idx].fieldValidate == true && fields[idx].fieldValidateRules.indexOf('required') != -1) {
         required = true;
     }
@@ -567,7 +567,8 @@ _%>
             .andExpect(jsonPath("$.[*].<%=fields[idx].fieldName%>").value(hasItem(<% if ((fields[idx].fieldType == 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent != 'text') { %>Base64Utils.encodeToString(<% } else if (fields[idx].fieldType == 'ZonedDateTime') { %>sameInstant(<% } %><%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%><% if ((fields[idx].fieldType == 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent != 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (fields[idx].fieldType == 'Integer') { %><% } else if (fields[idx].fieldType == 'Long') { %>.intValue()<% } else if (fields[idx].fieldType == 'Float' || fields[idx].fieldType == 'Double') { %>.doubleValue()<% } else if (fields[idx].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[idx].fieldType == 'Boolean') { %>.booleanValue()<% } else if (fields[idx].fieldType == 'ZonedDateTime') { %>)<% } else { %>.toString()<% } %>)))<% } %>;
     }<% } %>
 
-    @Test
+    @Test<% if (databaseType == 'sql') { %>
+    @Transactional<% } %>
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(<%= entityClass %>.class);
     }

@@ -15,11 +15,11 @@ import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 })
 export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
     <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
-<%- include('pagination-template'); -%>
+<%- include('pagination-template', {toArrayString: toArrayString}); -%>
     <%_ } else if (pagination === 'infinite-scroll') { _%>
-<%- include('infinite-scroll-template'); -%>
+<%- include('infinite-scroll-template', {toArrayString: toArrayString}); -%>
     <%_ } else if (pagination === 'no') { _%>
-<%- include('no-pagination-template'); -%>
+<%- include('no-pagination-template', {toArrayString: toArrayString}); -%>
     <%_ } _%>
     ngOnInit() {
         this.loadAll();

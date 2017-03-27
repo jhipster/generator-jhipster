@@ -4,7 +4,7 @@
         "messages": {
             <%_ if (clientFramework === 'angular1') { _%>
             "success": "<strong>Ձեր օգվողը ակտիվացված է:</strong> Խնդրում ենք <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">մուտք գործել</a>.",
-            <%_ } else if (clientFramework === 'angular2') { _%>
+            <%_ } else { _%>
             "success": "<strong>Ձեր օգվողը ակտիվացված է.</strong> Խնդրում ենք ",
             <%_ } _%>
             "error": "<strong>Ձեր օգվողը չի կարող ակտիվանալ:</strong> Խնդրում ենք, օգտվել գրանցման ձևից մուտք գործելու համար."

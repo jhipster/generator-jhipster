@@ -20,7 +20,7 @@
                 "info": "Vyberte si nové heslo",
                 <%_ if (clientFramework === 'angular1') { _%>
                 "success": "<strong>Vaše heslo bylo obnoveno.</strong> Můžete se <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">přihlásit</a>.",
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "success": "<strong>Vaše heslo bylo obnoveno.</strong> Můžete se ",
                 <%_ } _%>
                 "keymissing": "Chybí klíč na obnovení hesla.",

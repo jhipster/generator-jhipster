@@ -4,7 +4,7 @@
         "messages": {
             <%_ if (clientFramework === 'angular1') { _%>
             "success": "<strong>당신의 계정이 활성화되었습니다.</strong> <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">인증</a>하기.",
-            <%_ } else if (clientFramework === 'angular2') { _%>
+            <%_ } else { _%>
             "success": "<strong>당신의 계정이 활성화되었습니다.</strong> ",
             <%_ } _%>
             "error": "<strong>당신의 계정이 활성화될 수 없습니다.</strong> 회원가입을 위해 등록 폼을 이용해 주세요."

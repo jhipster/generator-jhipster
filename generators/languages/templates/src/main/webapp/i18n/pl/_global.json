@@ -51,7 +51,7 @@
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "Jeśli chcesz się <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">zalogować</a>, możesz spróbować któregoś z domyślnych kont:<br/>- Administrator (login=\"admin\" i hasło=\"admin\") <br/>- Użytkownik (login=\"user\" i hasło=\"user\").",
                 "register": "Nie masz jeszcze konta? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Zarejestruj się</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Jeśli chcesz się ",
                     "link": "zalogować",

@@ -20,7 +20,7 @@
                 "info": "Επιλέξτε έναν κανούργιο κωδικό",
                 <%_ if (clientFramework === 'angular1') { _%>
                 "success": "<strong>Έχει γίνει επαναφορά του κωδικού σας.</strong> Παρακαλούμε <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">συνδεθείτε</a>.",
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "success": "<strong>Έχει γίνει επαναφορά του κωδικού σας.</strong> Παρακαλούμε ",
                 <%_ } _%>
                 "keymissing": "κωδικός επαναφοράς είναι απών.",

@@ -25,6 +25,7 @@
             "relationshipName": "testEntity",
             "otherEntityName": "testEntity",
             "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
             "otherEntityField": "id"
         },
         {

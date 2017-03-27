@@ -51,7 +51,7 @@
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "Om du vill <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">logga in</a> - prova med standard kontot:<br/>- Administratör (användarnamn=\"admin\" och lösenord=\"admin\") <br/>- Användare (login=\"user\" och lösenord=\"user\").",
                 "register": "Har du inget konto? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Du kan registrera ett konto</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Om du vill ",
                     "link": "logga in",

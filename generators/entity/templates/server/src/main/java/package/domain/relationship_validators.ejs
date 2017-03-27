@@ -1,9 +1,9 @@
 <%#	Returns a string of all validator annotations for the entity relationships. -%>
 <%
-var relationship = relationships[idx];
-var result = '';
+const relationship = relationships[idx];
+let result = '';
 if (relationship.relationshipValidate === true) {
-    var validators = [];
+    const validators = [];
     if (relationship.relationshipRequired) {
         validators.push('@NotNull');
     }

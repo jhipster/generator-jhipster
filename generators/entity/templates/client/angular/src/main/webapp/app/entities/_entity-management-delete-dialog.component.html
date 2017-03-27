@@ -1,4 +1,4 @@
-<%_ var keyPrefix = angularAppName + '.' + entityTranslationKey; _%>
+<%_ const keyPrefix = angularAppName + '.' + entityTranslationKey; _%>
 <form name="deleteForm" (ngSubmit)="confirmDelete(<%= entityInstance %>.id)">
     <div class="modal-header">
         <h4 class="modal-title" jhiTranslate="entity.delete.title">Confirm delete operation</h4>

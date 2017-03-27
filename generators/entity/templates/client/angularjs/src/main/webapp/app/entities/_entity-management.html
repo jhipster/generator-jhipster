@@ -1,5 +1,5 @@
 <div>
-<%_ var keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
+<%_ const keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
     <h2 data-translate="<%= keyPrefix %>home.title"><%= entityClassPluralHumanized %></h2>
     <jhi-alert></jhi-alert>
     <div class="container-fluid">
@@ -46,7 +46,7 @@
                         <%_ if (relationships[idx].relationshipType == 'many-to-one'
                                 || (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide == true)
                                 || (relationships[idx].relationshipType == 'many-to-many' && relationships[idx].ownerSide == true && pagination == 'no')) {
-                            var fieldName = dto == 'no' ? "." + relationships[idx].otherEntityField : relationships[idx].otherEntityFieldCapitalized;_%>
+                            const fieldName = dto == 'no' ? "." + relationships[idx].otherEntityField : relationships[idx].otherEntityFieldCapitalized;_%>
                     <th<% if (pagination != 'no') { %> jh-sort-by="<%=relationships[idx].relationshipName + (fieldName)%>"<% } %>><span data-translate="<%= keyPrefix + relationships[idx].relationshipName%>"><%= relationships[idx].relationshipNameHumanized %></span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
                         <%_ } _%>
                     <%_ } _%>
@@ -57,10 +57,10 @@
                 <tr ng-repeat="<%=entityInstance %> in vm.<%=entityInstancePlural %> track by <%=entityInstance %>.id">
                     <td><a ui-sref="<%= entityStateName %>-detail({id:<%= entityInstance %>.id})">{{<%=entityInstance %>.id}}</a></td>
                     <%_ for (idx in fields) {
-                        var fieldName = fields[idx].fieldName;
-                        var fieldNameCapitalized = fields[idx].fieldNameCapitalized;
-                        var fieldType = fields[idx].fieldType;
-                        var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent; _%>
+                        const fieldName = fields[idx].fieldName;
+                        const fieldNameCapitalized = fields[idx].fieldNameCapitalized;
+                        const fieldType = fields[idx].fieldType;
+                        const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent; _%>
                         <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'image') { _%>
                     <td>
                         <a ng-if="<%= entityInstance %>.<%= fieldName %>" ng-click="vm.openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">
@@ -84,14 +84,14 @@
                         <%_ } _%>
                     <%_ } _%>
                     <%_ for (idx in relationships) {
-                            var relationshipType = relationships[idx].relationshipType;
-                            var ownerSide = relationships[idx].ownerSide;
-                            var relationshipFieldName = relationships[idx].relationshipFieldName;
-                            var relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-                            var otherEntityName = relationships[idx].otherEntityName;
-                            var otherEntityStateName = relationships[idx].otherEntityStateName;
-                            var otherEntityField = relationships[idx].otherEntityField;
-                            var otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized; _%>
+                            const relationshipType = relationships[idx].relationshipType;
+                            const ownerSide = relationships[idx].ownerSide;
+                            const relationshipFieldName = relationships[idx].relationshipFieldName;
+                            const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+                            const otherEntityName = relationships[idx].otherEntityName;
+                            const otherEntityStateName = relationships[idx].otherEntityStateName;
+                            const otherEntityField = relationships[idx].otherEntityField;
+                            const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized; _%>
                         <%_ if (relationshipType == 'many-to-one'
                                 || (relationshipType == 'one-to-one' && ownerSide == true)
                                 || (relationshipType == 'many-to-many' && ownerSide == true && pagination == 'no')) { _%>

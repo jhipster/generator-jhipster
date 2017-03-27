@@ -1,5 +1,5 @@
 <%_
-    var hasDate = false;
+    let hasDate = false;
     if (fieldsContainZonedDateTime || fieldsContainLocalDate) {
         hasDate = true;
     }

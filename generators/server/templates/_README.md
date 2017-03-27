@@ -45,7 +45,7 @@ You will only need to run this command when dependencies change in [package.json
 
     <%= clientPackageManager %> install
 
-<%_ if (clientFramework === 'angular2') { _%>
+<%_ if (clientFramework !== 'angular1') { _%>
 We use <%= clientPackageManager %> scripts and [Webpack][] as our build system.
 
 <%_ } else { _%>
@@ -59,7 +59,7 @@ auto-refreshes when files change on your hard drive.
 <% if (buildTool == 'maven') { %>
     ./mvnw<% } %><% if (buildTool == 'gradle') { %>
     ./gradlew<% } %>
-<%_ if (clientFramework === 'angular2') { _%>
+<%_ if (clientFramework !== 'angular1') { _%>
     <%= clientPackageManager %> start
 
 [<%= clientPackageMngrName %>][] is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
@@ -102,7 +102,7 @@ Add the `-h` flag on any command to see how you can use it. For example, `bower 
 
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
 
-<%_ if (clientFramework === 'angular2') { _%>
+<%_ if (clientFramework !== 'angular1') { _%>
 ### Using angular-cli
 
 You can also use [Angular CLI][] to generate some custom client code.
@@ -147,14 +147,14 @@ To launch your application's tests, run:
 
 Unit tests are run by [Karma][] and written with [Jasmine][]. They're located in [<%= CLIENT_TEST_SRC_DIR %>](<%= CLIENT_TEST_SRC_DIR %>) and can be run with:
 
-<%_ if (clientFramework === 'angular2') { _%>
+<%_ if (clientFramework !== 'angular1') { _%>
     <%= clientPackageManager %> test
 <%_ } else { _%>
     gulp test
 <%_ } _%>
 
 <% if (protractorTests) { %>UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in [<%= CLIENT_TEST_SRC_DIR %>e2e](<%= CLIENT_TEST_SRC_DIR %>e2e)
-and can be run by starting Spring Boot in one terminal (`<% if (buildTool == 'maven') { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`gulp itest`) in a second one.<% } %>
+and can be run by starting Spring Boot in one terminal (`<% if (buildTool == 'maven') { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`<% if (clientFramework !== 'angular1') { %><%= clientPackageManager %> run e2e<% } else { %>gulp itest<% } %>`) in a second one.<% } %>
 <% } %><% if (gatlingTests) { %>### Other tests
 
 Performance tests are run by [Gatling][] and written in Scala. They're located in [src/test/gatling](src/test/gatling) and can be run with:
@@ -209,7 +209,7 @@ To configure CI for your project, run the ci-cd sub-generator (`yo jhipster:ci-c
 <%_ if(!skipClient) {_%>
 [Node.js]: https://nodejs.org/
 [Yarn]: https://yarnpkg.org/
-<%_ if (clientFramework === 'angular2') { _%>
+<%_ if (clientFramework !== 'angular1') { _%>
 [Webpack]: https://webpack.github.io/
 [Angular CLI]: https://cli.angular.io/
 <%_ } else { _%>

@@ -33,18 +33,18 @@
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column><% for (idx in fields) {
-            var nullable = true;
+            let nullable = true;
             if (fields[idx].fieldValidate == true && fields[idx].fieldValidateRules.indexOf('required') != -1) {
                 nullable = false;
             }
-            var maxlength = 255;
+            let maxlength = 255;
             if (fields[idx].fieldValidate == true && fields[idx].fieldValidateRules.indexOf('maxlength') != -1) {
                 maxlength = fields[idx].fieldValidateRulesMaxlength;
             }
-            var fieldType = fields[idx].fieldType;
-            var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
-            var columnName = fields[idx].fieldNameUnderscored;
-            var columnType;
+            const fieldType = fields[idx].fieldType;
+            const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
+            const columnName = fields[idx].fieldNameAsDatabaseColumn;
+            let columnType;
             if (fieldType == 'String' || fields[idx].fieldIsEnum) {
                 columnType="varchar(" + maxlength + ")";
             } else if (fieldType == 'Integer') {
@@ -86,7 +86,7 @@
             </column>
             <%_ }  _%>
             <%_ } _%><% for (idx in relationships) {
-                var nullable_relation = true,
+                let nullable_relation = true,
                 relationshipType = relationships[idx].relationshipType,
                 relationshipName = relationships[idx].relationshipName;
                 if (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired) {
@@ -102,18 +102,18 @@
             </column><% } %><% } %>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
-        <%_ for (idx in fields) {
+        <%_ for (const idx in fields) {
             if (fields[idx].fieldType == 'ZonedDateTime') { _%>
-        <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%=fields[idx].fieldNameUnderscored %>" columnDataType="datetime"/>
+        <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%=fields[idx].fieldNameAsDatabaseColumn %>" columnDataType="datetime"/>
         <%_ }
         } _%>
         <% for (idx in relationships) {
-            var relationshipType = relationships[idx].relationshipType,
+            const relationshipType = relationships[idx].relationshipType,
             relationshipName = relationships[idx].relationshipName,
             ownerSide = relationships[idx].ownerSide,
             otherEntityName = relationships[idx].otherEntityName;
             if (relationshipType == 'many-to-many' && ownerSide) {
-                var joinTableName = getJoinTableName(name, relationshipName, prodDatabaseType);
+                const joinTableName = getJoinTableName(name, relationshipName, prodDatabaseType);
           _%>
 
         <createTable tableName="<%= joinTableName %>">

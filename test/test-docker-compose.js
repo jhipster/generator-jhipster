@@ -1,48 +1,44 @@
-/*global describe, beforeEach, it*/
-'use strict';
+/* global describe, beforeEach, it*/
 
-var path = require('path');
-var assert = require('yeoman-assert');
-var helpers = require('yeoman-test');
-var fse = require('fs-extra');
 
-const constants = require('../generators/generator-constants'),
-    DOCKER_DIR = constants.DOCKER_DIR;
+const path = require('path');
+const assert = require('yeoman-assert');
+const helpers = require('yeoman-test');
+const fse = require('fs-extra');
 
 const expectedFiles = {
-    dockercompose : [
+    dockercompose: [
         'docker-compose.yml',
         'jhipster-registry.yml',
         'central-server-config/application.yml'
     ],
-    elk : [
+    elk: [
         'jhipster-console.yml',
         'log-conf/logstash.conf'
     ],
-    prometheus : [
+    prometheus: [
         'prometheus.yml',
         'prometheus-conf/alert.rules',
         'prometheus-conf/prometheus.yml',
         'alertmanager-conf/config.yml'
     ],
-    monolith : [
+    monolith: [
         'docker-compose.yml'
     ]
 };
 
-describe('JHipster Docker Compose Sub Generator', function () {
-
-    describe('only gateway', function () {
-        beforeEach(function (done) {
+describe('JHipster Docker Compose Sub Generator', () => {
+    describe('only gateway', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    'chosenApps': [
+                    chosenApps: [
                         '01-gateway'
                     ],
                     clusteredDbApps: [],
@@ -50,30 +46,30 @@ describe('JHipster Docker Compose Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.dockercompose);
         });
-        it('creates jhipster-registry content', function () {
+        it('creates jhipster-registry content', () => {
             assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
         });
-        it('creates compose file without container_name, external_links, links', function () {
+        it('creates compose file without container_name, external_links, links', () => {
             assert.noFileContent('docker-compose.yml', /container_name:/);
             assert.noFileContent('docker-compose.yml', /external_links:/);
             assert.noFileContent('docker-compose.yml', /links:/);
         });
     });
 
-    describe('only one microservice', function () {
-        beforeEach(function (done) {
+    describe('only one microservice', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    'chosenApps': [
+                    chosenApps: [
                         '02-mysql'
                     ],
                     clusteredDbApps: [],
@@ -81,30 +77,30 @@ describe('JHipster Docker Compose Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.dockercompose);
         });
-        it('creates jhipster-registry content', function () {
+        it('creates jhipster-registry content', () => {
             assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
         });
-        it('creates compose file without container_name, external_links, links', function () {
+        it('creates compose file without container_name, external_links, links', () => {
             assert.noFileContent('docker-compose.yml', /container_name:/);
             assert.noFileContent('docker-compose.yml', /external_links:/);
             assert.noFileContent('docker-compose.yml', /links:/);
         });
     });
 
-    describe('gateway and one microservice', function () {
-        beforeEach(function (done) {
+    describe('gateway and one microservice', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    'chosenApps': [
+                    chosenApps: [
                         '01-gateway',
                         '02-mysql'
                     ],
@@ -113,30 +109,30 @@ describe('JHipster Docker Compose Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.dockercompose);
         });
-        it('creates jhipster-registry content', function () {
+        it('creates jhipster-registry content', () => {
             assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
         });
-        it('creates compose file without container_name, external_links, links', function () {
+        it('creates compose file without container_name, external_links, links', () => {
             assert.noFileContent('docker-compose.yml', /container_name:/);
             assert.noFileContent('docker-compose.yml', /external_links:/);
             assert.noFileContent('docker-compose.yml', /links:/);
         });
     });
 
-    describe('gateway and one microservice, with elk', function () {
-        beforeEach(function (done) {
+    describe('gateway and one microservice, with elk', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    'chosenApps': [
+                    chosenApps: [
                         '01-gateway',
                         '02-mysql'
                     ],
@@ -145,33 +141,33 @@ describe('JHipster Docker Compose Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.dockercompose);
         });
-        it('creates expected elk files', function () {
+        it('creates expected elk files', () => {
             assert.file(expectedFiles.elk);
         });
-        it('creates jhipster-registry content', function () {
+        it('creates jhipster-registry content', () => {
             assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
         });
-        it('creates compose file without container_name, external_links, links', function () {
+        it('creates compose file without container_name, external_links, links', () => {
             assert.noFileContent('docker-compose.yml', /container_name:/);
             assert.noFileContent('docker-compose.yml', /external_links:/);
             assert.noFileContent('docker-compose.yml', /links:/);
         });
     });
 
-    describe('gateway and one microservice, with prometheus', function () {
-        beforeEach(function (done) {
+    describe('gateway and one microservice, with prometheus', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    'chosenApps': [
+                    chosenApps: [
                         '01-gateway',
                         '02-mysql'
                     ],
@@ -180,34 +176,34 @@ describe('JHipster Docker Compose Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.dockercompose);
         });
-        it('creates expected prometheus files', function () {
+        it('creates expected prometheus files', () => {
             assert.file(expectedFiles.prometheus);
         });
-        it('creates jhipster-registry content', function () {
+        it('creates jhipster-registry content', () => {
             assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
         });
-        it('creates compose file without container_name, external_links, links', function () {
+        it('creates compose file without container_name, external_links, links', () => {
             assert.noFileContent('docker-compose.yml', /container_name:/);
             assert.noFileContent('docker-compose.yml', /external_links:/);
             assert.noFileContent('docker-compose.yml', /links:/);
         });
     });
 
-    describe('gateway, uaa server and one microservice, with elk', function () {
-        beforeEach(function (done) {
+    describe('gateway, uaa server and one microservice, with elk', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
-                .withOptions({force: true})
+                .withOptions({ force: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    'chosenApps': [
+                    chosenApps: [
                         '01-gateway',
                         '02-mysql',
                         '06-uaa'
@@ -217,33 +213,33 @@ describe('JHipster Docker Compose Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.dockercompose);
         });
-        it('creates expected elk files', function () {
+        it('creates expected elk files', () => {
             assert.file(expectedFiles.elk);
         });
-        it('creates jhipster-registry content', function () {
+        it('creates jhipster-registry content', () => {
             assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
         });
-        it('creates compose file without container_name, external_links, links', function () {
+        it('creates compose file without container_name, external_links, links', () => {
             assert.noFileContent('docker-compose.yml', /container_name:/);
             assert.noFileContent('docker-compose.yml', /external_links:/);
             assert.noFileContent('docker-compose.yml', /links:/);
         });
     });
 
-    describe('gateway and multi microservices, with elk', function () {
-        beforeEach(function (done) {
+    describe('gateway and multi microservices, with elk', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    'chosenApps': [
+                    chosenApps: [
                         '01-gateway',
                         '02-mysql',
                         '03-psql',
@@ -255,33 +251,33 @@ describe('JHipster Docker Compose Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.dockercompose);
         });
-        it('creates expected elk files', function () {
+        it('creates expected elk files', () => {
             assert.file(expectedFiles.elk);
         });
-        it('creates jhipster-registry content', function () {
+        it('creates jhipster-registry content', () => {
             assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
         });
-        it('creates compose file without container_name, external_links, links', function () {
+        it('creates compose file without container_name, external_links, links', () => {
             assert.noFileContent('docker-compose.yml', /container_name:/);
             assert.noFileContent('docker-compose.yml', /external_links:/);
             assert.noFileContent('docker-compose.yml', /links:/);
         });
     });
 
-    describe('gateway and multi microservices, with 1 mongodb cluster', function () {
-        beforeEach(function (done) {
+    describe('gateway and multi microservices, with 1 mongodb cluster', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    'chosenApps': [
+                    chosenApps: [
                         '01-gateway',
                         '02-mysql',
                         '03-psql',
@@ -294,33 +290,33 @@ describe('JHipster Docker Compose Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.dockercompose);
         });
-        it('creates expected elk files', function () {
+        it('creates expected elk files', () => {
             assert.file(expectedFiles.elk);
         });
-        it('creates jhipster-registry content', function () {
+        it('creates jhipster-registry content', () => {
             assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
         });
-        it('creates compose file without container_name, external_links, links', function () {
+        it('creates compose file without container_name, external_links, links', () => {
             assert.noFileContent('docker-compose.yml', /container_name:/);
             assert.noFileContent('docker-compose.yml', /external_links:/);
             assert.noFileContent('docker-compose.yml', /links:/);
         });
     });
 
-    describe('gateway and 1 microservice, with Cassandra cluster', function () {
-        beforeEach(function (done) {
+    describe('gateway and 1 microservice, with Cassandra cluster', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    'chosenApps': [
+                    chosenApps: [
                         '01-gateway',
                         '05-cassandra'
                     ],
@@ -329,33 +325,33 @@ describe('JHipster Docker Compose Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.dockercompose);
         });
-        it('creates expected elk files', function () {
+        it('creates expected elk files', () => {
             assert.file(expectedFiles.elk);
         });
-        it('creates jhipster-registry content', function () {
+        it('creates jhipster-registry content', () => {
             assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
         });
-        it('creates compose file without container_name, external_links, links', function () {
+        it('creates compose file without container_name, external_links, links', () => {
             assert.noFileContent('docker-compose.yml', /container_name:/);
             assert.noFileContent('docker-compose.yml', /external_links:/);
             assert.noFileContent('docker-compose.yml', /links:/);
         });
     });
 
-    describe('monolith', function () {
-        beforeEach(function (done) {
+    describe('monolith', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
                     composeApplicationType: 'monolith',
                     directoryPath: './',
-                    'chosenApps': [
+                    chosenApps: [
                         '08-monolith'
                     ],
                     clusteredDbApps: [],
@@ -363,24 +359,13 @@ describe('JHipster Docker Compose Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected default files', function() {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.monolith);
         });
-        it('creates compose file without container_name, external_links, links', function () {
+        it('creates compose file without container_name, external_links, links', () => {
             assert.noFileContent('docker-compose.yml', /container_name:/);
             assert.noFileContent('docker-compose.yml', /external_links:/);
             assert.noFileContent('docker-compose.yml', /links:/);
         });
     });
 });
-
-exports.shouldBeV3DockerfileCompatible = function(databaseType) {
-    it('creates compose file without container_name, external_links, links', function () {
-        assert.noFileContent(DOCKER_DIR + 'app.yml', /container_name:/);
-        assert.noFileContent(DOCKER_DIR + 'app.yml', /external_links:/);
-        assert.noFileContent(DOCKER_DIR + 'app.yml', /links:/);
-        assert.noFileContent(DOCKER_DIR + databaseType + '.yml', /container_name:/);
-        assert.noFileContent(DOCKER_DIR + databaseType + '.yml', /external_links:/);
-        assert.noFileContent(DOCKER_DIR + databaseType + '.yml', /links:/);
-    });
-};
