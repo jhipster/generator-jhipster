@@ -215,13 +215,19 @@ public class UserService {
      * @param lastName last name of user
      * @param email email id of user
      * @param langKey language key
+     <%_ if (databaseType == 'mongodb' || databaseType == 'sql') { _%>
+     * @param imageUrl image URL of user
+     <%_ } _%>
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey) {
+    public void updateUser(String firstName, String lastName, String email, String langKey<% if (databaseType === 'mongodb' || databaseType === 'sql') { %>, String imageUrl<% } %>) {
         userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(user -> {
             user.setFirstName(firstName);
             user.setLastName(lastName);
             user.setEmail(email);
             user.setLangKey(langKey);
+            <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
+            user.setImageUrl(imageUrl);
+            <%_ } _%>
             <%_ if (databaseType == 'mongodb' || databaseType == 'cassandra') { _%>
             userRepository.save(user);
             <%_ } _%>
@@ -297,9 +303,10 @@ public class UserService {
         });
     }
 
-    <%_ if (databaseType == 'sql') { _%>
-    @Transactional(readOnly = true)<%_ } _%>
-    <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional(readOnly = true)
+    <%_ } _%>
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
     public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
         return userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER).map(UserDTO::new);
     }<% } else { // Cassandra %>
