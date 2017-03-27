@@ -6,9 +6,9 @@
                 "button": "Reset password"
             },
             "messages": {
-                "info": "Enter the e-mail address you used to register",
-                "success": "Check your e-mails for details on how to reset your password.",
-                "notfound": "<strong>E-Mail address isn't registered!</strong> Please check and try again"
+                "info": "Enter the email address you used to register",
+                "success": "Check your emails for details on how to reset your password.",
+                "notfound": "<strong>Email address isn't registered!</strong> Please check and try again"
             }
         },
         "finish" : {

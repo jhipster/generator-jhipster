@@ -43,8 +43,8 @@
             "newpassword.placeholder": "Новый пароль",
             "confirmpassword": "Подтверждение нового пароля",
             "confirmpassword.placeholder": "Подтвердите новый пароль",
-            "email": "E-mail",
-            "email.placeholder": "Ваш e-mail"
+            "email": "Email",
+            "email.placeholder": "Ваш email"
         },
         "messages": {
             "info": {
@@ -79,10 +79,10 @@
                     "maxlength": "Подтверждение пароля не может быть больше чем 50 символов"
                 },
                 "email": {
-                    "required": "E-mail должен быть указан.",
-                    "invalid": "E-mail не верен.",
-                    "minlength": "Длина e-mail должна быть хотя-бы 5 символов",
-                    "maxlength": "E-mail не может быть длиннее чем 50 символов"
+                    "required": "Email должен быть указан.",
+                    "invalid": "Email не верен.",
+                    "minlength": "Длина email должна быть хотя-бы 5 символов",
+                    "maxlength": "Email не может быть длиннее чем 50 символов"
                 }
             }
         },

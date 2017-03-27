@@ -12,7 +12,7 @@
         "messages": {
             "error": {
                 "fail": "<strong>Eroare!</strong> Setările nu au putut fi salvate.",
-                "emailexists": "<strong>E-mailul a fost deja folosit!</strong> Vă rugăm să alegeți un altul."
+                "emailexists": "<strong>Emailul a fost deja folosit!</strong> Vă rugăm să alegeți un altul."
             },
             "success": "<strong>Setări salvate!</strong>",
             "validate": {

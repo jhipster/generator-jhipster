@@ -6,7 +6,7 @@
                 "button": "Şifreyi sıfırla"
             },
             "messages": {
-                "info": "Kayıt olurken kullandığın e-mail adresini gir",
+                "info": "Kayıt olurken kullandığın email adresini gir",
                 "success": "Şifreni nasıl sıfırlayacağını öğrenmek için e-postalarını kontrol et.",
                 "notfound": "<strong>E-Posta adresi kayıtlı değil!</strong> Lütfen kontrol et ve tekrar dene"
             }

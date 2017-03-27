@@ -12,7 +12,7 @@
         "messages": {
             "error": {
                 "fail": "<strong>Ocorreu um erro!</strong> As configurações não foram guardadas.",
-                "emailexists": "<strong>O e-mail já se encontra em uso!</strong> Por favor escolha outro."
+                "emailexists": "<strong>O email já se encontra em uso!</strong> Por favor escolha outro."
             },
             "success": "<strong>Configurações guardadas com sucesso!</strong>",
             "validate": {
