@@ -205,10 +205,6 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 'admin/_admin.state.js',
-                'admin/audits/_audits.controller.js',
-                'admin/audits/_audits.service.js',
-                { file: 'admin/audits/_audits.state.js', method: 'processJs' },
-                { file: 'admin/audits/_audits.html', method: 'processHtml' },
                 'admin/configuration/_configuration.controller.js',
                 'admin/configuration/_configuration.service.js',
                 { file: 'admin/configuration/_configuration.state.js', method: 'processJs' },
@@ -231,6 +227,16 @@ const files = {
                 { file: 'admin/metrics/_metrics.modal.html', method: 'processHtml', template: true },
                 { file: 'admin/docs/_docs.html', method: 'copy' },
                 { file: 'admin/docs/_docs.state.js', method: 'processJs' }
+            ]
+        },
+        {
+            condition: generator => generator.devDatabaseType !== 'cassandra',
+            path: ANGULAR_DIR,
+            templates: [
+                'admin/audits/_audits.controller.js',
+                'admin/audits/_audits.service.js',
+                { file: 'admin/audits/_audits.state.js', method: 'processJs' },
+                { file: 'admin/audits/_audits.html', method: 'processHtml' },
             ]
         },
         {
