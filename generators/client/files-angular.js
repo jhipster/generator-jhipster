@@ -258,12 +258,6 @@ const files = {
                 { file: 'admin/_admin.route.ts', method: 'processJs' },
                 'admin/_admin.module.ts',
                 // admin modules
-                { file: 'admin/audits/_audits.route.ts', method: 'processJs' },
-                'admin/audits/_audit-data.model.ts',
-                'admin/audits/_audit.model.ts',
-                { file: 'admin/audits/_audits.component.ts', method: 'processJs' },
-                { file: 'admin/audits/_audits.component.html', method: 'processHtml' },
-                'admin/audits/_audits.service.ts',
                 { file: 'admin/configuration/_configuration.route.ts', method: 'processJs' },
                 { file: 'admin/configuration/_configuration.component.ts', method: 'processJs' },
                 { file: 'admin/configuration/_configuration.component.html', method: 'processHtml' },
@@ -288,6 +282,18 @@ const files = {
                 'admin/metrics/_metrics-modal.component.ts',
                 { file: 'admin/metrics/_metrics-modal.component.html', method: 'processHtml', template: true },
                 'admin/metrics/_metrics.service.ts'
+            ]
+        },
+        {
+            condition: generator => generator.devDatabaseType !== 'cassandra',
+            path: ANGULAR_DIR,
+            templates: [
+                { file: 'admin/audits/_audits.route.ts', method: 'processJs' },
+                'admin/audits/_audit-data.model.ts',
+                'admin/audits/_audit.model.ts',
+                { file: 'admin/audits/_audits.component.ts', method: 'processJs' },
+                { file: 'admin/audits/_audits.component.html', method: 'processHtml' },
+                'admin/audits/_audits.service.ts'
             ]
         },
         {
@@ -417,11 +423,17 @@ const files = {
                 'spec/app/account/register/_register.component.spec.ts',
                 'spec/app/account/settings/_settings.component.spec.ts',
                 'spec/app/admin/health/_health.component.spec.ts',
-                'spec/app/admin/audits/_audits.component.spec.ts',
                 'spec/helpers/_spyobject.ts',
                 'spec/helpers/_mock-account.service.ts',
                 'spec/helpers/_mock-principal.service.ts',
                 'spec/helpers/_mock-route.service.ts'
+            ]
+        },
+        {
+            condition: generator => generator.devDatabaseType !== 'cassandra',
+            path: TEST_SRC_DIR,
+            templates: [
+                'spec/app/admin/audits/_audits.component.spec.ts',
             ]
         },
         {
