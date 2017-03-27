@@ -17,7 +17,7 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { Sanitizer } from '@angular/core';
 
-import { AlertService } from '../../src/service/alert.service';
+import { AlertService, Alert } from '../../src/service/alert.service';
 
 function mockAlertService(sanitizer: Sanitizer) {
     return new AlertService(sanitizer, false);
@@ -50,7 +50,7 @@ describe('Alert service test', () => {
                 timeout: 3000,
                 toast: true,
                 position: 'top left'
-            }, [])).toEqual(jasmine.objectContaining({
+            }, [])).toEqual(jasmine.objectContaining(<Alert>{
                 type: 'success',
                 msg: 'Hello Jhipster',
                 id: 0,
@@ -61,7 +61,7 @@ describe('Alert service test', () => {
             }));
 
             expect(service.get().length).toBe(1);
-            expect(service.get()).toContain(jasmine.objectContaining({
+            expect(service.get()[0]).toEqual(jasmine.objectContaining(<Alert>{
                 type: 'success',
                 msg: 'Hello Jhipster',
                 id: 0,
@@ -74,14 +74,14 @@ describe('Alert service test', () => {
 
         it('should produce an alert object with correct id', inject([AlertService], (service: AlertService) => {
             service.info('Hello Jhipster info');
-            expect(service.success('Hello Jhipster success')).toEqual(jasmine.objectContaining({
+            expect(service.success('Hello Jhipster success')).toEqual(jasmine.objectContaining(<Alert>{
                 type: 'success',
                 msg: 'Hello Jhipster success',
                 id: 1
             }));
 
             expect(service.get().length).toBe(2);
-            expect(service.get()).toContain(jasmine.objectContaining({
+            expect(service.get()[1]).toEqual(jasmine.objectContaining(<Alert>{
                 type: 'success',
                 msg: 'Hello Jhipster success',
                 id: 1
@@ -91,7 +91,7 @@ describe('Alert service test', () => {
         it('should close an alert correctly', inject([AlertService], (service: AlertService) => {
             service.info('Hello Jhipster info');
             service.info('Hello Jhipster info 2');
-            expect(service.success('Hello Jhipster success')).toEqual(jasmine.objectContaining({
+            expect(service.success('Hello Jhipster success')).toEqual(jasmine.objectContaining(<Alert>{
                 type: 'success',
                 msg: 'Hello Jhipster success',
                 id: 2
@@ -100,25 +100,20 @@ describe('Alert service test', () => {
             expect(service.get().length).toBe(3);
             service.closeAlert(1);
             expect(service.get().length).toBe(2);
-            expect(service.get()).not.toContain(jasmine.objectContaining({
+            expect(service.get()[1]).not.toEqual(jasmine.objectContaining(<Alert>{
                 type: 'info',
                 msg: 'Hello Jhipster info 2',
                 id: 1
             }));
             service.closeAlert(2);
             expect(service.get().length).toBe(1);
-            expect(service.get()).not.toContain(jasmine.objectContaining({
+            expect(service.get()[0]).not.toEqual(jasmine.objectContaining(<Alert>{
                 type: 'success',
                 msg: 'Hello Jhipster success',
                 id: 2
             }));
             service.closeAlert(0);
             expect(service.get().length).toBe(0);
-            expect(service.get()).not.toContain(jasmine.objectContaining({
-                type: 'info',
-                msg: 'Hello Jhipster info',
-                id: 0
-            }));
         }));
 
         it('should close an alert on timeout correctly', inject([AlertService], (service: AlertService) => {
@@ -149,7 +144,7 @@ describe('Alert service test', () => {
                 toast: true,
                 position: 'top left',
                 scoped: true
-            }, [])).toEqual(jasmine.objectContaining({
+            }, [])).toEqual(jasmine.objectContaining(<Alert>{
                 type: 'success',
                 msg: 'Hello Jhipster',
                 id: 0,
@@ -163,14 +158,14 @@ describe('Alert service test', () => {
         }));
 
         it('should produce a success message', inject([AlertService], (service: AlertService) => {
-            expect(service.success('Hello Jhipster')).toEqual(jasmine.objectContaining({
+            expect(service.success('Hello Jhipster')).toEqual(jasmine.objectContaining(<Alert>{
                 type: 'success',
                 msg: 'Hello Jhipster'
             }));
         }));
 
         it('should produce a success message with custom position', inject([AlertService], (service: AlertService) => {
-            expect(service.success('Hello Jhipster', {}, 'bottom left')).toEqual(jasmine.objectContaining({
+            expect(service.success('Hello Jhipster', {}, 'bottom left')).toEqual(jasmine.objectContaining(<Alert>{
                 type: 'success',
                 msg: 'Hello Jhipster',
                 position: 'bottom left',
@@ -178,21 +173,21 @@ describe('Alert service test', () => {
         }));
 
         it('should produce a error message', inject([AlertService], (service: AlertService) => {
-            expect(service.error('Hello Jhipster')).toEqual(jasmine.objectContaining({
+            expect(service.error('Hello Jhipster')).toEqual(jasmine.objectContaining(<Alert>{
                 type: 'danger',
                 msg: 'Hello Jhipster'
             }));
         }));
 
         it('should produce a warning message', inject([AlertService], (service: AlertService) => {
-            expect(service.warning('Hello Jhipster')).toEqual(jasmine.objectContaining({
+            expect(service.warning('Hello Jhipster')).toEqual(jasmine.objectContaining(<Alert>{
                 type: 'warning',
                 msg: 'Hello Jhipster'
             }));
         }));
 
         it('should produce a info message', inject([AlertService], (service: AlertService) => {
-            expect(service.info('Hello Jhipster')).toEqual(jasmine.objectContaining({
+            expect(service.info('Hello Jhipster')).toEqual(jasmine.objectContaining(<Alert>{
                 type: 'info',
                 msg: 'Hello Jhipster'
             }));
