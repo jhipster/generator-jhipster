@@ -971,7 +971,7 @@
                         </goals>
                         <configuration>
                             <includes>
-                              <include>**/*Cucumber*.java</include>
+                                <include>**/*Cucumber*.java</include>
                             </includes>
                         </configuration>
                     </execution>
