@@ -11,12 +11,12 @@
   },
 
   "files": [
-    "src/main/webapp/app/app.module.ts",
-    "src/main/webapp/app/app.main.ts"
+    "<%= MAIN_SRC_DIR %>app/app.module.ts",
+    "<%= MAIN_SRC_DIR %>app/app.main.ts"
   ],
 
   "angularCompilerOptions": {
-   "genDir": "aot",
+   "genDir": ".",
    "skipMetadataEmit" : true
  }
 }
