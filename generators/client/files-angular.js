@@ -16,6 +16,7 @@ const files = {
             templates: [
                 '_package.json',
                 '_tsconfig.json',
+                '_tsconfig-aot.json',
                 '_tslint.json',
                 '_.angular-cli.json',
                 'webpack/_webpack.common.js',
