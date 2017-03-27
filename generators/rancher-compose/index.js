@@ -33,8 +33,8 @@ module.exports = RancherGenerator.extend({
 
     initializing: {
         sayHello: function() {
-            this.log(chalk.white(chalk.bold('⎈') + ' [BETA] Welcome to the JHipster Rancher Compose Generator ' + chalk.bold('⎈')));
-            this.log(chalk.white('Files will be generated in folder: ' + chalk.yellow(this.destinationRoot() + '/rancher/')));
+            this.log(chalk.white(chalk.bold('🐮') + ' [BETA] Welcome to the JHipster Rancher Compose Generator ' + chalk.bold('🐮')));
+            this.log(chalk.white('Files will be generated in folder: ' + chalk.yellow(this.destinationRoot())));
         },
 
         setupServerVars: function () {
