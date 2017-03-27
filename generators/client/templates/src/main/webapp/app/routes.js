@@ -15,12 +15,12 @@ if (process.env.NODE_ENV !== 'production') {
   // Require async routes only in development for react-hot-reloader to work.
   require('./modules/home/home');
   require('./modules/login/login');
-  require('./modules/account/settings');
-  require('./modules/account/password');
+  // require('./modules/account/settings');
+  // require('./modules/account/password');
   // require('./modules/administration/gateway/gateway');
   require('./modules/administration/logs/logs');
-  // require('./modules/administration/health/health');
-  // require('./modules/administration/metrics/metrics');
+  require('./modules/administration/health/health');
+  require('./modules/administration/metrics/metrics');
   // require('./modules/administration/user-management/user-management');
   require('./modules/administration/configuration/configuration');
   require('./modules/administration/audits/audits');
@@ -57,6 +57,7 @@ export default (onLogout) => {
           });
         }}
       />
+      {/*
       <Route
         path="/account/settings"
         getComponent={(nextState, cb) => {
@@ -73,28 +74,11 @@ export default (onLogout) => {
           });
         }}
       />
-      {/*
       <Route
         path="/admin/gateway"
         getComponent={(nextState, cb) => {
           require.ensure([], (require) => {
             cb(null, PrivateRoute(require('./modules/administration/gateway/gateway').default));
-          });
-        }}
-      />
-      <Route
-        path="/admin/health"
-        getComponent={(nextState, cb) => {
-          require.ensure([], (require) => {
-            cb(null, PrivateRoute(require('./modules/administration/health/health').default));
-          });
-        }}
-      />
-      <Route
-        path="/admin/metrics"
-        getComponent={(nextState, cb) => {
-          require.ensure([], (require) => {
-            cb(null, PrivateRoute(require('./modules/administration/metrics/metrics').default));
           });
         }}
       />
@@ -107,6 +91,38 @@ export default (onLogout) => {
         }}
       />
       */}
+      <Route
+        path="/admin/metrics"
+        getComponent={(nextState, cb) => {
+          require.ensure([], (require) => {
+            cb(null, PrivateRoute(require('./modules/administration/metrics/metrics').default));
+          });
+        }}
+      />
+      <Route
+        path="/admin/metrics-detail"
+        getComponent={(nextState, cb) => {
+          require.ensure([], (require) => {
+            cb(null, require('./modules/administration/metrics/metrics-detail/metrics-detail').default);
+          });
+        }}
+      />
+      <Route
+        path="/admin/health"
+        getComponent={(nextState, cb) => {
+          require.ensure([], (require) => {
+            cb(null, PrivateRoute(require('./modules/administration/health/health').default));
+          });
+        }}
+      />
+      <Route
+        path="/admin/health-detail"
+        getComponent={(nextState, cb) => {
+          require.ensure([], (require) => {
+            cb(null, require('./modules/administration/health/health-detail/health-detail').default);
+          });
+        }}
+      />
       <Route
         path="/admin/configuration"
         getComponent={(nextState, cb) => {
