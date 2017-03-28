@@ -1,0 +1,10 @@
+# Common configuration shared between all applications
+configserver:
+    name: Docker JHipster Registry
+    status: Connected to <% if (serviceDiscoveryType == 'eureka') { %>the JHipster Registry<% } %><% if (serviceDiscoveryType == 'consul') { %>Consul<% } %> running in Rancher
+
+jhipster:
+    security:
+        authentication:
+            jwt:
+                secret: <%= jwtSecretKey %>

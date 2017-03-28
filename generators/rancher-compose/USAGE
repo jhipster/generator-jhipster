@@ -5,5 +5,5 @@ Example:
     yo jhipster:rancher-compose
 
     This will create:
-        [application]/rancher/docker-compose.yml
-        [application]/rancher/rancher-compose.yml
+        [application]/docker-compose.yml
+        [application]/rancher-compose.yml

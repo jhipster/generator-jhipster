@@ -15,10 +15,8 @@ services:
 <%_ } _%>
 <%_ if (useKafka) { _%>
     zookeeper:
-        container_name: zookeeper
         image: <%= DOCKER_ZOOKEEPER %>
     kafka:
-        container_name: kafka
         image: <%= DOCKER_KAFKA %>
         environment:
             KAFKA_ADVERTISED_HOST_NAME: kafka
@@ -30,9 +28,8 @@ services:
 <%_ } _%>
 <%_ if (serviceDiscoveryType == 'eureka') { _%>
     jhipster-registry:
-        container_name: jhipster-registry
         image: <%= DOCKER_JHIPSTER_REGISTRY %>
-        volumes:
+        #volumes:
         #    - ./central-server-config:/central-config
         # By default the JHipster Registry runs with the "prod" and "native"
         # Spring profiles.
@@ -51,10 +48,19 @@ services:
             - JHIPSTER_METRICS_PROMETHEUS_ENABLED=true
             - JHIPSTER_METRICS_PROMETHEUS_ENDPOINT=/prometheusMetrics
             <%_ } _%>
-            - GIT_URI=https://github.com/jhipster/jhipster-registry/
-            - GIT_SEARCH_PATHS=central-config
+            - SPRING_CLOUD_CONFIG_SERVER_NATIVE_SEARCH_LOCATIONS=file:./config/
+            # Uncomment to use a git configuration source instead of the local filesystem
+            # mounted from the registry-config-sidekick volume
+            # - GIT_URI=https://github.com/jhipster/jhipster-registry/
+            # - GIT_SEARCH_PATHS=central-config
         ports:
             - 8761:8761
+        volumes:
+          - /config
+        volumes_from:
+          - registry-config-sidekick
+        labels:
+          io.rancher.sidekicks: registry-config-sidekick
 <%_ } _%>
 <%_ if (serviceDiscoveryType == 'consul') { _%>
     consul:
@@ -66,12 +72,28 @@ services:
         command: consul agent -dev -ui -client 0.0.0.0
     consul-config-loader:
         image: <%= DOCKER_CONSUL_CONFIG_LOADER %>
-        volumes:
-        #    - ./central-server-config:/config
         environment:
             - INIT_SLEEP_SECONDS=5
             - CONSUL_URL=consul
             - CONSUL_PORT=8500
+        volumes:
+          - /config
+        volumes_from:
+          - consul-config-sidekick
+        labels:
+          io.rancher.sidekicks: consul-config-sidekick
+<%_ } _%>
+<%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
+    registry-config-sidekick:
+        # this docker image must be built with:
+        # docker build -t <%= dockerRepositoryName %><% if (dockerRepositoryName !== '') { %>/<% } %>registry-config-sidekick registry-config-sidekick
+        image: <%= dockerRepositoryName %><% if (dockerRepositoryName !== '') { %>/<% } %>registry-config-sidekick
+        tty: true
+        stdin_open: true
+        command:
+          - cat
+        volumes:
+          - config:/config
 <%_ } _%>
 <%_ if (monitoring === 'elk') { _%>
     jhipster-elasticsearch:
@@ -94,43 +116,4 @@ services:
         image: <%= DOCKER_JHIPSTER_CONSOLE %>
         ports:
             - 5601:5601
-<%_ } _%>
-<%_ if (monitoring === 'prometheus') { _%>
-    prometheus:
-        image: <%= DOCKER_PROMETHEUS %>
-        container_name: prometheus
-        volumes:
-        - ./prometheus-conf/:/etc/prometheus/
-        - prometheus_data:/prometheus
-        command:
-        - '-config.file=/etc/prometheus/prometheus.yml'
-        - '-storage.local.path=/prometheus'
-        - '-alertmanager.url=http://alertmanager:9093'
-        expose:
-        - 9090
-        ports:
-        - 9090:9090
-    alertmanager:
-        image: <%= DOCKER_PROMETHEUS_ALERTMANAGER %>
-        ports:
-        - 9093:9093
-        volumes:
-        - ./alertmanager-conf/:/etc/alertmanager/
-        command:
-        - '-config.file=/etc/alertmanager/config.yml'
-        - '-storage.path=/alertmanager'
-    grafana:
-        image: <%= DOCKER_GRAFANA %>
-        ports:
-        - 3000:3000
-        volumes:
-        - grafana_data:/var/lib/grafana
-        environment:
-        - GF_SECURITY_ADMIN_PASSWORD=jhipster
-        - GF_USERS_ALLOW_SIGN_UP=false
-
-volumes:
-    prometheus_data: {}
-    grafana_data: {}
-
 <%_ } _%>
