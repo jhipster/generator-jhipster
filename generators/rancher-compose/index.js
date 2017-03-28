@@ -206,7 +206,7 @@ module.exports = RancherGenerator.extend({
 
                     // Register gateway of monolith app name
                     this.hasFrontApp = true;
-                    this.frontAppName = `${lowercaseBaseName}-app'`;
+                    this.frontAppName = `${lowercaseBaseName}-app`;
                 }
 
                 // change target image name

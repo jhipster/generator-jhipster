@@ -83,7 +83,7 @@ services:
         labels:
           io.rancher.sidekicks: consul-config-sidekick
 <%_ } _%>
-<%_ if (this.serviceDiscoveryType === 'eureka' || this.serviceDiscoveryType === 'consul') { _%>
+<%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
     registry-config-sidekick:
         # this docker image must be built with:
         # docker build -t <%= dockerRepositoryName %><% if (dockerRepositoryName !== '') { %>/<% } %>registry-config-sidekick registry-config-sidekick
