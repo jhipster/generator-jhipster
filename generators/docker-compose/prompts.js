@@ -179,7 +179,7 @@ function askForMonitoring() {
             },
             {
                 value: 'elk',
-                name: 'Yes, for logs and metrics with the JHipster Console (based on ELK)'
+                name: 'Yes, for logs and metrics with the JHipster Console (based on ELK and Zipkin)'
             },
             {
                 value: 'prometheus',
