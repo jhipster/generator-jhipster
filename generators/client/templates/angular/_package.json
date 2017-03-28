@@ -119,7 +119,7 @@
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "ngc": "ngc -p tsconfig-aot.json",
-    "cleanup": "rimraf '<%= MAIN_SRC_DIR %>app/**/*.ngfactory.ts' '<%= MAIN_SRC_DIR %>app/**/*.js' '<%= MAIN_SRC_DIR %>app/**/*.js.map' '<%= MAIN_SRC_DIR %>app/**/*.ngstyle.ts' '<%= MAIN_SRC_DIR %>app/**/*.ngsummary.json' <%= BUILD_DIR %>",
+    "cleanup": "rimraf 'aot/**/*' <%= BUILD_DIR %>",
     "start": "<%= clientPackageManager %> run webpack:dev",
     "webpack:build": "<%= clientPackageManager %> run ngc && webpack --config webpack/webpack.vendor.js && webpack --config webpack/webpack.dev.js",
     "webpack:build:dev": "webpack --config webpack/webpack.dev.js",

@@ -144,8 +144,4 @@ Desktop.ini
 ######################
 # AOT
 ######################
-/<%= CLIENT_MAIN_SRC_DIR %>app/**/*.js
-/<%= CLIENT_MAIN_SRC_DIR %>app/**/*.js.map
-/<%= CLIENT_MAIN_SRC_DIR %>app/**/*.ngfactory.ts
-/<%= CLIENT_MAIN_SRC_DIR %>app/**/*.ngstyle.ts
-/<%= CLIENT_MAIN_SRC_DIR %>app/**/*.ngsummary.json
+/aot/**/*
