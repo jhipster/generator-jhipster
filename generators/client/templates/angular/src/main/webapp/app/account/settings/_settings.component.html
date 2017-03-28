@@ -50,25 +50,25 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" for="email" jhiTranslate="global.form.email">E-mail</label>
+                    <label class="form-control-label" for="email" jhiTranslate="global.form.email">Email</label>
                     <input type="email" class="form-control" id="email" name="email" placeholder="{{'global.form.email.placeholder' | translate}}"
                            [(ngModel)]="settingsAccount.email" minlength=5 maxlength=100 #emailInput="ngModel" required>
                     <div *ngIf="emailInput.dirty && emailInput.invalid">
                         <small class="form-text text-danger"
                            *ngIf="emailInput.errors.required" jhiTranslate="global.messages.validate.email.required">
-                            Your e-mail is required.
+                            Your email is required.
                         </small>
                         <small class="form-text text-danger"
                            *ngIf="emailInput.errors.email" jhiTranslate="global.messages.validate.email.invalid">
-                            Your e-mail is invalid.
+                            Your email is invalid.
                         </small>
                         <small class="form-text text-danger"
                            *ngIf="emailInput.errors.minlength" jhiTranslate="global.messages.validate.email.minlength">
-                            Your e-mail is required to be at least 5 characters.
+                            Your email is required to be at least 5 characters.
                         </small>
                         <small class="form-text text-danger"
                            *ngIf="emailInput.errors.maxlength" jhiTranslate="global.messages.validate.email.maxlength">
-                            Your e-mail cannot be longer than 100 characters.
+                            Your email cannot be longer than 100 characters.
                         </small>
                     </div>
                 </div>

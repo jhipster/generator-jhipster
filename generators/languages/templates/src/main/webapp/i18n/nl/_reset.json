@@ -6,9 +6,9 @@
                 "button": "Reset wachtwoord"
             },
             "messages": {
-                "info": "Geef het e-mailadres dat u gebruikte om te registreren",
-                "success": "Controleer uw e-mails voor meer informatie over hoe u uw wachtwoord kan resetten.",
-                "notfound": "<strong>E-mailadres is niet geregistreerd!</strong> Gelieve het te controleren en opnieuw te proberen"
+                "info": "Geef het emailadres dat u gebruikte om te registreren",
+                "success": "Controleer uw emails voor meer informatie over hoe u uw wachtwoord kan resetten.",
+                "notfound": "<strong>Emailadres is niet geregistreerd!</strong> Gelieve het te controleren en opnieuw te proberen"
             }
         },
         "finish" : {

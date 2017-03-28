@@ -21,7 +21,7 @@
             "hystrix": "Hystrix",
             <%_ } _%>
             "diskSpace": "Espaço em disco",
-            "mail": "E-mail"<% if (searchEngine === 'elasticsearch') { %>,
+            "mail": "Email"<% if (searchEngine === 'elasticsearch') { %>,
             "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql') { %>,
             "db": "Base de dados"<% } %><% if (databaseType === 'mongodb') { %>,
             "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,

@@ -17,7 +17,7 @@
             "error": {
                 "fail": "<strong>La registrazione dell'account è fallita!</strong> Riprova più tardi.",
                 "userexists": "<strong>Il nome utente scelto è già registrato!</strong> Si prega di scegliere un altro nome utente.",
-                "emailexists": "<strong>L'indirizzo e-mail è già in uso</strong> Si prega di sceglierne un altro."
+                "emailexists": "<strong>L'indirizzo email è già in uso</strong> Si prega di sceglierne un altro."
             }
         }
     }

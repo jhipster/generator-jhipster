@@ -79,10 +79,10 @@
                     "maxlength": "La tua password non può contenere più di 50 caratteri"
                 },
                 "email": {
-                    "required": "L'indirizzo e-mail è obbligatorio.",
-                    "invalid": "L'indirizzo e-mail non è valido.",
-                    "minlength": "L'indirizzo e-mail deve essere di almeno 5 caratteri",
-                    "maxlength": "L'indirizzo e-mail non può contenere più di 50 caratteri"
+                    "required": "L'indirizzo email è obbligatorio.",
+                    "invalid": "L'indirizzo email non è valido.",
+                    "minlength": "L'indirizzo email deve essere di almeno 5 caratteri",
+                    "maxlength": "L'indirizzo email non può contenere più di 50 caratteri"
                 }
             }
         },

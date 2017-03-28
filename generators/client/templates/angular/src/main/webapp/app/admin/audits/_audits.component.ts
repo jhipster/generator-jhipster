@@ -78,8 +78,8 @@ export class AuditsComponent implements OnInit {
         let dateFormat = 'yyyy-MM-dd';
         // Today + 1 day - needed if the current day must be included
         let today: Date = new Date();
-
-        let date = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+        today.setDate(today.getDate() + 1);
+        let date = new Date(today.getFullYear(), today.getMonth(), today.getDate());
         this.toDate = this.datePipe.transform(date, dateFormat);
     }
 

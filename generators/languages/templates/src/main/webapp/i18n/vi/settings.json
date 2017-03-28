@@ -12,7 +12,7 @@
         "messages": {
             "error": {
                 "fail": "<strong>Có lỗi xảy ra!</strong> Không thể lưu cài đặt.",
-                "emailexists": "<strong>E-mail đã được sử dụng!</strong> Vui lòng nhập e-mail khác."
+                "emailexists": "<strong>Email đã được sử dụng!</strong> Vui lòng nhập email khác."
             },
             "success": "<strong>Đã lưu cài đặt!</strong>",
             "validate": {
