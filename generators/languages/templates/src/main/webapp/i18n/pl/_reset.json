@@ -6,9 +6,9 @@
                 "button": "Reset hasła"
             },
             "messages": {
-                "info": "Wpisz e-mail użyty podczas rejestracji.",
-                "success": "Sprawdź e-mail w celu uzyskania szczegołów jak zresetować hasło.",
-                "notfound": "<strong>E-Mail nie był zarejestrowany!</strong> Proszę sprawdź i spróbuj ponownie."
+                "info": "Wpisz email użyty podczas rejestracji.",
+                "success": "Sprawdź email w celu uzyskania szczegołów jak zresetować hasło.",
+                "notfound": "<strong>Email nie był zarejestrowany!</strong> Proszę sprawdź i spróbuj ponownie."
             }
         },
         "finish" : {

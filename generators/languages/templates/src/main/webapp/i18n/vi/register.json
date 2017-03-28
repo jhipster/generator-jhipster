@@ -17,7 +17,7 @@
             "error": {
                 "fail": "<strong>Đăng ký thất bại!</strong> Vui lòng thử lại sau.",
                 "userexists": "<strong>Tên tài khoản này đã được sử dụng!</strong> Bạn vui lòng chọn tên tài khoản khác.",
-                "emailexists": "<strong>E-mail này đã được sử dụng!</strong> Bạn vui lòng nhập e-mail khác."
+                "emailexists": "<strong>Email này đã được sử dụng!</strong> Bạn vui lòng nhập email khác."
             }
         }
     }

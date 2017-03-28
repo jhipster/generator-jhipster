@@ -100,12 +100,12 @@ describe('Component Tests', () => {
             )
         );
 
-        it('should notify of email existence upon 400/e-mail address already in use',
+        it('should notify of email existence upon 400/email address already in use',
             inject([Register],
                 fakeAsync((service: Register) => {
                     spyOn(service, 'save').and.returnValue(Observable.throw({
                         status: 400,
-                        _body: 'e-mail address already in use'
+                        _body: 'email address already in use'
                     }));
                     comp.registerAccount.password = comp.confirmPassword = 'password';
 

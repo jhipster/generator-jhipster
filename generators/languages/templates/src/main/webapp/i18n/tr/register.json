@@ -17,7 +17,7 @@
             "error": {
                 "fail": "<strong>Kayıt işlemi başarısız oldu!</strong> Lütfen daha sonra tekrar deneyin.",
                 "userexists": "<strong>Girdiğiniz kullanıcı sistemde mevcut!</strong> Lütfen başka bir kullanıcı deneyin.",
-                "emailexists": "<strong>E-mail adresi zaten kullanılıyor!</strong> Lütfen başka bir mail seçiniz."
+                "emailexists": "<strong>Email adresi zaten kullanılıyor!</strong> Lütfen başka bir mail seçiniz."
             }
         }
     }
