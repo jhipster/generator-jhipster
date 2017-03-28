@@ -25,21 +25,21 @@ public class <%= entityClass %>DTO implements Serializable {
     private String id;<% } %><% if (databaseType == 'cassandra') { %>
     private UUID id;<% } %>
     <%_ for (idx in fields) {
-        var fieldValidate = fields[idx].fieldValidate;
-        var fieldValidateRules = fields[idx].fieldValidateRules;
-        var fieldValidateRulesMinlength = fields[idx].fieldValidateRulesMinlength;
-        var fieldValidateRulesMaxlength = fields[idx].fieldValidateRulesMaxlength;
-        var fieldValidateRulesMinbytes = fields[idx].fieldValidateRulesMinbytes;
-        var fieldValidateRulesMaxbytes = fields[idx].fieldValidateRulesMaxbytes;
-        var fieldValidateRulesMin = fields[idx].fieldValidateRulesMin;
-        var fieldValidateRulesMax = fields[idx].fieldValidateRulesMax;
-        var fieldValidateRulesPatternJava = fields[idx].fieldValidateRulesPatternJava;
-        var fieldType = fields[idx].fieldType;
-        var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
-        var fieldName = fields[idx].fieldName;_%>
+        const fieldValidate = fields[idx].fieldValidate;
+        const fieldValidateRules = fields[idx].fieldValidateRules;
+        const fieldValidateRulesMinlength = fields[idx].fieldValidateRulesMinlength;
+        const fieldValidateRulesMaxlength = fields[idx].fieldValidateRulesMaxlength;
+        const fieldValidateRulesMinbytes = fields[idx].fieldValidateRulesMinbytes;
+        const fieldValidateRulesMaxbytes = fields[idx].fieldValidateRulesMaxbytes;
+        const fieldValidateRulesMin = fields[idx].fieldValidateRulesMin;
+        const fieldValidateRulesMax = fields[idx].fieldValidateRulesMax;
+        const fieldValidateRulesPatternJava = fields[idx].fieldValidateRulesPatternJava;
+        const fieldType = fields[idx].fieldType;
+        const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
+        const fieldName = fields[idx].fieldName;_%>
 
     <%_ if (fieldValidate == true) {
-            var required = false;
+            let required = false;
             if (fieldValidate == true && fieldValidateRules.indexOf('required') != -1) {
                 required = true;
             } _%>
@@ -58,13 +58,13 @@ public class <%= entityClass %>DTO implements Serializable {
         <%_ } _%>
     <%_ } _%>
     <%_ for (idx in relationships) {
-        var otherEntityRelationshipName = relationships[idx].otherEntityRelationshipName,
-        relationshipFieldName = relationships[idx].relationshipFieldName,
-        relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural,
-        relationshipType = relationships[idx].relationshipType,
-        otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized,
-        otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized,
-        ownerSide = relationships[idx].ownerSide; _%>
+        const otherEntityRelationshipName = relationships[idx].otherEntityRelationshipName;
+        const relationshipFieldName = relationships[idx].relationshipFieldName;
+        const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+        const relationshipType = relationships[idx].relationshipType;
+        const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
+        const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
+        const ownerSide = relationships[idx].ownerSide; _%>
     <%_ if (relationshipType == 'many-to-many' && ownerSide == true) { _%>
 
     private Set<<%= otherEntityNameCapitalized %>DTO> <%= relationshipFieldNamePlural %> = new HashSet<>();
@@ -84,10 +84,10 @@ public class <%= entityClass %>DTO implements Serializable {
         this.id = id;
     }
     <%_ for (idx in fields) {
-        var fieldType = fields[idx].fieldType;
-        var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
-        var fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod;
-        var fieldName = fields[idx].fieldName; _%>
+        const fieldType = fields[idx].fieldType;
+        const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
+        const fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod;
+        const fieldName = fields[idx].fieldName; _%>
     <%_ if(fieldTypeBlobContent != 'text') { _%>
     public <%= fieldType %> get<%= fieldInJavaBeanMethod %>() {
     <%_ } else { _%>
@@ -188,7 +188,7 @@ public class <%= entityClass %>DTO implements Serializable {
     public String toString() {
         return "<%= entityClass %>DTO{" +
             "id=" + id +<% for (idx in fields) {
-                var fieldName = fields[idx].fieldName; %>
+                const fieldName = fields[idx].fieldName; %>
             ", <%= fieldName %>='" + <%= fieldName %> + "'" +<% } %>
             '}';
     }

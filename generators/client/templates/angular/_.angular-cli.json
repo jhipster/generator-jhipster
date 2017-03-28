@@ -1,0 +1,56 @@
+{
+  "project": {
+    "name": "<%= dasherizedBaseName %>"
+  },
+  "apps": [
+    {
+      "root": "<%= MAIN_SRC_DIR %>",
+      "outDir": "<%= DIST_DIR %>app",
+      "assets": [
+        "content",
+        "favicon.ico"
+      ],
+      "index": "index.html",
+      "main": "app/app.main.ts",
+      "test": "",
+      "tsconfig": "../../../tsconfig.json",
+      "prefix": "<%= jhiPrefix %>",
+      "mobile": false,
+      "styles": [
+        "content/css/main.css"
+      ],
+      "scripts": [],
+      "environments": {}
+    }
+  ],
+  "addons": [],
+  "packages": [],
+  <%_ if (protractorTests) { _%>
+  "e2e": {
+    "protractor": {
+      "config": "src/test/javascript/protractor.conf.js"
+    }
+  },
+  <%_ } _%>
+  "test": {
+    "karma": {
+      "config": "src/test/javascript/karma.conf.js"
+    }
+  },
+  "defaults": {
+    "styleExt": "css",
+    "prefixInterfaces": false,
+    "inline": {
+      "style": true,
+      "template": false
+    },
+    "spec": {
+      "class": false,
+      "component": false,
+      "directive": false,
+      "module": false,
+      "pipe": false,
+      "service": false
+    }
+  }
+}

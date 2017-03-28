@@ -4,6 +4,7 @@ import <%=packageName%>.domain.Authority;<% } %>
 import <%=packageName%>.domain.User;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import <%=packageName%>.repository.AuthorityRepository;<% if (authenticationType == 'session') { %>
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %><% } %>
+import <%=packageName%>.config.Constants;
 import <%=packageName%>.repository.UserRepository;<% if (searchEngine == 'elasticsearch') { %>
 import <%=packageName%>.repository.search.UserSearchRepository;<% } %>
 import <%=packageName%>.security.AuthoritiesConstants;
@@ -209,13 +210,24 @@ public class UserService {
 
     /**
      * Update basic information (first name, last name, email, language) for the current user.
+     *
+     * @param firstName first name of user
+     * @param lastName last name of user
+     * @param email email id of user
+     * @param langKey language key
+     <%_ if (databaseType == 'mongodb' || databaseType == 'sql') { _%>
+     * @param imageUrl image URL of user
+     <%_ } _%>
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey) {
+    public void updateUser(String firstName, String lastName, String email, String langKey<% if (databaseType === 'mongodb' || databaseType === 'sql') { %>, String imageUrl<% } %>) {
         userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(user -> {
             user.setFirstName(firstName);
             user.setLastName(lastName);
             user.setEmail(email);
             user.setLangKey(langKey);
+            <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
+            user.setImageUrl(imageUrl);
+            <%_ } _%>
             <%_ if (databaseType == 'mongodb' || databaseType == 'cassandra') { _%>
             userRepository.save(user);
             <%_ } _%>
@@ -228,6 +240,9 @@ public class UserService {
 
     /**
      * Update all information for a specific user, and return the modified user.
+     *
+     * @param userDTO user to update
+     * @return updated user
      */
     public Optional<UserDTO> updateUser(UserDTO userDTO) {
         return Optional.of(userRepository
@@ -288,14 +303,16 @@ public class UserService {
         });
     }
 
-    <%_ if (databaseType == 'sql') { _%>
-    @Transactional(readOnly = true)<%_ } _%>
-    <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional(readOnly = true)
+    <%_ } _%>
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
     public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
-        return userRepository.findAll(pageable).map(UserDTO::new);
+        return userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER).map(UserDTO::new);
     }<% } else { // Cassandra %>
     public List<UserDTO> getAllManagedUsers() {
         return userRepository.findAll().stream()
+            .filter(user -> !Constants.ANONYMOUS_USER.equals(user.getLogin()))
             .map(UserDTO::new)
             .collect(Collectors.toList());
     }<% } %>

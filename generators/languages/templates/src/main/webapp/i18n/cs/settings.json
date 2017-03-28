@@ -12,7 +12,7 @@
         "messages": {
             "error": {
                 "fail": "<strong>Vyskytla se chyba!</strong> Nastavení nelze uložit.",
-                "emailexists": "<strong>E-mailová adresa je již používána!</strong> Prosím použjite jinou adresu."
+                "emailexists": "<strong>Emailová adresa je již používána!</strong> Prosím použjite jinou adresu."
             },
             "success": "<strong>Nastavení bylo uloženo!</strong>",
             "validate": {

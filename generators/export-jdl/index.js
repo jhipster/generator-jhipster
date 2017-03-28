@@ -1,35 +1,35 @@
-'use strict';
-var util = require('util'),
-    chalk = require('chalk'),
-    generators = require('yeoman-generator'),
-    jhiCore = require('jhipster-core'),
-    scriptBase = require('../generator-base');
+const util = require('util');
+const chalk = require('chalk');
+const generator = require('yeoman-generator');
+const jhiCore = require('jhipster-core');
+const BaseGenerator = require('../generator-base');
 
-var ExportJDLGenerator = generators.Base.extend({});
+const ExportJDLGenerator = generator.extend({});
 
-util.inherits(ExportJDLGenerator, scriptBase);
+util.inherits(ExportJDLGenerator, BaseGenerator);
 
 module.exports = ExportJDLGenerator.extend({
-    constructor: function () {
-        generators.Base.apply(this, arguments);
+    constructor: function (...args) { // eslint-disable-line object-shorthand
+        generator.apply(this, args);
         this.baseName = this.config.get('baseName');
         this.jdl = new jhiCore.JDLObject();
-        this.argument('jdlFile', { type: String, required: false, defaults: this.baseName + '.jh' });
+        this.argument('jdlFile', { type: String, required: false, defaults: `${this.baseName}.jh` });
+        this.jdlFile = this.options.jdlFile;
     },
 
     default: {
-        insight: function () {
-            var insight = this.insight();
+        insight() {
+            const insight = this.insight();
             insight.trackWithEvent('generator', 'export-jdl');
         },
 
-        parseJson: function () {
+        parseJson() {
             this.log('Parsing entities from .jhipster dir...');
             try {
-                let entities = {};
-                this.getExistingEntities().forEach( entity => entities[entity.name] = entity.definition );
+                const entities = {};
+                this.getExistingEntities().forEach((entity) => { entities[entity.name] = entity.definition; });
                 jhiCore.convertJsonEntitiesToJDL(entities, this.jdl);
-                jhiCore.convertJsonServerOptionsToJDL({'generator-jhipster': this.config.getAll()}, this.jdl);
+                jhiCore.convertJsonServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, this.jdl);
             } catch (e) {
                 this.log(e.message || e);
                 this.error('\nError while parsing entities to JDL\n');
@@ -37,12 +37,12 @@ module.exports = ExportJDLGenerator.extend({
         }
     },
 
-    writing: function () {
-        let content = '// JDL definition for application \'' + this.baseName + '\' generated with command \'yo jhipster:export-jdl\'\n\n' + this.jdl.toString();
+    writing() {
+        const content = `// JDL definition for application '${this.baseName}' generated with command 'yo jhipster:export-jdl'\n\n${this.jdl.toString()}`;
         this.fs.write(this.jdlFile, content);
     },
 
-    end: function() {
+    end() {
         this.log(chalk.green.bold('\nEntities successfully exported to JDL file\n'));
     }
 

@@ -43,15 +43,15 @@
             "newpassword.placeholder": "Nieuw wachtwoord",
             "confirmpassword": "Nieuw wachtwoord bevestigen",
             "confirmpassword.placeholder": "Bevestig het nieuwe wachtwoord",
-            "email": "E-mail",
-            "email.placeholder": "Uw e-mail"
+            "email": "Email",
+            "email.placeholder": "Uw email"
         },
         "messages": {
             "info": {
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "Indien u wilt <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">aanmelden</a>, dan kan u de standaard gebruikers proberen:<br/>- Administrator (login=\"admin\" en wachtwoord=\"admin\") <br/>- Gebruiker (login=\"user\" en wachtwoord=\"user\").",
                 "register": "U heeft nog geen gebruiker? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Registreer een nieuwe gebruiker</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Indien u wilt ",
                     "link": "aanmelden",
@@ -79,10 +79,10 @@
                     "maxlength": "Uw wachtwoord bevestiging kan niet langer zijn dan 50 tekens."
                 },
                 "email": {
-                    "required": "Uw e-mail is vereist.",
-                    "invalid": "Uw e-mail is ongeldig.",
-                    "minlength": "Uw e-mail moet minstens 5 tekens lang zijn.",
-                    "maxlength": "Uw e-mail kan niet langer zijn dan 50 tekens."
+                    "required": "Uw email is vereist.",
+                    "invalid": "Uw email is ongeldig.",
+                    "minlength": "Uw email moet minstens 5 tekens lang zijn.",
+                    "maxlength": "Uw email kan niet langer zijn dan 50 tekens."
                 }
             }
         },
@@ -128,7 +128,7 @@
         "NotNull": "Field {{fieldName}} cannot be empty!",
         "Size": "Field {{fieldName}} does not meet min/max size requirements!",
         "userexists": "Login name already used!",
-        "emailexists": "E-mail is already in use!",
+        "emailexists": "Email is already in use!",
         "idexists": "A new {{entityName}} cannot already have an ID"
     },
     "footer": "Dit is uw voettekst"

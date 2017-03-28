@@ -21,7 +21,7 @@ public class UserDTO {
 
     private <% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> id;
 
-    <%_ var columnMax = 50;
+    <%_ let columnMax = 50;
         if (enableSocialSignIn) {
             columnMax = 100;
         } _%>

@@ -4,7 +4,7 @@
         "messages": {
             <%_ if (clientFramework === 'angular1') { _%>
             "success": "<strong>आपला वापरकर्ता सक्रिय झाला आहे.</strong> कृपया <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">साइन इन करा</a>.",
-            <%_ } else if (clientFramework === 'angular2') { _%>
+            <%_ } else { _%>
             "success": "<strong>आपला वापरकर्ता सक्रिय झाला आहे.</strong> कृपया ",
             <%_ } _%>
             "error": "<strong>आपल्या वापरकर्ता सक्रिय केले जाऊ शकत नाही.</strongकृपया साइन अप करण्यासाठी नोंदणी फॉर्म वापरा."

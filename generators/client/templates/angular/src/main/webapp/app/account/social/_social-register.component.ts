@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
-<%_ if (enableTranslation) { _%>
+import { Component, OnInit } from '@angular/core';
 import { JhiLanguageService } from 'ng-jhipster';
-<%_ } _%>
 import { ActivatedRoute } from '@angular/router';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+
+import { LoginModalService } from '../../shared';
 
 @Component({
     selector: '<%=jhiPrefix%>-register',
@@ -13,16 +14,14 @@ export class SocialRegisterComponent implements OnInit  {
     error: boolean;
     provider: string;
     providerLabel: string;
+    modalRef: NgbModalRef;
 
     constructor (
         private route: ActivatedRoute,
-<%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
-<%_ } _%>
+        private loginModalService: LoginModalService
     ) {
-<%_ if (enableTranslation) { _%>
         this.jhiLanguageService.setLocations(['social']);
-<%_ } _%>
     }
 
     ngOnInit() {
@@ -34,5 +33,9 @@ export class SocialRegisterComponent implements OnInit  {
         });
         this.error = !this.success;
         this.providerLabel = this.provider.charAt(0).toUpperCase() + this.provider.slice(1);
+    }
+
+    login() {
+        this.modalRef = this.loginModalService.open();
     }
 }

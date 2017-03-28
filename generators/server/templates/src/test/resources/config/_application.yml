@@ -19,7 +19,7 @@ eureka:
         enabled: false
     instance:
         appname: <%= baseName %>
-        instanceId: <%= baseName %>:${spring.application.instance_id:${random.value}}
+        instanceId: <%= baseName %>:${spring.application.instance-id:${random.value}}
 <%_ } _%>
 
 spring:
@@ -31,6 +31,8 @@ spring:
     <%_ } _%>
     jackson:
         serialization.write_dates_as_timestamps: false
+    cache:
+        type: none
     <%_ if (messageBroker == 'kafka') { _%>
     cloud:
         stream:
@@ -53,7 +55,7 @@ spring:
         database-platform: io.github.jhipster.domain.util.FixedH2Dialect
         database: H2
         open-in-view: false
-        show-sql: true
+        show-sql: false
         hibernate:
             ddl-auto: none
             naming:
@@ -97,6 +99,8 @@ spring:
     <%_ } _%>
     mail:
         host: localhost
+    messages:
+        basename: i18n/messages
     mvc:
         favicon:
             enabled: false
@@ -122,7 +126,7 @@ server:
 
 jhipster:
     async:
-        core-pool-size: 2
+        core-pool-size: 1
         max-pool-size: 50
         queue-capacity: 10000
 <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>

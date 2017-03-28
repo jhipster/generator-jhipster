@@ -76,6 +76,7 @@ Before you submit your pull request consider the following guidelines:
      ```shell
      mvn spring-boot:run
      ```
+* You can also run our travis build locally by following [this](#local-travis-build)
 
 * Commit your changes using a descriptive commit message that follows our
   [commit message conventions](#commit-message-format).
@@ -176,15 +177,15 @@ Go to the [generator-jhipster project](https://github.com/jhipster/generator-jhi
 
 [Please read the Github forking documentation for more information](https://help.github.com/articles/fork-a-repo)
 
-### Set NPM to use the cloned project
+### Set NPM/YARN to use the cloned project
 
-In your cloned `generator-jhipster` project, type `npm link`.
+In your cloned `generator-jhipster` project, type `npm link` or `yarn link` depending on the package manager you use.
 
 This will do a symbolic link from the global `node_modules` version to point to this folder, so when we run `yo jhipster`, you will now use the development version of JHipster.
 
 For testing, you will want to generate an application, and there is a specific issue here: for each application, JHipster installs a local version of itself. This is made to enable several applications to each use a specific JHipster version (application A uses JHipster 3.1.0, and application B uses JHipster 3.2.0).
 
-To overcome this you need to run `npm link generator-jhipster` on the generated project folder as well, so that the local version has a symbolic link to the development version of JHipster.
+To overcome this you need to run `npm link generator-jhipster` or `yarn link generator-jhipster` on the generated project folder as well, so that the local version has a symbolic link to the development version of JHipster.
 
 To put it in a nutshell, you need to:
 
@@ -201,17 +202,34 @@ You should see your changes reflected in the generated project.
 
 ### Use a text editor
 
-As modifying the JHipster generator includes modifying Java and JavaScript templates, most IDE will not work correctly. We recommend you use a text editor like [Atom](https://atom.io/) to code your changes.
+As modifying the JHipster generator includes modifying Java and JavaScript templates, most IDE will not work correctly. We recommend you use a text editor like [Atom](https://atom.io/) or [VSCode](https://code.visualstudio.com/) to code your changes.
+
+## Local Travis Build
+
+You can run the travis builds locally by following below commands
+
+CD into the travis folder `cd travis` from the generator source code root folder
+
+Run `./build-samples.sh [command_name] [sample_name:optional]`
+
+Sample name is optional and can be any of the folder name in the `travis/samples` folder. If not specified the it will mean all samples
+
+Command name can be as below
+
+    `generate`: Generate the sample if specified else generate all samples
+    `build` : Generate and test the sample if specified else generate and test all samples
+    `clean` : Clean the generated code for the sample if specified else clean all samples
 
 ## <a name="rules"></a> Coding Rules
 To ensure consistency throughout the source code, keep these rules in mind as you are working:
 
 * All features or bug fixes **must be tested** by one or more tests.
-* All files must follow the [.editorconfig file](http://editorconfig.org/) located at the root of the JHipster generator project. Please note that generated projects use the same .editorconfig file, so that both the generator and the generated projects share the same configuration.
+* All files must follow the [.editorconfig file](http://editorconfig.org/) located at the root of the JHipster generator project. Please note that generated projects use the same `.editorconfig` file, so that both the generator and the generated projects share the same configuration.
 * Java files **must be** formatted using [Intellij IDEA's code style](http://confluence.jetbrains.com/display/IntelliJIDEA/Code+Style+and+Formatting). Please note that JHipster committers have a free Intellij IDEA Ultimate Edition for developing the project.
 * Generators JavaScript files **must follow** the eslint configuration defined at the project root, which is based on [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript).
 * Web apps JavaScript files **must follow** [Google's JavaScript Style Guide](https://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml).
 * AngularJS files **must follow** [John Papa's Angular 1 style guide] (https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md).
+* Angular 2+ Typescript files **must follow** [Official Angular style guide] (https://angular.io/styleguide).
 
 Please ensure to run `npm run lint` and `npm test` on the project root before submitting a pull request. You can also run `npm run lint-fix` to fix some of the lint issues automatically.
 
@@ -222,7 +240,7 @@ For simple code (few lines), logic can be embedded in the main file but if logic
 
 Sub templates should be named with the `ejs` extension because it's the default one, it enables editors to apply correct syntax highlighting and it enables us to use a very concise syntax:
 
-    <%- include field_validators -%>
+    <%- include('field_validators'); -%>
 
 This statement means that [_Entity.java](generators/entity/templates/src/main/java/package/domain/_Entity.java) template includes [field_validators.ejs](generators/entity/templates/src/main/java/package/domain/field_validators.ejs) sub template.
 
@@ -253,13 +271,13 @@ The Header contains a succinct description of the change:
 * don't capitalize first letter
 * no dot (.) at the end
 
-###Body
+### Body
 If your change is simple, the Body is optional.
 
 Just as in the Header, use the imperative, present tense: "change" not "changed" nor "changes".
 The Body should include the motivation for the change and contrast this with previous behavior.
 
-###Footer
+### Footer
 The footer is the place to reference GitHub issues that this commit **Closes**.
 
 You **must** use the [Github keywords](https://help.github.com/articles/closing-issues-via-commit-messages) for

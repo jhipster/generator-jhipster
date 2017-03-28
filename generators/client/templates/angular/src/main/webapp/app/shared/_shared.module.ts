@@ -21,7 +21,6 @@ import {
     <%_ if (websocket === 'spring-websocket') { _%>
     <%=jhiPrefixCapitalized%>TrackerService,
     <%_ } _%>
-    HasAuthorityDirective,
     HasAnyAuthorityDirective,
 <%_ if (enableSocialSignIn) { _%>
     <%=jhiPrefixCapitalized%>SocialComponent,
@@ -40,7 +39,6 @@ import {
         <%=jhiPrefixCapitalized%>SocialComponent,
         <%_ } _%>
         <%=jhiPrefixCapitalized%>LoginModalComponent,
-        HasAuthorityDirective,
         HasAnyAuthorityDirective
     ],
     providers: [
@@ -73,7 +71,6 @@ import {
         <%=jhiPrefixCapitalized%>SocialComponent,
         <%_ } _%>
         <%=jhiPrefixCapitalized%>LoginModalComponent,
-        HasAuthorityDirective,
         HasAnyAuthorityDirective,
         DatePipe
     ],

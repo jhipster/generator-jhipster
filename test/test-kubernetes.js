@@ -1,10 +1,10 @@
-/*global describe, beforeEach, it*/
-'use strict';
+/* global describe, beforeEach, it*/
 
-var path = require('path');
-var assert = require('yeoman-assert');
-var helpers = require('yeoman-test');
-var fse = require('fs-extra');
+
+const path = require('path');
+const assert = require('yeoman-assert');
+const helpers = require('yeoman-test');
+const fse = require('fs-extra');
 
 const expectedFiles = {
     eurekaregistry: [
@@ -16,39 +16,39 @@ const expectedFiles = {
         'registry/consul-config-loader.yml',
         'registry/application-configmap.yml'
     ],
-    jhgate : [
+    jhgate: [
         'jhgate/jhgate-deployment.yml',
         'jhgate/jhgate-mysql.yml',
         'jhgate/jhgate-service.yml'
     ],
-    msmysql : [
+    msmysql: [
         'msmysql/msmysql-deployment.yml',
         'msmysql/msmysql-mysql.yml',
         'msmysql/msmysql-service.yml'
     ],
-    mspsql : [
+    mspsql: [
         'mspsql/mspsql-deployment.yml',
         'mspsql/mspsql-postgresql.yml',
         'mspsql/mspsql-service.yml',
         'mspsql/mspsql-elasticsearch.yml'
     ],
-    msmongodb : [
+    msmongodb: [
         'msmongodb/msmongodb-deployment.yml',
         'msmongodb/msmongodb-mongodb.yml',
         'msmongodb/msmongodb-service.yml'
     ],
-    msmariadb : [
+    msmariadb: [
         'msmariadb/msmariadb-deployment.yml',
         'msmariadb/msmariadb-mariadb.yml',
         'msmariadb/msmariadb-service.yml'
     ],
-    monolith : [
+    monolith: [
         'samplemysql/samplemysql-deployment.yml',
         'samplemysql/samplemysql-mysql.yml',
         'samplemysql/samplemysql-service.yml',
         'samplemysql/samplemysql-elasticsearch.yml'
     ],
-    kafka : [
+    kafka: [
         'samplekafka/samplekafka-deployment.yml',
         'samplekafka/samplekafka-mysql.yml',
         'samplekafka/samplekafka-service.yml',
@@ -56,15 +56,15 @@ const expectedFiles = {
     ],
 };
 
-describe('JHipster Kubernetes Sub Generator', function () {
-    describe('only gateway', function () {
-        beforeEach(function (done) {
+describe('JHipster Kubernetes Sub Generator', () => {
+    describe('only gateway', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
@@ -78,25 +78,25 @@ describe('JHipster Kubernetes Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected registry files and content', function () {
+        it('creates expected registry files and content', () => {
             assert.file(expectedFiles.eurekaregistry);
             assert.fileContent('registry/jhipster-registry.yml', /# base64 encoded "meetup"/);
         });
-        it('creates expected gateway files and content', function () {
+        it('creates expected gateway files and content', () => {
             assert.file(expectedFiles.jhgate);
             assert.fileContent('jhgate/jhgate-deployment.yml', /image: jhipsterrepository\/jhgate/);
             assert.fileContent('jhgate/jhgate-deployment.yml', /jhipsternamespace.svc.cluster/);
         });
     });
 
-    describe('gateway and mysql microservice', function () {
-        beforeEach(function (done) {
+    describe('gateway and mysql microservice', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
@@ -110,25 +110,25 @@ describe('JHipster Kubernetes Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected registry files', function () {
+        it('creates expected registry files', () => {
             assert.file(expectedFiles.eurekaregistry);
         });
-        it('creates expected gateway files', function () {
+        it('creates expected gateway files', () => {
             assert.file(expectedFiles.jhgate);
         });
-        it('creates expected mysql files', function () {
+        it('creates expected mysql files', () => {
             assert.file(expectedFiles.msmysql);
         });
     });
 
-    describe('MySQL and PostgreSQL microservices without gateway', function () {
-        beforeEach(function (done) {
+    describe('MySQL and PostgreSQL microservices without gateway', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
@@ -142,28 +142,28 @@ describe('JHipster Kubernetes Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected registry files', function () {
+        it('creates expected registry files', () => {
             assert.file(expectedFiles.eurekaregistry);
         });
-        it('doesn\'t creates gateway files', function () {
+        it('doesn\'t creates gateway files', () => {
             assert.noFile(expectedFiles.jhgate);
         });
-        it('creates expected mysql files', function () {
+        it('creates expected mysql files', () => {
             assert.file(expectedFiles.msmysql);
         });
-        it('creates expected psql files', function () {
+        it('creates expected psql files', () => {
             assert.file(expectedFiles.mspsql);
         });
     });
 
-    describe('gateway, mysql, psql, mongodb, mariadb microservices', function () {
-        beforeEach(function (done) {
+    describe('gateway, mysql, psql, mongodb, mariadb microservices', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
@@ -180,34 +180,34 @@ describe('JHipster Kubernetes Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected registry files', function () {
+        it('creates expected registry files', () => {
             assert.file(expectedFiles.eurekaregistry);
         });
-        it('creates expected gateway files', function () {
+        it('creates expected gateway files', () => {
             assert.file(expectedFiles.jhgate);
         });
-        it('creates expected mysql files', function () {
+        it('creates expected mysql files', () => {
             assert.file(expectedFiles.msmysql);
         });
-        it('creates expected psql files', function () {
+        it('creates expected psql files', () => {
             assert.file(expectedFiles.mspsql);
         });
-        it('creates expected mongodb files', function () {
+        it('creates expected mongodb files', () => {
             assert.file(expectedFiles.msmongodb);
         });
-        it('creates expected mariadb files', function () {
+        it('creates expected mariadb files', () => {
             assert.file(expectedFiles.msmariadb);
         });
     });
 
-    describe('monolith application', function () {
-        beforeEach(function (done) {
+    describe('monolith application', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'monolith',
                     directoryPath: './',
@@ -220,22 +220,22 @@ describe('JHipster Kubernetes Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('doesn\'t creates registry files', function () {
+        it('doesn\'t creates registry files', () => {
             assert.noFile(expectedFiles.eurekaregistry);
         });
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.monolith);
         });
     });
 
-    describe('Kafka application', function () {
-        beforeEach(function (done) {
+    describe('Kafka application', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'monolith',
                     directoryPath: './',
@@ -248,12 +248,11 @@ describe('JHipster Kubernetes Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('doesn\'t creates registry files', function () {
+        it('doesn\'t creates registry files', () => {
             assert.noFile(expectedFiles.eurekaregistry);
         });
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.kafka);
         });
     });
-
 });

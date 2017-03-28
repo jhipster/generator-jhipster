@@ -4,7 +4,7 @@
         "messages": {
             <%_ if (clientFramework === 'angular1') { _%>
             "success": "<strong>Twoje konto zostało aktywowane.</strong> Możesz się teraz <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">zalogować</a>.",
-            <%_ } else if (clientFramework === 'angular2') { _%>
+            <%_ } else { _%>
             "success": "<strong>Twoje konto zostało aktywowane.</strong> Możesz się teraz ",
             <%_ } _%>
             "error": "<strong>Twoje konto nie mogło zostać aktywowane.</strong> Użyj proszę formularza rejestracji ponownie."

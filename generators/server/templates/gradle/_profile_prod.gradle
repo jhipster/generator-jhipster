@@ -58,6 +58,9 @@ processResources {
         filter {
             it.replace('#spring.profiles.active#', profiles)
         }
+        filter {
+            it.replace('#project.version#', version)
+        }
     }
 }
 

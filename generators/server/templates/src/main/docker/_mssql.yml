@@ -1,7 +1,6 @@
 version: '2'
 services:
     <%= baseName.toLowerCase() %>-mssql:
-        container_name: <%= baseName.toLowerCase() %>-mssql
         image: <%= DOCKER_MSSQL %>
         # volumes are not supported on macOS
         # volumes:

@@ -1,7 +1,6 @@
 version: '2'
 services:
     mspsql-elasticsearch:
-        container_name: mspsql-elasticsearch
         image: elasticsearch:1.7.5
         # volumes:
         #     - ~/volumes/jhipster/mspsql/elasticsearch/:/usr/share/elasticsearch/data/

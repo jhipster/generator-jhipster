@@ -2,6 +2,8 @@ package <%=packageName%>.domain;
 
 <%_ if (databaseType == 'mongodb') { _%>
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 <%_ } _%>
@@ -26,7 +28,10 @@ import java.util.Objects;
 @Entity
 @Table(name = "jhi_social_user_connection")<% if (hibernateCache != 'no') { %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType == 'mongodb') { %>
-@Document(collection = "jhi_social_user_connection")<% } %>
+@Document(collection = "jhi_social_user_connection")
+@CompoundIndexes(
+    @CompoundIndex(name = "user2-prov-provusr-idx", unique = true, def = "{'user_id': 1, 'provider_id': 1, 'provider_user_id': 1}")
+)<% } %>
 public class SocialUserConnection implements Serializable {
 
     private static final long serialVersionUID = 1L;

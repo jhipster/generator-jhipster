@@ -51,7 +51,7 @@
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "Se desexa <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">iniciar unha sesión</a>, pode intentalo coas contas predeterminadas:<br/>- Administrator (usuario=\"admin\" e contrasinal=\"admin\") <br/>- Usuario (usuario=\"user\" e contrasinal=\"user\").",
                 "register": "Aínda non tes unha conta de usuario? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Crea unha conta</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Se desexa ",
                     "link": "iniciar unha sesión",
@@ -132,7 +132,7 @@
         "NotNull": "O campo {{fieldName}} non pode estar baleiro!",
         "Size": "O campo {{fieldName}} non cumpre cos requisitos de tamaño mínimo ou máximo!",
         "userexists": "Login name already used!",
-        "emailexists": "E-mail is already in use!",
+        "emailexists": "Email is already in use!",
         "idexists": "A new {{entityName}} cannot already have an ID"
     },
     "footer": "pé de páxina"

@@ -1,6 +1,6 @@
 version: '2'
 services:
-<%_ for(var i = 0; i < appConfigs.length; i++) { _%>
+<%_ for(let i = 0; i < appConfigs.length; i++) { _%>
 <%- appsYaml[i] %>
 <%_ } _%>
 <%_ if (useKafka) { _%>

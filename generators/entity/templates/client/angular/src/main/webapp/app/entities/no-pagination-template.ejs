@@ -1,12 +1,12 @@
 <%_
-var i18nToLoad = [entityInstance];
-for (var idx in fields) {
+const i18nToLoad = [entityInstance];
+for (const idx in fields) {
     if (fields[idx].fieldIsEnum == true) {
         i18nToLoad.push(fields[idx].enumInstance);
     }
 }
 _%>
-<%= entityInstancePlural %>: <%= entityClass %>[];
+<%= entityInstancePlural %>: <%= entityAngularName %>[];
     currentAccount: any;
     eventSubscriber: Subscription;
     <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -17,7 +17,7 @@ _%>
         <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
         <%_ } _%>
-        private <%= entityInstance %>Service: <%= entityClass %>Service,
+        private <%= entityInstance %>Service: <%= entityAngularName %>Service,
         private alertService: AlertService,
         <%_ if (fieldsContainBlob) { _%>
         private dataUtils: DataUtils,

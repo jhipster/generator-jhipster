@@ -1,7 +1,6 @@
 version: '2'
 services:
     <%=baseName.toLowerCase()%>-cassandra-migration:
-        container_name: <%=baseName.toLowerCase()%>-cassandra-migration
         environment:
             - CASSANDRA_CONTACT_POINT=<%=baseName.toLowerCase()%>-cassandra
             - USER=docker-cassandra-migration

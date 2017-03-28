@@ -1,16 +1,14 @@
-'use strict';
-
-var chalk = require('chalk'),
-    _ = require('lodash');
+const chalk = require('chalk');
+const _ = require('lodash');
 
 module.exports = {
     prompting
 };
 
 function prompting() {
-    var done = this.async();
-    var databaseType = this.databaseType;
-    var prompts = [
+    const done = this.async();
+    const databaseType = this.databaseType;
+    const prompts = [
         {
             name: 'cloudfoundryDeployedName',
             message: 'Name to deploy as:',
@@ -33,23 +31,19 @@ function prompting() {
             default: 0
         },
         {
-            when: function(response) {
-                return databaseType !== 'no';
-            },
+            when: response => databaseType !== 'no',
             name: 'cloudfoundryDatabaseServiceName',
             message: 'What is the name of your database service?',
             default: 'elephantsql'
         },
         {
-            when: function(response) {
-                return databaseType !== 'no';
-            },
+            when: response => databaseType !== 'no',
             name: 'cloudfoundryDatabaseServicePlan',
             message: 'What is the name of your database plan?',
             default: 'turtle'
         }];
 
-    this.prompt(prompts).then(function (props) {
+    this.prompt(prompts).then((props) => {
         this.cloudfoundryDeployedName = _.kebabCase(props.cloudfoundryDeployedName).split('-').join('');
         this.cloudfoundryProfile = props.cloudfoundryProfile;
         this.cloudfoundryDatabaseServiceName = props.cloudfoundryDatabaseServiceName;
@@ -60,5 +54,5 @@ function prompting() {
             this.cloudfoundryProfile = 'prod';
         }
         done();
-    }.bind(this));
+    });
 }

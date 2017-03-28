@@ -43,15 +43,15 @@
             "newpassword.placeholder": "Nové heslo",
             "confirmpassword": "Potvrzení nového hesla",
             "confirmpassword.placeholder": "Potvrzení nového hesla",
-            "email": "E-mail",
-            "email.placeholder": "Váš e-mail"
+            "email": "Email",
+            "email.placeholder": "Váš email"
         },
         "messages": {
             "info": {
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "Pokud se chcete <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">přihlásit</a>, můžete vyzkoušet predvolené účty:<br/>- Administrátor (jméno=\"admin\" a heslo=\"admin\") <br/>- Uživatel (jméno=\"user\" a heslo=\"user\").",
                 "register": "Ještě nemáte účet? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Zaregistrujte si nový účet.</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Pokud se chcete ",
                     "link": "přihlásit",
@@ -79,10 +79,10 @@
                     "maxlength": "Vaše potvrzení hesla nemůže být delší než 50 znaků."
                 },
                 "email": {
-                    "required": "E-mail je povinný.",
-                    "invalid": "Zadaný e-mail není validní.",
-                    "minlength": "Váš e-mail musí mít alespoň 5 znaků.",
-                    "maxlength": "Váš e-mail nemůže být delší než 50 znaků."
+                    "required": "Email je povinný.",
+                    "invalid": "Zadaný email není validní.",
+                    "minlength": "Váš email musí mít alespoň 5 znaků.",
+                    "maxlength": "Váš email nemůže být delší než 50 znaků."
                 }
             }
         },
@@ -132,7 +132,7 @@
         "NotNull": "Pole {{ fieldName }} nemůže být prázdné!",
         "Size": "Pole {{ fieldName }} nesplňuje požadavek minimální nebo maximální velikosti!",
         "userexists": "Zadané uživatelské jméno je již použito!",
-        "emailexists": "Zadaný e-mail je již použitý!",
+        "emailexists": "Zadaný email je již použitý!",
         "idexists": "Nová entita {{ entityName }} ještě nemůže mít ID"
     },
     "footer": "Toto je vaše zápatí"

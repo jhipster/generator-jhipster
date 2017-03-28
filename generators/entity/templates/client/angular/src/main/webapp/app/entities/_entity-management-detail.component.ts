@@ -1,6 +1,6 @@
 <%_
-var i18nToLoad = [entityInstance];
-for (var idx in fields) {
+const i18nToLoad = [entityInstance];
+for (const idx in fields) {
     if (fields[idx].fieldIsEnum == true) {
         i18nToLoad.push(fields[idx].enumInstance);
     }
@@ -13,16 +13,16 @@ import { JhiLanguageService<% if (fieldsContainBlob) { %>, DataUtils<% } %> } fr
 <%_ } else if (fieldsContainBlob) { _%>
 import { DataUtils } from 'ng-jhipster';
 <%_ } _%>
-import { <%= entityClass %> } from './<%= entityFileName %>.model';
-import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
+import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
+import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 
 @Component({
     selector: '<%= jhiPrefix %>-<%= entityFileName %>-detail',
     templateUrl: './<%= entityFileName %>-detail.component.html'
 })
-export class <%= entityAngularJSName %>DetailComponent implements OnInit, OnDestroy {
+export class <%= entityAngularName %>DetailComponent implements OnInit, OnDestroy {
 
-    <%= entityInstance %>: <%= entityClass %>;
+    <%= entityInstance %>: <%= entityAngularName %>;
     private subscription: any;
 
     constructor(
@@ -32,7 +32,7 @@ export class <%= entityAngularJSName %>DetailComponent implements OnInit, OnDest
         <%_ if (fieldsContainBlob) { _%>
         private dataUtils: DataUtils,
         <%_ } _%>
-        private <%= entityInstance %>Service: <%= entityClass %>Service,
+        private <%= entityInstance %>Service: <%= entityAngularName %>Service,
         private route: ActivatedRoute
     ) {
         <%_ if (enableTranslation) { _%>

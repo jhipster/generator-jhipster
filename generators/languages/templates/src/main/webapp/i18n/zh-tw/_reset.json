@@ -20,7 +20,7 @@
                 "info": "請設定新的密碼",
                 <%_ if (clientFramework === 'angular1') { _%>
                 "success": "<strong>您的密碼已重設。</strong> 請 <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">登入</a>。",
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "success": "<strong>您的密碼已重設。</strong> 請 ",
                 <%_ } _%>
                 "keymissing": "沒有輸入重設金鑰",

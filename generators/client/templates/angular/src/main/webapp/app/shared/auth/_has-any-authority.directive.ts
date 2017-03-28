@@ -1,41 +1,41 @@
-import { Directive, ElementRef, Input, Renderer, OnInit } from '@angular/core';
+import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Principal } from './principal.service';
 
+/**
+ * @whatItDoes Conditionally includes an HTML element if current user has any
+ * of the authorities passed as the `expression`.
+ *
+ * @howToUse
+ * ```
+ *     <some-element *jhiHasAnyAuthority="'ROLE_ADMIN'">...</some-element>
+ *
+ *     <some-element *jhiHasAnyAuthority="['ROLE_ADMIN', 'ROLE_USER']">...</some-element>
+ * ```
+ */
 @Directive({
     selector: '[<%=jhiPrefix%>HasAnyAuthority]'
 })
-export class HasAnyAuthorityDirective implements OnInit {
+export class HasAnyAuthorityDirective {
 
-    @Input() <%=jhiPrefix%>HasAnyAuthority: string;
-    authority: string[];
+    private authorities: string[];
 
-    constructor(private principal: Principal, private el: ElementRef, private renderer: Renderer) {
+    constructor(private principal: Principal, private templateRef: TemplateRef<any>, private viewContainerRef: ViewContainerRef) {
     }
 
-    ngOnInit() {
-        this.authority = this.<%=jhiPrefix%>HasAnyAuthority.replace(/\s+/g, '').split(',');
-
-        if (this.authority.length > 0) {
-            this.setVisibilitySync();
-        }
-        this.principal.getAuthenticationState().subscribe(identity => this.setVisibilitySync());
+    @Input()
+    set <%=jhiPrefix%>HasAnyAuthority(value: string|string[]) {
+        this.authorities = typeof value === 'string' ? [ <string> value ] : <string[]> value;
+        this.updateView();
+        // Get notified each time authentication state changes.
+        this.principal.getAuthenticationState().subscribe(identity => this.updateView());
     }
 
-    private setVisible () {
-        this.renderer.setElementClass(this.el.nativeElement, 'hidden-xs-up', false);
-    }
-
-    private setHidden () {
-        this.renderer.setElementClass(this.el.nativeElement, 'hidden-xs-up', true);
-    }
-
-    private setVisibilitySync () {
-
-        let result = this.principal.hasAnyAuthority(this.authority);
-        if (result) {
-            this.setVisible();
-        } else {
-            this.setHidden();
-        }
+    private updateView(): void {
+        this.principal.hasAnyAuthority(this.authorities).then(result => {
+            this.viewContainerRef.clear();
+            if (result) {
+                this.viewContainerRef.createEmbeddedView(this.templateRef);
+            }
+        });
     }
 }

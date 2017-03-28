@@ -20,7 +20,7 @@
                 "info": "एक नया पासवर्ड चुनें",
                 <%_ if (clientFramework === 'angular1') { _%>
                 "success": "<strong>अपना पासवर्ड रीसेट किया गया है.</strong> कृपया <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">साइन इन</a> करें.",
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "success": "<strong>अपना पासवर्ड रीसेट किया गया है.</strong> कृपया ",
                 <%_ } _%>
                 "keymissing": "रीसेट कुंजी गुम है।",

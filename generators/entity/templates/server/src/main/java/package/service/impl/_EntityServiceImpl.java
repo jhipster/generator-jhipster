@@ -1,14 +1,14 @@
 package <%=packageName%>.service<% if (service == 'serviceImpl') { %>.impl<% } %>;
-<%  var serviceClassName = service == 'serviceImpl' ? entityClass + 'ServiceImpl' : entityClass + 'Service';
-    var viaService = false;
-    var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
-    var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
-    var mapper = entityInstance  + 'Mapper';
-    var dtoToEntity = mapper + '.'+ entityInstance +'DTOTo' + entityClass;
-    var entityToDto = mapper + '.'+ entityInstance +'To' + entityClass + 'DTO';
-    var entityToDtoReference = mapper + '::'+ entityInstance +'To' + entityClass + 'DTO';
-    var repository = entityInstance  + 'Repository';
-    var searchRepository = entityInstance  + 'SearchRepository';
+<%  const serviceClassName = service == 'serviceImpl' ? entityClass + 'ServiceImpl' : entityClass + 'Service';
+    let viaService = false;
+    const instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
+    const instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
+    const mapper = entityInstance  + 'Mapper';
+    const dtoToEntity = mapper + '.'+ entityInstance +'DTOTo' + entityClass;
+    const entityToDto = mapper + '.'+ entityInstance +'To' + entityClass + 'DTO';
+    const entityToDtoReference = mapper + '::'+ entityInstance +'To' + entityClass + 'DTO';
+    const repository = entityInstance  + 'Repository';
+    const searchRepository = entityInstance  + 'SearchRepository';
     if (service == 'serviceImpl') { %>
 import <%=packageName%>.service.<%= entityClass %>Service;<% } %>
 import <%=packageName%>.domain.<%= entityClass %>;
@@ -117,7 +117,8 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
     /**
      * Search for the <%= entityInstance %> corresponding to the query.
      *
-     *  @param query the query of the search
+     *  @param query the query of the search<% if (pagination != 'no') { %>
+     *  @param pageable the pagination information<% } %>
      *  @return the list of entities
      */
     <%_ if (service == 'serviceImpl') { _%>

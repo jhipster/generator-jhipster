@@ -5,9 +5,9 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const Visualizer = require('webpack-visualizer-plugin');
 const ENV = 'prod';
 
-module.exports = webpackMerge(commonConfig({env: ENV}), {
-        devtool: 'source-map',
-        output: {
+module.exports = webpackMerge(commonConfig({ env: ENV }), {
+    devtool: 'source-map',
+    output: {
         path: './<%= BUILD_DIR %>www',
         filename: '[hash].[name].bundle.js',
         chunkFilename: '[hash].[id].chunk.js'

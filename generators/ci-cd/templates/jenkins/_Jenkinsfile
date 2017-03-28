@@ -1,0 +1,183 @@
+#!/usr/bin/env groovy
+
+node {
+    stage('checkout') {
+        checkout scm
+    }
+
+<%_ if (jenkinsIntegrations.includes('gitlab')) { _%>
+    gitlabCommitStatus('build') {
+<%_ } _%>
+<%_ if (jenkinsIntegrations.includes('docker')) { _%>
+<%= gitLabIndent %>    docker.image('openjdk:8').inside('-u root<% if (buildTool === 'maven') { %> -e MAVEN_OPTS="-Duser.home=./"<% } else if (buildTool === 'gradle') { %> -e GRADLE_USER_HOME=.gradle<% } %>') {
+<%_ } _%>
+<%= indent %>    stage('check java') {
+<%= indent %>        sh "java -version"
+<%= indent %>    }
+
+<%_ if (buildTool === 'maven') { _%>
+<%= indent %>    stage('clean') {
+<%= indent %>        sh "chmod +x mvnw"
+<%= indent %>        sh "./mvnw clean"
+<%= indent %>    }
+
+    <%_ if (!skipClient) { _%>
+        <%_ if (clientPackageManager === 'yarn') { _%>
+<%= indent %>    stage('install tools') {
+<%= indent %>        sh "./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v<%= NODE_VERSION %> -DyarnVersion=v<%= YARN_VERSION %>"
+<%= indent %>    }
+
+<%= indent %>    stage('yarn install') {
+<%= indent %>        sh "./mvnw com.github.eirslett:frontend-maven-plugin:yarn"
+<%= indent %>    }
+
+        <%_ } else if (clientPackageManager === 'npm') { _%>
+<%= indent %>    stage('install tools') {
+<%= indent %>        sh "./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v<%= NODE_VERSION %> -DnpmVersion=<%= NPM_VERSION %>"
+<%= indent %>    }
+
+<%= indent %>    stage('npm install') {
+<%= indent %>        sh "./mvnw com.github.eirslett:frontend-maven-plugin:npm"
+<%= indent %>    }
+
+        <%_ } _%>
+    <%_ } _%>
+<%= indent %>    stage('backend tests') {
+<%= indent %>        try {
+<%= indent %>            sh "./mvnw test"
+<%= indent %>        } catch(err) {
+<%= indent %>            throw err
+<%= indent %>        } finally {
+<%= indent %>            junit '**/target/surefire-reports/TEST-*.xml'
+<%= indent %>        }
+<%= indent %>    }
+
+    <%_ if (!skipClient) { _%>
+<%= indent %>    stage('frontend tests') {
+<%= indent %>        try {
+        <%_ if (clientFramework === 'angular1') { _%>
+<%= indent %>            sh "./mvnw com.github.eirslett:frontend-maven-plugin:gulp -Dfrontend.gulp.arguments=test"
+        <%_ } else { _%>
+            <%_ if (clientPackageManager === 'yarn') { _%>
+<%= indent %>            sh "./mvnw com.github.eirslett:frontend-maven-plugin:yarn -Dfrontend.yarn.arguments=test"
+            <%_ } else if (clientPackageManager === 'npm') { _%>
+<%= indent %>            sh "./mvnw com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.yarn.arguments=test"
+            <%_ } _%>
+        <%_ } _%>
+<%= indent %>        } catch(err) {
+<%= indent %>            throw err
+<%= indent %>        } finally {
+<%= indent %>            junit '**/target/test-results/karma/TESTS-*.xml'
+<%= indent %>        }
+<%= indent %>    }
+
+    <%_ } _%>
+    <%_ if (heroku.includes('jenkins')) { _%>
+<%= indent %>    stage('package and deploy') {
+<%= indent %>        sh "./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy-war -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>"
+    <%_ } else { _%>
+<%= indent %>    stage('packaging') {
+<%= indent %>        sh "./mvnw package -Pprod -DskipTests"
+    <%_ } _%>
+<%= indent %>        archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
+<%= indent %>    }
+
+<%_ } else if (buildTool === 'gradle') { _%>
+<%= indent %>    stage('clean') {
+<%= indent %>        sh "chmod +x gradlew"
+<%= indent %>        sh "./gradlew clean --no-daemon"
+<%= indent %>    }
+
+    <%_ if (!skipClient) { _%>
+        <%_ if (clientPackageManager === 'yarn') { _%>
+<%= indent %>    stage('install tools') {
+<%= indent %>        sh "./gradlew yarn_install -PnodeInstall --no-daemon"
+<%= indent %>    }
+        <%_ } else if (clientPackageManager === 'npm') { _%>
+<%= indent %>    stage('npm install') {
+<%= indent %>        sh "./gradlew npmInstall -PnodeInstall --no-daemon"
+<%= indent %>    }
+        <%_ } _%>
+    <%_ } _%>
+
+<%= indent %>    stage('backend tests') {
+<%= indent %>        try {
+<%= indent %>            sh "./gradlew test -PnodeInstall --no-daemon"
+<%= indent %>        } catch(err) {
+<%= indent %>            throw err
+<%= indent %>        } finally {
+<%= indent %>            junit '**/build/**/TEST-*.xml'
+<%= indent %>        }
+<%= indent %>    }
+
+    <%_ if (!skipClient) { _%>
+<%= indent %>    stage('frontend tests') {
+<%= indent %>        try {
+        <%_ if (clientFramework === 'angular1') { _%>
+<%= indent %>            sh "./gradlew gulp_test -PnodeInstall --no-daemon"
+        <%_ } else { _%>
+            <%_ if (clientPackageManager === 'yarn') { _%>
+<%= indent %>            sh "./gradlew yarn_test -PnodeInstall --no-daemon"
+            <%_ } else if (clientPackageManager === 'npm') { _%>
+<%= indent %>            sh "./gradlew npm_test -PnodeInstall --no-daemon"
+            <%_ } _%>
+        <%_ } _%>
+<%= indent %>        } catch(err) {
+<%= indent %>            throw err
+<%= indent %>        } finally {
+<%= indent %>            junit '**/build/test-results/karma/TESTS-*.xml'
+<%= indent %>        }
+<%= indent %>    }
+
+    <%_ } _%>
+<%= indent %>    stage('packaging') {
+<%= indent %>        sh "./gradlew bootRepackage -x test -Pprod -PnodeInstall --no-daemon"
+<%= indent %>        archiveArtifacts artifacts: '**/build/libs/*.war', fingerprint: true
+<%= indent %>    }
+
+    <%_ if (heroku.includes('jenkins')) { _%>
+<%= indent %>    stage('deployment') {
+<%= indent %>        sh "./gradlew deployHeroku --no-daemon"
+<%= indent %>    }
+
+     <%_ } _%>
+<%_ } _%>
+<%_ if (jenkinsIntegrations.includes('sonar')) { _%>
+<%= indent %>    stage('quality analysis') {
+<%= indent %>        withSonarQubeEnv('<%= jenkinsSonarName %>') {
+    <%_ if (buildTool === 'maven') { _%>
+<%= indent %>            sh "./mvnw sonar:sonar"
+    <%_ } else if (buildTool === 'gradle' ) { _%>
+<%= indent %>            sh "./gradlew sonarqube --no-daemon"
+    <%_ } _%>
+<%= indent %>        }
+<%= indent %>    }
+<%_ } _%>
+<%_ if (jenkinsIntegrations.includes('docker')) { _%>
+<%= gitLabIndent %>    }
+<%_ } _%>
+<%_ if (jenkinsIntegrations.includes('publishDocker')) { _%>
+
+<%= gitLabIndent %>    def dockerImage
+<%= gitLabIndent %>    stage('build docker') {
+    <%_ if (buildTool === 'maven') { _%>
+<%= gitLabIndent %>        sh "cp -R src/main/docker target/"
+<%= gitLabIndent %>        sh "cp target/*.war target/docker/"
+<%= gitLabIndent %>        dockerImage = docker.build('<%= baseName.toLowerCase() %>', 'target/docker')
+    <%_ } else if (buildTool === 'gradle' ) { _%>
+<%= gitLabIndent %>        sh "cp -R src/main/docker build/"
+<%= gitLabIndent %>        sh "cp build/libs/*.war build/docker/"
+<%= gitLabIndent %>        dockerImage = docker.build('<%= baseName.toLowerCase() %>', 'build/docker')
+    <%_ } _%>
+<%= gitLabIndent %>    }
+
+<%= gitLabIndent %>    stage('publish docker') {
+<%= gitLabIndent %>        docker.withRegistry('<%= dockerRegistryURL %>', '<%= dockerRegistryCredentialsId %>') {
+<%= gitLabIndent %>            dockerImage.push 'latest'
+<%= gitLabIndent %>        }
+<%= gitLabIndent %>    }
+<%_ } _%>
+<%_ if (jenkinsIntegrations.includes('gitlab')) { _%>
+    }
+<%_ } _%>
+}

@@ -1,6 +1,6 @@
 <%_
-var i18nToLoad = [entityInstance];
-for (var idx in fields) {
+const i18nToLoad = [entityInstance];
+for (const idx in fields) {
     if (fields[idx].fieldIsEnum == true) {
         i18nToLoad.push(fields[idx].enumInstance);
     }
@@ -12,23 +12,23 @@ import { ActivatedRoute } from '@angular/router';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EventManager<% if (enableTranslation) { %>, JhiLanguageService<% } %> } from 'ng-jhipster';
 
-import { <%= entityClass %> } from './<%= entityFileName %>.model';
-import { <%= entityClass %>PopupService } from './<%= entityFileName %>-popup.service';
-import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
+import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
+import { <%= entityAngularName %>PopupService } from './<%= entityFileName %>-popup.service';
+import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 
 @Component({
     selector: '<%= jhiPrefix %>-<%= entityFileName %>-delete-dialog',
     templateUrl: './<%= entityFileName %>-delete-dialog.component.html'
 })
-export class <%= entityAngularJSName %>DeleteDialogComponent {
+export class <%= entityAngularName %>DeleteDialogComponent {
 
-    <%= entityInstance %>: <%= entityClass %>;
+    <%= entityInstance %>: <%= entityAngularName %>;
 
     constructor(
         <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
         <%_ } _%>
-        private <%= entityInstance %>Service: <%= entityClass %>Service,
+        private <%= entityInstance %>Service: <%= entityAngularName %>Service,
         public activeModal: NgbActiveModal,
         private eventManager: EventManager
     ) {
@@ -56,20 +56,20 @@ export class <%= entityAngularJSName %>DeleteDialogComponent {
     selector: '<%=jhiPrefix%>-<%= entityFileName %>-delete-popup',
     template: ''
 })
-export class <%= entityAngularJSName %>DeletePopupComponent implements OnInit, OnDestroy {
+export class <%= entityAngularName %>DeletePopupComponent implements OnInit, OnDestroy {
 
     modalRef: NgbModalRef;
     routeSub: any;
 
     constructor (
         private route: ActivatedRoute,
-        private <%= entityInstance %>PopupService: <%= entityClass %>PopupService
+        private <%= entityInstance %>PopupService: <%= entityAngularName %>PopupService
     ) {}
 
     ngOnInit() {
         this.routeSub = this.route.params.subscribe(params => {
             this.modalRef = this.<%= entityInstance %>PopupService
-                .open(<%= entityAngularJSName %>DeleteDialogComponent, params['id']);
+                .open(<%= entityAngularName %>DeleteDialogComponent, params['id']);
         });
     }
 

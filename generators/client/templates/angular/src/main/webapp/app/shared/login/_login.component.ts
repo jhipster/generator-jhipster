@@ -32,8 +32,8 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit, Aft
         <%_ if (enableSocialSignIn) { _%>
         private socialService: SocialService,
         <%_ } _%>
-        private activeModal: NgbActiveModal,
-        private router: Router
+        private router: Router,
+        public activeModal: NgbActiveModal
     ) {
         this.credentials = {};
     }
@@ -66,7 +66,7 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit, Aft
         }).then(() => {
             this.authenticationError = false;
             this.activeModal.dismiss('login success');
-            if (this.router.url === '/register' || this.router.url === '/activate' ||
+            if (this.router.url === '/register' || (/activate/.test(this.router.url)) ||
                 this.router.url === '/finishReset' || this.router.url === '/requestReset') {
                 this.router.navigate(['']);
             }
@@ -77,7 +77,7 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit, Aft
             });
 
             // // previousState was set in the authExpiredInterceptor before being redirected to login modal.
-            // // since login is succesful, go to stored previousState and clear previousState
+            // // since login is successful, go to stored previousState and clear previousState
             let previousState = this.stateStorageService.getPreviousState();
             if (previousState) {
                 this.stateStorageService.resetPreviousState();

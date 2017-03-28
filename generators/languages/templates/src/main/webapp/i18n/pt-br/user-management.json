@@ -9,7 +9,7 @@
         "updated": "Usuário com a identificação {{ param }} foi atualizado ",
         "deleted": "Usuário com a identificação {{ param }} foi removido",
         "delete": {
-            "question": "Você tem certeza que deseja excluir o usuário {{ id }}?"
+            "question": "Você tem certeza que deseja excluir o usuário {{ login }}?"
         },
         "detail": {
             "title": "Usuário"
@@ -17,7 +17,7 @@
         "login": "Login",
         "firstName": "Primeiro nome",
         "lastName": "Último nome",
-        "email": "E-mail",
+        "email": "Email",
         "activated": "Ativo",
         "deactivated": "Inativo",
         "profiles": "Perfis",

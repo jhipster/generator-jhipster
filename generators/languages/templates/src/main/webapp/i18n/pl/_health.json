@@ -4,11 +4,11 @@
         "refresh.button": "Odśwież",
         "stacktrace": "Stos wywołań",
         "details": {
-            "details": "Details",
-            "properties": "Properties",
-            "name": "Name",
-            "value": "Value",
-            "error": "Error"
+            "details": "Szczegóły",
+            "properties": "Właściwości",
+            "name": "Nazwa",
+            "value": "Wartość",
+            "error": "Błąd"
         },
         "indicator": {
             <%_ if (messageBroker === 'kafka') { _%>
@@ -21,7 +21,7 @@
             "hystrix": "Hystrix",
             <%_ } _%>
             "diskSpace": "Przestrzeń dyskowa",
-            "mail": "E-mail"<% if (searchEngine === 'elasticsearch') { %>,
+            "mail": "Email"<% if (searchEngine === 'elasticsearch') { %>,
             "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql') { %>,
             "db": "Baza danych"<% } %><% if (databaseType === 'mongodb') { %>,
             "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,

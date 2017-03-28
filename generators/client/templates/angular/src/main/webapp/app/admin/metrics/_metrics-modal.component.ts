@@ -9,11 +9,11 @@ export class <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent implements
 
     threadDumpFilter: any;
     threadDump: any;
-    threadDumpAll: number = 0;
-    threadDumpBlocked: number = 0;
-    threadDumpRunnable: number = 0;
-    threadDumpTimedWaiting: number = 0;
-    threadDumpWaiting: number = 0;
+    threadDumpAll = 0;
+    threadDumpBlocked = 0;
+    threadDumpRunnable = 0;
+    threadDumpTimedWaiting = 0;
+    threadDumpWaiting = 0;
 
     constructor(public activeModal: NgbActiveModal) {}
 
@@ -34,15 +34,15 @@ export class <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent implements
             this.threadDumpTimedWaiting + this.threadDumpBlocked;
     }
 
-    getTagClass (threadState) {
+    getBadgeClass (threadState) {
         if (threadState === 'RUNNABLE') {
-            return 'tag-success';
+            return 'badge-success';
         } else if (threadState === 'WAITING') {
-            return 'tag-info';
+            return 'badge-info';
         } else if (threadState === 'TIMED_WAITING') {
-            return 'tag-warning';
+            return 'badge-warning';
         } else if (threadState === 'BLOCKED') {
-            return 'tag-danger';
+            return 'badge-danger';
         }
     }
 }

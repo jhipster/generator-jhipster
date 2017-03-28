@@ -43,15 +43,15 @@
             "newpassword.placeholder": "Neues Passwort",
             "confirmpassword": "Neues Passwort bestätigen",
             "confirmpassword.placeholder": "Bestätigen Sie Ihr neues Passwort",
-            "email": "E-Mail Adresse",
-            "email.placeholder": "Ihre E-Mail Adresse"
+            "email": "Email Adresse",
+            "email.placeholder": "Ihre Email Adresse"
         },
         "messages": {
             "info": {
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "Wenn Sie sich <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">anmelden</a> möchten, versuchen Sie es mit <br/>- Administrator (Name=\"admin\" und Passwort=\"admin\")<br/>- Benutzer (Name=\"user\" und Passwort=\"user\").",
                 "register": "Sie haben noch keinen Zugang? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Registrieren Sie sich</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Wenn Sie sich ",
                     "link": "anmelden",
@@ -79,10 +79,10 @@
                     "maxlength": "Das bestätigte Passwort darf nicht länger als 50 Zeichen sein"
                 },
                 "email": {
-                    "required": "Ihre E-Mail Adresse wird benötigt.",
-                    "invalid": "Ihre E-Mail Adresse ist ungültig.",
-                    "minlength": "Ihre E-Mail Adresse muss mindestens 5 Zeichen lang sein",
-                    "maxlength": "Ihre E-Mail Adresse darf nicht länger als 50 Zeichen sein"
+                    "required": "Ihre Email Adresse wird benötigt.",
+                    "invalid": "Ihre Email Adresse ist ungültig.",
+                    "minlength": "Ihre Email Adresse muss mindestens 5 Zeichen lang sein",
+                    "maxlength": "Ihre Email Adresse darf nicht länger als 50 Zeichen sein"
                 }
             }
         },
@@ -132,7 +132,7 @@
         "NotNull": "Feld {{fieldName}} kann nicht leer sein!",
         "Size": "Feld {{fieldName}} erfüllt nicht die minimalen/maximalen Voraussetzungen!",
         "userexists": "Benutzername bereits vergeben!",
-        "emailexists": "E-mail wird bereits verwendet!",
+        "emailexists": "Email wird bereits verwendet!",
         "idexists": "Ein neuer {{entityName}} kann noch keine ID haben"
     },
     "footer": "Dies ist Ihre Fußzeile"

@@ -2,7 +2,6 @@ import { Injectable, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-import { UserMgmtDialogComponent } from './user-management-dialog.component';
 import { User, UserService } from '../../shared';
 
 @Injectable()
@@ -31,11 +30,9 @@ export class UserModalService {
         let modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.user = user;
         modalRef.result.then(result => {
-            console.log(`Closed with: ${result}`);
             this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.isOpen = false;
         }, (reason) => {
-            console.log(`Dismissed ${reason}`);
             this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.isOpen = false;
         });

@@ -7,7 +7,7 @@
                 "createOrEditLabel": "Genera o modifica un <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
                 "search": "Cerca <%= entityClassHumanized %>"<% } %>
             },<% if (!microserviceAppName) { %>
-            "created": "&Egrave; stato generato un nuovo <%= entityClassHumanized %> con identificatore { param }}",
+            "created": "&Egrave; stato generato un nuovo <%= entityClassHumanized %> con identificatore {{ param }}",
             "updated": "&Egrave; stato aggiornato <%= entityClassHumanized %> identificato da {{ param }}",
             "deleted": "&Egrave; stato eliminato <%= entityClassHumanized %> con identificatore {{ param }}",<% } %>
             "delete": {

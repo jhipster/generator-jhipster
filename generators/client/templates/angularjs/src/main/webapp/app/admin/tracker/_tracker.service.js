@@ -27,7 +27,7 @@
         return service;
 
         function connect () {
-            //building absolute path so that websocket doesnt fail when deploying with a context path
+            //building absolute path so that websocket doesn't fail when deploying with a context path
             var loc = $window.location;
             var url = '//' + loc.host + loc.pathname + 'websocket/tracker';<% if (authenticationType === 'oauth2') { %>
             /*jshint camelcase: false */

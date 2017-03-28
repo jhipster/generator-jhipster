@@ -43,15 +43,15 @@
             "newpassword.placeholder": "Nova palavra-passe",
             "confirmpassword": "Confirmação de nova palavra-passe",
             "confirmpassword.placeholder": "Confirme a nova palavra-passe",
-            "email": "E-mail",
-            "email.placeholder": "O seu e-mail"
+            "email": "Email",
+            "email.placeholder": "O seu email"
         },
         "messages": {
             "info": {
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "Para <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">entrar</a>, utilize as seguintes contas:<br/>- Administrador (utilizador=\"admin\" e palavra-passe=\"admin\") <br/>- Utilizador (utilizador=\"user\" e palavra-passe=\"user\").",
                 "register": "Ainda não tem uma conta? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Crie uma nova conta</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Para ",
                     "link": "entrar",
@@ -79,10 +79,10 @@
                     "maxlength": "A confirmação da palavra-passe não pode ter mais de 50 caracteres"
                 },
                 "email": {
-                    "required": "O e-mail é obrigatório.",
-                    "invalid": "E-mail inválido.",
-                    "minlength": "O e-mail deve ter pelo menos 5 caracteres",
-                    "maxlength": "O e-mail não pode ter mais de 50 caracteres"
+                    "required": "O email é obrigatório.",
+                    "invalid": "Email inválido.",
+                    "minlength": "O email deve ter pelo menos 5 caracteres",
+                    "maxlength": "O email não pode ter mais de 50 caracteres"
                 }
             }
         },
@@ -132,7 +132,7 @@
         "NotNull": "Field {{fieldName}} cannot be empty!",
         "Size": "Field {{fieldName}} does not meet min/max size requirements!",
         "userexists": "Login name already used!",
-        "emailexists": "E-mail is already in use!",
+        "emailexists": "Email is already in use!",
         "idexists": "A new {{entityName}} cannot already have an ID"
     },
     "footer": "Este é o seu rodapé"

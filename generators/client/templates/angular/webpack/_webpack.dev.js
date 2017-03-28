@@ -14,14 +14,15 @@ if (!fs.existsSync(ddlPath)) {
     execSync('webpack --config webpack/webpack.vendor.js');
 }
 
-module.exports = webpackMerge(commonConfig({env: ENV}), {
+module.exports = webpackMerge(commonConfig({ env: ENV }), {
     devtool: 'inline-source-map',
     devServer: {
         contentBase: './<%= BUILD_DIR %>www',
         proxy: [{
             context: [<% if (authenticationType === 'oauth2') { %>
                 '/oauth',<% } %><% if (authenticationType === 'uaa') { %>
-                '/uaa',<% } %>
+                '/<%= uaaBaseName.toLowerCase() %>',<% } %>
+                <!-- jhipster-needle-add-entity-to-webpack - JHipster will add entity api paths here -->
                 '/api',
                 '/management',
                 '/swagger-resources',
@@ -39,7 +40,7 @@ module.exports = webpackMerge(commonConfig({env: ENV}), {
         }<% } %>]
     },
     output: {
-        path: path.resolve('<%= BUILD_DIR %>www') ,
+        path: path.resolve('<%= BUILD_DIR %>www'),
         filename: '[name].bundle.js',
         chunkFilename: '[id].chunk.js'
     },
@@ -56,7 +57,10 @@ module.exports = webpackMerge(commonConfig({env: ENV}), {
         new BrowserSyncPlugin({
             host: 'localhost',
             port: 9000,
-            proxy: 'http://localhost:9060'
+            proxy: {
+                target: 'http://localhost:9060'<% if (websocket === 'spring-websocket') { %>,
+                ws: true<% } %>
+            }
         }, {
             reload: false
         }),

@@ -38,8 +38,9 @@ public class MongoDBTokenStore implements TokenStore {
     }
 
     @Override
-    public OAuth2Authentication readAuthentication(String tokenId) {
-        return oAuth2AccessTokenRepository.findByTokenId(tokenId).getAuthentication();
+    public OAuth2Authentication readAuthentication(String tokenValue) {
+        OAuth2AuthenticationAccessToken token = oAuth2AccessTokenRepository.findByTokenId(tokenValue);
+        return token == null ? null : token.getAuthentication();
     }
 
     @Override
@@ -52,10 +53,7 @@ public class MongoDBTokenStore implements TokenStore {
     @Override
     public OAuth2AccessToken readAccessToken(String tokenValue) {
         OAuth2AuthenticationAccessToken token = oAuth2AccessTokenRepository.findByTokenId(tokenValue);
-        if(token == null) {
-            return null;
-        }
-        return token.getoAuth2AccessToken();
+        return token == null ? null : token.getoAuth2AccessToken();
     }
 
     @Override
@@ -73,12 +71,14 @@ public class MongoDBTokenStore implements TokenStore {
 
     @Override
     public OAuth2RefreshToken readRefreshToken(String tokenValue) {
-        return oAuth2RefreshTokenRepository.findByTokenId(tokenValue).getoAuth2RefreshToken();
+        OAuth2AuthenticationRefreshToken token = oAuth2RefreshTokenRepository.findByTokenId(tokenValue);
+        return token == null ? null : token.getoAuth2RefreshToken();
     }
 
     @Override
     public OAuth2Authentication readAuthenticationForRefreshToken(OAuth2RefreshToken token) {
-        return oAuth2RefreshTokenRepository.findByTokenId(token.getValue()).getAuthentication();
+        OAuth2AuthenticationRefreshToken refreshToken = oAuth2RefreshTokenRepository.findByTokenId(token.getValue());
+        return refreshToken == null ? null : refreshToken.getAuthentication();
     }
 
     @Override
@@ -116,7 +116,7 @@ public class MongoDBTokenStore implements TokenStore {
     }
 
     private Collection<OAuth2AccessToken> extractAccessTokens(List<OAuth2AuthenticationAccessToken> tokens) {
-        List<OAuth2AccessToken> accessTokens = new ArrayList<OAuth2AccessToken>();
+        List<OAuth2AccessToken> accessTokens = new ArrayList<>();
         for(OAuth2AuthenticationAccessToken token : tokens) {
             accessTokens.add(token.getoAuth2AccessToken());
         }

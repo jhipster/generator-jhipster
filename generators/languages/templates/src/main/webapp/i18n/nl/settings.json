@@ -12,7 +12,7 @@
         "messages": {
             "error": {
                 "fail": "<strong>Er is een fout opgetreden!</strong> Instellingen kunnen niet worden opgeslagen.",
-                "emailexists": "<strong>E-mail is al in gebruik!</strong> Gelieve een andere te kiezen."
+                "emailexists": "<strong>Email is al in gebruik!</strong> Gelieve een andere te kiezen."
             },
             "success": "<strong>Instellingen opgeslagen!</strong>",
             "validate": {

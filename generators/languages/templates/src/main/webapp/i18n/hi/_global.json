@@ -51,7 +51,7 @@
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "आप <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">साइन इन</a> करने के लिए चाहते हैं, तो आप डिफ़ॉल्ट खातों का प्रयास कर सकते हैं <br/>- व्यवस्थापक (लॉगिन = \"admin\" और पासवर्ड = \"admin\") <br/>- उपयोगकर्ता(लॉगिन \"user\" और पासवर्ड= \"user\")",
                 "register": "आपका खाता मौजूद नहीं है? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">एक नया खाता पंजीकृत करें</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "आप ",
                     "link": "साइन इन",

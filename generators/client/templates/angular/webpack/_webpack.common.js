@@ -38,7 +38,14 @@ module.exports = function (options) {
                 },
                 {
                     test: /\.html$/,
-                    loader: 'raw-loader',
+                    loader: 'html-loader',
+                    options: {
+                        minimize: true,
+                        caseSensitive: true,
+                        removeAttributeQuotes:false,
+                        minifyJS:false,
+                        minifyCSS:false
+                    },
                     exclude: ['./src/main/webapp/index.html']
                 },
                 <%_ if (useSass) { _%>
@@ -64,8 +71,17 @@ module.exports = function (options) {
                 {
                     test: /\.(jpe?g|png|gif|svg|woff|woff2|ttf|eot)$/i,
                     loaders: [
-                        'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
-                        'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
+                        'file-loader?hash=sha512&digest=hex&name=[hash].[ext]', {
+                            loader: 'image-webpack-loader',
+                            query: {
+                                gifsicle: {
+                                    interlaced: false
+                                },
+                                optipng: {
+                                    optimizationLevel: 7
+                                }
+                            }
+                        }
                     ]
                 },
                 {
@@ -76,8 +92,8 @@ module.exports = function (options) {
                             replacement: function (match, p1, offset, string) {
                                 return `_${p1} = ${DATAS[p1]};`;
                             }
-                        }
-                    ]})
+                        }]
+                    })
                 }
             ]
         },
@@ -90,6 +106,7 @@ module.exports = function (options) {
                 manifest: require(path.resolve('./<%= BUILD_DIR %>www/vendor.json')),
             }),
             new CopyWebpackPlugin([
+                { from: './node_modules/core-js/client/shim.min.js', to: 'core-js-shim.min.js' },
                 { from: './node_modules/swagger-ui/dist', to: 'swagger-ui/dist' },
                 { from: './src/main/webapp/swagger-ui/', to: 'swagger-ui' },
                 { from: './src/main/webapp/favicon.ico', to: 'favicon.ico' },

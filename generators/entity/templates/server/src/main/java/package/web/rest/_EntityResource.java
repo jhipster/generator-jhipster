@@ -52,9 +52,9 @@ public class <%= entityClass %>Resource {
     private final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
 
     private static final String ENTITY_NAME = "<%= entityInstance %>";
-    <% var viaService = service != 'no';
-    var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
-    var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance; -%>
+    <% const viaService = service != 'no';
+    const instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
+    const instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance; -%>
     <%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource'}); -%>
 
     /**
@@ -102,8 +102,7 @@ public class <%= entityClass %>Resource {
      *<% if (pagination != 'no') { %>
      * @param pageable the pagination information<% } if (fieldsContainNoOwnerOneToOne) { %>
      * @param filter the filter of the request<% } %>
-     * @return the ResponseEntity with status 200 (OK) and the list of <%= entityInstancePlural %> in body<% if (pagination != 'no') { %>
-     * @throws URISyntaxException if there is an error to generate the pagination HTTP headers<% } %>
+     * @return the ResponseEntity with status 200 (OK) and the list of <%= entityInstancePlural %> in body
      */
     @GetMapping("/<%= entityApiUrl %>")
     @Timed<%- include('../../common/get_all_template', {viaService: viaService}); -%>
@@ -140,8 +139,7 @@ public class <%= entityClass %>Resource {
      *
      * @param query the query of the <%= entityInstance %> search <% if (pagination != 'no') { %>
      * @param pageable the pagination information<% } %>
-     * @return the result of the search<% if (pagination != 'no') { %>
-     * @throws URISyntaxException if there is an error to generate the pagination HTTP headers<% } %>
+     * @return the result of the search
      */
     @GetMapping("/_search/<%= entityApiUrl %>")
     @Timed<%- include('../../common/search_template', {viaService: viaService}); -%><% } %>

@@ -1,4 +1,4 @@
-import { browser, element, by, $ } from 'protractor';
+import { browser, element, by } from 'protractor';
 <%_
 let elementGetter = `getText()`;
 if (enableTranslation) {

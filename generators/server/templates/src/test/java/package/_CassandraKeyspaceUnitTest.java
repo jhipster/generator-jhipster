@@ -1,7 +1,7 @@
 package <%=packageName%>;
 
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Session;
+import com.datastax.driver.core.*;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -23,9 +23,7 @@ public class CassandraKeyspaceUnitTest extends AbstractCassandraTest {
 
     @Test
     public void shouldListCassandraUnitKeyspace() throws Exception {
-        ResultSet result = session.execute("SELECT * FROM system_schema.keyspaces;");
-        assertThat(result.all())
-            .extracting(row -> row.getString("keyspace_name"))
-            .containsOnlyOnce((CASSANDRA_UNIT_KEYSPACE));
+        Metadata metadata = session.getCluster().getMetadata();
+        assertThat(metadata.getKeyspace(CASSANDRA_UNIT_KEYSPACE)).isNotNull();
     }
 }

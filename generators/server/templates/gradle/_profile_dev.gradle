@@ -31,7 +31,7 @@ task gulpConstantDev(type: GulpTask) {
     args = ["ngconstant:dev", "--no-notification"]
 }
     <%_ } else { _%>
-task webpack(type: <%= clientPackageManager.charAt(0).toUpperCase() + clientPackageManager.slice(1) %>Task, dependsOn: '<%= clientPackageManager %>_install') {
+task webpackBuildDev(type: <%= clientPackageManager.charAt(0).toUpperCase() + clientPackageManager.slice(1) %>Task) {
     args = ["run", "webpack:build:dev"]
 }
     <%_ } _%>
@@ -56,6 +56,9 @@ processResources {
         filter {
             it.replace('#spring.profiles.active#', profiles)
         }
+        filter {
+            it.replace('#project.version#', version)
+        }
     }
 }
 
@@ -63,7 +66,7 @@ processResources {
     <%_ if (clientFramework === 'angular1') { _%>
 processResources.dependsOn gulpConstantDev
     <%_ } else { _%>
-processResources.dependsOn webpack
-webpack.onlyIf { project.hasProperty('webpack') }
+processResources.dependsOn webpackBuildDev
+webpackBuildDev.onlyIf { project.hasProperty('webpack') }
     <%_ } _%>
 <%_ } _%>

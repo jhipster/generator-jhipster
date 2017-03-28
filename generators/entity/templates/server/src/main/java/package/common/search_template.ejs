@@ -1,15 +1,14 @@
 <%_
-    var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
-    var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
-    var mapper = entityInstance + 'Mapper';
-    var entityToDtoReference = mapper + '::'+ entityInstance +'To' + entityClass + 'DTO';
-    var entityListToDtoListReference = mapper + '.'+ entityInstancePlural +'To' + entityClass + 'DTOs';
+    const instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
+    const instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
+    const mapper = entityInstance + 'Mapper';
+    const entityToDtoReference = mapper + '::'+ entityInstance +'To' + entityClass + 'DTO';
+    const entityListToDtoListReference = mapper + '.'+ entityInstancePlural +'To' + entityClass + 'DTOs';
     if (pagination == 'no') { %>
     public List<<%= instanceType %>> search<%= entityClassPlural %>(@RequestParam String query) {
         log.debug("REST request to search <%= entityClassPlural %> for query {}", query);<%- include('search_stream_template', {viaService: viaService}); -%>
     <% } if (pagination != 'no') { %>
-    public ResponseEntity<List<<%= instanceType %>>> search<%= entityClassPlural %>(@RequestParam String query, @ApiParam Pageable pageable)
-        throws URISyntaxException {
+    public ResponseEntity<List<<%= instanceType %>>> search<%= entityClassPlural %>(@RequestParam String query, @ApiParam Pageable pageable) {
         log.debug("REST request to search for a page of <%= entityClassPlural %> for query {}", query);<% if (viaService) { %>
         Page<<%= instanceType %>> page = <%= entityInstance %>Service.search(query, pageable);<% } else { %>
         Page<<%= entityClass %>> page = <%= entityInstance %>SearchRepository.search(queryStringQuery(query), pageable);<% } %>

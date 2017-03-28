@@ -22,7 +22,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
     connectedPromise: any;
     listener: Observable<any>;
     listenerObserver: Observer<any>;
-    alreadyConnectedOnce: boolean = false;
+    alreadyConnectedOnce = false;
     private subscription: Subscription;
 
     constructor(
@@ -42,7 +42,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         if (this.connectedPromise === null) {
           this.connection = this.createConnection();
         }
-        // building absolute path so that websocket doesnt fail when deploying with a context path
+        // building absolute path so that websocket doesn't fail when deploying with a context path
         const loc = this.$window.location;
         let url = '//' + loc.host + loc.pathname + 'websocket/tracker';
         <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa' || authenticationType === 'oauth2') { _%>

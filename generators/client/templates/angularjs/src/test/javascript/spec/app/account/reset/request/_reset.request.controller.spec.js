@@ -71,11 +71,11 @@ describe('Controller Tests', function() {
             expect($scope.vm.error).toBeNull();
             expect($scope.vm.errorEmailNotExists).toBeNull();
         });
-        it('notifies of unknown email upon e-mail address not registered/400', function() {
+        it('notifies of unknown email upon email address not registered/400', function() {
             // given
             MockAuth.resetPasswordInit.and.returnValue($q.reject({
                 status: 400,
-                data: 'e-mail address not registered'
+                data: 'email address not registered'
             }));
             createController();
             $scope.vm.resetAccount.email = 'user@domain.com';

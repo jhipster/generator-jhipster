@@ -23,7 +23,7 @@
                 <%_ if (applicationType === 'gateway') { _%>
                 "gateway": "Gateway",
                 <%_ } _%>
-                "userManagement": "User management",
+                "userManagement": "Użytkownicy",
                 "tracker": "Śledzenie użytkownika",
                 "metrics": "Metryki",
                 "health": "Status",
@@ -43,15 +43,15 @@
             "newpassword.placeholder": "Nowe hasło",
             "confirmpassword": "Potwierdź nowe hasło",
             "confirmpassword.placeholder": "Potwierdź nowe hasło",
-            "email": "E-mail",
-            "email.placeholder": "Twój e-mail"
+            "email": "Email",
+            "email.placeholder": "Twój email"
         },
         "messages": {
             "info": {
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "Jeśli chcesz się <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">zalogować</a>, możesz spróbować któregoś z domyślnych kont:<br/>- Administrator (login=\"admin\" i hasło=\"admin\") <br/>- Użytkownik (login=\"user\" i hasło=\"user\").",
                 "register": "Nie masz jeszcze konta? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Zarejestruj się</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Jeśli chcesz się ",
                     "link": "zalogować",
@@ -79,10 +79,10 @@
                     "maxlength": "Potwierdzenie hasła nie powinno być dłuższe niż 50 znaków"
                 },
                 "email": {
-                    "required": "Twój e-mail jest wymagany.",
-                    "invalid": "Twój e-mail jest błędny.",
-                    "minlength": "Twój e-mail musi mieć przynajmniej 5 znaków",
-                    "maxlength": "Twój e-mail nie może być dłuższy niż 50 znaków"
+                    "required": "Twój email jest wymagany.",
+                    "invalid": "Twój email jest błędny.",
+                    "minlength": "Twój email musi mieć przynajmniej 5 znaków",
+                    "maxlength": "Twój email nie może być dłuższy niż 50 znaków"
                 }
             }
         },
@@ -95,13 +95,13 @@
     },
     "entity": {
         "action": {
-            "addblob": "Add blob",
-            "addimage": "Add image",
+            "addblob": "Dodaj dane binarne",
+            "addimage": "Dodaj zdjęcie",
             "back": "Wstecz",
             "cancel": "Anuluj",
             "delete": "Usuń",
             "edit": "Edytuj",
-            "open": "Open",
+            "open": "Otwórz",
             "save": "Zapisz",
             "view": "Widok"
         },
@@ -126,14 +126,14 @@
         }
     },
     "error": {
-        "internalServerError": "Internal server error",
+        "internalServerError": "Wewnętrzny błąd serwera",
         "server.not.reachable": "Serwer jest nieosiągalny",
-        "url.not.found": "Not found",
+        "url.not.found": "Nie znaleziono",
         "NotNull": "Wartość {{fieldName}} nie może być pusta!",
         "Size": "Wartość {{fieldName}} nie spełnia wymagań co do długości!",
-        "userexists": "Login name already used!",
-        "emailexists": "E-mail is already in use!",
-        "idexists": "A new {{entityName}} cannot already have an ID"
+        "userexists": "Użytkownik o takiej nazwie już istnieje!",
+        "emailexists": "Użytkownik z takim adresem email już istnieje!",
+        "idexists": "Nowy {{entityName}} nie może jeszcze mieć przypisanego ID"
     },
     "footer": "To jest stopka"
 }

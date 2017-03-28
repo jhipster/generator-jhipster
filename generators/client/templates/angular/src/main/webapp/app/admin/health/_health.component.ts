@@ -30,11 +30,11 @@ export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
         return this.healthService.getBaseName(name);
     }
 
-    getTagClass(statusState) {
+    getBadgeClass(statusState) {
         if (statusState === 'UP') {
-            return 'tag-success';
+            return 'badge-success';
         } else {
-            return 'tag-danger';
+            return 'badge-danger';
         }
     }
 
@@ -56,9 +56,9 @@ export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
         const modalRef  = this.modalService.open(<%=jhiPrefixCapitalized%>HealthModalComponent);
         modalRef.componentInstance.currentHealth = health;
         modalRef.result.then((result) => {
-            console.log(`Closed with: ${result}`);
+            // Left blank intentionally, nothing to do here
         }, (reason) => {
-            console.log(`Dismissed ${reason}`);
+            // Left blank intentionally, nothing to do here
         });
     }
 

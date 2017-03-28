@@ -154,11 +154,7 @@ Generic styles
 /* ==========================================================================
 make sure browsers use the pointer cursor for anchors, even with no href
 ========================================================================== */
-a:hover {
-  cursor: pointer;
-}
-
-.hand {
+a:hover, .hand, [jh-sort-by] {
     cursor: pointer;
 }
 
@@ -305,14 +301,14 @@ entity tables helpers
 /* ==========================================================================
 entity detail page css
 ========================================================================== */
-.row.jh-entity-details > {
+.dl-horizontal.jh-entity-details > {
     dd {
         margin-bottom: 15px;
     }
 }
 
 @media screen and (min-width: 768px) {
-    .row.jh-entity-details > {
+    .dl-horizontal.jh-entity-details > {
         dt {
             margin-bottom: 15px;
         }

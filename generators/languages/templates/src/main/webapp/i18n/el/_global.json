@@ -43,15 +43,15 @@
             "newpassword.placeholder": "Καινούργιος κωδικός",
             "confirmpassword": "Επιβεβαίωση καινούργιου κωδικού",
             "confirmpassword.placeholder": "Επιβεβαιώστε τον καινούργιο κωδικό σας",
-            "email": "E-mail",
-            "email.placeholder": "Το E-mail σας"
+            "email": "Email",
+            "email.placeholder": "Το Email σας"
         },
         "messages": {
             "info": {
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "Αν θέλετε να <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">συνδεθείτε</a>, μπορείτε να δοκιμάσετε τους ακολουθους ήδη υπάρχων λογαριασμούς:<br/>- Διαχειριστής (login=\"admin\" και κωδικός=\"admin\") <br/>- Χρήστης (login=\"user\" και κωδικός=\"user\").",
                 "register": "Δεν έχετε λογαριασμό; <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Δημιουργήστε έναν νέο λογαριασμό</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Αν θέλετε να ",
                     "link": "συνδεθείτε",
@@ -79,10 +79,10 @@
                     "maxlength": "Η επιβεβαίωση του κωδικού σας δεν μπορεί να περιέχει πάνω από 50 χαρακτήρες."
                 },
                 "email": {
-                    "required": "Το e-mail σας είναι υποχρεωτικό.",
-                    "invalid": "Το e-mail σας δεν είναι έγκυρο.",
-                    "minlength": "Το e-mail σας πρέπει να περιέχει τουλάχιστον 5 χαρακτήρες.",
-                    "maxlength": "Το e-mail σας δεν μπορεί να περιέχει πάνω από 50 χαρακτήρες."
+                    "required": "Το email σας είναι υποχρεωτικό.",
+                    "invalid": "Το email σας δεν είναι έγκυρο.",
+                    "minlength": "Το email σας πρέπει να περιέχει τουλάχιστον 5 χαρακτήρες.",
+                    "maxlength": "Το email σας δεν μπορεί να περιέχει πάνω από 50 χαρακτήρες."
                 }
             }
         },
@@ -132,7 +132,7 @@
         "NotNull": "Το ακόλουθο πεδίο δεν μπορεί να είναι κενό: {{ fieldName }}",
         "Size": "Το ακόλουθο πεδίο δεν τηρεί της προϋποθέσεις μήκους/χωρητικότητας: {{ fieldName }}",
         "userexists": "Αυτό το όνομα σύνδεσης είναι ήδη εγγεγραμμένο!",
-        "emailexists": "Αυτό το e-mail είναι ήδη εγγεγραμμένο!",
+        "emailexists": "Αυτό το email είναι ήδη εγγεγραμμένο!",
         "idexists": "Ένα καινούργιο {{ entityName }} δεν μπορεί να έχει είδη ένα ID."
     },
     "footer": "Αυτό είναι το υποσέλιδο σας"

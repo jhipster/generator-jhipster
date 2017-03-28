@@ -4,53 +4,72 @@ machine:
     java:
         version: oraclejdk8
     node:
-        version: 4.5.0
+        version: <%= NODE_VERSION %>
 dependencies:
     cache_directories:
-        <%_ if (!skipClient) { _%>
         - node
         - node_modules
-        <%_ } _%>
-        <%_ if (buildTool === 'maven') { _%>
+<%_ if (buildTool === 'maven') { _%>
         - ~/.m2
-        <%_ } else if (buildTool === 'gradle') { _%>
+<%_ } else if (buildTool === 'gradle') { _%>
         - ~/.gradle
-        <%_ } _%>
-    <%_ if (!skipClient) { _%>
+<%_ } _%>
+<%_ if (clientPackageManager === 'yarn') { _%>
+        - $HOME/.yarn-cache
+<%_ } _%>
     override:
+        - java -version
+<%_ if (clientPackageManager === 'npm') { _%>
         - npm install -g npm
+    <%_ if (clientFramework === 'angular1') { _%>
         - npm install -g bower gulp
+    <%_ } _%>
         - node -v
         - npm -v
+    <%_ if (clientFramework === 'angular1') { _%>
         - bower -v
         - gulp -v
+    <%_ } _%>
         - java -version
         - npm install
-    <%_ } else { _%>
-    override:
-        - java -version
+<%_ } else if (clientPackageManager === 'yarn') { _%>
+        # Repo for Yarn
+        - curl -o- -L https://yarnpkg.com/install.sh | bash
+        - export PATH=$HOME/.yarn/bin:$PATH
+    <%_ if (clientFramework === 'angular1') { _%>
+        - yarn global add bower gulp-cli
     <%_ } _%>
+        - yarn install
+<%_ } _%>
 test:
     override:
 <%_ if (buildTool === 'maven') { _%>
-        - ./mvnw clean
-        - ./mvnw test
+        - chmod +x mvnw
+        - ./mvnw clean test
 <%_ } else if (buildTool === 'gradle') { _%>
-        - ./gradlew clean
-        - ./gradlew test --no-daemon
+        - chmod +x gradlew
+        - ./gradlew clean test --no-daemon
 <%_ } _%>
-<%_ if (!skipClient) { _%>
+<%_ if (applicationType !== 'microservice') { _%>
+    <%_ if (clientFramework === 'angular1') { _%>
         - gulp test
+    <%_ } else { _%>
+        <%_ if (clientPackageManager === 'yarn') { _%>
+        - yarn test
+        <%_ } else if (clientPackageManager === 'npm') { _%>
+        - npm test
+        <%_ } _%>
+    <%_ } _%>
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
-    <%_ if (integrations.includes('heroku')) { _%>
-        - HEROKU_API_KEY=\"<%= herokuApiKey %>\" ./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy-war -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>
+    <%_ if (heroku.includes('circle')) { _%>
+        - ./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy-war -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>
     <%_ } else { _%>
         - ./mvnw package -Pprod -DskipTests
     <%_ } _%>
 <%_ } else if (buildTool === 'gradle') { _%>
         - ./gradlew bootRepackage -Pprod -x test --no-daemon
-    <%_ if (integrations.includes('heroku')) { _%>
-        - HEROKU_API_KEY="<%= herokuApiKey %>" ./gradlew deployHeroku --no-daemon
+    <%_ if (heroku.includes('circle')) { _%>
+        - ./gradlew deployHeroku --no-daemon
     <%_ } _%>
 <%_ } _%>

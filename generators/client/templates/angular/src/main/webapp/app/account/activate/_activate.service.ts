@@ -13,6 +13,6 @@ export class Activate {
 
         return this.http.get(<% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/activate'<%} else { %>'api/activate'<% } %>, {
             search: params
-        }).map((res: Response) => res.json());
+        }).map((res: Response) => res);
     }
 }

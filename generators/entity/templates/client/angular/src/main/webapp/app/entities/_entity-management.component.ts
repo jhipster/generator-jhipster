@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 import { EventManager, ParseLinks, PaginationUtil<% if (enableTranslation) { %>, JhiLanguageService<% } %>, AlertService<% if (fieldsContainBlob) { %>, DataUtils<% } %> } from 'ng-jhipster';
 
-import { <%= entityClass %> } from './<%= entityFileName %>.model';
-import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
+import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
+import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 import { ITEMS_PER_PAGE, Principal } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
@@ -13,13 +13,13 @@ import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
     selector: '<%= jhiPrefix %>-<%= entityFileName %>',
     templateUrl: './<%= entityFileName %>.component.html'
 })
-export class <%= entityAngularJSName %>Component implements OnInit, OnDestroy {
+export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
     <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
-<%- include('pagination-template'); -%>
+<%- include('pagination-template', {toArrayString: toArrayString}); -%>
     <%_ } else if (pagination === 'infinite-scroll') { _%>
-<%- include('infinite-scroll-template'); -%>
+<%- include('infinite-scroll-template', {toArrayString: toArrayString}); -%>
     <%_ } else if (pagination === 'no') { _%>
-<%- include('no-pagination-template'); -%>
+<%- include('no-pagination-template', {toArrayString: toArrayString}); -%>
     <%_ } _%>
     ngOnInit() {
         this.loadAll();
@@ -33,7 +33,7 @@ export class <%= entityAngularJSName %>Component implements OnInit, OnDestroy {
         this.eventManager.destroy(this.eventSubscriber);
     }
 
-    trackId (index: number, item: <%= entityClass %>) {
+    trackId (index: number, item: <%= entityAngularName %>) {
         return item.id;
     }
 

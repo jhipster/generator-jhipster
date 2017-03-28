@@ -4,8 +4,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URISyntaxException;
-
 /**
  * Utility class for handling pagination.
  *
@@ -18,8 +16,7 @@ public final class PaginationUtil {
     private PaginationUtil() {
     }
 
-    public static HttpHeaders generatePaginationHttpHeaders(Page page, String baseUrl)
-        throws URISyntaxException {
+    public static HttpHeaders generatePaginationHttpHeaders(Page page, String baseUrl) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Total-Count", "" + Long.toString(page.getTotalElements()));
@@ -42,13 +39,12 @@ public final class PaginationUtil {
         return headers;
     }
 
-    private static String generateUri(String baseUrl, int page, int size) throws URISyntaxException {
+    private static String generateUri(String baseUrl, int page, int size) {
         return UriComponentsBuilder.fromUriString(baseUrl).queryParam("page", page).queryParam("size", size).toUriString();
     }
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
-    public static HttpHeaders generateSearchPaginationHttpHeaders(String query, Page page, String baseUrl)
-        throws URISyntaxException {
+    public static HttpHeaders generateSearchPaginationHttpHeaders(String query, Page page, String baseUrl) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Total-Count", "" + page.getTotalElements());
