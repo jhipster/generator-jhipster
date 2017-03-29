@@ -14,9 +14,15 @@ function getDate(isToday= true){
     if (isToday) {
         // Today + 1 day - needed if the current day must be included
         date.setDate(date.getDate() + 1);
-        return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+    } else {
+      // get last month
+      if(date.getMonth() === 0) {
+        date = new Date(date.getFullYear() - 1, 11, date.getDate());
+      } else {
+        date = new Date(date.getFullYear(), date.getMonth() - 1, date.getDate());
+      }
     }
-    return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 }
 
 describe('Component Tests', () => {
