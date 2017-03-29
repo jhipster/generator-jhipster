@@ -67,7 +67,7 @@ describe('Component Tests', () => {
         });
 
         describe('previousMonth function ', () => {
-            it('should set toDate to current date', () => {
+            it('should set fromDate to current date', () => {
                comp.previousMonth();
                expect(comp.fromDate).toBe(getDate(false));
             });
