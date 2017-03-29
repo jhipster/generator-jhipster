@@ -1,6 +1,7 @@
 package <%=packageName%>.web.rest.errors;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * View Model for sending a parameterized error message.
@@ -8,20 +9,21 @@ import java.io.Serializable;
 public class ParameterizedErrorVM implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private final String message;
-    private final String[] params;
 
-    public ParameterizedErrorVM(String message, String... params) {
+    private final String message;
+    private final Map<String, String> paramMap;
+
+    public ParameterizedErrorVM(String message, Map<String, String> paramMap) {
         this.message = message;
-        this.params = params;
+        this.paramMap = paramMap;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public String[] getParams() {
-        return params;
+    public Map<String, String> getParams() {
+        return paramMap;
     }
 
 }

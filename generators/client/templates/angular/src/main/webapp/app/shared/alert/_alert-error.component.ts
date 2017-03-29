@@ -62,7 +62,7 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
                                 'Field ' + fieldName + ' cannot be empty', 'error.' + fieldError.message, {fieldName: fieldName});
                         }
                     } else if (httpResponse.text() !== '' && httpResponse.json() && httpResponse.json().message) {
-                        this.addErrorAlert(httpResponse.json().message, httpResponse.json().message, httpResponse.json());
+                        this.addErrorAlert(httpResponse.json().message, httpResponse.json().message, httpResponse.json().params);
                     } else {
                         this.addErrorAlert(httpResponse.text());
                     }
