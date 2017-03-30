@@ -62,7 +62,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
             query += "\n                }, (subRes: Response) => this.onError(subRes.json()));"
             query += "\n            }"
             query += "\n        }, (res: Response) => this.onError(res.json()));"
-        } else  if (relationships[idx].relationshipType != 'one-to-many') {
+        } else if (relationships[idx].relationshipType != 'one-to-many') {
             variableName = relationships[idx].otherEntityNameCapitalizedPlural.toLowerCase();
             if (variableName === entityInstance) {
                 variableName += 'Collection';
@@ -162,7 +162,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     const entitiesSeen = [];
     for (idx in relationships) {
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
-            if(entitiesSeen.indexOf(otherEntityNameCapitalized) == -1) {
+            if(relationships[idx].relationshipType != 'one-to-many' && entitiesSeen.indexOf(otherEntityNameCapitalized) == -1) {
     _%>
 
     track<%- otherEntityNameCapitalized -%>ById(index: number, item: <%- relationships[idx].otherEntityAngularName -%>) {
