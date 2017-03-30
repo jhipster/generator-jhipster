@@ -188,11 +188,15 @@ const ngValidators = './ng_validators';
             <label data-translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
                 <%_ if (dto == 'no') { _%>
             <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=otherEntityNamePlural.toLowerCase() %> track by <%=otherEntityName %>.id"<% if (relationshipRequired) { %> required<% } %>>
+                <%_ if (!relationshipRequired) { _%>
                 <option value=""></option>
+                <%_ } _%>
             </select>
                 <%_ } else { _%>
             <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>Id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=otherEntityNamePlural.toLowerCase() %>"            <% if (relationshipRequired) { %> required<% } %>>
+                <%_ if (!relationshipRequired) { _%>
                 <option value=""></option>
+                <%_ } _%>
             </select>
             <%_ } _%>
         </div>
@@ -201,11 +205,15 @@ const ngValidators = './ng_validators';
             <label data-translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
                 <%_ if (dto == 'no') { _%>
             <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=relationshipFieldNamePlural.toLowerCase() %> | orderBy:'id' track by <%=otherEntityName %>.id"<% if (relationshipRequired) { %> required<% } %>>
+                <%_ if (!relationshipRequired) { _%>
                 <option value=""></option>
+                <%_ } _%>
             </select>
                 <%_ } else { _%>
             <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>Id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=relationshipFieldNamePlural.toLowerCase() %> | orderBy:'id'"<% if (relationshipRequired) { %> required<% } %>>
+                <%_ if (!relationshipRequired) { _%>
                 <option value=""></option>
+                <%_ } _%>
             </select>
                 <%_ } _%>
         </div>
