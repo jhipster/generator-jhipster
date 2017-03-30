@@ -242,9 +242,7 @@ dependencies {
     <%_ if (databaseType === 'sql') { _%>
     compile "org.hibernate:hibernate-envers"
     compile "org.hibernate:hibernate-validator"
-    compile ("org.liquibase:liquibase-core") {
-        exclude(module: 'jetty-servlet')
-    }
+    compile ("org.liquibase:liquibase-core")
     compile "com.mattbertolini:liquibase-slf4j:${liquibase_slf4j_version}"
     <%_ } _%>
     compile "org.springframework.boot:spring-boot-actuator"

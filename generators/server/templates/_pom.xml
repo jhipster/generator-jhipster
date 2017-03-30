@@ -461,12 +461,6 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>jetty-servlet</artifactId>
-                    <groupId>org.eclipse.jetty</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <%_ } _%>
         <%_ if (databaseType === 'mongodb') { _%>
