@@ -16,9 +16,11 @@ import { EventManager, AlertService<% if (enableTranslation) { %>, JhiLanguageSe
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { <%= entityAngularName %>PopupService } from './<%= entityFileName %>-popup.service';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
-<%_ for (const rel of differentRelationships) { _%>
+<%_ for (const rel of differentRelationships) {
+    if (rel.relationshipType != 'one-to-many') { _%>
 import { <%= rel.otherEntityAngularName %>, <%= rel.otherEntityAngularName%>Service } from '../<%= rel.otherEntityModulePath %>';
-<%_ } _%>
+<%_ }
+} _%>
 <%_
 // TODO replace ng-file-upload dependency by an ng2 depedency
 // TODO Find a better way to format dates so that it works with NgbDatePicker
@@ -60,7 +62,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
             query += "\n                }, (subRes: Response) => this.onError(subRes.json()));"
             query += "\n            }"
             query += "\n        }, (res: Response) => this.onError(res.json()));"
-        } else {
+        } else  if (relationships[idx].relationshipType != 'one-to-many') {
             variableName = relationships[idx].otherEntityNameCapitalizedPlural.toLowerCase();
             if (variableName === entityInstance) {
                 variableName += 'Collection';
@@ -68,7 +70,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
             query = 'this.' + relationships[idx].otherEntityName + 'Service.query().subscribe(';
             query += '\n            (res: Response) => { this.' + variableName + ' = res.json(); }, (res: Response) => this.onError(res.json()));';
         }
-        if (!contains(queries, query)) {
+        if (variableName && !contains(queries, query)) {
             queries.push(query);
             variables.push(variableName + ': ' + relationships[idx].otherEntityAngularName + '[];');
         }
@@ -85,8 +87,10 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         private dataUtils: DataUtils,
         <%_ } _%>
         private alertService: AlertService,
-        private <%= entityInstance %>Service: <%= entityAngularName %>Service,<% for (idx in differentRelationships) {%>
-        private <%= differentRelationships[idx].otherEntityName %>Service: <%= differentRelationships[idx].otherEntityAngularName %>Service,<% } %>
+        private <%= entityInstance %>Service: <%= entityAngularName %>Service,<% for (idx in differentRelationships) {
+        if (differentRelationships[idx].relationshipType != 'one-to-many') { %>
+        private <%= differentRelationships[idx].otherEntityName %>Service: <%= differentRelationships[idx].otherEntityAngularName %>Service,<% }
+        }%>
         private eventManager: EventManager
     ) {
         <%_ if (enableTranslation) { _%>
@@ -203,7 +207,6 @@ export class <%= entityAngularName %>PopupComponent implements OnInit, OnDestroy
                 this.modalRef = this.<%= entityInstance %>PopupService
                     .open(<%= entityAngularName %>DialogComponent);
             }
-
         });
     }
 
