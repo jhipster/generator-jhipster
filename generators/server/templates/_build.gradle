@@ -359,7 +359,7 @@ dependencies {
     testCompile "com.jayway.jsonpath:json-path"
     <%_ if (databaseType === 'cassandra') { _%>
     testCompile ("org.cassandraunit:cassandra-unit-spring:${cassandra_unit_spring_version}") {
-        exclude(module: 'org.slf4j')
+        exclude(group: 'org.slf4j')
     }
     <%_ } _%>
     <%_ if (cucumberTests) { _%>
