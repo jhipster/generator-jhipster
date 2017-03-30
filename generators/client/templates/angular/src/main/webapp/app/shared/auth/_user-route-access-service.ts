@@ -1,25 +1,30 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 
 import { AuthService } from '../';
 import { Principal } from '../';
 import { LoginModalService } from '../login/login-modal.service';
+import { StateStorageService } from './state-storage.service';
 
 @Injectable()
 export class UserRouteAccessService implements CanActivate {
 
-    constructor(private router: Router, private loginModalService: LoginModalService, private principal: Principal) {
+    constructor(private router: Router,
+                private loginModalService: LoginModalService,
+                private principal: Principal,
+                private stateStorageService: StateStorageService) {
     }
 
-    canActivate(route: ActivatedRouteSnapshot): boolean | Promise<boolean> {
-        return this.checkLogin(route.data['authorities']);
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Promise<boolean> {
+        return this.checkLogin(route.data['authorities'], state.url);
     }
 
-    checkLogin(authorities: string[]): boolean {
+    checkLogin(authorities: string[], url: string): boolean {
         this.principal.hasAnyAuthority(authorities).then(isOk => {
             if (isOk) {
                 return true;
             } else {
+                this.stateStorageService.storeUrl(url);
                 this.router.navigate(['accessdenied']).then(() => {
                     this.loginModalService.open();
                 });
@@ -27,10 +32,6 @@ export class UserRouteAccessService implements CanActivate {
             }
         });
 
-        // Store the attempted URL for redirecting
-        //this.authService.redirectUrl = url;
-
-        // Navigate to the login page with extras
-        return false;
-    }
+    return false;
+  }
 }
