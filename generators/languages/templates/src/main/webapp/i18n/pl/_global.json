@@ -43,8 +43,8 @@
             "newpassword.placeholder": "Nowe hasło",
             "confirmpassword": "Potwierdź nowe hasło",
             "confirmpassword.placeholder": "Potwierdź nowe hasło",
-            "email": "E-mail",
-            "email.placeholder": "Twój e-mail"
+            "email": "Email",
+            "email.placeholder": "Twój email"
         },
         "messages": {
             "info": {
@@ -79,10 +79,10 @@
                     "maxlength": "Potwierdzenie hasła nie powinno być dłuższe niż 50 znaków"
                 },
                 "email": {
-                    "required": "Twój e-mail jest wymagany.",
-                    "invalid": "Twój e-mail jest błędny.",
-                    "minlength": "Twój e-mail musi mieć przynajmniej 5 znaków",
-                    "maxlength": "Twój e-mail nie może być dłuższy niż 50 znaków"
+                    "required": "Twój email jest wymagany.",
+                    "invalid": "Twój email jest błędny.",
+                    "minlength": "Twój email musi mieć przynajmniej 5 znaków",
+                    "maxlength": "Twój email nie może być dłuższy niż 50 znaków"
                 }
             }
         },
@@ -132,7 +132,7 @@
         "NotNull": "Wartość {{fieldName}} nie może być pusta!",
         "Size": "Wartość {{fieldName}} nie spełnia wymagań co do długości!",
         "userexists": "Użytkownik o takiej nazwie już istnieje!",
-        "emailexists": "Użytkownik z takim adresem e-mail już istnieje!",
+        "emailexists": "Użytkownik z takim adresem email już istnieje!",
         "idexists": "Nowy {{entityName}} nie może jeszcze mieć przypisanego ID"
     },
     "footer": "To jest stopka"

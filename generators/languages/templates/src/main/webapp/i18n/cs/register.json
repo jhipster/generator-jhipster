@@ -13,11 +13,11 @@
                     "pattern": "Uživatelské jméno může obsahovat pouze malá písmena a číslice."
                 }
             },
-            "success": "<strong>Registrace uložená!</strong> Pro potvrzení registrace si prosím zkontrolujte vaši e-mailovú schránku.",
+            "success": "<strong>Registrace uložená!</strong> Pro potvrzení registrace si prosím zkontrolujte vaši emailovú schránku.",
             "error": {
                 "fail": "<strong>Registrace selhala!</strong> Prosím zkuste to znovu později.",
                 "userexists": "<strong>Uživatelské jméno již existuje!</strong> Prosím, zvolte jiné jméno.",
-                "emailexists": "<strong>E-mail se již používá!</strong> Prosím, zvolte jiný e-mail."
+                "emailexists": "<strong>Email se již používá!</strong> Prosím, zvolte jiný email."
             }
         }
     }

@@ -70,7 +70,7 @@ module.exports = ModulesGenerator.extend({
         jhipsterFunc.fs = this.fs;
         jhipsterFunc.log = this.log;
 
-        // add common methods from script-base.js
+        // add common methods from generator-base.js
         jhipsterFunc.addSocialButton = this.addSocialButton;
         jhipsterFunc.addSocialConnectionFactory = this.addSocialConnectionFactory;
         jhipsterFunc.addMavenDependency = this.addMavenDependency;

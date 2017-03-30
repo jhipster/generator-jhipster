@@ -17,7 +17,7 @@
             "error": {
                 "fail": "<strong>Registreringen fejlede!</strong> Prøv igen senere.",
                 "userexists": "<strong>Loginnavn er allerede i brug!</strong> Prøv med et andet.",
-                "emailexists": "<strong>E-mail er allerede i brug!</strong> Vælg venligst en anden."
+                "emailexists": "<strong>Email er allerede i brug!</strong> Vælg venligst en anden."
             }
         }
     }

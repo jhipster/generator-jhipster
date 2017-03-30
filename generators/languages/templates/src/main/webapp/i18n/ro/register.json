@@ -13,7 +13,7 @@
                     "pattern": "Numele dumneavoastră de utilizator poate conține doar litere mici si numere."
                 }
             },
-            "success": "<strong>Înregistrare salvată!</strong> Vă rugăm să vă verificați e-mailul pentru confirmare.",
+            "success": "<strong>Înregistrare salvată!</strong> Vă rugăm să vă verificați emailul pentru confirmare.",
             "error": {
                 "fail": "<strong>Inregistrare eșuată!</strong> Vă rugăm să încercați mai tarziu.",
                 "userexists": "<strong>Acest nume de utilizator a mai fost folosit!</strong> Vă rugăm să alegeți un altul.",

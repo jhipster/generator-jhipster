@@ -13,11 +13,11 @@
                     "pattern": "Ihr Benutzername darf nur Kleinbuchstaben und Ziffern enthalten"
                 }
             },
-            "success": "<strong>Registrierung gespeichert!</strong> Bitte überprüfen Sie Ihre E-Mails für die Bestätigung.",
+            "success": "<strong>Registrierung gespeichert!</strong> Bitte überprüfen Sie Ihre Emails für die Bestätigung.",
             "error": {
                 "fail": "<strong>Registrierung fehlgeschlagen!</strong> Bitte versuchen Sie es später nochmal.",
                 "userexists": "<strong>Benutzername bereits vergeben!</strong> Bitte wählen Sie einen anderen aus.",
-                "emailexists": "<strong>E-mail wird bereits verwendet!</strong> Bitte wählen Sie eine andere aus."
+                "emailexists": "<strong>Email wird bereits verwendet!</strong> Bitte wählen Sie eine andere aus."
             }
         }
     }

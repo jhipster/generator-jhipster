@@ -6,9 +6,9 @@
                 "button": "Promeni lozinku"
             },
             "messages": {
-                "info": "Unesite e-mail adresu koju ste koristili prilikom registracije",
-                "success": "Proverite Vašu e-mail adresu kako biste videli uputstva za promenu lozinke.",
-                "notfound": "<strong>E-mail adresa nije registrovana!</strong> Molimo Vas pokušajte ponovo"
+                "info": "Unesite email adresu koju ste koristili prilikom registracije",
+                "success": "Proverite Vašu email adresu kako biste videli uputstva za promenu lozinke.",
+                "notfound": "<strong>Email adresa nije registrovana!</strong> Molimo Vas pokušajte ponovo"
             }
         },
         "finish" : {

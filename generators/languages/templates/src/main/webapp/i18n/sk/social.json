@@ -5,7 +5,7 @@
             "title": "Registrovať sa pomocou {{ label }}",
             "errorTitle": "Registrovať sa pomocou externého účtu",
             "messages": {
-                "success": "<strong>Registrácia uložená!</strong> Pre potvrdenie registrácie si prosím skontrolujte vašu e-mailovú schránku.",
+                "success": "<strong>Registrácia uložená!</strong> Pre potvrdenie registrácie si prosím skontrolujte vašu emailovú schránku.",
                 "error": {
                     "fail": "<strong>Registrácia zlyhala!</strong> Vyskytol sa problém pri overovaní prostredníctvom externého účtu, odporúčame Vám vyskúšať to s iným pripojením."
                 }

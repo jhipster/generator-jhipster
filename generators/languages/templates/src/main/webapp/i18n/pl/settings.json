@@ -12,7 +12,7 @@
         "messages": {
             "error": {
                 "fail": "<strong>Wystąpił błąd!</strong> Ustawienia nie zostały zapisane.",
-                "emailexists": "<strong>Ten adres e-mail jest już zarejestrowany!</strong> Prosimy wybrać inny adres."
+                "emailexists": "<strong>Ten adres email jest już zarejestrowany!</strong> Prosimy wybrać inny adres."
             },
             "success": "<strong>Ustawienia zapisane!</strong>",
             "validate": {

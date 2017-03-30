@@ -12,7 +12,7 @@
         "messages": {
             "error": {
                 "fail": "<strong>Տեղի է ունեցել սխալ!</strong> Կարգավորումները չէն կարող  պահպանվել:",
-                "emailexists": "<strong>E-mail արդեն օգտագործվում է!</strong> Խնդրում ենք փորձել մեկ այլ:"
+                "emailexists": "<strong>Email արդեն օգտագործվում է!</strong> Խնդրում ենք փորձել մեկ այլ:"
             },
             "success": "<strong>Կարգավորումները պահպանված են!</strong>",
             "validate": {

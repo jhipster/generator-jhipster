@@ -77,11 +77,11 @@ describe('Component Tests', () => {
             })
         );
 
-        it('notifies of unknown email upon e-mail address not registered/400',
+        it('notifies of unknown email upon email address not registered/400',
             inject([PasswordResetInit], (service: PasswordResetInit) => {
                 spyOn(service, 'save').and.returnValue(Observable.throw({
                     status: 400,
-                    data: 'e-mail address not registered'
+                    data: 'email address not registered'
                 }));
                 comp.resetAccount.email = 'user@domain.com';
 
