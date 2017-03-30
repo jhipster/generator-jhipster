@@ -26,7 +26,7 @@ import org.springframework.security.oauth2.client.token.grant.client.ClientCrede
 
 @Configuration
 @ConditionalOnClass({ ClientCredentialsResourceDetails.class, LoadBalancerClient.class })
-@ConditionalOnProperty("security.client-authorization.client-id")
+@ConditionalOnProperty("jhipster.security.client-authorization.client-id")
 public class UaaAutoConfiguration {
 
     private JHipsterProperties jHipsterProperties;
