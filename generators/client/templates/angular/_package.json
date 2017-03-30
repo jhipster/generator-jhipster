@@ -114,12 +114,12 @@
     "node": ">=6.9.0"
   },
   "scripts": {
-    "lint": "tslint 'src/main/webapp/app/**/*.ts' --force",
-    "lint:fix": "tslint 'src/main/webapp/app/**/*.ts' --fix --force",
+    "lint": "tslint '<%= MAIN_SRC_DIR%>app/**/*.ts' --force",
+    "lint:fix": "tslint '<%= MAIN_SRC_DIR%>app/**/*.ts' --fix --force",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "ngc": "ngc -p tsconfig-aot.json",
-    "cleanup": "rimraf 'aot/**/*' <%= BUILD_DIR %>",
+    "cleanup": "rimraf 'aot/**/*' '<%= MAIN_SRC_DIR%>app/**/*.js' '<%= MAIN_SRC_DIR%>app/**/*.js.map' <%= BUILD_DIR %>",
     "start": "<%= clientPackageManager %> run webpack:dev",
     "webpack:build": "<%= clientPackageManager %> run ngc && webpack --config webpack/webpack.vendor.js && webpack --config webpack/webpack.dev.js",
     "webpack:build:dev": "webpack --config webpack/webpack.dev.js",
