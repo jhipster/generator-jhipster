@@ -24,6 +24,14 @@ export class StateStorageService {
         return this.$sessionStorage.retrieve('destinationState');
     }
 
+    storeUrl(url: string) {
+        this.$sessionStorage.store('previousUrl', url);
+    }
+
+    getUrl() {
+        return this.$sessionStorage.retrieve('previousUrl');
+    }
+
     storeDestinationState(destinationState, destinationStateParams, fromState) {
         let destinationInfo = {
             'destination': {
