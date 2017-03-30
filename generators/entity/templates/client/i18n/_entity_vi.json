@@ -1,0 +1,30 @@
+{
+    "<%= angularAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "home": {
+                "title": "<%= entityClassPluralHumanized %>",
+                "createLabel": "Thêm mới một <%= entityClassHumanized %>",
+                "createOrEditLabel": "Thêm mới hoặc cập nhật <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
+                "search": "Tìm <%= entityClassHumanized %>"<% } %>
+            },<% if (!microserviceAppName) { %>
+            "created": "Một <%= entityClassHumanized %> mới được tạo với định danh {{ param }}",
+            "updated": "Một <%= entityClassHumanized %> cập nhật với định danh {{ param }}",
+            "deleted": "Một <%= entityClassHumanized %> đã xóa với định danh {{ param }}",<% } %>
+            "delete": {
+                "question": "Bạn có chắc là muốn xóa <%= entityClassHumanized %> {{ id }}?"
+            },
+            "detail": {
+                "title": "<%= entityClassHumanized %>"
+            }<% for (idx in fields) { %>,
+            "<%=fields[idx].fieldName%>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameHumanized %>"<% } %>
+        }
+    }<% if (microserviceAppName) { %>,
+    "<%= microserviceAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "created": "Một <%= entityClassHumanized %> mới được tạo với định danh {{ param }}",
+            "updated": "Một <%= entityClassHumanized %> cập nhật với định danh {{ param }}",
+            "deleted": "Một <%= entityClassHumanized %> đã xóa với định danh {{ param }}"
+        }
+    }<% } %>
+}
