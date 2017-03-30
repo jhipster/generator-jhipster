@@ -335,12 +335,6 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>tools</artifactId>
-                    <groupId>com.sun</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <%_ } %>
         <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
