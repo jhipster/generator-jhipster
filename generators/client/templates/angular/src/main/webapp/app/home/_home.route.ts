@@ -9,6 +9,5 @@ export const HOME_ROUTE: Route = {
   data: {
     authorities: [],
     pageTitle: 'home.title'
-  },
-  canActivate: [UserRouteAccessService]
+  }
 };
