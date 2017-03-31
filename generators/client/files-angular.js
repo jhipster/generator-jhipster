@@ -298,7 +298,8 @@ const files = {
                 { file: 'admin/tracker/_tracker.route.ts', method: 'processJs' },
                 { file: 'admin/tracker/_tracker.component.ts', method: 'processJs' },
                 { file: 'admin/tracker/_tracker.component.html', method: 'processHtml' },
-                'shared/tracker/_tracker.service.ts'
+                'shared/tracker/_tracker.service.ts',
+                'shared/tracker/_window.service.ts'
             ]
         },
         {

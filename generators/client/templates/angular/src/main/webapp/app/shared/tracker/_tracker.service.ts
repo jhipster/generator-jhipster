@@ -3,6 +3,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { Observable, Observer, Subscription } from 'rxjs/Rx';
 
 import { CSRFService } from '../auth/csrf.service';
+import { WindowRef } from './window.service';
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { AuthServerProvider } from '../auth/auth-jwt.service';
 <%_ } _%>
@@ -30,8 +31,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa' || authenticationType === 'oauth2') { _%>
         private authServerProvider: AuthServerProvider,
         <%_ } _%>
-        private $document: Document,
-        private $window: Window,
+        private $window: WindowRef,
         private csrfService: CSRFService
     ) {
         this.connection = this.createConnection();

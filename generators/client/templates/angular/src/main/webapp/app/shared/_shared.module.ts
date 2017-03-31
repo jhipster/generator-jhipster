@@ -20,6 +20,7 @@ import {
     Principal,
     <%_ if (websocket === 'spring-websocket') { _%>
     <%=jhiPrefixCapitalized%>TrackerService,
+    WindowRef,
     <%_ } _%>
     HasAnyAuthorityDirective,
 <%_ if (enableSocialSignIn) { _%>
@@ -51,6 +52,7 @@ import {
         CSRFService,
         <%_ if (websocket === 'spring-websocket') { _%>
         <%=jhiPrefixCapitalized%>TrackerService,
+        WindowRef,
         <%_ } _%>
         <%_ if (!skipServer) { _%>
         AuthServerProvider,
