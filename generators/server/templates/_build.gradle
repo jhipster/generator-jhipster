@@ -195,7 +195,7 @@ dependencies {
     compile "io.dropwizard.metrics:metrics-json:" + dependencyManagement.managedVersions["io.dropwizard.metrics:metrics-core"]
     compile ("io.dropwizard.metrics:metrics-servlets")
     compile ("net.logstash.logback:logstash-logback-encoder:${logstash_logback_encoder_version}") {
-        exclude(module: 'ch.qos.logback')
+        exclude(group: 'ch.qos.logback')
     }
     compile "com.fasterxml.jackson.datatype:jackson-datatype-json-org"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
@@ -205,10 +205,7 @@ dependencies {
     <%_ } _%>
     compile "com.fasterxml.jackson.core:jackson-annotations"
     compile "com.fasterxml.jackson.core:jackson-databind"
-    compile ("com.ryantenney.metrics:metrics-spring:${metrics_spring_version}") {
-        exclude(module: 'metrics-core')
-        exclude(module: 'metrics-healthchecks')
-    }
+    compile ("com.ryantenney.metrics:metrics-spring:${metrics_spring_version}")
     <%_ if (hibernateCache === 'hazelcast') { _%>
     compile "com.hazelcast:hazelcast"
     compile "com.hazelcast:hazelcast-hibernate52:${hazelcast_hibernate52_version}"
@@ -226,9 +223,7 @@ dependencies {
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     compile "org.hibernate:hibernate-core:${hibernate_version}"
-    compile ("com.zaxxer:HikariCP:${hikaricp_version}") {
-        exclude(module: 'tools')
-    }
+    compile ("com.zaxxer:HikariCP:${hikaricp_version}")
     <%_ } _%>
     <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
     compile "commons-codec:commons-codec:${commons_codec_version}"
@@ -247,9 +242,7 @@ dependencies {
     <%_ if (databaseType === 'sql') { _%>
     compile "org.hibernate:hibernate-envers"
     compile "org.hibernate:hibernate-validator"
-    compile ("org.liquibase:liquibase-core") {
-        exclude(module: 'jetty-servlet')
-    }
+    compile ("org.liquibase:liquibase-core")
     compile "com.mattbertolini:liquibase-slf4j:${liquibase_slf4j_version}"
     <%_ } _%>
     compile "org.springframework.boot:spring-boot-actuator"
@@ -284,9 +277,6 @@ dependencies {
     <%_ } _%>
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"
     <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
-    compile ("com.datastax.cassandra:cassandra-driver-core") {
-        exclude module: 'com.codahale.metrics'
-    }
     compile "com.datastax.cassandra:cassandra-driver-extras:" + dependencyManagement.managedVersions["com.datastax.cassandra:cassandra-driver-core"]
     compile "com.datastax.cassandra:cassandra-driver-mapping"
     <%_ } _%>
@@ -369,7 +359,7 @@ dependencies {
     testCompile "com.jayway.jsonpath:json-path"
     <%_ if (databaseType === 'cassandra') { _%>
     testCompile ("org.cassandraunit:cassandra-unit-spring:${cassandra_unit_spring_version}") {
-        exclude(module: 'org.slf4j')
+        exclude(group: 'org.slf4j')
     }
     <%_ } _%>
     <%_ if (cucumberTests) { _%>
