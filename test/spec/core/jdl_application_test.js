@@ -24,8 +24,10 @@ describe('JDLApplication', () => {
         expect(jdlApplication.searchEngine).to.eq(false);
         expect(jdlApplication.enableTranslation).to.eq(true);
         expect(jdlApplication.applicationType).to.eq('monolith');
-        expect(jdlApplication.testFrameworks).to.deep.eq(['gatling', 'protactor']);
-        expect(jdlApplication.languages).to.deep.eq(['en']);
+        expect(
+          jdlApplication.testFrameworks.has('gatling') && jdlApplication.testFrameworks.has('protactor')
+        ).to.be.true;
+        expect(jdlApplication.languages.has('en')).to.be.true;
         expect(jdlApplication.serverPort).to.eq(8080);
         expect(jdlApplication.enableSocialSignIn).to.eq(false);
         expect(jdlApplication.useSass).to.eq(false);
@@ -62,7 +64,7 @@ describe('JDLApplication', () => {
   searchEngine false
   enableTranslation true
   applicationType monolith
-  testFrameworks gatling, protactor
+  testFrameworks gatling,protactor
   languages en
   serverPort 8080
   enableSocialSignIn false
