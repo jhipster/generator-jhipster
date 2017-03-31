@@ -21,7 +21,7 @@ import { WindowRef } from './tracker/window.service';
         InfiniteScrollModule
     ],
     <%_ if (websocket === 'spring-websocket') { _%>
-    providers[
+    providers: [
         WindowRef
     ],
     <%_ } _%>
