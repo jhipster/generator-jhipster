@@ -87,7 +87,7 @@
         <%_ } _%>
         <liquibase-slf4j.version>2.0.0</liquibase-slf4j.version>
         <%_ } _%>
-        <logstash-logback-encoder.version>4.8</logstash-logback-encoder.version>
+        <logstash-logback-encoder.version>4.9</logstash-logback-encoder.version>
         <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
         <lz4.version>1.3.0</lz4.version>
         <%_ } _%>
@@ -1512,6 +1512,20 @@
                 </dependency>
             </dependencies>
         </profile>
+        <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
+        <profile>
+            <!--
+                Profile for tracing requests with Zipkin.
+            -->
+            <id>zipkin</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.cloud</groupId>
+                    <artifactId>spring-cloud-starter-zipkin</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+        <%_ } _%>
         <profile>
             <!--
                 Profile for applying IDE-specific configuration.

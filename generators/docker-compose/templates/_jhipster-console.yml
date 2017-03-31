@@ -20,3 +20,10 @@ services:
         image: <%= DOCKER_JHIPSTER_CONSOLE %>
         ports:
             - 5601:5601
+    jhipster-zipkin:
+        image: <%= DOCKER_JHIPSTER_ZIPKIN %>
+        ports:
+            - 9411:9411
+        environment:
+            - ES_HOSTS=http://jhipster-elasticsearch:9200
+            - ZIPKIN_UI_LOGS_URL=http://localhost:5601/app/kibana#/dashboard/logs-dashboard?_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:now-1h,mode:quick,to:now))&_a=(filters:!(),options:(darkTheme:!f),panels:!((col:1,id:logs-levels,panelIndex:2,row:1,size_x:6,size_y:3,type:visualization),(col:7,columns:!(stack_trace),id:Stacktraces,panelIndex:7,row:1,size_x:4,size_y:3,sort:!('@timestamp',desc),type:search),(col:11,id:Log-forwarding-instructions,panelIndex:8,row:1,size_x:2,size_y:3,type:visualization),(col:1,columns:!(app_name,level,message),id:All-logs,panelIndex:9,row:4,size_x:12,size_y:7,sort:!('@timestamp',asc),type:search)),query:(query_string:(analyze_wildcard:!t,query:'{traceId}')),title:logs-dashboard,uiState:())

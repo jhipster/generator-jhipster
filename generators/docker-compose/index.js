@@ -35,6 +35,7 @@ module.exports = DockerComposeGenerator.extend({
             this.DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE;
             this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
             this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
+            this.DOCKER_JHIPSTER_ZIPKIN = constants.DOCKER_JHIPSTER_ZIPKIN;
             this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
             this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
             this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
@@ -179,6 +180,8 @@ module.exports = DockerComposeGenerator.extend({
 
                 // Add monitoring configuration for monolith directly in the docker-compose file as they can't get them from the config server
                 if (appConfig.applicationType === 'monolith' && this.monitoring === 'elk') {
+                    yamlConfig.environment.push('SPRING_ZIPKIN_ENABLED=true');
+                    yamlConfig.environment.push('SPRING_ZIPKIN_BASE_URL=http://jhipster-zipkin:9411');
                     yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_ENABLED=true');
                     yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_HOST=jhipster-logstash');
                     yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_ENABLED=true');

@@ -112,6 +112,7 @@ function writeFiles() {
                 this.template('gradle/_mapstruct.gradle', 'gradle/mapstruct.gradle', this, { interpolate: INTERPOLATE_REGEX });
                 this.template('gradle/_graphite.gradle', 'gradle/graphite.gradle');
                 this.template('gradle/_prometheus.gradle', 'gradle/prometheus.gradle');
+                this.template('gradle/_zipkin.gradle', 'gradle/zipkin.gradle');
                 if (this.gatlingTests) {
                     this.template('gradle/_gatling.gradle', 'gradle/gatling.gradle');
                 }
