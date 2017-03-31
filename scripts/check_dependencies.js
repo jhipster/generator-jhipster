@@ -10,17 +10,13 @@ const command = WIN_PLATFORM
   : 'npm';
 const args = WIN_PLATFORM
   ? ['/s', '/c', 'npm outdated', '--json']
-  : ['npm', 'outdated', '--json'];
+  : ['outdated', '--json'];
 
 const outDatedCommand = spawn(command, args);
 
 outDatedCommand.stdout.on('data', (data) => {
-  const dependencies = JSON.parse(data);
+  const dependencies = JSON.parse(data || {});
   const dependenciesToUpdate = Object.keys(dependencies).sort();
-  if (dependenciesToUpdate.length === 0) {
-    console.info(chalk.green('There is no dependency to update.'));
-    process.exit(0);
-  }
   console.info(`There ${dependenciesToUpdate.length === 1 ? 'is' : 'are'} ${dependenciesToUpdate.length} dependenc${dependenciesToUpdate.length === 1 ? 'y' : 'ies'} to update:`);
   for (let dependency of dependenciesToUpdate) {
     console.info(`\t${dependency} to v${dependencies[dependency].latest}`);
