@@ -6,6 +6,7 @@ const expect = require('chai').expect,
   UNARY_OPTIONS = require('../../../lib/core/jhipster/unary_options'),
   RELATIONSHIP_TYPES = require('../../../lib/core/jhipster/relationship_types'),
   JDLObject = require('../../../lib/core/jdl_object'),
+  JDLApplication = require('../../../lib/core/jdl_application'),
   JDLEntity = require('../../../lib/core/jdl_entity'),
   JDLField = require('../../../lib/core/jdl_field'),
   JDLValidation = require('../../../lib/core/jdl_validation'),
@@ -15,6 +16,27 @@ const expect = require('chai').expect,
   JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
 
 describe('JDLObject', () => {
+  describe('#addApplication', () => {
+    describe('when adding an invalid application', () => {
+      it('fails', () => {
+        const object = new JDLObject();
+        try {
+          object.addApplication();
+          fail();
+        } catch (error) {
+          expect(error.name).to.eq('InvalidObjectException');
+        }
+      });
+    });
+    describe('when adding a valid application', () => {
+      it('works', () => {
+        const object = new JDLObject();
+        const application = new JDLApplication();
+        object.addApplication(application);
+        expect(object.applications[application.baseName]).to.deep.eq(application);
+      });
+    })
+  });
   describe('#addEntity', () => {
     describe('when adding an invalid entity', () => {
       it('fails', () => {
