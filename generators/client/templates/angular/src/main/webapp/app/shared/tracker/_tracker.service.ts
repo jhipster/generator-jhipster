@@ -12,8 +12,8 @@ import { AuthServerProvider } from '../auth/auth-oauth2.service';
 <%_ } _%>
 
 <%_ // TODO find a better way to import these libs here _%>
-import SockJS = require('sockjs-client');
-import Stomp = require('webstomp-client');
+import * as SockJS from 'sockjs-client';
+import * as Stomp from 'webstomp-client';
 
 @Injectable()
 export class <%=jhiPrefixCapitalized%>TrackerService {
