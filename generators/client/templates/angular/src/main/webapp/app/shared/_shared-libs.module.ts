@@ -6,7 +6,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgJhipsterModule } from 'ng-jhipster';
 import { InfiniteScrollModule } from 'angular2-infinite-scroll';
 <%_ if (websocket === 'spring-websocket') { _%>
-import { WindowRef } from '../tracker/Window.service';
+import { WindowRef } from './tracker/window.service';
 <%_ } _%>
 
 @NgModule({
