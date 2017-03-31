@@ -43,7 +43,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
           this.connection = this.createConnection();
         }
         // building absolute path so that websocket doesn't fail when deploying with a context path
-        const loc = this.$window.location;
+        const loc = this.$window.getNativeWindow().location;
         let url = '//' + loc.host + loc.pathname + 'websocket/tracker';
         <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa' || authenticationType === 'oauth2') { _%>
         const authToken = this.authServerProvider.getToken()<% if (authenticationType === 'oauth2') { %>.access_token<% } %>;
