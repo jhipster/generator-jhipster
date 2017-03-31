@@ -42,6 +42,7 @@
   const parsed = {
     application: {
       baseName: 'jhipster',
+      path: 'jhipster',
       packageName: 'io.github.jhipster',
       packageFolder: 'io/github/jhipster',
       authenticationType: '',
@@ -159,6 +160,9 @@ applicationDecl
 applicationContentDecl
   = BASE_NAME SPACE* baseName:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.baseName = baseName.join('');
+  }
+  / PATH SPACE* path:[^\n]+ SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.path = path.join('');
   }
   / PACKAGE_NAME SPACE* packageName:(([a-z]+'.')*[a-z]+) SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.packageName = packageName.join('').replace(/,/g, '');
@@ -507,6 +511,7 @@ notAComment = !commentStop !commentStart char:. { return char; }
 // Application constants
 APPLICATION = 'application'
 BASE_NAME = 'baseName'
+PATH = 'path'
 PACKAGE_NAME = 'packageName'
 AUTHENTICATION_TYPE = 'authenticationType'
 HIBERNATE_CACHE = 'hibernateCache'

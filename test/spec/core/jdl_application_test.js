@@ -9,6 +9,7 @@ describe('JDLApplication', () => {
       it('uses default values', () => {
         const jdlApplication = new JDLApplication();
         expect(jdlApplication.baseName).to.eq('jhipster');
+        expect(jdlApplication.path).to.eq('jhipster');
         expect(jdlApplication.packageName).to.eq('io.github.jhipster');
         expect(jdlApplication.packageFolder).to.eq('io/github/jhipster');
         expect(jdlApplication.authenticationType).to.eq('session');
@@ -46,6 +47,7 @@ describe('JDLApplication', () => {
       const jdlApplication = new JDLApplication();
       expect(jdlApplication.toString()).to.eq(`application {
   baseName jhipster
+  path jhipster
   packageName io.github.jhipster
   packageFolder io/github/jhipster
   authenticationType session
