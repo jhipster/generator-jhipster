@@ -565,6 +565,12 @@ describe('JDLParser', () => {
           });
         });
       });
+      describe('when parsing application', () => {
+        it('parses it', () => {
+          const input = parseFromFiles(['./test/test_files/application.jdl']);
+          const content = JDLParser.parse(input, 'sql');
+        });
+      });
     });
   });
 });

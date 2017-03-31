@@ -3,7 +3,7 @@
 const expect = require('chai').expect,
   JDLApplication = require('../../../lib/core/jdl_application');
 
-describe('JDLApplication', () => {
+describe.only('JDLApplication', () => {
   describe('::new', () => {
     describe('without specifying special options', () => {
       it('uses default values', () => {
