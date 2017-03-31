@@ -20,7 +20,6 @@ export * from './language/language.pipe';
 <%_ } _%>
 <%_ if (websocket === 'spring-websocket') { _%>
 export * from './tracker/tracker.service';
-export * from './tracker/window.service';
 <%_ } _%>
 export * from './login/login.component';
 export * from './login/login.service';

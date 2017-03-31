@@ -20,7 +20,6 @@ import {
     Principal,
     <%_ if (websocket === 'spring-websocket') { _%>
     <%=jhiPrefixCapitalized%>TrackerService,
-    WindowRef,
     <%_ } _%>
     HasAnyAuthorityDirective,
 <%_ if (enableSocialSignIn) { _%>
