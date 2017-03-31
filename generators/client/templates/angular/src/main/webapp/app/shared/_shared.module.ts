@@ -51,7 +51,6 @@ import {
         CSRFService,
         <%_ if (websocket === 'spring-websocket') { _%>
         <%=jhiPrefixCapitalized%>TrackerService,
-        WindowRef,
         <%_ } _%>
         <%_ if (!skipServer) { _%>
         AuthServerProvider,
