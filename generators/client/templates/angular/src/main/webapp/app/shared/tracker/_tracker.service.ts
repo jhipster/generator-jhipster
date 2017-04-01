@@ -11,7 +11,6 @@ import { AuthServerProvider } from '../auth/auth-jwt.service';
 import { AuthServerProvider } from '../auth/auth-oauth2.service';
 <%_ } _%>
 
-<%_ // TODO find a better way to import these libs here _%>
 import * as SockJS from 'sockjs-client';
 import * as Stomp from 'webstomp-client';
 
