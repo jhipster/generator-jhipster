@@ -5,11 +5,11 @@
                 "title": "<%= entityClassPlural %>",
                 "createLabel": "Egy új <%= entityClassHumanized %> létrehozása",
                 "createOrEditLabel": "Hozzon létre, vagy módosítson <%= entityClassHumanized %>t"<% if (searchEngine === 'elasticsearch') { %>,
-                "search": "Search for <%= entityClassHumanized %>"<% } %>
+                "search": "<%= entityClassHumanized %> keresése"<% } %>
             },<% if (!microserviceAppName) { %>
-            "created": "A new <%= entityClassHumanized %> is created with identifier {{ param }}",
-            "updated": "A <%= entityClassHumanized %> is updated with identifier {{ param }}",
-            "deleted": "A <%= entityClassHumanized %> is deleted with identifier {{ param }}",<% } %>
+            "created": "Egy új <%= entityClassHumanized %> lett létrehozva {{ param }} azonosítóval",
+            "updated": "A <%= entityClassHumanized %> módosítva lett {{ param }} azonosítóval",
+            "deleted": "A <%= entityClassHumanized %> törölve lett {{ param }} azonosítóval",<% } %>
             "delete": {
                 "question": "Biztos benne, hogy törölni szeretné az <%= entityClassHumanized %>t {{ id }} azonosítóval?"
             },
@@ -22,9 +22,9 @@
     }<% if (microserviceAppName) { %>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
-            "created": "A new <%= entityClassHumanized %> is created with identifier {{ param }}",
-            "updated": "A <%= entityClassHumanized %> is updated with identifier {{ param }}",
-            "deleted": "A <%= entityClassHumanized %> is deleted with identifier {{ param }}"
+            "created": "Egy új <%= entityClassHumanized %> lett létrehozva {{ param }} azonosítóval",
+            "updated": "A <%= entityClassHumanized %> módosítva lett {{ param }} azonosítóval",
+            "deleted": "A <%= entityClassHumanized %> törölve lett {{ param }} azonosítóval"
         }
     }<% } %>
 }
