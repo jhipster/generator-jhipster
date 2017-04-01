@@ -1,7 +1,6 @@
 /**
- * This the grammar we use to generate the parser jhGrammar.js.
- * We use the online tool http://pegjs.org/online to generate the parser.
- * Modifying this file won't affect the program, this is just to have a more readable grammar.
+ * This is the grammar we use to generate the parser jhGrammar.js.
+ * We use the online tool at http://pegjs.org/online to write the parser.
  */
 
 {
@@ -39,40 +38,14 @@
     }
   }
 
+  function addToApplicationDecl(passedApplicationDecl, key, value) {
+    let applicationDecl = passedApplicationDecl || {};
+    applicationDecl[key] = value;
+    return applicationDecl;
+  }
+
   const parsed = {
-    application: {
-      baseName: 'jhipster',
-      path: 'jhipster',
-      packageName: 'io.github.jhipster',
-      packageFolder: 'io/github/jhipster',
-      authenticationType: '',
-      hibernateCache: 'no',
-      clusteredHttpSession: 'no',
-      websocket: 'no',
-      databaseType: 'sql',
-      devDatabaseType: 'h2Memory',
-      prodDatabaseType: 'mysql',
-      useCompass: false,
-      buildTool: 'maven',
-      searchEngine: false,
-      enableTranslation: true,
-      applicationType: 'monolith',
-      testFrameworks: ['gatling', 'protactor'],
-      languages: ['en'],
-      serverPort: 8080,
-      enableSocialSignIn: false,
-      useSass: false,
-      jhiPrefix: 'jhi',
-      messageBroker: false,
-      serviceDiscoveryType: false,
-      clientPackageManager: 'yarn',
-      clientFramework: 'angular1',
-      nativeLanguage: 'en',
-      frontEndBuilder: null,
-      skipUserManagement: false,
-      skipClient: false,
-      skipServer: false
-    },
+    applications: [],
     constants: {},
     entities: [],
     relationships: [],
@@ -97,7 +70,7 @@ prog
     return parsed;
   }
   / SPACE* applicationDeclaration:applicationDecl SPACE* p:prog {
-    parsed.application = applicationDeclaration;
+    parsed.applications.push(applicationDeclaration);
     return parsed;
   }
   / SPACE* ed:entityDecl SPACE* p:prog {
@@ -154,28 +127,36 @@ prog
 // Application Declaration
 applicationDecl
   = APPLICATION SPACE* '{' SPACE* applicationContent:applicationContentDecl? SPACE* '}' {
-    return applicationContent || parsed.application;
+    return applicationContent;
   }
 
 applicationContentDecl
   = BASE_NAME SPACE* baseName:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.baseName = baseName.join('');
+    return addToApplicationDecl(applicationContentDecl, 'baseName', baseName.join(''));
   }
   / PATH SPACE* path:[^\n]+ SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.path = path.join('');
+    return addToApplicationDecl(applicationContentDecl, 'path', path.join(''));
   }
   / PACKAGE_NAME SPACE* packageName:(([a-z]+'.')*[a-z]+) SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.packageName = packageName.join('').replace(/,/g, '');
-    parsed.application.packageFolder = parsed.application.packageName.replace(/[.]/g, '/');
+    applicationContentDecl = addToApplicationDecl(
+      applicationContentDecl,
+      'packageName',
+      packageName.join('').replace(/,/g, '')
+    );
+    return addToApplicationDecl(
+      applicationContentDecl,
+      'packageFolder',
+      applicationContentDecl.packageName.replace(/[.]/g, '/')
+    );
   }
   / AUTHENTICATION_TYPE SPACE* authenticationType:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.authenticationType = authenticationType.join('');
+    return addToApplicationDecl(applicationContentDecl, 'authenticationType', authenticationType.join(''));
   }
   / HIBERNATE_CACHE SPACE* hibernateCache:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.hibernateCache = hibernateCache.join('');
+    return addToApplicationDecl(applicationContentDecl, 'hibernateCache', hibernateCache.join(''));
   }
   / CLUSTERED_HTTP_SESSION SPACE* clusteredHttpSession:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.clusteredHttpSession = clusteredHttpSession.join('');
+    return addToApplicationDecl(applicationContentDecl, 'clusteredHttpSession', clusteredHttpSession.join(''));
   }
   / WEBSOCKET SPACE* websocket:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.websocket = websocket.join('');
