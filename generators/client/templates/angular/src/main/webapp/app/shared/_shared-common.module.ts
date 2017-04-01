@@ -6,6 +6,10 @@ import { TranslateService } from 'ng2-translate';
 <%_ } _%>
 import { AlertService } from 'ng-jhipster';
 
+<%_ if (websocket === 'spring-websocket') { _%>
+import { WindowRef } from './tracker/window.service';
+<%_ } _%>
+
 import {
     <%=angular2AppName%>SharedLibsModule,
     <%_ if (enableTranslation) { _%>
@@ -37,6 +41,9 @@ export function alertServiceProvider(sanitizer: Sanitizer<% if (enableTranslatio
     providers: [
         <%_ if (enableTranslation) { _%>
         JhiLanguageHelper,
+        <%_ } _%>
+        <%_ if (websocket === 'spring-websocket') { _%>    
+        WindowRef,
         <%_ } _%>
         {
             provide: AlertService,
