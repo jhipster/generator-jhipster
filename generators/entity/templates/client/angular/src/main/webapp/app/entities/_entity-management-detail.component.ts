@@ -9,11 +9,8 @@ _%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
-<%_ if (enableTranslation) { _%>
-import { EventManager, JhiLanguageService<% if (fieldsContainBlob) { %>, DataUtils<% } %> } from 'ng-jhipster';
-<%_ } else if (fieldsContainBlob) { _%>
-import { DataUtils } from 'ng-jhipster';
-<%_ } _%>
+import { EventManager <% if (enableTranslation) { %>, JhiLanguageService<% } %> <% if (fieldsContainBlob) { %>, DataUtils<% } %> } from 'ng-jhipster';
+
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 
