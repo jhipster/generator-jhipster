@@ -19,8 +19,8 @@ export class UserRouteAccessService implements CanActivate {
         return this.checkLogin(route.data['authorities'], state.url);
     }
 
-    checkLogin(authorities: string[], url: string): boolean {
-        this.principal.hasAnyAuthority(authorities).then(isOk => {
+    checkLogin(authorities: string[], url: string): Promise<boolean> {
+        return Promise.resolve(this.principal.hasAnyAuthority(authorities).then(isOk => {
             if (isOk) {
                 return true;
             } else {
@@ -30,8 +30,6 @@ export class UserRouteAccessService implements CanActivate {
                 });
                 return false;
             }
-        });
-
-    return false;
+        }));
   }
 }
