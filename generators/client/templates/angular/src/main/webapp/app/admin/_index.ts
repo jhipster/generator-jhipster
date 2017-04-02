@@ -1,8 +1,10 @@
+<%_ if (devDatabaseType !== 'cassandra') { _%>
 export * from './audits/audits.component';
 export * from './audits/audits.service';
 export * from './audits/audits.route';
 export * from './audits/audit.model';
 export * from './audits/audit-data.model';
+<%_ } _%>
 export * from './configuration/configuration.component';
 export * from './configuration/configuration.service';
 export * from './configuration/configuration.route';
