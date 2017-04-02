@@ -8,7 +8,9 @@ import { <%=angular2AppName%>SharedModule } from '../shared';
 
 import {
     adminState,
+    <%_ if (devDatabaseType !== 'cassandra') { _%>
     AuditsComponent,
+    <%_ } _%>
     <%_ if (!skipUserManagement) { _%>
     UserMgmtComponent,
     UserDialogComponent,
@@ -24,7 +26,9 @@ import {
     <%=jhiPrefixCapitalized%>HealthCheckComponent,
     <%=jhiPrefixCapitalized%>ConfigurationComponent,
     <%=jhiPrefixCapitalized%>DocsComponent,
+    <%_ if (devDatabaseType !== 'cassandra') { _%>
     AuditsService,
+    <%_ } _%>
     <%=jhiPrefixCapitalized%>ConfigurationService,
     <%=jhiPrefixCapitalized%>HealthService,
     <%=jhiPrefixCapitalized%>MetricsService,
@@ -50,7 +54,9 @@ import {
         RouterModule.forRoot(adminState, { useHash: true })
     ],
     declarations: [
+        <%_ if (devDatabaseType !== 'cassandra') { _%>
         AuditsComponent,
+        <%_ } _%>
         <%_ if (!skipUserManagement) { _%>
         UserMgmtComponent,
         UserDialogComponent,
@@ -82,7 +88,9 @@ import {
         <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent,
     ],
     providers: [
+        <%_ if (devDatabaseType !== 'cassandra') { _%>
         AuditsService,
+        <%_ } _%>
         <%=jhiPrefixCapitalized%>ConfigurationService,
         <%=jhiPrefixCapitalized%>HealthService,
         <%=jhiPrefixCapitalized%>MetricsService,
