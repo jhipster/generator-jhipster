@@ -31,5 +31,5 @@ export class UserRouteAccessService implements CanActivate {
                 return false;
             }
         }));
-  }
+    }
 }
