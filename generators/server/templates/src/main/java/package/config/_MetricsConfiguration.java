@@ -1,9 +1,6 @@
 package <%=packageName%>.config;
 
 import io.github.jhipster.config.JHipsterProperties;
-<%_ if (hibernateCache == 'ehcache') { _%>
-import io.github.jhipster.config.jcache.JCacheGaugeSet;
-<%_ } _%>
 <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
 import io.github.jhipster.config.metrics.SpectatorLogMetricWriter;
 
@@ -19,6 +16,9 @@ import com.codahale.metrics.JmxReporter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Slf4jReporter;
 import com.codahale.metrics.health.HealthCheckRegistry;
+<%_ if (hibernateCache == 'ehcache') { _%>
+import com.codahale.metrics.jcache.JCacheGaugeSet;
+<%_ } _%>
 import com.codahale.metrics.jvm.*;
 import com.ryantenney.metrics.spring.config.annotation.EnableMetrics;
 import com.ryantenney.metrics.spring.config.annotation.MetricsConfigurerAdapter;

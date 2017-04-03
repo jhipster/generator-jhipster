@@ -4,7 +4,7 @@ set -e
 #-------------------------------------------------------------------------------
 # Force no insight
 #-------------------------------------------------------------------------------
-if ["$APP_FOLDER" == "$HOME/app"]; then
+if [ "$APP_FOLDER" == "$HOME/app" ]; then
     mkdir -p "$HOME"/.config/configstore/
     cp "$JHIPSTER_TRAVIS"/configstore/*.json "$HOME"/.config/configstore/
 fi

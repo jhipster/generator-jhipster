@@ -48,6 +48,8 @@
         <cucumber.version>1.2.4</cucumber.version>
         <%_ } _%>
         <docker-maven-plugin.version>0.4.13</docker-maven-plugin.version>
+        <!-- Overridden to get metrics-jcache -->
+        <dropwizard-metrics.version>3.2.2</dropwizard-metrics.version>
         <%_ if (!skipClient) { _%>
         <frontend-maven-plugin.version>1.3</frontend-maven-plugin.version>
         <%_ } _%>
@@ -76,7 +78,7 @@
         <%_ if (gatlingTests) { _%>
         <jzlib.version>1.1.3</jzlib.version>
         <%_ } _%>
-        <jhipster.server.version>1.1.1</jhipster.server.version>
+        <jhipster.server.version>1.1.2</jhipster.server.version>
         <%_ if (authenticationType === 'jwt') { _%>
         <jjwt.version>0.7.0</jjwt.version>
         <%_ } _%>
@@ -226,6 +228,13 @@
             <artifactId>metrics-json</artifactId>
             <version>${dropwizard-metrics.version}</version>
         </dependency>
+        <% if (hibernateCache == 'ehcache') { %>
+        <dependency>
+            <groupId>io.dropwizard.metrics</groupId>
+            <artifactId>metrics-jcache</artifactId>
+            <version>${dropwizard-metrics.version}</version>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-jvm</artifactId>

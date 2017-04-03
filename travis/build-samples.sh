@@ -17,6 +17,7 @@ function usage() {
 }
 
 function generateProject() {
+    cd "$mydir"
     dir=$1
     JHIPSTER=$dir
     APP_FOLDER="$JHIPSTER_SAMPLES/$dir-sample"
@@ -29,6 +30,7 @@ function generateProject() {
 }
 
 function buildProject() {
+    cd "$mydir"
     dir=$1
     JHIPSTER=$dir
     APP_FOLDER="$JHIPSTER_SAMPLES/$dir-sample"
