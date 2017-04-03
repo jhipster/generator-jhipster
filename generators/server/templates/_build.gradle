@@ -195,14 +195,12 @@ repositories {
 
 dependencies {
     compile "io.github.jhipster:jhipster:${jhipster_server_version}"
-    compile "io.dropwizard.metrics:metrics-core"
-    <%_ if (hibernateCache == 'ehcache') { _%>
-    compile "io.dropwizard.metrics:metrics-jcache:" + dependencyManagement.managedVersions["io.dropwizard.metrics:metrics-core"]
-    <%_ } _%>
-    compile "io.dropwizard.metrics:metrics-jvm:" + dependencyManagement.managedVersions["io.dropwizard.metrics:metrics-core"]
-    compile "io.dropwizard.metrics:metrics-servlet:" + dependencyManagement.managedVersions["io.dropwizard.metrics:metrics-core"]
-    compile "io.dropwizard.metrics:metrics-json:" + dependencyManagement.managedVersions["io.dropwizard.metrics:metrics-core"]
-    compile ("io.dropwizard.metrics:metrics-servlets")
+    compile "io.dropwizard.metrics:metrics-core:${dropwizard_metrics_version}"
+    compile "io.dropwizard.metrics:metrics-jcache:${dropwizard_metrics_version}"
+    compile "io.dropwizard.metrics:metrics-jvm:${dropwizard_metrics_version}"
+    compile "io.dropwizard.metrics:metrics-servlet:${dropwizard_metrics_version}"
+    compile "io.dropwizard.metrics:metrics-json:${dropwizard_metrics_version}"
+    compile "io.dropwizard.metrics:metrics-servlets:${dropwizard_metrics_version}"
     compile ("net.logstash.logback:logstash-logback-encoder:${logstash_logback_encoder_version}") {
         exclude(group: 'ch.qos.logback')
     }
