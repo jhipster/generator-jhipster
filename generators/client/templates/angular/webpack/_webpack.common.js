@@ -103,7 +103,7 @@ module.exports = function (options) {
             }),
             new webpack.DllReferencePlugin({
                 context: './',
-                manifest: require(path.resolve('./<%= BUILD_DIR %>www/vendor.json')),
+                manifest: require(path.resolve('./<%= BUILD_DIR %>www/vendor.json'))
             }),
             new CopyWebpackPlugin([
                 { from: './node_modules/core-js/client/shim.min.js', to: 'core-js-shim.min.js' },
