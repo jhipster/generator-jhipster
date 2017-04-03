@@ -11,7 +11,7 @@
 
     <groupId>io.github.jhipster</groupId>
     <artifactId>jhipster</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <packaging>jar</packaging>
     <name>JHipster core library</name>
     <description>Server-side library used by applications created with the JHipster generator, see https://jhipster.github.io/ for more information on JHipster</description>
