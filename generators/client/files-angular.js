@@ -22,7 +22,8 @@ const files = {
                 'webpack/_webpack.common.js',
                 'webpack/_webpack.dev.js',
                 'webpack/_webpack.prod.js',
-                'webpack/_webpack.vendor.js'
+                'webpack/_webpack.vendor.js',
+                { file: 'webpack/logo-jhipster.png', method: 'copy' }
             ]
         }
     ],

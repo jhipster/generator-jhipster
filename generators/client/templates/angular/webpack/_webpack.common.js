@@ -4,6 +4,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const StringReplacePlugin = require('string-replace-webpack-plugin');
 const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
+const WebpackNotifierPlugin = require('webpack-notifier');
 const path = require('path');
 
 module.exports = function (options) {
@@ -125,7 +126,11 @@ module.exports = function (options) {
             new AddAssetHtmlPlugin([
                 { filepath: path.resolve('./<%= BUILD_DIR %>www/vendor.dll.js'), includeSourcemap: false }
             ]),
-            new StringReplacePlugin()
+            new StringReplacePlugin(),
+            new WebpackNotifierPlugin({
+                title: 'JHipster',
+                contentImage: path.join(__dirname, 'logo-jhipster.png')
+            })
         ]
     };
 };

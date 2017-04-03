@@ -96,6 +96,7 @@
     "webpack": "2.2.1",
     "webpack-dev-server": "2.4.2",
     "webpack-merge": "2.6.1",
+    "webpack-notifier": "1.5.0",
     "webpack-visualizer-plugin": "0.1.11",
     "write-file-webpack-plugin": "3.4.2",
     <%_ if (buildTool == 'maven') { _%>
