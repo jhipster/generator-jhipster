@@ -32,6 +32,6 @@ public class NoDefaultJCacheRegionFactory extends JCacheRegionFactory {
     protected Cache<Object, Object> createCache(String regionName, Properties properties, CacheDataDescription
         metadata) {
         throw new IllegalStateException("All Hibernate caches should be created upfront. " +
-            "Please update CacheConfiguration.java with the missing cache");
+            "Please update CacheConfiguration.java to add " + regionName);
     }
 }
