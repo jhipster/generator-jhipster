@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { MockBackend } from '@angular/http/testing';
 import { Http, BaseRequestOptions } from '@angular/http';
-import { EventManager<% if (enableTranslation) { %>, JhiLanguageService<% } %> } from 'ng-jhipster';
 <%_ if (enableTranslation) { _%>
+import { JhiLanguageService } from 'ng-jhipster';
 import { MockLanguageService } from './helpers/mock-language.service';
 <%_ } _%>
 
@@ -22,8 +22,7 @@ import { MockLanguageService } from './helpers/mock-language.service';
                 return new Http(backendInstance, defaultOptions);
             },
             deps: [MockBackend, BaseRequestOptions]
-        },
-        EventManager
+        }
     ]
 })
 export class <%=angular2AppName%>TestModule {}
