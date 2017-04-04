@@ -1263,7 +1263,7 @@ describe('JHipster client generator', () => {
         });
     });
 
-    describe('generate client with angularjs 1 using npm flag', () => {
+    describe('generate client with AngularJS 1 using npm flag', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/client'))
                 .withOptions({ skipInstall: true, auth: 'session', npm: true })
@@ -1285,7 +1285,7 @@ describe('JHipster client generator', () => {
         });
     });
 
-    describe('generate client with angular 2', () => {
+    describe('generate client with Angular 2+', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/client'))
                 .withOptions({ skipInstall: true, auth: 'session' })
@@ -1319,7 +1319,7 @@ describe('JHipster client generator', () => {
         });
     });
 
-    describe('generate client with angular 2 using yarn flag', () => {
+    describe('generate client with Angular 2+ using yarn flag', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/client'))
                 .withOptions({ skipInstall: true, auth: 'session', npm: true })

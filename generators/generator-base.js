@@ -1517,14 +1517,14 @@ module.exports = class extends Generator {
     }
 
     /**
-     * get the angular app name for the app.
+     * get the Angular application name.
      */
     getAngularAppName() {
         return _.camelCase(this.baseName, true) + (this.baseName.endsWith('App') ? '' : 'App');
     }
 
     /**
-     * get the angular 2 app name for the app.
+     * get the Angular 2+ application name.
      */
     getAngular2AppName() {
         return _.upperFirst(_.camelCase(this.baseName, true));
