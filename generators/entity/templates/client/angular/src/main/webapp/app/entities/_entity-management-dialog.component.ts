@@ -136,11 +136,11 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         if (this.<%= entityInstance %>.id !== undefined) {
             this.<%= entityInstance %>Service.update(this.<%= entityInstance %>)
                 .subscribe((res: <%= entityAngularName %>) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
         } else {
             this.<%= entityInstance %>Service.create(this.<%= entityInstance %>)
-                .subscribe((res: <%= entityAngularName %>) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                .subscribe((res: <%= entityAngularName %>) => 
+                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
         }
     }
 
@@ -151,6 +151,11 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     }
 
     private onSaveError (error) {
+        try {
+            error.json();
+        } catch (exception) {
+            error.message = error.text();
+        }
         this.isSaving = false;
         this.onError(error);
     }
