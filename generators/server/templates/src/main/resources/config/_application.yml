@@ -191,7 +191,7 @@ jhipster:
         <%_ if (authenticationType == 'jwt') { _%>
         redirect-after-sign-in: "/#/social-auth"
         <%_ } else { _%>
-        redirect-after-sign-in: "/#/home"
+        redirect-after-sign-in: "/#/"
         <%_ } _%>
 <%_ } _%>
     ribbon:
