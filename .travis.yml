@@ -7,6 +7,12 @@ node_js:
   - "6.10.0"
 jdk:
   - oraclejdk8
+addons:
+  apt:
+    sources:
+    - google-chrome
+    packages:
+    - google-chrome-stable
 cache:
   yarn: true
   directories:
