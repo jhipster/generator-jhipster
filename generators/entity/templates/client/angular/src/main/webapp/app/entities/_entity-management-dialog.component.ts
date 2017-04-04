@@ -139,7 +139,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
                     this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
         } else {
             this.<%= entityInstance %>Service.create(this.<%= entityInstance %>)
-                .subscribe((res: <%= entityAngularName %>) => 
+                .subscribe((res: <%= entityAngularName %>) =>
                     this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
         }
     }
