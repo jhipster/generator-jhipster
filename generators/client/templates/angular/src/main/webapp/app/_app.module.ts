@@ -19,6 +19,7 @@ import { PaginationConfig } from './blocks/config/uib-pagination.config';
 import {
     <%=jhiPrefixCapitalized%>MainComponent,
     NavbarComponent,
+    BreadcrumbComponent,
     FooterComponent,
     ProfileService,
     PageRibbonComponent,
@@ -43,6 +44,7 @@ import {
     declarations: [
         <%=jhiPrefixCapitalized%>MainComponent,
         NavbarComponent,
+        BreadcrumbComponent,
         ErrorComponent,
         PageRibbonComponent,
         <%_ if (enableTranslation) { _%>

@@ -21,7 +21,7 @@ export class <%=jhiPrefixCapitalized%>MainComponent implements OnInit {
         private titleService: Title,
         <%_ } _%>
         private router: Router,
-        private $storageService: StateStorageService,
+        private $storageService: StateStorageService
     ) {}
 
     private getPageTitle(routeSnapshot: ActivatedRouteSnapshot) {
@@ -49,7 +49,9 @@ export class <%=jhiPrefixCapitalized%>MainComponent implements OnInit {
                 if (destinationEvent !== undefined) {
                     params = destinationEvent.params;
                     destinationData = destinationEvent.data;
-                    destinationName = destinationEvent.url[0].path;
+                    if (destinationEvent.url[0] !== undefined) {
+                      destinationName = destinationEvent.url[0].path;
+                    }
                 }
                 let from = {name: this.router.url.slice(1)};
                 let destination = {name: destinationName, data: destinationData};

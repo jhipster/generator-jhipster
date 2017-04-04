@@ -1,0 +1,14 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a [hidden]="breadcrumbs.length === 0" routerLink=""><i class="fa fa-home"></i></a>
+        <span [hidden]="breadcrumbs.length > 0"><i class="fa fa-home"></i></span>
+    </li>
+    <li class="breadcrumb-item" [ngClass]="{ 'active': last }" *ngFor="let breadcrumb of breadcrumbs;  let last = last">
+        <a [hidden]="last" [routerLink]="[breadcrumb.url]">{{breadcrumb.label | translate}}</a>
+        <%_ if (enableTranslation) { _%>
+        <span [hidden]="!last">{{breadcrumb.label | translate}}</span>
+        <%_ } else { _%>
+        <span [hidden]="!last">{{breadcrumb.label}}</span>
+        <%_ } _%>
+    </li>
+</ol>
