@@ -31,7 +31,7 @@ function askForClient() {
             },
             {
                 value: 'angular2',
-                name: '[BETA] Angular 2.x'
+                name: '[BETA] Angular 4'
             }
         ],
         default: 'angular1'
