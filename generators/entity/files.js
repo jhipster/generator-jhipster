@@ -340,7 +340,7 @@ function writeFiles() {
                 this.addChangelogToLiquibase(`${this.changelogDate}_added_entity_${this.entityClass}`);
 
                 if (this.hibernateCache === 'ehcache') {
-                    this.addEntityToEhcache(this.entityClass, this.relationships);
+                    this.addEntityToEhcache(this.entityClass, this.relationships, this.packageName, this.packageFolder);
                 }
             }
         },
