@@ -581,17 +581,19 @@ module.exports = class extends Generator {
     /**
      * Add a new entity to the Ehcache, for the 2nd level cache of an entity and its relationships.
      *
-     * @param {string} name - the entity to cache.
-     * @parma {array} relationships - the relationships of this entity
+     * @param {string} entityClass - the entity to cache.
+     * @param {array} relationships - the relationships of this entity
+     * @param {string} packageName - the Java package name
+     * @param {string} packageFolder - the Java package folder
      */
-    addEntityToEhcache(entityClass, relationships) {
+    addEntityToEhcache(entityClass, relationships, packageName, packageFolder) {
         // Add the entity to ehcache
-        this.addEntryToEhcache(`${this.packageName}.domain.${entityClass}.class.getName()`);
+        this.addEntryToEhcache(`${packageName}.domain.${entityClass}.class.getName()`, packageFolder);
         // Add the collections linked to that entity to ehcache
         relationships.forEach((relationship) => {
             const relationshipType = relationship.relationshipType;
             if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
-                this.addEntryToEhcache(`${this.packageName}.domain.${entityClass}.class.getName() + ".${relationship.relationshipFieldNamePlural}"`);
+                this.addEntryToEhcache(`${packageName}.domain.${entityClass}.class.getName() + ".${relationship.relationshipFieldNamePlural}"`, packageFolder);
             }
         });
     }
@@ -599,11 +601,12 @@ module.exports = class extends Generator {
     /**
      * Add a new entry to Ehcache in CacheConfiguration.java
      *
-     * @param {string} name - the entry (including package name) to cache.
+     * @param {string} entry - the entry (including package name) to cache.
+     * @param {string} packageFolder - the Java package folder
      */
-    addEntryToEhcache(entry) {
+    addEntryToEhcache(entry, packageFolder) {
         try {
-            const ehcachePath = `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/config/CacheConfiguration.java`;
+            const ehcachePath = `${SERVER_MAIN_SRC_DIR}${packageFolder}/config/CacheConfiguration.java`;
             jhipsterUtils.rewriteFile({
                 file: ehcachePath,
                 needle: 'jhipster-needle-ehcache-add-entry',
