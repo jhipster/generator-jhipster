@@ -16,6 +16,7 @@ services:
             - SPRING_CLOUD_CONSUL_PORT=8500
             <%_ } _%>
             <%_ if (serviceDiscoveryType == 'eureka') { _%>
+            - EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka
             - SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config
             <%_ } _%>
             <%_ if (prodDatabaseType == 'mysql') { _%>

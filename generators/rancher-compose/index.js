@@ -286,8 +286,7 @@ module.exports = RancherGenerator.extend({
                     yamlArray[j] = yamlArray[j].replace(/'/g, '');
                 }
                 yamlString = yamlArray.join('\n');
-                yamlString = yamlString.replace('>-\n                ', '');
-                yamlString = yamlString.replace('>-\n                ', '');
+                yamlString = yamlString.replace(new RegExp('>-\\n {16}', 'g'), '');
                 this.appsYaml.push(yamlString);
             }, this);
         },
