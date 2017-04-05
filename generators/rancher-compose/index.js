@@ -206,6 +206,7 @@ module.exports = RancherGenerator.extend({
 
                     // Register gateway of monolith app name
                     this.hasFrontApp = true;
+                    this.frontAppPort = ports[0];
                     this.frontAppName = `${lowercaseBaseName}-app`;
                 }
 
@@ -213,7 +214,7 @@ module.exports = RancherGenerator.extend({
                 yamlConfig.image = this.dockerRepositoryName ? `${this.dockerRepositoryName}/${yamlConfig.image}` : yamlConfig.image;
 
                 // Add monitoring configuration for monolith directly in the docker-compose file as they can't get them from the config server
-                if (appConfig.applicationType === 'monolith' && this.monitoring === 'elk') {
+                if (this.monitoring === 'elk') {
                     yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_ENABLED=true');
                     yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_HOST=jhipster-logstash');
                     yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_ENABLED=true');

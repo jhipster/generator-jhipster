@@ -5,7 +5,7 @@ services:
       image: rancher/load-balancer-service
       ports:
         # Listen on public port 80 and direct traffic to private port 8080 of the service
-        - 80:8080
+        - 80:<%= frontAppPort %>
       links:
         # Target services in the same stack will be listed as a link
         - <%= frontAppName %>:<%= frontAppName %>
