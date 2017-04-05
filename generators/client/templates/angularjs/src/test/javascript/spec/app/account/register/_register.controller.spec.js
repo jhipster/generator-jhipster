@@ -77,11 +77,11 @@ describe('Controller Tests', function() {
             expect($scope.vm.error).toBeNull();
         });
 
-        it('should notify of email existence upon 400/e-mail address already in use', function() {
+        it('should notify of email existence upon 400/email address already in use', function() {
             // given
             MockAuth.createAccount.and.returnValue($q.reject({
                 status: 400,
-                data: 'e-mail address already in use'
+                data: 'email address already in use'
             }));
             createController();
             $scope.vm.registerAccount.password = $scope.vm.confirmPassword = 'password';

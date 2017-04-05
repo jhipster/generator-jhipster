@@ -8,21 +8,21 @@
     -->
     <changeSet id="<%= changelogDate %>-2" author="jhipster">
         <% for (idx in relationships) {
-            var relationshipType = relationships[idx].relationshipType,
+            const relationshipType = relationships[idx].relationshipType,
             relationshipName = relationships[idx].relationshipName,
             ownerSide = relationships[idx].ownerSide,
             otherEntityTableName = relationships[idx].otherEntityTableName;
             if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide)) {
-                var constraintName = getConstraintName(name, relationshipName, prodDatabaseType);%>
+                const constraintName = getConstraintName(name, relationshipName, prodDatabaseType);%>
         <addForeignKeyConstraint baseColumnNames="<%= getColumnName(relationshipName) %>_id"
                                  baseTableName="<%= entityTableName %>"
                                  constraintName="<%= constraintName %>"
                                  referencedColumnNames="id"
                                  referencedTableName="<%= otherEntityTableName %>"/>
         <%_ } else if (relationshipType == 'many-to-many' && ownerSide) {
-                var joinTableName = getJoinTableName(name, relationshipName, prodDatabaseType);
-                var constraintName = getConstraintName(joinTableName, getPluralColumnName(name), prodDatabaseType, true);
-                var otherEntityConstraintName = getConstraintName(joinTableName, getPluralColumnName(relationshipName), prodDatabaseType, true);
+                const joinTableName = getJoinTableName(name, relationshipName, prodDatabaseType);
+                const constraintName = getConstraintName(joinTableName, getPluralColumnName(name), prodDatabaseType, true);
+                const otherEntityConstraintName = getConstraintName(joinTableName, getPluralColumnName(relationshipName), prodDatabaseType, true);
           _%>
 
         <addForeignKeyConstraint baseColumnNames="<%= getPluralColumnName(name) %>_id"

@@ -48,8 +48,7 @@ public class LoginVM {
     @Override
     public String toString() {
         return "LoginVM{" +
-            "password='*****'" +
-            ", username='" + username + '\'' +
+            "username='" + username + '\'' +
             ", rememberMe=" + rememberMe +
             '}';
     }

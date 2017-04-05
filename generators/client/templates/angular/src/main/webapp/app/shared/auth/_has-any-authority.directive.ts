@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Principal } from './principal.service';
 
 /**
@@ -32,10 +32,9 @@ export class HasAnyAuthorityDirective {
 
     private updateView(): void {
         this.principal.hasAnyAuthority(this.authorities).then(result => {
+            this.viewContainerRef.clear();
             if (result) {
                 this.viewContainerRef.createEmbeddedView(this.templateRef);
-            } else {
-                this.viewContainerRef.clear();
             }
         });
     }

@@ -16,12 +16,17 @@ jhipster:
     metrics:
         logs: # report metrics in the logs
             enabled: true
-            reportFrequency: 60 # in seconds
+            report-frequency: 60 # in seconds
+
+spring:
+    zipkin:
+        base-url: http://jhipster-zipkin:9411
+        enabled: true
 <%_ } _%>
 
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 eureka:
     client:
-        serviceUrl:
+        service-url:
             defaultZone: http://admin:${jhipster.registry.password}@jhipster-registry:8761/eureka/
 <%_ } _%>

@@ -1,26 +1,25 @@
-'use strict';
-const util = require('util'),
-    generators = require('yeoman-generator'),
-    chalk = require('chalk'),
-    _ = require('lodash'),
-    prompts = require('./prompts'),
-    scriptBase = require('../generator-base'),
-    writeFiles = require('./files').writeFiles,
-    packagejs = require('../../package.json'),
-    crypto = require('crypto'),
-    os = require('os');
+const util = require('util');
+const generator = require('yeoman-generator');
+const chalk = require('chalk');
+const _ = require('lodash');
+const prompts = require('./prompts');
+const BaseGenerator = require('../generator-base');
+const writeFiles = require('./files').writeFiles;
+const packagejs = require('../../package.json');
+const crypto = require('crypto');
+const os = require('os');
+const constants = require('../generator-constants');
 
-var JhipsterServerGenerator = generators.Base.extend({});
+const JhipsterServerGenerator = generator.extend({});
 
-util.inherits(JhipsterServerGenerator, scriptBase);
+util.inherits(JhipsterServerGenerator, BaseGenerator);
 
 /* Constants used throughout */
-const constants = require('../generator-constants'),
-    QUESTIONS = constants.SERVER_QUESTIONS;
+const QUESTIONS = constants.SERVER_QUESTIONS;
 
 module.exports = JhipsterServerGenerator.extend({
-    constructor: function () {
-        generators.Base.apply(this, arguments);
+    constructor: function (...args) { // eslint-disable-line object-shorthand
+        generator.apply(this, args);
 
         this.configOptions = this.options.configOptions || {};
 
@@ -61,24 +60,27 @@ module.exports = JhipsterServerGenerator.extend({
 
         this.skipClient = !this.options['client-hook'] || this.configOptions.skipClient || this.config.get('skipClient');
         this.skipUserManagement = this.configOptions.skipUserManagement || this.options['skip-user-management'] || this.config.get('skipUserManagement');
-        this.enableTranslation = this.options['i18n'];
+        this.enableTranslation = this.options.i18n;
         this.testFrameworks = [];
-        this.options['gatling'] && this.testFrameworks.push('gatling');
-        this.options['cucumber'] && this.testFrameworks.push('cucumber');
+
+        if (this.options.gatling) this.testFrameworks.push('gatling');
+        if (this.options.cucumber) this.testFrameworks.push('cucumber');
+
         this.currentQuestion = this.configOptions.lastQuestion ? this.configOptions.lastQuestion : 0;
         this.totalQuestions = this.configOptions.totalQuestions ? this.configOptions.totalQuestions : QUESTIONS;
         this.logo = this.configOptions.logo;
         this.baseName = this.configOptions.baseName;
         this.clientPackageManager = this.configOptions.clientPackageManager;
+        this.isDebugEnabled = this.configOptions.isDebugEnabled || this.options.debug;
     },
     initializing: {
-        displayLogo: function () {
+        displayLogo() {
             if (this.logo) {
                 this.printJHipsterLogo();
             }
         },
 
-        setupServerVars: function () {
+        setupServerconsts() {
             // Make constants available in templates
             this.MAIN_DIR = constants.MAIN_DIR;
             this.TEST_DIR = constants.TEST_DIR;
@@ -107,6 +109,10 @@ module.exports = JhipsterServerGenerator.extend({
             this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
             this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
             this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
+
+            this.NODE_VERSION = constants.NODE_VERSION;
+            this.YARN_VERSION = constants.YARN_VERSION;
+            this.NPM_VERSION = constants.NPM_VERSION;
 
             this.javaVersion = '8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
             this.packagejs = packagejs;
@@ -177,24 +183,24 @@ module.exports = JhipsterServerGenerator.extend({
             this.languages = this.config.get('languages');
             this.uaaBaseName = this.config.get('uaaBaseName');
             this.clientFramework = this.config.get('clientFramework');
-            var testFrameworks = this.config.get('testFrameworks');
+            const testFrameworks = this.config.get('testFrameworks');
             if (testFrameworks) {
                 this.testFrameworks = testFrameworks;
             }
 
-            var baseName = this.config.get('baseName');
+            const baseName = this.config.get('baseName');
             if (baseName) {
                 // to avoid overriding name from configOptions
                 this.baseName = baseName;
             }
 
-            // force variables unused by microservice applications
+            // force constiables unused by microservice applications
             if (this.applicationType === 'microservice' || this.applicationType === 'uaa') {
                 this.clusteredHttpSession = false;
                 this.websocket = false;
             }
 
-            var serverConfigFound = this.packageName !== undefined &&
+            const serverConfigFound = this.packageName !== undefined &&
                 this.authenticationType !== undefined &&
                 this.hibernateCache !== undefined &&
                 this.clusteredHttpSession !== undefined &&
@@ -206,7 +212,6 @@ module.exports = JhipsterServerGenerator.extend({
                 this.buildTool !== undefined;
 
             if (this.baseName !== undefined && serverConfigFound) {
-
                 // Generate remember me key if key does not already exist in config
                 if (this.authenticationType === 'session' && this.rememberMeKey === undefined) {
                     this.rememberMeKey = crypto.randomBytes(20).toString('hex');
@@ -238,7 +243,7 @@ module.exports = JhipsterServerGenerator.extend({
                     this.languages = ['en', 'fr'];
                 }
                 // user-management will be handled by UAA app
-                if(this.applicationType === 'gateway' && this.authenticationType === 'uaa') {
+                if (this.applicationType === 'gateway' && this.authenticationType === 'uaa') {
                     this.skipUserManagement = true;
                 }
 
@@ -257,7 +262,7 @@ module.exports = JhipsterServerGenerator.extend({
         askForOptionalItems: prompts.askForOptionalItems,
         askFori18n: prompts.askFori18n,
 
-        setSharedConfigOptions: function () {
+        setSharedConfigOptions() {
             this.configOptions.lastQuestion = this.currentQuestion;
             this.configOptions.totalQuestions = this.totalQuestions;
             this.configOptions.packageName = this.packageName;
@@ -285,13 +290,13 @@ module.exports = JhipsterServerGenerator.extend({
             this.CLIENT_DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
             // Make documentation URL available in templates
             this.DOCUMENTATION_URL = constants.JHIPSTER_DOCUMENTATION_URL;
-            this.DOCUMENTATION_ARCHIVE_URL = constants.JHIPSTER_DOCUMENTATION_URL + constants.JHIPSTER_DOCUMENTATION_ARCHIVE_PATH + 'v' + this.jhipsterVersion;
+            this.DOCUMENTATION_ARCHIVE_URL = `${constants.JHIPSTER_DOCUMENTATION_URL + constants.JHIPSTER_DOCUMENTATION_ARCHIVE_PATH}v${this.jhipsterVersion}`;
         }
     },
 
     configuring: {
-        insight: function () {
-            var insight = this.insight();
+        insight() {
+            const insight = this.insight();
             insight.trackWithEvent('generator', 'server');
             insight.track('app/authenticationType', this.authenticationType);
             insight.track('app/hibernateCache', this.hibernateCache);
@@ -307,7 +312,7 @@ module.exports = JhipsterServerGenerator.extend({
             insight.track('app/enableSocialSignIn', this.enableSocialSignIn);
         },
 
-        configureGlobal: function () {
+        configureGlobal() {
             // Application name modified, using each technology's conventions
             this.angularAppName = this.getAngularAppName();
             this.camelizedBaseName = _.camelCase(this.baseName);
@@ -323,14 +328,14 @@ module.exports = JhipsterServerGenerator.extend({
             }
 
             this.packageFolder = this.packageName.replace(/\./g, '/');
-            this.testDir = constants.SERVER_TEST_SRC_DIR + this.packageFolder + '/';
+            this.testDir = `${constants.SERVER_TEST_SRC_DIR + this.packageFolder}/`;
             if (!this.nativeLanguage) {
                 // set to english when translation is set to false
                 this.nativeLanguage = 'en';
             }
         },
 
-        saveConfig: function () {
+        saveConfig() {
             this.config.set('jhipsterVersion', packagejs.version);
             this.config.set('baseName', this.baseName);
             this.config.set('packageName', this.packageName);
@@ -360,7 +365,7 @@ module.exports = JhipsterServerGenerator.extend({
     },
 
     default: {
-        getSharedConfigOptions: function () {
+        getSharedConfigOptions() {
             this.useSass = this.configOptions.useSass ? this.configOptions.useSass : false;
             if (this.configOptions.enableTranslation !== undefined) {
                 this.enableTranslation = this.configOptions.enableTranslation;
@@ -382,7 +387,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.cucumberTests = this.testFrameworks.indexOf('cucumber') !== -1;
         },
 
-        composeLanguages: function () {
+        composeLanguages() {
             if (this.configOptions.skipI18nQuestion) return;
 
             this.composeLanguagesSub(this, this.configOptions, 'server');
@@ -391,12 +396,11 @@ module.exports = JhipsterServerGenerator.extend({
 
     writing: writeFiles(),
 
-    end: function () {
-
+    end() {
         if (this.prodDatabaseType === 'oracle') {
             this.log('\n\n');
-            this.warning(chalk.yellow.bold('You have selected Oracle database.\n') +
-                'Please follow our documentation on using Oracle to set up the \n' +
+            this.warning(`${chalk.yellow.bold('You have selected Oracle database.\n')
+                }Please follow our documentation on using Oracle to set up the \n` +
                 'Oracle proprietary JDBC driver.');
         }
         this.log(chalk.green.bold('\nServer application generated successfully.\n'));
@@ -407,10 +411,10 @@ module.exports = JhipsterServerGenerator.extend({
         }
         let logMsgComment = '';
         if (os.platform() === 'win32') {
-            logMsgComment = ' (' + chalk.yellow.bold(executable) + ' if using Windows Command Prompt)';
+            logMsgComment = ` (${chalk.yellow.bold(executable)} if using Windows Command Prompt)`;
         }
-        this.log(chalk.green('Run your Spring Boot application:' +
-            '\n ' + chalk.yellow.bold('./' + executable) + logMsgComment));
+        this.log(chalk.green(`${'Run your Spring Boot application:' +
+            '\n '}${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
     }
 
 });

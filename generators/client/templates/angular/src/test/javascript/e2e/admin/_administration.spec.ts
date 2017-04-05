@@ -1,4 +1,4 @@
-import { browser, element, by, $ } from 'protractor';
+import { browser, element, by } from 'protractor';
 <%_
 let elementGetter = `getText()`;
 if (enableTranslation) {
@@ -78,6 +78,7 @@ describe('administration', () => {
         });
     });
 
+<%_ if (devDatabaseType !== 'cassandra') { _%>
     it('should load audits', () => {
         element(by.css('[routerLink="audits"]')).click();
         <%_ if (enableTranslation) { _%>
@@ -90,6 +91,7 @@ describe('administration', () => {
         });
     });
 
+<%_ } _%>
     it('should load logs', () => {
         element(by.css('[routerLink="logs"]')).click();
         <%_ if (enableTranslation) { _%>

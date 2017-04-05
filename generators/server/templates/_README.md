@@ -41,11 +41,11 @@ Before you can build this project, you must install and configure the following 
 <%_ } _%>
 
 After installing Node, you should be able to run the following command to install development tools.
-You will only need to run this command when dependencies change in `package.json`.
+You will only need to run this command when dependencies change in [package.json](package.json).
 
     <%= clientPackageManager %> install
 
-<%_ if (clientFramework === 'angular2') { _%>
+<%_ if (clientFramework !== 'angular1') { _%>
 We use <%= clientPackageManager %> scripts and [Webpack][] as our build system.
 
 <%_ } else { _%>
@@ -59,11 +59,11 @@ auto-refreshes when files change on your hard drive.
 <% if (buildTool == 'maven') { %>
     ./mvnw<% } %><% if (buildTool == 'gradle') { %>
     ./gradlew<% } %>
-<%_ if (clientFramework === 'angular2') { _%>
+<%_ if (clientFramework !== 'angular1') { _%>
     <%= clientPackageManager %> start
 
 [<%= clientPackageMngrName %>][] is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
-specifying a newer version in `package.json`. You can also run `<%= clientPackageManager %> update` and `<%= clientPackageManager %> install` to manage dependencies.
+specifying a newer version in [package.json](package.json). You can also run `<%= clientPackageManager %> update` and `<%= clientPackageManager %> install` to manage dependencies.
 Add the `help` flag on any command to see how you can use it. For example, `<%= clientPackageManager %> help update`.
 
 The `<%= clientPackageManager %> run` command will list all of the scripts available to run for this project.
@@ -80,12 +80,12 @@ To benefit from TypeScript type definitions from [DefinitelyTyped][] repository 
 
 Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] knows about them:
 
-Edit `src/main/webapp/app/vendor.ts`file:
+Edit [src/main/webapp/app/vendor.ts](src/main/webapp/app/vendor.ts) file:
 ~~~
 import 'leaflet/dist/leaflet.js';
 ~~~
 
-Edit `src/main/webapp/content/css/vendor.css` file:
+Edit [src/main/webapp/content/css/vendor.css](src/main/webapp/content/css/vendor.css) file:
 ~~~
 @import '~leaflet/dist/leaflet.css';
 ~~~
@@ -95,14 +95,14 @@ Note: there are still few other things remaining to do for Leaflet that we won't
     gulp
 
 [Bower][] is used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
-specifying a newer version in `bower.json`. You can also run `bower update` and `bower install` to manage dependencies.
+specifying a newer version in [bower.json](bower.json). You can also run `bower update` and `bower install` to manage dependencies.
 Add the `-h` flag on any command to see how you can use it. For example, `bower update -h`.
 <%_ } _%>
 <%_ } _%>
 
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
 
-<%_ if (clientFramework === 'angular2') { _%>
+<%_ if (clientFramework !== 'angular1') { _%>
 ### Using angular-cli
 
 You can also use [Angular CLI][] to generate some custom client code.
@@ -145,19 +145,19 @@ To launch your application's tests, run:
 <% if(!skipClient) { %>
 ### Client tests
 
-Unit tests are run by [Karma][] and written with [Jasmine][]. They're located in `<%= CLIENT_TEST_SRC_DIR %>` and can be run with:
+Unit tests are run by [Karma][] and written with [Jasmine][]. They're located in [<%= CLIENT_TEST_SRC_DIR %>](<%= CLIENT_TEST_SRC_DIR %>) and can be run with:
 
-<%_ if (clientFramework === 'angular2') { _%>
+<%_ if (clientFramework !== 'angular1') { _%>
     <%= clientPackageManager %> test
 <%_ } else { _%>
     gulp test
 <%_ } _%>
 
-<% if (protractorTests) { %>UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in `<%= CLIENT_TEST_SRC_DIR %>e2e`
-and can be run by starting Spring Boot in one terminal (`<% if (buildTool == 'maven') { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`gulp itest`) in a second one.<% } %>
+<% if (protractorTests) { %>UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in [<%= CLIENT_TEST_SRC_DIR %>e2e](<%= CLIENT_TEST_SRC_DIR %>e2e)
+and can be run by starting Spring Boot in one terminal (`<% if (buildTool == 'maven') { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`<% if (clientFramework !== 'angular1') { %><%= clientPackageManager %> run e2e<% } else { %>gulp itest<% } %>`) in a second one.<% } %>
 <% } %><% if (gatlingTests) { %>### Other tests
 
-Performance tests are run by [Gatling][] and written in Scala. They're located in `src/test/gatling` and can be run with:
+Performance tests are run by [Gatling][] and written in Scala. They're located in [src/test/gatling](src/test/gatling) and can be run with:
 
     <% if (buildTool == 'maven') { %>./mvnw gatling:execute<% } else { %>./gradlew gatlingRun<% } %>
 <% } %>
@@ -165,7 +165,7 @@ For more information, refer to the [Running tests page][].
 
 ## Using Docker to simplify development (optional)
 
-You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the `src/main/docker` folder to launch required third party services.
+You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the [src/main/docker](src/main/docker) folder to launch required third party services.
 For example, to start a <%= prodDatabaseType%> database in a docker container, run:
 
     docker-compose -f src/main/docker/<%= prodDatabaseType%>.yml up -d
@@ -187,7 +187,7 @@ For more information refer to [Using Docker and Docker-Compose][], this page als
 
 ## Continuous Integration (optional)
 
-To set up a CI environment, consult the [Setting up Continuous Integration][] page.
+To configure CI for your project, run the ci-cd sub-generator (`yo jhipster:ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
 
 [JHipster Homepage and latest documentation]: <%= DOCUMENTATION_URL %>
 [JHipster <%= jhipsterVersion %> archive]: <%= DOCUMENTATION_ARCHIVE_URL %>
@@ -209,7 +209,7 @@ To set up a CI environment, consult the [Setting up Continuous Integration][] pa
 <%_ if(!skipClient) {_%>
 [Node.js]: https://nodejs.org/
 [Yarn]: https://yarnpkg.org/
-<%_ if (clientFramework === 'angular2') { _%>
+<%_ if (clientFramework !== 'angular1') { _%>
 [Webpack]: https://webpack.github.io/
 [Angular CLI]: https://cli.angular.io/
 <%_ } else { _%>

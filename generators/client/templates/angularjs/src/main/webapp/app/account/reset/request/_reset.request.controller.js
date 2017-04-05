@@ -27,7 +27,7 @@
                 vm.success = 'OK';
             }).catch(function (response) {
                 vm.success = null;
-                if (response.status === 400 && response.data === 'e-mail address not registered') {
+                if (response.status === 400 && response.data === 'email address not registered') {
                     vm.errorEmailNotExists = 'ERROR';
                 } else {
                     vm.error = 'ERROR';

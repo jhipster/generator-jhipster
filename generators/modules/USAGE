@@ -8,9 +8,10 @@ Example:
 You can compose this sub-generator from a JHipster module, which is itself a generator,
 using:
 
-var configuration = {'moduleName': 'my-own-generator'};
+const configuration = {'moduleName': 'my-own-generator'};
 
 templates: function() {
-    this.composeWith('jhipster:modules', { options: {
-        configuration: configuration }});
-  }
+    this.composeWith(require.resolve('jhipster:modules'), {
+        configuration: configuration
+    });
+}

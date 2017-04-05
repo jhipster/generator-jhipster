@@ -1,6 +1,6 @@
 <%
-var keyPrefix = angularAppName + '.'+ entityTranslationKey + '.';
-var ngValidators = './ng_validators';
+const keyPrefix = angularAppName + '.'+ entityTranslationKey + '.';
+const ngValidators = './ng_validators';
 %>
 <form name="editForm" role="form" novalidate ng-submit="vm.save()"<% if (validation) { %> show-validation<% } %>>
 
@@ -17,14 +17,14 @@ var ngValidators = './ng_validators';
                     ng-model="vm.<%=entityInstance %>.id" readonly />
         </div>
         <%_ for (idx in fields) {
-            var fieldName = fields[idx].fieldName;
-            var fieldNameCapitalized = fields[idx].fieldNameCapitalized;
-            var fieldNameHumanized = fields[idx].fieldNameHumanized;
-            var fieldType = fields[idx].fieldType;
-            var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
-            var fieldInputType = 'text';
-            var ngModelOption = '';
-            var translationKey = keyPrefix + fieldName;
+            const fieldName = fields[idx].fieldName;
+            const fieldNameCapitalized = fields[idx].fieldNameCapitalized;
+            const fieldNameHumanized = fields[idx].fieldNameHumanized;
+            const fieldType = fields[idx].fieldType;
+            const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
+            let fieldInputType = 'text';
+            let ngModelOption = '';
+            const translationKey = keyPrefix + fieldName;
             if (fieldType == 'Integer' || fieldType == 'Long' || fieldType == 'Float' || fieldType == 'Double' || fieldType == 'BigDecimal') {
                 fieldInputType = 'number';
             } else if (fieldType == 'LocalDate') {
@@ -40,10 +40,10 @@ var ngValidators = './ng_validators';
             <label class="control-label" data-translate="<%= translationKey %>" for="field_<%= fieldName %>"><%= fieldNameHumanized %></label>
             <%_ if (fields[idx].fieldIsEnum) { _%>
             <select class="form-control" name="<%= fieldName %>" ng-model="vm.<%= entityInstance %>.<%= fieldName %>" id="field_<%= fieldName %>"<% if (fields[idx].fieldValidate == true && fields[idx].fieldValidateRules.indexOf('required') != -1) { %> required<% } %>>
-                <%_ var enumPrefix = angularAppName + '.'+ fieldType;
-                    var values = fields[idx].fieldValues.replace(/\s/g, '').split(',');
+                <%_ const enumPrefix = angularAppName + '.'+ fieldType;
+                    const values = fields[idx].fieldValues.replace(/\s/g, '').split(',');
                     for (key in values) {
-                        var value = values[key]; _%>
+                        const value = values[key]; _%>
                 <option value="<%= value %>" data-translate="<%=enumPrefix%>.<%=value%>"><%= value %></option>
                 <%_ } _%>
             </select>
@@ -87,6 +87,9 @@ var ngValidators = './ng_validators';
                         <button type="button" class="btn btn-default" ng-click="vm.openCalendar('<%=fieldName %>')"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                 </div>
+                <%_ } else if(fieldType == 'Boolean') { _%>
+                <input type="<%= fieldInputType %>" name="<%= fieldName %>" id="field_<%= fieldName %>"
+                          ng-model="vm.<%= entityInstance %>.<%= fieldName %>"/>
                 <%_ } else if(fieldTypeBlobContent == 'text') { _%>
                 <textarea class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>"
                     ng-model="vm.<%= entityInstance %>.<%= fieldName %>" <%- include(ngValidators) %>></textarea>
@@ -168,28 +171,32 @@ var ngValidators = './ng_validators';
         <%_ } _%>
 
         <%_ for (idx in relationships) {
-            var relationshipType = relationships[idx].relationshipType;
-            var ownerSide = relationships[idx].ownerSide;
-            var otherEntityName = relationships[idx].otherEntityName;
-            var otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-            var relationshipName = relationships[idx].relationshipName;
-            var relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
-            var relationshipFieldName = relationships[idx].relationshipFieldName;
-            var relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-            var otherEntityField = relationships[idx].otherEntityField;
-            var otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
-            var relationshipRequired = relationships[idx].relationshipRequired;
-            var translationKey = keyPrefix + relationshipName; _%>
+            const relationshipType = relationships[idx].relationshipType;
+            const ownerSide = relationships[idx].ownerSide;
+            const otherEntityName = relationships[idx].otherEntityName;
+            const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
+            const relationshipName = relationships[idx].relationshipName;
+            const relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
+            const relationshipFieldName = relationships[idx].relationshipFieldName;
+            const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+            const otherEntityField = relationships[idx].otherEntityField;
+            const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
+            const relationshipRequired = relationships[idx].relationshipRequired;
+            const translationKey = keyPrefix + relationshipName; _%>
             <%_ if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true && otherEntityName == 'user')) { _%>
         <div class="form-group">
             <label data-translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
                 <%_ if (dto == 'no') { _%>
             <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=otherEntityNamePlural.toLowerCase() %> track by <%=otherEntityName %>.id"<% if (relationshipRequired) { %> required<% } %>>
+                <%_ if (!relationshipRequired) { _%>
                 <option value=""></option>
+                <%_ } _%>
             </select>
                 <%_ } else { _%>
             <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>Id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=otherEntityNamePlural.toLowerCase() %>"            <% if (relationshipRequired) { %> required<% } %>>
+                <%_ if (!relationshipRequired) { _%>
                 <option value=""></option>
+                <%_ } _%>
             </select>
             <%_ } _%>
         </div>
@@ -198,11 +205,15 @@ var ngValidators = './ng_validators';
             <label data-translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
                 <%_ if (dto == 'no') { _%>
             <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=relationshipFieldNamePlural.toLowerCase() %> | orderBy:'id' track by <%=otherEntityName %>.id"<% if (relationshipRequired) { %> required<% } %>>
+                <%_ if (!relationshipRequired) { _%>
                 <option value=""></option>
+                <%_ } _%>
             </select>
                 <%_ } else { _%>
             <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>Id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=relationshipFieldNamePlural.toLowerCase() %> | orderBy:'id'"<% if (relationshipRequired) { %> required<% } %>>
+                <%_ if (!relationshipRequired) { _%>
                 <option value=""></option>
+                <%_ } _%>
             </select>
                 <%_ } _%>
         </div>

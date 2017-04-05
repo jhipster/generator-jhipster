@@ -6,9 +6,9 @@
                 "button": "Obnovit heslo"
             },
             "messages": {
-                "info": "Zadejte e-mailovou adresu, kterou jste použili při registraci",
-                "success": "Na Váš e-mail sme Vám poslali informace o tom jak si můžete obnovit Vaše heslo.",
-                "notfound": "<strong>E-mailová adresa nebyla registrována!</strong> Prosím zkontrolujte nebo zkuste zadat znovu."
+                "info": "Zadejte emailovou adresu, kterou jste použili při registraci",
+                "success": "Na Váš email sme Vám poslali informace o tom jak si můžete obnovit Vaše heslo.",
+                "notfound": "<strong>Emailová adresa nebyla registrována!</strong> Prosím zkontrolujte nebo zkuste zadat znovu."
             }
         },
         "finish" : {
@@ -20,7 +20,7 @@
                 "info": "Vyberte si nové heslo",
                 <%_ if (clientFramework === 'angular1') { _%>
                 "success": "<strong>Vaše heslo bylo obnoveno.</strong> Můžete se <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">přihlásit</a>.",
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "success": "<strong>Vaše heslo bylo obnoveno.</strong> Můžete se ",
                 <%_ } _%>
                 "keymissing": "Chybí klíč na obnovení hesla.",

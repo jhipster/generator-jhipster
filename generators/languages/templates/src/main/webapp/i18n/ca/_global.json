@@ -51,7 +51,7 @@
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "Si vol <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">autenticar-se</a>, pot usar els comptes per defect:<br/>- Administrador (nom d'usuari=\"admin\" i contrasenya=\"admin\") <br/>- Usuari (nom d'usuari=\"user\" i contrasenya=\"user\").",
                 "register": "No disposa d'un compte encara? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Registri un nou compte</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Si vol ",
                     "link": "autenticar-se",
@@ -132,7 +132,7 @@
         "NotNull": "El camp {{fieldName}} no pot ser buit!",
         "Size": "El camp {{fieldName}} no compleix els requeriments de tamany mínim/màxim!",
         "userexists": "Nom d'usuari ja en ús!",
-        "emailexists": "E-mail ja en ús!",
+        "emailexists": "Email ja en ús!",
         "idexists": "Una nova {{entityName}} no pot ja tenir un ID"
     },
     "footer": "Aquest és el teu peu de pàgina"

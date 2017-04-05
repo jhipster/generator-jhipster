@@ -1,5 +1,5 @@
-var HtmlScreenshotReporter = require("protractor-jasmine2-screenshot-reporter");
-var JasmineReporters = require('jasmine-reporters');
+const HtmlScreenshotReporter = require("protractor-jasmine2-screenshot-reporter");
+const JasmineReporters = require('jasmine-reporters');
 
 exports.config = {
     allScriptsTimeout: 20000,

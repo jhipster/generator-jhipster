@@ -4,7 +4,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - "6.9.5"
+  - "<%= NODE_VERSION %>"
 jdk:
   - oraclejdk8
 sudo: false
@@ -22,7 +22,7 @@ cache:
 <%_ } _%>
 env:
   global:
-    - NODE_VERSION=6.9.5
+    - NODE_VERSION=<%= NODE_VERSION %>
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
 before_install:
@@ -69,8 +69,7 @@ script:
 <%_ if (applicationType !== 'microservice') { _%>
     <%_ if (clientFramework === 'angular1') { _%>
   - gulp test
-    <%_ } _%>
-    <%_ if (clientFramework === 'angular2') { _%>
+    <%_ } else { _%>
         <%_ if (clientPackageManager === 'yarn') { _%>
   - yarn test
         <%_ } else if (clientPackageManager === 'npm') { _%>
@@ -79,9 +78,16 @@ script:
     <%_ } _%>
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
+  <%_ if (heroku.includes('travis')) { _%>
+  - ./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy-war -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>
+  <%_ } else { _%>
   - ./mvnw package -Pprod -DskipTests
+  <%_ } _%>
 <%_ } else if (buildTool === 'gradle') { _%>
   - ./gradlew bootRepackage -Pprod -x test
+  <%_ if (heroku.includes('travis')) { _%>
+  - ./gradlew deployHeroku
+  <%_ } _%>
 <%_ } _%>
 notifications:
   webhooks:

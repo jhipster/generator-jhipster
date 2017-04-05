@@ -52,15 +52,15 @@
             "newpassword.placeholder": "Parolă noua",
             "confirmpassword": "Confirma parolă",
             "confirmpassword.placeholder": "Confirmați noua parolă",
-            "email": "E-mail",
-            "email.placeholder": "E-mailul dumneavoastră"
+            "email": "Email",
+            "email.placeholder": "Emailul dumneavoastră"
         },
         "messages": {
             "info": {
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "Dacă doriți să vă <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">autentificați</a>, puteți încerca conturile implicite:<br/>- Administrator (login=\"admin\" si parola=\"admin\") <br/>- Utilizator (login=\"user\" si parola=\"user\").",
                 "register": "Înca nu aveți un cont? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Înregistrați un nou cont</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Dacă doriți să vă ",
                     "link": "autentificați",
@@ -88,10 +88,10 @@
                     "maxlength": "Confirmarea parolei poate avea maxim 50 de caractere."
                 },
                 "email": {
-                    "required": "E-mailul dumneavoastră este necesar.",
-                    "invalid": "E-mail invalid",
-                    "minlength": "E-mailul dumneavoastră trebuie să aibă cel puțin 5 caractere",
-                    "maxlength": "E-mailul dumneavoastră nu poate avea mai mult de 50 de caractere."
+                    "required": "Emailul dumneavoastră este necesar.",
+                    "invalid": "Email invalid",
+                    "minlength": "Emailul dumneavoastră trebuie să aibă cel puțin 5 caractere",
+                    "maxlength": "Emailul dumneavoastră nu poate avea mai mult de 50 de caractere."
                 }
             }
         },
@@ -141,7 +141,7 @@
         "NotNull": "Câmpul {{fieldName}} nu poate fi gol!",
         "Size": "Câmpul {{fieldName}} nu corespunde ceințelor de dimensiune minimă/maximă!",
         "userexists": "Login name already used!",
-        "emailexists": "E-mail is already in use!",
+        "emailexists": "Email is already in use!",
         "idexists": "A new {{entityName}} cannot already have an ID"
     },
     "footer": "Acesta este subsolul paginii dumneavoastră"

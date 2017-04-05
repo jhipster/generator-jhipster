@@ -3,7 +3,7 @@
     They are written in English to avoid character encoding issues (not a perfect solution)
 */
 <%_
-    var languageString = '\n';
+    let languageString = '\n';
     languages.forEach((lang, index) => {
         languageString += `    \'${lang}\'${index !== languages.length-1 ? ',\n' : ''}`;
     });

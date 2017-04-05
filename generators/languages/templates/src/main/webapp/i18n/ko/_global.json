@@ -51,7 +51,7 @@
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "<a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">인증</a>을 원하시면, 기본 계정을 사용할 수 있습니다:<br/>- 관리자 (아이디=\"admin\", 비밀번호=\"admin\") <br/>- 사용자 (아이디=\"user\", 비밀번호=\"user\").",
                 "register": "아직 계정이 없습니까? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">새로운 계정을 등록하세요</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "",
                     "link": "인증",
@@ -132,7 +132,7 @@
         "NotNull": "Field {{fieldName}} cannot be empty!",
         "Size": "Field {{fieldName}} does not meet min/max size requirements!",
         "userexists": "Login name already used!",
-        "emailexists": "E-mail is already in use!",
+        "emailexists": "Email is already in use!",
         "idexists": "A new {{entityName}} cannot already have an ID"
     },
     "footer": "하단영역"

@@ -37,7 +37,7 @@
                     vm.success = null;
                     if (response.status === 400 && response.data === 'login already in use') {
                         vm.errorUserExists = 'ERROR';
-                    } else if (response.status === 400 && response.data === 'e-mail address already in use') {
+                    } else if (response.status === 400 && response.data === 'email address already in use') {
                         vm.errorEmailExists = 'ERROR';
                     } else {
                         vm.error = 'ERROR';

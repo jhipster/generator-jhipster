@@ -1,4 +1,3 @@
-'use strict';
 
 module.exports = {
     askPipelines,
@@ -7,23 +6,23 @@ module.exports = {
 
 function askPipelines() {
     if (this.abort) return;
-    var done = this.async();
-    var prompts = [
+    const done = this.async();
+    const prompts = [
         {
             type: 'checkbox',
             name: 'pipelines',
             message: 'What CI/CD pipeline do you want to generate?',
             default: [],
             choices: [
-                {name: 'Jenkins pipeline', value: 'jenkins'},
-                {name: 'Travis CI', value: 'travis'},
-                {name: 'Gitlab CI', value: 'gitlab'},
-                {name: 'CircleCI', value: 'circle'}
+                { name: 'Jenkins pipeline', value: 'jenkins' },
+                { name: 'Travis CI', value: 'travis' },
+                { name: 'GitLab CI', value: 'gitlab' },
+                { name: 'CircleCI', value: 'circle' }
             ]
         }
     ];
-    this.prompt(prompts).then(props => {
-        if(props.pipelines.length === 0) {
+    this.prompt(prompts).then((props) => {
+        if (props.pipelines.length === 0) {
             this.abort = true;
         }
         this.pipelines = props.pipelines;
@@ -33,19 +32,22 @@ function askPipelines() {
 
 function askIntegrations() {
     if (this.abort || this.pipelines.length === 0) return;
-    var done = this.async();
-    var herokuChoices = [];
+    const done = this.async();
+    const herokuChoices = [];
     if (this.pipelines.includes('jenkins')) {
-        herokuChoices.push({name: 'In Jenkins pipeline', value: 'jenkins'});
+        herokuChoices.push({ name: 'In Jenkins pipeline', value: 'jenkins' });
     }
     if (this.pipelines.includes('gitlab')) {
-        herokuChoices.push({name: 'In Gitlab CI', value: 'gitlab'});
+        herokuChoices.push({ name: 'In GitLab CI', value: 'gitlab' });
     }
     if (this.pipelines.includes('circle')) {
-        herokuChoices.push({name: 'In CircleCI', value: 'circle'});
+        herokuChoices.push({ name: 'In CircleCI', value: 'circle' });
+    }
+    if (this.pipelines.includes('travis')) {
+        herokuChoices.push({ name: 'In Travis CI', value: 'travis' });
     }
 
-    var prompts = [
+    const prompts = [
         {
             when: this.pipelines.includes('jenkins'),
             type: 'checkbox',
@@ -53,9 +55,10 @@ function askIntegrations() {
             message: 'Jenkins pipeline: what tasks/integrations do you want to include?',
             default: [],
             choices: [
-                {name: 'Perform the build in a Docker container', value: 'docker'},
-                {name: 'Analyze code with Sonar', value: 'sonar'},
-                {name: 'Send build status to Gitlab', value: 'gitlab'}
+                { name: 'Perform the build in a Docker container', value: 'docker' },
+                { name: 'Analyze code with Sonar', value: 'sonar' },
+                { name: 'Send build status to GitLab', value: 'gitlab' },
+                { name: 'Build and publish a Docker image', value: 'publishDocker' }
             ]
         },
         {
@@ -66,14 +69,28 @@ function askIntegrations() {
             default: 'Sonar'
         },
         {
+            when: response => this.pipelines.includes('jenkins') && response.jenkinsIntegrations.includes('publishDocker'),
+            type: 'input',
+            name: 'dockerRegistryURL',
+            message: 'What is the URL of the Docker registry?',
+            default: 'https://registry.hub.docker.com'
+        },
+        {
+            when: response => this.pipelines.includes('jenkins') && response.jenkinsIntegrations.includes('publishDocker'),
+            type: 'input',
+            name: 'dockerRegistryCredentialsId',
+            message: 'What is the Jenkins Credentials ID for the Docker registry?',
+            default: 'docker-login'
+        },
+        {
             when: this.pipelines.includes('gitlab'),
             type: 'confirm',
             name: 'gitlabUseDocker',
-            message: 'In Gitlab CI, perform the build in a docker container (hint: gitlab.com uses Docker container)?',
+            message: 'In GitLab CI, perform the build in a docker container (hint: GitLab.com uses Docker container)?',
             default: false
         },
         {
-            when: (this.pipelines.includes('jenkins') || this.pipelines.includes('gitlab') || this.pipelines.includes('circle')) && this.herokuAppName,
+            when: (this.pipelines.includes('jenkins') || this.pipelines.includes('gitlab') || this.pipelines.includes('circle') || this.pipelines.includes('travis')) && this.herokuAppName,
             type: 'checkbox',
             name: 'heroku',
             message: 'Deploy to heroku?',
@@ -81,9 +98,11 @@ function askIntegrations() {
             choices: herokuChoices
         }
     ];
-    this.prompt(prompts).then(props => {
+    this.prompt(prompts).then((props) => {
         this.jenkinsIntegrations = props.jenkinsIntegrations;
         this.jenkinsSonarName = props.jenkinsSonarName;
+        this.dockerRegistryURL = props.dockerRegistryURL;
+        this.dockerRegistryCredentialsId = props.dockerRegistryCredentialsId;
         this.gitlabUseDocker = props.gitlabUseDocker;
         this.heroku = props.heroku;
         done();

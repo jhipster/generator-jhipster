@@ -6,9 +6,9 @@
                 "button": "Jelszó visszaállítás"
             },
             "messages": {
-                "info": "Adja meg e-mail címét, amivel regisztrált",
-                "success": "E-mail címére elküldtük a leírást, hogyan állíthatja vissza jelszavát.",
-                "notfound": "<strong>Ezzel az e-mail címmel nem regisztráltak!</strong> Kérjük ellenőrizze, és próbálja újra!"
+                "info": "Adja meg email címét, amivel regisztrált",
+                "success": "Email címére elküldtük a leírást, hogyan állíthatja vissza jelszavát.",
+                "notfound": "<strong>Ezzel az email címmel nem regisztráltak!</strong> Kérjük ellenőrizze, és próbálja újra!"
             }
         },
         "finish" : {
@@ -20,7 +20,7 @@
                 "info": "Válasszon új jelszót",
                 <%_ if (clientFramework === 'angular1') { _%>
                 "success": "<strong>Az Ön jelszava meg lett változtatva.</strong> Kérjük <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">lépjen be vele</a>.",
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "success": "<strong>Az Ön jelszava meg lett változtatva.</strong> Kérjük ",
                 <%_ } _%>
                 "keymissing": "A jelszó visszaállító kulcs hiányzik.",

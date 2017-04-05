@@ -1,7 +1,9 @@
-import { Routes, CanActivate } from '@angular/router';
+import { Routes } from '@angular/router';
 
 import {
+    <%_ if (devDatabaseType !== 'cassandra') { _%>
     auditsRoute,
+    <%_ } _%>
     configurationRoute,
     docsRoute,
     healthRoute,
@@ -22,7 +24,9 @@ import {
 import { UserRouteAccessService } from '../shared';
 
 let ADMIN_ROUTES = [
+    <%_ if (devDatabaseType !== 'cassandra') { _%>
     auditsRoute,
+    <%_ } _%>
     configurationRoute,
     docsRoute,
     healthRoute,

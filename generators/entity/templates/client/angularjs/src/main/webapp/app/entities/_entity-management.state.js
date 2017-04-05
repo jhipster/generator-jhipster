@@ -50,7 +50,7 @@
             <%_ } if (enableTranslation){ _%>
                 translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                     $translatePartialLoader.addPart('<%= entityInstance %>');<%
-                    for (var idx in fields) {
+                    for (const idx in fields) {
                       if (fields[idx].fieldIsEnum == true) { %>
                     $translatePartialLoader.addPart('<%= fields[idx].enumInstance %>');<% }} %>
                     $translatePartialLoader.addPart('global');
@@ -76,7 +76,7 @@
             resolve: {<% if (enableTranslation){ %>
                 translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                     $translatePartialLoader.addPart('<%= entityInstance %>');<%
-                    for (var idx in fields) {
+                    for (const idx in fields) {
                       if (fields[idx].fieldIsEnum == true) { %>
                     $translatePartialLoader.addPart('<%= fields[idx].enumInstance %>');<% }} %>
                     return $translate.refresh();

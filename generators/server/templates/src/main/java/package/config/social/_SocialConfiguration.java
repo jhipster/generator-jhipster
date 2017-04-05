@@ -132,7 +132,7 @@ public class SocialConfiguration implements SocialConfigurer {
     }
 
     @Bean
-    public ProviderSignInController providerSignInController(ConnectionFactoryLocator connectionFactoryLocator, UsersConnectionRepository usersConnectionRepository, SignInAdapter signInAdapter) throws Exception {
+    public ProviderSignInController providerSignInController(ConnectionFactoryLocator connectionFactoryLocator, UsersConnectionRepository usersConnectionRepository, SignInAdapter signInAdapter) {
         ProviderSignInController providerSignInController = new ProviderSignInController(connectionFactoryLocator, usersConnectionRepository, signInAdapter);
         providerSignInController.setSignUpUrl("/social/signup");
         providerSignInController.setApplicationUrl(environment.getProperty("spring.application.url"));

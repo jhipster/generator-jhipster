@@ -3,9 +3,9 @@
         "title": "Activation",
         "messages": {
             <%_ if (clientFramework === 'angular1') { _%>
-            "success": "<strong>Your user has been activated.</strong> Please <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">sign in</a>.",
-            <%_ } else if (clientFramework === 'angular2') { _%>
-            "success": "<strong>Your user has been activated.</strong> Please ",
+            "success": "<strong>Your user account has been activated.</strong> Please <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">sign in</a>.",
+            <%_ } else { _%>
+            "success": "<strong>Your user account has been activated.</strong> Please ",
             <%_ } _%>
             "error": "<strong>Your user could not be activated.</strong> Please use the registration form to sign up."
         }

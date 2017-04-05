@@ -137,13 +137,12 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
          * See the JHipsterProperties class and your application-*.yml configuration files
          * for more information.
          */
-        if (jHipsterProperties.getHttp().getVersion().equals(JHipsterProperties.Http.Version.V_2_0)) {
-            if (container instanceof UndertowEmbeddedServletContainerFactory) {
-                ((UndertowEmbeddedServletContainerFactory) container)
-                    .addBuilderCustomizers((builder) -> {
-                        builder.setServerOption(UndertowOptions.ENABLE_HTTP2, true);
-                    });
-            }
+        if (jHipsterProperties.getHttp().getVersion().equals(JHipsterProperties.Http.Version.V_2_0) &&
+            container instanceof UndertowEmbeddedServletContainerFactory) {
+
+            ((UndertowEmbeddedServletContainerFactory) container)
+                .addBuilderCustomizers(builder ->
+                    builder.setServerOption(UndertowOptions.ENABLE_HTTP2, true));
         }
     }
     <%_ if (!skipClient) { _%>
@@ -151,7 +150,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     private void setLocationForStaticAssets(ConfigurableEmbeddedServletContainer container) {
         File root;
         String prefixPath = resolvePathPrefix();
-        <%_ if (clientFramework === 'angular2') { _%>
+        <%_ if (clientFramework !== 'angular1') { _%>
         root = new File(prefixPath + "<%= CLIENT_DIST_DIR %>");
         <%_ } else { _%>
         if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {

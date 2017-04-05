@@ -1,7 +1,5 @@
-'use strict';
-
-var chalk = require('chalk'),
-    shelljs = require('shelljs');
+const chalk = require('chalk');
+const shelljs = require('shelljs');
 
 module.exports = {
     askForApplicationType,
@@ -14,9 +12,9 @@ module.exports = {
 };
 
 function askForApplicationType() {
-    var done = this.async();
+    const done = this.async();
 
-    var prompts = [{
+    const prompts = [{
         type: 'list',
         name: 'composeApplicationType',
         message: 'Which *type* of application would you like to deploy?',
@@ -33,82 +31,76 @@ function askForApplicationType() {
         default: 'monolith'
     }];
 
-    this.prompt(prompts).then(function(props) {
+    this.prompt(prompts).then((props) => {
         this.composeApplicationType = props.composeApplicationType;
         done();
-    }.bind(this));
+    });
 }
 
 function askForPath() {
     if (this.regenerate) return;
 
-    var done = this.async();
-    var composeApplicationType = this.composeApplicationType;
-    var messageAskForPath;
+    const done = this.async();
+    const composeApplicationType = this.composeApplicationType;
+    let messageAskForPath;
     if (composeApplicationType === 'monolith') {
         messageAskForPath = 'Enter the root directory where your applications are located';
     } else {
         messageAskForPath = 'Enter the root directory where your gateway(s) and microservices are located';
     }
-    var prompts = [{
+    const prompts = [{
         type: 'input',
         name: 'directoryPath',
         message: messageAskForPath,
         default: this.directoryPath || '../',
-        validate: function (input) {
-            var path = this.destinationPath(input);
-            if(shelljs.test('-d', path)) {
-                var appsFolders = getAppFolders.call(this, input, composeApplicationType);
+        validate: (input) => {
+            const path = this.destinationPath(input);
+            if (shelljs.test('-d', path)) {
+                const appsFolders = getAppFolders.call(this, input, composeApplicationType);
 
-                if(appsFolders.length === 0) {
-                    return 'No microservice or gateway found in ' + path;
-                } else {
-                    return true;
+                if (appsFolders.length === 0) {
+                    return `No microservice or gateway found in ${path}`;
                 }
-            } else {
-                return path + ' is not a directory or doesn\'t exist';
+                return true;
             }
-        }.bind(this)
+            return `${path} is not a directory or doesn't exist`;
+        }
     }];
 
-    this.prompt(prompts).then(function (props) {
+    this.prompt(prompts).then((props) => {
         this.directoryPath = props.directoryPath;
 
         this.appsFolders = getAppFolders.call(this, this.directoryPath, composeApplicationType);
 
-        //Removing registry from appsFolders, using reverse for loop
-        for(var i = this.appsFolders.length - 1; i >= 0; i--) {
+        // Removing registry from appsFolders, using reverse for loop
+        for (let i = this.appsFolders.length - 1; i >= 0; i--) {
             if (this.appsFolders[i] === 'jhipster-registry' || this.appsFolders[i] === 'registry') {
-                this.appsFolders.splice(i,1);
+                this.appsFolders.splice(i, 1);
             }
         }
 
-        this.log(chalk.green(this.appsFolders.length + ' applications found at ' + this.destinationPath(this.directoryPath) + '\n'));
+        this.log(chalk.green(`${this.appsFolders.length} applications found at ${this.destinationPath(this.directoryPath)}\n`));
 
         done();
-    }.bind(this));
+    });
 }
 
 function askForApps() {
     if (this.regenerate) return;
 
-    var done = this.async();
-    var messageAskForApps = 'Which applications do you want to include in your configuration?';
+    const done = this.async();
+    const messageAskForApps = 'Which applications do you want to include in your configuration?';
 
-    var prompts = [{
+    const prompts = [{
         type: 'checkbox',
         name: 'chosenApps',
         message: messageAskForApps,
         choices: this.appsFolders,
         default: this.defaultAppsFolders,
-        validate: function (input) {
-            if(input.length === 0) {
-                return 'Please choose at least one application';
-            } else return true;
-        }
+        validate: input => (input.length === 0 ? 'Please choose at least one application' : true)
     }];
 
-    this.prompt(prompts).then(function (props) {
+    this.prompt(prompts).then((props) => {
         this.appsFolders = props.chosenApps;
 
         this.appConfigs = [];
@@ -116,11 +108,11 @@ function askForApps() {
         this.monolithicNb = 0;
         this.microserviceNb = 0;
 
-        //Loading configs
-        this.appsFolders.forEach(function (appFolder) {
-            var path = this.destinationPath(this.directoryPath + appFolder +'/.yo-rc.json');
-            var fileData = this.fs.readJSON(path);
-            var config = fileData['generator-jhipster'];
+        // Loading configs
+        this.appsFolders.forEach((appFolder) => {
+            const path = this.destinationPath(`${this.directoryPath + appFolder}/.yo-rc.json`);
+            const fileData = this.fs.readJSON(path);
+            const config = fileData['generator-jhipster'];
 
             if (config.applicationType === 'monolith') {
                 this.monolithicNb++;
@@ -132,26 +124,26 @@ function askForApps() {
 
             this.portsToBind = this.monolithicNb + this.gatewayNb;
             this.appConfigs.push(config);
-        }, this);
+        });
 
         done();
-    }.bind(this));
+    });
 }
 
 function askForClustersMode() {
     if (this.regenerate) return;
 
-    var mongoApps = [];
-    this.appConfigs.forEach(function (appConfig, index) {
-        if(appConfig.prodDatabaseType === 'mongodb') {
+    const mongoApps = [];
+    this.appConfigs.forEach((appConfig, index) => {
+        if (appConfig.prodDatabaseType === 'mongodb') {
             mongoApps.push(this.appsFolders[index]);
         }
-    }, this);
-    if(mongoApps.length===0) return;
+    });
+    if (mongoApps.length === 0) return;
 
-    var done = this.async();
+    const done = this.async();
 
-    var prompts = [{
+    const prompts = [{
         type: 'checkbox',
         name: 'clusteredDbApps',
         message: 'Which applications do you want to use with clustered databases (only available with MongoDB)?',
@@ -159,24 +151,24 @@ function askForClustersMode() {
         default: this.clusteredDbApps
     }];
 
-    this.prompt(prompts).then(function (props) {
+    this.prompt(prompts).then((props) => {
         this.clusteredDbApps = props.clusteredDbApps;
-        for (var i = 0; i < this.appsFolders.length; i++) {
-            for (var j = 0; j < props.clusteredDbApps.length; j++) {
+        for (let i = 0; i < this.appsFolders.length; i++) {
+            for (let j = 0; j < props.clusteredDbApps.length; j++) {
                 this.appConfigs[i].clusteredDb = this.appsFolders[i] === props.clusteredDbApps[j];
             }
         }
 
         done();
-    }.bind(this));
+    });
 }
 
 function askForMonitoring() {
     if (this.regenerate) return;
 
-    var done = this.async();
+    const done = this.async();
 
-    var prompts = [{
+    const prompts = [{
         type: 'list',
         name: 'monitoring',
         message: 'Do you want to setup monitoring for your applications ?',
@@ -187,7 +179,7 @@ function askForMonitoring() {
             },
             {
                 value: 'elk',
-                name: 'Yes, for logs and metrics with the JHipster Console (based on ELK)'
+                name: 'Yes, for logs and metrics with the JHipster Console (based on ELK and Zipkin)'
             },
             {
                 value: 'prometheus',
@@ -197,48 +189,46 @@ function askForMonitoring() {
         default: 'no'
     }];
 
-    this.prompt(prompts).then(function(props) {
+    this.prompt(prompts).then((props) => {
         this.monitoring = props.monitoring;
         done();
-    }.bind(this));
+    });
 }
 
 function askForServiceDiscovery() {
     if (this.regenerate) return;
 
-    var done = this.async();
+    const done = this.async();
 
-    var serviceDiscoveryEnabledApps = [];
-    this.appConfigs.forEach(function (appConfig, index) {
-        if(appConfig.serviceDiscoveryType) {
-            serviceDiscoveryEnabledApps.push({baseName: appConfig.baseName, serviceDiscoveryType: appConfig.serviceDiscoveryType});
+    const serviceDiscoveryEnabledApps = [];
+    this.appConfigs.forEach((appConfig, index) => {
+        if (appConfig.serviceDiscoveryType) {
+            serviceDiscoveryEnabledApps.push({ baseName: appConfig.baseName, serviceDiscoveryType: appConfig.serviceDiscoveryType });
         }
-    }, this);
+    });
 
-    if(serviceDiscoveryEnabledApps.length === 0) {
+    if (serviceDiscoveryEnabledApps.length === 0) {
         this.serviceDiscoveryType = false;
         done();
         return;
     }
 
-    if(serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryType === 'consul')){
+    if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryType === 'consul')) {
         this.serviceDiscoveryType = 'consul';
         this.log(chalk.green('Consul detected as the service discovery and configuration provider used by your apps'));
         done();
-    }
-    else if(serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryType === 'eureka')){
+    } else if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryType === 'eureka')) {
         this.serviceDiscoveryType = 'eureka';
         this.log(chalk.green('JHipster registry detected as the service discovery and configuration provider used by your apps'));
         done();
-    }
-    else {
+    } else {
         this.log(chalk.yellow('Unable to determine the service discovery and configuration provider to use from your apps configuration.'));
         this.log('Your service discovery enabled apps:');
-        serviceDiscoveryEnabledApps.forEach(function(app){
+        serviceDiscoveryEnabledApps.forEach((app) => {
             this.log(` -${app.baseName} (${app.serviceDiscoveryType})`);
-        }.bind(this));
+        });
 
-        var prompts = [{
+        const prompts = [{
             type: 'list',
             name: 'serviceDiscoveryType',
             message: 'Which Service Discovery registry and Configuration server would you like to use ?',
@@ -259,60 +249,56 @@ function askForServiceDiscovery() {
             default: 'eureka'
         }];
 
-        this.prompt(prompts).then(function(props) {
+        this.prompt(prompts).then((props) => {
             this.serviceDiscoveryType = props.serviceDiscoveryType;
             done();
-        }.bind(this));
+        });
     }
 }
 
 function askForAdminPassword() {
     if (this.regenerate || this.serviceDiscoveryType !== 'eureka') return;
 
-    var done = this.async();
+    const done = this.async();
 
-    var prompts = [{
+    const prompts = [{
         type: 'input',
         name: 'adminPassword',
         message: 'Enter the admin password used to secure the JHipster Registry',
         default: 'admin',
-        validate: function (input) {
-            if(input.length < 5) {
-                return 'The password must have at least 5 characters';
-            } else return true;
-        }
+        validate: input => (input.length < 5 ? 'The password must have at least 5 characters' : true)
     }];
 
-    this.prompt(prompts).then(function(props) {
+    this.prompt(prompts).then((props) => {
         this.adminPassword = props.adminPassword;
         this.adminPasswordBase64 = new Buffer(this.adminPassword).toString('base64');
         done();
-    }.bind(this));
+    });
 }
 
 function getAppFolders(input, composeApplicationType) {
-    var files = shelljs.ls('-l', this.destinationPath(input));
-    var appsFolders = [];
+    const files = shelljs.ls('-l', this.destinationPath(input));
+    const appsFolders = [];
 
-    files.forEach(function(file) {
-        if(file.isDirectory()) {
-            if( (shelljs.test('-f', input + file.name + '/.yo-rc.json'))
-                && (shelljs.test('-f', input + file.name + '/src/main/docker/app.yml')) ) {
+    files.forEach((file) => {
+        if (file.isDirectory()) {
+            if ((shelljs.test('-f', `${input + file.name}/.yo-rc.json`))
+                && (shelljs.test('-f', `${input + file.name}/src/main/docker/app.yml`))) {
                 try {
-                    var fileData = this.fs.readJSON(input + file.name + '/.yo-rc.json');
+                    const fileData = this.fs.readJSON(`${input + file.name}/.yo-rc.json`);
                     if ((fileData['generator-jhipster'].baseName !== undefined)
                         && ((composeApplicationType === undefined)
                             || (composeApplicationType === fileData['generator-jhipster'].applicationType)
-                            || ((composeApplicationType === 'microservice') && ('gateway' === fileData['generator-jhipster'].applicationType))
-                            || ((composeApplicationType === 'microservice') && ('uaa' === fileData['generator-jhipster'].applicationType)))) {
-                        appsFolders.push(file.name.match(/([^\/]*)\/*$/)[1]);
+                            || ((composeApplicationType === 'microservice') && (fileData['generator-jhipster'].applicationType === 'gateway'))
+                            || ((composeApplicationType === 'microservice') && (fileData['generator-jhipster'].applicationType === 'uaa')))) {
+                        appsFolders.push(file.name.match(/([^/]*)\/*$/)[1]);
                     }
-                } catch(err) {
-                    this.log(chalk.red(file + ': this .yo-rc.json can\'t be read'));
+                } catch (err) {
+                    this.log(chalk.red(`${file}: this .yo-rc.json can't be read`));
                 }
             }
         }
-    }, this);
+    });
 
     return appsFolders;
 }

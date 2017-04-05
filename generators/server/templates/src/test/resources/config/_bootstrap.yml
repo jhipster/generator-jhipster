@@ -10,7 +10,7 @@ spring:
         consul:
             discovery:
                 enabled: false
-                instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+                instanceId: ${spring.application.name}:${spring.application.instance-id:${random.value}}
             config:
                 enabled: false
 <%_ } _%>

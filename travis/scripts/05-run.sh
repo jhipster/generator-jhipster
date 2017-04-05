@@ -51,16 +51,16 @@ launchCurlOrProtractor() {
 #-------------------------------------------------------------------------------
 if [ "$JHIPSTER" == "app-ng2-gateway-uaa" ]; then
     cd "$HOME"/uaa
-    ./mvnw package -DskipTests=true -P"$PROFILE"
+    ./mvnw package -DskipTests -P"$PROFILE"
 fi
 
 #-------------------------------------------------------------------------------
 # Package the application
 #-------------------------------------------------------------------------------
-cd "$HOME"/app
+cd "$APP_FOLDER"
 
 if [ -f "mvnw" ]; then
-    ./mvnw package -DskipTests=true -P"$PROFILE"
+    ./mvnw package -DskipTests -P"$PROFILE"
     mv target/*.war app.war
 elif [ -f "gradlew" ]; then
     ./gradlew bootRepackage -P"$PROFILE" -x test
@@ -79,7 +79,7 @@ fi
 #-------------------------------------------------------------------------------
 if [ "$RUN_APP" == 1 ]; then
     if [ "$JHIPSTER" == "app-ng2-gateway-uaa" ]; then
-        cd "$HOME"/uaa
+        cd "$UAA_APP_FOLDER"
         java -jar target/*.war \
             --spring.profiles.active="$PROFILE" \
             --logging.level.io.github.jhipster.sample=ERROR \
@@ -87,7 +87,7 @@ if [ "$RUN_APP" == 1 ]; then
         sleep 80
     fi
 
-    cd "$HOME"/app
+    cd "$APP_FOLDER"
     java -jar app.war \
         --spring.profiles.active="$PROFILE" \
         --logging.level.io.github.jhipster.sample=ERROR \

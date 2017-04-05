@@ -6,9 +6,9 @@
                 "button": "Reposição da palavra-passe"
             },
             "messages": {
-                "info": "Introduza o endereço de e-mail utilizado para registar",
-                "success": "Verifique o seu e-mail para mais detalhes sobre como repor a palavra-passe.",
-                "notfound": "<strong>Endereço de e-mail não registado!</strong> Por favor verifique e tente de novo"
+                "info": "Introduza o endereço de email utilizado para registar",
+                "success": "Verifique o seu email para mais detalhes sobre como repor a palavra-passe.",
+                "notfound": "<strong>Endereço de email não registado!</strong> Por favor verifique e tente de novo"
             }
         },
         "finish" : {
@@ -20,7 +20,7 @@
                 "info": "Escolha uma nova palavra-passe",
                 <%_ if (clientFramework === 'angular1') { _%>
                 "success": "<strong>A sua palavra-passe foi reposta.</strong> Por favor <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">autentique-se</a>.",
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "success": "<strong>A sua palavra-passe foi reposta.</strong> Por favor ",
                 <%_ } _%>
                 "keymissing": "Chave de reposição em falta.",

@@ -14,6 +14,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 <%_ } _%>
 <%_ if (databaseType == 'mongodb') { _%>
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 <%_ } _%>
@@ -56,14 +57,15 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @PartitionKey
     private String id;<% } %>
 
-    <%_ var columnMax = 50;
+    <%_ let columnMax = 50;
         if (enableSocialSignIn) {
             columnMax = 100;
         } _%>
     @NotNull
     @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 1, max = <%=columnMax %>)<% if (databaseType == 'sql') { %>
-    @Column(length = <%=columnMax %>, unique = true, nullable = false)<% } %>
+    @Column(length = <%=columnMax %>, unique = true, nullable = false)<% } %><% if (databaseType == 'mongodb') { %>
+    @Indexed<% } %>
     private String login;
 
     @JsonIgnore
@@ -83,8 +85,9 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     private String lastName;
 
     @Email
-    @Size(max = 100)<% if (databaseType == 'sql') { %>
-    @Column(length = 100, unique = true)<% } %>
+    @Size(min = 5, max = 100)<% if (databaseType == 'sql') { %>
+    @Column(length = 100, unique = true)<% } %><% if (databaseType == 'mongodb') { %>
+    @Indexed<% } %>
     private String email;
 <% if (databaseType == 'sql') { %>
     @NotNull
@@ -276,11 +279,7 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 
         User user = (User) o;
 
-        if (!login.equals(user.login)) {
-            return false;
-        }
-
-        return true;
+        return login.equals(user.login);
     }
 
     @Override

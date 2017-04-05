@@ -51,7 +51,7 @@
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "<a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">認証</a>を試したければ, デフォルトアカウント:<br/>- 管理者 (ユーザー名=\"admin\", パスワード=\"admin\") <br/>- ユーザー (login=\"user\", password=\"user\").",
                 "register": "アカウントをまだお持ちでないですか? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">アカウントを登録する</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "",
                     "link": "認証",
@@ -132,7 +132,7 @@
         "NotNull": "Field {{fieldName}} cannot be empty!",
         "Size": "Field {{fieldName}} does not meet min/max size requirements!",
         "userexists": "Login name already used!",
-        "emailexists": "E-mail is already in use!",
+        "emailexists": "Email is already in use!",
         "idexists": "A new {{entityName}} cannot already have an ID"
     },
     "footer": "フッターです"

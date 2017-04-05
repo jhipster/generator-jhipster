@@ -1,141 +1,139 @@
-/*global describe, it*/
-/* eslint-disable no-console */
-'use strict';
+/* global describe, it*/
 
-const assert = require('assert'),
-    expectedFiles = require('./test-expected-files'),
-    Generator = require('../generators/generator-base');
+const assert = require('assert');
+const expectedFiles = require('./test-expected-files');
+const BaseGenerator = require('../generators/generator-base');
 
-Generator.prototype.log = function (msg) {console.log(msg);};
+BaseGenerator.prototype.log = (msg) => { console.log(msg); }; // eslint-disable-line no-console
 
-describe('Generator Base', function () {
-    describe('getAllSupportedLanguages', function () {
-        describe('when called', function () {
-            it('returns an array', function () {
-                assert.notEqual(Generator.prototype.getAllSupportedLanguages().length, 0);
+describe('Generator Base', () => {
+    describe('getAllSupportedLanguages', () => {
+        describe('when called', () => {
+            it('returns an array', () => {
+                assert.notEqual(BaseGenerator.prototype.getAllSupportedLanguages().length, 0);
             });
         });
     });
-    describe('isSupportedLanguage', function () {
-        describe('when called with valid language', function () {
-            it('returns true', function () {
-                assert.equal(Generator.prototype.isSupportedLanguage('en'), true);
+    describe('isSupportedLanguage', () => {
+        describe('when called with valid language', () => {
+            it('returns true', () => {
+                assert.equal(BaseGenerator.prototype.isSupportedLanguage('en'), true);
             });
         });
-        describe('when called with invalid language', function () {
-            it('returns false', function () {
-                assert.equal(Generator.prototype.isSupportedLanguage('ab'), false);
-            });
-        });
-    });
-    describe('getAllSupportedLanguageOptions', function () {
-        describe('when called', function () {
-            it('returns an array', function () {
-                assert.notEqual(Generator.prototype.getAllSupportedLanguages().length, 0);
+        describe('when called with invalid language', () => {
+            it('returns false', () => {
+                assert.equal(BaseGenerator.prototype.isSupportedLanguage('ab'), false);
             });
         });
     });
-    describe('getTableName', function () {
-        describe('when called with a value', function () {
-            it('returns a table name', function () {
-                assert.equal(Generator.prototype.getTableName('tableName'), 'table_name');
+    describe('getAllSupportedLanguageOptions', () => {
+        describe('when called', () => {
+            it('returns an array', () => {
+                assert.notEqual(BaseGenerator.prototype.getAllSupportedLanguages().length, 0);
             });
         });
     });
-    describe('getColumnName', function () {
-        describe('when called with a value', function () {
-            it('returns a column name', function () {
-                assert.equal(Generator.prototype.getColumnName('colName'), 'col_name');
-                assert.equal(Generator.prototype.getColumnName('colNName'), 'colnname');
+    describe('getTableName', () => {
+        describe('when called with a value', () => {
+            it('returns a table name', () => {
+                assert.equal(BaseGenerator.prototype.getTableName('tableName'), 'table_name');
             });
         });
     });
-    describe('getPluralColumnName', function () {
-        describe('when called with a value', function () {
-            it('returns a plural column name', function () {
-                assert.equal(Generator.prototype.getPluralColumnName('colName'), 'col_names');
+    describe('getColumnName', () => {
+        describe('when called with a value', () => {
+            it('returns a column name', () => {
+                assert.equal(BaseGenerator.prototype.getColumnName('colName'), 'col_name');
+                assert.equal(BaseGenerator.prototype.getColumnName('colNName'), 'colnname');
             });
         });
     });
-    describe('getJoinTableName', function () {
-        describe('when called with a value', function () {
-            it('returns a join table name', function () {
-                assert.equal(Generator.prototype.getJoinTableName('entityName', 'relationshipName', 'mysql'), 'entity_name_relationship_name');
-            });
-        });
-        describe('when called with a long name', function () {
-            it('returns a proper join table name', function () {
-                assert.equal(Generator.prototype.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle').length, 30);
-                assert.equal(Generator.prototype.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle'), 'entity_name_lon_relationship_n');
+    describe('getPluralColumnName', () => {
+        describe('when called with a value', () => {
+            it('returns a plural column name', () => {
+                assert.equal(BaseGenerator.prototype.getPluralColumnName('colName'), 'col_names');
             });
         });
     });
-    describe('getConstraintName', function () {
-        describe('when called with a value', function () {
-            it('returns a constraint name', function () {
-                assert.equal(Generator.prototype.getConstraintName('entityName', 'relationshipName', 'mysql'), 'fk_entity_name_relationship_name_id');
+    describe('getJoinTableName', () => {
+        describe('when called with a value', () => {
+            it('returns a join table name', () => {
+                assert.equal(BaseGenerator.prototype.getJoinTableName('entityName', 'relationshipName', 'mysql'), 'entity_name_relationship_name');
             });
         });
-        describe('when called with a long name', function () {
-            it('returns a proper constraint name', function () {
-                assert.equal(Generator.prototype.getConstraintName('entityNameLongerName', 'relationshipName', 'oracle').length, 30);
-                assert.equal(Generator.prototype.getConstraintName('entityNameLongerName', 'relationshipName', 'oracle'), 'entity_name_lo_relationship_id');
-            });
-        });
-    });
-    describe('printJHipsterLogo', function () {
-        describe('when called', function () {
-            it('prints the logo', function () {
-                assert.equal(Generator.prototype.printJHipsterLogo(), undefined);
+        describe('when called with a long name', () => {
+            it('returns a proper join table name', () => {
+                assert.equal(BaseGenerator.prototype.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle').length, 30);
+                assert.equal(BaseGenerator.prototype.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle'), 'entity_name_lon_relationship_n');
             });
         });
     });
-    describe('checkForNewVersion', function () {
-        describe('when called', function () {
-            it('prints the new version info', function () {
-                assert.equal(Generator.prototype.checkForNewVersion(), undefined);
+    describe('getConstraintName', () => {
+        describe('when called with a value', () => {
+            it('returns a constraint name', () => {
+                assert.equal(BaseGenerator.prototype.getConstraintName('entityName', 'relationshipName', 'mysql'), 'fk_entity_name_relationship_name_id');
+            });
+        });
+        describe('when called with a long name', () => {
+            it('returns a proper constraint name', () => {
+                assert.equal(BaseGenerator.prototype.getConstraintName('entityNameLongerName', 'relationshipName', 'oracle').length, 30);
+                assert.equal(BaseGenerator.prototype.getConstraintName('entityNameLongerName', 'relationshipName', 'oracle'), 'entity_name_lo_relationship_id');
             });
         });
     });
-    describe('getAngularAppName', function () {
-        describe('when called with name', function () {
-            it('return the angular app name', function () {
-                Generator.prototype.baseName = 'myTest';
-                assert.equal(Generator.prototype.getAngularAppName(), 'myTestApp');
-            });
-        });
-        describe('when called with name having App', function () {
-            it('return the angular app name', function () {
-                Generator.prototype.baseName = 'myApp';
-                assert.equal(Generator.prototype.getAngularAppName(), 'myApp');
+    describe('printJHipsterLogo', () => {
+        describe('when called', () => {
+            it('prints the logo', () => {
+                assert.equal(BaseGenerator.prototype.printJHipsterLogo(), undefined);
             });
         });
     });
-    describe('getMainClassName', function () {
-        describe('when called with name', function () {
-            it('return the app name', function () {
-                Generator.prototype.baseName = 'myTest';
-                assert.equal(Generator.prototype.getMainClassName(), 'MyTestApp');
+    describe('checkForNewVersion', () => {
+        describe('when called', () => {
+            it('prints the new version info', () => {
+                assert.equal(BaseGenerator.prototype.checkForNewVersion(), undefined);
             });
         });
-        describe('when called with name having App', function () {
-            it('return the app name', function () {
-                Generator.prototype.baseName = 'myApp';
-                assert.equal(Generator.prototype.getMainClassName(), 'MyApp');
+    });
+    describe('getAngularAppName', () => {
+        describe('when called with name', () => {
+            it('return the angular app name', () => {
+                BaseGenerator.prototype.baseName = 'myTest';
+                assert.equal(BaseGenerator.prototype.getAngularAppName(), 'myTestApp');
             });
         });
-        describe('when called with name having invalid java chars', function () {
-            it('return the default app name', function () {
-                Generator.prototype.baseName = '9myApp';
-                assert.equal(Generator.prototype.getMainClassName(), 'Application');
+        describe('when called with name having App', () => {
+            it('return the angular app name', () => {
+                BaseGenerator.prototype.baseName = 'myApp';
+                assert.equal(BaseGenerator.prototype.getAngularAppName(), 'myApp');
+            });
+        });
+    });
+    describe('getMainClassName', () => {
+        describe('when called with name', () => {
+            it('return the app name', () => {
+                BaseGenerator.prototype.baseName = 'myTest';
+                assert.equal(BaseGenerator.prototype.getMainClassName(), 'MyTestApp');
+            });
+        });
+        describe('when called with name having App', () => {
+            it('return the app name', () => {
+                BaseGenerator.prototype.baseName = 'myApp';
+                assert.equal(BaseGenerator.prototype.getMainClassName(), 'MyApp');
+            });
+        });
+        describe('when called with name having invalid java chars', () => {
+            it('return the default app name', () => {
+                BaseGenerator.prototype.baseName = '9myApp';
+                assert.equal(BaseGenerator.prototype.getMainClassName(), 'Application');
             });
         });
     });
 
-    describe('writeFilesToDisk', function () {
-        describe('when called with default angular client options', function () {
-            it('should produce correct files', function () {
-                const files = require('../generators/client/files-angularjs').files; // fetch angular 1 files
+    describe('writeFilesToDisk', () => {
+        describe('when called with default angular client options', () => {
+            it('should produce correct files', () => {
+                const files = require('../generators/client/files-angularjs').files; // eslint-disable-line global-require
                 const generator = {
                     useSass: false,
                     enableTranslation: true,
@@ -144,13 +142,13 @@ describe('Generator Base', function () {
                 };
                 let filesToAssert = expectedFiles.client;
                 filesToAssert = filesToAssert.concat(expectedFiles.userManagement).sort();
-                const out = Generator.prototype.writeFilesToDisk(files, generator, true).sort();
+                const out = BaseGenerator.prototype.writeFilesToDisk(files, generator, true).sort();
                 assert.deepEqual(out, filesToAssert);
             });
         });
-        describe('when called with default angular client options skipping user-management', function () {
-            it('should produce correct files', function () {
-                const files = require('../generators/client/files-angularjs').files; // fetch angular 1 files
+        describe('when called with default angular client options skipping user-management', () => {
+            it('should produce correct files', () => {
+                const files = require('../generators/client/files-angularjs').files; // eslint-disable-line global-require
                 const generator = {
                     useSass: false,
                     enableTranslation: true,
@@ -159,15 +157,16 @@ describe('Generator Base', function () {
                     testFrameworks: []
                 };
                 const filesToAssert = expectedFiles.client.sort();
-                const out = Generator.prototype.writeFilesToDisk(files, generator, true).sort();
+                const out = BaseGenerator.prototype.writeFilesToDisk(files, generator, true).sort();
                 assert.deepEqual(out, filesToAssert);
             });
         });
     });
 
-    describe('stripMargin', function () {
-        it('should produce correct output without margin', function () {
-            const entityFolderName = 'entityFolderName', entityFileName = 'entityFileName';
+    describe('stripMargin', () => {
+        it('should produce correct output without margin', () => {
+            const entityFolderName = 'entityFolderName';
+            const entityFileName = 'entityFileName';
             const content =
                 `|export * from './${entityFolderName}/${entityFileName}-dialog.component';
                  |export * from './${entityFolderName}/${entityFileName}-delete-dialog.component';
@@ -180,15 +179,17 @@ export * from './entityFolderName/entityFileName-delete-dialog.component';
 export * from './entityFolderName/entityFileName-detail.component';
 export * from './entityFolderName/entityFileName.component';
 export * from './entityFolderName/entityFileName.state';`;
-            assert.equal(Generator.prototype.stripMargin(content), out);
+            assert.equal(BaseGenerator.prototype.stripMargin(content), out);
         });
-        it('should produce correct indented output without margin', function () {
-            const routerName = 'routerName', enableTranslation = true, glyphiconName = 'glyphiconName';
+        it('should produce correct indented output without margin', () => {
+            const routerName = 'routerName';
+            const enableTranslation = true;
+            const glyphiconName = 'glyphiconName';
             const content =
                 `|<li ui-sref-active="active">
                  |    <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
                  |        <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
-                 |        <span ${enableTranslation ? 'data-translate="global.menu.' + routerName + '"' : ''}>${routerName}</span>
+                 |        <span ${enableTranslation ? `data-translate="global.menu.${routerName}"` : ''}>${routerName}</span>
                  |    </a>
                  |</li>`;
             const out =
@@ -198,7 +199,7 @@ export * from './entityFolderName/entityFileName.state';`;
         <span data-translate="global.menu.routerName">routerName</span>
     </a>
 </li>`;
-            assert.equal(Generator.prototype.stripMargin(content), out);
+            assert.equal(BaseGenerator.prototype.stripMargin(content), out);
         });
     });
 });

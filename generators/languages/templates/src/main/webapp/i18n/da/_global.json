@@ -43,15 +43,15 @@
             "newpassword.placeholder": "Indtast det nye kodeord",
             "confirmpassword": "Bekræft det nye kodeordet",
             "confirmpassword.placeholder": "Bekræft det nye kodeord",
-            "email": "E-mail",
-            "email.placeholder": "Din e-mail adresse"
+            "email": "Email",
+            "email.placeholder": "Din email adresse"
         },
         "messages": {
             "info": {
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "Hvis du ønsker at <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">logge ind</a>, så kan du prøve det med:<br/>- Administrator (brugernavn=\"admin\" and kodeord=\"admin\") <br/>- User (brugernavn=\"user\" and kodeord=\"user\").",
                 "register": "You don't have an account yet? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Register a new account</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Hvis du ønsker at ",
                     "link": "logge ind",
@@ -79,10 +79,10 @@
                     "maxlength": "Kodeordet må ikke overskride 20 tegn!"
                 },
                 "email": {
-                    "required": "Din e-mail adresse er påkrævet.",
-                    "invalid": "Din e-mail adresse er ugyldig!",
-                    "minlength": "Din e-mail adresse skal som minimum være på 5 tegn",
-                    "maxlength": "Din e-mail adresse må ikke overskride 50 tegn"
+                    "required": "Din email adresse er påkrævet.",
+                    "invalid": "Din email adresse er ugyldig!",
+                    "minlength": "Din email adresse skal som minimum være på 5 tegn",
+                    "maxlength": "Din email adresse må ikke overskride 50 tegn"
                 }
             }
         },
@@ -132,7 +132,7 @@
         "NotNull": "Field {{fieldName}} cannot be empty!",
         "Size": "Field {{fieldName}} does not meet min/max size requirements!",
         "userexists": "Login name already used!",
-        "emailexists": "E-mail is already in use!",
+        "emailexists": "Email is already in use!",
         "idexists": "A new {{entityName}} cannot already have an ID"
     },
     "footer": "Det her er sidefoden"

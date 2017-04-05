@@ -43,15 +43,15 @@
             "newpassword.placeholder": "Новый пароль",
             "confirmpassword": "Подтверждение нового пароля",
             "confirmpassword.placeholder": "Подтвердите новый пароль",
-            "email": "E-mail",
-            "email.placeholder": "Ваш e-mail"
+            "email": "Email",
+            "email.placeholder": "Ваш email"
         },
         "messages": {
             "info": {
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "Если вы хотите <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">авторизироваться</a>, вы можете попробовать аккаунты по умолчанию:<br/>- Администратор (логин=\"admin\" и пароль=\"admin\") <br/>- Пользователь (логин=\"user\" и пароль=\"user\").",
                 "register": "У вас нет аккаунта? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Создать новый аккаунт</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Если вы хотите ",
                     "link": "авторизироваться",
@@ -79,10 +79,10 @@
                     "maxlength": "Подтверждение пароля не может быть больше чем 50 символов"
                 },
                 "email": {
-                    "required": "E-mail должен быть указан.",
-                    "invalid": "E-mail не верен.",
-                    "minlength": "Длина e-mail должна быть хотя-бы 5 символов",
-                    "maxlength": "E-mail не может быть длиннее чем 50 символов"
+                    "required": "Email должен быть указан.",
+                    "invalid": "Email не верен.",
+                    "minlength": "Длина email должна быть хотя-бы 5 символов",
+                    "maxlength": "Email не может быть длиннее чем 50 символов"
                 }
             }
         },

@@ -1,25 +1,25 @@
-'use strict';
-var util = require('util'),
-    generators = require('yeoman-generator'),
-    _ = require('lodash'),
-    scriptBase = require('../generator-base');
+const util = require('util');
+const generator = require('yeoman-generator');
+const _ = require('lodash');
+const BaseGenerator = require('../generator-base');
+const constants = require('../generator-constants');
 
-const constants = require('../generator-constants'),
-    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
+const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
-var ServiceGenerator = generators.Base.extend({});
+const ServiceGenerator = generator.extend({});
 
-util.inherits(ServiceGenerator, scriptBase);
+util.inherits(ServiceGenerator, BaseGenerator);
 
 module.exports = ServiceGenerator.extend({
-    constructor: function () {
-        generators.Base.apply(this, arguments);
-        this.argument('name', {type: String, required: true});
+    constructor: function (...args) { // eslint-disable-line object-shorthand
+        generator.apply(this, args);
+        this.argument('name', { type: String, required: true });
+        this.name = this.options.name;
     },
 
     initializing: {
-        getConfig: function () {
-            this.log('The service ' + this.name + ' is being created.');
+        getConfig() {
+            this.log(`The service ${this.name} is being created.`);
             this.baseName = this.config.get('baseName');
             this.packageName = this.config.get('packageName');
             this.packageFolder = this.config.get('packageFolder');
@@ -27,10 +27,10 @@ module.exports = ServiceGenerator.extend({
         }
     },
 
-    prompting: function () {
-        var done = this.async();
+    prompting() {
+        const done = this.async();
 
-        var prompts = [
+        const prompts = [
             {
                 type: 'confirm',
                 name: 'useInterface',
@@ -38,29 +38,29 @@ module.exports = ServiceGenerator.extend({
                 default: false
             }
         ];
-        this.prompt(prompts).then(function (props) {
+        this.prompt(prompts).then((props) => {
             this.useInterface = props.useInterface;
             done();
-        }.bind(this));
+        });
     },
     default: {
-        insight: function () {
-            var insight = this.insight();
+        insight() {
+            const insight = this.insight();
             insight.trackWithEvent('generator', 'service');
             insight.track('service/interface', this.useInterface);
         }
     },
 
-    writing: function () {
+    writing() {
         this.serviceClass = _.upperFirst(this.name);
-        this.serviceInstance = this.name.toLowerCase();
+        this.serviceInstance = _.lowerCase(this.name);
 
-        this.template(SERVER_MAIN_SRC_DIR + 'package/service/_Service.java',
-            SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/' + this.serviceClass + 'Service.java');
+        this.template(`${SERVER_MAIN_SRC_DIR}package/service/_Service.java`,
+            `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/${this.serviceClass}Service.java`);
 
         if (this.useInterface) {
-            this.template(SERVER_MAIN_SRC_DIR + 'package/service/impl/_ServiceImpl.java',
-                SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/impl/' + this.serviceClass + 'ServiceImpl.java');
+            this.template(`${SERVER_MAIN_SRC_DIR}package/service/impl/_ServiceImpl.java`,
+                `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/impl/${this.serviceClass}ServiceImpl.java`);
         }
     }
 

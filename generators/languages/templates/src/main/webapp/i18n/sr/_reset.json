@@ -6,9 +6,9 @@
                 "button": "Promeni lozinku"
             },
             "messages": {
-                "info": "Unesite e-mail adresu koju ste koristili prilikom registracije",
-                "success": "Proverite Vašu e-mail adresu kako biste videli uputstva za promenu lozinke.",
-                "notfound": "<strong>E-mail adresa nije registrovana!</strong> Molimo Vas pokušajte ponovo"
+                "info": "Unesite email adresu koju ste koristili prilikom registracije",
+                "success": "Proverite Vašu email adresu kako biste videli uputstva za promenu lozinke.",
+                "notfound": "<strong>Email adresa nije registrovana!</strong> Molimo Vas pokušajte ponovo"
             }
         },
         "finish" : {
@@ -20,7 +20,7 @@
                 "info": "Unesi novu lozinku",
                 <%_ if (clientFramework === 'angular1') { _%>
                 "success": "<strong>Vaša lozinka je uspešno promenjena.</strong> Molimo Vas <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">prijavite se</a> ponovo.",
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "success": "<strong>Vaša lozinka je uspešno promenjena.</strong> Molimo Vas ",
                 <%_ } _%>
                 "keymissing": "Nedostaje kljuc za promenu.",

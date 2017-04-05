@@ -1,21 +1,20 @@
-'use strict';
-var util = require('util'),
-    generators = require('yeoman-generator'),
-    chalk = require('chalk'),
-    _ = require('lodash'),
-    scriptBase = require('../generator-base');
+const util = require('util');
+const generator = require('yeoman-generator');
+const chalk = require('chalk');
+const _ = require('lodash');
+const BaseGenerator = require('../generator-base');
 
 const constants = require('../generator-constants');
 
-var LanguagesGenerator = generators.Base.extend({});
+const LanguagesGenerator = generator.extend({});
 
-util.inherits(LanguagesGenerator, scriptBase);
+util.inherits(LanguagesGenerator, BaseGenerator);
 
-var configOptions = {};
+let configOptions = {};
 
 module.exports = LanguagesGenerator.extend({
-    constructor: function () {
-        generators.Base.apply(this, arguments);
+    constructor: function (...args) { // eslint-disable-line object-shorthand
+        generator.apply(this, args);
 
         configOptions = this.options.configOptions || {};
 
@@ -42,30 +41,32 @@ module.exports = LanguagesGenerator.extend({
 
         this.skipClient = this.options['skip-client'] || this.config.get('skipClient');
         this.skipServer = this.options['skip-server'] || this.config.get('skipServer');
-
         // Validate languages passed as argument
-        this.languages && this.languages.forEach(function (language) {
-            if (!this.isSupportedLanguage(language)) {
-                this.log('\n');
-                this.error(chalk.red('Unsupported language "' + language + '" passed as argument to language generator.' +
-                    '\nSupported languages: ' + _.map(this.getAllSupportedLanguageOptions(), function (o) {
-                        return '\n  ' + _.padEnd(o.value, 5) + ' (' + o.name + ')';
-                    }).join(''))
-                );
-            }
-        }, this);
+        this.languages = this.options.languages;
+        if (this.languages) {
+            this.languages.forEach((language) => {
+                if (!this.isSupportedLanguage(language)) {
+                    this.log('\n');
+                    this.error(chalk.red(
+                        `Unsupported language "${language}" passed as argument to language generator.` +
+                        `\nSupported languages: ${_.map(this.getAllSupportedLanguageOptions(),
+                        o => `\n  ${_.padEnd(o.value, 5)} (${o.name})`).join('')}`
+                    ));
+                }
+            });
+        }
     },
     initializing: {
-        getConfig: function () {
+        getConfig() {
             if (this.languages) {
                 if (this.skipClient) {
-                    this.log(chalk.bold('\nInstalling languages: ' + this.languages.join(', ') + ' for server'));
+                    this.log(chalk.bold(`\nInstalling languages: ${this.languages.join(', ')} for server`));
                 } else if (this.skipServer) {
-                    this.log(chalk.bold('\nInstalling languages: ' + this.languages.join(', ') + ' for client'));
+                    this.log(chalk.bold(`\nInstalling languages: ${this.languages.join(', ')} for client`));
                 } else {
-                    this.log(chalk.bold('\nInstalling languages: ' + this.languages.join(', ')));
+                    this.log(chalk.bold(`\nInstalling languages: ${this.languages.join(', ')}`));
                 }
-                this.languagesToApply = this.languages;
+                this.languagesToApply = this.languages || [];
             } else {
                 this.log(chalk.bold('\nLanguages configuration is starting'));
             }
@@ -84,12 +85,12 @@ module.exports = LanguagesGenerator.extend({
         }
     },
 
-    prompting: function () {
+    prompting() {
         if (this.languages) return;
 
-        var done = this.async();
-        var languageOptions = this.getAllSupportedLanguageOptions();
-        var prompts = [
+        const done = this.async();
+        const languageOptions = this.getAllSupportedLanguageOptions();
+        const prompts = [
             {
                 type: 'checkbox',
                 name: 'languages',
@@ -97,23 +98,22 @@ module.exports = LanguagesGenerator.extend({
                 choices: languageOptions
             }];
         if (this.enableTranslation || configOptions.enableTranslation) {
-            this.prompt(prompts).then(function (props) {
-                this.languagesToApply = props.languages;
+            this.prompt(prompts).then((props) => {
+                this.languagesToApply = props.languages || [];
                 done();
-            }.bind(this));
+            });
         } else {
             this.log(chalk.red('Translation is disabled for the project. Languages cannot be added.'));
-            return;
         }
     },
 
     default: {
-        insight: function () {
-            var insight = this.insight();
+        insight() {
+            const insight = this.insight();
             insight.trackWithEvent('generator', 'languages');
         },
 
-        getSharedConfigOptions: function () {
+        getSharedConfigOptions() {
             if (configOptions.applicationType) {
                 this.applicationType = configOptions.applicationType;
             }
@@ -152,16 +152,16 @@ module.exports = LanguagesGenerator.extend({
             }
         },
 
-        saveConfig: function () {
+        saveConfig() {
             if (this.enableTranslation) {
                 this.config.set('languages', _.union(this.currentLanguages, this.languagesToApply));
             }
         }
     },
 
-    writing: function () {
-        var insight = this.insight();
-        this.languagesToApply && this.languagesToApply.forEach(function (language) {
+    writing() {
+        const insight = this.insight();
+        this.languagesToApply.forEach((language) => {
             if (!this.skipClient) {
                 this.installI18nClientFilesByLanguage(this, constants.CLIENT_MAIN_SRC_DIR, language);
             }
@@ -169,11 +169,13 @@ module.exports = LanguagesGenerator.extend({
                 this.installI18nServerFilesByLanguage(this, constants.SERVER_MAIN_RES_DIR, language);
             }
             insight.track('languages/language', language);
-        }, this);
-        if (!this.skipClient && this.clientFramework === 'angular1') {
-            this.updateLanguagesInLanguageConstant(this.config.get('languages'));
-        } else if (!this.skipClient && this.clientFramework === 'angular2') {
-            this.updateLanguagesInLanguageConstantNG2(this.config.get('languages'));
+        });
+        if (!this.skipClient) {
+            if (this.clientFramework === 'angular1') {
+                this.updateLanguagesInLanguageConstant(this.config.get('languages'));
+            } else {
+                this.updateLanguagesInLanguageConstantNG2(this.config.get('languages'));
+            }
         }
     }
 });

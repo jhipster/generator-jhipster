@@ -1,11 +1,10 @@
-'use strict';
-
 const mkdirp = require('mkdirp');
+const constants = require('../generator-constants');
+
 /* Constants use throughout */
-const constants = require('../generator-constants'),
-    MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
-    TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR,
-    ANGULAR_DIR = constants.ANGULAR_DIR;
+const MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
+const TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
+const ANGULAR_DIR = constants.ANGULAR_DIR;
 
 /**
  * The default is to use a file path string. It implies use of the template method.
@@ -76,8 +75,8 @@ const files = {
             templates: [
                 { file: '_favicon.ico', method: 'copy' },
                 { file: '_robots.txt', method: 'copy' },
-                { file: '_404.html', method: 'copy' },
-                { file: '_index.html', method: 'copy' }
+                '_404.html',
+                '_index.html'
             ]
         }
     ],
@@ -206,10 +205,6 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 'admin/_admin.state.js',
-                'admin/audits/_audits.controller.js',
-                'admin/audits/_audits.service.js',
-                { file: 'admin/audits/_audits.state.js', method: 'processJs' },
-                { file: 'admin/audits/_audits.html', method: 'processHtml' },
                 'admin/configuration/_configuration.controller.js',
                 'admin/configuration/_configuration.service.js',
                 { file: 'admin/configuration/_configuration.state.js', method: 'processJs' },
@@ -232,6 +227,16 @@ const files = {
                 { file: 'admin/metrics/_metrics.modal.html', method: 'processHtml', template: true },
                 { file: 'admin/docs/_docs.html', method: 'copy' },
                 { file: 'admin/docs/_docs.state.js', method: 'processJs' }
+            ]
+        },
+        {
+            condition: generator => generator.devDatabaseType !== 'cassandra',
+            path: ANGULAR_DIR,
+            templates: [
+                'admin/audits/_audits.controller.js',
+                'admin/audits/_audits.service.js',
+                { file: 'admin/audits/_audits.state.js', method: 'processJs' },
+                { file: 'admin/audits/_audits.html', method: 'processHtml' },
             ]
         },
         {
@@ -292,7 +297,7 @@ const files = {
                 'components/util/_sort.directive.js',
                 'components/util/_sort-by.directive.js',
                 'components/util/_jhi-item-count.directive.js',
-                //alert service code
+                // alert service code
                 'components/alert/_alert.service.js',
                 'components/alert/_alert.directive.js',
                 'components/alert/_alert-error.directive.js'
@@ -395,7 +400,7 @@ module.exports = {
 
 function writeFiles() {
     mkdirp(MAIN_SRC_DIR);
-    this.fs.copy(this.templatePath('angularjs/gulp/_handle-errors.js'), this.destinationPath('gulp/handle-errors.js')); // to avoid interpolate errors
+    this.copy('angularjs/gulp/_handle-errors.js', 'gulp/handle-errors.js'); // to avoid interpolate errors
     // write angular 1.x files
     this.writeFilesToDisk(files, this, false, 'angularjs');
 }

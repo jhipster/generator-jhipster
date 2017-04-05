@@ -6,7 +6,7 @@
                 "button": "Şifreyi sıfırla"
             },
             "messages": {
-                "info": "Kayıt olurken kullandığın e-mail adresini gir",
+                "info": "Kayıt olurken kullandığın email adresini gir",
                 "success": "Şifreni nasıl sıfırlayacağını öğrenmek için e-postalarını kontrol et.",
                 "notfound": "<strong>E-Posta adresi kayıtlı değil!</strong> Lütfen kontrol et ve tekrar dene"
             }
@@ -20,7 +20,7 @@
                 "info": "Yeni şifre seç",
                 <%_ if (clientFramework === 'angular1') { _%>
                 "success": "<strong>Şifren sıfırlandı.</strong> Lütfen <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">giriş yap</a>.",
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "success": "<strong>Şifren sıfırlandı.</strong> Lütfen ",
                 <%_ } _%>
                 "keymissing": "Şifre sıfırlama anahtarı geçersiz.",

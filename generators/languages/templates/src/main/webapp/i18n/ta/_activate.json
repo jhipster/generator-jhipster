@@ -4,7 +4,7 @@
         "messages": {
             <%_ if (clientFramework === 'angular1') { _%>
             "success": "<strong>உங்கள் பயனர் செயல்படுத்தப்படுகிறது.</strong> தயவு செய்து <a href=\"#/login\">அங்கிகரிக்கவும்</a>.",
-            <%_ } else if (clientFramework === 'angular2') { _%>
+            <%_ } else { _%>
             "success": "<strong>உங்கள் பயனர் செயல்படுத்தப்படுகிறது.</strong> தயவு செய்து ",
             <%_ } _%>
             "error": "<strong>உங்கள் பயனர் செயல்படுத்த முடியவில்லை.</strong> பதிவு செய்ய பதிவு படிவத்தை பயன்படுத்தவும்."

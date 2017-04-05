@@ -1,0 +1,45 @@
+version: '2'
+services:
+<%_ if (enableRancherLoadBalancing && hasFrontApp) { _%>
+    lb:
+        # load balancer container
+        scale: 1
+        load_balancer_config:
+          name: lb config
+        health_check:
+          port: 42
+          interval: 2000
+          unhealthy_threshold: 3
+          healthy_threshold: 2
+          response_timeout: 2000
+<%_ } _%>
+<%_ for(var i = 0; i < appConfigs.length; i++) { _%>
+<%- appsRancherYaml[i] %>
+<%_ } _%>
+<%_ if (useKafka) { _%>
+    zookeeper:
+        scale: 1
+    kafka:
+        scale: 1
+<%_ } _%>
+
+<%_ if (serviceDiscoveryType == 'eureka') { _%>
+    jhipster-registry:
+        scale: 1
+<%_ } _%>
+
+<%_ if (serviceDiscoveryType == 'consul') { _%>
+    consul:
+        scale: 1
+    consul-config-loader:
+        scale: 1
+<%_ } _%>
+
+<%_ if (monitoring === 'elk') { _%>
+    jhipster-elasticsearch:
+        scale: 1
+    jhipster-logstash:
+        scale: 1
+    jhipster-console:
+        scale: 1
+<%_ } _%>

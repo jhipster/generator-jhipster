@@ -43,15 +43,15 @@
             "newpassword.placeholder": "Nova senha",
             "confirmpassword": "Confirmação de nova senha",
             "confirmpassword.placeholder": "Confirme a nova senha",
-            "email": "E-mail",
-            "email.placeholder": "Seu e-mail"
+            "email": "Email",
+            "email.placeholder": "Seu email"
         },
         "messages": {
             "info": {
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "Para <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">entrar</a>, utilize as seguintes contas padrões:<br/>- Administrador (usuário=\"admin\" and senha=\"admin\") <br/>- Usuário (usuário=\"user\" and senha=\"user\").",
                 "register": "Não possui uma conta ainda? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Crie uma nova conta</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Para ",
                     "link": "entrar",
@@ -79,10 +79,10 @@
                     "maxlength": "A confirmação da senha não pode ter mais de 50 caracteres"
                 },
                 "email": {
-                    "required": "O e-mail é obrigatório.",
-                    "invalid": "E-mail inválido.",
-                    "minlength": "O e-mail deve ter pelo menos 5 caracteres",
-                    "maxlength": "O e-mail não pode ter mais de 50 caracteres"
+                    "required": "O email é obrigatório.",
+                    "invalid": "Email inválido.",
+                    "minlength": "O email deve ter pelo menos 5 caracteres",
+                    "maxlength": "O email não pode ter mais de 50 caracteres"
                 }
             }
         },

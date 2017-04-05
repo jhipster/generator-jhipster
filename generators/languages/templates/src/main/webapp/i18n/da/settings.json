@@ -12,7 +12,7 @@
         "messages": {
             "error": {
                 "fail": "<strong>Der opstod en fejl!</strong> Brugerindstillingerne kunne ikke gemmes.",
-                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+                "emailexists": "<strong>Email is already in use!</strong> Please choose another one."
             },
             "success": "<strong>Brugerindstillinger gemt!</strong>",
             "validate": {

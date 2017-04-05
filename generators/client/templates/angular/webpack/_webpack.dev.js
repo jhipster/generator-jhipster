@@ -21,7 +21,8 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         proxy: [{
             context: [<% if (authenticationType === 'oauth2') { %>
                 '/oauth',<% } %><% if (authenticationType === 'uaa') { %>
-                '/uaa',<% } %>
+                '/<%= uaaBaseName.toLowerCase() %>',<% } %>
+                <!-- jhipster-needle-add-entity-to-webpack - JHipster will add entity api paths here -->
                 '/api',
                 '/management',
                 '/swagger-resources',
@@ -56,7 +57,10 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         new BrowserSyncPlugin({
             host: 'localhost',
             port: 9000,
-            proxy: 'http://localhost:9060'
+            proxy: {
+                target: 'http://localhost:9060'<% if (websocket === 'spring-websocket') { %>,
+                ws: true<% } %>
+            }
         }, {
             reload: false
         }),

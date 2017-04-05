@@ -1,6 +1,6 @@
 <%
-var mapper = entityInstance  + 'Mapper';
-var entityToDtoReference = mapper + '::'+ entityInstance +'To' + entityClass + 'DTO';
+const mapper = entityInstance  + 'Mapper';
+const entityToDtoReference = mapper + '::'+ entityInstance +'To' + entityClass + 'DTO';
 for (idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { %>
         if ("<%= relationships[idx].relationshipName.toLowerCase() %>-is-null".equals(filter)) {
             log.debug("REST request to get all <%= entityClass %>s where <%= relationships[idx].relationshipName %> is null");<% if (viaService) { %>

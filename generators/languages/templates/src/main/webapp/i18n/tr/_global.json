@@ -51,7 +51,7 @@
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "<a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">Giriş</a> yapmak istiyorsanız, varsayılan hesaplardan birini deneyebilirsiniz:<br/>- Yönetici (kullanıcı adı=\"admin\" ve şifre=\"admin\") <br/>- Kullanıcı (kullanıcı adı=\"user\" and şifre=\"user\").",
                 "register": "Henüz bir hesabınız yok mu? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Yeni hesap oluştur</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "",
                     "link": "Giriş",
@@ -132,7 +132,7 @@
         "NotNull": "{{fieldName}} alanı boş bırakılamaz!",
         "Size": "{{fieldName}} alanı min/max gerekliliklere uymuyor!",
         "userexists": "Login name already used!",
-        "emailexists": "E-mail is already in use!",
+        "emailexists": "Email is already in use!",
         "idexists": "A new {{entityName}} cannot already have an ID"
     },
     "footer": "Burası sayfa alt bilgisi"

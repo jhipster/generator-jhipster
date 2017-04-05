@@ -80,12 +80,14 @@
                             <span jhiTranslate="global.menu.admin.configuration">Configuration</span>
                         </a>
                     </li>
+                    <%_ if (devDatabaseType !== 'cassandra') { _%>
                     <li>
                         <a class="dropdown-item" routerLink="audits" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-bell" aria-hidden="true"></i>
                             <span jhiTranslate="global.menu.admin.audits">Audits</span>
                         </a>
                     </li>
+                    <%_ } _%>
                     <li>
                         <a class="dropdown-item" routerLink="logs" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-tasks" aria-hidden="true"></i>

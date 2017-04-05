@@ -6,9 +6,9 @@
                 "button": "Passwort zurücksetzen"
             },
             "messages": {
-                "info": "Geben Sie die E-Mail Adresse ein, welche Sie bei der Registrierung verwendet haben.",
-                "success": "Eine E-Mail mit weiteren Instruktionen für das Zurücksetzen des Passworts wurde gesendet.",
-                "notfound": "<strong>Diese E-Mail Adresse existiert nicht!</strong> Überprüfen Sie Ihre E-Mail Adresse und versuchen Sie es nochmal."
+                "info": "Geben Sie die Email Adresse ein, welche Sie bei der Registrierung verwendet haben.",
+                "success": "Eine Email mit weiteren Instruktionen für das Zurücksetzen des Passworts wurde gesendet.",
+                "notfound": "<strong>Diese Email Adresse existiert nicht!</strong> Überprüfen Sie Ihre Email Adresse und versuchen Sie es nochmal."
             }
         },
         "finish" : {
@@ -20,7 +20,7 @@
                 "info": "Wählen Sie ein neues Passwort",
                 <%_ if (clientFramework === 'angular1') { _%>
                 "success": "<strong>Ihr Passwort wurde zurückgesetzt.</strong> Bitte <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">melden</a> Sie sich erneut an.",
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "success": "<strong>Ihr Passwort wurde zurückgesetzt.</strong> Bitte ",
                 <%_ } _%>
                 "keymissing": "Der Reset Schlüssel fehlt.",

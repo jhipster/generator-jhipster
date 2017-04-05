@@ -1,12 +1,12 @@
 <%#	Returns a string of all validator annotations for the entity field. -%>
 <%
-var field = fields[idx];
-var result = '';
+const field = fields[idx];
+let result = '';
 
 if (field.fieldValidate === true) {
-    var rules = field.fieldValidateRules;
-    var validators = [];
-  var MAX_VALUE = 2147483647;
+    const rules = field.fieldValidateRules;
+    const validators = [];
+    const MAX_VALUE = 2147483647;
 
     if (rules.indexOf('required') !== -1) {
         validators.push('@NotNull');
@@ -37,7 +37,7 @@ if (field.fieldValidate === true) {
         }
     }
     if (rules.indexOf('max') !== -1) {
-        var isLong = (field.fieldValidateRulesMax > MAX_VALUE) ? 'L' : '';
+        const isLong = (field.fieldValidateRulesMax > MAX_VALUE) ? 'L' : '';
         if (field.fieldType === 'Float' || field.fieldType === 'Double' || field.fieldType === 'BigDecimal') {
             validators.push('@DecimalMax(value = "' + field.fieldValidateRulesMax + '")');
         } else {

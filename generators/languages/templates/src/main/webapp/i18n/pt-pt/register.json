@@ -13,11 +13,11 @@
                     "pattern": "O utilizador apenas pode conter letras minúsculas e números"
                 }
             },
-            "success": "<strong>Registo efetuado com sucesso!</strong> Por favor verifique o seu e-mail para confirmar a conta.",
+            "success": "<strong>Registo efetuado com sucesso!</strong> Por favor verifique o seu email para confirmar a conta.",
             "error": {
                 "fail": "<strong>Erro ao realizar o registo!</strong> Por favor tente novamente mais tarde.",
                 "userexists": "<strong>Utilizador já registado!</strong> Por favor escolha outro.",
-                "emailexists": "<strong>O e-mail já está em uso!</strong> Por favor escolha outro."
+                "emailexists": "<strong>O email já está em uso!</strong> Por favor escolha outro."
             }
         }
     }

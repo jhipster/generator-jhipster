@@ -3,6 +3,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { Observable, Observer, Subscription } from 'rxjs/Rx';
 
 import { CSRFService } from '../auth/csrf.service';
+import { WindowRef } from './window.service';
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { AuthServerProvider } from '../auth/auth-jwt.service';
 <%_ } _%>
@@ -10,9 +11,8 @@ import { AuthServerProvider } from '../auth/auth-jwt.service';
 import { AuthServerProvider } from '../auth/auth-oauth2.service';
 <%_ } _%>
 
-<%_ // TODO find a better way to import these libs here _%>
-import SockJS = require('sockjs-client');
-import Stomp = require('webstomp-client');
+import * as SockJS from 'sockjs-client';
+import * as Stomp from 'webstomp-client';
 
 @Injectable()
 export class <%=jhiPrefixCapitalized%>TrackerService {
@@ -30,8 +30,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa' || authenticationType === 'oauth2') { _%>
         private authServerProvider: AuthServerProvider,
         <%_ } _%>
-        private $document: Document,
-        private $window: Window,
+        private $window: WindowRef,
         private csrfService: CSRFService
     ) {
         this.connection = this.createConnection();
@@ -42,8 +41,8 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         if (this.connectedPromise === null) {
           this.connection = this.createConnection();
         }
-        // building absolute path so that websocket doesnt fail when deploying with a context path
-        const loc = this.$window.location;
+        // building absolute path so that websocket doesn't fail when deploying with a context path
+        const loc = this.$window.nativeWindow.location;
         let url = '//' + loc.host + loc.pathname + 'websocket/tracker';
         <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa' || authenticationType === 'oauth2') { _%>
         const authToken = this.authServerProvider.getToken()<% if (authenticationType === 'oauth2') { %>.access_token<% } %>;

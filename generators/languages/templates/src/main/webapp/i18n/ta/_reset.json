@@ -20,7 +20,7 @@
                 "info": "புதிய கடவுச்சொல்லை தேர்வு செய்க",
                 <%_ if (clientFramework === 'angular1') { _%>
                 "success": "<strong>உங்கள் கடவுச்சொல் மாற்றப்பட்டது.</strong> தயவு செய்து <a href=\"#/login\"> உறுதி செய்க</a>.",
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "success": "<strong>உங்கள் கடவுச்சொல் மாற்றப்பட்டது.</strong> தயவு செய்து ",
                 <%_ } _%>
                 "keymissing": "மாற்று சாவி காணவில்லை.",

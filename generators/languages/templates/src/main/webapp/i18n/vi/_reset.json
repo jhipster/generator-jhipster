@@ -6,9 +6,9 @@
                 "button": "Đặt lại mật khẩu"
             },
             "messages": {
-                "info": "Nhập địa chỉ e-mail mà bạn đã sử dụng để đăng ký",
+                "info": "Nhập địa chỉ email mà bạn đã sử dụng để đăng ký",
                 "success": "Vui lòng kiểm tra hòm thư của bạn để xem chi tiết cách lấy lại mật khẩu.",
-                "notfound": "<strong>Địa chỉ e-mail chưa được đăng ký!</strong> Vui lòng kiểm tra lại."
+                "notfound": "<strong>Địa chỉ email chưa được đăng ký!</strong> Vui lòng kiểm tra lại."
             }
         },
         "finish" : {
@@ -20,7 +20,7 @@
                 "info": "Chọn mật khẩu mới",
                 <%_ if (clientFramework === 'angular1') { _%>
                 "success": "<strong>Mật khẩu của bạn đã được đặt lại.</strong> Bạn vui lòng <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">đăng nhập</a>.",
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "success": "<strong>Mật khẩu của bạn đã được đặt lại.</strong> Bạn vui lòng ",
                 <%_ } _%>
                 "keymissing": "Không tìm thấy khóa để đặt lại mật khẩu.",

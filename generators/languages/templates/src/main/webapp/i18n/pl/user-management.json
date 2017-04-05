@@ -5,11 +5,11 @@
             "createLabel": "Stwórz nowego użytkownika",
             "createOrEditLabel": "Stwórz lub edytuj użytkownika"
         },
-        "created": "A new user is created with identifier {{ param }}",
-        "updated": "An user is updated with identifier {{ param }}",
-        "deleted": "An user is deleted with identifier {{ param }}",
+        "created": "Utworzono nowego użytkownika z identyfikatorem {{ param }}",
+        "updated": "Uaktualniono użytkownika z identyfikatorem {{ param }}",
+        "deleted": "Usunięto użytkownika z identyfikatorem {{ param }}",
         "delete": {
-            "question": "Are you sure you want to delete user {{ login }}?"
+            "question": "Czy na pewno chcesz usunąć użytkownika {{ login }}?"
         },
         "detail": {
             "title": "Użytkownik"
@@ -17,9 +17,9 @@
         "login": "Login",
         "firstName": "Imię",
         "lastName": "Nazwisko",
-        "email": "E-mail",
+        "email": "Email",
         "activated": "Aktywny",
-        "deactivated": "Nie aktywny",
+        "deactivated": "Nieaktywny",
         "profiles": "Profile",
         "langKey": "Język",
         "createdBy": "Utworzony przez",

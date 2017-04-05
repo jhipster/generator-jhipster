@@ -1,6 +1,6 @@
 version: '2'
 services:
-<%_ for(var i = 0; i < appConfigs.length; i++) { _%>
+<%_ for(let i = 0; i < appConfigs.length; i++) { _%>
 <%- appsYaml[i] %>
 <%_ } _%>
 <%_ if (useKafka) { _%>
@@ -43,6 +43,10 @@ services:
         extends:
             file: jhipster-console.yml
             service: jhipster-console
+    jhipster-zipkin:
+        extends:
+            file: jhipster-console.yml
+            service: jhipster-zipkin
 <%_ } _%>
 
 <%_ if (monitoring === 'prometheus') { _%>

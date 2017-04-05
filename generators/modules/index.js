@@ -1,37 +1,36 @@
-'use strict';
-var util = require('util'),
-    generators = require('yeoman-generator'),
-    _ = require('lodash'),
-    chalk = require('chalk'),
-    scriptBase = require('../generator-base');
+const util = require('util');
+const generator = require('yeoman-generator');
+const _ = require('lodash');
+const chalk = require('chalk');
+const BaseGenerator = require('../generator-base');
 
 const constants = require('../generator-constants');
 
-var ModulesGenerator = generators.Base.extend({});
+const ModulesGenerator = generator.extend({});
 
-util.inherits(ModulesGenerator, scriptBase);
+util.inherits(ModulesGenerator, BaseGenerator);
 
 module.exports = ModulesGenerator.extend({
-    constructor: function () {
-        generators.Base.apply(this, arguments);
+    constructor: function (...args) { // eslint-disable-line object-shorthand
+        generator.apply(this, args);
 
-        var jhipsterVar = this.options.jhipsterVar;
-        var jhipsterFunc = this.options.jhipsterFunc;
+        const jhipsterVar = this.options.jhipsterVar;
+        const jhipsterFunc = this.options.jhipsterFunc;
         if (jhipsterVar === undefined || jhipsterVar.moduleName === undefined) {
             this.error(chalk.red('This sub-generator must be used by JHipster modules, and the module name is not defined.'));
         }
 
-        this.log('Composing JHipster configuration with module ' + chalk.red(jhipsterVar.moduleName));
+        this.log(`Composing JHipster configuration with module ${chalk.red(jhipsterVar.moduleName)}`);
 
-        var baseName = this.config.get('baseName');
-        var packageName = this.config.get('packageName');
-        var packageFolder = this.config.get('packageFolder');
+        const baseName = this.config.get('baseName');
+        const packageName = this.config.get('packageName');
+        const packageFolder = this.config.get('packageFolder');
 
         if (!this.options.skipValidation && (baseName === undefined || packageName === undefined)) {
             this.log(chalk.red('ERROR! There is no existing JHipster configuration file in this directory.'));
-            this.error('JHipster ' + jhipsterVar.moduleName + ' is a JHipster module, and needs a .yo-rc.json configuration file made by JHipster.');
+            this.error(`JHipster ${jhipsterVar.moduleName} is a JHipster module, and needs a .yo-rc.json configuration file made by JHipster.`);
         }
-        // add required JHipster variables
+        // add required JHipster constiables
         jhipsterVar.baseName = this.baseName = baseName;
         jhipsterVar.packageName = packageName;
         jhipsterVar.packageFolder = packageFolder;
@@ -58,10 +57,11 @@ module.exports = ModulesGenerator.extend({
         jhipsterVar.jhipsterVersion = this.config.get('jhipsterVersion');
         jhipsterVar.serverPort = this.config.get('serverPort');
         jhipsterVar.clientFramework = this.config.get('clientFramework');
+        jhipsterVar.clientPackageManager = this.config.get('clientPackageManager');
 
         jhipsterVar.angularAppName = this.getAngularAppName();
         jhipsterVar.mainClassName = this.getMainClassName();
-        jhipsterVar.javaDir = constants.SERVER_MAIN_SRC_DIR + packageFolder + '/';
+        jhipsterVar.javaDir = `${constants.SERVER_MAIN_SRC_DIR + packageFolder}/`;
         jhipsterVar.resourceDir = constants.SERVER_MAIN_RES_DIR;
         jhipsterVar.webappDir = constants.CLIENT_MAIN_SRC_DIR;
         jhipsterVar.CONSTANTS = constants;
@@ -70,7 +70,7 @@ module.exports = ModulesGenerator.extend({
         jhipsterFunc.fs = this.fs;
         jhipsterFunc.log = this.log;
 
-        //add common methods from script-base.js
+        // add common methods from generator-base.js
         jhipsterFunc.addSocialButton = this.addSocialButton;
         jhipsterFunc.addSocialConnectionFactory = this.addSocialConnectionFactory;
         jhipsterFunc.addMavenDependency = this.addMavenDependency;
@@ -141,8 +141,8 @@ module.exports = ModulesGenerator.extend({
         jhipsterFunc.getEntityJson = this.getEntityJson;
     },
 
-    initializing: function () {
-        var insight = this.insight();
+    initializing() {
+        const insight = this.insight();
         insight.trackWithEvent('generator', 'modules');
 
         this.log('Reading the JHipster project configuration for your module');

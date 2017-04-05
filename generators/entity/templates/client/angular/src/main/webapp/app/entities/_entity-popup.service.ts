@@ -7,7 +7,7 @@ import { DatePipe } from '@angular/common';
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 <%_
-var hasDate = false;
+let hasDate = false;
 if (fieldsContainZonedDateTime || fieldsContainLocalDate) {
     hasDate = true;
 }
@@ -45,7 +45,8 @@ export class <%= entityAngularName %>PopupService {
                 }
                         <%_ } _%>
                         <%_ if (fields[idx].fieldType == 'ZonedDateTime') { _%>
-                <%= entityInstance %>.<%=fields[idx].fieldName%> = this.datePipe.transform(<%= entityInstance %>.<%=fields[idx].fieldName%>, 'yyyy-MM-ddThh:mm');
+                <%= entityInstance %>.<%=fields[idx].fieldName%> = this.datePipe
+                    .transform(<%= entityInstance %>.<%=fields[idx].fieldName%>, 'yyyy-MM-ddThh:mm');
                         <%_ } _%>
                 <%_ } _%>
                 <%_ } _%>

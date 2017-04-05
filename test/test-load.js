@@ -1,11 +1,11 @@
-/*global describe, beforeEach, it*/
-'use strict';
+/* global describe, beforeEach, it*/
 
-var assert = require('assert');
 
-describe('JHipster generator', function () {
-    it('can be imported without blowing up', function () {
-        var app = require('../generators/app');
+const assert = require('assert');
+
+describe('JHipster generator', () => {
+    it('can be imported without blowing up', () => {
+        const app = require('../generators/app'); // eslint-disable-line global-require
         assert(app !== undefined);
     });
 });

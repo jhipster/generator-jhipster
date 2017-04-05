@@ -20,7 +20,7 @@
                 "info": "एक नवीन संकेतशब्द निवडा",
                 <%_ if (clientFramework === 'angular1') { _%>
                 "success": "<strong>आपला संकेतशब्द रीसेट केला गेला आहे.</strong> कृपया <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">साइन इन करा</a>.",
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "success": "<strong>आपला संकेतशब्द रीसेट केला गेला आहे.</strong> कृपया ",
                 <%_ } _%>
                 "keymissing": "रीसेट की गहाळ आहे.",

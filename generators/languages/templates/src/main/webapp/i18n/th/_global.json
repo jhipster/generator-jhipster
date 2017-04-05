@@ -1,0 +1,126 @@
+{
+    "global": {
+        "title": "<%= capitalizedBaseName %>",
+        "browsehappy": "เบราว์เซอร์ที่คุณใช้<strong>เก่าเกินไป</strong>. กรุณา <a href=\"http://browsehappy.com/?locale=en\">อัพเกรดเบราว์เซอร์</a> เพื่อสัมผัสประสบการณ์ที่ดีสำหรับคุณ.",
+        "menu": {
+            "home": "หน้าหลัก",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "entities": {
+                "main": "Entities",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+                "main": "บัญชี",
+                "settings": "ตั้งค่า",
+                "password": "รหัสผ่าน",
+                "sessions": "เซสชั่น",
+                "login": "เข้าระบบ",
+                "logout": "ออกระบบ",
+                "register": "ลงทะเบียน"
+            },
+            "admin": {
+                "main": "ผู้ดูแลระบบ",
+                <%_ if (applicationType == 'gateway') { _%>
+                "gateway": "เกตเวย์",
+                <%_ } _%>
+                "userManagement": "จัดการผู้ใช้",
+                "tracker": "ติดตามผู้ใช้",
+                "metrics": "ตัวชี้วัด",
+                "health": "สถานะระบบ",
+                "configuration": "องค์ประกอบ",
+                "logs": "บันทึกการทำงาน",
+                "audits": "การตรวจสอบ",
+                "apidocs": "API",
+                "database": "ฐานข้อมูล",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+            },
+            "language": "ภาษา"
+        },
+        "form": {
+            "username": "ชื่อผู้ใช้",
+            "username.placeholder": "ชื่อของคุณ",
+            "newpassword": "รหัสผ่านใหม่",
+            "newpassword.placeholder": "รหัสผ่านใหม่",
+            "confirmpassword": "ยืนยันรหัสผ่านใหม่",
+            "confirmpassword.placeholder": "ยืนยันรหัสผ่านใหม่",
+            "email": "อีเมล",
+            "email.placeholder": "อีเมลของคุณ"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "หากคุณต้องการ <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">เข้าระบบ</a>, คุณสามารถใช้บัญชี:<br/>- ผู้ดูแลระบบ (login=\"admin\" and password=\"admin\") <br/>- ผู้ใช้งานทั่วไป (login=\"user\" and password=\"user\").",
+                "register": "ถ้าคุณยังไม่มีบัญชี? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">ลงทะเบียน</a>."
+            },
+            "error": {
+                "dontmatch": "รหัสผ่านและยืนยันรหัสผ่าน ไม่เหมือนกัน."
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "คุณต้องใส่รหัสผ่าน",
+                    "minlength": "รหัสผ่านจะต้องมีอย่างน้อย 4 อักขระ",
+                    "maxlength": "รหัสผ่านจะต้องมีความยาวไม่เกิน 50 อักขระ",
+                    "strength": "ความปลอดภัยของรหัสผ่าน:"
+                },
+                "confirmpassword": {
+                    "required": "คุณต้องใส่ การยืนยันรหัสผ่าน.",
+                    "minlength": "การยืนยันรหัสผ่านจะต้องมีอย่างน้อย 4 อักขระ.",
+                    "maxlength": "การยืนยันรหัสผ่านจะต้องมีความยาวไม่เกิน 50 อักขระ."
+                },
+                "email": {
+                    "required": "คุณต้องใส่อีเมล.",
+                    "invalid": "อีเมลไม่ถูกต้อง.",
+                    "minlength": "อีเมลต้องมีอย่างน้อย 5 อักขระ.",
+                    "maxlength": "อีเมลจะต้องมีความยาวไม่เกิน 50 อักขระ."
+                }
+            }
+        },
+        "field": {
+            "id": "รหัส"
+        },
+        "ribbon": {
+            "dev":"Development"
+        }
+    },
+    "entity": {
+        "action": {
+            "addblob": "เพิ่ม blob",
+            "addimage": "เพิ่มรูปภาพ",
+            "back": "กลับ",
+            "cancel": "ยกเลิก",
+            "delete": "ลบ",
+            "edit": "แก้ไข",
+            "open": "เปิด",
+            "save": "บันทึก",
+            "view": "ดู"
+        },
+        "detail": {
+            "field": "ฟิลด์",
+            "value": "ค่า"
+        },
+        "delete": {
+            "title": "ยืนยันการลบ"
+        },
+        "validation": {
+            "required": "จะต้องใส่ข้อมูลฟิลด์นี้.",
+            "minlength": "ข้อมูลฟิลด์นี้จะต้องใส่อย่างน้อย {{ min }} อักษร.",
+            "maxlength": "ข้อมูลฟิลด์นี้ไม่สามารถยาวมากกว่า {{ max }} อักษร.",
+            "min": "จำนวนอักษรของฟิลด์นี้จะต้องมากกว่า {{ min }}.",
+            "max": "จำนวนอักษรของฟิลด์นี้จะต้องไม่มากกว่า {{ max }}.",
+            "minbytes": "ขนาดของฟิลด์นี้จะต้องมากกว่า  {{ min }} ไบต์.",
+            "maxbytes": "ขนาดของฟิลด์นี้จะต้องไม่มากกว่า{{ max }} ไบต์.",
+            "pattern": "ฟิลด์นี้จะต้องทำตามรูปแบบ {{ pattern }}.",
+            "number": "ฟิลด์นี้จะต้องเป็นตัวเลขเท่านั้น	.",
+            "datetimelocal": "ฟิลด์นี้จะต้องเป็นวันที่และเวลาเท่านั้น."
+        }
+    },
+    "error": {
+        "server.not.reachable": "ไม่สามารถติดต่อเซิร์ฟเวอร์ได้",
+        "url.not.found": "ไม่พบข้อมูล",
+        "NotNull": "ฟิลด์ {{ fieldName }} ต้องใส่ข้อมูล!",
+        "Size": "ฟิลด์ {{ fieldName }} ไม่ตรงกับขนาด มาก/น้อย ที่ต้องการ!",
+        "userexists": "ชื่อผู้ใช้นี้ถูกใช้ไปแล้ว!",
+        "emailexists": "อีเมลนี้ถูกใช้ไปแล้ว!",
+        "idexists": "{{ entityName }} ไม่สามารถใช้ ID ที่ถูกใช้ไปแล้ว"
+    },
+    "footer": "นี่คือส่วนท้าย"
+}

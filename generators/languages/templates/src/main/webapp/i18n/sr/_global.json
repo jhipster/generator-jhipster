@@ -43,15 +43,15 @@
             "newpassword.placeholder": "Vaša nova lozinka",
             "confirmpassword": "Potvrdite lozinku",
             "confirmpassword.placeholder": "Potvrdite vašu lozinku",
-            "email": "E-mail",
-            "email.placeholder": "Vaš e-mail"
+            "email": "Email",
+            "email.placeholder": "Vaš email"
         },
         "messages": {
             "info": {
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "Ako želite da se <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">prijavite</a>, možete probati sa univerzanlnim korisničkim nalozima:<br/>- Administrator (korisničko ime=\"admin\" i lozinka=\"admin\") <br/>- User (korisničko ime=\"user\" i lozinka=\"user\").",
                 "register": "Još uvek nemate profil? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Registrujte svoj profil</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Ako želite da se ",
                     "link": "prijavite",
@@ -79,10 +79,10 @@
                     "maxlength": "Potvrda lozinke ne može biti duža od 50 karaktera."
                 },
                 "email": {
-                    "required": "Vaš e-mail je obavezan.",
-                    "invalid": "Vaš e-mail is neispravan.",
-                    "minlength": "Vaš e-mail mora imati najmanje 5 karaktera.",
-                    "maxlength": "Vaš e-mail ne može biti duži od 50 karaktera."
+                    "required": "Vaš email je obavezan.",
+                    "invalid": "Vaš email is neispravan.",
+                    "minlength": "Vaš email mora imati najmanje 5 karaktera.",
+                    "maxlength": "Vaš email ne može biti duži od 50 karaktera."
                 }
             }
         },
@@ -132,7 +132,7 @@
         "NotNull": "Polje {{ fieldName }} ne može biti prazno!",
         "Size": "Polje {{ fieldName }} ne zadovoljava minimalna i maksimalna ograničenja!",
         "userexists": "Korisiničko ime već postoji!",
-        "emailexists": "E-mail je već upotrebljen!",
+        "emailexists": "Email je već upotrebljen!",
         "idexists": "Novi {{ entityName }} ne može sadržati ID"
     },
     "footer": "Ovo je vaše podnožje"

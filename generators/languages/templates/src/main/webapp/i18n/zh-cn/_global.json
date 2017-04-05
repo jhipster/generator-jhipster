@@ -51,7 +51,7 @@
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "如果您要<a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">登录</a>, 您可以使用默认账号:<br/>- 管理员 (账号=\"admin\"和密码=\"admin\") <br/>- 普通用户 (账号=\"user\"和密码=\"user\").",
                 "register": "您还没有账号？<a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">注册一个新账号</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "如果您要",
                     "link": "登录",

@@ -21,12 +21,12 @@
             "admin": {
                 "main": "Adminisztráció",
                 <%_ if (applicationType === 'gateway') { _%>
-                "gateway": "Gateway",
+                "gateway": "Átjáró",
                 <%_ } _%>
                 "userManagement": "Felhasználókezelés",
                 "tracker": "Felhasználó követés",
                 "metrics": "Metrikák",
-                "health": "Health",
+                "health": "Akalmazás állapota",
                 "configuration": "Konfiguráció",
                 "logs": "Naplók",
                 "audits": "Nyomkövetés",
@@ -43,7 +43,7 @@
             "newpassword.placeholder": "Új jelszava",
             "confirmpassword": "Új jelszó megerősítése",
             "confirmpassword.placeholder": "Írja be újra a jelszavát",
-            "email": "E-mail",
+            "email": "Email",
             "email.placeholder": "Az Ön email címe"
         },
         "messages": {
@@ -51,7 +51,7 @@
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "Ha be akar <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">lépni</a>, kipróbálás céljából használható felhasználók:<br/>- Adminisztrátor (azonosító=\"admin\" és a jelszó=\"admin\") <br/>- Felhasználó (azonosító=\"user\" és jelszó=\"user\").",
                 "register": "Nincs még hozzáférése? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Regisztráljon</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Ha be akar ",
                     "link": "lépni",
@@ -90,7 +90,7 @@
             "id" : "ID"
         },
         "ribbon": {
-            "dev":"Fejlesztés"
+            "dev":"Fejlesztői változat"
         }
     },
     "entity": {
@@ -126,13 +126,13 @@
         }
     },
     "error": {
-        "internalServerError": "Internal server error",
+        "internalServerError": "Szerver hiba",
         "server.not.reachable": "A szerver nem elérhető",
-        "url.not.found": "Not found",
+        "url.not.found": "Nem található",
         "NotNull": "Az {{fieldName}} mező nem lehet üres!",
         "Size": "A {{fieldName}} mező nem teljesíti a minimum/maximum hossz követelményeket!",
         "userexists": "Ezzel a felhasználónévvel már regisztráltak!",
-        "emailexists": "Ezzel az e-mail címmel már regisztráltak!",
+        "emailexists": "Ezzel az email címmel már regisztráltak!",
         "idexists": "Az új {{entityName}}-nak/nek nem lehet még ID-ja"
     },
     "footer": "Ez a lábléc."

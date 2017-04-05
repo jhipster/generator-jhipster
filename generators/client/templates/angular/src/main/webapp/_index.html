@@ -14,6 +14,15 @@
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
     <<%= jhiPrefix %>-main></<%= jhiPrefix %>-main>
+    <script>
+        // load shim for IE
+        if (window.navigator.userAgent.indexOf('Trident/') > 0) {
+            var script = document.createElement('script');
+            script.src = 'core-js-shim.min.js';
+            script.type = 'text/javascript';
+            document.getElementsByTagName('head')[0].appendChild(script)
+        }
+    </script>
     <!-- Google Analytics: uncomment and change UA-XXXXX-X to be your site's ID.
     <script>
         (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=

@@ -12,7 +12,7 @@ data:
     <%_ if (serviceDiscoveryType == 'eureka') { _%>
     eureka:
       client:
-        serviceUrl:
+        service-url:
           # This must contain a list of all Eureka server replicas for registry HA to work correctly
           defaultZone: http://admin:${jhipster.registry.password}@jhipster-registry-0.jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/,http://admin:${jhipster.registry.password}@jhipster-registry-1.jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/
     <%_ } _%>

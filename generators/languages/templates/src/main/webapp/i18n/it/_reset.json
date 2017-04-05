@@ -6,9 +6,9 @@
                 "button": "Reimposta Password"
             },
             "messages": {
-                "info": "Inserisci l'indirizzo e-mail utilizzato per la registrazione",
-                "success": "Controlla la tua e-mail per i dettagli su come reimpostare la password.",
-                "notfound": "<strong>E-Mail non registrata!</strong> Si prega di verificarla e riprovare!"
+                "info": "Inserisci l'indirizzo email utilizzato per la registrazione",
+                "success": "Controlla la tua email per i dettagli su come reimpostare la password.",
+                "notfound": "<strong>Email non registrata!</strong> Si prega di verificarla e riprovare!"
             }
         },
         "finish" : {
@@ -20,7 +20,7 @@
                 "info": "Scegliere una nuova password",
                 <%_ if (clientFramework === 'angular1') { _%>
                 "success": "<strong>La tua password è stata reimpostata .</strong> Per favore <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">autenticati</a>.",
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "success": "<strong>La tua password è stata reimpostata .</strong> Per favore ",
                 <%_ } _%>
                 "keymissing": "La chiave di reimpostazione non è presente.",

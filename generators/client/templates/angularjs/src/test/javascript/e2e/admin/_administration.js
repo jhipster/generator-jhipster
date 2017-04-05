@@ -77,6 +77,7 @@ describe('administration', function () {
         });
     });
 
+<%_ if (devDatabaseType !== 'cassandra') { _%>
     it('should load audits', function () {
         element(by.css('[ui-sref="audits"]')).click();
         <%_ if (enableTranslation) { _%>
@@ -89,6 +90,7 @@ describe('administration', function () {
         });
     });
 
+<%_ } _%>
     it('should load logs', function () {
         element(by.css('[ui-sref="logs"]')).click();
         <%_ if (enableTranslation) { _%>

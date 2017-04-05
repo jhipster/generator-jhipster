@@ -5,9 +5,9 @@
         .module('<%=angularAppName%>')
         .controller('<%= entityAngularName %>Controller', <%= entityAngularName %>Controller);
 
-    <%= entityAngularName %>Controller.$inject = [<% if (fieldsContainBlob) { %>'DataUtils', <% } %>'<%= entityClass %>'<% if (searchEngine == 'elasticsearch') { %>, '<%= entityClass %>Search'<% } %><% if (pagination != 'no') { %>, 'ParseLinks', 'AlertService', 'paginationConstants'<% } %> <%_ if (pagination == 'pager' || pagination == 'pagination'){ %>, 'pagingParams'<% } %>];
+    <%= entityAngularName %>Controller.$inject = [<% if (pagination == 'pagination' || pagination == 'pager') { %>'$state', <% } %><% if (fieldsContainBlob) { %>'DataUtils', <% } %>'<%= entityClass %>'<% if (searchEngine == 'elasticsearch') { %>, '<%= entityClass %>Search'<% } %><% if (pagination != 'no') { %>, 'ParseLinks', 'AlertService', 'paginationConstants'<% } %> <%_ if (pagination == 'pager' || pagination == 'pagination'){ %>, 'pagingParams'<% } %>];
 
-    function <%= entityAngularName %>Controller(<% if (fieldsContainBlob) { %>DataUtils, <% } %><%= entityClass %><% if (searchEngine == 'elasticsearch') { %>, <%= entityClass %>Search<% } %><% if (pagination != 'no') { %>, ParseLinks, AlertService, paginationConstants<% } %> <%_ if (pagination == 'pager' || pagination == 'pagination'){ %>, pagingParams<% } %>) {
+    function <%= entityAngularName %>Controller(<% if (pagination == 'pagination' || pagination == 'pager') { %>$state, <% } %><% if (fieldsContainBlob) { %>DataUtils, <% } %><%= entityClass %><% if (searchEngine == 'elasticsearch') { %>, <%= entityClass %>Search<% } %><% if (pagination != 'no') { %>, ParseLinks, AlertService, paginationConstants<% } %> <%_ if (pagination == 'pager' || pagination == 'pagination'){ %>, pagingParams<% } %>) {
 
         var vm = this;
 

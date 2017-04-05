@@ -1,6 +1,6 @@
 <%_
-var i18nToLoad = [entityInstance];
-for (var idx in fields) {
+const i18nToLoad = [entityInstance];
+for (const idx in fields) {
     if (fields[idx].fieldIsEnum == true) {
         i18nToLoad.push(fields[idx].enumInstance);
     }
@@ -16,13 +16,16 @@ import { EventManager, AlertService<% if (enableTranslation) { %>, JhiLanguageSe
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { <%= entityAngularName %>PopupService } from './<%= entityFileName %>-popup.service';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
-<%_ for (var rel of differentRelationships) { _%>
+<%_ for (const rel of differentRelationships) {
+    if (rel.relationshipType != 'one-to-many') { _%>
 import { <%= rel.otherEntityAngularName %>, <%= rel.otherEntityAngularName%>Service } from '../<%= rel.otherEntityModulePath %>';
-<%_ } _%>
+<%_ }
+} _%>
 <%_
 // TODO replace ng-file-upload dependency by an ng2 depedency
 // TODO Find a better way to format dates so that it works with NgbDatePicker
 _%>
+
 @Component({
     selector: '<%= jhiPrefix %>-<%= entityFileName %>-dialog',
     templateUrl: './<%= entityFileName %>-dialog.component.html'
@@ -33,19 +36,19 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     authorities: any[];
     isSaving: boolean;
     <%_
-    var queries = [];
-    var variables = [];
-    var hasManyToMany = false;
-    for (idx in relationships) {
-        var query;
-        var variableName;
+    const queries = [];
+    const variables = [];
+    let hasManyToMany = false;
+    for (const idx in relationships) {
+        let query;
+        let variableName;
         hasManyToMany = hasManyToMany || relationships[idx].relationshipType == 'many-to-many';
         if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide == true && relationships[idx].otherEntityName != 'user') {
             variableName = relationships[idx].relationshipFieldNamePlural.toLowerCase();
             if (variableName === entityInstance) {
                 variableName += 'Collection';
             }
-            var relationshipFieldName = "this." + entityInstance + "." + relationships[idx].relationshipFieldName;
+            const relationshipFieldName = "this." + entityInstance + "." + relationships[idx].relationshipFieldName;
             query  = "this." + relationships[idx].otherEntityName + "Service.query({filter: '" + relationships[idx].otherEntityRelationshipName.toLowerCase() + "-is-null'}).subscribe((res: Response) => {"
             if (dto === "no") {
                 query += "\n            if (!" + relationshipFieldName + " || !" + relationshipFieldName + ".id) {"
@@ -59,7 +62,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
             query += "\n                }, (subRes: Response) => this.onError(subRes.json()));"
             query += "\n            }"
             query += "\n        }, (res: Response) => this.onError(res.json()));"
-        } else {
+        } else if (relationships[idx].relationshipType != 'one-to-many') {
             variableName = relationships[idx].otherEntityNameCapitalizedPlural.toLowerCase();
             if (variableName === entityInstance) {
                 variableName += 'Collection';
@@ -67,12 +70,12 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
             query = 'this.' + relationships[idx].otherEntityName + 'Service.query().subscribe(';
             query += '\n            (res: Response) => { this.' + variableName + ' = res.json(); }, (res: Response) => this.onError(res.json()));';
         }
-        if (!contains(queries, query)) {
+        if (variableName && !contains(queries, query)) {
             queries.push(query);
             variables.push(variableName + ': ' + relationships[idx].otherEntityAngularName + '[];');
         }
     }
-    for (idx in variables) { %>
+    for (const idx in variables) { %>
     <%- variables[idx] %>
     <%_ } _%>
     constructor(
@@ -84,8 +87,10 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         private dataUtils: DataUtils,
         <%_ } _%>
         private alertService: AlertService,
-        private <%= entityInstance %>Service: <%= entityAngularName %>Service,<% for (idx in differentRelationships) {%>
-        private <%= differentRelationships[idx].otherEntityName %>Service: <%= differentRelationships[idx].otherEntityAngularName %>Service,<% } %>
+        private <%= entityInstance %>Service: <%= entityAngularName %>Service,<% for (idx in differentRelationships) {
+        if (differentRelationships[idx].relationshipType != 'one-to-many') { %>
+        private <%= differentRelationships[idx].otherEntityName %>Service: <%= differentRelationships[idx].otherEntityAngularName %>Service,<% }
+        }%>
         private eventManager: EventManager
     ) {
         <%_ if (enableTranslation) { _%>
@@ -130,10 +135,12 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         this.isSaving = true;
         if (this.<%= entityInstance %>.id !== undefined) {
             this.<%= entityInstance %>Service.update(this.<%= entityInstance %>)
-                .subscribe((res: <%= entityAngularName %>) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                .subscribe((res: <%= entityAngularName %>) =>
+                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
         } else {
             this.<%= entityInstance %>Service.create(this.<%= entityInstance %>)
-                .subscribe((res: <%= entityAngularName %>) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                .subscribe((res: <%= entityAngularName %>) =>
+                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
         }
     }
 
@@ -144,6 +151,11 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     }
 
     private onSaveError (error) {
+        try {
+            error.json();
+        } catch (exception) {
+            error.message = error.text();
+        }
         this.isSaving = false;
         this.onError(error);
     }
@@ -152,10 +164,10 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         this.alertService.error(error.message, null, null);
     }
     <%_
-    var entitiesSeen = [];
+    const entitiesSeen = [];
     for (idx in relationships) {
-        var otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
-            if(entitiesSeen.indexOf(otherEntityNameCapitalized) == -1) {
+        const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
+        if(relationships[idx].relationshipType != 'one-to-many' && entitiesSeen.indexOf(otherEntityNameCapitalized) == -1) {
     _%>
 
     track<%- otherEntityNameCapitalized -%>ById(index: number, item: <%- relationships[idx].otherEntityAngularName -%>) {
@@ -200,7 +212,6 @@ export class <%= entityAngularName %>PopupComponent implements OnInit, OnDestroy
                 this.modalRef = this.<%= entityInstance %>PopupService
                     .open(<%= entityAngularName %>DialogComponent);
             }
-
         });
     }
 

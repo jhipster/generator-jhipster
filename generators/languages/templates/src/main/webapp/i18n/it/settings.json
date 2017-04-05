@@ -12,7 +12,7 @@
         "messages": {
             "error": {
                 "fail": "<strong>Si è verificato un errore!</strong> Impossibile salvare le impostazioni.",
-                "emailexists": "<strong>L'indirizzo e-mail è già in uso!</strong> Si prega di sceglierne un altro."
+                "emailexists": "<strong>L'indirizzo email è già in uso!</strong> Si prega di sceglierne un altro."
             },
             "success": "<strong>Impostazioni salvate!</strong>",
             "validate": {

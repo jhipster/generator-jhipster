@@ -4,7 +4,7 @@ machine:
     java:
         version: oraclejdk8
     node:
-        version: 6.9.5
+        version: <%= NODE_VERSION %>
 dependencies:
     cache_directories:
         - node
@@ -53,7 +53,7 @@ test:
 <%_ if (applicationType !== 'microservice') { _%>
     <%_ if (clientFramework === 'angular1') { _%>
         - gulp test
-    <%_ } else if (clientFramework === 'angular2') { _%>
+    <%_ } else { _%>
         <%_ if (clientPackageManager === 'yarn') { _%>
         - yarn test
         <%_ } else if (clientPackageManager === 'npm') { _%>

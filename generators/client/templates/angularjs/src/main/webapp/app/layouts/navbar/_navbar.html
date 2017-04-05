@@ -135,12 +135,14 @@
                                 <span data-translate="global.menu.admin.configuration">Configuration</span>
                             </a>
                         </li>
+                        <%_ if (devDatabaseType !== 'cassandra') { _%>
                         <li ui-sref-active="active">
                             <a ui-sref="audits" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-bell"></span>&nbsp;
                                 <span data-translate="global.menu.admin.audits">Audits</span>
                             </a>
                         </li>
+                        <%_ } _%>
                         <li ui-sref-active="active">
                             <a ui-sref="logs" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-tasks"></span>&nbsp;

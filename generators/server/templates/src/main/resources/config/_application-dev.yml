@@ -18,12 +18,7 @@ eureka:
     instance:
         prefer-ip-address: true
     client:
-        enabled: true
-        healthcheck:
-            enabled: true
-        registerWithEureka: true
-        fetchRegistry: true
-        serviceUrl:
+        service-url:
             defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
 <%_ } _%>
 
@@ -137,12 +132,7 @@ spring:
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
             <%_ if (hibernateCache == 'ehcache') { _%>
-            hibernate.javax.cache.provider: org.ehcache.jsr107.EhcacheCachingProvider
-            hibernate.javax.cache.uri: ${spring.cache.jcache.config}
-            hibernate.cache.region.factory_class: io.github.jhipster.config.jcache.SpringCacheRegionFactory
-    cache:
-        jcache:
-            config: config/ehcache/ehcache-dev.xml
+            hibernate.cache.region.factory_class: io.github.jhipster.config.jcache.NoDefaultJCacheRegionFactory
             <%_ } else if (hibernateCache == 'hazelcast') { _%>
             hibernate.cache.region.factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
             hibernate.cache.hazelcast.instance_name: <%= baseName %>
@@ -188,6 +178,14 @@ spring:
         cache-seconds: 1
     thymeleaf:
         cache: false
+<%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
+    zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
+        base-url: http://localhost:9411
+        enabled: false
+        locator:
+            discovery:
+                enabled: true
+<%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
 
 liquibase:
@@ -230,12 +228,27 @@ jhipster:
     <%_ } _%>
     http:
         version: V_1_1 # To use HTTP/2 you will need SSL support (see above the "server.ssl" configuration)
-    <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>
+    <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast' ||  hibernateCache == 'ehcache') { _%>
     cache: # Cache configuration
+        <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>
         hazelcast: # Hazelcast distributed cache
             time-to-live-seconds: 3600
             backup-count: 1
+        <%_ } _%>
+        <%_ if (hibernateCache == 'ehcache') { _%>
+        ehcache: # Ehcache configuration
+            time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
+            max-entries: 100 # Number of objects in each cache entry
+        <%_ } _%>
     <%_ } _%>
+    # CORS is only enabled by default with the "dev" profile, so BrowserSync can access the API
+    cors:
+        allowed-origins: "*"
+        allowed-methods: GET, PUT, POST, DELETE, OPTIONS
+        allowed-headers: "*"
+        exposed-headers:
+        allow-credentials: true
+        max-age: 1800
     <%_ if (authenticationType == 'jwt') { _%>
     security:
         authentication:
@@ -285,7 +298,7 @@ jhipster:
             endpoint: /prometheusMetrics
         logs: # Reports Dropwizard metrics in the logs
             enabled: false
-            reportFrequency: 60 # in seconds
+            report-frequency: 60 # in seconds
     logging:
         logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
             enabled: false

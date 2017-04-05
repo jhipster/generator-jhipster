@@ -43,15 +43,15 @@
             "newpassword.placeholder": "Nhập mật khẩu mới",
             "confirmpassword": "Xác nhận mật khẩu mới",
             "confirmpassword.placeholder": "Nhập lại mật khẩu mới",
-            "email": "E-mail",
-            "email.placeholder": "Nhập e-mail của bạn"
+            "email": "Email",
+            "email.placeholder": "Nhập email của bạn"
         },
         "messages": {
             "info": {
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "Nếu bạn muốn <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">đăng nhập</a>, bạn có thể thử với tài khoản mặc định:<br/>- Quản trị viên (tài khoản=\"admin\" và mật khẩu=\"admin\") <br/>- Người dùng (tài khoản=\"user\" và mật khẩu=\"user\").",
                 "register": "Bạn vẫn chưa có tài khoản? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Đăng ký tài khoản mới</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Nếu bạn muốn ",
                     "link": "đăng nhập",
@@ -79,10 +79,10 @@
                     "maxlength": "Mật khẩu không được vượt quá 50 ký tự."
                 },
                 "email": {
-                    "required": "Bạn phải nhập e-mail.",
-                    "invalid": "E-mail bạn nhập không hợp lệ.",
-                    "minlength": "E-mail phải có ít nhất 5 ký tự.",
-                    "maxlength": "E-mail không được vượt quá 50 ký tự."
+                    "required": "Bạn phải nhập email.",
+                    "invalid": "Email bạn nhập không hợp lệ.",
+                    "minlength": "Email phải có ít nhất 5 ký tự.",
+                    "maxlength": "Email không được vượt quá 50 ký tự."
                 }
             }
         },
@@ -132,7 +132,7 @@
         "NotNull": "Trường {{ fieldName }} không được để trống!",
         "Size": "Trường {{ fieldName }} không nằm trong giới hạn tối thiểu/tối đa!",
         "userexists": "Tên đăng nhập đã được sử dụng!",
-        "emailexists": "E-mail đã được sử dụng!",
+        "emailexists": "Email đã được sử dụng!",
         "idexists": "Thêm mới {{ entityName }} không được trùng với định danh đã tồn tại"
     },
     "footer": "Đây là chân trang của bạn"

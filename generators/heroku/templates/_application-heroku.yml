@@ -18,7 +18,7 @@ eureka:
         prefer-ip-address: false
 <%_ } _%>
     client:
-        serviceUrl:
+        service-url:
             defaultZone: ${JHIPSTER_REGISTRY_URL}/eureka/
 
 spring:

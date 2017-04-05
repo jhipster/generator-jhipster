@@ -54,7 +54,7 @@ gradle-front-test:
     script:
         <%_ if (clientFramework === 'angular1') { _%>
         - ./gradlew gulp_test -PnodeInstall --no-daemon
-        <%_ } else if (clientFramework === 'angular2') { _%>
+        <%_ } else { _%>
             <%_ if (clientPackageManager === 'yarn') { _%>
         - ./gradlew yarn_test -PnodeInstall --no-daemon
             <%_ } else if (clientPackageManager === 'npm') { _%>
@@ -106,10 +106,10 @@ before_script:
     - chmod +x mvnw
     <%_ if (!skipClient) { _%>
         <%_ if (clientPackageManager === 'yarn') { _%>
-    - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v6.9.5 -DyarnVersion=v0.20.3
+    - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v<%= NODE_VERSION %> -DyarnVersion=v<%= YARN_VERSION %>
     - ./mvnw com.github.eirslett:frontend-maven-plugin:yarn
         <%_ } else if (clientPackageManager === 'npm') { _%>
-    - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v6.9.5 -DnpmVersion=4.1.2
+    - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v<%= NODE_VERSION %> -DnpmVersion=<%= NPM_VERSION %>
     - ./mvnw com.github.eirslett:frontend-maven-plugin:npm
         <%_ } _%>
     <%_ } _%>
@@ -131,7 +131,7 @@ maven-front-test:
     script:
         <%_ if (clientFramework === 'angular1') { _%>
         - ./mvnw com.github.eirslett:frontend-maven-plugin:gulp -Dfrontend.gulp.arguments=test
-        <%_ } else if (clientFramework === 'angular2') { _%>
+        <%_ } else { _%>
             <%_ if (clientPackageManager === 'yarn') { _%>
         - ./mvnw com.github.eirslett:frontend-maven-plugin:yarn -Dfrontend.yarn.arguments=test
             <%_ } else if (clientPackageManager === 'npm') { _%>
@@ -153,10 +153,10 @@ gatling-test:
         - chmod +x mvnw
         <%_ if (!skipClient) { _%>
             <%_ if (clientPackageManager === 'yarn') { _%>
-        - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v6.9.5 -DyarnVersion=v0.20.3
+        - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v<%= NODE_VERSION %> -DyarnVersion=v<%= YARN_VERSION %>
         - ./mvnw com.github.eirslett:frontend-maven-plugin:yarn
             <%_ } else if (clientPackageManager === 'npm') { _%>
-        - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v6.9.5 -DnpmVersion=4.1.2
+        - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v<%= NODE_VERSION %> -DnpmVersion=<%= NPM_VERSION %>
         - ./mvnw com.github.eirslett:frontend-maven-plugin:npm
             <%_ } _%>
         <%_ } _%>

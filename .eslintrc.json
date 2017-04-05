@@ -3,7 +3,7 @@
         "node": true,
         "es6": true
     },
-    "extends": ["eslint:recommended"],
+    "extends": ["airbnb-base"],
     "rules": {
         "indent": [2, 4],
         "linebreak-style": 0,
@@ -14,6 +14,16 @@
         "no-use-before-define": [2, "nofunc"],
         "no-unused-vars": [2, {"vars": "local", "args": "none"}],
         "no-multi-str": 2,
-        "no-irregular-whitespace": 2
+        "no-irregular-whitespace": 2,
+        "comma-dangle": "off",
+        "max-len": "off",
+        "func-names": "off",
+        "class-methods-use-this": "off",
+        "no-underscore-dangle": "off",
+        "no-plusplus": "off",
+
+        "no-multi-assign": "off",
+        "no-param-reassign": "off",
+        "no-shadow": "off"
     }
 }

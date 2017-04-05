@@ -3,7 +3,7 @@
 #--------------------------------------------------
 # Launch Sonar analysis
 #--------------------------------------------------
-cd "$HOME"/app
+cd "$APP_FOLDER"
 if [ "$JHIPSTER" == "app-default-from-scratch" ]; then
     if [ "$TRAVIS_REPO_SLUG" = "jhipster/generator-jhipster" ] && [ "$TRAVIS_BRANCH" = "master" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
         ./mvnw clean

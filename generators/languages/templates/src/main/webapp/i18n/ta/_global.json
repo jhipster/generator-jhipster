@@ -51,7 +51,7 @@
                 <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "<a href=\"#/login\">அங்கீகரிக்க</a>, நீங்கள் இயல்புநிலை கணக்குகள் முயற்சி செய்யலாம்:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\").",
                 "register": "உங்களுக்கு கணக்கு இல்லை? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">புதிய கணக்கு பதிவு செய்க!</a>"
-                <%_ } else if (clientFramework === 'angular2') { _%>
+                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "",
                     "link": "அங்கீகரிக்க",
