@@ -71,19 +71,7 @@ module.exports = function (options) {
                 },
                 {
                     test: /\.(jpe?g|png|gif|svg|woff2?|ttf|eot)$/i,
-                    loaders: [
-                        'file-loader?hash=sha512&digest=hex&name=[hash].[ext]', {
-                            loader: 'image-webpack-loader',
-                            query: {
-                                gifsicle: {
-                                    interlaced: false
-                                },
-                                optipng: {
-                                    optimizationLevel: 7
-                                }
-                            }
-                        }
-                    ]
+                    loaders: ['file-loader?hash=sha512&digest=hex&name=[hash].[ext]']
                 },
                 {
                     test: /app.constants.ts$/,
