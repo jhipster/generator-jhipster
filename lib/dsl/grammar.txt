@@ -62,7 +62,10 @@
   };
 }
 
-start = p:prog { return p; }
+start = p:prog {
+    p.applications.reverse();
+    return p;
+  }
 
 prog
   = SPACE* constantDecl:constantDecl SPACE* p:prog {
@@ -159,40 +162,41 @@ applicationContentDecl
     return addToApplicationDecl(applicationContentDecl, 'clusteredHttpSession', clusteredHttpSession.join(''));
   }
   / WEBSOCKET SPACE* websocket:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.websocket = websocket.join('');
+    return addToApplicationDecl(applicationContentDecl, 'websocket', websocket.join(''));
   }
   / DATABASE_TYPE SPACE* databaseType:[a-z]+ SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.databaseType = databaseType.join('');
+    return addToApplicationDecl(applicationContentDecl, 'databaseType', databaseType.join(''));
   }
   / DEV_DATABASE_TYPE SPACE* devDatabaseType:[A-z0-9]+ SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.devDatabaseType = devDatabaseType.join('');
+    return addToApplicationDecl(applicationContentDecl, 'devDatabaseType', devDatabaseType.join(''));
   }
   / PROD_DATABASE_TYPE SPACE* prodDatabaseType:[A-z0-9]+ SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.prodDatabaseType = prodDatabaseType.join('');
+    return addToApplicationDecl(applicationContentDecl, 'prodDatabaseType', prodDatabaseType.join(''));
   }
   / USE_COMPASS SPACE* useCompass:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.useCompass = useCompass;
+    return addToApplicationDecl(applicationContentDecl, 'useCompass', useCompass);
   }
   / BUILD_TOOL SPACE* buildTool:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.buildTool = buildTool.join('');
+    return addToApplicationDecl(applicationContentDecl, 'buildTool', buildTool.join(''));
   }
   / SEARCH_ENGINE SPACE* searchEngine:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.searchEngine = searchEngine;
+    return addToApplicationDecl(applicationContentDecl, 'searchEngine', searchEngine);
   }
   / ENABLE_TRANSLATION SPACE* enableTranslation:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.enableTranslation = enableTranslation;
+    return addToApplicationDecl(applicationContentDecl, 'enableTranslation', enableTranslation);
   }
   / APPLICATION_TYPE SPACE* applicationType:[a-z]+ SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.applicationType = applicationType.join('');
+    return addToApplicationDecl(applicationContentDecl, 'applicationType', applicationType.join(''));
   }
   / TEST_FRAMEWORK SPACE* testFrameworks:[a-z, ]+ SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.testFrameworks = [];
+    testFrameworkEntries = [];
     const results = testFrameworks.join('').split(',');
     for (let i = 0; i < results.length; i++) {
       if (results[i].trim().length !== 0) {
-        parsed.application.testFrameworks.push(results[i].trim());
+        testFrameworkEntries.push(results[i].trim());
       }
     }
+    return addToApplicationDecl(applicationContentDecl, 'testFrameworks', testFrameworkEntries);
   }
   / LANGUAGES SPACE* languages:[a-z, ]+ SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.languages = [];
