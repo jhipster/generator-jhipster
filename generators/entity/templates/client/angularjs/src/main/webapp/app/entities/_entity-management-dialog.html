@@ -149,8 +149,8 @@ const ngValidators = './ng_validators';
                 <%_ } _%>
                 <%_ if (fields[idx].fieldValidateRules.indexOf('pattern') != -1) { _%>
                 <p class="help-block"
-                    ng-show="editForm.<%= fieldName %>.$error.pattern" data-translate="entity.validation.pattern" translate-value-pattern="<%= fields[idx].fieldValidateRulesPattern %>">
-                    This field should follow pattern "<%= fields[idx].fieldValidateRulesPattern %>".
+                    ng-show="editForm.<%= fieldName %>.$error.pattern" data-translate="entity.validation.pattern" translate-value-pattern="<%= fieldNameHumanized %>">
+                    This field should follow pattern for "<%= fieldNameHumanized %>".
                 </p>
                 <%_ } _%>
                 <%_ if (fieldType == 'Integer' || fieldType == 'Long' || fieldType == 'Float' || fieldType == 'Double' || fieldType == 'BigDecimal') { _%>
