@@ -241,7 +241,6 @@ dependencies {
     <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
     compile "net.jpountz.lz4:lz4:${lz4_version}"
     <%_ } _%>
-    compile "org.apache.geronimo.javamail:geronimo-javamail_1.4_mail:${geronimo_javamail_1_4_mail_version}"
     <%_ if (hibernateCache === 'ehcache' && databaseType === 'sql') { _%>
     compile "org.ehcache:ehcache"
     compile "org.hibernate:hibernate-jcache:${hibernate_version}"
@@ -255,6 +254,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-actuator"
     compile "org.springframework.boot:spring-boot-autoconfigure"
     compile "org.springframework.boot:spring-boot-loader-tools"
+    compile "org.springframework.boot:spring-boot-starter-mail"
     compile "org.springframework.boot:spring-boot-starter-logging"
     compile "org.springframework.boot:spring-boot-starter-aop"
     <%_ if (databaseType === 'sql') { _%>
