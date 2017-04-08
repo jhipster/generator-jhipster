@@ -79,7 +79,7 @@ script:
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
   <%_ if (heroku.includes('travis')) { _%>
-  - ./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy-war -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>
+  - ./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>
   <%_ } else { _%>
   - ./mvnw package -Pprod -DskipTests
   <%_ } _%>
