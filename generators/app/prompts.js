@@ -143,7 +143,7 @@ function askModulesToBeInstalled(done, generator) {
         moduleResponse.results.forEach((modDef) => {
             choices.push({
                 value: { name: modDef.package.name, version: modDef.package.version },
-                name: `(${modDef.package.name}-${modDef.package.version}) ${modDef.package.description} [${modDef.package.author.name}]`
+                name: `(${modDef.package.name}-${modDef.package.version}) ${modDef.package.description}`
             });
         });
         if (choices.length > 0) {
