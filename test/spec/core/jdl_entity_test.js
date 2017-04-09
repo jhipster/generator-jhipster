@@ -111,12 +111,14 @@ describe('JDLEntity', () => {
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
+          expect(error.message).to.eq(`The passed field '' must be valid for entity '${entity.name}'.`);
         }
         try {
           entity.addField({name: 'myField'});
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
+          expect(error.message).to.eq(`The passed field 'myField' must be valid for entity '${entity.name}'.`);
         }
       });
     });
