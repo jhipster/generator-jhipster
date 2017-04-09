@@ -26,6 +26,9 @@ describe('JDLBinaryOption', () => {
           fail();
         } catch (error) {
           expect(error.name).to.eq('IllegalArgumentException');
+          expect(
+            error.message
+          ).to.eq(`The option's name and value must be valid, got no value for 'IsNotAnOption'.`);
         }
       });
     });
@@ -36,6 +39,7 @@ describe('JDLBinaryOption', () => {
           fail();
         } catch (error) {
           expect(error.name).to.eq('IllegalArgumentException');
+          expect(error.message).to.eq("The option's name and value must be valid, got no value for 'dto'.");
         }
       });
     });

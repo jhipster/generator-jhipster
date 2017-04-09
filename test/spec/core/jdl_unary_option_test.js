@@ -25,6 +25,7 @@ describe('JDLUnaryOption', () => {
           fail();
         } catch (error) {
           expect(error.name).to.eq('IllegalArgumentException');
+          expect(error.message).to.eq("The option's name must be valid, got 'IsNotAnOption'.");
         }
       });
     });
