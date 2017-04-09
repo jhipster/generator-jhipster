@@ -189,8 +189,8 @@ To overcome this you need to run `npm link generator-jhipster` or `yarn link gen
 
 To put it in a nutshell, you need to:
 
-1. run `npm link` on the `generator-jhipster` project
-2. run `npm link generator-jhipster` on the generated application folder (you need to do this for each application you create)
+1. run `npm link` or `yarn link` on the `generator-jhipster` project
+2. run `npm link generator-jhipster` or `yarn link generator-jhipster` on the generated application folder (you need to do this for each application you create)
 
 Now, running the 'yo jhipster' command should use your specific JHipster version. You can test it by making a small change in your cloned generator, and running again on an existing JHipster project:
 
