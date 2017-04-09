@@ -101,12 +101,14 @@ describe('JDLField', () => {
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
+          expect(error.message).to.eq('The passed validation must be valid.\nErrors: No validation');
         }
         try {
           field.addValidation({name: VALIDATIONS.MIN});
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
+          expect(error.message).to.eq('The passed validation must be valid.\nErrors: No value');
         }
       });
     });

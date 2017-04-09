@@ -24,6 +24,7 @@ describe('JDLObject', () => {
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
+          expect(error.message).to.eq('The entity must be valid in order to be added.\nErrors: No entity');
         }
         try {
           object.addEntity({
@@ -36,6 +37,9 @@ describe('JDLObject', () => {
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
+          expect(
+            error.message
+          ).to.eq('The entity must be valid in order to be added.\nErrors: For field #1: No field name');
         }
       });
     });
@@ -79,12 +83,14 @@ describe('JDLObject', () => {
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
+          expect(error.message).to.eq('The enum must be valid in order to be added.\nErrors: No enumeration');
         }
         try {
           object.addEnum({values: ['A', 'B']});
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
+          expect(error.message).to.eq('The enum must be valid in order to be added.\nErrors: No enumeration name');
         }
       });
     });
