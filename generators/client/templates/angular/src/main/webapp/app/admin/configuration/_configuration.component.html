@@ -17,7 +17,7 @@
                 <div class="row" *ngFor="let key of keys(entry.properties)">
                     <div class="col-md-4">{{key}}</div>
                     <div class="col-md-8">
-                        <span class="float-right badge badge-default break">{{entry.properties[key]}}</span>
+                        <span class="float-right badge badge-default break">{{entry.properties[key] | json}}</span>
                     </div>
                 </div>
             </td>
