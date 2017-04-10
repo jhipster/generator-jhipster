@@ -122,6 +122,7 @@ describe('JDLObject', () => {
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
+          expect(error.message).to.eq('The relationship must be valid in order to be added.\nErrors: No relationship');
         }
         try {
           object.addRelationship({
@@ -133,6 +134,9 @@ describe('JDLObject', () => {
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
+          expect(
+            error.message
+          ).to.eq('The relationship must be valid in order to be added.\nErrors: Wrong source entity: No entity name, No table name, No fields object');
         }
       });
     });
