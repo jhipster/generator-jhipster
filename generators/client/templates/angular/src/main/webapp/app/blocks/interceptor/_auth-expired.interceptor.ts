@@ -45,6 +45,9 @@ export class AuthExpiredInterceptor extends HttpInterceptor {
                 if (principal.isAuthenticated()) {
                     let auth: AuthService = self.injector.get(AuthService);
                     auth.authorize(true);
+                } else {
+                    let authServerProvider: AuthServerProvider = self.injector.get(AuthServerProvider);
+                    authServerProvider.logout();
                 }
             }
             return Observable.throw(error);
