@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class SocialService {
 
-    constructor () {}
+    constructor() {}
 
-    getProviderSetting (provider) {
+    getProviderSetting(provider) {
         switch (provider) {
             case 'google': return 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email';
             case 'facebook': return 'public_profile,email';
@@ -15,8 +15,7 @@ export class SocialService {
         }
     }
 
-    getProviderURL (provider) {
+    getProviderURL(provider) {
         return 'signin/' + provider;
     }
-
 }

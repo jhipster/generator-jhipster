@@ -47,7 +47,7 @@ export class <%= entityAngularName %>DetailComponent implements OnInit, OnDestro
         this.registerChangeIn<%= entityClassPlural %>();
     }
 
-    load (id) {
+    load(id) {
         this.<%= entityInstance %>Service.find(id).subscribe(<%= entityInstance %> => {
             this.<%= entityInstance %> = <%= entityInstance %>;
         });
@@ -73,5 +73,4 @@ export class <%= entityAngularName %>DetailComponent implements OnInit, OnDestro
     registerChangeIn<%= entityClassPlural %>() {
         this.eventSubscriber = this.eventManager.subscribe('<%= entityInstance %>ListModification', response => this.load(this.<%= entityInstance %>.id));
     }
-
 }

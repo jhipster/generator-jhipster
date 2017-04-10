@@ -11,7 +11,7 @@ import { CookieService } from 'angular2-cookie/core';
 })
 export class SocialAuthComponent implements OnInit {
 
-    constructor (
+    constructor(
         private jhiLanguageService: JhiLanguageService,
         private Auth: AuthService,
         private loginService: LoginService,

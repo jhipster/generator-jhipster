@@ -7,7 +7,7 @@ export class <%=jhiPrefixCapitalized%>HealthService {
 
     separator: string;
 
-    constructor (private http: Http) {
+    constructor(private http: Http) {
         this.separator = '.';
     }
 
@@ -77,7 +77,7 @@ export class <%=jhiPrefixCapitalized%>HealthService {
         return healthData;
     }
 
-    private flattenHealthData (result, path, data): any {
+    private flattenHealthData(result, path, data): any {
         for (let key in data) {
             if (data.hasOwnProperty(key)) {
                 let value = data[key];
@@ -91,11 +91,10 @@ export class <%=jhiPrefixCapitalized%>HealthService {
                 }
             }
         }
-
         return result;
     }
 
-    private getModuleName (path, name): string {
+    private getModuleName(path, name): string {
         let result;
         if (path && name) {
             result = path + this.separator + name;
@@ -109,7 +108,7 @@ export class <%=jhiPrefixCapitalized%>HealthService {
         return result;
     }
 
-    private hasSubSystem (healthObject): boolean {
+    private hasSubSystem(healthObject): boolean {
         let result = false;
 
         for (let key in healthObject) {
@@ -120,11 +119,10 @@ export class <%=jhiPrefixCapitalized%>HealthService {
                 }
             }
         }
-
         return result;
     }
 
-    private isHealthObject (healthObject): boolean {
+    private isHealthObject(healthObject): boolean {
         let result = false;
 
         for (let key in healthObject) {
@@ -134,7 +132,6 @@ export class <%=jhiPrefixCapitalized%>HealthService {
                 }
             }
         }
-
         return result;
     }
 }

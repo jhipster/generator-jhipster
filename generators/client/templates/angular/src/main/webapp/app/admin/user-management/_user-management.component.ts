@@ -72,7 +72,7 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
         this.eventManager.subscribe('userListModification', response => this.loadAll());
     }
 
-    setActive (user, isActivated) {
+    setActive(user, isActivated) {
         user.activated = isActivated;
 
         this.userService.update(user).subscribe(
@@ -88,7 +88,7 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
             });
     }
 
-    loadAll () {
+    loadAll() {
         this.userService.query(<%_ if (databaseType !== 'cassandra') { _%>{
             page: this.page - 1,
             size: this.itemsPerPage,
@@ -98,12 +98,12 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
         );
     }
 
-    trackIdentity (index, item: User) {
+    trackIdentity(index, item: User) {
         return item.id;
     }
 
     <%_ if (databaseType !== 'cassandra') { _%>
-    sort () {
+    sort() {
         let result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
         if (this.predicate !== 'id') {
             result.push('id');
@@ -111,14 +111,14 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
         return result;
     }
 
-    loadPage (page: number) {
+    loadPage(page: number) {
         if (page !== this.previousPage) {
             this.previousPage = page;
             this.transition();
         }
     }
 
-    transition () {
+    transition() {
         this.router.navigate(['/user-management'], { queryParams:
                 {
                     page: this.page,

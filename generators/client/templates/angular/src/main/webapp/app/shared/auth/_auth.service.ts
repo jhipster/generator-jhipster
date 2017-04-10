@@ -15,12 +15,12 @@ export class AuthService {
         private router: Router
     ) {}
 
-    authorize (force) {
+    authorize(force) {
         let authReturn = this.principal.identity(force).then(authThen.bind(this));
 
         return authReturn;
 
-        function authThen () {
+        function authThen() {
             let isAuthenticated = this.principal.isAuthenticated();
             let toStateInfo = this.stateStorageService.getDestinationState().destination;
 

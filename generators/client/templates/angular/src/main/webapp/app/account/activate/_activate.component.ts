@@ -24,7 +24,7 @@ export class ActivateComponent implements OnInit {
         this.jhiLanguageService.setLocations(['activate']);
     }
 
-    ngOnInit () {
+    ngOnInit() {
         this.route.queryParams.subscribe(params => {
             this.activate.get(params['key']).subscribe(() => {
                 this.error = null;

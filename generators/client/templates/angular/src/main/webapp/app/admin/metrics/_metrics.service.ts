@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Rx';
 @Injectable()
 export class <%=jhiPrefixCapitalized%>MetricsService {
 
-    constructor (private http: Http) {}
+    constructor(private http: Http) {}
 
     getMetrics(): Observable<any> {
         return this.http.get('management/metrics').map((res: Response) => res.json());

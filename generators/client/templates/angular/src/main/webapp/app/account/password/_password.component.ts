@@ -24,13 +24,13 @@ export class PasswordComponent implements OnInit {
         this.jhiLanguageService.setLocations(['password']);
     }
 
-    ngOnInit () {
+    ngOnInit() {
         this.principal.identity().then((account) => {
             this.account = account;
         });
     }
 
-    changePassword () {
+    changePassword() {
         if (this.password !== this.confirmPassword) {
             this.error = null;
             this.success = null;

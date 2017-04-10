@@ -37,7 +37,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         this.listener = this.createListener();
     }
 
-    connect () {
+    connect() {
         if (this.connectedPromise === null) {
           this.connection = this.createConnection();
         }
@@ -71,7 +71,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         });
     }
 
-    disconnect () {
+    disconnect() {
         if (this.stompClient !== null) {
             this.stompClient.disconnect();
             this.stompClient = null;
@@ -83,7 +83,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         this.alreadyConnectedOnce = false;
     }
 
-    receive () {
+    receive() {
         return this.listener;
     }
 
@@ -97,7 +97,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         }
     }
 
-    subscribe () {
+    subscribe() {
         this.connection.then(() => {
             this.subscriber = this.stompClient.subscribe('/topic/tracker', data => {
                 this.listenerObserver.next(JSON.parse(data.body));
@@ -105,7 +105,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         });
     }
 
-    unsubscribe () {
+    unsubscribe() {
         if (this.subscriber !== null) {
             this.subscriber.unsubscribe();
         }

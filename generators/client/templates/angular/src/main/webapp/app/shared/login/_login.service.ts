@@ -18,7 +18,7 @@ import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.serv
 @Injectable()
 export class LoginService {
 
-    constructor (
+    constructor(
         <%_ if (enableTranslation) { _%>
         private languageService: JhiLanguageService,
         <%_ } _%>
@@ -31,7 +31,7 @@ export class LoginService {
         <%_ } _%>
     ) {}
 
-    login (credentials, callback?) {
+    login(credentials, callback?) {
         let cb = callback || function() {};
 
         return new Promise((resolve, reject) => {
@@ -63,7 +63,7 @@ export class LoginService {
     }
     <%_ } _%>
 
-    logout () {
+    logout() {
         this.authServerProvider.logout().subscribe();
         this.principal.authenticate(null);
     }

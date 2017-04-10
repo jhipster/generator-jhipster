@@ -6,7 +6,7 @@ import { JhiLanguageService } from 'ng-jhipster';
     templateUrl: './docs.component.html'
 })
 export class <%=jhiPrefixCapitalized%>DocsComponent {
-    constructor (
+    constructor(
         private jhiLanguageService: JhiLanguageService
     ) {
         this.jhiLanguageService.setLocations(['global']);

@@ -21,16 +21,15 @@ export class <%=jhiPrefixCapitalized%>GatewayComponent implements OnInit {
         this.jhiLanguageService.setLocations(['gateway']);
     }
 
-    ngOnInit () {
+    ngOnInit() {
         this.refresh();
     }
 
-    refresh () {
+    refresh() {
         this.updatingRoutes = true;
         this.gatewayRoutesService.findAll().subscribe(gatewayRoutes => {
             this.gatewayRoutes = gatewayRoutes;
             this.updatingRoutes = false;
         });
     }
-
 }

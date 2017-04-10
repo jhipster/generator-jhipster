@@ -8,7 +8,7 @@ import { LANGUAGES } from './language.constants';
 @Injectable()
 export class JhiLanguageHelper {
 
-    constructor (private translateService: TranslateService, private titleService: Title, private router: Router) {
+    constructor(private translateService: TranslateService, private titleService: Title, private router: Router) {
         this.init();
     }
 
@@ -33,7 +33,7 @@ export class JhiLanguageHelper {
         });
     }
 
-    private init () {
+    private init() {
         this.translateService.onTranslationChange.subscribe((event: TranslationChangeEvent) => {
             this.updateTitle();
         });

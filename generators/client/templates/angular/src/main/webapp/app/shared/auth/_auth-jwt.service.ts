@@ -11,11 +11,11 @@ export class AuthServerProvider {
         private $sessionStorage: SessionStorageService
     ) {}
 
-    getToken () {
+    getToken() {
         return this.$localStorage.retrieve('authenticationToken') || this.$sessionStorage.retrieve('authenticationToken');
     }
 
-    login (credentials): Observable<any> {
+    login(credentials): Observable<any> {
 <%_ if (authenticationType === 'uaa') { _%>
         let data = new URLSearchParams();
         data.append('grant_type', 'password');
@@ -45,7 +45,7 @@ export class AuthServerProvider {
         };
         return this.http.post('api/authenticate', data).map(authenticateSuccess.bind(this));
 
-        function authenticateSuccess (resp) {
+        function authenticateSuccess(resp) {
             let bearerToken = resp.headers.get('Authorization');
             if (bearerToken && bearerToken.slice(0, 7) === 'Bearer ') {
                 let jwt = bearerToken.slice(7, bearerToken.length);
@@ -73,7 +73,7 @@ export class AuthServerProvider {
         }
     }
 
-    logout (): Observable<any> {
+    logout(): Observable<any> {
         return new Observable(observer => {
             this.$localStorage.clear('authenticationToken');
             this.$sessionStorage.clear('authenticationToken');

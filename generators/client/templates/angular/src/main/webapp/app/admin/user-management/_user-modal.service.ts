@@ -7,13 +7,13 @@ import { User, UserService } from '../../shared';
 @Injectable()
 export class UserModalService {
     private isOpen = false;
-    constructor (
+    constructor(
         private modalService: NgbModal,
         private router: Router,
         private userService: UserService
     ) {}
 
-    open (component: Component, login?: string): NgbModalRef {
+    open(component: Component, login?: string): NgbModalRef {
         if (this.isOpen) {
             return;
         }

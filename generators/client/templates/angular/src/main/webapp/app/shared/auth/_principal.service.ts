@@ -17,13 +17,13 @@ export class Principal {
         private trackerService: <%=jhiPrefixCapitalized%>TrackerService<% } %>
     ) {}
 
-    authenticate (identity) {
+    authenticate(identity) {
         this.userIdentity = identity;
         this.authenticated = identity !== null;
         this.authenticationState.next(this.userIdentity);
     }
 
-    hasAnyAuthority (authorities: string[]): Promise<boolean> {
+    hasAnyAuthority(authorities: string[]): Promise<boolean> {
         if (!this.authenticated || !this.userIdentity || !this.userIdentity.authorities) {
             return Promise.resolve(false);
         }
@@ -37,7 +37,7 @@ export class Principal {
         return Promise.resolve(false);
     }
 
-    hasAuthority (authority: string): Promise<boolean> {
+    hasAuthority(authority: string): Promise<boolean> {
         if (!this.authenticated) {
            return Promise.resolve(false);
         }
@@ -49,7 +49,7 @@ export class Principal {
         });
     }
 
-    identity (force?: boolean): Promise<any> {
+    identity(force?: boolean): Promise<any> {
         if (force === true) {
             this.userIdentity = undefined;
         }
@@ -87,11 +87,11 @@ export class Principal {
         });
     }
 
-    isAuthenticated (): boolean {
+    isAuthenticated(): boolean {
         return this.authenticated;
     }
 
-    isIdentityResolved (): boolean {
+    isIdentityResolved(): boolean {
         return this.userIdentity !== undefined;
     }
 
@@ -100,6 +100,6 @@ export class Principal {
     }
 
     getImageUrl(): String {
-        return this.isIdentityResolved () ? this.userIdentity.imageUrl : null;
+        return this.isIdentityResolved() ? this.userIdentity.imageUrl : null;
     }
 }

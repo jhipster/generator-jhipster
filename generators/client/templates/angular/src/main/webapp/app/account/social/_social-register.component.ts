@@ -16,7 +16,7 @@ export class SocialRegisterComponent implements OnInit  {
     providerLabel: string;
     modalRef: NgbModalRef;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private jhiLanguageService: JhiLanguageService,
         private loginModalService: LoginModalService

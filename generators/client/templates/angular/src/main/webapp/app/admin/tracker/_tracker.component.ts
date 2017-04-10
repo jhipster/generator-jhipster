@@ -18,7 +18,7 @@ export class <%=jhiPrefixCapitalized%>TrackerComponent implements OnInit, OnDest
         this.jhiLanguageService.setLocations(['tracker']);
     }
 
-    showActivity (activity: any) {
+    showActivity(activity: any) {
         let existingActivity = false;
         for (let index = 0; index < this.activities.length; index++) {
             if (this.activities[index].sessionId === activity.sessionId) {
@@ -45,5 +45,4 @@ export class <%=jhiPrefixCapitalized%>TrackerComponent implements OnInit, OnDest
     ngOnDestroy() {
         this.trackerService.unsubscribe();
     }
-
 }

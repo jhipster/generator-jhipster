@@ -32,7 +32,7 @@ export class SessionsComponent implements OnInit {
         });
     }
 
-    invalidate (series) {
+    invalidate(series) {
         this.sessionsService.delete(encodeURIComponent(series)).subscribe(
             response => {
                 if (response.status === 200) {
