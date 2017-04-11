@@ -10,14 +10,14 @@ import { Principal } from '../../../../../../main/webapp/app/shared/auth/princip
 
 describe('Component Tests', () => {
 
-    let sessions: Session;
+    let sessions: Session[];
     let fixture: ComponentFixture<SessionsComponent>;
     let comp: SessionsComponent;
 
     describe('SessionsComponent', function () {
 
         beforeEach(() => {
-            sessions = new Session('xxxxxx==', new Date(2015, 10, 15), '0:0:0:0:0:0:0:1', 'Mozilla/5.0');
+            sessions = [new Session('xxxxxx==', new Date(2015, 10, 15), '0:0:0:0:0:0:0:1', 'Mozilla/5.0')];
 
             fixture = TestBed.configureTestingModule({
                 imports: [<%=angular2AppName%>TestModule],
