@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const path = require('path');
 module.exports = {
     entry: {
         'vendor': [
@@ -50,7 +51,7 @@ module.exports = {
     },
     output: {
         filename: '[name].dll.js',
-        path: './<%= BUILD_DIR %>www',
+        path: path.resolve('./<%= BUILD_DIR %>www'),
         library: '[name]'
     },
     plugins: [
