@@ -31,6 +31,8 @@ module.exports = UpgradeGenerator.extend({
             this.clientPackageManager = this.config.get('clientPackageManager');
             this.clientFramework = this.config.get('clientFramework');
             this.skipInstall = this.options['skip-install'];
+            this.silent = !this.options.verbose;
+            this.targetVersion = this.options['target-version'];
         }
     },
 
@@ -53,7 +55,7 @@ module.exports = UpgradeGenerator.extend({
 
     _generate(version, callback) {
         this.log(`Regenerating app with jhipster ${version}...`);
-        shelljs.exec('yo jhipster --with-entities --force --skip-install', { silent: true }, (code, msg, err) => {
+        shelljs.exec('yo jhipster --with-entities --force --skip-install', { silent: this.silent }, (code, msg, err) => {
             if (code === 0) this.log(chalk.green(`Successfully regenerated app with jhipster ${version}`));
             else this.error(`Something went wrong while generating project! ${err}`);
             callback();
@@ -98,10 +100,15 @@ module.exports = UpgradeGenerator.extend({
         },
 
         checkLatestVersion() {
+            if (this.targetVersion) {
+                this.log(`Upgrading to the target version: ${this.targetVersion}`);
+                this.latestVersion = this.targetVersion;
+                return;
+            }
             this.log(`Looking for latest ${GENERATOR_JHIPSTER} version...`);
             const done = this.async();
             const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn info' : 'npm show';
-            shelljs.exec(`${commandPrefix} ${GENERATOR_JHIPSTER} version`, { silent: true }, (code, msg, err) => {
+            shelljs.exec(`${commandPrefix} ${GENERATOR_JHIPSTER} version`, { silent: this.silent }, (code, msg, err) => {
                 this.latestVersion = this.clientPackageManager === 'yarn' ? msg.split('\n')[1] : msg.replace('\n', '');
                 if (semver.lt(this.currentVersion, this.latestVersion)) {
                     this.log(chalk.green(`New ${GENERATOR_JHIPSTER} version found: ${this.latestVersion}`));
@@ -186,7 +193,7 @@ module.exports = UpgradeGenerator.extend({
             const installJhipsterLocally = (version, callback) => {
                 this.log(`Installing JHipster ${version} locally`);
                 const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn add' : 'npm install';
-                shelljs.exec(`${commandPrefix} ${GENERATOR_JHIPSTER}@${version} --dev --no-lockfile`, { silent: true }, (code, msg, err) => {
+                shelljs.exec(`${commandPrefix} ${GENERATOR_JHIPSTER}@${version} --dev --no-lockfile`, { silent: this.silent }, (code, msg, err) => {
                     if (code === 0) this.log(chalk.green(`Installed ${GENERATOR_JHIPSTER}@${version}`));
                     else this.error(`Something went wrong while installing the JHipster generator! ${msg} ${err}`);
                     callback();
@@ -230,7 +237,7 @@ module.exports = UpgradeGenerator.extend({
             this.log(chalk.yellow(`Updating ${GENERATOR_JHIPSTER} to ${this.latestVersion} . This might take some time...`));
             const done = this.async();
             const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn add' : 'npm install';
-            shelljs.exec(`${commandPrefix} ${GENERATOR_JHIPSTER}@${this.latestVersion} --dev --no-lockfile`, { silent: true }, (code, msg, err) => {
+            shelljs.exec(`${commandPrefix} ${GENERATOR_JHIPSTER}@${this.latestVersion} --dev --no-lockfile`, { silent: this.silent }, (code, msg, err) => {
                 if (code === 0) this.log(chalk.green(`Updated ${GENERATOR_JHIPSTER} to version ${this.latestVersion}`));
                 else this.error(`Something went wrong while updating generator! ${msg} ${err}`);
                 done();
@@ -269,7 +276,7 @@ module.exports = UpgradeGenerator.extend({
             shelljs.rm('-rf', 'node_modules');
             this.log('Installing dependencies, please wait...');
             const installCommand = this.clientPackageManager === 'yarn' ? 'yarn' : 'npm install';
-            shelljs.exec(installCommand, { silent: true }, (code, msg, err) => {
+            shelljs.exec(installCommand, { silent: this.silent }, (code, msg, err) => {
                 if (code !== 0) {
                     this.error(`${installCommand}failed.`);
                 }
