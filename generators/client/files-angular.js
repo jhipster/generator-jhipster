@@ -15,6 +15,7 @@ const files = {
         {
             templates: [
                 '_package.json',
+                '_proxy.conf.json',
                 '_tsconfig.json',
                 '_tsconfig-aot.json',
                 '_tslint.json',
