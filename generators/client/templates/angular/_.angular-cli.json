@@ -47,7 +47,7 @@
       "project": "../../../tsconfig.json"
     },
     {
-      "project": "../../../tsconfig.-aotjson"
+      "project": "../../../tsconfig-aotjson"
     }
   ],
   "test": {
