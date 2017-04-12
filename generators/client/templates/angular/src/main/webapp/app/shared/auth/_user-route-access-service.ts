@@ -18,7 +18,7 @@ export class UserRouteAccessService implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Promise<boolean> {
 
         const authorities = route.data['authorities'];
-        if (!authorities || authorities.length == 0) {
+        if (!authorities || authorities.length === 0) {
             return true;
         }
 
