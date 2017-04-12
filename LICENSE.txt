@@ -1,5 +1,5 @@
 
-    Copyright 2013 Julien Dubois and the respective JHipster contributors
+    Copyright 2013-2017 Julien Dubois and the respective JHipster contributors
 
                                  Apache License
                            Version 2.0, January 2004
