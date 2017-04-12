@@ -47,7 +47,7 @@ export class <%= entityAngularName %>Service {
         Observable<<%= entityAngularName %>> {
 
     <%_ } _%>
-        let copy: <%= entityAngularName %> = Object.assign({}, <%= entityInstance %>);
+        const copy: <%= entityAngularName %> = Object.assign({}, <%= entityInstance %>);
         <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
         copy.<%=fields[idx].fieldName%> = this.dateUtils
             .convertLocalDateToServer(<%= entityInstance %>.<%=fields[idx].fieldName%>);
@@ -66,7 +66,7 @@ export class <%= entityAngularName %>Service {
         Observable<<%= entityAngularName %>> {
 
     <%_ } _%>
-        let copy: <%= entityAngularName %> = Object.assign({}, <%= entityInstance %>);
+        const copy: <%= entityAngularName %> = Object.assign({}, <%= entityInstance %>);
         <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
         copy.<%=fields[idx].fieldName%> = this.dateUtils
             .convertLocalDateToServer(<%= entityInstance %>.<%=fields[idx].fieldName%>);
@@ -81,7 +81,7 @@ export class <%= entityAngularName %>Service {
     find(id: number): Observable<<%= entityAngularName %>> {
         return this.http.get(`${this.resourceUrl}/${id}`).map((res: Response) => {
             <%_ if(hasDate) { _%>
-            let jsonResponse = res.json();
+            const jsonResponse = res.json();
             <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
             jsonResponse.<%=fields[idx].fieldName%> = this.dateUtils
                 .convertLocalDateFromServer(jsonResponse.<%=fields[idx].fieldName%>);
@@ -98,7 +98,7 @@ export class <%= entityAngularName %>Service {
     }
 
     query(req?: any): Observable<Response> {
-        let options = this.createRequestOption(req);
+        const options = this.createRequestOption(req);
         <%_ // TODO Use Response class from @angular/http when the body field will be accessible  directly _%>
         return this.http.get(this.resourceUrl, options)
             <%_ if(hasDate) { _%>
@@ -113,7 +113,7 @@ export class <%= entityAngularName %>Service {
 
     <%_ if(searchEngine === 'elasticsearch') { _%>
     search(req?: any): Observable<Response> {
-        let options = this.createRequestOption(req);
+        const options = this.createRequestOption(req);
         return this.http.get(this.resourceSearchUrl, options)
             <%_ if(hasDate) { _%>
             .map((res: any) => this.convertResponse(res))
@@ -124,7 +124,7 @@ export class <%= entityAngularName %>Service {
 
     <%_ if(hasDate) { _%>
     private convertResponse(res: any): any {
-        let jsonResponse = res.json();
+        const jsonResponse = res.json();
         for (let i = 0; i < jsonResponse.length; i++) {
         <%_ for (idx in fields) { _%>
             <%_ if (fields[idx].fieldType == 'LocalDate') { _%>
@@ -143,7 +143,7 @@ export class <%= entityAngularName %>Service {
     <%_ } _%>
 
     private createRequestOption(req?: any): BaseRequestOptions {
-        let options: BaseRequestOptions = new BaseRequestOptions();
+        const options: BaseRequestOptions = new BaseRequestOptions();
         if (req) {
             let params: URLSearchParams = new URLSearchParams();
             params.set('page', req.page);

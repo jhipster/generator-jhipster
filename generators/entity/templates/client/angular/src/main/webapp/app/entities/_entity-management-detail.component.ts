@@ -59,14 +59,14 @@ export class <%= entityAngularName %>DetailComponent implements OnInit, OnDestro
     }
 
     ngOnInit() {
-        this.subscription = this.route.params.subscribe(params => {
+        this.subscription = this.route.params.subscribe((params) => {
             this.load(params['id']);
         });
         this.registerChangeIn<%= entityClassPlural %>();
     }
 
     load(id) {
-        this.<%= entityInstance %>Service.find(id).subscribe(<%= entityInstance %> => {
+        this.<%= entityInstance %>Service.find(id).subscribe((<%= entityInstance %>) => {
             this.<%= entityInstance %> = <%= entityInstance %>;
         });
     }
@@ -89,6 +89,6 @@ export class <%= entityAngularName %>DetailComponent implements OnInit, OnDestro
     }
 
     registerChangeIn<%= entityClassPlural %>() {
-        this.eventSubscriber = this.eventManager.subscribe('<%= entityInstance %>ListModification', response => this.load(this.<%= entityInstance %>.id));
+        this.eventSubscriber = this.eventManager.subscribe('<%= entityInstance %>ListModification', (response) => this.load(this.<%= entityInstance %>.id));
     }
 }

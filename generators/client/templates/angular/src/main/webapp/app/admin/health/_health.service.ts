@@ -57,9 +57,8 @@ export class <%=jhiPrefixCapitalized%>HealthService {
 
     /* private methods */
     private addHealthObject(result, isLeaf, healthObject, name): any {
-
         const healthData: any = {
-            'name': name
+            name
         };
 
         const details = {};

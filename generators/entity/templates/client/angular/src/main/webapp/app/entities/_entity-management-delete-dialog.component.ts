@@ -60,7 +60,7 @@ export class <%= entityAngularName %>DeleteDialogComponent {
     }
 
     confirmDelete (id: number) {
-        this.<%= entityInstance %>Service.delete(id).subscribe(response => {
+        this.<%= entityInstance %>Service.delete(id).subscribe((response) => {
             this.eventManager.broadcast({
                 name: '<%= entityInstance %>ListModification',
                 content: 'Deleted an <%= entityInstance %>'
@@ -85,7 +85,7 @@ export class <%= entityAngularName %>DeletePopupComponent implements OnInit, OnD
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             this.modalRef = this.<%= entityInstance %>PopupService
                 .open(<%= entityAngularName %>DeleteDialogComponent, params['id']);
         });
