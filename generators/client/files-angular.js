@@ -53,7 +53,7 @@ const files = {
         {
             condition: generator => generator.useSass,
             templates: [
-                { file: '_postcss.config.js', method: 'copy' }
+                '_postcss.config.js'
             ]
         }
     ],
