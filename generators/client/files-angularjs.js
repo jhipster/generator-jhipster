@@ -36,7 +36,7 @@ const files = {
             path: MAIN_SRC_DIR,
             templates: [
                 'content/css/_main.css',
-                { file: 'content/css/_documentation.css', method: 'copy' }
+                'content/css/_documentation.css'
             ]
         }
     ],
@@ -74,7 +74,7 @@ const files = {
             path: MAIN_SRC_DIR,
             templates: [
                 { file: '_favicon.ico', method: 'copy' },
-                { file: '_robots.txt', method: 'copy' },
+                '_robots.txt',
                 '_404.html',
                 '_index.html'
             ]
@@ -225,7 +225,7 @@ const files = {
                 { file: 'admin/metrics/_metrics.state.js', method: 'processJs' },
                 { file: 'admin/metrics/_metrics.html', method: 'processHtml', template: true },
                 { file: 'admin/metrics/_metrics.modal.html', method: 'processHtml', template: true },
-                { file: 'admin/docs/_docs.html', method: 'copy' },
+                'admin/docs/_docs.html',
                 { file: 'admin/docs/_docs.state.js', method: 'processJs' }
             ]
         },

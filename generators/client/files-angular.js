@@ -37,7 +37,7 @@ const files = {
             templates: [
                 'content/css/_global.css',
                 'content/css/_vendor.css',
-                { file: 'content/css/_documentation.css', method: 'copy' }
+                'content/css/_documentation.css'
             ]
         }
     ],
@@ -47,7 +47,7 @@ const files = {
             path: MAIN_SRC_DIR,
             templates: [
                 'content/scss/_global.scss',
-                'content/scss/_vendor.scss',
+                'content/scss/_vendor.scss'
             ]
         },
         {
