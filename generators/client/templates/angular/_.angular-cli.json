@@ -17,79 +17,76 @@
  limitations under the License.
 -%>
 {
-  "project": {
-    "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-    "name": "<%= dasherizedBaseName %>"
-  },
-  "apps": [
-    {
-      "root": "<%= MAIN_SRC_DIR %>",
-      "outDir": "<%= DIST_DIR %>app",
-      "assets": [
-        "content",
-        <%_ if (enableTranslation) { _%>
-        "i18n",
-        <%_ } _%>
-        "favicon.ico"
-      ],
-      "index": "index.html",
-      "main": "app/app.main.ts",
-      "polyfills": "app/polyfills.ts",
-      "test": "",
-      "tsconfig": "../../../tsconfig.json",
-      "prefix": "<%= jhiPrefix %>",
-      "mobile": false,
-      "styles": [
-        <%_ if (useSass) { _%>
-        "content/scss/vendor.scss",
-        "content/scss/global.scss"
-        <%_ } else { _%>
-        "content/css/vendor.css",
-        "content/css/global.css"
-        <%_ } _%>
-      ],
-      "scripts": []
-    }
-  ],
-  "addons": [],
-  "packages": [],
-  <%_ if (protractorTests) { _%>
-  "e2e": {
-    "protractor": {
-      "config": "src/test/javascript/protractor.conf.js"
-    }
-  },
-  <%_ } _%>
-  "lint": [
-    {
-      "project": "../../../tsconfig.json"
+    "project": {
+        "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+        "name": "<%= dasherizedBaseName %>"
     },
-    {
-      "project": "../../../tsconfig-aot.json"
-    }
-  ],
-  "test": {
-    "karma": {
-      "config": "src/test/javascript/karma.conf.js"
-    }
-  },
-  "defaults": {
-    <%_ if (useSass) { _%>
-    "styleExt": "scss",
-    <%_ } else { _%>
-    "styleExt": "css",
+    "apps": [{
+        "root": "<%= MAIN_SRC_DIR %>",
+        "outDir": "<%= DIST_DIR %>app",
+        "assets": [
+            "content",
+            <%_ if (enableTranslation) { _%>
+            "i18n",
+            <%_ } _%>
+            "favicon.ico"
+        ],
+        "index": "index.html",
+        "main": "app/app.main.ts",
+        "polyfills": "app/polyfills.ts",
+        "test": "",
+        "tsconfig": "../../../tsconfig.json",
+        "prefix": "<%= jhiPrefix %>",
+        "mobile": false,
+        "styles": [
+            <%_ if (useSass) { _%>
+            "content/scss/vendor.scss",
+            "content/scss/global.scss"
+            <%_ } else { _%>
+            "content/css/vendor.css",
+            "content/css/global.css"
+            <%_ } _%>
+        ],
+        "scripts": []
+    }],
+    "addons": [],
+    "packages": [],
+    <%_ if (protractorTests) { _%>
+    "e2e": {
+        "protractor": {
+            "config": "src/test/javascript/protractor.conf.js"
+        }
+    },
     <%_ } _%>
-    "prefixInterfaces": false,
-    "inline": {
-      "style": true,
-      "template": false
+    "lint": [{
+            "project": "../../../tsconfig.json"
+        },
+        {
+            "project": "../../../tsconfig-aot.json"
+        }
+    ],
+    "test": {
+        "karma": {
+            "config": "src/test/javascript/karma.conf.js"
+        }
     },
-    "spec": {
-      "component": false,
-      "directive": false,
-      "pipe": false,
-      "service": false
-    }
-  },
-  "packageManager": "yarn"
+    "defaults": {
+        <%_ if (useSass) { _%>
+        "styleExt": "scss",
+        <%_ } else { _%>
+        "styleExt": "css",
+        <%_ } _%>
+        "prefixInterfaces": false,
+        "inline": {
+            "style": true,
+            "template": false
+        },
+        "spec": {
+            "component": false,
+            "directive": false,
+            "pipe": false,
+            "service": false
+        }
+    },
+    "packageManager": "yarn"
 }

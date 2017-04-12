@@ -41,7 +41,7 @@ export class UserService {
     }
 
     query(req?: any): Observable<Response> {
-        let params: URLSearchParams = new URLSearchParams();
+        const params: URLSearchParams = new URLSearchParams();
         if (req) {
             params.set('page', req.page);
             params.set('size', req.size);
@@ -50,7 +50,7 @@ export class UserService {
             }
         }
 
-        let options = {
+        const options = {
             search: params
         };
 

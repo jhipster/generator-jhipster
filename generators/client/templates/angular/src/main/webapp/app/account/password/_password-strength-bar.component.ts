@@ -48,15 +48,14 @@ export class PasswordStrengthBarComponent {
     measureStrength(p: string): number {
 
         let force = 0;
-        let regex = /[$-/:-?{-~!"^_`\[\]]/g; // "
+        const regex = /[$-/:-?{-~!"^_`\[\]]/g; // "
+        const lowerLetters = /[a-z]+/.test(p);
+        const upperLetters = /[A-Z]+/.test(p);
+        const numbers = /[0-9]+/.test(p);
+        const symbols = regex.test(p);
 
-        let lowerLetters = /[a-z]+/.test(p);
-        let upperLetters = /[A-Z]+/.test(p);
-        let numbers = /[0-9]+/.test(p);
-        let symbols = regex.test(p);
-
-        let flags = [lowerLetters, upperLetters, numbers, symbols];
-        let passedMatches = flags.filter( (isMatchedFlag: boolean) => {
+        const flags = [lowerLetters, upperLetters, numbers, symbols];
+        const passedMatches = flags.filter( (isMatchedFlag: boolean) => {
             return isMatchedFlag === true;
         }).length;
 
@@ -93,12 +92,12 @@ export class PasswordStrengthBarComponent {
     @Input()
     set passwordToCheck(password: string) {
         if (password) {
-            let c = this.getColor(this.measureStrength(password));
-            let element = this.elementRef.nativeElement;
+            const c = this.getColor(this.measureStrength(password));
+            const element = this.elementRef.nativeElement;
             if ( element.className ) {
                 this.renderer.setElementClass(element, element.className , false);
             }
-            let lis = element.getElementsByTagName('li');
+            const lis = element.getElementsByTagName('li');
             for (let i = 0; i < lis.length; i++) {
                 if (i < c.idx) {
                     this.renderer.setElementStyle(lis[i], 'backgroundColor', c.col);

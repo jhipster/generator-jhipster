@@ -34,23 +34,23 @@ export class <%=jhiPrefixCapitalized%>HealthService {
     }
 
     transformHealthData(data): any {
-        let response = [];
+        const response = [];
         this.flattenHealthData(response, null, data);
         return response;
     }
 
     getBaseName(name): string {
         if (name) {
-            let split = name.split('.');
+            const split = name.split('.');
             return split[0];
         }
     }
 
     getSubSystemName(name): string {
         if (name) {
-            let split = name.split('.');
+            const split = name.split('.');
             split.splice(0, 1);
-            let remainder = split.join('.');
+            const remainder = split.join('.');
             return remainder ? ' - ' + remainder : '';
         }
     }
@@ -58,20 +58,16 @@ export class <%=jhiPrefixCapitalized%>HealthService {
     /* private methods */
     private addHealthObject(result, isLeaf, healthObject, name): any {
 
-        let status: any;
-        let error: any;
-        let healthData: any = {
-            'name': name,
-            'error': error,
-            'status': status
+        const healthData: any = {
+            'name': name
         };
 
-        let details = {};
+        const details = {};
         let hasDetails = false;
 
-        for (let key in healthObject) {
+        for (const key in healthObject) {
             if (healthObject.hasOwnProperty(key)) {
-                let value = healthObject[key];
+                const value = healthObject[key];
                 if (key === 'status' || key === 'error') {
                     healthData[key] = value;
                 } else {
@@ -96,9 +92,9 @@ export class <%=jhiPrefixCapitalized%>HealthService {
     }
 
     private flattenHealthData(result, path, data): any {
-        for (let key in data) {
+        for (const key in data) {
             if (data.hasOwnProperty(key)) {
-                let value = data[key];
+                const value = data[key];
                 if (this.isHealthObject(value)) {
                     if (this.hasSubSystem(value)) {
                         this.addHealthObject(result, false, value, this.getModuleName(path, key));
@@ -129,9 +125,9 @@ export class <%=jhiPrefixCapitalized%>HealthService {
     private hasSubSystem(healthObject): boolean {
         let result = false;
 
-        for (let key in healthObject) {
+        for (const key in healthObject) {
             if (healthObject.hasOwnProperty(key)) {
-                let value = healthObject[key];
+                const value = healthObject[key];
                 if (value && value.status) {
                     result = true;
                 }
@@ -143,7 +139,7 @@ export class <%=jhiPrefixCapitalized%>HealthService {
     private isHealthObject(healthObject): boolean {
         let result = false;
 
-        for (let key in healthObject) {
+        for (const key in healthObject) {
             if (healthObject.hasOwnProperty(key)) {
                 if (key === 'status') {
                     result = true;

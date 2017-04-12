@@ -38,10 +38,9 @@ import {
     <%=jhiPrefixCapitalized%>AlertErrorComponent
 } from './';
 
-
 export function alertServiceProvider(sanitizer: Sanitizer<% if (enableTranslation) { %>, translateService: TranslateService<% } %>) {
     // set below to true to make alerts look like toast
-    let isToast = false;
+    const isToast = false;
     return new AlertService(sanitizer, isToast<% if (enableTranslation) { %>, translateService<% } %>);
 }
 
@@ -60,7 +59,7 @@ export function alertServiceProvider(sanitizer: Sanitizer<% if (enableTranslatio
         <%_ if (enableTranslation) { _%>
         JhiLanguageHelper,
         <%_ } _%>
-        <%_ if (websocket === 'spring-websocket') { _%>    
+        <%_ if (websocket === 'spring-websocket') { _%>
         WindowRef,
         <%_ } _%>
         {

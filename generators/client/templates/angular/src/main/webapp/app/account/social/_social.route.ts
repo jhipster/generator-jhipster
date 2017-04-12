@@ -43,5 +43,4 @@ export const socialAuthRoute: Route = {
         pageTitle: 'social.register.title'
     },
     canActivate: [UserRouteAccessService]
-};
-<%_ } _%>
+};<%_ } _%>

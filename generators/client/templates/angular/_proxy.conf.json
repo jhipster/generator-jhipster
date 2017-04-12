@@ -17,9 +17,9 @@
  limitations under the License.
 -%>
 {
-  "*": {
-    "target":"http://localhost:<%= serverPort %>",
-    "secure": false,
-    "loglevel": "debug"
-  }
+    "*": {
+        "target": "http://localhost:<%= serverPort %>",
+        "secure": false,
+        "loglevel": "debug"
+    }
 }

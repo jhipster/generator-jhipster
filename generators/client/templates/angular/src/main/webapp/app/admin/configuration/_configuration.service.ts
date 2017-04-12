@@ -28,11 +28,11 @@ export class <%=jhiPrefixCapitalized%>ConfigurationService {
 
     get(): Observable<any> {
         return this.http.get('management/configprops').map((res: Response) => {
-            let properties: any[] = [];
+            const properties: any[] = [];
 
             const propertiesObject = res.json();
 
-            for (let key in propertiesObject) {
+            for (const key in propertiesObject) {
                 if (propertiesObject.hasOwnProperty(key)) {
                     properties.push(propertiesObject[key]);
                 }
@@ -47,16 +47,16 @@ export class <%=jhiPrefixCapitalized%>ConfigurationService {
 
     getEnv(): Observable<any> {
         return this.http.get('management/env').map((res: Response) => {
-            let properties: any = {};
+            const properties: any = {};
 
             const propertiesObject = res.json();
 
-            for (let key in propertiesObject) {
+            for (const key in propertiesObject) {
                 if (propertiesObject.hasOwnProperty(key)) {
-                    let valsObject = propertiesObject[key];
-                    let vals: any[] = [];
+                    const valsObject = propertiesObject[key];
+                    const vals: any[] = [];
 
-                    for (let valKey in valsObject) {
+                    for (const valKey in valsObject) {
                         if (valsObject.hasOwnProperty(valKey)) {
                             vals.push({key: valKey, val: valsObject[valKey]});
                         }

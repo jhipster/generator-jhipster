@@ -36,7 +36,7 @@ import {
     settingsRoute
 } from './';
 
-let ACCOUNT_ROUTES = [
+const ACCOUNT_ROUTES = [
    activateRoute,
    passwordRoute,
    passwordResetFinishRoute,

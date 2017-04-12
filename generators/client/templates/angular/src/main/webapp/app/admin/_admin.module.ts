@@ -65,7 +65,6 @@ import {
     <%_ } _%>
 } from './';
 
-
 @NgModule({
     imports: [
         <%=angular2AppName%>SharedModule,

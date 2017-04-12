@@ -22,7 +22,7 @@ import { RouterModule } from '@angular/router';
 import { navbarRoute } from '../app.route';
 import { errorRoute } from './';
 
-let LAYOUT_ROUTES = [
+const LAYOUT_ROUTES = [
     navbarRoute,
     ...errorRoute
 ];

@@ -23,7 +23,6 @@ import { <%=angular2AppName%>SharedModule } from '../shared';
 
 import { HOME_ROUTE, HomeComponent } from './';
 
-
 @NgModule({
     imports: [
         <%=angular2AppName%>SharedModule,

@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { Title }     from '@angular/platform-browser';
+import { Title } from '@angular/platform-browser';
 import { Router, ActivatedRouteSnapshot } from '@angular/router';
 import { TranslateService, TranslationChangeEvent, LangChangeEvent } from 'ng2-translate/ng2-translate';
 
@@ -46,7 +46,7 @@ export class JhiLanguageHelper {
              titleKey = this.getPageTitle(this.router.routerState.snapshot.root);
         }
 
-        this.translateService.get(titleKey).subscribe(title => {
+        this.translateService.get(titleKey).subscribe((title) => {
             this.titleService.setTitle(title);
         });
     }

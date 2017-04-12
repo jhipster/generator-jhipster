@@ -61,7 +61,8 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         }
         // building absolute path so that websocket doesn't fail when deploying with a context path
         const loc = this.$window.nativeWindow.location;
-        let url = '//' + loc.host + loc.pathname + 'websocket/tracker';
+        let url;
+        url = '//' + loc.host + loc.pathname + 'websocket/tracker';
         <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa' || authenticationType === 'oauth2') { _%>
         const authToken = this.authServerProvider.getToken()<% if (authenticationType === 'oauth2') { %>.access_token<% } %>;
         if (authToken) {
@@ -70,7 +71,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         <%_ } _%>
         const socket = new SockJS(url);
         this.stompClient = Stomp.over(socket);
-        let headers = {};
+        const headers = {};
         <%_ if (authenticationType === 'session') { _%>
         headers['X-XSRF-TOKEN'] = this.csrfService.getCSRF('XSRF-TOKEN');
         <%_ } _%>
@@ -117,7 +118,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
 
     subscribe() {
         this.connection.then(() => {
-            this.subscriber = this.stompClient.subscribe('/topic/tracker', data => {
+            this.subscriber = this.stompClient.subscribe('/topic/tracker', (data) => {
                 this.listenerObserver.next(JSON.parse(data.body));
             });
         });
@@ -131,7 +132,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
     }
 
     private createListener(): Observable<any> {
-        return new Observable(observer => {
+        return new Observable((observer) => {
             this.listenerObserver = observer;
         });
     }

@@ -39,7 +39,7 @@ export class PageRibbonComponent implements OnInit {
     constructor(private profileService: ProfileService) {}
 
     ngOnInit() {
-        this.profileService.getProfileInfo().subscribe(profileInfo => {
+        this.profileService.getProfileInfo().subscribe((profileInfo) => {
             this.profileInfo = profileInfo;
             this.ribbonEnv = profileInfo.ribbonEnv;
         });

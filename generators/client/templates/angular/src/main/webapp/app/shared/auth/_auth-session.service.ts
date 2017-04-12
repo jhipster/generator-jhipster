@@ -28,16 +28,14 @@ export class AuthServerProvider {
     ) {}
 
     login(credentials): Observable<any> {
-        let data = 'j_username=' + encodeURIComponent(credentials.username) +
+        const data = 'j_username=' + encodeURIComponent(credentials.username) +
             '&j_password=' + encodeURIComponent(credentials.password) +
             '&remember-me=' + credentials.rememberMe + '&submit=Login';
-        let headers = new Headers ({
+        const headers = new Headers ({
             'Content-Type': 'application/x-www-form-urlencoded'
         });
 
-        return this.http.post('api/authentication', data, {
-            headers: headers
-        });
+        return this.http.post('api/authentication', data, { headers });
     }
 
     logout(): Observable<any> {

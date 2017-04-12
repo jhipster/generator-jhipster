@@ -41,7 +41,7 @@ import {
 
 import { UserRouteAccessService } from '../shared';
 
-let ADMIN_ROUTES = [
+const ADMIN_ROUTES = [
     <%_ if (devDatabaseType !== 'cassandra') { _%>
     auditsRoute,
     <%_ } _%>
@@ -60,7 +60,6 @@ let ADMIN_ROUTES = [
     <%_ } _%>
     metricsRoute
 ];
-
 
 export const adminState: Routes = [{
     path: '',

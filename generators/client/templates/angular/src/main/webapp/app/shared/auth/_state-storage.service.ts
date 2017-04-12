@@ -34,7 +34,7 @@ export class StateStorageService {
     }
 
     storePreviousState(previousStateName, previousStateParams) {
-        let previousState = { 'name': previousStateName, 'params': previousStateParams };
+        const previousState = { 'name': previousStateName, 'params': previousStateParams };
         this.$sessionStorage.store('previousState', previousState);
     }
 
@@ -51,7 +51,7 @@ export class StateStorageService {
     }
 
     storeDestinationState(destinationState, destinationStateParams, fromState) {
-        let destinationInfo = {
+        const destinationInfo = {
             'destination': {
                 'name': destinationState.name,
                 'data': destinationState.data,

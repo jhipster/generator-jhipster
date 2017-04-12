@@ -55,7 +55,7 @@ export class <%=jhiPrefixCapitalized%>TrackerComponent implements OnInit, OnDest
 
     ngOnInit() {
         this.trackerService.subscribe();
-        this.trackerService.receive().subscribe(activity => {
+        this.trackerService.receive().subscribe((activity) => {
             this.showActivity(activity);
         });
     }

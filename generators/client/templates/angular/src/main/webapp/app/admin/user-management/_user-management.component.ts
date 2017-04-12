@@ -62,7 +62,7 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
     ) {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.itemsPerPage = ITEMS_PER_PAGE;
-        this.routeData = this.activatedRoute.data.subscribe(data => {
+        this.routeData = this.activatedRoute.data.subscribe((data) => {
             this.page = data['pagingParams'].page;
             this.previousPage = data['pagingParams'].page;
             this.reverse = data['pagingParams'].ascending;
@@ -87,14 +87,14 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
     }
 
     registerChangeInUsers() {
-        this.eventManager.subscribe('userListModification', response => this.loadAll());
+        this.eventManager.subscribe('userListModification', (response) => this.loadAll());
     }
 
     setActive(user, isActivated) {
         user.activated = isActivated;
 
         this.userService.update(user).subscribe(
-            response => {
+            (response) => {
                 if (response.status === 200) {
                     this.error = null;
                     this.success = 'OK';
@@ -107,10 +107,10 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
     }
 
     loadAll() {
-        this.userService.query(<%_ if (databaseType !== 'cassandra') { _%>{
+        this.userService.query(<% if (databaseType !== 'cassandra') { %>{
             page: this.page - 1,
             size: this.itemsPerPage,
-            sort: this.sort()}<%_ } _%>).subscribe(
+            sort: this.sort()}<% } %>).subscribe(
             (res: Response) => this.onSuccess(res.json(), res.headers),
             (res: Response) => this.onError(res.json())
         );
@@ -122,7 +122,7 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
 
     <%_ if (databaseType !== 'cassandra') { _%>
     sort() {
-        let result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
+        const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
         if (this.predicate !== 'id') {
             result.push('id');
         }

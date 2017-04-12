@@ -64,10 +64,10 @@ export class UserMgmtDialogComponent implements OnInit {
     save() {
         this.isSaving = true;
         if (this.user.id !== null) {
-            this.userService.update(this.user).subscribe(response => this.onSaveSuccess(response), () => this.onSaveError());
+            this.userService.update(this.user).subscribe((response) => this.onSaveSuccess(response), () => this.onSaveError());
         } else {<% if (!enableTranslation) { %>
             this.user.langKey = 'en';<% } %>
-            this.userService.create(this.user).subscribe(response => this.onSaveSuccess(response), () => this.onSaveError());
+            this.userService.create(this.user).subscribe((response) => this.onSaveSuccess(response), () => this.onSaveError());
         }
     }
 
@@ -97,7 +97,7 @@ export class UserDialogComponent implements OnInit, OnDestroy {
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             if ( params['login'] ) {
                 this.modalRef = this.userModalService.open(UserMgmtDialogComponent, params['login']);
             } else {
