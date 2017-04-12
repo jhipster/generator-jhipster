@@ -3,7 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { <% if (enableTranslation) { %>JhiLanguageService, <% } %>EventManager } from 'ng-jhipster';
 
-import { LoginService } from '../login/login.service';
+import { LoginService } from './login.service';
 import { StateStorageService } from '../auth/state-storage.service';
 <%_ if (enableSocialSignIn) { _%>
 import { SocialService } from '../social/social.service';
