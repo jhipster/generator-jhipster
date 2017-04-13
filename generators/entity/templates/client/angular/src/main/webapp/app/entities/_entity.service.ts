@@ -120,6 +120,7 @@ export class <%= entityAngularName %>Service {
             <%_ } _%>
         ;
     }
+
     <%_ } _%>
     <%_ if(hasDate) { _%>
 
@@ -140,8 +141,8 @@ export class <%= entityAngularName %>Service {
         res._body = jsonResponse;
         return res;
     }
-    <%_ } _%>
 
+    <%_ } _%>
     private createRequestOption(req?: any): BaseRequestOptions {
         const options: BaseRequestOptions = new BaseRequestOptions();
         if (req) {
