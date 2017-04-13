@@ -64,8 +64,8 @@ export class <%= entityAngularName %>ResolvePagingParams implements Resolve<any>
     };
   }
 }
-<%_ } _%>
 
+<%_ } _%>
 export const <%= entityInstance %>Route: Routes = [
   {
     path: '<%= entityUrl %>',

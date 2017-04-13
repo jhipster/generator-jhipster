@@ -55,11 +55,11 @@ export class <%= entityAngularName %>DeleteDialogComponent {
         <%_ } _%>
     }
 
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    confirmDelete (id: number) {
+    confirmDelete(id: number) {
         this.<%= entityInstance %>Service.delete(id).subscribe((response) => {
             this.eventManager.broadcast({
                 name: '<%= entityInstance %>ListModification',
@@ -79,7 +79,7 @@ export class <%= entityAngularName %>DeletePopupComponent implements OnInit, OnD
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private <%= entityInstance %>PopupService: <%= entityAngularName %>PopupService
     ) {}

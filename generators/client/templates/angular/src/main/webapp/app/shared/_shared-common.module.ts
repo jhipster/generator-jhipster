@@ -18,16 +18,13 @@
 -%>
 import { NgModule, Sanitizer } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from 'ng2-translate';
 <%_ } _%>
 import { AlertService } from 'ng-jhipster';
-
 <%_ if (websocket === 'spring-websocket') { _%>
 import { WindowRef } from './tracker/window.service';
 <%_ } _%>
-
 import {
     <%=angular2AppName%>SharedLibsModule,
     <%_ if (enableTranslation) { _%>
