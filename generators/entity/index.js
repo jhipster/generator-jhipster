@@ -576,6 +576,13 @@ module.exports = EntityGenerator.extend({
 
                 const otherEntityName = relationship.otherEntityName;
                 const otherEntityData = this.getEntityJson(otherEntityName);
+
+                if (this.dto && this.dto === 'mapstruct') {
+                    if (otherEntityData && (!otherEntityData.dto || otherEntityData.dto !== 'mapstruct')) {
+                        this.warning(chalk.red(`This entity has the DTO option, and it has a relationship with an entity that doesn't have the DTO option. This will result in an error.`));
+                    }
+                }
+
                 if (otherEntityName === 'user') {
                     relationship.otherEntityTableName = 'jhi_user';
                 } else {
