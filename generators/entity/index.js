@@ -579,7 +579,7 @@ module.exports = EntityGenerator.extend({
 
                 if (this.dto && this.dto === 'mapstruct') {
                     if (otherEntityData && (!otherEntityData.dto || otherEntityData.dto !== 'mapstruct')) {
-                        this.warning(chalk.red(`This entity has the DTO option, and it has a relationship with an entity that doesn't have the DTO option. This will result in an error.`));
+                        this.warning(chalk.red('This entity has the DTO option, and it has a relationship with an entity that doesn\'t have the DTO option. This will result in an error.'));
                     }
                 }
 
