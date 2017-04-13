@@ -96,6 +96,13 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     for (const idx in variables) { %>
     <%- variables[idx] %>
     <%_ } _%>
+    <%_ for (idx in fields) {
+        const fieldName = fields[idx].fieldName;
+        const fieldType = fields[idx].fieldType;
+        if (fieldType == 'LocalDate') { _%>
+    <%# fieldName -%><%# Dp: any; //TODO Fix this to avoid lint error -%>
+        <%_ }
+    } _%>
     constructor(
         public activeModal: NgbActiveModal,
         <%_ if (enableTranslation) { _%>

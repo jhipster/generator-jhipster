@@ -42,8 +42,9 @@ import { <%= entityAngularName %>PopupComponent } from './<%= entityFileName %>-
 <%_ if (entityFileName.length <= 30) { _%>
 import { <%= entityAngularName %>DeletePopupComponent } from './<%= entityFileName %>-delete-dialog.component';
 <%_ } else { _%>
-import { <%= entityAngularName %>DeletePopupComponent }
-    from './<%= entityFileName %>-delete-dialog.component';
+import {
+    <%= entityAngularName %>DeletePopupComponent
+} from './<%= entityFileName %>-delete-dialog.component';
 <%_ } _%>
 
 import { Principal } from '../../shared';

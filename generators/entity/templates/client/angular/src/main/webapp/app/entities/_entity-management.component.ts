@@ -51,7 +51,7 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
         this.eventManager.destroy(this.eventSubscriber);
     }
 
-    trackId (index: number, item: <%= entityAngularName %>) {
+    trackId(index: number, item: <%= entityAngularName %>) {
         return item.id;
     }
     <%_ if (fieldsContainBlob) { _%>
