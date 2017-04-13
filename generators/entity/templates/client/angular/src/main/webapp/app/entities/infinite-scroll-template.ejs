@@ -71,7 +71,7 @@ _%>
         <%_ } _%>
     }
 
-    loadAll () {
+    loadAll() {
     <%_ if (searchEngine === 'elasticsearch') { _%>
         if (this.currentSearch) {
             this.<%= entityInstance %>Service.search({
@@ -96,7 +96,7 @@ _%>
         );
     }
 
-    reset () {
+    reset() {
         this.page = 0;
         this.<%= entityInstancePlural %> = [];
         this.loadAll();
@@ -108,7 +108,7 @@ _%>
     }
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
-    clear () {
+    clear() {
         this.<%= entityInstancePlural %> = [];
         this.links = {
             last: 0
@@ -120,7 +120,7 @@ _%>
         this.loadAll();
     }
 
-    search (query) {
+    search(query) {
         if (!query) {
             return this.clear();
         }

@@ -75,7 +75,7 @@ module.exports = {
     plugins: [
         new webpack.DllPlugin({
             name: '[name]',
-            path: './<%= BUILD_DIR %>www/[name].json'
+            path: path.resolve('./<%= BUILD_DIR %>www/[name].json')
         })
     ]
 };

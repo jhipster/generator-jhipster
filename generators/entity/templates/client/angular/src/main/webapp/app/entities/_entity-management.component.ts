@@ -54,10 +54,8 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
     trackId (index: number, item: <%= entityAngularName %>) {
         return item.id;
     }
-
-
-
     <%_ if (fieldsContainBlob) { _%>
+
     byteSize(field) {
         return this.dataUtils.byteSize(field);
     }
@@ -66,7 +64,8 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
         return this.dataUtils.openFile(contentType, field);
     }
     <%_ } _%>
-    <%_ let eventCallBack = 'this.loadAll()';
+    <%_
+    let eventCallBack = 'this.loadAll()';
     if (pagination === 'infinite-scroll') {
         eventCallBack = 'this.reset()';
     } _%>
@@ -76,8 +75,8 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
 
     <%_ if (pagination !== 'no') { _%>
         <%_ if (databaseType !== 'cassandra') { _%>
-    sort () {
-        let result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
+    sort() {
+        const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
         if (this.predicate !== 'id') {
             result.push('id');
         }
@@ -86,7 +85,7 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
 
         <%_ } _%>
         <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
-    private onSuccess (data, headers) {
+    private onSuccess(data, headers) {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
@@ -105,7 +104,7 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
     }
     <%_ }} _%>
 
-    private onError (error) {
+    private onError(error) {
         this.alertService.error(error.message, null, null);
     }
 }

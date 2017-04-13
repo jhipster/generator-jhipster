@@ -39,13 +39,13 @@ export class <%= entityAngularName %>Service {
     <%_ } _%>
 
     constructor(private http: Http<% if (hasDate) { %>, private dateUtils: DateUtils<% } %>) { }
-
     <%_ if (entityAngularName.length <= 30) { _%>
+
     create(<%= entityInstance %>: <%= entityAngularName %>): Observable<<%= entityAngularName %>> {
     <%_ } else { _%>
+
     create(<%= entityInstance %>: <%= entityAngularName %>):
         Observable<<%= entityAngularName %>> {
-
     <%_ } _%>
         const copy: <%= entityAngularName %> = Object.assign({}, <%= entityInstance %>);
         <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
@@ -58,13 +58,13 @@ export class <%= entityAngularName %>Service {
             return res.json();
         });
     }
-
     <%_ if (entityAngularName.length <= 30) { _%>
+
     update(<%= entityInstance %>: <%= entityAngularName %>): Observable<<%= entityAngularName %>> {
     <%_ } else { _%>
+
     update(<%= entityInstance %>: <%= entityAngularName %>):
         Observable<<%= entityAngularName %>> {
-
     <%_ } _%>
         const copy: <%= entityAngularName %> = Object.assign({}, <%= entityInstance %>);
         <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
@@ -121,8 +121,8 @@ export class <%= entityAngularName %>Service {
         ;
     }
     <%_ } _%>
-
     <%_ if(hasDate) { _%>
+
     private convertResponse(res: any): any {
         const jsonResponse = res.json();
         for (let i = 0; i < jsonResponse.length; i++) {

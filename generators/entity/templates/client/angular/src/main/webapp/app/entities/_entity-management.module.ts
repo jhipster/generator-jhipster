@@ -41,7 +41,7 @@ import {
     <%_ } _%>
 } from './';
 
-let ENTITY_STATES = [
+const ENTITY_STATES = [
     ...<%= entityInstance %>Route,
     ...<%= entityInstance %>PopupRoute,
 ];

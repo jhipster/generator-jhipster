@@ -43,7 +43,7 @@ export class <%= entityAngularName %>PopupService {
 
     ) {}
 
-    open (component: Component, id?: number | any): NgbModalRef {
+    open(component: Component, id?: number | any): NgbModalRef {
         if (this.isOpen) {
             return;
         }
@@ -81,7 +81,7 @@ export class <%= entityAngularName %>PopupService {
     <%= entityInstance %>ModalRef(component: Component,
         <%= entityInstance %>: <%= entityAngularName %>): NgbModalRef {
     <%_ } _%>
-        let modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
+        const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
         modalRef.result.then(result => {
             this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });

@@ -145,11 +145,11 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         }
     }
    <%_ } _%>
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    save () {
+    save() {
         this.isSaving = true;
         if (this.<%= entityInstance %>.id !== undefined) {
             this.<%= entityInstance %>Service.update(this.<%= entityInstance %>)
@@ -162,13 +162,13 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         }
     }
 
-    private onSaveSuccess (result: <%= entityAngularName %>) {
+    private onSaveSuccess(result: <%= entityAngularName %>) {
         this.eventManager.broadcast({ name: '<%= entityInstance %>ListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
     }
 
-    private onSaveError (error) {
+    private onSaveError(error) {
         try {
             error.json();
         } catch (exception) {
@@ -178,7 +178,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         this.onError(error);
     }
 
-    private onError (error) {
+    private onError(error) {
         this.alertService.error(error.message, null, null);
     }
     <%_

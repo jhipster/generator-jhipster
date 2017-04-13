@@ -102,7 +102,7 @@ currentAccount: any;
         );
     }
     <%_ if (databaseType !== 'cassandra') { _%>
-    loadPage (page: number) {
+    loadPage(page: number) {
         if (page !== this.previousPage) {
             this.previousPage = page;
             this.transition();
@@ -135,7 +135,7 @@ currentAccount: any;
     }
     <%_ } _%>
     <%_ if(searchEngine === 'elasticsearch') { _%>
-    search (query) {
+    search(query) {
         if (!query) {
             return this.clear();
         }

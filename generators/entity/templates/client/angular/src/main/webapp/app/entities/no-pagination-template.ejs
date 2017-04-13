@@ -78,7 +78,7 @@ _%>
     }
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
-    search (query) {
+    search(query) {
         if (!query) {
             return this.clear();
         }
