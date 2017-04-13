@@ -24,7 +24,6 @@ import { <%= angular2AppName %>SharedModule } from '../../shared';
        if (rel.otherEntityNameCapitalized === 'User') { _%>
 import { <%= angular2AppName %>AdminModule } from '../../admin/admin.module';
 <%_ }} _%>
-
 import {
     <%= entityAngularName %>Service,
     <%= entityAngularName %>PopupService,

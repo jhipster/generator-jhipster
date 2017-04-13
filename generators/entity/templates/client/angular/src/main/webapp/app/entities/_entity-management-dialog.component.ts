@@ -96,6 +96,13 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     for (const idx in variables) { %>
     <%- variables[idx] %>
     <%_ } _%>
+    <%_ for (idx in fields) {
+        const fieldName = fields[idx].fieldName;
+        const fieldType = fields[idx].fieldType;
+        if (fieldType == 'LocalDate') { _%>
+    <%# fieldName -%><%# Dp: any; //TODO Fix this to avoid lint error -%>
+        <%_ }
+    } _%>
     constructor(
         public activeModal: NgbActiveModal,
         <%_ if (enableTranslation) { _%>
@@ -132,15 +139,15 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         return this.dataUtils.openFile(contentType, field);
     }
 
-    setFileData($event, <%= entityInstance %>, field, isImage) {
-        if ($event.target.files && $event.target.files[0]) {
-            let $file = $event.target.files[0];
-            if (isImage && !/^image\//.test($file.type)) {
+    setFileData(event, <%= entityInstance %>, field, isImage) {
+        if (event.target.files && event.target.files[0]) {
+            const file = event.target.files[0];
+            if (isImage && !/^image\//.test(file.type)) {
                 return;
             }
-            this.dataUtils.toBase64($file, (base64Data) => {
+            this.dataUtils.toBase64(file, (base64Data) => {
                 <%= entityInstance %>[field] = base64Data;
-                <%= entityInstance %>[`${field}ContentType`] = $file.type;
+                <%= entityInstance %>[`${field}ContentType`] = file.type;
             });
         }
     }
@@ -216,7 +223,7 @@ export class <%= entityAngularName %>PopupComponent implements OnInit, OnDestroy
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private <%= entityInstance %>PopupService: <%= entityAngularName %>PopupService
     ) {}

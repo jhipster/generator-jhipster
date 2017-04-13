@@ -51,7 +51,7 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
         this.eventManager.destroy(this.eventSubscriber);
     }
 
-    trackId (index: number, item: <%= entityAngularName %>) {
+    trackId(index: number, item: <%= entityAngularName %>) {
         return item.id;
     }
     <%_ if (fieldsContainBlob) { _%>
@@ -102,8 +102,8 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
             this.<%= entityInstancePlural %>.push(data[i]);
         }
     }
-    <%_ }} _%>
 
+    <%_ }} _%>
     private onError(error) {
         this.alertService.error(error.message, null, null);
     }

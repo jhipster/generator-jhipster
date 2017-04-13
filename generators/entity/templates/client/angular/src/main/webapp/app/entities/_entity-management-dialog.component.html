@@ -34,25 +34,26 @@ _%>
                    [(ngModel)]="<%=entityInstance %>.id" readonly />
         </div>
         <%_ for (idx in fields) {
-        const fieldName = fields[idx].fieldName;
-        const fieldNameCapitalized = fields[idx].fieldNameCapitalized;
-        const fieldNameHumanized = fields[idx].fieldNameHumanized;
-        const fieldType = fields[idx].fieldType;
-        const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
-        let fieldInputType = 'text';
-        let ngModelOption = '';
-        const translationKey = keyPrefix + fieldName;
-        if (fieldType == 'Integer' || fieldType == 'Long' || fieldType == 'Float' || fieldType == 'Double' || fieldType == 'BigDecimal') {
-        fieldInputType = 'number';
-        } else if (fieldType == 'LocalDate') {
-        fieldInputType = 'date';
-        } else if (fieldType == 'ZonedDateTime') {
-        fieldInputType = 'datetime-local';
-        } else if (fieldType == 'Boolean') {
-        fieldInputType = 'checkbox';
-        } else if ((fieldType == 'byte[]' || fieldType == 'ByteBuffer') && fieldTypeBlobContent != 'text') {
-        fieldInputType = 'hidden';
-        } _%>
+            const fieldName = fields[idx].fieldName;
+            const fieldNameCapitalized = fields[idx].fieldNameCapitalized;
+            const fieldNameHumanized = fields[idx].fieldNameHumanized;
+            const fieldType = fields[idx].fieldType;
+            const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
+            let fieldInputType = 'text';
+            let ngModelOption = '';
+            const translationKey = keyPrefix + fieldName;
+            if (fieldType == 'Integer' || fieldType == 'Long' || fieldType == 'Float' || fieldType == 'Double' || fieldType == 'BigDecimal') {
+                fieldInputType = 'number';
+            } else if (fieldType == 'LocalDate') {
+                fieldInputType = 'date';
+            } else if (fieldType == 'ZonedDateTime') {
+                fieldInputType = 'datetime-local';
+            } else if (fieldType == 'Boolean') {
+                fieldInputType = 'checkbox';
+            } else if ((fieldType == 'byte[]' || fieldType == 'ByteBuffer') && fieldTypeBlobContent != 'text') {
+                fieldInputType = 'hidden';
+            }
+        _%>
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="<%= translationKey %>" for="field_<%= fieldName %>"><%= fieldNameHumanized %></label>
             <%_ if (fields[idx].fieldIsEnum) { _%>

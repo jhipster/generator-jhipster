@@ -33,7 +33,7 @@ _%>
 @Injectable()
 export class <%= entityAngularName %>PopupService {
     private isOpen = false;
-    constructor (
+    constructor(
         <%_ if (fieldsContainZonedDateTime) { _%>
         private datePipe: DatePipe,
         <%_ } _%>
@@ -50,7 +50,7 @@ export class <%= entityAngularName %>PopupService {
         this.isOpen = true;
 
         if (id) {
-            this.<%= entityInstance %>Service.find(id).subscribe(<%= entityInstance %> => {
+            this.<%= entityInstance %>Service.find(id).subscribe((<%= entityInstance %>) => {
                 <%_ if (hasDate) { _%>
                     <%_ for (idx in fields) { _%>
                         <%_ if (fields[idx].fieldType == 'LocalDate') { _%>
@@ -83,7 +83,7 @@ export class <%= entityAngularName %>PopupService {
     <%_ } _%>
         const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
-        modalRef.result.then(result => {
+        modalRef.result.then((result) => {
             this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.isOpen = false;
         }, (reason) => {
