@@ -75,7 +75,8 @@ describe('JDLUnaryOption', () => {
           JDLUnaryOption.isValid({
             name: UNARY_OPTIONS.SKIP_CLIENT,
             entityNames: emptyOption.entityNames,
-            excludedNames: emptyOption.excludedNames
+            excludedNames: emptyOption.excludedNames,
+            getType: () => 'UNARY'
           })
         ).to.be.true;
       });

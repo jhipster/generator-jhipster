@@ -176,13 +176,17 @@ describe('JDLObject', () => {
           object.addOption(null);
           fail();
         } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
+          expect(error.name).to.eq('InvalidObjectException');
+          expect(error.message).to.eq('The option must be valid in order to be added.\nErrors: No option');
         }
         try {
           object.addOption({});
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
+          expect(
+            error.message
+          ).to.eq('The option must be valid in order to be added.\nErrors: No option name, No entity names, No excluded names, No type');
         }
         try {
           object.addOption({
@@ -192,6 +196,9 @@ describe('JDLObject', () => {
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
+          expect(
+            error.message
+          ).to.eq('The option must be valid in order to be added.\nErrors: No entity names, No excluded names, No type');
         }
       });
     });

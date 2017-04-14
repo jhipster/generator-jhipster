@@ -88,7 +88,7 @@ describe('JDLBinaryOption', () => {
         expect(JDLBinaryOption.isValid({name: BINARY_OPTIONS.DTO})).to.be.false;
       });
     });
-    describe('when passing an object with a name, entity names and excluded names', () => {
+    describe('when passing an object with a name, entity names, excluded names and a type', () => {
       it('returns true', () => {
         const emptyOption = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
@@ -99,7 +99,8 @@ describe('JDLBinaryOption', () => {
             name: BINARY_OPTIONS.DTO,
             value: BINARY_OPTION_VALUES.dto.MAPSTRUCT,
             entityNames: emptyOption.entityNames,
-            excludedNames: emptyOption.excludedNames
+            excludedNames: emptyOption.excludedNames,
+            getType: () => 'BINARY'
           })
         ).to.be.true;
       });
