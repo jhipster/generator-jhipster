@@ -133,8 +133,8 @@
     "node": ">=6.9.0"
   },
   "scripts": {
-    "lint": "tslint '<%= MAIN_SRC_DIR%>app/**/*.ts' --force",
-    "lint:fix": "tslint '<%= MAIN_SRC_DIR%>app/**/*.ts' --fix --force",
+    "lint": "tslint '<%= MAIN_SRC_DIR%>app/**/*.ts'",
+    "lint:fix": "tslint '<%= MAIN_SRC_DIR%>app/**/*.ts' --fix",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "ngc": "ngc -p tsconfig-aot.json",

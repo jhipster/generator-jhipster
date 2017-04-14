@@ -89,6 +89,9 @@ export class <%= entityAngularName %>DetailComponent implements OnInit, OnDestro
     }
 
     registerChangeIn<%= entityClassPlural %>() {
-        this.eventSubscriber = this.eventManager.subscribe('<%= entityInstance %>ListModification', (response) => this.load(this.<%= entityInstance %>.id));
+        this.eventSubscriber = this.eventManager.subscribe(
+            '<%= entityInstance %>ListModification',
+            (response) => this.load(this.<%= entityInstance %>.id)
+        );
     }
 }
