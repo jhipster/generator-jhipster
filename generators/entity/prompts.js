@@ -415,7 +415,7 @@ function askForField(done) {
                 } else if (input === '') {
                     return 'Your field name cannot be empty';
                 } else if (input.charAt(0) === input.charAt(0).toUpperCase()) {
-                    return 'Your field name cannot start with a upper case letter';
+                    return 'Your field name cannot start with an upper case letter';
                 } else if (input === 'id' || fieldNamesUnderscored.indexOf(_.snakeCase(input)) !== -1) {
                     return 'Your field name cannot use an already existing field name';
                 } else if (!skipServer && jhiCore.isReservedFieldName(input)) {
@@ -916,6 +916,8 @@ function askForRelationship(done) {
                     return 'Your relationship cannot contain special characters';
                 } else if (input === '') {
                     return 'Your relationship cannot be empty';
+                } else if (input.charAt(0) === input.charAt(0).toUpperCase()) {
+                    return 'Your relationship cannot start with an upper case letter';
                 } else if (input === 'id' || fieldNamesUnderscored.indexOf(_.snakeCase(input)) !== -1) {
                     return 'Your relationship cannot use an already existing field name';
                 } else if (jhiCore.isReservedKeyword(input, 'JAVA')) {
