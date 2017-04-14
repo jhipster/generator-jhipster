@@ -33,8 +33,8 @@ export const socialRegisterRoute: Route = {
     },
     canActivate: [UserRouteAccessService]
 };
-
 <%_ if (authenticationType == 'jwt') { _%>
+
 export const socialAuthRoute: Route = {
     path: 'social-auth',
     component: SocialAuthComponent,
@@ -43,4 +43,5 @@ export const socialAuthRoute: Route = {
         pageTitle: 'social.register.title'
     },
     canActivate: [UserRouteAccessService]
-};<%_ } _%>
+};
+<%_ } _%>
