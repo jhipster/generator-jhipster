@@ -1,5 +1,5 @@
-- Please make sure the below checklist is followed for Pull requests.
+- Please make sure the below checklist is followed for Pull Requests.
 
-- [ ] Travis tests are green
+- [ ] [Travis tests](https://travis-ci.org/jhipster/generator-jhipster/pull_requests) are green
 - [ ] Tests are added where necessary
-- [ ] Coding Rules & Commit Guidelines as per [CONTRIBUTING.md](https://github.com/jhipster/generator-jhipster/blob/master/CONTRIBUTING.md) are followed
+- [ ] Coding Rules & Commit Guidelines as per our [CONTRIBUTING.md document](https://github.com/jhipster/generator-jhipster/blob/master/CONTRIBUTING.md) are followed
