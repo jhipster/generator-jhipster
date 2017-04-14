@@ -210,5 +210,33 @@ describe('::convert', () => {
         );
       });
     });
+    describe('when converting a JDL with blobs', () => {
+      let input = parseFromFiles(['./test/test_files/blob_jdl.jdl']);
+      let content = EntityParser.parse({
+        jdlObject: JDLParser.parse(input, 'sql'),
+        databaseType: 'sql'
+      });
+      it('converts it', () => {
+        expect(content.A.fields).to.deep.eq(
+          [
+            {
+              "fieldName": "anyBlob",
+              "fieldType": "byte[]",
+              "fieldTypeBlobContent": "any"
+            },
+            {
+              "fieldName": "imageBlob",
+              "fieldType": "byte[]",
+              "fieldTypeBlobContent": "image"
+            },
+            {
+              "fieldName": "textBlob",
+              "fieldType": "byte[]",
+              "fieldTypeBlobContent": "text"
+            }
+          ]
+        );
+      });
+    });
   });
 });
