@@ -58,6 +58,7 @@ import org.springframework.cache.annotation.EnableCaching;
 <%_ if (serviceDiscoveryType) { _%>
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.client.serviceregistry.Registration;
 <%_ } _%>
 import org.springframework.context.annotation.*;<% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
 import org.springframework.core.env.Environment;<% } %>
@@ -118,13 +119,16 @@ public class CacheConfiguration {
 
     private final DiscoveryClient discoveryClient;
 
+    private final Registration registration;
+
     private final ServerProperties serverProperties;
         <%_ } _%>
 
-    public CacheConfiguration(<% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>Environment env<% if (serviceDiscoveryType) { %>, DiscoveryClient discoveryClient, ServerProperties serverProperties<% } } %>) {
+    public CacheConfiguration(<% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>Environment env<% if (serviceDiscoveryType) { %>, DiscoveryClient discoveryClient, Registration registration, ServerProperties serverProperties<% } } %>) {
         this.env = env;
         <%_ if (serviceDiscoveryType) { _%>
         this.discoveryClient = discoveryClient;
+        this.registration = registration;
         this.serverProperties = serverProperties;
         <%_ } _%>
     }
@@ -156,7 +160,7 @@ public class CacheConfiguration {
         config.setInstanceName("<%=baseName%>");
         <%_ if (serviceDiscoveryType) { _%>
         // The serviceId is by default the application's name, see Spring Boot's eureka.instance.appname property
-        String serviceId = discoveryClient.getLocalServiceInstance().getServiceId();
+        String serviceId = registration.getServiceId();
         log.debug("Configuring Hazelcast clustering for instanceId: {}", serviceId);
 
         // In development, everything goes through 127.0.0.1, with a different port
