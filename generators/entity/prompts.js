@@ -357,7 +357,7 @@ function askForPagination() {
             default: 0
         }
     ];
-    // TODO this should be removed when https://github.com/jhipster/generator-jhipster/issues/5007 is done
+    // Check the issue https://github.com/jhipster/generator-jhipster/issues/5007 for more details
     if (this.clientFramework !== 'angular1') {
         prompts = [
             {
