@@ -1,5 +1,5 @@
 - Please follow the issue template below for bug reports and feature requests.
-- If you have a support request rather than a bug please use [stackoverflow](http://stackoverflow.com/questions/tagged/jhipster) wth the jHipster tag.
+- If you have a support request rather than a bug please use [stackoverflow](http://stackoverflow.com/questions/tagged/jhipster) wth the JHipster tag.
 - For bug reports its mandatory to paste the result of command `yo jhipster:info` run in your project root folder.
 - Tickets opened without any of these informations will be **closed** without any explanation.
 
@@ -17,7 +17,7 @@
 
 ##### **Related issues**
 
-<!-- Has a similar issue been reported before? Please serach both closed & open issues -->
+<!-- Has a similar issue been reported before? Please search both closed & open issues -->
 
 ##### **Suggest a Fix**
 

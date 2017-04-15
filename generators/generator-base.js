@@ -182,14 +182,18 @@ module.exports = class extends Generator {
                 return;
             }
             const appName = this.getAngular2AppName();
-
+            let importStatement = `|import { ${appName}${entityAngularName}Module } from './${entityFolderName}/${entityFileName}.module';`;
+            if (importStatement.length > constants.LINE_LENGTH) {
+                importStatement =
+                    `|import {
+                     |    ${appName}${entityAngularName}Module
+                     |} from './${entityFolderName}/${entityFileName}.module';`;
+            }
             jhipsterUtils.rewriteFile({
                 file: entityModulePath,
                 needle: 'jhipster-needle-add-entity-module-import',
                 splicable: [
-                    this.stripMargin(
-                        `|import { ${appName}${entityAngularName}Module } from './${entityFolderName}/${entityFileName}.module';`
-                    )
+                    this.stripMargin(importStatement)
                 ]
             }, this);
 

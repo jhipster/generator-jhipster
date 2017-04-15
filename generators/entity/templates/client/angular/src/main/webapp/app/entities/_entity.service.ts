@@ -30,6 +30,7 @@ import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 <%_ if(hasDate) { _%>
 import { DateUtils } from 'ng-jhipster';
 <%_ } _%>
+
 @Injectable()
 export class <%= entityAngularName %>Service {
 
@@ -120,7 +121,6 @@ export class <%= entityAngularName %>Service {
             <%_ } _%>
         ;
     }
-
     <%_ } _%>
     <%_ if(hasDate) { _%>
 
