@@ -94,7 +94,7 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
                     if (httpResponse.text() !== '' && httpResponse.json() && httpResponse.json().message) {
                         this.addErrorAlert(httpResponse.json().message);
                     } else {
-                        this.addErrorAlert(httpResponse.text()); 
+                        this.addErrorAlert(httpResponse.text());
                     }
             }
         });
