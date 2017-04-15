@@ -109,6 +109,10 @@ module.exports = UpgradeGenerator.extend({
             const done = this.async();
             const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn info' : 'npm show';
             shelljs.exec(`${commandPrefix} ${GENERATOR_JHIPSTER} version`, { silent: this.silent }, (code, msg, err) => {
+                if (err) {
+                    this.warning(`Something went wrong fetching the latest JHipster version number...\n${err}`);
+                    this.error('Exiting process');
+                }
                 this.latestVersion = this.clientPackageManager === 'yarn' ? msg.split('\n')[1] : msg.replace('\n', '');
                 if (semver.lt(this.currentVersion, this.latestVersion)) {
                     this.log(chalk.green(`New ${GENERATOR_JHIPSTER} version found: ${this.latestVersion}`));
