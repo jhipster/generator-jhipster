@@ -69,8 +69,8 @@ export class NavbarComponent implements OnInit {
         this.languageHelper.getAll().then((languages) => {
             this.languages = languages;
         });
-        <%_ } _%>
 
+        <%_ } _%>
         this.profileService.getProfileInfo().subscribe((profileInfo) => {
             this.inProduction = profileInfo.inProduction;
             this.swaggerEnabled = profileInfo.swaggerEnabled;
@@ -81,8 +81,8 @@ export class NavbarComponent implements OnInit {
     changeLanguage(languageKey: string) {
       this.languageService.changeLanguage(languageKey);
     }
-    <%_ } _%>
 
+    <%_ } _%>
     collapseNavbar() {
         this.isNavbarCollapsed = true;
     }
