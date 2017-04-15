@@ -30,12 +30,12 @@ import { <%=angular2AppName%>AdminModule } from './admin/admin.module';
 import { <%=angular2AppName%>AccountModule } from './account/account.module';
 import { <%=angular2AppName%>EntityModule } from './entities/entity.module';
 
-import { LayoutRoutingModule } from './layouts';
 import { customHttpProvider } from './blocks/interceptor/http.provider';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
 
 import {
     <%=jhiPrefixCapitalized%>MainComponent,
+    LayoutRoutingModule,
     NavbarComponent,
     FooterComponent,
     ProfileService,

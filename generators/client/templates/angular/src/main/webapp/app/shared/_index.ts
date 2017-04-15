@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+export * from './constants/pagination.constants';
 export * from './alert/alert.component';
 export * from './alert/alert-error.component';
 export * from './auth/csrf.service';
@@ -31,6 +32,7 @@ export * from './auth/auth-session.service';
 export * from './auth/auth.service';
 export * from './auth/principal.service';
 export * from './auth/has-any-authority.directive';
+export * from './auth/user-route-access-service';
 <%_ if (enableTranslation) { _%>
 export * from './language/language.constants';
 export * from './language/language.helper';
@@ -42,7 +44,6 @@ export * from './tracker/tracker.service';
 export * from './login/login.component';
 export * from './login/login.service';
 export * from './login/login-modal.service';
-export * from './constants/pagination.constants';
 export * from './user/account.model';
 <%_ if (!skipUserManagement) { _%>
 export * from './user/user.model';
@@ -55,4 +56,3 @@ export * from './social/social.component';
 export * from './shared-libs.module';
 export * from './shared-common.module';
 export * from './shared.module';
-export * from './auth/user-route-access-service';

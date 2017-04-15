@@ -59,7 +59,7 @@ export class StateStorageService {
             'params': destinationStateParams,
             'from': {
                 'name': fromState.name,
-             }
+            }
         };
         this.$sessionStorage.store('destinationState', destinationInfo);
     }

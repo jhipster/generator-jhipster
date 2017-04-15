@@ -56,7 +56,7 @@ export class <%=jhiPrefixCapitalized%>MainComponent implements OnInit {
                 <%_ if (enableTranslation) { _%>
                 this.jhiLanguageHelper.updateTitle(this.getPageTitle(this.router.routerState.snapshot.root));
                 <%_ } else { _%>
-                 this.titleService.setTitle(this.getPageTitle(this.router.routerState.snapshot.root));
+                this.titleService.setTitle(this.getPageTitle(this.router.routerState.snapshot.root));
                 <%_ } _%>
             }
         });
