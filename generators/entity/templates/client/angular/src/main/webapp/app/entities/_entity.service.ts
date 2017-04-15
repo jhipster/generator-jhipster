@@ -100,10 +100,9 @@ export class <%= entityAngularName %>Service {
 
     query(req?: any): Observable<Response> {
         const options = this.createRequestOption(req);
-        <%_ // TODO Use Response class from @angular/http when the body field will be accessible  directly _%>
         return this.http.get(this.resourceUrl, options)
             <%_ if(hasDate) { _%>
-            .map((res: any) => this.convertResponse(res))
+            .map((res: Response) => this.convertResponse(res))
             <%_ } _%>
         ;
     }
@@ -124,7 +123,7 @@ export class <%= entityAngularName %>Service {
     <%_ } _%>
     <%_ if(hasDate) { _%>
 
-    private convertResponse(res: any): any {
+    private convertResponse(res: Response): Response {
         const jsonResponse = res.json();
         for (let i = 0; i < jsonResponse.length; i++) {
         <%_ for (idx in fields) { _%>
@@ -138,7 +137,7 @@ export class <%= entityAngularName %>Service {
             <%_ } _%>
         <%_ } _%>
         }
-        res._body = jsonResponse;
+        res.json().data = jsonResponse;
         return res;
     }
 
