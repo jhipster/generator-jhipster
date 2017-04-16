@@ -86,7 +86,6 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     }
 
     private processError(response) {
-        <%_ // TODO handle this.logout(); on error _%>
         this.success = null;
         if (response.status === 400 && response._body === 'login already in use') {
             this.errorUserExists = 'ERROR';
