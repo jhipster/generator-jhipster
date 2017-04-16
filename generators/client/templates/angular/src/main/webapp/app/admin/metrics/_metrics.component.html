@@ -107,14 +107,16 @@
                     </ngb-progressbar>
                 </td>
                 <td class="text-right">
-                    {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].mean_rate | number:'1.0-2'}}
-                </td>
-                <td class="text-right">{{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m1_rate | number:'1.0-2'}}
-                </td>
-                <td class="text-right">{{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m5_rate | number:'1.0-2'}}
+                    {{filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].mean_rate) | number:'1.0-2'}}
                 </td>
                 <td class="text-right">
-                    {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m15_rate | number:'1.0-2'}}
+                    {{filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m1_rate) | number:'1.0-2'}}
+                </td>
+                <td class="text-right">
+                    {{filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m5_rate) | number:'1.0-2'}}
+                </td>
+                <td class="text-right">
+                    {{filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m15_rate) | number:'1.0-2'}}
                 </td>
             </tr>
             <tr>
@@ -125,16 +127,16 @@
                     </ngb-progressbar>
                 </td>
                 <td class="text-right">
-                    {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].mean_rate | number:'1.0-2'}}
+                    {{filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].mean_rate) | number:'1.0-2'}}
                 </td>
                 <td class="text-right">
-                    {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m1_rate | number:'1.0-2'}}
+                    {{filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m1_rate) | number:'1.0-2'}}
                 </td>
                 <td class="text-right">
-                    {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m5_rate | number:'1.0-2'}}
+                    {{filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m5_rate) | number:'1.0-2'}}
                 </td>
                 <td class="text-right">
-                    {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m15_rate | number:'1.0-2'}}
+                    {{filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m15_rate) | number:'1.0-2'}}
                 </td>
             </tr>
             <tr>
@@ -145,16 +147,16 @@
                     </ngb-progressbar>
                 </td>
                 <td class="text-right">
-                    {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].mean_rate | number:'1.0-2'}}
+                    {{filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].mean_rate) | number:'1.0-2'}}
                 </td>
                 <td class="text-right">
-                    {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m1_rate | number:'1.0-2'}}
+                    {{filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m1_rate) | number:'1.0-2'}}
                 </td>
                 <td class="text-right">
-                    {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m5_rate | number:'1.0-2'}}
+                    {{filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m5_rate) | number:'1.0-2'}}
                 </td>
                 <td class="text-right">
-                    {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m15_rate | number:'1.0-2'}}
+                    {{filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m15_rate) | number:'1.0-2'}}
                 </td>
             </tr>
             </tbody>
@@ -223,9 +225,9 @@
                 <td class="text-right">{{metrics.gauges[entry.key + '.cache-evictions'].value}}</td>
                 <td class="text-right">{{metrics.gauges[entry.key + '.cache-hit-percentage'].value}}</td>
                 <td class="text-right">{{metrics.gauges[entry.key + '.cache-miss-percentage'].value }}</td>
-                <td class="text-right">{{metrics.gauges[entry.key + '.average-get-time'].value  | number : '1.2-2' }}</td>
-                <td class="text-right">{{metrics.gauges[entry.key + '.average-put-time'].value  | number : '1.2-2'}}</td>
-                <td class="text-right">{{metrics.gauges[entry.key + '.average-remove-time'].value | number : '1.2-2' }}</td>
+                <td class="text-right">{{filterNaN(metrics.gauges[entry.key + '.average-get-time'].value)  | number : '1.2-2' }}</td>
+                <td class="text-right">{{filterNaN(metrics.gauges[entry.key + '.average-put-time'].value)  | number : '1.2-2'}}</td>
+                <td class="text-right">{{filterNaN(metrics.gauges[entry.key + '.average-remove-time'].value) | number : '1.2-2' }}</td>
             </tr>
             </tbody>
         </table>
@@ -257,13 +259,13 @@
                         </div>
                     </td>
                     <td class="text-right">{{metrics.histograms['HikariPool-1.pool.Usage'].count}}</td>
-                    <td class="text-right">{{metrics.histograms['HikariPool-1.pool.Usage'].mean | number:'1.0-2'}}</td>
-                    <td class="text-right">{{metrics.histograms['HikariPool-1.pool.Usage'].min | number:'1.0-2'}}</td>
-                    <td class="text-right">{{metrics.histograms['HikariPool-1.pool.Usage'].p50 | number:'1.0-2'}}</td>
-                    <td class="text-right">{{metrics.histograms['HikariPool-1.pool.Usage'].p75 | number:'1.0-2'}}</td>
-                    <td class="text-right">{{metrics.histograms['HikariPool-1.pool.Usage'].p95 | number:'1.0-2'}}</td>
-                    <td class="text-right">{{metrics.histograms['HikariPool-1.pool.Usage'].p99 | number:'1.0-2'}}</td>
-                    <td class="text-right">{{metrics.histograms['HikariPool-1.pool.Usage'].max | number:'1.0-2'}}</td>
+                    <td class="text-right">{{filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].mean) | number:'1.0-2'}}</td>
+                    <td class="text-right">{{filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].min) | number:'1.0-2'}}</td>
+                    <td class="text-right">{{filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].p50) | number:'1.0-2'}}</td>
+                    <td class="text-right">{{filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].p75) | number:'1.0-2'}}</td>
+                    <td class="text-right">{{filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].p95) | number:'1.0-2'}}</td>
+                    <td class="text-right">{{filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].p99) | number:'1.0-2'}}</td>
+                    <td class="text-right">{{filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].max) | number:'1.0-2'}}</td>
                 </tr>
             </tbody>
         </table>

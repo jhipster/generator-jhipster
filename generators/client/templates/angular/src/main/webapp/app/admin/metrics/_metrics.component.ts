@@ -25,14 +25,14 @@ import { <%=jhiPrefixCapitalized%>MetricsService } from './metrics.service';
 
 @Component({
     selector: '<%=jhiPrefix%>-metrics',
-    templateUrl: './metrics.component.html',
+    templateUrl: './metrics.component.html'
 })
 export class <%=jhiPrefixCapitalized%>MetricsMonitoringComponent implements OnInit {
     metrics: any = {};
     cachesStats: any = {};
     servicesStats: any = {};
     updatingMetrics = true;
-    JCACHE_KEY: string ;
+    JCACHE_KEY: string;
 
     constructor(
         private jhiLanguageService: JhiLanguageService,
@@ -87,6 +87,13 @@ export class <%=jhiPrefixCapitalized%>MetricsMonitoringComponent implements OnIn
                 // Left blank intentionally, nothing to do here
             });
         });
+    }
+
+    filterNaN(input) {
+        if (isNaN(input)) {
+            return 0;
+        }
+        return input;
     }
 
 }
