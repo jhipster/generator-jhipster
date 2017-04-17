@@ -151,7 +151,7 @@
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
     "postinstall": "webdriver-manager update && <%= clientPackageManager %> run webpack:build"
     <%_ } else { _%>
-    "postinstall": "<%= clientPackageManager %> run webpack:build"
+    "postinstall": "node node_modules/pngquant-bin/lib/install.js && <%= clientPackageManager %> run webpack:build"
     <%_ } _%>
   }
 }
