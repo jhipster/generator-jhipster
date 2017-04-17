@@ -83,10 +83,6 @@ public class TokenProviderTest {
 
     @Test
     public void testReturnFalseWhenJWTisUnsupported() {
-        Date expirationDate = new Date(new Date().getTime() + ONE_MINUTE);
-
-        Authentication authentication = createAuthentication();
-
         String unsupportedToken = createUnsupportedToken();
 
         boolean isTokenValid = tokenProvider.validateToken(unsupportedToken);
@@ -96,7 +92,6 @@ public class TokenProviderTest {
 
     @Test
     public void testReturnFalseWhenJWTisInvalid() {
-
         boolean isTokenValid = tokenProvider.validateToken("");
 
         assertThat(isTokenValid).isEqualTo(false);

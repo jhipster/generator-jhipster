@@ -23,12 +23,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
-<%_ if (databaseType == 'sql') { _%>
-import org.springframework.data.jpa.repository.JpaRepository;
-<%_ } _%>
-<%_ if (databaseType == 'mongodb') { _%>
-import org.springframework.data.mongodb.repository.MongoRepository;
-<%_ } _%>
 import org.springframework.http.MediaType;
 
 import java.io.IOException;
