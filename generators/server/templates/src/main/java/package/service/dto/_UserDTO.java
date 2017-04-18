@@ -43,6 +43,7 @@ public class UserDTO {
         if (enableSocialSignIn) {
             columnMax = 100;
         } _%>
+    @NotNull
     @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 1, max = <%=columnMax %>)
     private String login;
