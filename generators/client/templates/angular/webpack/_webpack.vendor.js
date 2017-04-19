@@ -32,7 +32,7 @@ module.exports = {
             '@angular/router',
             '@ng-bootstrap/ng-bootstrap',
             'angular2-cookie',
-            'angular2-infinite-scroll',
+            'ngx-infinite-scroll',
             'jquery',
             'ng-jhipster',
             'ng2-webstorage',
