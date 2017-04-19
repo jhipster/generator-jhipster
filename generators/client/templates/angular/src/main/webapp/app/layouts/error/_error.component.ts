@@ -41,7 +41,7 @@ export class ErrorComponent implements OnInit {
                 this.error403 = routeData.error403;
             }
             if (routeData.errorMessage) {
-                this.error403 = routeData.errorMessage;
+                this.errorMessage = routeData.errorMessage;
             }
         });
     }
