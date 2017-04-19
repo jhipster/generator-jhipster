@@ -70,6 +70,7 @@ export class AuthExpiredInterceptor extends HttpInterceptor {
         });
     }
 <%_ } if (authenticationType === 'session') { _%>
+    
     responseIntercept(observable: Observable<Response>): Observable<Response> {
         return <Observable<Response>> observable.catch((error) => {
             <%_ // TODO this is ng1 way...the ng2 would be more like someRouterService.subscribe(url).forEach.. this needs to be updated _%>
