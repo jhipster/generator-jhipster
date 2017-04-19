@@ -24,6 +24,7 @@ import <%=packageName%>.domain.Authority;<% } %>
 import <%=packageName%>.domain.User;
 
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.*;
 <%_ if (databaseType == 'mongodb' || databaseType == 'sql') { _%>
@@ -43,7 +44,7 @@ public class UserDTO {
         if (enableSocialSignIn) {
             columnMax = 100;
         } _%>
-    @NotNull
+    @NotBlank
     @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 1, max = <%=columnMax %>)
     private String login;
