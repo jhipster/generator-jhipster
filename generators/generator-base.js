@@ -142,7 +142,7 @@ module.exports = class extends Generator {
                     splicable: [`<li ui-sref-active="active">
                                 <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
                                     <span class="glyphicon glyphicon-asterisk"></span>&nbsp;
-                                    <span ${enableTranslation ? `data-translate="global.menu.entities.${_.camelCase(routerName)}"` : ''}>${_.startCase(routerName)}</span>
+                                    <span${enableTranslation ? ` data-translate="global.menu.entities.${_.camelCase(routerName)}"` : ''}>${_.startCase(routerName)}</span>
                                 </a>
                             </li>`
                     ]
@@ -157,7 +157,7 @@ module.exports = class extends Generator {
                             `|<li uiSrefActive="active">
                              |                        <a class="dropdown-item" routerLink="${routerName}" (click)="collapseNavbar()">
                              |                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                             |                            <span ${enableTranslation ? `jhiTranslate="global.menu.entities.${_.camelCase(routerName)}"` : ''}>${_.startCase(routerName)}</span>
+                             |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${_.camelCase(routerName)}"` : ''}>${_.startCase(routerName)}</span>
                              |                        </a>
                              |                    </li>`
                         )
