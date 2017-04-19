@@ -43,7 +43,6 @@ export class AuthExpiredInterceptor extends HttpInterceptor {
 <%_ } if (authenticationType === 'session') { _%>
     constructor(private injector: Injector,
         private stateStorageService: StateStorageService) {
-
         super();
     }
 <%_ } _%>
