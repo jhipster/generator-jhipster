@@ -36,7 +36,7 @@
     "@angular/router": "4.0.0",
     "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.22",
     "angular2-cookie": "1.2.6",
-    "ngx-infinite-scroll": "0.4.0",
+    "ngx-infinite-scroll": "0.4.1",
     "bootstrap": "4.0.0-alpha.6",
     "core-js": "2.4.1",
     "font-awesome": "4.7.0",
