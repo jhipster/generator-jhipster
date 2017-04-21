@@ -84,13 +84,6 @@ Generic styles
     opacity: 1;
 }
 
-/*FIXME this is to support grids in table class; */
-table td[class*=col-], table th[class*=col-] {
-    position: static;
-    display: table-cell;
-    float: none;
-}
-
 .footer {
     border-top: 1px solid rgba(0,0,0,.125);
 }

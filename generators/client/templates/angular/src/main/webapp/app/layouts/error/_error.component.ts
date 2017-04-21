@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { JhiLanguageService } from 'ng-jhipster';
 
 @Component({
@@ -28,12 +29,20 @@ export class ErrorComponent implements OnInit {
     error403: boolean;
 
     constructor(
-        private jhiLanguageService: JhiLanguageService
+        private jhiLanguageService: JhiLanguageService,
+        private route: ActivatedRoute
     ) {
         this.jhiLanguageService.setLocations(['error']);
     }
 
     ngOnInit() {
-        <%_ // TODO need to see how the error message can be passed here _%>
+        this.route.data.subscribe((routeData) => {
+            if (routeData.error403) {
+                this.error403 = routeData.error403;
+            }
+            if (routeData.errorMessage) {
+                this.errorMessage = routeData.errorMessage;
+            }
+        });
     }
 }
