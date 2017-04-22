@@ -48,13 +48,7 @@ export class <%= entityAngularName %>Service {
     create(<%= entityInstance %>: <%= entityAngularName %>):
         Observable<<%= entityAngularName %>> {
     <%_ } _%>
-        const copy: <%= entityAngularName %> = Object.assign({}, <%= entityInstance %>);
-        <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
-        copy.<%=fields[idx].fieldName%> = this.dateUtils
-            .convertLocalDateToServer(<%= entityInstance %>.<%=fields[idx].fieldName%>);
-        <%_ } if (fields[idx].fieldType == 'ZonedDateTime') { _%>
-        copy.<%=fields[idx].fieldName%> = this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>);
-        <%_ } } _%>
+        const copy = this.convert(<%= entityInstance %>);
         return this.http.post(this.resourceUrl, copy).map((res: Response) => {
             return res.json();
         });
@@ -67,13 +61,7 @@ export class <%= entityAngularName %>Service {
     update(<%= entityInstance %>: <%= entityAngularName %>):
         Observable<<%= entityAngularName %>> {
     <%_ } _%>
-        const copy: <%= entityAngularName %> = Object.assign({}, <%= entityInstance %>);
-        <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
-        copy.<%=fields[idx].fieldName%> = this.dateUtils
-            .convertLocalDateToServer(<%= entityInstance %>.<%=fields[idx].fieldName%>);
-        <%_ } if (fields[idx].fieldType == 'ZonedDateTime') { %>
-        copy.<%=fields[idx].fieldName%> = this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>);
-        <%_ } } _%>
+        const copy = this.convert(<%= entityInstance %>);
         return this.http.put(this.resourceUrl, copy).map((res: Response) => {
             return res.json();
         });
@@ -156,5 +144,16 @@ export class <%= entityAngularName %>Service {
             options.search = params;
         }
         return options;
+    }
+
+    private convert(<%= entityInstance %>: <%= entityAngularName %>): <%= entityAngularName %> {
+        const copy: <%= entityAngularName %> = Object.assign({}, <%= entityInstance %>);
+        <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
+        copy.<%=fields[idx].fieldName%> = this.dateUtils
+            .convertLocalDateToServer(<%= entityInstance %>.<%=fields[idx].fieldName%>);
+        <%_ } if (fields[idx].fieldType == 'ZonedDateTime') { %>
+        copy.<%=fields[idx].fieldName%> = this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>);
+        <%_ } } _%>
+        return copy;
     }
 }
