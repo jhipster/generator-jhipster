@@ -43,10 +43,16 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 <%_ if (databaseType == 'cassandra') { _%>
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
-<%_ } _%>
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validator;
+<%_ } _%>
 import java.util.List;
 import java.util.Optional;
+<%_ if (databaseType == 'cassandra') { _%>
+import java.util.Set;
+<%_ } _%>
 
 <%_ if (databaseType === 'sql') { _%>
 /**
@@ -92,6 +98,8 @@ public class UserRepository {
 
     private final Session session;
 
+    private final Validator validator;
+
     private Mapper<User> mapper;
 
     private PreparedStatement findAllStmt;
@@ -128,8 +136,9 @@ public class UserRepository {
 
     private PreparedStatement truncateByEmailStmt;
 
-    public UserRepository(Session session) {
+    public UserRepository(Session session, Validator validator) {
         this.session = session;
+        this.validator = validator;
         mapper = new MappingManager(session).mapper(User.class);
 
         findAllStmt = session.prepare("SELECT * FROM user");
@@ -228,6 +237,10 @@ public class UserRepository {
     }
 
     public User save(User user) {
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        if (violations != null && !violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         User oldUser = mapper.get(user.getId());
         if (oldUser != null) {
             if (!StringUtils.isEmpty(oldUser.getActivationKey()) && !oldUser.getActivationKey().equals(user.getActivationKey())) {

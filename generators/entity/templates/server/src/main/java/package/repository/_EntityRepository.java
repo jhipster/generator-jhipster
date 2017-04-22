@@ -29,11 +29,16 @@ import org.springframework.data.repository.query.Param;<% } %>
 import java.util.List;<% } %><% if (databaseType=='mongodb') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;<% } %><% if (databaseType == 'cassandra') { %>
 import org.springframework.stereotype.Repository;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validator;
 <% if (fieldsContainLocalDate == true) { %>
 import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
 import java.time.ZonedDateTime;<% } %>
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;<% } %>
 
 <% if (databaseType=='sql') { %>/**
@@ -63,14 +68,17 @@ public class <%= entityClass %>Repository {
 
     private final Session session;
 
+    private final Validator validator;
+
     private Mapper<<%= entityClass %>> mapper;
 
     private PreparedStatement findAllStmt;
 
     private PreparedStatement truncateStmt;
 
-    public <%= entityClass %>Repository(Session session) {
+    public <%= entityClass %>Repository(Session session, Validator validator) {
         this.session = session;
+        this.validator = validator;
         this.mapper = new MappingManager(session).mapper(<%= entityClass %>.class);
         this.findAllStmt = session.prepare("SELECT * FROM <%= entityInstance %>");
         this.truncateStmt = session.prepare("TRUNCATE <%= entityInstance %>");
@@ -112,6 +120,10 @@ public class <%= entityClass %>Repository {
     public <%= entityClass %> save(<%= entityClass %> <%= entityInstance %>) {
         if (<%= entityInstance %>.getId() == null) {
             <%= entityInstance %>.setId(UUID.randomUUID());
+        }
+        Set<ConstraintViolation<<%= entityClass %>>> violations = validator.validate(<%= entityInstance %>);
+        if (violations != null && !violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
         }
         mapper.save(<%= entityInstance %>);
         return <%= entityInstance %>;
