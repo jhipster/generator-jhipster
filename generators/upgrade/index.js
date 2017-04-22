@@ -46,7 +46,7 @@ module.exports = UpgradeGenerator.extend({
 
     _cleanUp() {
         shelljs.ls('-A').forEach((file) => {
-            if (['.yo-rc.json', '.jhipster', 'node_modules', '.git','.idea'].indexOf(file) === -1) {
+            if (['.yo-rc.json', '.jhipster', 'node_modules', '.git', '.idea'].indexOf(file) === -1) {
                 shelljs.rm('-rf', file);
             }
         });
