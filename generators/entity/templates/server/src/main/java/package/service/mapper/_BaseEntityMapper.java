@@ -16,14 +16,21 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-const mapper = entityInstance  + 'Mapper';
-const entityToDtoReference = mapper + '::' + 'toDto'; %>
-        <%_ if (!viaService) { _%>
-        return StreamSupport
-            .stream(<%= entityInstance %>SearchRepository.search(queryStringQuery(query)).spliterator(), false)<% if (dto == 'mapstruct') { %>
-            .map(<%= entityToDtoReference %>)<% } %>
-            .collect(Collectors.toList());
-        <%_ } else { _%>
-        return <%= entityInstance %>Service.search(query);
-        <%_ } _%>
+package <%=packageName%>.service.mapper;
+
+import java.util.List;
+
+/**
+ * Contract for a generic entity to dto mapper.
+ */
+
+public interface EntityMapper <D, E> {
+
+    public E toEntity(D dto);
+
+    public D toDto(E entity);
+
+    public List <E> toEntity(List<D> dtoList);
+
+    public List <D> toDto(List<E> entityList);
+}

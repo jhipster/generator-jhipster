@@ -20,7 +20,7 @@
     const instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
     const instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
     const mapper = entityInstance + 'Mapper';
-    const entityListToDtoListReference = mapper + '.'+ entityInstancePlural +'To' + entityClass + 'DTOs';
+    const entityListToDtoListReference = mapper + '.' + 'toDto';
     if (pagination == 'no') { %>
     public List<<%= instanceType %>> getAll<%= entityClassPlural %>(<% if (fieldsContainNoOwnerOneToOne) { %>@RequestParam(required = false) String filter<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
         log.debug("REST request to get all <%= entityClassPlural %>");<% if (viaService) { %>
