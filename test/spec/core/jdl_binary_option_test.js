@@ -26,6 +26,9 @@ describe('JDLBinaryOption', () => {
           fail();
         } catch (error) {
           expect(error.name).to.eq('IllegalArgumentException');
+          expect(
+            error.message
+          ).to.eq(`The option's name and value must be valid, got no value for 'IsNotAnOption'.`);
         }
       });
     });
@@ -36,6 +39,7 @@ describe('JDLBinaryOption', () => {
           fail();
         } catch (error) {
           expect(error.name).to.eq('IllegalArgumentException');
+          expect(error.message).to.eq("The option's name and value must be valid, got no value for 'dto'.");
         }
       });
     });
@@ -84,7 +88,7 @@ describe('JDLBinaryOption', () => {
         expect(JDLBinaryOption.isValid({name: BINARY_OPTIONS.DTO})).to.be.false;
       });
     });
-    describe('when passing an object with a name, entity names and excluded names', () => {
+    describe('when passing an object with a name, entity names, excluded names and a type', () => {
       it('returns true', () => {
         const emptyOption = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
@@ -95,7 +99,8 @@ describe('JDLBinaryOption', () => {
             name: BINARY_OPTIONS.DTO,
             value: BINARY_OPTION_VALUES.dto.MAPSTRUCT,
             entityNames: emptyOption.entityNames,
-            excludedNames: emptyOption.excludedNames
+            excludedNames: emptyOption.excludedNames,
+            getType: () => 'BINARY'
           })
         ).to.be.true;
       });
@@ -112,7 +117,8 @@ describe('JDLBinaryOption', () => {
           option.addEntity(null);
           fail();
         } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
+          expect(error.name).to.eq('InvalidObjectException');
+          expect(error.message).to.eq('The passed entity must be valid.\nErrors: No entity');
         }
       });
     });
@@ -127,6 +133,9 @@ describe('JDLBinaryOption', () => {
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
+          expect(
+            error.message
+          ).to.eq('The passed entity must be valid.\nErrors: No entity name, No table name, No fields object');
         }
       });
     });
@@ -176,7 +185,8 @@ describe('JDLBinaryOption', () => {
           option.excludeEntity(null);
           fail();
         } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
+          expect(error.name).to.eq('InvalidObjectException');
+          expect(error.message).to.eq('The passed entity must be valid.\nErrors: No entity');
         }
       });
     });
@@ -191,6 +201,9 @@ describe('JDLBinaryOption', () => {
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
+          expect(
+            error.message
+          ).to.eq('The passed entity must be valid.\nErrors: No entity name, No table name, No fields object');
         }
       });
     });

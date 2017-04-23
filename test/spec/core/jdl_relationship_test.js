@@ -181,6 +181,9 @@ describe('JDLRelationship', () => {
             fail();
           } catch (error) {
             expect(error.name).to.eq('InvalidObjectException');
+            expect(
+              error.message
+            ).to.eq('The exception is not in a valid state.\nErrors: Declaration error (no injected field in both sides).');
           }
         });
       });
@@ -198,6 +201,7 @@ describe('JDLRelationship', () => {
             fail();
           } catch (error) {
             expect(error.name).to.eq('InvalidObjectException');
+            expect(error.message).to.eq("The exception is not in a valid state.\nErrors: Wrong type: got 'WRONG'.");
           }
         });
       });

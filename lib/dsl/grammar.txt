@@ -199,13 +199,14 @@ applicationContentDecl
     return addToApplicationDecl(applicationContentDecl, 'testFrameworks', testFrameworkEntries);
   }
   / LANGUAGES SPACE* languages:[a-z, ]+ SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.languages = [];
+    languages = [];
     const results = languages.join('').split(',');
     for (let i = 0; i < results.length; i++) {
       if (results[i].trim().length !== 0) {
-        parsed.application.languages.push(results[i].trim());
+        languages.push(results[i].trim());
       }
     }
+    return addToApplicationDecl(applicationContentDecl, 'languages', languages);
   }
   / SERVER_PORT SPACE* serverPort:[0-9]+ SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.serverPort = parseInt(serverPort.join(''), 10);

@@ -25,6 +25,7 @@ describe('JDLUnaryOption', () => {
           fail();
         } catch (error) {
           expect(error.name).to.eq('IllegalArgumentException');
+          expect(error.message).to.eq("The option's name must be valid, got 'IsNotAnOption'.");
         }
       });
     });
@@ -74,7 +75,8 @@ describe('JDLUnaryOption', () => {
           JDLUnaryOption.isValid({
             name: UNARY_OPTIONS.SKIP_CLIENT,
             entityNames: emptyOption.entityNames,
-            excludedNames: emptyOption.excludedNames
+            excludedNames: emptyOption.excludedNames,
+            getType: () => 'UNARY'
           })
         ).to.be.true;
       });
@@ -88,7 +90,8 @@ describe('JDLUnaryOption', () => {
           option.addEntity(null);
           fail();
         } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
+          expect(error.name).to.eq('InvalidObjectException');
+          expect(error.message).to.eq('The passed entity must be valid.\nErrors: No entity');
         }
       });
     });
@@ -100,6 +103,9 @@ describe('JDLUnaryOption', () => {
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
+          expect(
+            error.message
+          ).to.eq('The passed entity must be valid.\nErrors: No entity name, No table name, No fields object');
         }
       });
     });
@@ -137,7 +143,8 @@ describe('JDLUnaryOption', () => {
           option.excludeEntity(null);
           fail();
         } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
+          expect(error.name).to.eq('InvalidObjectException');
+          expect(error.message).to.eq('The passed entity must be valid.\nErrors: No entity');
         }
       });
     });
@@ -149,6 +156,9 @@ describe('JDLUnaryOption', () => {
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
+          expect(
+            error.message
+          ).to.eq('The passed entity must be valid.\nErrors: No entity name, No table name, No fields object');
         }
       });
     });

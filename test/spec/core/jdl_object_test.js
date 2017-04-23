@@ -46,6 +46,7 @@ describe('JDLObject', () => {
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
+          expect(error.message).to.eq('The entity must be valid in order to be added.\nErrors: No entity');
         }
         try {
           object.addEntity({
@@ -58,6 +59,9 @@ describe('JDLObject', () => {
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
+          expect(
+            error.message
+          ).to.eq('The entity must be valid in order to be added.\nErrors: For field #1: No field name');
         }
       });
     });
@@ -101,12 +105,14 @@ describe('JDLObject', () => {
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
+          expect(error.message).to.eq('The enum must be valid in order to be added.\nErrors: No enumeration');
         }
         try {
           object.addEnum({values: ['A', 'B']});
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
+          expect(error.message).to.eq('The enum must be valid in order to be added.\nErrors: No enumeration name');
         }
       });
     });
@@ -138,6 +144,7 @@ describe('JDLObject', () => {
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
+          expect(error.message).to.eq('The relationship must be valid in order to be added.\nErrors: No relationship');
         }
         try {
           object.addRelationship({
@@ -149,6 +156,9 @@ describe('JDLObject', () => {
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
+          expect(
+            error.message
+          ).to.eq('The relationship must be valid in order to be added.\nErrors: Wrong source entity: No entity name, No table name, No fields object');
         }
       });
     });
@@ -188,13 +198,17 @@ describe('JDLObject', () => {
           object.addOption(null);
           fail();
         } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
+          expect(error.name).to.eq('InvalidObjectException');
+          expect(error.message).to.eq('The option must be valid in order to be added.\nErrors: No option');
         }
         try {
           object.addOption({});
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
+          expect(
+            error.message
+          ).to.eq('The option must be valid in order to be added.\nErrors: No option name, No entity names, No excluded names, No type');
         }
         try {
           object.addOption({
@@ -204,6 +218,9 @@ describe('JDLObject', () => {
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
+          expect(
+            error.message
+          ).to.eq('The option must be valid in order to be added.\nErrors: No entity names, No excluded names, No type');
         }
       });
     });
