@@ -49,7 +49,7 @@ module.exports = class extends Generator {
                     splicable: [`<li ui-sref-active="active">
                                 <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
                                     <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
-                                    <span ${enableTranslation ? `data-translate="global.menu.${routerName}"` : ''}>${_.startCase(routerName)}</span>
+                                    <span${enableTranslation ? ` data-translate="global.menu.${routerName}"` : ''}>${_.startCase(routerName)}</span>
                                 </a>
                             </li>`
                     ]
@@ -59,10 +59,10 @@ module.exports = class extends Generator {
                 jhipsterUtils.rewriteFile({
                     file: navbarPath,
                     needle: 'jhipster-needle-add-element-to-menu',
-                    splicable: [`<li routerLinkActive="active">
-                                <a routerLink="${routerName}" routerLinkActive="active" ng-click="vm.collapseNavbar()">
-                                    <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
-                                    <span ${enableTranslation ? `data-translate="global.menu.${routerName}"` : ''}>${_.startCase(routerName)}</span>
+                    splicable: [`<li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                                <a class="nav-link" routerLink="${routerName}" (click)="collapseNavbar()">
+                                    <i class="fa fa-${glyphiconName}"></i>&nbsp;
+                                    <span${enableTranslation ? ` jhiTranslate="global.menu.${routerName}"` : ''}>${_.startCase(routerName)}</span>
                                 </a>
                             </li>`
                     ]
@@ -86,20 +86,31 @@ module.exports = class extends Generator {
         try {
             if (clientFramework === 'angular1') {
                 navbarAdminPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.html`;
-            } else {
-                navbarAdminPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
-            }
-            jhipsterUtils.rewriteFile({
-                file: navbarAdminPath,
-                needle: 'jhipster-needle-add-element-to-admin-menu',
-                splicable: [`<li ui-sref-active="active" >
+                jhipsterUtils.rewriteFile({
+                    file: navbarAdminPath,
+                    needle: 'jhipster-needle-add-element-to-admin-menu',
+                    splicable: [`<li ui-sref-active="active">
                             <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
-                                <span ${enableTranslation ? `data-translate="global.menu.admin.${routerName}"` : ''}>${_.startCase(routerName)}</span>
+                                <span${enableTranslation ? ` data-translate="global.menu.admin.${routerName}"` : ''}>${_.startCase(routerName)}</span>
                             </a>
                         </li>`
-                ]
-            }, this);
+                    ]
+                }, this);
+            } else {
+                navbarAdminPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
+                jhipsterUtils.rewriteFile({
+                    file: navbarAdminPath,
+                    needle: 'jhipster-needle-add-element-to-admin-menu',
+                    splicable: [`<li>
+                            <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" (click)="collapseNavbar()">
+                                <i class="fa fa-${glyphiconName}"></i>&nbsp;
+                                <span${enableTranslation ? ` jhiTranslate="global.menu.admin.${routerName}"` : ''}>${_.startCase(routerName)}</span>
+                            </a>
+                        </li>`
+                    ]
+                }, this);
+            }
         } catch (e) {
             this.log(`${chalk.yellow('\nUnable to find ') + navbarAdminPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName} ${chalk.yellow('not added to admin menu.\n')}`);
         }
@@ -154,7 +165,7 @@ module.exports = class extends Generator {
                     needle: 'jhipster-needle-add-entity-to-menu',
                     splicable: [
                         this.stripMargin(
-                            `|<li uiSrefActive="active">
+                            `|<li>
                              |                        <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" (click)="collapseNavbar()">
                              |                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                              |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${_.camelCase(routerName)}"` : ''}>${_.startCase(routerName)}</span>
