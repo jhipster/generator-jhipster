@@ -114,7 +114,8 @@ module.exports = function (options) {
             }),
             new CopyWebpackPlugin([
                 { from: './node_modules/core-js/client/shim.min.js', to: 'core-js-shim.min.js' },
-                { from: './node_modules/swagger-ui/dist', to: 'swagger-ui/dist' },
+                { from: './node_modules/swagger-ui-dist/*.{js,css,html}', to: 'swagger-ui/dist', flatten: true },
+                { from: './node_modules/jquery/dist/jquery.min.js', to: 'swagger-ui/dist', flatten: true },
                 { from: './src/main/webapp/swagger-ui/', to: 'swagger-ui' },
                 { from: './src/main/webapp/favicon.ico', to: 'favicon.ico' },
                 { from: './src/main/webapp/robots.txt', to: 'robots.txt' }<% if (enableTranslation) { %>,
