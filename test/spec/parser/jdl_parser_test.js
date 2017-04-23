@@ -565,6 +565,16 @@ describe('JDLParser', () => {
           });
         });
       });
+      describe('when having a cassandra app with paginated entities', () => {
+        const input = parseFromFiles(['./test/test_files/cassandra_jdl.jdl']);
+        it('fails', () => {
+          try {
+            JDLParser.parse(input, 'cassandra');
+          } catch (error) {
+            expect(error.name).to.eq('IllegalOptionException');
+          }
+        });
+      });
     });
   });
 });
