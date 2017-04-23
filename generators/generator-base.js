@@ -155,7 +155,7 @@ module.exports = class extends Generator {
                     splicable: [
                         this.stripMargin(
                             `|<li uiSrefActive="active">
-                             |                        <a class="dropdown-item" routerLink="${routerName}" (click)="collapseNavbar()">
+                             |                        <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" (click)="collapseNavbar()">
                              |                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                              |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${_.camelCase(routerName)}"` : ''}>${_.startCase(routerName)}</span>
                              |                        </a>
