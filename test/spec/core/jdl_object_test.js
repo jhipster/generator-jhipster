@@ -35,7 +35,7 @@ describe('JDLObject', () => {
         object.addApplication(application);
         expect(object.applications[application.baseName]).to.deep.eq(application);
       });
-    })
+    });
   });
   describe('#addEntity', () => {
     describe('when adding an invalid entity', () => {
@@ -235,6 +235,8 @@ describe('JDLObject', () => {
   describe('#toString', () => {
     it('stringifies the JDL object', () => {
       const object = new JDLObject();
+      const application = new JDLApplication();
+      object.addApplication(application);
       const entityA = new JDLEntity({name: 'EntityA', tableName: 't_entity_a'});
       const field = new JDLField({name: 'myField', type: 'String'});
       field.addValidation(new JDLValidation());
@@ -262,7 +264,9 @@ describe('JDLObject', () => {
       option2.addEntity(entityB);
       object.addOption(option2);
       expect(object.toString()).to.eq(
-        `${entityA.toString()}
+        `${application.toString()}
+
+${entityA.toString()}
 ${entityB.toString()}
 ${enumObject.toString()}
 
