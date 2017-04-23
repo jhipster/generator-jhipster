@@ -31,8 +31,15 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 <% } %><% if (databaseType == 'cassandra') { %>
 import org.springframework.stereotype.Repository;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validator;
+
 import java.util.ArrayList;<% } %>
 import java.util.List;
+<%_ if (databaseType == 'cassandra') { _%>
+import java.util.Set;
+<%_ } _%>
 
 <% if (databaseType == 'sql') { %>/**
  * Spring Data JPA repository for the PersistentToken entity.
@@ -53,6 +60,8 @@ public class PersistentTokenRepository {
 
     private final Session session;
 
+    private final Validator validator;
+
     Mapper<PersistentToken> mapper;
 
     private PreparedStatement findPersistentTokenSeriesByUserIdStmt;
@@ -63,8 +72,9 @@ public class PersistentTokenRepository {
 
     private PreparedStatement deletePersistentTokenSeriesByUserIdStmt;
 
-    public PersistentTokenRepository(Session session) {
+    public PersistentTokenRepository(Session session, Validator validator) {
         this.session = session;
+        this.validator = validator;
         mapper = new MappingManager(session).mapper(PersistentToken.class);
 
         findPersistentTokenSeriesByUserIdStmt = session.prepare(
@@ -105,6 +115,10 @@ public class PersistentTokenRepository {
     }
 
     public void save(PersistentToken token) {
+        Set<ConstraintViolation<PersistentToken>> violations = validator.validate(token);
+        if (violations != null && !violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
         BatchStatement batch = new BatchStatement();
         batch.add(insertPersistentTokenStmt.bind()
             .setString("series", token.getSeries())
