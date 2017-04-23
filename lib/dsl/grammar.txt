@@ -209,53 +209,53 @@ applicationContentDecl
     return addToApplicationDecl(applicationContentDecl, 'languages', languages);
   }
   / SERVER_PORT SPACE* serverPort:[0-9]+ SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.serverPort = parseInt(serverPort.join(''), 10);
+  	return addToApplicationDecl(applicationContentDecl, 'serverPort', parseInt(serverPort.join(''), 10));
   }
   / ENABLE_SOCIAL_SIGN_IN SPACE* enableSocialSignIn:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.enableSocialSignIn = enableSocialSignIn;
+    return addToApplicationDecl(applicationContentDecl, 'enableSocialSignIn', enableSocialSignIn);
   }
   / USE_SASS SPACE* useSass:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.useSass = useSass;
+    return addToApplicationDecl(applicationContentDecl, 'useSass', useSass);
   }
   / JHI_PREFIX SPACE* jhiPrefix:[A-z0-9_-]+ SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.jhiPrefix = jhiPrefix.join('');
+    return addToApplicationDecl(applicationContentDecl, 'jhiPrefix', jhiPrefix.join(''));
   }
   / MESSAGE_BROKER SPACE* messageBroker:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.messageBroker = messageBroker;
+    return addToApplicationDecl(applicationContentDecl, 'messageBroker', messageBroker);
   }
   / SERVICE_DISCOVERY_TYPE SPACE* serviceDiscoveryType:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
     const choice = serviceDiscoveryType.join('');
     switch (choice) {
     case 'true':
-      parsed.application.serviceDiscoveryType = true;
+      return addToApplicationDecl(applicationContentDecl, 'serviceDiscoveryType', true);
       break;
     case 'false':
-      parsed.application.serviceDiscoveryType = false;
+      return addToApplicationDecl(applicationContentDecl, 'serviceDiscoveryType', false);
       break;
     default:
-      parsed.application.serviceDiscoveryType = choice;
+      return addToApplicationDecl(applicationContentDecl, 'serviceDiscoveryType', choice.join(''));
     }
   }
   / CLIENT_PACKAGE_MANAGER SPACE* clientPackageManager:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.clientPackageManager = clientPackageManager.join('');
+    return addToApplicationDecl(applicationContentDecl, 'clientPackageManager', clientPackageManager.join(''));
   }
   / CLIENT_FRAMEWORK SPACE* clientFramework:[A-z0-9]+ SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.clientFramework = clientFramework.join('');
+    return addToApplicationDecl(applicationContentDecl, 'clientFramework', clientFramework.join(''));
   }
   / NATIVE_LANGUAGE SPACE* nativeLanguage:[a-z]+ applicationContentDecl:applicationContentDecl {
-    parsed.application.nativeLanguage = nativeLanguage.join('');
+    return addToApplicationDecl(applicationContentDecl, 'nativeLanguage', nativeLanguage.join(''));
   }
   / FRONT_END_BUILDER SPACE* frontEndBuilder:[A-z]+ applicationContentDecl:applicationContentDecl {
-    parsed.application.frontEndBuilder = frontEndBuilder.join('');
+    return addToApplicationDecl(applicationContentDecl, 'frontEndBuilder', frontEndBuilder.join(''));
   }
   / SKIP_USER_MANAGEMENT SPACE* skipUserManagement:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.skipUserManagement = skipUserManagement;
+    return addToApplicationDecl(applicationContentDecl, 'skipUserManagement', skipUserManagement.join(''));
   }
   / SKIP_CLIENT SPACE* skipClient:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.skipClient = skipClient;
+    return addToApplicationDecl(applicationContentDecl, 'skipClient', skipClient);
   }
   / SKIP_SERVER SPACE* skipServer:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.skipServer = skipServer;
+    return addToApplicationDecl(applicationContentDecl, 'skipServer', skipServer);
   }
   / ''
 
