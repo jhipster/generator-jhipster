@@ -10,7 +10,7 @@ Are you ready to contribute to JHipster? We'd love to have you on board, and we 
  - [Git Commit Guidelines](#commit)
 
 ## <a name="issue"></a> Issues and Bugs
-If you find a bug in the source code or a mistake in the documentation, you can help us by submitting a ticket to our [GitHub  issues](https://github.com/jhipster/generator-jhipster/issues). Even better, you can submit a Pull Request to our [JHipster generator project](https://github.com/jhipster/generator-jhipster) or to our [Documentation project](https://github.com/jhipster/jhipster.github.io).
+If you find a bug in the source code or a mistake in the documentation, you can help us by submitting a ticket to our [GitHub issues](https://github.com/jhipster/generator-jhipster/issues). Even better, you can submit a Pull Request to our [JHipster generator project](https://github.com/jhipster/generator-jhipster) or to our [Documentation project](https://github.com/jhipster/jhipster.github.io).
 
 **Please see the Submission Guidelines below**.
 
@@ -24,7 +24,7 @@ would like to implement a new feature then consider what kind of change it is:
 ## <a name="submit"></a> Submission Guidelines
 
 ### Submitting an Issue
-Before you submit your issue search the archive, maybe your question was already answered.
+Before you submit your issue search the [archive](https://github.com/jhipster/generator-jhipster/issues?utf8=%E2%9C%93&q=is%3Aissue), maybe your question was already answered.
 
 If your issue appears to be a bug, and has not been reported, open a new issue.
 Help us to maximize the effort we can spend fixing issues and adding new
@@ -54,7 +54,7 @@ Issues opened without any of these info will be **closed** without any explanati
 ### Submitting a Pull Request
 Before you submit your pull request consider the following guidelines:
 
-* Search [GitHub](https://github.com/jhipster/generator-jhipster/pulls) for an open or closed Pull Request
+* Search [GitHub](https://github.com/jhipster/generator-jhipster/pulls?utf8=%E2%9C%93&q=is%3Apr) for an open or closed Pull Request
   that relates to your submission.
 * If you want to modify the JHipster generator, read our [Generator development setup](#setup)
 * Make your changes in a new git branch
