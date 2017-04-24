@@ -282,7 +282,7 @@ module.exports = UpgradeGenerator.extend({
             const installCommand = this.clientPackageManager === 'yarn' ? 'yarn' : 'npm install';
             shelljs.exec(installCommand, { silent: this.silent }, (code, msg, err) => {
                 if (code !== 0) {
-                    this.error(`${installCommand}failed.`);
+                    this.error(`${installCommand} failed.`);
                 }
                 if (this.clientFramework === 'angular1') {
                     this.spawnCommandSync('bower', ['install']);
