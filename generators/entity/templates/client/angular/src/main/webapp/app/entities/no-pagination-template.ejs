@@ -54,20 +54,20 @@ _%>
             this.<%= entityInstance %>Service.search({
                 query: this.currentSearch,
                 }).subscribe(
-                    (res: Response) => this.<%= entityInstancePlural %> = res.json(),
-                    (res: Response) => this.onError(res.json())
+                    (res: ResponseWrapper) => this.<%= entityInstancePlural %> = res.json,
+                    (res: ResponseWrapper) => this.onError(res.json)
                 );
             return;
        }
        <%_ } _%>
         this.<%= entityInstance %>Service.query().subscribe(
-            (res: Response) => {
-                this.<%= entityInstancePlural %> = res.json();
+            (res: ResponseWrapper) => {
+                this.<%= entityInstancePlural %> = res.json;
                 <%_ if (searchEngine === 'elasticsearch') { _%>
                 this.currentSearch = '';
                 <%_ } _%>
             },
-            (res: Response) => this.onError(res.json())
+            (res: ResponseWrapper) => this.onError(res.json)
         );
     }
     <%_ if (searchEngine === 'elasticsearch') { _%>

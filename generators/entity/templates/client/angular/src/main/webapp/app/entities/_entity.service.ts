@@ -30,6 +30,7 @@ import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 <%_ if(hasDate) { _%>
 import { DateUtils } from 'ng-jhipster';
 <%_ } _%>
+import { ResponseWrapper } from '../../shared';
 
 @Injectable()
 export class <%= entityAngularName %>Service {
@@ -50,7 +51,13 @@ export class <%= entityAngularName %>Service {
     <%_ } _%>
         const copy = this.convert(<%= entityInstance %>);
         return this.http.post(this.resourceUrl, copy).map((res: Response) => {
+            <%_ if(hasDate) { _%>
+            const jsonResponse = res.json();
+            this.convertItemFromServer(jsonResponse);
+            return jsonResponse;
+            <%_ } else { _%>
             return res.json();
+            <%_ } _%>
         });
     }
     <%_ if (entityAngularName.length <= 30) { _%>
@@ -63,22 +70,9 @@ export class <%= entityAngularName %>Service {
     <%_ } _%>
         const copy = this.convert(<%= entityInstance %>);
         return this.http.put(this.resourceUrl, copy).map((res: Response) => {
-            return res.json();
-        });
-    }
-
-    find(id: number): Observable<<%= entityAngularName %>> {
-        return this.http.get(`${this.resourceUrl}/${id}`).map((res: Response) => {
             <%_ if(hasDate) { _%>
             const jsonResponse = res.json();
-            <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
-            jsonResponse.<%=fields[idx].fieldName%> = this.dateUtils
-                .convertLocalDateFromServer(jsonResponse.<%=fields[idx].fieldName%>);
-            <%_ } _%>
-            <%_ if (['Instant', 'ZonedDateTime'].includes(fields[idx].fieldType)) { _%>
-            jsonResponse.<%=fields[idx].fieldName%> = this.dateUtils
-                .convertDateTimeFromServer(jsonResponse.<%=fields[idx].fieldName%>);
-            <%_ } } _%>
+            this.convertItemFromServer(jsonResponse);
             return jsonResponse;
             <%_ } else { _%>
             return res.json();
@@ -86,12 +80,22 @@ export class <%= entityAngularName %>Service {
         });
     }
 
-    query(req?: any): Observable<Response> {
+    find(id: number): Observable<<%= entityAngularName %>> {
+        return this.http.get(`${this.resourceUrl}/${id}`).map((res: Response) => {
+            <%_ if(hasDate) { _%>
+            const jsonResponse = res.json();
+            this.convertItemFromServer(jsonResponse);
+            return jsonResponse;
+            <%_ } else { _%>
+            return res.json();
+            <%_ } _%>
+        });
+    }
+
+    query(req?: any): Observable<ResponseWrapper> {
         const options = this.createRequestOption(req);
         return this.http.get(this.resourceUrl, options)
-            <%_ if(hasDate) { _%>
             .map((res: Response) => this.convertResponse(res))
-            <%_ } _%>
         ;
     }
 
@@ -100,36 +104,39 @@ export class <%= entityAngularName %>Service {
     }
     <%_ if(searchEngine === 'elasticsearch') { _%>
 
-    search(req?: any): Observable<Response> {
+    search(req?: any): Observable<ResponseWrapper> {
         const options = this.createRequestOption(req);
         return this.http.get(this.resourceSearchUrl, options)
-            <%_ if(hasDate) { _%>
             .map((res: any) => this.convertResponse(res))
-            <%_ } _%>
         ;
     }
     <%_ } _%>
+
+    private convertResponse(res: Response): ResponseWrapper {
+        const jsonResponse = res.json();
+    <%_ if(hasDate) { _%>
+        for (let i = 0; i < jsonResponse.length; i++) {
+            this.convertItemFromServer(jsonResponse[i]);
+        }
+    <%_ } _%>
+        return new ResponseWrapper(res.headers, jsonResponse);
+    }
     <%_ if(hasDate) { _%>
 
-    private convertResponse(res: Response): Response {
-        const jsonResponse = res.json();
-        for (let i = 0; i < jsonResponse.length; i++) {
+    private convertItemFromServer(entity: any) {
         <%_ for (idx in fields) { _%>
             <%_ if (fields[idx].fieldType == 'LocalDate') { _%>
-            jsonResponse[i].<%=fields[idx].fieldName%> = this.dateUtils
-                .convertLocalDateFromServer(jsonResponse[i].<%=fields[idx].fieldName%>);
+        entity.<%=fields[idx].fieldName%> = this.dateUtils
+            .convertLocalDateFromServer(entity.<%=fields[idx].fieldName%>);
             <%_ } _%>
             <%_ if (['Instant', 'ZonedDateTime'].includes(fields[idx].fieldType)) { _%>
-            jsonResponse[i].<%=fields[idx].fieldName%> = this.dateUtils
-                .convertDateTimeFromServer(jsonResponse[i].<%=fields[idx].fieldName%>);
+        entity.<%=fields[idx].fieldName%> = this.dateUtils
+            .convertDateTimeFromServer(entity.<%=fields[idx].fieldName%>);
             <%_ } _%>
         <%_ } _%>
-        }
-        res.json().data = jsonResponse;
-        return res;
     }
-
     <%_ } _%>
+
     private createRequestOption(req?: any): BaseRequestOptions {
         const options: BaseRequestOptions = new BaseRequestOptions();
         if (req) {
