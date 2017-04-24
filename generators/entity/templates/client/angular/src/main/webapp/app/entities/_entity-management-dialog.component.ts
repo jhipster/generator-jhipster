@@ -28,6 +28,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 
+import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EventManager, AlertService<% if (enableTranslation) { %>, JhiLanguageService<% } %><% if (fieldsContainBlob) { %>, DataUtils<% } %> } from 'ng-jhipster';
 
@@ -160,14 +161,17 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     save() {
         this.isSaving = true;
         if (this.<%= entityInstance %>.id !== undefined) {
-            this.<%= entityInstance %>Service.update(this.<%= entityInstance %>)
-                .subscribe((res: <%= entityAngularName %>) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
+            this.subscribeToSaveResponse(
+                this.<%= entityInstance %>Service.update(this.<%= entityInstance %>));
         } else {
-            this.<%= entityInstance %>Service.create(this.<%= entityInstance %>)
-                .subscribe((res: <%= entityAngularName %>) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
+            this.subscribeToSaveResponse(
+                this.<%= entityInstance %>Service.create(this.<%= entityInstance %>));
         }
+    }
+
+    private subscribeToSaveResponse(result: Observable<<%= entityAngularName %>>) {
+        result.subscribe((res: <%= entityAngularName %>) =>
+            this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
     }
 
     private onSaveSuccess(result: <%= entityAngularName %>) {
