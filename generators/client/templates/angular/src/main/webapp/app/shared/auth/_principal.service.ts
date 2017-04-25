@@ -42,17 +42,21 @@ export class Principal {
     }
 
     hasAnyAuthority(authorities: string[]): Promise<boolean> {
+        return Promise.resolve(this.hasAnyAuthorityDirect(authorities));
+    }
+
+    hasAnyAuthorityDirect(authorities: string[]): boolean {
         if (!this.authenticated || !this.userIdentity || !this.userIdentity.authorities) {
-            return Promise.resolve(false);
+            return false;
         }
 
         for (let i = 0; i < authorities.length; i++) {
             if (this.userIdentity.authorities.indexOf(authorities[i]) !== -1) {
-                return Promise.resolve(true);
+                return true;
             }
         }
 
-        return Promise.resolve(false);
+        return false;
     }
 
     hasAuthority(authority: string): Promise<boolean> {
