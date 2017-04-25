@@ -42,7 +42,8 @@ const files = {
             path: MAIN_SRC_DIR,
             templates: [
                 'content/scss/_global.scss',
-                'content/scss/_vendor.scss'
+                'content/scss/_vendor.scss',
+                '_postcss.config.js'
             ]
         }
     ],
