@@ -181,7 +181,6 @@
         <spring-social-google.version>1.0.0.RELEASE</spring-social-google.version>
         <%_ } _%>
         <springfox.version>2.6.1</springfox.version>
-        <undertow.version>1.4.10.Final</undertow.version>
         <%_ if (databaseType === 'sql') { _%>
         <validation-api.version>1.1.0.Final</validation-api.version>
         <%_ } _%>
