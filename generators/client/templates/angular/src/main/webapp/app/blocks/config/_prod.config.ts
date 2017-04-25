@@ -17,11 +17,11 @@
  limitations under the License.
 -%>
 import { enableProdMode } from '@angular/core';
-import { DEBUG_INFO_ENABLED } from '../../app.constants';
+import { environment } from '../../../environments/environment';
 
 export function ProdConfig() {
     // disable debug data on prod profile to improve performance
-    if (!DEBUG_INFO_ENABLED) {
-        enableProdMode();
+    if (environment.production) {
+      enableProdMode();
     }
 }
