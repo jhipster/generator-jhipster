@@ -53,9 +53,6 @@
         <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx256m</argLine>
         <assertj.version>3.6.2</assertj.version>
         <awaitility.version>2.0.0</awaitility.version>
-        <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
-        <commons-codec.version>1.10</commons-codec.version>
-        <%_ } _%>
         <commons-io.version>2.5</commons-io.version>
         <commons-lang.version>3.5</commons-lang.version>
         <%_ if (cucumberTests) { _%>
@@ -363,7 +360,6 @@
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>${commons-codec.version}</version>
         </dependency>
         <%_ } _%>
         <dependency>

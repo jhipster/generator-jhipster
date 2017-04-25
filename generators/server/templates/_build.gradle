@@ -251,7 +251,7 @@ dependencies {
     compile ("com.zaxxer:HikariCP:${hikaricp_version}")
     <%_ } _%>
     <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
-    compile "commons-codec:commons-codec:${commons_codec_version}"
+    compile "commons-codec:commons-codec"
     <%_ } _%>
     compile "org.apache.commons:commons-lang3:${commons_lang_version}"
     compile "commons-io:commons-io:${commons_io_version}"
