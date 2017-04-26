@@ -53,9 +53,6 @@
         <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx256m</argLine>
         <assertj.version>3.6.2</assertj.version>
         <awaitility.version>2.0.0</awaitility.version>
-        <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
-        <commons-codec.version>1.10</commons-codec.version>
-        <%_ } _%>
         <commons-io.version>2.5</commons-io.version>
         <commons-lang.version>3.5</commons-lang.version>
         <%_ if (cucumberTests) { _%>
@@ -83,9 +80,6 @@
         <%_ } _%>
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
         <java.version>1.<%= javaVersion %></java.version>
-        <%_ if (databaseType === 'sql') { _%>
-        <javassist.version>3.21.0-GA</javassist.version>
-        <%_ } _%>
         <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast') { _%>
         <jcache.version>1.0.0</jcache.version>
         <%_ } _%>
@@ -187,7 +181,6 @@
         <spring-social-google.version>1.0.0.RELEASE</spring-social-google.version>
         <%_ } _%>
         <springfox.version>2.6.1</springfox.version>
-        <undertow.version>1.4.10.Final</undertow.version>
         <%_ if (databaseType === 'sql') { _%>
         <validation-api.version>1.1.0.Final</validation-api.version>
         <%_ } _%>
@@ -363,7 +356,6 @@
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>${commons-codec.version}</version>
         </dependency>
         <%_ } _%>
         <dependency>
