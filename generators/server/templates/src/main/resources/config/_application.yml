@@ -19,7 +19,7 @@
 # ===================================================================
 # Spring Boot configuration.
 #
-# This configuration will be overriden by the Spring profile you use,
+# This configuration will be overridden by the Spring profile you use,
 # for example application-dev.yml if you use the "dev" profile.
 #
 # More information on profiles: https://jhipster.github.io/profiles/
