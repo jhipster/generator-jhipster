@@ -467,10 +467,10 @@ function askForOptionalItems() {
         );
     }
     if (applicationType === 'monolith' && this.authenticationType === 'jwt') {
-        if (this.hibernateCache === 'ast') {
+        if (this.hibernateCache === 'hazelcast') {
             choices.push(
                 {
-                    name: 'Service Discovery and Configuration using JHipster Registry (important for scaling ast)',
+                    name: 'Service Discovery and Configuration using JHipster Registry (important for scaling Hazelcast)',
                     value: 'serviceDiscoveryType:eureka'
                 }
             );
