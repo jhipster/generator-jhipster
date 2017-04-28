@@ -52,12 +52,12 @@ function askForServerSideOpts() {
             message: response => this.getNumberedQuestion('Which *type* of authentication would you like to use?', applicationType === 'monolith'),
             choices: [
                 {
-                    value: 'session',
-                    name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)'
-                },
-                {
                     value: 'jwt',
                     name: 'JWT authentication (stateless, with a token)'
+                },
+                {
+                    value: 'session',
+                    name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)'
                 },
                 {
                     value: 'oauth2',
@@ -351,19 +351,19 @@ function askForServerSideOpts() {
             message: response => this.getNumberedQuestion('Do you want to use Hibernate 2nd level cache?', response.databaseType === 'sql'),
             choices: [
                 {
-                    value: 'no',
-                    name: 'No'
-                },
-                {
                     value: 'ehcache',
                     name: 'Yes, with ehcache (local cache, for a single node)'
                 },
                 {
                     value: 'hazelcast',
                     name: 'Yes, with HazelCast (distributed cache, for multiple nodes)'
+                },
+                {
+                    value: 'no',
+                    name: 'No'
                 }
             ],
-            default: (applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') ? 2 : 1
+            default: (applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') ? 1 : 0
         },
         {
             type: 'list',
@@ -430,7 +430,6 @@ function askForServerSideOpts() {
             this.prodDatabaseType = 'cassandra';
             this.hibernateCache = 'no';
         }
-
         done();
     });
 }
@@ -468,10 +467,10 @@ function askForOptionalItems() {
         );
     }
     if (applicationType === 'monolith' && this.authenticationType === 'jwt') {
-        if (this.hibernateCache === 'hazelcast') {
+        if (this.hibernateCache === 'ast') {
             choices.push(
                 {
-                    name: 'Service Discovery and Configuration using JHipster Registry (important for scaling Hazelcast)',
+                    name: 'Service Discovery and Configuration using JHipster Registry (important for scaling ast)',
                     value: 'serviceDiscoveryType:eureka'
                 }
             );
