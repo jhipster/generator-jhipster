@@ -148,7 +148,7 @@ public class <%= entityClass %>Resource {
     @Timed
     public ResponseEntity<Void> delete<%= entityClass %>(@PathVariable <%= pkType %> id) {
         log.debug("REST request to delete <%= entityClass %> : {}", id);<%- include('../../common/delete_template', {viaService: viaService}); -%>
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id<% if (pkType !== 'String') { %>.toString()<% } %>)).build();
     }<% if (searchEngine == 'elasticsearch') { %>
 
     /**
