@@ -88,19 +88,22 @@
     "tslint": "4.5.1",
     "phantomjs-prebuilt": "2.1.14",
     "rimraf": "2.6.1",
-    "typescript": "2.2.2"
+    "typescript": "2.2.2",
+    "lite-server": "2.3.0",
+    "concurrently": "3.4.0"
   },
   "engines": {
     "node": ">=6.9.0"
   },
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --proxy-conf proxy.conf.json",
+    "start": "concurrently --kill-others \"ng build --watch\" \"lite-server\" ",
     "build": "ng build",
     "build:prod": "ng build --prod",
-    "test": "ng test",
+    "test": "ng test --single-run",
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",
+    "lite-server": "lite-server",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "ngc": "ngc -p tsconfig-aot.json",

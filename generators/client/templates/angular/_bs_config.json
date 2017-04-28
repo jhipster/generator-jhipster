@@ -1,0 +1,6 @@
+{
+  "host": "localhost",
+  "port": 9000,
+  "files": ["./target/www/app/**/*.{html,htm,css,js}"],
+  "server": { "baseDir": "./target/www/app" }
+}
