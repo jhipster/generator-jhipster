@@ -177,6 +177,17 @@
             ]
         },
         {
+            "fieldName": "instantJade",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "instanteRequiredJade",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "zonedDateTimeJade",
             "fieldType": "ZonedDateTime"
         },

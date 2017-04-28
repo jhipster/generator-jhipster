@@ -177,6 +177,17 @@
             ]
         },
         {
+            "fieldName": "instantAlice",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "instanteRequiredAlice",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "zonedDateTimeAlice",
             "fieldType": "ZonedDateTime"
         },

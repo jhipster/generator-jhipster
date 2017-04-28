@@ -19,7 +19,7 @@
 (function() {
     'use strict';
 <%_ let hasDate = false;
-    if (fieldsContainZonedDateTime || fieldsContainLocalDate) {
+    if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) {
         hasDate = true;
     }
 _%>
@@ -39,7 +39,7 @@ _%>
                 transformResponse: function (data) {
                     if (data) {
                         data = angular.fromJson(data);<% for (idx in fields) { if (fields[idx].fieldType == 'LocalDate') { %>
-                        data.<%=fields[idx].fieldName%> = DateUtils.convertLocalDateFromServer(data.<%=fields[idx].fieldName%>);<% }if (fields[idx].fieldType == 'ZonedDateTime') { %>
+                        data.<%=fields[idx].fieldName%> = DateUtils.convertLocalDateFromServer(data.<%=fields[idx].fieldName%>);<% }if (['Instant', 'ZonedDateTime'].includes(fields[idx].fieldType)) { %>
                         data.<%=fields[idx].fieldName%> = DateUtils.convertDateTimeFromServer(data.<%=fields[idx].fieldName%>);<% } }%>
                     }
                     return data;

@@ -19,14 +19,14 @@
 import { Injectable, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-<%_ if (fieldsContainZonedDateTime) { _%>
+<%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
 import { DatePipe } from '@angular/common';
 <%_ } _%>
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 <%_
 let hasDate = false;
-if (fieldsContainZonedDateTime || fieldsContainLocalDate) {
+if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) {
     hasDate = true;
 }
 _%>
@@ -34,7 +34,7 @@ _%>
 export class <%= entityAngularName %>PopupService {
     private isOpen = false;
     constructor(
-        <%_ if (fieldsContainZonedDateTime) { _%>
+        <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
         private datePipe: DatePipe,
         <%_ } _%>
         private modalService: NgbModal,
@@ -62,7 +62,7 @@ export class <%= entityAngularName %>PopupService {
                     };
                 }
                         <%_ } _%>
-                        <%_ if (fields[idx].fieldType == 'ZonedDateTime') { _%>
+                        <%_ if (['Instant', 'ZonedDateTime'].includes(fields[idx].fieldType)) { _%>
                 <%= entityInstance %>.<%=fields[idx].fieldName%> = this.datePipe
                     .transform(<%= entityInstance %>.<%=fields[idx].fieldName%>, 'yyyy-MM-ddThh:mm');
                         <%_ } _%>

@@ -177,6 +177,17 @@
             ]
         },
         {
+            "fieldName": "instantMika",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "instanteRequiredMika",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "zonedDateTimeMika",
             "fieldType": "ZonedDateTime"
         },

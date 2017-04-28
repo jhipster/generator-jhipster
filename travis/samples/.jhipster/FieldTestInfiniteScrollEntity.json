@@ -177,6 +177,17 @@
             ]
         },
         {
+            "fieldName": "instantHugo",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "instanteRequiredHugo",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "zonedDateTimeHugo",
             "fieldType": "ZonedDateTime"
         },

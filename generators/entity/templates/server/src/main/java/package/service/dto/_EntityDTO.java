@@ -18,7 +18,8 @@
 -%>
 package <%=packageName%>.service.dto;
 
-<%_ if (fieldsContainLocalDate == true) { _%>
+<% if (fieldsContainInstant == true) { %>
+import java.time.Instant;<% } %><% if (fieldsContainLocalDate == true) { %>
 import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
 import java.time.ZonedDateTime;<% } %><% if (validation) { %>
 import javax.validation.constraints.*;<% } %>

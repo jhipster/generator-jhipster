@@ -77,6 +77,8 @@
                 columnType="decimal(10,2)";
             } else if (fieldType == 'LocalDate') {
                 columnType="date";
+            } else if (fieldType == 'Instant') {
+                columnType="timestamp";
             } else if (fieldType == 'ZonedDateTime') {
                 columnType="timestamp";
             } else if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') {
@@ -121,7 +123,7 @@
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
         <%_ for (const idx in fields) {
-            if (fields[idx].fieldType == 'ZonedDateTime') { _%>
+            if (fields[idx].fieldType == 'ZonedDateTime' || fields[idx].fieldType == 'Instant') { _%>
         <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%=fields[idx].fieldNameAsDatabaseColumn %>" columnDataType="datetime"/>
         <%_ }
         } _%>
