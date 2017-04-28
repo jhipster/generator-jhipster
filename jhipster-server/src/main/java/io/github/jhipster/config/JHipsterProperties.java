@@ -764,7 +764,9 @@ public class JHipsterProperties {
 
             private boolean enabled = false;
 
-            private long limit = 100000L;
+            private long limit = 100_000L;
+
+            private int durationInSeconds = 3_600;
 
             public boolean isEnabled() {
                 return enabled;
@@ -780,6 +782,14 @@ public class JHipsterProperties {
 
             public void setLimit(long limit) {
                 this.limit = limit;
+            }
+
+            public int getDurationInSeconds() {
+                return durationInSeconds;
+            }
+
+            public void setDurationInSeconds(int durationInSeconds) {
+                this.durationInSeconds = durationInSeconds;
             }
         }
     }
