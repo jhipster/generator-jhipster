@@ -93,7 +93,7 @@ spec:
           value: my-secret-token-to-change-in-production
         - name: EUREKA_CLIENT_FETCH_REGISTRY
           value: 'true'
-        - name: EUREKA_REGISTER_WITH_EUREKA
+        - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
           value: 'true'
         # Eureka specific tweaking
         - name: EUREKA_SERVER_REGISTRY_SYNC_RETRY_WAIT_MS
@@ -130,8 +130,8 @@ spec:
                 REPLICAS="${REPLICAS},"
               fi
             done
-            export EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=$REPLICAS
-            echo "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=${REPLICAS}"
+            export EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=$REPLICAS
+            echo "EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=${REPLICAS}"
 
             java -jar /jhipster-registry.war --spring.cloud.config.server.git.uri=${GIT_URI} --spring.cloud.config.server.git.search-paths=${GIT_SEARCH_PATHS} -Djava.security.egd=file:/dev/./urandom
         volumeMounts:
