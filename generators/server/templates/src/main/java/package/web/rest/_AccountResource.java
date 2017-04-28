@@ -233,7 +233,7 @@ public class AccountResource {
             persistentTokenRepository.findByUser(u).stream()
                 .filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries))<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
                 .findAny().ifPresent(t -> persistentTokenRepository.delete(decodedSeries)));<% } else { %>
-                .findAny().ifPresent(persistentToken -> persistentTokenRepository.delete(persistentToken)));<% } %>
+                .findAny().ifPresent(persistentTokenRepository::delete));<% } %>
     }<% } %>
 
     /**
