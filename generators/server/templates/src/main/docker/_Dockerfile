@@ -19,9 +19,8 @@
 FROM <%= DOCKER_JAVA_JRE %>
 
 ENV SPRING_OUTPUT_ANSI_ENABLED=ALWAYS \
-    JHIPSTER_SLEEP=0
-ENV JAVA_OPTS=""
-
+    JHIPSTER_SLEEP=0 \
+    JAVA_OPTS=""
 
 # add directly the war
 ADD *.war /app.war
@@ -29,5 +28,4 @@ ADD *.war /app.war
 EXPOSE <%= serverPort %><% if (hibernateCache == 'hazelcast') { %> 5701/udp<% } %>
 CMD echo "The application will start in ${JHIPSTER_SLEEP}s..." && \
     sleep ${JHIPSTER_SLEEP} && \
-    java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.war
-
+    java ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom -jar /app.war
