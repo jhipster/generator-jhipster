@@ -25,12 +25,12 @@ import org.hibernate.envers.Audited;<% } %>
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-<% if (databaseType == 'mongodb') { %>import org.springframework.data.mongodb.core.mapping.Field;
-import java.time.ZonedDateTime;
+import org.springframework.data.annotation.LastModifiedDate;<% if (databaseType == 'mongodb') { %>
+import org.springframework.data.mongodb.core.mapping.Field;
+import java.time.Instant;
 <% } %><% if (databaseType == 'sql') { %>
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;<% } %>
@@ -56,7 +56,7 @@ public abstract class AbstractAuditingEntity implements Serializable {
     @Column(name = "created_date", nullable = false)<% } %><% if (databaseType == 'mongodb') { %>
     @Field("created_date")<% } %>
     @JsonIgnore
-    private ZonedDateTime createdDate = ZonedDateTime.now();
+    private Instant createdDate = Instant.now();
 
     @LastModifiedBy<% if (databaseType == 'sql') { %>
     @Column(name = "last_modified_by", length = 50)<% } %><% if (databaseType == 'mongodb') { %>
@@ -68,7 +68,7 @@ public abstract class AbstractAuditingEntity implements Serializable {
     @Column(name = "last_modified_date")<% } %><% if (databaseType == 'mongodb') { %>
     @Field("last_modified_date")<% } %>
     @JsonIgnore
-    private ZonedDateTime lastModifiedDate = ZonedDateTime.now();
+    private Instant lastModifiedDate = Instant.now();
 
     public String getCreatedBy() {
         return createdBy;
@@ -78,11 +78,11 @@ public abstract class AbstractAuditingEntity implements Serializable {
         this.createdBy = createdBy;
     }
 
-    public ZonedDateTime getCreatedDate() {
+    public Instant getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(ZonedDateTime createdDate) {
+    public void setCreatedDate(Instant createdDate) {
         this.createdDate = createdDate;
     }
 
@@ -94,11 +94,11 @@ public abstract class AbstractAuditingEntity implements Serializable {
         this.lastModifiedBy = lastModifiedBy;
     }
 
-    public ZonedDateTime getLastModifiedDate() {
+    public Instant getLastModifiedDate() {
         return lastModifiedDate;
     }
 
-    public void setLastModifiedDate(ZonedDateTime lastModifiedDate) {
+    public void setLastModifiedDate(Instant lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
 }

@@ -22,7 +22,7 @@ import <%=packageName%>.service.dto.UserDTO;
 import javax.validation.constraints.Size;
 
 <%_ if (databaseType == 'mongodb' || databaseType == 'sql') { _%>
-import java.time.ZonedDateTime;
+import java.time.Instant;
 <%_ } _%>
 import java.util.Set;
 
@@ -44,7 +44,7 @@ public class ManagedUserVM extends UserDTO {
 
     public ManagedUserVM(<% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> id, String login, String password, String firstName, String lastName,
                          String email, boolean activated<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>, String imageUrl<% } %>, String langKey,
-                         <% if (databaseType == 'mongodb' || databaseType == 'sql') { %>String createdBy, ZonedDateTime createdDate, String lastModifiedBy, ZonedDateTime lastModifiedDate,
+                         <% if (databaseType == 'mongodb' || databaseType == 'sql') { %>String createdBy, Instant createdDate, String lastModifiedBy, Instant lastModifiedDate,
                         <% } %>Set<String> authorities) {
 
         super(id, login, firstName, lastName, email, activated<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>, imageUrl<% } %>, langKey,
