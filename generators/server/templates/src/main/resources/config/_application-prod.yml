@@ -41,10 +41,6 @@ eureka:
 <%_ } _%>
 
 spring:
-    <%_ if (applicationType == 'gateway' && databaseType != 'cassandra') { _%>
-    autoconfigure:
-        exclude: org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration
-    <%_ } _%>
     devtools:
         restart:
             enabled: false
@@ -150,16 +146,13 @@ spring:
             uri: mongodb://localhost:27017
             database: <%= baseName %>
     <%_ } _%>
-    <%_ if (databaseType == 'cassandra' || applicationType == 'gateway') { _%>
+    <%_ if (databaseType == 'cassandra') { _%>
         cassandra:
             contactPoints: localhost
             protocolVersion: V4
             compression: LZ4
             keyspaceName: <%= baseName %>
-    <%_ if (applicationType == 'gateway') { _%>
-            repositories:
-                enabled: false
-    <%_ } } _%>
+    <%_ } _%>
     <%_ if (searchEngine == 'elasticsearch') { _%>
         elasticsearch:
             cluster-name:
@@ -219,7 +212,7 @@ server:
 jhipster:
     <%_ if (applicationType == 'gateway') { _%>
     gateway:
-        rate-limiting: # Warning! Read the documentation in the GatewayConfiguration class.
+        rate-limiting:
             enabled: false
         authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
             app1: /api # recommended prod configuration

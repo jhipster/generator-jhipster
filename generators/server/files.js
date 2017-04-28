@@ -274,7 +274,6 @@ function writeFiles() {
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/apidoc/_GatewaySwaggerResourcesProvider.java`, `${javaDir}config/apidoc/GatewaySwaggerResourcesProvider.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/gateway/ratelimiting/_RateLimitingFilter.java`, `${javaDir}gateway/ratelimiting/RateLimitingFilter.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/gateway/_TokenRelayFilter.java`, `${javaDir}gateway/TokenRelayFilter.java`);
-            this.template(`${SERVER_MAIN_SRC_DIR}package/gateway/ratelimiting/_RateLimitingRepository.java`, `${javaDir}gateway/ratelimiting/RateLimitingRepository.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/gateway/accesscontrol/_AccessControlFilter.java`, `${javaDir}gateway/accesscontrol/AccessControlFilter.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/gateway/responserewriting/_SwaggerBasePathRewritingFilter.java`, `${javaDir}gateway/responserewriting/SwaggerBasePathRewritingFilter.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/vm/_RouteVM.java`, `${javaDir}web/rest/vm/RouteVM.java`);
@@ -313,7 +312,7 @@ function writeFiles() {
 
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_package-info.java`, `${javaDir}config/package-info.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_AsyncConfiguration.java`, `${javaDir}config/AsyncConfiguration.java`);
-            if (this.hibernateCache === 'ehcache' || this.hibernateCache === 'hazelcast' || this.clusteredHttpSession === 'hazelcast') {
+            if (this.hibernateCache === 'ehcache' || this.hibernateCache === 'hazelcast' || this.clusteredHttpSession === 'hazelcast' || this.applicationType === 'gateway') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/_CacheConfiguration.java`, `${javaDir}config/CacheConfiguration.java`);
             }
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_Constants.java`, `${javaDir}config/Constants.java`);
@@ -344,7 +343,7 @@ function writeFiles() {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/metrics/_CassandraHealthIndicator.java`, `${javaDir}config/metrics/CassandraHealthIndicator.java`);
             }
 
-            if (this.databaseType === 'cassandra' || this.applicationType === 'gateway') {
+            if (this.databaseType === 'cassandra') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/cassandra/_CassandraConfiguration.java`, `${javaDir}config/cassandra/CassandraConfiguration.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/cassandra/_CustomZonedDateTimeCodec.java`, `${javaDir}config/cassandra/CustomZonedDateTimeCodec.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/cassandra/_package-info.java`, `${javaDir}config/cassandra/package-info.java`);
