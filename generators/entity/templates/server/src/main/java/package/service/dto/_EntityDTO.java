@@ -107,7 +107,7 @@ public class <%= entityClass %>DTO implements Serializable {
         const fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod;
         const fieldName = fields[idx].fieldName; _%>
     <%_ if(fieldTypeBlobContent != 'text') { _%>
-    public <%= fieldType %> get<%= fieldInJavaBeanMethod %>() {
+    public <%= fieldType %> <% if (fieldType.toLowerCase() == 'boolean') { %>is<% } else { %>get<%_ } _%><%= fieldInJavaBeanMethod %>() {
     <%_ } else { _%>
     public String get<%= fieldInJavaBeanMethod %>() {
     <%_ } _%>
@@ -192,22 +192,24 @@ public class <%= entityClass %>DTO implements Serializable {
 
         <%= entityClass %>DTO <%= entityInstance %>DTO = (<%= entityClass %>DTO) o;
 
-        if ( ! Objects.equals(id, <%= entityInstance %>DTO.id)) { return false; }
+        if ( ! Objects.equals(getId(), <%= entityInstance %>DTO.getId())) { return false; }
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "<%= entityClass %>DTO{" +
-            "id=" + id +<% for (idx in fields) {
-                const fieldName = fields[idx].fieldName; %>
-            ", <%= fieldName %>='" + <%= fieldName %> + "'" +<% } %>
+            "id=" + getId() +<%_ for (idx in fields) {
+                const fieldName = fields[idx].fieldName;
+                const fieldType = fields[idx].fieldType;
+                const fieldNameCapitalized = fieldName.charAt(0).toUpperCase() + fieldName.slice(1) _%>
+            ", <%= fieldName %>='" + <% if (fieldType.toLowerCase() == 'boolean') { %>is<% } else { %>get<%_ } _%><%= fieldNameCapitalized %>() + "'" +<% } %>
             '}';
     }
 }
