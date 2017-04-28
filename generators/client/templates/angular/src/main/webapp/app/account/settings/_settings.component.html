@@ -70,7 +70,7 @@
                 <div class="form-group">
                     <label class="form-control-label" for="email" jhiTranslate="global.form.email">Email</label>
                     <input type="email" class="form-control" id="email" name="email" placeholder="{{'global.form.email.placeholder' | translate}}"
-                           [(ngModel)]="settingsAccount.email" minlength=5 maxlength=100 #emailInput="ngModel" required>
+                           [(ngModel)]="settingsAccount.email" minlength="5" maxlength="100" #emailInput="ngModel" required>
                     <div *ngIf="emailInput.dirty && emailInput.invalid">
                         <small class="form-text text-danger"
                            *ngIf="emailInput.errors.required" jhiTranslate="global.messages.validate.email.required">
