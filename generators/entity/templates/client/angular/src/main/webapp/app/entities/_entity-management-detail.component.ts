@@ -39,7 +39,7 @@ import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service
 export class <%= entityAngularName %>DetailComponent implements OnInit, OnDestroy {
 
     <%= entityInstance %>: <%= entityAngularName %>;
-    private subscription: any;
+    private subscription: Subscription;
     private eventSubscriber: Subscription;
 
     constructor(
