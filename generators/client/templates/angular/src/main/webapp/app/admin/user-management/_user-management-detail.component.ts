@@ -18,6 +18,7 @@
 -%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Rx';
 import { JhiLanguageService } from 'ng-jhipster';
 
 import { User, UserService } from '../../shared';
@@ -29,7 +30,7 @@ import { User, UserService } from '../../shared';
 export class UserMgmtDetailComponent implements OnInit, OnDestroy {
 
     user: User;
-    private subscription: any;
+    private subscription: Subscription;
 
     constructor(
         private jhiLanguageService: JhiLanguageService,
