@@ -49,9 +49,10 @@ import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 <%_ if (hibernateCache == 'ehcache') { _%>
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
 <%_ } _%>
-<%_ if ((hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast' || applicationType == 'gateway') && serviceDiscoveryType) { _%>
+<%_ if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast' || applicationType == 'gateway') { _%>
+<%_ if (serviceDiscoveryType) { _%>
 import org.springframework.boot.autoconfigure.web.ServerProperties;
-<%_ } _%><%_ if (hibernateCache == 'hazelcast' || hibernateCache == 'no') { _%>
+<%_ } _%>
 import org.springframework.cache.CacheManager;
 <%_ } _%>
 import org.springframework.cache.annotation.EnableCaching;
