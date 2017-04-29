@@ -49,18 +49,11 @@ import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 <%_ if (hibernateCache == 'ehcache') { _%>
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
 <%_ } _%>
-<<<<<<< HEAD
-<%_ if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast' || applicationType == 'gateway') { _%>
-<%_ if (serviceDiscoveryType) { _%>
-import org.springframework.boot.autoconfigure.web.ServerProperties;
-<%_ } _%>
-=======
 <%_ if ((hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') && serviceDiscoveryType) { _%>
     <%_ if (serviceDiscoveryType) { _%>
 import org.springframework.boot.autoconfigure.web.ServerProperties;
     <%_ } _%>
 
->>>>>>> 7a7dab8b5... Fix import error, and force the use of Hazelcast on gateways
 import org.springframework.cache.CacheManager;
 <%_ } _%>
 import org.springframework.cache.annotation.EnableCaching;
