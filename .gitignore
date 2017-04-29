@@ -9,3 +9,4 @@ test/temp/
 *debug.log*
 .vscode
 yarn.lock
+.DS_Store
