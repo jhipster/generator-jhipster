@@ -345,7 +345,7 @@ function askForServerSideOpts() {
             default: 0
         },
         {
-            when: response => response.databaseType === 'sql',
+            when: response => (response.databaseType === 'sql' && applicationType !== 'gateway'),
             type: 'list',
             name: 'hibernateCache',
             message: response => this.getNumberedQuestion('Do you want to use Hibernate 2nd level cache?', response.databaseType === 'sql'),
@@ -363,7 +363,7 @@ function askForServerSideOpts() {
                     name: 'No'
                 }
             ],
-            default: (applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') ? 1 : 0
+            default: (applicationType === 'microservice' || applicationType === 'uaa') ? 1 : 0
         },
         {
             type: 'list',
@@ -429,6 +429,10 @@ function askForServerSideOpts() {
             this.devDatabaseType = 'cassandra';
             this.prodDatabaseType = 'cassandra';
             this.hibernateCache = 'no';
+        }
+        // Hazelcast is mandatory for Gateways, as it is used for rate limiting
+        if (this.applicationType === 'gateway') {
+            this.hibernateCache = 'hazelcast';
         }
         done();
     });
