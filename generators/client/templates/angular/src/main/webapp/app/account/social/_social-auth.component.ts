@@ -19,7 +19,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { JhiLanguageService } from 'ng-jhipster';
 import { AuthService, LoginService } from '../../shared';
 import { CookieService } from 'angular2-cookie/core';
 
@@ -30,13 +29,11 @@ import { CookieService } from 'angular2-cookie/core';
 export class SocialAuthComponent implements OnInit {
 
     constructor(
-        private jhiLanguageService: JhiLanguageService,
         private Auth: AuthService,
         private loginService: LoginService,
         private cookieService: CookieService,
         private router: Router
     ) {
-        this.jhiLanguageService.setLocations(['social']);
     }
 
     ngOnInit() {
