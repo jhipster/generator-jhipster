@@ -30,8 +30,8 @@ module.exports = OpenShiftGenerator.extend({
 
     initializing: {
         sayHello() {
-            this.log(chalk.white(`${chalk.bold('⭕')} [BETA] Welcome to the JHipster OpenShift Generator ${chalk.bold('⭕')}`));
-            this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
+            this.log(chalk.white(`${chalk.bold('⭕')} [*BETA*] Welcome to the JHipster OpenShift Generator ${chalk.bold('⭕')}`));
+            this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())} or in the root directory path that you select in the subsequent step`));
         },
 
         checkDocker() {
@@ -234,10 +234,8 @@ module.exports = OpenShiftGenerator.extend({
         this.log('OR');
         if (this.gatewayNb >= 1 || this.microserviceNb >= 1) {
             this.log(`  ${chalk.cyan(`oc apply -f ${this.directoryPath}/ocp/registry`)}`);
-            // this.log(`  ${chalk.cyan('cat ocp/registry/* | oc process -f - | oc create -f -')}`);
             for (let i = 0; i < this.appsFolders.length; i++) {
                 this.log(`  ${chalk.cyan(`oc apply -f ${this.directoryPath}/ocp/${this.appConfigs[i].baseName}`)}`);
-                // this.log(`  ${chalk.cyan(`cat ocp/${this.appConfigs[i].baseName}/* | oc process -f - | oc create -f -`)}`);
             }
             this.log('and then install the apps from OpenShift console by choosing the template created in the namespace. ');
         }

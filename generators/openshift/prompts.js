@@ -27,10 +27,23 @@ function askForOpenShiftNamespace() {
 function askForStorageType() {
     const done = this.async();
 
+    const storageEnabledApps = [];
+    this.appConfigs.forEach((appConfig, index) => {
+        if (appConfig.prodDatabaseType !== 'no') {
+        storageEnabledApps.push({ baseName: appConfig.baseName, prodDatabaseType: appConfig.prodDatabaseType });
+        }
+    });
+
+    if (storageEnabledApps.length === 0) {
+        done();
+        return;
+    }
+
+    // prompt this only when prodDatabaseType != 'no' for any of the chosen apps
     const prompts = [{
         type: 'list',
         name: 'storageType',
-        message: 'Which *type* of database storage would you like to use, if the app has storage on?',
+        message: 'Which *type* of database storage would you like to use?',
         choices: [
             {
                 value: 'persistent',
