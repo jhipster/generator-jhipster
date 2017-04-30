@@ -49,7 +49,7 @@ import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 <%_ if (hibernateCache == 'ehcache') { _%>
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
 <%_ } _%>
-<%_ if ((hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') && serviceDiscoveryType) { _%>
+<%_ if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { _%>
     <%_ if (serviceDiscoveryType) { _%>
 import org.springframework.boot.autoconfigure.web.ServerProperties;
     <%_ } _%>
