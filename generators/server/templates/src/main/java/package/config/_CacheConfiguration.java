@@ -50,14 +50,14 @@ import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
 <%_ } _%>
 <%_ if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { _%>
-    <%_ if (serviceDiscoveryType) { _%>
+    <%_ if (serviceDiscoveryType === 'eureka') { _%>
 import org.springframework.boot.autoconfigure.web.ServerProperties;
     <%_ } _%>
 
 import org.springframework.cache.CacheManager;
 <%_ } _%>
 import org.springframework.cache.annotation.EnableCaching;
-<%_ if (serviceDiscoveryType) { _%>
+<%_ if (serviceDiscoveryType === 'eureka') { _%>
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.serviceregistry.Registration;
@@ -117,7 +117,7 @@ public class CacheConfiguration {
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
 
     private final Environment env;
-        <%_ if (serviceDiscoveryType) { _%>
+        <%_ if (serviceDiscoveryType === 'eureka') { _%>
 
     private final DiscoveryClient discoveryClient;
 
@@ -126,9 +126,9 @@ public class CacheConfiguration {
     private final ServerProperties serverProperties;
         <%_ } _%>
 
-    public CacheConfiguration(<% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>Environment env<% if (serviceDiscoveryType) { %>, DiscoveryClient discoveryClient, Registration registration, ServerProperties serverProperties<% } } %>) {
+    public CacheConfiguration(<% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>Environment env<% if (serviceDiscoveryType === 'eureka') { %>, DiscoveryClient discoveryClient, Registration registration, ServerProperties serverProperties<% } } %>) {
         this.env = env;
-        <%_ if (serviceDiscoveryType) { _%>
+        <%_ if (serviceDiscoveryType === 'eureka') { _%>
         this.discoveryClient = discoveryClient;
         this.registration = registration;
         this.serverProperties = serverProperties;
@@ -160,7 +160,7 @@ public class CacheConfiguration {
 
         Config config = new Config();
         config.setInstanceName("<%=baseName%>");
-        <%_ if (serviceDiscoveryType) { _%>
+        <%_ if (serviceDiscoveryType === 'eureka') { _%>
         // The serviceId is by default the application's name, see Spring Boot's eureka.instance.appname property
         String serviceId = registration.getServiceId();
         log.debug("Configuring Hazelcast clustering for instanceId: {}", serviceId);
