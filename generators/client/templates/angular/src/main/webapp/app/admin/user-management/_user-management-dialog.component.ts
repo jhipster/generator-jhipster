@@ -48,7 +48,10 @@ export class UserMgmtDialogComponent implements OnInit {
 
     ngOnInit() {
         this.isSaving = false;
-        this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
+        this.authorities = [];
+        this.userService.authorities().subscribe((authorities) => {
+            this.authorities = authorities;
+        });
         <%_ if (enableTranslation) { _%>
         this.languageHelper.getAll().then((languages) => {
             this.languages = languages;

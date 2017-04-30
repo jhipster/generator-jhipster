@@ -46,8 +46,8 @@ import org.springframework.transaction.annotation.Transactional;<% } %>
 import java.time.LocalDate;
 <%_ } _%>
 import java.time.ZonedDateTime;
-import java.util.*;<% if (databaseType == 'cassandra') { %>
-import java.util.stream.Collectors;<% } %>
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Service class for managing users.
@@ -402,5 +402,12 @@ public class UserService {
             userRepository.delete(user);<% if (searchEngine == 'elasticsearch') { %>
             userSearchRepository.delete(user);<% } %>
         }
+    }
+
+    /**
+     * @return a list of all the authorities
+     */
+    public List<String> getAuthorities() {
+        return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
     }<% } %>
 }
