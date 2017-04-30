@@ -20,24 +20,24 @@
 # Use this script to run oc commands to create resources in the selected namespace. Files are ordered
 # in proper order. 'oc process' processes the template as resources which is again piped to
 # 'oc apply' to create those resources in OpenShift namespace
-oc process -f registry/config-scc.yml | oc apply -f -
+oc process -f ocp/registry/config-scc.yml | oc apply -f -
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
-oc process -f registry/application-configmap.yml | oc apply -f -
-oc process -f registry/jhipster-registry.yml | oc apply -f -
+oc process -f ocp/registry/application-configmap.yml | oc apply -f -
+oc process -f ocp/registry/jhipster-registry.yml | oc apply -f -
 <%_ } _%> <%_ if (serviceDiscoveryType === 'consul') {  _%>
-oc process -f registry/application-configmap.yml | oc apply -f -
-oc process -f registry/consul.yml | oc apply -f -
+oc process -f ocp/registry/application-configmap.yml | oc apply -f -
+oc process -f ocp/registry/consul.yml | oc apply -f -
 <%_ } _%> <%_ for (var i = 0; i < appConfigs.length; i++) {
 const appName = appConfigs[i].baseName.toLowerCase();
 app = appConfigs[i];
 if (app.prodDatabaseType !== 'no') { _%>
-oc process -f <%- appName %>/<%- appName %>-<%- app.prodDatabaseType %>.yml | oc apply -f -
+oc process -f ocp/<%- appName %>/<%- appName %>-<%- app.prodDatabaseType %>.yml | oc apply -f -
 <%_ } _%> <%_ if (app.searchEngine === 'elasticsearch') { _%>
-oc process -f <%- appName %>/<%- appName %>-elasticsearch.yml | oc apply -f -
+oc process -f ocp/<%- appName %>/<%- appName %>-elasticsearch.yml | oc apply -f -
 <%_ } _%> <%_ if (app.messageBroker === 'kafka') { _%>
-oc process -f <%- appName %>/<%- appName %>-kafka.yml | oc apply -f -
+oc process -f ocp/<%- appName %>/<%- appName %>-kafka.yml | oc apply -f -
 <%_ } _%>
-oc process -f <%- appName %>/<%- appName %>-deployment.yml | oc apply -f -
+oc process -f ocp/<%- appName %>/<%- appName %>-deployment.yml | oc apply -f -
 <%_ } _%>
 
 
