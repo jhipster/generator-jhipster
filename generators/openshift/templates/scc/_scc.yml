@@ -16,6 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+# Security Context Constraint template.
+#
+# This defines customized scc and service account to run some of the docker images wherever the 'default' service account privileges are not sufficient.
+#
 apiVersion: v1
 kind: Template
 metadata:

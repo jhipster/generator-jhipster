@@ -16,9 +16,16 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+# DB template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the PostgresDB service. This template can even be
+# saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls note wherever
+# displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
 # The default image will not allow you to run with persistent storage as some of the runAs capabilities need to be modified in the
 # base image. However if you replace the base image with Red Hat's supported image then you would be able to run with
 # persistent storage. This will be made to be available running on persistent storage with the existing image in near future
+#
 apiVersion: v1
 kind: Template
 metadata:

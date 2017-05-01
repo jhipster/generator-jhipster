@@ -16,6 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+# ConfigMap template.
+#
+# This is centralized/externalized configuration service from OpenShift. Pls note wherever displayName says
+# *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
 apiVersion: v1
 kind: Template
 metadata:

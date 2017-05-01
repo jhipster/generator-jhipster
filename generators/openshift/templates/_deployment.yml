@@ -16,6 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+#
+# Application template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the jHipster application
+# service. This template can even be saved in OpenShift namespace as well so that have the flexibility to do any project specific
+# customizations. Pls note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be
+# referenced in other places.
+#
 apiVersion: v1
 kind: Template
 metadata:

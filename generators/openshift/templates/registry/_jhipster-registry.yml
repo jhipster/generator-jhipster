@@ -18,9 +18,12 @@
 -%>
 # JHipster Registry HA cluster
 #
-# As this is based on a StatefulSet, it will only work on OCP >= 1.5. Please note StatefulSet is yet not a production ready service.
+# As this is based on a StatefulSet, it will only work on OCP >= 1.5/3.5. Please note StatefulSet is yet not a production ready service.
 # It is 'BETA' in Kubernetes and 'Technology Preview' in OpenShift 3.5
 #
+# Registry template. This defines all the configurable parameters and other objects that are needed to run the Eureka service. This
+# template can even be saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls
+# note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
 #
 apiVersion: v1
 kind: Template
