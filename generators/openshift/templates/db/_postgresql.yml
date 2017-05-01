@@ -74,7 +74,6 @@ parameters:
     description: Name of the service account
     required: true
     displayName: "*** PLEASE DO NOT CHANGE THIS ***"
-    readOnly: true
   -
     name: VOLUME_CAPACITY
     displayName: Volume Capacity

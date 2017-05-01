@@ -35,6 +35,12 @@ function writeFiles() {
             }
         },
 
+        writeElkFiles() {
+            if (this.monitoring !== 'elk') return;
+
+            this.template('monitoring/_jhipster-monitoring.yml', `${this.directoryPath}/ocp/monitoring/jhipster-monitoring.yml`);
+        },
+
         writeConfigRunFile(){
             this.template('_apply.sh', `${this.directoryPath}/ocp/ocp-apply.sh`);
         }

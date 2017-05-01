@@ -27,6 +27,8 @@ oc process -f ocp/registry/jhipster-registry.yml | oc apply -f -
 <%_ } _%> <%_ if (serviceDiscoveryType === 'consul') {  _%>
 oc process -f ocp/registry/application-configmap.yml | oc apply -f -
 oc process -f ocp/registry/consul.yml | oc apply -f -
+<%_ } _%> <%_ if (monitoring === 'elk') { _%>
+oc process -f ocp/monitoring/jhipster-monitoring.yml | oc apply -f -
 <%_ } _%> <%_ for (var i = 0; i < appConfigs.length; i++) {
 const appName = appConfigs[i].baseName.toLowerCase();
 app = appConfigs[i];

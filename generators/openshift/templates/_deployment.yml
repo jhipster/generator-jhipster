@@ -55,6 +55,20 @@ parameters:
     description: Port of the application
     required: true
     displayName: Application Port
+<%_ if (app.monitoring === 'elk') { _%>
+  -
+    name: JHIPSTER_LOGSTASH
+    value: jhipster-logstash
+    description: Host name of the Logstash service
+    required: true
+    displayName: "*** PLEASE DO NOT CHANGE THIS ***"
+  -
+    name: JHIPSTER_ZIPKIN
+    value: http://jhipster-zipkin
+    description: Host name of the Zipkin service
+    required: true
+    displayName: "*** PLEASE DO NOT CHANGE THIS ***"
+<%_ } _%>
 objects:
   -
     apiVersion: v1
@@ -161,6 +175,18 @@ objects:
               value: ${APPLICATION_NAME}-kafka
             - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES
               value: ${APPLICATION_NAME}-zookeeper
+            <%_ } _%>
+            <%_ if (app.monitoring === 'elk') { _%>
+            - name: JHIPSTER_METRICS_LOGS_ENABLED
+              value: "true"
+            - name: JHIPSTER_LOGGING_LOGSTASH_ENABLED
+              value: "true"
+            - name: JHIPSTER_LOGGING_LOGSTASH_HOST
+              value: ${JHIPSTER_LOGSTASH}
+            - name: SPRING_ZIPKIN_ENABLED
+              value: "true"
+            - name: SPRING_ZIPKIN_BASE_URL
+              value: ${JHIPSTER_ZIPKIN}
             <%_ } _%>
             ports:
             - name: http

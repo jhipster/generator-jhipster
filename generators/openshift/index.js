@@ -95,6 +95,10 @@ module.exports = OpenShiftGenerator.extend({
             this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
             this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
             this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
+            this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
+            this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
+            this.DOCKER_JHIPSTER_ZIPKIN = constants.DOCKER_JHIPSTER_ZIPKIN;
+            this.DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE;
 
             if (this.defaultAppsFolders !== undefined) {
                 this.log('\nFound .yo-rc.json config file...');
@@ -129,6 +133,7 @@ module.exports = OpenShiftGenerator.extend({
         askForApplicationType: prompts.askForApplicationType,
         askForPath: prompts.askForPath,
         askForApps: prompts.askForApps,
+        askForMonitoring: prompts.askForMonitoring,
         // cluster for mongodb: it can be done later
         // askForClustersMode: prompts.askForClustersMode,
         askForServiceDiscovery: prompts.askForServiceDiscovery,
@@ -234,6 +239,9 @@ module.exports = OpenShiftGenerator.extend({
         this.log('OR');
         if (this.gatewayNb >= 1 || this.microserviceNb >= 1) {
             this.log(`  ${chalk.cyan(`oc apply -f ${this.directoryPath}/ocp/registry`)}`);
+            if(this.monitoring === 'elk') {
+                this.log(`  ${chalk.cyan(`oc apply -f ${this.directoryPath}/ocp/monitoring`)}`);
+            }
             for (let i = 0; i < this.appsFolders.length; i++) {
                 this.log(`  ${chalk.cyan(`oc apply -f ${this.directoryPath}/ocp/${this.appConfigs[i].baseName}`)}`);
             }
