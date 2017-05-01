@@ -234,10 +234,10 @@ module.exports = OpenShiftGenerator.extend({
             this.log(`  ${chalk.cyan(`${this.dockerPushCommand} ${targetImageName}`)}`);
         }
 
-        this.log('\nYou can deploy all your apps by either running: ');
+        this.log('\nYou can deploy all your apps by running: ');
         this.log(`  ${chalk.cyan(`${this.directoryPath}/ocp/ocp-apply.sh`)}`);
-        this.log('OR');
         if (this.gatewayNb >= 1 || this.microserviceNb >= 1) {
+            this.log('OR');
             this.log(`  ${chalk.cyan(`oc apply -f ${this.directoryPath}/ocp/registry`)}`);
             if(this.monitoring === 'elk') {
                 this.log(`  ${chalk.cyan(`oc apply -f ${this.directoryPath}/ocp/monitoring`)}`);
