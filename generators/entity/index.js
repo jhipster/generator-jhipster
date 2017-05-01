@@ -678,13 +678,19 @@ module.exports = EntityGenerator.extend({
 
     install() {
         const injectJsFilesToIndex = () => {
+            const done = this.async();
             this.log(`\n${chalk.bold.green('Running `gulp inject` to add JavaScript to index.html\n')}`);
-            this.spawnCommand('gulp', ['inject:app']);
+            this.spawnCommand('gulp', ['inject:app']).on('close', () => {
+                done();
+            });
         };
         // rebuild client for Angular
         const rebuildClient = () => {
+            const done = this.async();
             this.log(`\n${chalk.bold.green('Running `webpack:build:dev` to update client app\n')}`);
-            this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build:dev']);
+            this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build:dev']).on('close', () => {
+                done();
+            });
         };
         if (!this.options['skip-install'] && !this.skipClient) {
             if (this.clientFramework === 'angular1') {
