@@ -41,7 +41,7 @@ function writeFiles() {
             this.template('monitoring/_jhipster-monitoring.yml', `${this.directoryPath}/ocp/monitoring/jhipster-monitoring.yml`);
         },
 
-        writeConfigRunFile(){
+        writeConfigRunFile() {
             this.template('_apply.sh', `${this.directoryPath}/ocp/ocp-apply.sh`);
         }
 

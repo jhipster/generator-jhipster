@@ -27,11 +27,10 @@ function askForOpenShiftNamespace() {
 function askForStorageType() {
     const done = this.async();
 
-    var storageEnabled = false;
+    let storageEnabled = false;
     this.appConfigs.forEach((appConfig, index) => {
         if (appConfig.prodDatabaseType !== 'no' || appConfig.searchEngine === 'elasticsearch') {
             storageEnabled = true;
-            return;
         }
     });
 

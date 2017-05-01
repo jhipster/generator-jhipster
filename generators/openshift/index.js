@@ -239,7 +239,7 @@ module.exports = OpenShiftGenerator.extend({
         if (this.gatewayNb >= 1 || this.microserviceNb >= 1) {
             this.log('OR');
             this.log(`  ${chalk.cyan(`oc apply -f ${this.directoryPath}/ocp/registry`)}`);
-            if(this.monitoring === 'elk') {
+            if (this.monitoring === 'elk') {
                 this.log(`  ${chalk.cyan(`oc apply -f ${this.directoryPath}/ocp/monitoring`)}`);
             }
             for (let i = 0; i < this.appsFolders.length; i++) {
