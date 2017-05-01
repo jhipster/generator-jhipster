@@ -28,9 +28,10 @@ function askForStorageType() {
     const done = this.async();
 
     let storageEnabled = false;
-    this.appConfigs.forEach((appConfig, index) => {
+    this.appConfigs.some((appConfig, index) => {
         if (appConfig.prodDatabaseType !== 'no' || appConfig.searchEngine === 'elasticsearch') {
             storageEnabled = true;
+            return storageEnabled;
         }
     });
 
