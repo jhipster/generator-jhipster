@@ -50,6 +50,22 @@ public final class SecurityUtils {
         }
         return userName;
     }
+    <%_ if (authenticationType === 'jwt') { _%>
+
+    /**
+     * Get the JWT of the current user.
+     *
+     * @return the JWT of the current user
+     */
+    public static String getCurrentUserJWT() {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+        if (authentication != null && authentication.getCredentials() instanceof String) {
+            return (String) authentication.getCredentials();
+        }
+        return null;
+    }
+    <%_ } _%>
 
     /**
      * Check if a user is authenticated.
