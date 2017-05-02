@@ -23,6 +23,7 @@ import { <%=jhiPrefixCapitalized%>TrackerService } from './../shared/tracker/tra
 <%_ } _%>
 
 import { <%=angular2AppName%>SharedModule } from '../shared';
+/* jhipster-needle-add-admin-module-import - JHipster will add admin modules imports here */
 
 import {
     adminState,
@@ -68,7 +69,8 @@ import {
 @NgModule({
     imports: [
         <%=angular2AppName%>SharedModule,
-        RouterModule.forRoot(adminState, { useHash: true })
+        RouterModule.forRoot(adminState, { useHash: true }),
+        /* jhipster-needle-add-admin-module - JHipster will add admin modules here */
     ],
     declarations: [
         <%_ if (devDatabaseType !== 'cassandra') { _%>
