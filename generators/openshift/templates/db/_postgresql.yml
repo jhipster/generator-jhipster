@@ -22,10 +22,6 @@
 # saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls note wherever
 # displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
 #
-# The default image will not allow you to run with persistent storage as some of the runAs capabilities need to be modified in the
-# base image. However if you replace the base image with Red Hat's supported image then you would be able to run with
-# persistent storage. This will be made to be available running on persistent storage with the existing image in near future
-#
 apiVersion: v1
 kind: Template
 metadata:
@@ -184,7 +180,7 @@ objects:
                 port: 5432
             volumeMounts:
             - name: ${APPLICATION_NAME}-data
-              mountPath: /var/lib/postgresql/
+              mountPath: /var/lib/postgresql/data
             resources:
             imagePullPolicy: IfNotPresent
           serviceAccount: ${SVC_ID}
