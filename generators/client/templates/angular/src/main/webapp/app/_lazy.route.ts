@@ -16,18 +16,16 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { customHttpProvider } from '../blocks/interceptor/http.provider';
+import { Route } from '@angular/router';
 
-/* jhipster-needle-add-entity-module-import - JHipster will add entity modules imports here */
+import { NavbarComponent } from './layouts';
 
-@NgModule({
-    imports: [
-        /* jhipster-needle-add-entity-module - JHipster will add entity modules here */
-    ],
-    declarations: [],
-    entryComponents: [],
-    providers: [customHttpProvider()],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
-})
-export default class <%=angular2AppName%>EntityModule {}
+export const adminRoute: Route = {
+    path: 'admin',
+    loadChildren:'./admin/admin.module'
+};
+
+export const entityRoute: Route = {
+    path: 'entity',
+    loadChildren:'./entities/entity.module'
+};

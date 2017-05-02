@@ -23,6 +23,7 @@ import { <%=jhiPrefixCapitalized%>TrackerService } from './../shared/tracker/tra
 <%_ } _%>
 
 import { <%=angular2AppName%>SharedModule } from '../shared';
+import { customHttpProvider } from '../blocks/interceptor/http.provider';
 
 import {
     adminState,
@@ -68,7 +69,7 @@ import {
 @NgModule({
     imports: [
         <%=angular2AppName%>SharedModule,
-        RouterModule.forRoot(adminState, { useHash: true })
+        RouterModule.forChild(adminState)
     ],
     declarations: [
         <%_ if (devDatabaseType !== 'cassandra') { _%>
@@ -111,6 +112,7 @@ import {
         <%=jhiPrefixCapitalized%>ConfigurationService,
         <%=jhiPrefixCapitalized%>HealthService,
         <%=jhiPrefixCapitalized%>MetricsService,
+        customHttpProvider(),
         <%_ if (applicationType === 'gateway') { _%>
         GatewayRoutesService,
         <%_ } _%>
@@ -126,4 +128,4 @@ import {
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class <%=angular2AppName%>AdminModule {}
+export default class <%=angular2AppName%>AdminModule {}

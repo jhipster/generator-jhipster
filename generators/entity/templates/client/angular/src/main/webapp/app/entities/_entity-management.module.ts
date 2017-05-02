@@ -52,7 +52,7 @@ const ENTITY_STATES = [
               if (rel.otherEntityNameCapitalized === 'User') { _%>
         <%= angular2AppName %>AdminModule,
         <%_ }} _%>
-        RouterModule.forRoot(ENTITY_STATES, { useHash: true })
+        RouterModule.forChild(ENTITY_STATES)
     ],
     declarations: [
         <%= entityAngularName %>Component,
