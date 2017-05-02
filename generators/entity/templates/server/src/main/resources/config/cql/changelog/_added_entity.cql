@@ -31,8 +31,9 @@ CREATE TABLE IF NOT EXISTS <%= entityInstance %> (
     <%= fieldName %> float,<% } else if (fieldType == 'Double') { %>
     <%= fieldName %> double,<% } else if (fieldType == 'BigDecimal') { %>
     <%= fieldName %> decimal,<% } else if (fieldType == 'LocalDate') { %>
-    <%= fieldName %> date,<% } else if (fieldType == 'ZonedDateTime') { %>
-    <%= fieldName %> timestamp,<% } else if (fieldType == 'Boolean') { %>
+    <%= fieldName %> date,<% } else if (fieldType == 'Instant') { %>
+    <%= fieldName %> timestamp,<% } else if (fieldType == 'ZonedDateTime') { %>
+    <%= fieldName %> tuple<timestamp,varchar>,<% } else if (fieldType == 'Boolean') { %>
     <%= fieldName %> boolean,<% } else if (fieldType === 'ByteBuffer') { %>
     <%= fieldName %> blob,<% if (fieldTypeBlobContent !== 'text') { %>
     <%= fieldNameUnderscored %>_content_type text,<% } } } %>

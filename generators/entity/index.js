@@ -436,6 +436,7 @@ module.exports = EntityGenerator.extend({
             this.entityTranslationKey = this.entityInstance;
             this.entityTranslationKeyMenu = _.camelCase(this.entityStateName);
 
+            this.fieldsContainInstant = false;
             this.fieldsContainZonedDateTime = false;
             this.fieldsContainLocalDate = false;
             this.fieldsContainBigDecimal = false;
@@ -456,12 +457,12 @@ module.exports = EntityGenerator.extend({
             this.fields.forEach((field) => {
                 // Migration from JodaTime to Java Time
                 if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
-                    field.fieldType = 'ZonedDateTime';
+                    field.fieldType = 'Instant';
                 }
                 const fieldType = field.fieldType;
 
                 const nonEnumType = _.includes(['String', 'Integer', 'Long', 'Float', 'Double', 'BigDecimal',
-                    'LocalDate', 'ZonedDateTime', 'Boolean', 'byte[]', 'ByteBuffer'], fieldType);
+                    'LocalDate', 'Instant', 'ZonedDateTime', 'Boolean', 'byte[]', 'ByteBuffer'], fieldType);
                 if ((this.databaseType === 'sql' || this.databaseType === 'mongodb') && !nonEnumType) {
                     field.fieldIsEnum = true;
                 } else {
@@ -518,6 +519,8 @@ module.exports = EntityGenerator.extend({
 
                 if (fieldType === 'ZonedDateTime') {
                     this.fieldsContainZonedDateTime = true;
+                } else if (fieldType === 'Instant') {
+                    this.fieldsContainInstant = true;
                 } else if (fieldType === 'LocalDate') {
                     this.fieldsContainLocalDate = true;
                 } else if (fieldType === 'BigDecimal') {
@@ -717,6 +720,7 @@ module.exports = EntityGenerator.extend({
                         fieldsContainNoOwnerOneToOne: this.fieldsContainNoOwnerOneToOne,
                         fieldsContainOwnerOneToOne: this.fieldsContainOwnerOneToOne,
                         fieldsContainOneToMany: this.fieldsContainOneToMany,
+                        fieldsContainInstant: this.fieldsContainInstant,
                         fieldsContainZonedDateTime: this.fieldsContainZonedDateTime,
                         fieldsContainLocalDate: this.fieldsContainLocalDate,
                         fieldsContainBigDecimal: this.fieldsContainBigDecimal,

@@ -52,14 +52,15 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;<% if (databas
 import org.springframework.transaction.annotation.Transactional;<% } %><% if (fieldsContainBlob == true) { %>
 import org.springframework.util.Base64Utils;<% } %>
 <% if (databaseType == 'sql') { %>
-import javax.persistence.EntityManager;<% } %><% if (fieldsContainLocalDate == true) { %>
-import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
-import java.time.Instant;
+import javax.persistence.EntityManager;<% } %><% if (fieldsContainBigDecimal == true) { %>
+import java.math.BigDecimal;<% } %><% if (fieldsContainBlob == true && databaseType === 'cassandra') { %>
+import java.nio.ByteBuffer;<% } %><% if (fieldsContainLocalDate == true) { %>
+import java.time.LocalDate;<% } %><% if (fieldsContainInstant == true || fieldsContainZonedDateTime == true) { %>
+import java.time.Instant;<% } %><% if (fieldsContainZonedDateTime == true) { %>
 import java.time.ZonedDateTime;
 import java.time.ZoneOffset;<% } %><% if (fieldsContainLocalDate == true || fieldsContainZonedDateTime == true) { %>
-import java.time.ZoneId;<% } %><% if (fieldsContainBigDecimal == true) { %>
-import java.math.BigDecimal;<% } %><% if (fieldsContainBlob == true && databaseType === 'cassandra') { %>
-import java.nio.ByteBuffer;<% } %>
+import java.time.ZoneId;<% } %><% if (fieldsContainInstant == true) { %>
+import java.time.temporal.ChronoUnit;<% } %>
 import java.util.List;<% if (databaseType == 'cassandra') { %>
 import java.util.UUID;<% } %>
 <% if (fieldsContainZonedDateTime == true) { %>
@@ -211,6 +212,10 @@ _%>
 
     private static final LocalDate <%=defaultValueName %> = LocalDate.ofEpochDay(0L);
     private static final LocalDate <%=updatedValueName %> = LocalDate.now(ZoneId.systemDefault());
+    <%_ } else if (fieldType == 'Instant') { _%>
+
+    private static final Instant <%=defaultValueName %> = Instant.ofEpochMilli(0L);
+    private static final Instant <%=updatedValueName %> = Instant.now().truncatedTo(ChronoUnit.MILLIS);
     <%_ } else if (fieldType == 'ZonedDateTime') { _%>
 
     private static final ZonedDateTime <%=defaultValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);

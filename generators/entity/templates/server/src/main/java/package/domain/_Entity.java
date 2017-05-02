@@ -37,7 +37,8 @@ import javax.persistence.*;<% } %><% if (validation) { %>
 import javax.validation.constraints.*;<% } %>
 import java.io.Serializable;<% if (fieldsContainBigDecimal == true) { %>
 import java.math.BigDecimal;<% } %><% if (fieldsContainBlob && databaseType === 'cassandra') { %>
-import java.nio.ByteBuffer;<% } %><% if (fieldsContainLocalDate == true) { %>
+import java.nio.ByteBuffer;<% } %><% if (fieldsContainInstant == true) { %>
+import java.time.Instant;<% } %><% if (fieldsContainLocalDate == true) { %>
 import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
 import java.time.ZonedDateTime;<% } %><% if (importSet == true) { %>
 import java.util.HashSet;
@@ -108,7 +109,7 @@ public class <%= entityClass %> implements Serializable {
         if (fieldType == 'byte[]') { _%>
     @Lob
         <%_ }
-        if (fieldType == 'LocalDate' || fieldType == 'ZonedDateTime') { _%>
+        if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fieldType)) { _%>
     @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (required) { %>, nullable = false<% } %>)
         <%_ } else if (fieldType == 'BigDecimal') { _%>
     @Column(name = "<%-fieldNameAsDatabaseColumn %>", precision=10, scale=2<% if (required) { %>, nullable = false<% } %>)

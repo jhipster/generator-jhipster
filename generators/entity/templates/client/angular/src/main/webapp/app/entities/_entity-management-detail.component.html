@@ -37,7 +37,7 @@
                 </a>
                 {{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}
             </div>
-            <%_ } else if (fieldType == 'ZonedDateTime') { _%>
+            <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
             <span>{{<%=entityInstance %>.<%= fieldName %> | date:'medium'}}</span>
             <%_ } else if (fieldType == 'LocalDate') { _%>
             <span>{{<%=entityInstance %>.<%= fieldName %> | date:'mediumDate'}}</span>

@@ -33,7 +33,8 @@ import org.springframework.stereotype.Repository;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
-<% if (fieldsContainLocalDate == true) { %>
+<% if (fieldsContainInstant == true) { %>
+import java.time.Instant;<% } %><% if (fieldsContainLocalDate == true) { %>
 import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
 import java.time.ZonedDateTime;<% } %>
 import java.util.ArrayList;
@@ -98,8 +99,8 @@ public class <%= entityClass %>Repository {
                     if (fields[idx].fieldType == 'Integer') { %>
                 <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getInt("<%= fieldName %>"));<% } else if (fields[idx].fieldType == 'BigDecimal') { %>
                 <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getDecimal("<%= fieldName %>"));<% } else if (fields[idx].fieldType == 'LocalDate') { %>
-                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.get("<%= fieldName %>", LocalDate.class));<% } else if (fields[idx].fieldType == 'ZonedDateTime') { %>
-                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.get("<%= fieldName %>", ZonedDateTime.class));<% } else if (fields[idx].fieldType == 'Boolean') { %>
+                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.get("<%= fieldName %>", LocalDate.class));<% } else if (['Instant', 'ZonedDateTime'].includes(fields[idx].fieldType)) { %>
+                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.get("<%= fieldName %>", <%= fields[idx].fieldType %>.class));<% } else if (fields[idx].fieldType == 'Boolean') { %>
                 <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getBool("<%= fieldName %>"));<% } else if (fields[idx].fieldType == 'Text') { %>
                 <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getString("<%= fieldName %>"));<% } else if (fields[idx].fieldType === 'ByteBuffer') { %>
                 <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getBytes("<%= fieldName %>"));

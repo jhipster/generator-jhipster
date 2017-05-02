@@ -37,7 +37,7 @@
         },
         {
             "fieldName": "lastOperationDate",
-            "fieldType": "ZonedDateTime"
+            "fieldType": "Instant"
         },
         {
             "fieldName": "active",
