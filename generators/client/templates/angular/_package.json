@@ -107,7 +107,7 @@
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "ngc": "ngc -p tsconfig-aot.json",
-    "cleanup": "rimraf target/",
+    "cleanup": "rimraf <%= BUILD_DIR %>{aot,www}",
     <%_ if (protractorTests) { _%>
     "e2e": "ng e2e --proxy-conf proxy.conf.json",
     "postinstall": "webdriver-manager update && node node_modules/phantomjs-prebuilt/install.js && yarn build"

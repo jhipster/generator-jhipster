@@ -26,7 +26,7 @@ for (const idx in fields) {
 _%>
 <%_
 let hasDate = false;
-if (fieldsContainZonedDateTime || fieldsContainLocalDate) {
+if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) {
     hasDate = true;
 }
 _%>

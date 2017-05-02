@@ -72,4 +72,8 @@ function cleanupOldServerFiles(generator, javaDir, testDir) {
         generator.removeFile(`${javaDir}web/filter/CachingHttpHeadersFilter.java`);
         generator.removeFile(`${javaDir}web/filter/package-info.java`);
     }
+    if (generator.isJhipsterVersionLessThan('4.3.0')) {
+        generator.removeFile(`${javaDir}gateway/ratelimiting/RateLimitingRepository.java`);
+        generator.removeFile(`${javaDir}config/cassandra/CustomZonedDateTimeCodec.java`);
+    }
 }

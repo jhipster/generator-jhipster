@@ -177,6 +177,17 @@
             ]
         },
         {
+            "fieldName": "instantEva",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "instanteRequiredEva",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "zonedDateTimeEva",
             "fieldType": "ZonedDateTime"
         },

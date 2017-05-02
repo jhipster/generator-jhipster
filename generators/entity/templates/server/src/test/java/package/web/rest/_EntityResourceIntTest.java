@@ -52,14 +52,15 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;<% if (databas
 import org.springframework.transaction.annotation.Transactional;<% } %><% if (fieldsContainBlob == true) { %>
 import org.springframework.util.Base64Utils;<% } %>
 <% if (databaseType == 'sql') { %>
-import javax.persistence.EntityManager;<% } %><% if (fieldsContainLocalDate == true) { %>
-import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
-import java.time.Instant;
+import javax.persistence.EntityManager;<% } %><% if (fieldsContainBigDecimal == true) { %>
+import java.math.BigDecimal;<% } %><% if (fieldsContainBlob == true && databaseType === 'cassandra') { %>
+import java.nio.ByteBuffer;<% } %><% if (fieldsContainLocalDate == true) { %>
+import java.time.LocalDate;<% } %><% if (fieldsContainInstant == true || fieldsContainZonedDateTime == true) { %>
+import java.time.Instant;<% } %><% if (fieldsContainZonedDateTime == true) { %>
 import java.time.ZonedDateTime;
 import java.time.ZoneOffset;<% } %><% if (fieldsContainLocalDate == true || fieldsContainZonedDateTime == true) { %>
-import java.time.ZoneId;<% } %><% if (fieldsContainBigDecimal == true) { %>
-import java.math.BigDecimal;<% } %><% if (fieldsContainBlob == true && databaseType === 'cassandra') { %>
-import java.nio.ByteBuffer;<% } %>
+import java.time.ZoneId;<% } %><% if (fieldsContainInstant == true) { %>
+import java.time.temporal.ChronoUnit;<% } %>
 import java.util.List;<% if (databaseType == 'cassandra') { %>
 import java.util.UUID;<% } %>
 <% if (fieldsContainZonedDateTime == true) { %>
@@ -211,6 +212,10 @@ _%>
 
     private static final LocalDate <%=defaultValueName %> = LocalDate.ofEpochDay(0L);
     private static final LocalDate <%=updatedValueName %> = LocalDate.now(ZoneId.systemDefault());
+    <%_ } else if (fieldType == 'Instant') { _%>
+
+    private static final Instant <%=defaultValueName %> = Instant.ofEpochMilli(0L);
+    private static final Instant <%=updatedValueName %> = Instant.now().truncatedTo(ChronoUnit.MILLIS);
     <%_ } else if (fieldType == 'ZonedDateTime') { _%>
 
     private static final ZonedDateTime <%=defaultValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
@@ -338,7 +343,7 @@ _%>
 
         // Create the <%= entityClass %>
         <%_ if (dto == 'mapstruct') { _%>
-        <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.<%= entityInstance %>To<%= entityClass %>DTO(<%= entityInstance %>);
+        <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.toDto(<%= entityInstance %>);
         <%_ } _%>
         rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -374,7 +379,7 @@ _%>
         // Create the <%= entityClass %> with an existing ID
         <%= entityInstance %>.setId(<% if (databaseType == 'sql') { %>1L<% } else if (databaseType == 'mongodb') { %>"existing_id"<% } else if (databaseType == 'cassandra') { %>UUID.randomUUID()<% } %>);
         <%_ if (dto == 'mapstruct') { _%>
-        <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.<%= entityInstance %>To<%= entityClass %>DTO(<%= entityInstance %>);
+        <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.toDto(<%= entityInstance %>);
         <%_ } _%>
 
         // An entity with an existing ID cannot be created, so this API call must fail
@@ -401,7 +406,7 @@ _%>
         <%= entityInstance %>.set<%= fields[idx].fieldInJavaBeanMethod %>(null);
 
         // Create the <%= entityClass %>, which fails.<% if (dto == 'mapstruct') { %>
-        <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.<%= entityInstance %>To<%= entityClass %>DTO(<%= entityInstance %>);<% } %>
+        <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.toDto(<%= entityInstance %>);<% } %>
 
         rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -486,7 +491,7 @@ _%>
             <%_ } _%>
         <%_ } _%>
         <%_ if (dto == 'mapstruct') { _%>
-        <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.<%= entityInstance %>To<%= entityClass %>DTO(updated<%= entityClass %>);
+        <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.toDto(updated<%= entityClass %>);
         <%_ } _%>
 
         rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")
@@ -521,7 +526,7 @@ _%>
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll().size();
 
         // Create the <%= entityClass %><% if (dto == 'mapstruct') { %>
-        <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.<%= entityInstance %>To<%= entityClass %>DTO(<%= entityInstance %>);<% } %>
+        <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.toDto(<%= entityInstance %>);<% } %>
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")

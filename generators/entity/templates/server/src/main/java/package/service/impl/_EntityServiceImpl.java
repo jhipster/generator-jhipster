@@ -22,9 +22,9 @@ package <%=packageName%>.service<% if (service == 'serviceImpl') { %>.impl<% } %
     const instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
     const instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
     const mapper = entityInstance  + 'Mapper';
-    const dtoToEntity = mapper + '.'+ entityInstance +'DTOTo' + entityClass;
-    const entityToDto = mapper + '.'+ entityInstance +'To' + entityClass + 'DTO';
-    const entityToDtoReference = mapper + '::'+ entityInstance +'To' + entityClass + 'DTO';
+    const dtoToEntity = mapper + '.'+ 'toEntity';
+    const entityToDto = mapper + '.'+ 'toDto';
+    const entityToDtoReference = mapper + '::'+ 'toDto';
     const repository = entityInstance  + 'Repository';
     const searchRepository = entityInstance  + 'SearchRepository';
     if (service == 'serviceImpl') { %>

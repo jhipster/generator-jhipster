@@ -177,6 +177,17 @@
             ]
         },
         {
+            "fieldName": "zonedDateTimeField",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "zonedDateTimeRequiredField",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "booleanField",
             "fieldType": "Boolean"
         },

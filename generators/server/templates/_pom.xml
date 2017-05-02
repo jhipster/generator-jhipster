@@ -53,8 +53,8 @@
         <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx256m</argLine>
         <assertj.version>3.6.2</assertj.version>
         <awaitility.version>2.0.0</awaitility.version>
-        <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
-        <commons-codec.version>1.10</commons-codec.version>
+        <%_ if (applicationType === 'gateway') { _%>
+        <bucket4j.version>2.0.0</bucket4j.version>
         <%_ } _%>
         <commons-io.version>2.5</commons-io.version>
         <commons-lang.version>3.5</commons-lang.version>
@@ -83,16 +83,13 @@
         <%_ } _%>
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
         <java.version>1.<%= javaVersion %></java.version>
-        <%_ if (databaseType === 'sql') { _%>
-        <javassist.version>3.21.0-GA</javassist.version>
-        <%_ } _%>
-        <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast') { _%>
+        <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || applicationType === 'gateway') { _%>
         <jcache.version>1.0.0</jcache.version>
         <%_ } _%>
         <%_ if (gatlingTests) { _%>
         <jzlib.version>1.1.3</jzlib.version>
         <%_ } _%>
-        <jhipster.server.version>1.1.2</jhipster.server.version>
+        <jhipster.server.version>1.1.3</jhipster.server.version>
         <%_ if (authenticationType === 'jwt') { _%>
         <jjwt.version>0.7.0</jjwt.version>
         <%_ } _%>
@@ -104,7 +101,7 @@
         <liquibase-slf4j.version>2.0.0</liquibase-slf4j.version>
         <%_ } _%>
         <logstash-logback-encoder.version>4.9</logstash-logback-encoder.version>
-        <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
+        <%_ if (databaseType === 'cassandra') { _%>
         <lz4.version>1.3.0</lz4.version>
         <%_ } _%>
         <m2e.apt.activation>jdt_apt</m2e.apt.activation>
@@ -187,7 +184,6 @@
         <spring-social-google.version>1.0.0.RELEASE</spring-social-google.version>
         <%_ } _%>
         <springfox.version>2.6.1</springfox.version>
-        <undertow.version>1.4.10.Final</undertow.version>
         <%_ if (databaseType === 'sql') { _%>
         <validation-api.version>1.1.0.Final</validation-api.version>
         <%_ } _%>
@@ -287,7 +283,7 @@
             <scope>test</scope>
             <%_ } _%>
         </dependency>
-        <%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
+        <%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
@@ -300,7 +296,7 @@
             <version>${hazelcast-hibernate52.version}</version>
         </dependency>
         <%_ } _%>
-        <%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
+        <%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-spring</artifactId>
@@ -359,11 +355,10 @@
             <artifactId>HikariCP</artifactId>
         </dependency>
         <%_ } %>
-        <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
+        <%_ if (databaseType === 'cassandra') { _%>
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>${commons-codec.version}</version>
         </dependency>
         <%_ } _%>
         <dependency>
@@ -396,7 +391,7 @@
             <version>${jzlib.version}</version>
         </dependency>
         <%_ } _%>
-        <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast') { _%>
+        <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || applicationType === 'gateway') { _%>
         <dependency>
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>
@@ -414,7 +409,7 @@
             <artifactId>mariadb-java-client</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
+        <%_ if (databaseType === 'cassandra') { _%>
         <dependency>
             <groupId>net.jpountz.lz4</groupId>
             <artifactId>lz4</artifactId>
@@ -640,7 +635,7 @@
             <artifactId>spring-security-jwt</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
+        <%_ if (databaseType === 'cassandra') { _%>
         <!-- DataStax driver -->
         <dependency>
             <groupId>com.datastax.cassandra</groupId>
@@ -661,6 +656,16 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-zuul</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.vladimir-bukhtoyarov</groupId>
+            <artifactId>bucket4j-core</artifactId>
+            <version>${bucket4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.vladimir-bukhtoyarov</groupId>
+            <artifactId>bucket4j-jcache</artifactId>
+            <version>${bucket4j.version}</version>
         </dependency>
         <%_ } _%>
         <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>

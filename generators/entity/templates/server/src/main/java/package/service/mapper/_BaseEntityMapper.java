@@ -16,16 +16,23 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-FROM <%= DOCKER_JAVA_JRE %>
+package <%=packageName%>.service.mapper;
 
-ENV SPRING_OUTPUT_ANSI_ENABLED=ALWAYS \
-    JHIPSTER_SLEEP=0 \
-    JAVA_OPTS=""
+import java.util.List;
 
-# add directly the war
-ADD *.war /app.war
+/**
+ * Contract for a generic dto to entity mapper.
+ @param <DTO> - DTO type parameter.
+ @param <ENTITY> - Entity type parameter.
+ */
 
-EXPOSE <%= serverPort %><% if (hibernateCache == 'hazelcast') { %> 5701/udp<% } %>
-CMD echo "The application will start in ${JHIPSTER_SLEEP}s..." && \
-    sleep ${JHIPSTER_SLEEP} && \
-    java ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom -jar /app.war
+public interface EntityMapper <DTO, ENTITY> {
+
+    public ENTITY toEntity(DTO dto);
+
+    public DTO toDto(ENTITY entity);
+
+    public List <ENTITY> toEntity(List<DTO> dtoList);
+
+    public List <DTO> toDto(List<ENTITY> entityList);
+}

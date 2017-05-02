@@ -19,7 +19,7 @@
     "fields": [
         {
             "fieldName": "date",
-            "fieldType": "ZonedDateTime",
+            "fieldType": "Instant",
             "fieldValidateRules": [
                 "required"
             ]

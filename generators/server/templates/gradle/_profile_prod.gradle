@@ -51,6 +51,11 @@ task gulpBuildWithOpts(type: GulpTask) {
     args = ["build", "--no-notification"]
 }
     <%_ } else { _%>
+
+task webpack_test(type: <%= clientPackageManager.charAt(0).toUpperCase() + clientPackageManager.slice(1) %>Task, dependsOn: '<%= clientPackageManager %>_install') {
+    args = ["run", "webpack:test"]
+}
+
 task webpack(type: <%= clientPackageManager.charAt(0).toUpperCase() + clientPackageManager.slice(1) %>Task, dependsOn: '<%= clientPackageManager %>_install') {
     args = ["run", "webpack:prod"]
 }
@@ -97,6 +102,7 @@ gulpBuildWithOpts.dependsOn npm_install
 gulpBuildWithOpts.dependsOn bower
 processResources.dependsOn gulpBuildWithOpts
 test.dependsOn gulp_test
+test.dependsOn webpack_test
 bootRun.dependsOn gulp_test
     <%_ } else { _%>
 processResources.dependsOn webpack

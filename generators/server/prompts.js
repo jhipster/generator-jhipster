@@ -52,12 +52,12 @@ function askForServerSideOpts() {
             message: response => this.getNumberedQuestion('Which *type* of authentication would you like to use?', applicationType === 'monolith'),
             choices: [
                 {
-                    value: 'session',
-                    name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)'
-                },
-                {
                     value: 'jwt',
                     name: 'JWT authentication (stateless, with a token)'
+                },
+                {
+                    value: 'session',
+                    name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)'
                 },
                 {
                     value: 'oauth2',
@@ -345,15 +345,11 @@ function askForServerSideOpts() {
             default: 0
         },
         {
-            when: response => response.databaseType === 'sql',
+            when: response => (response.databaseType === 'sql' && applicationType !== 'gateway'),
             type: 'list',
             name: 'hibernateCache',
             message: response => this.getNumberedQuestion('Do you want to use Hibernate 2nd level cache?', response.databaseType === 'sql'),
             choices: [
-                {
-                    value: 'no',
-                    name: 'No'
-                },
                 {
                     value: 'ehcache',
                     name: 'Yes, with ehcache (local cache, for a single node)'
@@ -361,9 +357,13 @@ function askForServerSideOpts() {
                 {
                     value: 'hazelcast',
                     name: 'Yes, with HazelCast (distributed cache, for multiple nodes)'
+                },
+                {
+                    value: 'no',
+                    name: 'No'
                 }
             ],
-            default: (applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') ? 2 : 1
+            default: (applicationType === 'microservice' || applicationType === 'uaa') ? 1 : 0
         },
         {
             type: 'list',
@@ -430,7 +430,10 @@ function askForServerSideOpts() {
             this.prodDatabaseType = 'cassandra';
             this.hibernateCache = 'no';
         }
-
+        // Hazelcast is mandatory for Gateways, as it is used for rate limiting
+        if (this.applicationType === 'gateway') {
+            this.hibernateCache = 'hazelcast';
+        }
         done();
     });
 }

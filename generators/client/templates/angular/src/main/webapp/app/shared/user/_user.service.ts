@@ -60,4 +60,16 @@ export class UserService {
     delete(login: string): Observable<Response> {
         return this.http.delete(`${this.resourceUrl}/${login}`);
     }
+
+    authorities(): Observable<string[]> {
+<%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
+        return this.http.get('api/users/authorities').map((res: Response) => {
+            const json = res.json();
+            return <string[]> json;
+        });
+<%_ } else { _%>
+        return Observable.of(['ROLE_USER', 'ROLE_ADMIN']);
+<%_ } _%>
+    }
+
 }

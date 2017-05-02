@@ -47,7 +47,7 @@ const ngValidators = './ng_validators';
                 fieldInputType = 'number';
             } else if (fieldType == 'LocalDate') {
                 fieldInputType = 'date';
-            } else if (fieldType == 'ZonedDateTime') {
+            } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) {
                 fieldInputType = 'datetime-local';
             } else if (fieldType == 'Boolean') {
                 fieldInputType = 'checkbox';
@@ -97,7 +97,7 @@ const ngValidators = './ng_validators';
                         <button type="button" class="btn btn-default" ng-click="vm.openCalendar('<%=fieldName %>')"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                 </div>
-                <%_ } else if(fieldType == 'ZonedDateTime') { _%>
+                <%_ } else if(['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
                 <div class="input-group">
                     <input id="field_<%= fieldName %>" type="text" class="form-control" name="<%= fieldName %>" datetime-picker="{{dateformat}}" ng-model="vm.<%= entityInstance %>.<%= fieldName %>" is-open="vm.datePickerOpenStatus.<%=fieldName %>"
                     <%- include(ngValidators) %>/>
@@ -177,7 +177,7 @@ const ngValidators = './ng_validators';
                     This field should be a number.
                 </p>
                 <%_ } _%>
-                <%_ if (fieldType == 'ZonedDateTime') { _%>
+                <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
                 <p class="help-block"
                     ng-show="editForm.<%= fieldName %>.$error.ZonedDateTimelocal" data-translate="entity.validation.ZonedDateTimelocal">
                     This field should be a date and time.

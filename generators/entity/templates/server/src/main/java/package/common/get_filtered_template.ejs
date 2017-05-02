@@ -19,7 +19,7 @@
 <%
 const instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
 const mapper = entityInstance  + 'Mapper';
-const entityToDtoReference = mapper + '::'+ entityInstance +'To' + entityClass + 'DTO';
+const entityToDtoReference = mapper + '::' + 'toDto';
 for (const idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { %>
 
     /**

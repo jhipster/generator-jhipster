@@ -164,6 +164,10 @@ module.exports = JhipsterServerGenerator.extend({
             if (this.hibernateCache === undefined) {
                 this.hibernateCache = 'no';
             }
+            // Hazelcast is mandatory for Gateways, as it is used for rate limiting
+            if (this.applicationType === 'gateway') {
+                this.hibernateCache = 'hazelcast';
+            }
             this.clusteredHttpSession = this.config.get('clusteredHttpSession') === 'no' ? false : this.config.get('clusteredHttpSession');
             if (this.hibernateCache === 'ehcache') {
                 this.clusteredHttpSession = false; // cannot use HazelCast clusering AND ehcache

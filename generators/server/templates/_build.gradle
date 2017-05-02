@@ -236,14 +236,14 @@ dependencies {
     compile "com.hazelcast:hazelcast-hibernate52:${hazelcast_hibernate52_version}"
     compile "com.hazelcast:hazelcast-spring"
     <%_ } _%>
-    <%_ if (clusteredHttpSession === 'hazelcast' && hibernateCache != 'hazelcast') { _%>
+    <%_ if ((clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') && hibernateCache != 'hazelcast') { _%>
     compile "com.hazelcast:hazelcast"
     compile "com.hazelcast:hazelcast-spring"
     <%_ } _%>
     <%_ if (clusteredHttpSession === 'hazelcast') { _%>
     compile "com.hazelcast:hazelcast-wm:${hazelcast_wm_version}"
     <%_ } _%>
-    <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast') { _%>
+    <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || applicationType === 'gateway') { _%>
     compile "javax.cache:cache-api"
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
@@ -251,7 +251,7 @@ dependencies {
     compile ("com.zaxxer:HikariCP:${hikaricp_version}")
     <%_ } _%>
     <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
-    compile "commons-codec:commons-codec:${commons_codec_version}"
+    compile "commons-codec:commons-codec"
     <%_ } _%>
     compile "org.apache.commons:commons-lang3:${commons_lang_version}"
     compile "commons-io:commons-io:${commons_io_version}"
@@ -307,6 +307,8 @@ dependencies {
     <%_ } _%>
     <%_ if (applicationType === 'gateway') { _%>
     compile "org.springframework.cloud:spring-cloud-starter-zuul"
+    compile "com.github.vladimir-bukhtoyarov:bucket4j-core:${bucket4j_version}"
+    compile "com.github.vladimir-bukhtoyarov:bucket4j-jcache:${bucket4j_version}"
     <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
     compile "org.springframework.cloud:spring-cloud-starter"

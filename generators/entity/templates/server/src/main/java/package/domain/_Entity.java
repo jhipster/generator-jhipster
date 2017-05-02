@@ -37,7 +37,8 @@ import javax.persistence.*;<% } %><% if (validation) { %>
 import javax.validation.constraints.*;<% } %>
 import java.io.Serializable;<% if (fieldsContainBigDecimal == true) { %>
 import java.math.BigDecimal;<% } %><% if (fieldsContainBlob && databaseType === 'cassandra') { %>
-import java.nio.ByteBuffer;<% } %><% if (fieldsContainLocalDate == true) { %>
+import java.nio.ByteBuffer;<% } %><% if (fieldsContainInstant == true) { %>
+import java.time.Instant;<% } %><% if (fieldsContainLocalDate == true) { %>
 import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
 import java.time.ZonedDateTime;<% } %><% if (importSet == true) { %>
 import java.util.HashSet;
@@ -108,7 +109,7 @@ public class <%= entityClass %> implements Serializable {
         if (fieldType == 'byte[]') { _%>
     @Lob
         <%_ }
-        if (fieldType == 'LocalDate' || fieldType == 'ZonedDateTime') { _%>
+        if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fieldType)) { _%>
     @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (required) { %>, nullable = false<% } %>)
         <%_ } else if (fieldType == 'BigDecimal') { _%>
     @Column(name = "<%-fieldNameAsDatabaseColumn %>", precision=10, scale=2<% if (required) { %>, nullable = false<% } %>)
@@ -222,11 +223,7 @@ public class <%= entityClass %> implements Serializable {
         const fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod; _%>
 
     <%_ if (fieldTypeBlobContent != 'text') { _%>
-        <%_ if (fieldType.toLowerCase() == 'boolean') { _%>
-    public <%= fieldType %> is<%= fieldInJavaBeanMethod %>() {
-        <%_ } else { _%>
-    public <%= fieldType %> get<%= fieldInJavaBeanMethod %>() {
-        <%_ } _%>
+    public <%= fieldType %> <% if (fieldType.toLowerCase() == 'boolean') { %>is<% } else { %>get<%_ } _%><%= fieldInJavaBeanMethod %>() {
     <%_ } else { _%>
     public String get<%= fieldInJavaBeanMethod %>() {
     <%_ } _%>
@@ -348,26 +345,27 @@ public class <%= entityClass %> implements Serializable {
             return false;
         }
         <%= entityClass %> <%= entityInstance %> = (<%= entityClass %>) o;
-        if (<%= entityInstance %>.id == null || id == null) {
+        if (<%= entityInstance %>.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(id, <%= entityInstance %>.id);
+        return Objects.equals(getId(), <%= entityInstance %>.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "<%= entityClass %>{" +
-            "id=" + id +
+            "id=" + getId() +
             <%_ for (idx in fields) {
                 const fieldType = fields[idx].fieldType;
                 const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
-                const fieldName = fields[idx].fieldName; _%>
-            ", <%= fieldName %>='" + <%= fieldName %> + "'" +
+                const fieldName = fields[idx].fieldName; 
+                const fieldNameCapitalized = fieldName.charAt(0).toUpperCase() + fieldName.slice(1) _%>
+            ", <%= fieldName %>='" + <% if (fieldType.toLowerCase() == 'boolean') { %>is<% } else { %>get<%_ } _%><%= fieldNameCapitalized %>() + "'" +
                 <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
             ", <%= fieldName %>ContentType='" + <%= fieldName %>ContentType + "'" +
                 <%_ } _%>

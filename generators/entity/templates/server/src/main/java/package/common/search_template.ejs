@@ -20,8 +20,8 @@
     const instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
     const instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
     const mapper = entityInstance + 'Mapper';
-    const entityToDtoReference = mapper + '::'+ entityInstance +'To' + entityClass + 'DTO';
-    const entityListToDtoListReference = mapper + '.'+ entityInstancePlural +'To' + entityClass + 'DTOs';
+    const entityToDtoReference = mapper + '::' + 'toDto';
+    const entityListToDtoListReference = mapper + '.' + 'toDto';
     if (pagination == 'no') { %>
     public List<<%= instanceType %>> search<%= entityClassPlural %>(@RequestParam String query) {
         log.debug("REST request to search <%= entityClassPlural %> for query {}", query);<%- include('search_stream_template', {viaService: viaService}); -%>

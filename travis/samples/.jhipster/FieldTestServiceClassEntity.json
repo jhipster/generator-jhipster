@@ -177,6 +177,17 @@
             ]
         },
         {
+            "fieldName": "instantBob",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "instanteRequiredBob",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "zonedDateTimeBob",
             "fieldType": "ZonedDateTime"
         },
