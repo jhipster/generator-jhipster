@@ -33,6 +33,7 @@ function askForStorageType() {
             storageEnabled = true;
             return storageEnabled;
         }
+        return false;
     });
 
     if (storageEnabled === false) {
