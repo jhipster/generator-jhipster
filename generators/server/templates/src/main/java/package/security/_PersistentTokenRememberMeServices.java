@@ -17,12 +17,17 @@
  limitations under the License.
 -%>
 package <%=packageName%>.security;
-<% if (databaseType == 'cassandra') { %>
-import com.datastax.driver.core.exceptions.DriverException;<%}%>
+
 import <%=packageName%>.domain.PersistentToken;
 import <%=packageName%>.repository.PersistentTokenRepository;
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.service.util.RandomUtil;
+
+<%_ if (databaseType == 'cassandra') { _%>
+import com.datastax.driver.core.exceptions.DriverException;
+<%_ } _%>
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 
 import io.github.jhipster.config.JHipsterProperties;
 
@@ -37,11 +42,17 @@ import org.springframework.stereotype.Service;<% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<%}%>
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import java.time.LocalDate;<%}%><% if (databaseType == 'cassandra') { %>
-import java.time.temporal.ChronoUnit;<%}%>
-import java.util.Arrays;<% if (databaseType == 'cassandra') { %>
-import java.util.Date;<%}%>
+import javax.servlet.http.HttpServletResponse;
+import java.io.Serializable;
+<%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
+import java.time.LocalDate;
+<%_ } _%>
+<%_ if (databaseType == 'cassandra') { _%>
+import java.time.temporal.ChronoUnit;
+<%_ } _%>
+import java.util.concurrent.TimeUnit;
+import java.util.Arrays;
+import java.util.Date;
 
 /**
  * Custom implementation of Spring Security's RememberMeServices.
@@ -55,6 +66,10 @@ import java.util.Date;<%}%>
  * <li>It stores more information, such as the IP address and the user agent, for audit purposes<li>
  * <li>When a user logs out, only his current session is invalidated, and not all of his sessions</li>
  * </ul>
+ * <p>
+ * Please note that it allows the use of the same token for 5 seconds, and this value stored in a specific
+ * cache during that period. This is to allow concurrent requests from the same user: otherwise, two
+ * requests being sent at the same time could invalidate each other's token.
  * <p>
  * This is inspired by:
  * <ul>
@@ -77,6 +92,12 @@ public class PersistentTokenRememberMeServices extends
 
     private static final int TOKEN_VALIDITY_SECONDS = 60 * 60 * 24 * TOKEN_VALIDITY_DAYS;
 
+    private static final int UPGRADED_TOKEN_VALIDITY_SECONDS = 5;
+
+    private Cache<String, UpgradedRememberMeToken> upgradedTokenCache = CacheBuilder.newBuilder()
+            .expireAfterWrite(UPGRADED_TOKEN_VALIDITY_SECONDS, TimeUnit.SECONDS)
+            .build();
+
     private final PersistentTokenRepository persistentTokenRepository;
 
     private final UserRepository userRepository;
@@ -94,24 +115,37 @@ public class PersistentTokenRememberMeServices extends
     protected UserDetails processAutoLoginCookie(String[] cookieTokens, HttpServletRequest request,
         HttpServletResponse response) {
 
-        PersistentToken token = getPersistentToken(cookieTokens);<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-        String login = token.getUser().getLogin();<%}%><% if (databaseType == 'cassandra') { %>
-        String login = token.getLogin();<%}%>
+        String login = null;
+        UpgradedRememberMeToken upgradedToken = upgradedTokenCache.getIfPresent(cookieTokens[0]);
+        if (upgradedToken != null) {
+            login = upgradedToken.getUserLoginIfValidAndRecentUpgrade(cookieTokens);
+            log.debug("Detected previously upgraded login token for user '{}'", login);
+        }
 
-        // Token also matches, so login is valid. Update the token value, keeping the *same* series number.
-        log.debug("Refreshing persistent login token for user '{}', series '{}'", login, token.getSeries());<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-        token.setTokenDate(LocalDate.now());<%}%><% if (databaseType == 'cassandra') { %>
-        token.setTokenDate(new Date());<%}%>
-        token.setTokenValue(RandomUtil.generateTokenData());
-        token.setIpAddress(request.getRemoteAddr());
-        token.setUserAgent(request.getHeader("User-Agent"));
-        try {
-            <% if (databaseType == 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>persistentTokenRepository.save(token);<% } %>
-            addCookie(token, request, response);<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-        } catch (DataAccessException e) {<% } else { %>
-        } catch (DriverException e) {<% } %>
-            log.error("Failed to update token: ", e);
-            throw new RememberMeAuthenticationException("Autologin failed due to data access problem", e);
+        if (login == null) {
+            PersistentToken token = getPersistentToken(cookieTokens);<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+            login = token.getUser().getLogin();<%}%><% if (databaseType == 'cassandra') { %>
+            login = token.getLogin();<%}%>
+
+            // Token also matches, so login is valid. Update the token value, keeping the *same* series number.
+            log.debug("Refreshing persistent login token for user '{}', series '{}'", login, token.getSeries());<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+            token.setTokenDate(LocalDate.now());<%}%><% if (databaseType == 'cassandra') { %>
+            token.setTokenDate(new Date());<%}%>
+            token.setTokenValue(RandomUtil.generateTokenData());
+            token.setIpAddress(request.getRemoteAddr());
+            token.setUserAgent(request.getHeader("User-Agent"));
+            try {
+                <% if (databaseType == 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>persistentTokenRepository.save(token);<% } %>
+                <%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
+            } catch (DataAccessException e) {
+                <%_ } else { _%>
+            } catch (DriverException e) {
+                <%_ } _%>
+                log.error("Failed to update token: ", e);
+                throw new RememberMeAuthenticationException("Autologin failed due to data access problem", e);
+            }
+            addCookie(token, request, response);
+            upgradedTokenCache.put(cookieTokens[0], new UpgradedRememberMeToken(cookieTokens, login));
         }
         return getUserDetailsService().loadUserByUsername(login);
     }
@@ -208,5 +242,31 @@ public class PersistentTokenRememberMeServices extends
         setCookie(
             new String[]{token.getSeries(), token.getTokenValue()},
             TOKEN_VALIDITY_SECONDS, request, response);
+    }
+
+    private class UpgradedRememberMeToken implements Serializable {
+
+        private static final long serialVersionUID = 1L;
+
+        private String[] upgradedToken;
+
+        private Date upgradeTime;
+
+        private String userLogin;
+
+        UpgradedRememberMeToken(String[] upgradedToken, String userLogin) {
+            this.upgradedToken = upgradedToken;
+            this.userLogin = userLogin;
+            this.upgradeTime = new Date();
+        }
+
+        String getUserLoginIfValidAndRecentUpgrade(String[] currentToken) {
+            if (currentToken[0].equals(this.upgradedToken[0]) &&
+                    currentToken[1].equals(this.upgradedToken[1]) &&
+                    (upgradeTime.getTime() + UPGRADED_TOKEN_VALIDITY_SECONDS * 1000) > new Date().getTime()) {
+                return this.userLogin;
+            }
+            return null;
+        }
     }
 }
