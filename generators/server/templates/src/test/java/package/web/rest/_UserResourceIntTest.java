@@ -62,11 +62,11 @@ import java.util.UUID;
 <%_ } _%>
 
 <%_ if (enableSocialSignIn) { _%>
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 <%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -676,6 +676,22 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         List<User> userList = userRepository.findAll();
         assertThat(userList).hasSize(databaseSizeBeforeDelete - 1);
     }
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+
+    @Test
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+    <%_ } _%>
+    public void getAllAuthorities() throws Exception {
+        restUserMockMvc.perform(get("/api/users/authorities")
+                .accept(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$").value(containsInAnyOrder("ROLE_USER", "ROLE_ADMIN")));
+    }
+    <%_ } _%>
 
     @Test
     <%_ if (databaseType === 'sql') { _%>
