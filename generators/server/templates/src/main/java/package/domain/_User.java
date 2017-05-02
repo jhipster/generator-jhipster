@@ -20,7 +20,6 @@ package <%=packageName%>.domain;
 
 import <%=packageName%>.config.Constants;
 <% if (databaseType == 'cassandra') { %>
-import java.util.Date;
 import com.datastax.driver.mapping.annotations.*;<% } %>
 import com.fasterxml.jackson.annotation.JsonIgnore;<% if (databaseType == 'sql') { %>
 import org.hibernate.annotations.BatchSize;<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
@@ -46,8 +45,8 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import java.time.ZonedDateTime;<% } %>
+import java.util.Set;
+import java.time.Instant;
 
 /**
  * A user.
@@ -136,16 +135,12 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Column(name = "reset_key", length = 20)<% } %><% if (databaseType == 'mongodb') { %>
     @Field("reset_key")<% } %><% if (databaseType == 'cassandra') { %>
     @Column(name = "reset_key")<% } %>
-    private String resetKey;<%if (databaseType == 'sql') {%>
+    private String resetKey;
 
-    @Column(name = "reset_date")
-    private ZonedDateTime resetDate = null;<% }%><%if (databaseType == 'mongodb') {%>
-
-    @Field("reset_date")
-    private ZonedDateTime resetDate = null;<% }%><% if (databaseType == 'cassandra') { %>
-
-    @Column(name = "reset_date")
-    private Date resetDate;<% }%>
+    <%_ if (databaseType == 'sql' || databaseType == 'cassandra') { _%>
+    @Column(name = "reset_date")<% } else if (databaseType == 'mongodb') {%>
+    @Field("reset_date")<% }%>
+    private Instant resetDate = null;
 
     @JsonIgnore<% if (databaseType == 'sql') { %>
     @ManyToMany
@@ -244,24 +239,15 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 
     public void setResetKey(String resetKey) {
         this.resetKey = resetKey;
-    }<% if (databaseType == 'sql' || databaseType == 'mongodb') {%>
+    }
 
-    public ZonedDateTime getResetDate() {
+    public Instant getResetDate() {
        return resetDate;
     }
 
-    public void setResetDate(ZonedDateTime resetDate) {
+    public void setResetDate(Instant resetDate) {
        this.resetDate = resetDate;
-    }<% }%><% if (databaseType == 'cassandra') { %>
-
-    public Date getResetDate() {
-        return resetDate;
     }
-
-    public void setResetDate(Date resetDate) {
-        this.resetDate = resetDate;
-    }<% }%>
-
     public String getLangKey() {
         return langKey;
     }
