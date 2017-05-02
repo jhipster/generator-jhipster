@@ -3,7 +3,7 @@
 const expect = require('chai').expect,
   fail = expect.fail,
   toFilePath = require('../../../lib/reader/json_file_reader').toFilePath,
-  doesfileExist = require('../../../lib/reader/json_file_reader').doesfileExist,
+  doesFileExist = require('../../../lib/reader/json_file_reader').doesFileExist,
   readEntityJSON = require('../../../lib/reader/json_file_reader').readEntityJSON;
 
 describe('JSONFileReader', () => {
@@ -111,21 +111,21 @@ describe('JSONFileReader', () => {
       });
     });
   });
-  describe('::doesfileExist', () => {
+  describe('::doesFileExist', () => {
     describe('when checking a file path', () => {
       describe('with a nil file path', () => {
         it('return false', () => {
-          expect(doesfileExist()).to.be.false;
+          expect(doesFileExist()).to.be.false;
         });
       });
       describe('with an invalid file path', () => {
         it('return false', () => {
-          expect(doesfileExist('someInvalidPath')).to.be.false;
+          expect(doesFileExist('someInvalidPath')).to.be.false;
         });
       });
       describe('with a valid file path', () => {
         it('return true', () => {
-          expect(doesfileExist(`./test/test_files/MyEntity.json`)).to.be.true;
+          expect(doesFileExist(`./test/test_files/MyEntity.json`)).to.be.true;
         });
       });
     });
