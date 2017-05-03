@@ -53,7 +53,7 @@
     "zone.js": "0.8.5"
   },
   "devDependencies": {
-    "@angular/cli": "1.0.0",
+    "@angular/cli": "1.0.1",
     "@angular/compiler-cli": "4.0.0",
     "@types/jasmine": "2.5.47",
     "@types/node": "7.0.12",
@@ -88,22 +88,19 @@
     "tslint": "4.5.1",
     "phantomjs-prebuilt": "2.1.14",
     "rimraf": "2.6.1",
-    "typescript": "2.2.2",
-    "lite-server": "2.3.0",
-    "concurrently": "3.4.0"
+    "typescript": "2.2.2"
   },
   "engines": {
     "node": ">=6.9.0"
   },
   "scripts": {
     "ng": "ng",
-    "start": "concurrently --kill-others \"ng build --watch\" \"lite-server\" ",
+    "start": "ng serve",
     "build": "ng build",
     "build:prod": "ng build --prod",
     "test": "ng test --single-run",
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",
-    "lite-server": "lite-server",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "ngc": "ngc -p tsconfig-aot.json",

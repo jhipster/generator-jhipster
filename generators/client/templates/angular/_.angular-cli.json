@@ -23,7 +23,7 @@
     },
     "apps": [{
         "root": "<%= MAIN_SRC_DIR %>",
-        "outDir": "<%= DIST_DIR %>app",
+        "outDir": "<%= DIST_DIR %>",
         "assets": [
             "content/images",
             <%_ if (enableTranslation) { _%>
@@ -31,7 +31,9 @@
             <%_ } _%>
             "favicon.ico",
             "swagger-ui",
-            "robots.txt"
+            "robots.txt",
+            { "glob": "shim.min.js", "input": "../../../node_modules/core-js/client/", "output": "./" },
+            { "glob": "**/*", "input": "../../../node_modules/swagger-ui/dist/", "output": "swagger-ui/dist" }
         ],
         "index": "index.html",
         "main": "app/app.main.ts",
