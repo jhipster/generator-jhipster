@@ -244,7 +244,7 @@ public class PersistentTokenRememberMeServices extends
             TOKEN_VALIDITY_SECONDS, request, response);
     }
 
-    private class UpgradedRememberMeToken implements Serializable {
+    private static class UpgradedRememberMeToken implements Serializable {
 
         private static final long serialVersionUID = 1L;
 
