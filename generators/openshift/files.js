@@ -25,7 +25,7 @@ function writeFiles() {
         },
 
         writeRegistryFiles() {
-            this.template('scc/_scc.yml', `${this.directoryPath}/ocp/registry/config-scc.yml`);
+            this.template('scc/_scc-config.yml', `${this.directoryPath}/ocp/registry/scc-config.yml`);
             if (this.serviceDiscoveryType === 'eureka') {
                 this.template('registry/_jhipster-registry.yml', `${this.directoryPath}/ocp/registry/jhipster-registry.yml`);
                 this.template('registry/_application-configmap.yml', `${this.directoryPath}/ocp/registry/application-configmap.yml`);

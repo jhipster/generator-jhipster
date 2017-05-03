@@ -20,7 +20,7 @@
 # Use this script to run oc commands to create resources in the selected namespace. Files are ordered
 # in proper order. 'oc process' processes the template as resources which is again piped to
 # 'oc apply' to create those resources in OpenShift namespace
-oc process -f <%-directoryPath%>/ocp/registry/config-scc.yml | oc apply -f -
+oc process -f <%-directoryPath%>/ocp/registry/scc-config.yml | oc apply -f -
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 oc process -f <%-directoryPath%>/ocp/registry/application-configmap.yml | oc apply -f -
 oc process -f <%-directoryPath%>/ocp/registry/jhipster-registry.yml | oc apply -f -

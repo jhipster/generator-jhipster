@@ -7,15 +7,19 @@ const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 
 const expectedFiles = {
+    sccconfig: [
+        './ocp/registry/scc-config.yml'
+    ],
+    elk: [
+        './ocp/monitoring/jhipster-monitoring.yml'
+    ],
     eurekaregistry: [
         './ocp/registry/jhipster-registry.yml',
-        './ocp/registry/application-configmap.yml',
-        './ocp/registry/config-scc.yml'
+        './ocp/registry/application-configmap.yml'
     ],
     consulregistry: [
         './ocp/registry/consul.yml',
-        './ocp/registry/application-configmap.yml',
-        './ocp/registry/config-scc.yml'
+        './ocp/registry/application-configmap.yml'
     ],
     applcgw: [
         './ocp/jhgate/jhgate-deployment.yml',
@@ -45,11 +49,7 @@ const expectedFiles = {
     monolith: [
         './ocp/samplemysql/samplemysql-deployment.yml',
         './ocp/samplemysql/samplemysql-mysql.yml',
-        './ocp/samplemysql/samplemysql-elasticsearch.yml',
-        './ocp/registry/config-scc.yml'
-    ],
-    elk: [
-        './ocp/monitoring/jhipster-monitoring.yml'
+        './ocp/samplemysql/samplemysql-elasticsearch.yml'
     ]
 };
 
@@ -79,6 +79,9 @@ describe('JHipster OpenShift Sub Generator', () => {
         it('creates expected registry files and content', () => {
             assert.file(expectedFiles.eurekaregistry);
             assert.fileContent('./ocp/registry/jhipster-registry.yml', /# base64 encoded "openshiftpaas"/);
+        });
+        it('creates expected scc files', () => {
+            assert.file(expectedFiles.sccconfig);
         });
         it('creates expected gateway files and content', () => {
             assert.file(expectedFiles.applcgw);
@@ -110,6 +113,9 @@ describe('JHipster OpenShift Sub Generator', () => {
         });
         it('creates expected registry files', () => {
             assert.file(expectedFiles.eurekaregistry);
+        });
+        it('creates expected scc files', () => {
+            assert.file(expectedFiles.sccconfig);
         });
         it('creates expected gateway files', () => {
             assert.file(expectedFiles.applcgw);
@@ -143,6 +149,9 @@ describe('JHipster OpenShift Sub Generator', () => {
         });
         it('creates expected registry files', () => {
             assert.file(expectedFiles.eurekaregistry);
+        });
+        it('creates expected scc files', () => {
+            assert.file(expectedFiles.sccconfig);
         });
         it('creates expected gateway files', () => {
             assert.file(expectedFiles.applcgw);
@@ -179,6 +188,9 @@ describe('JHipster OpenShift Sub Generator', () => {
         });
         it('creates expected registry files', () => {
             assert.file(expectedFiles.eurekaregistry);
+        });
+        it('creates expected scc files', () => {
+            assert.file(expectedFiles.sccconfig);
         });
         it('doesn\'t creates gateway files', () => {
             assert.noFile(expectedFiles.applcgw);
@@ -218,6 +230,9 @@ describe('JHipster OpenShift Sub Generator', () => {
         });
         it('creates expected registry files', () => {
             assert.file(expectedFiles.eurekaregistry);
+        });
+        it('creates expected scc files', () => {
+            assert.file(expectedFiles.sccconfig);
         });
         it('creates expected gateway files', () => {
             assert.file(expectedFiles.applcgw);
@@ -259,8 +274,11 @@ describe('JHipster OpenShift Sub Generator', () => {
                 })
                 .on('end', done);
         });
-        it('creates expected default files', () => {
+        it('creates expected monolith files', () => {
             assert.file(expectedFiles.monolith);
+        });
+        it('creates expected scc files', () => {
+            assert.file(expectedFiles.sccconfig);
         });
     });
 
@@ -287,6 +305,9 @@ describe('JHipster OpenShift Sub Generator', () => {
         });
         it('creates expected default files', () => {
             assert.file(expectedFiles.monolith);
+        });
+        it('creates expected scc files', () => {
+            assert.file(expectedFiles.sccconfig);
         });
         it('creates expected elk files', () => {
             assert.file(expectedFiles.elk);
