@@ -45,6 +45,17 @@ public class SecurityUtilsUnitTest {
         String login = SecurityUtils.getCurrentUserLogin();
         assertThat(login).isEqualTo("admin");
     }
+    <%_ if (authenticationType === 'jwt') { _%>
+
+    @Test
+    public void testgetCurrentUserJWT() {
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "token"));
+        SecurityContextHolder.setContext(securityContext);
+        String jwt = SecurityUtils.getCurrentUserJWT();
+        assertThat(jwt).isEqualTo("token");
+    }
+    <%_ } _%>
 
     @Test
     public void testIsAuthenticated() {
