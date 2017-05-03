@@ -41,5 +41,3 @@ oc process -f <%-directoryPath%>/ocp/<%- appName %>/<%- appName %>-kafka.yml | o
 <%_ } _%>
 oc process -f <%-directoryPath%>/ocp/<%- appName %>/<%- appName %>-deployment.yml | oc apply -f -
 <%_ } _%>
-
-

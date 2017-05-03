@@ -66,6 +66,3 @@ objects:
             authentication:
               jwt:
                 secret: <%= jwtSecretKey %>
-      #application-prod.yml: |-
-      #  configserver:
-      #    status: Connected in prod
