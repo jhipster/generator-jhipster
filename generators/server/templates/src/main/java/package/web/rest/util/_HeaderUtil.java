@@ -72,7 +72,7 @@ public final class HeaderUtil {
         return createAlert(<%- deletedMessage %>, param);
     }
 
-    public static HttpHeaders createFailureAlert(String entityName, String errorKey, String defaultMessage) {
+    public static HttpHeaders createFailureAlert(String entityName, String defaultMessage) {
         log.error("Entity processing failed, {}", defaultMessage);
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-<%=angularAppName%>-error", <%- errorMessage %>);
