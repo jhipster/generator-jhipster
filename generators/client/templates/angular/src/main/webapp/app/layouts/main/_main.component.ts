@@ -20,6 +20,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, NavigationEnd, RoutesRecognized } from '@angular/router';
 
 <%_ if (enableTranslation) { _%>
+import { JhiLanguageService } from 'ng-jhipster';
 import { JhiLanguageHelper, StateStorageService } from '../../shared';
 <%_ } else { _%>
 import { Title } from '@angular/platform-browser';
@@ -35,12 +36,18 @@ export class <%=jhiPrefixCapitalized%>MainComponent implements OnInit {
     constructor(
         <%_ if (enableTranslation) { _%>
         private jhiLanguageHelper: JhiLanguageHelper,
+        private jhiLanguageService: JhiLanguageService,
         <%_ } else { _%>
         private titleService: Title,
         <%_ } _%>
         private router: Router,
         private $storageService: StateStorageService,
-    ) {}
+    ) {
+        <%_ if (enableTranslation) { _%>
+        // Just for forcing translation loading
+        jhiLanguageService.setLocations(['all']);
+        <%_ } _%>
+    }
 
     private getPageTitle(routeSnapshot: ActivatedRouteSnapshot) {
         let title: string = (routeSnapshot.data && routeSnapshot.data['pageTitle']) ? routeSnapshot.data['pageTitle'] : '<%= angularAppName %>';

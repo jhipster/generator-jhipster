@@ -107,22 +107,24 @@ public class <%= entityClass %>DTO implements Serializable {
         const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
         const fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod;
         const fieldName = fields[idx].fieldName; _%>
-    <%_ if(fieldTypeBlobContent != 'text') { _%>
+        <%_ if(fieldTypeBlobContent != 'text') { _%>
+
     public <%= fieldType %> <% if (fieldType.toLowerCase() == 'boolean') { %>is<% } else { %>get<%_ } _%><%= fieldInJavaBeanMethod %>() {
-    <%_ } else { _%>
+        <%_ } else { _%>
+
     public String get<%= fieldInJavaBeanMethod %>() {
-    <%_ } _%>
+        <%_ } _%>
         return <%= fieldName %>;
     }
 
-    <%_ if(fieldTypeBlobContent != 'text') { _%>
+        <%_ if(fieldTypeBlobContent != 'text') { _%>
     public void set<%= fieldInJavaBeanMethod %>(<%= fieldType %> <%= fieldName %>) {
-    <%_ } else { _%>
+        <%_ } else { _%>
     public void set<%= fieldInJavaBeanMethod %>(String <%= fieldName %>) {
-    <%_ } _%>
+        <%_ } _%>
         this.<%= fieldName %> = <%= fieldName %>;
     }
-    <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
+        <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
 
     public String get<%= fieldInJavaBeanMethod %>ContentType() {
         return <%= fieldName %>ContentType;
@@ -131,7 +133,8 @@ public class <%= entityClass %>DTO implements Serializable {
     public void set<%= fieldInJavaBeanMethod %>ContentType(String <%= fieldName %>ContentType) {
         this.<%= fieldName %>ContentType = <%= fieldName %>ContentType;
     }
-    <%_ } } _%>
+        <%_ } _%>
+    <%_ } _%>
     <%_ for (idx in relationships) {
         relationshipFieldName = relationships[idx].relationshipFieldName,
         relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural,
@@ -206,11 +209,11 @@ public class <%= entityClass %>DTO implements Serializable {
     @Override
     public String toString() {
         return "<%= entityClass %>DTO{" +
-            "id=" + getId() +<%_ for (idx in fields) {
+            "id=" + getId() +<% for (idx in fields) {
                 const fieldName = fields[idx].fieldName;
                 const fieldType = fields[idx].fieldType;
-                const fieldNameCapitalized = fieldName.charAt(0).toUpperCase() + fieldName.slice(1) _%>
+                const fieldNameCapitalized = fieldName.charAt(0).toUpperCase() + fieldName.slice(1) %>
             ", <%= fieldName %>='" + <% if (fieldType.toLowerCase() == 'boolean') { %>is<% } else { %>get<%_ } _%><%= fieldNameCapitalized %>() + "'" +<% } %>
-            '}';
+            "}";
     }
 }

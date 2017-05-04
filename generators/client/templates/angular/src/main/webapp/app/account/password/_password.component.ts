@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 import { Component, OnInit } from '@angular/core';
-import { JhiLanguageService } from 'ng-jhipster';
 
 import { Principal } from '../../shared';
 import { Password } from './password.service';
@@ -35,11 +34,9 @@ export class PasswordComponent implements OnInit {
     confirmPassword: string;
 
     constructor(
-        private jhiLanguageService: JhiLanguageService,
         private passwordService: Password,
         private principal: Principal
     ) {
-        this.jhiLanguageService.setLocations(['password']);
     }
 
     ngOnInit() {

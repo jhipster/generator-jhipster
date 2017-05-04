@@ -135,6 +135,7 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Column(name = "reset_key", length = 20)<% } %><% if (databaseType == 'mongodb') { %>
     @Field("reset_key")<% } %><% if (databaseType == 'cassandra') { %>
     @Column(name = "reset_key")<% } %>
+    @JsonIgnore
     private String resetKey;
 
     <%_ if (databaseType == 'sql' || databaseType == 'cassandra') { _%>
