@@ -30,7 +30,7 @@ import { Response } from '@angular/http';
 
 import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EventManager, AlertService<% if (enableTranslation) { %>, JhiLanguageService<% } %><% if (fieldsContainBlob) { %>, DataUtils<% } %> } from 'ng-jhipster';
+import { EventManager, AlertService<% if (fieldsContainBlob) { %>, DataUtils<% } %> } from 'ng-jhipster';
 
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { <%= entityAngularName %>PopupService } from './<%= entityFileName %>-popup.service';
@@ -107,9 +107,6 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
 
     constructor(
         public activeModal: NgbActiveModal,
-        <%_ if (enableTranslation) { _%>
-        private jhiLanguageService: JhiLanguageService,
-        <%_ } _%>
         <%_ if (fieldsContainBlob) { _%>
         private dataUtils: DataUtils,
         <%_ } _%>
@@ -120,9 +117,6 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         }%>
         private eventManager: EventManager
     ) {
-        <%_ if (enableTranslation) { _%>
-        this.jhiLanguageService.setLocations(<%- toArrayString(i18nToLoad) %>);
-        <%_ } _%>
     }
 
     ngOnInit() {

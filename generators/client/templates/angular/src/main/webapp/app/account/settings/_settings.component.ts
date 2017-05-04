@@ -37,7 +37,6 @@ export class SettingsComponent implements OnInit {
         private languageService: JhiLanguageService,
         private languageHelper: JhiLanguageHelper<% } %>
     ) {
-        this.languageService.setLocations(['settings']);
     }
 
     ngOnInit() {

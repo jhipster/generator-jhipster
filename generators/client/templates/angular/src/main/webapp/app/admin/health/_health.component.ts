@@ -32,11 +32,9 @@ export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
     updatingHealth: boolean;
 
     constructor(
-        private jhiLanguageService: JhiLanguageService,
         private modalService: NgbModal,
         private healthService: <%=jhiPrefixCapitalized%>HealthService
     ) {
-        this.jhiLanguageService.setLocations(['health']);
 
     }
 

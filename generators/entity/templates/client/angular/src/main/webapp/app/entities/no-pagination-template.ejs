@@ -32,9 +32,6 @@ _%>
     <%_ } _%>
 
     constructor(
-        <%_ if (enableTranslation) { _%>
-        private jhiLanguageService: JhiLanguageService,
-        <%_ } _%>
         private <%= entityInstance %>Service: <%= entityAngularName %>Service,
         private alertService: AlertService,
         <%_ if (fieldsContainBlob) { _%>
@@ -48,9 +45,6 @@ _%>
     ) {
         <%_ if (searchEngine === 'elasticsearch') { _%>
         this.currentSearch = activatedRoute.snapshot.params['search'] ? activatedRoute.snapshot.params['search'] : '';
-        <%_ } _%>
-        <%_ if (enableTranslation) { _%>
-        this.jhiLanguageService.setLocations(<%- toArrayString(i18nToLoad) %>);
         <%_ } _%>
     }
 
