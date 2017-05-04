@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 import { Component, OnInit } from '@angular/core';
-import { JhiLanguageService } from 'ng-jhipster';
 
 import { <%=jhiPrefixCapitalized%>ConfigurationService } from './configuration.service';
 
@@ -34,10 +33,8 @@ export class <%=jhiPrefixCapitalized%>ConfigurationComponent implements OnInit {
     reverse: boolean;
 
     constructor(
-        private jhiLanguageService: JhiLanguageService,
         private configurationService: <%=jhiPrefixCapitalized%>ConfigurationService
     ) {
-        this.jhiLanguageService.setLocations(['configuration']);
         this.configKeys = [];
         this.filter = '';
         this.orderProp = 'prefix';

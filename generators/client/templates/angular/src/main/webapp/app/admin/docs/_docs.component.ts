@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 import { Component } from '@angular/core';
-import { JhiLanguageService } from 'ng-jhipster';
 
 @Component({
     selector: '<%=jhiPrefix%>-docs',
@@ -25,8 +24,6 @@ import { JhiLanguageService } from 'ng-jhipster';
 })
 export class <%=jhiPrefixCapitalized%>DocsComponent {
     constructor(
-        private jhiLanguageService: JhiLanguageService
     ) {
-        this.jhiLanguageService.setLocations(['global']);
     }
 }

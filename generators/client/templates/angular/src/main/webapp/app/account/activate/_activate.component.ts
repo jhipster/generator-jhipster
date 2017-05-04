@@ -19,7 +19,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute } from '@angular/router';
-import { JhiLanguageService } from 'ng-jhipster';
 
 import { Activate } from './activate.service';
 import { LoginModalService } from '../../shared';
@@ -34,12 +33,10 @@ export class ActivateComponent implements OnInit {
     modalRef: NgbModalRef;
 
     constructor(
-        private jhiLanguageService: JhiLanguageService,
         private activate: Activate,
         private loginModalService: LoginModalService,
         private route: ActivatedRoute
     ) {
-        this.jhiLanguageService.setLocations(['activate']);
     }
 
     ngOnInit() {
