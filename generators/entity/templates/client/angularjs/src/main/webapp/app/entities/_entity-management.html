@@ -93,7 +93,7 @@
                     </td>
                         <%_ } else if (fields[idx].fieldIsEnum) { _%>
                     <td data-translate="{{'<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>}}">{{<%= entityInstance %>.<%= fieldName %>}}</td>
-                        <%_ } else if (fieldType == 'ZonedDateTime') { _%>
+                        <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
                     <td>{{<%=entityInstance %>.<%=fieldName%> | date:'medium'}}</td>
                     <%_ } else if (fieldType == 'LocalDate') { _%>
                         <td>{{<%=entityInstance %>.<%=fieldName%> | date:'mediumDate'}}</td>

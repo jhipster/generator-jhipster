@@ -25,10 +25,8 @@ import <%=packageName%>.domain.User;<% if ((databaseType == 'sql' || databaseTyp
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
 import <%=packageName%>.config.Constants;
 import <%=packageName%>.repository.UserRepository;
-import <%=packageName%>.service.dto.UserDTO;
-import java.time.ZonedDateTime;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import <%=packageName%>.service.util.RandomUtil;<% } %><% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
-import java.time.LocalDate;<% } %>
+import <%=packageName%>.service.dto.UserDTO;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import <%=packageName%>.service.util.RandomUtil;<% } %>
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +35,12 @@ import org.springframework.transaction.annotation.Transactional;<% } %>
 import org.springframework.test.context.junit4.SpringRunner;
 <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import java.util.Optional;<%}%>
+import org.springframework.data.domain.PageRequest;<%}%>
+<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
+import java.time.LocalDate;<% } %>
+import java.time.Instant;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import java.time.temporal.ChronoUnit;
+import java.util.Optional;<% } %>
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -99,7 +101,7 @@ public class UserServiceIntTest <% if (databaseType == 'cassandra') { %>extends 
     public void assertThatResetKeyMustNotBeOlderThan24Hours() {
         User user = userService.createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
 
-        ZonedDateTime daysAgo = ZonedDateTime.now().minusHours(25);
+        Instant daysAgo = Instant.now().minus(25, ChronoUnit.HOURS);
         String resetKey = RandomUtil.generateResetKey();
         user.setActivated(true);
         user.setResetDate(daysAgo);
@@ -118,7 +120,7 @@ public class UserServiceIntTest <% if (databaseType == 'cassandra') { %>extends 
     public void assertThatResetKeyMustBeValid() {
         User user = userService.createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
 
-        ZonedDateTime daysAgo = ZonedDateTime.now().minusHours(25);
+        Instant daysAgo = Instant.now().minus(25, ChronoUnit.HOURS);
         user.setActivated(true);
         user.setResetDate(daysAgo);
         user.setResetKey("1234");
@@ -132,7 +134,7 @@ public class UserServiceIntTest <% if (databaseType == 'cassandra') { %>extends 
     public void assertThatUserCanResetPassword() {
         User user = userService.createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
         String oldPassword = user.getPassword();
-        ZonedDateTime daysAgo = ZonedDateTime.now().minusHours(2);
+        Instant daysAgo = Instant.now().minus(2, ChronoUnit.HOURS);
         String resetKey = RandomUtil.generateResetKey();
         user.setActivated(true);
         user.setResetDate(daysAgo);
@@ -150,8 +152,8 @@ public class UserServiceIntTest <% if (databaseType == 'cassandra') { %>extends 
     @Test
     public void testFindNotActivatedUsersByCreationDateBefore() {
         userService.removeNotActivatedUsers();
-        ZonedDateTime now = ZonedDateTime.now();
-        List<User> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minusDays(3));
+        Instant now = Instant.now();
+        List<User> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS));
         assertThat(users).isEmpty();
     }<% } %><% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
 

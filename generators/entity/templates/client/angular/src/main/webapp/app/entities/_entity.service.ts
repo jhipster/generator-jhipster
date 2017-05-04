@@ -18,7 +18,7 @@
 -%>
 <%_
     let hasDate = false;
-    if (fieldsContainZonedDateTime || fieldsContainLocalDate) {
+    if (fieldsContainInstant || fieldsContainZonedDateTime) {
         hasDate = true;
     }
 _%>
@@ -75,7 +75,7 @@ export class <%= entityAngularName %>Service {
             jsonResponse.<%=fields[idx].fieldName%> = this.dateUtils
                 .convertLocalDateFromServer(jsonResponse.<%=fields[idx].fieldName%>);
             <%_ } _%>
-            <%_ if (fields[idx].fieldType == 'ZonedDateTime') { _%>
+            <%_ if (['Instant', 'ZonedDateTime'].includes(fields[idx].fieldType)) { _%>
             jsonResponse.<%=fields[idx].fieldName%> = this.dateUtils
                 .convertDateTimeFromServer(jsonResponse.<%=fields[idx].fieldName%>);
             <%_ } } _%>
@@ -119,7 +119,7 @@ export class <%= entityAngularName %>Service {
             jsonResponse[i].<%=fields[idx].fieldName%> = this.dateUtils
                 .convertLocalDateFromServer(jsonResponse[i].<%=fields[idx].fieldName%>);
             <%_ } _%>
-            <%_ if (fields[idx].fieldType == 'ZonedDateTime') { _%>
+            <%_ if (['Instant', 'ZonedDateTime'].includes(fields[idx].fieldType)) { _%>
             jsonResponse[i].<%=fields[idx].fieldName%> = this.dateUtils
                 .convertDateTimeFromServer(jsonResponse[i].<%=fields[idx].fieldName%>);
             <%_ } _%>
@@ -151,7 +151,7 @@ export class <%= entityAngularName %>Service {
         <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
         copy.<%=fields[idx].fieldName%> = this.dateUtils
             .convertLocalDateToServer(<%= entityInstance %>.<%=fields[idx].fieldName%>);
-        <%_ } if (fields[idx].fieldType == 'ZonedDateTime') { %>
+        <%_ } if (['Instant', 'ZonedDateTime'].includes(fields[idx].fieldType)) { %>
         copy.<%=fields[idx].fieldName%> = this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>);
         <%_ } } _%>
         return copy;

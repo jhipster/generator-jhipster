@@ -18,7 +18,8 @@
 -%>
 package <%=packageName%>.service.dto;
 
-<%_ if (fieldsContainLocalDate == true) { _%>
+<% if (fieldsContainInstant == true) { %>
+import java.time.Instant;<% } %><% if (fieldsContainLocalDate == true) { %>
 import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
 import java.time.ZonedDateTime;<% } %><% if (validation) { %>
 import javax.validation.constraints.*;<% } %>
@@ -106,22 +107,24 @@ public class <%= entityClass %>DTO implements Serializable {
         const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
         const fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod;
         const fieldName = fields[idx].fieldName; _%>
-    <%_ if(fieldTypeBlobContent != 'text') { _%>
-    public <%= fieldType %> get<%= fieldInJavaBeanMethod %>() {
-    <%_ } else { _%>
+        <%_ if(fieldTypeBlobContent != 'text') { _%>
+
+    public <%= fieldType %> <% if (fieldType.toLowerCase() == 'boolean') { %>is<% } else { %>get<%_ } _%><%= fieldInJavaBeanMethod %>() {
+        <%_ } else { _%>
+
     public String get<%= fieldInJavaBeanMethod %>() {
-    <%_ } _%>
+        <%_ } _%>
         return <%= fieldName %>;
     }
 
-    <%_ if(fieldTypeBlobContent != 'text') { _%>
+        <%_ if(fieldTypeBlobContent != 'text') { _%>
     public void set<%= fieldInJavaBeanMethod %>(<%= fieldType %> <%= fieldName %>) {
-    <%_ } else { _%>
+        <%_ } else { _%>
     public void set<%= fieldInJavaBeanMethod %>(String <%= fieldName %>) {
-    <%_ } _%>
+        <%_ } _%>
         this.<%= fieldName %> = <%= fieldName %>;
     }
-    <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
+        <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
 
     public String get<%= fieldInJavaBeanMethod %>ContentType() {
         return <%= fieldName %>ContentType;
@@ -130,7 +133,8 @@ public class <%= entityClass %>DTO implements Serializable {
     public void set<%= fieldInJavaBeanMethod %>ContentType(String <%= fieldName %>ContentType) {
         this.<%= fieldName %>ContentType = <%= fieldName %>ContentType;
     }
-    <%_ } } _%>
+        <%_ } _%>
+    <%_ } _%>
     <%_ for (idx in relationships) {
         relationshipFieldName = relationships[idx].relationshipFieldName,
         relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural,
@@ -192,22 +196,24 @@ public class <%= entityClass %>DTO implements Serializable {
 
         <%= entityClass %>DTO <%= entityInstance %>DTO = (<%= entityClass %>DTO) o;
 
-        if ( ! Objects.equals(id, <%= entityInstance %>DTO.id)) { return false; }
+        if ( ! Objects.equals(getId(), <%= entityInstance %>DTO.getId())) { return false; }
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "<%= entityClass %>DTO{" +
-            "id=" + id +<% for (idx in fields) {
-                const fieldName = fields[idx].fieldName; %>
-            ", <%= fieldName %>='" + <%= fieldName %> + "'" +<% } %>
-            '}';
+            "id=" + getId() +<% for (idx in fields) {
+                const fieldName = fields[idx].fieldName;
+                const fieldType = fields[idx].fieldType;
+                const fieldNameCapitalized = fieldName.charAt(0).toUpperCase() + fieldName.slice(1) %>
+            ", <%= fieldName %>='" + <% if (fieldType.toLowerCase() == 'boolean') { %>is<% } else { %>get<%_ } _%><%= fieldNameCapitalized %>() + "'" +<% } %>
+            "}";
     }
 }

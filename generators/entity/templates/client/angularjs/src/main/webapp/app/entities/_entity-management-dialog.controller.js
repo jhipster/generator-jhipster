@@ -30,7 +30,7 @@
 
         vm.<%= entityInstance %> = entity;
         vm.clear = clear;
-        <%_ if (fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
+        <%_ if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
         <%_ } _%>
@@ -93,7 +93,7 @@
         }
 
         <%_ for (idx in fields) {
-            if (fields[idx].fieldType === 'LocalDate' || fields[idx].fieldType === 'ZonedDateTime') { _%>
+            if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType)) { _%>
         vm.datePickerOpenStatus.<%= fields[idx].fieldName %> = false;
         <%_ } else if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
 
@@ -114,7 +114,7 @@
         };
         <%_ } } _%>
 
-        <%_ if (fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
+        <%_ if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
         function openCalendar (date) {
             vm.datePickerOpenStatus[date] = true;
         }

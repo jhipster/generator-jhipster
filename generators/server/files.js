@@ -345,7 +345,6 @@ function writeFiles() {
 
             if (this.databaseType === 'cassandra') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/cassandra/_CassandraConfiguration.java`, `${javaDir}config/cassandra/CassandraConfiguration.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/config/cassandra/_CustomZonedDateTimeCodec.java`, `${javaDir}config/cassandra/CustomZonedDateTimeCodec.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/cassandra/_package-info.java`, `${javaDir}config/cassandra/package-info.java`);
             }
             if (this.searchEngine === 'elasticsearch') {

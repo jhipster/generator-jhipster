@@ -24,11 +24,6 @@ import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
 <%_ } _%>
 import <%=packageName%>.domain.User;
-<%_ if (databaseType !== 'cassandra') { _%>
-
-import java.time.ZonedDateTime;
-
-<%_ } _%>
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -53,6 +48,9 @@ import java.util.Optional;
 <%_ if (databaseType == 'cassandra') { _%>
 import java.util.Set;
 <%_ } _%>
+<%_ if (databaseType !== 'cassandra') { _%>
+import java.time.Instant;
+<%_ } _%>
 
 <%_ if (databaseType === 'sql') { _%>
 /**
@@ -74,7 +72,7 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
 
     Optional<User> findOneByActivationKey(String activationKey);
 
-    List<User> findAllByActivatedIsFalseAndCreatedDateBefore(ZonedDateTime dateTime);
+    List<User> findAllByActivatedIsFalseAndCreatedDateBefore(Instant dateTime);
 
     Optional<User> findOneByResetKey(String resetKey);
 

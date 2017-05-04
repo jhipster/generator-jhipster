@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { JhiLanguageService } from 'ng-jhipster';
 
 import { <%=jhiPrefixCapitalized%>TrackerService } from '../../shared';
 
@@ -30,10 +29,8 @@ export class <%=jhiPrefixCapitalized%>TrackerComponent implements OnInit, OnDest
     activities: any[] = [];
 
     constructor(
-        private jhiLanguageService: JhiLanguageService,
         private trackerService: <%=jhiPrefixCapitalized%>TrackerService
     ) {
-        this.jhiLanguageService.setLocations(['tracker']);
     }
 
     showActivity(activity: any) {

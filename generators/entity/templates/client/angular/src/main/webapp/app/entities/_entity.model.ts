@@ -47,8 +47,6 @@ for (const idx in fields) {
     let tsType;
     if (fields[idx].fieldIsEnum) {
         tsType = fieldType;
-    } else if (fieldType == 'ZonedDateTime') {
-        tsType = 'any';
     } else if (fieldType == 'Boolean') {
         tsType = 'boolean';
         defaultVariablesValues[fieldName] = 'this.' + fieldName + ' = false;';
