@@ -29,7 +29,7 @@ export class AlertService {
     }
 
     clear() {
-        this.alerts = [];
+       this.alerts.splice(0, this.alerts.length);
     }
 
     get(): Alert[] {
