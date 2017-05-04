@@ -30,6 +30,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
         NgJhipsterModule.forRoot({
             <%_ if (enableTranslation) { _%>
             i18nEnabled: true,
+            defaultI18nLocation: 'all',
             defaultI18nLang: '<%= nativeLanguage %>'
             <%_ } _%>
         }),

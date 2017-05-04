@@ -28,7 +28,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EventManager<% if (enableTranslation) { %>, JhiLanguageService<% } %> } from 'ng-jhipster';
+import { EventManager } from 'ng-jhipster';
 
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { <%= entityAngularName %>PopupService } from './<%= entityFileName %>-popup.service';
@@ -43,16 +43,10 @@ export class <%= entityAngularName %>DeleteDialogComponent {
     <%= entityInstance %>: <%= entityAngularName %>;
 
     constructor(
-        <%_ if (enableTranslation) { _%>
-        private jhiLanguageService: JhiLanguageService,
-        <%_ } _%>
         private <%= entityInstance %>Service: <%= entityAngularName %>Service,
         public activeModal: NgbActiveModal,
         private eventManager: EventManager
     ) {
-        <%_ if (enableTranslation) { _%>
-        this.jhiLanguageService.setLocations(<%- toArrayString(i18nToLoad) %>);
-        <%_ } _%>
     }
 
     clear() {

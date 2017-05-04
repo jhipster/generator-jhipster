@@ -177,6 +177,17 @@
             ]
         },
         {
+            "fieldName": "instantTom",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "instanteRequiredTom",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "zonedDateTimeTom",
             "fieldType": "ZonedDateTime"
         },

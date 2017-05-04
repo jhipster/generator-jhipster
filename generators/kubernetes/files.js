@@ -11,8 +11,8 @@ function writeFiles() {
                 this.app = this.appConfigs[i];
                 this.template('_deployment.yml', `${appName}/${appName}-deployment.yml`);
                 this.template('_service.yml', `${appName}/${appName}-service.yml`);
-
-                if (this.app.prodDatabaseType) {
+                // If we choose microservice with no DB, it is trying to move _no.yml as prodDatabaseType is getting tagged as 'string' type
+                if (this.app.prodDatabaseType !== 'no') {
                     this.template(`db/_${this.app.prodDatabaseType}.yml`, `${appName}/${appName}-${this.app.prodDatabaseType}.yml`);
                 }
                 if (this.app.searchEngine === 'elasticsearch') {

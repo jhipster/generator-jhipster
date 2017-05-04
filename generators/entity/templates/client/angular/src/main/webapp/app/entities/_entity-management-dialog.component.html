@@ -46,7 +46,7 @@ _%>
                 fieldInputType = 'number';
             } else if (fieldType == 'LocalDate') {
                 fieldInputType = 'date';
-            } else if (fieldType == 'ZonedDateTime') {
+            } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) {
                 fieldInputType = 'datetime-local';
             } else if (fieldType == 'Boolean') {
                 fieldInputType = 'checkbox';
@@ -94,7 +94,7 @@ _%>
                     <button type="button" class="btn btn-default" (click)="<%= fieldName %>Dp.toggle()"><i class="fa fa-calendar"></i></button>
                 </span>
             </div>
-            <%_ } else if (fieldType == 'ZonedDateTime') { _%>
+            <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
             <div class="d-flex">
                 <input id="field_<%= fieldName %>" type="datetime-local" class="form-control" name="<%= fieldName %>" [(ngModel)]="<%= entityInstance %>.<%= fieldName %>"
                 <%- include ng_validators %>  />
@@ -168,7 +168,7 @@ _%>
                     This field should be a number.
                 </small>
                 <%_ } _%>
-                <%_ if (fieldType == 'ZonedDateTime') { _%>
+                <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
                 <small class="form-text text-danger"
                     [hidden]="!editForm.controls.<%= fieldName %>?.errors?.ZonedDateTimelocal" jhiTranslate="entity.validation.ZonedDateTimelocal">
                     This field should be a date and time.

@@ -462,6 +462,10 @@ function askForField(done) {
                     name: 'LocalDate'
                 },
                 {
+                    value: 'Instant',
+                    name: 'Instant'
+                },
+                {
                     value: 'ZonedDateTime',
                     name: 'ZonedDateTime'
                 },
@@ -580,6 +584,10 @@ function askForField(done) {
                 {
                     value: 'LocalDate',
                     name: 'LocalDate (Warning: only compatible with Cassandra v3)'
+                },
+                {
+                    value: 'Instant',
+                    name: 'Instant'
                 },
                 {
                     value: 'ZonedDateTime',
@@ -724,6 +732,7 @@ function askForField(done) {
             when: response => response.fieldAdd === true &&
                     response.fieldValidate === true &&
                     (response.fieldType === 'LocalDate' ||
+                    response.fieldType === 'Instant' ||
                     response.fieldType === 'ZonedDateTime' ||
                     response.fieldType === 'UUID' ||
                     response.fieldType === 'Boolean' ||

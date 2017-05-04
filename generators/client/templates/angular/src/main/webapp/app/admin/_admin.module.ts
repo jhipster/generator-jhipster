@@ -23,7 +23,11 @@ import { <%=jhiPrefixCapitalized%>TrackerService } from './../shared/tracker/tra
 <%_ } _%>
 
 import { <%=angular2AppName%>SharedModule } from '../shared';
+<<<<<<< HEAD
 import { customHttpProvider } from '../blocks/interceptor/http.provider';
+=======
+/* jhipster-needle-add-admin-module-import - JHipster will add admin modules imports here */
+>>>>>>> origin/master
 
 import {
     adminState,
@@ -69,7 +73,8 @@ import {
 @NgModule({
     imports: [
         <%=angular2AppName%>SharedModule,
-        RouterModule.forChild(adminState)
+        RouterModule.forChild(adminState),
+        /* jhipster-needle-add-admin-module - JHipster will add admin modules here */
     ],
     declarations: [
         <%_ if (devDatabaseType !== 'cassandra') { _%>

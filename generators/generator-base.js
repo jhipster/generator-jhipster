@@ -103,11 +103,11 @@ module.exports = class extends Generator {
                     file: navbarAdminPath,
                     needle: 'jhipster-needle-add-element-to-admin-menu',
                     splicable: [`<li>
-                            <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" (click)="collapseNavbar()">
-                                <i class="fa fa-${glyphiconName}"></i>&nbsp;
-                                <span${enableTranslation ? ` jhiTranslate="global.menu.admin.${routerName}"` : ''}>${_.startCase(routerName)}</span>
-                            </a>
-                        </li>`
+                        <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" (click)="collapseNavbar()">
+                            <i class="fa fa-${glyphiconName}" aria-hidden="true"></i>&nbsp;
+                            <span${enableTranslation ? ` jhiTranslate="global.menu.admin.${routerName}"` : ''}>${_.startCase(routerName)}</span>
+                        </a>
+                    </li>`
                     ]
                 }, this);
             }
@@ -179,6 +179,7 @@ module.exports = class extends Generator {
             this.log(`${chalk.yellow('\nUnable to find ') + entityMenuPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`);
         }
     }
+
     /**
      * Add a new entity in the TS modules file.
      *
@@ -220,6 +221,52 @@ module.exports = class extends Generator {
         } catch (e) {
             this.log(e);
             this.log(`${chalk.yellow('\nUnable to find ') + entityModulePath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + entityInstance + entityClass + entityFolderName + entityFileName} ${chalk.yellow(`not added to ${entityModulePath}.\n`)}`);
+        }
+    }
+
+    /**
+     * Add a new admin in the TS modules file.
+     *
+     * @param {string} appName - Angular2 application name.
+     * @param {string} adminAngularName - The name of the new admin item.
+     * @param {string} adminFolderName - The name of the folder.
+     * @param {string} adminFileName - The name of the file.
+     * @param {boolean} enableTranslation - If translations are enabled or not.
+     * @param {string} clientFramework - The name of the client framework.
+     */
+    addAdminToModule(appName, adminAngularName, adminFolderName, adminFileName, enableTranslation, clientFramework) {
+        const adminModulePath = `${CLIENT_MAIN_SRC_DIR}app/admin/admin.module.ts`;
+        try {
+            if (clientFramework === 'angular1') {
+                return;
+            }
+            let importStatement = `|import { ${appName}${adminAngularName}Module } from './${adminFolderName}/${adminFileName}.module';`;
+            if (importStatement.length > constants.LINE_LENGTH) {
+                importStatement =
+                    `|import {
+                     |    ${appName}${adminAngularName}Module
+                     |} from './${adminFolderName}/${adminFileName}.module';`;
+            }
+            jhipsterUtils.rewriteFile({
+                file: adminModulePath,
+                needle: 'jhipster-needle-add-admin-module-import',
+                splicable: [
+                    this.stripMargin(importStatement)
+                ]
+            }, this);
+
+            jhipsterUtils.rewriteFile({
+                file: adminModulePath,
+                needle: 'jhipster-needle-add-admin-module',
+                splicable: [
+                    this.stripMargin(
+                        `|${appName}${adminAngularName}Module,`
+                    )
+                ]
+            }, this);
+        } catch (e) {
+            this.log(e);
+            this.log(`${chalk.yellow('\nUnable to find ') + appName + chalk.yellow(' or missing required jhipster-needle. Reference to ') + adminAngularName + adminFolderName + adminFileName + enableTranslation + clientFramework} ${chalk.yellow(`not added to ${adminModulePath}.\n`)}`);
         }
     }
 

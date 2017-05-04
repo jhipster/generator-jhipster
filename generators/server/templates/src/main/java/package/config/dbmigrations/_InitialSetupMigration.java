@@ -32,7 +32,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 <%_ } _%>
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -69,7 +69,7 @@ public class InitialSetupMigration {
         systemUser.setActivated(true);
         systemUser.setLangKey("en");
         systemUser.setCreatedBy(systemUser.getLogin());
-        systemUser.setCreatedDate(ZonedDateTime.now());
+        systemUser.setCreatedDate(Instant.now());
         systemUser.getAuthorities().add(adminAuthority);
         systemUser.getAuthorities().add(userAuthority);
         mongoTemplate.save(systemUser);
@@ -84,7 +84,7 @@ public class InitialSetupMigration {
         anonymousUser.setActivated(true);
         anonymousUser.setLangKey("en");
         anonymousUser.setCreatedBy(systemUser.getLogin());
-        anonymousUser.setCreatedDate(ZonedDateTime.now());
+        anonymousUser.setCreatedDate(Instant.now());
         mongoTemplate.save(anonymousUser);
 
         User adminUser = new User();
@@ -97,7 +97,7 @@ public class InitialSetupMigration {
         adminUser.setActivated(true);
         adminUser.setLangKey("en");
         adminUser.setCreatedBy(systemUser.getLogin());
-        adminUser.setCreatedDate(ZonedDateTime.now());
+        adminUser.setCreatedDate(Instant.now());
         adminUser.getAuthorities().add(adminAuthority);
         adminUser.getAuthorities().add(userAuthority);
         mongoTemplate.save(adminUser);
@@ -112,7 +112,7 @@ public class InitialSetupMigration {
         userUser.setActivated(true);
         userUser.setLangKey("en");
         userUser.setCreatedBy(systemUser.getLogin());
-        userUser.setCreatedDate(ZonedDateTime.now());
+        userUser.setCreatedDate(Instant.now());
         userUser.getAuthorities().add(userAuthority);
         mongoTemplate.save(userUser);
     }

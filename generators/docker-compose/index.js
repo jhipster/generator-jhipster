@@ -266,8 +266,8 @@ module.exports = DockerComposeGenerator.extend({
                     yamlArray[j] = yamlArray[j].replace(/'/g, '');
                 }
                 yamlString = yamlArray.join('\n');
-                yamlString = yamlString.replace('>-\n                ', '');
-                yamlString = yamlString.replace('>-\n                ', '');
+                yamlString = yamlString.replace(/>-\n/g, '');
+                yamlString = yamlString.replace(/-\s\s+/g, '- ');
                 this.appsYaml.push(yamlString);
             });
         },

@@ -23,6 +23,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const StringReplacePlugin = require('string-replace-webpack-plugin');
 const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 const WebpackNotifierPlugin = require('webpack-notifier');
+const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin")
 const path = require('path');
 
 module.exports = function (options) {
@@ -124,6 +125,15 @@ module.exports = function (options) {
             new webpack.ProvidePlugin({
                 $: "jquery",
                 jQuery: "jquery"
+            }),
+            new MergeJsonWebpackPlugin({
+                output:{
+                    groupBy:[
+<%_ for (language in languages) { _%>
+                        { pattern:"./src/main/webapp/i18n/<%= languages[language] %>/*.json", fileName:"./<%= BUILD_DIR %>www/i18n/<%= languages[language] %>/all.json" },
+<%_ } _%>
+                    ]
+                }
             }),
             new HtmlWebpackPlugin({
                 template: './src/main/webapp/index.html',
