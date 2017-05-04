@@ -4,7 +4,7 @@
     "baseName": "jhipsterSampleApplication",
     "packageName": "io.github.jhipster.sample",
     "packageFolder": "io/github/jhipster/sample",
-    "authenticationType": "session",
+    "authenticationType": "jwt",
     "hibernateCache": "ehcache",
     "clusteredHttpSession": false,
     "websocket": false,
@@ -29,7 +29,7 @@
     "jhiPrefix": "jhi",
     "travis": true,
     "messageBroker": false,
-    "serviceDiscoveryType": false,
+    "serviceDiscoveryType": "eureka",
     "clientPackageManager": "yarn",
     "clientFramework": "angular2"
   }

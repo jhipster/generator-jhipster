@@ -45,7 +45,7 @@ const JHIPSTER_DOCUMENTATION_ARCHIVE_PATH = '/documentation-archive/';
 const constants = {
     QUESTIONS: 15, // maximum possible number of questions
     CLIENT_QUESTIONS: 4,
-    SERVER_QUESTIONS: 15,
+    SERVER_QUESTIONS: 16,
     INTERPOLATE_REGEX: /<%:([\s\S]+?)%>/g, // so that tags in templates do not get mistreated as _ templates
     DOCKER_DIR: `${MAIN_DIR}docker/`,
     LINE_LENGTH: 180,
