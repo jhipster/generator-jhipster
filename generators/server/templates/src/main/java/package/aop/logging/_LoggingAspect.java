@@ -51,9 +51,9 @@ public class LoggingAspect {
     /**
      * Pointcut that matches all repositories, services and Web REST endpoints.
      */
-    @Pointcut("(within(io.github.jhipster.travis.repository..*) && @annotation(org.springframework.stereotype.Repository))"+
-                  " || (within(io.github.jhipster.travis.service..*) && @annotation(org.springframework.stereotype.Service))"+
-                  " || (within(io.github.jhipster.travis.web.rest..*) && @annotation(org.springframework.web.bind.annotation.RestController))")
+    @Pointcut("(within(<%=packageName%>.repository..*) && @annotation(org.springframework.stereotype.Repository))"+
+                  " || (within(<%=packageName%>.service..*) && @annotation(org.springframework.stereotype.Service))"+
+                  " || (within(<%=packageName%>.web.rest..*) && @annotation(org.springframework.web.bind.annotation.RestController))")
     public void loggingPointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }
