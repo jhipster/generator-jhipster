@@ -595,4 +595,12 @@ _%>
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(<%= entityClass %>.class);
     }
+    <%_ if (dto == 'mapstruct') { _%>
+
+    @Test<% if (databaseType == 'sql') { %>
+    @Transactional<% } %>
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(<%= entityClass %>DTO.class);
+    }
+    <%_ } _%>
 }

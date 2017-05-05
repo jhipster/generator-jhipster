@@ -1604,9 +1604,9 @@ istextorbinary@^2.1.0:
     editions "^1.1.1"
     textextensions "1 || 2"
 
-jhipster-core@1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/jhipster-core/-/jhipster-core-1.3.0.tgz#70da7799fcebe20099c5fa0e4272ac8eca3777a9"
+jhipster-core@1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/jhipster-core/-/jhipster-core-1.3.1.tgz#0c6e267f95b52e343455824a5f6bfd24d8b0d61a"
   dependencies:
     lodash "4.17.4"
 

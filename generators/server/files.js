@@ -222,7 +222,6 @@ function writeFiles() {
             if (this.authenticationType === 'jwt') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/vm/_LoginVM.java`, `${javaDir}web/rest/vm/LoginVM.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_UserJWTController.java`, `${javaDir}web/rest/UserJWTController.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_JWTToken.java`, `${javaDir}web/rest/JWTToken.java`);
             }
 
             if (this.authenticationType === 'oauth2') {

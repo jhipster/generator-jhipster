@@ -41,13 +41,13 @@ spring:
             discovery:
                 tags: profile=${spring.profiles.active}, version=${info.project.version}
             config:
-                fail-fast: true
+                fail-fast: false
                 format: yaml
                 profile-separator: "-"
         <%_ } _%>
         <%_ if (serviceDiscoveryType === 'eureka') { _%>
         config:
-            fail-fast: true
+            fail-fast: false
             uri: http://admin:${jhipster.registry.password}@localhost:8761/config
             # name of the config server's property source (file.yml) that we want to use
             name: <%= baseName %>
