@@ -408,7 +408,7 @@ function askForServerSideOpts() {
 
         // JWT authentication is mandatory with Eureka, so the JHipster Registry
         // can control the applications
-        if (this.serviceDiscoveryType === 'eureka') {
+        if (this.serviceDiscoveryType === 'eureka' && this.authenticationType !== 'uaa') {
             this.authenticationType = 'jwt';
         }
 

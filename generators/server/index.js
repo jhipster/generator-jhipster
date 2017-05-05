@@ -181,7 +181,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.authenticationType = this.config.get('authenticationType');
             // JWT authentication is mandatory with Eureka, so the JHipster Registry
             // can control the applications
-            if (this.serviceDiscoveryType === 'eureka') {
+            if (this.serviceDiscoveryType === 'eureka' && this.authenticationType !== 'uaa') {
                 this.authenticationType = 'jwt';
             }
             if (this.authenticationType === 'session') {
