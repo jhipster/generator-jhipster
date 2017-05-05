@@ -31,7 +31,7 @@ import { <%=angular2AppName%>AccountModule } from './account/account.module';
 
 import { customHttpProvider } from './blocks/interceptor/http.provider';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
-import { entityRoute,adminRoute } from './lazy.route';
+import { LAZY_ROUTES } from './lazy.route';
 
 import {
     <%=jhiPrefixCapitalized%>MainComponent,
@@ -46,10 +46,6 @@ import {
     ErrorComponent
 } from './layouts';
 
-const LAZY_ROUTES = [
-    adminRoute,
-    entityRoute
-];
 
 @NgModule({
     imports: [
@@ -60,7 +56,6 @@ const LAZY_ROUTES = [
         <%=angular2AppName%>SharedModule,
         <%=angular2AppName%>HomeModule,
         <%=angular2AppName%>AccountModule,
-
     ],
     declarations: [
         <%=jhiPrefixCapitalized%>MainComponent,

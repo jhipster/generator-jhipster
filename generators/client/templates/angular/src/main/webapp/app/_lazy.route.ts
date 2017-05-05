@@ -18,8 +18,6 @@
 -%>
 import { Route } from '@angular/router';
 
-import { NavbarComponent } from './layouts';
-
 export const adminRoute: Route = {
     path: 'admin',
     loadChildren:'./admin/admin.module'
@@ -29,3 +27,8 @@ export const entityRoute: Route = {
     path: 'entity',
     loadChildren:'./entities/entity.module'
 };
+
+export const LAZY_ROUTES = [
+    adminRoute,
+    entityRoute
+];
