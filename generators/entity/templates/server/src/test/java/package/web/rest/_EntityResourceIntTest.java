@@ -602,5 +602,14 @@ _%>
     public void dtoEqualsVerifier() throws Exception {
         TestUtil.equalsVerifier(<%= entityClass %>DTO.class);
     }
+        <%_ if (databaseType == 'sql') { _%>
+
+    @Test<% if (databaseType == 'sql') { %>
+    @Transactional<% } %>
+    public void testEntityFromId() {
+        assertThat(<%= entityInstance %>Mapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(<%= entityInstance %>Mapper.fromId(null)).isNull();
+    }
+         <%_ } _%>
     <%_ } _%>
 }
