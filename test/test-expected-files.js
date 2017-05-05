@@ -364,10 +364,15 @@ const expectedFiles = {
         `${CLIENT_TEST_SRC_DIR}spec/app/account/sessions/sessions.controller.spec.js`
     ],
 
-    jwt: [
+    jwtServer: [
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/jwt/JWTConfigurer.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/jwt/JWTFilter.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/jwt/TokenProvider.java`
+    ],
+
+    jwtClient: [
+        `${CLIENT_MAIN_SRC_DIR}app/blocks/interceptor/auth.interceptor.js`,
+        `${CLIENT_MAIN_SRC_DIR}app/services/auth/auth.jwt.service.js`
     ],
 
     messageBroker: [
