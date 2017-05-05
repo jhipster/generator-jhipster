@@ -29,7 +29,7 @@
       "en"
     ],
     "travis": true,
-    "serviceDiscoveryType": "eureka",
+    "serviceDiscoveryType": false,
     "clientPackageManager": "yarn",
     "clientFramework": "angular2"
   }

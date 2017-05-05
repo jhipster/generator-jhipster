@@ -25,7 +25,8 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
-                    authenticationType: 'session',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
                     databaseType: 'sql',
                     devDatabaseType: 'h2Memory',
@@ -35,7 +36,8 @@ describe('JHipster generator', () => {
                     nativeLanguage: 'en',
                     languages: ['fr'],
                     buildTool: 'maven',
-                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    enableSocialSignIn: false,
+                    clientFramework: 'angular1',
                     skipClient: false,
                     skipUserManagement: false,
                     serverSideOptions: []
@@ -45,13 +47,15 @@ describe('JHipster generator', () => {
 
         it('creates expected default files', () => {
             assert.file(expectedFiles.server);
+            assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.dockerServices);
             assert.file(expectedFiles.mysql);
             assert.file(getFilesForOptions(angularJsfiles, {
                 useSass: false,
                 enableTranslation: true,
-                authenticationType: 'session',
+                serviceDiscoveryType: false,
+                authenticationType: 'jwt',
                 testFrameworks: []
             }));
             assert.noFile([
@@ -80,7 +84,8 @@ describe('JHipster generator', () => {
                     clientFramework: 'angular2',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
-                    authenticationType: 'session',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
                     databaseType: 'sql',
                     devDatabaseType: 'h2Memory',
@@ -100,13 +105,15 @@ describe('JHipster generator', () => {
 
         it('creates expected default files for angular2', () => {
             assert.file(expectedFiles.server);
+            assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.dockerServices);
             assert.file(expectedFiles.mysql);
             assert.file(getFilesForOptions(angularfiles, {
                 useSass: false,
                 enableTranslation: true,
-                authenticationType: 'session',
+                serviceDiscoveryType: false,
+                authenticationType: 'jwt',
                 testFrameworks: []
             }));
         });
@@ -123,7 +130,8 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
-                    authenticationType: 'session',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
                     databaseType: 'sql',
                     devDatabaseType: 'h2Memory',
@@ -143,13 +151,15 @@ describe('JHipster generator', () => {
 
         it('creates expected default files', () => {
             assert.file(expectedFiles.server);
+            assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.dockerServices);
             assert.file(expectedFiles.mysql);
             assert.file(getFilesForOptions(angularJsfiles, {
                 useSass: false,
                 enableTranslation: true,
-                authenticationType: 'session',
+                serviceDiscoveryType: false,
+                authenticationType: 'jwt',
                 testFrameworks: []
             }));
         });
@@ -169,7 +179,8 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
-                    authenticationType: 'session',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
                     databaseType: 'sql',
                     devDatabaseType: 'h2Disk',
@@ -189,13 +200,15 @@ describe('JHipster generator', () => {
 
         it('creates expected default files', () => {
             assert.file(expectedFiles.server);
+            assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.dockerServices);
             assert.file(expectedFiles.mariadb);
             assert.file(getFilesForOptions(angularJsfiles, {
                 useSass: false,
                 enableTranslation: true,
-                authenticationType: 'session',
+                serviceDiscoveryType: false,
+                authenticationType: 'jwt',
                 testFrameworks: []
             }));
         });
@@ -210,7 +223,8 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
-                    authenticationType: 'session',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
                     databaseType: 'sql',
                     devDatabaseType: 'h2Memory',
@@ -228,6 +242,7 @@ describe('JHipster generator', () => {
 
         it('creates expected default files for gradle', () => {
             assert.file(expectedFiles.server);
+            assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.gradle);
             assert.file(['gradle/yeoman.gradle']);
             assert.file(expectedFiles.dockerServices);
@@ -235,7 +250,8 @@ describe('JHipster generator', () => {
             assert.file(getFilesForOptions(angularJsfiles, {
                 useSass: false,
                 enableTranslation: true,
-                authenticationType: 'session',
+                serviceDiscoveryType: false,
+                authenticationType: 'jwt',
                 testFrameworks: []
             }));
         });
@@ -249,7 +265,8 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.otherpackage',
                     packageFolder: 'com/otherpackage',
-                    authenticationType: 'session',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
                     databaseType: 'sql',
                     devDatabaseType: 'h2Memory',
@@ -282,7 +299,8 @@ describe('JHipster generator', () => {
                     baseName: '21Points',
                     packageName: 'com.otherpackage',
                     packageFolder: 'com/otherpackage',
-                    authenticationType: 'session',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
                     databaseType: 'sql',
                     devDatabaseType: 'h2Memory',
@@ -314,7 +332,8 @@ describe('JHipster generator', () => {
                     baseName: 'myapplication',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
-                    authenticationType: 'session',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
                     databaseType: 'sql',
                     devDatabaseType: 'h2Memory',
@@ -346,6 +365,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    serviceDiscoveryType: false,
                     authenticationType: 'oauth2',
                     hibernateCache: 'ehcache',
                     databaseType: 'sql',
@@ -377,7 +397,8 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
-                    authenticationType: 'session',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
                     hibernateCache: 'hazelcast',
                     databaseType: 'sql',
                     devDatabaseType: 'h2Memory',
@@ -402,7 +423,8 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
-                    authenticationType: 'session',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
                     hibernateCache: 'no',
                     databaseType: 'sql',
                     devDatabaseType: 'postgresql',
@@ -437,7 +459,8 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
-                    authenticationType: 'session',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
                     hibernateCache: 'no',
                     databaseType: 'mongodb',
                     devDatabaseType: 'mongodb',
@@ -469,7 +492,8 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
-                    authenticationType: 'session',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
                     hibernateCache: 'no',
                     databaseType: 'sql',
                     devDatabaseType: 'mssql',
@@ -503,7 +527,8 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
-                    authenticationType: 'session',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
                     hibernateCache: 'no',
                     databaseType: 'cassandra',
                     devDatabaseType: 'cassandra',
@@ -535,7 +560,8 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
-                    authenticationType: 'session',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
                     hibernateCache: 'no',
                     databaseType: 'cassandra',
                     devDatabaseType: 'cassandra',
@@ -566,7 +592,8 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
-                    authenticationType: 'session',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
                     hibernateCache: 'hazelcast',
                     databaseType: 'sql',
                     devDatabaseType: 'h2Memory',
@@ -586,7 +613,7 @@ describe('JHipster generator', () => {
         });
     });
 
-    describe('social login for http session', () => {
+    describe('social login for HTTP session', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({ skipInstall: true, skipChecks: true })
@@ -594,6 +621,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    serviceDiscoveryType: false,
                     authenticationType: 'session',
                     hibernateCache: 'ehcache',
                     databaseType: 'sql',
@@ -612,10 +640,12 @@ describe('JHipster generator', () => {
                 .on('end', done);
         });
 
-        it('creates expected files with social login for http session enabled', () => {
+        it('creates expected files with social login for HTTP session enabled', () => {
+            assert.file(expectedFiles.session);
             assert.file(getFilesForOptions(angularJsfiles, {
                 useSass: false,
                 enableTranslation: true,
+                serviceDiscoveryType: false,
                 authenticationType: 'session',
                 testFrameworks: [],
                 enableSocialSignIn: true
@@ -623,7 +653,7 @@ describe('JHipster generator', () => {
         });
     });
 
-    describe('social login for JWT session', () => {
+    describe('social login for JWT authentication', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({ skipInstall: true, skipChecks: true })
@@ -631,6 +661,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    serviceDiscoveryType: false,
                     authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
                     databaseType: 'sql',
@@ -649,10 +680,11 @@ describe('JHipster generator', () => {
                 .on('end', done);
         });
 
-        it('creates expected files with social login for http session enabled', () => {
+        it('creates expected files with social login for JWT authentication enabled', () => {
             assert.file(getFilesForOptions(angularJsfiles, {
                 useSass: false,
                 enableTranslation: true,
+                serviceDiscoveryType: false,
                 authenticationType: 'jwt',
                 testFrameworks: [],
                 enableSocialSignIn: true
@@ -668,6 +700,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    serviceDiscoveryType: false,
                     authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
                     databaseType: 'sql',
@@ -689,7 +722,45 @@ describe('JHipster generator', () => {
             assert.file(getFilesForOptions(angularJsfiles, {
                 useSass: false,
                 enableTranslation: true,
+                serviceDiscoveryType: false,
                 authenticationType: 'jwt',
+                testFrameworks: []
+            }));
+        });
+    });
+
+    describe('HTTP session authentication', () => {
+        beforeEach((done) => {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({ skipInstall: true, skipChecks: true })
+                .withPrompts({
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'session',
+                    hibernateCache: 'ehcache',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: []
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files with HTTP session authentication', () => {
+            assert.file(expectedFiles.session);
+            assert.file(getFilesForOptions(angularJsfiles, {
+                useSass: false,
+                enableTranslation: true,
+                serviceDiscoveryType: false,
+                authenticationType: 'session',
                 testFrameworks: []
             }));
         });
@@ -704,7 +775,8 @@ describe('JHipster generator', () => {
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
                     serverPort: '8080',
-                    authenticationType: 'session',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
                     clusteredHttpSession: false,
                     websocket: false,
@@ -735,6 +807,7 @@ describe('JHipster generator', () => {
 
         it('creates expected files with Kafka message broker enabled', () => {
             assert.file(expectedFiles.server);
+            assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.gatling);
             assert.file(expectedFiles.messageBroker);
         });
@@ -749,7 +822,8 @@ describe('JHipster generator', () => {
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
                     serverPort: '8080',
-                    authenticationType: 'session',
+                    authenticationType: 'jwt',
+                    serviceDiscoveryType: false,
                     hibernateCache: 'ehcache',
                     clusteredHttpSession: false,
                     websocket: false,
@@ -780,7 +854,8 @@ describe('JHipster generator', () => {
             assert.file(getFilesForOptions(angularJsfiles, {
                 useSass: false,
                 enableTranslation: true,
-                authenticationType: 'session',
+                serviceDiscoveryType: false,
+                authenticationType: 'jwt',
                 testFrameworks: [
                     'protractor'
                 ]
@@ -801,7 +876,8 @@ describe('JHipster generator', () => {
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
                     serverPort: '8080',
-                    authenticationType: 'session',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
                     clusteredHttpSession: false,
                     websocket: false,
@@ -847,7 +923,8 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
-                    authenticationType: 'session',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
                     databaseType: 'sql',
                     devDatabaseType: 'h2Memory',
@@ -868,6 +945,7 @@ describe('JHipster generator', () => {
             assert.noFile(getFilesForOptions(angularJsfiles, {
                 useSass: false,
                 enableTranslation: true,
+                serviceDiscoveryType: false,
                 authenticationType: 'session',
                 testFrameworks: []
             }, '', ['package.json']));
@@ -882,7 +960,8 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
-                    authenticationType: 'session',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
                     databaseType: 'sql',
                     devDatabaseType: 'h2Memory',
@@ -903,7 +982,8 @@ describe('JHipster generator', () => {
             assert.noFile(getFilesForOptions(angularJsfiles, {
                 useSass: false,
                 enableTranslation: true,
-                authenticationType: 'session',
+                serviceDiscoveryType: false,
+                authenticationType: 'jwt',
                 testFrameworks: []
             }, '', ['package.json']));
             assert.noFile(['gradle/yeoman.gradle']);
@@ -919,6 +999,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    serviceDiscoveryType: 'eureka',
                     authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
                     databaseType: 'sql',
@@ -930,8 +1011,7 @@ describe('JHipster generator', () => {
                     languages: ['fr'],
                     buildTool: 'maven',
                     rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    serverSideOptions: [],
-                    serviceDiscoveryType: 'eureka'
+                    serverSideOptions: []
                 })
                 .on('end', done);
         });
@@ -953,6 +1033,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    serviceDiscoveryType: 'eureka',
                     authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
                     databaseType: 'sql',
@@ -964,8 +1045,7 @@ describe('JHipster generator', () => {
                     languages: ['fr'],
                     buildTool: 'maven',
                     rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    serverSideOptions: [],
-                    serviceDiscoveryType: 'eureka'
+                    serverSideOptions: []
                 })
                 .on('end', done);
         });
@@ -988,7 +1068,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
-                    authenticationType: 'session',
+                    authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
                     databaseType: 'sql',
                     devDatabaseType: 'h2Memory',
@@ -1021,6 +1101,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    serviceDiscoveryType: 'consul',
                     authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
                     databaseType: 'sql',
@@ -1032,8 +1113,7 @@ describe('JHipster generator', () => {
                     languages: ['fr'],
                     buildTool: 'maven',
                     rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    serverSideOptions: [],
-                    serviceDiscoveryType: 'consul'
+                    serverSideOptions: []
                 })
                 .on('end', done);
         });
@@ -1055,6 +1135,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    serviceDiscoveryType: 'consul',
                     authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
                     databaseType: 'sql',
@@ -1066,8 +1147,7 @@ describe('JHipster generator', () => {
                     languages: ['fr'],
                     buildTool: 'maven',
                     rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    serverSideOptions: [],
-                    serviceDiscoveryType: 'consul'
+                    serverSideOptions: []
                 })
                 .on('end', done);
         });
@@ -1090,6 +1170,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    serviceDiscoveryType: 'eureka',
                     authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
                     databaseType: 'sql',
@@ -1103,8 +1184,7 @@ describe('JHipster generator', () => {
                     rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                     serverSideOptions: [],
                     skipClient: true,
-                    skipUserManagement: true,
-                    serviceDiscoveryType: 'eureka'
+                    skipUserManagement: true
                 })
                 .on('end', done);
         });
@@ -1200,7 +1280,8 @@ describe('JHipster server generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
-                    authenticationType: 'session',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
                     databaseType: 'sql',
                     devDatabaseType: 'h2Memory',
@@ -1217,12 +1298,14 @@ describe('JHipster server generator', () => {
 
         it('creates expected files for default configuration with gatling enabled for server generator', () => {
             assert.file(expectedFiles.server);
+            assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.gatling);
             assert.noFile(getFilesForOptions(angularJsfiles, {
                 useSass: false,
                 enableTranslation: true,
-                authenticationType: 'session',
+                serviceDiscoveryType: false,
+                authenticationType: 'jwt',
                 testFrameworks: []
             }));
         });
@@ -1233,10 +1316,11 @@ describe('JHipster client generator', () => {
     describe('generate client with angularjs 1', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/client'))
-                .withOptions({ skipInstall: true, auth: 'session' })
+                .withOptions({ skipInstall: true, auth: 'jwt' })
                 .withPrompts({
                     baseName: 'jhipster',
                     enableTranslation: true,
+                    serviceDiscoveryType: false,
                     nativeLanguage: 'en',
                     languages: ['fr'],
                     clientFramework: 'angular1',
@@ -1251,7 +1335,8 @@ describe('JHipster client generator', () => {
             assert.file(getFilesForOptions(angularJsfiles, {
                 useSass: true,
                 enableTranslation: true,
-                authenticationType: 'session',
+                serviceDiscoveryType: false,
+                authenticationType: 'jwt',
                 testFrameworks: []
             }));
         });
@@ -1269,6 +1354,7 @@ describe('JHipster client generator', () => {
                 .withOptions({ skipInstall: true, auth: 'session', npm: true })
                 .withPrompts({
                     baseName: 'jhipster',
+                    serviceDiscoveryType: false,
                     enableTranslation: true,
                     nativeLanguage: 'en',
                     languages: ['fr'],
@@ -1288,9 +1374,10 @@ describe('JHipster client generator', () => {
     describe('generate client with Angular 2+', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/client'))
-                .withOptions({ skipInstall: true, auth: 'session' })
+                .withOptions({ skipInstall: true, auth: 'jwt' })
                 .withPrompts({
                     baseName: 'jhipster',
+                    serviceDiscoveryType: false,
                     enableTranslation: true,
                     nativeLanguage: 'en',
                     languages: ['fr'],
@@ -1307,7 +1394,8 @@ describe('JHipster client generator', () => {
             assert.file(getFilesForOptions(angularfiles, {
                 useSass: true,
                 enableTranslation: true,
-                authenticationType: 'session',
+                serviceDiscoveryType: false,
+                authenticationType: 'jwt',
                 testFrameworks: []
             }));
         });
@@ -1322,9 +1410,10 @@ describe('JHipster client generator', () => {
     describe('generate client with Angular 2+ using yarn flag', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/client'))
-                .withOptions({ skipInstall: true, auth: 'session', npm: true })
+                .withOptions({ skipInstall: true, auth: 'jwt', npm: true })
                 .withPrompts({
                     baseName: 'jhipster',
+                    serviceDiscoveryType: false,
                     enableTranslation: true,
                     nativeLanguage: 'en',
                     languages: ['fr'],
@@ -1341,7 +1430,8 @@ describe('JHipster client generator', () => {
             assert.file(getFilesForOptions(angularfiles, {
                 useSass: true,
                 enableTranslation: true,
-                authenticationType: 'session',
+                serviceDiscoveryType: false,
+                authenticationType: 'jwt',
                 testFrameworks: []
             }));
         });

@@ -137,7 +137,8 @@ describe('Generator Base', () => {
                 const generator = {
                     useSass: false,
                     enableTranslation: true,
-                    authenticationType: 'session',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
                     testFrameworks: []
                 };
                 let filesToAssert = expectedFiles.client;
@@ -152,7 +153,8 @@ describe('Generator Base', () => {
                 const generator = {
                     useSass: false,
                     enableTranslation: true,
-                    authenticationType: 'session',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
                     skipUserManagement: true,
                     testFrameworks: []
                 };

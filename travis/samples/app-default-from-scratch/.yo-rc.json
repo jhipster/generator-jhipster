@@ -29,7 +29,7 @@
     "jhiPrefix": "jhi",
     "travis": true,
     "messageBroker": false,
-    "serviceDiscoveryType": "eureka",
+    "serviceDiscoveryType": false,
     "clientPackageManager": "yarn",
     "clientFramework": "angular2"
   }
