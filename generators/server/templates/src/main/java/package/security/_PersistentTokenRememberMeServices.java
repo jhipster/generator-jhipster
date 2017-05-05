@@ -115,39 +115,41 @@ public class PersistentTokenRememberMeServices extends
     protected UserDetails processAutoLoginCookie(String[] cookieTokens, HttpServletRequest request,
         HttpServletResponse response) {
 
-        String login = null;
-        UpgradedRememberMeToken upgradedToken = upgradedTokenCache.getIfPresent(cookieTokens[0]);
-        if (upgradedToken != null) {
-            login = upgradedToken.getUserLoginIfValidAndRecentUpgrade(cookieTokens);
-            log.debug("Detected previously upgraded login token for user '{}'", login);
-        }
-
-        if (login == null) {
-            PersistentToken token = getPersistentToken(cookieTokens);<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-            login = token.getUser().getLogin();<%}%><% if (databaseType == 'cassandra') { %>
-            login = token.getLogin();<%}%>
-
-            // Token also matches, so login is valid. Update the token value, keeping the *same* series number.
-            log.debug("Refreshing persistent login token for user '{}', series '{}'", login, token.getSeries());<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-            token.setTokenDate(LocalDate.now());<%}%><% if (databaseType == 'cassandra') { %>
-            token.setTokenDate(new Date());<%}%>
-            token.setTokenValue(RandomUtil.generateTokenData());
-            token.setIpAddress(request.getRemoteAddr());
-            token.setUserAgent(request.getHeader("User-Agent"));
-            try {
-                <% if (databaseType == 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>persistentTokenRepository.save(token);<% } %>
-                <%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
-            } catch (DataAccessException e) {
-                <%_ } else { _%>
-            } catch (DriverException e) {
-                <%_ } _%>
-                log.error("Failed to update token: ", e);
-                throw new RememberMeAuthenticationException("Autologin failed due to data access problem", e);
+        synchronized (this) { // prevent 2 authentication requests from the same user in parallel
+            String login = null;
+            UpgradedRememberMeToken upgradedToken = upgradedTokenCache.getIfPresent(cookieTokens[0]);
+            if (upgradedToken != null) {
+                login = upgradedToken.getUserLoginIfValidAndRecentUpgrade(cookieTokens);
+                log.debug("Detected previously upgraded login token for user '{}'", login);
             }
-            addCookie(token, request, response);
-            upgradedTokenCache.put(cookieTokens[0], new UpgradedRememberMeToken(cookieTokens, login));
+
+            if (login == null) {
+                PersistentToken token = getPersistentToken(cookieTokens);<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+                login = token.getUser().getLogin();<%}%><% if (databaseType == 'cassandra') { %>
+                login = token.getLogin();<%}%>
+
+                // Token also matches, so login is valid. Update the token value, keeping the *same* series number.
+                log.debug("Refreshing persistent login token for user '{}', series '{}'", login, token.getSeries());<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+                token.setTokenDate(LocalDate.now());<%}%><% if (databaseType == 'cassandra') { %>
+                token.setTokenDate(new Date());<%}%>
+                token.setTokenValue(RandomUtil.generateTokenData());
+                token.setIpAddress(request.getRemoteAddr());
+                token.setUserAgent(request.getHeader("User-Agent"));
+                try {
+                    <% if (databaseType == 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>persistentTokenRepository.save(token);<% } %>
+                    <%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
+                } catch (DataAccessException e) {
+                    <%_ } else { _%>
+                } catch (DriverException e) {
+                    <%_ } _%>
+                    log.error("Failed to update token: ", e);
+                    throw new RememberMeAuthenticationException("Autologin failed due to data access problem", e);
+                }
+                addCookie(token, request, response);
+                upgradedTokenCache.put(cookieTokens[0], new UpgradedRememberMeToken(cookieTokens, login));
+            }
+            return getUserDetailsService().loadUserByUsername(login);
         }
-        return getUserDetailsService().loadUserByUsername(login);
     }
 
     @Override

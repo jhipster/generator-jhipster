@@ -77,17 +77,14 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/AbstractAuditingEntity.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Authority.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/PersistentAuditEvent.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/PersistentToken.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/User.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/package-info.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/AuthorityRepository.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/CustomAuditEventRepository.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/PersistenceAuditEventRepository.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/UserRepository.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/PersistentTokenRepository.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/package-info.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/AuthoritiesConstants.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/PersistentTokenRememberMeServices.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/SecurityUtils.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/SpringSecurityAuditorAware.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/DomainUserDetailsService.java`,
@@ -227,14 +224,12 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/services/auth/principal.service.js`,
         `${CLIENT_MAIN_SRC_DIR}app/services/auth/has-authority.directive.js`,
         `${CLIENT_MAIN_SRC_DIR}app/services/auth/has-any-authority.directive.js`,
-        `${CLIENT_MAIN_SRC_DIR}app/services/auth/auth.session.service.js`,
         `${CLIENT_MAIN_SRC_DIR}app/services/auth/account.service.js`,
         `${CLIENT_MAIN_SRC_DIR}app/services/auth/activate.service.js`,
         `${CLIENT_MAIN_SRC_DIR}app/services/auth/password.service.js`,
         `${CLIENT_MAIN_SRC_DIR}app/services/auth/password-reset-init.service.js`,
         `${CLIENT_MAIN_SRC_DIR}app/services/auth/password-reset-finish.service.js`,
         `${CLIENT_MAIN_SRC_DIR}app/services/auth/register.service.js`,
-        `${CLIENT_MAIN_SRC_DIR}app/services/auth/sessions.service.js`,
         `${CLIENT_MAIN_SRC_DIR}app/services/profiles/page-ribbon.directive.js`,
         `${CLIENT_MAIN_SRC_DIR}app/services/profiles/profile.service.js`,
         `${CLIENT_MAIN_SRC_DIR}app/components/form/show-validation.directive.js`,
@@ -283,9 +278,6 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/account/reset/finish/reset.finish.html`,
         `${CLIENT_MAIN_SRC_DIR}app/account/reset/finish/reset.finish.state.js`,
         `${CLIENT_MAIN_SRC_DIR}app/account/reset/finish/reset.finish.controller.js`,
-        `${CLIENT_MAIN_SRC_DIR}app/account/sessions/sessions.html`,
-        `${CLIENT_MAIN_SRC_DIR}app/account/sessions/sessions.state.js`,
-        `${CLIENT_MAIN_SRC_DIR}app/account/sessions/sessions.controller.js`,
         `${CLIENT_MAIN_SRC_DIR}app/account/settings/settings.html`,
         `${CLIENT_MAIN_SRC_DIR}app/account/settings/settings.state.js`,
         `${CLIENT_MAIN_SRC_DIR}app/account/settings/settings.controller.js`,
@@ -321,7 +313,6 @@ const expectedFiles = {
         `${CLIENT_TEST_SRC_DIR}spec/app/components/login/login.controller.spec.js`,
         `${CLIENT_TEST_SRC_DIR}spec/app/account/password/password.controller.spec.js`,
         `${CLIENT_TEST_SRC_DIR}spec/app/account/password/password-strength-bar.directive.spec.js`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/account/sessions/sessions.controller.spec.js`,
         `${CLIENT_TEST_SRC_DIR}spec/app/account/settings/settings.controller.spec.js`,
         `${CLIENT_TEST_SRC_DIR}spec/app/account/activate/activate.controller.spec.js`,
         `${CLIENT_TEST_SRC_DIR}spec/app/account/register/register.controller.spec.js`,
@@ -361,10 +352,27 @@ const expectedFiles = {
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/SocialServiceIntTest.java`
     ],
 
-    jwt: [
+    session: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/PersistentToken.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/PersistentTokenRepository.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/PersistentTokenRememberMeServices.java`,
+        `${CLIENT_MAIN_SRC_DIR}app/account/sessions/sessions.html`,
+        `${CLIENT_MAIN_SRC_DIR}app/account/sessions/sessions.state.js`,
+        `${CLIENT_MAIN_SRC_DIR}app/account/sessions/sessions.controller.js`,
+        `${CLIENT_MAIN_SRC_DIR}app/services/auth/sessions.service.js`,
+        `${CLIENT_MAIN_SRC_DIR}app/services/auth/auth.session.service.js`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/account/sessions/sessions.controller.spec.js`
+    ],
+
+    jwtServer: [
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/jwt/JWTConfigurer.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/jwt/JWTFilter.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/jwt/TokenProvider.java`
+    ],
+
+    jwtClient: [
+        `${CLIENT_MAIN_SRC_DIR}app/blocks/interceptor/auth.interceptor.js`,
+        `${CLIENT_MAIN_SRC_DIR}app/services/auth/auth.jwt.service.js`
     ],
 
     messageBroker: [

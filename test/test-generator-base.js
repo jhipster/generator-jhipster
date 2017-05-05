@@ -137,10 +137,12 @@ describe('Generator Base', () => {
                 const generator = {
                     useSass: false,
                     enableTranslation: true,
-                    authenticationType: 'session',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
                     testFrameworks: []
                 };
                 let filesToAssert = expectedFiles.client;
+                filesToAssert = filesToAssert.concat(expectedFiles.jwtClient);
                 filesToAssert = filesToAssert.concat(expectedFiles.userManagement).sort();
                 const out = BaseGenerator.prototype.writeFilesToDisk(files, generator, true).sort();
                 assert.deepEqual(out, filesToAssert);
@@ -152,11 +154,14 @@ describe('Generator Base', () => {
                 const generator = {
                     useSass: false,
                     enableTranslation: true,
-                    authenticationType: 'session',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
                     skipUserManagement: true,
                     testFrameworks: []
                 };
-                const filesToAssert = expectedFiles.client.sort();
+                let filesToAssert = expectedFiles.client;
+                filesToAssert = filesToAssert.concat(expectedFiles.jwtClient);
+                filesToAssert = filesToAssert.sort();
                 const out = BaseGenerator.prototype.writeFilesToDisk(files, generator, true).sort();
                 assert.deepEqual(out, filesToAssert);
             });
