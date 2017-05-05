@@ -51,7 +51,9 @@ public class LoggingAspect {
     /**
      * Pointcut that matches all repositories, services and Web REST endpoints.
      */
-    @Pointcut("within(<%=packageName%>.repository..*) || within(<%=packageName%>.service..*) || within(<%=packageName%>.web.rest..*)")
+    @Pointcut("(within(<%=packageName%>.repository..*) && bean(*Repository))"+
+                  " || (within(<%=packageName%>.service..*) && bean(*Service))"+
+                  " || (within(<%=packageName%>.web.rest..*) && bean(*Resource))")
     public void loggingPointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }
