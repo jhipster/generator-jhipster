@@ -64,7 +64,11 @@ services:
             - JHIPSTER_SLEEP=30 # gives time for the Cassandra cluster to start and execute the migration scripts
                 <%_ } _%>
             <%_ } else { _%>
+                <%_ if (serviceDiscoveryType == 'eureka') { _%>
+            - JHIPSTER_SLEEP=20 # gives time for the JHipster Registry to boot before the application
+                <%_ } else { _%>
             - JHIPSTER_SLEEP=10 # gives time for the database to boot before the application
+                <%_ } _%>
             <%_ } _%>
             <%_ if (searchEngine == 'elasticsearch') { _%>
             - SPRING_DATA_ELASTICSEARCH_CLUSTER_NODES=<%= baseName.toLowerCase() %>-elasticsearch:9300
