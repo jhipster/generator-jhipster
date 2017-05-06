@@ -21,13 +21,7 @@ import { RequestOptionsArgs, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Injector } from '@angular/core';
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-import { AuthService } from '../../shared/auth/auth.service';
-import { Principal } from '../../shared/auth/principal.service';
-    <%_ if (authenticationType === 'oauth2') { _%>
-import { AuthServerProvider } from '../../shared/auth/auth-oauth2.service';
-    <%_ } else { _%>
-import { AuthServerProvider } from '../../shared/auth/auth-jwt.service';
-    <%_ } _%>
+import { LoginService } from '../../shared/login/login.service';
 <%_ } if (authenticationType === 'session') { _%>
 import { AuthServerProvider } from '../../shared/auth/auth-session.service';
 import { StateStorageService } from '../../shared/auth/state-storage.service';
@@ -55,15 +49,8 @@ export class AuthExpiredInterceptor extends HttpInterceptor {
     responseIntercept(observable: Observable<Response>): Observable<Response> {
         return <Observable<Response>> observable.catch((error, source) => {
             if (error.status === 401) {
-                const principal: Principal = this.injector.get(Principal);
-
-                if (principal.isAuthenticated()) {
-                    const auth: AuthService = this.injector.get(AuthService);
-                    auth.authorize(true);
-                } else {
-                    const authServerProvider: AuthServerProvider = this.injector.get(AuthServerProvider);
-                    authServerProvider.logout();
-                }
+                const loginService: LoginService = this.injector.get(LoginService);
+                loginService.logout();
             }
             return Observable.throw(error);
         });
