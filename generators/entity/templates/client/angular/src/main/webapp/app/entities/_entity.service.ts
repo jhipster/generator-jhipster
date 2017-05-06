@@ -18,7 +18,7 @@
 -%>
 <%_
     let hasDate = false;
-    if (fieldsContainInstant || fieldsContainZonedDateTime) {
+    if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) {
         hasDate = true;
     }
 _%>
