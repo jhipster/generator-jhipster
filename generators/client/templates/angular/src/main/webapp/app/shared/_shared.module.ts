@@ -24,7 +24,6 @@ import {
     <%=angular2AppName%>SharedLibsModule,
     <%=angular2AppName%>SharedCommonModule,
     CSRFService,
-    AuthService,
     <%_ if (!skipServer) { _%>
     AuthServerProvider,
     <%_ } _%>
@@ -76,7 +75,6 @@ import {
         <%_ if (enableSocialSignIn) { _%>
         SocialService,
         <%_ } _%>
-        AuthService,
         <%_ if (!skipUserManagement) { _%>
         UserService,
         <%_ } _%>
