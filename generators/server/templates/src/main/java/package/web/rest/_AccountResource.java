@@ -162,12 +162,13 @@ public class AccountResource {
     @PostMapping("/account")
     @Timed
     public ResponseEntity saveAccount(@Valid @RequestBody UserDTO userDTO) {
+        final String userLogin = SecurityUtils.getCurrentUserLogin();
         Optional<User> existingUser = userRepository.findOneByEmail(userDTO.getEmail());
-        if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userDTO.getLogin()))) {
+        if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("user-management", "emailexists", "Email already in use")).body(null);
         }
         return userRepository
-            .findOneByLogin(SecurityUtils.getCurrentUserLogin())
+            .findOneByLogin(userLogin)
             .map(u -> {
                 userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
                     userDTO.getLangKey()<% if (databaseType === 'mongodb' || databaseType === 'sql') { %>, userDTO.getImageUrl()<% } %>);
