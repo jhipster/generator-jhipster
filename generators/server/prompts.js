@@ -423,6 +423,7 @@ function askForServerSideOpts() {
     ];
 
     this.prompt(prompts).then((props) => {
+        this.serviceDiscoveryType = props.serviceDiscoveryType;
         this.authenticationType = props.authenticationType;
 
         // JWT authentication is mandatory with Eureka, so the JHipster Registry
@@ -458,7 +459,6 @@ function askForServerSideOpts() {
         this.devDatabaseType = props.devDatabaseType;
         this.prodDatabaseType = props.prodDatabaseType;
         this.searchEngine = props.searchEngine;
-        this.serviceDiscoveryType = props.serviceDiscoveryType;
         this.buildTool = props.buildTool;
         this.uaaBaseName = getUaaAppName.call(this, props.uaaBaseName).baseName;
 
