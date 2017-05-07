@@ -29,6 +29,7 @@ services:
         environment:
             - SPRING_PROFILES_ACTIVE=dev,native
             - SECURITY_USER_PASSWORD=<%= adminPassword %>
+            - JHIPSTER_REGISTRY_PASSWORD=<%= adminPassword %>
             <%_ if (monitoring === 'elk') { _%>
             - JHIPSTER_LOGGING_LOGSTASH_ENABLED=true
             - JHIPSTER_LOGGING_LOGSTASH_HOST=jhipster-logstash
