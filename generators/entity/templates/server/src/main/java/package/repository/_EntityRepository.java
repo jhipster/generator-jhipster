@@ -19,6 +19,7 @@
 package <%=packageName%>.repository;
 
 import <%=packageName%>.domain.<%=entityClass%>;
+import org.springframework.stereotype.Repository;
 <% if (databaseType == 'cassandra') { %>
 import com.datastax.driver.core.*;
 import com.datastax.driver.mapping.Mapper;
@@ -26,7 +27,6 @@ import com.datastax.driver.mapping.MappingManager;<% } %><% if (databaseType=='s
 import org.springframework.data.jpa.repository.*;<% if (fieldsContainOwnerManyToMany==true) { %>
 import org.springframework.data.repository.query.Param;<% } %>
 
-import org.springframework.stereotype.Repository;
 import java.util.List;<% } %><% if (databaseType=='mongodb') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;<% } %><% if (databaseType == 'cassandra') { %>
 
