@@ -35,8 +35,10 @@
 
         function responseError(response) {
             if (response.status === 401) {
+    <%_ if (authenticationType !== 'uaa') { _%>
                 delete $localStorage.authenticationToken;
                 delete $sessionStorage.authenticationToken;
+    <%_ } _%>
                 var Principal = $injector.get('Principal');
                 if (Principal.isAuthenticated()) {
                     var Auth = $injector.get('Auth');

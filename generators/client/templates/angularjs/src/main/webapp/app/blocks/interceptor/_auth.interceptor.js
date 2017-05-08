@@ -41,7 +41,7 @@
                 config.headers.Authorization = 'Bearer ' + token.access_token;
             }
             <%_ } _%>
-            <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+            <%_ if (authenticationType === 'jwt') { _%>
             if (token) {
                 config.headers.Authorization = 'Bearer ' + token;
             }

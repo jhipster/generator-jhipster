@@ -21,7 +21,9 @@ import { Http, XHRBackend, RequestOptions } from '@angular/http';
 import { JhiEventManager, JhiInterceptableHttp } from 'ng-jhipster';
 
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+<%_ if (authenticationType !== 'uaa') { _%>
 import { AuthInterceptor } from './auth.interceptor';
+<%_ } _%>
 import { LocalStorageService, SessionStorageService } from 'ng2-webstorage';
 <%_ } if (authenticationType === 'session') { _%>
 import { StateStorageService } from '../../shared/auth/state-storage.service';
@@ -50,7 +52,9 @@ export function interceptableFactory(
         defaultOptions,
         [
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+		<%_ if (authenticationType !== 'uaa') { _%>
             new AuthInterceptor(localStorage, sessionStorage),
+        <%_ } _%>
             new AuthExpiredInterceptor(injector),
         <%_ } if (authenticationType === 'session') { _%>
             new AuthExpiredInterceptor(injector, stateStorageService),

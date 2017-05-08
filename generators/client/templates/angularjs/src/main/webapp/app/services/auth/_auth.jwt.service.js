@@ -37,7 +37,11 @@
         return service;
 
         function getToken () {
+<%_ if (authenticationType === 'uaa') { _%>
+            return null;
+<% } else { %>
             return $localStorage.authenticationToken || $sessionStorage.authenticationToken;
+<%_ } _%>
         }
 
         function login (credentials) {
@@ -45,30 +49,13 @@
             var data = {
                 username: credentials.username,
                 password: credentials.password,
-                grant_type: "password"
-            };
-            var headers = {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                "Authorization" : "Basic d2ViX2FwcDo="
+                rememberMe: credentials.rememberMe
             };
 
             return $http({
-                url: '<%= uaaBaseName.toLowerCase() %>/oauth/token',
+                url: '/auth/login',
                 method: 'post',
-                data: data,
-                headers: headers,
-                transformRequest: function(obj) {
-                    var str = [];
-                    for (var p in obj) {
-                        str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
-                    }
-                    return str.join('&');
-                }
-            }).then(function (data) {
-                var accessToken = data.data["access_token"];
-                if (angular.isDefined(accessToken)) {
-                    service.storeAuthenticationToken(accessToken, credentials.rememberMe);
-                }
+                data: data
             });
 <% } else { %>
             var data = {
@@ -103,16 +90,22 @@
         }
 
         function storeAuthenticationToken(jwt, rememberMe) {
+<%_ if(authenticationType !== 'uaa') { _%>
             if(rememberMe){
                 $localStorage.authenticationToken = jwt;
             } else {
                 $sessionStorage.authenticationToken = jwt;
             }
+<%_ } _%>
         }
 
         function logout () {
+<%_ if(authenticationType === 'uaa') { _%>
+            return $http.post('/auth/logout');
+<% } else { %>
             delete $localStorage.authenticationToken;
             delete $sessionStorage.authenticationToken;
+<%_ } _%>
         }
     }
 })();
