@@ -45,25 +45,17 @@
             var data = {
                 username: credentials.username,
                 password: credentials.password,
-                grant_type: "password"
+                rememberMe: credentials.rememberMe
             };
             var headers = {
-                'Content-Type': 'application/x-www-form-urlencoded',
                 "Authorization" : "Basic d2ViX2FwcDo="
             };
 
             return $http({
-                url: '<%= uaaBaseName.toLowerCase() %>/oauth/token',
+                url: '/auth/login',
                 method: 'post',
                 data: data,
-                headers: headers,
-                transformRequest: function(obj) {
-                    var str = [];
-                    for (var p in obj) {
-                        str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
-                    }
-                    return str.join('&');
-                }
+                headers: headers
             }).then(function (data) {
                 var accessToken = data.data["access_token"];
                 if (angular.isDefined(accessToken)) {
@@ -103,14 +95,21 @@
         }
 
         function storeAuthenticationToken(jwt, rememberMe) {
+<%_ if(authenticationType === 'uaa') { _%>
+                $sessionStorage.authenticationToken = jwt;
+<% } else { %>
             if(rememberMe){
                 $localStorage.authenticationToken = jwt;
             } else {
                 $sessionStorage.authenticationToken = jwt;
             }
+<%_ } _%>
         }
 
         function logout () {
+<%_ if(authenticationType === 'uaa') { _%>
+            $http.post('/auth/logout');
+<%_ } _%>
             delete $localStorage.authenticationToken;
             delete $sessionStorage.authenticationToken;
         }
