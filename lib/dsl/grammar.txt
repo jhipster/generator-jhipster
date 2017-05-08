@@ -149,7 +149,7 @@ relationDecl
     }
 
 relationshipBodies
-  = rb:relationshipBody SPACE* ',' SPACE* morerb:relationshipBodies { return addUniqueElements([rb], morerb); }
+  = rb:relationshipBody SPACE* ','? SPACE* morerb:relationshipBodies { return addUniqueElements([rb], morerb); }
   / rb:relationshipBody { return [rb]; }
 
 relationshipBody
