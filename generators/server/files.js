@@ -561,6 +561,7 @@ function writeFiles() {
             this.template(`${SERVER_TEST_SRC_DIR}package/security/_SecurityUtilsUnitTest.java`, `${testDir}security/SecurityUtilsUnitTest.java`);
             if (this.authenticationType === 'jwt') {
                 this.template(`${SERVER_TEST_SRC_DIR}package/security/jwt/_TokenProviderTest.java`, `${testDir}security/jwt/TokenProviderTest.java`);
+                this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_UserJWTControllerIntTest.java`, `${testDir}web/rest/UserJWTControllerIntTest.java`);
             }
 
             if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {

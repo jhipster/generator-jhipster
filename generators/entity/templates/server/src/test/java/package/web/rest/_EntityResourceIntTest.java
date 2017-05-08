@@ -594,6 +594,15 @@ _%>
     @Transactional<% } %>
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(<%= entityClass %>.class);
+        <%= entityClass %> <%= entityInstance %>1 = new <%= entityClass %>();
+        <%= entityInstance %>1.setId(<% if (databaseType == 'sql') { %>1L<% } else if (databaseType == 'mongodb') { %>"id1"<% } else if (databaseType == 'cassandra') { %>UUID.randomUUID()<% } %>);
+        <%= entityClass %> <%= entityInstance %>2 = new <%= entityClass %>();
+        <%= entityInstance %>2.setId(<%= entityInstance %>1.getId());
+        assertThat(<%= entityInstance %>1).isEqualTo(<%= entityInstance %>2);
+        <%= entityInstance %>2.setId(<% if (databaseType == 'sql') { %>2L<% } else if (databaseType == 'mongodb') { %>"id2"<% } else if (databaseType == 'cassandra') { %>UUID.randomUUID()<% } %>);
+        assertThat(<%= entityInstance %>1).isNotEqualTo(<%= entityInstance %>2);
+        <%= entityInstance %>1.setId(null);
+        assertThat(<%= entityInstance %>1).isNotEqualTo(<%= entityInstance %>2);
     }
     <%_ if (dto == 'mapstruct') { _%>
 
@@ -601,6 +610,16 @@ _%>
     @Transactional<% } %>
     public void dtoEqualsVerifier() throws Exception {
         TestUtil.equalsVerifier(<%= entityClass %>DTO.class);
+        <%= entityClass %>DTO <%= entityInstance %>DTO1 = new <%= entityClass %>DTO();
+        <%= entityInstance %>DTO1.setId(<% if (databaseType == 'sql') { %>1L<% } else if (databaseType == 'mongodb') { %>"id1"<% } else if (databaseType == 'cassandra') { %>UUID.randomUUID()<% } %>);
+        <%= entityClass %>DTO <%= entityInstance %>DTO2 = new <%= entityClass %>DTO();
+        assertThat(<%= entityInstance %>DTO1).isNotEqualTo(<%= entityInstance %>DTO2);
+        <%= entityInstance %>DTO2.setId(<%= entityInstance %>DTO1.getId());
+        assertThat(<%= entityInstance %>DTO1).isEqualTo(<%= entityInstance %>DTO2);
+        <%= entityInstance %>DTO2.setId(<% if (databaseType == 'sql') { %>2L<% } else if (databaseType == 'mongodb') { %>"id2"<% } else if (databaseType == 'cassandra') { %>UUID.randomUUID()<% } %>);
+        assertThat(<%= entityInstance %>DTO1).isNotEqualTo(<%= entityInstance %>DTO2);
+        <%= entityInstance %>DTO1.setId(null);
+        assertThat(<%= entityInstance %>DTO1).isNotEqualTo(<%= entityInstance %>DTO2);
     }
         <%_ if (databaseType == 'sql') { _%>
 

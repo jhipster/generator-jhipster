@@ -198,11 +198,7 @@ public class <%= entityClass %>DTO implements Serializable {
         if(<%= entityInstance %>DTO.getId() == null || getId() == null) {
             return false;
         }
-        if (!Objects.equals(getId(), <%= entityInstance %>DTO.getId())) {
-            return false;
-        }
-
-        return true;
+        return Objects.equals(getId(), <%= entityInstance %>DTO.getId());
     }
 
     @Override
