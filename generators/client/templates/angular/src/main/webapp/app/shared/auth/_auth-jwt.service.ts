@@ -35,17 +35,17 @@ export class AuthServerProvider {
 
     login(credentials): Observable<any> {
 <%_ if (authenticationType === 'uaa') { _%>
-        const data = new URLSearchParams();
-        data.append('grant_type', 'password');
-        data.append('username', credentials.username);
-        data.append('password', credentials.password);
+        const data = {
+            username: credentials.username,
+            password: credentials.password,
+            rememberMe: credentials.rememberMe
+        };
 
         const headers = new Headers ({
-            'Content-Type': 'application/x-www-form-urlencoded',
             'Authorization' : 'Basic d2ViX2FwcDo='
         });
 
-        return this.http.post('<%= uaaBaseName.toLowerCase() %>/oauth/token', data, {
+        return this.http.post('auth/login', data, {
             headers
         }).map((resp) => {
             const accessToken = resp.json()['access_token'];
@@ -84,15 +84,22 @@ export class AuthServerProvider {
     }
 
     storeAuthenticationToken(jwt, rememberMe) {
+<%_ if (authenticationType === 'uaa') { _%>
+            this.$sessionStorage.store('authenticationToken', jwt);
+<% } else { %>
         if (rememberMe) {
             this.$localStorage.store('authenticationToken', jwt);
         } else {
             this.$sessionStorage.store('authenticationToken', jwt);
         }
+<%_ } _%>
     }
 
     logout(): Observable<any> {
         return new Observable((observer) => {
+<%_ if (authenticationType === 'uaa') { _%>
+            this.http.post('/auth/logout', null);
+<%_ } _%>
             this.$localStorage.clear('authenticationToken');
             this.$sessionStorage.clear('authenticationToken');
             observer.complete();

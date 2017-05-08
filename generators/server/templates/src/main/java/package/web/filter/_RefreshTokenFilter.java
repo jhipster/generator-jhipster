@@ -1,0 +1,129 @@
+<%#
+ Copyright 2013-2017 the original author or authors.
+
+ This file is part of the JHipster project, see https://jhipster.github.io/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%=packageName%>.web.filter;
+
+import <%=packageName%>.security.CookieTokenExtractor;
+import <%=packageName%>.security.UaaAuthenticationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.filter.GenericFilterBean;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+/**
+ * Filters incoming requests and refreshes the access token before it expires.
+ */
+public class RefreshTokenFilter extends GenericFilterBean {
+    /**
+     * Number of seconds before expiry to start refreshing access tokens so we don't run into race conditions when forwarding
+     * requests downstream. Otherwise, access tokens may still be valid when we check here but may then be expired
+     * when relayed to another microservice a wee bit later.
+     */
+    private static final int REFRESH_WINDOW_SECS = 30;
+
+    private final Logger log = LoggerFactory.getLogger(RefreshTokenFilter.class);
+
+    /**
+     * The UaaAuthenticationService is doing the actual work. We are just a simple filter after all.
+     */
+    private final UaaAuthenticationService authenticationService;
+    private final TokenStore tokenStore;
+
+    public RefreshTokenFilter(UaaAuthenticationService authenticationService, TokenStore tokenStore) {
+        this.authenticationService = authenticationService;
+        this.tokenStore = tokenStore;
+    }
+
+    /**
+     * Check access token cookie and refresh it, if it is either not present, expired or about to expire.
+     */
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+        throws IOException, ServletException {
+        HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
+        HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
+        try {
+            HttpServletRequest newServletRequest = refreshTokensIfExpiring(httpServletRequest, httpServletResponse);
+            filterChain.doFilter(newServletRequest, servletResponse);
+        } catch (InvalidTokenException ex) {
+            log.error("Security exception: invalid token", ex);
+            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            authenticationService.clearCookies(httpServletRequest, httpServletResponse);
+        }
+    }
+
+    /**
+     * Refresh the access and refresh tokens if they are about to expire.
+     *
+     * @param httpServletRequest  the servlet request holding the current cookies. If no refresh cookie is present,
+     *                            then we are out of luck.
+     * @param httpServletResponse the servlet response that gets the new set-cookie headers, if they had to be
+     *                            refreshed.
+     * @return a new request to use downstream that contains the new cookies, if they had to be refreshed.
+     */
+    public HttpServletRequest refreshTokensIfExpiring(HttpServletRequest httpServletRequest, HttpServletResponse
+        httpServletResponse) {
+        //get access token from cookie
+        Cookie accessTokenCookie = CookieTokenExtractor.getCookie(httpServletRequest,
+            CookieTokenExtractor.ACCESS_TOKEN_COOKIE);
+        if (mustRefreshToken(accessTokenCookie)) {        //we either have no access token, or it is expired, or it is about to expire
+            //get the refresh token cookie and, if present, request new tokens
+            Cookie refreshCookie = CookieTokenExtractor.getCookie(httpServletRequest,
+                CookieTokenExtractor.REFRESH_TOKEN_COOKIE);
+            if (refreshCookie != null) {
+                try {
+                    httpServletRequest = authenticationService.refreshToken(httpServletRequest, httpServletResponse, refreshCookie);
+                } catch (HttpClientErrorException ex) {
+                    throw new InvalidTokenException("could not refresh OAuth2 token", ex);
+                }
+            }
+        }
+        return httpServletRequest;
+    }
+
+    /**
+     * Check if we must refresh the access token.
+     * We must refresh it, if we either have no access token, or it is expired, or it is about to expire.
+     *
+     * @param accessTokenCookie the current access token.
+     * @return true, if it must be refreshed; false, otherwise.
+     */
+    private boolean mustRefreshToken(Cookie accessTokenCookie) {
+        if (accessTokenCookie == null) {
+            return true;
+        }
+        OAuth2AccessToken token = tokenStore.readAccessToken(accessTokenCookie.getValue());
+        //check if token is expired or about to expire
+        if (token.isExpired() || token.getExpiresIn() < REFRESH_WINDOW_SECS) {
+            return true;
+        }
+        return false;       //access token is still fine
+    }
+}

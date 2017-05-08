@@ -31,6 +31,7 @@ export class AuthInterceptor extends JhiHttpInterceptor {
     }
 
     requestIntercept(options?: RequestOptionsArgs): RequestOptionsArgs {
+    <%_ if (authenticationType !== 'uaa') { _%>
         const token = this.localStorage.retrieve('authenticationToken') || this.sessionStorage.retrieve('authenticationToken');
         <%_ if (authenticationType === 'oauth2') { _%>
         if (token && token.expires_at && token.expires_at > new Date().getTime()) {
@@ -41,10 +42,19 @@ export class AuthInterceptor extends JhiHttpInterceptor {
             options.headers.append('Authorization', 'Bearer ' + token);
         }
         <%_ } _%>
+    <%_ } _%>
         return options;
     }
 
     responseIntercept(observable: Observable<Response>): Observable<Response> {
+    <%_ if (authenticationType === 'uaa') { _%>
+        observable.subscribe( (response) => {
+            if (response.headers.has('authorization')) {
+                const jwt = response.headers.get('authorization');
+                this.sessionStorage.store('authenticationToken', jwt);
+            }
+        });
+    <%_ } _%>
         return observable; // by pass
     }
 
