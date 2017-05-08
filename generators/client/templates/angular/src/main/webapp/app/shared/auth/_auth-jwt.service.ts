@@ -96,6 +96,9 @@ export class AuthServerProvider {
         return this.http.post('/auth/logout', null);
 <% } else { %>
         return new Observable((observer) => {
+<%_ if (authenticationType === 'uaa') { _%>
+            this.http.post('/auth/logout', null);
+<%_ } _%>
             this.$localStorage.clear('authenticationToken');
             this.$sessionStorage.clear('authenticationToken');
             observer.complete();

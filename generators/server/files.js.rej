@@ -1,0 +1,11 @@
+diff a/generators/server/files.js b/generators/server/files.js	(rejected hunks)
+@@ -306,6 +306,9 @@
+ +                this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_OAuth2AuthenticationService.java`, `${javaDir}security/oauth2/OAuth2AuthenticationService.java`);
+ +                this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_OAuth2CookieHelper.java`, `${javaDir}security/oauth2/OAuth2CookieHelper.java`);
+ +                this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_OAuth2Cookies.java`, `${javaDir}security/oauth2/OAuth2Cookies.java`);
++                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/oauth2/_UaaAuthenticationConfiguration.java`, `${javaDir}config/oauth2/UaaAuthenticationConfiguration.java`);
++                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/_UaaAuthenticationService.java`, `${javaDir}security/UaaAuthenticationService.java`);
++                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/_CookieTokenExtractor.java`, `${javaDir}security/CookieTokenExtractor.java`);
+              }
+          },
+  

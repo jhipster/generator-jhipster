@@ -314,8 +314,8 @@ jhipster:
             jwt:
                 # Access Token is valid for 5 mins
                 token-validity-in-seconds: 300
-                # Refresh Token is valid for 30 days in case of remember me
-                token-validity-in-seconds-for-remember-me: 2592000
+                # Refresh Token is valid for 7 days in case of remember me
+                token-validity-in-seconds-for-remember-me: 604800
     <%_ } _%>
     <%_ if (authenticationType == 'oauth2' && databaseType != 'sql') { _%>
     security:
