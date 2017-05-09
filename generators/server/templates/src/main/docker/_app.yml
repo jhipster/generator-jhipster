@@ -16,13 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (applicationType == 'gateway' && prodDatabaseType != 'cassandra') { _%>
-#-------------------------------------------------------------------------------
-# Note for using the rate-limiting:
-#   The comment part won't be copied if you use the subgenerator docker-compose
-#   you have to manually copy it
-#-------------------------------------------------------------------------------
-<%_ } _%>
 version: '2'
 services:
     <%= baseName.toLowerCase() %>-app:
@@ -56,7 +49,7 @@ services:
             - SPRING_DATA_MONGODB_URI=mongodb://<%= baseName.toLowerCase() %>-mongodb:27017
             - SPRING_DATA_MONGODB_DATABASE=<%= baseName %>
             <%_ } _%>
-            <%_ if (applicationType == 'gateway' || prodDatabaseType == 'cassandra') { _%>
+            <%_ if (prodDatabaseType == 'cassandra') { _%>
             - SPRING_DATA_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra
                 <%_ if (authenticationType === 'uaa') { _%>
             - JHIPSTER_SLEEP=80 # gives time for uaa and the Cassandra cluster to start and execute the migration scripts
@@ -126,19 +119,6 @@ services:
             service: <%= baseName.toLowerCase() %>-cassandra-migration
         environment:
             - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql
-    <%_ } _%>
-    <%_ if (applicationType == 'gateway' && prodDatabaseType != 'cassandra') { _%>
-    # Uncomment to have Cassandra working with the gateway
-    # <%= baseName.toLowerCase() %>-cassandra:
-    #     extends:
-    #         file: cassandra-cluster.yml
-    #         service: <%= baseName.toLowerCase() %>-cassandra
-    # <%= baseName.toLowerCase() %>-cassandra-migration:
-    #     extends:
-    #         file: cassandra-migration.yml
-    #         service: <%= baseName.toLowerCase() %>-cassandra-migration
-    #     environment:
-    #         - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql
     <%_ } _%>
     <%_ if (searchEngine == 'elasticsearch') { _%>
     <%= baseName.toLowerCase() %>-elasticsearch:
