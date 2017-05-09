@@ -19,6 +19,7 @@
 package <%=packageName%>.security;
 
 import <%=packageName%>.security.UaaAuthenticationService;
+import <%=packageName%>.web.filter.RefreshTokenFilter;
 import io.github.jhipster.config.JHipsterProperties;
 import org.junit.Assert;
 import org.junit.Before;
