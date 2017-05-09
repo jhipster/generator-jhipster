@@ -33,4 +33,4 @@ if (!semver.satisfies(currentNodeVersion, minimumNodeVersion)) {
     /* eslint-enable  */
     process.exit(1);
 }
-require('./jh-cli');
+require('./cli');
