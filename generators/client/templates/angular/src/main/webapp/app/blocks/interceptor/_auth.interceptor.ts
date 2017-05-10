@@ -24,8 +24,10 @@ import { HttpInterceptor } from 'ng-jhipster';
 export class AuthInterceptor extends HttpInterceptor {
 
     constructor(
+        <%_ if (authenticationType !== 'uaa') { _%>
         private localStorage: LocalStorageService,
         private sessionStorage: SessionStorageService
+        <%_ } _%>
     ) {
         super();
     }
