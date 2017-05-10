@@ -16,12 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.config.oauth2;
-import <%=packageName%>.security.CookieTokenExtractor;
-import <%=packageName%>.security.UaaAuthenticationService;
-import <%=packageName%>.web.filter.RefreshTokenFilterConfigurer;
+package <%=packageName%>.config.uaa;
 
-import io.github.jhipster.config.JHipsterProperties;
+import <%=packageName%>.security.uaa.CookieTokenExtractor;
+import <%=packageName%>.security.uaa.OAuth2CookieHelper;
+import <%=packageName%>.security.uaa.UaaAuthenticationService;
+import <%=packageName%>.web.filter.RefreshTokenFilterConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -40,13 +40,10 @@ import org.springframework.web.client.RestTemplate;
 @EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class UaaAuthenticationConfiguration extends ResourceServerConfigurerAdapter {
-
-    private final JHipsterProperties jHipsterProperties;
     private final TokenStore tokenStore;
     private final RestTemplate restTemplate;
 
-    public UaaAuthenticationConfiguration(JHipsterProperties jHipsterProperties, TokenStore tokenStore, RestTemplate loadBalancedRestTemplate) {
-        this.jHipsterProperties = jHipsterProperties;
+    public UaaAuthenticationConfiguration(TokenStore tokenStore, RestTemplate loadBalancedRestTemplate) {
         this.tokenStore = tokenStore;
         this.restTemplate = loadBalancedRestTemplate;
     }
@@ -69,8 +66,13 @@ public class UaaAuthenticationConfiguration extends ResourceServerConfigurerAdap
     }
 
     @Bean
+    public OAuth2CookieHelper cookieHelper() {
+        return new OAuth2CookieHelper();
+    }
+
+    @Bean
     public UaaAuthenticationService uaaAuthenticationService() {
-        return new UaaAuthenticationService(jHipsterProperties, restTemplate);
+        return new UaaAuthenticationService(cookieHelper(), restTemplate);
     }
 
     /**

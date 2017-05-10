@@ -299,9 +299,12 @@ function writeFiles() {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_AuthResource.java`, `${javaDir}web/rest/AuthResource.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/web/filter/_RefreshTokenFilter.java`, `${javaDir}web/filter/RefreshTokenFilter.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/web/filter/_RefreshTokenFilterConfigurer.java`, `${javaDir}web/filter/RefreshTokenFilterConfigurer.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/config/oauth2/_UaaAuthenticationConfiguration.java`, `${javaDir}config/oauth2/UaaAuthenticationConfiguration.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/security/_UaaAuthenticationService.java`, `${javaDir}security/UaaAuthenticationService.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/security/_CookieTokenExtractor.java`, `${javaDir}security/CookieTokenExtractor.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/config/uaa/_UaaAuthenticationConfiguration.java`, `${javaDir}config/uaa/UaaAuthenticationConfiguration.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/uaa/_UaaAuthenticationService.java`, `${javaDir}security/uaa/UaaAuthenticationService.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/uaa/_CookieTokenExtractor.java`, `${javaDir}security/uaa/CookieTokenExtractor.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/uaa/_OAuth2Cookies.java`, `${javaDir}security/uaa/OAuth2Cookies.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/uaa/_OAuth2CookieHelper.java`, `${javaDir}security/uaa/OAuth2CookieHelper.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/uaa/_CookiesHttpServletRequestWrapper.java`, `${javaDir}security/uaa/CookiesHttpServletRequestWrapper.java`);
             }
         },
 
@@ -475,6 +478,7 @@ function writeFiles() {
             if (this.authenticationType === 'uaa') {
                 this.template(`${SERVER_TEST_SRC_DIR}package/security/_OAuth2TokenMockUtil.java`, `${testDir}security/OAuth2TokenMockUtil.java`);
                 this.template(`${SERVER_TEST_SRC_DIR}package/config/_SecurityBeanOverrideConfiguration.java`, `${testDir}config/SecurityBeanOverrideConfiguration.java`);
+                this.template(`${SERVER_TEST_SRC_DIR}package/security/_OAuth2CookieHelperTest.java`, `${testDir}security/OAuth2CookieHelperTest.java`);
                 this.template(`${SERVER_TEST_SRC_DIR}package/security/_UaaAuthenticationServiceTest.java`, `${testDir}security/UaaAuthenticationServiceTest.java`);
             }
 
