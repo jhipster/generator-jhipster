@@ -18,7 +18,7 @@
 -%>
 package <%=packageName%>.web.filter;
 
-import <%=packageName%>.security.UaaAuthenticationService;
+import <%=packageName%>.security.uaa.UaaAuthenticationService;
 
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

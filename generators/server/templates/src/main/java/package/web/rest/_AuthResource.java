@@ -19,7 +19,7 @@
 package <%=packageName%>.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import <%=packageName%>.security.UaaAuthenticationService;
+import <%=packageName%>.security.uaa.UaaAuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -79,7 +79,7 @@ public class AuthResource {
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
         log.info("logging out user {}", SecurityContextHolder.getContext().getAuthentication().getName());
-        authenticationService.clearCookies(request, response);
+        authenticationService.logout(request, response);
         return ResponseEntity.ok(null);
     }
 }
