@@ -24,13 +24,18 @@ import { LocalStorageService, SessionStorageService } from 'ng2-webstorage';
 @Injectable()
 export class AuthServerProvider {
     constructor(
-        private http: Http,
+        private http: Http<%_ if (authenticationType !== 'uaa') { _%>,
         private $localStorage: LocalStorageService,
         private $sessionStorage: SessionStorageService
+<%_ } _%>
     ) {}
 
     getToken() {
+<%_ if (authenticationType === 'uaa') { _%>
+        return null;
+<% } else { %>
         return this.$localStorage.retrieve('authenticationToken') || this.$sessionStorage.retrieve('authenticationToken');
+<%_ } _%>
     }
 
     login(credentials): Observable<any> {
@@ -47,13 +52,6 @@ export class AuthServerProvider {
 
         return this.http.post('auth/login', data, {
             headers
-        }).map((resp) => {
-            const accessToken = resp.json()['access_token'];
-            if (accessToken) {
-                this.storeAuthenticationToken(accessToken, credentials.rememberMe);
-            }
-
-            return accessToken;
         });
 <% } else { %>
         const data = {
@@ -84,9 +82,7 @@ export class AuthServerProvider {
     }
 
     storeAuthenticationToken(jwt, rememberMe) {
-<%_ if (authenticationType === 'uaa') { _%>
-            this.$sessionStorage.store('authenticationToken', jwt);
-<% } else { %>
+<%_ if (authenticationType !== 'uaa') { _%>
         if (rememberMe) {
             this.$localStorage.store('authenticationToken', jwt);
         } else {
@@ -96,13 +92,14 @@ export class AuthServerProvider {
     }
 
     logout(): Observable<any> {
-        return new Observable((observer) => {
 <%_ if (authenticationType === 'uaa') { _%>
-            this.http.post('/auth/logout', null);
-<%_ } _%>
+        return this.http.post('/auth/logout', null);
+<% } else { %>
+        return new Observable((observer) => {
             this.$localStorage.clear('authenticationToken');
             this.$sessionStorage.clear('authenticationToken');
             observer.complete();
         });
+<%_ } _%>
     }
 }
