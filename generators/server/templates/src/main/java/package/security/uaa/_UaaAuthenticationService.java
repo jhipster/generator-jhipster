@@ -22,16 +22,11 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.exceptions.BadClientCredentialsException;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.Cookie;
@@ -71,16 +66,16 @@ public class UaaAuthenticationService {
         this.cookieHelper = new OAuth2CookieHelper();
         this.restTemplate = restTemplate;
         recentlyRefreshed = CacheBuilder.newBuilder()
-                                        .expireAfterWrite(REFRESH_TOKEN_CACHE_SECS, TimeUnit.SECONDS)
-                                        .build();
+            .expireAfterWrite(REFRESH_TOKEN_CACHE_SECS, TimeUnit.SECONDS)
+            .build();
     }
 
     /**
      * Authenticate the user by username and password.
      *
-     * @param request the request coming from the client.
+     * @param request  the request coming from the client.
      * @param response the response going back to the server.
-     * @param params the params holding the username, password and rememberMe.
+     * @param params   the params holding the username, password and rememberMe.
      * @return the OAuth2AccessToken as a ResponseEntity. Will return OK (200), if successful.
      * If the UAA cannot authenticate the user, the status code returned by UAA will be returned.
      */
@@ -90,22 +85,23 @@ public class UaaAuthenticationService {
             HttpHeaders reqHeaders = new HttpHeaders();
             reqHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
             //take over Authorization header from client request to UAA request
-            reqHeaders.add("Authorization", request.getHeader("Authorization"));
+            String authorizationHeader = request.getHeader("Authorization");
+            reqHeaders.add("Authorization", authorizationHeader);
             boolean rememberMe = Boolean.valueOf(params.remove("rememberMe"));
             MultiValueMap<String, String> formParams = new LinkedMultiValueMap<>();
             formParams.setAll(params);
             formParams.add("grant_type", "password");
             HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(formParams, reqHeaders);
             ResponseEntity<OAuth2AccessToken> responseEntity = restTemplate.postForEntity("http://uaa/oauth/token",
-                                                                                          entity,
-                                                                                          OAuth2AccessToken.class);
+                entity,
+                OAuth2AccessToken.class);
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
                 log.debug("failed to authenticate user with UAA: {}", responseEntity.getStatusCodeValue());
                 return responseEntity;
             }
             OAuth2AccessToken accessToken = responseEntity.getBody();
             OAuth2Cookies cookies = new OAuth2Cookies();
-            cookieHelper.createCookies(request, accessToken, rememberMe, cookies);
+            cookieHelper.createCookies(request, accessToken, rememberMe, authorizationHeader, cookies);
             cookies.addCookiesTo(response);
             if (log.isDebugEnabled()) {
                 log.debug("successfully authenticated user {}", params.get("username"));
@@ -124,8 +120,8 @@ public class UaaAuthenticationService {
      * so we need to cache results for a certain duration and synchronize threads to avoid sending
      * multiple requests in parallel.
      *
-     * @param request the request potentially holding the refresh token.
-     * @param response the response setting the new cookies (if refresh was successful).
+     * @param request       the request potentially holding the refresh token.
+     * @param response      the response setting the new cookies (if refresh was successful).
      * @param refreshCookie the refresh token cookie. Must not be null.
      * @return the new servlet request containing the updated cookies for relaying downstream.
      */
@@ -136,22 +132,21 @@ public class UaaAuthenticationService {
             //check if we have a result from another thread already
             if (cookies.getAccessTokenCookie() == null) {            //no, we are first!
                 //send a refresh_token grant to UAA, getting new tokens
-                Cookie clientAuthorizationCookie = OAuth2CookieHelper.getClientAuthorizationCookie(request);
-                if(clientAuthorizationCookie==null || !StringUtils.hasText(clientAuthorizationCookie.getValue())) {
+                String authorizationHeader = OAuth2CookieHelper.getClientAuthorizationCookieValue(request);
+                if (authorizationHeader == null) {
                     log.error("refresh grant: no authorization header, cannot authenticate with UAA");
                     throw new BadClientCredentialsException();
                 }
-                String authorizationHeader = clientAuthorizationCookie.getValue();
                 OAuth2AccessToken accessToken = sendRefreshGrant(request, refreshCookie, authorizationHeader);
                 boolean rememberMe = OAuth2CookieHelper.isRememberMe(refreshCookie);
-                cookieHelper.createCookies(request, accessToken, rememberMe, cookies);
+                cookieHelper.createCookies(request, accessToken, rememberMe, authorizationHeader, cookies);
                 //add cookies to response to update browser
                 cookies.addCookiesTo(response);
             } else {
                 log.debug("reusing cached refresh_token grant");
             }
             //replace cookies in original request with new ones
-            Cookie []requestCookies=request.getCookies();
+            Cookie[] requestCookies = request.getCookies();
             requestCookies = cookieHelper.addCookie(requestCookies, cookies.getRefreshTokenCookie());
             requestCookies = cookieHelper.addCookie(requestCookies, cookies.getAccessTokenCookie());
             return new CookiesHttpServletRequestWrapper(request, requestCookies);
@@ -180,9 +175,9 @@ public class UaaAuthenticationService {
     /**
      * Sends a refresh grant to UAA using the current refresh token to obtain new tokens.
      *
-     * @param request the servlet request we received.
+     * @param request                    the servlet request we received.
      * @param originalRefreshTokenCookie the refresh cookie to use to obtain new tokens.
-     * @param authorizationHeader "Authorization" header to set to authenticate with UAA.
+     * @param authorizationHeader        "Authorization" header to set to authenticate with UAA.
      * @return the new, refreshed access token.
      */
     private OAuth2AccessToken sendRefreshGrant(HttpServletRequest request, Cookie originalRefreshTokenCookie, String authorizationHeader) {
@@ -194,7 +189,7 @@ public class UaaAuthenticationService {
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(params, headers);
         log.debug("contacting UAA to refresh OAuth2 JWT tokens");
         ResponseEntity<OAuth2AccessToken> responseEntity = restTemplate.postForEntity("http://uaa/oauth/token", entity,
-                                                                                      OAuth2AccessToken.class);
+            OAuth2AccessToken.class);
         OAuth2AccessToken accessToken = responseEntity.getBody();
         log.info("refreshed OAuth2 JWT cookies using refresh_token grant");
         return accessToken;
@@ -203,7 +198,7 @@ public class UaaAuthenticationService {
     /**
      * Logs the user out by clearing all cookies.
      *
-     * @param httpServletRequest the request containing the Cookies.
+     * @param httpServletRequest  the request containing the Cookies.
      * @param httpServletResponse the response used to clear them.
      */
     public void logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -211,7 +206,7 @@ public class UaaAuthenticationService {
     }
 
     public HttpServletRequest stripTokens(HttpServletRequest httpServletRequest) {
-        Cookie []cookies=cookieHelper.stripTokens(httpServletRequest.getCookies());
+        Cookie[] cookies = cookieHelper.stripTokens(httpServletRequest.getCookies());
         return new CookiesHttpServletRequestWrapper(httpServletRequest, cookies);
     }
 }
