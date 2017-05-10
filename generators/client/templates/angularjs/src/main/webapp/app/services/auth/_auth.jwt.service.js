@@ -37,7 +37,11 @@
         return service;
 
         function getToken () {
+<%_ if (authenticationType === 'uaa') { _%>
+            return null;
+<% } else { %>
             return $localStorage.authenticationToken || $sessionStorage.authenticationToken;
+<%_ } _%>
         }
 
         function login (credentials) {
@@ -56,11 +60,6 @@
                 method: 'post',
                 data: data,
                 headers: headers
-            }).then(function (data) {
-                var accessToken = data.data["access_token"];
-                if (angular.isDefined(accessToken)) {
-                    service.storeAuthenticationToken(accessToken, credentials.rememberMe);
-                }
             });
 <% } else { %>
             var data = {
@@ -95,9 +94,7 @@
         }
 
         function storeAuthenticationToken(jwt, rememberMe) {
-<%_ if(authenticationType === 'uaa') { _%>
-                $sessionStorage.authenticationToken = jwt;
-<% } else { %>
+<%_ if(authenticationType !== 'uaa') { _%>
             if(rememberMe){
                 $localStorage.authenticationToken = jwt;
             } else {
@@ -109,9 +106,10 @@
         function logout () {
 <%_ if(authenticationType === 'uaa') { _%>
             $http.post('/auth/logout');
-<%_ } _%>
+<% } else { %>
             delete $localStorage.authenticationToken;
             delete $sessionStorage.authenticationToken;
+<%_ } _%>
         }
     }
 })();

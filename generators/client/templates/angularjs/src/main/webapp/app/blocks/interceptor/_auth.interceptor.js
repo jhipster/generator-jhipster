@@ -23,44 +23,38 @@
         .module('<%=angularAppName%>')
         .factory('authInterceptor', authInterceptor);
 
-    authInterceptor.$inject = ['$rootScope', '$q', '$location', '$localStorage', '$sessionStorage'];
+    authInterceptor.$inject = ['$rootScope', '$q', '$location'
+<%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt') { _%>
+, '$localStorage', '$sessionStorage'
+<%_ } _%>
+];
 
     function authInterceptor ($rootScope, $q, $location, $localStorage, $sessionStorage) {
         var service = {
-            <%_ if (authenticationType === 'uaa') { _%>
-            response: response
-            <%_ } else { _%>
             request: request
-            <%_ } _%>
         };
 
         return service;
 
-        <%_ if (authenticationType === 'uaa') { _%>
-            function response (response) {
-                var jwt = response.headers()['authorization'];
-                if(angular.isDefined(jwt)) {
-                    $sessionStorage.authenticationToken = jwt;
-                }
-                return response;
-            }
-        <%_ } else { _%>
         function request (config) {
             /*jshint camelcase: false */
             config.headers = config.headers || {};
-            var token = $localStorage.authenticationToken || $sessionStorage.authenticationToken;
+            <%_ if (authenticationType === 'uaa') { _%>
+            config.headers.Authorization = 'Basic d2ViX2FwcDo=';
+            <%_ } _%>
             <%_ if (authenticationType === 'oauth2') { _%>
+            var token = $localStorage.authenticationToken || $sessionStorage.authenticationToken;
             if (token && token.expires_at && token.expires_at > new Date().getTime()) {
                 config.headers.Authorization = 'Bearer ' + token.access_token;
             }
             <%_ } _%>
             <%_ if (authenticationType === 'jwt') { _%>
+            var token = $localStorage.authenticationToken || $sessionStorage.authenticationToken;
             if (token) {
                 config.headers.Authorization = 'Bearer ' + token;
             }
             <%_ } _%>
             return config;
         }
-        <%_ } _%>
     }
 })();
