@@ -19,7 +19,6 @@
 package <%=packageName%>.security;
 
 import <%=packageName%>.security.uaa.CookieTokenExtractor;
-import com.mycompany.myapp.security.uaa.CookieTokenExtractor;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
