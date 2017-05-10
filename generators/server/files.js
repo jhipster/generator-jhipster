@@ -478,9 +478,11 @@ function writeFiles() {
             if (this.authenticationType === 'uaa') {
                 this.template(`${SERVER_TEST_SRC_DIR}package/security/_OAuth2TokenMockUtil.java`, `${testDir}security/OAuth2TokenMockUtil.java`);
                 this.template(`${SERVER_TEST_SRC_DIR}package/config/_SecurityBeanOverrideConfiguration.java`, `${testDir}config/SecurityBeanOverrideConfiguration.java`);
-                this.template(`${SERVER_TEST_SRC_DIR}package/security/_OAuth2CookieHelperTest.java`, `${testDir}security/OAuth2CookieHelperTest.java`);
-                this.template(`${SERVER_TEST_SRC_DIR}package/security/_UaaAuthenticationServiceTest.java`, `${testDir}security/UaaAuthenticationServiceTest.java`);
-                this.template(`${SERVER_TEST_SRC_DIR}package/security/_CookieTokenExtractorTest.java`, `${testDir}security/CookieTokenExtractorTest.java`);
+                if (this.applicationType === 'gateway') {
+                    this.template(`${SERVER_TEST_SRC_DIR}package/security/_OAuth2CookieHelperTest.java`, `${testDir}security/OAuth2CookieHelperTest.java`);
+                    this.template(`${SERVER_TEST_SRC_DIR}package/security/_UaaAuthenticationServiceTest.java`, `${testDir}security/UaaAuthenticationServiceTest.java`);
+                    this.template(`${SERVER_TEST_SRC_DIR}package/security/_CookieTokenExtractorTest.java`, `${testDir}security/CookieTokenExtractorTest.java`);
+                }
             }
 
             // Create Gatling test files
