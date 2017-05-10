@@ -31,24 +31,11 @@
 
     function authInterceptor ($rootScope, $q, $location, $localStorage, $sessionStorage) {
         var service = {
-            <%_ if (authenticationType === 'uaa') { _%>
-            response: response
-            <%_ } else { _%>
             request: request
-            <%_ } _%>
         };
 
         return service;
 
-        <%_ if (authenticationType === 'uaa') { _%>
-            function response (response) {
-                var jwt = response.headers()['authorization'];
-                if(angular.isDefined(jwt)) {
-                    $sessionStorage.authenticationToken = jwt;
-                }
-                return response;
-            }
-        <%_ } else { _%>
         function request (config) {
             /*jshint camelcase: false */
             config.headers = config.headers || {};
@@ -69,6 +56,5 @@
             <%_ } _%>
             return config;
         }
-        <%_ } _%>
     }
 })();
