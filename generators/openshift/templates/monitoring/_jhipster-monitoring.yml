@@ -26,12 +26,12 @@
 apiVersion: v1
 kind: Template
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-monitoring-template
+  name: jhipster-monitoring-template
   namespace: <%= openshiftNamespace %>
   annotations:
     description: This template defines objects that are required to spin up monitoring pod
-    tags: elasticsearch, logstash, kibana, zipkin, <%= app.baseName.toLowerCase() %>-monitoring<% if (storageType == 'persistent') { %> ,persistent <% } %> <% if (storageType == 'ephemeral') { %> ,ephemeral <% } %>
-    openshift.io/display-name: <%= app.baseName.toLowerCase() %>-monitoring-template
+    tags: elasticsearch, logstash, kibana, zipkin, jhipster-monitoring<% if (storageType == 'persistent') { %> ,persistent <% } %> <% if (storageType == 'ephemeral') { %> ,ephemeral <% } %>
+    openshift.io/display-name: jhipster-monitoring-template
     openshift.io/long-description: "This template provides objects that are required to spin up a monitoring pod. It contains
     elasticsearch for storing logs, logstash for accumulating logs to elasticsearch, kibana for visualization and zipkin for tracing.<% if
     (storageType =='persistent') { %>The database is stored on persistent storage, so any restart of the service will not cause any impact to the data.
@@ -39,7 +39,7 @@ metadata:
      %>The database is not stored on persistent storage, so any restart of the service will result in all data being lost.<% } %>"
     openshift.io/provider-display-name: JHipster-OpenShift
 labels:
-  app: <%= app.baseName.toLowerCase() %>-monitoring
+  app: jhipster-monitoring
   createdBy: JHipster-Team
 parameters:
   -

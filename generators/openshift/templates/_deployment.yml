@@ -91,12 +91,12 @@ objects:
             app: ${APPLICATION_NAME}
         spec:
           containers:
-          - name: ${APPLICATION_NAME}-app
+          - name: ${APPLICATION_NAME}
             image: <%= app.targetImageName %>
             imagePullPolicy: IfNotPresent
             env:
             - name: SPRING_PROFILES_ACTIVE
-              value: prod
+              value: prod,swagger
             <%_ if (app.serviceDiscoveryType === 'eureka') { _%>
             - name: SPRING_CLOUD_CONFIG_URI
               value: http://admin:${jhipster.registry.password}@jhipster-registry:8761/config
@@ -184,7 +184,7 @@ objects:
             - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES
               value: ${APPLICATION_NAME}-zookeeper
             <%_ } _%>
-            <%_ if (app.monitoring === 'elk') { _%>
+            <%_ if (monitoring === 'elk') { _%>
             - name: JHIPSTER_METRICS_LOGS_ENABLED
               value: "true"
             - name: JHIPSTER_LOGGING_LOGSTASH_ENABLED
@@ -195,6 +195,14 @@ objects:
               value: "true"
             - name: SPRING_ZIPKIN_BASE_URL
               value: ${JHIPSTER_ZIPKIN}
+            <%_ } _%>
+            <%_ if (monitoring === 'prometheus') { _%>
+            - name: JHIPSTER_METRICS_LOGS_ENABLED
+              value: "true"
+            - name: JHIPSTER_METRICS_PROMETHEUS_ENABLED
+              value: "true"
+            - name: JHIPSTER_METRICS_PROMETHEUS_ENDPOINT
+              value: "/prometheusMetrics"
             <%_ } _%>
             ports:
             - name: http

@@ -29,6 +29,8 @@ oc process -f <%-directoryPath%>/ocp/registry/application-configmap.yml | oc app
 oc process -f <%-directoryPath%>/ocp/registry/consul.yml | oc apply -f -
 <%_ } _%> <%_ if (monitoring === 'elk') { _%>
 oc process -f <%-directoryPath%>/ocp/monitoring/jhipster-monitoring.yml | oc apply -f -
+<%_ } _%> <%_ if (monitoring === 'prometheus') { _%>
+oc process -f <%-directoryPath%>/ocp/monitoring/jhipster-metrics.yml | oc apply -f -
 <%_ } _%> <%_ for (var i = 0; i < appConfigs.length; i++) {
 const appName = appConfigs[i].baseName.toLowerCase();
 app = appConfigs[i];

@@ -75,6 +75,7 @@ module.exports = OpenShiftGenerator.extend({
             this.directoryPath = this.config.get('directoryPath');
             this.clusteredDbApps = this.config.get('clusteredDbApps');
             this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
+            this.monitoring = this.config.get('monitoring');
             this.adminPassword = this.config.get('adminPassword');
             this.jwtSecretKey = this.config.get('jwtSecretKey');
             this.dockerRepositoryName = this.config.get('dockerRepositoryName');
@@ -99,6 +100,9 @@ module.exports = OpenShiftGenerator.extend({
             this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
             this.DOCKER_JHIPSTER_ZIPKIN = constants.DOCKER_JHIPSTER_ZIPKIN;
             this.DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE;
+            this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
+            this.DOCKER_PROMETHEUS_ALERTMANAGER = constants.DOCKER_PROMETHEUS_ALERTMANAGER;
+            this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
 
             if (this.defaultAppsFolders !== undefined) {
                 this.log('\nFound .yo-rc.json config file...');
@@ -134,8 +138,6 @@ module.exports = OpenShiftGenerator.extend({
         askForPath: prompts.askForPath,
         askForApps: prompts.askForApps,
         askForMonitoring: prompts.askForMonitoring,
-        // cluster for mongodb: it can be done later
-        // askForClustersMode: prompts.askForClustersMode,
         askForServiceDiscovery: prompts.askForServiceDiscovery,
         askForAdminPassword: prompts.askForAdminPassword,
         askForOpenShiftNamespace: prompts.askForOpenShiftNamespace,
@@ -205,6 +207,7 @@ module.exports = OpenShiftGenerator.extend({
             this.config.set('directoryPath', this.directoryPath);
             this.config.set('clusteredDbApps', this.clusteredDbApps);
             this.config.set('serviceDiscoveryType', this.serviceDiscoveryType);
+            this.config.set('monitoring', this.monitoring);
             this.config.set('jwtSecretKey', this.jwtSecretKey);
             this.config.set('dockerRepositoryName', this.dockerRepositoryName);
             this.config.set('dockerPushCommand', this.dockerPushCommand);
@@ -239,7 +242,7 @@ module.exports = OpenShiftGenerator.extend({
         if (this.gatewayNb >= 1 || this.microserviceNb >= 1) {
             this.log('OR');
             this.log(`  ${chalk.cyan(`oc apply -f ${this.directoryPath}/ocp/registry`)}`);
-            if (this.monitoring === 'elk') {
+            if (this.monitoring === 'elk' || this.monitoring === 'prometheus') {
                 this.log(`  ${chalk.cyan(`oc apply -f ${this.directoryPath}/ocp/monitoring`)}`);
             }
             for (let i = 0; i < this.appsFolders.length; i++) {

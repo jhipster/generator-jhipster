@@ -41,6 +41,19 @@ function writeFiles() {
             this.template('monitoring/_jhipster-monitoring.yml', `${this.directoryPath}/ocp/monitoring/jhipster-monitoring.yml`);
         },
 
+        writePrometheusFiles() {
+            if (this.monitoring !== 'prometheus') return;
+
+            const appsToMonitor = [];
+            for (let i = 0; i < this.appConfigs.length; i++) {
+                appsToMonitor.push(`- ${this.appConfigs[i].baseName}:${this.appConfigs[i].serverPort}`);
+            }
+
+            this.appsToMonitorList = appsToMonitor.join('\n').replace(/'/g, '');
+
+            this.template('monitoring/_jhipster-metrics.yml', `${this.directoryPath}/ocp/monitoring/jhipster-metrics.yml`);
+        },
+
         writeConfigRunFile() {
             this.template('_apply.sh', `${this.directoryPath}/ocp/ocp-apply.sh`);
         }
