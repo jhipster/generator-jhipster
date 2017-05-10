@@ -34,9 +34,9 @@ class CookiesHttpServletRequestWrapper extends HttpServletRequestWrapper {
      */
     private Cookie[] cookies;
 
-    public CookiesHttpServletRequestWrapper(HttpServletRequest request, Cookie []cookies) {
+    public CookiesHttpServletRequestWrapper(HttpServletRequest request, Cookie[] cookies) {
         super(request);
-        this. cookies = cookies;
+        this.cookies = cookies;
     }
 
     /**
