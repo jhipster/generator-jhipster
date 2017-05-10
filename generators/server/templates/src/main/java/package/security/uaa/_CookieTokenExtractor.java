@@ -16,31 +16,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.security;
+package <%=packageName%>.security.uaa;
 
 import org.springframework.security.oauth2.provider.authentication.BearerTokenExtractor;
-import org.springframework.util.StringUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 /**
  * Extracts the access token from a cookie.
- * Falls back to a BearerTokenExtractor extracting information from the Authorization header, if no cookie was found.
+ * Falls back to a <code>BearerTokenExtractor</code> extracting information from the Authorization header, if no
+ * cookie was found.
  */
 public class CookieTokenExtractor extends BearerTokenExtractor {
     /**
-     * Name of the access token cookie.
-     */
-    public static final String ACCESS_TOKEN_COOKIE = "accessToken";
-    /**
-     * Name of the refresh token cookie.
-     */
-    public static final String REFRESH_TOKEN_COOKIE = "refreshToken";
-
-    /**
      * Extract the JWT access token from the request, if present.
-     * If not, then it falls back to the BearerTokenExtractor behaviour.
+     * If not, then it falls back to the {@link BearerTokenExtractor} behaviour.
      *
      * @param request the request containing the cookies.
      * @return the extracted JWT token; or null.
@@ -48,34 +39,13 @@ public class CookieTokenExtractor extends BearerTokenExtractor {
     @Override
     protected String extractToken(HttpServletRequest request) {
         String result;
-        Cookie accessTokenCookie = getCookie(request, ACCESS_TOKEN_COOKIE);
+        Cookie accessTokenCookie = OAuth2CookieHelper.getAccessTokenCookie(request);
         if (accessTokenCookie != null) {
             result = accessTokenCookie.getValue();
         } else {
             result = super.extractToken(request);
         }
         return result;
-    }
-
-    /**
-     * Get a cookie by name from the given servlet request.
-     *
-     * @param request    the request containing the cookie.
-     * @param cookieName the name of the cookie to get.
-     * @return the resulting Cookie, or null.
-     */
-    public static Cookie getCookie(HttpServletRequest request, String cookieName) {
-        if (request.getCookies() != null) {
-            for (Cookie cookie : request.getCookies()) {
-                if (cookie.getName().equals(cookieName)) {
-                    String value = cookie.getValue();
-                    if (StringUtils.hasText(value)) {
-                        return cookie;
-                    }
-                }
-            }
-        }
-        return null;
     }
 
 }

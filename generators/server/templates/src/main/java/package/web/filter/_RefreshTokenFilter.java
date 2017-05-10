@@ -108,7 +108,7 @@ public class RefreshTokenFilter extends GenericFilterBean {
                 log.warn("access token found, but no refresh token, stripping them all");
                 OAuth2AccessToken token = tokenStore.readAccessToken(accessTokenCookie.getValue());
                 if(token.isExpired()) {
-                    newHttpServletRequest = authenticationService.stripTokens(httpServletRequest);
+                    throw new BadClientCredentialsException();
                 }
             }
         }
