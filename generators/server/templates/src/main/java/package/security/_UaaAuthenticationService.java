@@ -176,7 +176,6 @@ public class UaaAuthenticationService {
                 sendRefreshGrant(request, refreshCookie, result);
                 //add cookies to response to update browser
                 response.addCookie(result.getAccessTokenCookie());
-                response.addHeader("Authorization", result.getAccessTokenCookie().getValue());        //report back to auth.interceptor
                 response.addCookie(result.getRefreshTokenCookie());
             } else {
                 log.debug("reusing cached refresh grant");
