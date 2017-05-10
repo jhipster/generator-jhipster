@@ -104,6 +104,9 @@ public class UaaAuthenticationService {
             }
             OAuth2AccessToken accessToken = responseEntity.getBody();
             addCookies(request, response, accessToken, rememberMe);
+            if(log.isDebugEnabled()) {
+                log.debug("successfully authenticated user {}, access and refresh token cookies set", params.get("username"));
+            }
             return responseEntity;
         } catch (Exception ex) {
             log.error("failed to get OAuth2 tokens from UAA", ex);
@@ -178,7 +181,7 @@ public class UaaAuthenticationService {
                 response.addCookie(result.getAccessTokenCookie());
                 response.addCookie(result.getRefreshTokenCookie());
             } else {
-                log.debug("reusing cached refresh grant");
+                log.debug("reusing cached refresh_token grant");
             }
             return new AuthorizedRequest(request, result.getAccessTokenCookie(),
                 result.getRefreshTokenCookie());
@@ -230,15 +233,16 @@ public class UaaAuthenticationService {
         }
         headers.add("Authorization", authorization);
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(params, headers);
-        log.debug("contacting UAA to refresh OAuth2 JWT tokens on behalf of client_id {} with no secret", clientId);
+        log.debug("contacting UAA to refresh OAuth2 JWT tokens on behalf of client_id {}", clientId);
         ResponseEntity<OAuth2AccessToken> responseEntity = restTemplate.postForEntity("http://uaa/oauth/token", entity,
             OAuth2AccessToken.class);
         OAuth2AccessToken accessToken = responseEntity.getBody();
         Cookie accessTokenCookie = createAccessTokenCookie(request, accessToken, refreshCookie.getDomain());
+        //FIXME maxAge always -1
         boolean rememberMe = refreshCookie.getMaxAge() > 0;
         Cookie refreshTokenCookie = createRefreshTokenCookie(request, accessToken.getRefreshToken(), rememberMe,
             refreshCookie.getDomain());
-        log.info("refreshed OAuth2 JWT cookies");
+        log.info("refreshed OAuth2 JWT cookies using refresh_token grant");
         result.setCookies(accessTokenCookie, refreshTokenCookie);
     }
 
@@ -426,11 +430,13 @@ public class UaaAuthenticationService {
      * @param httpServletResponse the response used to clear them.
      */
     public void clearCookies(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+        String domain = getCookieDomain(httpServletRequest);
         Cookie accessTokenCookie = CookieTokenExtractor.getCookie(httpServletRequest, CookieTokenExtractor.ACCESS_TOKEN_COOKIE);
         if (accessTokenCookie != null) {
             accessTokenCookie.setValue("");
             accessTokenCookie.setMaxAge(0);
             accessTokenCookie.setPath("/");
+            accessTokenCookie.setDomain(domain);
             httpServletResponse.addCookie(accessTokenCookie);
             log.debug("clearing access token cookie");
         }
@@ -439,6 +445,7 @@ public class UaaAuthenticationService {
             refreshTokenCookie.setValue("");
             refreshTokenCookie.setMaxAge(0);
             refreshTokenCookie.setPath("/");
+            refreshTokenCookie.setDomain(domain);
             httpServletResponse.addCookie(refreshTokenCookie);
             log.debug("clearing refresh token cookie");
         }
