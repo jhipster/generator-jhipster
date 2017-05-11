@@ -32,6 +32,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 /**
@@ -75,7 +76,10 @@ public class AuditResource {
         @RequestParam(value = "toDate") LocalDate toDate,
         @ApiParam Pageable pageable) {
 
-        Page<AuditEvent> page = auditEventService.findByDates(fromDate.atTime(0, 0), toDate.atTime(23, 59), pageable);
+        Page<AuditEvent> page = auditEventService.findByDates(
+            fromDate.atStartOfDay(ZoneId.systemDefault()).toInstant(),
+            toDate.atStartOfDay(ZoneId.systemDefault()).plusDays(1).toInstant(),
+            pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/management/audits");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
