@@ -20,13 +20,13 @@ package <%=packageName%>.service;
 
 import <%=packageName%>.config.audit.AuditEventConverter;
 import <%=packageName%>.repository.PersistenceAuditEventRepository;
-import java.time.LocalDateTime;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;<% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 
+import java.time.Instant;
 import java.util.Optional;
 
 /**
@@ -56,7 +56,7 @@ public class AuditEventService {
             .map(auditEventConverter::convertToAuditEvent);
     }
 
-    public Page<AuditEvent> findByDates(LocalDateTime fromDate, LocalDateTime toDate, Pageable pageable) {
+    public Page<AuditEvent> findByDates(Instant fromDate, Instant toDate, Pageable pageable) {
         return persistenceAuditEventRepository.findAllByAuditEventDateBetween(fromDate, toDate, pageable)
             .map(auditEventConverter::convertToAuditEvent);
     }
