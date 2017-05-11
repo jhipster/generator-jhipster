@@ -287,6 +287,7 @@ function writeFiles() {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/uaa/_OAuth2Cookies.java`, `${javaDir}security/uaa/OAuth2Cookies.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/uaa/_OAuth2CookieHelper.java`, `${javaDir}security/uaa/OAuth2CookieHelper.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/uaa/_CookiesHttpServletRequestWrapper.java`, `${javaDir}security/uaa/CookiesHttpServletRequestWrapper.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/uaa/_CookieCollection.java`, `${javaDir}security/uaa/CookieCollection.java`);
             }
         },
 
@@ -451,9 +452,10 @@ function writeFiles() {
                 this.template(`${SERVER_TEST_SRC_DIR}package/security/_OAuth2TokenMockUtil.java`, `${testDir}security/OAuth2TokenMockUtil.java`);
                 this.template(`${SERVER_TEST_SRC_DIR}package/config/_SecurityBeanOverrideConfiguration.java`, `${testDir}config/SecurityBeanOverrideConfiguration.java`);
                 if (this.applicationType === 'gateway') {
-                    this.template(`${SERVER_TEST_SRC_DIR}package/security/_OAuth2CookieHelperTest.java`, `${testDir}security/OAuth2CookieHelperTest.java`);
-                    this.template(`${SERVER_TEST_SRC_DIR}package/security/_UaaAuthenticationServiceTest.java`, `${testDir}security/UaaAuthenticationServiceTest.java`);
-                    this.template(`${SERVER_TEST_SRC_DIR}package/security/_CookieTokenExtractorTest.java`, `${testDir}security/CookieTokenExtractorTest.java`);
+                    this.template(`${SERVER_TEST_SRC_DIR}package/security/uaa/_OAuth2CookieHelperTest.java`, `${testDir}security/uaa/OAuth2CookieHelperTest.java`);
+                    this.template(`${SERVER_TEST_SRC_DIR}package/security/uaa/_UaaAuthenticationServiceTest.java`, `${testDir}security/uaa/UaaAuthenticationServiceTest.java`);
+                    this.template(`${SERVER_TEST_SRC_DIR}package/security/uaa/_CookieTokenExtractorTest.java`, `${testDir}security/uaa/CookieTokenExtractorTest.java`);
+                    this.template(`${SERVER_TEST_SRC_DIR}package/security/uaa/_CookieCollectionTest.java`, `${testDir}security/uaa/CookieCollectionTest.java`);
                 }
             }
 

@@ -23,8 +23,9 @@ import <%=packageName%>.security.uaa.UaaAuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.common.exceptions.BadClientCredentialsException;
+import org.springframework.security.oauth2.common.exceptions.ClientAuthenticationException;
 import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
+import org.springframework.security.oauth2.common.exceptions.UnauthorizedClientException;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.filter.GenericFilterBean;
@@ -71,17 +72,13 @@ public class RefreshTokenFilter extends GenericFilterBean {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
         try {
-            HttpServletRequest newServletRequest = refreshTokensIfExpiring(httpServletRequest, httpServletResponse);
-            filterChain.doFilter(newServletRequest, servletResponse);
-        } catch (InvalidTokenException ex) {
-            log.error("Security exception: invalid token", ex);
-            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            authenticationService.logout(httpServletRequest, httpServletResponse);
+            httpServletRequest = refreshTokensIfExpiring(httpServletRequest, httpServletResponse);
+        } catch (ClientAuthenticationException ex) {
+            log.warn("Security exception: could not refresh tokens", ex);
+//            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//            authenticationService.logout(httpServletRequest, httpServletResponse);
         }
-        catch(BadClientCredentialsException ex) {
-            HttpServletRequest newServletRequest = authenticationService.stripTokens(httpServletRequest);
-            filterChain.doFilter(newServletRequest, servletResponse);
-        }
+        filterChain.doFilter(httpServletRequest, servletResponse);
     }
 
     /**
@@ -92,9 +89,11 @@ public class RefreshTokenFilter extends GenericFilterBean {
      * @param httpServletResponse the servlet response that gets the new set-cookie headers, if they had to be
      *                            refreshed.
      * @return a new request to use downstream that contains the new cookies, if they had to be refreshed.
+     * @throws InvalidTokenException if the tokens could not be refreshed.
      */
     public HttpServletRequest refreshTokensIfExpiring(HttpServletRequest httpServletRequest, HttpServletResponse
         httpServletResponse) {
+        HttpServletRequest newHttpServletRequest = httpServletRequest;
         //get access token from cookie
         Cookie accessTokenCookie = OAuth2CookieHelper.getAccessTokenCookie(httpServletRequest);
         if (mustRefreshToken(accessTokenCookie)) {        //we either have no access token, or it is expired, or it is about to expire
@@ -102,20 +101,20 @@ public class RefreshTokenFilter extends GenericFilterBean {
             Cookie refreshCookie = OAuth2CookieHelper.getRefreshTokenCookie(httpServletRequest);
             if (refreshCookie != null) {
                 try {
-                    httpServletRequest = authenticationService.refreshToken(httpServletRequest, httpServletResponse, refreshCookie);
+                    newHttpServletRequest = authenticationService.refreshToken(httpServletRequest, httpServletResponse, refreshCookie);
                 } catch (HttpClientErrorException ex) {
-                    throw new InvalidTokenException("could not refresh OAuth2 token", ex);
+                    throw new UnauthorizedClientException("could not refresh OAuth2 token", ex);
                 }
             }
             else if(accessTokenCookie!=null) {
                 log.warn("access token found, but no refresh token, stripping them all");
                 OAuth2AccessToken token = tokenStore.readAccessToken(accessTokenCookie.getValue());
                 if(token.isExpired()) {
-                    throw new BadClientCredentialsException();
+                    newHttpServletRequest = authenticationService.stripTokens(httpServletRequest);
                 }
             }
         }
-        return httpServletRequest;
+        return newHttpServletRequest;
     }
 
     /**

@@ -22,9 +22,12 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.common.exceptions.BadClientCredentialsException;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -133,10 +136,6 @@ public class UaaAuthenticationService {
             if (cookies.getAccessTokenCookie() == null) {            //no, we are first!
                 //send a refresh_token grant to UAA, getting new tokens
                 String authorizationHeader = OAuth2CookieHelper.getClientAuthorizationCookieValue(request);
-                if (authorizationHeader == null) {
-                    log.error("refresh grant: no authorization header, cannot authenticate with UAA");
-                    throw new BadClientCredentialsException();
-                }
                 OAuth2AccessToken accessToken = sendRefreshGrant(request, refreshCookie, authorizationHeader);
                 boolean rememberMe = OAuth2CookieHelper.isRememberMe(refreshCookie);
                 cookieHelper.createCookies(request, accessToken, rememberMe, authorizationHeader, cookies);
@@ -146,10 +145,10 @@ public class UaaAuthenticationService {
                 log.debug("reusing cached refresh_token grant");
             }
             //replace cookies in original request with new ones
-            Cookie[] requestCookies = request.getCookies();
-            requestCookies = cookieHelper.addCookie(requestCookies, cookies.getRefreshTokenCookie());
-            requestCookies = cookieHelper.addCookie(requestCookies, cookies.getAccessTokenCookie());
-            return new CookiesHttpServletRequestWrapper(request, requestCookies);
+            CookieCollection requestCookies = new CookieCollection(request.getCookies());
+            requestCookies.add(cookies.getAccessTokenCookie());
+            requestCookies.add(cookies.getRefreshTokenCookie());
+            return new CookiesHttpServletRequestWrapper(request, requestCookies.toArray());
         }
     }
 
@@ -177,7 +176,7 @@ public class UaaAuthenticationService {
      *
      * @param request                    the servlet request we received.
      * @param originalRefreshTokenCookie the refresh cookie to use to obtain new tokens.
-     * @param authorizationHeader        "Authorization" header to set to authenticate with UAA.
+     * @param authorizationHeader        <code>"Authorization"</code> header to set to authenticate with UAA.
      * @return the new, refreshed access token.
      */
     private OAuth2AccessToken sendRefreshGrant(HttpServletRequest request, Cookie originalRefreshTokenCookie, String authorizationHeader) {
@@ -185,7 +184,12 @@ public class UaaAuthenticationService {
         params.add("grant_type", "refresh_token");
         params.add("refresh_token", originalRefreshTokenCookie.getValue());
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", authorizationHeader);
+        if(authorizationHeader!=null) {
+            headers.add("Authorization", authorizationHeader);
+        }
+        else {
+            log.warn("no authorization header found, still trying to contact UAA...");
+        }
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(params, headers);
         log.debug("contacting UAA to refresh OAuth2 JWT tokens");
         ResponseEntity<OAuth2AccessToken> responseEntity = restTemplate.postForEntity("http://uaa/oauth/token", entity,
