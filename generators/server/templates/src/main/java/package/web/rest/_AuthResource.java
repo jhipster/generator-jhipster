@@ -77,6 +77,7 @@ public class AuthResource {
      * @return an empty response entity.
      */
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    @Timed
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
         log.info("logging out user {}", SecurityContextHolder.getContext().getAuthentication().getName());
         authenticationService.logout(request, response);
