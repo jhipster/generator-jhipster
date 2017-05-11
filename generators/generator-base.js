@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2017 the original author or authors.
+ * Copyright 2013-2017 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://jhipster.github.io/
  * for more information.
@@ -1910,6 +1910,28 @@ module.exports = class extends Generator {
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
+        }
+    }
+
+    updateLanguagesInWebpack(languages) {
+        const fullPath = 'webpack/webpack.common.js';
+        try {
+            let content = 'groupBy: [\n';
+            for (let i = 0, len = languages.length; i < len; i++) {
+                const language = languages[i];
+                content += `                        { pattern: "./src/main/webapp/i18n/${language}/*.json", fileName: "./${this.BUILD_DIR}www/i18n/${language}/all.json" }${i !== languages.length - 1 ? ',' : ''}\n`;
+            }
+            content +=
+                '                        // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n' +
+                '                 ]';
+
+            jhipsterUtils.replaceContent({
+                file: fullPath,
+                pattern: /groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g,
+                content
+            }, this);
+        } catch (e) {
+            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
         }
     }
 

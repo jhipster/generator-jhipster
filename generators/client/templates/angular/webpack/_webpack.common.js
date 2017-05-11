@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -23,7 +23,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const StringReplacePlugin = require('string-replace-webpack-plugin');
 const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 const WebpackNotifierPlugin = require('webpack-notifier');
+<%_ if (enableTranslation) { _%>
 const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin")
+<%_ } _%>
 const path = require('path');
 
 module.exports = function (options) {
@@ -125,15 +127,15 @@ module.exports = function (options) {
                 $: "jquery",
                 jQuery: "jquery"
             }),
+            <%_ if (enableTranslation) { _%>
             new MergeJsonWebpackPlugin({
-                output:{
-                    groupBy:[
-<%_ for (language in languages) { _%>
-                        { pattern:"./src/main/webapp/i18n/<%= languages[language] %>/*.json", fileName:"./<%= BUILD_DIR %>www/i18n/<%= languages[language] %>/all.json" },
-<%_ } _%>
+                output: {
+                    groupBy: [
+                        // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array
                     ]
                 }
             }),
+            <%_ } _%>
             new HtmlWebpackPlugin({
                 template: './src/main/webapp/index.html',
                 chunksSortMode: 'dependency',

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2017 the original author or authors.
+ * Copyright 2013-2017 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://jhipster.github.io/
  * for more information.
@@ -100,6 +100,12 @@ module.exports = LanguagesGenerator.extend({
             this.enableSocialSignIn = this.config.get('enableSocialSignIn');
             this.currentLanguages = this.config.get('languages');
             this.clientFramework = this.config.get('clientFramework');
+            // Make dist dir available in templates
+            if (this.config.get('buildTool') === 'maven') {
+                this.BUILD_DIR = 'target/';
+            } else {
+                this.BUILD_DIR = 'build/';
+            }
         }
     },
 
@@ -193,6 +199,7 @@ module.exports = LanguagesGenerator.extend({
                 this.updateLanguagesInLanguageConstant(this.config.get('languages'));
             } else {
                 this.updateLanguagesInLanguageConstantNG2(this.config.get('languages'));
+                this.updateLanguagesInWebpack(this.config.get('languages'));
             }
         }
     }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2017 the original author or authors.
+ * Copyright 2013-2017 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://jhipster.github.io/
  * for more information.
@@ -399,7 +399,6 @@ const files = {
         {
             path: ANGULAR_DIR,
             templates: [
-                'shared/auth/_auth.service.ts',
                 'shared/auth/_csrf.service.ts',
                 'shared/auth/_state-storage.service.ts',
                 'shared/auth/_principal.service.ts',
