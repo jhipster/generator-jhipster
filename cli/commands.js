@@ -5,7 +5,6 @@ module.exports = {
         desc: 'Creates a new JHipster application based on the selected options'
     },
     aws: {
-        alias: 'aws',
         desc: 'Initializes a AWS app and generates a WAR file that is ready to push to AWS.'
     },
     'ci-cd': {
@@ -13,7 +12,6 @@ module.exports = {
         desc: 'Creates pipeline scripts for various CI/CD tools based on the selected options'
     },
     client: {
-        alias: 'client',
         desc: 'Creates a new JHipster client side application based on the selected options'
     },
     cloudfoundry: {
@@ -61,11 +59,9 @@ module.exports = {
         desc: 'Creates all required rancher-compose deployment configuration for the selected applications'
     },
     server: {
-        alias: 'server',
         desc: 'Creates a new JHipster server side application based on the selected options'
     },
     service: {
-        alias: 'service',
         argument: ['name'],
         desc: 'Creates a new JHipster service: this is a simple transactional Spring service bean'
     },

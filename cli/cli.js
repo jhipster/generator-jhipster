@@ -79,21 +79,23 @@ const getOptionsFromArgs = (args) => {
 
 /* Get options for the command */
 const getOptions = (args, opts) => {
+    let options = [];
     if (opts.argument && opts.argument.length > 0) {
         program.log.debug('Arguments found');
-        return getOptionsFromArgs(args).join(' ');
+        program.log.debug(getOptionsFromArgs(args).join(' '));
+        options = getOptionsFromArgs(args);
     }
     if (args.length === 1) {
         program.log.debug('No Arguments found looking for flags');
-        return getFlagsFromArg(args[0]).join(' ');
+        options = getFlagsFromArg(args[0]);
     }
-    return '';
+    return options.join(' ').trim();
 };
 
 /* Run a yeoman command */
 const runYoCommand = (cmd, args, opts) => {
     const options = getOptions(args, opts);
-    const command = `${JHIPSTER_NS}:${cmd} ${options}`;
+    const command = `${JHIPSTER_NS}:${cmd}${options ? ` ${options}` : ''}`;
     console.log(chalk.yellow(`Executing ${command}`));
     env.run(command, done);
 };
@@ -103,10 +105,11 @@ program.version(version).usage('[command] [options]').allowUnknownOption();
 /* create commands */
 Object.keys(SUB_GENERATORS).forEach((key) => {
     const opts = SUB_GENERATORS[key];
-    program
-        .command(`${key} ${getArgs(opts)}`, '', { isDefault: opts.default })
-        .alias(opts.alias)
-        .allowUnknownOption()
+    const command = program.command(`${key} ${getArgs(opts)}`, '', { isDefault: opts.default });
+    if (opts.alias) {
+        command.alias(opts.alias);
+    }
+    command.allowUnknownOption()
         .description(opts.desc)
         .action((args) => {
             program.log.debug('Options passed:');
