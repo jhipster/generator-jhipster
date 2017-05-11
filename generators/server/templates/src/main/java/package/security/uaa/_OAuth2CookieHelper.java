@@ -33,7 +33,6 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -64,8 +63,11 @@ public class OAuth2CookieHelper {
      * e.g. <code>Basic d2ViX2FwcDo=</code>.
      */
     public static final String CLIENT_AUTHORIZATION_COOKIE = "uaa-clientAuthorization";
-    private static final List<String> cookieNames = Arrays.asList(ACCESS_TOKEN_COOKIE, SESSION_REFRESH_TOKEN_COOKIE,
-        PERSISTENT_REFRESH_TOKEN_COOKIE, CLIENT_AUTHORIZATION_COOKIE);
+    /**
+     * The names of the Cookies we set.
+     */
+    private static final List<String> COOKIE_NAMES = Arrays.asList(ACCESS_TOKEN_COOKIE, SESSION_REFRESH_TOKEN_COOKIE,
+                                                                   PERSISTENT_REFRESH_TOKEN_COOKIE, CLIENT_AUTHORIZATION_COOKIE);
     /**
      * Number of seconds to expire refresh token cookies before the enclosed token expires.
      * This makes sure we don't run into race conditions where the cookie is still there but
@@ -274,57 +276,16 @@ public class OAuth2CookieHelper {
         return domain;
     }
 
-    /**
-     * Replace or add a Cookie in an array of Cookies.
-     * Does its best to replace inline.
+    /**Strip our token cookies from the array.
      *
-     * @param cookies   our current array of Cookies.
-     * @param newCookie the new cookie to add to the above array. Will replace a cookie of similar name.
-     * @return the modified cookies. This may be a new array if the new cookie did not fit.
+     * @param cookies the cookies we receive as input.
+     * @return the new cookie array without our tokens.
      */
-    public Cookie[] addCookie(Cookie[] cookies, Cookie newCookie) {
-        if (cookies != null && cookies.length > 0) {
-            for (int i = 0; i < cookies.length; i++) {
-                if (cookies[i].getName().equals(newCookie.getName())) {
-                    cookies[i] = newCookie;
-                    return cookies;
-                }
-            }
-            //original cookies array has not enough space, we must allocate a new cookie array
-            int n = cookies.length;
-            cookies = Arrays.copyOf(cookies, n + 1);
-            cookies[n] = newCookie;
-        } else {      //no cookies set currently, should not be happening, but set them anyway
-            cookies = new Cookie[1];
-            cookies[0] = newCookie;
-        }
-        return cookies;
-    }
-
-    public Cookie[] removeCookies(Cookie[] cookies, List<String> cookieNames) {
-        List<Cookie> cookieList = null;
-        if (cookies != null && cookies.length > 0) {
-            for (int i = 0; i < cookies.length; i++) {
-                if (cookieNames.contains(cookies[i].getName())) {
-                    if (cookieList == null) {
-                        cookieList = new ArrayList<>(cookies.length - 1);
-                        for (int j = 0; j < i; j++) {
-                            cookieList.add(cookies[j]);
-                        }
-                    }
-                } else if (cookieList != null) {
-                    cookieList.add(cookies[i]);
-                }
-            }
-        }
-        if (cookieList != null) {
-            Cookie[] newCookies = new Cookie[cookieList.size()];
-            return cookieList.toArray(newCookies);
-        }
-        return cookies;
-    }
-
     public Cookie[] stripTokens(Cookie[] cookies) {
-        return removeCookies(cookies, cookieNames);
+        CookieCollection cc=new CookieCollection(cookies);
+        if(cc.removeAll(COOKIE_NAMES)) {
+            return cc.toArray();
+        }
+        return cookies;
     }
 }
