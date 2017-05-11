@@ -179,4 +179,17 @@ public class UserServiceIntTest <% if (databaseType == 'cassandra') { %>extends 
             .noneMatch(user -> Constants.ANONYMOUS_USER.equals(user.getLogin())))
             .isTrue();
     }
+    <%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
+
+    @Test
+    public void testRemoveNotActivatedUsers() {
+        User user = userService.createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
+        user.setActivated(false);
+        user.setCreatedDate(Instant.now().minus(30, ChronoUnit.DAYS));
+        userRepository.save(user);
+        assertThat(userRepository.findOneByLogin("johndoe")).isPresent();
+        userService.removeNotActivatedUsers();
+        assertThat(userRepository.findOneByLogin("johndoe")).isNotPresent();
+    }
+    <%_ } _%>
 }
