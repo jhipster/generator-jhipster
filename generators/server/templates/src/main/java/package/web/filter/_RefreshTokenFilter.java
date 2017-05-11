@@ -75,8 +75,6 @@ public class RefreshTokenFilter extends GenericFilterBean {
             httpServletRequest = refreshTokensIfExpiring(httpServletRequest, httpServletResponse);
         } catch (ClientAuthenticationException ex) {
             log.warn("Security exception: could not refresh tokens", ex);
-//            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//            authenticationService.logout(httpServletRequest, httpServletResponse);
         }
         filterChain.doFilter(httpServletRequest, servletResponse);
     }
