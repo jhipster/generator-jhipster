@@ -16,9 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.security;
+package <%=packageName%>.security.uaa;
 
-import <%=packageName%>.security.uaa.OAuth2CookieHelper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,14 +25,16 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.util.ReflectionTestUtils;
 
 /**
- * @author markus.oellinger
+ * Tests helper functions around OAuth2 Cookies.
+ * 
+ * @see OAuth2CookieHelper
  */
 public class OAuth2CookieHelperTest {
     public static final String GET_COOKIE_DOMAIN_METHOD = "getCookieDomain";
     private OAuth2CookieHelper cookieHelper;
 
     @Before
-    public void init() throws NoSuchMethodException {
+    public void setUp() throws NoSuchMethodException {
         cookieHelper = new OAuth2CookieHelper();
     }
 
