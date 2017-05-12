@@ -24,7 +24,10 @@
     "email": "",
     "url": "https://github.com/jdubois"
   },
-  "main": "app/index.js",
+  "main": "cli/index.js",
+  "bin": {
+    "jh": "./cli/jh.js"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/jhipster/generator-jhipster.git"
@@ -36,8 +39,10 @@
     "test": "mocha --timeout 20000 --slow 0 --reporter spec"
   },
   "dependencies": {
+    "autocmdr": "0.0.8",
     "chalk": "1.1.3",
     "cheerio": "0.22.0",
+    "commander": "2.9.0",
     "ejs": "2.5.6",
     "glob": "7.1.1",
     "html-wiring": "1.2.0",
@@ -50,6 +55,7 @@
     "randexp": "0.4.5",
     "semver": "5.3.0",
     "shelljs": "0.7.7",
+    "yeoman-environment": "1.6.6",
     "yeoman-generator": "1.1.1",
     "yo": "1.8.5"
   },
