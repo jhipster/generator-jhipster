@@ -381,7 +381,7 @@ function writeFiles() {
             }
         },
 
-        writeServerJaconstepoFiles() {
+        writeServerJavaPackageInfoFiles() {
             if (this.searchEngine === 'elasticsearch') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/repository/search/_package-info.java`, `${javaDir}repository/search/package-info.java`);
             }
@@ -442,6 +442,10 @@ function writeFiles() {
             }
 
             this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_TestUtil.java`, `${testDir}web/rest/TestUtil.java`);
+            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_LogsResourceIntTest.java`, `${testDir}web/rest/LogsResourceIntTest.java`);
+            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_ProfileInfoResourceIntTest.java`, `${testDir}web/rest/ProfileInfoResourceIntTest.java`);
+            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/errors/_ExceptionTranslatorIntTest.java`, `${testDir}web/rest/errors/ExceptionTranslatorIntTest.java`);
+            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/errors/_ExceptionTranslatorTestController.java`, `${testDir}web/rest/errors/ExceptionTranslatorTestController.java`);
 
             this.template(`${SERVER_TEST_RES_DIR}config/_application.yml`, `${SERVER_TEST_RES_DIR}config/application.yml`);
             this.template(`${SERVER_TEST_RES_DIR}_logback.xml`, `${SERVER_TEST_RES_DIR}logback.xml`);
@@ -553,8 +557,6 @@ function writeFiles() {
 
             this.template(`${SERVER_TEST_SRC_DIR}package/service/_MailServiceIntTest.java`, `${testDir}service/MailServiceIntTest.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/service/_UserServiceIntTest.java`, `${testDir}service/UserServiceIntTest.java`);
-            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_LogsResourceIntTest.java`, `${testDir}web/rest/LogsResourceIntTest.java`);
-            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_ProfileInfoResourceIntTest.java`, `${testDir}web/rest/ProfileInfoResourceIntTest.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_UserResourceIntTest.java`, `${testDir}web/rest/UserResourceIntTest.java`);
             if (this.enableSocialSignIn) {
                 this.template(`${SERVER_TEST_SRC_DIR}package/repository/_CustomSocialUsersConnectionRepositoryIntTest.java`, `${testDir}repository/CustomSocialUsersConnectionRepositoryIntTest.java`);

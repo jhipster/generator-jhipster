@@ -23,6 +23,9 @@ import io.github.jhipster.config.JHipsterProperties;
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
+<%_ if (authenticationType == 'uaa') { _%>
+import <%= packageName %>.config.SecurityBeanOverrideConfiguration;
+<%_ } _%>
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,7 +49,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see ProfileInfoResource
  **/
 @RunWith(SpringRunner.class)
+<%_ if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>
+@SpringBootTest(classes = {<%= mainClass %>.class, SecurityBeanOverrideConfiguration.class})
+<%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
+<%_ } _%>
 public class ProfileInfoResourceIntTest <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     @Mock
