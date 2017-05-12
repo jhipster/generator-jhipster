@@ -69,7 +69,7 @@ function writeFiles() {
             if (this.prodDatabaseType === 'mongodb') {
                 this.template(`${DOCKER_DIR}_mongodb.yml`, `${DOCKER_DIR}mongodb.yml`);
                 this.template(`${DOCKER_DIR}_mongodb-cluster.yml`, `${DOCKER_DIR}mongodb-cluster.yml`);
-                this.copy(`${DOCKER_DIR}mongodb/MongoDB.Dockerfile`, `${DOCKER_DIR}mongodb/MongoDB.Dockerfile`);
+                this.template(`${DOCKER_DIR}mongodb/MongoDB.Dockerfile`, `${DOCKER_DIR}mongodb/MongoDB.Dockerfile`);
                 this.template(`${DOCKER_DIR}mongodb/scripts/init_replicaset.js`, `${DOCKER_DIR}mongodb/scripts/init_replicaset.js`);
             }
             if (this.prodDatabaseType === 'mssql') {
