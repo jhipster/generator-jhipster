@@ -2,7 +2,7 @@ Description:
     Creates all required Docker deployment configuration for the selected applications.
 
 Example:
-    yo jhipster:docker-compose
+    jhipster docker-compose
 
     This will create:
         docker-compose.yml

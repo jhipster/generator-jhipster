@@ -2,7 +2,7 @@ Description:
     Creates all required OpenShift deployment configuration for the selected applications.
 
 Example:
-    yo jhipster:openshift
+    jhipster openshift
 
     This will create:
         [application]/ocp/*.yml

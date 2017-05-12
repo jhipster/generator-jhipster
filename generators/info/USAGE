@@ -2,4 +2,4 @@ Description:
     Display information about your current project and system.
 
 Example:
-    yo jhipster:information
+    jhipster info

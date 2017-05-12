@@ -2,7 +2,7 @@ Description:
     Creates a new JHipster entity: JPA entity, Spring server side components and Angular client side components
 
 Example:
-    yo jhipster:entity Foo
+    jhipster entity Foo
 
     This will create:
         .jhipster.Foo.json

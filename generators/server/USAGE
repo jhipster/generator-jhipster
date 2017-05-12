@@ -2,6 +2,6 @@ Description:
     Creates a new JHipster server side application based on the selected options
 
 Example:
-    yo jhipster:server
+    jhipster server
 
     This will create a Spring Boot server side app

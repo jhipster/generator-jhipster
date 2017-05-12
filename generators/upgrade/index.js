@@ -74,7 +74,7 @@ module.exports = UpgradeGenerator.extend({
 
     _generate(version, callback) {
         this.log(`Regenerating app with jhipster ${version}...`);
-        shelljs.exec('yo jhipster --with-entities --force --skip-install', { silent: this.silent }, (code, msg, err) => {
+        shelljs.exec('jhipster --with-entities --force --skip-install', { silent: this.silent }, (code, msg, err) => {
             if (code === 0) this.log(chalk.green(`Successfully regenerated app with jhipster ${version}`));
             else this.error(`Something went wrong while generating project! ${err}`);
             callback();

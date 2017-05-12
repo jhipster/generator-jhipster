@@ -360,7 +360,7 @@ module.exports = HerokuGenerator.extend({
                 }
                 this.log(chalk.green(`\nYour app should now be live. To view it run\n\t${chalk.bold('heroku open')}`));
                 this.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold('heroku logs --tail')}`));
-                this.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('yo jhipster:heroku')}`));
+                this.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
                 done();
             });
 
