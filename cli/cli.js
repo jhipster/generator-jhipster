@@ -24,8 +24,8 @@ const packageJson = require('../package.json');
 const SUB_GENERATORS = require('./commands');
 
 /* Enable loggers and help https://github.com/Hypercubed/autocmdr#logger */
-require('autocmdr/lib/logger')(program, { name: 'jh' });
-require('autocmdr/lib/help')(program, { name: 'jh' });
+require('autocmdr/lib/logger')(program, { name: 'jhipster' });
+require('autocmdr/lib/help')(program, { name: 'jhipster' });
 
 const version = packageJson.version;
 const env = yeoman.createEnv();
@@ -129,7 +129,7 @@ program.on('--help', () => {
 });
 
 /* Enable autocompletion https://github.com/Hypercubed/autocmdr#completion */
-require('autocmdr/lib/completion')(program, { name: 'jh' });
+require('autocmdr/lib/completion')(program, { name: 'jhipster' });
 
 program.parse(process.argv);
 

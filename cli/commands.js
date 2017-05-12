@@ -54,6 +54,10 @@ module.exports = {
         argument: ['languages...'],
         desc: 'Select languages from a list of available languages. The i18n files will be copied to the /webapp/i18n folder'
     },
+    openshift: {
+        alias: 'os',
+        desc: 'Creates all required OpenShift deployment configuration for the selected applications'
+    },
     'rancher-compose': {
         alias: 'rc',
         desc: 'Creates all required rancher-compose deployment configuration for the selected applications'
