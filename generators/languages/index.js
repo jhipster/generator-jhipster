@@ -1,3 +1,21 @@
+/**
+ * Copyright 2013-2017 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://jhipster.github.io/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 const util = require('util');
 const generator = require('yeoman-generator');
 const chalk = require('chalk');
@@ -82,6 +100,12 @@ module.exports = LanguagesGenerator.extend({
             this.enableSocialSignIn = this.config.get('enableSocialSignIn');
             this.currentLanguages = this.config.get('languages');
             this.clientFramework = this.config.get('clientFramework');
+            // Make dist dir available in templates
+            if (this.config.get('buildTool') === 'maven') {
+                this.BUILD_DIR = 'target/';
+            } else {
+                this.BUILD_DIR = 'build/';
+            }
         }
     },
 
@@ -175,6 +199,7 @@ module.exports = LanguagesGenerator.extend({
                 this.updateLanguagesInLanguageConstant(this.config.get('languages'));
             } else {
                 this.updateLanguagesInLanguageConstantNG2(this.config.get('languages'));
+                this.updateLanguagesInWebpack(this.config.get('languages'));
             }
         }
     }

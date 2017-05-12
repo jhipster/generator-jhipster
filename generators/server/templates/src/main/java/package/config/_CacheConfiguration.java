@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -27,6 +27,7 @@ import org.ehcache.expiry.Expirations;
 import org.ehcache.jsr107.Eh107Configuration;
 
 import java.util.concurrent.TimeUnit;
+
 <%_ } _%>
 <%_ if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { _%>
 
@@ -42,8 +43,9 @@ import com.hazelcast.config.MaxSizeConfig;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-<%_ } _%>
 
+import org.springframework.beans.factory.annotation.Autowired;
+<%_ } _%>
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 <%_ if (hibernateCache == 'ehcache') { _%>
@@ -119,21 +121,27 @@ public class CacheConfiguration {
     private final Environment env;
         <%_ if (serviceDiscoveryType === 'eureka') { _%>
 
+    private final ServerProperties serverProperties;
+
     private final DiscoveryClient discoveryClient;
 
-    private final Registration registration;
-
-    private final ServerProperties serverProperties;
+    private Registration registration;
         <%_ } _%>
 
-    public CacheConfiguration(<% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>Environment env<% if (serviceDiscoveryType === 'eureka') { %>, DiscoveryClient discoveryClient, Registration registration, ServerProperties serverProperties<% } } %>) {
+    public CacheConfiguration(<% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>Environment env<% if (serviceDiscoveryType === 'eureka') { %>, ServerProperties serverProperties, DiscoveryClient discoveryClient<% } } %>) {
         this.env = env;
         <%_ if (serviceDiscoveryType === 'eureka') { _%>
-        this.discoveryClient = discoveryClient;
-        this.registration = registration;
         this.serverProperties = serverProperties;
+        this.discoveryClient = discoveryClient;
         <%_ } _%>
     }
+        <%_ if (serviceDiscoveryType === 'eureka') { _%>
+
+    @Autowired(required = false)
+    public void setRegistration(Registration registration) {
+        this.registration = registration;
+    }
+        <%_ } _%>
 
     @PreDestroy
     public void destroy() {
@@ -151,42 +159,42 @@ public class CacheConfiguration {
     @Bean
     public HazelcastInstance hazelcastInstance(JHipsterProperties jHipsterProperties) {
         log.debug("Configuring Hazelcast");
-
         HazelcastInstance hazelCastInstance = Hazelcast.getHazelcastInstanceByName("<%=baseName%>");
         if (hazelCastInstance != null) {
             log.debug("Hazelcast already initialized");
             return hazelCastInstance;
         }
-
         Config config = new Config();
         config.setInstanceName("<%=baseName%>");
         <%_ if (serviceDiscoveryType === 'eureka') { _%>
-        // The serviceId is by default the application's name, see Spring Boot's eureka.instance.appname property
-        String serviceId = registration.getServiceId();
-        log.debug("Configuring Hazelcast clustering for instanceId: {}", serviceId);
+        config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
+        if (this.registration == null) {
+            log.warn("No discovery service is set up, Hazelcast cannot create a cluster.");
+        } else {
+            // The serviceId is by default the application's name, see Spring Boot's eureka.instance.appname property
+            String serviceId = registration.getServiceId();
+            log.debug("Configuring Hazelcast clustering for instanceId: {}", serviceId);
+            // In development, everything goes through 127.0.0.1, with a different port
+            if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)) {
+                log.debug("Application is running with the \"dev\" profile, Hazelcast " +
+                          "cluster will only work with localhost instances");
 
-        // In development, everything goes through 127.0.0.1, with a different port
-        if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)) {
-            log.debug("Application is running with the \"dev\" profile, Hazelcast " +
-                      "cluster will only work with localhost instances");
-
-            System.setProperty("hazelcast.local.localAddress", "127.0.0.1");
-            config.getNetworkConfig().setPort(serverProperties.getPort() + 5701);
-            config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
-            config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true);
-            for (ServiceInstance instance : discoveryClient.getInstances(serviceId)) {
-                String clusterMember = "127.0.0.1:" + (instance.getPort() + 5701);
-                log.debug("Adding Hazelcast (dev) cluster member " + clusterMember);
-                config.getNetworkConfig().getJoin().getTcpIpConfig().addMember(clusterMember);
-            }
-        } else { // Production configuration, one host per instance all using port 5701
-            config.getNetworkConfig().setPort(5701);
-            config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
-            config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true);
-            for (ServiceInstance instance : discoveryClient.getInstances(serviceId)) {
-                String clusterMember = instance.getHost() + ":5701";
-                log.debug("Adding Hazelcast (prod) cluster member " + clusterMember);
-                config.getNetworkConfig().getJoin().getTcpIpConfig().addMember(clusterMember);
+                System.setProperty("hazelcast.local.localAddress", "127.0.0.1");
+                config.getNetworkConfig().setPort(serverProperties.getPort() + 5701);
+                config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true);
+                for (ServiceInstance instance : discoveryClient.getInstances(serviceId)) {
+                    String clusterMember = "127.0.0.1:" + (instance.getPort() + 5701);
+                    log.debug("Adding Hazelcast (dev) cluster member " + clusterMember);
+                    config.getNetworkConfig().getJoin().getTcpIpConfig().addMember(clusterMember);
+                }
+            } else { // Production configuration, one host per instance all using port 5701
+                config.getNetworkConfig().setPort(5701);
+                config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true);
+                for (ServiceInstance instance : discoveryClient.getInstances(serviceId)) {
+                    String clusterMember = instance.getHost() + ":5701";
+                    log.debug("Adding Hazelcast (prod) cluster member " + clusterMember);
+                    config.getNetworkConfig().getJoin().getTcpIpConfig().addMember(clusterMember);
+                }
             }
         }
         <%_ } else { _%>

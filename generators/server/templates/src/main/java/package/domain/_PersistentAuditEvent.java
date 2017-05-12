@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -17,15 +17,18 @@
  limitations under the License.
 -%>
 package <%=packageName%>.domain;
-<% if (databaseType == 'mongodb') { %>
+<%_ if (databaseType == 'mongodb') { _%>
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;<% } %>
+import org.springframework.data.mongodb.core.mapping.Field;
+<%_ } else if (databaseType == 'sql') { _%>
 
-import java.io.Serializable;
-import java.time.LocalDateTime;<% if (databaseType == 'sql') { %>
-import javax.persistence.*;<% } %>
+import javax.persistence.*;
+<%_ } _%>
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,7 +58,7 @@ public class PersistentAuditEvent implements Serializable {
     private String principal;
 <% if (databaseType == 'sql') { %>
     @Column(name = "event_date")<% } %>
-    private LocalDateTime auditEventDate;<% if (databaseType == 'sql') { %>
+    private Instant auditEventDate;<% if (databaseType == 'sql') { %>
     @Column(name = "event_type")<% } %><% if (databaseType == 'mongodb') { %>
     @Field("event_type")<% } %>
     private String auditEventType;
@@ -89,11 +92,11 @@ public class PersistentAuditEvent implements Serializable {
         this.principal = principal;
     }
 
-    public LocalDateTime getAuditEventDate() {
+    public Instant getAuditEventDate() {
         return auditEventDate;
     }
 
-    public void setAuditEventDate(LocalDateTime auditEventDate) {
+    public void setAuditEventDate(Instant auditEventDate) {
         this.auditEventDate = auditEventDate;
     }
 

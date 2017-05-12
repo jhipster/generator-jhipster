@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -41,13 +41,13 @@ spring:
             discovery:
                 tags: profile=${spring.profiles.active}, version=${info.project.version}
             config:
-                fail-fast: true
+                fail-fast: false # if not in "prod" profile, do not force to use Spring Cloud Config
                 format: yaml
                 profile-separator: "-"
         <%_ } _%>
         <%_ if (serviceDiscoveryType === 'eureka') { _%>
         config:
-            fail-fast: true
+            fail-fast: false # if not in "prod" profile, do not force to use Spring Cloud Config
             uri: http://admin:${jhipster.registry.password}@localhost:8761/config
             # name of the config server's property source (file.yml) that we want to use
             name: <%= baseName %>

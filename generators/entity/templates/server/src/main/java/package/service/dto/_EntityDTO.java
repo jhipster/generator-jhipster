@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -195,10 +195,10 @@ public class <%= entityClass %>DTO implements Serializable {
         }
 
         <%= entityClass %>DTO <%= entityInstance %>DTO = (<%= entityClass %>DTO) o;
-
-        if ( ! Objects.equals(getId(), <%= entityInstance %>DTO.getId())) { return false; }
-
-        return true;
+        if(<%= entityInstance %>DTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), <%= entityInstance %>DTO.getId());
     }
 
     @Override

@@ -1,3 +1,22 @@
+/**
+ * Copyright 2013-2017 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://jhipster.github.io/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 const path = require('path');
 const _ = require('lodash');
 const Generator = require('yeoman-generator');
@@ -1891,6 +1910,28 @@ module.exports = class extends Generator {
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
+        }
+    }
+
+    updateLanguagesInWebpack(languages) {
+        const fullPath = 'webpack/webpack.common.js';
+        try {
+            let content = 'groupBy: [\n';
+            for (let i = 0, len = languages.length; i < len; i++) {
+                const language = languages[i];
+                content += `                        { pattern: "./src/main/webapp/i18n/${language}/*.json", fileName: "./${this.BUILD_DIR}www/i18n/${language}/all.json" }${i !== languages.length - 1 ? ',' : ''}\n`;
+            }
+            content +=
+                '                        // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n' +
+                '                 ]';
+
+            jhipsterUtils.replaceContent({
+                file: fullPath,
+                pattern: /groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g,
+                content
+            }, this);
+        } catch (e) {
+            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
         }
     }
 

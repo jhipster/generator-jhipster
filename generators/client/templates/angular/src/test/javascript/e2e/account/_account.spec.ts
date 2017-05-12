@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -63,11 +63,11 @@ describe('account', () => {
 
     it('should login successfully with admin account', () => {
         <%_ if (enableTranslation) { _%>
-        const expect1 = /login.title/;
+        const expect1 = /global.form.username/;
         <%_ } else { _%>
-        const expect1 = /Sign in/;
+        const expect1 = /Login/;
         <%_ } _%>
-        element.all(by.css('.modal-content h1')).first().<%- elementGetter %>.then((value) => {
+        element.all(by.css('.modal-content label')).first().<%- elementGetter %>.then((value) => {
             expect(value).toMatch(expect1);
         });
         username.clear();
