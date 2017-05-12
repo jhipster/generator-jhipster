@@ -1923,7 +1923,7 @@ module.exports = class extends Generator {
             }
             content +=
                 '                        // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n' +
-                '                 ]';
+                '                    ]';
 
             jhipsterUtils.replaceContent({
                 file: fullPath,
