@@ -4,8 +4,8 @@ const assert = require('assert');
 const exec = require('child_process').exec;
 const path = require('path');
 
-describe('jh cli test', () => {
-    const cmd = `node ${path.join(__dirname, '../cli/jh')} `;
+describe('jhipster cli test', () => {
+    const cmd = `node ${path.join(__dirname, '../cli/jhipster')} `;
     console.log(cmd); // eslint-disable-line
 
     it('--help should run without errors', (done) => {
