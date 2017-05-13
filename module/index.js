@@ -30,11 +30,13 @@ const JHipsterEntityExporter = require('../lib/export/jhipster_entity_exporter')
   exportEntities = JHipsterEntityExporter.exportEntities,
   createJHipsterEntityFolderFolder = JHipsterEntityExporter.createJHipsterEntityFolderFolder;
 
-const exportToJDL = require('../lib/export/jdl_exporter').exportToJDL,
-  JSONFileReader = require('../lib/reader/json_file_reader'),
+const JDLExporter = require('../lib/export/jdl_exporter');
+
+const JSONFileReader = require('../lib/reader/json_file_reader'),
   toFilePath = JSONFileReader.toFilePath,
-  readEntityJSON = JSONFileReader.readEntityJSON,
-  ReservedKeywords = require('../lib/core/jhipster/reserved_keywords'),
+  readEntityJSON = JSONFileReader.readEntityJSON;
+
+const ReservedKeywords = require('../lib/core/jhipster/reserved_keywords'),
   ObjectUtils = require('../lib/utils/object_utils'),
   FormatUtils = require('../lib/utils/format_utils'),
   StringUtils = require('../lib/utils/string_utils'),
@@ -52,7 +54,7 @@ module.exports = {
   isReservedClassName: ReservedKeywords.isReservedClassName,
   isReservedTableName: ReservedKeywords.isReservedTableName,
   isReservedFieldName: ReservedKeywords.isReservedFieldName,
-  
+
   /* JDL objects */
   JDLObject: JDLObject,
   JDLApplication: JDLApplication,
@@ -84,16 +86,22 @@ module.exports = {
   exportEntities: exportEntities,
 
   /* JDL exporting */
-  exportToJDL: exportToJDL,
+  exportToJDL: JDLExporter.exportToJDL,
+
   /* JDL utils */
   isJDLFile: JDLReader.checkFileIsJDLFile,
+
   /* JSON utils */
   ObjectUtils: ObjectUtils,
   createJHipsterEntityFolderFolder: createJHipsterEntityFolderFolder,
+
+  /* JSON file reading */
   readEntityJSON: readEntityJSON,
   toFilePath: toFilePath,
+
   /* Objects */
   Set: Set,
+
   /* Utils */
   camelCase: StringUtils.camelCase,
   dateFormatForLiquibase: FormatUtils.dateFormatForLiquibase
