@@ -19,11 +19,13 @@ const BINARY_OPTIONS = require('../lib/core/jhipster/binary_options'),
   JDLRelationship = require('../lib/core/jdl_relationship'),
   JDLRelationships = require('../lib/core/jdl_relationships'),
   JDLUnaryOption = require('../lib/core/jdl_unary_option'),
-  JDLBinaryOption = require('../lib/core/jdl_binary_option'),
-  JSONExporter = require('../lib/export/json_exporter'),
-  exportToJSON = JSONExporter.exportToJSON,
-  createJHipsterJSONFolder = JSONExporter.createJHipsterJSONFolder,
-  exportToJDL = require('../lib/export/jdl_exporter').exportToJDL,
+  JDLBinaryOption = require('../lib/core/jdl_binary_option');
+
+const JHipsterEntityExporter = require('../lib/export/jhipster_entity_exporter'),
+  exportEntities = JHipsterEntityExporter.exportEntities,
+  createJHipsterEntityFolderFolder = JHipsterEntityExporter.createJHipsterEntityFolderFolder;
+
+const exportToJDL = require('../lib/export/jdl_exporter').exportToJDL,
   JSONFileReader = require('../lib/reader/json_file_reader'),
   toFilePath = JSONFileReader.toFilePath,
   readEntityJSON = JSONFileReader.readEntityJSON,
@@ -66,15 +68,15 @@ module.exports = {
   /* Json conversion */
   convertJsonEntitiesToJDL: JsonParser.parseEntities,
   convertJsonServerOptionsToJDL: JsonParser.parseServerOptions,
-  /* JSON exporting */
-  exportToJSON: exportToJSON,
+  /* Entity exporting */
+  exportEntities: exportEntities,
   /* JDL exporting */
   exportToJDL: exportToJDL,
   /* JDL utils */
   isJDLFile: JDLReader.checkFileIsJDLFile,
   /* JSON utils */
   ObjectUtils: ObjectUtils,
-  createJHipsterJSONFolder: createJHipsterJSONFolder,
+  createJHipsterEntityFolderFolder: createJHipsterEntityFolderFolder,
   readEntityJSON: readEntityJSON,
   toFilePath: toFilePath,
   /* Objects */
