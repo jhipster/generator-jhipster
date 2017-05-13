@@ -19,7 +19,7 @@
 package <%=packageName%>.security.uaa;
 
 import <%=packageName%>.web.filter.RefreshTokenFilter;
-import org.hamcrest.Matchers;
+import io.github.jhipster.config.JHipsterProperties;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -28,17 +28,12 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.DefaultOAuth2RefreshToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.common.exceptions.UnauthorizedClientException;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -61,7 +56,7 @@ import static org.mockito.Mockito.when;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class UaaAuthenticationServiceTest {
-    public static final String CLIENT_AUTHORIZATION = "Basic d2ViX2FwcDo=";
+    public static final String CLIENT_AUTHORIZATION = "Basic aW50ZXJuYWw6aW50ZXJuYWw=";
     public static final String ACCESS_TOKEN_VALUE = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQyNzI4NDQsInVzZXJfbmFtZSI6InVzZXIiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwianRpIjoiNzc1ZTJkYWUtYWYzZi00YTdhLWExOTktNzNiZTU1MmIxZDVkIiwiY2xpZW50X2lkIjoid2ViX2FwcCIsInNjb3BlIjpbIm9wZW5pZCJdfQ.gEK0YcX2IpkpxnkxXXHQ4I0xzTjcy7edqb89ukYE0LPe7xUcZVwkkCJF_nBxsGJh2jtA6NzNLfY5zuL6nP7uoAq3fmvsyrcyR2qPk8JuuNzGtSkICx3kPDRjAT4ST8SZdeh7XCbPVbySJ7ZmPlRWHyedzLA1wXN0NUf8yZYS4ELdUwVBYIXSjkNoKqfWm88cwuNr0g0teypjPtjDqCnXFt1pibwdfIXn479Y1neNAdvSpHcI4Ost-c7APCNxW2gqX-0BItZQearxRgKDdBQ7CGPAIky7dA0gPuKUpp_VCoqowKCXqkE9yKtRQGIISewtj2UkDRZePmzmYrUBXRzfYw";
     public static final String REFRESH_TOKEN_VALUE = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJ1c2VyIiwic2NvcGUiOlsib3BlbmlkIl0sImF0aSI6Ijc3NWUyZGFlLWFmM2YtNGE3YS1hMTk5LTczYmU1NTJiMWQ1ZCIsImV4cCI6MTQ5Njg2NDc0MywiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImp0aSI6IjhmYjI2YTllLTdjYzQtNDFlMi1hNzBjLTk4MDc0N2U2YWFiOSIsImNsaWVudF9pZCI6IndlYl9hcHAifQ.q1-Df9_AFO6TJNiLKV2YwTjRbnd7qcXv52skXYnog5siHYRoR6cPtm6TNQ04iDAoIHljTSTNnD6DS3bHk41mV55gsSVxGReL8VCb_R8ZmhVL4-5yr90sfms0wFp6lgD2bPmZ-TXiS2Oe9wcbNWagy5RsEplZ-sbXu3tjmDao4FN35ojPsXmUs84XnNQH3Y_-PY9GjZG0JEfLQIvE0J5BkXS18Z015GKyA6GBIoLhAGBQQYyG9m10ld_a9fD5SmCyCF72Jad_pfP1u8Z_WyvO-wrlBvm2x-zBthreVrXU5mOb9795wJEP-xaw3dXYGjht_grcW4vKUFtj61JgZk98CQ";
     public static final String NEW_ACCESS_TOKEN_VALUE = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0OTQyNzY2NDEsInVzZXJfbmFtZSI6InVzZXIiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwianRpIjoiYzIyY2YzMDgtZTIyYi00YzNjLWI5MjctOTYwYzA2YmY1ZmU0IiwiY2xpZW50X2lkIjoid2ViX2FwcCIsInNjb3BlIjpbIm9wZW5pZCJdfQ.IAhE39GCqWRUuXdWy-raOcE9NYXRhGiqkeJH649501LeqNPH5HtRUNWmudVRgwT52Bj7HcbJapMLGetKIMEASqC1-WARfcZ_PR0r7Kfg3OlFALWOH_oVT5kvi2H-QCoSAF9mRYK6abCh_tPk5KryVB5c7YxTMIXDT2nTsSexD8eNQOMBWRCg0RaLHZ9bKfeyVgncQJsu7-vTo1xJyh-keYpdNZ0TA2SjYJgezmB7gwW1Kmc7_83htr8VycG7XA_PuD9--yRNlrN0LtNHEBqNypZsOe6NvpKiNlodFYHlsU1CaumzcF9U7dpVanjIUKJ5VRWVUlSFY6JJ755W29VCTw";
@@ -74,16 +69,21 @@ public class UaaAuthenticationServiceTest {
     private RefreshTokenFilter refreshTokenFilter;
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
+    private JHipsterProperties jHipsterProperties;
 
     @Before
     public void init() {
+        jHipsterProperties = new JHipsterProperties();
+        jHipsterProperties.getSecurity().getClientAuthorization().setAccessTokenUri("http://uaa/oauth/token");
+        jHipsterProperties.getSecurity().getClientAuthorization().setClientId("internal");
+        jHipsterProperties.getSecurity().getClientAuthorization().setClientSecret("internal");
         OAuth2CookieHelper cookieHelper = new OAuth2CookieHelper();
         OAuth2AccessToken accessToken = createAccessToken(ACCESS_TOKEN_VALUE, REFRESH_TOKEN_VALUE);
 
         mockPasswordGrant(accessToken);
         mockRefreshGrant();
 
-        authenticationService = new UaaAuthenticationService(cookieHelper, restTemplate);
+        authenticationService = new UaaAuthenticationService(jHipsterProperties, cookieHelper, restTemplate);
         when(tokenStore.readAccessToken(ACCESS_TOKEN_VALUE)).thenReturn(accessToken);
         refreshTokenFilter = new RefreshTokenFilter(authenticationService, tokenStore);
     }
@@ -100,8 +100,7 @@ public class UaaAuthenticationServiceTest {
         MockHttpServletRequest request = new MockHttpServletRequest(HttpMethod.GET, "http://www.test.com");
         Cookie accessTokenCookie = new Cookie(OAuth2CookieHelper.ACCESS_TOKEN_COOKIE, ACCESS_TOKEN_VALUE);
         Cookie refreshTokenCookie = new Cookie(OAuth2CookieHelper.SESSION_REFRESH_TOKEN_COOKIE, REFRESH_TOKEN_VALUE);
-        Cookie clientAuthorizationCookie = OAuth2CookieHelper.createClientAuthorizationCookie(CLIENT_AUTHORIZATION);
-        request.setCookies(accessTokenCookie, refreshTokenCookie, clientAuthorizationCookie);
+        request.setCookies(accessTokenCookie, refreshTokenCookie);
         return request;
     }
 
@@ -152,8 +151,6 @@ public class UaaAuthenticationServiceTest {
         Cookie refreshTokenCookie = response.getCookie(OAuth2CookieHelper.PERSISTENT_REFRESH_TOKEN_COOKIE);
         Assert.assertEquals(REFRESH_TOKEN_VALUE, refreshTokenCookie.getValue());
         Assert.assertNull(response.getCookie(OAuth2CookieHelper.SESSION_REFRESH_TOKEN_COOKIE));
-        Cookie clientAuthorizationCookie = response.getCookie(OAuth2CookieHelper.CLIENT_AUTHORIZATION_COOKIE);
-        Assert.assertEquals(CLIENT_AUTHORIZATION, OAuth2CookieHelper.getClientAuthorizationCookieValue(clientAuthorizationCookie));
     }
 
     @Test
@@ -173,26 +170,10 @@ public class UaaAuthenticationServiceTest {
      * If no authorization cookie is found, then we cannot contact UAA.
      */
     @Test
-    public void testRefreshGrantNoAuthentication() {
-        MockHttpServletRequest request = new MockHttpServletRequest(HttpMethod.GET, "http://www.test.com");
-        Cookie accessTokenCookie = new Cookie(OAuth2CookieHelper.ACCESS_TOKEN_COOKIE, ACCESS_TOKEN_VALUE);
-        Cookie refreshTokenCookie = new Cookie(OAuth2CookieHelper.SESSION_REFRESH_TOKEN_COOKIE, REFRESH_TOKEN_VALUE);
-        request.setCookies(accessTokenCookie, refreshTokenCookie);
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        expectedException.expect(UnauthorizedClientException.class);
-        expectedException.expectCause(Matchers.isA(HttpClientErrorException.class));
-        refreshTokenFilter.refreshTokensIfExpiring(request, response);
-    }
-
-    /**
-     * If no authorization cookie is found, then we cannot contact UAA.
-     */
-    @Test
     public void testRefreshGrantNoRefreshToken() {
         MockHttpServletRequest request = new MockHttpServletRequest(HttpMethod.GET, "http://www.test.com");
         Cookie accessTokenCookie = new Cookie(OAuth2CookieHelper.ACCESS_TOKEN_COOKIE, ACCESS_TOKEN_VALUE);
-        Cookie clientAuthorizationCookie = OAuth2CookieHelper.createClientAuthorizationCookie(CLIENT_AUTHORIZATION);
-        request.setCookies(accessTokenCookie, clientAuthorizationCookie);
+        request.setCookies(accessTokenCookie);
         MockHttpServletResponse response = new MockHttpServletResponse();
         HttpServletRequest newRequest = refreshTokenFilter.refreshTokensIfExpiring(request, response);
         //TODO check that newRequest does not contain an access token anymore
@@ -215,11 +196,10 @@ public class UaaAuthenticationServiceTest {
     @Test
     public void testStripTokens() {
         MockHttpServletRequest request = createMockHttpServletRequest();
-        HttpServletRequest newRequest=authenticationService.stripTokens(request);
-        CookieCollection cookies=new CookieCollection(newRequest.getCookies());
+        HttpServletRequest newRequest = authenticationService.stripTokens(request);
+        CookieCollection cookies = new CookieCollection(newRequest.getCookies());
         Assert.assertFalse(cookies.contains(OAuth2CookieHelper.ACCESS_TOKEN_COOKIE));
         Assert.assertFalse(cookies.contains(OAuth2CookieHelper.PERSISTENT_REFRESH_TOKEN_COOKIE));
         Assert.assertFalse(cookies.contains(OAuth2CookieHelper.SESSION_REFRESH_TOKEN_COOKIE));
-        Assert.assertFalse(cookies.contains(OAuth2CookieHelper.CLIENT_AUTHORIZATION_COOKIE));
     }
 }

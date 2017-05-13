@@ -274,7 +274,7 @@ jhipster:
                 token-validity-in-seconds: 86400
                 token-validity-in-seconds-for-remember-me: 2592000
     <%_ } _%>
-    <%_ if ((applicationType === 'microservice' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
+    <%_ if ((applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
     security:
         client-authorization:
             <%_ if (applicationType !== 'uaa') { _%>
