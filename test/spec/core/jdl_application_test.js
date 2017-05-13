@@ -7,7 +7,7 @@ describe('JDLApplication', () => {
   describe('::new', () => {
     describe('without specifying special options', () => {
       it('uses default values', () => {
-        const jdlApplication = new JDLApplication();
+        const jdlApplication = new JDLApplication({});
         expect(jdlApplication.baseName).to.eq('jhipster');
         expect(jdlApplication.path).to.eq('jhipster');
         expect(jdlApplication.packageName).to.eq('io.github.jhipster');
@@ -24,9 +24,7 @@ describe('JDLApplication', () => {
         expect(jdlApplication.searchEngine).to.eq(false);
         expect(jdlApplication.enableTranslation).to.eq(true);
         expect(jdlApplication.applicationType).to.eq('monolith');
-        expect(
-          jdlApplication.testFrameworks.has('gatling') && jdlApplication.testFrameworks.has('protactor')
-        ).to.be.true;
+        expect(jdlApplication.testFrameworks.size()).to.eq(0);
         expect(jdlApplication.languages.has('en')).to.be.true;
         expect(jdlApplication.serverPort).to.eq(8080);
         expect(jdlApplication.enableSocialSignIn).to.eq(false);
@@ -46,7 +44,7 @@ describe('JDLApplication', () => {
   });
   describe('#toString', () => {
     it('stringifies the application object', () => {
-      const jdlApplication = new JDLApplication();
+      const jdlApplication = new JDLApplication({});
       expect(jdlApplication.toString()).to.eq(`application {
   baseName jhipster
   path jhipster
@@ -64,7 +62,7 @@ describe('JDLApplication', () => {
   searchEngine false
   enableTranslation true
   applicationType monolith
-  testFrameworks gatling,protactor
+  testFrameworks
   languages en
   serverPort 8080
   enableSocialSignIn false
@@ -75,7 +73,7 @@ describe('JDLApplication', () => {
   clientPackageManager yarn
   clientFramework angular1
   nativeLanguage en
-  frontEndBuilder null
+  frontEndBuilder
   skipUserManagement false
   skipClient false
   skipServer false
