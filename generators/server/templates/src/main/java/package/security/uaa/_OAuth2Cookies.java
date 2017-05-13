@@ -27,7 +27,6 @@ import javax.servlet.http.HttpServletResponse;
 class OAuth2Cookies {
     private Cookie accessTokenCookie;
     private Cookie refreshTokenCookie;
-    private Cookie clientAuthorizationCookie;
 
     public Cookie getAccessTokenCookie() {
         return accessTokenCookie;
@@ -37,14 +36,9 @@ class OAuth2Cookies {
         return refreshTokenCookie;
     }
 
-    public Cookie getClientAuthorizationCookie() {
-        return clientAuthorizationCookie;
-    }
-
-    public void setCookies(Cookie accessTokenCookie, Cookie refreshTokenCookie, Cookie clientAuthorizationCookie) {
+    public void setCookies(Cookie accessTokenCookie, Cookie refreshTokenCookie) {
         this.accessTokenCookie = accessTokenCookie;
         this.refreshTokenCookie = refreshTokenCookie;
-        this.clientAuthorizationCookie = clientAuthorizationCookie;
     }
 
     /**
@@ -55,6 +49,5 @@ class OAuth2Cookies {
     void addCookiesTo(HttpServletResponse response) {
         response.addCookie(getAccessTokenCookie());
         response.addCookie(getRefreshTokenCookie());
-        response.addCookie(getClientAuthorizationCookie());
     }
 }
