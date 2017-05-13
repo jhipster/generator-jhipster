@@ -20,14 +20,12 @@ package <%=packageName%>.security.uaa;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import io.github.jhipster.config.JHipsterProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.util.Base64Utils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -49,6 +47,7 @@ public class UaaAuthenticationService {
      */
     private static final long REFRESH_TOKEN_CACHE_SECS = 10l;
 
+    private final JHipsterProperties jHipsterProperties;
     /**
      * Helps us with cookie handling.
      */
@@ -65,8 +64,9 @@ public class UaaAuthenticationService {
      */
     private final Cache<String, OAuth2Cookies> recentlyRefreshed;
 
-    public UaaAuthenticationService(OAuth2CookieHelper cookieHelper, RestTemplate restTemplate) {
-        this.cookieHelper = new OAuth2CookieHelper();
+    public UaaAuthenticationService(JHipsterProperties jHipsterProperties, OAuth2CookieHelper cookieHelper, RestTemplate restTemplate) {
+        this.jHipsterProperties = jHipsterProperties;
+        this.cookieHelper = cookieHelper;
         this.restTemplate = restTemplate;
         recentlyRefreshed = CacheBuilder.newBuilder()
             .expireAfterWrite(REFRESH_TOKEN_CACHE_SECS, TimeUnit.SECONDS)
@@ -95,7 +95,7 @@ public class UaaAuthenticationService {
             formParams.setAll(params);
             formParams.add("grant_type", "password");
             HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(formParams, reqHeaders);
-            ResponseEntity<OAuth2AccessToken> responseEntity = restTemplate.postForEntity("http://uaa/oauth/token",
+            ResponseEntity<OAuth2AccessToken> responseEntity = restTemplate.postForEntity(jHipsterProperties.getSecurity().getClientAuthorization().getAccessTokenUri(),
                 entity,
                 OAuth2AccessToken.class);
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -104,7 +104,7 @@ public class UaaAuthenticationService {
             }
             OAuth2AccessToken accessToken = responseEntity.getBody();
             OAuth2Cookies cookies = new OAuth2Cookies();
-            cookieHelper.createCookies(request, accessToken, rememberMe, authorizationHeader, cookies);
+            cookieHelper.createCookies(request, accessToken, rememberMe, cookies);
             cookies.addCookiesTo(response);
             if (log.isDebugEnabled()) {
                 log.debug("successfully authenticated user {}", params.get("username"));
@@ -135,10 +135,9 @@ public class UaaAuthenticationService {
             //check if we have a result from another thread already
             if (cookies.getAccessTokenCookie() == null) {            //no, we are first!
                 //send a refresh_token grant to UAA, getting new tokens
-                String authorizationHeader = OAuth2CookieHelper.getClientAuthorizationCookieValue(request);
-                OAuth2AccessToken accessToken = sendRefreshGrant(request, refreshCookie, authorizationHeader);
+                OAuth2AccessToken accessToken = sendRefreshGrant(request, refreshCookie);
                 boolean rememberMe = OAuth2CookieHelper.isRememberMe(refreshCookie);
-                cookieHelper.createCookies(request, accessToken, rememberMe, authorizationHeader, cookies);
+                cookieHelper.createCookies(request, accessToken, rememberMe, cookies);
                 //add cookies to response to update browser
                 cookies.addCookiesTo(response);
             } else {
@@ -176,23 +175,22 @@ public class UaaAuthenticationService {
      *
      * @param request                    the servlet request we received.
      * @param originalRefreshTokenCookie the refresh cookie to use to obtain new tokens.
-     * @param authorizationHeader        <code>"Authorization"</code> header to set to authenticate with UAA.
      * @return the new, refreshed access token.
      */
-    private OAuth2AccessToken sendRefreshGrant(HttpServletRequest request, Cookie originalRefreshTokenCookie, String authorizationHeader) {
+    private OAuth2AccessToken sendRefreshGrant(HttpServletRequest request, Cookie originalRefreshTokenCookie) {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "refresh_token");
         params.add("refresh_token", originalRefreshTokenCookie.getValue());
         HttpHeaders headers = new HttpHeaders();
-        if(authorizationHeader!=null) {
-            headers.add("Authorization", authorizationHeader);
-        }
-        else {
-            log.warn("no authorization header found, still trying to contact UAA...");
-        }
+        String clientId = jHipsterProperties.getSecurity().getClientAuthorization().getClientId();
+        String clientSecret = jHipsterProperties.getSecurity().getClientAuthorization().getClientSecret();
+        String authorization = clientId + ":" + clientSecret;
+        String authorizationHeader = "Basic " + Base64Utils.encodeToString(authorization.getBytes());
+        headers.add("Authorization", authorizationHeader);
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(params, headers);
         log.debug("contacting UAA to refresh OAuth2 JWT tokens");
-        ResponseEntity<OAuth2AccessToken> responseEntity = restTemplate.postForEntity("http://uaa/oauth/token", entity,
+        String tokenEndpointUrl = jHipsterProperties.getSecurity().getClientAuthorization().getAccessTokenUri();
+        ResponseEntity<OAuth2AccessToken> responseEntity = restTemplate.postForEntity(tokenEndpointUrl, entity,
             OAuth2AccessToken.class);
         OAuth2AccessToken accessToken = responseEntity.getBody();
         log.info("refreshed OAuth2 JWT cookies using refresh_token grant");

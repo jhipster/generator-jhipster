@@ -57,17 +57,10 @@ public class OAuth2CookieHelper {
      */
     public static final String PERSISTENT_REFRESH_TOKEN_COOKIE = "uaa-storedRefreshToken";
     /**
-     * Name of the cookie holding the cllient authorization presented by the client during authentication.
-     * This is stored since we need it again when we refresh the tokens.
-     * The cookie holds the original base64 encoded Authorization header content,
-     * e.g. <code>Basic d2ViX2FwcDo=</code>.
-     */
-    public static final String CLIENT_AUTHORIZATION_COOKIE = "uaa-clientAuthorization";
-    /**
      * The names of the Cookies we set.
      */
     private static final List<String> COOKIE_NAMES = Arrays.asList(ACCESS_TOKEN_COOKIE, SESSION_REFRESH_TOKEN_COOKIE,
-                                                                   PERSISTENT_REFRESH_TOKEN_COOKIE, CLIENT_AUTHORIZATION_COOKIE);
+        PERSISTENT_REFRESH_TOKEN_COOKIE);
     /**
      * Number of seconds to expire refresh token cookies before the enclosed token expires.
      * This makes sure we don't run into race conditions where the cookie is still there but
@@ -91,30 +84,6 @@ public class OAuth2CookieHelper {
             refreshTokenCookie = getCookie(request, PERSISTENT_REFRESH_TOKEN_COOKIE);
         }
         return refreshTokenCookie;
-    }
-
-    public static String getClientAuthorizationCookieValue(HttpServletRequest request) {
-        Cookie cookie = getCookie(request, CLIENT_AUTHORIZATION_COOKIE);
-        return getClientAuthorizationCookieValue(cookie);
-    }
-
-    public static String getClientAuthorizationCookieValue(Cookie cookie) {
-        if (cookie != null) {
-            return new String(Base64Utils.decodeFromUrlSafeString(cookie.getValue()));
-        }
-        return null;
-    }
-
-    /**
-     * Create a cookie to remember the Authorization header the client presented during authentication.
-     * We will need it again when issuing the refresh_token grant on behalf of that client.
-     *
-     * @param authorization the Basic Authorization header we received during authentication.
-     * @return the cookie containing this in a browser-friendly encoded way.
-     */
-    public static Cookie createClientAuthorizationCookie(String authorization) {
-        String value = Base64Utils.encodeToUrlSafeString(authorization.getBytes());
-        return new Cookie(CLIENT_AUTHORIZATION_COOKIE, value);
     }
 
     /**
@@ -151,14 +120,13 @@ public class OAuth2CookieHelper {
     /**
      * Create cookies using the provided values.
      *
-     * @param request             the request we are handling.
-     * @param accessToken         the access token and enclosed refresh token for our cookies.
-     * @param rememberMe          whether the user had originally checked "remember me".
-     * @param authorizationHeader the "Authorization" header the client had presented during authentication.
-     * @param result              will get the resulting cookies set.
+     * @param request     the request we are handling.
+     * @param accessToken the access token and enclosed refresh token for our cookies.
+     * @param rememberMe  whether the user had originally checked "remember me".
+     * @param result      will get the resulting cookies set.
      */
     public void createCookies(HttpServletRequest request, OAuth2AccessToken accessToken, boolean rememberMe,
-                              String authorizationHeader, OAuth2Cookies result) {
+                              OAuth2Cookies result) {
         String domain = getCookieDomain(request);
         log.debug("creating cookies for domain {}", domain);
         Cookie accessTokenCookie = new Cookie(ACCESS_TOKEN_COOKIE, accessToken.getValue());
@@ -175,11 +143,7 @@ public class OAuth2CookieHelper {
         }
         setCookieProperties(refreshTokenCookie, request.isSecure(), domain);
         log.debug("created refresh token cookie '{}', age: {}", refreshTokenCookie.getName(), refreshTokenCookie.getMaxAge());
-        Cookie clientAuthorizationCookie = createClientAuthorizationCookie(authorizationHeader);
-        setCookieProperties(clientAuthorizationCookie, request.isSecure(), domain);
-        clientAuthorizationCookie.setMaxAge(refreshTokenCookie.getMaxAge());        //same age as refresh token cookie
-        log.debug("created client authorization cookie '{}', age: {}", clientAuthorizationCookie.getName(), clientAuthorizationCookie.getMaxAge());
-        result.setCookies(accessTokenCookie, refreshTokenCookie, clientAuthorizationCookie);
+        result.setCookies(accessTokenCookie, refreshTokenCookie);
     }
 
     /**
@@ -236,7 +200,6 @@ public class OAuth2CookieHelper {
         clearCookie(httpServletRequest, httpServletResponse, domain, ACCESS_TOKEN_COOKIE);
         clearCookie(httpServletRequest, httpServletResponse, domain, SESSION_REFRESH_TOKEN_COOKIE);
         clearCookie(httpServletRequest, httpServletResponse, domain, PERSISTENT_REFRESH_TOKEN_COOKIE);
-        clearCookie(httpServletRequest, httpServletResponse, domain, CLIENT_AUTHORIZATION_COOKIE);
     }
 
     private void clearCookie(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
@@ -276,14 +239,15 @@ public class OAuth2CookieHelper {
         return domain;
     }
 
-    /**Strip our token cookies from the array.
+    /**
+     * Strip our token cookies from the array.
      *
      * @param cookies the cookies we receive as input.
      * @return the new cookie array without our tokens.
      */
     public Cookie[] stripTokens(Cookie[] cookies) {
-        CookieCollection cc=new CookieCollection(cookies);
-        if(cc.removeAll(COOKIE_NAMES)) {
+        CookieCollection cc = new CookieCollection(cookies);
+        if (cc.removeAll(COOKIE_NAMES)) {
             return cc.toArray();
         }
         return cookies;
