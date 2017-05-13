@@ -257,6 +257,7 @@ applicationContentDecl
   / SKIP_SERVER SPACE* skipServer:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
     return addToApplicationDecl(applicationContentDecl, 'skipServer', skipServer);
   }
+  / comment SPACE* applicationContentDecl:applicationContentDecl { return applicationContentDecl; }
   / ''
 
 booleanChoice
