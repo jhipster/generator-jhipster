@@ -10,8 +10,10 @@ const BINARY_OPTIONS = require('../lib/core/jhipster/binary_options'),
   JsonReader = require('../lib/reader/json_reader'),
   convertToJDL = require('../lib/parser/jdl_parser').parse,
   convertToJHipsterJSON = require('../lib/parser/entity_parser').parse,
-  JsonParser = require('../lib/parser/json_parser'),
-  JDLObject = require('../lib/core/jdl_object'),
+  JsonParser = require('../lib/parser/json_parser');
+
+const JDLObject = require('../lib/core/jdl_object'),
+  JDLApplication = require('../lib/core/jdl_application'),
   JDLEntity = require('../lib/core/jdl_entity'),
   JDLField = require('../lib/core/jdl_field'),
   JDLValidation = require('../lib/core/jdl_validation'),
@@ -50,8 +52,10 @@ module.exports = {
   isReservedClassName: ReservedKeywords.isReservedClassName,
   isReservedTableName: ReservedKeywords.isReservedTableName,
   isReservedFieldName: ReservedKeywords.isReservedFieldName,
+  
   /* JDL objects */
   JDLObject: JDLObject,
+  JDLApplication: JDLApplication,
   JDLEntity: JDLEntity,
   JDLField: JDLField,
   JDLValidation: JDLValidation,
@@ -60,6 +64,7 @@ module.exports = {
   JDLRelationships: JDLRelationships,
   JDLUnaryOption: JDLUnaryOption,
   JDLBinaryOption: JDLBinaryOption,
+
   /* JDL reading */
   parse: JDLReader.parse,
   parseFromFiles: JDLReader.parseFromFiles,
