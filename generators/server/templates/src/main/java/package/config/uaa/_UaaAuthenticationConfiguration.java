@@ -22,6 +22,7 @@ import <%=packageName%>.security.uaa.CookieTokenExtractor;
 import <%=packageName%>.security.uaa.OAuth2CookieHelper;
 import <%=packageName%>.security.uaa.UaaAuthenticationService;
 import <%=packageName%>.web.filter.RefreshTokenFilterConfigurer;
+import io.github.jhipster.config.JHipsterProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -40,10 +41,12 @@ import org.springframework.web.client.RestTemplate;
 @EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class UaaAuthenticationConfiguration extends ResourceServerConfigurerAdapter {
+    private final JHipsterProperties jHipsterProperties;
     private final TokenStore tokenStore;
     private final RestTemplate restTemplate;
 
-    public UaaAuthenticationConfiguration(TokenStore tokenStore, RestTemplate loadBalancedRestTemplate) {
+    public UaaAuthenticationConfiguration(JHipsterProperties jHipsterProperties, TokenStore tokenStore, RestTemplate loadBalancedRestTemplate) {
+        this.jHipsterProperties = jHipsterProperties;
         this.tokenStore = tokenStore;
         this.restTemplate = loadBalancedRestTemplate;
     }
@@ -72,7 +75,7 @@ public class UaaAuthenticationConfiguration extends ResourceServerConfigurerAdap
 
     @Bean
     public UaaAuthenticationService uaaAuthenticationService() {
-        return new UaaAuthenticationService(cookieHelper(), restTemplate);
+        return new UaaAuthenticationService(jHipsterProperties, cookieHelper(), restTemplate);
     }
 
     /**
