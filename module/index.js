@@ -21,6 +21,9 @@ const BINARY_OPTIONS = require('../lib/core/jhipster/binary_options'),
   JDLUnaryOption = require('../lib/core/jdl_unary_option'),
   JDLBinaryOption = require('../lib/core/jdl_binary_option');
 
+const JHipsterApplicationExporter = require('../lib/export/jhipster_application_exporter'),
+  exportApplications = JHipsterApplicationExporter.exportApplications;
+
 const JHipsterEntityExporter = require('../lib/export/jhipster_entity_exporter'),
   exportEntities = JHipsterEntityExporter.exportEntities,
   createJHipsterEntityFolderFolder = JHipsterEntityExporter.createJHipsterEntityFolderFolder;
@@ -68,8 +71,13 @@ module.exports = {
   /* Json conversion */
   convertJsonEntitiesToJDL: JsonParser.parseEntities,
   convertJsonServerOptionsToJDL: JsonParser.parseServerOptions,
+
+  /* Application exporting */
+  exportApplications: exportApplications,
+
   /* Entity exporting */
   exportEntities: exportEntities,
+
   /* JDL exporting */
   exportToJDL: exportToJDL,
   /* JDL utils */
