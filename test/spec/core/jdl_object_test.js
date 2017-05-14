@@ -25,6 +25,7 @@ describe('JDLObject', () => {
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
+          expect(error.message.indexOf('No application')).not.to.eq(-1);
         }
       });
     });
