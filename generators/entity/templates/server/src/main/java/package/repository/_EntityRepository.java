@@ -19,6 +19,7 @@
 package <%=packageName%>.repository;
 
 import <%=packageName%>.domain.<%=entityClass%>;
+import org.springframework.stereotype.Repository;
 <% if (databaseType == 'cassandra') { %>
 import com.datastax.driver.core.*;
 import com.datastax.driver.mapping.Mapper;
@@ -28,7 +29,6 @@ import org.springframework.data.repository.query.Param;<% } %>
 
 import java.util.List;<% } %><% if (databaseType=='mongodb') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;<% } %><% if (databaseType == 'cassandra') { %>
-import org.springframework.stereotype.Repository;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -50,6 +50,7 @@ import java.util.UUID;<% } %>
  * Cassandra repository for the <%= entityClass %> entity.
  */<% } %><% if (databaseType=='sql' || databaseType=='mongodb') { %>
 @SuppressWarnings("unused")
+@Repository
 public interface <%=entityClass%>Repository extends <% if (databaseType=='sql') { %>JpaRepository<% } %><% if (databaseType=='mongodb') { %>MongoRepository<% } %><<%=entityClass%>,<%= pkType %>> {<% for (idx in relationships) { %><% if (relationships[idx].relationshipType == 'many-to-one' && relationships[idx].otherEntityName == 'user') { %>
 
     @Query("select <%= entityInstance %> from <%= entityClass %> <%= entityInstance %> where <%= entityInstance %>.<%= relationships[idx].relationshipFieldName %>.login = ?#{principal.username}")
