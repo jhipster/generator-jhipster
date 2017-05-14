@@ -46,6 +46,7 @@ module.exports = JDLGenerator.extend({
         },
 
         getConfig() {
+            this.applicationType = this.config.get('applicationType');
             this.baseName = this.config.get('baseName');
             this.prodDatabaseType = this.config.get('prodDatabaseType');
             this.skipClient = this.config.get('skipClient');
@@ -73,7 +74,7 @@ module.exports = JDLGenerator.extend({
         parseJDL() {
             this.log('The jdl is being parsed.');
             try {
-                const jdlObject = jhiCore.convertToJDL(jhiCore.parseFromFiles(this.jdlFiles), this.prodDatabaseType);
+                const jdlObject = jhiCore.convertToJDL(jhiCore.parseFromFiles(this.jdlFiles), this.prodDatabaseType, this.applicationType);
                 const entities = jhiCore.convertToJHipsterJSON({
                     jdlObject,
                     databaseType: this.prodDatabaseType
