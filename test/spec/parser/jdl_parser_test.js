@@ -163,6 +163,12 @@ describe('JDLParser', () => {
           ]);
         });
       });
+      describe('with an application type', () => {
+        const input = parseFromFiles(['./test/test_files/invalid_field_type.jdl']);
+        it("doesn't check for field types", () => {
+          JDLParser.parse(input, 'sql', 'gateway');
+        });
+      });
       describe('with a required relationship', () => {
         const input = parseFromFiles(['./test/test_files/required_relationships.jdl']);
         const content = JDLParser.parse(input, 'sql');
