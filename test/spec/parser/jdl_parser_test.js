@@ -576,9 +576,17 @@ describe('JDLParser', () => {
         });
       });
       describe('when parsing application', () => {
+        const input = parseFromFiles(['./test/test_files/application.jdl']);
+        const content = JDLParser.parse(input, 'sql');
         it('parses it', () => {
-          const input = parseFromFiles(['./test/test_files/application.jdl']);
-          const content = JDLParser.parse(input, 'sql');
+          expect(content.applications.toto.baseName).to.eq('toto');
+          expect(content.applications.toto.path).to.eq('../../toto');
+          expect(content.applications.toto.packageName).to.eq('com.mathieu.sample');
+          expect(content.applications.toto.packageFolder).to.eq('com/mathieu/sample');
+          expect(content.applications.toto.enableTranslation).to.be.false;
+          expect(
+            content.applications.toto.languages.has('en') && content.applications.toto.languages.has('fr')
+          ).be.true;
         });
       });
     });

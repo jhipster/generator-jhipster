@@ -189,7 +189,7 @@ applicationContentDecl
     return addToApplicationDecl(applicationContentDecl, 'applicationType', applicationType.join(''));
   }
   / TEST_FRAMEWORK SPACE* testFrameworks:[a-z, ]+ SPACE* applicationContentDecl:applicationContentDecl {
-    testFrameworkEntries = [];
+    const testFrameworkEntries = [];
     const results = testFrameworks.join('').split(',');
     for (let i = 0; i < results.length; i++) {
       if (results[i].trim().length !== 0) {
@@ -199,14 +199,14 @@ applicationContentDecl
     return addToApplicationDecl(applicationContentDecl, 'testFrameworks', testFrameworkEntries);
   }
   / LANGUAGES SPACE* languages:[a-z, ]+ SPACE* applicationContentDecl:applicationContentDecl {
-    languages = [];
+    const languageEntries = [];
     const results = languages.join('').split(',');
     for (let i = 0; i < results.length; i++) {
       if (results[i].trim().length !== 0) {
-        languages.push(results[i].trim());
+        languageEntries.push(results[i].trim());
       }
     }
-    return addToApplicationDecl(applicationContentDecl, 'languages', languages);
+    return addToApplicationDecl(applicationContentDecl, 'languages', languageEntries);
   }
   / SERVER_PORT SPACE* serverPort:[0-9]+ SPACE* applicationContentDecl:applicationContentDecl {
   	return addToApplicationDecl(applicationContentDecl, 'serverPort', parseInt(serverPort.join(''), 10));
