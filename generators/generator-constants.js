@@ -20,7 +20,7 @@
 // version of docker images
 const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v3.0.0';
 const DOCKER_JAVA_JRE = 'openjdk:8-jre-alpine';
-const DOCKER_MYSQL = 'mysql:5.7.13'; // mysql.5.7.14+ doesn't work well with zoned date time, see https://github.com/jhipster/generator-jhipster/pull/4038
+const DOCKER_MYSQL = 'mysql:5.7.18';
 const DOCKER_MARIADB = 'mariadb:10.1.17';
 const DOCKER_POSTGRESQL = 'postgres:9.6.2';
 const DOCKER_MONGODB = 'mongo:3.2.10';
