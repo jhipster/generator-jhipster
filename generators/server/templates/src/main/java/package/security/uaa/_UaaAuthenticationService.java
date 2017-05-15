@@ -33,6 +33,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -185,7 +186,7 @@ public class UaaAuthenticationService {
         String clientId = jHipsterProperties.getSecurity().getClientAuthorization().getClientId();
         String clientSecret = jHipsterProperties.getSecurity().getClientAuthorization().getClientSecret();
         String authorization = clientId + ":" + clientSecret;
-        String authorizationHeader = "Basic " + Base64Utils.encodeToString(authorization.getBytes());
+        String authorizationHeader = "Basic " + Base64Utils.encodeToString(authorization.getBytes(StandardCharsets.UTF_8));
         headers.add("Authorization", authorizationHeader);
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(params, headers);
         log.debug("contacting UAA to refresh OAuth2 JWT tokens");
