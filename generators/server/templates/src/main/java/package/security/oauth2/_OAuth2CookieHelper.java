@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.security.uaa;
+package <%=packageName%>.security.oauth2;
 
 import com.google.common.net.InternetDomainName;
 import org.slf4j.Logger;
@@ -27,7 +27,6 @@ import org.springframework.security.jwt.Jwt;
 import org.springframework.security.jwt.JwtHelper;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2RefreshToken;
-import org.springframework.util.Base64Utils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.Cookie;

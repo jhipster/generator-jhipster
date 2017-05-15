@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.security.uaa;
+package <%=packageName%>.security.oauth2;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -41,24 +41,24 @@ public class CookieTokenExtractorTest {
 
     @Test
     public void testExtractTokenCookie() {
-        MockHttpServletRequest request = UaaAuthenticationServiceTest.createMockHttpServletRequest();
+        MockHttpServletRequest request = OAuth2AuthenticationServiceTest.createMockHttpServletRequest();
         Authentication authentication = cookieTokenExtractor.extract(request);
-        Assert.assertEquals(UaaAuthenticationServiceTest.ACCESS_TOKEN_VALUE, authentication.getPrincipal().toString());
+        Assert.assertEquals(OAuth2AuthenticationServiceTest.ACCESS_TOKEN_VALUE, authentication.getPrincipal().toString());
     }
 
     @Test
     public void testExtractTokenHeader() {
         MockHttpServletRequest request = new MockHttpServletRequest(HttpMethod.GET, "http://www.test.com");
-        request.addHeader("Authorization", OAuth2AccessToken.BEARER_TYPE + " " + UaaAuthenticationServiceTest.ACCESS_TOKEN_VALUE);
+        request.addHeader("Authorization", OAuth2AccessToken.BEARER_TYPE + " " + OAuth2AuthenticationServiceTest.ACCESS_TOKEN_VALUE);
         Authentication authentication = cookieTokenExtractor.extract(request);
-        Assert.assertEquals(UaaAuthenticationServiceTest.ACCESS_TOKEN_VALUE, authentication.getPrincipal().toString());
+        Assert.assertEquals(OAuth2AuthenticationServiceTest.ACCESS_TOKEN_VALUE, authentication.getPrincipal().toString());
     }
 
     @Test
     public void testExtractTokenParam() {
         MockHttpServletRequest request = new MockHttpServletRequest(HttpMethod.GET, "http://www.test.com");
-        request.addParameter(OAuth2AccessToken.ACCESS_TOKEN, UaaAuthenticationServiceTest.ACCESS_TOKEN_VALUE);
+        request.addParameter(OAuth2AccessToken.ACCESS_TOKEN, OAuth2AuthenticationServiceTest.ACCESS_TOKEN_VALUE);
         Authentication authentication = cookieTokenExtractor.extract(request);
-        Assert.assertEquals(UaaAuthenticationServiceTest.ACCESS_TOKEN_VALUE, authentication.getPrincipal().toString());
+        Assert.assertEquals(OAuth2AuthenticationServiceTest.ACCESS_TOKEN_VALUE, authentication.getPrincipal().toString());
     }
 }

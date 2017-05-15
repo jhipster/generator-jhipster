@@ -1,0 +1,95 @@
+<%#
+ Copyright 2013-2017 the original author or authors.
+
+ This file is part of the JHipster project, see https://jhipster.github.io/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%=packageName%>.config.oauth2;
+
+import <%=packageName%>.security.oauth2.OAuth2TokenEndpointClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.jwt.crypto.sign.RsaVerifier;
+import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+
+import java.util.Map;
+
+/**
+ * Improved JwtAccessTokenConverter that can handle lazy fetching of public verifier keys.
+ */
+public class OAuth2JwtAccessTokenConverter extends JwtAccessTokenConverter {
+    /**
+     * Maximum refresh rate for public keys.
+     * We won't fetch new public keys any faster than that to avoid spamming UAA in case
+     * we reveive a lot of "illegal" tokens.
+     * TODO: may want to externalize to JHipsterProperties
+     */
+    private static final long MAX_PUBLIC_KEY_REFRESH_RATE = 10000L;
+    private final Logger log = LoggerFactory.getLogger(OAuth2JwtAccessTokenConverter.class);
+
+    private final OAuth2TokenEndpointClient authorizationClient;
+    /**
+     * When did we last fetch the public key?
+     */
+    private long lastKeyFetchTimestamp;
+
+    public OAuth2JwtAccessTokenConverter(OAuth2TokenEndpointClient authorizationClient) {
+        this.authorizationClient = authorizationClient;
+        fetchPublicKey();
+    }
+
+    /**
+     * Try to decode the token with the current public key.
+     * If it fails, contact the OAuth2 server to get a new public key, then try again.
+     * We might not have fetched it in the first place or it might have changed.
+     *
+     * @param token the JWT token to decode.
+     * @return the resulting claims.
+     * @throw InvalidTokenException if we cannot decode the token.
+     */
+    @Override
+    protected Map<String, Object> decode(String token) {
+        try {
+            return super.decode(token);
+        } catch (InvalidTokenException ex) {
+            if (fetchPublicKey()) {
+                return super.decode(token);
+            }
+            throw ex;
+        }
+    }
+
+    /**
+     * Fetch a new public key from the AuthorizationServer.
+     *
+     * @return true, if we could fetch it; false, if we could not.
+     */
+    private boolean fetchPublicKey() {
+        long t = System.currentTimeMillis();
+        if (t - lastKeyFetchTimestamp < MAX_PUBLIC_KEY_REFRESH_RATE) {
+            return false;
+        }
+        lastKeyFetchTimestamp = t;
+        String key = authorizationClient.getPublicKey();
+        if (key != null) {
+            log.info("got public key from AuthorizationServer to verify tokens");
+            setVerifierKey(key);                //check if key is valid
+            setVerifier(new RsaVerifier(key));
+            return true;
+        }
+        return false;
+    }
+}
