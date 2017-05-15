@@ -42,7 +42,6 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.HttpMethod;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
