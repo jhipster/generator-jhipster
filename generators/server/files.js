@@ -295,9 +295,11 @@ function writeFiles() {
             if (this.applicationType !== 'microservice' && !(this.applicationType === 'gateway' && this.authenticationType === 'uaa')) return;
 
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_MicroserviceSecurityConfiguration.java`, `${javaDir}config/MicroserviceSecurityConfiguration.java`);
-            this.template(`${SERVER_MAIN_SRC_DIR}package/config/oauth2/_OAuth2JwtAccessTokenConverter.java`, `${javaDir}config/oauth2/OAuth2JwtAccessTokenConverter.java`);
-            this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_OAuth2TokenEndpointClient.java`, `${javaDir}security/oauth2/OAuth2TokenEndpointClient.java`);
-            this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_UaaTokenEndpointClient.java`, `${javaDir}security/oauth2/UaaTokenEndpointClient.java`);
+            if (this.authenticationType === 'uaa') {
+                this.template(`${SERVER_MAIN_SRC_DIR}package/config/oauth2/_OAuth2JwtAccessTokenConverter.java`, `${javaDir}config/oauth2/OAuth2JwtAccessTokenConverter.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_OAuth2TokenEndpointClient.java`, `${javaDir}security/oauth2/OAuth2TokenEndpointClient.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_UaaTokenEndpointClient.java`, `${javaDir}security/oauth2/UaaTokenEndpointClient.java`);
+            }
             if (this.applicationType === 'microservice' && this.authenticationType === 'uaa') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/_FeignConfiguration.java`, `${javaDir}config/FeignConfiguration.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/client/_AuthorizedFeignClient.java`, `${javaDir}client/AuthorizedFeignClient.java`);
