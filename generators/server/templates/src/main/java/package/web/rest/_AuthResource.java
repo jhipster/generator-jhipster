@@ -19,7 +19,7 @@
 package <%=packageName%>.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import <%=packageName%>.security.uaa.UaaAuthenticationService;
+import <%=packageName%>.security.oauth2.OAuth2AuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -47,9 +47,9 @@ public class AuthResource {
 
     private final Logger log = LoggerFactory.getLogger(AuthResource.class);
 
-    private UaaAuthenticationService authenticationService;
+    private OAuth2AuthenticationService authenticationService;
 
-    public AuthResource(UaaAuthenticationService authenticationService) {
+    public AuthResource(OAuth2AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
     }
 
