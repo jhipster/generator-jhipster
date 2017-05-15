@@ -28,7 +28,6 @@ import { LoginModalService } from '../../../../../../main/webapp/app/shared';
 import { Register } from '../../../../../../main/webapp/app/account/register/register.service';
 import { RegisterComponent } from '../../../../../../main/webapp/app/account/register/register.component';
 
-
 describe('Component Tests', () => {
 
     describe('RegisterComponent', () => {

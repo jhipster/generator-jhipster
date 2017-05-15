@@ -108,8 +108,8 @@ spring:
             cluster-nodes:
             properties:
                 path:
-                  logs: target/elasticsearch/log
-                  data: target/elasticsearch/data
+                    logs: target/elasticsearch/log
+                    data: target/elasticsearch/data
     <%_ } _%>
     mail:
         host: localhost
