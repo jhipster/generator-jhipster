@@ -63,6 +63,10 @@ public class OAuth2JwtAccessTokenConverter extends JwtAccessTokenConverter {
     @Override
     protected Map<String, Object> decode(String token) {
         try {
+            //check if our public key and thus SignatureVerifier have expired
+            if (System.currentTimeMillis() - lastKeyFetchTimestamp > PUBLIC_KEY_TTL) {
+                throw new InvalidTokenException("public key expired");
+            }
             return super.decode(token);
         } catch (InvalidTokenException ex) {
             if (tryCreateSignatureVerifier()) {
@@ -82,13 +86,13 @@ public class OAuth2JwtAccessTokenConverter extends JwtAccessTokenConverter {
         if (t - lastKeyFetchTimestamp < MAX_PUBLIC_KEY_REFRESH_RATE) {
             return false;
         }
-        lastKeyFetchTimestamp = t;
         try {
-            SignatureVerifier verifier = authorizationClient.getSignatureVerifier();
+            SignatureVerifier verifier = signatureVerifierClient.getSignatureVerifier();
             setVerifier(verifier);
+            lastKeyFetchTimestamp = t;
+            log.debug("Public key retrieved from OAuth2 server to create SignatureVerifier");
             return true;
-        }
-        catch(Throwable ex) {
+        } catch (Throwable ex) {
             log.error("could not get public key from OAuth2 server to create SignatureVerifier", ex);
             return false;
         }
