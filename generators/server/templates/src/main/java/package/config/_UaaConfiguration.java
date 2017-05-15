@@ -121,7 +121,7 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
             .withClient("web_app")
             .scopes("openid")
             .autoApprove(true)
-            .authorizedGrantTypes("implicit", "password", "authorization_code")
+            .authorizedGrantTypes("implicit", "password", "refresh_token", "authorization_code")
             .accessTokenValiditySeconds((int)jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds())
             .refreshTokenValiditySeconds((int)jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSecondsForRememberMe())
             .and()
@@ -129,7 +129,7 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
             .secret(jHipsterProperties.getSecurity().getClientAuthorization().getClientSecret())
             .scopes("web-app")
             .autoApprove(true)
-            .authorizedGrantTypes("client_credentials", "refresh_token")
+            .authorizedGrantTypes("client_credentials", "password", "refresh_token")
             .accessTokenValiditySeconds((int)jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds());
     }
 
