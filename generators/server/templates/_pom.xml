@@ -1146,7 +1146,7 @@
         </profile>
         <%_ if (!skipClient && clientFramework !== 'angular1') { _%>
         <profile>
-            <id>webpack</id>
+            <id>angularcli</id>
             <build>
                 <plugins>
                     <plugin>
@@ -1178,13 +1178,13 @@
                             </execution>
                             <%_ } _%>
                             <execution>
-                                <id>webpack build dev</id>
+                                <id>angularcli build dev</id>
                                 <goals>
                                     <goal><%= clientPackageManager %></goal>
                                 </goals>
                                 <phase>generate-resources</phase>
                                 <configuration>
-                                    <arguments>run webpack:build:dev</arguments>
+                                    <arguments>build</arguments>
                                 </configuration>
                             </execution>
                         </executions>
@@ -1366,23 +1366,13 @@
                             <%_ } _%>
                             <%_ if (clientFramework !== 'angular1') { _%>
                             <execution>
-                                <id>webpack build test</id>
-                                <goals>
-                                    <goal><%= clientPackageManager %></goal>
-                                </goals>
-                                <phase>test</phase>
-                                <configuration>
-                                    <arguments>run webpack:test</arguments>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>webpack build prod</id>
+                                <id>angularcli build prod</id>
                                 <goals>
                                     <goal><%= clientPackageManager %></goal>
                                 </goals>
                                 <phase>generate-resources</phase>
                                 <configuration>
-                                    <arguments>run webpack:prod</arguments>
+                                    <arguments>ng build --prod</arguments>
                                 </configuration>
                             </execution>
                             <%_ } _%>

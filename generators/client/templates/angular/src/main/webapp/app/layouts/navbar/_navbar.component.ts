@@ -24,7 +24,7 @@ import { JhiLanguageService } from 'ng-jhipster';
 import { ProfileService } from '../profiles/profile.service';
 import { <% if (enableTranslation) { %>JhiLanguageHelper, <% } %>Principal, LoginModalService, LoginService } from '../../shared';
 
-import { VERSION, DEBUG_INFO_ENABLED } from '../../app.constants';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: '<%=jhiPrefix%>-navbar',
@@ -57,7 +57,7 @@ export class NavbarComponent implements OnInit {
         private profileService: ProfileService,
         private router: Router
     ) {
-        this.version = VERSION ? 'v' + VERSION : '';
+        this.version = environment.VERSION;
         this.isNavbarCollapsed = true;
         <%_ if (enableTranslation) { _%>
         this.languageService.addLocation('home');

@@ -37,12 +37,7 @@ const files = {
                 '_tsconfig.json',
                 '_tsconfig-aot.json',
                 '_tslint.json',
-                '_.angular-cli.json',
-                'webpack/_webpack.common.js',
-                'webpack/_webpack.dev.js',
-                'webpack/_webpack.prod.js',
-                'webpack/_webpack.vendor.js',
-                { file: 'webpack/logo-jhipster.png', method: 'copy' }
+                '_.angular-cli.json'
             ]
         }
     ],
@@ -75,6 +70,8 @@ const files = {
             ]
         }
     ],
+
+
     image: [
         {
             path: MAIN_SRC_DIR,
@@ -105,6 +102,15 @@ const files = {
             ]
         }
     ],
+    environments: [
+        {
+            path: MAIN_SRC_DIR,
+            templates: [
+                'environments/_environment.ts',
+                'environments/_environment.prod.ts'
+            ]
+        }
+    ],
     angularApp: [
         {
             path: ANGULAR_DIR,
@@ -112,7 +118,6 @@ const files = {
                 '_app.main.ts',
                 '_app.route.ts',
                 '_app.module.ts',
-                '_app.constants.ts',
                 '_polyfills.ts',
                 '_vendor.ts',
                 'blocks/config/_prod.config.ts',
