@@ -23,8 +23,13 @@ import com.google.common.cache.CacheBuilder;
 import io.github.jhipster.config.JHipsterProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.common.exceptions.InvalidClientException;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -70,8 +75,8 @@ public class UaaAuthenticationService {
         this.cookieHelper = cookieHelper;
         this.restTemplate = restTemplate;
         recentlyRefreshed = CacheBuilder.newBuilder()
-            .expireAfterWrite(REFRESH_TOKEN_CACHE_SECS, TimeUnit.SECONDS)
-            .build();
+                                        .expireAfterWrite(REFRESH_TOKEN_CACHE_SECS, TimeUnit.SECONDS)
+                                        .build();
     }
 
     /**
@@ -88,17 +93,13 @@ public class UaaAuthenticationService {
         try {
             HttpHeaders reqHeaders = new HttpHeaders();
             reqHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-            //take over Authorization header from client request to UAA request
-            String authorizationHeader = request.getHeader("Authorization");
-            reqHeaders.add("Authorization", authorizationHeader);
+            reqHeaders.add("Authorization", getAuthorizationHeader());
             boolean rememberMe = Boolean.valueOf(params.remove("rememberMe"));
             MultiValueMap<String, String> formParams = new LinkedMultiValueMap<>();
             formParams.setAll(params);
             formParams.add("grant_type", "password");
             HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(formParams, reqHeaders);
-            ResponseEntity<OAuth2AccessToken> responseEntity = restTemplate.postForEntity(jHipsterProperties.getSecurity().getClientAuthorization().getAccessTokenUri(),
-                entity,
-                OAuth2AccessToken.class);
+            ResponseEntity<OAuth2AccessToken> responseEntity = restTemplate.postForEntity(getTokenEndpoint(), entity, OAuth2AccessToken.class);
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
                 log.debug("failed to authenticate user with UAA: {}", responseEntity.getStatusCodeValue());
                 return responseEntity;
@@ -130,7 +131,7 @@ public class UaaAuthenticationService {
      * @return the new servlet request containing the updated cookies for relaying downstream.
      */
     public HttpServletRequest refreshToken(HttpServletRequest request, HttpServletResponse response, Cookie
-        refreshCookie) {
+            refreshCookie) {
         OAuth2Cookies cookies = getCachedCookies(refreshCookie.getValue());
         synchronized (cookies) {
             //check if we have a result from another thread already
@@ -183,19 +184,35 @@ public class UaaAuthenticationService {
         params.add("grant_type", "refresh_token");
         params.add("refresh_token", originalRefreshTokenCookie.getValue());
         HttpHeaders headers = new HttpHeaders();
-        String clientId = jHipsterProperties.getSecurity().getClientAuthorization().getClientId();
-        String clientSecret = jHipsterProperties.getSecurity().getClientAuthorization().getClientSecret();
-        String authorization = clientId + ":" + clientSecret;
-        String authorizationHeader = "Basic " + Base64Utils.encodeToString(authorization.getBytes(StandardCharsets.UTF_8));
-        headers.add("Authorization", authorizationHeader);
+        headers.add("Authorization", getAuthorizationHeader());
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(params, headers);
         log.debug("contacting UAA to refresh OAuth2 JWT tokens");
-        String tokenEndpointUrl = jHipsterProperties.getSecurity().getClientAuthorization().getAccessTokenUri();
-        ResponseEntity<OAuth2AccessToken> responseEntity = restTemplate.postForEntity(tokenEndpointUrl, entity,
-            OAuth2AccessToken.class);
+        ResponseEntity<OAuth2AccessToken> responseEntity = restTemplate.postForEntity(getTokenEndpoint(), entity,
+                                                                                      OAuth2AccessToken.class);
         OAuth2AccessToken accessToken = responseEntity.getBody();
         log.info("refreshed OAuth2 JWT cookies using refresh_token grant");
         return accessToken;
+    }
+
+    private String getAuthorizationHeader() {
+        String clientId = jHipsterProperties.getSecurity().getClientAuthorization().getClientId();
+        if(clientId == null) {
+            throw new InvalidClientException("no client-id configured in application properties");
+        }
+        String clientSecret = jHipsterProperties.getSecurity().getClientAuthorization().getClientSecret();
+        if(clientSecret == null) {
+            throw new InvalidClientException("no client-secret configured in application properties");
+        }
+        String authorization = clientId + ":" + clientSecret;
+        return "Basic " + Base64Utils.encodeToString(authorization.getBytes(StandardCharsets.UTF_8));
+    }
+
+    private String getTokenEndpoint() {
+        String tokenEndpointUrl = jHipsterProperties.getSecurity().getClientAuthorization().getAccessTokenUri();
+        if(tokenEndpointUrl == null) {
+            throw new InvalidClientException("no token endpoint configured in application properties");
+        }
+        return tokenEndpointUrl;
     }
 
     /**
