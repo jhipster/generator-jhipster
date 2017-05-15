@@ -98,15 +98,15 @@ function askForServerSideOpts() {
             ),
             choices: [
                 {
-                    value: 'eureka',
-                    name: 'Yes'
-                },
-                {
                     value: false,
                     name: 'No'
+                },
+                {
+                    value: 'eureka',
+                    name: 'Yes'
                 }
             ],
-            default: 'eureka'
+            default: false
         },
         {
             when: response => applicationType === 'monolith' && response.serviceDiscoveryType !== 'eureka',
