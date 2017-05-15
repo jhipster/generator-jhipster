@@ -23,6 +23,7 @@ const chalk = require('chalk');
 const packageJson = require('../package.json');
 const logger = require('./utils').logger;
 const initHelp = require('./utils').initHelp;
+const initAutoCompletion = require('./completion').init;
 const SUB_GENERATORS = require('./commands');
 
 const version = packageJson.version;
@@ -131,9 +132,8 @@ Object.keys(SUB_GENERATORS).forEach((key) => {
 /* Generate useful help info during typos */
 initHelp(program, CLI_NAME);
 
-
-/* Enable autocompletion https://github.com/Hypercubed/autocmdr#completion */
-// require('./completion').init(program);
+/* Enable autocompletion: This needs to right before parsing argv */
+initAutoCompletion(program, CLI_NAME);
 
 program.parse(process.argv);
 
