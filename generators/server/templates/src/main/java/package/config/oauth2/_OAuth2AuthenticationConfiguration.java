@@ -16,13 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.config.uaa;
+package <%=packageName%>.config.oauth2;
 
-import <%=packageName%>.security.uaa.CookieTokenExtractor;
-import <%=packageName%>.security.uaa.OAuth2CookieHelper;
-import <%=packageName%>.security.uaa.UaaAuthenticationService;
+import <%=packageName%>.security.oauth2.CookieTokenExtractor;
+import <%=packageName%>.security.oauth2.OAuth2CookieHelper;
+import <%=packageName%>.security.oauth2.OAuth2AuthenticationService;
+import <%=packageName%>.security.oauth2.OAuth2TokenEndpointClient;
 import <%=packageName%>.web.filter.RefreshTokenFilterConfigurer;
-import io.github.jhipster.config.JHipsterProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -32,7 +32,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.authentication.TokenExtractor;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * Configures the RefreshFilter refreshing expired OAuth2 token Cookies.
@@ -40,15 +39,13 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 @EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-public class UaaAuthenticationConfiguration extends ResourceServerConfigurerAdapter {
-    private final JHipsterProperties jHipsterProperties;
+public class OAuth2AuthenticationConfiguration extends ResourceServerConfigurerAdapter {
+    private final OAuth2TokenEndpointClient authorizationClient;
     private final TokenStore tokenStore;
-    private final RestTemplate restTemplate;
 
-    public UaaAuthenticationConfiguration(JHipsterProperties jHipsterProperties, TokenStore tokenStore, RestTemplate loadBalancedRestTemplate) {
-        this.jHipsterProperties = jHipsterProperties;
+    public OAuth2AuthenticationConfiguration(OAuth2TokenEndpointClient authorizationClient, TokenStore tokenStore) {
+        this.authorizationClient = authorizationClient;
         this.tokenStore = tokenStore;
-        this.restTemplate = loadBalancedRestTemplate;
     }
 
     @Override
@@ -74,8 +71,8 @@ public class UaaAuthenticationConfiguration extends ResourceServerConfigurerAdap
     }
 
     @Bean
-    public UaaAuthenticationService uaaAuthenticationService() {
-        return new UaaAuthenticationService(jHipsterProperties, cookieHelper(), restTemplate);
+    public OAuth2AuthenticationService uaaAuthenticationService() {
+        return new OAuth2AuthenticationService(authorizationClient, cookieHelper());
     }
 
     /**

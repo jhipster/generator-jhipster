@@ -18,8 +18,8 @@
 -%>
 package <%=packageName%>.web.filter;
 
-import <%=packageName%>.security.uaa.OAuth2CookieHelper;
-import <%=packageName%>.security.uaa.UaaAuthenticationService;
+import <%=packageName%>.security.oauth2.OAuth2CookieHelper;
+import <%=packageName%>.security.oauth2.OAuth2AuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -53,12 +53,12 @@ public class RefreshTokenFilter extends GenericFilterBean {
     private final Logger log = LoggerFactory.getLogger(RefreshTokenFilter.class);
 
     /**
-     * The UaaAuthenticationService is doing the actual work. We are just a simple filter after all.
+     * The OAuth2AuthenticationService is doing the actual work. We are just a simple filter after all.
      */
-    private final UaaAuthenticationService authenticationService;
+    private final OAuth2AuthenticationService authenticationService;
     private final TokenStore tokenStore;
 
-    public RefreshTokenFilter(UaaAuthenticationService authenticationService, TokenStore tokenStore) {
+    public RefreshTokenFilter(OAuth2AuthenticationService authenticationService, TokenStore tokenStore) {
         this.authenticationService = authenticationService;
         this.tokenStore = tokenStore;
     }

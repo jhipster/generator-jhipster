@@ -18,7 +18,7 @@
 -%>
 package <%=packageName%>.web.filter;
 
-import <%=packageName%>.security.uaa.UaaAuthenticationService;
+import <%=packageName%>.security.oauth2.OAuth2AuthenticationService;
 
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -33,12 +33,12 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
  */
 public class RefreshTokenFilterConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
     /**
-     * RefreshTokenFilter needs the UaaAuthenticationService to refresh cookies using the refresh token.
+     * RefreshTokenFilter needs the OAuth2AuthenticationService to refresh cookies using the refresh token.
      */
-    private UaaAuthenticationService authenticationService;
+    private OAuth2AuthenticationService authenticationService;
     private final TokenStore tokenStore;
 
-    public RefreshTokenFilterConfigurer(UaaAuthenticationService authenticationService, TokenStore tokenStore) {
+    public RefreshTokenFilterConfigurer(OAuth2AuthenticationService authenticationService, TokenStore tokenStore) {
         this.authenticationService = authenticationService;
         this.tokenStore = tokenStore;
     }

@@ -281,13 +281,13 @@ function writeFiles() {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_AuthResource.java`, `${javaDir}web/rest/AuthResource.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/web/filter/_RefreshTokenFilter.java`, `${javaDir}web/filter/RefreshTokenFilter.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/web/filter/_RefreshTokenFilterConfigurer.java`, `${javaDir}web/filter/RefreshTokenFilterConfigurer.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/config/uaa/_UaaAuthenticationConfiguration.java`, `${javaDir}config/uaa/UaaAuthenticationConfiguration.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/security/uaa/_UaaAuthenticationService.java`, `${javaDir}security/uaa/UaaAuthenticationService.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/security/uaa/_CookieTokenExtractor.java`, `${javaDir}security/uaa/CookieTokenExtractor.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/security/uaa/_OAuth2Cookies.java`, `${javaDir}security/uaa/OAuth2Cookies.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/security/uaa/_OAuth2CookieHelper.java`, `${javaDir}security/uaa/OAuth2CookieHelper.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/security/uaa/_CookiesHttpServletRequestWrapper.java`, `${javaDir}security/uaa/CookiesHttpServletRequestWrapper.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/security/uaa/_CookieCollection.java`, `${javaDir}security/uaa/CookieCollection.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/config/oauth2/_OAuth2AuthenticationConfiguration.java`, `${javaDir}config/oauth2/OAuth2AuthenticationConfiguration.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_CookieCollection.java`, `${javaDir}security/oauth2/CookieCollection.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_CookiesHttpServletRequestWrapper.java`, `${javaDir}security/oauth2/CookiesHttpServletRequestWrapper.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_CookieTokenExtractor.java`, `${javaDir}security/oauth2/CookieTokenExtractor.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_OAuth2AuthenticationService.java`, `${javaDir}security/uaa/OAuth2AuthenticationService.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_OAuth2CookieHelper.java`, `${javaDir}security/oauth2/OAuth2CookieHelper.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_OAuth2Cookies.java`, `${javaDir}security/oauth2/OAuth2Cookies.java`);
             }
         },
 
@@ -295,6 +295,9 @@ function writeFiles() {
             if (this.applicationType !== 'microservice' && !(this.applicationType === 'gateway' && this.authenticationType === 'uaa')) return;
 
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_MicroserviceSecurityConfiguration.java`, `${javaDir}config/MicroserviceSecurityConfiguration.java`);
+            this.template(`${SERVER_MAIN_SRC_DIR}package/config/oauth2/_OAuth2JwtAccessTokenConverter.java`, `${javaDir}config/oauth2/OAuth2JwtAccessTokenConverter.java`);
+            this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_OAuth2TokenEndpointClient.java`, `${javaDir}security/oauth2/OAuth2TokenEndpointClient.java`);
+            this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_UaaTokenEndpointClient.java`, `${javaDir}security/oauth2/UaaTokenEndpointClient.java`);
             if (this.applicationType === 'microservice' && this.authenticationType === 'uaa') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/_FeignConfiguration.java`, `${javaDir}config/FeignConfiguration.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/client/_AuthorizedFeignClient.java`, `${javaDir}client/AuthorizedFeignClient.java`);
@@ -452,10 +455,10 @@ function writeFiles() {
                 this.template(`${SERVER_TEST_SRC_DIR}package/security/_OAuth2TokenMockUtil.java`, `${testDir}security/OAuth2TokenMockUtil.java`);
                 this.template(`${SERVER_TEST_SRC_DIR}package/config/_SecurityBeanOverrideConfiguration.java`, `${testDir}config/SecurityBeanOverrideConfiguration.java`);
                 if (this.applicationType === 'gateway') {
-                    this.template(`${SERVER_TEST_SRC_DIR}package/security/uaa/_OAuth2CookieHelperTest.java`, `${testDir}security/uaa/OAuth2CookieHelperTest.java`);
-                    this.template(`${SERVER_TEST_SRC_DIR}package/security/uaa/_UaaAuthenticationServiceTest.java`, `${testDir}security/uaa/UaaAuthenticationServiceTest.java`);
-                    this.template(`${SERVER_TEST_SRC_DIR}package/security/uaa/_CookieTokenExtractorTest.java`, `${testDir}security/uaa/CookieTokenExtractorTest.java`);
-                    this.template(`${SERVER_TEST_SRC_DIR}package/security/uaa/_CookieCollectionTest.java`, `${testDir}security/uaa/CookieCollectionTest.java`);
+                    this.template(`${SERVER_TEST_SRC_DIR}package/security/oauth2/_OAuth2CookieHelperTest.java`, `${testDir}security/oauth2/OAuth2CookieHelperTest.java`);
+                    this.template(`${SERVER_TEST_SRC_DIR}package/security/oauth2/_OAuth2AuthenticationServiceTest.java`, `${testDir}security/oauth2/OAuth2AuthenticationServiceTest.java`);
+                    this.template(`${SERVER_TEST_SRC_DIR}package/security/oauth2/_CookieTokenExtractorTest.java`, `${testDir}security/oauth2/CookieTokenExtractorTest.java`);
+                    this.template(`${SERVER_TEST_SRC_DIR}package/security/oauth2/_CookieCollectionTest.java`, `${testDir}security/oauth2/CookieCollectionTest.java`);
                 }
             }
 
