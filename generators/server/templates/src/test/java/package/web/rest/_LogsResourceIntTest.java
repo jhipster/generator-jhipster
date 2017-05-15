@@ -22,6 +22,9 @@ package <%= packageName %>.web.rest;
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
+<%_ if (authenticationType == 'uaa') { _%>
+import <%= packageName %>.config.SecurityBeanOverrideConfiguration;
+<%_ } _%>
 import <%= packageName %>.web.rest.vm.LoggerVM;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,7 +47,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see LogsResource
  */
 @RunWith(SpringRunner.class)
+<%_ if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>
+@SpringBootTest(classes = {<%= mainClass %>.class, SecurityBeanOverrideConfiguration.class})
+<%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
+<%_ } _%>
 public class LogsResourceIntTest <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     private MockMvc restLogsMockMvc;
