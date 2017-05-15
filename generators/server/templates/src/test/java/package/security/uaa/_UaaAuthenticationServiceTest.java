@@ -97,7 +97,7 @@ public class UaaAuthenticationServiceTest {
     }
 
     public static MockHttpServletRequest createMockHttpServletRequest() {
-        MockHttpServletRequest request = new MockHttpServletRequest(HttpMethod.GET, "http://www.test.com");
+        MockHttpServletRequest request = new MockHttpServletRequest(HttpMethod.GET.name(), "http://www.test.com");
         Cookie accessTokenCookie = new Cookie(OAuth2CookieHelper.ACCESS_TOKEN_COOKIE, ACCESS_TOKEN_VALUE);
         Cookie refreshTokenCookie = new Cookie(OAuth2CookieHelper.SESSION_REFRESH_TOKEN_COOKIE, REFRESH_TOKEN_VALUE);
         request.setCookies(accessTokenCookie, refreshTokenCookie);
@@ -171,7 +171,7 @@ public class UaaAuthenticationServiceTest {
      */
     @Test
     public void testRefreshGrantNoRefreshToken() {
-        MockHttpServletRequest request = new MockHttpServletRequest(HttpMethod.GET, "http://www.test.com");
+        MockHttpServletRequest request = new MockHttpServletRequest(HttpMethod.GET.name(), "http://www.test.com");
         Cookie accessTokenCookie = new Cookie(OAuth2CookieHelper.ACCESS_TOKEN_COOKIE, ACCESS_TOKEN_VALUE);
         request.setCookies(accessTokenCookie);
         MockHttpServletResponse response = new MockHttpServletResponse();
