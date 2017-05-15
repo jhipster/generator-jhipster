@@ -312,9 +312,9 @@ jhipster:
     <%_ if (applicationType == 'uaa') { _%>
         authentication:
             jwt:
-                # Access Token is valid for 1 min
-                token-validity-in-seconds: 60
-                # Refresh Token is valid for 3 days in case of remember me
+                # Access Token is valid for 5 mins
+                token-validity-in-seconds: 300
+                # Refresh Token is valid for 30 days in case of remember me
                 token-validity-in-seconds-for-remember-me: 2592000
     <%_ } _%>
     <%_ if (authenticationType == 'oauth2' && databaseType != 'sql') { _%>
