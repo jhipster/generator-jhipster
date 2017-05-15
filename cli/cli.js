@@ -21,15 +21,17 @@ const program = require('commander');
 const yeoman = require('yeoman-environment');
 const chalk = require('chalk');
 const packageJson = require('../package.json');
+const logger = require('./utils').logger;
+const initHelp = require('./utils').initHelp;
 const SUB_GENERATORS = require('./commands');
-
-/* Enable loggers and help https://github.com/Hypercubed/autocmdr#logger */
-require('autocmdr/lib/logger')(program, { name: 'jhipster' });
-require('autocmdr/lib/help')(program, { name: 'jhipster' });
 
 const version = packageJson.version;
 const env = yeoman.createEnv();
-const JHIPSTER_NS = 'jhipster';
+const CLI_NAME = 'jhipster';
+const JHIPSTER_NS = CLI_NAME;
+
+/* setup debugging */
+logger.init(program);
 
 /* Register yeoman generators */
 Object.keys(SUB_GENERATORS).forEach((generator) => {
@@ -37,7 +39,7 @@ Object.keys(SUB_GENERATORS).forEach((generator) => {
 });
 
 const done = () => {
-    console.log('Execution complete');
+    logger.info('Execution complete');
 };
 
 /**
@@ -77,26 +79,30 @@ const getOptionsFromArgs = (args) => {
     return options;
 };
 
-/* Get options for the command */
+/**
+ *  Get options for the command
+ */
 const getOptions = (args, opts) => {
     let options = [];
     if (opts.argument && opts.argument.length > 0) {
-        program.log.debug('Arguments found');
-        program.log.debug(getOptionsFromArgs(args).join(' '));
+        logger.debug('Arguments found');
+        logger.debug(getOptionsFromArgs(args).join(' '));
         options = getOptionsFromArgs(args);
     }
     if (args.length === 1) {
-        program.log.debug('No Arguments found looking for flags');
+        logger.debug('No Arguments found looking for flags');
         options = getFlagsFromArg(args[0]);
     }
     return options.join(' ').trim();
 };
 
-/* Run a yeoman command */
+/**
+ *  Run a yeoman command
+ */
 const runYoCommand = (cmd, args, opts) => {
     const options = getOptions(args, opts);
     const command = `${JHIPSTER_NS}:${cmd}${options ? ` ${options}` : ''}`;
-    console.log(chalk.yellow(`Executing ${command}`));
+    logger.info(chalk.yellow(`Executing ${command}`));
     env.run(command, done);
 };
 
@@ -112,30 +118,28 @@ Object.keys(SUB_GENERATORS).forEach((key) => {
     command.allowUnknownOption()
         .description(opts.desc)
         .action((args) => {
-            program.log.debug('Options passed:');
-            program.log.debug(opts);
+            logger.debug('Options passed:');
+            logger.debug(opts);
             runYoCommand(key, program.args, opts);
         })
         .on('--help', () => {
-            program.log.debug('Adding additional help info');
+            logger.debug('Adding additional help info');
             env.run(`${JHIPSTER_NS}:${key} --help`, done);
         });
 });
 
-program.on('--help', () => {
-    program.log.debug('Adding additional help info');
-    console.log(`  For more info visit ${chalk.blue('https://jhipster.github.io')}`);
-    console.log('');
-});
+/* Generate useful help info during typos */
+initHelp(program, CLI_NAME);
+
 
 /* Enable autocompletion https://github.com/Hypercubed/autocmdr#completion */
-require('autocmdr/lib/completion')(program, { name: 'jhipster' });
+// require('./completion').init(program);
 
 program.parse(process.argv);
 
 /* Run default when no commands are specified */
 if (program.args.length < 1) {
-    program.log.debug('No command specified. Running default');
-    console.log(chalk.yellow('Running default command'));
+    logger.debug('No command specified. Running default');
+    logger.info(chalk.yellow('Running default command'));
     runYoCommand('app', [{ parent: { rawArgs: program.rawArgs } }], {});
 }
