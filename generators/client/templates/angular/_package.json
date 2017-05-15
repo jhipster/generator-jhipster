@@ -25,15 +25,15 @@
     "node_modules"
   ],
   "dependencies": {
-    "@angular/common": "4.0.0",
-    "@angular/compiler": "4.0.0",
-    "@angular/core": "4.0.0",
-    "@angular/forms": "4.0.0",
-    "@angular/http": "4.0.0",
-    "@angular/platform-browser": "4.0.0",
-    "@angular/platform-browser-dynamic": "4.0.0",
-    "@angular/router": "4.0.0",
-    "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.23",
+    "@angular/common": "4.1.2",
+    "@angular/compiler": "4.1.2",
+    "@angular/core": "4.1.2",
+    "@angular/forms": "4.1.2",
+    "@angular/http": "4.1.2",
+    "@angular/platform-browser": "4.1.2",
+    "@angular/platform-browser-dynamic": "4.1.2",
+    "@angular/router": "4.1.2",
+    "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.25",
     "angular2-cookie": "1.2.6",
     "ngx-infinite-scroll": "0.4.1",
     "bootstrap": "4.0.0-alpha.6",
@@ -50,11 +50,11 @@
     "webstomp-client": "1.0.6",
     <%_ } _%>
     "tether": "1.4.0",
-    "zone.js": "0.8.5"
+    "zone.js": "0.8.10"
   },
   "devDependencies": {
     "@angular/cli": "1.0.0",
-    "@angular/compiler-cli": "4.0.0",
+    "@angular/compiler-cli": "4.1.2",
     "@types/jasmine": "2.5.47",
     "@types/node": "7.0.12",
     <%_ if (protractorTests) { _%>
