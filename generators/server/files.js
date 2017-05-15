@@ -78,7 +78,7 @@ function writeFiles() {
             if (this.prodDatabaseType === 'oracle') {
                 this.template(`${DOCKER_DIR}_oracle.yml`, `${DOCKER_DIR}oracle.yml`);
             }
-            if (this.applicationType === 'gateway' || this.prodDatabaseType === 'cassandra') {
+            if (this.prodDatabaseType === 'cassandra') {
                 // docker-compose files
                 this.template(`${DOCKER_DIR}_cassandra.yml`, `${DOCKER_DIR}cassandra.yml`);
                 this.template(`${DOCKER_DIR}_cassandra-cluster.yml`, `${DOCKER_DIR}cassandra-cluster.yml`);
@@ -182,7 +182,7 @@ function writeFiles() {
                 }
             }
 
-            if (this.databaseType === 'cassandra' || this.applicationType === 'gateway') {
+            if (this.databaseType === 'cassandra') {
                 this.template(`${SERVER_MAIN_RES_DIR}config/cql/_create-keyspace-prod.cql`, `${SERVER_MAIN_RES_DIR}config/cql/create-keyspace-prod.cql`);
                 this.template(`${SERVER_MAIN_RES_DIR}config/cql/_create-keyspace.cql`, `${SERVER_MAIN_RES_DIR}config/cql/create-keyspace.cql`);
                 this.template(`${SERVER_MAIN_RES_DIR}config/cql/_drop-keyspace.cql`, `${SERVER_MAIN_RES_DIR}config/cql/drop-keyspace.cql`);
