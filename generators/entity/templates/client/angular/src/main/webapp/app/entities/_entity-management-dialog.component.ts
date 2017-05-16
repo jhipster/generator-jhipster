@@ -35,11 +35,21 @@ import { EventManager, AlertService<% if (fieldsContainBlob) { %>, DataUtils<% }
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { <%= entityAngularName %>PopupService } from './<%= entityFileName %>-popup.service';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
-<%_ for (const rel of differentRelationships) {
-    if (rel.relationshipType != 'one-to-many') { _%>
+<%_
+let hasRelationshipQuery = false;
+for (const rel of differentRelationships) {
+    if (rel.relationshipType === 'one-to-one' && rel.ownerSide === true && rel.otherEntityName !== 'user') {
+        hasRelationshipQuery = true;
+    }
+    if (rel.relationshipType !== 'one-to-many') {
+        hasRelationshipQuery = true;
+_%>
 import { <%= rel.otherEntityAngularName %>, <%= rel.otherEntityAngularName%>Service } from '../<%= rel.otherEntityModulePath %>';
 <%_ }
 } _%>
+<%_ if (hasRelationshipQuery) { _%>
+import { ResponseWrapper } from '../../shared';
+<%_ } _%>
 <%_
 // TODO replace ng-file-upload dependency by an ng2 depedency
 // TODO Find a better way to format dates so that it works with NgbDatePicker
@@ -55,45 +65,10 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     authorities: any[];
     isSaving: boolean;
     <%_
-    const queries = [];
-    const variables = [];
-    let hasManyToMany = false;
-    for (const idx in relationships) {
-        let query;
-        let variableName;
-        hasManyToMany = hasManyToMany || relationships[idx].relationshipType == 'many-to-many';
-        if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide == true && relationships[idx].otherEntityName != 'user') {
-            variableName = relationships[idx].relationshipFieldNamePlural.toLowerCase();
-            if (variableName === entityInstance) {
-                variableName += 'Collection';
-            }
-            const relationshipFieldName = "this." + entityInstance + "." + relationships[idx].relationshipFieldName;
-            query  = "this." + relationships[idx].otherEntityName + "Service.query({filter: '" + relationships[idx].otherEntityRelationshipName.toLowerCase() + "-is-null'}).subscribe((res: Response) => {"
-            if (dto === "no") {
-                query += "\n            if (!" + relationshipFieldName + " || !" + relationshipFieldName + ".id) {"
-            } else {
-                query += "\n            if (!" + relationshipFieldName + "Id) {"
-            }
-            query += "\n                this." + variableName + " = res.json();"
-            query += "\n            } else {"
-            query += "\n                this." + relationships[idx].otherEntityName + "Service.find(" + relationshipFieldName + (dto == 'no' ? ".id" : "Id") + ").subscribe((subRes: " + relationships[idx].otherEntityAngularName + ") => {"
-            query += "\n                    this." + variableName + " = [subRes].concat(res.json());"
-            query += "\n                }, (subRes: Response) => this.onError(subRes.json()));"
-            query += "\n            }"
-            query += "\n        }, (res: Response) => this.onError(res.json()));"
-        } else if (relationships[idx].relationshipType != 'one-to-many') {
-            variableName = relationships[idx].otherEntityNameCapitalizedPlural.toLowerCase();
-            if (variableName === entityInstance) {
-                variableName += 'Collection';
-            }
-            query = 'this.' + relationships[idx].otherEntityName + 'Service.query().subscribe(';
-            query += '\n            (res: Response) => { this.' + variableName + ' = res.json(); }, (res: Response) => this.onError(res.json()));';
-        }
-        if (variableName && !contains(queries, query)) {
-            queries.push(query);
-            variables.push(variableName + ': ' + relationships[idx].otherEntityAngularName + '[];');
-        }
-    }
+    const query = generateEntityQueries(relationships, entityInstance, dto);
+    const queries = query.queries;
+    const variables = query.variables;
+    let hasManyToMany = query.hasManyToMany;
     for (const idx in variables) { %>
     <%- variables[idx] %>
     <%_ } _%>
