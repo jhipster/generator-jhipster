@@ -21,7 +21,7 @@ package <%=packageName%>.config.oauth2;
 import <%=packageName%>.security.oauth2.OAuth2TokenEndpointClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.jwt.crypto.sign.RsaVerifier;
+import org.springframework.security.jwt.crypto.sign.SignatureVerifier;
 import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
@@ -48,7 +48,7 @@ public class OAuth2JwtAccessTokenConverter extends JwtAccessTokenConverter {
 
     public OAuth2JwtAccessTokenConverter(OAuth2TokenEndpointClient authorizationClient) {
         this.authorizationClient = authorizationClient;
-        fetchPublicKey();
+        tryCreateSignatureVerifier();
     }
 
     /**
@@ -65,7 +65,7 @@ public class OAuth2JwtAccessTokenConverter extends JwtAccessTokenConverter {
         try {
             return super.decode(token);
         } catch (InvalidTokenException ex) {
-            if (fetchPublicKey()) {
+            if (tryCreateSignatureVerifier()) {
                 return super.decode(token);
             }
             throw ex;
@@ -77,19 +77,20 @@ public class OAuth2JwtAccessTokenConverter extends JwtAccessTokenConverter {
      *
      * @return true, if we could fetch it; false, if we could not.
      */
-    private boolean fetchPublicKey() {
+    private boolean tryCreateSignatureVerifier() {
         long t = System.currentTimeMillis();
         if (t - lastKeyFetchTimestamp < MAX_PUBLIC_KEY_REFRESH_RATE) {
             return false;
         }
         lastKeyFetchTimestamp = t;
-        String key = authorizationClient.getPublicKey();
-        if (key != null) {
-            log.info("got public key from AuthorizationServer to verify tokens");
-            setVerifierKey(key);                //check if key is valid
-            setVerifier(new RsaVerifier(key));
+        try {
+            SignatureVerifier verifier = authorizationClient.getSignatureVerifier();
+            setVerifier(verifier);
             return true;
         }
-        return false;
+        catch(Throwable ex) {
+            log.error("could not get public key from OAuth2 server to create SignatureVerifier", ex);
+            return false;
+        }
     }
 }

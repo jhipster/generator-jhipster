@@ -18,6 +18,7 @@
 -%>
 package <%=packageName%>.security.oauth2;
 
+import org.springframework.security.jwt.crypto.sign.SignatureVerifier;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 
 /**
@@ -27,12 +28,14 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
  */
 public interface OAuth2TokenEndpointClient {
     /**
-     * Fetch the public key from the Authorization server.
+     * Returns the SignatureVerifier used to verify JWT tokens.
+     * Fetches the public key from the Authorization server to create
+     * this verifier.
      *
-     * @return the new public key to be used to verify JWT signatures.
+     * @return the new verifier used to verify JWT signatures.
      * Will be null if we cannot contact the token endpoint.
      */
-    String getPublicKey();
+    SignatureVerifier getSignatureVerifier();
 
     /**
      * Send a password grant to the token endpoint.
