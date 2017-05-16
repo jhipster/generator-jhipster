@@ -21,57 +21,56 @@ package <%=packageName%>.security.oauth2;
 import io.github.jhipster.config.JHipsterProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.jwt.crypto.sign.RsaVerifier;
 import org.springframework.security.jwt.crypto.sign.SignatureVerifier;
-import org.springframework.security.oauth2.common.util.JsonParser;
-import org.springframework.security.oauth2.common.util.JsonParserFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import sun.security.rsa.RSAKeyFactory;
 
 import java.math.BigInteger;
+import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
 import java.security.PublicKey;
-import java.security.interfaces.RSAKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.RSAPublicKeySpec;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * @author markus.oellinger
  */
+@Component
 public class KeycloakTokenEndpointClient extends OAuth2TokenEndpointClientAdapter implements OAuth2TokenEndpointClient {
     private final Logger log = LoggerFactory.getLogger(KeycloakTokenEndpointClient.class);
-    private JsonParser jsonParser;
 
-    public KeycloakTokenEndpointClient(RestTemplate restTemplate, JHipsterProperties jHipsterProperties) {
+    public KeycloakTokenEndpointClient(@Qualifier("vanillaRestTemplate") RestTemplate restTemplate,
+                                       JHipsterProperties jHipsterProperties) {
         super(restTemplate, jHipsterProperties);
-        jsonParser = JsonParserFactory.create();
     }
 
     @Override
-    public SignatureVerifier getSignatureVerifier() {
+    public SignatureVerifier getSignatureVerifier() throws Exception {
         String publicKeyEndpointUri = getTokenEndpoint().replace("/token", "/certs");
         HttpEntity<Void> request = new HttpEntity<Void>(new HttpHeaders());
-        String json = (String) restTemplate
-            .exchange(publicKeyEndpointUri, HttpMethod.GET, request, Map.class).getBody()
-            .get("keys");
-        Map<String, Object> map=jsonParser.parseMap(json);
-        String e=(String)map.get("e");
-        BigInteger modulus=new BigInteger(1, Base64Utils.decodeFromUrlSafeString((String)map.get("n")));
-        BigInteger publicExponent = new BigInteger(1, Base64Utils.decodeFromString((String)map.get("e")));
+        LinkedHashMap<String, List<Map<String, Object>>> result =
+            restTemplate.getForObject(publicKeyEndpointUri, LinkedHashMap.class);
+        Map<String, Object> properties = result.get("keys").get(0);
+        BigInteger modulus = new BigInteger(1, Base64Utils.decodeFromUrlSafeString((String) properties.get("n")));
+        BigInteger publicExponent = new BigInteger(1, Base64Utils.decodeFromString((String) properties.get("e")));
         try {
-            PublicKey publicKey=KeyFactory.getInstance("RSA").generatePublic(new RSAPublicKeySpec(modulus, publicExponent));
-            RSAPublicKey rsaKey=(RSAPublicKey)RSAKeyFactory.toRSAKey(publicKey);
+            PublicKey publicKey =
+                KeyFactory.getInstance("RSA").generatePublic(new RSAPublicKeySpec(modulus, publicExponent));
+            RSAPublicKey rsaKey = (RSAPublicKey) RSAKeyFactory.toRSAKey(publicKey);
             return new RsaVerifier(rsaKey);
-        }
-        catch(Throwable ex) {
-            log.warn("could not retrieve public key from keycloak", ex);
-            return null;
+        } catch (GeneralSecurityException ex) {
+            log.error("could not create key verifier", ex);
+            throw ex;
         }
     }
 

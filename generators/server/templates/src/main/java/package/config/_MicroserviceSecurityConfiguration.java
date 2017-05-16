@@ -159,12 +159,12 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
     }
 
     @Bean
-    public JwtAccessTokenConverter jwtAccessTokenConverter(
-            @Qualifier("loadBalancedRestTemplate") RestTemplate keyUriRestTemplate) {
-        return new OAuth2JwtAccessTokenConverter(tokenEndpointClient(keyUriRestTemplate));
+    public JwtAccessTokenConverter jwtAccessTokenConverter(OAuth2TokenEndpointClient tokenEndpointClient) {
+        return new OAuth2JwtAccessTokenConverter(tokenEndpointClient);
     }
 
     @Bean
+	@Qualifier("loadBalancedRestTemplate")
     public RestTemplate loadBalancedRestTemplate(RestTemplateCustomizer customizer) {
         RestTemplate restTemplate = new RestTemplate();
         customizer.customize(restTemplate);
@@ -172,8 +172,9 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
     }
 
     @Bean
-    public OAuth2TokenEndpointClient tokenEndpointClient(RestTemplate keyUriRestTemplate) {
-        return new UaaTokenEndpointClient(discoveryClient, keyUriRestTemplate, jHipsterProperties);
+    @Qualifier("vanillaRestTemplate")
+    public RestTemplate vanillaRestTemplate() {
+        return new RestTemplate();
     }
 }
 <%_ } _%>

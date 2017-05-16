@@ -21,6 +21,7 @@ package <%=packageName%>.security.oauth2;
 import io.github.jhipster.config.JHipsterProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -28,6 +29,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.jwt.crypto.sign.RsaVerifier;
 import org.springframework.security.jwt.crypto.sign.SignatureVerifier;
 import org.springframework.security.oauth2.common.exceptions.InvalidClientException;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -38,10 +40,11 @@ import java.util.Map;
 /**
  * Client talking to UAA's token endpoint to do different OAuth2 grants.
  */
+@Component
 public class UaaTokenEndpointClient extends OAuth2TokenEndpointClientAdapter implements OAuth2TokenEndpointClient {
     private final Logger log = LoggerFactory.getLogger(UaaTokenEndpointClient.class);
 
-    public UaaTokenEndpointClient(DiscoveryClient discoveryClient, RestTemplate restTemplate,
+    public UaaTokenEndpointClient(DiscoveryClient discoveryClient, @Qualifier("loadBalancedRestTemplate") RestTemplate restTemplate,
                                   JHipsterProperties jHipsterProperties) {
         super(restTemplate, jHipsterProperties);
         // Load available UAA servers
@@ -54,7 +57,7 @@ public class UaaTokenEndpointClient extends OAuth2TokenEndpointClientAdapter imp
      * @return the public key used to verify JWT tokens; or null.
      */
     @Override
-    public SignatureVerifier getSignatureVerifier() {
+    public SignatureVerifier getSignatureVerifier() throws Exception {
         try {
             HttpEntity<Void> request = new HttpEntity<Void>(new HttpHeaders());
             String key = (String) restTemplate
