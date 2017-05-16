@@ -303,7 +303,7 @@ function writeFiles() {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_CookieCollection.java`, `${javaDir}security/oauth2/CookieCollection.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_CookiesHttpServletRequestWrapper.java`, `${javaDir}security/oauth2/CookiesHttpServletRequestWrapper.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_CookieTokenExtractor.java`, `${javaDir}security/oauth2/CookieTokenExtractor.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_OAuth2AuthenticationService.java`, `${javaDir}security/uaa/OAuth2AuthenticationService.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_OAuth2AuthenticationService.java`, `${javaDir}security/oauth2/OAuth2AuthenticationService.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_OAuth2CookieHelper.java`, `${javaDir}security/oauth2/OAuth2CookieHelper.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_OAuth2Cookies.java`, `${javaDir}security/oauth2/OAuth2Cookies.java`);
             }
@@ -316,7 +316,9 @@ function writeFiles() {
             if (this.authenticationType === 'uaa') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/oauth2/_OAuth2JwtAccessTokenConverter.java`, `${javaDir}config/oauth2/OAuth2JwtAccessTokenConverter.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_OAuth2TokenEndpointClient.java`, `${javaDir}security/oauth2/OAuth2TokenEndpointClient.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_OAuth2TokenEndpointClientAdapter.java`, `${javaDir}security/oauth2/OAuth2TokenEndpointClientAdapter.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_UaaTokenEndpointClient.java`, `${javaDir}security/oauth2/UaaTokenEndpointClient.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_KeycloakTokenEndpointClient.java`, `${javaDir}security/oauth2/KeycloakTokenEndpointClient.java`);
             }
             if (this.applicationType === 'microservice' && this.authenticationType === 'uaa') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/_FeignConfiguration.java`, `${javaDir}config/FeignConfiguration.java`);
