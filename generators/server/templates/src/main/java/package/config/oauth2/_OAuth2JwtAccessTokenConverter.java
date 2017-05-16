@@ -58,7 +58,7 @@ public class OAuth2JwtAccessTokenConverter extends JwtAccessTokenConverter {
      *
      * @param token the JWT token to decode.
      * @return the resulting claims.
-     * @throw InvalidTokenException if we cannot decode the token.
+     * @throws InvalidTokenException if we cannot decode the token.
      */
     @Override
     protected Map<String, Object> decode(String token) {
