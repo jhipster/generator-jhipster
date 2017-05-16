@@ -197,7 +197,7 @@ function askForMonitoring() {
             },
             {
                 value: 'elk',
-                name: 'Yes, for logs and metrics with the JHipster Console (based on ELK and Zipkin)'
+                name: (this.composeApplicationType === 'monolith') ? 'Yes, for logs and metrics with the JHipster Console (based on ELK)' : 'Yes, for logs and metrics with the JHipster Console (based on ELK and Zipkin)'
             },
             {
                 value: 'prometheus',
