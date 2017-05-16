@@ -109,7 +109,8 @@
         },
         "ribbon": {
             "dev":"Development"
-        }
+        },
+        "item-count": "Mostra {{first}} - {{second}} di {{total}} articoli."
     },
     "entity": {
         "action": {

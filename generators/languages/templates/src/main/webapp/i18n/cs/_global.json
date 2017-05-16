@@ -109,7 +109,8 @@
         },
         "ribbon": {
             "dev":"Development"
-        }
+        },
+        "item-count": "Zobrazeno {{first}} - {{second}} ze {{total}} položek."
     },
     "entity": {
         "action": {
