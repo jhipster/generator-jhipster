@@ -23,14 +23,14 @@
     }
 _%>
 import { Injectable } from '@angular/core';
-import { Http, Response, URLSearchParams, BaseRequestOptions } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
-
-import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 <%_ if(hasDate) { _%>
 import { DateUtils } from 'ng-jhipster';
 <%_ } _%>
-import { ResponseWrapper } from '../../shared';
+
+import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
+import { ResponseWrapper, createRequestOption } from '../../shared';
 
 @Injectable()
 export class <%= entityAngularName %>Service {
@@ -93,10 +93,9 @@ export class <%= entityAngularName %>Service {
     }
 
     query(req?: any): Observable<ResponseWrapper> {
-        const options = this.createRequestOption(req);
+        const options = createRequestOption(req);
         return this.http.get(this.resourceUrl, options)
-            .map((res: Response) => this.convertResponse(res))
-        ;
+            .map((res: Response) => this.convertResponse(res));
     }
 
     delete(id: number): Observable<Response> {
@@ -105,10 +104,9 @@ export class <%= entityAngularName %>Service {
     <%_ if(searchEngine === 'elasticsearch') { _%>
 
     search(req?: any): Observable<ResponseWrapper> {
-        const options = this.createRequestOption(req);
+        const options = createRequestOption(req);
         return this.http.get(this.resourceSearchUrl, options)
-            .map((res: any) => this.convertResponse(res))
-        ;
+            .map((res: any) => this.convertResponse(res));
     }
     <%_ } _%>
 
@@ -136,22 +134,6 @@ export class <%= entityAngularName %>Service {
         <%_ } _%>
     }
     <%_ } _%>
-
-    private createRequestOption(req?: any): BaseRequestOptions {
-        const options: BaseRequestOptions = new BaseRequestOptions();
-        if (req) {
-            const params: URLSearchParams = new URLSearchParams();
-            params.set('page', req.page);
-            params.set('size', req.size);
-            if (req.sort) {
-                params.paramsMap.set('sort', req.sort);
-            }
-            params.set('query', req.query);
-
-            options.search = params;
-        }
-        return options;
-    }
 
     private convert(<%= entityInstance %>: <%= entityAngularName %>): <%= entityAngularName %> {
         const copy: <%= entityAngularName %> = Object.assign({}, <%= entityInstance %>);
