@@ -441,6 +441,8 @@ function writeFiles() {
                 this.template(`${SERVER_TEST_RES_DIR}_cassandra-random-port.yml`, `${SERVER_TEST_RES_DIR}cassandra-random-port.yml`);
             }
 
+            this.template(`${SERVER_TEST_SRC_DIR}package/config/_WebConfigurerTest.java`, `${testDir}config/WebConfigurerTest.java`);
+            this.template(`${SERVER_TEST_SRC_DIR}package/config/_WebConfigurerTestController.java`, `${testDir}config/WebConfigurerTestController.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_TestUtil.java`, `${testDir}web/rest/TestUtil.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_LogsResourceIntTest.java`, `${testDir}web/rest/LogsResourceIntTest.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_ProfileInfoResourceIntTest.java`, `${testDir}web/rest/ProfileInfoResourceIntTest.java`);
