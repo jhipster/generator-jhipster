@@ -105,14 +105,6 @@ public abstract class OAuth2TokenEndpointClientAdapter implements OAuth2TokenEnd
 
     protected abstract void addAuthentication(HttpHeaders reqHeaders, MultiValueMap<String, String> formParams);
 
-    /**Returns a Basic authorization header to be used to talk to UAA.*/
-    protected String getAuthorizationHeader() {
-        String clientId = getClientId();
-        String clientSecret = getClientSecret();
-        String authorization = clientId + ":" + clientSecret;
-        return "Basic " + Base64Utils.encodeToString(authorization.getBytes(StandardCharsets.UTF_8));
-    }
-
     protected String getClientSecret() {
         String clientSecret = jHipsterProperties.getSecurity().getClientAuthorization().getClientSecret();
         if(clientSecret == null) {
@@ -129,7 +121,11 @@ public abstract class OAuth2TokenEndpointClientAdapter implements OAuth2TokenEnd
         return clientId;
     }
 
-    /**Returns the configured OAuth2 token endpoint URI.*/
+    /**
+     * Returns the configured OAuth2 token endpoint URI.
+     * 
+     * @return the OAuth2 token endpoint URI.
+     */
     protected String getTokenEndpoint() {
         String tokenEndpointUrl = jHipsterProperties.getSecurity().getClientAuthorization().getAccessTokenUri();
         if(tokenEndpointUrl == null) {
