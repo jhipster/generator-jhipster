@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -52,26 +52,6 @@ public class KeycloakTokenEndpointClient extends OAuth2TokenEndpointClientAdapte
     public KeycloakTokenEndpointClient(@Qualifier("vanillaRestTemplate") RestTemplate restTemplate,
                                        JHipsterProperties jHipsterProperties) {
         super(restTemplate, jHipsterProperties);
-    }
-
-    @Override
-    public SignatureVerifier getSignatureVerifier() throws Exception {
-        String publicKeyEndpointUri = getTokenEndpoint().replace("/token", "/certs");
-        HttpEntity<Void> request = new HttpEntity<Void>(new HttpHeaders());
-        LinkedHashMap<String, List<Map<String, Object>>> result =
-            restTemplate.getForObject(publicKeyEndpointUri, LinkedHashMap.class);
-        Map<String, Object> properties = result.get("keys").get(0);
-        BigInteger modulus = new BigInteger(1, Base64Utils.decodeFromUrlSafeString((String) properties.get("n")));
-        BigInteger publicExponent = new BigInteger(1, Base64Utils.decodeFromString((String) properties.get("e")));
-        try {
-            PublicKey publicKey =
-                KeyFactory.getInstance("RSA").generatePublic(new RSAPublicKeySpec(modulus, publicExponent));
-            RSAPublicKey rsaKey = (RSAPublicKey) RSAKeyFactory.toRSAKey(publicKey);
-            return new RsaVerifier(rsaKey);
-        } catch (GeneralSecurityException ex) {
-            log.error("could not create key verifier", ex);
-            throw ex;
-        }
     }
 
     @Override

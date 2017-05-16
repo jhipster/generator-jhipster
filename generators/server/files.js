@@ -318,6 +318,7 @@ function writeFiles() {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_OAuth2TokenEndpointClient.java`, `${javaDir}security/oauth2/OAuth2TokenEndpointClient.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_OAuth2TokenEndpointClientAdapter.java`, `${javaDir}security/oauth2/OAuth2TokenEndpointClientAdapter.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_UaaTokenEndpointClient.java`, `${javaDir}security/oauth2/UaaTokenEndpointClient.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_KeycloakTokenEndpointClient.java`, `${javaDir}security/oauth2/KeycloakTokenEndpointClient.java`);
             }
             if (this.applicationType === 'microservice' && this.authenticationType === 'uaa') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/_FeignConfiguration.java`, `${javaDir}config/FeignConfiguration.java`);
