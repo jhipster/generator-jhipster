@@ -40,7 +40,7 @@ import java.nio.charset.StandardCharsets;
  * @author markus.oellinger
  */
 public abstract class OAuth2TokenEndpointClientAdapter implements OAuth2TokenEndpointClient {
-    private final Logger log = LoggerFactory.getLogger(UaaTokenEndpointClient.class);
+    private final Logger log = LoggerFactory.getLogger(OAuth2TokenEndpointClientAdapter.class);
     protected final RestTemplate restTemplate;
     protected final JHipsterProperties jHipsterProperties;
 
@@ -50,7 +50,7 @@ public abstract class OAuth2TokenEndpointClientAdapter implements OAuth2TokenEnd
     }
 
     /**
-     * Sends a password grant to UAA.
+     * Sends a password grant to the token endpoint.
      *
      * @param username the username to authenticate.
      * @param password his password.
@@ -66,10 +66,11 @@ public abstract class OAuth2TokenEndpointClientAdapter implements OAuth2TokenEnd
         formParams.set("grant_type", "password");
         addAuthentication(reqHeaders, formParams);
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(formParams, reqHeaders);
+        log.debug("contacting OAuth2 token endpoint to login user: {}", username);
         ResponseEntity<OAuth2AccessToken>
             responseEntity = restTemplate.postForEntity(getTokenEndpoint(), entity, OAuth2AccessToken.class);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
-            log.debug("failed to authenticate user with UAA: {}", responseEntity.getStatusCodeValue());
+            log.debug("failed to authenticate user with OAuth2 token endpoint, status: {}", responseEntity.getStatusCodeValue());
             throw new HttpClientErrorException(responseEntity.getStatusCode());
         }
         OAuth2AccessToken accessToken = responseEntity.getBody();
@@ -77,7 +78,7 @@ public abstract class OAuth2TokenEndpointClientAdapter implements OAuth2TokenEnd
     }
 
     /**
-     * Sends a refresh grant to UAA using the current refresh token to obtain new tokens.
+     * Sends a refresh grant to the token endpoint using the current refresh token to obtain new tokens.
      *
      * @param refreshTokenValue the refresh token to use to obtain new tokens.
      * @return the new, refreshed access token.
@@ -90,11 +91,11 @@ public abstract class OAuth2TokenEndpointClientAdapter implements OAuth2TokenEnd
         HttpHeaders headers = new HttpHeaders();
         addAuthentication(headers, params);
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(params, headers);
-        log.debug("contacting UAA to refresh OAuth2 JWT tokens");
+        log.debug("contacting OAuth2 token endpoint to refresh OAuth2 JWT tokens");
         ResponseEntity<OAuth2AccessToken> responseEntity = restTemplate.postForEntity(getTokenEndpoint(), entity,
                                                                                       OAuth2AccessToken.class);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
-            log.debug("failed to refresh tokens with UAA: {}", responseEntity.getStatusCodeValue());
+            log.debug("failed to refresh tokens: {}", responseEntity.getStatusCodeValue());
             throw new HttpClientErrorException(responseEntity.getStatusCode());
         }
         OAuth2AccessToken accessToken = responseEntity.getBody();
@@ -128,7 +129,7 @@ public abstract class OAuth2TokenEndpointClientAdapter implements OAuth2TokenEnd
         return clientId;
     }
 
-    /**Returns the configured UAA token endpoint URI.*/
+    /**Returns the configured OAuth2 token endpoint URI.*/
     protected String getTokenEndpoint() {
         String tokenEndpointUrl = jHipsterProperties.getSecurity().getClientAuthorization().getAccessTokenUri();
         if(tokenEndpointUrl == null) {
