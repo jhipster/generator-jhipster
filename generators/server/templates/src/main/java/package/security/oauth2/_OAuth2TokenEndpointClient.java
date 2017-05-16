@@ -34,8 +34,9 @@ public interface OAuth2TokenEndpointClient {
      *
      * @return the new verifier used to verify JWT signatures.
      * Will be null if we cannot contact the token endpoint.
+     * @throws Exception if we could not create a SignatureVerifier or contact the token endpoint.
      */
-    SignatureVerifier getSignatureVerifier();
+    SignatureVerifier getSignatureVerifier() throws Exception;
 
     /**
      * Send a password grant to the token endpoint.
@@ -44,6 +45,7 @@ public interface OAuth2TokenEndpointClient {
      * @param password his password.
      * @return the access token and enclosed refresh token received from the token endpoint.
      * @throws org.springframework.security.oauth2.common.exceptions.ClientAuthenticationException
+     * if we cannot contact the token endpoint.
      */
     OAuth2AccessToken sendPasswordGrant(String username, String password);
 
@@ -53,6 +55,7 @@ public interface OAuth2TokenEndpointClient {
      * @param refreshTokenValue the refresh token used to get new tokens.
      * @return the new access/refresh token pair.
      * @throws org.springframework.security.oauth2.common.exceptions.ClientAuthenticationException
+     * if we cannot contact the token endpoint.
      */
     OAuth2AccessToken sendRefreshGrant(String refreshTokenValue);
 }
