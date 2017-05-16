@@ -49,6 +49,7 @@ export * from './user/user.model';
 export * from './user/user.service';
 <%_ } _%>
 export * from './model/response-wrapper.model';
+export * from './model/request-util';
 <%_ if (enableSocialSignIn) { _%>
 export * from './social/social.service';
 export * from './social/social.component';

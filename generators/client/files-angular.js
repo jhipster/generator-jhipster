@@ -367,6 +367,7 @@ const files = {
                 'shared/constants/_pagination.constants.ts',
                 // models
                 'shared/model/_response-wrapper.model.ts',
+                'shared/model/_request-util.ts',
                 'shared/user/_account.model.ts',
                 // login
                 'shared/login/_login.component.ts',
