@@ -35,11 +35,12 @@ jhipster:
         logs: # report metrics in the logs
             enabled: true
             report-frequency: 60 # in seconds
-
+  <%_ if (composeApplicationType === 'gateway' || composeApplicationType === 'microservice' || composeApplicationType === 'uaa') { _%>
 spring:
     zipkin:
         base-url: http://jhipster-zipkin:9411
         enabled: true
+  <%_ } _%>
 <%_ } _%>
 
 <%_ if (serviceDiscoveryType === 'eureka') { _%>

@@ -61,10 +61,12 @@ services:
         extends:
             file: jhipster-console.yml
             service: jhipster-console
+    <%_ if (composeApplicationType === 'gateway' || composeApplicationType === 'microservice' || composeApplicationType === 'uaa') { _%>
     jhipster-zipkin:
         extends:
             file: jhipster-console.yml
             service: jhipster-zipkin
+    <%_ } _%>
 <%_ } _%>
 
 <%_ if (monitoring === 'prometheus') { _%>

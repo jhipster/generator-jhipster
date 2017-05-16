@@ -114,7 +114,7 @@ objects:
             <%_ } _%>
             <%_ if (app.prodDatabaseType === 'mysql') { _%>
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://${APPLICATION_NAME}-mysqldb:3306/<%= app.baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false
+              value: jdbc:mysql://${APPLICATION_NAME}-mysqldb/<%= app.baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -128,7 +128,7 @@ objects:
             <%_ } _%>
             <%_ if (app.prodDatabaseType === 'mariadb') { _%>
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:mariadb://${APPLICATION_NAME}-mariadb:3306/<%= app.baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false
+              value: jdbc:mariadb://${APPLICATION_NAME}-mariadb/<%= app.baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -142,7 +142,7 @@ objects:
             <%_ } _%>
             <%_ if (app.prodDatabaseType === 'postgresql') { _%>
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://${APPLICATION_NAME}-postgresqldb:5432/${APPLICATION_NAME}
+              value: jdbc:postgresql://${APPLICATION_NAME}-postgresqldb/${APPLICATION_NAME}
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -156,7 +156,7 @@ objects:
             <%_ } _%>
             <%_ if (app.prodDatabaseType === 'mongodb') { _%>
             - name: SPRING_DATA_MONGODB_URI
-              value: mongodb://${APPLICATION_NAME}-mongodb:27017
+              value: mongodb://${APPLICATION_NAME}-mongodb
             - name: SPRING_DATA_MONGODB_DATABASE
               value: ${APPLICATION_NAME}
             - name: SPRING_DATASOURCE_USERNAME
@@ -191,10 +191,12 @@ objects:
               value: "true"
             - name: JHIPSTER_LOGGING_LOGSTASH_HOST
               value: ${JHIPSTER_LOGSTASH}
+              <%_ if (composeApplicationType === 'gateway' || composeApplicationType === 'microservice' || composeApplicationType === 'uaa') { _%>
             - name: SPRING_ZIPKIN_ENABLED
               value: "true"
             - name: SPRING_ZIPKIN_BASE_URL
               value: ${JHIPSTER_ZIPKIN}
+              <%_ } _%>
             <%_ } _%>
             <%_ if (monitoring === 'prometheus') { _%>
             - name: JHIPSTER_METRICS_LOGS_ENABLED
@@ -215,9 +217,7 @@ objects:
     spec:
       selector:
         app: ${APPLICATION_NAME}
-      <%_ if (app.applicationType === 'monolith' || app.applicationType === 'gateway') { _%>
       type: LoadBalancer
-      <%_ } _%>
       ports:
       - name: http
         port: "${APP_PORT}"
