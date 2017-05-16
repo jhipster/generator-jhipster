@@ -191,7 +191,7 @@ objects:
               value: "true"
             - name: JHIPSTER_LOGGING_LOGSTASH_HOST
               value: ${JHIPSTER_LOGSTASH}
-              <%_ if (composeApplicationType === 'gateway' || composeApplicationType === 'microservice' || composeApplicationType === 'uaa') { _%>
+              <%_ if (composeApplicationType === 'microservice') { _%>
             - name: SPRING_ZIPKIN_ENABLED
               value: "true"
             - name: SPRING_ZIPKIN_BASE_URL

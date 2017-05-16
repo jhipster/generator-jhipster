@@ -61,7 +61,7 @@ parameters:
     description: Name of the kibana application
     required: true
     displayName: Kibana Application Name
-<%_ if (composeApplicationType === 'gateway' || composeApplicationType === 'microservice' || composeApplicationType === 'uaa') { _%>
+<%_ if (composeApplicationType === 'microservice') { _%>
   -
     name: ZK_APP_NAME
     value: jhipster-zipkin
@@ -397,7 +397,7 @@ objects:
       port:
         targetPort: "http"
       wildcardPolicy: None
-<%_ if (composeApplicationType === 'gateway' || composeApplicationType === 'microservice' || composeApplicationType === 'uaa') { _%>
+<%_ if (composeApplicationType === 'microservice') { _%>
   -
     apiVersion: v1
     kind: DeploymentConfig

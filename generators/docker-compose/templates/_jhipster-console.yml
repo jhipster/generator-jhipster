@@ -38,7 +38,7 @@ services:
         image: <%= DOCKER_JHIPSTER_CONSOLE %>
         ports:
             - 5601:5601
-    <%_ if (composeApplicationType === 'gateway' || composeApplicationType === 'microservice' || composeApplicationType === 'uaa') { _%>
+    <%_ if (composeApplicationType === 'microservice') { _%>
     jhipster-zipkin:
         image: <%= DOCKER_JHIPSTER_ZIPKIN %>
         ports:
