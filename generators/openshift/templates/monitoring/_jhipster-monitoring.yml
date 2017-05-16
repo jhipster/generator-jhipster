@@ -373,13 +373,8 @@ objects:
     spec:
       ports:
         -
-          name: http-bc
-          port: 5601
-          protocol: TCP
-          targetPort: 5601
-        -
           name: http
-          port: 80
+          port: 5601
           protocol: TCP
           targetPort: 5601
       selector:
