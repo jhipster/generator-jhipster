@@ -76,7 +76,9 @@ public class UaaTokenEndpointClient extends OAuth2TokenEndpointClientAdapter imp
         reqHeaders.add("Authorization", getAuthorizationHeader());
     }
 
-    /** Returns a Basic authorization header to be used to talk to UAA. */
+    /**
+     * @return a Basic authorization header to be used to talk to UAA.
+     */
     protected String getAuthorizationHeader() {
         String clientId = getClientId();
         String clientSecret = getClientSecret();
