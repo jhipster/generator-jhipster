@@ -51,6 +51,10 @@ import java.security.KeyPair;
 @Configuration
 @EnableAuthorizationServer
 public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
+    /**
+     * Access tokens will not expire any earlier than this.
+     */
+    private static final int MIN_ACCESS_TOKEN_VALDITIY_SECS = 60;
 
     @EnableResourceServer
     public static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
