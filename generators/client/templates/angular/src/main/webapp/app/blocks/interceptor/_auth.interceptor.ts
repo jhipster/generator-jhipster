@@ -24,19 +24,24 @@ import { HttpInterceptor } from 'ng-jhipster';
 export class AuthInterceptor extends HttpInterceptor {
 
     constructor(
+        <%_ if (authenticationType !== 'uaa') { _%>
         private localStorage: LocalStorageService,
         private sessionStorage: SessionStorageService
+        <%_ } _%>
     ) {
         super();
     }
 
     requestIntercept(options?: RequestOptionsArgs): RequestOptionsArgs {
+        <%_ if (authenticationType === 'uaa') { _%>
+        options.headers.append('Authorization', 'Basic d2ViX2FwcDo=');
+        <%_ } else if (authenticationType === 'oauth2') { _%>
         const token = this.localStorage.retrieve('authenticationToken') || this.sessionStorage.retrieve('authenticationToken');
-        <%_ if (authenticationType === 'oauth2') { _%>
         if (token && token.expires_at && token.expires_at > new Date().getTime()) {
             options.headers.append('Authorization', 'Bearer ' + token.access_token);
         }
-        <%_ } else if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+        <%_ } else if (authenticationType === 'jwt') { _%>
+        const token = this.localStorage.retrieve('authenticationToken') || this.sessionStorage.retrieve('authenticationToken');
         if (!!token) {
             options.headers.append('Authorization', 'Bearer ' + token);
         }

@@ -90,6 +90,9 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
 }
 <%_ } _%>
 <%_ if(authenticationType == 'uaa') { _%>
+import <%=packageName%>.config.oauth2.OAuth2JwtAccessTokenConverter;
+import <%=packageName%>.security.oauth2.OAuth2TokenEndpointClient;
+import <%=packageName%>.security.oauth2.UaaTokenEndpointClient;
 import <%=packageName%>.security.AuthoritiesConstants;
 
 import io.github.jhipster.config.JHipsterProperties;
@@ -156,29 +159,22 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
     }
 
     @Bean
-    public JwtAccessTokenConverter jwtAccessTokenConverter(
-            @Qualifier("loadBalancedRestTemplate") RestTemplate keyUriRestTemplate) {
-
-        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setVerifierKey(getKeyFromAuthorizationServer(keyUriRestTemplate));
-        return converter;
+    public JwtAccessTokenConverter jwtAccessTokenConverter(OAuth2TokenEndpointClient tokenEndpointClient) {
+        return new OAuth2JwtAccessTokenConverter(tokenEndpointClient);
     }
 
     @Bean
+	@Qualifier("loadBalancedRestTemplate")
     public RestTemplate loadBalancedRestTemplate(RestTemplateCustomizer customizer) {
         RestTemplate restTemplate = new RestTemplate();
         customizer.customize(restTemplate);
         return restTemplate;
     }
 
-    private String getKeyFromAuthorizationServer(RestTemplate keyUriRestTemplate) {
-        // Load available UAA servers
-        discoveryClient.getServices();
-        HttpEntity<Void> request = new HttpEntity<Void>(new HttpHeaders());
-        return (String) keyUriRestTemplate
-            .exchange("http://<%= uaaBaseName %>/oauth/token_key", HttpMethod.GET, request, Map.class).getBody()
-            .get("value");
-
+    @Bean
+    @Qualifier("vanillaRestTemplate")
+    public RestTemplate vanillaRestTemplate() {
+        return new RestTemplate();
     }
 }
 <%_ } _%>
