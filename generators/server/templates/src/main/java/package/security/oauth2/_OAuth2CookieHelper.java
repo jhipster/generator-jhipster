@@ -136,7 +136,15 @@ public class OAuth2CookieHelper {
         Cookie refreshTokenCookie;
         if (rememberMe) {           //keep token around if rememberMe is true
             refreshTokenCookie = new Cookie(PERSISTENT_REFRESH_TOKEN_COOKIE, refreshToken.getValue());
-            refreshTokenCookie.setMaxAge((int) getMaxAge(refreshToken));
+            try {
+                long maxAge = getRemainingDuration(refreshToken.getValue());
+                //let cookie expire a bit earlier than the token to avoid race conditions
+                maxAge -= REFRESH_TOKEN_EXPIRATION_WINDOW_SECS;
+                refreshTokenCookie.setMaxAge((int) maxAge);
+            }
+            catch(InvalidTokenException ex) {
+                log.warn("could not parse remaining duration of refresh token, will set as session cookie only", ex);
+            }
         } else {
             refreshTokenCookie = new Cookie(SESSION_REFRESH_TOKEN_COOKIE, refreshToken.getValue());
         }
@@ -151,25 +159,23 @@ public class OAuth2CookieHelper {
      *
      * @param refreshToken the refresh token to examine.
      * @return the remaining duration in seconds.
+     * @throws InvalidTokenException if we cannot parse the exp claim in the token.
      */
-    private long getMaxAge(OAuth2RefreshToken refreshToken) {
+    private long getRemainingDuration(String refreshToken) {
         try {
-            Jwt jwt = JwtHelper.decode(refreshToken.getValue());
+            Jwt jwt = JwtHelper.decode(refreshToken);
             String claims = jwt.getClaims();
             Map<String, Object> claimsMap = jsonParser.parseMap(claims);
-            Object exp = claimsMap.get("exp");
+            Object exp = claimsMap.get(AccessTokenConverter.EXP);
             if (exp != null) {
                 long expiresIn = Long.parseLong(exp.toString()) - System.currentTimeMillis() / 1000L;
                 log.debug("refresh token valid for another {} secs", expiresIn);
-                //expire a bit earlier than the token to avoid race conditions
-                expiresIn -= REFRESH_TOKEN_EXPIRATION_WINDOW_SECS;
                 return expiresIn;
             }
         } catch (RuntimeException ex) {
-            log.error("could not parse refresh token claims", ex);
+            throw new InvalidTokenException("could not parse exp claim in refresh token", ex);
         }
-        //cannot determine refresh token expiry date, fall back to session cookie
-        return -1L;
+        throw new InvalidTokenException("no exp claim found in refresh token");
     }
 
     /**
