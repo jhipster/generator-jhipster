@@ -91,13 +91,10 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
 <%_ } _%>
 <%_ if(authenticationType == 'uaa') { _%>
 import <%=packageName%>.config.oauth2.OAuth2JwtAccessTokenConverter;
-import <%=packageName%>.security.oauth2.OAuth2TokenEndpointClient;
+import <%=packageName%>.security.oauth2.OAuth2SignatureVerifierClient;
 import <%=packageName%>.security.AuthoritiesConstants;
 
-import io.github.jhipster.config.JHipsterProperties;
-
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.RestTemplateCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -114,24 +111,10 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Map;
-
 @Configuration
 @EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerAdapter {
-
-    private final JHipsterProperties jHipsterProperties;
-
-    private final DiscoveryClient discoveryClient;
-
-    public MicroserviceSecurityConfiguration(JHipsterProperties jHipsterProperties,
-            DiscoveryClient discoveryClient) {
-
-        this.jHipsterProperties = jHipsterProperties;
-        this.discoveryClient = discoveryClient;
-    }
-
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
@@ -158,8 +141,8 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
     }
 
     @Bean
-    public JwtAccessTokenConverter jwtAccessTokenConverter(OAuth2TokenEndpointClient tokenEndpointClient) {
-        return new OAuth2JwtAccessTokenConverter(tokenEndpointClient);
+    public JwtAccessTokenConverter jwtAccessTokenConverter(OAuth2SignatureVerifierClient signatureVerifierClient) {
+        return new OAuth2JwtAccessTokenConverter(signatureVerifierClient);
     }
 
     @Bean

@@ -136,17 +136,20 @@ public class OAuth2CookieHelper {
      * This gives us the chance to expire session cookies regardless of the token duration.
      */
     private Cookie createRefreshTokenCookie(OAuth2RefreshToken refreshToken, boolean rememberMe) {
-        int maxAge=-1;
-        String value=refreshToken.getValue();
-        if(!rememberMe) {
+        int maxAge = -1;
+        String value = refreshToken.getValue();
+        if (!rememberMe) {
             StringBuilder sb = new StringBuilder(value.length() + 11);
             sb.append(System.currentTimeMillis());
             sb.append('|');
             sb.append(value);
-            value=sb.toString();
-        }
-        else {
-            maxAge = (int)getRemainingDuration(refreshToken.getValue());
+            value = sb.toString();
+        } else {
+            //get expiration in seconds from the token's "exp" claim
+            int exp = getExpClaim(refreshToken.getValue());
+            int now = (int) (System.currentTimeMillis() / 1000L);
+            maxAge = exp - now;
+            log.debug("refresh token valid for another {} secs", maxAge);
             //let cookie expire a bit earlier than the token to avoid race conditions
             maxAge -= REFRESH_TOKEN_EXPIRATION_WINDOW_SECS;
         }
@@ -163,7 +166,7 @@ public class OAuth2CookieHelper {
      * @return true, if it was set persistently (i.e. for "remember me").
      */
     public static boolean isRememberMe(Cookie refreshTokenCookie) {
-        return refreshTokenCookie.getValue().indexOf('|')<0;
+        return refreshTokenCookie.getValue().indexOf('|') < 0;
     }
 
     /**
@@ -171,14 +174,14 @@ public class OAuth2CookieHelper {
      * Since we encode additional information into the cookie, this needs to be called to get
      * hold of the enclosed JWT.
      *
-     * @param refreshCookie  the cookie we store the value in.
+     * @param refreshCookie the cookie we store the value in.
      * @return the refresh JWT from the cookie.
      */
     public static String getRefreshTokenValue(Cookie refreshCookie) {
-        String value=refreshCookie.getValue();
-        int i=value.indexOf('|');
-        if(i>0) {
-            return value.substring(i+1);
+        String value = refreshCookie.getValue();
+        int i = value.indexOf('|');
+        if (i > 0) {
+            return value.substring(i + 1);
         }
         return value;
     }
@@ -192,15 +195,16 @@ public class OAuth2CookieHelper {
      * a persistent cookie.
      */
     private Long getRefreshTokenCreationTimestamp(Cookie refreshCookie) {
-        String value=refreshCookie.getValue();
-        int i=value.indexOf('|');
-        if(i>0) {
-            return Long.parseLong(value.substring(0,i));
+        String value = refreshCookie.getValue();
+        int i = value.indexOf('|');
+        if (i > 0) {
+            return Long.parseLong(value.substring(0, i));
         }
         return null;
     }
 
-    /**Checks if the refresh token session has expired.
+    /**
+     * Checks if the refresh token session has expired.
      * Only makes sense for non-persistent cookies, i.e. when remember me was not checked.
      * The motivation for this is that we want to throw out a user after a while if he's inactive.
      * We cannot do this via refresh token validity because that one is also used for remember me.
@@ -211,11 +215,11 @@ public class OAuth2CookieHelper {
     public boolean isSessionExpired(Cookie refreshCookie) {
         //read non-remember-me session length in secs
         int validity = jHipsterProperties.getSecurity().getAuthentication().getOauth().getTokenValidityInSeconds();
-        if(validity<=0) {           //no session expiration configured
+        if (validity < 0) {           //no session expiration configured
             return false;
         }
         Long creationTimestamp = getRefreshTokenCreationTimestamp(refreshCookie);
-        if(creationTimestamp==null) {           //remember me was checked, session does not expire
+        if (creationTimestamp == null) {           //remember me was checked, session does not expire
             return false;
         }
         long sessionDuration = System.currentTimeMillis() - creationTimestamp;
@@ -224,28 +228,21 @@ public class OAuth2CookieHelper {
     }
 
     /**
-     * Retrieve the remaining duration of the refresh token.
-     * If the refresh token does not contain an "exp" claim, then we revert back to a default duration.
+     * Retrieve the exp claim of the refresh token.
      *
      * @param refreshToken the refresh token to examine.
-     * @return the remaining duration in seconds.
-     * @throws InvalidTokenException if we cannot parse the exp claim in the token.
+     * @return the timestamp in seconds when the token will expire (since epoch).
+     * @throws InvalidTokenException if we cannot find or parse the exp claim in the token.
      */
-    private long getRemainingDuration(String refreshToken) {
-        try {
-            Jwt jwt = JwtHelper.decode(refreshToken);
-            String claims = jwt.getClaims();
-            Map<String, Object> claimsMap = jsonParser.parseMap(claims);
-            Object exp = claimsMap.get(AccessTokenConverter.EXP);
-            if (exp != null) {
-                long expiresIn = Long.parseLong(exp.toString()) - System.currentTimeMillis() / 1000L;
-                log.debug("refresh token valid for another {} secs", expiresIn);
-                return expiresIn;
-            }
-        } catch (RuntimeException ex) {
-            throw new InvalidTokenException("could not parse exp claim in refresh token", ex);
+    private Integer getExpClaim(String refreshToken) {
+        Jwt jwt = JwtHelper.decode(refreshToken);
+        String claims = jwt.getClaims();
+        Map<String, Object> claimsMap = jsonParser.parseMap(claims);
+        Object exp = claimsMap.get(AccessTokenConverter.EXP);
+        if (exp != null && exp instanceof Integer) {
+            return (Integer) exp;
         }
-        throw new InvalidTokenException("no exp claim found in refresh token");
+        throw new InvalidTokenException("no valid exp claim found in refresh token");
     }
 
     /**

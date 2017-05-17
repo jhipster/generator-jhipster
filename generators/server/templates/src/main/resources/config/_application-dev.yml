@@ -309,6 +309,13 @@ jhipster:
             client-id: internal
             client-secret: internal
     <%_ } _%>
+    <%_ if (applicationType === 'gateway' && authenticationType==='uaa') { _%>
+        authentication:
+            oauth:
+                # Controls session expiration due to inactivity (ignored for remember-me).
+                # Negative values disable session inactivity expiration.
+                token-validity-in-seconds: 1800
+    <%_ } _%>
     <%_ if (applicationType == 'uaa') { _%>
         authentication:
             jwt:

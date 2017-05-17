@@ -22,20 +22,13 @@ import io.github.jhipster.config.JHipsterProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.jwt.crypto.sign.RsaVerifier;
-import org.springframework.security.jwt.crypto.sign.SignatureVerifier;
-import org.springframework.security.oauth2.common.exceptions.InvalidClientException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 /**
  * Client talking to UAA's token endpoint to do different OAuth2 grants.
@@ -44,31 +37,9 @@ import java.util.Map;
 public class UaaTokenEndpointClient extends OAuth2TokenEndpointClientAdapter implements OAuth2TokenEndpointClient {
     private final Logger log = LoggerFactory.getLogger(UaaTokenEndpointClient.class);
 
-    public UaaTokenEndpointClient(DiscoveryClient discoveryClient, @Qualifier("loadBalancedRestTemplate") RestTemplate restTemplate,
+    public UaaTokenEndpointClient(@Qualifier("loadBalancedRestTemplate") RestTemplate restTemplate,
                                   JHipsterProperties jHipsterProperties) {
         super(restTemplate, jHipsterProperties);
-        // Load available UAA servers
-        discoveryClient.getServices();
-    }
-
-    /**
-     * Fetches the public key from the UAA.
-     *
-     * @return the public key used to verify JWT tokens; or null.
-     */
-    @Override
-    public SignatureVerifier getSignatureVerifier() throws Exception {
-        try {
-            HttpEntity<Void> request = new HttpEntity<Void>(new HttpHeaders());
-            String key = (String) restTemplate
-                .exchange(getPublicKeyEndpoint(), HttpMethod.GET, request, Map.class).getBody()
-                .get("value");
-            return new RsaVerifier(key);
-        } catch (IllegalStateException ex) {
-            log.warn("could not contact UAA to get public key");
-            return null;
-        }
-
     }
 
     @Override
@@ -84,16 +55,6 @@ public class UaaTokenEndpointClient extends OAuth2TokenEndpointClientAdapter imp
         String clientSecret = getClientSecret();
         String authorization = clientId + ":" + clientSecret;
         return "Basic " + Base64Utils.encodeToString(authorization.getBytes(StandardCharsets.UTF_8));
-    }
-
-    /** Returns the configured endpoint URI to retrieve the public key. */
-    protected String getPublicKeyEndpoint() {
-        //TODO move to JHipsterProperties as a separate property
-        String tokenEndpointUrl = jHipsterProperties.getSecurity().getClientAuthorization().getAccessTokenUri();
-        if (tokenEndpointUrl == null) {
-            throw new InvalidClientException("no token endpoint configured in application properties");
-        }
-        return tokenEndpointUrl + "_key";
     }
 
 }

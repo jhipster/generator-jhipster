@@ -19,8 +19,8 @@
 package <%=packageName%>.config.oauth2;
 
 import <%=packageName%>.security.oauth2.CookieTokenExtractor;
-import <%=packageName%>.security.oauth2.OAuth2CookieHelper;
 import <%=packageName%>.security.oauth2.OAuth2AuthenticationService;
+import <%=packageName%>.security.oauth2.OAuth2CookieHelper;
 import <%=packageName%>.security.oauth2.OAuth2TokenEndpointClient;
 import <%=packageName%>.web.filter.RefreshTokenFilterConfigurer;
 import io.github.jhipster.config.JHipsterProperties;
@@ -42,13 +42,12 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class OAuth2AuthenticationConfiguration extends ResourceServerConfigurerAdapter {
     private final JHipsterProperties jHipsterProperties;
-    private final OAuth2TokenEndpointClient authorizationClient;
+    private final OAuth2TokenEndpointClient tokenEndpointClient;
     private final TokenStore tokenStore;
 
-    public OAuth2AuthenticationConfiguration(JHipsterProperties jHipsterProperties,
-                                             OAuth2TokenEndpointClient authorizationClient, TokenStore tokenStore) {
+    public OAuth2AuthenticationConfiguration(JHipsterProperties jHipsterProperties, OAuth2TokenEndpointClient tokenEndpointClient, TokenStore tokenStore) {
         this.jHipsterProperties = jHipsterProperties;
-        this.authorizationClient = authorizationClient;
+        this.tokenEndpointClient = tokenEndpointClient;
         this.tokenStore = tokenStore;
     }
 
@@ -76,7 +75,7 @@ public class OAuth2AuthenticationConfiguration extends ResourceServerConfigurerA
 
     @Bean
     public OAuth2AuthenticationService uaaAuthenticationService() {
-        return new OAuth2AuthenticationService(authorizationClient, cookieHelper());
+        return new OAuth2AuthenticationService(tokenEndpointClient, cookieHelper());
     }
 
     /**
