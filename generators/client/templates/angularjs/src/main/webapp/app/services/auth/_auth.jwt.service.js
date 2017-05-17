@@ -51,15 +51,11 @@
                 password: credentials.password,
                 rememberMe: credentials.rememberMe
             };
-            var headers = {
-                "Authorization" : "Basic d2ViX2FwcDo="
-            };
 
             return $http({
                 url: '/auth/login',
                 method: 'post',
-                data: data,
-                headers: headers
+                data: data
             });
 <% } else { %>
             var data = {
