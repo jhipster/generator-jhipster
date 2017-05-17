@@ -159,7 +159,7 @@ public class WebConfigurerTest {
         assertThat(container.getMimeMappings().get("json")).isEqualTo("text/html;charset=utf-8");
         <%_ if (!skipClient) { _%>
         if (container.getDocumentRoot() != null) {
-			//make sure test doesn't fail on Windows due to backslash
+            //make sure test doesn't fail on Windows due to backslash
             assertThat(container.getDocumentRoot().getPath().replace("\\", "/")).isEqualTo("target/www");
         }
         <%_ } _%>
