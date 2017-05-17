@@ -23,7 +23,7 @@
         .module('<%=angularAppName%>')
         .factory('authInterceptor', authInterceptor);
 
-    authInterceptor.$inject = [authInterceptor.$inject = ['$rootScope', '$q', '$location', '$localStorage', '$sessionStorage'];
+    authInterceptor.$inject = ['$rootScope', '$q', '$location', '$localStorage', '$sessionStorage'];
 
     function authInterceptor ($rootScope, $q, $location, $localStorage, $sessionStorage) {
         var service = {
