@@ -18,6 +18,7 @@
 -%>
 package <%=packageName%>.security.oauth2;
 
+import io.github.jhipster.config.JHipsterProperties;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +27,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 /**
  * Tests helper functions around OAuth2 Cookies.
- * 
+ *
  * @see OAuth2CookieHelper
  */
 public class OAuth2CookieHelperTest {
@@ -35,7 +36,8 @@ public class OAuth2CookieHelperTest {
 
     @Before
     public void setUp() throws NoSuchMethodException {
-        cookieHelper = new OAuth2CookieHelper();
+        JHipsterProperties jHipsterProperties=new JHipsterProperties();
+        cookieHelper = new OAuth2CookieHelper(jHipsterProperties);
     }
 
    @Test
