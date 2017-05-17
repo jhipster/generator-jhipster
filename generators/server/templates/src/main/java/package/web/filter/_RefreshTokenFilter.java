@@ -18,8 +18,8 @@
 -%>
 package <%=packageName%>.web.filter;
 
-import <%=packageName%>.security.oauth2.OAuth2CookieHelper;
 import <%=packageName%>.security.oauth2.OAuth2AuthenticationService;
+import <%=packageName%>.security.oauth2.OAuth2CookieHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -103,11 +103,10 @@ public class RefreshTokenFilter extends GenericFilterBean {
                 } catch (HttpClientErrorException ex) {
                     throw new UnauthorizedClientException("could not refresh OAuth2 token", ex);
                 }
-            }
-            else if(accessTokenCookie!=null) {
+            } else if (accessTokenCookie != null) {
                 log.warn("access token found, but no refresh token, stripping them all");
                 OAuth2AccessToken token = tokenStore.readAccessToken(accessTokenCookie.getValue());
-                if(token.isExpired()) {
+                if (token.isExpired()) {
                     newHttpServletRequest = authenticationService.stripTokens(httpServletRequest);
                 }
             }

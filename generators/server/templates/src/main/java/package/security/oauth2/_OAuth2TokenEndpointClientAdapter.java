@@ -28,16 +28,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.exceptions.InvalidClientException;
-import org.springframework.util.Base64Utils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.nio.charset.StandardCharsets;
-
 /**
- * @author markus.oellinger
+ * Default base class for an OAuth2TokenEndpointClient.
+ * Individual implementations for a particular OAuth2 provider can use this as a starting point.
  */
 public abstract class OAuth2TokenEndpointClientAdapter implements OAuth2TokenEndpointClient {
     private final Logger log = LoggerFactory.getLogger(OAuth2TokenEndpointClientAdapter.class);
@@ -123,7 +121,7 @@ public abstract class OAuth2TokenEndpointClientAdapter implements OAuth2TokenEnd
 
     /**
      * Returns the configured OAuth2 token endpoint URI.
-     * 
+     *
      * @return the OAuth2 token endpoint URI.
      */
     protected String getTokenEndpoint() {

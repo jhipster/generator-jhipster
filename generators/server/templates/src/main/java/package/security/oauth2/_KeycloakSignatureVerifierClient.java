@@ -46,18 +46,32 @@ import java.util.Map;
  * @author markus.oellinger
  */
 @Component
-public class KeycloakTokenEndpointClient extends OAuth2TokenEndpointClientAdapter implements OAuth2TokenEndpointClient {
-    private final Logger log = LoggerFactory.getLogger(KeycloakTokenEndpointClient.class);
+public class KeycloakSignatureVerifierClient implements OAuth2SignatureVerifierClient implements {
+    private final Logger log = LoggerFactory.getLogger(KeycloakSignatureVerifierClient.class);
 
-    public KeycloakTokenEndpointClient(@Qualifier("vanillaRestTemplate") RestTemplate restTemplate,
+    public KeycloakSignatureVerifierClient(@Qualifier("vanillaRestTemplate") RestTemplate restTemplate,
                                        JHipsterProperties jHipsterProperties) {
         super(restTemplate, jHipsterProperties);
     }
 
     @Override
-    protected void addAuthentication(HttpHeaders reqHeaders, MultiValueMap<String, String> formParams) {
-        formParams.set("client_id", getClientId());
-        formParams.set("client_secret", getClientSecret());
+    public SignatureVerifier getSignatureVerifier() throws Exception {
+        String publicKeyEndpointUri = getTokenEndpoint().replace("/token", "/certs");
+        HttpEntity<Void> request = new HttpEntity<Void>(new HttpHeaders());
+        LinkedHashMap<String, List<Map<String, Object>>> result =
+            restTemplate.getForObject(publicKeyEndpointUri, LinkedHashMap.class);
+        Map<String, Object> properties = result.get("keys").get(0);
+        BigInteger modulus = new BigInteger(1, Base64Utils.decodeFromUrlSafeString((String) properties.get("n")));
+        BigInteger publicExponent = new BigInteger(1, Base64Utils.decodeFromString((String) properties.get("e")));
+        try {
+            PublicKey publicKey =
+                KeyFactory.getInstance("RSA").generatePublic(new RSAPublicKeySpec(modulus, publicExponent));
+            RSAPublicKey rsaKey = (RSAPublicKey) RSAKeyFactory.toRSAKey(publicKey);
+            return new RsaVerifier(rsaKey);
+        } catch (GeneralSecurityException ex) {
+            log.error("could not create key verifier", ex);
+            throw ex;
+        }
     }
 
 }

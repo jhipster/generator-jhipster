@@ -109,12 +109,18 @@ public class OAuth2AuthenticationService {
      */
     public HttpServletRequest refreshToken(HttpServletRequest request, HttpServletResponse response, Cookie
         refreshCookie) {
+        if (cookieHelper.isSessionExpired(refreshCookie)) {          //session has expired, don't refresh
+            log.info("sesssion has expired due to inactivity");
+            cookieHelper.clearCookies(request, response);
+            return stripTokens(request);
+        }
         OAuth2Cookies cookies = getCachedCookies(refreshCookie.getValue());
         synchronized (cookies) {
             //check if we have a result from another thread already
             if (cookies.getAccessTokenCookie() == null) {            //no, we are first!
                 //send a refresh_token grant to UAA, getting new tokens
-                OAuth2AccessToken accessToken = authorizationClient.sendRefreshGrant(refreshCookie.getValue());
+                String refreshCookieValue = OAuth2CookieHelper.getRefreshTokenValue(refreshCookie);
+                OAuth2AccessToken accessToken = authorizationClient.sendRefreshGrant(refreshCookieValue);
                 boolean rememberMe = OAuth2CookieHelper.isRememberMe(refreshCookie);
                 cookieHelper.createCookies(request, accessToken, rememberMe, cookies);
                 //add cookies to response to update browser
@@ -159,6 +165,13 @@ public class OAuth2AuthenticationService {
         cookieHelper.clearCookies(httpServletRequest, httpServletResponse);
     }
 
+    /**
+     * Strips tokens preventing them from being used further down the chain.
+     * For example, the OAuth2 client won't checked them and they won't be relayed to other services.
+     *
+     * @param httpServletRequest the incoming request.
+     * @return the request to replace it with which has the tokens stripped.
+     */
     public HttpServletRequest stripTokens(HttpServletRequest httpServletRequest) {
         Cookie[] cookies = cookieHelper.stripTokens(httpServletRequest.getCookies());
         return new CookiesHttpServletRequestWrapper(httpServletRequest, cookies);
