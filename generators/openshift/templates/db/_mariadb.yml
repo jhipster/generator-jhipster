@@ -214,5 +214,10 @@ objects:
           protocol: TCP
           port: 3306
           targetPort: 3306
+        -
+          name: mariadb
+          protocol: TCP
+          port: 80
+          targetPort: 3306
       selector:
         app: ${APPLICATION_NAME}
