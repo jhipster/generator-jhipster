@@ -92,7 +92,6 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
 <%_ if(authenticationType == 'uaa') { _%>
 import <%=packageName%>.config.oauth2.OAuth2JwtAccessTokenConverter;
 import <%=packageName%>.security.oauth2.OAuth2TokenEndpointClient;
-import <%=packageName%>.security.oauth2.UaaTokenEndpointClient;
 import <%=packageName%>.security.AuthoritiesConstants;
 
 import io.github.jhipster.config.JHipsterProperties;

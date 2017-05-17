@@ -121,7 +121,7 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
             .withClient("web_app")
             .scopes("openid")
             .autoApprove(true)
-            .authorizedGrantTypes("implicit", "password", "refresh_token", "authorization_code")
+            .authorizedGrantTypes("implicit","refresh_token", "password", "authorization_code")
             .accessTokenValiditySeconds((int)jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds())
             .refreshTokenValiditySeconds((int)jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSecondsForRememberMe())
             .and()
@@ -130,7 +130,8 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
             .scopes("web-app")
             .autoApprove(true)
             .authorizedGrantTypes("client_credentials", "password", "refresh_token")
-            .accessTokenValiditySeconds((int)jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds());
+            .accessTokenValiditySeconds((int)jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds())
+            .refreshTokenValiditySeconds((int)jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSecondsForRememberMe());
     }
 
     @Override
@@ -153,7 +154,7 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
     }
 
     /**
-     * This bean generates an token enhancer, which manages the exchange between JWT acces tokens and Authentication
+     * This bean generates an token enhancer, which manages the exchange between JWT access tokens and Authentication
      * in both directions.
      *
      * @return an access token converter configured with the authorization server's public/private keys

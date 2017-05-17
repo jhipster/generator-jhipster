@@ -46,13 +46,7 @@ export class AuthServerProvider {
             rememberMe: credentials.rememberMe
         };
 
-        const headers = new Headers ({
-            'Authorization' : 'Basic d2ViX2FwcDo='
-        });
-
-        return this.http.post('auth/login', data, {
-            headers
-        });
+        return this.http.post('auth/login', data, {});
 <% } else { %>
         const data = {
             username: credentials.username,
