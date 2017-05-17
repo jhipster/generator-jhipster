@@ -2251,7 +2251,7 @@ module.exports = class extends Generator {
                         .find(${relationshipFieldName}${dto === 'no' ? '.id' : 'Id'})
                         .subscribe((subRes: ${relationship.otherEntityAngularName}) => {
                             this.${variableName} = [subRes].concat(res.json);
-                        }, (subRes: ResponseWrapper) => this.onError(subRes.json);
+                        }, (subRes: ResponseWrapper) => this.onError(subRes.json));
                 }
             }, (res: ResponseWrapper) => this.onError(res.json));`;
             } else if (relationship.relationshipType !== 'one-to-many') {
