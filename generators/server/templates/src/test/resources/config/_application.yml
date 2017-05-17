@@ -143,6 +143,13 @@ jhipster:
         core-pool-size: 1
         max-pool-size: 50
         queue-capacity: 10000
+    # To test logstash appender
+    logging:
+            logstash:
+                enabled: true
+                host: localhost
+                port: 5000
+                queue-size: 512
 <%_ if (!skipUserManagement) { _%>
     mail:
         from: test@localhost
@@ -182,6 +189,9 @@ jhipster:
 <%_ } _%>
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
+        logs: # Reports Dropwizard metrics in the logs
+            enabled: true
+            report-frequency: 60 # in seconds
 
 # ===================================================================
 # Application specific properties

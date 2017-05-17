@@ -26,16 +26,20 @@ import <%= packageName %>.<%= mainClass %>;
 import <%= packageName %>.config.SecurityBeanOverrideConfiguration;
 <%_ } _%>
 import <%= packageName %>.web.rest.vm.LoggerVM;
+import ch.qos.logback.classic.AsyncAppender;
+import ch.qos.logback.classic.LoggerContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -83,5 +87,11 @@ public class LogsResourceIntTest <% if (databaseType === 'cassandra') { %>extend
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(logger)))
             .andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void testLogstashAppender() {
+        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
+        assertThat(context.getLogger("ROOT").getAppender("ASYNC_LOGSTASH")).isInstanceOf(AsyncAppender.class);
     }
 }
