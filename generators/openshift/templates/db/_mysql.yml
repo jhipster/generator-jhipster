@@ -214,5 +214,11 @@ objects:
           protocol: TCP
           port: 3306
           targetPort: 3306
+        # No need to mention the port explicitly as each pod and service gets assigned with an IP, a service within a pod is accessible/routable at :80
+        -
+          name: mysqldb
+          protocol: TCP
+          port: 80
+          targetPort: 3306
       selector:
         app: ${APPLICATION_NAME}

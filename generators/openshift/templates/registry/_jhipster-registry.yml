@@ -84,17 +84,18 @@ objects:
             env:
             # StatefulSet specific configuration
             - name: CLUSTER_SIZE
-              value: "2"
+              value: "<%= registryReplicas %>"
             - name: STATEFULSET_NAME
               value: ${APPLICATION_NAME}
-            - name: STATEFULSET_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
             # Registry configuration
             - name: SPRING_PROFILES_ACTIVE
               value: prod,native
             - name: SECURITY_USER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ${SECRET_REF}
+                  key: registry-admin-password
+            - name: JHIPSTER_REGISTRY_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: ${SECRET_REF}
@@ -116,6 +117,7 @@ objects:
               value: '30000'
             - name: EUREKA_SERVER_RENAWAL_THRESHOLD_UPDATE_INTERVAL_MS
               value: '15000'
+            # this might not be required as the service-url is defined in configMap as well. If there is no impact, this can be safely removed
             command:
               - "/bin/sh"
               - "-ec"
@@ -128,7 +130,7 @@ objects:
                 LAST_POD_INDEX=$((${CLUSTER_SIZE} - 1))
                 REPLICAS=""
                 for i in $(seq 0 $LAST_POD_INDEX); do
-                  REPLICAS="${REPLICAS}http://admin:${SECURITY_USER_PASSWORD}@${STATEFULSET_NAME}-${i}.jhipster-registry:8761/eureka/"
+                  REPLICAS="${REPLICAS}http://admin:${JHIPSTER_REGISTRY_PASSWORD}@${STATEFULSET_NAME}-${i}.jhipster-registry/eureka/"
                   if [ $i -lt $LAST_POD_INDEX ]; then
                     REPLICAS="${REPLICAS},"
                   fi
@@ -155,8 +157,12 @@ objects:
         service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
     spec:
       ports:
-      - name: http
+      - name: http-bc
         port: 8761
+        targetPort: 8761
+      - name: http
+        port: 80
+        targetPort: 8761
       type: ClusterIP
       selector:
         app: ${APPLICATION_NAME}
