@@ -19,6 +19,7 @@
 package <%=packageName%>.security.oauth2;
 
 import com.google.common.net.InternetDomainName;
+import io.github.jhipster.config.JHipsterProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.json.JsonParser;
@@ -27,6 +28,8 @@ import org.springframework.security.jwt.Jwt;
 import org.springframework.security.jwt.JwtHelper;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2RefreshToken;
+import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
+import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.Cookie;
@@ -43,47 +46,43 @@ public class OAuth2CookieHelper {
     /**
      * Name of the access token cookie.
      */
-    public static final String ACCESS_TOKEN_COOKIE = "uaa-accessToken";
+    public static final String ACCESS_TOKEN_COOKIE = OAuth2AccessToken.ACCESS_TOKEN;
     /**
-     * Name of the refresh token cookie for sessions (no remember me).
+     * Name of the refresh token cookie.
      */
-    public static final String SESSION_REFRESH_TOKEN_COOKIE = "uaa-sessionRefreshToken";
-    /**
-     * Name of the persistent refresh token cookie (with remember me).
-     * The reason why we need two different cookie names is that it is impossible
-     * for the server to find out when refreshing the tokens whether remember me
-     * was originally chosen or not (i.e. whether the cookie must be persistent or session only).
-     */
-    public static final String PERSISTENT_REFRESH_TOKEN_COOKIE = "uaa-storedRefreshToken";
+    public static final String REFRESH_TOKEN_COOKIE = OAuth2AccessToken.REFRESH_TOKEN;
     /**
      * The names of the Cookies we set.
      */
-    private static final List<String> COOKIE_NAMES = Arrays.asList(ACCESS_TOKEN_COOKIE, SESSION_REFRESH_TOKEN_COOKIE,
-        PERSISTENT_REFRESH_TOKEN_COOKIE);
+    private static final List<String> COOKIE_NAMES = Arrays.asList(ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE);
     /**
      * Number of seconds to expire refresh token cookies before the enclosed token expires.
      * This makes sure we don't run into race conditions where the cookie is still there but
-     * expires while be process it.
+     * expires while we process it.
      */
     private static final long REFRESH_TOKEN_EXPIRATION_WINDOW_SECS = 3L;
 
     private final Logger log = LoggerFactory.getLogger(OAuth2CookieHelper.class);
+
+    private JHipsterProperties jHipsterProperties;
+
     /**
      * Used to parse JWT claims.
      */
     private JsonParser jsonParser = JsonParserFactory.getJsonParser();
+
+    public OAuth2CookieHelper(JHipsterProperties jHipsterProperties) {
+        this.jHipsterProperties = jHipsterProperties;
+    }
 
     public static Cookie getAccessTokenCookie(HttpServletRequest request) {
         return getCookie(request, ACCESS_TOKEN_COOKIE);
     }
 
     public static Cookie getRefreshTokenCookie(HttpServletRequest request) {
-        Cookie refreshTokenCookie = getCookie(request, SESSION_REFRESH_TOKEN_COOKIE);
-        if (refreshTokenCookie == null) {
-            refreshTokenCookie = getCookie(request, PERSISTENT_REFRESH_TOKEN_COOKIE);
-        }
-        return refreshTokenCookie;
+        return getCookie(request, REFRESH_TOKEN_COOKIE);
     }
+
 
     /**
      * Get a cookie by name from the given servlet request.
@@ -107,16 +106,6 @@ public class OAuth2CookieHelper {
     }
 
     /**
-     * Returns true if the refresh token cookie was set with remember me checked.
-     *
-     * @param refreshTokenCookie the cookie we investigate.
-     * @return true, if it was set persistently (i.e. for "remember me").
-     */
-    public static boolean isRememberMe(Cookie refreshTokenCookie) {
-        return PERSISTENT_REFRESH_TOKEN_COOKIE.equals(refreshTokenCookie.getName());
-    }
-
-    /**
      * Create cookies using the provided values.
      *
      * @param request     the request we are handling.
@@ -133,24 +122,105 @@ public class OAuth2CookieHelper {
         log.debug("created access token cookie '{}'", accessTokenCookie.getName());
 
         OAuth2RefreshToken refreshToken = accessToken.getRefreshToken();
-        Cookie refreshTokenCookie;
-        if (rememberMe) {           //keep token around if rememberMe is true
-            refreshTokenCookie = new Cookie(PERSISTENT_REFRESH_TOKEN_COOKIE, refreshToken.getValue());
-            try {
-                long maxAge = getRemainingDuration(refreshToken.getValue());
-                //let cookie expire a bit earlier than the token to avoid race conditions
-                maxAge -= REFRESH_TOKEN_EXPIRATION_WINDOW_SECS;
-                refreshTokenCookie.setMaxAge((int) maxAge);
-            }
-            catch(InvalidTokenException ex) {
-                log.warn("could not parse remaining duration of refresh token, will set as session cookie only", ex);
-            }
-        } else {
-            refreshTokenCookie = new Cookie(SESSION_REFRESH_TOKEN_COOKIE, refreshToken.getValue());
-        }
+        Cookie refreshTokenCookie = createRefreshTokenCookie(refreshToken, rememberMe);
         setCookieProperties(refreshTokenCookie, request.isSecure(), domain);
         log.debug("created refresh token cookie '{}', age: {}", refreshTokenCookie.getName(), refreshTokenCookie.getMaxAge());
         result.setCookies(accessTokenCookie, refreshTokenCookie);
+    }
+
+    /**
+     * Create a cookie out of the given refresh token.
+     * Refresh token cookies contain the base64 encoded refresh token (a JWT token).
+     * They also contain a hint whether the refresh token was for remember me or not.
+     * If not, then the cookie will be prefixed by the timestamp it was created at followed by a pipe '|'.
+     * This gives us the chance to expire session cookies regardless of the token duration.
+     */
+    private Cookie createRefreshTokenCookie(OAuth2RefreshToken refreshToken, boolean rememberMe) {
+        int maxAge=-1;
+        String value=refreshToken.getValue();
+        if(!rememberMe) {
+            StringBuilder sb = new StringBuilder(value.length() + 11);
+            sb.append(System.currentTimeMillis());
+            sb.append('|');
+            sb.append(value);
+            value=sb.toString();
+        }
+        else {
+            maxAge = (int)getRemainingDuration(refreshToken.getValue());
+            //let cookie expire a bit earlier than the token to avoid race conditions
+            maxAge -= REFRESH_TOKEN_EXPIRATION_WINDOW_SECS;
+        }
+        Cookie refreshTokenCookie = new Cookie(REFRESH_TOKEN_COOKIE, value);
+        refreshTokenCookie.setMaxAge(maxAge);
+        return refreshTokenCookie;
+    }
+
+    /**
+     * Returns true if the refresh token cookie was set with remember me checked.
+     * We can recognize this by a missing creation timestamp in the cookie.
+     *
+     * @param refreshTokenCookie the cookie we investigate.
+     * @return true, if it was set persistently (i.e. for "remember me").
+     */
+    public static boolean isRememberMe(Cookie refreshTokenCookie) {
+        return refreshTokenCookie.getValue().indexOf('|')<0;
+    }
+
+    /**
+     * Extracts the refresh token from the refresh token cookie.
+     * Since we encode additional information into the cookie, this needs to be called to get
+     * hold of the enclosed JWT.
+     *
+     * @param refreshCookie  the cookie we store the value in.
+     * @return the refresh JWT from the cookie.
+     */
+    public static String getRefreshTokenValue(Cookie refreshCookie) {
+        String value=refreshCookie.getValue();
+        int i=value.indexOf('|');
+        if(i>0) {
+            return value.substring(i+1);
+        }
+        return value;
+    }
+
+    /**
+     * Returns the timestamp when the refresh token was created.
+     * Only possible if it was not created with "remember me".
+     *
+     * @param refreshCookie the refresh token cookie.
+     * @return the timestamp when it was created. Will be null if it is
+     * a persistent cookie.
+     */
+    private Long getRefreshTokenCreationTimestamp(Cookie refreshCookie) {
+        String value=refreshCookie.getValue();
+        int i=value.indexOf('|');
+        if(i>0) {
+            return Long.parseLong(value.substring(0,i));
+        }
+        return null;
+    }
+
+    /**Checks if the refresh token session has expired.
+     * Only makes sense for non-persistent cookies, i.e. when remember me was not checked.
+     * The motivation for this is that we want to throw out a user after a while if he's inactive.
+     * We cannot do this via refresh token validity because that one is also used for remember me.
+     *
+     * @param refreshCookie the refresh token cookie to check.
+     * @return true, if the session is expired.
+     */
+    public boolean isSessionExpired(Cookie refreshCookie) {
+        //read non-remember-me session length in secs
+        int validity = jHipsterProperties.getSecurity().getAuthentication().getOauth().getTokenValidityInSeconds();
+        if(validity<=0) {           //no session expiration configured
+            return false;
+        }
+        Long creationTimestamp = getRefreshTokenCreationTimestamp(refreshCookie);
+        if(creationTimestamp==null) {           //remember me was checked, session does not expire
+            return false;
+        }
+        long sessionDuration = System.currentTimeMillis() - creationTimestamp;
+        sessionDuration /= 1000L;                            //convert to secs
+        return sessionDuration > validity;            //session has expired
     }
 
     /**
@@ -203,8 +273,7 @@ public class OAuth2CookieHelper {
     public void clearCookies(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
         String domain = getCookieDomain(httpServletRequest);
         clearCookie(httpServletRequest, httpServletResponse, domain, ACCESS_TOKEN_COOKIE);
-        clearCookie(httpServletRequest, httpServletResponse, domain, SESSION_REFRESH_TOKEN_COOKIE);
-        clearCookie(httpServletRequest, httpServletResponse, domain, PERSISTENT_REFRESH_TOKEN_COOKIE);
+        clearCookie(httpServletRequest, httpServletResponse, domain, REFRESH_TOKEN_COOKIE);
     }
 
     private void clearCookie(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,

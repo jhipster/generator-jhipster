@@ -29,7 +29,12 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
@@ -80,7 +85,7 @@ public class OAuth2AuthenticationServiceTest {
         jHipsterProperties.getSecurity().getClientAuthorization().setAccessTokenUri("http://uaa/oauth/token");
         jHipsterProperties.getSecurity().getClientAuthorization().setClientId("internal");
         jHipsterProperties.getSecurity().getClientAuthorization().setClientSecret("internal");
-        OAuth2CookieHelper cookieHelper = new OAuth2CookieHelper();
+        OAuth2CookieHelper cookieHelper = new OAuth2CookieHelper(jHipsterProperties);
         OAuth2AccessToken accessToken = createAccessToken(ACCESS_TOKEN_VALUE, REFRESH_TOKEN_VALUE);
 
         mockPasswordGrant(accessToken);
@@ -103,7 +108,7 @@ public class OAuth2AuthenticationServiceTest {
     public static MockHttpServletRequest createMockHttpServletRequest() {
         MockHttpServletRequest request = new MockHttpServletRequest(HttpMethod.GET.name(), "http://www.test.com");
         Cookie accessTokenCookie = new Cookie(OAuth2CookieHelper.ACCESS_TOKEN_COOKIE, ACCESS_TOKEN_VALUE);
-        Cookie refreshTokenCookie = new Cookie(OAuth2CookieHelper.SESSION_REFRESH_TOKEN_COOKIE, REFRESH_TOKEN_VALUE);
+        Cookie refreshTokenCookie = new Cookie(OAuth2CookieHelper.REFRESH_TOKEN_COOKIE, REFRESH_TOKEN_VALUE);
         request.setCookies(accessTokenCookie, refreshTokenCookie);
         return request;
     }
@@ -152,9 +157,9 @@ public class OAuth2AuthenticationServiceTest {
         //check that cookies are set correctly
         Cookie accessTokenCookie = response.getCookie(OAuth2CookieHelper.ACCESS_TOKEN_COOKIE);
         Assert.assertEquals(ACCESS_TOKEN_VALUE, accessTokenCookie.getValue());
-        Cookie refreshTokenCookie = response.getCookie(OAuth2CookieHelper.PERSISTENT_REFRESH_TOKEN_COOKIE);
-        Assert.assertEquals(REFRESH_TOKEN_VALUE, refreshTokenCookie.getValue());
-        Assert.assertNull(response.getCookie(OAuth2CookieHelper.SESSION_REFRESH_TOKEN_COOKIE));
+        Cookie refreshTokenCookie = response.getCookie(OAuth2CookieHelper.REFRESH_TOKEN_COOKIE);
+        Assert.assertEquals(REFRESH_TOKEN_VALUE, OAuth2CookieHelper.getRefreshTokenValue(refreshTokenCookie));
+        Assert.assertTrue(OAuth2CookieHelper.isRememberMe(refreshTokenCookie));
     }
 
     @Test
@@ -164,7 +169,7 @@ public class OAuth2AuthenticationServiceTest {
         HttpServletRequest newRequest = refreshTokenFilter.refreshTokensIfExpiring(request, response);
         Cookie newAccessTokenCookie = response.getCookie(OAuth2CookieHelper.ACCESS_TOKEN_COOKIE);
         Assert.assertEquals(NEW_ACCESS_TOKEN_VALUE, newAccessTokenCookie.getValue());
-        Cookie newRefreshTokenCookie = response.getCookie(OAuth2CookieHelper.SESSION_REFRESH_TOKEN_COOKIE);
+        Cookie newRefreshTokenCookie = response.getCookie(OAuth2CookieHelper.REFRESH_TOKEN_COOKIE);
         Assert.assertEquals(NEW_REFRESH_TOKEN_VALUE, newRefreshTokenCookie.getValue());
         Cookie requestAccessTokenCookie = OAuth2CookieHelper.getAccessTokenCookie(newRequest);
         Assert.assertEquals(NEW_ACCESS_TOKEN_VALUE, requestAccessTokenCookie.getValue());
@@ -187,13 +192,13 @@ public class OAuth2AuthenticationServiceTest {
     public void testLogout() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         Cookie accessTokenCookie = new Cookie(OAuth2CookieHelper.ACCESS_TOKEN_COOKIE, ACCESS_TOKEN_VALUE);
-        Cookie refreshTokenCookie = new Cookie(OAuth2CookieHelper.SESSION_REFRESH_TOKEN_COOKIE, REFRESH_TOKEN_VALUE);
+        Cookie refreshTokenCookie = new Cookie(OAuth2CookieHelper.REFRESH_TOKEN_COOKIE, REFRESH_TOKEN_VALUE);
         request.setCookies(accessTokenCookie, refreshTokenCookie);
         MockHttpServletResponse response = new MockHttpServletResponse();
         authenticationService.logout(request, response);
         Cookie newAccessTokenCookie = response.getCookie(OAuth2CookieHelper.ACCESS_TOKEN_COOKIE);
         Assert.assertEquals(0, newAccessTokenCookie.getMaxAge());
-        Cookie newRefreshTokenCookie = response.getCookie(OAuth2CookieHelper.SESSION_REFRESH_TOKEN_COOKIE);
+        Cookie newRefreshTokenCookie = response.getCookie(OAuth2CookieHelper.REFRESH_TOKEN_COOKIE);
         Assert.assertEquals(0, newRefreshTokenCookie.getMaxAge());
     }
 
@@ -203,7 +208,6 @@ public class OAuth2AuthenticationServiceTest {
         HttpServletRequest newRequest = authenticationService.stripTokens(request);
         CookieCollection cookies = new CookieCollection(newRequest.getCookies());
         Assert.assertFalse(cookies.contains(OAuth2CookieHelper.ACCESS_TOKEN_COOKIE));
-        Assert.assertFalse(cookies.contains(OAuth2CookieHelper.PERSISTENT_REFRESH_TOKEN_COOKIE));
-        Assert.assertFalse(cookies.contains(OAuth2CookieHelper.SESSION_REFRESH_TOKEN_COOKIE));
+        Assert.assertFalse(cookies.contains(OAuth2CookieHelper.REFRESH_TOKEN_COOKIE));
     }
 }
