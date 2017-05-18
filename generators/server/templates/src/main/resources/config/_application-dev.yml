@@ -367,6 +367,14 @@ jhipster:
             # edit spring.metrics.export.delay-millis to set report frequency
     <%_ } _%>
 
+<%_ if (applicationType == 'uaa') { _%>
+uaa:
+    key-store:
+      name: keystore.jks
+      password: password
+      alias: selfsigned
+<%_ } _%>
+
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class

@@ -19,7 +19,7 @@
 package <%=packageName%>.config;
 
 import <%=packageName%>.security.AuthoritiesConstants;
-
+import <%=packageName%>.security.UaaJwtAccessTokenConverter;
 import io.github.jhipster.config.JHipsterProperties;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,8 +112,11 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
 
     private final JHipsterProperties jHipsterProperties;
 
-    public UaaConfiguration(JHipsterProperties jHipsterProperties) {
+    private final UaaProperties uaaProperties;
+
+    public UaaConfiguration(JHipsterProperties jHipsterProperties, UaaProperties uaaProperties) {
         this.jHipsterProperties = jHipsterProperties;
+        this.uaaProperties = uaaProperties;
     }
 
     @Override
@@ -162,17 +165,17 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
     }
 
     /**
-     * This bean generates an token enhancer, which manages the exchange between JWT access tokens and Authentication
+     * This bean generates an token enhancer, which manages the exchange between JWT acces tokens and Authentication
      * in both directions.
      *
      * @return an access token converter configured with the authorization server's public/private keys
      */
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
-        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+        JwtAccessTokenConverter converter = new UaaJwtAccessTokenConverter();
         KeyPair keyPair = new KeyStoreKeyFactory(
-             new ClassPathResource("keystore.jks"), "password".toCharArray())
-             .getKeyPair("selfsigned");
+             new ClassPathResource(uaaProperties.getKeyStore().getName()), uaaProperties.getKeyStore().getPassword().toCharArray())
+             .getKeyPair(uaaProperties.getKeyStore().getAlias());
         converter.setKeyPair(keyPair);
         return converter;
     }
