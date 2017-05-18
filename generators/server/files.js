@@ -224,6 +224,8 @@ function writeFiles() {
             if (this.applicationType === 'uaa') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/_UaaWebSecurityConfiguration.java`, `${javaDir}config/UaaWebSecurityConfiguration.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/_UaaConfiguration.java`, `${javaDir}config/UaaConfiguration.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/config/_UaaProperties.java`, `${javaDir}config/UaaProperties.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/_UaaJwtAccessTokenConverter.java`, `${javaDir}security/UaaJwtAccessTokenConverter.java`);
             } else {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/_SecurityConfiguration.java`, `${javaDir}config/SecurityConfiguration.java`);
             }
