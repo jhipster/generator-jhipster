@@ -611,6 +611,10 @@ module.exports = EntityGenerator.extend({
                     if (!relationship.otherEntityTableName) {
                         relationship.otherEntityTableName = this.getTableName(otherEntityName);
                     }
+                    if (jhiCore.isReservedTableName(relationship.otherEntityTableName, this.prodDatabaseType)) {
+                        const otherEntityTableName = relationship.otherEntityTableName;
+                        relationship.otherEntityTableName = `jhi_${otherEntityTableName}`;
+                    }
                 }
 
                 if (_.isUndefined(relationship.otherEntityNamePlural)) {
