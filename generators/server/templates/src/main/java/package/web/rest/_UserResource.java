@@ -188,6 +188,7 @@ public class UserResource {
      * @return a string list of the all of the roles
      */
     @GetMapping("/users/authorities")
+    @Timed
     @Secured(AuthoritiesConstants.ADMIN)
     public List<String> getAuthorities() {
         return userService.getAuthorities();
