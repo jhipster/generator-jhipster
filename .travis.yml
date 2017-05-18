@@ -69,7 +69,7 @@ before_install:
   - yarn global add yo bower gulp-cli
 install:
   - cd "$TRAVIS_BUILD_DIR"/
-  - yarn install --ignore-engines
+  - yarn install
   - yarn link
   - yarn run test
   - $JHIPSTER_SCRIPTS/01-generate-entities.sh
