@@ -50,11 +50,13 @@ import org.springframework.web.bind.annotation.*;
 <% if (validation) { %>
 import javax.validation.Valid;<% } %>
 import java.net.URI;
-import java.net.URISyntaxException;<% if (dto == 'mapstruct') { %>
+import java.net.URISyntaxException;
+<%_ const viaService = service != 'no';
+    if (pagination === 'no' && dto === 'mapstruct' && !viaService && fieldsContainNoOwnerOneToOne === true) { _%>
 import java.util.LinkedList;<% } %>
 import java.util.List;
 import java.util.Optional;<% if (databaseType == 'cassandra') { %>
-import java.util.UUID;<% } %><% if (searchEngine == 'elasticsearch' || dto == 'mapstruct' || fieldsContainNoOwnerOneToOne == true) { %>
+import java.util.UUID;<% } %><% if (!viaService && (searchEngine == 'elasticsearch' || fieldsContainNoOwnerOneToOne == true)) { %>
 import java.util.stream.Collectors;<% } %><% if (searchEngine == 'elasticsearch' || fieldsContainNoOwnerOneToOne == true) { %>
 import java.util.stream.StreamSupport;<% } %><% if (searchEngine == 'elasticsearch') { %>
 
@@ -70,7 +72,7 @@ public class <%= entityClass %>Resource {
     private final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
 
     private static final String ENTITY_NAME = "<%= entityInstance %>";
-    <% const viaService = service != 'no';
+    <%
     const instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
     const instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance; -%>
     <%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource'}); -%>
