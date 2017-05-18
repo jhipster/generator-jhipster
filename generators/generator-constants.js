@@ -37,9 +37,9 @@ const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v2.0.1';
 const DOCKER_JHIPSTER_ZIPKIN = 'jhipster/jhipster-zipkin:v2.0.1';
 const DOCKER_CONSUL = 'consul:0.8.3';
 const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.2.2';
-const DOCKER_PROMETHEUS = 'prom/prometheus:v1.4.1';
-const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.5.1';
-const DOCKER_GRAFANA = 'grafana/grafana:4.0.2';
+const DOCKER_PROMETHEUS = 'prom/prometheus:v1.6.3';
+const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.6.2';
+const DOCKER_GRAFANA = 'grafana/grafana:4.3.2';
 const DOCKER_JENKINS = 'jenkins:latest';
 
 // version of Node, Yarn, NPM
