@@ -623,8 +623,8 @@ _%>
     }
         <%_ if (databaseType == 'sql') { _%>
 
-    @Test<% if (databaseType == 'sql') { %>
-    @Transactional<% } %>
+    @Test
+    @Transactional
     public void testEntityFromId() {
         assertThat(<%= entityInstance %>Mapper.fromId(42L).getId()).isEqualTo(42);
         assertThat(<%= entityInstance %>Mapper.fromId(null)).isNull();
