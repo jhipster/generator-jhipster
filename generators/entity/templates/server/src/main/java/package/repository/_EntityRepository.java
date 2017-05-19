@@ -26,8 +26,15 @@ import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;<% } %><% if (databaseType=='sql') { %>
 import org.springframework.data.jpa.repository.*;<% if (fieldsContainOwnerManyToMany==true) { %>
 import org.springframework.data.repository.query.Param;<% } %>
-
-import java.util.List;<% } %><% if (databaseType=='mongodb') { %>
+<%_ let importList = fieldsContainOwnerManyToMany;
+    for (r of relationships) {
+        if (r.relationshipType == 'many-to-one' && r.otherEntityName == 'user') {
+            importList = true;
+        }
+    }
+    if (importList == true) {
+_%>
+import java.util.List;<% }} %><% if (databaseType=='mongodb') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;<% } %><% if (databaseType == 'cassandra') { %>
 
 import javax.validation.ConstraintViolation;
