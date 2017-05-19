@@ -34,6 +34,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.DefaultOAuth2RefreshToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -168,7 +169,7 @@ public class OAuth2AuthenticationServiceTest {
     }
 
     /**
-     * If no authorization cookie is found, then we cannot contact UAA.
+     * If no refresh token is found and the access token has expired, then expect an exception.
      */
     @Test
     public void testRefreshGrantNoRefreshToken() {
@@ -176,8 +177,8 @@ public class OAuth2AuthenticationServiceTest {
         Cookie accessTokenCookie = new Cookie(OAuth2CookieHelper.ACCESS_TOKEN_COOKIE, ACCESS_TOKEN_VALUE);
         request.setCookies(accessTokenCookie);
         MockHttpServletResponse response = new MockHttpServletResponse();
-        HttpServletRequest newRequest = refreshTokenFilter.refreshTokensIfExpiring(request, response);
-        //TODO check that newRequest does not contain an access token anymore
+        expectedException.expect(InvalidTokenException.class);
+        refreshTokenFilter.refreshTokensIfExpiring(request, response);
     }
 
     @Test
