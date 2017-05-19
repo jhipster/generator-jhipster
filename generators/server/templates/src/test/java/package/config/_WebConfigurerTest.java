@@ -42,6 +42,7 @@ import io.github.jhipster.web.filter.CachingHttpHeadersFilter;
 import io.undertow.Undertow;
 import io.undertow.Undertow.Builder;
 import io.undertow.UndertowOptions;
+import org.apache.commons.io.FilenameUtils;
 <%_ if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
 import org.h2.server.web.WebServlet;
 <%_ } _%>
@@ -160,7 +161,7 @@ public class WebConfigurerTest {
         <%_ if (!skipClient) { _%>
         if (container.getDocumentRoot() != null) {
             //make sure test doesn't fail on Windows due to backslash
-            assertThat(container.getDocumentRoot().getPath().replace("\\", "/")).isEqualTo("target/www");
+            assertThat(FilenameUtils.normalize(container.getDocumentRoot().getPath(), true)).isEqualTo("target/www");
         }
         <%_ } _%>
 
@@ -179,6 +180,7 @@ public class WebConfigurerTest {
         assertThat(container.getMimeMappings().get("html")).isEqualTo("text/html;charset=utf-8");
         assertThat(container.getMimeMappings().get("json")).isEqualTo("text/html;charset=utf-8");
         assertThat(container.getDocumentRoot().getPath()).isEqualTo("src/main/webapp");
+        assertThat(FilenameUtils.normalize(container.getDocumentRoot().getPath(), true)).isEqualTo("src/main/webapp");
 
         Builder builder = Undertow.builder();
         container.getBuilderCustomizers().forEach(c -> c.customize(builder));

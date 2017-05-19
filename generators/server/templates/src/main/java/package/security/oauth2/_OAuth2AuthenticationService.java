@@ -109,10 +109,11 @@ public class OAuth2AuthenticationService {
      */
     public HttpServletRequest refreshToken(HttpServletRequest request, HttpServletResponse response, Cookie
         refreshCookie) {
-        if (cookieHelper.isSessionExpired(refreshCookie)) {          //session has expired, don't refresh
+        //check if non-remember-me session has expired
+        if (cookieHelper.isSessionExpired(refreshCookie)) {
             log.info("sesssion has expired due to inactivity");
-            cookieHelper.clearCookies(request, response);
-            return stripTokens(request);
+            logout(request, response);       //logout to clear cookies in browser
+            return stripTokens(request);            //don't include cookies downstream
         }
         OAuth2Cookies cookies = getCachedCookies(refreshCookie.getValue());
         synchronized (cookies) {
@@ -166,14 +167,14 @@ public class OAuth2AuthenticationService {
     }
 
     /**
-     * Strips tokens preventing them from being used further down the chain.
+     * Strips token cookies preventing them from being used further down the chain.
      * For example, the OAuth2 client won't checked them and they won't be relayed to other services.
      *
      * @param httpServletRequest the incoming request.
      * @return the request to replace it with which has the tokens stripped.
      */
     public HttpServletRequest stripTokens(HttpServletRequest httpServletRequest) {
-        Cookie[] cookies = cookieHelper.stripTokens(httpServletRequest.getCookies());
+        Cookie[] cookies = cookieHelper.stripCookies(httpServletRequest.getCookies());
         return new CookiesHttpServletRequestWrapper(httpServletRequest, cookies);
     }
 }

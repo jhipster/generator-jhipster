@@ -75,6 +75,7 @@ public class RefreshTokenFilter extends GenericFilterBean {
             httpServletRequest = refreshTokensIfExpiring(httpServletRequest, httpServletResponse);
         } catch (ClientAuthenticationException ex) {
             log.warn("Security exception: could not refresh tokens", ex);
+            httpServletRequest = authenticationService.stripTokens(httpServletRequest);
         }
         filterChain.doFilter(httpServletRequest, servletResponse);
     }
@@ -107,7 +108,7 @@ public class RefreshTokenFilter extends GenericFilterBean {
                 log.warn("access token found, but no refresh token, stripping them all");
                 OAuth2AccessToken token = tokenStore.readAccessToken(accessTokenCookie.getValue());
                 if (token.isExpired()) {
-                    newHttpServletRequest = authenticationService.stripTokens(httpServletRequest);
+                    throw new InvalidTokenException("access token has expired, but there's no refresh token");
                 }
             }
         }
