@@ -90,7 +90,7 @@ public class <%= entityClass %>Resource {
         log.debug("REST request to save <%= entityClass %> : {}", <%= instanceName %>);
         if (<%= instanceName %>.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new <%= entityInstance %> cannot already have an ID")).body(null);
-        }<%- include('../../common/save_template', {viaService: viaService}); -%>
+        }<%- include('../../common/save_template', {viaService: viaService, returnDirectly: false}); -%>
         return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -111,7 +111,7 @@ public class <%= entityClass %>Resource {
         log.debug("REST request to update <%= entityClass %> : {}", <%= instanceName %>);
         if (<%= instanceName %>.getId() == null) {
             return create<%= entityClass %>(<%= instanceName %>);
-        }<%- include('../../common/save_template', {viaService: viaService}); -%>
+        }<%- include('../../common/save_template', {viaService: viaService, returnDirectly: false}); -%>
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, <%= instanceName %>.getId().toString()))
             .body(result);
@@ -136,7 +136,7 @@ public class <%= entityClass %>Resource {
     @GetMapping("/<%= entityApiUrl %>/{id}")
     @Timed
     public ResponseEntity<<%= instanceType %>> get<%= entityClass %>(@PathVariable <%= pkType %> id) {
-        log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {viaService: viaService}); -%>
+        log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {viaService: viaService, returnDirectly:false}); -%>
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(<%= instanceName %>));
     }
 

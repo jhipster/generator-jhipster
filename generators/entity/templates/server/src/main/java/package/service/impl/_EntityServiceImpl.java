@@ -69,8 +69,7 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
     @Override
     <%_ } _%>
     public <%= instanceType %> save(<%= instanceType %> <%= instanceName %>) {
-        log.debug("Request to save <%= entityClass %> : {}", <%= instanceName %>);<%- include('../../common/save_template', {viaService: viaService}); -%>
-        return result;
+        log.debug("Request to save <%= entityClass %> : {}", <%= instanceName %>);<%- include('../../common/save_template', {viaService: viaService, returnDirectly: true}); -%>
     }
 
     /**
@@ -88,17 +87,12 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
     public <% if (pagination != 'no') { %>Page<<%= instanceType %><% } else { %>List<<%= instanceType %><% } %>> findAll(<% if (pagination != 'no') { %>Pageable pageable<% } %>) {
         log.debug("Request to get all <%= entityClassPlural %>");
         <%_ if (pagination == 'no') { _%>
-        List<<%= instanceType %>> result = <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>()<% if (dto == 'mapstruct') { %>.stream()
+        return <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>()<% if (dto == 'mapstruct') { %>.stream()
             .map(<%= entityToDtoReference %>)
             .collect(Collectors.toCollection(LinkedList::new))<% } %>;
-
-        return result;
         <%_ } else { _%>
-        Page<<%= entityClass %>> result = <%= entityInstance %>Repository.findAll(pageable);
-            <%_ if (dto == 'mapstruct') { _%>
-        return result.map(<%= entityInstance %> -> <%= entityToDto %>(<%= entityInstance%>));
-            <%_ } else { _%>
-        return result;
+        return <%= entityInstance %>Repository.findAll(pageable)<% if (dto !== 'mapstruct') { %>;<% } else { %>
+            .map(<%= entityInstance %> -> <%= entityToDto %>(<%= entityInstance%>));
         <%_ } } _%>
     }
 <%- include('../../common/get_filtered_template'); -%>
@@ -115,8 +109,7 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
     @Transactional(readOnly = true)
     <%_ } _%>
     public <%= instanceType %> findOne(<%= pkType %> id) {
-        log.debug("Request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {viaService: viaService}); -%>
-        return <%= instanceName %>;
+        log.debug("Request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {viaService: viaService, returnDirectly:true}); -%>
     }
 
     /**
