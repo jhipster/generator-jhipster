@@ -29,7 +29,7 @@ const enum <%= fields[idx].fieldType %> {<%
 <%_ } } _%>
 <%_ if (dto == "no") {
        for (const rel of differentRelationships) { _%>
-import { <%= rel.otherEntityNameCapitalized %> } from '../<%= rel.otherEntityModulePath %>';
+import { <%= rel.otherEntityAngularName %> } from '../<%= rel.otherEntityModulePath %>';
 <%_ }
 }
 const variables = {};
@@ -63,7 +63,7 @@ for (idx in relationships) {
     let fieldType;
     let fieldName;
     if (dto == "no") {
-        fieldType = relationships[idx].otherEntityNameCapitalized;
+        fieldType = relationships[idx].otherEntityAngularName;
         fieldName = relationships[idx].relationshipFieldName;
     } else {
         fieldType = tsKeyType;
