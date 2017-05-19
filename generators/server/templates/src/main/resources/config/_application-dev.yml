@@ -316,14 +316,6 @@ jhipster:
                 # Negative values disable session inactivity expiration.
                 token-validity-in-seconds: 1800
     <%_ } _%>
-    <%_ if (applicationType == 'uaa') { _%>
-        authentication:
-            jwt:
-                # Access Token is valid for 5 mins
-                token-validity-in-seconds: 300
-                # Refresh Token is valid for 7 days in case of remember me
-                token-validity-in-seconds-for-remember-me: 604800
-    <%_ } _%>
     <%_ if (authenticationType == 'oauth2' && databaseType != 'sql') { _%>
     security:
         authentication:
@@ -370,9 +362,14 @@ jhipster:
 <%_ if (applicationType == 'uaa') { _%>
 uaa:
     key-store:
-      name: keystore.jks
-      password: password
-      alias: selfsigned
+        name: keystore.jks
+        password: password
+        alias: selfsigned
+    token-validity:
+        # Access Token is valid for 5 mins
+        access-token-validity-in-seconds: 300
+        # Refresh Token is valid for 7 days
+        refresh-token-validity-in-seconds-for-remember-me: 604800
 <%_ } _%>
 
 # ===================================================================

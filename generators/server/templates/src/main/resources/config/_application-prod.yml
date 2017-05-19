@@ -278,14 +278,6 @@ jhipster:
             client-id: internal
             client-secret: internal
     <%_ } _%>
-    <%_ if (applicationType == 'uaa') { _%>
-        authentication:
-            jwt:
-                # Access Token is valid for 5 mins
-                token-validity-in-seconds: 300
-                # Refresh Token is valid for 7 days in case of remember me
-                token-validity-in-seconds-for-remember-me: 604800
-    <%_ } _%>
     <%_ if (authenticationType == 'oauth2' && databaseType != 'sql') { _%>
     security:
         authentication:
@@ -334,9 +326,12 @@ uaa:
     #be sure to to change to a different keystore in production!
     #create one using: keytool -genkeypair -keystore keystore_prod.jks -storepass <secretpasswd> -alias <myalias>
     key-store:
-      name: keystore.jks
-      password: password
-      alias: selfsigned
+        name: keystore.jks
+        password: password
+        alias: selfsigned
+    token-validity:
+        access-token-validity-in-seconds: 300
+        refresh-token-validity-in-seconds-for-remember-me: 604800
 <%_ } _%>
 
 # ===================================================================

@@ -19,7 +19,7 @@
 package <%=packageName%>.config;
 
 import <%=packageName%>.security.AuthoritiesConstants;
-import <%=packageName%>.security.UaaJwtAccessTokenConverter;
+import <%=packageName%>.security.IatTokenEnhancer;
 import io.github.jhipster.config.JHipsterProperties;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +38,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
@@ -47,6 +48,7 @@ import org.springframework.web.filter.CorsFilter;
 
 import javax.servlet.http.HttpServletResponse;
 import java.security.KeyPair;
+import java.util.Arrays;
 
 @Configuration
 @EnableAuthorizationServer
@@ -121,9 +123,9 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        int accessTokenValidity = (int)jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds();
+        int accessTokenValidity = uaaProperties.getTokenValidity().getAccessTokenValidityInSeconds();
         accessTokenValidity = Math.max(accessTokenValidity, MIN_ACCESS_TOKEN_VALDITIY_SECS);
-        int refreshTokenValidity = (int)jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSecondsForRememberMe();
+        int refreshTokenValidity = uaaProperties.getTokenValidity().getRefreshTokenValidityInSecondsForRememberMe();
         refreshTokenValidity = Math.max(refreshTokenValidity, accessTokenValidity);
         /*
         For a better client design, this should be done by a ClientDetailsService (similar to UserDetailsService).
@@ -147,8 +149,12 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints.authenticationManager(authenticationManager).accessTokenConverter(
-                jwtAccessTokenConverter());
+        TokenEnhancerChain tokenEnhancerChain=new TokenEnhancerChain();
+        tokenEnhancerChain.setTokenEnhancers(Arrays.asList(new IatTokenEnhancer(), jwtAccessTokenConverter()));
+        endpoints
+            .authenticationManager(authenticationManager)
+            .tokenStore(tokenStore())
+            .tokenEnhancer(tokenEnhancerChain);
     }
 
     @Autowired
@@ -172,7 +178,7 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
      */
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
-        JwtAccessTokenConverter converter = new UaaJwtAccessTokenConverter();
+        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
         KeyPair keyPair = new KeyStoreKeyFactory(
              new ClassPathResource(uaaProperties.getKeyStore().getName()), uaaProperties.getKeyStore().getPassword().toCharArray())
              .getKeyPair(uaaProperties.getKeyStore().getAlias());

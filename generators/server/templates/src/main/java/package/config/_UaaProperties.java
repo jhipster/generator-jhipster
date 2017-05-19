@@ -33,6 +33,12 @@ public class UaaProperties {
         return keyStore;
     }
 
+    private TokenValidity tokenValidity = new TokenValidity();
+
+    public TokenValidity getTokenValidity() {
+        return tokenValidity;
+    }
+
     /**
      * Keystore configuration for signing and verifying JWT tokens.
      */
@@ -66,6 +72,29 @@ public class UaaProperties {
 
         public void setAlias(String alias) {
             this.alias = alias;
+        }
+    }
+
+    public static class TokenValidity {
+        //validity of the short-lived access token in secs (min: 60), don't make it too long
+        private int accessTokenValidityInSeconds = 5 * 60;
+        //validity of the refresh token in secs (defines the duration of "remember me")
+        private int refreshTokenValidityInSecondsForRememberMe = 7 * 24 * 60 * 60;
+
+        public int getAccessTokenValidityInSeconds() {
+            return accessTokenValidityInSeconds;
+        }
+
+        public void setAccessTokenValidityInSeconds(int accessTokenValidityInSeconds) {
+            this.accessTokenValidityInSeconds = accessTokenValidityInSeconds;
+        }
+
+        public int getRefreshTokenValidityInSecondsForRememberMe() {
+            return refreshTokenValidityInSecondsForRememberMe;
+        }
+
+        public void setRefreshTokenValidityInSecondsForRememberMe(int refreshTokenValidityInSecondsForRememberMe) {
+            this.refreshTokenValidityInSecondsForRememberMe = refreshTokenValidityInSecondsForRememberMe;
         }
     }
 }
