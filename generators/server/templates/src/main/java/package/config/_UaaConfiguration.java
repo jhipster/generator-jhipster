@@ -123,15 +123,16 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        int accessTokenValidity = uaaProperties.getTokenValidity().getAccessTokenValidityInSeconds();
+        int accessTokenValidity = uaaProperties.getWebClientConfiguration().getAccessTokenValidityInSeconds();
         accessTokenValidity = Math.max(accessTokenValidity, MIN_ACCESS_TOKEN_VALDITIY_SECS);
-        int refreshTokenValidity = uaaProperties.getTokenValidity().getRefreshTokenValidityInSecondsForRememberMe();
+        int refreshTokenValidity = uaaProperties.getWebClientConfiguration().getRefreshTokenValidityInSecondsForRememberMe();
         refreshTokenValidity = Math.max(refreshTokenValidity, accessTokenValidity);
         /*
         For a better client design, this should be done by a ClientDetailsService (similar to UserDetailsService).
          */
         clients.inMemory()
-            .withClient("web_app")
+            .withClient(uaaProperties.getWebClientConfiguration().getClientId())
+            .secret(uaaProperties.getWebClientConfiguration().getSecret())
             .scopes("openid")
             .autoApprove(true)
             .authorizedGrantTypes("implicit","refresh_token", "password", "authorization_code")
@@ -142,9 +143,9 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
             .secret(jHipsterProperties.getSecurity().getClientAuthorization().getClientSecret())
             .scopes("web-app")
             .autoApprove(true)
-            .authorizedGrantTypes("client_credentials", "password", "refresh_token")
-            .accessTokenValiditySeconds(accessTokenValidity)
-            .refreshTokenValiditySeconds(refreshTokenValidity);
+            .authorizedGrantTypes("client_credentials")
+            .accessTokenValiditySeconds((int) jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds())
+            .refreshTokenValiditySeconds((int) jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSecondsForRememberMe());
     }
 
     @Override

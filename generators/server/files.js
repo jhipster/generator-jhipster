@@ -319,6 +319,7 @@ function writeFiles() {
 
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_MicroserviceSecurityConfiguration.java`, `${javaDir}config/MicroserviceSecurityConfiguration.java`);
             if (this.authenticationType === 'uaa') {
+                this.template(`${SERVER_MAIN_SRC_DIR}package/config/oauth2/_OAuth2Properties.java`, `${javaDir}config/oauth2/OAuth2Properties.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/oauth2/_OAuth2JwtAccessTokenConverter.java`, `${javaDir}config/oauth2/OAuth2JwtAccessTokenConverter.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_OAuth2SignatureVerifierClient.java`, `${javaDir}security/oauth2/OAuth2SignatureVerifierClient.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_UaaSignatureVerifierClient.java`, `${javaDir}security/oauth2/UaaSignatureVerifierClient.java`);
