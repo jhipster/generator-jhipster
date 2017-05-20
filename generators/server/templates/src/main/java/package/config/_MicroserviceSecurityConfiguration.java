@@ -91,6 +91,7 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
 <%_ } _%>
 <%_ if(authenticationType == 'uaa') { _%>
 import <%=packageName%>.config.oauth2.OAuth2JwtAccessTokenConverter;
+import <%=packageName%>.config.oauth2.OAuth2Properties;
 import <%=packageName%>.security.oauth2.OAuth2SignatureVerifierClient;
 import <%=packageName%>.security.AuthoritiesConstants;
 
@@ -115,6 +116,12 @@ import org.springframework.web.client.RestTemplate;
 @EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerAdapter {
+    private final OAuth2Properties oAuth2Properties;
+
+    public MicroserviceSecurityConfiguration(OAuth2Properties oAuth2Properties) {
+        this.oAuth2Properties = oAuth2Properties;
+    }
+
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
@@ -142,7 +149,7 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
 
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter(OAuth2SignatureVerifierClient signatureVerifierClient) {
-        return new OAuth2JwtAccessTokenConverter(signatureVerifierClient);
+        return new OAuth2JwtAccessTokenConverter(oAuth2Properties, signatureVerifierClient);
     }
 
     @Bean

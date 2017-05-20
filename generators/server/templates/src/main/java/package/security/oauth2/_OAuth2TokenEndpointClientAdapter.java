@@ -18,6 +18,7 @@
 -%>
 package <%=packageName%>.security.oauth2;
 
+import com.mycompany.myapp.config.oauth2.OAuth2Properties;
 import io.github.jhipster.config.JHipsterProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,10 +42,12 @@ public abstract class OAuth2TokenEndpointClientAdapter implements OAuth2TokenEnd
     private final Logger log = LoggerFactory.getLogger(OAuth2TokenEndpointClientAdapter.class);
     protected final RestTemplate restTemplate;
     protected final JHipsterProperties jHipsterProperties;
+    protected final OAuth2Properties oAuth2Properties;
 
-    public OAuth2TokenEndpointClientAdapter(RestTemplate restTemplate, JHipsterProperties jHipsterProperties) {
+    public OAuth2TokenEndpointClientAdapter(RestTemplate restTemplate, JHipsterProperties jHipsterProperties, OAuth2Properties oAuth2Properties) {
         this.restTemplate = restTemplate;
         this.jHipsterProperties = jHipsterProperties;
+        this.oAuth2Properties = oAuth2Properties;
     }
 
     /**
@@ -104,7 +107,7 @@ public abstract class OAuth2TokenEndpointClientAdapter implements OAuth2TokenEnd
     protected abstract void addAuthentication(HttpHeaders reqHeaders, MultiValueMap<String, String> formParams);
 
     protected String getClientSecret() {
-        String clientSecret = jHipsterProperties.getSecurity().getClientAuthorization().getClientSecret();
+        String clientSecret = oAuth2Properties.getWebClientConfiguration().getSecret();
         if(clientSecret == null) {
             throw new InvalidClientException("no client-secret configured in application properties");
         }
@@ -112,7 +115,7 @@ public abstract class OAuth2TokenEndpointClientAdapter implements OAuth2TokenEnd
     }
 
     protected String getClientId() {
-        String clientId = jHipsterProperties.getSecurity().getClientAuthorization().getClientId();
+        String clientId = oAuth2Properties.getWebClientConfiguration().getClientId();
         if(clientId == null) {
             throw new InvalidClientException("no client-id configured in application properties");
         }

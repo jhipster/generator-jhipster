@@ -18,7 +18,7 @@
 -%>
 package <%=packageName%>.security.oauth2;
 
-import io.github.jhipster.config.JHipsterProperties;
+import com.mycompany.myapp.config.oauth2.OAuth2Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -41,12 +41,12 @@ import java.util.Map;
 public class UaaSignatureVerifierClient implements OAuth2SignatureVerifierClient {
     private final Logger log = LoggerFactory.getLogger(UaaSignatureVerifierClient.class);
     private final RestTemplate restTemplate;
-    protected final JHipsterProperties jHipsterProperties;
+    protected final OAuth2Properties oAuth2Properties;
 
     public UaaSignatureVerifierClient(DiscoveryClient discoveryClient, @Qualifier("loadBalancedRestTemplate") RestTemplate restTemplate,
-                                  JHipsterProperties jHipsterProperties) {
+                                  OAuth2Properties oAuth2Properties) {
         this.restTemplate = restTemplate;
-        this.jHipsterProperties = jHipsterProperties;
+        this.oAuth2Properties = oAuth2Properties;
         // Load available UAA servers
         discoveryClient.getServices();
     }
@@ -72,11 +72,10 @@ public class UaaSignatureVerifierClient implements OAuth2SignatureVerifierClient
 
     /** Returns the configured endpoint URI to retrieve the public key. */
     private String getPublicKeyEndpoint() {
-        //TODO move to JHipsterProperties as a separate property
-        String tokenEndpointUrl = jHipsterProperties.getSecurity().getClientAuthorization().getAccessTokenUri();
+        String tokenEndpointUrl = oAuth2Properties.getSignatureVerification().getPublicKeyEndpointUri();
         if (tokenEndpointUrl == null) {
             throw new InvalidClientException("no token endpoint configured in application properties");
         }
-        return tokenEndpointUrl + "_key";
+        return tokenEndpointUrl;
     }
 }

@@ -31,28 +31,17 @@ import java.util.Map;
  * Improved JwtAccessTokenConverter that can handle lazy fetching of public verifier keys.
  */
 public class OAuth2JwtAccessTokenConverter extends JwtAccessTokenConverter {
-    /**
-     * Maximum refresh rate for public keys in ms.
-     * We won't fetch new public keys any faster than that to avoid spamming UAA in case
-     * we receive a lot of "illegal" tokens.
-     * TODO: may want to externalize to JHipsterProperties
-     */
-    private static final long MAX_PUBLIC_KEY_REFRESH_RATE = 10 * 1000L;
-    /**
-     * Maximum TTL for the public key in ms.
-     * The public key will be fetched again from UAA if it gets older than that.
-     * That way, we make sure that we get the newest keys always in case they are updated there.
-     */
-    private static final long PUBLIC_KEY_TTL = 24 * 60 * 60 * 1000L;
     private final Logger log = LoggerFactory.getLogger(OAuth2JwtAccessTokenConverter.class);
 
+    private final OAuth2Properties oAuth2Properties;
     private final OAuth2SignatureVerifierClient signatureVerifierClient;
     /**
      * When did we last fetch the public key?
      */
     private long lastKeyFetchTimestamp;
 
-    public OAuth2JwtAccessTokenConverter(OAuth2SignatureVerifierClient signatureVerifierClient) {
+    public OAuth2JwtAccessTokenConverter(OAuth2Properties oAuth2Properties, OAuth2SignatureVerifierClient signatureVerifierClient) {
+        this.oAuth2Properties = oAuth2Properties;
         this.signatureVerifierClient = signatureVerifierClient;
         tryCreateSignatureVerifier();
     }
@@ -70,7 +59,8 @@ public class OAuth2JwtAccessTokenConverter extends JwtAccessTokenConverter {
     protected Map<String, Object> decode(String token) {
         try {
             //check if our public key and thus SignatureVerifier have expired
-            if (System.currentTimeMillis() - lastKeyFetchTimestamp > PUBLIC_KEY_TTL) {
+            long ttl = oAuth2Properties.getSignatureVerification().getTtl();
+            if (ttl > 0 && System.currentTimeMillis() - lastKeyFetchTimestamp > ttl) {
                 throw new InvalidTokenException("public key expired");
             }
             return super.decode(token);
@@ -89,7 +79,7 @@ public class OAuth2JwtAccessTokenConverter extends JwtAccessTokenConverter {
      */
     private boolean tryCreateSignatureVerifier() {
         long t = System.currentTimeMillis();
-        if (t - lastKeyFetchTimestamp < MAX_PUBLIC_KEY_REFRESH_RATE) {
+        if (t - lastKeyFetchTimestamp < oAuth2Properties.getSignatureVerification().getPublicKeyRefreshRateLimit()) {
             return false;
         }
         try {

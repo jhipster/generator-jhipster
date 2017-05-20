@@ -22,7 +22,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
- * Properties for UAA.
+ * Properties for UAA-based OAuth2 security.
  */
 @Component
 @ConfigurationProperties(prefix = "uaa", ignoreUnknownFields = false)
@@ -33,10 +33,10 @@ public class UaaProperties {
         return keyStore;
     }
 
-    private TokenValidity tokenValidity = new TokenValidity();
+    private WebClientConfiguration webClientConfiguration = new WebClientConfiguration();
 
-    public TokenValidity getTokenValidity() {
-        return tokenValidity;
+    public WebClientConfiguration getWebClientConfiguration() {
+        return webClientConfiguration;
     }
 
     /**
@@ -75,11 +75,13 @@ public class UaaProperties {
         }
     }
 
-    public static class TokenValidity {
+    public static class WebClientConfiguration {
         //validity of the short-lived access token in secs (min: 60), don't make it too long
         private int accessTokenValidityInSeconds = 5 * 60;
         //validity of the refresh token in secs (defines the duration of "remember me")
         private int refreshTokenValidityInSecondsForRememberMe = 7 * 24 * 60 * 60;
+        private String clientId = "web_app";
+        private String secret = "changeit";
 
         public int getAccessTokenValidityInSeconds() {
             return accessTokenValidityInSeconds;
@@ -95,6 +97,22 @@ public class UaaProperties {
 
         public void setRefreshTokenValidityInSecondsForRememberMe(int refreshTokenValidityInSecondsForRememberMe) {
             this.refreshTokenValidityInSecondsForRememberMe = refreshTokenValidityInSecondsForRememberMe;
+        }
+
+        public String getClientId() {
+            return clientId;
+        }
+
+        public void setClientId(String clientId) {
+            this.clientId = clientId;
+        }
+
+        public String getSecret() {
+            return secret;
+        }
+
+        public void setSecret(String secret) {
+            this.secret = secret;
         }
     }
 }

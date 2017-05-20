@@ -18,6 +18,7 @@
 -%>
 package <%=packageName%>.security.oauth2;
 
+import <%=packageName%>.config.oauth2.OAuth2Properties;
 import io.github.jhipster.config.JHipsterProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,8 +39,8 @@ public class UaaTokenEndpointClient extends OAuth2TokenEndpointClientAdapter imp
     private final Logger log = LoggerFactory.getLogger(UaaTokenEndpointClient.class);
 
     public UaaTokenEndpointClient(@Qualifier("loadBalancedRestTemplate") RestTemplate restTemplate,
-                                  JHipsterProperties jHipsterProperties) {
-        super(restTemplate, jHipsterProperties);
+                                  JHipsterProperties jHipsterProperties, OAuth2Properties oAuth2Properties) {
+        super(restTemplate, jHipsterProperties, oAuth2Properties);
     }
 
     @Override
