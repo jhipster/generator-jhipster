@@ -18,7 +18,7 @@
 -%>
 package <%=packageName%>.security.oauth2;
 
-import com.mycompany.myapp.config.oauth2.OAuth2Properties;
+import <%=packageName%>.config.oauth2.OAuth2Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;

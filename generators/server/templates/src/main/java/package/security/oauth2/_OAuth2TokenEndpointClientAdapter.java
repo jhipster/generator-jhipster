@@ -18,7 +18,7 @@
 -%>
 package <%=packageName%>.security.oauth2;
 
-import com.mycompany.myapp.config.oauth2.OAuth2Properties;
+import <%=packageName%>.config.oauth2.OAuth2Properties;
 import io.github.jhipster.config.JHipsterProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
