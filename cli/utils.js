@@ -12,8 +12,12 @@ const info = function (msg) {
     console.info(msg);
 };
 
+const log = function (msg) {
+    console.log(msg);
+};
+
 const error = function (msg) {
-    console.error(msg);
+    console.error(`${chalk.red.bold('ERROR!')} ${chalk.red(msg)}`);
 };
 
 const init = function (program) {
@@ -31,6 +35,7 @@ const logger = {
     init,
     debug,
     info,
+    log,
     error
 };
 
