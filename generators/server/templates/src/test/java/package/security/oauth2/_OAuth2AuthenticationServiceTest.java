@@ -80,7 +80,7 @@ public class OAuth2AuthenticationServiceTest {
         oAuth2Properties = new OAuth2Properties();
         jHipsterProperties = new JHipsterProperties();
         jHipsterProperties.getSecurity().getClientAuthorization().setAccessTokenUri("http://uaa/oauth/token");
-        OAuth2CookieHelper cookieHelper = new OAuth2CookieHelper(jHipsterProperties);
+        OAuth2CookieHelper cookieHelper = new OAuth2CookieHelper(oAuth2Properties);
         OAuth2AccessToken accessToken = createAccessToken(ACCESS_TOKEN_VALUE, REFRESH_TOKEN_VALUE);
 
         mockPasswordGrant(accessToken);

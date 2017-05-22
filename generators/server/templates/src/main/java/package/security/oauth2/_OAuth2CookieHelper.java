@@ -18,8 +18,8 @@
 -%>
 package <%=packageName%>.security.oauth2;
 
+import <%=packageName%>.config.oauth2.OAuth2Properties;
 import com.google.common.net.InternetDomainName;
-import io.github.jhipster.config.JHipsterProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.json.JsonParser;
@@ -69,15 +69,15 @@ public class OAuth2CookieHelper {
 
     private final Logger log = LoggerFactory.getLogger(OAuth2CookieHelper.class);
 
-    private JHipsterProperties jHipsterProperties;
+    private OAuth2Properties oAuth2Properties;
 
     /**
      * Used to parse JWT claims.
      */
     private JsonParser jsonParser = JsonParserFactory.getJsonParser();
 
-    public OAuth2CookieHelper(JHipsterProperties jHipsterProperties) {
-        this.jHipsterProperties = jHipsterProperties;
+    public OAuth2CookieHelper(OAuth2Properties oAuth2Properties) {
+        this.oAuth2Properties = oAuth2Properties;
     }
 
     public static Cookie getAccessTokenCookie(HttpServletRequest request) {
@@ -209,7 +209,7 @@ public class OAuth2CookieHelper {
             return false;
         }
         //read non-remember-me session length in secs
-        int validity = jHipsterProperties.getSecurity().getAuthentication().getOauth().getTokenValidityInSeconds();
+        int validity = oAuth2Properties.getWebClientConfiguration().getSessionTimeoutInSeconds();
         if (validity < 0) {           //no session expiration configured
             return false;
         }
@@ -295,9 +295,15 @@ public class OAuth2CookieHelper {
      *
      * @param request the HTTP request we received from the client.
      * @return the top level domain to set the cookies for.
+     * Returns null if the domain is not under a public suffix (.com, .co.uk), e.g. for localhost.
      */
     private String getCookieDomain(HttpServletRequest request) {
-        String domain = request.getServerName().toLowerCase();
+        String domain = oAuth2Properties.getWebClientConfiguration().getCookieDomain();
+        if(domain!=null) {
+            return domain;
+        }
+        //if not explicitly defined, use top-level domain
+        domain = request.getServerName().toLowerCase();
         //strip off leading www.
         if (domain.startsWith("www.")) {
             domain = domain.substring(4);
@@ -308,7 +314,8 @@ public class OAuth2CookieHelper {
             //preserve leading dot
             return "." + domainName.topPrivateDomain().toString();
         }
-        return domain;
+        //no top-level domain, stick with default domain
+        return null;
     }
 
     /**
