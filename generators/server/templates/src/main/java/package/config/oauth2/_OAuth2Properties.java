@@ -42,7 +42,21 @@ public class OAuth2Properties {
     public static class WebClientConfiguration {
         private String clientId = "web_app";
         private String secret = "changeit";
+        /**
+         * Holds the session timeout in seconds for non-remember-me sessions.
+         * After so many seconds of inactivity, the session will be terminated.
+         * Only checked during token refresh, so long access token validity may
+         * delay the session timeout accordingly.
+         */
         private int sessionTimeoutInSeconds = 1800;
+        /**
+         * Defines the cookie domain. If specified, cookies will be set on this domain.
+         * If not configured, then cookies will be set on the top-level domain of the
+         * request you sent, i.e. if you send a request to <code>app1.your-domain.com</code>,
+         * then cookies will be set <code>on .your-domain.com</code>, such that they
+         * are also valid for <code>app2.your-domain.com</code>.
+         */
+        private String cookieDomain;
 
         public String getClientId() {
             return clientId;
@@ -66,6 +80,14 @@ public class OAuth2Properties {
 
         public void setSessionTimeoutInSeconds(int sessionTimeoutInSeconds) {
             this.sessionTimeoutInSeconds = sessionTimeoutInSeconds;
+        }
+
+        public String getCookieDomain() {
+            return cookieDomain;
+        }
+
+        public void setCookieDomain(String cookieDomain) {
+            this.cookieDomain = cookieDomain;
         }
     }
 
