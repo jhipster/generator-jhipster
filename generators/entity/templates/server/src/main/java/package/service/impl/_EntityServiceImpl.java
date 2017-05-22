@@ -35,11 +35,15 @@ import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% 
 import <%=packageName%>.service.dto.<%= entityClass %>DTO;
 import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;<% } %>
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;<% if (pagination != 'no') { %>
+import org.slf4j.LoggerFactory;
+<%_ if (pagination != 'no') { _%>
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;<% } if (databaseType == 'sql') { %>
-import org.springframework.transaction.annotation.Transactional;<% } %>
+import org.springframework.data.domain.Pageable;
+<%_ } _%>
 import org.springframework.stereotype.Service;
+<%_ if (databaseType == 'sql') { _%>
+import org.springframework.transaction.annotation.Transactional;
+<%_ } _%>
 <% if (dto === 'mapstruct' && (pagination ==='no' ||  fieldsContainNoOwnerOneToOne === true)) { %>
 import java.util.LinkedList;<% } %><% if (pagination ==='no' ||  fieldsContainNoOwnerOneToOne === true) { %>
 import java.util.List;<% } %><% if (databaseType == 'cassandra') { %>
@@ -57,7 +61,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
 public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implements <%= entityClass %>Service<% } %>{
 
     private final Logger log = LoggerFactory.getLogger(<%= serviceClassName %>.class);
-    <%- include('../../common/inject_template', {viaService: viaService, constructorName: serviceClassName}); -%>
+<%- include('../../common/inject_template', {viaService: viaService, constructorName: serviceClassName}); -%>
 
     /**
      * Save a <%= entityInstance %>.
@@ -74,7 +78,7 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
 
     /**
      *  Get all the <%= entityInstancePlural %>.
-     *  <% if (pagination != 'no') { %>
+     *<% if (pagination != 'no') { %>
      *  @param pageable the pagination information<% } %>
      *  @return the list of entities
      */
@@ -92,8 +96,8 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
             .collect(Collectors.toCollection(LinkedList::new))<% } %>;
         <%_ } else { _%>
         return <%= entityInstance %>Repository.findAll(pageable)<% if (dto !== 'mapstruct') { %>;<% } else { %>
-            .map(<%= entityToDtoReference %>);
-        <%_ } } _%>
+            .map(<%= entityToDtoReference %>);<% } %>
+        <%_ } _%>
     }
 <%- include('../../common/get_filtered_template'); -%>
     /**
