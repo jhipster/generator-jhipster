@@ -219,6 +219,7 @@ public class OAuth2CookieHelper {
         }
         int now=(int)(System.currentTimeMillis()/1000L);
         int sessionDuration = now - iat;
+        log.debug("session duration {} secs, will timeout at {}", sessionDuration, validity);
         return sessionDuration > validity;            //session has expired
     }
 
