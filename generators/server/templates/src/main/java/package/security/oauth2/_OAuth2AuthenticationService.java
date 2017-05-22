@@ -111,7 +111,7 @@ public class OAuth2AuthenticationService {
         refreshCookie) {
         //check if non-remember-me session has expired
         if (cookieHelper.isSessionExpired(refreshCookie)) {
-            log.info("sesssion has expired due to inactivity");
+            log.info("session has expired due to inactivity");
             logout(request, response);       //logout to clear cookies in browser
             return stripTokens(request);            //don't include cookies downstream
         }

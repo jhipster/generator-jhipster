@@ -84,13 +84,15 @@ public class OAuth2JwtAccessTokenConverter extends JwtAccessTokenConverter {
         }
         try {
             SignatureVerifier verifier = signatureVerifierClient.getSignatureVerifier();
-            setVerifier(verifier);
-            lastKeyFetchTimestamp = t;
-            log.debug("Public key retrieved from OAuth2 server to create SignatureVerifier");
-            return true;
+            if(verifier!=null) {
+                setVerifier(verifier);
+                lastKeyFetchTimestamp = t;
+                log.debug("Public key retrieved from OAuth2 server to create SignatureVerifier");
+                return true;
+            }
         } catch (Throwable ex) {
             log.error("could not get public key from OAuth2 server to create SignatureVerifier", ex);
-            return false;
         }
+        return false;
     }
 }
