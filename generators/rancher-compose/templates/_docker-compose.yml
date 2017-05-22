@@ -97,9 +97,9 @@ services:
         volumes:
           - /config
         volumes_from:
-          - consul-config-sidekick
+          - registry-config-sidekick
         labels:
-          io.rancher.sidekicks: consul-config-sidekick
+          io.rancher.sidekicks: registry-config-sidekick
 <%_ } _%>
 <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
     registry-config-sidekick:
