@@ -35,13 +35,13 @@
     "@angular/router": "4.1.3",
     "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.26",
     "angular2-cookie": "1.2.6",
-    "ngx-infinite-scroll": "0.4.1",
     "bootstrap": "4.0.0-alpha.6",
     "core-js": "2.4.1",
     "font-awesome": "4.7.0",
     "jquery": "3.2.1",
     "ng-jhipster": "0.1.16",
     "ng2-webstorage": "1.6.2",
+    "ngx-infinite-scroll": "0.4.1",
     "reflect-metadata": "0.1.10",
     "rxjs": "5.4.0",
     "swagger-ui": "2.2.10",
@@ -94,11 +94,13 @@
     "lazypipe": "1.0.1",
     "lodash": "4.17.4",
     "map-stream": "0.0.7",
+    <%_ if (enableTranslation) { _%>
+    "merge-jsons-webpack-plugin": "1.0.5",
+    <%_ } _%>
     "phantomjs-prebuilt": "2.1.14",
     <%_ if (protractorTests) { _%>
     "protractor": "5.1.2",
     "protractor-jasmine2-screenshot-reporter": "0.3.5",
-    "ts-node": "3.0.4",
     <%_ } _%>
     "proxy-middleware": "0.15.0",
     "rimraf": "2.6.1",
@@ -107,6 +109,9 @@
     "string-replace-webpack-plugin": "0.1.3",
     "style-loader": "0.16.1",
     "to-string-loader": "1.1.5",
+    <%_ if (protractorTests) { _%>
+    "ts-node": "3.0.4",
+    <%_ } _%>
     "tslint": "4.5.1",
     "tslint-loader": "3.5.2",
     "typescript": "2.3.3",
@@ -115,9 +120,6 @@
     "webpack-merge": "4.1.0",
     "webpack-notifier": "1.5.0",
     "webpack-visualizer-plugin": "0.1.11",
-    <%_ if (enableTranslation) { _%>
-    "merge-jsons-webpack-plugin": "1.0.5",
-    <%_ } _%>
     "write-file-webpack-plugin": "3.4.2",
     <%_ if (buildTool == 'maven') { _%>
     "xml2js": "0.4.17",
