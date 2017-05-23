@@ -11,7 +11,7 @@
     ],
     "fields": [
         {
-            "fieldName": "label",
+            "fieldName": "labelName",
             "fieldType": "String",
             "fieldValidateRules": [
                 "required",
