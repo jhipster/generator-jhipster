@@ -18,7 +18,7 @@ import { Injectable } from '@angular/core';
 import { Observable, Observer, Subscription} from 'rxjs/Rx';
 
 /**
- * An utily class to manage RX events
+ * An utility class to manage RX events
  */
 @Injectable()
 export class EventManager {
