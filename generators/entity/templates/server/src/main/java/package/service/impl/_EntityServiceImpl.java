@@ -92,7 +92,7 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
             .collect(Collectors.toCollection(LinkedList::new))<% } %>;
         <%_ } else { _%>
         return <%= entityInstance %>Repository.findAll(pageable)<% if (dto !== 'mapstruct') { %>;<% } else { %>
-            .map(<%= entityInstance %>Mapper::<%= entityToDto %>);
+            .map(<%= entityToDtoReference %>);
         <%_ } } _%>
     }
 <%- include('../../common/get_filtered_template'); -%>
@@ -145,7 +145,7 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
         log.debug("Request to search for a page of <%= entityClassPlural %> for query {}", query);
         Page<<%= entityClass %>> result = <%= entityInstance %>SearchRepository.search(queryStringQuery(query), pageable);
             <%_ if (dto == 'mapstruct') { _%>
-        return result.map(<%= entityInstance %>Mapper::<%= entityToDto %>);
+        return result.map(<%= entityToDtoReference %>);
             <%_ } else { _%>
         return result;
         <%_ } } _%>
