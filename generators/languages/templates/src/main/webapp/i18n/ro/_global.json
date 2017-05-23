@@ -118,7 +118,8 @@
         },
         "ribbon": {
             "dev":"Development"
-        }
+        },
+        "item-count": "Se afișează {{first}} - {{second}} de {{total}} elemente."
     },
     "entity": {
         "action": {
