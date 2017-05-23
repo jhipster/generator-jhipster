@@ -23,7 +23,7 @@ package <%=packageName%>.service<% if (service == 'serviceImpl') { %>.impl<% } %
     const instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
     const mapper = entityInstance  + 'Mapper';
     const dtoToEntity = mapper + '.'+ 'toEntity';
-    const entityToDto = mapper + '.'+ 'toDto';
+    const entityToDto = 'toDto';
     const entityToDtoReference = mapper + '::'+ 'toDto';
     const repository = entityInstance  + 'Repository';
     const searchRepository = entityInstance  + 'SearchRepository';
@@ -92,7 +92,7 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
             .collect(Collectors.toCollection(LinkedList::new))<% } %>;
         <%_ } else { _%>
         return <%= entityInstance %>Repository.findAll(pageable)<% if (dto !== 'mapstruct') { %>;<% } else { %>
-            .map(<%= entityInstance %> -> <%= entityToDto %>(<%= entityInstance%>));
+            .map(<%= entityInstance %>Mapper::<%= entityToDto %>);
         <%_ } } _%>
     }
 <%- include('../../common/get_filtered_template'); -%>
@@ -145,7 +145,7 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
         log.debug("Request to search for a page of <%= entityClassPlural %> for query {}", query);
         Page<<%= entityClass %>> result = <%= entityInstance %>SearchRepository.search(queryStringQuery(query), pageable);
             <%_ if (dto == 'mapstruct') { _%>
-        return result.map(<%= entityInstance %> -> <%= entityToDto %>(<%= entityInstance%>));
+        return result.map(<%= entityInstance %>Mapper::<%= entityToDto %>);
             <%_ } else { _%>
         return result;
         <%_ } } _%>
