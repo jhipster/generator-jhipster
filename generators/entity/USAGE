@@ -5,7 +5,7 @@ Example:
     jhipster entity Foo
 
     This will create:
-        .jhipster.Foo.json
+        .jhipster/Foo.json
         src/main/java/package/domain/Foo.java
         src/main/java/package/repository/FooRepository.java
         src/main/java/package/web/rest/FooResource.java
