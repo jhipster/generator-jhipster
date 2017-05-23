@@ -41,6 +41,7 @@ for (idx in relationships) {
     const relationshipName = relationships[idx].relationshipName;
     const ownerSide = relationships[idx].ownerSide;
     if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true)) {renMapAnotEnt = true;%>
+
     @Mapping(source = "<%= relationshipName %>.id", target = "<%= relationships[idx].relationshipFieldName %>Id")<% if (relationships[idx].otherEntityFieldCapitalized !='Id' && relationships[idx].otherEntityFieldCapitalized != '') { %>
     @Mapping(source = "<%= relationshipName %>.<%= relationships[idx].otherEntityField %>", target = "<%= relationships[idx].relationshipFieldName %><%= relationships[idx].otherEntityFieldCapitalized %>")<% } } } %>
     <% if(renMapAnotEnt == true) { %><%= entityClass %>DTO toDto(<%= entityClass %> <%= entityInstance %>); <% } %><%
@@ -52,19 +53,13 @@ for (idx in relationships) {
     const relationshipNamePlural = relationships[idx].relationshipNamePlural;
     const ownerSide = relationships[idx].ownerSide;
     if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true)) {renMapAnotDto = true; %>
+
     @Mapping(source = "<%= relationshipName %>Id", target = "<%= relationshipName %>")<% } else if (relationshipType == 'many-to-many' && ownerSide == false) {renMapAnotDto = true; %>
     @Mapping(target = "<%= relationshipNamePlural %>", ignore = true)<% } else if (relationshipType == 'one-to-many') {renMapAnotDto = true; %>
     @Mapping(target = "<%= relationshipNamePlural %>", ignore = true)<% } else if (relationshipType == 'one-to-one' && ownerSide == false) {renMapAnotDto = true; %>
     @Mapping(target = "<%= relationshipName %>", ignore = true)<% } } %>
     <% if(renMapAnotDto == true) { %><%= entityClass %> toEntity(<%= entityClass%>DTO <%= entityInstance %>DTO); <% } %>
-    /**
-     * generating the fromId for all mappers if the databaseType is sql, as the class has relationship to it might need it, instead of
-     * creating a new attribute to know if the entity has any relationship from some other entity
-     *
-     * @param id id of the entity
-     * @return the entity instance
-     */
-     <%if(databaseType === 'sql') { %>
+    <%_ if(databaseType === 'sql') { _%>
     default <%= entityClass %> fromId(Long id) {
         if (id == null) {
             return null;
