@@ -465,11 +465,9 @@ module.exports = EntityGenerator.extend({
             this.fieldsContainOwnerOneToOne = false;
             this.fieldsContainOneToMany = false;
             this.fieldsContainManyToOne = false;
-            this.differentTypes = [this.entityClass];
             if (!this.relationships) {
                 this.relationships = [];
             }
-            this.differentRelationships = [];
 
             // Load in-memory data for fields
             this.fields.forEach((field) => {
@@ -553,6 +551,9 @@ module.exports = EntityGenerator.extend({
             });
             // Load in-memory data for relationships
             this.relationships.forEach((relationship) => {
+                this.differentTypes = [this.entityClass];
+                this.differentRelationships = [];
+
                 if (_.isUndefined(relationship.relationshipNameCapitalized)) {
                     relationship.relationshipNameCapitalized = _.upperFirst(relationship.relationshipName);
                 }
@@ -672,6 +673,7 @@ module.exports = EntityGenerator.extend({
                 }
 
                 const entityType = relationship.otherEntityNameCapitalized;
+
                 if (this.differentTypes.indexOf(entityType) === -1) {
                     this.differentTypes.push(entityType);
                     this.differentRelationships.push(relationship);
