@@ -673,7 +673,6 @@ module.exports = EntityGenerator.extend({
                 }
 
                 const entityType = relationship.otherEntityNameCapitalized;
-
                 if (this.differentTypes.indexOf(entityType) === -1) {
                     this.differentTypes.push(entityType);
                     this.differentRelationships.push(relationship);
