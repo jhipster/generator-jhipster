@@ -45,7 +45,7 @@ public class UserMapper {
     public List<UserDTO> usersToUserDTOs(List<User> users) {
         return users.stream()
             .filter(Objects::nonNull)
-            .map(user -> this.userToUserDTO(user))
+            .map(this::userToUserDTO)
             .collect(Collectors.toList());
     }
 
@@ -80,7 +80,7 @@ public class UserMapper {
     public List<User> userDTOsToUsers(List<UserDTO> userDTOs) {
         return userDTOs.stream()
             .filter(Objects::nonNull)
-            .map(userDTO -> this.userDTOToUser(userDTO))
+            .map(this::userDTOToUser)
             .collect(Collectors.toList());
     }
 
