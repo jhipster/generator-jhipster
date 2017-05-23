@@ -61,9 +61,9 @@ public class LoggingAspect {
     /**
      * Pointcut that matches all Spring beans in the application's main packages.
      */
-    @Pointcut("within(com.yolo.repository..*)"+
-        " || within(com.yolo.service..*)"+
-        " || within(com.yolo.web.rest..*)")
+    @Pointcut("within(<%=packageName%>.repository..*)"+
+        " || within(<%=packageName%>.service..*)"+
+        " || within(<%=packageName%>.web.rest..*)")
     public void applicationPackagePointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }
