@@ -51,10 +51,20 @@ public class LoggingAspect {
     /**
      * Pointcut that matches all repositories, services and Web REST endpoints.
      */
-    @Pointcut("(within(<%=packageName%>.repository..*) && @annotation(org.springframework.stereotype.Repository))"+
-        " || (within(<%=packageName%>.service..*) && @annotation(org.springframework.stereotype.Service))"+
-        " || (within(<%=packageName%>.web.rest..*) && @annotation(org.springframework.web.bind.annotation.RestController))")
-    public void loggingPointcut() {
+    @Pointcut("within(@org.springframework.stereotype.Repository *)" +
+        " || within(@org.springframework.stereotype.Service *)" +
+        " || within(@org.springframework.web.bind.annotation.RestController *)")
+    public void springBeanPointcut() {
+        // Method is empty as this is just a Pointcut, the implementations are in the advices.
+    }
+
+    /**
+     * Pointcut that matches all Spring beans in the application's main packages.
+     */
+    @Pointcut("within(com.yolo.repository..*)"+
+        " || within(com.yolo.service..*)"+
+        " || within(com.yolo.web.rest..*)")
+    public void applicationPackagePointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }
 
@@ -64,7 +74,7 @@ public class LoggingAspect {
      * @param joinPoint join point for advice
      * @param e exception
      */
-    @AfterThrowing(pointcut = "loggingPointcut()", throwing = "e")
+    @AfterThrowing(pointcut = "applicationPackagePointcut() && springBeanPointcut()", throwing = "e")
     public void logAfterThrowing(JoinPoint joinPoint, Throwable e) {
         if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)) {
             log.error("Exception in {}.{}() with cause = \'{}\' and exception = \'{}\'", joinPoint.getSignature().getDeclaringTypeName(),
@@ -83,7 +93,7 @@ public class LoggingAspect {
      * @return result
      * @throws Throwable throws IllegalArgumentException
      */
-    @Around("loggingPointcut()")
+    @Around("applicationPackagePointcut() && springBeanPointcut()")
     public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
         if (log.isDebugEnabled()) {
             log.debug("Enter: {}.{}() with argument[s] = {}", joinPoint.getSignature().getDeclaringTypeName(),
