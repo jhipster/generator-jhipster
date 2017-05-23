@@ -131,19 +131,23 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         this.isSaving = true;
         if (this.<%= entityInstance %>.id !== undefined) {
             this.subscribeToSaveResponse(
-                this.<%= entityInstance %>Service.update(this.<%= entityInstance %>));
+                this.<%= entityInstance %>Service.update(this.<%= entityInstance %>), false);
         } else {
             this.subscribeToSaveResponse(
-                this.<%= entityInstance %>Service.create(this.<%= entityInstance %>));
+                this.<%= entityInstance %>Service.create(this.<%= entityInstance %>), true);
         }
     }
 
-    private subscribeToSaveResponse(result: Observable<<%= entityAngularName %>>) {
+    private subscribeToSaveResponse(result: Observable<<%= entityAngularName %>>, isCreated: boolean) {
         result.subscribe((res: <%= entityAngularName %>) =>
-            this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
+            this.onSaveSuccess(res, isCreated), (res: Response) => this.onSaveError(res));
     }
 
-    private onSaveSuccess(result: <%= entityAngularName %>) {
+    private onSaveSuccess(result: <%= entityAngularName %>, isCreated: boolean) {
+        this.alertService.success(
+            isCreated ? '<%= angularAppName %>.<%= entityTranslationKey %>.created'
+            : '<%= angularAppName %>.<%= entityTranslationKey %>.updated',
+            { param : result.id }, null);
         this.eventManager.broadcast({ name: '<%= entityInstance %>ListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
