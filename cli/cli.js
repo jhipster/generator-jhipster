@@ -104,7 +104,13 @@ const runYoCommand = (cmd, args, opts) => {
     const options = getOptions(args, opts);
     const command = `${JHIPSTER_NS}:${cmd}${options ? ` ${options}` : ''}`;
     logger.info(chalk.yellow(`Executing ${command}`));
-    env.run(command, done);
+    try {
+        env.run(command, done);
+    } catch (e) {
+        logger.error(e.message);
+        logger.log(e);
+        process.exit(1);
+    }
 };
 
 program.version(version).usage('[command] [options]').allowUnknownOption();
