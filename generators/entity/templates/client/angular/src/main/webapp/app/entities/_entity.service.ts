@@ -117,7 +117,7 @@ export class <%= entityAngularName %>Service {
             this.convertItemFromServer(jsonResponse[i]);
         }
     <%_ } _%>
-        return new ResponseWrapper(res.headers, jsonResponse);
+        return new ResponseWrapper(res.headers, jsonResponse, res.status);
     }
     <%_ if(hasDate) { _%>
 
