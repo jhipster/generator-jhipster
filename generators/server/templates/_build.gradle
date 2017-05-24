@@ -422,7 +422,7 @@ dependencies {
 }
 
 clean {
-    delete "target"
+    delete "build"
 }
 
 task cleanResources(type: Delete) {
