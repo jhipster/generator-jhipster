@@ -144,10 +144,18 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     }
 
     private onSaveSuccess(result: <%= entityAngularName %>, isCreated: boolean) {
+        <%_ if (enableTranslation) { _%>
         this.alertService.success(
             isCreated ? '<%= angularAppName %>.<%= entityTranslationKey %>.created'
             : '<%= angularAppName %>.<%= entityTranslationKey %>.updated',
             { param : result.id }, null);
+        <%_ } else { _%>
+        this.alertService.success(
+            isCreated ? `A new <%= entityClassHumanized %> is created with identifier ${result.id}`
+            : `A <%= entityClassHumanized %> is updated with identifier ${result.id}`,
+            null, null);
+        <%_ } _%>
+
         this.eventManager.broadcast({ name: '<%= entityInstance %>ListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
