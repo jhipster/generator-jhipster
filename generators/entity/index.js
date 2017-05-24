@@ -466,6 +466,7 @@ module.exports = EntityGenerator.extend({
             this.fieldsContainOneToMany = false;
             this.fieldsContainManyToOne = false;
             this.differentTypes = [];
+            this.differentRelationships = [];
             if (!this.relationships) {
                 this.relationships = [];
             }
