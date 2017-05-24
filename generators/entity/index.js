@@ -553,7 +553,7 @@ module.exports = EntityGenerator.extend({
             // Load in-memory data for relationships
             this.relationships.forEach((relationship) => {
                 this.differentTypes = [this.entityClass];
-            this.differentRelationships = [];
+                this.differentRelationships = [];
                 if (_.isUndefined(relationship.relationshipNameCapitalized)) {
                     relationship.relationshipNameCapitalized = _.upperFirst(relationship.relationshipName);
                 }
