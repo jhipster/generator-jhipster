@@ -614,4 +614,31 @@ module.exports = class extends Generator {
         }
         return false;
     }
+
+    /**
+     * Return the method name which converts the filter to specification
+     * @param {string} fieldType
+     */
+    getSpecificationBuilder(fieldType) {
+        if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'LocalDate', 'ZonedDateTime', 'Instant'].includes(fieldType)) {
+            return 'buildRangeSpecification';
+        }
+        if (fieldType === 'String') {
+            return 'buildStringSpecification';
+        }
+        return 'buildSpecification';
+    }
+
+    isFilterableType(fieldType) {
+        // Float, Double, BigDecimal and Boolean should work - new server library release needed
+        return !(['byte[]', 'ByteBuffer', 'Float', 'Double', 'BigDecimal', 'Boolean'].includes(fieldType));
+    }
+
+    copyFilteringFlag(from, to) {
+        if (this.databaseType === 'sql' && this.service !== 'no') {
+            to.jpaMetamodelFiltering = from.jpaMetamodelFiltering;
+        } else {
+            to.jpaMetamodelFiltering = false;
+        }
+    }
 };

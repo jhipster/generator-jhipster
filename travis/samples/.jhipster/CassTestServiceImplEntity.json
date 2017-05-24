@@ -214,5 +214,6 @@
     "changelogDate": "20160208184031",
     "dto": "no",
     "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
     "pagination": "no"
 }

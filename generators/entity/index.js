@@ -213,6 +213,7 @@ module.exports = EntityGenerator.extend({
                 this.validation = false;
                 this.dto = 'no';
                 this.service = 'no';
+                this.jpaMetamodelFiltering = false;
             } else {
                 // existing entity reading values from file
                 this.log(`\nThe entity ${this.name} is being updated.\n`);
@@ -256,6 +257,7 @@ module.exports = EntityGenerator.extend({
         this.searchEngine = this.fileData.searchEngine || this.searchEngine;
         this.javadoc = this.fileData.javadoc;
         this.entityTableName = this.fileData.entityTableName;
+        this.copyFilteringFlag(this.fileData, this);
         if (_.isUndefined(this.entityTableName)) {
             this.warning(`entityTableName is missing in .jhipster/${this.name}.json, using entity name as fallback`);
             this.entityTableName = this.getTableName(this.name);
@@ -302,6 +304,7 @@ module.exports = EntityGenerator.extend({
         askForTableName: prompts.askForTableName,
         askForDTO: prompts.askForDTO,
         askForService: prompts.askForService,
+        askForFiltering: prompts.askForFiltering,
         askForPagination: prompts.askForPagination
     },
 
@@ -401,6 +404,10 @@ module.exports = EntityGenerator.extend({
                 this.warning(`service is missing in .jhipster/${this.name}.json, using no as fallback`);
                 this.service = 'no';
             }
+            if (_.isUndefined(this.jpaMetamodelFiltering)) {
+                this.warning(`jpaMetamodelFiltering is missing in .jhipster/${this.name}.json, using 'no' as fallback`);
+                this.jpaMetamodelFiltering = false;
+            }
             if (_.isUndefined(this.pagination)) {
                 if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
                     this.warning(`pagination is missing in .jhipster/${this.name}.json, using no as fallback`);
@@ -427,6 +434,7 @@ module.exports = EntityGenerator.extend({
             this.data.dto = this.dto;
             this.data.service = this.service;
             this.data.entityTableName = this.entityTableName;
+            this.copyFilteringFlag(this, this.data);
             if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
                 this.data.pagination = this.pagination;
             } else {
@@ -744,6 +752,7 @@ module.exports = EntityGenerator.extend({
                         fieldsContainBigDecimal: this.fieldsContainBigDecimal,
                         fieldsContainBlob: this.fieldsContainBlob,
                         fieldsContainImageBlob: this.fieldsContainImageBlob,
+                        jpaMetamodelFiltering: this.jpaMetamodelFiltering,
                         pkType: this.pkType,
                         entityApiUrl: this.entityApiUrl,
                         entityClass: this.entityClass,
