@@ -30,12 +30,14 @@ export class UserService {
 
     constructor(private http: Http) { }
 
-    create(user: User): Observable<Response> {
-        return this.http.post(this.resourceUrl, user);
+    create(user: User): Observable<ResponseWrapper> {
+        return this.http.post(this.resourceUrl, user)
+            .map((res: Response) => this.convertResponse(res));
     }
 
-    update(user: User): Observable<Response> {
-        return this.http.put(this.resourceUrl, user);
+    update(user: User): Observable<ResponseWrapper> {
+        return this.http.put(this.resourceUrl, user)
+            .map((res: Response) => this.convertResponse(res));
     }
 
     find(login: string): Observable<User> {
@@ -65,6 +67,6 @@ export class UserService {
 
     private convertResponse(res: Response): ResponseWrapper {
         const jsonResponse = res.json();
-        return new ResponseWrapper(res.headers, jsonResponse);
+        return new ResponseWrapper(res.headers, jsonResponse, res.status);
     }
 }

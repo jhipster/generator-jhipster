@@ -20,7 +20,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EventManager } from 'ng-jhipster';
+import { AlertService, EventManager } from 'ng-jhipster';
 
 import { UserModalService } from './user-modal.service';
 import { <% if (enableTranslation) { %>JhiLanguageHelper,<% } %> User, UserService } from '../../shared';
@@ -42,6 +42,7 @@ export class UserMgmtDialogComponent implements OnInit {
         private languageHelper: JhiLanguageHelper,
         <%_ } _%>
         private userService: UserService,
+        private alertService: AlertService,
         private eventManager: EventManager
     ) {}
 
@@ -65,14 +66,25 @@ export class UserMgmtDialogComponent implements OnInit {
     save() {
         this.isSaving = true;
         if (this.user.id !== null) {
-            this.userService.update(this.user).subscribe((response) => this.onSaveSuccess(response), () => this.onSaveError());
+            this.userService.update(this.user).subscribe((response) => this.onSaveSuccess(response, false), () => this.onSaveError());
         } else {<% if (!enableTranslation) { %>
             this.user.langKey = 'en';<% } %>
-            this.userService.create(this.user).subscribe((response) => this.onSaveSuccess(response), () => this.onSaveError());
+            this.userService.create(this.user).subscribe((response) => this.onSaveSuccess(response, true), () => this.onSaveError());
         }
     }
 
-    private onSaveSuccess(result) {
+    private onSaveSuccess(result, isCreated: boolean) {
+        <%_ if (enableTranslation) { _%>
+        this.alertService.success(
+            isCreated ? 'userManagement.created'
+            : 'userManagement.updated',
+            { param : result.json.login }, null);
+        <%_ } else { _%>
+        this.alertService.success(
+            isCreated ? `A new user is created with identifier ${result.json.login}`
+            : `An user is updated with identifier ${result.json.login}`,
+            null, null);
+        <%_ } _%>
         this.eventManager.broadcast({ name: 'userListModification', content: 'OK' });
         this.isSaving = false;
         this.activeModal.dismiss(result);

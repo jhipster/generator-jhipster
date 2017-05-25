@@ -131,19 +131,31 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         this.isSaving = true;
         if (this.<%= entityInstance %>.id !== undefined) {
             this.subscribeToSaveResponse(
-                this.<%= entityInstance %>Service.update(this.<%= entityInstance %>));
+                this.<%= entityInstance %>Service.update(this.<%= entityInstance %>), false);
         } else {
             this.subscribeToSaveResponse(
-                this.<%= entityInstance %>Service.create(this.<%= entityInstance %>));
+                this.<%= entityInstance %>Service.create(this.<%= entityInstance %>), true);
         }
     }
 
-    private subscribeToSaveResponse(result: Observable<<%= entityAngularName %>>) {
+    private subscribeToSaveResponse(result: Observable<<%= entityAngularName %>>, isCreated: boolean) {
         result.subscribe((res: <%= entityAngularName %>) =>
-            this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
+            this.onSaveSuccess(res, isCreated), (res: Response) => this.onSaveError(res));
     }
 
-    private onSaveSuccess(result: <%= entityAngularName %>) {
+    private onSaveSuccess(result: <%= entityAngularName %>, isCreated: boolean) {
+        <%_ if (enableTranslation) { _%>
+        this.alertService.success(
+            isCreated ? '<%= angularAppName %>.<%= entityTranslationKey %>.created'
+            : '<%= angularAppName %>.<%= entityTranslationKey %>.updated',
+            { param : result.id }, null);
+        <%_ } else { _%>
+        this.alertService.success(
+            isCreated ? `A new <%= entityClassHumanized %> is created with identifier ${result.id}`
+            : `A <%= entityClassHumanized %> is updated with identifier ${result.id}`,
+            null, null);
+        <%_ } _%>
+
         this.eventManager.broadcast({ name: '<%= entityInstance %>ListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
