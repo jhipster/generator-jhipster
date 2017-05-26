@@ -47,11 +47,8 @@ describe('Component Tests', () => {
                         useClass: MockPrincipal
                     }
                 ]
-            }).overrideComponent(SessionsComponent, {
-                set: {
-                    template: ''
-                }
-            }).createComponent(SessionsComponent);
+            }).overrideTemplate(SessionsComponent, '')
+            .createComponent(SessionsComponent);
             comp = fixture.componentInstance;
         });
 

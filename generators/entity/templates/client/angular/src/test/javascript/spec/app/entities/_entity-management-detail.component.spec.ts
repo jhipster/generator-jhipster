@@ -50,11 +50,8 @@ describe('Component Tests', () => {
                     <%= entityAngularName %>Service,
                     EventManager
                 ]
-            }).overrideComponent(<%= entityAngularName %>DetailComponent, {
-                set: {
-                    template: ''
-                }
-            }).compileComponents();
+            }).overrideTemplate(<%= entityAngularName %>DetailComponent, '')
+            .compileComponents();
         }));
 
         beforeEach(() => {
