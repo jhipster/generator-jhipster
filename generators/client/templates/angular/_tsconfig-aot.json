@@ -17,29 +17,17 @@
  limitations under the License.
 -%>
 {
-    "compilerOptions": {
-        "target": "es5",
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "sourceMap": true,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "removeComments": false,
-        "noImplicitAny": false,
-        "suppressImplicitAnyIndexErrors": true,
-        "outDir": "<%= DIST_DIR %>app",
-        "lib": ["es6", "dom"],
-        "typeRoots": [
-            "node_modules/@types"
-        ]
-    },
-
-    "files": [
-        "<%= MAIN_SRC_DIR %>app/app.module.ts",
-        "<%= MAIN_SRC_DIR %>app/app.main.ts"
-    ],
-
-    "angularCompilerOptions": {
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "es2015",
+    "baseUrl": "",
+    "types": [],
+    "allowJs": true
+  },
+  "exclude": [
+    "src/test/**/*.ts"
+  ],
+  "angularCompilerOptions": {
         "genDir": "<%= BUILD_DIR %>aot",
         "skipMetadataEmit" : true
     }
