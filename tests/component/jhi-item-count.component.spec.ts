@@ -15,9 +15,9 @@
  */
 
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { TranslateModule } from 'ng2-translate';
 import { JhiItemCountComponent } from '../../src/component/jhi-item-count.component';
 import { JhiTranslateComponent } from '../../src/language/jhi-translate.directive';
-import { TranslateModule } from 'ng2-translate';
 import { ConfigService } from '../../src/config.service';
 
 function getElementHtml(element: ComponentFixture<JhiItemCountComponent>): string {
