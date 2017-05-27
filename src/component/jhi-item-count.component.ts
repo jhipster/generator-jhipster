@@ -25,8 +25,8 @@ import { ConfigService } from '../config.service';
 @Component({
     selector: 'jhi-item-count',
     template: `
-        <div *ngIf="i18nEnabled; else noI18n" class="info jhi-item-count" 
-            jhiTranslate="global.item-count" 
+        <div *ngIf="i18nEnabled; else noI18n" class="info jhi-item-count"
+            jhiTranslate="global.item-count"
             translateValues="{{i18nValues()}}"
             [attr.translateValues]="i18nValues()">  /* [attr.translateValues] is used to get entire values in tests */
         </div>
