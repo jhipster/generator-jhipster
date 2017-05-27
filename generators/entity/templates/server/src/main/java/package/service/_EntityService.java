@@ -47,7 +47,7 @@ public interface <%= entityClass %>Service {
 
     /**
      *  Get all the <%= entityInstancePlural %>.
-     *  <% if (pagination != 'no') { %>
+     *<% if (pagination != 'no') { %>
      *  @param pageable the pagination information<% } %>
      *  @return the list of entities
      */
