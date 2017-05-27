@@ -17,6 +17,7 @@
  limitations under the License.
  */
 import { Component, Input } from '@angular/core';
+import { ConfigService } from '../config.service';
 
 /**
  * A component that will take care of item count statistics of a pagination.
@@ -24,11 +25,16 @@ import { Component, Input } from '@angular/core';
 @Component({
     selector: 'jhi-item-count',
     template: `
-        <div class="info jhi-item-count">
+        <div *ngIf="i18nEnabled; else noI18n" class="info jhi-item-count" 
+            jhiTranslate="global.item-count" 
+            translateValues="{{i18nValues()}}"
+            [attr.translateValues]="i18nValues()">  /* [attr.translateValues] is used to get entire values in tests */
+        </div>
+        <ng-template #noI18n class="info jhi-item-count">
             Showing {{((page - 1) * itemsPerPage) == 0 ? 1 : ((page - 1) * itemsPerPage + 1)}} -
             {{(page * itemsPerPage) < total ? (page * itemsPerPage) : total}}
             of {{total}} items.
-        </div>`
+        </ng-template>`
 })
 export class JhiItemCountComponent {
 
@@ -47,5 +53,22 @@ export class JhiItemCountComponent {
     */
     @Input() itemsPerPage: number;
 
-    constructor() {}
+    /**
+     * True if the generated application use i18n
+     */
+    i18nEnabled: boolean;
+
+    /**
+     * "translate-values" JSON of the template
+     */
+    i18nValues(): string {
+        const first = ((this.page - 1) * this.itemsPerPage) === 0 ? 1 : ((this.page - 1) * this.itemsPerPage + 1);
+        const second = (this.page * this.itemsPerPage) < this.total ? (this.page * this.itemsPerPage) : this.total;
+        return '{first: \'' + first + '\', second: \'' + second + '\', total: \'' + this.total + '\'}';
+    }
+
+    constructor(config: ConfigService) {
+        this.i18nEnabled = config.CONFIG_OPTIONS.i18nEnabled;
+    }
+
 }

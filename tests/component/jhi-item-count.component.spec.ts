@@ -17,11 +17,23 @@
  limitations under the License.
  */
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { TranslateModule } from 'ng2-translate';
 import { JhiItemCountComponent } from '../../src/component/jhi-item-count.component';
-
+import { JhiTranslateComponent } from '../../src/language/jhi-translate.directive';
+import { ConfigService } from '../../src/config.service';
 
 function getElementHtml(element: ComponentFixture<JhiItemCountComponent>): string {
-    return element.nativeElement.querySelector('.jhi-item-count').innerHTML.trim();
+    const res = element.nativeElement.querySelector('.jhi-item-count');
+    return (res && res.innerHTML) ? res.innerHTML.trim() : '';
+}
+
+function getElementAttribute(element: ComponentFixture<JhiItemCountComponent>, value: string): string {
+    let res = element.nativeElement.querySelector('.jhi-item-count');
+    if (res && res.attributes) {
+        res = res.attributes.getNamedItem(value);
+        return (res && res.value) ? res.value.trim() : '';
+    }
+    return '';
 }
 
 describe('JhiItemCountComponent test', () => {
@@ -31,7 +43,15 @@ describe('JhiItemCountComponent test', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [JhiItemCountComponent]
+            declarations: [JhiItemCountComponent, JhiTranslateComponent],
+            imports: [TranslateModule.forRoot()],
+            providers: [
+                JhiItemCountComponent,
+                {
+                    provide: ConfigService,
+                    useValue: new ConfigService({defaultI18nLang: 'en', i18nEnabled: true})
+                }
+            ]
         }).compileComponents();
     }));
 
@@ -53,16 +73,28 @@ describe('JhiItemCountComponent test', () => {
             comp.total = 100;
             fixture.detectChanges();
 
-            expect(getElementHtml(fixture)).toBe(`Showing 1 -
-            10
-            of 100 items.`);
-
+            getElementHtml(fixture);
+            expect(getElementAttribute(fixture, 'translateValues')).toBe(`{first: '1', second: '10', total: '100'}`);
             comp.page = 2;
             fixture.detectChanges();
 
-            expect(getElementHtml(fixture)).toBe(`Showing 11 -
-            20
-            of 100 items.`);
+            getElementHtml(fixture);
+            expect(getElementAttribute(fixture, 'translateValues')).toBe(`{first: '11', second: '20', total: '100'}`);
+        });
+
+        it('should not translate the content', () => {
+            comp.i18nEnabled = false;
+            comp.page = 1;
+            comp.itemsPerPage = 10;
+            comp.total = 100;
+            fixture.detectChanges();
+            expect(getElementAttribute(fixture, 'translateValues')).toBe(``);
+            expect(getElementHtml(fixture)).toBe(``);
+
+            comp.page = 2;
+            fixture.detectChanges();
+            expect(getElementAttribute(fixture, 'translateValues')).toBe(``);
+            expect(getElementHtml(fixture)).toBe(``);
         });
     });
 });
