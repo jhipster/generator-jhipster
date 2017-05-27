@@ -98,7 +98,7 @@ spring:
         username: SA
         password: yourStrong(!)Password
         <%_ } else if (devDatabaseType == 'h2Disk') { _%>
-        url: jdbc:h2:file:./target/h2db/db/<%= lowercaseBaseName %>;DB_CLOSE_DELAY=-1
+        url: jdbc:h2:file:./<%= BUILD_DIR %>h2db/db/<%= lowercaseBaseName %>;DB_CLOSE_DELAY=-1
         username: <%= baseName %>
         password:
         <%_ } else if (devDatabaseType == 'h2Memory') { _%>
@@ -180,8 +180,8 @@ spring:
             cluster-nodes:
             properties:
                 path:
-                    logs: target/elasticsearch/log
-                    data: target/elasticsearch/data
+                    logs: <%= BUILD_DIR %>elasticsearch/log
+                    data: <%= BUILD_DIR %>elasticsearch/data
     <%_ } _%>
     mail:
         host: localhost

@@ -102,9 +102,9 @@ gulpBuildWithOpts.dependsOn npm_install
 gulpBuildWithOpts.dependsOn bower
 processResources.dependsOn gulpBuildWithOpts
 test.dependsOn gulp_test
-test.dependsOn webpack_test
 bootRun.dependsOn gulp_test
     <%_ } else { _%>
+test.dependsOn webpack_test
 processResources.dependsOn webpack
     <%_ } _%>
 <%_ } _%>
