@@ -84,6 +84,47 @@ objects:
     metadata:
       name: ${APPLICATION_NAME}
     spec:
+      strategy:
+        type: Rolling
+        rollingParams:
+          updatePeriodSeconds: 1
+          intervalSeconds: 1
+          timeoutSeconds: 600
+          maxUnavailable: 25%
+          maxSurge: 25%
+          pre:
+            failurePolicy: ignore
+            execNewPod:
+              command:
+                - "/bin/sh"
+                - "-c"
+                - |
+                    while true
+                    do
+                    <%_ if (app.prodDatabaseType === 'mysql') { _%>
+                      rt=$(nc -z -w 1 ${APPLICATION_NAME}-mysqldb 80)
+                    <%_ } _%>
+                    <%_ if (app.prodDatabaseType === 'mariadb') { _%>
+                      rt=$(nc -z -w 1 ${APPLICATION_NAME}-mariadb 80)
+                    <%_ } _%>
+                    <%_ if (app.prodDatabaseType === 'postgresql') { _%>
+                      rt=$(nc -z -w 1 ${APPLICATION_NAME}-postgresqldb 80)
+                    <%_ } _%>
+                    <%_ if (app.prodDatabaseType === 'mongodb') { _%>
+                      rt=$(nc -z -w 1 ${APPLICATION_NAME}-mongodb 80)
+                    <%_ } _%>
+                    <%_ if (app.prodDatabaseType === 'cassandra') { _%>
+                      rt=$(nc -z -w 1 ${APPLICATION_NAME}-cassandra 9042)
+                    <%_ } _%>
+                      if [ $? -eq 0 ]; then
+                        echo "DB is UP"
+                        break
+                      fi
+                      echo "DB is not yet reachable;sleep for 10s before retry"
+                      sleep 10
+                    done
+              containerName: ${APPLICATION_NAME}
+        resources:
       replicas: "1"
       template:
         metadata:
@@ -97,6 +138,11 @@ objects:
             env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod,swagger
+            - name: DEPENDENCY_PROBE
+              valueFrom:
+                configMapKeyRef:
+                  name: dependency-probe
+                  key: probe.sh
             <%_ if (app.serviceDiscoveryType === 'eureka') { _%>
             - name: SPRING_CLOUD_CONFIG_URI
               value: http://admin:${jhipster.registry.password}@jhipster-registry/config
@@ -213,6 +259,10 @@ objects:
     apiVersion: v1
     kind: Service
     metadata:
+      annotations:
+        service.alpha.openshift.io/dependencies: '[{"name": "${APPLICATION_NAME}-mysqldb", "namespace": "", "kind": "Service"}]'
+      labels:
+        app: ${APPLICATION_NAME}
       name: ${APPLICATION_NAME}
     spec:
       selector:
