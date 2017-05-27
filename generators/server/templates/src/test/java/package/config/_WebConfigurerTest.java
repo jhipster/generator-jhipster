@@ -159,7 +159,7 @@ public class WebConfigurerTest {
         assertThat(container.getMimeMappings().get("json")).isEqualTo("text/html;charset=utf-8");
         <%_ if (!skipClient) { _%>
         if (container.getDocumentRoot() != null) {
-            assertThat(container.getDocumentRoot().getPath()).isEqualTo("<%= BUILD_DIR %>/www");
+            assertThat(container.getDocumentRoot().getPath()).isEqualTo("<%= BUILD_DIR %>www");
         }
         <%_ } _%>
 
