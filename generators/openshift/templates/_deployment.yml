@@ -138,11 +138,6 @@ objects:
             env:
             - name: SPRING_PROFILES_ACTIVE
               value: prod,swagger
-            - name: DEPENDENCY_PROBE
-              valueFrom:
-                configMapKeyRef:
-                  name: dependency-probe
-                  key: probe.sh
             <%_ if (app.serviceDiscoveryType === 'eureka') { _%>
             - name: SPRING_CLOUD_CONFIG_URI
               value: http://admin:${jhipster.registry.password}@jhipster-registry/config
@@ -260,7 +255,12 @@ objects:
     kind: Service
     metadata:
       annotations:
-        service.alpha.openshift.io/dependencies: '[{"name": "${APPLICATION_NAME}-mysqldb", "namespace": "", "kind": "Service"}]'
+        service.alpha.openshift.io/dependencies: '[{
+          "name": <%_ if (app.prodDatabaseType === 'mysql') { _%>"${APPLICATION_NAME}-mysqldb"<%_ } _%>
+          <%_ if (app.prodDatabaseType === 'mariadb') { _%>"${APPLICATION_NAME}-mariadb"<%_ } _%>
+          <%_ if (app.prodDatabaseType === 'postgresql') { _%>"${APPLICATION_NAME}-postgresqldb"<%_ } _%>
+          <%_ if (app.prodDatabaseType === 'mongodb') { _%>"${APPLICATION_NAME}-mongodb"<%_ } _%>
+          <%_ if (app.prodDatabaseType === 'cassandra') { _%>"${APPLICATION_NAME}-cassandra" <%_ } _%>, "namespace": "", "kind": "Service"}]'
       labels:
         app: ${APPLICATION_NAME}
       name: ${APPLICATION_NAME}
