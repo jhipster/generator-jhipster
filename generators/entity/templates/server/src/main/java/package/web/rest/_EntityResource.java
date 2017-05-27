@@ -72,10 +72,10 @@ public class <%= entityClass %>Resource {
     private final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
 
     private static final String ENTITY_NAME = "<%= entityInstance %>";
-    <%
+    <%_
     const instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
-    const instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance; -%>
-    <%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource'}); -%>
+    const instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
+    _%><%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource'}); -%>
 
     /**
      * POST  /<%= entityApiUrl %> : Create a new <%= entityInstance %>.
@@ -157,11 +157,10 @@ public class <%= entityClass %>Resource {
      * SEARCH  /_search/<%= entityApiUrl %>?query=:query : search for the <%= entityInstance %> corresponding
      * to the query.
      *
-     * @param query the query of the <%= entityInstance %> search <% if (pagination != 'no') { %>
+     * @param query the query of the <%= entityInstance %> search<% if (pagination != 'no') { %>
      * @param pageable the pagination information<% } %>
      * @return the result of the search
      */
     @GetMapping("/_search/<%= entityApiUrl %>")
     @Timed<%- include('../../common/search_template', {viaService: viaService}); -%><% } %>
-
 }

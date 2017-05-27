@@ -145,11 +145,11 @@ jhipster:
         queue-capacity: 10000
     # To test logstash appender
     logging:
-            logstash:
-                enabled: true
-                host: localhost
-                port: 5000
-                queue-size: 512
+        logstash:
+            enabled: true
+            host: localhost
+            port: 5000
+            queue-size: 512
 <%_ if (!skipUserManagement) { _%>
     mail:
         from: test@localhost
