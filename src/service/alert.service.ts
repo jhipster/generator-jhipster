@@ -40,7 +40,7 @@ export class AlertService {
     private alerts: Alert[];
     private timeout: number;
 
-    constructor(private sanitizer: Sanitizer, private toast?: boolean, private translateService?: TranslateService) {
+    constructor(private sanitizer: Sanitizer, private toast = false, private translateService?: TranslateService) {
         this.alertId = 0; // unique id for each alert. Starts from 0.
         this.alerts = [];
         this.timeout = 5000; // default timeout in milliseconds
