@@ -148,7 +148,7 @@
     "webpack:build": "<%= clientPackageManager %> run ngc && webpack --config webpack/webpack.vendor.js && webpack --config webpack/webpack.dev.js",
     "webpack:build:dev": "webpack --config webpack/webpack.dev.js",
     "webpack:build:vendor": "webpack --config webpack/webpack.vendor.js",
-    "webpack:dev": "webpack-dev-server --config webpack/webpack.dev.js  --progress --inline --hot --profile --port=9060",
+    "webpack:dev": "webpack-dev-server --config webpack/webpack.dev.js  --progress --inline --hot --profile --port=9060 --history-api-fallback",
     "webpack:test": "<%= clientPackageManager %> run ngc && <%= clientPackageManager %> run test",
     "webpack:prod": "<%= clientPackageManager %> run ngc && webpack -p --config webpack/webpack.vendor.js && webpack -p --config webpack/webpack.prod.js",
     "test": "<%= clientPackageManager %> run lint && karma start src/test/javascript/karma.conf.js",
