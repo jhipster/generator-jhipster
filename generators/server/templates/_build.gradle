@@ -52,6 +52,9 @@ apply plugin: 'propdeps'
 apply plugin: 'com.moowork.node'
     <%_ if (clientFramework === 'angular1') { _%>
 apply plugin: 'com.moowork.gulp'
+gulp {
+    bufferOutput = true
+}
     <%_ } _%>
 <%_ } _%>
 apply plugin: 'io.spring.dependency-management'
