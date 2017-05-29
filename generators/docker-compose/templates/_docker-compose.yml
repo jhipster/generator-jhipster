@@ -47,8 +47,8 @@ services:
             file: consul.yml
             service: consul-config-loader
 <%_ } _%>
-
 <%_ if (monitoring === 'elk') { _%>
+
     jhipster-elasticsearch:
         extends:
             file: jhipster-console.yml
@@ -68,8 +68,8 @@ services:
             service: jhipster-zipkin
     <%_ } _%>
 <%_ } _%>
-
 <%_ if (monitoring === 'prometheus') { _%>
+
     prometheus:
         extends:
             file: prometheus.yml
@@ -88,5 +88,4 @@ services:
 volumes:
     prometheus_data: {}
     grafana_data: {}
-
 <%_ } _%>
