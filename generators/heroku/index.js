@@ -145,7 +145,7 @@ module.exports = HerokuGenerator.extend({
             const cliPlugin = 'heroku-cli-deploy';
 
             exec('heroku plugins', (err, stdout) => {
-                if (stdout.indexOf(cliPlugin) > -1) {
+                if (_.includes(stdout, cliPlugin)) {
                     this.log('\nHeroku CLI deployment plugin already installed');
                     done();
                 } else {
@@ -260,7 +260,7 @@ module.exports = HerokuGenerator.extend({
             exec(`heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`, {}, (err, stdout, stderr) => {
                 if (err) {
                     const verifyAccountUrl = 'https://heroku.com/verify';
-                    if (err.indexOf(verifyAccountUrl) > -1) {
+                    if (_.includes(err, verifyAccountUrl)) {
                         this.abort = true;
                         this.log.error(`Account must be verified to use addons. Please go to: ${verifyAccountUrl}`);
                         this.log.error(err);
