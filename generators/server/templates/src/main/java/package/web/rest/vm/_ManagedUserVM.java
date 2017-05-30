@@ -20,6 +20,7 @@ package <%=packageName%>.web.rest.vm;
 
 import <%=packageName%>.service.dto.UserDTO;
 import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.NotBlank;
 
 <%_ if (databaseType == 'mongodb' || databaseType == 'sql') { _%>
 import java.time.Instant;
@@ -35,6 +36,7 @@ public class ManagedUserVM extends UserDTO {
 
     public static final int PASSWORD_MAX_LENGTH = 100;
 
+    @NotBlank
     @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
     private String password;
 
