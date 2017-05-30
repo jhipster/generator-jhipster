@@ -80,7 +80,7 @@ export class <%= entityAngularName %>Service {
         });
     }
 
-    find(id: number): Observable<<%= entityAngularName %>> {
+    find(id: <% if (pkType == 'String') { %>string<% } else { %>number<% } %>): Observable<<%= entityAngularName %>> {
         return this.http.get(`${this.resourceUrl}/${id}`).map((res: Response) => {
             <%_ if(hasDate) { _%>
             const jsonResponse = res.json();
@@ -98,7 +98,7 @@ export class <%= entityAngularName %>Service {
             .map((res: Response) => this.convertResponse(res));
     }
 
-    delete(id: number): Observable<Response> {
+    delete(id: <% if (pkType == 'String') { %>string<% } else { %>number<% } %>): Observable<Response> {
         return this.http.delete(`${this.resourceUrl}/${id}`);
     }
     <%_ if(searchEngine === 'elasticsearch') { _%>
