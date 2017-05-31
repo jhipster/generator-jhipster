@@ -322,6 +322,39 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
 
     @Test<% if (databaseType == 'sql') { %>
     @Transactional<% } %>
+    public void testRegisterNullPassword() throws Exception {
+        ManagedUserVM invalidUser = new ManagedUserVM(
+            null,               // id
+            "bob",              // login
+            null,               // invalid null password
+            "Bob",              // firstName
+            "Green",            // lastName
+            "bob@example.com",  // email
+            true,               // activated
+            <%_ if (databaseType == 'mongodb' || databaseType == 'sql') { _%>
+            "http://placehold.it/50x50", //imageUrl
+            <%_ } _%>
+            "<%= nativeLanguage %>",                   // langKey
+            <%_ if (databaseType == 'mongodb' || databaseType == 'sql') { _%>
+            null,                   // createdBy
+            null,                   // createdDate
+            null,                   // lastModifiedBy
+            null,                   // lastModifiedDate
+            <%_ } _%>
+            new HashSet<>(Collections.singletonList(AuthoritiesConstants.USER)));
+
+        restUserMockMvc.perform(
+            post("/api/register")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(invalidUser)))
+            .andExpect(status().isBadRequest());
+
+        Optional<User> user = userRepository.findOneByLogin("bob");
+        assertThat(user.isPresent()).isFalse();
+    }
+
+    @Test<% if (databaseType == 'sql') { %>
+    @Transactional<% } %>
     public void testRegisterDuplicateLogin() throws Exception {
         // Good
         ManagedUserVM validUser = new ManagedUserVM(
