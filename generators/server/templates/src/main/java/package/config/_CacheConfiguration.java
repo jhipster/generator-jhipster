@@ -43,8 +43,9 @@ import com.hazelcast.config.MaxSizeConfig;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+    <%_ if (serviceDiscoveryType === 'eureka') { _%>
 import org.springframework.beans.factory.annotation.Autowired;
+    <%_ } _%>
 <%_ } _%>
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
