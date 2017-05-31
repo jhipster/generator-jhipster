@@ -142,17 +142,27 @@ module.exports = HerokuGenerator.extend({
         installHerokuDeployPlugin() {
             if (this.abort) return;
             const done = this.async();
-            this.log(chalk.bold('\nInstalling Heroku CLI deployment plugin'));
-            const child = exec('heroku plugins:install heroku-cli-deploy', (err, stdout) => {
-                if (err) {
-                    this.abort = true;
-                    this.log.error(err);
-                }
-                done();
-            });
+            const cliPlugin = 'heroku-cli-deploy';
 
-            child.stdout.on('data', (data) => {
-                this.log(data.toString());
+            exec('heroku plugins', (err, stdout) => {
+                if (_.includes(stdout, cliPlugin)) {
+                    this.log('\nHeroku CLI deployment plugin already installed');
+                    done();
+                } else {
+                    this.log(chalk.bold('\nInstalling Heroku CLI deployment plugin'));
+                    const child = exec(`heroku plugins:install ${cliPlugin}`, (err, stdout) => {
+                        if (err) {
+                            this.abort = true;
+                            this.log.error(err);
+                        }
+
+                        done();
+                    });
+
+                    child.stdout.on('data', (data) => {
+                        this.log(data.toString());
+                    });
+                }
             });
         },
 
@@ -249,7 +259,14 @@ module.exports = HerokuGenerator.extend({
             this.log(chalk.bold('\nProvisioning addons'));
             exec(`heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`, {}, (err, stdout, stderr) => {
                 if (err) {
-                    this.log('No new addons created');
+                    const verifyAccountUrl = 'https://heroku.com/verify';
+                    if (_.includes(err, verifyAccountUrl)) {
+                        this.abort = true;
+                        this.log.error(`Account must be verified to use addons. Please go to: ${verifyAccountUrl}`);
+                        this.log.error(err);
+                    } else {
+                        this.log('No new addons created');
+                    }
                 } else {
                     this.log(`Created ${dbAddOn}`);
                 }
