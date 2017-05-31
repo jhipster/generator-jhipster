@@ -42,6 +42,7 @@ import io.github.jhipster.web.filter.CachingHttpHeadersFilter;
 import io.undertow.Undertow;
 import io.undertow.Undertow.Builder;
 import io.undertow.UndertowOptions;
+import org.apache.commons.io.FilenameUtils;
 <%_ if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
 import org.h2.server.web.WebServlet;
 <%_ } _%>
@@ -159,7 +160,7 @@ public class WebConfigurerTest {
         assertThat(container.getMimeMappings().get("json")).isEqualTo("text/html;charset=utf-8");
         <%_ if (!skipClient) { _%>
         if (container.getDocumentRoot() != null) {
-            assertThat(container.getDocumentRoot().getPath()).isEqualTo("<%= BUILD_DIR %>www");
+            assertThat(container.getDocumentRoot().getPath()).isEqualTo(FilenameUtils.separatorsToSystem("<%= BUILD_DIR %>www"));
         }
         <%_ } _%>
 
@@ -177,7 +178,7 @@ public class WebConfigurerTest {
         assertThat(container.getMimeMappings().get("abs")).isEqualTo("audio/x-mpeg");
         assertThat(container.getMimeMappings().get("html")).isEqualTo("text/html;charset=utf-8");
         assertThat(container.getMimeMappings().get("json")).isEqualTo("text/html;charset=utf-8");
-        assertThat(container.getDocumentRoot().getPath()).isEqualTo("src/main/webapp");
+        assertThat(container.getDocumentRoot().getPath()).isEqualTo(FilenameUtils.separatorsToSystem("src/main/webapp"));
 
         Builder builder = Undertow.builder();
         container.getBuilderCustomizers().forEach(c -> c.customize(builder));
