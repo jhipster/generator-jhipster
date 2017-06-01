@@ -19,7 +19,6 @@
 package <%=packageName%>.web.rest.vm;
 
 import ch.qos.logback.classic.Logger;
-import com.fasterxml.jackson.annotation.JsonCreator;
 
 /**
  * View Model object for storing a Logback logger.
@@ -35,7 +34,6 @@ public class LoggerVM {
         this.level = logger.getEffectiveLevel().toString();
     }
 
-    @JsonCreator
     public LoggerVM() {
         // Empty public constructor used by Jackson.
     }
