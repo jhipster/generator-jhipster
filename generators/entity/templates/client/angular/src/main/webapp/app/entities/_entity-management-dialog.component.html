@@ -78,12 +78,16 @@ _%>
                     <%_ } else { _%>
                     <span class="pull-left">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
                     <%_ } _%>
+                    <%_ if (fieldTypeBlobContent == 'image') { _%>
+                    <button type="button" (click)="clearInputImage('<%= fieldName %>', '<%= fieldName %>ContentType', 'fileImage')" class="btn btn-default btn-xs pull-right">
+                    <%_ } else { _%>
                     <button type="button" (click)="<%= entityInstance %>.<%= fieldName %>=null;<%= entityInstance %>.<%= fieldName %>ContentType=null;"
                             class="btn btn-default btn-xs pull-right">
+                    <%_ } _%>
                         <span class="fa fa-times"></span>
                     </button>
                 </div>
-                <input type="file" (change)="setFileData($event, <%= entityInstance %>, '<%= fieldName %>', <% if (fieldTypeBlobContent == 'image') { %>true)" accept="image/*" jhiTranslate="entity.action.addimage"<% } else { %>false)" jhiTranslate="entity.action.addblob"<% } %>/>
+                <input type="file"<% if (fieldTypeBlobContent == 'image') { %> id="fileImage"<% } %> (change)="setFileData($event, <%= entityInstance %>, '<%= fieldName %>', <% if (fieldTypeBlobContent == 'image') { %>true)" accept="image/*" jhiTranslate="entity.action.addimage"<% } else { %>false)" jhiTranslate="entity.action.addblob"<% } %>/>
             </div>
             <%_ } _%>
             <%_ if (fieldType == 'LocalDate') { _%>
@@ -104,8 +108,7 @@ _%>
                 [(ngModel)]="<%= entityInstance %>.<%= fieldName %>" <%- include ng_validators %> ></textarea>
             <%_ } else { _%>
             <input type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>"
-                [(ngModel)]="<%= entityInstance %>.<%= fieldName %>"
-            <%- include ng_validators %> />
+                [(ngModel)]="<%= entityInstance %>.<%= fieldName %>" <%- include ng_validators %> />
                 <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
             <input type="hidden" class="form-control" name="<%= fieldName %>ContentType" id="field_<%= fieldName %>ContentType"
                 [(ngModel)]="<%= entityInstance %>.<%= fieldName %>ContentType" />

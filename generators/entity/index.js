@@ -459,6 +459,7 @@ module.exports = EntityGenerator.extend({
             this.fieldsContainLocalDate = false;
             this.fieldsContainBigDecimal = false;
             this.fieldsContainBlob = false;
+            this.fieldsContainImageBlob = false;
             this.validation = false;
             this.fieldsContainOwnerManyToMany = false;
             this.fieldsContainNoOwnerOneToOne = false;
@@ -545,6 +546,9 @@ module.exports = EntityGenerator.extend({
                     this.fieldsContainBigDecimal = true;
                 } else if (fieldType === 'byte[]' || fieldType === 'ByteBuffer') {
                     this.fieldsContainBlob = true;
+                    if (field.fieldTypeBlobContent === 'image') {
+                        this.fieldsContainImageBlob = true;
+                    }
                 }
 
                 if (field.fieldValidate) {
@@ -747,6 +751,7 @@ module.exports = EntityGenerator.extend({
                         fieldsContainLocalDate: this.fieldsContainLocalDate,
                         fieldsContainBigDecimal: this.fieldsContainBigDecimal,
                         fieldsContainBlob: this.fieldsContainBlob,
+                        fieldsContainImageBlob: this.fieldsContainImageBlob,
                         pkType: this.pkType,
                         entityApiUrl: this.entityApiUrl,
                         entityClass: this.entityClass,
