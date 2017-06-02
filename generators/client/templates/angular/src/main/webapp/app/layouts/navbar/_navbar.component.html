@@ -121,7 +121,7 @@
                     <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
                     <%_ if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
                     <li *ngIf="!inProduction">
-                        <a class="dropdown-item" href='/h2-console' target="_tab" (click)="collapseNavbar()">
+                        <a class="dropdown-item" href='./h2-console' target="_tab" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-hdd-o" aria-hidden="true"></i>
                             <span jhiTranslate="global.menu.admin.database">Database</span>
                         </a>
