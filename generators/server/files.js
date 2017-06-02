@@ -344,6 +344,7 @@ function writeFiles() {
             }
 
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_ApplicationProperties.java`, `${javaDir}config/ApplicationProperties.java`);
+            this.template(`${SERVER_MAIN_SRC_DIR}package/config/_JacksonConfiguration.java`, `${javaDir}config/JacksonConfiguration.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_LocaleConfiguration.java`, `${javaDir}config/LocaleConfiguration.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_LoggingAspectConfiguration.java`, `${javaDir}config/LoggingAspectConfiguration.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_MetricsConfiguration.java`, `${javaDir}config/MetricsConfiguration.java`);

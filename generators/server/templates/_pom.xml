@@ -277,6 +277,10 @@
             <artifactId>jackson-datatype-json-org</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-afterburner</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <%_ if (devDatabaseType != 'h2Disk' && devDatabaseType != 'h2Memory') { _%>

@@ -230,6 +230,7 @@ dependencies {
     <%_ } _%>
     compile "com.fasterxml.jackson.core:jackson-annotations"
     compile "com.fasterxml.jackson.core:jackson-databind"
+    compile "com.fasterxml.jackson.module:jackson-module-afterburner"
     compile ("com.ryantenney.metrics:metrics-spring:${metrics_spring_version}")
     <%_ if (hibernateCache === 'hazelcast') { _%>
     compile "com.hazelcast:hazelcast"
