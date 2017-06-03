@@ -677,15 +677,6 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
 
         userRepository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(user);
 
-        User anotherUser = new User();
-        <%_ if (databaseType === 'cassandra') { _%>
-        anotherUser.setId(UUID.randomUUID().toString());
-        <%_ } _%>
-        anotherUser.setLogin("save-existing-email-and-login");
-        anotherUser.setEmail("save-existing-email-and-login@example.com");
-        anotherUser.setPassword(RandomStringUtils.random(60));
-        anotherUser.setActivated(true);
-
         UserDTO userDTO = new UserDTO(
             null,                   // id
             "not-used",          // login
