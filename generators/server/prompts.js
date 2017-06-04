@@ -398,6 +398,10 @@ function askForServerSideOpts() {
                     name: 'Yes, with HazelCast (distributed cache, for multiple nodes)'
                 },
                 {
+                    value: 'infinispan',
+                    name: 'Yes, with Infinispan (hybrid cache, for multiple nodes)'
+                },
+                {
                     value: 'no',
                     name: 'No'
                 }

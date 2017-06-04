@@ -58,7 +58,8 @@ import <%=packageName%>.domain.enumeration.<%= element %>;<% }); %>
 <% } -%>
 <% if (databaseType === 'sql') { -%>
 @Entity
-@Table(name = "<%= entityTableName %>")<% if (hibernateCache !== 'no') { %>
+@Table(name = "<%= entityTableName %>")<% if (hibernateCache === 'infinispan') { %>
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <% } else if (hibernateCache !== 'no') { %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType === 'mongodb') { %>
 @Document(collection = "<%= entityTableName %>")<% } %><% if (databaseType === 'cassandra') { %>
 @Table(name = "<%= entityInstance %>")<% } %><% if (searchEngine === 'elasticsearch') { %>
@@ -164,7 +165,8 @@ public class <%= entityClass %> implements Serializable {
     _%>
     @OneToMany(mappedBy = "<%= otherEntityRelationshipName %>")
     @JsonIgnore
-    <%_     if (hibernateCache !== 'no') { _%>
+    <%_     if (hibernateCache === 'infinispan') { _%>
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <% } else if (hibernateCache !== 'no') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     <%_     } _%>
     private Set<<%= otherEntityNameCapitalized %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
@@ -178,8 +180,12 @@ public class <%= entityClass %> implements Serializable {
 
     <%_ } else if (relationshipType === 'many-to-many') { _%>
     @ManyToMany<% if (ownerSide === false) { %>(mappedBy = "<%= otherEntityRelationshipNamePlural %>")
-    @JsonIgnore<% } %>
-    <%_     if (hibernateCache !== 'no') { _%>
+    @JsonIgnore
+    <%_     } else { _%>
+
+    <%_     }
+            if (hibernateCache === 'infinispan') { _%>
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <% } else if (hibernateCache !== 'no') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     <%_     }
             if (ownerSide === true) { _%>

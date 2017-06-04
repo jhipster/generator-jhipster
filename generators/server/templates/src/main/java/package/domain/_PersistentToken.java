@@ -40,7 +40,9 @@ import java.util.Date;<% } %>
  */<% if (databaseType === 'sql') { %>
 @Entity
 @Table(name = "jhi_persistent_token")<% } %><% if (hibernateCache !== 'no' && databaseType === 'sql') { %>
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType === 'mongodb') { %>
+<% if (hibernateCache === 'infinispan') { %>
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)<% } else {%>
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% }} %><% if (databaseType === 'mongodb') { %>
 @Document(collection = "jhi_persistent_token")<% } %><% if (databaseType === 'cassandra') { %>
 @Table(name = "persistent_token")<% } %>
 public class PersistentToken implements Serializable {

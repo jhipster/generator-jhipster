@@ -75,6 +75,16 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 
 import javax.annotation.PreDestroy;
 <%_ } _%>
+<%_ if (hibernateCache === 'infinispan') { _%>
+import org.infinispan.configuration.cache.CacheMode;
+import org.infinispan.configuration.cache.ConfigurationBuilder;
+import org.infinispan.configuration.global.GlobalConfigurationBuilder;
+import infinispan.autoconfigure.embedded.InfinispanCacheConfigurer;
+import infinispan.autoconfigure.embedded.InfinispanGlobalConfigurer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import io.github.jhipster.config.JHipsterProperties;
+<%_ } _%>
 
 @Configuration
 @EnableCaching
@@ -278,4 +288,42 @@ public class CacheConfiguration {
     }
     <%_ } _%>
     <%_ } _%>
+
+    <%_ if (hibernateCache === 'infinispan') { _%>
+    private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
+    /**
+     * This bean is optional but it shows how to inject {@link org.infinispan.configuration.global.GlobalConfiguration}.
+     */
+    @Bean
+    public InfinispanGlobalConfigurer globalConfiguration(JHipsterProperties jHipsterProperties) {
+        log.info("Defining Infinispan Global Configuration");
+
+        return () -> GlobalConfigurationBuilder
+                .defaultClusteredBuilder().transport().defaultTransport().clusterName("infinispan-hibernate-cluster")
+                .addProperty("configurationFile", jHipsterProperties.getCache()
+                .getInfinispan().getConfigFile())
+                .globalJmxStatistics().allowDuplicateDomains(true)
+                .build();
+    }
+
+    /**
+     * Initialize cache configuration for L2 cache access.
+     * 'app-data' is defined with distribution mode and
+     * data 'entity' is defined with invalidation mode
+     */
+    @Bean
+    public InfinispanCacheConfigurer cacheConfigurer(JHipsterProperties jHipsterProperties) {
+        log.info("Defining {} configuration", "app-data and entity");
+
+        return manager -> {
+            manager.defineConfiguration("dist-app-data", new ConfigurationBuilder()
+                .clustering().cacheMode(CacheMode.DIST_SYNC).hash().numOwners(jHipsterProperties.getCache()
+                .getInfinispan().getDistInstCount()).build());
+            manager.defineConfiguration("repl-app-data", new ConfigurationBuilder()
+                .clustering().cacheMode(CacheMode.REPL_SYNC).build());
+        };
+    }
+<%_ } _%>
+
+
 }

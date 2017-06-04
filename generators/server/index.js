@@ -187,7 +187,7 @@ module.exports = JhipsterServerGenerator.extend({
                 this.hibernateCache = 'hazelcast';
             }
             this.clusteredHttpSession = this.config.get('clusteredHttpSession') === 'no' ? false : this.config.get('clusteredHttpSession');
-            if (this.hibernateCache === 'ehcache') {
+            if (this.hibernateCache === 'ehcache' || this.hibernateCache === 'infinispan') {
                 this.clusteredHttpSession = false; // cannot use HazelCast clusering AND ehcache
             }
             this.buildTool = this.config.get('buildTool');

@@ -44,7 +44,8 @@ import java.util.Objects;
  * A Social user.
  */<% if (databaseType === 'sql') { %>
 @Entity
-@Table(name = "jhi_social_user_connection")<% if (hibernateCache !== 'no') { %>
+@Table(name = "jhi_social_user_connection")<% if (hibernateCache === 'infinispan') { %>
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <% } else if (hibernateCache !== 'no') { %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType === 'mongodb') { %>
 @Document(collection = "jhi_social_user_connection")
 @CompoundIndexes(
