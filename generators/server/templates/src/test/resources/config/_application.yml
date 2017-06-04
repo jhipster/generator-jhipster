@@ -82,6 +82,8 @@ spring:
             hibernate.generate_statistics: true
             hibernate.hbm2ddl.auto: validate
     <%_ } _%>
+    messages:
+        basename: i18n/messages
     <%_ if (databaseType == 'mongodb' || databaseType == 'cassandra' || applicationType == 'gateway' || searchEngine == 'elasticsearch') { _%>
     data:
     <%_ } _%>
