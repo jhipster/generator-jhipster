@@ -35,7 +35,7 @@ export * from './auth/user-route-access-service';
 <%_ if (enableTranslation) { _%>
 export * from './language/language.constants';
 export * from './language/language.helper';
-export * from './language/find-language-from-key';
+export * from './language/find-language-from-key.pipe';
 <%_ } _%>
 <%_ if (websocket === 'spring-websocket') { _%>
 export * from './tracker/tracker.service';
