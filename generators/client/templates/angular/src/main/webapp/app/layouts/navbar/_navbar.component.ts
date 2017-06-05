@@ -19,7 +19,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { JhiLanguageService } from 'ng-jhipster';
 
 import { ProfileService } from '../profiles/profile.service';
 import { <% if (enableTranslation) { %>JhiLanguageHelper, <% } %>Principal, LoginModalService, LoginService } from '../../shared';
@@ -50,7 +49,6 @@ export class NavbarComponent implements OnInit {
         private loginService: LoginService,
         <%_ if (enableTranslation) { _%>
         private languageHelper: JhiLanguageHelper,
-        private languageService: JhiLanguageService,
         <%_ } _%>
         private principal: Principal,
         private loginModalService: LoginModalService,
@@ -59,9 +57,6 @@ export class NavbarComponent implements OnInit {
     ) {
         this.version = VERSION ? 'v' + VERSION : '';
         this.isNavbarCollapsed = true;
-        <%_ if (enableTranslation) { _%>
-        this.languageService.addLocation('home');
-        <%_ } _%>
     }
 
     ngOnInit() {
