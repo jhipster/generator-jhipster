@@ -383,7 +383,7 @@ const files = {
             condition: generator => generator.enableTranslation,
             path: ANGULAR_DIR,
             templates: [
-                'shared/language/_language.pipe.ts',
+                'shared/language/_find-language-from-key.pipe.ts',
                 'shared/language/_language.constants.ts',
                 'shared/language/_language.helper.ts'
             ]
