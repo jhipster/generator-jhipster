@@ -27,5 +27,5 @@ if (module['hot']) {
 }
 
 platformBrowserDynamic().bootstrapModule(<%=angular2AppName%>AppModule)
-.then(success => console.log(`Application started`))
-.catch(err => console.error(err));
+.then((success) => console.log(`Application started`))
+.catch((err) => console.error(err));
