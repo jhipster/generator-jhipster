@@ -251,7 +251,7 @@ dependencies {
     compile "org.hibernate:hibernate-infinispan:${infinispan_hibernate52_version}"
     <%_ } _%>
     <%_ if (hibernateCache === 'infinispan' || clusteredHttpSession === 'infinispan') {_%>
-    compile "org.infinispan:infinispan-spring-boot-starter:${infinispan_version_starter}"
+    compile "org.infinispan:infinispan-spring-boot-starter:${infinispan_boot_starter_version}"
     compile "org.infinispan:infinispan-core"
     compile "org.infinispan:infinispan-spring4-embedded:${infinispan_cloud_version}"
     compile "org.infinispan:infinispan-spring4-common:${infinispan_cloud_version}"

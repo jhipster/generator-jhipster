@@ -83,7 +83,7 @@
         <%_ if (hibernateCache === 'infinispan' || clusteredHttpSession === 'infinispan') { _%>
         <infinispan.version>8.2.5.Final</infinispan.version>
         <infinispan.cloud.version>9.0.0.Final</infinispan.cloud.version>
-        <infinispan.version.starter>1.0.0.Final</infinispan.version.starter>
+        <infinispan.boot.starter.version>1.0.0.Final</infinispan.boot.starter.version>
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
         <hibernate.version>5.2.8.Final</hibernate.version>
@@ -341,7 +341,7 @@
         <dependency>
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-spring-boot-starter</artifactId>
-            <version>${infinispan.version.starter}</version>
+            <version>${infinispan.boot.starter.version}</version>
         </dependency>
         <dependency>
             <groupId>org.infinispan</groupId>
