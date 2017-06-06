@@ -75,7 +75,7 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 
 import javax.annotation.PreDestroy;
 <%_ } _%>
-<%_ if (hibernateCache === 'infinispan') { _%>
+<%_ if (hibernateCache === 'infinispan' || clusteredHttpSession === 'infinispan') { _%>
 import org.infinispan.configuration.cache.CacheMode;
 import org.infinispan.configuration.cache.ConfigurationBuilder;
 import org.infinispan.configuration.global.GlobalConfigurationBuilder;
@@ -84,10 +84,17 @@ import infinispan.autoconfigure.embedded.InfinispanGlobalConfigurer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.github.jhipster.config.JHipsterProperties;
+import java.util.concurrent.TimeUnit;
+import org.infinispan.eviction.EvictionType;
 <%_ } _%>
-
+<%_ if (clusteredHttpSession == 'infinispan') { _%>
+import org.infinispan.spring.session.configuration.EnableInfinispanEmbeddedHttpSession;
+<%_ } _%>
 @Configuration
 @EnableCaching
+<%_ if (clusteredHttpSession == 'infinispan') { _%>
+@EnableInfinispanEmbeddedHttpSession
+<%_ } _%>
 @AutoConfigureAfter(value = { MetricsConfiguration.class })
 @AutoConfigureBefore(value = { WebConfigurer.class<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>, DatabaseConfiguration.class<% } %> })
 public class CacheConfiguration {
@@ -289,8 +296,17 @@ public class CacheConfiguration {
     <%_ } _%>
     <%_ } _%>
 
-    <%_ if (hibernateCache === 'infinispan') { _%>
+    <%_ if (hibernateCache === 'infinispan' || clusteredHttpSession === 'infinispan') { _%>
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
+
+    /* for customizing session cookie key; default is 'session'
+    @Bean
+    public org.springframework.session.web.http.CookieSerializer cookieSerializer() {
+        org.springframework.session.web.http.DefaultCookieSerializer serializer = new org.springframework.session.web.http.DefaultCookieSerializer();
+        serializer.setCookieName("JSESSIONID");
+        return serializer;
+    }*/
+
     /**
      * This bean is optional but it shows how to inject {@link org.infinispan.configuration.global.GlobalConfiguration}.
      */
@@ -313,14 +329,23 @@ public class CacheConfiguration {
      */
     @Bean
     public InfinispanCacheConfigurer cacheConfigurer(JHipsterProperties jHipsterProperties) {
-        log.info("Defining {} configuration", "app-data and entity");
+        log.info("Defining {} configuration", "app-data for local, replicated and distributed modes");
+        final JHipsterProperties.Cache.Infinispan cacheInfo = jHipsterProperties.getCache().getInfinispan();
 
         return manager -> {
+            <%_ if (clusteredHttpSession == 'infinispan') { _%>
+            manager.defineConfiguration("sessions", new ConfigurationBuilder().clustering().cacheMode(CacheMode.DIST_SYNC).build());
+            <%_ } _%>
+            manager.defineConfiguration("local-app-data", new ConfigurationBuilder().clustering().cacheMode(CacheMode.LOCAL)
+                .eviction().type(EvictionType.COUNT).size(cacheInfo.getLocal().getMaxEntries()).expiration()
+                .lifespan(cacheInfo.getLocal().getTimeToLiveSeconds(), TimeUnit.MINUTES).build());
             manager.defineConfiguration("dist-app-data", new ConfigurationBuilder()
-                .clustering().cacheMode(CacheMode.DIST_SYNC).hash().numOwners(jHipsterProperties.getCache()
-                .getInfinispan().getDistInstCount()).build());
+                .clustering().cacheMode(CacheMode.DIST_SYNC).hash().numOwners(cacheInfo.getDistributed().getInstanceCount()).eviction()
+                .type(EvictionType.COUNT).size(cacheInfo.getDistributed().getMaxEntries()).expiration().lifespan(cacheInfo.getDistributed()
+                .getTimeToLiveSeconds(), TimeUnit.MINUTES).build());
             manager.defineConfiguration("repl-app-data", new ConfigurationBuilder()
-                .clustering().cacheMode(CacheMode.REPL_SYNC).build());
+                .clustering().cacheMode(CacheMode.REPL_SYNC).eviction().type(EvictionType.COUNT).size(cacheInfo.getReplicated()
+                .getMaxEntries()).expiration().lifespan(cacheInfo.getReplicated().getTimeToLiveSeconds(), TimeUnit.MINUTES).build());
         };
     }
 <%_ } _%>

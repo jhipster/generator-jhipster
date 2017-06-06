@@ -399,7 +399,7 @@ function askForServerSideOpts() {
                 },
                 {
                     value: 'infinispan',
-                    name: 'Yes, with Infinispan (hybrid cache, for multiple nodes)'
+                    name: '[BETA] Yes, with Infinispan (hybrid cache, for multiple nodes)'
                 },
                 {
                     value: 'no',
@@ -516,6 +516,14 @@ function askForOptionalItems() {
             {
                 name: 'Clustered HTTP sessions using Hazelcast',
                 value: 'clusteredHttpSession:hazelcast'
+            }
+        );
+    }
+    if ((this.authenticationType === 'session') && (this.hibernateCache === 'no' || this.hibernateCache === 'infinispan')) {
+        choices.push(
+            {
+                name: '[BETA] Clustered HTTP sessions using Infinispan',
+                value: 'clusteredHttpSession:infinispan'
             }
         );
     }

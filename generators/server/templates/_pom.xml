@@ -79,8 +79,10 @@
         <%_ } _%>
         <%_ if (hibernateCache === 'infinispan') { _%>
         <infinispan-hibernate52.version>5.2.8.Final</infinispan-hibernate52.version>
+        <%_ } _%>
+        <%_ if (hibernateCache === 'infinispan' || clusteredHttpSession === 'infinispan') { _%>
         <infinispan.version>8.2.5.Final</infinispan.version>
-        <infinispan.cloud.version>9.0.1.Final</infinispan.cloud.version>
+        <infinispan.cloud.version>9.0.0.Final</infinispan.cloud.version>
         <infinispan.version.starter>1.0.0.Final</infinispan.version.starter>
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
@@ -198,7 +200,7 @@
         <%_ } _%>
     </properties>
 
-<%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa' || messageBroker === 'kafka' || hibernateCache === 'infinispan') { _%>
+    <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa' || messageBroker === 'kafka' || hibernateCache === 'infinispan' || clusteredHttpSession === 'infinispan') { _%>
     <dependencyManagement>
         <dependencies>
             <%_ if (messageBroker === 'kafka') { _%>
@@ -219,7 +221,7 @@
                 <scope>import</scope>
             </dependency>
             <%_ } _%>
-            <%_ if (hibernateCache === 'infinispan') { _%>
+            <%_ if (hibernateCache === 'infinispan' || clusteredHttpSession === 'infinispan') { _%>
             <dependency>
                 <groupId>org.infinispan</groupId>
                 <artifactId>infinispan-bom</artifactId>
@@ -334,6 +336,8 @@
             <artifactId>hibernate-infinispan</artifactId>
             <version>${infinispan-hibernate52.version}</version>
         </dependency>
+        <%_ } _%>
+        <%_ if (hibernateCache === 'infinispan' || clusteredHttpSession === 'infinispan') { _%>
         <dependency>
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-spring-boot-starter</artifactId>
@@ -346,6 +350,12 @@
         <dependency>
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-spring4-embedded</artifactId>
+            <version>${infinispan.cloud.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-spring4-common</artifactId>
+            <version>${infinispan.cloud.version}</version>
         </dependency>
         <dependency>
             <groupId>org.infinispan</groupId>
@@ -357,6 +367,12 @@
                     <artifactId>undertow-core</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <%_ } _%>
+        <%_ if (clusteredHttpSession === 'infinispan') { _%>
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session</artifactId>
         </dependency>
         <%_ } _%>
         <dependency>
