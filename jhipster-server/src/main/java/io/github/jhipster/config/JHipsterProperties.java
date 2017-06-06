@@ -183,6 +183,8 @@ public class JHipsterProperties {
 
         private final Ehcache ehcache = new Ehcache();
 
+        private final Infinispan infinispan = new Infinispan();
+
         public Hazelcast getHazelcast() {
             return hazelcast;
         }
@@ -190,6 +192,8 @@ public class JHipsterProperties {
         public Ehcache getEhcache() {
             return ehcache;
         }
+
+        public Infinispan getInfinispan() { return infinispan; }
 
         public static class Hazelcast {
 
@@ -235,6 +239,81 @@ public class JHipsterProperties {
             public void setMaxEntries(long maxEntries) {
                 this.maxEntries = maxEntries;
             }
+        }
+
+        public static class Infinispan {
+
+            private String configFile = "default-configs/default-jgroups-tcp.xml";
+
+            private final Local local = new Local();
+
+            private final Distributed distributed = new Distributed();
+
+            private final Replicated replicated = new Replicated();
+
+            public String getConfigFile() { return configFile; }
+
+            public void setConfigFile(String configFile) { this.configFile = configFile; }
+
+            public Local getLocal() { return local; }
+
+            public Distributed getDistributed() { return distributed; }
+
+            public Replicated getReplicated() { return replicated; }
+
+            public static class Local {
+
+                private long timeToLiveSeconds = 60;
+
+                private long maxEntries = 100;
+
+                public long getTimeToLiveSeconds() { return timeToLiveSeconds; }
+
+                public void setTimeToLiveSeconds(long timeToLiveSeconds) { this.timeToLiveSeconds = timeToLiveSeconds; }
+
+                public long getMaxEntries() { return maxEntries; }
+
+                public void setMaxEntries(long maxEntries) { this.maxEntries = maxEntries; }
+
+            }
+
+            public static class Distributed {
+
+                private long timeToLiveSeconds = 60;
+
+                private long maxEntries = 100;
+
+                private int instanceCount = 1;
+
+                public long getTimeToLiveSeconds() { return timeToLiveSeconds; }
+
+                public void setTimeToLiveSeconds(long timeToLiveSeconds) { this.timeToLiveSeconds = timeToLiveSeconds; }
+
+                public long getMaxEntries() { return maxEntries; }
+
+                public void setMaxEntries(long maxEntries) { this.maxEntries = maxEntries; }
+
+                public int getInstanceCount() { return instanceCount; }
+
+                public void setInstanceCount(int instanceCount) { this.instanceCount = instanceCount; }
+            }
+
+            public static class Replicated {
+
+                private long timeToLiveSeconds = 60;
+
+                private long maxEntries = 100;
+
+                public long getTimeToLiveSeconds() { return timeToLiveSeconds; }
+
+                public void setTimeToLiveSeconds(long timeToLiveSeconds) { this.timeToLiveSeconds = timeToLiveSeconds; }
+
+                public long getMaxEntries() { return maxEntries; }
+
+                public void setMaxEntries(long maxEntries) { this.maxEntries = maxEntries; }
+
+            }
+
         }
     }
 
