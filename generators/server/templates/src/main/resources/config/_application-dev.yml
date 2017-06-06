@@ -265,7 +265,6 @@ jhipster:
         <%_ } _%>
         <%_ if (hibernateCache == 'infinispan') { _%>
         infinispan:
-            session-time-to-live-seconds: 30 # session validity stay 1/2 hour (in minutes) in the cache
             config-file: default-configs/default-jgroups-udp.xml
             # local app cache
             local:
