@@ -192,7 +192,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .sessionRegistry(sessionRegistry)
             .and().and()<% } %><% if (clusteredHttpSession == 'infinispan') { %>
             .sessionManagement()
-            .maximumSessions(1) // maximum number of concurrent sessions for one user
+            .maximumSessions(32) // maximum number of concurrent sessions for one user
             .sessionRegistry(sessionRegistry())
             .and().and()<% } %>
             <%_ if (authenticationType === 'session') { _%>
