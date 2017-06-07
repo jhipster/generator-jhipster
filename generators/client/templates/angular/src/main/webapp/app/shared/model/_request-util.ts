@@ -11,7 +11,7 @@ export const createRequestOption = (req?: any): BaseRequestOptions => {
         }
         params.set('query', req.query);
 
-        options.search = params;
+        options.params = params;
     }
     return options;
 };
