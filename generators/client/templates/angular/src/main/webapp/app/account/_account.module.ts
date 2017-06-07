@@ -23,10 +23,10 @@ import { <%=angular2AppName%>SharedModule } from '../shared';
 
 import {
     Register,
-    Activate,
-    Password,
-    PasswordResetInit,
-    PasswordResetFinish,
+    ActivateService,
+    PasswordService,
+    PasswordResetInitService,
+    PasswordResetFinishService,
     <%_ if (authenticationType === 'session') { _%>
     SessionsService,
     SessionsComponent,
@@ -75,10 +75,10 @@ import {
         SessionsService,
         <%_ } _%>
         Register,
-        Activate,
-        Password,
-        PasswordResetInit,
-        PasswordResetFinish
+        ActivateService,
+        PasswordService,
+        PasswordResetInitService,
+        PasswordResetFinishService
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

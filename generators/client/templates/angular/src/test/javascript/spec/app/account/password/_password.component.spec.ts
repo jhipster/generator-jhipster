@@ -20,7 +20,7 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { Observable } from 'rxjs/Rx';
 import { <%=angular2AppName%>TestModule } from '../../../test.module';
 import { PasswordComponent } from '../../../../../../main/webapp/app/account/password/password.component';
-import { Password } from '../../../../../../main/webapp/app/account/password/password.service';
+import { PasswordService } from '../../../../../../main/webapp/app/account/password/password.service';
 import { Principal } from '../../../../../../main/webapp/app/shared/auth/principal.service';
 import { AccountService } from '../../../../../../main/webapp/app/shared/auth/account.service';
 <%_ if (websocket === 'spring-websocket') { _%>
@@ -35,7 +35,7 @@ describe('Component Tests', () => {
 
         let comp: PasswordComponent;
         let fixture: ComponentFixture<PasswordComponent>;
-        let service: Password;
+        let service: PasswordService;
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
@@ -50,7 +50,7 @@ describe('Component Tests', () => {
                         useClass: MockTrackerService
                     },
                     <%_ } _%>
-                    Password
+                    PasswordService
                 ]
             }).overrideTemplate(PasswordComponent, '')
             .compileComponents();
@@ -59,7 +59,7 @@ describe('Component Tests', () => {
         beforeEach(() => {
             fixture = TestBed.createComponent(PasswordComponent);
             comp = fixture.componentInstance;
-            service = fixture.debugElement.injector.get(Password);
+            service = fixture.debugElement.injector.get(PasswordService);
         });
 
         it('should show error if passwords do not match', () => {

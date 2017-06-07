@@ -21,7 +21,7 @@ import { Http, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
 @Injectable()
-export class Activate {
+export class ActivateService {
 
     constructor(private http: Http) {}
 

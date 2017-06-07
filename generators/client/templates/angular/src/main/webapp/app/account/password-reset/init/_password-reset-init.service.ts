@@ -21,7 +21,7 @@ import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
 @Injectable()
-export class PasswordResetInit {
+export class PasswordResetInitService {
 
     constructor(private http: Http) {}
 
