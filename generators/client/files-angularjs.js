@@ -94,7 +94,9 @@ const files = {
                 { file: '_favicon.ico', method: 'copy' },
                 '_robots.txt',
                 '_404.html',
-                '_index.html'
+                '_index.html',
+                '_manifest.webapp',
+                '_sw.js'
             ]
         }
     ],

@@ -26,7 +26,8 @@
     <%_ if(enableTranslation) { _%>
     <meta name="google" value="notranslate">
     <%_ } _%>
-    <meta name="viewport" content="width=device-width">
+    <meta name="theme-color" content="#000000">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css content/css/vendor.css -->
     <!-- bower:css -->
@@ -39,6 +40,7 @@
     <link rel="stylesheet" href="content/css/main.css">
     <!-- endbuild -->
     <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="manifest" href="manifest.webapp" />
 </head>
 <body ng-app="<%= angularAppName %>" ng-strict-di>
     <!--[if lt IE 9]>
@@ -98,7 +100,15 @@
             <p data-translate="footer">This is your footer</p>
         </div>
     </div>
-
+    <!-- uncomment this for adding service worker
+        <script>
+            if ('serviceWorker' in navigator) {
+                 navigator.serviceWorker
+                    .register('./sw.js')
+                    .then(function() { console.log('Service Worker Registered'); });
+            }
+        </script>
+    -->
     <!-- Google Analytics: uncomment and change UA-XXXXX-X to be your site's ID.
     <script>
         (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=

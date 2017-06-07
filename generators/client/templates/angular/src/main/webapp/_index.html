@@ -25,8 +25,10 @@
     <title><%= baseName %></title>
     <meta name="description" content=""><% if (enableTranslation) { %>
     <meta name="google" value="notranslate"><% } %>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#000000">
     <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="manifest" href="manifest.webapp" />
 </head>
 <body>
     <!--[if lt IE 9]>
@@ -42,6 +44,15 @@
             document.getElementsByTagName('head')[0].appendChild(script)
         }
     </script>
+    <!-- uncomment this for adding service worker
+        <script>
+            if ('serviceWorker' in navigator) {
+                 navigator.serviceWorker
+                    .register('./sw.js')
+                    .then(function() { console.log('Service Worker Registered'); });
+            }
+        </script>
+    -->
     <!-- Google Analytics: uncomment and change UA-XXXXX-X to be your site's ID.
     <script>
         (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
