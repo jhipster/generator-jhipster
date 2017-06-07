@@ -287,6 +287,9 @@ public class UserService {
                 <%_ if (databaseType == 'mongodb' || databaseType == 'cassandra') { _%>
                 userRepository.save(user);
                 <%_ } _%>
+                <%_ if (searchEngine === 'elasticsearch') { _%>
+                userSearchRepository.save(user);
+                <%_ } _%>
                 log.debug("Changed Information for User: {}", user);
                 return user;
             })
