@@ -95,6 +95,7 @@ module.exports = KubernetesGenerator.extend({
             this.adminPassword = this.config.get('adminPassword');
             this.jwtSecretKey = this.config.get('jwtSecretKey');
             this.dockerRepositoryName = this.config.get('dockerRepositoryName');
+            this.dockerTag = this.config.get('dockerTag');
             this.dockerPushCommand = this.config.get('dockerPushCommand');
             this.kubernetesNamespace = this.config.get('kubernetesNamespace');
 
@@ -149,6 +150,7 @@ module.exports = KubernetesGenerator.extend({
         askForAdminPassword: prompts.askForAdminPassword,
         askForKubernetesNamespace: prompts.askForKubernetesNamespace,
         askForDockerRepositoryName: prompts.askForDockerRepositoryName,
+        askForDockerTag: prompts.askForDockerTag,
         askForDockerPushCommand: prompts.askForDockerPushCommand
     },
 
@@ -210,6 +212,7 @@ module.exports = KubernetesGenerator.extend({
             this.config.set('serviceDiscoveryType', this.serviceDiscoveryType);
             this.config.set('jwtSecretKey', this.jwtSecretKey);
             this.config.set('dockerRepositoryName', this.dockerRepositoryName);
+            this.config.set('dockerTag', this.dockerTag);
             this.config.set('dockerPushCommand', this.dockerPushCommand);
             this.config.set('kubernetesNamespace', this.kubernetesNamespace);
         }
@@ -228,7 +231,7 @@ module.exports = KubernetesGenerator.extend({
         this.log(`${chalk.yellow.bold('WARNING!')} You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:`);
         for (let i = 0; i < this.appsFolders.length; i++) {
             const originalImageName = this.appConfigs[i].baseName.toLowerCase();
-            const targetImageName = this.appConfigs[i].targetImageName;
+            const targetImageName = `${this.appConfigs[i].targetImageName}:${this.dockerTag}`;
             if (originalImageName !== targetImageName) {
                 this.log(`  ${chalk.cyan(`docker image tag ${originalImageName} ${targetImageName}`)}`);
             }

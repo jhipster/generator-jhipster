@@ -25,6 +25,10 @@ spec:
     app: <%= app.baseName.toLowerCase() %>
   <%_ if (app.applicationType === 'monolith' || app.applicationType === 'gateway') { _%>
   type: LoadBalancer
-  <%_ } _%>
+  ports:
+  - port: 80
+    targetPort: <%= app.serverPort %>
+  <%_ } else { _%>
   ports:
   - port: <%= app.serverPort %>
+  <%_ } _%>
