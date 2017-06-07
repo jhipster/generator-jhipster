@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import { MissingTranslationHandler, MissingTranslationHandlerParams } from 'ng2-translate';
+import { MissingTranslationHandler, MissingTranslationHandlerParams } from '@ngx-translate/core';
 import { ConfigService } from '../config.service';
 
 export class JhiMissingTranslationHandler implements MissingTranslationHandler {

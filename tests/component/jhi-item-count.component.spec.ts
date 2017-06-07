@@ -17,7 +17,7 @@
  limitations under the License.
  */
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { TranslateModule } from 'ng2-translate';
+import { TranslateModule } from '@ngx-translate/core';
 import { JhiItemCountComponent } from '../../src/component/jhi-item-count.component';
 import { JhiTranslateComponent } from '../../src/language/jhi-translate.directive';
 import { ConfigService } from '../../src/config.service';
