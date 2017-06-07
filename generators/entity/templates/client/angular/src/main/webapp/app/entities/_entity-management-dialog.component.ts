@@ -129,17 +129,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
 
     <%_ if (fieldsContainImageBlob) { _%>
     clearInputImage(field: string, fieldContentType: string, idInput: string) {
-        if (this.<%= entityInstance %> && field && fieldContentType) {
-            if (this.<%= entityInstance %>.hasOwnProperty(field)) {
-                this.<%= entityInstance %>[field] = null;
-            }
-            if (this.<%= entityInstance %>.hasOwnProperty(fieldContentType)) {
-                this.<%= entityInstance %>[fieldContentType] = null;
-            }
-            if (idInput && this.elementRef.nativeElement.querySelector('#' + idInput)) {
-                this.elementRef.nativeElement.querySelector('#' + idInput).value = null;
-            }
-        }
+        this.dataUtils.clearInputImage(this.<%= entityInstance %>, this.elementRef, field, fieldContentType, idInput);
     }
 
     <%_ } _%>
