@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
+import { ElementRef, Injectable } from '@angular/core';
 
 /**
  * An utility service for data.
@@ -81,5 +81,24 @@ export class DataUtils {
             let base64Data = e.target.result.substr(e.target.result.indexOf('base64,') + 'base64,'.length);
             cb(base64Data);
         };
+    }
+
+    /**
+     * Method to clear the input
+     */
+    clearInputImage(entity: any, elementRef: ElementRef, field: string, fieldContentType: string, idInput: string) {
+        console.log(elementRef);
+        console.log(entity);
+        if (entity && field && fieldContentType) {
+            if (entity.hasOwnProperty(field)) {
+                entity[field] = null;
+            }
+            if (entity.hasOwnProperty(fieldContentType)) {
+                entity[fieldContentType] = null;
+            }
+            if (elementRef && idInput && elementRef.nativeElement.querySelector('#' + idInput)) {
+                elementRef.nativeElement.querySelector('#' + idInput).value = null;
+            }
+        }
     }
 }
