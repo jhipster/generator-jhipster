@@ -17,9 +17,10 @@
  limitations under the License.
 -%>
 {
+    "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
     "project": {
-        "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-        "name": "<%= dasherizedBaseName %>"
+        "name": "<%= dasherizedBaseName %>",
+        "ejected": true
     },
     "apps": [{
         "root": "<%= MAIN_SRC_DIR %>",
