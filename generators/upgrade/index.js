@@ -73,9 +73,9 @@ module.exports = UpgradeGenerator.extend({
     },
 
     _generate(version, callback) {
-        this.log(`Regenerating app with jhipster ${version}...`);
+        this.log(`Regenerating application with JHipster ${version}...`);
         shelljs.exec('jhipster --with-entities --force --skip-install', { silent: this.silent }, (code, msg, err) => {
-            if (code === 0) this.log(chalk.green(`Successfully regenerated app with jhipster ${version}`));
+            if (code === 0) this.log(chalk.green(`Successfully regenerated application with JHipster ${version}`));
             else this.error(`Something went wrong while generating project! ${err}`);
             callback();
         });
@@ -207,7 +207,7 @@ module.exports = UpgradeGenerator.extend({
                             this.error(`Unable to record current code has been generated with version ${
                             this.currentVersion}:\n${msg} ${err}`);
                         }
-                        this.log(`Current code recorded as generated with version ${this.currentVersion}`);
+                        this.log(`Current code has been generated with version ${this.currentVersion}`);
                         done();
                     });
                 });
@@ -262,7 +262,7 @@ module.exports = UpgradeGenerator.extend({
             const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn add' : 'npm install';
             shelljs.exec(`${commandPrefix} ${GENERATOR_JHIPSTER}@${this.latestVersion} --dev --no-lockfile`, { silent: this.silent }, (code, msg, err) => {
                 if (code === 0) this.log(chalk.green(`Updated ${GENERATOR_JHIPSTER} to version ${this.latestVersion}`));
-                else this.error(`Something went wrong while updating generator! ${msg} ${err}`);
+                else this.error(`Something went wrong while updating JHipster! ${msg} ${err}`);
                 done();
             });
         },
