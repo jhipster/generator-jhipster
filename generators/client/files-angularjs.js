@@ -96,6 +96,7 @@ const files = {
                 '_404.html',
                 '_index.html',
                 '_manifest.webapp',
+                '_sw-loader.js',
                 '_sw.js'
             ]
         }
