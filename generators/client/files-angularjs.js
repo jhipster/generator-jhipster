@@ -95,7 +95,8 @@ const files = {
                 '_robots.txt',
                 '_404.html',
                 '_index.html',
-                '_manifest.webapp'
+                '_manifest.webapp',
+                '_sw.js'
             ]
         }
     ],
