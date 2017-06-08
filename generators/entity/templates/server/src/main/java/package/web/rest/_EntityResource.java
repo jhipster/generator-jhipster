@@ -102,7 +102,7 @@ public class <%= entityClass %>Resource {
      * @param <%= instanceName %> the <%= instanceName %> to update
      * @return the ResponseEntity with status 200 (OK) and with body the updated <%= instanceName %>,
      * or with status 400 (Bad Request) if the <%= instanceName %> is not valid,
-     * or with status 500 (Internal Server Error) if the <%= instanceName %> couldnt be updated
+     * or with status 500 (Internal Server Error) if the <%= instanceName %> couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/<%= entityApiUrl %>")
