@@ -316,16 +316,14 @@ public class CacheConfiguration {
 
         return () -> GlobalConfigurationBuilder
                 .defaultClusteredBuilder().transport().defaultTransport().clusterName("infinispan-hibernate-cluster")
-                .addProperty("configurationFile", jHipsterProperties.getCache()
-                .getInfinispan().getConfigFile())
-                .globalJmxStatistics().allowDuplicateDomains(true)
-                .build();
+                .addProperty("configurationFile", jHipsterProperties.getCache().getInfinispan().getConfigFile())
+                .globalJmxStatistics().allowDuplicateDomains(true).build();
     }
 
     /**
-     * Initialize cache configuration for L2 cache access.
-     * 'app-data' is defined with distribution mode and
-     * data 'entity' is defined with invalidation mode
+     * Initialize cache configuration for L2 and session cache access.
+     * 'session' is defined with distribution mode and
+     * 'app' with three different modes local, distributed and replicated
      */
     @Bean
     public InfinispanCacheConfigurer cacheConfigurer(JHipsterProperties jHipsterProperties) {
@@ -334,7 +332,9 @@ public class CacheConfiguration {
 
         return manager -> {
             <%_ if (clusteredHttpSession == 'infinispan') { _%>
-            manager.defineConfiguration("sessions", new ConfigurationBuilder().clustering().cacheMode(CacheMode.DIST_SYNC).build());
+            // ** do not change the definition of this as this is used for maintaining application sessions **
+            manager.defineConfiguration("sessions", new ConfigurationBuilder().clustering().cacheMode(CacheMode.DIST_SYNC).
+                hash().numOwners(cacheInfo.getDistributed().getInstanceCount()).stateTransfer().awaitInitialTransfer(true).build());
             <%_ } _%>
             manager.defineConfiguration("local-app-data", new ConfigurationBuilder().clustering().cacheMode(CacheMode.LOCAL)
                 .eviction().type(EvictionType.COUNT).size(cacheInfo.getLocal().getMaxEntries()).expiration()
