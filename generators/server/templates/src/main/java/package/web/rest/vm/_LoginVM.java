@@ -64,6 +64,7 @@ public class LoginVM {
     }
 
     @Override
+    @SuppressWarnings("squid:S2068") // The hard-coded password is actually hidden here...
     public String toString() {
         return "LoginVM{" +
             "username='" + username + '\'' +
