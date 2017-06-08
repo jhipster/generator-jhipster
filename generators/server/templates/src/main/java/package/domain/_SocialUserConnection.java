@@ -44,9 +44,10 @@ import java.util.Objects;
  * A Social user.
  */<% if (databaseType === 'sql') { %>
 @Entity
-@Table(name = "jhi_social_user_connection")<% if (hibernateCache === 'infinispan') { %>
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <% } else if (hibernateCache !== 'no') { %>
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType === 'mongodb') { %>
+@Table(name = "jhi_social_user_connection")<% if (hibernateCache !== 'no') {
+if (hibernateCache === 'infinispan') { %>
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <% } else { %>
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } } %><% } %><% if (databaseType === 'mongodb') { %>
 @Document(collection = "jhi_social_user_connection")
 @CompoundIndexes(
     @CompoundIndex(name = "user2-prov-provusr-idx", unique = true, def = "{'user_id': 1, 'provider_id': 1, 'provider_user_id': 1}")
