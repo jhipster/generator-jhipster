@@ -50,12 +50,12 @@ eureka:
         status-page-url-path: ${management.context-path}/info
         health-check-url-path: ${management.context-path}/health
         metadata-map:
-            zone: primary # This is needed for the load balancer
             profile: ${spring.profiles.active}
             version: ${info.project.version}
 ribbon:
     eureka:
         enabled: true
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.WeightedResponseTimeRule
 <%_ } _%>
 <%_ if (applicationType === 'gateway') { _%>
 # See http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html
