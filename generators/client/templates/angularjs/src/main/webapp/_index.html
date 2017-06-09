@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="<% if (enableTranslation) { %><%= nativeLanguage %><% } else { %>en<% } %>">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -100,6 +100,9 @@
             <p data-translate="footer">This is your footer</p>
         </div>
     </div>
+    <noscript>
+        <h1>You must enable javascript to view this page.</h1>
+    </noscript>
     <!-- uncomment this for adding service worker
         <script>
             if ('serviceWorker' in navigator) {

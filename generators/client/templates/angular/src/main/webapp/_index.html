@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="<% if (enableTranslation) { %><%= nativeLanguage %><% } else { %>en<% } %>">
 <head>
     <base href="./" />
     <meta charset="utf-8">
@@ -44,6 +44,9 @@
             document.getElementsByTagName('head')[0].appendChild(script)
         }
     </script>
+    <noscript>
+        <h1>You must enable javascript to view this page.</h1>
+    </noscript>
     <!-- uncomment this for adding service worker
         <script>
             if ('serviceWorker' in navigator) {
