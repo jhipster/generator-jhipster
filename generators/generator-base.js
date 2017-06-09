@@ -459,6 +459,7 @@ module.exports = class extends Generator {
             { name: 'Turkish', value: 'tr' },
             { name: 'Tamil', value: 'ta' },
             { name: 'Thai', value: 'th' },
+            { name: 'Ukrainian', value: 'ua' },
             { name: 'Vietnamese', value: 'vi' }
         ];
     }
