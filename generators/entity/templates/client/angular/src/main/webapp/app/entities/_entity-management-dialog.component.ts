@@ -24,7 +24,7 @@ for (const idx in fields) {
     }
 }
 _%>
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy<% if (fieldsContainImageBlob) { %>, ElementRef<% } %> } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 
@@ -90,6 +90,9 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         if (differentRelationships[idx].relationshipType != 'one-to-many') { %>
         private <%= differentRelationships[idx].otherEntityName %>Service: <%= differentRelationships[idx].otherEntityAngularName %>Service,<% }
         }%>
+        <%_ if (fieldsContainImageBlob) { _%>
+        private elementRef: ElementRef,
+        <%_ } _%>
         private eventManager: EventManager
     ) {
     }
@@ -101,6 +104,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         <%- queries[idx] %>
         <%_ } _%>
     }
+
     <%_ if (fieldsContainBlob) { _%>
     byteSize(field) {
         return this.dataUtils.byteSize(field);
@@ -111,7 +115,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     }
 
     setFileData(event, <%= entityInstance %>, field, isImage) {
-        if (event.target.files && event.target.files[0]) {
+        if (event && event.target.files && event.target.files[0]) {
             const file = event.target.files[0];
             if (isImage && !/^image\//.test(file.type)) {
                 return;
@@ -122,7 +126,14 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
             });
         }
     }
-   <%_ } _%>
+
+    <%_ if (fieldsContainImageBlob) { _%>
+    clearInputImage(field: string, fieldContentType: string, idInput: string) {
+        this.dataUtils.clearInputImage(this.<%= entityInstance %>, this.elementRef, field, fieldContentType, idInput);
+    }
+
+    <%_ } _%>
+    <%_ } _%>
     clear() {
         this.activeModal.dismiss('cancel');
     }

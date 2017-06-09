@@ -30,6 +30,7 @@ if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate
     hasDate = true;
 }
 _%>
+
 @Injectable()
 export class <%= entityAngularName %>PopupService {
     private isOpen = false;

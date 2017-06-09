@@ -28,7 +28,9 @@ import { Subscription } from 'rxjs/Rx';
     template: `
         <div class="alerts" role="alert">
             <div *ngFor="let alert of alerts"  [ngClass]="{\'alert.position\': true, \'toast\': alert.toast}">
-                <ngb-alert type="{{alert.type}}" close="alert.close(alerts)"><pre [innerHTML]="alert.msg"></pre></ngb-alert>
+                <ngb-alert *ngIf="alert && alert.type && alert.msg" [type]="alert.type" (close)="alert.close(alerts)">
+                    <pre [innerHTML]="alert.msg"></pre>
+                </ngb-alert>
             </div>
         </div>`
 })
@@ -77,7 +79,7 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
                                 fieldError.objectName + '.' + convertedField)<% } else { %>convertedField.charAt(0).toUpperCase() +
                                 convertedField.slice(1)<% } %>;
                             this.addErrorAlert(
-                                'Field ' + fieldName + ' cannot be empty', 'error.' + fieldError.message, { fieldName });
+                                'Error on field "' + fieldName + '"', 'error.' + fieldError.message, { fieldName });
                         }
                     } else if (httpResponse.text() !== '' && httpResponse.json() && httpResponse.json().message) {
                         this.addErrorAlert(httpResponse.json().message, httpResponse.json().message, httpResponse.json().params);
@@ -109,7 +111,7 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
 
     addErrorAlert(message, key?, data?) {
         <%_ if (enableTranslation) { _%>
-        key = key && key !== null ? key : message;
+        key = (key && key !== null) ? key : message;
         this.alerts.push(
             this.alertService.addAlert(
                 {

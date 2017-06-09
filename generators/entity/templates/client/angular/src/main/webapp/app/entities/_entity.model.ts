@@ -56,6 +56,9 @@ for (const idx in fields) {
         tsType = 'string';
     } else { //(fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'image' || fieldType == 'LocalDate'
         tsType = 'any';
+        if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent == 'image') {
+            variables[fieldName + 'ContentType'] = fieldName + 'ContentType?: ' + 'string';
+        }
     }
     variables[fieldName] = fieldName + '?: ' + tsType;
 }
