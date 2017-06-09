@@ -59,8 +59,9 @@ import <%=packageName%>.domain.enumeration.<%= element %>;<% }); %>
 <% if (databaseType === 'sql') { -%>
 @Entity
 @Table(name = "<%= entityTableName %>")
-<% if (hibernateCache !== 'no') { if (hibernateCache === 'infinispan') { %>@Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <% } else { %>
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } } %><% } %><% if (databaseType === 'mongodb') { %>
+<%_ if (hibernateCache !== 'no') { if (hibernateCache === 'infinispan') { _%>
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <%_ } else { _%>
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<%_ } } _%><% } %><% if (databaseType === 'mongodb') { %>
 @Document(collection = "<%= entityTableName %>")<% } %><% if (databaseType === 'cassandra') { %>
 @Table(name = "<%= entityInstance %>")<% } %><% if (searchEngine === 'elasticsearch') { %>
 @Document(indexName = "<%= entityInstance.toLowerCase() %>")<% } %>
@@ -165,12 +166,10 @@ public class <%= entityClass %> implements Serializable {
     _%>
     @OneToMany(mappedBy = "<%= otherEntityRelationshipName %>")
     @JsonIgnore
-    <%_     if (hibernateCache !== 'no') {
-                if (hibernateCache === 'infinispan') { _%>
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <% } else { %>
+    <%_     if (hibernateCache !== 'no') { if (hibernateCache === 'infinispan') { _%>
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <%_     } else { _%>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     <%_    } } _%>
-
     private Set<<%= otherEntityNameCapitalized %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
 
     <%_ } else if (relationshipType === 'many-to-one') { _%>
@@ -184,13 +183,10 @@ public class <%= entityClass %> implements Serializable {
     @ManyToMany<% if (ownerSide === false) { %>(mappedBy = "<%= otherEntityRelationshipNamePlural %>")
     @JsonIgnore
     <%_     } else { _%>
-
-    <%_     }
-            if (hibernateCache !== 'no') {
-                if (hibernateCache === 'infinispan') { _%>
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <% } else { %>
+    <%_     } if (hibernateCache !== 'no') { if (hibernateCache === 'infinispan') { _%>
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <%_     } else { _%>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    <%_    } }
+    <%_     } }
             if (ownerSide === true) { _%>
     <%_ if (relationshipValidate) { _%>
     <%- include relationship_validators -%>
@@ -199,7 +195,6 @@ public class <%= entityClass %> implements Serializable {
                joinColumns = @JoinColumn(name="<%= getPluralColumnName(name) %>_id", referencedColumnName="id"),
                inverseJoinColumns = @JoinColumn(name="<%= getPluralColumnName(relationships[idx].relationshipName) %>_id", referencedColumnName="id"))
     <%_     } _%>
-
     private Set<<%= otherEntityNameCapitalized %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
 
     <%_ } else { _%>
