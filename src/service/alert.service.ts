@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import { Injectable, Sanitizer, SecurityContext } from '@angular/core';
+import { Inject, Injectable, Sanitizer, SecurityContext } from '@angular/core';
 import { TranslateService } from 'ng2-translate';
 
 export type AlertType =  'success' | 'danger' | 'warning' | 'info';
@@ -40,7 +40,11 @@ export class AlertService {
     private alerts: Alert[];
     private timeout: number;
 
-    constructor(private sanitizer: Sanitizer, private toast = false, private translateService?: TranslateService) {
+    constructor(
+        private sanitizer: Sanitizer,
+        @Inject('toast') private toast: boolean, // see the issue generator-jhipster#4794
+        private translateService?: TranslateService
+    ) {
         this.alertId = 0; // unique id for each alert. Starts from 0.
         this.alerts = [];
         this.timeout = 5000; // default timeout in milliseconds
@@ -60,7 +64,7 @@ export class AlertService {
             msg: msg,
             params: params,
             timeout: this.timeout,
-            toast: this.toast,
+            toast: this.isToast(),
             position: position
         }, []);
     }
@@ -71,7 +75,7 @@ export class AlertService {
             msg: msg,
             params: params,
             timeout: this.timeout,
-            toast: this.toast,
+            toast: this.isToast(),
             position: position
         }, []);
     }
@@ -82,7 +86,7 @@ export class AlertService {
             msg: msg,
             params: params,
             timeout: this.timeout,
-            toast: this.toast,
+            toast: this.isToast(),
             position: position
         }, []);
     }
@@ -93,7 +97,7 @@ export class AlertService {
             msg: msg,
             params: params,
             timeout: this.timeout,
-            toast: this.toast,
+            toast: this.isToast(),
             position: position
         }, []);
     }
