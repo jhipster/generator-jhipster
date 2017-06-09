@@ -193,7 +193,9 @@ public class JHipsterProperties {
             return ehcache;
         }
 
-        public Infinispan getInfinispan() { return infinispan; }
+        public Infinispan getInfinispan() {
+            return infinispan;
+        }
 
         public static class Hazelcast {
 
