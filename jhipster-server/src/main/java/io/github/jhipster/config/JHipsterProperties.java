@@ -27,7 +27,7 @@ import org.springframework.web.cors.CorsConfiguration;
 
 /**
  * Properties specific to JHipster.
- *
+ * <p>
  * <p>
  * Properties are configured in the application.yml file.
  * </p>
@@ -253,15 +253,25 @@ public class JHipsterProperties {
 
             private final Replicated replicated = new Replicated();
 
-            public String getConfigFile() { return configFile; }
+            public String getConfigFile() {
+                return configFile;
+            }
 
-            public void setConfigFile(String configFile) { this.configFile = configFile; }
+            public void setConfigFile(String configFile) {
+                this.configFile = configFile;
+            }
 
-            public Local getLocal() { return local; }
+            public Local getLocal() {
+                return local;
+            }
 
-            public Distributed getDistributed() { return distributed; }
+            public Distributed getDistributed() {
+                return distributed;
+            }
 
-            public Replicated getReplicated() { return replicated; }
+            public Replicated getReplicated() {
+                return replicated;
+            }
 
             public static class Local {
 
@@ -269,13 +279,21 @@ public class JHipsterProperties {
 
                 private long maxEntries = 100;
 
-                public long getTimeToLiveSeconds() { return timeToLiveSeconds; }
+                public long getTimeToLiveSeconds() {
+                    return timeToLiveSeconds;
+                }
 
-                public void setTimeToLiveSeconds(long timeToLiveSeconds) { this.timeToLiveSeconds = timeToLiveSeconds; }
+                public void setTimeToLiveSeconds(long timeToLiveSeconds) {
+                    this.timeToLiveSeconds = timeToLiveSeconds;
+                }
 
-                public long getMaxEntries() { return maxEntries; }
+                public long getMaxEntries() {
+                    return maxEntries;
+                }
 
-                public void setMaxEntries(long maxEntries) { this.maxEntries = maxEntries; }
+                public void setMaxEntries(long maxEntries) {
+                    this.maxEntries = maxEntries;
+                }
 
             }
 
@@ -287,17 +305,29 @@ public class JHipsterProperties {
 
                 private int instanceCount = 1;
 
-                public long getTimeToLiveSeconds() { return timeToLiveSeconds; }
+                public long getTimeToLiveSeconds() {
+                    return timeToLiveSeconds;
+                }
 
-                public void setTimeToLiveSeconds(long timeToLiveSeconds) { this.timeToLiveSeconds = timeToLiveSeconds; }
+                public void setTimeToLiveSeconds(long timeToLiveSeconds) {
+                    this.timeToLiveSeconds = timeToLiveSeconds;
+                }
 
-                public long getMaxEntries() { return maxEntries; }
+                public long getMaxEntries() {
+                    return maxEntries;
+                }
 
-                public void setMaxEntries(long maxEntries) { this.maxEntries = maxEntries; }
+                public void setMaxEntries(long maxEntries) {
+                    this.maxEntries = maxEntries;
+                }
 
-                public int getInstanceCount() { return instanceCount; }
+                public int getInstanceCount() {
+                    return instanceCount;
+                }
 
-                public void setInstanceCount(int instanceCount) { this.instanceCount = instanceCount; }
+                public void setInstanceCount(int instanceCount) {
+                    this.instanceCount = instanceCount;
+                }
             }
 
             public static class Replicated {
@@ -306,13 +336,21 @@ public class JHipsterProperties {
 
                 private long maxEntries = 100;
 
-                public long getTimeToLiveSeconds() { return timeToLiveSeconds; }
+                public long getTimeToLiveSeconds() {
+                    return timeToLiveSeconds;
+                }
 
-                public void setTimeToLiveSeconds(long timeToLiveSeconds) { this.timeToLiveSeconds = timeToLiveSeconds; }
+                public void setTimeToLiveSeconds(long timeToLiveSeconds) {
+                    this.timeToLiveSeconds = timeToLiveSeconds;
+                }
 
-                public long getMaxEntries() { return maxEntries; }
+                public long getMaxEntries() {
+                    return maxEntries;
+                }
 
-                public void setMaxEntries(long maxEntries) { this.maxEntries = maxEntries; }
+                public void setMaxEntries(long maxEntries) {
+                    this.maxEntries = maxEntries;
+                }
 
             }
 
