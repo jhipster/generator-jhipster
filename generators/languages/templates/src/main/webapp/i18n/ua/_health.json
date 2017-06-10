@@ -34,8 +34,8 @@
             <%_ } _%>
             <%_ if (applicationType === 'gateway') { _%>
             "discoveryComposite": "Discovery Composite",
-            "refreshScope": "Microservice Refresh Scope",
-            "configServer": "Microservice Config Server",
+            "refreshScope": "Межі оновлення мікросервіса",
+            "configServer": "Конфігураційний сервер мікросервіса",
             "hystrix": "Hystrix",
             <%_ } _%>
             "diskSpace": "Місце на диску",
