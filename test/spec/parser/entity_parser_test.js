@@ -45,6 +45,16 @@ describe('::convert', () => {
     });
   });
   describe('when passing valid arguments', () => {
+    describe('when passing args for a gateway app', () => {
+      const input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
+      it('does not fail because of NoSQL modeling mistakes', () => {
+        EntityParser.parse({
+          jdlObject: JDLParser.parse(input, 'mysql'),
+          databaseType: 'cassandra',
+          applicationType: 'gateway'
+        });
+      });
+    });
     describe('when converting JDL to entity json for SQL type', () => {
       const input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
       const content = EntityParser.parse({
