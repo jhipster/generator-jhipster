@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import { Inject, Injectable, Sanitizer, SecurityContext } from '@angular/core';
+import { Injectable, Sanitizer, SecurityContext } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 export type AlertType =  'success' | 'danger' | 'warning' | 'info';
@@ -42,7 +42,7 @@ export class AlertService {
 
     constructor(
         private sanitizer: Sanitizer,
-        @Inject('toast') private toast: boolean, // see the issue generator-jhipster#4794
+        private toast?,
         private translateService?: TranslateService
     ) {
         this.alertId = 0; // unique id for each alert. Starts from 0.

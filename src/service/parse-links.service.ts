@@ -39,7 +39,7 @@ export class ParseLinks {
         let links: any = {};
 
         // Parse each part into a named link
-        parts.forEach( p => {
+        parts.forEach(p => {
             let section: string[] = p.split(';');
 
             if (section.length !== 2) {
@@ -56,7 +56,7 @@ export class ParseLinks {
 
             let page: any = queryString.page;
 
-            if ( typeof page === 'string') {
+            if (typeof page === 'string') {
                 page = parseInt(page, 10);
             }
 

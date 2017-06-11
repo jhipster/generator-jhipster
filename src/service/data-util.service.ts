@@ -29,7 +29,7 @@ export class DataUtils {
     /**
      * Method to abbreviate the text given
      */
-    abbreviate (text: string, append = '...') {
+    abbreviate(text: string, append = '...') {
 
         if (text.length < 30) {
             return text;
@@ -40,43 +40,22 @@ export class DataUtils {
     /**
      * Method to find the byte size of the string provides
      */
-    byteSize (base64String: string) {
-        return this._formatAsBytes(this._size(base64String));
+    byteSize(base64String: string) {
+        return this.formatAsBytes(this.size(base64String));
     }
 
-    private _endsWith(suffix: string, str: string): boolean {
-        return str.indexOf(suffix, str.length - suffix.length) !== -1;
-    }
-
-    private _paddingSize(value: string): number {
-        if (this._endsWith('==', value)) {
-            return 2;
-        }
-        if (this._endsWith('=', value)) {
-            return 1;
-        }
-        return 0;
-    }
-
-    private _size(value: string): number {
-        return value.length / 4 * 3 - this._paddingSize(value);
-    }
-
-    private _formatAsBytes(size: number): string {
-        return size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' bytes';
-    }
 
     /**
      * Method to open file
      */
-    openFile (type: string, data: string) {
+    openFile(type: string, data: string) {
         window.open('data:' + type + ';base64,' + data, '_blank', 'height=300,width=400');
     }
 
     /**
      * Method to convert the file to base64
      */
-    toBase64 (file: File, cb: Function) {
+    toBase64(file: File, cb: Function) {
         let fileReader: FileReader = new FileReader();
         fileReader.readAsDataURL(file);
         fileReader.onload = function (e: any) {
@@ -102,5 +81,27 @@ export class DataUtils {
                 elementRef.nativeElement.querySelector('#' + idInput).value = null;
             }
         }
+    }
+
+    private endsWith(suffix: string, str: string): boolean {
+        return str.indexOf(suffix, str.length - suffix.length) !== -1;
+    }
+
+    private paddingSize(value: string): number {
+        if (this.endsWith('==', value)) {
+            return 2;
+        }
+        if (this.endsWith('=', value)) {
+            return 1;
+        }
+        return 0;
+    }
+
+    private size(value: string): number {
+        return value.length / 4 * 3 - this.paddingSize(value);
+    }
+
+    private formatAsBytes(size: number): string {
+        return size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' bytes';
     }
 }
