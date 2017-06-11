@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { NgModule, Sanitizer } from '@angular/core';
+import { InjectionToken, NgModule, Sanitizer } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
@@ -35,10 +35,11 @@ import {
     <%=jhiPrefixCapitalized%>AlertErrorComponent
 } from './';
 
-export function alertServiceProvider(sanitizer: Sanitizer<% if (enableTranslation) { %>, translateService: TranslateService<% } %>) {
-    // set below to true to make alerts look like toast
-    const isToast = false;
-    return new AlertService(sanitizer, isToast<% if (enableTranslation) { %>, translateService<% } %>);
+// set the provider to true to make alerts look like toast
+export const TOAST = new InjectionToken<boolean>('toast');
+
+export function alertServiceProvider(sanitizer: Sanitizer, toast: boolean<% if (enableTranslation) { %>, translateService: TranslateService<% } %>) {
+    return new AlertService(sanitizer, toast<% if (enableTranslation) { %>, translateService<% } %>);
 }
 
 @NgModule({
@@ -62,7 +63,11 @@ export function alertServiceProvider(sanitizer: Sanitizer<% if (enableTranslatio
         {
             provide: AlertService,
             useFactory: alertServiceProvider,
-            deps: [Sanitizer<% if (enableTranslation) { %>, TranslateService<% } %>]
+            deps: [Sanitizer, TOAST<% if (enableTranslation) { %>, TranslateService<% } %>]
+        },
+        {
+            provide: TOAST,
+            useValue: false // set to true to make alerts look like toast
         },
         Title
     ],
