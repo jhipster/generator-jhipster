@@ -17,7 +17,7 @@
  limitations under the License.
  */
 import { Inject, Injectable, Sanitizer, SecurityContext } from '@angular/core';
-import { TranslateService } from 'ng2-translate';
+import { TranslateService } from '@ngx-translate/core';
 
 export type AlertType =  'success' | 'danger' | 'warning' | 'info';
 
