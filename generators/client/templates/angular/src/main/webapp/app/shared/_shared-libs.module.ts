@@ -28,6 +28,8 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
     imports: [
         NgbModule.forRoot(),
         NgJhipsterModule.forRoot({
+            // set below to true to make alerts look like toast
+            alertAsToast: false,
             <%_ if (enableTranslation) { _%>
             i18nEnabled: true,
             defaultI18nLang: '<%= nativeLanguage %>'

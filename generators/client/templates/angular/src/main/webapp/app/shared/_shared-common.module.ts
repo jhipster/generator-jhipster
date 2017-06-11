@@ -16,12 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { NgModule, Sanitizer } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-<%_ if (enableTranslation) { _%>
-import { TranslateService } from '@ngx-translate/core';
-<%_ } _%>
-import { AlertService } from 'ng-jhipster';
+
 <%_ if (websocket === 'spring-websocket') { _%>
 import { WindowRef } from './tracker/window.service';
 <%_ } _%>
@@ -34,12 +31,6 @@ import {
     <%=jhiPrefixCapitalized%>AlertComponent,
     <%=jhiPrefixCapitalized%>AlertErrorComponent
 } from './';
-
-export function alertServiceProvider(sanitizer: Sanitizer<% if (enableTranslation) { %>, translateService: TranslateService<% } %>) {
-    // set below to true to make alerts look like toast
-    const isToast = false;
-    return new AlertService(sanitizer, isToast<% if (enableTranslation) { %>, translateService<% } %>);
-}
 
 @NgModule({
     imports: [
@@ -59,11 +50,6 @@ export function alertServiceProvider(sanitizer: Sanitizer<% if (enableTranslatio
         <%_ if (websocket === 'spring-websocket') { _%>
         WindowRef,
         <%_ } _%>
-        {
-            provide: AlertService,
-            useFactory: alertServiceProvider,
-            deps: [Sanitizer<% if (enableTranslation) { %>, TranslateService<% } %>]
-        },
         Title
     ],
     exports: [
