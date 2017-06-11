@@ -18,7 +18,7 @@
 -%>
 import { Directive, OnInit, ElementRef, Renderer, Input} from '@angular/core';
 <%_ if (enableTranslation) { _%>
-import { TranslateService, LangChangeEvent } from 'ng2-translate';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 <%_ } _%>
 
 @Directive({

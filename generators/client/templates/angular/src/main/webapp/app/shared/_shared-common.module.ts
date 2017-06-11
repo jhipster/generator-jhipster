@@ -19,7 +19,7 @@
 import { NgModule, Sanitizer } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 <%_ if (enableTranslation) { _%>
-import { TranslateService } from 'ng2-translate';
+import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
 import { AlertService } from 'ng-jhipster';
 <%_ if (websocket === 'spring-websocket') { _%>
