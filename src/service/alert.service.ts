@@ -61,49 +61,49 @@ export class AlertService {
     success(msg: string, params?: any, position?: string): Alert {
         return this.addAlert({
             type: 'success',
-            msg: msg,
-            params: params,
+            msg,
+            params,
             timeout: this.timeout,
             toast: this.isToast(),
-            position: position
+            position
         }, []);
     }
 
     error(msg: string, params?: any, position?: string): Alert {
         return this.addAlert({
             type: 'danger',
-            msg: msg,
-            params: params,
+            msg,
+            params,
             timeout: this.timeout,
             toast: this.isToast(),
-            position: position
+            position
         }, []);
     }
 
     warning(msg: string, params?: any, position?: string): Alert {
         return this.addAlert({
             type: 'warning',
-            msg: msg,
-            params: params,
+            msg,
+            params,
             timeout: this.timeout,
             toast: this.isToast(),
-            position: position
+            position
         }, []);
     }
 
     info(msg: string, params?: any, position?: string): Alert {
         return this.addAlert({
             type: 'info',
-            msg: msg,
-            params: params,
+            msg,
+            params,
             timeout: this.timeout,
             toast: this.isToast(),
-            position: position
+            position
         }, []);
     }
 
     private factory(alertOptions: Alert): Alert {
-        let alert: Alert = {
+        const alert: Alert = {
             type: alertOptions.type,
             msg: this.sanitizer.sanitize(SecurityContext.HTML, alertOptions.msg),
             id: alertOptions.id,
@@ -126,7 +126,7 @@ export class AlertService {
         if (this.translateService && alertOptions.msg) {
             alertOptions.msg = this.translateService.instant(alertOptions.msg, alertOptions.params);
         }
-        let alert = this.factory(alertOptions);
+        const alert = this.factory(alertOptions);
         if (alertOptions.timeout && alertOptions.timeout > 0) {
             setTimeout(() => {
                 this.closeAlert(alertOptions.id, extAlerts);
@@ -136,8 +136,8 @@ export class AlertService {
     }
 
     closeAlert(id: number, extAlerts?: Alert[]): any {
-        let thisAlerts: Alert[] = (extAlerts && extAlerts.length > 0) ? extAlerts : this.alerts;
-        return this.closeAlertByIndex(thisAlerts.map(e => e.id).indexOf(id), thisAlerts);
+        const thisAlerts: Alert[] = (extAlerts && extAlerts.length > 0) ? extAlerts : this.alerts;
+        return this.closeAlertByIndex(thisAlerts.map((e) => e.id).indexOf(id), thisAlerts);
     }
 
     closeAlertByIndex(index: number, thisAlerts: Alert[]): Alert[] {

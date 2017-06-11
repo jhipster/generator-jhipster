@@ -44,7 +44,7 @@ describe('Parse links service test', () => {
         }));
 
         it('should return links when headers are passed', inject([ParseLinks], (service: ParseLinks) => {
-            let links = {last: 0, first: 0};
+            const links = {last: 0, first: 0};
             expect(service.parse(' </api/audits?page=0&size=20>; rel="last",</api/audits?page=0&size=20>; rel="first"')).toEqual(links);
         }));
 

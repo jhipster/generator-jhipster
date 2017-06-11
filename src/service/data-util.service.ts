@@ -24,7 +24,7 @@ import { ElementRef, Injectable } from '@angular/core';
 @Injectable()
 export class DataUtils {
 
-    constructor () {}
+    constructor() {}
 
     /**
      * Method to abbreviate the text given
@@ -44,7 +44,6 @@ export class DataUtils {
         return this.formatAsBytes(this.size(base64String));
     }
 
-
     /**
      * Method to open file
      */
@@ -56,10 +55,10 @@ export class DataUtils {
      * Method to convert the file to base64
      */
     toBase64(file: File, cb: Function) {
-        let fileReader: FileReader = new FileReader();
+        const fileReader: FileReader = new FileReader();
         fileReader.readAsDataURL(file);
-        fileReader.onload = function (e: any) {
-            let base64Data = e.target.result.substr(e.target.result.indexOf('base64,') + 'base64,'.length);
+        fileReader.onload = function(e: any) {
+            const base64Data = e.target.result.substr(e.target.result.indexOf('base64,') + 'base64,'.length);
             cb(base64Data);
         };
     }

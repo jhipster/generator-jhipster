@@ -43,7 +43,6 @@ describe('Alert service test', () => {
             jasmine.clock().uninstall();
         });
 
-
         it('should produce a proper alert object and fetch it', inject([AlertService], (service: AlertService) => {
             expect(service.addAlert({
                 type: 'success',

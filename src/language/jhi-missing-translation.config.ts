@@ -23,7 +23,7 @@ export class JhiMissingTranslationHandler implements MissingTranslationHandler {
     constructor(private configService: ConfigService) {}
 
     handle(params: MissingTranslationHandlerParams) {
-        let key = params.key;
+        const key = params.key;
         return `${this.configService.getConfig().noi18nMessage}[${key}]`;
     }
 }

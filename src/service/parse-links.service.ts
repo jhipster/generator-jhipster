@@ -35,23 +35,23 @@ export class ParseLinks {
         }
 
         // Split parts by comma
-        let parts: string[] = header.split(',');
-        let links: any = {};
+        const parts: string[] = header.split(',');
+        const links: any = {};
 
         // Parse each part into a named link
-        parts.forEach(p => {
-            let section: string[] = p.split(';');
+        parts.forEach((p) => {
+            const section: string[] = p.split(';');
 
             if (section.length !== 2) {
                 throw new Error('section could not be split on ";"');
             }
 
-            let url: string = section[0].replace(/<(.*)>/, '$1').trim();
-            let queryString: any = {};
+            const url: string = section[0].replace(/<(.*)>/, '$1').trim();
+            const queryString: any = {};
 
             url.replace(
                 new RegExp('([^?=&]+)(=([^&]*))?', 'g'),
-                ($0, $1, $2, $3) => { return queryString[$1] = $3; }
+                ($0, $1, $2, $3) => queryString[$1] = $3
             );
 
             let page: any = queryString.page;
@@ -60,7 +60,7 @@ export class ParseLinks {
                 page = parseInt(page, 10);
             }
 
-            let name: string = section[1].replace(/rel="(.*)"/, '$1').trim();
+            const name: string = section[1].replace(/rel="(.*)"/, '$1').trim();
             links[name] = page;
         });
         return links;

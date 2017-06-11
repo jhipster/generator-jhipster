@@ -33,7 +33,7 @@ export class JhiSortByDirective {
 
     constructor(@Host() jhiSort: JhiSortDirective, private el: ElementRef, private renderer: Renderer, configService: ConfigService) {
         this.jhiSort = jhiSort;
-        let config = configService.getConfig();
+        const config = configService.getConfig();
         this.sortAscIcon = config.sortAscIcon;
         this.sortDescIcon = config.sortDescIcon;
     }
@@ -45,8 +45,8 @@ export class JhiSortByDirective {
         }
     }
 
-    private applyClass () {
-        let childSpan = this.el.nativeElement.children[1];
+    private applyClass() {
+        const childSpan = this.el.nativeElement.children[1];
         let add = this.sortAscIcon;
         if (!this.jhiSort.ascending) {
             add = this.sortDescIcon;
