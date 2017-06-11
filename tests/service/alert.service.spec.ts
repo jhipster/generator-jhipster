@@ -17,22 +17,24 @@
  limitations under the License.
  */
 import { TestBed, inject } from '@angular/core/testing';
-import { Sanitizer } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { AlertService, Alert } from '../../src/service/alert.service';
-
-function mockAlertService(sanitizer: Sanitizer) {
-    return new AlertService(sanitizer, false);
-}
+import { ConfigService } from '../../src/config.service';
 
 describe('Alert service test', () => {
 
     describe('Alert Service Test', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
-                providers: [{
-                    provide: AlertService, useFactory: mockAlertService, deps: [Sanitizer]
-                }]
+                imports: [TranslateModule.forRoot()],
+                providers: [
+                    AlertService,
+                    {
+                        provide: ConfigService,
+                        useValue: new ConfigService({defaultI18nLang: 'en', i18nEnabled: true})
+                    }
+                ]
             });
             // Make sure we can install mock clock
             jasmine.clock().uninstall();

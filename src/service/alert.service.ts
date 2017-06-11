@@ -19,6 +19,8 @@
 import { Injectable, Sanitizer, SecurityContext } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
+import { ConfigService } from '../config.service';
+
 export type AlertType =  'success' | 'danger' | 'warning' | 'info';
 
 export interface Alert {
@@ -39,12 +41,17 @@ export class AlertService {
     private alertId: number;
     private alerts: Alert[];
     private timeout: number;
+    private toast: boolean;
+    private i18nEnabled: boolean;
 
     constructor(
         private sanitizer: Sanitizer,
-        private toast?,
-        private translateService?: TranslateService
+        private configService: ConfigService,
+        private translateService: TranslateService
     ) {
+        const config = this.configService.getConfig();
+        this.toast = config.alertAsToast;
+        this.i18nEnabled = config.i18nEnabled;
         this.alertId = 0; // unique id for each alert. Starts from 0.
         this.alerts = [];
         this.timeout = 5000; // default timeout in milliseconds
@@ -123,7 +130,7 @@ export class AlertService {
 
     addAlert(alertOptions: Alert, extAlerts: Alert[]): Alert {
         alertOptions.id = this.alertId++;
-        if (this.translateService && alertOptions.msg) {
+        if (this.i18nEnabled && alertOptions.msg) {
             alertOptions.msg = this.translateService.instant(alertOptions.msg, alertOptions.params);
         }
         const alert = this.factory(alertOptions);
