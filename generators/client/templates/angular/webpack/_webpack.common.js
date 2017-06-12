@@ -95,6 +95,10 @@ module.exports = function (options) {
                     loaders: ['file-loader?hash=sha512&digest=hex&name=content/[hash].[ext]']
                 },
                 {
+                    test: /manifest.webapp$/,
+                    loader: 'file-loader?name=manifest.webapp!web-app-manifest-loader'
+                },
+                {
                     test: /app.constants.ts$/,
                     loader: StringReplacePlugin.replace({
                         replacements: [{
