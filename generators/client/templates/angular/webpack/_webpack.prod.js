@@ -55,7 +55,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         // AOT Plugin 
         new AotPlugin({
             tsConfigPath: './tsconfig-aot.json',
-            entryModule: root('src/main/webapp/app/app.module#HipzeeAppModule')
+            entryModule: root('src/main/webapp/app/app.module#<%=angular2AppName%>AppModule')
         }),
         new webpack.optimize.UglifyJsPlugin({
             beautify: false,
