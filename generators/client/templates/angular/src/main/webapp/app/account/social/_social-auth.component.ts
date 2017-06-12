@@ -40,6 +40,7 @@ export class SocialAuthComponent implements OnInit {
         if (token.length) {
             this.loginService.loginWithToken(token, false).then(() => {
                     this.cookieService.remove('social-authentication');
+                    this.router.navigate(['']);
                  }, () => {
                     this.router.navigate(['social-register'], {queryParams: {'success': 'false'}});
             });
