@@ -5,7 +5,8 @@
   "main": "module/index.js",
   "keywords": [
     "JHipster",
-    "DSL"
+    "DSL",
+    "JDL"
   ],
   "scripts": {
     "lint": "eslint .",
