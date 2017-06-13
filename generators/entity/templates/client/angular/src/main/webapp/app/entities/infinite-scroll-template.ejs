@@ -41,12 +41,12 @@ _%>
 
     constructor(
         private <%= entityInstance %>Service: <%= entityAngularName %>Service,
-        private alertService: AlertService,
+        private alertService: JhiAlertService,
         <%_ if (fieldsContainBlob) { _%>
-        private dataUtils: DataUtils,
+        private dataUtils: JhiDataUtils,
         <%_ } _%>
-        private eventManager: EventManager,
-        private parseLinks: ParseLinks,
+        private eventManager: JhiEventManager,
+        private parseLinks: JhiParseLinks,
         <%_ if (searchEngine === 'elasticsearch') { _%>
         private activatedRoute: ActivatedRoute,
         <%_ } _%>

@@ -27,7 +27,7 @@ _%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
-import { EventManager <% if (fieldsContainBlob) { %>, DataUtils<% } %> } from 'ng-jhipster';
+import { JhiEventManager <% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
 
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
@@ -43,9 +43,9 @@ export class <%= entityAngularName %>DetailComponent implements OnInit, OnDestro
     private eventSubscriber: Subscription;
 
     constructor(
-        private eventManager: EventManager,
+        private eventManager: JhiEventManager,
         <%_ if (fieldsContainBlob) { _%>
-        private dataUtils: DataUtils,
+        private dataUtils: JhiDataUtils,
         <%_ } _%>
         private <%= entityInstance %>Service: <%= entityAngularName %>Service,
         private route: ActivatedRoute

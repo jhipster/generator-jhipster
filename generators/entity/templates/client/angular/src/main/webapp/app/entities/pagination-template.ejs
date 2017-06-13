@@ -47,16 +47,16 @@ currentAccount: any;
 
     constructor(
         private <%= entityInstance %>Service: <%= entityAngularName %>Service,
-        private parseLinks: ParseLinks,
-        private alertService: AlertService,
+        private parseLinks: JhiParseLinks,
+        private alertService: JhiAlertService,
         private principal: Principal,
         private activatedRoute: ActivatedRoute,
         <%_ if (fieldsContainBlob) { _%>
-        private dataUtils: DataUtils,
+        private dataUtils: JhiDataUtils,
         <%_ } _%>
         private router: Router,
-        private eventManager: EventManager<%_ if (databaseType !== 'cassandra') { _%>,
-        private paginationUtil: PaginationUtil,
+        private eventManager: JhiEventManager<%_ if (databaseType !== 'cassandra') { _%>,
+        private paginationUtil: JhiPaginationUtil,
         private paginationConfig: PaginationConfig
         <%_ } _%>
     ) {

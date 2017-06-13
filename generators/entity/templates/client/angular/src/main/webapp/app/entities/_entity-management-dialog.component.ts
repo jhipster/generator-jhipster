@@ -30,7 +30,7 @@ import { Response } from '@angular/http';
 
 import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EventManager, AlertService<% if (fieldsContainBlob) { %>, DataUtils<% } %> } from 'ng-jhipster';
+import { JhiEventManager, JhiAlertService<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
 
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { <%= entityAngularName %>PopupService } from './<%= entityFileName %>-popup.service';
@@ -83,9 +83,9 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     constructor(
         public activeModal: NgbActiveModal,
         <%_ if (fieldsContainBlob) { _%>
-        private dataUtils: DataUtils,
+        private dataUtils: JhiDataUtils,
         <%_ } _%>
-        private alertService: AlertService,
+        private alertService: JhiAlertService,
         private <%= entityInstance %>Service: <%= entityAngularName %>Service,<% for (idx in differentRelationships) {
         if (differentRelationships[idx].relationshipType != 'one-to-many') { %>
         private <%= differentRelationships[idx].otherEntityName %>Service: <%= differentRelationships[idx].otherEntityAngularName %>Service,<% }
@@ -93,7 +93,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         <%_ if (fieldsContainImageBlob) { _%>
         private elementRef: ElementRef,
         <%_ } _%>
-        private eventManager: EventManager
+        private eventManager: JhiEventManager
     ) {
     }
 
