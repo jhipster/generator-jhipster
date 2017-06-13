@@ -14,7 +14,7 @@
     "test": "npm run lint && mocha test",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha test --",
     "peg-parse": "pegjs -o lib/dsl/pegjs_parser.js lib/dsl/grammar.txt",
-    "prepublish": "npm test",
+    "prepublish": "npm run peg-parse && npm test",
     "release": "git push && git push --tags && npm publish",
     "release-patch": "npm version patch -a -m \"Update to %s\" && npm run release",
     "release-minor": "npm version minor -a -m \"Update to %s\" && npm run release",
