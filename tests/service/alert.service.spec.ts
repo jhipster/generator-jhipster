@@ -19,8 +19,8 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { AlertService, Alert } from '../../src/service/alert.service';
-import { ConfigService } from '../../src/config.service';
+import { JhiAlertService, JhiAlert } from '../../src/service/alert.service';
+import { JhiConfigService } from '../../src/config.service';
 
 describe('Alert service test', () => {
 
@@ -29,10 +29,10 @@ describe('Alert service test', () => {
             TestBed.configureTestingModule({
                 imports: [TranslateModule.forRoot()],
                 providers: [
-                    AlertService,
+                    JhiAlertService,
                     {
-                        provide: ConfigService,
-                        useValue: new ConfigService({defaultI18nLang: 'en', i18nEnabled: true})
+                        provide: JhiConfigService,
+                        useValue: new JhiConfigService({defaultI18nLang: 'en', i18nEnabled: true})
                     }
                 ]
             });
@@ -45,7 +45,7 @@ describe('Alert service test', () => {
             jasmine.clock().uninstall();
         });
 
-        it('should produce a proper alert object and fetch it', inject([AlertService], (service: AlertService) => {
+        it('should produce a proper alert object and fetch it', inject([JhiAlertService], (service: JhiAlertService) => {
             expect(service.addAlert({
                 type: 'success',
                 msg: 'Hello Jhipster',
@@ -53,7 +53,7 @@ describe('Alert service test', () => {
                 timeout: 3000,
                 toast: true,
                 position: 'top left'
-            }, [])).toEqual(jasmine.objectContaining(<Alert>{
+            }, [])).toEqual(jasmine.objectContaining(<JhiAlert>{
                 type: 'success',
                 msg: 'Hello Jhipster',
                 id: 0,
@@ -64,7 +64,7 @@ describe('Alert service test', () => {
             }));
 
             expect(service.get().length).toBe(1);
-            expect(service.get()[0]).toEqual(jasmine.objectContaining(<Alert>{
+            expect(service.get()[0]).toEqual(jasmine.objectContaining(<JhiAlert>{
                 type: 'success',
                 msg: 'Hello Jhipster',
                 id: 0,
@@ -75,26 +75,26 @@ describe('Alert service test', () => {
             }));
         }));
 
-        it('should produce an alert object with correct id', inject([AlertService], (service: AlertService) => {
+        it('should produce an alert object with correct id', inject([JhiAlertService], (service: JhiAlertService) => {
             service.info('Hello Jhipster info');
-            expect(service.success('Hello Jhipster success')).toEqual(jasmine.objectContaining(<Alert>{
+            expect(service.success('Hello Jhipster success')).toEqual(jasmine.objectContaining(<JhiAlert>{
                 type: 'success',
                 msg: 'Hello Jhipster success',
                 id: 1
             }));
 
             expect(service.get().length).toBe(2);
-            expect(service.get()[1]).toEqual(jasmine.objectContaining(<Alert>{
+            expect(service.get()[1]).toEqual(jasmine.objectContaining(<JhiAlert>{
                 type: 'success',
                 msg: 'Hello Jhipster success',
                 id: 1
             }));
         }));
 
-        it('should close an alert correctly', inject([AlertService], (service: AlertService) => {
+        it('should close an alert correctly', inject([JhiAlertService], (service: JhiAlertService) => {
             service.info('Hello Jhipster info');
             service.info('Hello Jhipster info 2');
-            expect(service.success('Hello Jhipster success')).toEqual(jasmine.objectContaining(<Alert>{
+            expect(service.success('Hello Jhipster success')).toEqual(jasmine.objectContaining(<JhiAlert>{
                 type: 'success',
                 msg: 'Hello Jhipster success',
                 id: 2
@@ -103,14 +103,14 @@ describe('Alert service test', () => {
             expect(service.get().length).toBe(3);
             service.closeAlert(1);
             expect(service.get().length).toBe(2);
-            expect(service.get()[1]).not.toEqual(jasmine.objectContaining(<Alert>{
+            expect(service.get()[1]).not.toEqual(jasmine.objectContaining(<JhiAlert>{
                 type: 'info',
                 msg: 'Hello Jhipster info 2',
                 id: 1
             }));
             service.closeAlert(2);
             expect(service.get().length).toBe(1);
-            expect(service.get()[0]).not.toEqual(jasmine.objectContaining(<Alert>{
+            expect(service.get()[0]).not.toEqual(jasmine.objectContaining(<JhiAlert>{
                 type: 'success',
                 msg: 'Hello Jhipster success',
                 id: 2
@@ -119,7 +119,7 @@ describe('Alert service test', () => {
             expect(service.get().length).toBe(0);
         }));
 
-        it('should close an alert on timeout correctly', inject([AlertService], (service: AlertService) => {
+        it('should close an alert on timeout correctly', inject([JhiAlertService], (service: JhiAlertService) => {
             service.info('Hello Jhipster info');
 
             expect(service.get().length).toBe(1);
@@ -129,7 +129,7 @@ describe('Alert service test', () => {
             expect(service.get().length).toBe(0);
         }));
 
-        it('should clear alerts', inject([AlertService], (service: AlertService) => {
+        it('should clear alerts', inject([JhiAlertService], (service: JhiAlertService) => {
             service.info('Hello Jhipster info');
             service.error('Hello Jhipster info');
             service.success('Hello Jhipster info');
@@ -138,7 +138,7 @@ describe('Alert service test', () => {
             expect(service.get().length).toBe(0);
         }));
 
-        it('should produce a scoped alert', inject([AlertService], (service: AlertService) => {
+        it('should produce a scoped alert', inject([JhiAlertService], (service: JhiAlertService) => {
             expect(service.addAlert({
                 type: 'success',
                 msg: 'Hello Jhipster',
@@ -147,7 +147,7 @@ describe('Alert service test', () => {
                 toast: true,
                 position: 'top left',
                 scoped: true
-            }, [])).toEqual(jasmine.objectContaining(<Alert>{
+            }, [])).toEqual(jasmine.objectContaining(<JhiAlert>{
                 type: 'success',
                 msg: 'Hello Jhipster',
                 id: 0,
@@ -160,37 +160,37 @@ describe('Alert service test', () => {
             expect(service.get().length).toBe(0);
         }));
 
-        it('should produce a success message', inject([AlertService], (service: AlertService) => {
-            expect(service.success('Hello Jhipster')).toEqual(jasmine.objectContaining(<Alert>{
+        it('should produce a success message', inject([JhiAlertService], (service: JhiAlertService) => {
+            expect(service.success('Hello Jhipster')).toEqual(jasmine.objectContaining(<JhiAlert>{
                 type: 'success',
                 msg: 'Hello Jhipster'
             }));
         }));
 
-        it('should produce a success message with custom position', inject([AlertService], (service: AlertService) => {
-            expect(service.success('Hello Jhipster', {}, 'bottom left')).toEqual(jasmine.objectContaining(<Alert>{
+        it('should produce a success message with custom position', inject([JhiAlertService], (service: JhiAlertService) => {
+            expect(service.success('Hello Jhipster', {}, 'bottom left')).toEqual(jasmine.objectContaining(<JhiAlert>{
                 type: 'success',
                 msg: 'Hello Jhipster',
                 position: 'bottom left',
             }));
         }));
 
-        it('should produce a error message', inject([AlertService], (service: AlertService) => {
-            expect(service.error('Hello Jhipster')).toEqual(jasmine.objectContaining(<Alert>{
+        it('should produce a error message', inject([JhiAlertService], (service: JhiAlertService) => {
+            expect(service.error('Hello Jhipster')).toEqual(jasmine.objectContaining(<JhiAlert>{
                 type: 'danger',
                 msg: 'Hello Jhipster'
             }));
         }));
 
-        it('should produce a warning message', inject([AlertService], (service: AlertService) => {
-            expect(service.warning('Hello Jhipster')).toEqual(jasmine.objectContaining(<Alert>{
+        it('should produce a warning message', inject([JhiAlertService], (service: JhiAlertService) => {
+            expect(service.warning('Hello Jhipster')).toEqual(jasmine.objectContaining(<JhiAlert>{
                 type: 'warning',
                 msg: 'Hello Jhipster'
             }));
         }));
 
-        it('should produce a info message', inject([AlertService], (service: AlertService) => {
-            expect(service.info('Hello Jhipster')).toEqual(jasmine.objectContaining(<Alert>{
+        it('should produce a info message', inject([JhiAlertService], (service: JhiAlertService) => {
+            expect(service.info('Hello Jhipster')).toEqual(jasmine.objectContaining(<JhiAlert>{
                 type: 'info',
                 msg: 'Hello Jhipster'
             }));

@@ -17,7 +17,7 @@
  limitations under the License.
  */
 import { Directive, Input, Output, Renderer, EventEmitter, ElementRef } from '@angular/core';
-import { ConfigService } from '../config.service';
+import { JhiConfigService } from '../config.service';
 
 @Directive({
     selector: '[jhiSort]'
@@ -37,7 +37,7 @@ export class JhiSortDirective {
 
     element: any;
 
-    constructor(el: ElementRef, renderer: Renderer, configService: ConfigService) {
+    constructor(el: ElementRef, renderer: Renderer, configService: JhiConfigService) {
         this.element = el.nativeElement;
         const config = configService.getConfig();
         this.sortIcon = config.sortIcon;

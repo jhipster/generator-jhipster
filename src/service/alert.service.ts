@@ -19,34 +19,34 @@
 import { Injectable, Sanitizer, SecurityContext } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
-import { ConfigService } from '../config.service';
+import { JhiConfigService } from '../config.service';
 
-export type AlertType =  'success' | 'danger' | 'warning' | 'info';
+export type JhiAlertType =  'success' | 'danger' | 'warning' | 'info';
 
-export interface Alert {
+export interface JhiAlert {
     id?: number;
-    type: AlertType;
+    type: JhiAlertType;
     msg: string;
     params?: any;
     timeout?: number;
     toast?: boolean;
     position?: string;
     scoped?: boolean;
-    close?: (alerts: Alert[]) => void;
+    close?: (alerts: JhiAlert[]) => void;
 }
 
 @Injectable()
-export class AlertService {
+export class JhiAlertService {
 
     private alertId: number;
-    private alerts: Alert[];
+    private alerts: JhiAlert[];
     private timeout: number;
     private toast: boolean;
     private i18nEnabled: boolean;
 
     constructor(
         private sanitizer: Sanitizer,
-        private configService: ConfigService,
+        private configService: JhiConfigService,
         private translateService: TranslateService
     ) {
         const config = this.configService.getConfig();
@@ -61,11 +61,11 @@ export class AlertService {
        this.alerts.splice(0, this.alerts.length);
     }
 
-    get(): Alert[] {
+    get(): JhiAlert[] {
         return this.alerts;
     }
 
-    success(msg: string, params?: any, position?: string): Alert {
+    success(msg: string, params?: any, position?: string): JhiAlert {
         return this.addAlert({
             type: 'success',
             msg,
@@ -76,7 +76,7 @@ export class AlertService {
         }, []);
     }
 
-    error(msg: string, params?: any, position?: string): Alert {
+    error(msg: string, params?: any, position?: string): JhiAlert {
         return this.addAlert({
             type: 'danger',
             msg,
@@ -87,7 +87,7 @@ export class AlertService {
         }, []);
     }
 
-    warning(msg: string, params?: any, position?: string): Alert {
+    warning(msg: string, params?: any, position?: string): JhiAlert {
         return this.addAlert({
             type: 'warning',
             msg,
@@ -98,7 +98,7 @@ export class AlertService {
         }, []);
     }
 
-    info(msg: string, params?: any, position?: string): Alert {
+    info(msg: string, params?: any, position?: string): JhiAlert {
         return this.addAlert({
             type: 'info',
             msg,
@@ -109,8 +109,8 @@ export class AlertService {
         }, []);
     }
 
-    private factory(alertOptions: Alert): Alert {
-        const alert: Alert = {
+    private factory(alertOptions: JhiAlert): JhiAlert {
+        const alert: JhiAlert = {
             type: alertOptions.type,
             msg: this.sanitizer.sanitize(SecurityContext.HTML, alertOptions.msg),
             id: alertOptions.id,
@@ -118,7 +118,7 @@ export class AlertService {
             toast: alertOptions.toast,
             position: alertOptions.position ? alertOptions.position : 'top right',
             scoped: alertOptions.scoped,
-            close: (alerts: Alert[]) => {
+            close: (alerts: JhiAlert[]) => {
                 return this.closeAlert(alertOptions.id, alerts);
             }
         };
@@ -128,7 +128,7 @@ export class AlertService {
         return alert;
     }
 
-    addAlert(alertOptions: Alert, extAlerts: Alert[]): Alert {
+    addAlert(alertOptions: JhiAlert, extAlerts: JhiAlert[]): JhiAlert {
         alertOptions.id = this.alertId++;
         if (this.i18nEnabled && alertOptions.msg) {
             alertOptions.msg = this.translateService.instant(alertOptions.msg, alertOptions.params);
@@ -142,12 +142,12 @@ export class AlertService {
         return alert;
     }
 
-    closeAlert(id: number, extAlerts?: Alert[]): any {
-        const thisAlerts: Alert[] = (extAlerts && extAlerts.length > 0) ? extAlerts : this.alerts;
+    closeAlert(id: number, extAlerts?: JhiAlert[]): any {
+        const thisAlerts: JhiAlert[] = (extAlerts && extAlerts.length > 0) ? extAlerts : this.alerts;
         return this.closeAlertByIndex(thisAlerts.map((e) => e.id).indexOf(id), thisAlerts);
     }
 
-    closeAlertByIndex(index: number, thisAlerts: Alert[]): Alert[] {
+    closeAlertByIndex(index: number, thisAlerts: JhiAlert[]): JhiAlert[] {
         return thisAlerts.splice(index, 1);
     }
 

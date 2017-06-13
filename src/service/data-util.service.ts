@@ -22,7 +22,7 @@ import { ElementRef, Injectable } from '@angular/core';
  * An utility service for data.
  */
 @Injectable()
-export class DataUtils {
+export class JhiDataUtils {
 
     constructor() {}
 

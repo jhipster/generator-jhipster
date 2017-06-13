@@ -17,10 +17,10 @@
  limitations under the License.
  */
 import { MissingTranslationHandler, MissingTranslationHandlerParams } from '@ngx-translate/core';
-import { ConfigService } from '../config.service';
+import { JhiConfigService } from '../config.service';
 
 export class JhiMissingTranslationHandler implements MissingTranslationHandler {
-    constructor(private configService: ConfigService) {}
+    constructor(private configService: JhiConfigService) {}
 
     handle(params: MissingTranslationHandlerParams) {
         const key = params.key;

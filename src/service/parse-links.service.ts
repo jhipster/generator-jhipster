@@ -22,7 +22,7 @@ import { Injectable } from '@angular/core';
  * An utility service for link parsing.
  */
 @Injectable()
-export class ParseLinks {
+export class JhiParseLinks {
 
     constructor() {}
 

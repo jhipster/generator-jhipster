@@ -20,7 +20,7 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { JhiItemCountComponent } from '../../src/component/jhi-item-count.component';
 import { JhiTranslateComponent } from '../../src/language/jhi-translate.directive';
-import { ConfigService } from '../../src/config.service';
+import { JhiConfigService } from '../../src/config.service';
 
 function getElementHtml(element: ComponentFixture<JhiItemCountComponent>): string {
     const res = element.nativeElement.querySelector('.jhi-item-count');
@@ -48,8 +48,8 @@ describe('JhiItemCountComponent test', () => {
             providers: [
                 JhiItemCountComponent,
                 {
-                    provide: ConfigService,
-                    useValue: new ConfigService({defaultI18nLang: 'en', i18nEnabled: true})
+                    provide: JhiConfigService,
+                    useValue: new JhiConfigService({defaultI18nLang: 'en', i18nEnabled: true})
                 }
             ]
         }).compileComponents();

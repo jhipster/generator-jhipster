@@ -18,7 +18,7 @@
  */
 import { TestBed, inject } from '@angular/core/testing';
 
-import { DataUtils } from '../../src/service/data-util.service';
+import { JhiDataUtils } from '../../src/service/data-util.service';
 
 describe('Data Utils service test', () => {
 
@@ -26,24 +26,24 @@ describe('Data Utils service test', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 providers: [
-                    DataUtils
+                    JhiDataUtils
                 ]
             });
         });
 
-        it('should not abbreviate the text when below cutoff', inject([DataUtils], (service: DataUtils) => {
+        it('should not abbreviate the text when below cutoff', inject([JhiDataUtils], (service: JhiDataUtils) => {
             expect(service.abbreviate('Hello Jhipster')).toBe('Hello Jhipster');
         }));
 
-        it('should abbreviate the text and append ...', inject([DataUtils], (service: DataUtils) => {
+        it('should abbreviate the text and append ...', inject([JhiDataUtils], (service: JhiDataUtils) => {
             expect(service.abbreviate('Hello Jhipster lets test the data utils function')).toBe('Hello Jhipster ...s function');
         }));
 
-        it('should abbreviate the text and append +++', inject([DataUtils], (service: DataUtils) => {
+        it('should abbreviate the text and append +++', inject([JhiDataUtils], (service: JhiDataUtils) => {
             expect(service.abbreviate('Hello Jhipster lets test the data utils function', '+++')).toBe('Hello Jhipster +++s function');
         }));
 
-        it('should return the bytesize of the text', inject([DataUtils], (service: DataUtils) => {
+        it('should return the bytesize of the text', inject([JhiDataUtils], (service: JhiDataUtils) => {
             expect(service.byteSize('Hello Jhipster')).toBe(`10.5 bytes`);
         }));
     });

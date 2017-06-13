@@ -19,7 +19,7 @@
 import { Injectable } from '@angular/core';
 import { TestBed, inject } from '@angular/core/testing';
 
-import { EventManager } from '../../src/service/event-manager.service';
+import { JhiEventManager } from '../../src/service/event-manager.service';
 
 @Injectable()
 class SpyService {
@@ -37,20 +37,20 @@ describe('Event Manager test', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 providers: [
-                    EventManager,
+                    JhiEventManager,
                     SpyService
                 ]
             });
         });
 
-        it('should not fail when nosubscriber and broadcasting', inject([EventManager],
-            (eventManager: EventManager) => {
+        it('should not fail when nosubscriber and broadcasting', inject([JhiEventManager],
+            (eventManager: JhiEventManager) => {
             expect(eventManager.observer).toBeUndefined();
             eventManager.broadcast({ name: 'modifier', content: 'modified something'});
         }));
 
-        it('should create an observable and callback when broadcasted', inject([EventManager, SpyService],
-            (eventManager: EventManager, spyService: SpyService) => {
+        it('should create an observable and callback when broadcasted', inject([JhiEventManager, SpyService],
+            (eventManager: JhiEventManager, spyService: SpyService) => {
             expect(spyService.called).toBeFalsy();
             eventManager.subscribe('modifier', (response) => callback(spyService));
             eventManager.broadcast({ name: 'modifier', content: 'modified something'});

@@ -17,7 +17,7 @@
  limitations under the License.
  */
 import { Component, Input } from '@angular/core';
-import { ConfigService } from '../config.service';
+import { JhiConfigService } from '../config.service';
 
 /**
  * A component that will take care of item count statistics of a pagination.
@@ -67,7 +67,7 @@ export class JhiItemCountComponent {
         return '{first: \'' + first + '\', second: \'' + second + '\', total: \'' + this.total + '\'}';
     }
 
-    constructor(config: ConfigService) {
+    constructor(config: JhiConfigService) {
         this.i18nEnabled = config.CONFIG_OPTIONS.i18nEnabled;
     }
 

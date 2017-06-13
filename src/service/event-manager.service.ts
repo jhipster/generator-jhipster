@@ -23,7 +23,7 @@ import { Observable, Observer, Subscription} from 'rxjs/Rx';
  * An utility class to manage RX events
  */
 @Injectable()
-export class EventManager {
+export class JhiEventManager {
 
     observable: Observable<any>;
     observer: Observer<any>;
