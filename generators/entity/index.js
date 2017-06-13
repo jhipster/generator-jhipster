@@ -180,6 +180,8 @@ module.exports = EntityGenerator.extend({
         validateEntityName() {
             if (!(/^([a-zA-Z0-9_]*)$/.test(this.name))) {
                 this.error(chalk.red('The entity name cannot contain special characters'));
+            } else if ((/^[0-9].*$/.test(this.name))) {
+                this.error(chalk.red('The entity name cannot start with a number'));
             } else if (this.name === '') {
                 this.error(chalk.red('The entity name cannot be empty'));
             } else if (this.name.indexOf('Detail', this.name.length - 'Detail'.length) !== -1) {
