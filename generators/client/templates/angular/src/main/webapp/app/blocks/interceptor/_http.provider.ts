@@ -18,7 +18,7 @@
 -%>
 import { Injector } from '@angular/core';
 import { Http, XHRBackend, RequestOptions } from '@angular/http';
-import { JhiEventManager, InterceptableHttp } from 'ng-jhipster';
+import { JhiEventManager, JhiInterceptableHttp } from 'ng-jhipster';
 
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { AuthInterceptor } from './auth.interceptor';
@@ -45,7 +45,7 @@ export function interceptableFactory(
     <%_ } _%>
     eventManager: JhiEventManager
 ) {
-    return new InterceptableHttp(
+    return new JhiInterceptableHttp(
         backend,
         defaultOptions,
         [

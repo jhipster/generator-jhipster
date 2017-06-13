@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { HttpInterceptor } from 'ng-jhipster';
+import { JhiHttpInterceptor } from 'ng-jhipster';
 import { RequestOptionsArgs, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Injector } from '@angular/core';
@@ -28,7 +28,7 @@ import { StateStorageService } from '../../shared/auth/state-storage.service';
 import { LoginModalService } from '../../shared/login/login-modal.service';
 <%_ } _%>
 
-export class AuthExpiredInterceptor extends HttpInterceptor {
+export class AuthExpiredInterceptor extends JhiHttpInterceptor {
 
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
     constructor(private injector: Injector) {
