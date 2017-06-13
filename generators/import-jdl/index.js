@@ -77,7 +77,8 @@ module.exports = JDLGenerator.extend({
                 const jdlObject = jhiCore.convertToJDL(jhiCore.parseFromFiles(this.jdlFiles), this.prodDatabaseType, this.applicationType);
                 const entities = jhiCore.convertToJHipsterJSON({
                     jdlObject,
-                    databaseType: this.prodDatabaseType
+                    databaseType: this.prodDatabaseType,
+                    applicationType: this.applicationType
                 });
                 this.log('Writing entity JSON files.');
                 jhiCore.exportToJSON(entities, this.options.force);
