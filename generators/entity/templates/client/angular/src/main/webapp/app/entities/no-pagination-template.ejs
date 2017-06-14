@@ -33,11 +33,11 @@ _%>
 
     constructor(
         private <%= entityInstance %>Service: <%= entityAngularName %>Service,
-        private alertService: AlertService,
+        private alertService: JhiAlertService,
         <%_ if (fieldsContainBlob) { _%>
-        private dataUtils: DataUtils,
+        private dataUtils: JhiDataUtils,
         <%_ } _%>
-        private eventManager: EventManager,
+        private eventManager: JhiEventManager,
         <%_ if (searchEngine === 'elasticsearch') { _%>
         private activatedRoute: ActivatedRoute,
         <%_ } _%>

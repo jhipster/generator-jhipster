@@ -21,14 +21,14 @@ import { Http, Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { LocalStorageService } from 'ng2-webstorage';
 
-import { Base64 } from 'ng-jhipster';
+import { JhiBase64Service } from 'ng-jhipster';
 
 @Injectable()
 export class AuthServerProvider {
 
     constructor(
         private http: Http,
-        private base64: Base64,
+        private base64: JhiBase64Service,
         private $localStorage: LocalStorageService
     ) {}
 

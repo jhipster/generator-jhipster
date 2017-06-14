@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { HttpInterceptor } from 'ng-jhipster';
+import { JhiHttpInterceptor } from 'ng-jhipster';
 import { RequestOptionsArgs, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Injector } from '@angular/core';
@@ -28,7 +28,7 @@ import { StateStorageService } from '../../shared/auth/state-storage.service';
 import { LoginModalService } from '../../shared/login/login-modal.service';
 <%_ } _%>
 
-export class AuthExpiredInterceptor extends HttpInterceptor {
+export class AuthExpiredInterceptor extends JhiHttpInterceptor {
 
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
     constructor(private injector: Injector) {
@@ -59,7 +59,6 @@ export class AuthExpiredInterceptor extends HttpInterceptor {
 
     responseIntercept(observable: Observable<Response>): Observable<Response> {
         return <Observable<Response>> observable.catch((error) => {
-            <%_ // TODO this is ng1 way...the ng2 would be more like someRouterService.subscribe(url).forEach.. this needs to be updated _%>
             if (error.status === 401 && error.text() !== '' && error.json().path && error.json().path.indexOf('/api/account') === -1) {
                 const authServerProvider = this.injector.get(AuthServerProvider);
                 const destination = this.stateStorageService.getDestinationState();
