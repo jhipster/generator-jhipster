@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { CookieService } from 'angular2-cookie/core';
+import { CookieService } from 'ngx-cookie';
 
 @Injectable()
 export class CSRFService {
