@@ -1,0 +1,181 @@
+<%#
+ Copyright 2013-2017 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://jhipster.github.io/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+# JHipster Registry HA cluster
+#
+# As this is based on a StatefulSet, it will only work on OCP >= 1.5/3.5. Please note StatefulSet is yet not a production ready service.
+# It is 'BETA' in Kubernetes and 'Technology Preview' in OpenShift 3.5
+#
+# Registry template. This defines all the configurable parameters and other objects that are needed to run the Eureka service. This
+# template can even be saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls
+# note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: jhipster-registry-template
+  namespace: <%= openshiftNamespace %>
+  annotations:
+    description: This template defines objects that are required to spin up an jhipster-registry pod
+    tags: jhipster-registry, eureka, spring-cloud
+    openshift.io/display-name: jhipster-registry-template
+    openshift.io/long-description: This template provides objects that are required to spin up a jhipster-registry pod.
+    openshift.io/provider-display-name: JHipster
+labels:
+  app: jhipster-registry
+  createdBy: JHipster-Team
+parameters:
+  -
+    name: APPLICATION_NAME
+    value: jhipster-registry
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  -
+    name: SECRET_REF
+    value: reg-secret-ref
+    description: Name of the application
+    required: true
+    displayName: "*** PLEASE DO NOT CHANGE THIS ***"
+objects:
+  -
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: ${SECRET_REF}
+    type: Opaque
+    data:
+      registry-admin-password: <%= adminPasswordBase64 %> # base64 encoded "<%= adminPassword %>"
+  -
+    apiVersion: apps/v1beta1
+    kind: StatefulSet
+    metadata:
+      name: ${APPLICATION_NAME}
+    spec:
+      serviceName: ${APPLICATION_NAME}
+      replicas: "<%= registryReplicas %>"
+      template:
+        metadata:
+          labels:
+            app: ${APPLICATION_NAME}
+        spec:
+          terminationGracePeriodSeconds: 10
+          containers:
+          - name: ${APPLICATION_NAME}
+            image: <%= DOCKER_JHIPSTER_REGISTRY %>
+            ports:
+            - name: http
+              containerPort: 8761
+            env:
+            # StatefulSet specific configuration
+            - name: CLUSTER_SIZE
+              value: "<%= registryReplicas %>"
+            - name: STATEFULSET_NAME
+              value: ${APPLICATION_NAME}
+            # Registry configuration
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod,native
+            - name: SECURITY_USER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ${SECRET_REF}
+                  key: registry-admin-password
+            - name: JHIPSTER_REGISTRY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ${SECRET_REF}
+                  key: registry-admin-password
+            - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_SECRET
+              value: my-secret-token-to-change-in-production
+            - name: EUREKA_CLIENT_FETCH_REGISTRY
+              value: 'true'
+            - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
+              value: 'true'
+            # Eureka specific tweaking
+            - name: EUREKA_SERVER_REGISTRY_SYNC_RETRY_WAIT_MS
+              value: '500'
+            - name: EUREKA_SERVER_A_SGCACHE_EXPIRY_TIMEOUT_MS
+              value: '60000'
+            - name: EUREKA_SERVER_EVICTION_INTERVAL_TIMER_IN_MS
+              value: '30000'
+            - name: EUREKA_SERVER_PEER_EUREKA_NODES_UPDATE_INTERVAL_MS
+              value: '30000'
+            - name: EUREKA_SERVER_RENAWAL_THRESHOLD_UPDATE_INTERVAL_MS
+              value: '15000'
+            # this might not be required as the service-url is defined in configMap as well. If there is no impact, this can be safely removed
+            command:
+              - "/bin/sh"
+              - "-ec"
+              - |
+                HOSTNAME=$(hostname)
+                export EUREKA_INSTANCE_HOSTNAME="${HOSTNAME}.jhipster-registry"
+                echo "Setting EUREKA_INSTANCE_HOSTNAME=${EUREKA_INSTANCE_HOSTNAME}"
+                echo "Configuring Registry Replicas for CLUSTER_SIZE=${CLUSTER_SIZE}"
+
+                LAST_POD_INDEX=$((${CLUSTER_SIZE} - 1))
+                REPLICAS=""
+                for i in $(seq 0 $LAST_POD_INDEX); do
+                  REPLICAS="${REPLICAS}http://admin:${JHIPSTER_REGISTRY_PASSWORD}@${STATEFULSET_NAME}-${i}.jhipster-registry/eureka/"
+                  if [ $i -lt $LAST_POD_INDEX ]; then
+                    REPLICAS="${REPLICAS},"
+                  fi
+                done
+                export EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=$REPLICAS
+                echo "EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=${REPLICAS}"
+
+                java -jar /jhipster-registry.war --spring.cloud.config.server.git.uri=${GIT_URI} --spring.cloud.config.server.git.search-paths=${GIT_SEARCH_PATHS} -Djava.security.egd=file:/dev/./urandom
+            volumeMounts:
+            - name: config-volume
+              mountPath: /central-config
+          volumes:
+          - name: config-volume
+            configMap:
+              name: application-config
+  -
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: ${APPLICATION_NAME}
+      labels:
+        app: ${APPLICATION_NAME}
+      annotations:
+        service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+    spec:
+      ports:
+      - name: http-bc
+        port: 8761
+        targetPort: 8761
+      - name: http
+        port: 80
+        targetPort: 8761
+      type: ClusterIP
+      selector:
+        app: ${APPLICATION_NAME}
+  -
+    apiVersion: v1
+    kind: Route
+    metadata:
+      name: ${APPLICATION_NAME}
+    spec:
+      to:
+        kind: Service
+        name: ${APPLICATION_NAME}
+        weight: 100
+      port:
+        targetPort: http
+      wildcardPolicy: None

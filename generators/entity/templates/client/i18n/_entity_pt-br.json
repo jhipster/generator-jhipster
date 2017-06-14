@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -25,9 +25,9 @@
                 "createOrEditLabel": "Criar ou editar <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
                 "search": "Pesquisar por <%= entityClassHumanized %>"<% } %>
             },<% if (!microserviceAppName) { %>
-            "created": "Um novo <%= entityClassHumanized %> é criado com o identificador {{ param }}",
-            "updated": "Um <%= entityClassHumanized %> é atualizado com o identificador {{ param }}",
-            "deleted": "Um <%= entityClassHumanized %> é deletado com o identificador {{ param }}",<% } %>
+            "created": "Um novo <%= entityClassHumanized %> foi criado com o identificador {{ param }}",
+            "updated": "Um <%= entityClassHumanized %> foi atualizado com o identificador {{ param }}",
+            "deleted": "Um <%= entityClassHumanized %> foi deletado com o identificador {{ param }}",<% } %>
             "delete": {
                 "question": "Tem certeza de que deseja excluir <%= entityClassHumanized %> {{ id }}?"
             },
@@ -40,9 +40,9 @@
     }<% if (microserviceAppName) { %>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
-            "created": "Um novo <%= entityClassHumanized %> é criado com o identificador {{ param }}",
-            "updated": "Um <%= entityClassHumanized %> é atualizado com o identificador {{ param }}",
-            "deleted": "Um <%= entityClassHumanized %> é deletado com o identificador {{ param }}"
+            "created": "Um novo <%= entityClassHumanized %> foi criado com o identificador {{ param }}",
+            "updated": "Um <%= entityClassHumanized %> foi atualizado com o identificador {{ param }}",
+            "deleted": "Um <%= entityClassHumanized %> foi deletado com o identificador {{ param }}"
         }
     }<% } %>
 }

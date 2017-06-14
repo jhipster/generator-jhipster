@@ -49,11 +49,11 @@ chances of your issue being dealt with quickly:
 * **Entity configuration(s) `entityName.json` files generated in the `.jhipster` directory** - if the error is during an entity creation or associated with a specific entity
 * **Browsers and Operating System** - is this a problem with all browsers or only IE8?
 
-You can use `yo jhipster:info` to provide us the information we need.
+You can use `jhipster info` to provide us the information we need.
 
 Click [here](https://github.com/jhipster/generator-jhipster/issues/new) to open a bug issue with a pre-filled template. For feature requests and enquiries you can use [this template][feature-template].
 
-You can run `yo jhipster:info` in your project folder to get most of the above required info.
+You can run `jhipster info` in your project folder to get most of the above required info.
 
 Issues opened without any of these info will be **closed** without any explanation.
 
@@ -187,7 +187,7 @@ Go to the [generator-jhipster project](https://github.com/jhipster/generator-jhi
 
 In your cloned `generator-jhipster` project, type `npm link` or `yarn link` depending on the package manager you use.
 
-This will do a symbolic link from the global `node_modules` version to point to this folder, so when we run `yo jhipster`, you will now use the development version of JHipster.
+This will do a symbolic link from the global `node_modules` version to point to this folder, so when we run `jhipster`, you will now use the development version of JHipster.
 
 For testing, you will want to generate an application, and there is a specific issue here: for each application, JHipster installs a local version of itself. This is made to enable several applications to each use a specific JHipster version (application A uses JHipster 3.1.0, and application B uses JHipster 3.2.0).
 
@@ -198,10 +198,10 @@ To put it in a nutshell, you need to:
 1. run `npm link` or `yarn link` on the `generator-jhipster` project
 2. run `npm link generator-jhipster` or `yarn link generator-jhipster` on the generated application folder (you need to do this for each application you create)
 
-Now, running the 'yo jhipster' command should use your specific JHipster version. You can test it by making a small change in your cloned generator, and running again on an existing JHipster project:
+Now, running the 'jhipster' command should use your specific JHipster version. You can test it by making a small change in your cloned generator, and running again on an existing JHipster project:
 
 ```shell
-yo jhipster
+jhipster
 ```
 
 You should see your changes reflected in the generated project.

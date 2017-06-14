@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -16,20 +16,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-const commonConfig = require('./webpack.common.js');
 const webpackMerge = require('webpack-merge');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const Visualizer = require('webpack-visualizer-plugin');
 const path = require('path');
+
+const commonConfig = require('./webpack.common.js');
+
 const ENV = 'prod';
 
 module.exports = webpackMerge(commonConfig({ env: ENV }), {
     devtool: 'source-map',
     output: {
         path: path.resolve('./<%= BUILD_DIR %>www'),
-        filename: '[hash].[name].bundle.js',
-        chunkFilename: '[hash].[id].chunk.js'
+        filename: 'app/[hash].[name].bundle.js',
+        chunkFilename: 'app/[hash].[id].chunk.js'
     },
     plugins: [
         new ExtractTextPlugin('[hash].styles.css'),

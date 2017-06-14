@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -18,9 +18,9 @@
 -%>
 import { Component, OnDestroy } from '@angular/core';
 <%_ if (enableTranslation) { _%>
-import { TranslateService } from 'ng2-translate';
+import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
-import { EventManager, AlertService } from 'ng-jhipster';
+import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { Subscription } from 'rxjs/Rx';
 
 @Component({
@@ -28,7 +28,9 @@ import { Subscription } from 'rxjs/Rx';
     template: `
         <div class="alerts" role="alert">
             <div *ngFor="let alert of alerts"  [ngClass]="{\'alert.position\': true, \'toast\': alert.toast}">
-                <ngb-alert type="{{alert.type}}" close="alert.close(alerts)"><pre [innerHTML]="alert.msg"></pre></ngb-alert>
+                <ngb-alert *ngIf="alert && alert.type && alert.msg" [type]="alert.type" (close)="alert.close(alerts)">
+                    <pre [innerHTML]="alert.msg"></pre>
+                </ngb-alert>
             </div>
         </div>`
 })
@@ -37,7 +39,7 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
     alerts: any[];
     cleanHttpErrorListener: Subscription;
 
-    constructor(private alertService: AlertService, private eventManager: EventManager<% if (enableTranslation) { %>, private translateService: TranslateService<% } %>) {
+    constructor(private alertService: JhiAlertService, private eventManager: JhiEventManager<% if (enableTranslation) { %>, private translateService: TranslateService<% } %>) {
         this.alerts = [];
 
         this.cleanHttpErrorListener = eventManager.subscribe('<%=angularAppName%>.httpError', (response) => {
@@ -77,7 +79,7 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
                                 fieldError.objectName + '.' + convertedField)<% } else { %>convertedField.charAt(0).toUpperCase() +
                                 convertedField.slice(1)<% } %>;
                             this.addErrorAlert(
-                                'Field ' + fieldName + ' cannot be empty', 'error.' + fieldError.message, { fieldName });
+                                'Error on field "' + fieldName + '"', 'error.' + fieldError.message, { fieldName });
                         }
                     } else if (httpResponse.text() !== '' && httpResponse.json() && httpResponse.json().message) {
                         this.addErrorAlert(httpResponse.json().message, httpResponse.json().message, httpResponse.json().params);
@@ -109,7 +111,7 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
 
     addErrorAlert(message, key?, data?) {
         <%_ if (enableTranslation) { _%>
-        key = key && key !== null ? key : message;
+        key = (key && key !== null) ? key : message;
         this.alerts.push(
             this.alertService.addAlert(
                 {

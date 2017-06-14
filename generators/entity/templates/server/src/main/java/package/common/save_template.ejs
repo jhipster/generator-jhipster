@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -21,14 +21,16 @@ const instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInsta
 const mapper = entityInstance  + 'Mapper';
 const dtoToEntity = mapper + '.' + 'toEntity';
 const entityToDto = mapper + '.' + 'toDto';
+const returnPrefix = (returnDirectly && searchEngine !== 'elasticsearch') ? 'return' : instanceType + ' result =';
 let resultEntity;
 if (!viaService) {
     if (dto == 'mapstruct') {
         resultEntity = entityInstance; %>
         <%= entityClass %> <%= entityInstance %> = <%= dtoToEntity %>(<%= instanceName %>);
         <%= entityInstance %> = <%= entityInstance %>Repository.save(<%= entityInstance %>);
-        <%= instanceType %> result = <%= entityToDto %>(<%= entityInstance %>);<% } else {
+        <%= returnPrefix %> <%= entityToDto %>(<%= entityInstance %>);<% } else {
     resultEntity = 'result'; %>
-        <%= entityClass %> result = <%= entityInstance %>Repository.save(<%= entityInstance %>);<% } if (searchEngine == 'elasticsearch') { %>
-        <%= entityInstance %>SearchRepository.save(<%= resultEntity %>);<% }} else { %>
-        <%= instanceType %> result = <%= entityInstance %>Service.save(<%= instanceName %>);<% } %>
+        <%= returnPrefix %> <%= entityInstance %>Repository.save(<%= entityInstance %>);<% } if (searchEngine == 'elasticsearch') { %>
+        <%= entityInstance %>SearchRepository.save(<%= resultEntity %>);<% if (returnDirectly) { %>
+        return result;<% }}} else { %>
+        <%= returnPrefix %> <%= entityInstance %>Service.save(<%= instanceName %>);<% } %>

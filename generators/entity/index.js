@@ -1,3 +1,21 @@
+/**
+ * Copyright 2013-2017 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://jhipster.github.io/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 const util = require('util');
 const generator = require('yeoman-generator');
 const chalk = require('chalk');
@@ -162,6 +180,8 @@ module.exports = EntityGenerator.extend({
         validateEntityName() {
             if (!(/^([a-zA-Z0-9_]*)$/.test(this.name))) {
                 this.error(chalk.red('The entity name cannot contain special characters'));
+            } else if ((/^[0-9].*$/.test(this.name))) {
+                this.error(chalk.red('The entity name cannot start with a number'));
             } else if (this.name === '') {
                 this.error(chalk.red('The entity name cannot be empty'));
             } else if (this.name.indexOf('Detail', this.name.length - 'Detail'.length) !== -1) {
@@ -441,6 +461,7 @@ module.exports = EntityGenerator.extend({
             this.fieldsContainLocalDate = false;
             this.fieldsContainBigDecimal = false;
             this.fieldsContainBlob = false;
+            this.fieldsContainImageBlob = false;
             this.validation = false;
             this.fieldsContainOwnerManyToMany = false;
             this.fieldsContainNoOwnerOneToOne = false;
@@ -527,6 +548,9 @@ module.exports = EntityGenerator.extend({
                     this.fieldsContainBigDecimal = true;
                 } else if (fieldType === 'byte[]' || fieldType === 'ByteBuffer') {
                     this.fieldsContainBlob = true;
+                    if (field.fieldTypeBlobContent === 'image') {
+                        this.fieldsContainImageBlob = true;
+                    }
                 }
 
                 if (field.fieldValidate) {
@@ -592,6 +616,10 @@ module.exports = EntityGenerator.extend({
                     relationship.otherEntityTableName = otherEntityData ? otherEntityData.entityTableName : null;
                     if (!relationship.otherEntityTableName) {
                         relationship.otherEntityTableName = this.getTableName(otherEntityName);
+                    }
+                    if (jhiCore.isReservedTableName(relationship.otherEntityTableName, this.prodDatabaseType)) {
+                        const otherEntityTableName = relationship.otherEntityTableName;
+                        relationship.otherEntityTableName = `jhi_${otherEntityTableName}`;
                     }
                 }
 
@@ -725,6 +753,7 @@ module.exports = EntityGenerator.extend({
                         fieldsContainLocalDate: this.fieldsContainLocalDate,
                         fieldsContainBigDecimal: this.fieldsContainBigDecimal,
                         fieldsContainBlob: this.fieldsContainBlob,
+                        fieldsContainImageBlob: this.fieldsContainImageBlob,
                         pkType: this.pkType,
                         entityApiUrl: this.entityApiUrl,
                         entityClass: this.entityClass,

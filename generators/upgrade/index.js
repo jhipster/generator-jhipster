@@ -1,3 +1,22 @@
+/**
+ * Copyright 2013-2017 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://jhipster.github.io/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 const util = require('util');
 const generator = require('yeoman-generator');
 const chalk = require('chalk');
@@ -54,9 +73,9 @@ module.exports = UpgradeGenerator.extend({
     },
 
     _generate(version, callback) {
-        this.log(`Regenerating app with jhipster ${version}...`);
-        shelljs.exec('yo jhipster --with-entities --force --skip-install', { silent: this.silent }, (code, msg, err) => {
-            if (code === 0) this.log(chalk.green(`Successfully regenerated app with jhipster ${version}`));
+        this.log(`Regenerating application with JHipster ${version}...`);
+        shelljs.exec('jhipster --with-entities --force --skip-install', { silent: this.silent }, (code, msg, err) => {
+            if (code === 0) this.log(chalk.green(`Successfully regenerated application with JHipster ${version}`));
             else this.error(`Something went wrong while generating project! ${err}`);
             callback();
         });
@@ -188,7 +207,7 @@ module.exports = UpgradeGenerator.extend({
                             this.error(`Unable to record current code has been generated with version ${
                             this.currentVersion}:\n${msg} ${err}`);
                         }
-                        this.log(`Current code recorded as generated with version ${this.currentVersion}`);
+                        this.log(`Current code has been generated with version ${this.currentVersion}`);
                         done();
                     });
                 });
@@ -243,7 +262,7 @@ module.exports = UpgradeGenerator.extend({
             const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn add' : 'npm install';
             shelljs.exec(`${commandPrefix} ${GENERATOR_JHIPSTER}@${this.latestVersion} --dev --no-lockfile`, { silent: this.silent }, (code, msg, err) => {
                 if (code === 0) this.log(chalk.green(`Updated ${GENERATOR_JHIPSTER} to version ${this.latestVersion}`));
-                else this.error(`Something went wrong while updating generator! ${msg} ${err}`);
+                else this.error(`Something went wrong while updating JHipster! ${msg} ${err}`);
                 done();
             });
         },

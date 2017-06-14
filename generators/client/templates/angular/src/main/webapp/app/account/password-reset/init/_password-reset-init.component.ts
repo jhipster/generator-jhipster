@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -18,7 +18,7 @@
 -%>
 import { Component, OnInit, AfterViewInit, Renderer, ElementRef } from '@angular/core';
 
-import { PasswordResetInit } from './password-reset-init.service';
+import { PasswordResetInitService } from './password-reset-init.service';
 
 @Component({
     selector: '<%=jhiPrefix%>-password-reset-init',
@@ -31,7 +31,7 @@ export class PasswordResetInitComponent implements OnInit, AfterViewInit {
     success: string;
 
     constructor(
-        private passwordResetInit: PasswordResetInit,
+        private passwordResetInitService: PasswordResetInitService,
         private elementRef: ElementRef,
         private renderer: Renderer
     ) {
@@ -49,7 +49,7 @@ export class PasswordResetInitComponent implements OnInit, AfterViewInit {
         this.error = null;
         this.errorEmailNotExists = null;
 
-        this.passwordResetInit.save(this.resetAccount.email).subscribe(() => {
+        this.passwordResetInitService.save(this.resetAccount.email).subscribe(() => {
             this.success = 'OK';
         }, (response) => {
             this.success = null;

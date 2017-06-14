@@ -1,0 +1,77 @@
+<%#
+ Copyright 2013-2017 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://jhipster.github.io/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+# Security Context Constraint template.
+#
+# This defines customized scc and service account to run some of the docker images wherever the 'default' service account privileges are not sufficient.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: scc-config-template
+  namespace: <%= openshiftNamespace %>
+  annotations:
+    description: This template defines the scc objects
+    tags: "scc"
+    openshift.io/display-name: scc-config-template
+    openshift.io/long-description: "This template provides the scc objects"
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: scc-config-template
+  createdBy: JHipster-Team
+parameters:
+  -
+    name: SVC_ID
+    value: jhipster
+    description: Name of the service account
+    required: true
+    readOnly: true
+    displayName: "*** PLEASE DO NOT CHANGE THIS ***"
+objects:
+  -
+    apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: ${SVC_ID}
+  -
+    apiVersion: v1
+    kind: SecurityContextConstraints
+    metadata:
+      name: jhipster-scc
+      annotations:
+        kubernetes.io/description: "This provides all features of the restricted SCC but allows users to run with any UID and any GID.
+         This mostly inherits anyuid scc."
+    runAsUser:
+      type: RunAsAny
+    seLinuxContext:
+      type: MustRunAs
+    fsGroup:
+      type: RunAsAny
+    supplementalGroups:
+      type: RunAsAny
+    users:
+    - system:serviceaccount:<%= openshiftNamespace %>:${SVC_ID}
+    volumes:
+    - configMap
+    - downwardAPI
+    - emptyDir
+    - persistentVolumeClaim
+    - secret
+    - hostPath
+    - nfs
+    priority: 1

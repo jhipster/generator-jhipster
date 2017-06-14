@@ -1,8 +1,8 @@
 Description:
-    Select languages to the app from a list of available languages. The i18n files will be copied to the /webapp/i18n folders.
+    Select languages from a list of available languages. The i18n files will be copied to the /webapp/i18n folder.
 
 Example:
-    yo jhipster:languages
+    jhipster languages
 
     This will create for each selected language:
         /webapp/i18n/{lang}/global.json

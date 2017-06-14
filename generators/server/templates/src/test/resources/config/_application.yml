@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -43,10 +43,6 @@ eureka:
 spring:
     application:
         name: <%= baseName %>
-    <%_ if (applicationType == 'gateway' && databaseType != 'cassandra') { _%>
-    autoconfigure:
-        exclude: org.springframework.boot.autoconfigure.data.cassandra.CassandraDataAutoConfiguration, org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration
-    <%_ } _%>
     jackson:
         serialization.write_dates_as_timestamps: false
     cache:
@@ -95,7 +91,7 @@ spring:
             port: 27117
             database: <%= baseName %>
     <%_ } _%>
-    <%_ if (applicationType == 'gateway' || databaseType == 'cassandra') { _%>
+    <%_ if (databaseType === 'cassandra') { _%>
         cassandra:
             contactPoints: localhost
             port: 0
@@ -112,8 +108,8 @@ spring:
             cluster-nodes:
             properties:
                 path:
-                  logs: target/elasticsearch/log
-                  data: target/elasticsearch/data
+                    logs: <%= BUILD_DIR %>elasticsearch/log
+                    data: <%= BUILD_DIR %>elasticsearch/data
     <%_ } _%>
     mail:
         host: localhost
@@ -147,6 +143,18 @@ jhipster:
         core-pool-size: 1
         max-pool-size: 50
         queue-capacity: 10000
+    # To test logstash appender
+    logging:
+        logstash:
+            enabled: true
+            host: localhost
+            port: 5000
+            queue-size: 512
+<%_ if (!skipUserManagement) { _%>
+    mail:
+        from: test@localhost
+        base-url: http://127.0.0.1:8080
+<%_ } _%>
 <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
     security:
         authentication:
@@ -181,6 +189,9 @@ jhipster:
 <%_ } _%>
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
+        logs: # Reports Dropwizard metrics in the logs
+            enabled: true
+            report-frequency: 60 # in seconds
 
 # ===================================================================
 # Application specific properties

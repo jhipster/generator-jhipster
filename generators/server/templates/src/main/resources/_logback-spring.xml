@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -42,7 +42,7 @@
 
     <logger name="<%=packageName%>" level="#logback.loglevel#"/>
 
-    <logger name="io.github.jhipster" level="DEBUG"/>
+    <logger name="io.github.jhipster" level="#logback.loglevel#"/>
 <% if (databaseType == 'cassandra') { %>
     <logger name="io.netty" level="WARN"/><% } %>
     <logger name="javax.activation" level="WARN"/>
@@ -101,6 +101,9 @@
 
     <root level="#logback.loglevel#">
         <appender-ref ref="CONSOLE"/>
+<!--
+        <appender-ref ref="FILE"/>
+-->
     </root>
 
 </configuration>

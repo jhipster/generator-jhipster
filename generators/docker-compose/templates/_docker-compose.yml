@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -47,8 +47,8 @@ services:
             file: consul.yml
             service: consul-config-loader
 <%_ } _%>
-
 <%_ if (monitoring === 'elk') { _%>
+
     jhipster-elasticsearch:
         extends:
             file: jhipster-console.yml
@@ -61,13 +61,15 @@ services:
         extends:
             file: jhipster-console.yml
             service: jhipster-console
+    <%_ if (composeApplicationType === 'microservice') { _%>
     jhipster-zipkin:
         extends:
             file: jhipster-console.yml
             service: jhipster-zipkin
+    <%_ } _%>
 <%_ } _%>
-
 <%_ if (monitoring === 'prometheus') { _%>
+
     prometheus:
         extends:
             file: prometheus.yml
@@ -86,5 +88,4 @@ services:
 volumes:
     prometheus_data: {}
     grafana_data: {}
-
 <%_ } _%>

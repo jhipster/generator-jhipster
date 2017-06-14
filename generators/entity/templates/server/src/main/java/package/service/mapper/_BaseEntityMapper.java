@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -22,17 +22,17 @@ import java.util.List;
 
 /**
  * Contract for a generic dto to entity mapper.
- @param <DTO> - DTO type parameter.
- @param <ENTITY> - Entity type parameter.
+ @param <D> - DTO type parameter.
+ @param <E> - Entity type parameter.
  */
 
-public interface EntityMapper <DTO, ENTITY> {
+public interface EntityMapper <D, E> {
 
-    public ENTITY toEntity(DTO dto);
+    public E toEntity(D dto);
 
-    public DTO toDto(ENTITY entity);
+    public D toDto(E entity);
 
-    public List <ENTITY> toEntity(List<DTO> dtoList);
+    public List <E> toEntity(List<D> dtoList);
 
-    public List <DTO> toDto(List<ENTITY> entityList);
+    public List <D> toDto(List<E> entityList);
 }

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -230,6 +230,7 @@ dependencies {
     <%_ } _%>
     compile "com.fasterxml.jackson.core:jackson-annotations"
     compile "com.fasterxml.jackson.core:jackson-databind"
+    compile "com.fasterxml.jackson.module:jackson-module-afterburner"
     compile ("com.ryantenney.metrics:metrics-spring:${metrics_spring_version}")
     <%_ if (hibernateCache === 'hazelcast') { _%>
     compile "com.hazelcast:hazelcast"
@@ -391,7 +392,9 @@ dependencies {
     testCompile "info.cukes:cucumber-junit:${cucumber_version}"
     testCompile "info.cukes:cucumber-spring:${cucumber_version}"
     <%_ } _%>
-    testCompile "org.springframework.boot:spring-boot-starter-test"
+    testCompile ("org.springframework.boot:spring-boot-starter-test") {
+        exclude group: 'com.vaadin.external.google', module: 'android-json'
+    }
     testCompile "org.springframework.security:spring-security-test"
     testCompile "org.springframework.boot:spring-boot-test"
     testCompile "org.assertj:assertj-core:${assertj_version}"
@@ -417,7 +420,9 @@ dependencies {
     <%_ if (messageBroker === 'kafka') { _%>
     testCompile "org.springframework.cloud:spring-cloud-stream-test-support"
     <%_ } _%>
-    optional "org.springframework.boot:spring-boot-configuration-processor:${spring_boot_version}"
+    optional ("org.springframework.boot:spring-boot-configuration-processor:${spring_boot_version}") {
+        exclude group: 'com.vaadin.external.google', module: 'android-json'
+    }
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 

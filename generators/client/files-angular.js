@@ -1,3 +1,21 @@
+/**
+ * Copyright 2013-2017 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://jhipster.github.io/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 const mkdirp = require('mkdirp');
 const constants = require('../generator-constants');
 
@@ -20,6 +38,7 @@ const files = {
                 '_tsconfig-aot.json',
                 '_tslint.json',
                 '_.angular-cli.json',
+                'webpack/_utils.js',
                 'webpack/_webpack.common.js',
                 'webpack/_webpack.dev.js',
                 'webpack/_webpack.prod.js',
@@ -83,7 +102,9 @@ const files = {
                 { file: '_favicon.ico', method: 'copy' },
                 '_robots.txt',
                 '_404.html',
-                '_index.html'
+                '_index.html',
+                '_manifest.webapp',
+                '_sw.js'
             ]
         }
     ],
@@ -349,6 +370,8 @@ const files = {
                 'shared/_shared-common.module.ts',
                 'shared/constants/_pagination.constants.ts',
                 // models
+                'shared/model/_response-wrapper.model.ts',
+                'shared/model/_request-util.ts',
                 'shared/user/_account.model.ts',
                 // login
                 'shared/login/_login.component.ts',
@@ -364,7 +387,7 @@ const files = {
             condition: generator => generator.enableTranslation,
             path: ANGULAR_DIR,
             templates: [
-                'shared/language/_language.pipe.ts',
+                'shared/language/_find-language-from-key.pipe.ts',
                 'shared/language/_language.constants.ts',
                 'shared/language/_language.helper.ts'
             ]
@@ -382,7 +405,6 @@ const files = {
         {
             path: ANGULAR_DIR,
             templates: [
-                'shared/auth/_auth.service.ts',
                 'shared/auth/_csrf.service.ts',
                 'shared/auth/_state-storage.service.ts',
                 'shared/auth/_principal.service.ts',

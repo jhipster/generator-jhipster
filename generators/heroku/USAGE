@@ -2,7 +2,7 @@ Description:
     Initializes a Heroku app and generates a WAR file that is ready to push to Heroku.
 
 Example:
-    yo jhipster:heroku
+    jhipster heroku
 
     This will create:
         Procfile

@@ -1,4 +1,4 @@
 Description:
     Creates entities from the passed JDL file location
 Example:
-    yo jhipster:import-jdl .\model.jh
+    jhipster import-jdl .\model.jh

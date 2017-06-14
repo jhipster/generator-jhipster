@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -16,11 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { HttpInterceptor } from 'ng-jhipster';
+import { JhiHttpInterceptor } from 'ng-jhipster';
 import { RequestOptionsArgs, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
-export class NotificationInterceptor extends HttpInterceptor {
+export class NotificationInterceptor extends JhiHttpInterceptor {
 
     constructor() {
         super();
@@ -43,7 +43,8 @@ export class NotificationInterceptor extends HttpInterceptor {
             headers.sort();
             const alertKey = headers.length >= 1 ? error.headers.get(headers[0]) : null;
             if (typeof alertKey === 'string') {
-                // AlertService.success(alertKey, { param: response.headers(headers[1])});
+                // TODO
+                // JhiAlertService.success(alertKey, { param: response.headers(headers[1])});
             }
             return Observable.throw(error);
         });

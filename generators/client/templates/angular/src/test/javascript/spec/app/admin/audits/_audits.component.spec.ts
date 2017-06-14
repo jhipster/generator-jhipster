@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -19,7 +19,7 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { DatePipe } from '@angular/common';
 import { NgbPaginationConfig} from '@ng-bootstrap/ng-bootstrap';
-import { ParseLinks } from 'ng-jhipster';
+import { JhiParseLinks } from 'ng-jhipster';
 import { <%=angular2AppName%>TestModule } from '../../../test.module';
 import { PaginationConfig } from '../../../../../../main/webapp/app/blocks/config/uib-pagination.config'
 import { AuditsComponent } from '../../../../../../main/webapp/app/admin/audits/audits.component';
@@ -58,16 +58,11 @@ describe('Component Tests', () => {
                 providers: [
                     AuditsService,
                     NgbPaginationConfig,
-                    ParseLinks,
+                    JhiParseLinks,
                     PaginationConfig,
                     DatePipe
                 ]
-            })
-            .overrideComponent(AuditsComponent, {
-                set: {
-                    template: ''
-                }
-            })
+            }).overrideTemplate(AuditsComponent, '')
             .compileComponents();
         }));
 

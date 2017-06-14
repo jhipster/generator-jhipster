@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -286,6 +286,9 @@ public class UserService {
                 <%_ } _%>
                 <%_ if (databaseType == 'mongodb' || databaseType == 'cassandra') { _%>
                 userRepository.save(user);
+                <%_ } _%>
+                <%_ if (searchEngine === 'elasticsearch') { _%>
+                userSearchRepository.save(user);
                 <%_ } _%>
                 log.debug("Changed Information for User: {}", user);
                 return user;

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -35,8 +35,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 <%_ if (databaseType == 'mongodb') { _%>
 import org.springframework.data.mongodb.repository.MongoRepository;
 <%_ } _%>
-<%_ if (databaseType == 'cassandra') { _%>
 import org.springframework.stereotype.Repository;
+<%_ if (databaseType == 'cassandra') { _%>
 import org.springframework.util.StringUtils;
 
 import javax.validation.ConstraintViolation;
@@ -68,6 +68,7 @@ import java.time.Instant;
  */
 <%_ } _%>
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+@Repository
 public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRepository<User, Long><% } %><% if (databaseType == 'mongodb') { %>MongoRepository<User, String><% } %> {
 
     Optional<User> findOneByActivationKey(String activationKey);

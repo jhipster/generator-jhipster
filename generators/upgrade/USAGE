@@ -3,7 +3,7 @@ Description:
 
 Example:
 
-    yo jhipster:upgrade
+    jhipster upgrade
 
     Assuming you have Git installed, and you run this command in the Git branch you are using for development, JHipster Upgrader will :
     - checkout a "jhipster_upgrade" branch

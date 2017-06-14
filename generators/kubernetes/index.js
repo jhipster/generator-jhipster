@@ -1,3 +1,21 @@
+/**
+ * Copyright 2013-2017 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://jhipster.github.io/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 const generator = require('yeoman-generator');
 const chalk = require('chalk');
 const shelljs = require('shelljs');
@@ -222,14 +240,14 @@ module.exports = KubernetesGenerator.extend({
             this.log(`  ${chalk.cyan('kubectl apply -f registry')}`);
         }
         for (let i = 0; i < this.appsFolders.length; i++) {
-            this.log(`  ${chalk.cyan(`kubectl apply -f ${this.appConfigs[i].baseName}`)}`);
+            this.log(`  ${chalk.cyan(`kubectl apply -f ${this.appConfigs[i].baseName.toLowerCase()}`)}`);
         }
 
         if (this.gatewayNb + this.monolithicNb >= 1) {
             this.log('\nUse these commands to find your application\'s IP addresses:');
             for (let i = 0; i < this.appsFolders.length; i++) {
                 if (this.appConfigs[i].applicationType === 'gateway' || this.appConfigs[i].applicationType === 'monolith') {
-                    this.log(`  ${chalk.cyan(`kubectl get svc ${this.appConfigs[i].baseName}`)}`);
+                    this.log(`  ${chalk.cyan(`kubectl get svc ${this.appConfigs[i].baseName.toLowerCase()}`)}`);
                 }
             }
             this.log();

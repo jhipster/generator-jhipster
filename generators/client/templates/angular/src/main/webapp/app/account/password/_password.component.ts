@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -19,7 +19,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Principal } from '../../shared';
-import { Password } from './password.service';
+import { PasswordService } from './password.service';
 
 @Component({
     selector: '<%=jhiPrefix%>-password',
@@ -34,7 +34,7 @@ export class PasswordComponent implements OnInit {
     confirmPassword: string;
 
     constructor(
-        private passwordService: Password,
+        private passwordService: PasswordService,
         private principal: Principal
     ) {
     }
