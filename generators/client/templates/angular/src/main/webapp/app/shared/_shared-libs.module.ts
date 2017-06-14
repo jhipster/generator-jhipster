@@ -23,6 +23,7 @@ import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgJhipsterModule } from 'ng-jhipster';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { CookieModule } from 'ngx-cookie';
 
 @NgModule({
     imports: [
@@ -35,7 +36,8 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
             defaultI18nLang: '<%= nativeLanguage %>'
             <%_ } _%>
         }),
-        InfiniteScrollModule
+        InfiniteScrollModule,
+        CookieModule.forRoot()
     ],
     exports: [
         FormsModule,

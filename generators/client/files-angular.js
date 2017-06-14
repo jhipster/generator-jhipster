@@ -38,6 +38,7 @@ const files = {
                 '_tsconfig-aot.json',
                 '_tslint.json',
                 '_.angular-cli.json',
+                'webpack/_utils.js',
                 'webpack/_webpack.common.js',
                 'webpack/_webpack.dev.js',
                 'webpack/_webpack.prod.js',

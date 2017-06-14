@@ -18,6 +18,7 @@
 -%>
 const webpack = require('webpack');
 const path = require('path');
+
 module.exports = {
     entry: {
         'vendor': [
@@ -31,12 +32,12 @@ module.exports = {
             '@angular/platform-browser-dynamic',
             '@angular/router',
             '@ng-bootstrap/ng-bootstrap',
-            'angular2-cookie',
             'ngx-infinite-scroll',
             'jquery',
             'ng-jhipster',
             'ng2-webstorage',
-            <%_ if (websocket == 'spring-websocket') { _%>
+            'ngx-cookie',
+            <%_ if (websocket === 'spring-websocket') { _%>
             'sockjs-client',
             'webstomp-client',
             <%_ } _%>

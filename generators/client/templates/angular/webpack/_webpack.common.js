@@ -28,9 +28,11 @@ const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin")
 <%_ } _%>
 const path = require('path');
 
-module.exports = function (options) {
+const parseVersion = require('./utils.js').parseVersion;
+
+module.exports = (options) => {
     const DATAS = {
-        VERSION: JSON.stringify(require("../package.json").version),
+        VERSION: `'${parseVersion()}'`,
         DEBUG_INFO_ENABLED: options.env === 'dev'
     };
     return {
@@ -103,9 +105,7 @@ module.exports = function (options) {
                     loader: StringReplacePlugin.replace({
                         replacements: [{
                             pattern: /\/\* @toreplace (\w*?) \*\//ig,
-                            replacement: function (match, p1, offset, string) {
-                                return `_${p1} = ${DATAS[p1]};`;
-                            }
+                            replacement: (match, p1, offset, string) => `_${p1} = ${DATAS[p1]};`
                         }]
                     })
                 }
