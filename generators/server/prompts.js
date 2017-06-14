@@ -154,7 +154,7 @@ function askForServerSideOpts() {
             type: 'input',
             name: 'uaaBaseName',
             message: response => this.getNumberedQuestion(
-                'What is the folder path of your UAA application?.',
+                'What is the folder path of your UAA application?',
                 (applicationType === 'gateway' || applicationType === 'microservice') && response.authenticationType === 'uaa'
             ),
             default: '../uaa',
