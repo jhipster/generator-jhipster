@@ -39,6 +39,7 @@ describe('JHipster generator languages', () => {
         { name: 'Swedish', value: 'sv' },
         { name: 'Turkish', value: 'tr' },
         { name: 'Tamil', value: 'ta' },
+        { name: 'Ukrainian', value: 'ua' },
         { name: 'Vietnamese', value: 'vi' }
     ];
 
