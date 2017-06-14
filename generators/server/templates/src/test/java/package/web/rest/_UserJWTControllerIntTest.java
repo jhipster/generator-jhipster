@@ -94,7 +94,7 @@ public class UserJWTControllerIntTest <% if (databaseType === 'cassandra') { %>e
 
         <%_ if (databaseType === 'sql') { _%>
         userRepository.saveAndFlush(user);
-        <%_ } else if (databaseType === 'mongodb' || databaseType == 'cassandra') { _%>
+        <%_ } else if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
         userRepository.save(user);
         <%_ } _%>
 
@@ -125,7 +125,7 @@ public class UserJWTControllerIntTest <% if (databaseType === 'cassandra') { %>e
 
         <%_ if (databaseType === 'sql') { _%>
         userRepository.saveAndFlush(user);
-        <%_ } else if (databaseType === 'mongodb' || databaseType == 'cassandra') { _%>
+        <%_ } else if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
         userRepository.save(user);
         <%_ } _%>
 

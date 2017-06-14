@@ -209,7 +209,7 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 
 [JHipster Homepage and latest documentation]: <%= DOCUMENTATION_URL %>
 [JHipster <%= jhipsterVersion %> archive]: <%= DOCUMENTATION_ARCHIVE_URL %>
-<% if (applicationType === 'gateway' || applicationType == 'microservice' || applicationType == 'uaa') { %>[Doing microservices with JHipster]: <%= DOCUMENTATION_ARCHIVE_URL %>/microservices-architecture/<% } %>
+<% if (applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { %>[Doing microservices with JHipster]: <%= DOCUMENTATION_ARCHIVE_URL %>/microservices-architecture/<% } %>
 <%_ if (applicationType === 'uaa') { _%>[Using UAA for Microservice Security]: <%= DOCUMENTATION_ARCHIVE_URL %>/using-uaa/<%_ } _%>
 [Using JHipster in development]: <%= DOCUMENTATION_ARCHIVE_URL %>/development/
 <%_ if (serviceDiscoveryType === 'eureka') { _%>

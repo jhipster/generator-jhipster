@@ -67,7 +67,7 @@ public class ExceptionTranslatorIntTest <% if (databaseType === 'cassandra') { %
             .setControllerAdvice(exceptionTranslator)
             .build();
     }
-    <%_ if (databaseType !== 'no' && databaseType != 'cassandra') { _%>
+    <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
 
     @Test
     public void testConcurrencyFailure() throws Exception {

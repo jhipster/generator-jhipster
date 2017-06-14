@@ -21,7 +21,7 @@ package <%= packageName %>.config;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
 import com.codahale.metrics.servlets.MetricsServlet;
-<%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache == 'hazelcast') { _%>
+<%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { _%>
 import com.hazelcast.config.Config;
 import com.hazelcast.core.*;
 import com.hazelcast.durableexecutor.DurableExecutorService;
@@ -43,7 +43,7 @@ import io.undertow.Undertow;
 import io.undertow.Undertow.Builder;
 import io.undertow.UndertowOptions;
 import org.apache.commons.io.FilenameUtils;
-<%_ if (devDatabaseType === 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
+<%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 import org.h2.server.web.WebServlet;
 <%_ } _%>
 import org.junit.Before;
@@ -59,7 +59,7 @@ import org.xnio.OptionMap;
 
 import javax.servlet.*;
 import java.util.*;
-<%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache == 'hazelcast') { _%>
+<%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { _%>
 import java.util.concurrent.ConcurrentMap;
 <%_ } _%>
 
@@ -105,7 +105,7 @@ public class WebConfigurerTest {
         env = new MockEnvironment();
         props = new JHipsterProperties();
 
-        webConfigurer = new WebConfigurer(env, props<% if (clusteredHttpSession === 'hazelcast' || hibernateCache == 'hazelcast') { %>, new MockHazelcastInstance()<% } %>);
+        webConfigurer = new WebConfigurer(env, props<% if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { %>, new MockHazelcastInstance()<% } %>);
         metricRegistry = new MetricRegistry();
         webConfigurer.setMetricRegistry(metricRegistry);
     }
@@ -125,7 +125,7 @@ public class WebConfigurerTest {
         <%_ if (!skipClient) { _%>
         verify(servletContext).addFilter(eq("cachingHttpHeadersFilter"), any(CachingHttpHeadersFilter.class));
         <%_ } _%>
-        <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
+        <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
         verify(servletContext, never()).addServlet(eq("H2Console"), any(WebServlet.class));
         <%_ } _%>
     }
@@ -145,7 +145,7 @@ public class WebConfigurerTest {
         <%_ if (!skipClient) { _%>
         verify(servletContext, never()).addFilter(eq("cachingHttpHeadersFilter"), any(CachingHttpHeadersFilter.class));
         <%_ } _%>
-        <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
+        <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
         verify(servletContext).addServlet(eq("H2Console"), any(WebServlet.class));
         <%_ } _%>
     }
@@ -169,7 +169,7 @@ public class WebConfigurerTest {
         OptionMap.Builder serverOptions = (OptionMap.Builder) ReflectionTestUtils.getField(builder, "serverOptions");
         assertThat(serverOptions.getMap().get(UndertowOptions.ENABLE_HTTP2)).isNull();
     }
-    <%_ if (!skipClient && clientFramework == 'angular1') { _%>
+    <%_ if (!skipClient && clientFramework === 'angular1') { _%>
 
     @Test
     public void testCustomizeServletContainerNotProd() {
@@ -407,7 +407,7 @@ public class WebConfigurerTest {
             return null;
         }
     }
-    <%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache == 'hazelcast') { _%>
+    <%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { _%>
 
     public static class MockHazelcastInstance implements HazelcastInstance {
 

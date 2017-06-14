@@ -25,7 +25,7 @@
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <property name="now" value="now()" dbms="h2"/>
-    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType == 'mariadb') { _%>
+    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
     <property name="now" value="now()" dbms="mysql"/>
     <property name="autoIncrement" value="true"/>
     <%_ } _%>

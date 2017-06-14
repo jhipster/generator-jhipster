@@ -125,7 +125,7 @@ public class <%= mainClass %> {
             InetAddress.getLocalHost().getHostAddress(),
             env.getProperty("server.port"),
             env.getActiveProfiles());
-        <%_ if (serviceDiscoveryType && (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa')) { _%>
+        <%_ if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { _%>
 
         String configServerStatus = env.getProperty("configserver.status");
         log.info("\n----------------------------------------------------------\n\t" +

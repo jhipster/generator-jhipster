@@ -19,7 +19,7 @@
 package <%=packageName%>.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-<%_ if (dto !== 'mapstruct' || service == 'no') { _%>
+<%_ if (dto !== 'mapstruct' || service === 'no') { _%>
 import <%=packageName%>.domain.<%= entityClass %>;
 <%_ } _%>
 <%_ if (service !== 'no') { _%>
@@ -51,13 +51,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;<% } %>
 import java.net.URI;
 import java.net.URISyntaxException;
-<%_ const viaService = service != 'no';
+<%_ const viaService = service !== 'no';
     if (pagination === 'no' && dto === 'mapstruct' && !viaService && fieldsContainNoOwnerOneToOne === true) { _%>
 import java.util.LinkedList;<% } %>
 import java.util.List;
 import java.util.Optional;<% if (databaseType === 'cassandra') { %>
-import java.util.UUID;<% } %><% if (!viaService && (searchEngine == 'elasticsearch' || fieldsContainNoOwnerOneToOne == true)) { %>
-import java.util.stream.Collectors;<% } %><% if (searchEngine === 'elasticsearch' || fieldsContainNoOwnerOneToOne == true) { %>
+import java.util.UUID;<% } %><% if (!viaService && (searchEngine === 'elasticsearch' || fieldsContainNoOwnerOneToOne === true)) { %>
+import java.util.stream.Collectors;<% } %><% if (searchEngine === 'elasticsearch' || fieldsContainNoOwnerOneToOne === true) { %>
 import java.util.stream.StreamSupport;<% } %><% if (searchEngine === 'elasticsearch') { %>
 
 import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
@@ -73,8 +73,8 @@ public class <%= entityClass %>Resource {
 
     private static final String ENTITY_NAME = "<%= entityInstance %>";
     <%_
-    const instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
-    const instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
+    const instanceType = (dto === 'mapstruct') ? entityClass + 'DTO' : entityClass;
+    const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
     _%><%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource'}); -%>
 
     /**

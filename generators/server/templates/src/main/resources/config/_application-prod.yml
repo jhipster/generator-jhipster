@@ -46,7 +46,7 @@ spring:
             enabled: false
         livereload:
             enabled: false
-    <%_ if (messageBroker === 'kafka' || serviceDiscoveryType == 'consul') { _%>
+    <%_ if (messageBroker === 'kafka' || serviceDiscoveryType === 'consul') { _%>
     cloud:
         <%_ if (serviceDiscoveryType === 'consul') { _%>
         consul:
@@ -90,7 +90,7 @@ spring:
         username: system
         password: oracle
         <%_ } _%>
-        <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType == 'mariadb' || prodDatabaseType === 'mssql') { _%>
+        <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb' || prodDatabaseType === 'mssql') { _%>
         hikari:
             data-source-properties:
                 cachePrepStmts: true
@@ -99,7 +99,7 @@ spring:
                 useServerPrepStmts: true
         <%_ } _%>
     jpa:
-        <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType == 'mariadb') { _%>
+        <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
         database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
         <%_ } else if (prodDatabaseType === 'postgresql') { _%>
         database-platform: io.github.jhipster.domain.util.FixedPostgreSQL82Dialect
@@ -124,7 +124,7 @@ spring:
         show-sql: false
         properties:
             hibernate.id.new_generator_mappings: true
-            hibernate.cache.use_second_level_cache: <% if (hibernateCache === 'ehcache' || hibernateCache == 'hazelcast') { %>true<% } else { %>false<% } %>
+            hibernate.cache.use_second_level_cache: <% if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast') { %>true<% } else { %>false<% } %>
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: false
             <%_ if (hibernateCache === 'ehcache') { _%>
@@ -138,7 +138,7 @@ spring:
             hibernate.cache.hazelcast.use_lite_member: true
             <%_ } _%>
     <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType == 'cassandra' || applicationType == 'gateway' || searchEngine == 'elasticsearch') { _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra' || applicationType === 'gateway' || searchEngine === 'elasticsearch') { _%>
     data:
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
@@ -221,9 +221,9 @@ jhipster:
         version: V_1_1 # To use HTTP/2 you will need SSL support (see above the "server.ssl" configuration)
         cache: # Used by the CachingHttpHeadersFilter
             timeToLiveInDays: 1461
-    <%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache == 'hazelcast' ||  hibernateCache == 'ehcache') { _%>
+    <%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast' ||  hibernateCache === 'ehcache') { _%>
     cache: # Cache configuration
-        <%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache == 'hazelcast') { _%>
+        <%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { _%>
         hazelcast: # Hazelcast distributed cache
             time-to-live-seconds: 3600
             backup-count: 1
@@ -253,7 +253,7 @@ jhipster:
             client-id: internal
             client-secret: internal
     <%_ } _%>
-    <%_ if (authenticationType === 'oauth2' && databaseType != 'sql') { _%>
+    <%_ if (authenticationType === 'oauth2' && databaseType !== 'sql') { _%>
     security:
         authentication:
             oauth:
@@ -290,7 +290,7 @@ jhipster:
             host: localhost
             port: 5000
             queue-size: 512
-    <%_ if (applicationType === 'microservice' || applicationType == 'gateway') { _%>
+    <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
         spectator-metrics: # Reports Spectator Circuit Breaker metrics in the logs
             enabled: false
             # edit spring.metrics.export.delay-millis to set report frequency

@@ -18,7 +18,7 @@
 -%>
 package <%=packageName%>.config;
 
-<%_ if (authenticationType === 'session' || authenticationType == 'jwt') { _%>
+<%_ if (authenticationType === 'session' || authenticationType === 'jwt') { _%>
 import <%=packageName%>.security.*;
 <%_ } _%>
 <%_ if (authenticationType === 'jwt') { _%>
@@ -40,7 +40,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;<% if (authenticationType === 'jwt' || authenticationType == 'oauth2') { %>
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;<% if (authenticationType === 'jwt' || authenticationType === 'oauth2') { %>
 import org.springframework.security.config.http.SessionCreationPolicy;<% } %><% if (clusteredHttpSession === 'hazelcast') { %>
 import org.springframework.security.core.session.SessionRegistry;<% } %>
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -129,7 +129,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new AjaxAuthenticationFailureHandler();
     }
     <%_ } _%>
-    <%_ if (authenticationType === 'session' || authenticationType == 'oauth2') { _%>
+    <%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
 
     @Bean
     public AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler() {
@@ -162,9 +162,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/activate")
             .antMatchers("/api/account/reset_password/init")
             .antMatchers("/api/account/reset_password/finish")<% } %>
-            .antMatchers("/test/**")<% if (devDatabaseType !== 'h2Disk' && devDatabaseType != 'h2Memory') { %>;<% } else { %>
+            .antMatchers("/test/**")<% if (devDatabaseType !== 'h2Disk' && devDatabaseType !== 'h2Memory') { %>;<% } else { %>
             .antMatchers("/h2-console/**");<% } %>
-    }<% if (authenticationType === 'session' || authenticationType == 'jwt') { %>
+    }<% if (authenticationType === 'session' || authenticationType === 'jwt') { %>
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

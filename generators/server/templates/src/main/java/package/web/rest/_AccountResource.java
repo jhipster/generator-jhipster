@@ -107,7 +107,7 @@ public class AccountResource {
                     User user = userService
                         .createUser(managedUserVM.getLogin(), managedUserVM.getPassword(),
                             managedUserVM.getFirstName(), managedUserVM.getLastName(),
-                            managedUserVM.getEmail().toLowerCase()<% if (databaseType === 'mongodb' || databaseType == 'sql') { %>, managedUserVM.getImageUrl()<% } %>,
+                            managedUserVM.getEmail().toLowerCase()<% if (databaseType === 'mongodb' || databaseType === 'sql') { %>, managedUserVM.getImageUrl()<% } %>,
                             managedUserVM.getLangKey());
 
                     mailService.sendActivationEmail(user);
@@ -235,7 +235,7 @@ public class AccountResource {
         String decodedSeries = URLDecoder.decode(series, "UTF-8");
         userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(u ->
             persistentTokenRepository.findByUser(u).stream()
-                .filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries))<% if (databaseType === 'sql' || databaseType == 'mongodb') { %>
+                .filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries))<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
                 .findAny().ifPresent(t -> persistentTokenRepository.delete(decodedSeries)));<% } else { %>
                 .findAny().ifPresent(persistentTokenRepository::delete));<% } %>
     }<% } %>

@@ -50,13 +50,13 @@ for (const idx in fields) {
     } else if (fieldType === 'Boolean') {
         tsType = 'boolean';
         defaultVariablesValues[fieldName] = 'this.' + fieldName + ' = false;';
-    } else if (fieldType === 'Double' || fieldType == 'Float' || fieldType == 'Long' || fieldType == 'Integer' || fieldType == 'BigDecimal') {
+    } else if (fieldType === 'Double' || fieldType === 'Float' || fieldType === 'Long' || fieldType === 'Integer' || fieldType === 'BigDecimal') {
         tsType = 'number';
-    } else if (fieldType === 'String'  || fieldType == 'UUID') {
+    } else if (fieldType === 'String'  || fieldType === 'UUID') {
         tsType = 'string';
-    } else { //(fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'image' || fieldType == 'LocalDate'
+    } else { //(fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate'
         tsType = 'any';
-        if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent == 'image') {
+        if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent === 'image') {
             variables[fieldName + 'ContentType'] = fieldName + 'ContentType?: ' + 'string';
         }
     }

@@ -26,7 +26,7 @@
 
     <property name="now" value="now()" dbms="h2"/>
 
-    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType == 'mariadb') { _%>
+    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
     <property name="now" value="now()" dbms="mysql"/>
     <property name="autoIncrement" value="true"/>
     <%_ } _%>
@@ -52,11 +52,11 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column><% for (idx in fields) {
             let nullable = true;
-            if (fields[idx].fieldValidate == true && fields[idx].fieldValidateRules.indexOf('required') != -1) {
+            if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.indexOf('required') !== -1) {
                 nullable = false;
             }
             let maxlength = 255;
-            if (fields[idx].fieldValidate == true && fields[idx].fieldValidateRules.indexOf('maxlength') != -1) {
+            if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.indexOf('maxlength') !== -1) {
                 maxlength = fields[idx].fieldValidateRulesMaxlength;
             }
             const fieldType = fields[idx].fieldType;
@@ -81,7 +81,7 @@
                 columnType="timestamp";
             } else if (fieldType === 'ZonedDateTime') {
                 columnType="timestamp";
-            } else if (fieldType === 'byte[]' && fieldTypeBlobContent != 'text') {
+            } else if (fieldType === 'byte[]' && fieldTypeBlobContent !== 'text') {
                 if (prodDatabaseType === 'mysql' || prodDatabaseType === 'postgresql') {
                     columnType="longblob";
                 } else {
@@ -123,7 +123,7 @@
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
         <%_ for (const idx in fields) {
-            if (fields[idx].fieldType == 'ZonedDateTime' || fields[idx].fieldType == 'Instant') { _%>
+            if (fields[idx].fieldType === 'ZonedDateTime' || fields[idx].fieldType === 'Instant') { _%>
         <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%=fields[idx].fieldNameAsDatabaseColumn %>" columnDataType="datetime"/>
         <%_ }
         } _%>

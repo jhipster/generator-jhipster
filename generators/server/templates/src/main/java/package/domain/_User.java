@@ -22,7 +22,7 @@ import <%=packageName%>.config.Constants;
 <% if (databaseType === 'cassandra') { %>
 import com.datastax.driver.mapping.annotations.*;<% } %>
 import com.fasterxml.jackson.annotation.JsonIgnore;<% if (databaseType === 'sql') { %>
-import org.hibernate.annotations.BatchSize;<% } %><% if (hibernateCache !== 'no' && databaseType == 'sql') { %>
+import org.hibernate.annotations.BatchSize;<% } %><% if (hibernateCache !== 'no' && databaseType === 'sql') { %>
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %>
 import org.hibernate.validator.constraints.Email;
@@ -52,17 +52,17 @@ import java.time.Instant;
  * A user.
  */<% if (databaseType === 'sql') { %>
 @Entity
-@Table(name = "jhi_user")<% } %><% if (hibernateCache !== 'no' && databaseType == 'sql') { %>
+@Table(name = "jhi_user")<% } %><% if (hibernateCache !== 'no' && databaseType === 'sql') { %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType === 'mongodb') { %>
 @Document(collection = "jhi_user")<% } %><% if (databaseType === 'cassandra') { %>
 @Table(name = "user")<% } %><% if (searchEngine === 'elasticsearch') { %>
 @Document(indexName = "user")<% } %>
-public class User<% if (databaseType === 'sql' || databaseType == 'mongodb') { %> extends AbstractAuditingEntity<% } %> implements Serializable {
+public class User<% if (databaseType === 'sql' || databaseType === 'mongodb') { %> extends AbstractAuditingEntity<% } %> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 <% if (databaseType === 'sql') { %>
     @Id
-    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType == 'mariadb') { _%>
+    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     <%_ }  else { _%>
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
@@ -116,7 +116,7 @@ public class User<% if (databaseType === 'sql' || databaseType == 'mongodb') { %
     @Field("lang_key")<% } %><% if (databaseType === 'cassandra') { %>
     @Column(name = "lang_key")<% } %>
     private String langKey;
-    <%_ if (databaseType === 'mongodb' || databaseType == 'sql') { _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
 
     @Size(max = 256)<% if (databaseType === 'sql') { %>
     @Column(name = "image_url", length = 256)<% } %><% if (databaseType === 'mongodb') { %>
@@ -138,7 +138,7 @@ public class User<% if (databaseType === 'sql' || databaseType == 'mongodb') { %
     @JsonIgnore
     private String resetKey;
 
-    <%_ if (databaseType === 'sql' || databaseType == 'cassandra') { _%>
+    <%_ if (databaseType === 'sql' || databaseType === 'cassandra') { _%>
     @Column(name = "reset_date")<% } else if (databaseType === 'mongodb') {%>
     @Field("reset_date")<% }%>
     private Instant resetDate = null;
@@ -150,20 +150,20 @@ public class User<% if (databaseType === 'sql' || databaseType == 'mongodb') { %
         joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})<% if (hibernateCache !== 'no') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType === 'sql') { %>
-    @BatchSize(size = 20)<% } %><% } %><% if (databaseType === 'sql' || databaseType == 'mongodb') { %>
+    @BatchSize(size = 20)<% } %><% } %><% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
     private Set<Authority> authorities = new HashSet<>();<% } %><% if (databaseType === 'cassandra') { %>
-    private Set<String> authorities = new HashSet<>();<% } %><% if (authenticationType === 'session' && databaseType == 'sql') { %>
+    private Set<String> authorities = new HashSet<>();<% } %><% if (authenticationType === 'session' && databaseType === 'sql') { %>
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")<% if (hibernateCache !== 'no') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
     private Set<PersistentToken> persistentTokens = new HashSet<>();<% } %>
 
-    public <% if (databaseType === 'sql') { %>Long<% } else if (databaseType === 'mongodb' || databaseType == 'cassandra') { %>String<% } %> getId() {
+    public <% if (databaseType === 'sql') { %>Long<% } else if (databaseType === 'mongodb' || databaseType === 'cassandra') { %>String<% } %> getId() {
         return id;
     }
 
-    public void setId(<% if (databaseType === 'sql') { %>Long<% } else if (databaseType === 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id) {
+    public void setId(<% if (databaseType === 'sql') { %>Long<% } else if (databaseType === 'mongodb' || databaseType === 'cassandra') { %>String<% } %> id) {
         this.id = id;
     }
 
@@ -207,7 +207,7 @@ public class User<% if (databaseType === 'sql' || databaseType == 'mongodb') { %
     public void setEmail(String email) {
         this.email = email;
     }
-    <%_ if (databaseType === 'mongodb' || databaseType == 'sql') { _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
 
     public String getImageUrl() {
         return imageUrl;
@@ -257,13 +257,13 @@ public class User<% if (databaseType === 'sql' || databaseType == 'mongodb') { %
         this.langKey = langKey;
     }
 
-    public Set<<% if (databaseType === 'sql' || databaseType == 'mongodb')  { %>Authority<% } %><% if (databaseType === 'cassandra') { %>String<% } %>> getAuthorities() {
+    public Set<<% if (databaseType === 'sql' || databaseType === 'mongodb')  { %>Authority<% } %><% if (databaseType === 'cassandra') { %>String<% } %>> getAuthorities() {
         return authorities;
     }
 
-    public void setAuthorities(Set<<% if (databaseType === 'sql' || databaseType == 'mongodb') { %>Authority<% } %><% if (databaseType === 'cassandra') { %>String<% } %>> authorities) {
+    public void setAuthorities(Set<<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>Authority<% } %><% if (databaseType === 'cassandra') { %>String<% } %>> authorities) {
         this.authorities = authorities;
-    }<% if ((authenticationType == 'session') && (databaseType == 'sql')) { %>
+    }<% if ((authenticationType === 'session') && (databaseType === 'sql')) { %>
 
     public Set<PersistentToken> getPersistentTokens() {
         return persistentTokens;
@@ -298,7 +298,7 @@ public class User<% if (databaseType === 'sql' || databaseType == 'mongodb') { %
             "login='" + login + '\'' +
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +<% if (databaseType === 'mongodb' || databaseType == 'sql') { %>
+            ", email='" + email + '\'' +<% if (databaseType === 'mongodb' || databaseType === 'sql') { %>
             ", imageUrl='" + imageUrl + '\'' +<% } %>
             ", activated='" + activated + '\'' +
             ", langKey='" + langKey + '\'' +

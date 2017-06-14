@@ -29,7 +29,7 @@ import org.ehcache.jsr107.Eh107Configuration;
 import java.util.concurrent.TimeUnit;
 
 <%_ } _%>
-<%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession == 'hazelcast') { _%>
+<%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
 
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.config.JHipsterProperties;
@@ -52,7 +52,7 @@ import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 <%_ if (hibernateCache === 'ehcache') { _%>
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
 <%_ } _%>
-<%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession == 'hazelcast') { _%>
+<%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
     <%_ if (serviceDiscoveryType === 'eureka') { _%>
 import org.springframework.boot.autoconfigure.web.ServerProperties;
     <%_ } _%>
@@ -65,13 +65,13 @@ import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.serviceregistry.Registration;
 <%_ } _%>
-import org.springframework.context.annotation.*;<% if (hibernateCache === 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
+import org.springframework.context.annotation.*;<% if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast') { %>
 import org.springframework.core.env.Environment;<% } %>
 <%_ if (clusteredHttpSession === 'hazelcast') { _%>
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 <%_ } _%>
-<%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession == 'hazelcast') { _%>
+<%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
 
 import javax.annotation.PreDestroy;
 <%_ } _%>
@@ -79,7 +79,7 @@ import javax.annotation.PreDestroy;
 @Configuration
 @EnableCaching
 @AutoConfigureAfter(value = { MetricsConfiguration.class })
-@AutoConfigureBefore(value = { WebConfigurer.class<% if (databaseType === 'sql' || databaseType == 'mongodb') { %>, DatabaseConfiguration.class<% } %> })
+@AutoConfigureBefore(value = { WebConfigurer.class<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>, DatabaseConfiguration.class<% } %> })
 public class CacheConfiguration {
     <%_ if (hibernateCache === 'ehcache') { _%>
 
@@ -115,7 +115,7 @@ public class CacheConfiguration {
         };
     }
     <%_ } _%>
-    <%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession == 'hazelcast') { _%>
+    <%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
 
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
 
@@ -129,7 +129,7 @@ public class CacheConfiguration {
     private Registration registration;
         <%_ } _%>
 
-    public CacheConfiguration(<% if (hibernateCache === 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>Environment env<% if (serviceDiscoveryType === 'eureka') { %>, ServerProperties serverProperties, DiscoveryClient discoveryClient<% } } %>) {
+    public CacheConfiguration(<% if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast') { %>Environment env<% if (serviceDiscoveryType === 'eureka') { %>, ServerProperties serverProperties, DiscoveryClient discoveryClient<% } } %>) {
         this.env = env;
         <%_ if (serviceDiscoveryType === 'eureka') { _%>
         this.serverProperties = serverProperties;

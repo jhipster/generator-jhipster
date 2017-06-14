@@ -24,7 +24,7 @@ import io.github.jhipster.web.filter.CachingHttpHeadersFilter;<% } %>
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
-import com.codahale.metrics.servlets.MetricsServlet;<% if (clusteredHttpSession === 'hazelcast' || hibernateCache == 'hazelcast') { %>
+import com.codahale.metrics.servlets.MetricsServlet;<% if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { %>
 import com.hazelcast.core.HazelcastInstance;<% } %><% if (clusteredHttpSession === 'hazelcast') { %>
 import com.hazelcast.web.SessionListener;
 import com.hazelcast.web.spring.SpringAwareWebFilter;<% } %>
@@ -58,17 +58,17 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
 
     private final Environment env;
 
-    private final JHipsterProperties jHipsterProperties;<% if (clusteredHttpSession === 'hazelcast' || hibernateCache == 'hazelcast') { %>
+    private final JHipsterProperties jHipsterProperties;<% if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { %>
 
     private final HazelcastInstance hazelcastInstance;<% } %>
 
     private MetricRegistry metricRegistry;
 
-    public WebConfigurer(Environment env, JHipsterProperties jHipsterProperties<% if (clusteredHttpSession === 'hazelcast' || hibernateCache == 'hazelcast') { %>, HazelcastInstance hazelcastInstance<% } %>) {
+    public WebConfigurer(Environment env, JHipsterProperties jHipsterProperties<% if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { %>, HazelcastInstance hazelcastInstance<% } %>) {
 
         this.env = env;
         this.jHipsterProperties = jHipsterProperties;
-        <%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache == 'hazelcast') { _%>
+        <%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { _%>
         this.hazelcastInstance = hazelcastInstance;
         <%_ } _%>
     }
@@ -83,7 +83,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         initMetrics(servletContext, disps);<% if (!skipClient) { %>
         if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
             initCachingHttpHeadersFilter(servletContext, disps);
-        }<% } %><% if (devDatabaseType === 'h2Disk' || devDatabaseType == 'h2Memory') { %>
+        }<% } %><% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>
         if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)) {
             initH2Console(servletContext);
         }<% } %>
@@ -257,7 +257,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
             <%_ } _%>
         }
         return new CorsFilter(source);
-    }<% if (devDatabaseType === 'h2Disk' || devDatabaseType == 'h2Memory') { %>
+    }<% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>
 
     /**
      * Initializes H2 console.

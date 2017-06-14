@@ -17,10 +17,10 @@
  limitations under the License.
 -%>
 package <%=packageName%>.service<% if (service === 'serviceImpl') { %>.impl<% } %>;
-<%  const serviceClassName = service == 'serviceImpl' ? entityClass + 'ServiceImpl' : entityClass + 'Service';
+<%  const serviceClassName = service === 'serviceImpl' ? entityClass + 'ServiceImpl' : entityClass + 'Service';
     let viaService = false;
-    const instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
-    const instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
+    const instanceType = (dto === 'mapstruct') ? entityClass + 'DTO' : entityClass;
+    const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
     const mapper = entityInstance  + 'Mapper';
     const dtoToEntity = mapper + '.'+ 'toEntity';
     const entityToDto = 'toDto';

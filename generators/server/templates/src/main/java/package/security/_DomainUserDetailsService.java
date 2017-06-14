@@ -61,7 +61,7 @@ public class DomainUserDetailsService implements UserDetailsService {
             if (!user.getActivated()) {
                 throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
             }
-            List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()<% if (databaseType === 'sql' || databaseType == 'mongodb') { %>
+            List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
                     .map(authority -> new SimpleGrantedAuthority(authority.getName()))<% } %><% if (databaseType === 'cassandra') { %>
                 .map(authority -> new SimpleGrantedAuthority(authority))<% } %>
                 .collect(Collectors.toList());

@@ -47,7 +47,7 @@ import java.util.Set;
  * Spring Data MongoDB repository for the PersistentToken entity.
  */<% } %><% if (databaseType === 'cassandra') { %>/**
  * Cassandra repository for the PersistentToken entity.
- */<% } %><% if (databaseType === 'sql' || databaseType == 'mongodb') { %>
+ */<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
 public interface PersistentTokenRepository extends <% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><PersistentToken, String> {
 
     List<PersistentToken> findByUser(User user);

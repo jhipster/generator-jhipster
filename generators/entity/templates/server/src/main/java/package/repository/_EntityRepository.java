@@ -28,7 +28,7 @@ import org.springframework.data.jpa.repository.*;<% if (fieldsContainOwnerManyTo
 import org.springframework.data.repository.query.Param;<% } %>
 <%_ let importList = fieldsContainOwnerManyToMany;
     for (r of relationships) {
-        if (r.relationshipType == 'many-to-one' && r.otherEntityName == 'user') {
+        if (r.relationshipType === 'many-to-one' && r.otherEntityName === 'user') {
             importList = true;
         }
     }
@@ -66,18 +66,18 @@ import java.util.UUID;<% } %>
 @Repository
 public interface <%=entityClass%>Repository extends <% if (databaseType=='sql') { %>JpaRepository<% } %><% if (databaseType=='mongodb') { %>MongoRepository<% } %><<%=entityClass%>,<%= pkType %>> {
     <%_ for (idx in relationships) {
-        if (relationships[idx].relationshipType == 'many-to-one' && relationships[idx].otherEntityName == 'user') { _%>
+        if (relationships[idx].relationshipType === 'many-to-one' && relationships[idx].otherEntityName === 'user') { _%>
 
     @Query("select <%= entityTableName %> from <%= entityClass %> <%= entityTableName %> where <%= entityTableName %>.<%= relationships[idx].relationshipFieldName %>.login = ?#{principal.username}")
     List<<%= entityClass %>> findBy<%= relationships[idx].relationshipNameCapitalized %>IsCurrentUser();
     <%_ } } _%>
     <% if (fieldsContainOwnerManyToMany === true) { %>
     @Query("select distinct <%= entityTableName %> from <%= entityClass %> <%= entityTableName %><% for (idx in relationships) {
-    if (relationships[idx].relationshipType == 'many-to-many' && relationships[idx].ownerSide == true) { %> left join fetch <%=entityTableName%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%>")
+    if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { %> left join fetch <%=entityTableName%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%>")
     List<<%=entityClass%>> findAllWithEagerRelationships();
 
     @Query("select <%= entityTableName %> from <%= entityClass %> <%= entityTableName %><% for (idx in relationships) {
-    if (relationships[idx].relationshipType == 'many-to-many' && relationships[idx].ownerSide == true) { %> left join fetch <%=entityTableName%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%> where <%=entityTableName%>.id =:id")
+    if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { %> left join fetch <%=entityTableName%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%> where <%=entityTableName%>.id =:id")
     <%=entityClass%> findOneWithEagerRelationships(@Param("id") Long id);
     <% } %>
 }
@@ -114,12 +114,12 @@ public class <%= entityClass %>Repository {
                     const fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod;
                     const fieldName = fields[idx].fieldName;
                     const fieldNameUnderscored = fields[idx].fieldNameUnderscored;
-                    if (fields[idx].fieldType == 'Integer') { %>
-                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getInt("<%= fieldName %>"));<% } else if (fields[idx].fieldType == 'BigDecimal') { %>
-                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getDecimal("<%= fieldName %>"));<% } else if (fields[idx].fieldType == 'LocalDate') { %>
+                    if (fields[idx].fieldType === 'Integer') { %>
+                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getInt("<%= fieldName %>"));<% } else if (fields[idx].fieldType === 'BigDecimal') { %>
+                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getDecimal("<%= fieldName %>"));<% } else if (fields[idx].fieldType === 'LocalDate') { %>
                 <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.get("<%= fieldName %>", LocalDate.class));<% } else if (['Instant', 'ZonedDateTime'].includes(fields[idx].fieldType)) { %>
-                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.get("<%= fieldName %>", <%= fields[idx].fieldType %>.class));<% } else if (fields[idx].fieldType == 'Boolean') { %>
-                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getBool("<%= fieldName %>"));<% } else if (fields[idx].fieldType == 'Text') { %>
+                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.get("<%= fieldName %>", <%= fields[idx].fieldType %>.class));<% } else if (fields[idx].fieldType === 'Boolean') { %>
+                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getBool("<%= fieldName %>"));<% } else if (fields[idx].fieldType === 'Text') { %>
                 <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getString("<%= fieldName %>"));<% } else if (fields[idx].fieldType === 'ByteBuffer') { %>
                 <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getBytes("<%= fieldName %>"));
                 <%_ if (fields[idx].fieldTypeBlobContent !== 'text') { _%>

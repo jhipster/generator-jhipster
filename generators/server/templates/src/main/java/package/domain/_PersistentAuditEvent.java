@@ -42,7 +42,7 @@ import java.util.Map;
 public class PersistentAuditEvent implements Serializable {
 
     @Id<% if (databaseType === 'sql') { %>
-    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType == 'mariadb') { _%>
+    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     <%_ }  else { _%>
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")

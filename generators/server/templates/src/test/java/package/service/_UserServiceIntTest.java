@@ -19,13 +19,13 @@
 package <%=packageName%>.service;
 <% if (databaseType === 'cassandra') { %>
 import <%=packageName%>.AbstractCassandraTest;<% } %>
-import <%=packageName%>.<%= mainClass %>;<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
+import <%=packageName%>.<%= mainClass %>;<% if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { %>
 import <%=packageName%>.domain.PersistentToken;<% } %>
-import <%=packageName%>.domain.User;<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
+import <%=packageName%>.domain.User;<% if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { %>
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
 import <%=packageName%>.config.Constants;
 import <%=packageName%>.repository.UserRepository;
-import <%=packageName%>.service.dto.UserDTO;<% if (databaseType === 'sql' || databaseType == 'mongodb') { %>
+import <%=packageName%>.service.dto.UserDTO;<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
 import <%=packageName%>.service.util.RandomUtil;<% } %>
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,12 +33,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;<% if (databaseType === 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 import org.springframework.test.context.junit4.SpringRunner;
-<% if (databaseType === 'sql' || databaseType == 'mongodb') { %>
+<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;<%}%>
-<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
+<% if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { %>
 import java.time.LocalDate;<% } %>
-import java.time.Instant;<% if (databaseType === 'sql' || databaseType == 'mongodb') { %>
+import java.time.Instant;<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;<% } %>
 import java.util.List;
@@ -53,7 +53,7 @@ import static org.assertj.core.api.Assertions.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)<% if (databaseType === 'sql') { %>
 @Transactional<% } %>
-public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
+public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{<% if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { %>
 
     @Autowired
     private PersistentTokenRepository persistentTokenRepository;<% } %>
@@ -62,7 +62,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
     private UserRepository userRepository;
 
     @Autowired
-    private UserService userService;<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
+    private UserService userService;<% if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { %>
 
     @Test
     public void testRemoveOldPersistentTokens() {
@@ -74,7 +74,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         assertThat(persistentTokenRepository.findByUser(admin)).hasSize(existingCount + 2);
         userService.removeOldPersistentTokens();
         assertThat(persistentTokenRepository.findByUser(admin)).hasSize(existingCount + 1);
-    }<% } %><% if (databaseType === 'sql' || databaseType == 'mongodb') { %>
+    }<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
 
     @Test
     public void assertThatUserMustExistToResetPassword() {
@@ -155,7 +155,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         Instant now = Instant.now();
         List<User> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS));
         assertThat(users).isEmpty();
-    }<% } %><% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
+    }<% } %><% if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { %>
 
     private void generateUserToken(User user, String tokenSeries, LocalDate localDate) {
         PersistentToken token = new PersistentToken();
@@ -170,7 +170,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
     }<% } %>
 
     @Test
-    public void assertThatAnonymousUserIsNotGet() {<% if (databaseType === 'sql' || databaseType == 'mongodb') { %>
+    public void assertThatAnonymousUserIsNotGet() {<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
         final PageRequest pageable = new PageRequest(0, (int) userRepository.count());
         final Page<UserDTO> allManagedUsers = userService.getAllManagedUsers(pageable);
         assertThat(allManagedUsers.getContent().stream()<% } %><% if (databaseType === 'cassandra') { %>
@@ -179,7 +179,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
             .noneMatch(user -> Constants.ANONYMOUS_USER.equals(user.getLogin())))
             .isTrue();
     }
-    <%_ if (databaseType === 'sql' || databaseType == 'mongodb') { _%>
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 
     @Test
     public void testRemoveNotActivatedUsers() {

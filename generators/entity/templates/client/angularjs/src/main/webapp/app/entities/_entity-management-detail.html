@@ -30,7 +30,7 @@
         <dd>
             <%_ if (fields[idx].fieldIsEnum) { _%>
             <span data-translate="{{'<%= angularAppName %>.<%= fieldType %>.' + vm.<%= entityInstance %>.<%= fieldName %>}}">{{vm.<%= entityInstance %>.<%= fieldName %>}}</span>
-            <%_ } else if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'image') { _%>
+            <%_ } else if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image') { _%>
             <div ng-if="vm.<%= entityInstance %>.<%= fieldName %>">
                 <a ng-click="vm.openFile(vm.<%= entityInstance %>.<%= fieldName %>ContentType, vm.<%= entityInstance %>.<%= fieldName %>)">
                     <img data-ng-src="{{'data:' + vm.<%=entityInstance %>.<%= fieldName %>ContentType + ';base64,' + vm.<%= entityInstance %>.<%= fieldName %>}}" style="max-width: 100%;" alt="<%=entityInstance %> image"/>
@@ -41,7 +41,7 @@
             <span>{{vm.<%=entityInstance %>.<%= fieldName %> | date:'medium'}}</span>
             <%_ } else if (fieldType === 'LocalDate') { _%>
             <span>{{vm.<%=entityInstance %>.<%= fieldName %> | date:'mediumDate'}}</span>
-            <%_ } else if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'any') { _%>
+            <%_ } else if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any') { _%>
             <div ng-if="vm.<%= entityInstance %>.<%= fieldName %>">
                 <a ng-click="vm.openFile(vm.<%= entityInstance %>.<%= fieldName %>ContentType, vm.<%= entityInstance %>.<%= fieldName %>)" data-translate="entity.action.open">open</a>
                 {{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}
@@ -63,8 +63,8 @@
                 const otherEntityField = relationships[idx].otherEntityField;
                 const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
                 if (relationshipType === 'many-to-one'
-                    || (relationshipType == 'one-to-one' && ownerSide == true)
-                    || (relationshipType == 'many-to-many' && ownerSide == true)) { _%>
+                    || (relationshipType === 'one-to-one' && ownerSide === true)
+                    || (relationshipType === 'many-to-many' && ownerSide === true)) { _%>
         <dt><span data-translate="<%= keyPrefix %>.<%= relationshipName %>"><%= relationshipNameHumanized %></span></dt>
         <dd>
             <%_ if (otherEntityName === 'user') { _%>

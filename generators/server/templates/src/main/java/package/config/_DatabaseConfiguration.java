@@ -24,7 +24,7 @@ import io.github.jhipster.config.liquibase.AsyncSpringLiquibase;
 
 import liquibase.integration.spring.SpringLiquibase;
 <%_ } _%>
-<%_ if (databaseType === 'mongodb' && authenticationType == 'oauth2') { _%>
+<%_ if (databaseType === 'mongodb' && authenticationType === 'oauth2') { _%>
 
 import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;
 <%_ } _%>
@@ -36,7 +36,7 @@ import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.domain.util.JSR310DateConverters.DateToZonedDateTimeConverter;
 import io.github.jhipster.domain.util.JSR310DateConverters.ZonedDateTimeToDateConverter;
 <%_ } _%>
-<%_ if (devDatabaseType === 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
+<%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 import org.h2.tools.Server;
 <%_ } _%>
 import org.slf4j.Logger;
@@ -47,7 +47,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;<% } %>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;<% if (databaseType === 'mongodb') { %>
-import org.springframework.context.annotation.Import;<% } %><% if (databaseType === 'mongodb' || devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>
+import org.springframework.context.annotation.Import;<% } %><% if (databaseType === 'mongodb' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>
 import org.springframework.context.annotation.Profile;<% } %><% if (databaseType === 'sql') { %>
 import org.springframework.core.env.Environment;<% } %><% if (databaseType === 'mongodb') { %>
 import org.springframework.core.convert.converter.Converter;<% } %><% if (searchEngine === 'elasticsearch') { %>
@@ -65,7 +65,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
-<%_ if (devDatabaseType === 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
+<%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 import java.sql.SQLException;
 <%_ } } _%>
 <%_ if (databaseType === 'mongodb') { _%>
@@ -92,7 +92,7 @@ public class DatabaseConfiguration {
     public DatabaseConfiguration(Environment env) {
         this.env = env;
     }
-<%_ if (devDatabaseType === 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
+<%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 
     /**
      * Open the TCP port for the H2 database, so it is available remotely.

@@ -17,8 +17,8 @@
  limitations under the License.
 -%>
 package <%=packageName%>.service;
-<%  const instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
-    const instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance; %>
+<%  const instanceType = (dto === 'mapstruct') ? entityClass + 'DTO' : entityClass;
+    const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance; %>
 <%_ if (dto === 'mapstruct') { _%>
 import <%=packageName%>.service.dto.<%= entityClass %>DTO;
 <%_ } else { _%>
@@ -52,7 +52,7 @@ public interface <%= entityClass %>Service {
      *  @return the list of entities
      */
     <% if (pagination !== 'no') { %>Page<<%= instanceType %><% } else { %>List<<%= instanceType %><% } %>> findAll(<% if (pagination !== 'no') { %>Pageable pageable<% } %>);
-<% for (idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { -%>
+<% for (idx in relationships) { if (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide !== true) { -%>
     /**
      *  Get all the <%= entityClass %>DTO where <%= relationships[idx].relationshipNameCapitalized %> is null.
      *

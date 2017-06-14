@@ -55,16 +55,16 @@
     <div class="table-responsive">
         <table class="jh-table table table-striped">
             <thead>
-                <tr<% if (pagination !== 'no') { %> jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.<%=pagination != 'infinite-scroll' ? 'transition' : 'reset'%>()"<% } %>>
+                <tr<% if (pagination !== 'no') { %> jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.<%=pagination !== 'infinite-scroll' ? 'transition' : 'reset'%>()"<% } %>>
                     <th<% if (pagination !== 'no') { %> jh-sort-by="id"<% } %>><span data-translate="global.field.id">ID</span><% if (pagination !== 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
                     <%_ for (idx in fields) { _%>
                     <th<% if (pagination !== 'no') { %> jh-sort-by="<%= fields[idx].fieldName%>"<% } %>><span data-translate="<%=keyPrefix + fields[idx].fieldName %>"><%= fields[idx].fieldNameHumanized %></span><% if (pagination !== 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
                     <%_ } _%>
                     <%_ for (idx in relationships) { _%>
-                        <%_ if (relationships[idx].relationshipType == 'many-to-one'
-                                || (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide == true)
-                                || (relationships[idx].relationshipType == 'many-to-many' && relationships[idx].ownerSide == true && pagination == 'no')) {
-                            const fieldName = dto == 'no' ? "." + relationships[idx].otherEntityField : relationships[idx].otherEntityFieldCapitalized;_%>
+                        <%_ if (relationships[idx].relationshipType === 'many-to-one'
+                                || (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide === true)
+                                || (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true && pagination === 'no')) {
+                            const fieldName = dto === 'no' ? "." + relationships[idx].otherEntityField : relationships[idx].otherEntityFieldCapitalized;_%>
                     <th<% if (pagination !== 'no') { %> jh-sort-by="<%=relationships[idx].relationshipName + (fieldName)%>"<% } %>><span data-translate="<%= keyPrefix + relationships[idx].relationshipName%>"><%= relationships[idx].relationshipNameHumanized %></span><% if (pagination !== 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
                         <%_ } _%>
                     <%_ } _%>
@@ -79,14 +79,14 @@
                         const fieldNameCapitalized = fields[idx].fieldNameCapitalized;
                         const fieldType = fields[idx].fieldType;
                         const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent; _%>
-                        <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'image') { _%>
+                        <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image') { _%>
                     <td>
                         <a ng-if="<%= entityInstance %>.<%= fieldName %>" ng-click="vm.openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">
                             <img data-ng-src="{{'data:' + <%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fieldName%>}}" style="max-height: 30px;" alt="<%=entityInstance %> image"/>
                         </a>
                         <span ng-if="<%= entityInstance %>.<%= fieldName %>">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
                     </td>
-                        <%_ } else if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'any') { _%>
+                        <%_ } else if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any') { _%>
                     <td>
                         <a ng-if="<%= entityInstance %>.<%= fieldName %>" ng-click="vm.openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" data-translate="entity.action.open">open</a>
                         <span ng-if="<%= entityInstance %>.<%= fieldName %>">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
@@ -111,8 +111,8 @@
                             const otherEntityField = relationships[idx].otherEntityField;
                             const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized; _%>
                         <%_ if (relationshipType === 'many-to-one'
-                                || (relationshipType == 'one-to-one' && ownerSide == true)
-                                || (relationshipType == 'many-to-many' && ownerSide == true && pagination == 'no')) { _%>
+                                || (relationshipType === 'one-to-one' && ownerSide === true)
+                                || (relationshipType === 'many-to-many' && ownerSide === true && pagination === 'no')) { _%>
                     <td>
                             <%_ if (otherEntityName === 'user') { _%>
                                 <%_ if (relationshipType === 'many-to-many') { _%>

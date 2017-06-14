@@ -28,13 +28,13 @@ import <%=packageName%>.service.MailService;
 import <%=packageName%>.service.UserService;
 import <%=packageName%>.service.dto.UserDTO;
 import <%=packageName%>.web.rest.vm.ManagedUserVM;
-import <%=packageName%>.web.rest.util.HeaderUtil;<% if (databaseType === 'sql' || databaseType == 'mongodb') { %>
+import <%=packageName%>.web.rest.util.HeaderUtil;<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
 import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
 import io.github.jhipster.web.util.ResponseUtil;
 import io.swagger.annotations.ApiParam;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;<% if (databaseType === 'sql' || databaseType == 'mongodb') { %>
+import org.slf4j.LoggerFactory;<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;<% } %>
@@ -172,12 +172,12 @@ public class UserResource {
 
     /**
      * GET  /users : get all users.
-     *<% if (databaseType === 'sql' || databaseType == 'mongodb') { %>
+     *<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
      * @param pageable the pagination information<% } %>
      * @return the ResponseEntity with status 200 (OK) and with body all users
      */
     @GetMapping("/users")
-    @Timed<% if (databaseType === 'sql' || databaseType == 'mongodb') { %>
+    @Timed<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
     public ResponseEntity<List<UserDTO>> getAllUsers(@ApiParam Pageable pageable) {
         final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");

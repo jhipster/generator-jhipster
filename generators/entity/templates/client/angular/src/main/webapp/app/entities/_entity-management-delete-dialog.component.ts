@@ -19,7 +19,7 @@
 <%_
 const i18nToLoad = [entityInstance];
 for (const idx in fields) {
-    if (fields[idx].fieldIsEnum == true) {
+    if (fields[idx].fieldIsEnum === true) {
         i18nToLoad.push(fields[idx].enumInstance);
     }
 }

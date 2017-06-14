@@ -18,7 +18,7 @@
 -%>
 package <%=packageName%>.service.mapper;
 
-<%_ if (databaseType === 'sql' || databaseType == 'mongodb') { _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 import <%=packageName%>.domain.Authority;
 <%_ } _%>
 import <%=packageName%>.domain.User;
@@ -92,7 +92,7 @@ public class UserMapper {
         user.setId(id);
         return user;
     }
-    <%_ if (databaseType === 'sql' || databaseType == 'mongodb') { _%>
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 
     public Set<Authority> authoritiesFromStrings(Set<String> strings) {
         return strings.stream().map(string -> {

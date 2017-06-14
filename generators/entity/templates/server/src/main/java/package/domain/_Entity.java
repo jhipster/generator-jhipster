@@ -68,7 +68,7 @@ public class <%= entityClass %> implements Serializable {
     private static final long serialVersionUID = 1L;
 <% if (databaseType === 'sql') { %>
     @Id
-    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType == 'mariadb') { _%>
+    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     <%_ }  else { _%>
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
@@ -94,7 +94,7 @@ public class <%= entityClass %> implements Serializable {
     const fieldNameUnderscored = fields[idx].fieldNameUnderscored;
     const fieldNameAsDatabaseColumn = fields[idx].fieldNameAsDatabaseColumn;
     if (fieldValidate === true) {
-        if (fieldValidate === true && fieldValidateRules.indexOf('required') != -1) {
+        if (fieldValidate === true && fieldValidateRules.indexOf('required') !== -1) {
             required = true;
         } _%>
     <%- include ../common/field_validators -%>
@@ -114,7 +114,7 @@ public class <%= entityClass %> implements Serializable {
         <%_ } else if (fieldType === 'BigDecimal') { _%>
     @Column(name = "<%-fieldNameAsDatabaseColumn %>", precision=10, scale=2<% if (required) { %>, nullable = false<% } %>)
         <%_ } else { _%>
-    @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (fieldValidate === true) { %><% if (fieldValidateRules.indexOf('maxlength') != -1) { %>, length = <%= fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% } %>)
+    @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (fieldValidate === true) { %><% if (fieldValidateRules.indexOf('maxlength') !== -1) { %>, length = <%= fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% } %>)
     <%_     }
         } _%>
     <%_ if (databaseType === 'mongodb') { _%>
@@ -126,7 +126,7 @@ public class <%= entityClass %> implements Serializable {
     private String <%= fieldName %>;
     <%_ } _%>
 
-    <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
+    <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { _%>
       <%_ if (databaseType === 'sql' || databaseType === 'cassandra') { _%>
     @Column(name = "<%-fieldNameAsDatabaseColumn %>_content_type"<% if (required && databaseType !== 'cassandra') { %>, nullable = false<% } %>)
         <%_ if (required && databaseType === 'cassandra') { _%>
@@ -220,7 +220,7 @@ public class <%= entityClass %> implements Serializable {
         const fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod; _%>
 
     <%_ if (fieldTypeBlobContent !== 'text') { _%>
-    public <%= fieldType %> <% if (fieldType.toLowerCase() == 'boolean') { %>is<% } else { %>get<%_ } _%><%= fieldInJavaBeanMethod %>() {
+    public <%= fieldType %> <% if (fieldType.toLowerCase() === 'boolean') { %>is<% } else { %>get<%_ } _%><%= fieldInJavaBeanMethod %>() {
     <%_ } else { _%>
     public String get<%= fieldInJavaBeanMethod %>() {
     <%_ } _%>
@@ -245,7 +245,7 @@ public class <%= entityClass %> implements Serializable {
     <%_ } _%>
         this.<%= fieldName %> = <%= fieldName %>;
     }
-    <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
+    <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { _%>
 
     public String get<%= fieldInJavaBeanMethod %>ContentType() {
         return <%= fieldName %>ContentType;
@@ -276,7 +276,7 @@ public class <%= entityClass %> implements Serializable {
         const otherEntityRelationshipNameCapitalized = relationships[idx].otherEntityRelationshipNameCapitalized;
         const otherEntityRelationshipNameCapitalizedPlural = relationships[idx].otherEntityRelationshipNameCapitalizedPlural;
     _%>
-    <%_ if (relationshipType === 'one-to-many' || relationshipType == 'many-to-many') { _%>
+    <%_ if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') { _%>
 
     public Set<<%= otherEntityNameCapitalized %>> get<%= relationshipNameCapitalizedPlural %>() {
         return <%= relationshipFieldNamePlural %>;
@@ -292,7 +292,7 @@ public class <%= entityClass %> implements Serializable {
         this.<%= relationshipFieldNamePlural %>.add(<%= otherEntityName %>);
             <%_ if (relationshipType === 'one-to-many') { _%>
         <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(this);
-            <%_ } else if (otherEntityRelationshipNameCapitalizedPlural !== '' && relationshipType == 'many-to-many') {
+            <%_ } else if (otherEntityRelationshipNameCapitalizedPlural !== '' && relationshipType === 'many-to-many') {
                 // JHipster version < 3.6.0 didn't ask for this relationship name _%>
         <%= otherEntityName %>.get<%= otherEntityRelationshipNameCapitalizedPlural %>().add(this);
             <%_ } _%>
@@ -303,7 +303,7 @@ public class <%= entityClass %> implements Serializable {
         this.<%= relationshipFieldNamePlural %>.remove(<%= otherEntityName %>);
             <%_ if (relationshipType === 'one-to-many') { _%>
         <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(null);
-            <%_ } else if (otherEntityRelationshipNameCapitalizedPlural !== '' && relationshipType == 'many-to-many') {
+            <%_ } else if (otherEntityRelationshipNameCapitalizedPlural !== '' && relationshipType === 'many-to-many') {
                 // JHipster version < 3.6.0 didn't ask for this relationship name _%>
         <%= otherEntityName %>.get<%= otherEntityRelationshipNameCapitalizedPlural %>().remove(this);
             <%_ } _%>
@@ -362,8 +362,8 @@ public class <%= entityClass %> implements Serializable {
                 const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
                 const fieldName = fields[idx].fieldName;
                 const fieldNameCapitalized = fieldName.charAt(0).toUpperCase() + fieldName.slice(1) _%>
-            ", <%= fieldName %>='" + <% if (fieldType.toLowerCase() == 'boolean') { %>is<% } else { %>get<%_ } _%><%= fieldNameCapitalized %>() + "'" +
-                <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
+            ", <%= fieldName %>='" + <% if (fieldType.toLowerCase() === 'boolean') { %>is<% } else { %>get<%_ } _%><%= fieldNameCapitalized %>() + "'" +
+                <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { _%>
             ", <%= fieldName %>ContentType='" + <%= fieldName %>ContentType + "'" +
                 <%_ } _%>
             <%_ } _%>

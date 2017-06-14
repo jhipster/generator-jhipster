@@ -123,7 +123,7 @@ export class <%= entityAngularName %>Service {
 
     private convertItemFromServer(entity: any) {
         <%_ for (idx in fields) { _%>
-            <%_ if (fields[idx].fieldType == 'LocalDate') { _%>
+            <%_ if (fields[idx].fieldType === 'LocalDate') { _%>
         entity.<%=fields[idx].fieldName%> = this.dateUtils
             .convertLocalDateFromServer(entity.<%=fields[idx].fieldName%>);
             <%_ } _%>
@@ -137,7 +137,7 @@ export class <%= entityAngularName %>Service {
 
     private convert(<%= entityInstance %>: <%= entityAngularName %>): <%= entityAngularName %> {
         const copy: <%= entityAngularName %> = Object.assign({}, <%= entityInstance %>);
-        <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
+        <%_ for (idx in fields){ if (fields[idx].fieldType === 'LocalDate') { _%>
         copy.<%=fields[idx].fieldName%> = this.dateUtils
             .convertLocalDateToServer(<%= entityInstance %>.<%=fields[idx].fieldName%>);
         <%_ } if (['Instant', 'ZonedDateTime'].includes(fields[idx].fieldType)) { %>

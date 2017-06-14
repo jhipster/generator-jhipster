@@ -19,7 +19,7 @@
 package <%=packageName%>.config;
 
 import io.github.jhipster.config.JHipsterProperties;
-<%_ if (applicationType === 'microservice' || applicationType == 'gateway') { _%>
+<%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
 import io.github.jhipster.config.metrics.SpectatorLogMetricWriter;
 
 import com.netflix.spectator.api.Registry;
@@ -133,7 +133,7 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
             reporter.start(jHipsterProperties.getMetrics().getLogs().getReportFrequency(), TimeUnit.SECONDS);
         }
     }
-    <%_ if (applicationType === 'microservice' || applicationType == 'gateway') { _%>
+    <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
 
     /* Spectator metrics log reporting */
     @Bean

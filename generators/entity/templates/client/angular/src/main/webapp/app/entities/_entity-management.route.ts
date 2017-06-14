@@ -19,7 +19,7 @@
 <%_
 const i18nToLoad = [entityInstance];
 for (const idx in fields) {
-    if (fields[idx].fieldIsEnum == true) {
+    if (fields[idx].fieldIsEnum === true) {
         i18nToLoad.push(fields[idx].enumInstance);
     }
 }
@@ -49,7 +49,7 @@ import {
 
 import { Principal } from '../../shared';
 
-<%_ if (pagination == 'pagination' || pagination == 'pager') { _%>
+<%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
 @Injectable()
 export class <%= entityAngularName %>ResolvePagingParams implements Resolve<any> {
 
@@ -71,7 +71,7 @@ export const <%= entityInstance %>Route: Routes = [
     {
         path: '<%= entityUrl %>',
         component: <%= entityAngularName %>Component,
-        <%_ if (pagination == 'pagination' || pagination == 'pager'){ _%>
+        <%_ if (pagination === 'pagination' || pagination === 'pager'){ _%>
         resolve: {
             'pagingParams': <%= entityAngularName %>ResolvePagingParams
         },
