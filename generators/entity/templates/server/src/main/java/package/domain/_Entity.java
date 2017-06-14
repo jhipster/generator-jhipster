@@ -179,8 +179,6 @@ public class <%= entityClass %> implements Serializable {
     <%_ } else if (relationshipType == 'many-to-many') { _%>
     @ManyToMany<% if (ownerSide == false) { %>(mappedBy = "<%= otherEntityRelationshipNamePlural %>")
     @JsonIgnore
-    <%_     } else { _%>
-
     <%_     }
             if (hibernateCache != 'no') { _%>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
