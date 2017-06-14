@@ -25,13 +25,13 @@ for (const idx in relationships) { if (relationships[idx].relationshipType == 'o
     /**
      *  get all the <%= entityInstancePlural %> where <%= relationships[idx].relationshipNameCapitalized %> is null.
      *  @return the list of entities
-     */<% if (databaseType == 'sql') { %>
+     */<% if (databaseType === 'sql') { %>
     @Transactional(readOnly = true) <% } %>
     public List<<%= instanceType %>> findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull() {
         log.debug("Request to get all <%= entityInstancePlural %> where <%= relationships[idx].relationshipNameCapitalized %> is null");
         return StreamSupport
             .stream(<%= entityInstance %>Repository.findAll().spliterator(), false)
-            .filter(<%= entityInstance %> -> <%= entityInstance %>.get<%= relationships[idx].relationshipNameCapitalized %>() == null)<% if (dto == 'mapstruct') { %>
+            .filter(<%= entityInstance %> -> <%= entityInstance %>.get<%= relationships[idx].relationshipNameCapitalized %>() == null)<% if (dto === 'mapstruct') { %>
             .map(<%= entityToDtoReference %>)
             .collect(Collectors.toCollection(LinkedList::new));<% } else { %>
             .collect(Collectors.toList());<% } %>

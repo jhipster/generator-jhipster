@@ -25,7 +25,7 @@ for (idx in relationships) {
         break;
     }
 }
-if (importApiModelProperty == false) {
+if (!importApiModelProperty) {
   for (idx in fields) {
       if (typeof fields[idx].javadoc != 'undefined') {
           importApiModelProperty = true;

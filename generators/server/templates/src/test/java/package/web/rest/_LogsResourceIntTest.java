@@ -22,7 +22,7 @@ package <%= packageName %>.web.rest;
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
-<%_ if (authenticationType == 'uaa') { _%>
+<%_ if (authenticationType === 'uaa') { _%>
 import <%= packageName %>.config.SecurityBeanOverrideConfiguration;
 <%_ } _%>
 import <%= packageName %>.web.rest.vm.LoggerVM;

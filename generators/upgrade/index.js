@@ -168,7 +168,7 @@ module.exports = UpgradeGenerator.extend({
             const done = this.async();
             this.gitExec(['status', '--porcelain'], (code, msg, err) => {
                 if (code !== 0) this.error(`Unable to check for local changes:\n${msg} ${err}`);
-                if (msg != null && msg !== '') {
+                if (msg) {
                     this.warning(' local changes found.\n' +
                         '\tPlease commit/stash them before upgrading');
                     this.error('Exiting process');

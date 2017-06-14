@@ -59,7 +59,7 @@ public class JWTFilter extends GenericFilterBean {
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7, bearerToken.length());
         }
-        <%_ if (websocket == 'spring-websocket') { _%>
+        <%_ if (websocket === 'spring-websocket') { _%>
         String jwt = request.getParameter(JWTConfigurer.AUTHORIZATION_TOKEN);
         if (StringUtils.hasText(jwt)) {
             return jwt;

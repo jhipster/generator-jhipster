@@ -29,7 +29,7 @@ import {
     <%_ } _%>
     <%_ if (enableSocialSignIn) { _%>
     socialRegisterRoute,
-        <%_ if (authenticationType == 'jwt') { _%>
+        <%_ if (authenticationType === 'jwt') { _%>
     socialAuthRoute,
         <%_ } _%>
     <%_ } _%>
@@ -46,7 +46,7 @@ const ACCOUNT_ROUTES = [
     sessionsRoute,
     <%_ } _%>
     <%_ if (enableSocialSignIn) { _%>
-    <%_ if (authenticationType == 'jwt') { _%>
+    <%_ if (authenticationType === 'jwt') { _%>
     socialAuthRoute,
     <%_ } _%>
     socialRegisterRoute,

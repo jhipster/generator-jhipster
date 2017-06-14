@@ -107,7 +107,7 @@ currentAccount: any;
             {
                 page: this.page,
                 size: this.itemsPerPage,
-                <%_ if (searchEngine == 'elasticsearch') { _%>
+                <%_ if (searchEngine === 'elasticsearch') { _%>
                 search: this.currentSearch,
                 <%_ } _%>
                 sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')

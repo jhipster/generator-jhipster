@@ -19,7 +19,7 @@
 package <%=packageName%>.service.dto;
 
 import <%=packageName%>.config.Constants;
-<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+<% if (databaseType === 'sql' || databaseType == 'mongodb') { %>
 import <%=packageName%>.domain.Authority;<% } %>
 import <%=packageName%>.domain.User;
 
@@ -27,7 +27,7 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.*;
-<%_ if (databaseType == 'mongodb' || databaseType == 'sql') { _%>
+<%_ if (databaseType === 'mongodb' || databaseType == 'sql') { _%>
 import java.time.Instant;
 <%_ } _%>
 import java.util.Set;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  */
 public class UserDTO {
 
-    private <% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> id;
+    private <% if (databaseType === 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> id;
 
     <%_ let columnMax = 50;
         if (enableSocialSignIn) {
@@ -58,7 +58,7 @@ public class UserDTO {
     @Email
     @Size(min = 5, max = 100)
     private String email;
-    <%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
+    <%_ if (databaseType === 'sql' || databaseType == 'mongodb') { _%>
 
     @Size(max = 256)
     private String imageUrl;
@@ -68,7 +68,7 @@ public class UserDTO {
 
     @Size(min = 2, max = 5)
     private String langKey;
-    <%_ if (databaseType == 'mongodb' || databaseType == 'sql') { _%>
+    <%_ if (databaseType === 'mongodb' || databaseType == 'sql') { _%>
 
     private String createdBy;
 
@@ -87,15 +87,15 @@ public class UserDTO {
 
     public UserDTO(User user) {
         this(user.getId(), user.getLogin(), user.getFirstName(), user.getLastName(),
-            user.getEmail(), user.getActivated(),<% if (databaseType == 'sql' || databaseType == 'mongodb') { %> user.getImageUrl(), <% } %>user.getLangKey(),<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+            user.getEmail(), user.getActivated(),<% if (databaseType === 'sql' || databaseType == 'mongodb') { %> user.getImageUrl(), <% } %>user.getLangKey(),<% if (databaseType === 'sql' || databaseType == 'mongodb') { %>
             user.getCreatedBy(), user.getCreatedDate(), user.getLastModifiedBy(), user.getLastModifiedDate(),
             user.getAuthorities().stream().map(Authority::getName)
                 .collect(Collectors.toSet()));<% } else { %>
             user.getAuthorities());<% } %>
     }
 
-    public UserDTO(<% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> id, String login, String firstName, String lastName,
-        String email, boolean activated,<% if (databaseType == 'sql' || databaseType == 'mongodb') { %> String imageUrl, <% } %>String langKey,<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
+    public UserDTO(<% if (databaseType === 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> id, String login, String firstName, String lastName,
+        String email, boolean activated,<% if (databaseType === 'sql' || databaseType == 'mongodb') { %> String imageUrl, <% } %>String langKey,<% if (databaseType === 'mongodb' || databaseType == 'sql') { %>
         String createdBy, Instant createdDate, String lastModifiedBy, Instant lastModifiedDate,
         <% } %>Set<String> authorities) {
 
@@ -105,11 +105,11 @@ public class UserDTO {
         this.lastName = lastName;
         this.email = email;
         this.activated = activated;
-        <%_ if (databaseType == 'mongodb' || databaseType == 'sql') { _%>
+        <%_ if (databaseType === 'mongodb' || databaseType == 'sql') { _%>
         this.imageUrl = imageUrl;
         <%_ } _%>
         this.langKey = langKey;
-        <%_ if (databaseType == 'mongodb' || databaseType == 'sql') { _%>
+        <%_ if (databaseType === 'mongodb' || databaseType == 'sql') { _%>
         this.createdBy = createdBy;
         this.createdDate = createdDate;
         this.lastModifiedBy = lastModifiedBy;
@@ -118,11 +118,11 @@ public class UserDTO {
         this.authorities = authorities;
     }
 
-    public <% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> getId() {
+    public <% if (databaseType === 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> getId() {
         return id;
     }
 
-    public void setId(<% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> id) {
+    public void setId(<% if (databaseType === 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> id) {
         this.id = id;
     }
 
@@ -145,7 +145,7 @@ public class UserDTO {
     public String getEmail() {
         return email;
     }
-    <%_ if (databaseType == 'mongodb' || databaseType == 'sql') { _%>
+    <%_ if (databaseType === 'mongodb' || databaseType == 'sql') { _%>
 
     public String getImageUrl() {
         return imageUrl;
@@ -159,7 +159,7 @@ public class UserDTO {
     public String getLangKey() {
         return langKey;
     }
-    <%_ if (databaseType == 'mongodb' || databaseType == 'sql') { _%>
+    <%_ if (databaseType === 'mongodb' || databaseType == 'sql') { _%>
 
     public String getCreatedBy() {
         return createdBy;
@@ -192,10 +192,10 @@ public class UserDTO {
             "login='" + login + '\'' +
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
+            ", email='" + email + '\'' +<% if (databaseType === 'mongodb' || databaseType == 'sql') { %>
             ", imageUrl='" + imageUrl + '\'' +<% } %>
             ", activated=" + activated +
-            ", langKey='" + langKey + '\'' +<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
+            ", langKey='" + langKey + '\'' +<% if (databaseType === 'mongodb' || databaseType == 'sql') { %>
             ", createdBy=" + createdBy +
             ", createdDate=" + createdDate +
             ", lastModifiedBy='" + lastModifiedBy + '\'' +

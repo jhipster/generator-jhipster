@@ -46,7 +46,7 @@
                     return $translate.refresh();
                 }]
             }
-        })<% if (authenticationType == 'jwt') { %>
+        })<% if (authenticationType === 'jwt') { %>
         .state('social-auth', {
             parent: 'account',
             url: '/social-auth',

@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 package <%=packageName%>.security.social;
-<%_ if (authenticationType == 'jwt') { _%>
+<%_ if (authenticationType === 'jwt') { _%>
 
 import <%=packageName%>.security.jwt.TokenProvider;
 <%_ } _%>
@@ -35,7 +35,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.web.context.request.NativeWebRequest;
-<%_ if (authenticationType == 'jwt') { _%>
+<%_ if (authenticationType === 'jwt') { _%>
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.context.request.ServletWebRequest;
 import javax.servlet.http.Cookie;
@@ -49,21 +49,21 @@ public class CustomSignInAdapter implements SignInAdapter {
     private final UserDetailsService userDetailsService;
 
     private final JHipsterProperties jHipsterProperties;
-    <%_ if (authenticationType == 'jwt') { _%>
+    <%_ if (authenticationType === 'jwt') { _%>
 
     private final TokenProvider tokenProvider;
 
     <%_ } _%>
 
-    public CustomSignInAdapter(UserDetailsService userDetailsService, JHipsterProperties jHipsterProperties<% if (authenticationType == 'jwt') { %>,
+    public CustomSignInAdapter(UserDetailsService userDetailsService, JHipsterProperties jHipsterProperties<% if (authenticationType === 'jwt') { %>,
             TokenProvider tokenProvider<% } %>) {
         this.userDetailsService = userDetailsService;
         this.jHipsterProperties = jHipsterProperties;
-        <%_ if (authenticationType == 'jwt') { _%>
+        <%_ if (authenticationType === 'jwt') { _%>
         this.tokenProvider = tokenProvider;
         <%_ } _%>
     }
-    <%_ if (authenticationType == 'jwt') { _%>
+    <%_ if (authenticationType === 'jwt') { _%>
 
     @Override
     public String signIn(String userId, Connection<?> connection, NativeWebRequest request){

@@ -21,7 +21,7 @@ const mapper = entityInstance  + 'Mapper';
 const entityToDtoReference = mapper + '::' + 'toDto'; %>
         <%_ if (!viaService) { _%>
         return StreamSupport
-            .stream(<%= entityInstance %>SearchRepository.search(queryStringQuery(query)).spliterator(), false)<% if (dto == 'mapstruct') { %>
+            .stream(<%= entityInstance %>SearchRepository.search(queryStringQuery(query)).spliterator(), false)<% if (dto === 'mapstruct') { %>
             .map(<%= entityToDtoReference %>)<% } %>
             .collect(Collectors.toList());
         <%_ } else { _%>

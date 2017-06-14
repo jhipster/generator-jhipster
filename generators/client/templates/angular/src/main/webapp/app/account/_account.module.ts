@@ -40,7 +40,7 @@ import {
     SettingsComponent,
     <%_ if (enableSocialSignIn) { _%>
     SocialRegisterComponent,
-        <%_ if (authenticationType == 'jwt') { _%>
+        <%_ if (authenticationType === 'jwt') { _%>
     SocialAuthComponent,
         <%_ } _%>
     <%_ } _%>
@@ -55,7 +55,7 @@ import {
     declarations: [
         <%_ if (enableSocialSignIn) { _%>
         SocialRegisterComponent,
-            <%_ if (authenticationType == 'jwt') { _%>
+            <%_ if (authenticationType === 'jwt') { _%>
         SocialAuthComponent,
             <%_ } _%>
         <%_ } _%>

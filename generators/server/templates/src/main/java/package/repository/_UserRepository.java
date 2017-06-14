@@ -32,11 +32,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 <%_ } _%>
-<%_ if (databaseType == 'mongodb') { _%>
+<%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.mongodb.repository.MongoRepository;
 <%_ } _%>
 import org.springframework.stereotype.Repository;
-<%_ if (databaseType == 'cassandra') { _%>
+<%_ if (databaseType === 'cassandra') { _%>
 import org.springframework.util.StringUtils;
 
 import javax.validation.ConstraintViolation;
@@ -45,7 +45,7 @@ import javax.validation.Validator;
 <%_ } _%>
 import java.util.List;
 import java.util.Optional;
-<%_ if (databaseType == 'cassandra') { _%>
+<%_ if (databaseType === 'cassandra') { _%>
 import java.util.Set;
 <%_ } _%>
 <%_ if (databaseType !== 'cassandra') { _%>
@@ -57,19 +57,19 @@ import java.time.Instant;
  * Spring Data JPA repository for the User entity.
  */
 <%_ } _%>
-<%_ if (databaseType == 'mongodb') { _%>
+<%_ if (databaseType === 'mongodb') { _%>
 /**
  * Spring Data MongoDB repository for the User entity.
  */
 <%_ } _%>
-<%_ if (databaseType == 'cassandra') { _%>
+<%_ if (databaseType === 'cassandra') { _%>
 /**
  * Cassandra repository for the User entity.
  */
 <%_ } _%>
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 @Repository
-public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRepository<User, Long><% } %><% if (databaseType == 'mongodb') { %>MongoRepository<User, String><% } %> {
+public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRepository<User, Long><% } %><% if (databaseType === 'mongodb') { %>MongoRepository<User, String><% } %> {
 
     Optional<User> findOneByActivationKey(String activationKey);
 
@@ -80,7 +80,7 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
     Optional<User> findOneByEmail(String email);
 
     Optional<User> findOneByLogin(String login);
-    <%_ if (databaseType == 'sql') { _%>
+    <%_ if (databaseType === 'sql') { _%>
 
     @EntityGraph(attributePaths = "authorities")
     User findOneWithAuthoritiesById(<%= pkType %> id);

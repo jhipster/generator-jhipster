@@ -22,7 +22,7 @@ module.exports = {
     parseVersion : parseVersion
 };
 
-<%_ if (buildTool == 'maven') { _%>
+<%_ if (buildTool === 'maven') { _%>
 const parseString = require('xml2js').parseString;
 // return the version number from `pom.xml` file
 function parseVersion() {
@@ -40,7 +40,7 @@ function parseVersion() {
     }
     return version;
 }
-<%_ } else if (buildTool == 'gradle') { _%>
+<%_ } else if (buildTool === 'gradle') { _%>
 // Returns the second occurrence of the version number from `build.gradle` file
 function parseVersion() {
     const versionRegex = /^version\s*=\s*[',"]([^',"]*)[',"]/gm; // Match and group the version number

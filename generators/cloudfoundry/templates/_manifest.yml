@@ -20,7 +20,7 @@
 path: .
 instances: 1
 buildpack: https://github.com/cloudfoundry/java-buildpack
-<%_ if (databaseType != 'no') { _%>
+<%_ if (databaseType !== 'no') { _%>
 services:
 - <%= cloudfoundryDeployedName %>
 <%_ } _%>

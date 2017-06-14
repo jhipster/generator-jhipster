@@ -75,7 +75,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     <%_ for (idx in fields) {
         const fieldName = fields[idx].fieldName;
         const fieldType = fields[idx].fieldType;
-        if (fieldType == 'LocalDate') { _%>
+        if (fieldType === 'LocalDate') { _%>
     <%= fieldName %>Dp: any;
         <%_ }
     } _%>

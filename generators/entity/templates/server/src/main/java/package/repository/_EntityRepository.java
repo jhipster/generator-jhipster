@@ -20,7 +20,7 @@ package <%=packageName%>.repository;
 
 import <%=packageName%>.domain.<%=entityClass%>;
 import org.springframework.stereotype.Repository;
-<% if (databaseType == 'cassandra') { %>
+<% if (databaseType === 'cassandra') { %>
 import com.datastax.driver.core.*;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;<% } %><% if (databaseType=='sql') { %>
@@ -32,17 +32,17 @@ import org.springframework.data.repository.query.Param;<% } %>
             importList = true;
         }
     }
-    if (importList == true) {
+    if (importList === true) {
 _%>
 import java.util.List;<% }} %><% if (databaseType=='mongodb') { %>
-import org.springframework.data.mongodb.repository.MongoRepository;<% } %><% if (databaseType == 'cassandra') { %>
+import org.springframework.data.mongodb.repository.MongoRepository;<% } %><% if (databaseType === 'cassandra') { %>
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
-<% if (fieldsContainInstant == true) { %>
-import java.time.Instant;<% } %><% if (fieldsContainLocalDate == true) { %>
-import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
+<% if (fieldsContainInstant === true) { %>
+import java.time.Instant;<% } %><% if (fieldsContainLocalDate === true) { %>
+import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime === true) { %>
 import java.time.ZonedDateTime;<% } %>
 import java.util.ArrayList;
 import java.util.List;

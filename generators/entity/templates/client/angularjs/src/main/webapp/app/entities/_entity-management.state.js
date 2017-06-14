@@ -29,7 +29,7 @@
         $stateProvider
         .state('<%= entityStateName %>', {
             parent: 'entity',
-            url: '/<%= entityUrl %><% if (pagination == 'pagination' || pagination == 'pager') { %>?page&sort&search<% } %>',
+            url: '/<%= entityUrl %><% if (pagination === 'pagination' || pagination == 'pager') { %>?page&sort&search<% } %>',
             data: {
                 authorities: ['ROLE_USER'],
                 pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
@@ -41,7 +41,7 @@
                     controllerAs: 'vm'
                 }
             },
-            <%_ if (pagination == 'pagination' || pagination == 'pager'){ _%>
+            <%_ if (pagination === 'pagination' || pagination == 'pager'){ _%>
             params: {
                 page: {
                     value: '1',
@@ -55,7 +55,7 @@
             },
             <%_ } _%>
             resolve: {
-            <%_ if (pagination == 'pagination' || pagination == 'pager'){ _%>
+            <%_ if (pagination === 'pagination' || pagination == 'pager'){ _%>
                 pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
                     return {
                         page: PaginationUtil.parsePage($stateParams.page),

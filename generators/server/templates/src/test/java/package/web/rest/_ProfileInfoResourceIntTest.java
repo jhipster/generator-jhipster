@@ -23,7 +23,7 @@ import io.github.jhipster.config.JHipsterProperties;
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
-<%_ if (authenticationType == 'uaa') { _%>
+<%_ if (authenticationType === 'uaa') { _%>
 import <%= packageName %>.config.SecurityBeanOverrideConfiguration;
 <%_ } _%>
 import org.junit.Before;

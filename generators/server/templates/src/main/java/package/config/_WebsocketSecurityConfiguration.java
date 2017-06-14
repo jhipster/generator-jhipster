@@ -41,7 +41,7 @@ public class WebsocketSecurityConfiguration extends AbstractSecurityWebSocketMes
             .simpTypeMatchers(SimpMessageType.MESSAGE, SimpMessageType.SUBSCRIBE).denyAll()
             // catch all
             .anyMessage().denyAll();
-    }<% if (authenticationType != 'session') { %>
+    }<% if (authenticationType !== 'session') { %>
 
     /**
      * Disables CSRF for Websockets.

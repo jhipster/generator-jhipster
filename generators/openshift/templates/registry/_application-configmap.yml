@@ -52,9 +52,9 @@ objects:
     data:
       application.yml: |-
         configserver:
-          name: <% if (serviceDiscoveryType == 'eureka') { %> JHipster Registry<% } %><% if (serviceDiscoveryType == 'consul') { %>Consul<% } %>
-          status: Connected to <% if (serviceDiscoveryType == 'eureka') { %>the JHipster Registry<% } %><% if (serviceDiscoveryType == 'consul') { %>Consul<% } %> running in OpenShift
-        <%_ if (serviceDiscoveryType == 'eureka') {  _%>
+          name: <% if (serviceDiscoveryType === 'eureka') { %> JHipster Registry<% } %><% if (serviceDiscoveryType === 'consul') { %>Consul<% } %>
+          status: Connected to <% if (serviceDiscoveryType === 'eureka') { %>the JHipster Registry<% } %><% if (serviceDiscoveryType === 'consul') { %>Consul<% } %> running in OpenShift
+        <%_ if (serviceDiscoveryType === 'eureka') {  _%>
         eureka:
           client:
             service-url:

@@ -18,17 +18,17 @@
 -%>
 package <%=packageName%>.service.dto;
 
-<% if (fieldsContainInstant == true) { %>
-import java.time.Instant;<% } %><% if (fieldsContainLocalDate == true) { %>
-import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
+<% if (fieldsContainInstant === true) { %>
+import java.time.Instant;<% } %><% if (fieldsContainLocalDate === true) { %>
+import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime === true) { %>
 import java.time.ZonedDateTime;<% } %><% if (validation) { %>
 import javax.validation.constraints.*;<% } %>
-import java.io.Serializable;<% if (fieldsContainBigDecimal == true) { %>
+import java.io.Serializable;<% if (fieldsContainBigDecimal === true) { %>
 import java.math.BigDecimal;<% } %><% if (fieldsContainBlob && databaseType === 'cassandra') { %>
 import java.nio.ByteBuffer;<% } %><% if (relationships.length > 0) { %>
 import java.util.HashSet;
 import java.util.Set;<% } %>
-import java.util.Objects;<% if (databaseType == 'cassandra') { %>
+import java.util.Objects;<% if (databaseType === 'cassandra') { %>
 import java.util.UUID;<% } %><% if (fieldsContainBlob && databaseType === 'sql') { %>
 import javax.persistence.Lob;<% } %>
 <%_ for (idx in fields) { if (fields[idx].fieldIsEnum == true) { _%>
@@ -39,9 +39,9 @@ import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;
  * A DTO for the <%= entityClass %> entity.
  */
 public class <%= entityClass %>DTO implements Serializable {
-<% if (databaseType == 'sql') { %>
-    private Long id;<% } %><% if (databaseType == 'mongodb') { %>
-    private String id;<% } %><% if (databaseType == 'cassandra') { %>
+<% if (databaseType === 'sql') { %>
+    private Long id;<% } %><% if (databaseType === 'mongodb') { %>
+    private String id;<% } %><% if (databaseType === 'cassandra') { %>
     private UUID id;<% } %>
     <%_ for (idx in fields) {
         const fieldValidate = fields[idx].fieldValidate;
@@ -57,17 +57,17 @@ public class <%= entityClass %>DTO implements Serializable {
         const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
         const fieldName = fields[idx].fieldName;_%>
 
-    <%_ if (fieldValidate == true) {
+    <%_ if (fieldValidate === true) {
             let required = false;
-            if (fieldValidate == true && fieldValidateRules.indexOf('required') != -1) {
+            if (fieldValidate === true && fieldValidateRules.indexOf('required') != -1) {
                 required = true;
             } _%>
     <%- include ../../common/field_validators -%>
     <%_ } _%>
-    <%_ if (fieldType == 'byte[]' && databaseType === 'sql') { _%>
+    <%_ if (fieldType === 'byte[]' && databaseType === 'sql') { _%>
     @Lob
     <%_ } _%>
-    <%_ if (fieldTypeBlobContent != 'text') { _%>
+    <%_ if (fieldTypeBlobContent !== 'text') { _%>
     private <%= fieldType %> <%= fieldName %>;
     <%_ } else { _%>
     private String <%= fieldName %>;
@@ -84,10 +84,10 @@ public class <%= entityClass %>DTO implements Serializable {
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
         const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
         const ownerSide = relationships[idx].ownerSide; _%>
-    <%_ if (relationshipType == 'many-to-many' && ownerSide == true) { _%>
+    <%_ if (relationshipType === 'many-to-many' && ownerSide == true) { _%>
 
     private Set<<%= otherEntityNameCapitalized %>DTO> <%= relationshipFieldNamePlural %> = new HashSet<>();
-    <%_ } else if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true)) { _%>
+    <%_ } else if (relationshipType === 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true)) { _%>
 
     private Long <%= relationshipFieldName %>Id;
     <%_ if (otherEntityFieldCapitalized !='Id' && otherEntityFieldCapitalized != '') { _%>
@@ -95,11 +95,11 @@ public class <%= entityClass %>DTO implements Serializable {
     private String <%= relationshipFieldName %><%= otherEntityFieldCapitalized %>;
     <%_ } } } _%>
 
-    public <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %><% if (databaseType == 'cassandra') { %>UUID<% } %> getId() {
+    public <% if (databaseType === 'sql') { %>Long<% } %><% if (databaseType === 'mongodb') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> getId() {
         return id;
     }
 
-    public void setId(<% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %><% if (databaseType == 'cassandra') { %>UUID<% } %> id) {
+    public void setId(<% if (databaseType === 'sql') { %>Long<% } %><% if (databaseType === 'mongodb') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> id) {
         this.id = id;
     }
     <%_ for (idx in fields) {
@@ -107,7 +107,7 @@ public class <%= entityClass %>DTO implements Serializable {
         const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
         const fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod;
         const fieldName = fields[idx].fieldName; _%>
-        <%_ if(fieldTypeBlobContent != 'text') { _%>
+        <%_ if(fieldTypeBlobContent !== 'text') { _%>
 
     public <%= fieldType %> <% if (fieldType.toLowerCase() == 'boolean') { %>is<% } else { %>get<%_ } _%><%= fieldInJavaBeanMethod %>() {
         <%_ } else { _%>
@@ -117,7 +117,7 @@ public class <%= entityClass %>DTO implements Serializable {
         return <%= fieldName %>;
     }
 
-        <%_ if(fieldTypeBlobContent != 'text') { _%>
+        <%_ if(fieldTypeBlobContent !== 'text') { _%>
     public void set<%= fieldInJavaBeanMethod %>(<%= fieldType %> <%= fieldName %>) {
         <%_ } else { _%>
     public void set<%= fieldInJavaBeanMethod %>(String <%= fieldName %>) {
@@ -146,7 +146,7 @@ public class <%= entityClass %>DTO implements Serializable {
         relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized,
         relationshipNameCapitalizedPlural = relationships[idx].relationshipNameCapitalizedPlural,
         ownerSide = relationships[idx].ownerSide;
-        if (relationshipType == 'many-to-many' && ownerSide == true) { _%>
+        if (relationshipType === 'many-to-many' && ownerSide == true) { _%>
 
     public Set<<%= otherEntityNameCapitalized %>DTO> get<%= relationshipNameCapitalizedPlural %>() {
         return <%= relationshipFieldNamePlural %>;
@@ -155,7 +155,7 @@ public class <%= entityClass %>DTO implements Serializable {
     public void set<%= relationshipNameCapitalizedPlural %>(Set<<%= otherEntityNameCapitalized %>DTO> <%= otherEntityNamePlural %>) {
         this.<%= relationshipFieldNamePlural %> = <%= otherEntityNamePlural %>;
     }
-    <%_ } else if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true)) { _%>
+    <%_ } else if (relationshipType === 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true)) { _%>
 
     <%_ if (relationshipNameCapitalized.length > 1) { _%>
     public Long get<%= relationshipNameCapitalized %>Id() {
