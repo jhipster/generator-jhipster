@@ -67,15 +67,15 @@ relationships.forEach(relationship => {
     let fieldName;
     const relationshipType = relationship.relationshipType;
     if (relationshipType == 'one-to-many' || relationshipType == 'many-to-many') {
-        fieldType = `${relationships.otherEntityAngularName}[]`;
-        fieldName = relationships.relationshipFieldNamePlural;
+        fieldType = `${relationship.otherEntityAngularName}[]`;
+        fieldName = relationship.relationshipFieldNamePlural;
     } else {
         if (dto === "no") {
-            fieldType = relationships.otherEntityAngularName;
-            fieldName = relationships.relationshipFieldName;
+            fieldType = relationship.otherEntityAngularName;
+            fieldName = relationship.relationshipFieldName;
         } else {
             fieldType = tsKeyType;
-            fieldName = `${relationships.relationshipFieldName}Id`;
+            fieldName = `${relationship.relationshipFieldName}Id`;
         }
     }
     variables[fieldName] = fieldName + '?: ' + fieldType;
