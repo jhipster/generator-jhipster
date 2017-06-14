@@ -1,0 +1,286 @@
+<%#
+ Copyright 2013-2017 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://jhipster.github.io/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+#
+# Application template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the jHipster application
+# service. This template can even be saved in OpenShift namespace as well so that have the flexibility to do any project specific
+# customizations. Pls note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be
+# referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-app-template
+  namespace: <%= openshiftNamespace %>
+  annotations:
+    description: This template defines objects that are required to spin up an <%= app.baseName.toLowerCase() %> service pod
+    tags: <%= app.baseName.toLowerCase() %>, service
+    openshift.io/display-name: <%= app.baseName.toLowerCase() %>-template
+    openshift.io/long-description: This template provides objects that are required to spin up a <%= app.baseName.toLowerCase() %> service pod.
+    openshift.io/provider-display-name: JHipster
+labels:
+  app: <%= app.baseName.toLowerCase() %>-app
+  createdBy: JHipster-Team
+parameters:
+  -
+    name: APPLICATION_NAME
+    value: <%= app.baseName.toLowerCase() %>
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  -
+    name: SECRET_REF
+    value: ds-secret-ref
+    description: Name of the DataSource Secret Reference
+    required: true
+    displayName: "*** PLEASE DO NOT CHANGE THIS ***"
+  -
+    name: REG_SECRET_REF
+    value: reg-secret-ref
+    description: Name of the Registry Secret Reference
+    required: true
+    displayName: "*** PLEASE DO NOT CHANGE THIS ***"
+  -
+    name: APP_PORT
+    value: "<%= app.serverPort %>"
+    description: Port of the application
+    required: true
+    displayName: Application Port
+<%_ if (app.monitoring === 'elk') { _%>
+  -
+    name: JHIPSTER_LOGSTASH
+    value: jhipster-logstash
+    description: Host name of the Logstash service
+    required: true
+    displayName: "*** PLEASE DO NOT CHANGE THIS ***"
+  -
+    name: JHIPSTER_ZIPKIN
+    value: http://jhipster-zipkin
+    description: Host name of the Zipkin service
+    required: true
+    displayName: "*** PLEASE DO NOT CHANGE THIS ***"
+<%_ } _%>
+objects:
+  -
+    apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: ${APPLICATION_NAME}
+    spec:
+      strategy:
+        type: Rolling
+        rollingParams:
+          updatePeriodSeconds: 1
+          intervalSeconds: 1
+          timeoutSeconds: 600
+          maxUnavailable: 25%
+          maxSurge: 25%
+          pre:
+            failurePolicy: ignore
+            execNewPod:
+              command:
+                - "/bin/sh"
+                - "-c"
+                - |
+                    while true
+                    do
+                    <%_ if (app.prodDatabaseType === 'mysql') { _%>
+                      rt=$(nc -z -w 1 ${APPLICATION_NAME}-mysqldb 80)
+                    <%_ } _%>
+                    <%_ if (app.prodDatabaseType === 'mariadb') { _%>
+                      rt=$(nc -z -w 1 ${APPLICATION_NAME}-mariadb 80)
+                    <%_ } _%>
+                    <%_ if (app.prodDatabaseType === 'postgresql') { _%>
+                      rt=$(nc -z -w 1 ${APPLICATION_NAME}-postgresqldb 80)
+                    <%_ } _%>
+                    <%_ if (app.prodDatabaseType === 'mongodb') { _%>
+                      rt=$(nc -z -w 1 ${APPLICATION_NAME}-mongodb 80)
+                    <%_ } _%>
+                    <%_ if (app.prodDatabaseType === 'cassandra') { _%>
+                      rt=$(nc -z -w 1 ${APPLICATION_NAME}-cassandra 9042)
+                    <%_ } _%>
+                      if [ $? -eq 0 ]; then
+                        echo "DB is UP"
+                        break
+                      fi
+                      echo "DB is not yet reachable;sleep for 10s before retry"
+                      sleep 10
+                    done
+              containerName: ${APPLICATION_NAME}
+        resources:
+      replicas: "1"
+      template:
+        metadata:
+          labels:
+            app: ${APPLICATION_NAME}
+        spec:
+          containers:
+          - name: ${APPLICATION_NAME}
+            image: <%= app.targetImageName %>
+            imagePullPolicy: IfNotPresent
+            env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod,swagger
+            <%_ if (app.serviceDiscoveryType === 'eureka') { _%>
+            - name: SPRING_CLOUD_CONFIG_URI
+              value: http://admin:${jhipster.registry.password}@jhipster-registry/config
+            - name: JHIPSTER_REGISTRY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ${REG_SECRET_REF}
+                  key: registry-admin-password
+            <%_ } _%>
+            <%_ if (app.serviceDiscoveryType === 'consul') { _%>
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: ${APPLICATION_NAME}-consul
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: "8500"
+            <%_ } _%>
+            <%_ if (app.prodDatabaseType === 'mysql') { _%>
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://${APPLICATION_NAME}-mysqldb/<%= app.baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: ${SECRET_REF}
+                  key: database-user
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ${SECRET_REF}
+                  key: database-password
+            <%_ } _%>
+            <%_ if (app.prodDatabaseType === 'mariadb') { _%>
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mariadb://${APPLICATION_NAME}-mariadb/<%= app.baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: ${SECRET_REF}
+                  key: database-user
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ${SECRET_REF}
+                  key: database-password
+            <%_ } _%>
+            <%_ if (app.prodDatabaseType === 'postgresql') { _%>
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://${APPLICATION_NAME}-postgresqldb/${APPLICATION_NAME}
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: ${SECRET_REF}
+                  key: database-user
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ${SECRET_REF}
+                  key: database-password
+            <%_ } _%>
+            <%_ if (app.prodDatabaseType === 'mongodb') { _%>
+            - name: SPRING_DATA_MONGODB_URI
+              value: mongodb://${APPLICATION_NAME}-mongodb
+            - name: SPRING_DATA_MONGODB_DATABASE
+              value: ${APPLICATION_NAME}
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: ${SECRET_REF}
+                  key: database-user
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ${SECRET_REF}
+                  key: database-password
+            <%_ } _%>
+            <%_ if (app.prodDatabaseType === 'cassandra') { _%>
+            - name: SPRING_DATA_CASSANDRA_CONTACTPOINTS
+              value: ${APPLICATION_NAME}-cassandra
+            <%_ } _%>
+            <%_ if (app.searchEngine === 'elasticsearch') { _%>
+            - name: SPRING_DATA_ELASTICSEARCH_CLUSTER_NODES
+              value: ${APPLICATION_NAME}-elasticsearch:9300
+            <%_ } _%>
+            <%_ if (app.messageBroker === 'kafka') { _%>
+            - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
+              value: ${APPLICATION_NAME}-kafka
+            - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES
+              value: ${APPLICATION_NAME}-zookeeper
+            <%_ } _%>
+            <%_ if (monitoring === 'elk') { _%>
+            - name: JHIPSTER_METRICS_LOGS_ENABLED
+              value: "true"
+            - name: JHIPSTER_LOGGING_LOGSTASH_ENABLED
+              value: "true"
+            - name: JHIPSTER_LOGGING_LOGSTASH_HOST
+              value: ${JHIPSTER_LOGSTASH}
+              <%_ if (composeApplicationType === 'microservice') { _%>
+            - name: SPRING_ZIPKIN_ENABLED
+              value: "true"
+            - name: SPRING_ZIPKIN_BASE_URL
+              value: ${JHIPSTER_ZIPKIN}
+              <%_ } _%>
+            <%_ } _%>
+            <%_ if (monitoring === 'prometheus') { _%>
+            - name: JHIPSTER_METRICS_LOGS_ENABLED
+              value: "true"
+            - name: JHIPSTER_METRICS_PROMETHEUS_ENABLED
+              value: "true"
+            - name: JHIPSTER_METRICS_PROMETHEUS_ENDPOINT
+              value: "/prometheusMetrics"
+            <%_ } _%>
+            ports:
+            - name: http
+              containerPort: "${APP_PORT}"
+  -
+    apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        service.alpha.openshift.io/dependencies: '[{
+          "name": <%_ if (app.prodDatabaseType === 'mysql') { _%>"${APPLICATION_NAME}-mysqldb"<%_ } _%>
+          <%_ if (app.prodDatabaseType === 'mariadb') { _%>"${APPLICATION_NAME}-mariadb"<%_ } _%>
+          <%_ if (app.prodDatabaseType === 'postgresql') { _%>"${APPLICATION_NAME}-postgresqldb"<%_ } _%>
+          <%_ if (app.prodDatabaseType === 'mongodb') { _%>"${APPLICATION_NAME}-mongodb"<%_ } _%>
+          <%_ if (app.prodDatabaseType === 'cassandra') { _%>"${APPLICATION_NAME}-cassandra" <%_ } _%>, "namespace": "", "kind": "Service"}]'
+      labels:
+        app: ${APPLICATION_NAME}
+      name: ${APPLICATION_NAME}
+    spec:
+      selector:
+        app: ${APPLICATION_NAME}
+      type: LoadBalancer
+      ports:
+      - name: http
+        port: "${APP_PORT}"
+  -
+    apiVersion: v1
+    kind: Route
+    metadata:
+      name: ${APPLICATION_NAME}
+    spec:
+      to:
+        kind: Service
+        name: ${APPLICATION_NAME}
+        weight: "100"
+      port:
+        targetPort: "http"
+      wildcardPolicy: None

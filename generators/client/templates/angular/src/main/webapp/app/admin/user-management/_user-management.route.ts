@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -19,7 +19,7 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes, CanActivate } from '@angular/router';
 
-import { PaginationUtil } from 'ng-jhipster';
+import { JhiPaginationUtil } from 'ng-jhipster';
 
 import { UserMgmtComponent } from './user-management.component';
 import { UserMgmtDetailComponent } from './user-management-detail.component';
@@ -41,7 +41,7 @@ export class UserResolve implements CanActivate {
 @Injectable()
 export class UserResolvePagingParams implements Resolve<any> {
 
-    constructor(private paginationUtil: PaginationUtil) {}
+    constructor(private paginationUtil: JhiPaginationUtil) {}
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const page = route.queryParams['page'] ? route.queryParams['page'] : '1';

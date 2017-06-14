@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -17,21 +17,23 @@
  limitations under the License.
 -%>
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AlertService } from 'ng-jhipster';
+import { JhiAlertService } from 'ng-jhipster';
 
 @Component({
     selector: '<%=jhiPrefix%>-alert',
     template: `
         <div class="alerts" role="alert">
             <div *ngFor="let alert of alerts" [ngClass]="{\'alert.position\': true, \'toast\': alert.toast}">
-                <ngb-alert [type]="alert.type" (close)="alert.close(alerts)"><pre [innerHTML]="alert.msg"></pre></ngb-alert>
+                <ngb-alert *ngIf="alert && alert.type && alert.msg" [type]="alert.type" (close)="alert.close(alerts)">
+                    <pre [innerHTML]="alert.msg"></pre>
+                </ngb-alert>
             </div>
         </div>`
 })
 export class <%=jhiPrefixCapitalized%>AlertComponent implements OnInit, OnDestroy {
     alerts: any[];
 
-    constructor(private alertService: AlertService) { }
+    constructor(private alertService: JhiAlertService) { }
 
     ngOnInit() {
         this.alerts = this.alertService.get();

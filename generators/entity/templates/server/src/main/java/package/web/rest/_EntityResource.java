@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -50,11 +50,13 @@ import org.springframework.web.bind.annotation.*;
 <% if (validation) { %>
 import javax.validation.Valid;<% } %>
 import java.net.URI;
-import java.net.URISyntaxException;<% if (dto == 'mapstruct') { %>
+import java.net.URISyntaxException;
+<%_ const viaService = service != 'no';
+    if (pagination === 'no' && dto === 'mapstruct' && !viaService && fieldsContainNoOwnerOneToOne === true) { _%>
 import java.util.LinkedList;<% } %>
 import java.util.List;
 import java.util.Optional;<% if (databaseType == 'cassandra') { %>
-import java.util.UUID;<% } %><% if (searchEngine == 'elasticsearch' || dto == 'mapstruct' || fieldsContainNoOwnerOneToOne == true) { %>
+import java.util.UUID;<% } %><% if (!viaService && (searchEngine == 'elasticsearch' || fieldsContainNoOwnerOneToOne == true)) { %>
 import java.util.stream.Collectors;<% } %><% if (searchEngine == 'elasticsearch' || fieldsContainNoOwnerOneToOne == true) { %>
 import java.util.stream.StreamSupport;<% } %><% if (searchEngine == 'elasticsearch') { %>
 
@@ -70,10 +72,10 @@ public class <%= entityClass %>Resource {
     private final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
 
     private static final String ENTITY_NAME = "<%= entityInstance %>";
-    <% const viaService = service != 'no';
+    <%_
     const instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
-    const instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance; -%>
-    <%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource'}); -%>
+    const instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
+    _%><%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource'}); -%>
 
     /**
      * POST  /<%= entityApiUrl %> : Create a new <%= entityInstance %>.
@@ -88,7 +90,7 @@ public class <%= entityClass %>Resource {
         log.debug("REST request to save <%= entityClass %> : {}", <%= instanceName %>);
         if (<%= instanceName %>.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new <%= entityInstance %> cannot already have an ID")).body(null);
-        }<%- include('../../common/save_template', {viaService: viaService}); -%>
+        }<%- include('../../common/save_template', {viaService: viaService, returnDirectly: false}); -%>
         return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -100,7 +102,7 @@ public class <%= entityClass %>Resource {
      * @param <%= instanceName %> the <%= instanceName %> to update
      * @return the ResponseEntity with status 200 (OK) and with body the updated <%= instanceName %>,
      * or with status 400 (Bad Request) if the <%= instanceName %> is not valid,
-     * or with status 500 (Internal Server Error) if the <%= instanceName %> couldnt be updated
+     * or with status 500 (Internal Server Error) if the <%= instanceName %> couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/<%= entityApiUrl %>")
@@ -109,7 +111,7 @@ public class <%= entityClass %>Resource {
         log.debug("REST request to update <%= entityClass %> : {}", <%= instanceName %>);
         if (<%= instanceName %>.getId() == null) {
             return create<%= entityClass %>(<%= instanceName %>);
-        }<%- include('../../common/save_template', {viaService: viaService}); -%>
+        }<%- include('../../common/save_template', {viaService: viaService, returnDirectly: false}); -%>
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, <%= instanceName %>.getId().toString()))
             .body(result);
@@ -134,7 +136,7 @@ public class <%= entityClass %>Resource {
     @GetMapping("/<%= entityApiUrl %>/{id}")
     @Timed
     public ResponseEntity<<%= instanceType %>> get<%= entityClass %>(@PathVariable <%= pkType %> id) {
-        log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {viaService: viaService}); -%>
+        log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {viaService: viaService, returnDirectly:false}); -%>
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(<%= instanceName %>));
     }
 
@@ -155,11 +157,10 @@ public class <%= entityClass %>Resource {
      * SEARCH  /_search/<%= entityApiUrl %>?query=:query : search for the <%= entityInstance %> corresponding
      * to the query.
      *
-     * @param query the query of the <%= entityInstance %> search <% if (pagination != 'no') { %>
+     * @param query the query of the <%= entityInstance %> search<% if (pagination != 'no') { %>
      * @param pageable the pagination information<% } %>
      * @return the result of the search
      */
     @GetMapping("/_search/<%= entityApiUrl %>")
     @Timed<%- include('../../common/search_template', {viaService: viaService}); -%><% } %>
-
 }

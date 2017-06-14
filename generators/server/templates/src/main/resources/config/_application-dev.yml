@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -36,6 +36,9 @@ eureka:
     instance:
         prefer-ip-address: true
     client:
+        <%_ if (applicationType === 'monolith') { _%>
+        enabled: false # By default, the JHipster Registry is not used in the "dev" profile
+        <%_ } _%>
         service-url:
             defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
 <%_ } _%>
@@ -95,7 +98,7 @@ spring:
         username: SA
         password: yourStrong(!)Password
         <%_ } else if (devDatabaseType == 'h2Disk') { _%>
-        url: jdbc:h2:file:./target/h2db/db/<%= lowercaseBaseName %>;DB_CLOSE_DELAY=-1
+        url: jdbc:h2:file:./<%= BUILD_DIR %>h2db/db/<%= lowercaseBaseName %>;DB_CLOSE_DELAY=-1
         username: <%= baseName %>
         password:
         <%_ } else if (devDatabaseType == 'h2Memory') { _%>
@@ -177,8 +180,8 @@ spring:
             cluster-nodes:
             properties:
                 path:
-                  logs: target/elasticsearch/log
-                  data: target/elasticsearch/data
+                    logs: <%= BUILD_DIR %>elasticsearch/log
+                    data: <%= BUILD_DIR %>elasticsearch/data
     <%_ } _%>
     mail:
         host: localhost

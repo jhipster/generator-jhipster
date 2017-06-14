@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -20,8 +20,9 @@
     const instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
     const mapper = entityInstance  + 'Mapper';
     const entityToDto = mapper + '.' + 'toDto';
+    const returnPrefix = returnDirectly ? 'return' : instanceType + ' ' + instanceName + ' =';
     if (!viaService) {
 %>
-        <%= entityClass %> <%= entityInstance %> = <% if (databaseType == 'sql' || databaseType == 'mongodb') { %><%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findOneWithEagerRelationships<% } else { %>findOne<% } %>(id)<% } %><% if (databaseType == 'cassandra') { %><%= entityInstance %>Repository.findOne(UUID.fromString(id))<% } %>;<% if (dto == 'mapstruct') { %>
-        <%= instanceType %> <%= instanceName %> = <%= entityToDto %>(<%= entityInstance %>);<% } } else { %>
-        <%= instanceType %> <%= instanceName %> = <%= entityInstance %>Service.findOne(id);<% } %>
+        <% if (dto == 'mapstruct') { %><%= entityClass %> <%= entityInstance %> = <% } else { %><%= returnPrefix %> <% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %><%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findOneWithEagerRelationships<% } else { %>findOne<% } %>(id)<% } %><% if (databaseType == 'cassandra') { %><%= entityInstance %>Repository.findOne(UUID.fromString(id))<% } %>;<% if (dto == 'mapstruct') { %>
+        <%= returnPrefix %> <%= entityToDto %>(<%= entityInstance %>);<% } } else { %>
+        <%= returnPrefix %> <%= entityInstance %>Service.findOne(id);<% } %>

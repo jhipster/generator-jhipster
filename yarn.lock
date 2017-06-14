@@ -586,6 +586,10 @@ detect-newline@^1.0.3:
     get-stdin "^4.0.1"
     minimist "^1.1.0"
 
+didyoumean@1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/didyoumean/-/didyoumean-1.2.1.tgz#e92edfdada6537d484d73c0172fd1eba0c4976ff"
+
 diff@1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/diff/-/diff-1.4.0.tgz#7f28d2eb9ee7b15a97efd89ce63dcfdaa3ccbabf"
@@ -618,6 +622,10 @@ dom-serializer@0, dom-serializer@~0.1.0:
   dependencies:
     domelementtype "~1.1.1"
     entities "~1.1.1"
+
+dom-walk@^0.1.0:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/dom-walk/-/dom-walk-0.1.1.tgz#672226dc74c8f799ad35307df936aba11acd6018"
 
 domelementtype@1, domelementtype@^1.3.0:
   version "1.3.0"
@@ -1142,6 +1150,13 @@ glob@^6.0.1:
     once "^1.3.0"
     path-is-absolute "^1.0.0"
 
+global@^4.3.2:
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/global/-/global-4.3.2.tgz#e76989268a6c74c38908b1305b10fc0e394e9d0f"
+  dependencies:
+    min-document "^2.19.0"
+    process "~0.5.1"
+
 globals@^9.14.0:
   version "9.16.0"
   resolved "https://registry.yarnpkg.com/globals/-/globals-9.16.0.tgz#63e903658171ec2d9f51b1d31de5e2b8dc01fb80"
@@ -1604,9 +1619,9 @@ istextorbinary@^2.1.0:
     editions "^1.1.1"
     textextensions "1 || 2"
 
-jhipster-core@1.3.1:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/jhipster-core/-/jhipster-core-1.3.1.tgz#0c6e267f95b52e343455824a5f6bfd24d8b0d61a"
+jhipster-core@1.3.2:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/jhipster-core/-/jhipster-core-1.3.2.tgz#5b2675c7682be098b1238760474a32657905bdae"
   dependencies:
     lodash "4.17.4"
 
@@ -1763,6 +1778,10 @@ lodash.defaults@^4.0.1:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/lodash.defaults/-/lodash.defaults-4.2.0.tgz#d09178716ffea4dde9e5fb7b37f6f0802274580c"
 
+lodash.difference@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.difference/-/lodash.difference-4.5.0.tgz#9ccb4e505d486b91651345772885a2df27fd017c"
+
 lodash.filter@^4.4.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.filter/-/lodash.filter-4.6.0.tgz#668b1d4981603ae1cc5a6fa760143e480b4c4ace"
@@ -1826,6 +1845,10 @@ lodash.reject@^4.4.0:
 lodash.some@^4.4.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.some/-/lodash.some-4.6.0.tgz#1bb9f314ef6b8baded13b549169b2a945eb68e4d"
+
+lodash.uniq@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
 
 lodash@4.17.4, lodash@^4.0.0, lodash@^4.11.1, lodash@^4.14.0, lodash@^4.17.2, lodash@^4.3.0, lodash@^4.6.1:
   version "4.17.4"
@@ -1929,6 +1952,12 @@ mime-types@^2.1.12, mime-types@~2.1.7:
   resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.14.tgz#f7ef7d97583fcaf3b7d282b6f8b5679dab1e94ee"
   dependencies:
     mime-db "~1.26.0"
+
+min-document@^2.19.0:
+  version "2.19.0"
+  resolved "https://registry.yarnpkg.com/min-document/-/min-document-2.19.0.tgz#7bd282e3f5842ed295bb748cdd9f1ffa2c824685"
+  dependencies:
+    dom-walk "^0.1.0"
 
 "minimatch@2 || 3", minimatch@3.0.x, minimatch@^3.0.0, minimatch@^3.0.2, minimatch@^3.0.3:
   version "3.0.3"
@@ -2266,6 +2295,10 @@ pretty-bytes@^4.0.2:
 process-nextick-args@^1.0.6, process-nextick-args@~1.0.6:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-1.0.7.tgz#150e20b756590ad3f91093f25a4f2ad8bff30ba3"
+
+process@~0.5.1:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/process/-/process-0.5.2.tgz#1638d8a8e34c2f440a91db95ab9aeb677fc185cf"
 
 progress@^1.1.8:
   version "1.1.8"
@@ -2739,6 +2772,19 @@ table@^3.7.8:
     slice-ansi "0.0.4"
     string-width "^2.0.0"
 
+tabtab@2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/tabtab/-/tabtab-2.2.2.tgz#7a047f143b010b4cbd31f857e82961512cbf4e14"
+  dependencies:
+    debug "^2.2.0"
+    inquirer "^1.0.2"
+    lodash.difference "^4.5.0"
+    lodash.uniq "^4.5.0"
+    minimist "^1.2.0"
+    mkdirp "^0.5.1"
+    npmlog "^2.0.3"
+    object-assign "^4.1.0"
+
 tabtab@^1.3.0:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/tabtab/-/tabtab-1.3.2.tgz#bb9c2ca6324f659fde7634c2caf3c096e1187ca7"
@@ -3043,7 +3089,7 @@ yeoman-doctor@^2.0.0:
     twig "^0.8.2"
     user-home "^2.0.0"
 
-yeoman-environment@^1.1.0, yeoman-environment@^1.5.2, yeoman-environment@^1.6.1:
+yeoman-environment@1.6.6, yeoman-environment@^1.1.0, yeoman-environment@^1.5.2, yeoman-environment@^1.6.1:
   version "1.6.6"
   resolved "https://registry.yarnpkg.com/yeoman-environment/-/yeoman-environment-1.6.6.tgz#cd85fa67d156060e440d7807d7ef7cf0d2d1d671"
   dependencies:

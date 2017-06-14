@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -124,9 +124,9 @@ public class InitialSetupMigration {
         SimpleGrantedAuthority userAuthority = new SimpleGrantedAuthority(AuthoritiesConstants.USER);
 
         OAuth2AuthenticationClientDetails appDetails = new OAuth2AuthenticationClientDetails();
-        appDetails.setClientId("oauthapp");
+        appDetails.setClientId("<%= baseName %>app");
         appDetails.setClientSecret("my-secret-token-to-change-in-production");
-        appDetails.setResourceIds(Collections.singletonList("res_oauth"));
+        appDetails.setResourceIds(Collections.singletonList("res_<%= baseName %>"));
         appDetails.setScope(Arrays.asList("read", "write"));
         appDetails.setAuthorizedGrantTypes(Arrays.asList("password", "refresh_token", "authorization_code", "implicit"));
         appDetails.setAuthorities(Arrays.asList(adminAuthority, userAuthority));
@@ -137,7 +137,7 @@ public class InitialSetupMigration {
         OAuth2AuthenticationClientDetails swaggerUIDetails = new OAuth2AuthenticationClientDetails();
         swaggerUIDetails.setClientId("your-client-id");
         swaggerUIDetails.setClientSecret("your-client-secret-if-required");
-        swaggerUIDetails.setResourceIds(Collections.singletonList("res_oauth"));
+        swaggerUIDetails.setResourceIds(Collections.singletonList("res_<%= baseName %>"));
         swaggerUIDetails.setScope(Collections.singletonList("access"));
         swaggerUIDetails.setAuthorizedGrantTypes(Arrays.asList("refresh_token", "authorization_code", "implicit"));
         swaggerUIDetails.setAuthorities(Arrays.asList(adminAuthority, userAuthority));

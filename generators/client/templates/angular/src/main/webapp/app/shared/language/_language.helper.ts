@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -19,7 +19,7 @@
 import { Injectable } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router, ActivatedRouteSnapshot } from '@angular/router';
-import { TranslateService, TranslationChangeEvent, LangChangeEvent } from 'ng2-translate/ng2-translate';
+import { TranslateService, TranslationChangeEvent, LangChangeEvent } from '@ngx-translate/core';
 
 import { LANGUAGES } from './language.constants';
 

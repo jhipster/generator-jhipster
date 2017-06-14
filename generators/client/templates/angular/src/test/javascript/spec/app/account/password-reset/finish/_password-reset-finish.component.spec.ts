@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -22,7 +22,7 @@ import { ActivatedRoute } from '@angular/router';
 import { LoginModalService } from '../../../../../../../main/webapp/app/shared';
 import { <%=angular2AppName%>TestModule } from '../../../../test.module';
 import { PasswordResetFinishComponent } from '../../../../../../../main/webapp/app/account/password-reset/finish/password-reset-finish.component';
-import { PasswordResetFinish } from '../../../../../../../main/webapp/app/account/password-reset/finish/password-reset-finish.service';
+import { PasswordResetFinishService } from '../../../../../../../main/webapp/app/account/password-reset/finish/password-reset-finish.service';
 import { MockActivatedRoute } from '../../../../helpers/mock-route.service';
 
 
@@ -38,7 +38,7 @@ describe('Component Tests', () => {
                 imports: [<%=angular2AppName%>TestModule],
                 declarations: [PasswordResetFinishComponent],
                 providers: [
-                    PasswordResetFinish,
+                    PasswordResetFinishService,
                     {
                         provide: LoginModalService,
                         useValue: null
@@ -58,11 +58,8 @@ describe('Component Tests', () => {
                         useValue: new ElementRef(null)
                     }
                 ]
-            }).overrideComponent(PasswordResetFinishComponent, {
-                set: {
-                    template: ''
-                }
-            }).createComponent(PasswordResetFinishComponent);
+            }).overrideTemplate(PasswordResetFinishComponent, '')
+            .createComponent(PasswordResetFinishComponent);
             comp = fixture.componentInstance;
         });
 

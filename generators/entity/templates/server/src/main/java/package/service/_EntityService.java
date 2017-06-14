@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -28,7 +28,9 @@ import <%=packageName%>.domain.<%= entityClass %>;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
+<%_ if (pagination === 'no' || fieldsContainNoOwnerOneToOne === true) { _%>
 import java.util.List;
+<%_ } _%>
 
 /**
  * Service Interface for managing <%= entityClass %>.
@@ -45,7 +47,7 @@ public interface <%= entityClass %>Service {
 
     /**
      *  Get all the <%= entityInstancePlural %>.
-     *  <% if (pagination != 'no') { %>
+     *<% if (pagination != 'no') { %>
      *  @param pageable the pagination information<% } %>
      *  @return the list of entities
      */

@@ -1,11 +1,11 @@
 Description:
-    Creates a new JHipster entity: JPA entity, Spring MVC REST controller, AngularJS controller, service and view, all wired up together
+    Creates a new JHipster entity: JPA entity, Spring server side components and Angular client side components
 
 Example:
-    yo jhipster:entity Foo
+    jhipster entity Foo
 
     This will create:
-        .jhipster.Foo.json
+        .jhipster/Foo.json
         src/main/java/package/domain/Foo.java
         src/main/java/package/repository/FooRepository.java
         src/main/java/package/web/rest/FooResource.java

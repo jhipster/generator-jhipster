@@ -4,7 +4,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - "6.10.2"
+  - "6.10.3"
 jdk:
   - oraclejdk8
 addons:
@@ -71,7 +71,9 @@ install:
   - cd "$TRAVIS_BUILD_DIR"/
   - yarn install
   - yarn link
-  - yarn run test
+  - if [ "$JHIPSTER" == "app-default-from-scratch" ]; then
+        yarn run test;
+    fi
   - $JHIPSTER_SCRIPTS/01-generate-entities.sh
   - $JHIPSTER_SCRIPTS/02-generate-project.sh
 script:

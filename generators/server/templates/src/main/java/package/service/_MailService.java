@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -87,44 +87,42 @@ public class MailService {
             javaMailSender.send(mimeMessage);
             log.debug("Sent email to User '{}'", to);
         } catch (Exception e) {
-            log.warn("Email could not be sent to user '{}'", to, e);
+            if (log.isDebugEnabled()) {
+                log.warn("Email could not be sent to user '{}'", to, e);
+            } else {
+                log.warn("Email could not be sent to user '{}': {}", to, e.getMessage());
+            }
         }
+    }
+
+    @Async
+    public void sendEmailFromTemplate(User user, String templateName, String titleKey) {
+        Locale locale = Locale.forLanguageTag(user.getLangKey());
+        Context context = new Context(locale);
+        context.setVariable(USER, user);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        String content = templateEngine.process(templateName, context);
+        String subject = messageSource.getMessage(titleKey, null, locale);
+        sendEmail(user.getEmail(), subject, content, false, true);
+
     }
 
     @Async
     public void sendActivationEmail(User user) {
         log.debug("Sending activation email to '{}'", user.getEmail());
-        Locale locale = Locale.forLanguageTag(user.getLangKey());
-        Context context = new Context(locale);
-        context.setVariable(USER, user);
-        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
-        String content = templateEngine.process("activationEmail", context);
-        String subject = messageSource.getMessage("email.activation.title", null, locale);
-        sendEmail(user.getEmail(), subject, content, false, true);
+        sendEmailFromTemplate(user, "activationEmail", "email.activation.title");
     }
 
     @Async
     public void sendCreationEmail(User user) {
         log.debug("Sending creation email to '{}'", user.getEmail());
-        Locale locale = Locale.forLanguageTag(user.getLangKey());
-        Context context = new Context(locale);
-        context.setVariable(USER, user);
-        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
-        String content = templateEngine.process("creationEmail", context);
-        String subject = messageSource.getMessage("email.activation.title", null, locale);
-        sendEmail(user.getEmail(), subject, content, false, true);
+        sendEmailFromTemplate(user, "creationEmail", "email.activation.title");
     }
 
     @Async
     public void sendPasswordResetMail(User user) {
         log.debug("Sending password reset email to '{}'", user.getEmail());
-        Locale locale = Locale.forLanguageTag(user.getLangKey());
-        Context context = new Context(locale);
-        context.setVariable(USER, user);
-        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
-        String content = templateEngine.process("passwordResetEmail", context);
-        String subject = messageSource.getMessage("email.reset.title", null, locale);
-        sendEmail(user.getEmail(), subject, content, false, true);
+        sendEmailFromTemplate(user, "passwordResetEmail", "email.reset.title");
     }
     <%_ if (enableSocialSignIn) { _%>
 

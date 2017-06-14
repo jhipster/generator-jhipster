@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -18,7 +18,7 @@
 -%>
 import { Injector } from '@angular/core';
 import { Http, XHRBackend, RequestOptions } from '@angular/http';
-import { EventManager, InterceptableHttp } from 'ng-jhipster';
+import { JhiEventManager, JhiInterceptableHttp } from 'ng-jhipster';
 
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { AuthInterceptor } from './auth.interceptor';
@@ -43,9 +43,9 @@ export function interceptableFactory(
     injector: Injector,
     stateStorageService: StateStorageService,
     <%_ } _%>
-    eventManager: EventManager
+    eventManager: JhiEventManager
 ) {
-    return new InterceptableHttp(
+    return new JhiInterceptableHttp(
         backend,
         defaultOptions,
         [
@@ -77,7 +77,7 @@ export function customHttpProvider() {
             Injector,
             StateStorageService,
             <%_ } _%>
-            EventManager
+            JhiEventManager
         ]
     };
 };

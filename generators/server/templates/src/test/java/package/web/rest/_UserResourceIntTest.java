@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -16,24 +16,30 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.web.rest;
+package <%= packageName %>.web.rest;
 
 <%_ if (databaseType === 'cassandra') { _%>
-import <%=packageName%>.AbstractCassandraTest;
+import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
-import <%=packageName%>.<%= mainClass %>;
-import <%=packageName%>.domain.User;
-import <%=packageName%>.repository.UserRepository;
+import <%= packageName %>.<%= mainClass %>;
+<%_ if (databaseType !== 'cassandra') { _%>
+import <%= packageName %>.domain.Authority;
+<%_ } _%>
+import <%= packageName %>.domain.User;
+import <%= packageName %>.repository.UserRepository;
 <%_ if (searchEngine === 'elasticsearch') { _%>
-import <%=packageName%>.repository.search.UserSearchRepository;
+import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
-import <%=packageName%>.service.MailService;
-import <%=packageName%>.service.UserService;
+import <%= packageName %>.security.AuthoritiesConstants;
+import <%= packageName %>.service.MailService;
+import <%= packageName %>.service.UserService;
+import <%= packageName %>.service.dto.UserDTO;
+import <%= packageName %>.service.mapper.UserMapper;
 <%_ if (databaseType === 'cassandra') { _%>
-import <%=packageName%>.service.util.RandomUtil;
+import <%= packageName %>.service.util.RandomUtil;
 <%_ } _%>
-import <%=packageName%>.web.rest.errors.ExceptionTranslator;
-import <%=packageName%>.web.rest.vm.ManagedUserVM;
+import <%= packageName %>.web.rest.errors.ExceptionTranslator;
+import <%= packageName %>.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,10 +60,16 @@ import org.springframework.transaction.annotation.Transactional;
 <%_ if (databaseType === 'sql') { _%>
 import javax.persistence.EntityManager;
 <%_ } _%>
+<%_ if (databaseType !== 'cassandra') { _%>
+import java.time.Instant;
+<%_ } _%>
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-<%_ if (databaseType === 'cassandra') { _%>
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+<%_ if (databaseType !== 'sql') { _%>
 import java.util.UUID;
 <%_ } _%>
 
@@ -78,6 +90,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)
 public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+
+    <%_ if (databaseType == 'sql') { _%>
+    private static final Long DEFAULT_ID = 1L;
+    <%_ } else { _%>
+    private static final String DEFAULT_ID = "id1";
+    <%_ } _%>
 
     private static final String DEFAULT_LOGIN = "johndoe";
     private static final String UPDATED_LOGIN = "jhipster";
@@ -115,6 +133,9 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -684,12 +705,12 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
     <%_ } _%>
     public void getAllAuthorities() throws Exception {
         restUserMockMvc.perform(get("/api/users/authorities")
-                .accept(TestUtil.APPLICATION_JSON_UTF8)
-                .contentType(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$").value(containsInAnyOrder("ROLE_USER", "ROLE_ADMIN")));
+            .accept(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").value(containsInAnyOrder("ROLE_USER", "ROLE_ADMIN")));
     }
     <%_ } _%>
 
@@ -697,11 +718,132 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
     <%_ if (databaseType === 'sql') { _%>
     @Transactional
     <%_ } _%>
-    public void equalsVerifier() throws Exception {
+    public void testUserEquals() {
         User userA = new User();
+        assertThat(userA).isEqualTo(userA);
+        assertThat(userA).isNotEqualTo(null);
+        assertThat(userA).isNotEqualTo(new Object());
+        assertThat(userA.toString()).isNotNull();
+
         userA.setLogin("AAA");
         User userB = new User();
         userB.setLogin("BBB");
         assertThat(userA).isNotEqualTo(userB);
+
+        userB.setLogin("AAA");
+        assertThat(userA).isEqualTo(userB);
+        assertThat(userA.hashCode()).isEqualTo(userB.hashCode());
     }
+
+    @Test
+    public void testUserFromId() {
+        assertThat(userMapper.userFromId(DEFAULT_ID).getId()).isEqualTo(DEFAULT_ID);
+        assertThat(userMapper.userFromId(null)).isNull();
+    }
+
+    @Test
+    public void testUserDTOtoUser() {
+        UserDTO userDTO = new UserDTO(
+            DEFAULT_ID,
+            DEFAULT_LOGIN,
+            DEFAULT_FIRSTNAME,
+            DEFAULT_LASTNAME,
+            DEFAULT_EMAIL,
+            true,
+            <%_ if (databaseType !== 'cassandra') { _%>
+            DEFAULT_IMAGEURL,
+            <%_ } _%>
+            DEFAULT_LANGKEY,
+            <%_ if (databaseType !== 'cassandra') { _%>
+            DEFAULT_LOGIN,
+            null,
+            DEFAULT_LOGIN,
+            null,
+            <%_ } _%>
+            Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
+        User user = userMapper.userDTOToUser(userDTO);
+        assertThat(user.getId()).isEqualTo(DEFAULT_ID);
+        assertThat(user.getLogin()).isEqualTo(DEFAULT_LOGIN);
+        assertThat(user.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
+        assertThat(user.getLastName()).isEqualTo(DEFAULT_LASTNAME);
+        assertThat(user.getEmail()).isEqualTo(DEFAULT_EMAIL);
+        assertThat(user.getActivated()).isEqualTo(true);
+        <%_ if (databaseType !== 'cassandra') { _%>
+        assertThat(user.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
+        <%_ } _%>
+        assertThat(user.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
+        <%_ if (databaseType !== 'cassandra') { _%>
+        assertThat(user.getCreatedBy()).isNull();
+        assertThat(user.getCreatedDate()).isNotNull();
+        assertThat(user.getLastModifiedBy()).isNull();
+        assertThat(user.getLastModifiedDate()).isNotNull();
+        <%_ } _%>
+        assertThat(user.getAuthorities())<% if (databaseType !== 'cassandra') { %>.extracting("name")<%_ } _%>.containsExactly(AuthoritiesConstants.USER);
+    }
+
+    @Test
+    public void testUserToUserDTO() {
+        user.setId(DEFAULT_ID);
+        <%_ if (databaseType !== 'cassandra') { _%>
+        user.setCreatedBy(DEFAULT_LOGIN);
+        user.setCreatedDate(Instant.now());
+        user.setLastModifiedBy(DEFAULT_LOGIN);
+        user.setLastModifiedDate(Instant.now());
+
+        Set<Authority> authorities = new HashSet<>();
+        Authority authority = new Authority();
+        authority.setName(AuthoritiesConstants.USER);
+        authorities.add(authority);
+        user.setAuthorities(authorities);
+        <%_ } else { _%>
+        user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
+        <%_ } _%>
+
+        UserDTO userDTO = userMapper.userToUserDTO(user);
+
+        assertThat(userDTO.getId()).isEqualTo(DEFAULT_ID);
+        assertThat(userDTO.getLogin()).isEqualTo(DEFAULT_LOGIN);
+        assertThat(userDTO.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
+        assertThat(userDTO.getLastName()).isEqualTo(DEFAULT_LASTNAME);
+        assertThat(userDTO.getEmail()).isEqualTo(DEFAULT_EMAIL);
+        assertThat(userDTO.isActivated()).isEqualTo(true);
+        <%_ if (databaseType !== 'cassandra') { _%>
+        assertThat(userDTO.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
+        <%_ } _%>
+        assertThat(userDTO.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
+        <%_ if (databaseType !== 'cassandra') { _%>
+        assertThat(userDTO.getCreatedBy()).isEqualTo(DEFAULT_LOGIN);
+        assertThat(userDTO.getCreatedDate()).isEqualTo(user.getCreatedDate());
+        assertThat(userDTO.getLastModifiedBy()).isEqualTo(DEFAULT_LOGIN);
+        assertThat(userDTO.getLastModifiedDate()).isEqualTo(user.getLastModifiedDate());
+        <%_ } _%>
+        assertThat(userDTO.getAuthorities()).containsExactly(AuthoritiesConstants.USER);
+        assertThat(userDTO.toString()).isNotNull();
+    }
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+
+    @Test
+    public void testAuthorityEquals() throws Exception {
+        Authority authorityA = new Authority();
+        assertThat(authorityA).isEqualTo(authorityA);
+        assertThat(authorityA).isNotEqualTo(null);
+        assertThat(authorityA).isNotEqualTo(new Object());
+        assertThat(authorityA.hashCode()).isEqualTo(0);
+        assertThat(authorityA.toString()).isNotNull();
+
+        Authority authorityB = new Authority();
+        assertThat(authorityA).isEqualTo(authorityB);
+
+        authorityB.setName(AuthoritiesConstants.ADMIN);
+        assertThat(authorityA).isNotEqualTo(authorityB);
+
+        authorityA.setName(AuthoritiesConstants.USER);
+        assertThat(authorityA).isNotEqualTo(authorityB);
+
+        authorityB.setName(AuthoritiesConstants.USER);
+        assertThat(authorityA).isEqualTo(authorityB);
+        assertThat(authorityA.hashCode()).isEqualTo(authorityB.hashCode());
+    }
+    <%_ } _%>
+
 }

@@ -1,6 +1,6 @@
 - Please follow the issue template below for bug reports and feature requests.
 - If you have a support request rather than a bug please use [stackoverflow](http://stackoverflow.com/questions/tagged/jhipster) with the JHipster tag.
-- For bug reports its mandatory to paste the result of command `yo jhipster:info` run in your project root folder.
+- For bug reports its mandatory to paste the result of command `jhipster info` run in your project root folder.
 - Tickets opened without any of these pieces of information will be **closed** without any explanation.
 
 ##### **Overview of the issue**
@@ -33,7 +33,7 @@ Which version of JHipster are you using, is it a regression?
 ##### **JHipster configuration**
 
 <!--
-To provide all information we need, you should run `yo jhipster:info` in the project root folder, and
+To provide all information we need, you should run `jhipster info` in the project root folder, and
 copy/paste the result here.
 The `.yo-rc.json` file generated in the root folder is mandatory for bug reports. This will help us to replicate the scenario.
 You should remove any sensitive information like the rememberMe key or the jwtSecretKey key.

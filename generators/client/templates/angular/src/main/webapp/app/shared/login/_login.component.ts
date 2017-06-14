@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -16,10 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit, AfterViewInit, Renderer, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, Renderer, ElementRef } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
-import { <% if (enableTranslation) { %>JhiLanguageService, <% } %>EventManager } from 'ng-jhipster';
+import { JhiEventManager } from 'ng-jhipster';
 
 import { LoginService } from './login.service';
 import { StateStorageService } from '../auth/state-storage.service';
@@ -31,7 +31,7 @@ import { SocialService } from '../social/social.service';
     selector: '<%=jhiPrefix%>-login-modal',
     templateUrl: './login.component.html'
 })
-export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit, AfterViewInit {
+export class <%=jhiPrefixCapitalized%>LoginModalComponent implements AfterViewInit {
     authenticationError: boolean;
     password: string;
     rememberMe: boolean;
@@ -39,10 +39,7 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit, Aft
     credentials: any;
 
     constructor(
-        private eventManager: EventManager,
-        <%_ if (enableTranslation) { _%>
-        private languageService: JhiLanguageService,
-        <%_ } _%>
+        private eventManager: JhiEventManager,
         private loginService: LoginService,
         private stateStorageService: StateStorageService,
         private elementRef: ElementRef,
@@ -54,12 +51,6 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit, Aft
         public activeModal: NgbActiveModal
     ) {
         this.credentials = {};
-    }
-
-    ngOnInit() {
-        <%_ if (enableTranslation) { _%>
-        this.languageService.addLocation('login');
-        <%_ } _%>
     }
 
     ngAfterViewInit() {

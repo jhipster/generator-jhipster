@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -23,39 +23,68 @@ import <%=packageName%>.domain.Authority;
 <%_ } _%>
 import <%=packageName%>.domain.User;
 import <%=packageName%>.service.dto.UserDTO;
-import org.mapstruct.*;
 
-import java.util.List;
-import java.util.Set;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Mapper for the entity User and its DTO UserDTO.
+ * Mapper for the entity User and its DTO called UserDTO.
+ *
+ * Normal mappers are generated using MapStruct, this one is hand-coded as MapStruct
+ * support is still in beta, and requires a manual step with an IDE.
  */
-@Mapper(componentModel = "spring", uses = {})
-public interface UserMapper {
+@Service
+public class UserMapper {
 
-    UserDTO userToUserDTO(User user);
+    public UserDTO userToUserDTO(User user) {
+        return new UserDTO(user);
+    }
 
-    List<UserDTO> usersToUserDTOs(List<User> users);
+    public List<UserDTO> usersToUserDTOs(List<User> users) {
+        return users.stream()
+            .filter(Objects::nonNull)
+            .map(this::userToUserDTO)
+            .collect(Collectors.toList());
+    }
 
-    <%_ if (databaseType != 'cassandra') { _%>
-    @Mapping(target = "createdBy", ignore = true)
-    @Mapping(target = "createdDate", ignore = true)
-    @Mapping(target = "lastModifiedBy", ignore = true)
-    @Mapping(target = "lastModifiedDate", ignore = true)
-    <%_ if ((authenticationType == 'session') && (databaseType == 'sql')) { _%>
-    @Mapping(target = "persistentTokens", ignore = true)
-    <%_ } } _%>
-    @Mapping(target = "activationKey", ignore = true)
-    @Mapping(target = "resetKey", ignore = true)
-    @Mapping(target = "resetDate", ignore = true)
-    @Mapping(target = "password", ignore = true)
-    User userDTOToUser(UserDTO userDTO);
+    public User userDTOToUser(UserDTO userDTO) {
+        if (userDTO == null) {
+            return null;
+        } else {
+            User user = new User();
+            user.setId(userDTO.getId());
+            user.setLogin(userDTO.getLogin());
+            user.setFirstName(userDTO.getFirstName());
+            user.setLastName(userDTO.getLastName());
+            user.setEmail(userDTO.getEmail());
+            <%_ if (databaseType !== 'cassandra') { _%>
+            user.setImageUrl(userDTO.getImageUrl());
+            <%_ } _%>
+            user.setActivated(userDTO.isActivated());
+            user.setLangKey(userDTO.getLangKey());
+            <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+            Set<Authority> authorities = this.authoritiesFromStrings(userDTO.getAuthorities());
+            if(authorities != null) {
+                user.setAuthorities(authorities);
+            }
+            <%_ } _%>
+            <%_ if (databaseType === 'cassandra') { _%>
+            user.setAuthorities(userDTO.getAuthorities());
+            <%_ } _%>
+            return user;
+        }
+    }
 
-    List<User> userDTOsToUsers(List<UserDTO> userDTOs);
+    public List<User> userDTOsToUsers(List<UserDTO> userDTOs) {
+        return userDTOs.stream()
+            .filter(Objects::nonNull)
+            .map(this::userDTOToUser)
+            .collect(Collectors.toList());
+    }
 
-    default User userFromId(<% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> id) {
+    public User userFromId(<% if (databaseType === 'mongodb' || databaseType === 'cassandra') { %>String<% } else { %>Long<% } %> id) {
         if (id == null) {
             return null;
         }
@@ -63,14 +92,9 @@ public interface UserMapper {
         user.setId(id);
         return user;
     }
-    <%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
+    <%_ if (databaseType === 'sql' || databaseType == 'mongodb') { _%>
 
-    default Set<String> stringsFromAuthorities (Set<Authority> authorities) {
-        return authorities.stream().map(Authority::getName)
-            .collect(Collectors.toSet());
-    }
-
-    default Set<Authority> authoritiesFromStrings(Set<String> strings) {
+    public Set<Authority> authoritiesFromStrings(Set<String> strings) {
         return strings.stream().map(string -> {
             Authority auth = new Authority();
             auth.setName(string);

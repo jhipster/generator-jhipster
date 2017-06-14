@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -29,7 +29,7 @@ const enum <%= fields[idx].fieldType %> {<%
 <%_ } } _%>
 <%_ if (dto == "no") {
        for (const rel of differentRelationships) { _%>
-import { <%= rel.otherEntityNameCapitalized %> } from '../<%= rel.otherEntityModulePath %>';
+import { <%= rel.otherEntityAngularName %> } from '../<%= rel.otherEntityModulePath %>';
 <%_ }
 }
 const variables = {};
@@ -56,6 +56,9 @@ for (const idx in fields) {
         tsType = 'string';
     } else { //(fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'image' || fieldType == 'LocalDate'
         tsType = 'any';
+        if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent == 'image') {
+            variables[fieldName + 'ContentType'] = fieldName + 'ContentType?: ' + 'string';
+        }
     }
     variables[fieldName] = fieldName + '?: ' + tsType;
 }
@@ -63,7 +66,7 @@ for (idx in relationships) {
     let fieldType;
     let fieldName;
     if (dto == "no") {
-        fieldType = relationships[idx].otherEntityNameCapitalized;
+        fieldType = relationships[idx].otherEntityAngularName;
         fieldName = relationships[idx].relationshipFieldName;
     } else {
         fieldType = tsKeyType;

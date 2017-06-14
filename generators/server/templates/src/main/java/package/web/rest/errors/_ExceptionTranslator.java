@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -89,7 +89,11 @@ public class ExceptionTranslator {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorVM> processException(Exception ex) {
-        log.error(ex.getMessage(), ex);
+        if (log.isDebugEnabled()) {
+            log.debug("An unexpected error occured: {}", ex.getMessage(), ex);
+        } else {
+            log.error("An unexpected error occured: {}", ex.getMessage());
+        }
         BodyBuilder builder;
         ErrorVM errorVM;
         ResponseStatus responseStatus = AnnotationUtils.findAnnotation(ex.getClass(), ResponseStatus.class);

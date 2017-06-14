@@ -1,3 +1,22 @@
+/**
+ * Copyright 2013-2017 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://jhipster.github.io/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 const path = require('path');
 const _ = require('lodash');
 const Generator = require('yeoman-generator');
@@ -166,7 +185,7 @@ module.exports = class extends Generator {
                     splicable: [
                         this.stripMargin(
                             `|<li>
-                             |                        <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" (click)="collapseNavbar()">
+                             |                        <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                              |                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                              |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${_.camelCase(routerName)}"` : ''}>${_.startCase(routerName)}</span>
                              |                        </a>
@@ -1119,8 +1138,8 @@ module.exports = class extends Generator {
         switch (action) {
         case 'stripHtml' :
             regex = new RegExp([
-                /( (data-t|jhiT)ranslate="([a-zA-Z0-9 +{}'](\.)?)+")/,                    // data-translate or jhiTranslate
-                /( translate(-v|V)alues="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|-|'|\s|\.)*?\}")/,    // translate-values or translateValues
+                /( (data-t|jhiT)ranslate="([a-zA-Z0-9 +{}'_](\.)?)+")/,                    // data-translate or jhiTranslate
+                /( translate(-v|V)alues="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|-|'|\s|\.|_)*?\}")/,    // translate-values or translateValues
                 /( translate-compile)/,                                                         // translate-compile
                 /( translate-value-max="[0-9{}()|]*")/,                                   // translate-value-max
             ].map(r => r.source).join('|'), 'g');
@@ -1894,6 +1913,28 @@ module.exports = class extends Generator {
         }
     }
 
+    updateLanguagesInWebpack(languages) {
+        const fullPath = 'webpack/webpack.common.js';
+        try {
+            let content = 'groupBy: [\n';
+            for (let i = 0, len = languages.length; i < len; i++) {
+                const language = languages[i];
+                content += `                        { pattern: "./src/main/webapp/i18n/${language}/*.json", fileName: "./${this.BUILD_DIR}www/i18n/${language}.json" }${i !== languages.length - 1 ? ',' : ''}\n`;
+            }
+            content +=
+                '                        // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n' +
+                '                    ]';
+
+            jhipsterUtils.replaceContent({
+                file: fullPath,
+                pattern: /groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g,
+                content
+            }, this);
+        } catch (e) {
+            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
+        }
+    }
+
     insight(trackingCode = 'UA-46075199-2', packageName = packagejs.name, packageVersion = packagejs.version) {
         const insight = new Insight({
             trackingCode,
@@ -2179,5 +2220,58 @@ module.exports = class extends Generator {
             }
             done();
         });
+    }
+
+    generateEntityQueries(relationships, entityInstance, dto) {
+        const queries = [];
+        const variables = [];
+        let hasManyToMany = false;
+        relationships.forEach((relationship) => {
+            let query;
+            let variableName;
+            hasManyToMany = hasManyToMany || relationship.relationshipType === 'many-to-many';
+            if (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true && relationship.otherEntityName !== 'user') {
+                variableName = relationship.relationshipFieldNamePlural.toLowerCase();
+                if (variableName === entityInstance) {
+                    variableName += 'Collection';
+                }
+                const relationshipFieldName = `this.${entityInstance}.${relationship.relationshipFieldName}`;
+                const relationshipFieldNameIdCheck = dto === 'no' ?
+                    `!${relationshipFieldName} || !${relationshipFieldName}.id` :
+                    `!${relationshipFieldName}Id`;
+
+                query =
+        `this.${relationship.otherEntityName}Service
+            .query({filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'})
+            .subscribe((res: ResponseWrapper) => {
+                if (${relationshipFieldNameIdCheck}) {
+                    this.${variableName} = res.json;
+                } else {
+                    this.${relationship.otherEntityName}Service
+                        .find(${relationshipFieldName}${dto === 'no' ? '.id' : 'Id'})
+                        .subscribe((subRes: ${relationship.otherEntityAngularName}) => {
+                            this.${variableName} = [subRes].concat(res.json);
+                        }, (subRes: ResponseWrapper) => this.onError(subRes.json));
+                }
+            }, (res: ResponseWrapper) => this.onError(res.json));`;
+            } else if (relationship.relationshipType !== 'one-to-many') {
+                variableName = relationship.otherEntityNameCapitalizedPlural.toLowerCase();
+                if (variableName === entityInstance) {
+                    variableName += 'Collection';
+                }
+                query =
+        `this.${relationship.otherEntityName}Service.query()
+            .subscribe((res: ResponseWrapper) => { this.${variableName} = res.json; }, (res: ResponseWrapper) => this.onError(res.json));`;
+            }
+            if (variableName && !this.contains(queries, query)) {
+                queries.push(query);
+                variables.push(`${variableName}: ${relationship.otherEntityAngularName}[];`);
+            }
+        });
+        return {
+            queries,
+            variables,
+            hasManyToMany
+        };
     }
 };

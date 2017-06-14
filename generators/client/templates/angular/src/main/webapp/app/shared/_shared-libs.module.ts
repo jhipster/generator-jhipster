@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -28,9 +28,10 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
     imports: [
         NgbModule.forRoot(),
         NgJhipsterModule.forRoot({
+            // set below to true to make alerts look like toast
+            alertAsToast: false,
             <%_ if (enableTranslation) { _%>
             i18nEnabled: true,
-            defaultI18nLocation: 'all',
             defaultI18nLang: '<%= nativeLanguage %>'
             <%_ } _%>
         }),

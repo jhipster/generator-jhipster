@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -41,12 +41,12 @@ _%>
 
     constructor(
         private <%= entityInstance %>Service: <%= entityAngularName %>Service,
-        private alertService: AlertService,
+        private alertService: JhiAlertService,
         <%_ if (fieldsContainBlob) { _%>
-        private dataUtils: DataUtils,
+        private dataUtils: JhiDataUtils,
         <%_ } _%>
-        private eventManager: EventManager,
-        private parseLinks: ParseLinks,
+        private eventManager: JhiEventManager,
+        private parseLinks: JhiParseLinks,
         <%_ if (searchEngine === 'elasticsearch') { _%>
         private activatedRoute: ActivatedRoute,
         <%_ } _%>
@@ -74,8 +74,8 @@ _%>
                 size: this.itemsPerPage,
                 sort: this.sort()
             }).subscribe(
-                (res: Response) => this.onSuccess(res.json(), res.headers),
-                (res: Response) => this.onError(res.json())
+                (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
+                (res: ResponseWrapper) => this.onError(res.json)
             );
             return;
         }
@@ -85,8 +85,8 @@ _%>
             size: this.itemsPerPage,
             sort: this.sort()
         }).subscribe(
-            (res: Response) => this.onSuccess(res.json(), res.headers),
-            (res: Response) => this.onError(res.json())
+            (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
+            (res: ResponseWrapper) => this.onError(res.json)
         );
     }
 

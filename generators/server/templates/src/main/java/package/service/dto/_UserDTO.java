@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -82,7 +82,7 @@ public class UserDTO {
     private Set<String> authorities;
 
     public UserDTO() {
-        // Empty constructor needed for MapStruct.
+        // Empty constructor needed for Jackson.
     }
 
     public UserDTO(User user) {

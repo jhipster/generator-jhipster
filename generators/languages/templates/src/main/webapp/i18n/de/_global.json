@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -109,7 +109,8 @@
         },
         "ribbon": {
             "dev":"Development"
-        }
+        },
+        "item-count": "Ergebnis {{first}} - {{second}} von {{total}} Elemente."
     },
     "entity": {
         "action": {
@@ -146,7 +147,7 @@
     "error": {
         "internalServerError": "Internal server error",
         "server.not.reachable": "Server ist nicht erreichbar",
-        "url.not.found": "Not found",
+        "url.not.found": "Nicht gefunden",
         "NotNull": "Feld {{fieldName}} kann nicht leer sein!",
         "Size": "Feld {{fieldName}} erfüllt nicht die minimalen/maximalen Voraussetzungen!",
         "userexists": "Benutzername bereits vergeben!",

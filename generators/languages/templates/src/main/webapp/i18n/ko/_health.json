@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -20,13 +20,13 @@
     "health": {
         "title": "상태 확인",
         "refresh.button": "새로고침",
-        "stacktrace": "Stack trace",
+        "stacktrace": "스택트레이스",
         "details": {
-            "details": "Details",
-            "properties": "Properties",
-            "name": "Name",
-            "value": "Value",
-            "error": "Error"
+            "details": "세부사항",
+            "properties": "정보",
+            "name": "이름",
+            "value": "값",
+            "error": "오류"
         },
         "indicator": {
             <%_ if (messageBroker === 'kafka') { _%>
@@ -45,7 +45,6 @@
             "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
             "cassandra": "Cassandra"<% } %>
         },
-        "stacktrace": "스택트레이스",
         "table": {
             "service": "서비스 이름",
             "status": "상태"

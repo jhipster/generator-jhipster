@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -47,16 +47,16 @@ currentAccount: any;
 
     constructor(
         private <%= entityInstance %>Service: <%= entityAngularName %>Service,
-        private parseLinks: ParseLinks,
-        private alertService: AlertService,
+        private parseLinks: JhiParseLinks,
+        private alertService: JhiAlertService,
         private principal: Principal,
         private activatedRoute: ActivatedRoute,
         <%_ if (fieldsContainBlob) { _%>
-        private dataUtils: DataUtils,
+        private dataUtils: JhiDataUtils,
         <%_ } _%>
         private router: Router,
-        private eventManager: EventManager<%_ if (databaseType !== 'cassandra') { _%>,
-        private paginationUtil: PaginationUtil,
+        private eventManager: JhiEventManager<%_ if (databaseType !== 'cassandra') { _%>,
+        private paginationUtil: JhiPaginationUtil,
         private paginationConfig: PaginationConfig
         <%_ } _%>
     ) {
@@ -81,8 +81,8 @@ currentAccount: any;
                 query: this.currentSearch,
                 size: this.itemsPerPage,
                 sort: this.sort()}).subscribe(
-                    (res: Response) => this.onSuccess(res.json(), res.headers),
-                    (res: Response) => this.onError(res.json())
+                    (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
+                    (res: ResponseWrapper) => this.onError(res.json)
                 );
             return;
         }
@@ -91,8 +91,8 @@ currentAccount: any;
             page: this.page - 1,
             size: this.itemsPerPage,
             sort: this.sort()}<%_ } _%>).subscribe(
-            (res: Response) => this.onSuccess(res.json(), res.headers),
-            (res: Response) => this.onError(res.json())
+            (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
+            (res: ResponseWrapper) => this.onError(res.json)
         );
     }
     <%_ if (databaseType !== 'cassandra') { _%>

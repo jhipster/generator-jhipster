@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -28,7 +28,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EventManager } from 'ng-jhipster';
+import { JhiAlertService, JhiEventManager } from 'ng-jhipster';
 
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { <%= entityAngularName %>PopupService } from './<%= entityFileName %>-popup.service';
@@ -45,7 +45,8 @@ export class <%= entityAngularName %>DeleteDialogComponent {
     constructor(
         private <%= entityInstance %>Service: <%= entityAngularName %>Service,
         public activeModal: NgbActiveModal,
-        private eventManager: EventManager
+        private alertService: JhiAlertService,
+        private eventManager: JhiEventManager
     ) {
     }
 
@@ -53,7 +54,7 @@ export class <%= entityAngularName %>DeleteDialogComponent {
         this.activeModal.dismiss('cancel');
     }
 
-    confirmDelete(id: number) {
+    confirmDelete(id: <% if (pkType == 'String') { %>string<% } else { %>number<% } %>) {
         this.<%= entityInstance %>Service.delete(id).subscribe((response) => {
             this.eventManager.broadcast({
                 name: '<%= entityInstance %>ListModification',
@@ -61,6 +62,11 @@ export class <%= entityAngularName %>DeleteDialogComponent {
             });
             this.activeModal.dismiss(true);
         });
+        <%_ if (enableTranslation) { _%>
+        this.alertService.success('<%= angularAppName %>.<%= entityTranslationKey %>.deleted', { param : id }, null);
+        <%_ } else { _%>
+        this.alertService.success(`A <%= entityClassHumanized %> is deleted with identifier ${id}`, null, null);
+        <%_ } _%>
     }
 }
 

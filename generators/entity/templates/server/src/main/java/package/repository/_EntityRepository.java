@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -19,16 +19,23 @@
 package <%=packageName%>.repository;
 
 import <%=packageName%>.domain.<%=entityClass%>;
+import org.springframework.stereotype.Repository;
 <% if (databaseType == 'cassandra') { %>
 import com.datastax.driver.core.*;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;<% } %><% if (databaseType=='sql') { %>
 import org.springframework.data.jpa.repository.*;<% if (fieldsContainOwnerManyToMany==true) { %>
 import org.springframework.data.repository.query.Param;<% } %>
-
-import java.util.List;<% } %><% if (databaseType=='mongodb') { %>
+<%_ let importList = fieldsContainOwnerManyToMany;
+    for (r of relationships) {
+        if (r.relationshipType == 'many-to-one' && r.otherEntityName == 'user') {
+            importList = true;
+        }
+    }
+    if (importList == true) {
+_%>
+import java.util.List;<% }} %><% if (databaseType=='mongodb') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;<% } %><% if (databaseType == 'cassandra') { %>
-import org.springframework.stereotype.Repository;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -42,28 +49,39 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;<% } %>
 
-<% if (databaseType=='sql') { %>/**
+<%_ if (databaseType === 'sql') { _%>
+/**
  * Spring Data JPA repository for the <%= entityClass %> entity.
- */<% } %><% if (databaseType=='mongodb') { %>/**
+ */
+<%_ } if (databaseType === 'mongodb') { _%>
+/**
  * Spring Data MongoDB repository for the <%= entityClass %> entity.
- */<% } %><% if (databaseType=='cassandra') { %>/**
+ */
+<%_ } if (databaseType === 'cassandra') { _%>
+/**
  * Cassandra repository for the <%= entityClass %> entity.
- */<% } %><% if (databaseType=='sql' || databaseType=='mongodb') { %>
+ */
+<%_ } if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 @SuppressWarnings("unused")
-public interface <%=entityClass%>Repository extends <% if (databaseType=='sql') { %>JpaRepository<% } %><% if (databaseType=='mongodb') { %>MongoRepository<% } %><<%=entityClass%>,<%= pkType %>> {<% for (idx in relationships) { %><% if (relationships[idx].relationshipType == 'many-to-one' && relationships[idx].otherEntityName == 'user') { %>
+@Repository
+public interface <%=entityClass%>Repository extends <% if (databaseType=='sql') { %>JpaRepository<% } %><% if (databaseType=='mongodb') { %>MongoRepository<% } %><<%=entityClass%>,<%= pkType %>> {
+    <%_ for (idx in relationships) {
+        if (relationships[idx].relationshipType == 'many-to-one' && relationships[idx].otherEntityName == 'user') { _%>
 
-    @Query("select <%= entityInstance %> from <%= entityClass %> <%= entityInstance %> where <%= entityInstance %>.<%= relationships[idx].relationshipFieldName %>.login = ?#{principal.username}")
-    List<<%= entityClass %>> findBy<%= relationships[idx].relationshipNameCapitalized %>IsCurrentUser();<% } } %>
-<% if (fieldsContainOwnerManyToMany==true) { %>
-    @Query("select distinct <%= entityInstance %> from <%= entityClass %> <%= entityInstance %><% for (idx in relationships) {
-    if (relationships[idx].relationshipType == 'many-to-many' && relationships[idx].ownerSide == true) { %> left join fetch <%=entityInstance%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%>")
+    @Query("select <%= entityTableName %> from <%= entityClass %> <%= entityTableName %> where <%= entityTableName %>.<%= relationships[idx].relationshipFieldName %>.login = ?#{principal.username}")
+    List<<%= entityClass %>> findBy<%= relationships[idx].relationshipNameCapitalized %>IsCurrentUser();
+    <%_ } } _%>
+    <% if (fieldsContainOwnerManyToMany === true) { %>
+    @Query("select distinct <%= entityTableName %> from <%= entityClass %> <%= entityTableName %><% for (idx in relationships) {
+    if (relationships[idx].relationshipType == 'many-to-many' && relationships[idx].ownerSide == true) { %> left join fetch <%=entityTableName%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%>")
     List<<%=entityClass%>> findAllWithEagerRelationships();
 
-    @Query("select <%= entityInstance %> from <%= entityClass %> <%= entityInstance %><% for (idx in relationships) {
-    if (relationships[idx].relationshipType == 'many-to-many' && relationships[idx].ownerSide == true) { %> left join fetch <%=entityInstance%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%> where <%=entityInstance%>.id =:id")
+    @Query("select <%= entityTableName %> from <%= entityClass %> <%= entityTableName %><% for (idx in relationships) {
+    if (relationships[idx].relationshipType == 'many-to-many' && relationships[idx].ownerSide == true) { %> left join fetch <%=entityTableName%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%> where <%=entityTableName%>.id =:id")
     <%=entityClass%> findOneWithEagerRelationships(@Param("id") Long id);
-<% } %>
-}<% } %><% if (databaseType == 'cassandra') { %>
+    <% } %>
+}
+<%_ } if (databaseType === 'cassandra') { _%>
 @Repository
 public class <%= entityClass %>Repository {
 
@@ -138,4 +156,5 @@ public class <%= entityClass %>Repository {
         BoundStatement stmt = truncateStmt.bind();
         session.execute(stmt);
     }
-}<% } %>
+}
+<%_ } _%>

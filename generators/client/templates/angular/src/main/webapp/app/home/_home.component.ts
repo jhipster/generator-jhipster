@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -18,7 +18,7 @@
 -%>
 import { Component, OnInit } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EventManager } from 'ng-jhipster';
+import { JhiEventManager } from 'ng-jhipster';
 
 import { Account, LoginModalService, Principal } from '../shared';
 
@@ -41,7 +41,7 @@ export class HomeComponent implements OnInit {
     constructor(
         private principal: Principal,
         private loginModalService: LoginModalService,
-        private eventManager: EventManager
+        private eventManager: JhiEventManager
     ) {
     }
 

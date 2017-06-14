@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2017 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -17,14 +17,13 @@
  limitations under the License.
 -%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
-import { EventManager, ParseLinks, PaginationUtil<% if (enableTranslation) { %>, JhiLanguageService<% } %>, AlertService<% if (fieldsContainBlob) { %>, DataUtils<% } %> } from 'ng-jhipster';
+import { JhiEventManager, JhiParseLinks, JhiPaginationUtil<% if (enableTranslation) { %>, JhiLanguageService<% } %>, JhiAlertService<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
 
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
-import { ITEMS_PER_PAGE, Principal } from '../../shared';
+import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
 @Component({
