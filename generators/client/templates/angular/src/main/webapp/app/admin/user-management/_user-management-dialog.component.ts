@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiAlertService, JhiEventManager } from 'ng-jhipster';
@@ -43,7 +43,8 @@ export class UserMgmtDialogComponent implements OnInit {
         <%_ } _%>
         private userService: UserService,
         private alertService: JhiAlertService,
-        private eventManager: JhiEventManager
+        private eventManager: JhiEventManager,
+        private router: Router
     ) {}
 
     ngOnInit() {
@@ -59,11 +60,19 @@ export class UserMgmtDialogComponent implements OnInit {
         <%_ } _%>
     }
 
+    goToPreviousUrl() {
+        let currentUrl: string = this.router.url;
+        let previousUrl: string = currentUrl.substr(0, (currentUrl.indexOf("(")-1)); 
+        this.router.navigate([previousUrl]);
+    }
+
     clear() {
+        this.goToPreviousUrl();
         this.activeModal.dismiss('cancel');
     }
 
     save() {
+        this.goToPreviousUrl();
         this.isSaving = true;
         if (this.user.id !== null) {
             this.userService.update(this.user).subscribe((response) => this.onSaveSuccess(response, false), () => this.onSaveError());

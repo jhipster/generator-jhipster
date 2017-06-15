@@ -25,7 +25,7 @@ for (const idx in fields) {
 }
 _%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiAlertService, JhiEventManager } from 'ng-jhipster';
@@ -46,15 +46,24 @@ export class <%= entityAngularName %>DeleteDialogComponent {
         private <%= entityInstance %>Service: <%= entityAngularName %>Service,
         public activeModal: NgbActiveModal,
         private alertService: JhiAlertService,
-        private eventManager: JhiEventManager
+        private eventManager: JhiEventManager,
+        private router: Router
     ) {
     }
 
+    goToPreviousUrl() {
+        let currentUrl: string = this.router.url;
+        let previousUrl: string = currentUrl.substr(0, (currentUrl.indexOf("(")-1)); 
+        this.router.navigate([previousUrl]);
+    }
+
     clear() {
+        this.goToPreviousUrl();
         this.activeModal.dismiss('cancel');
     }
 
     confirmDelete(id: <% if (pkType == 'String') { %>string<% } else { %>number<% } %>) {
+        this.goToPreviousUrl();
         this.<%= entityInstance %>Service.delete(id).subscribe((response) => {
             this.eventManager.broadcast({
                 name: '<%= entityInstance %>ListModification',

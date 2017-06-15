@@ -34,7 +34,6 @@ import {
     <%= entityAngularName %>DeletePopupComponent,
     <%= entityAngularName %>DeleteDialogComponent,
     <%= entityInstance %>Route,
-    <%= entityInstance %>PopupRoute,
     <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
     <%= entityAngularName %>ResolvePagingParams,
     <%_ } _%>
@@ -42,7 +41,6 @@ import {
 
 const ENTITY_STATES = [
     ...<%= entityInstance %>Route,
-    ...<%= entityInstance %>PopupRoute,
 ];
 
 @NgModule({

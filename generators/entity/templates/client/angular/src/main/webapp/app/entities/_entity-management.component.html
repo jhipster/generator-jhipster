@@ -20,7 +20,7 @@
     <%_ const keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
     <h2>
         <span jhiTranslate="<%= keyPrefix %>home.title"><%= entityClassPluralHumanized %></span>
-        <button class="btn btn-primary float-right create-<%= entityUrl %>" [routerLink]="['/entity', { outlets: { popup: ['<%= entityUrl %>-new'] } }]">
+        <button class="btn btn-primary float-right create-<%= entityUrl %>" [routerLink]="[{ outlets: { popup: ['<%= entityUrl %>-new'] } }]">
             <span class="fa fa-plus"></span>
             <span <% if (searchEngine == 'elasticsearch') { %>class="hidden-sm-down" <% } %> jhiTranslate="<%= keyPrefix %>home.createLabel">
             Create new <%= entityClassHumanized %>
@@ -149,14 +149,14 @@
                             <span class="hidden-md-down" jhiTranslate="entity.action.view">View</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/entity', { outlets: { popup: '<%= entityUrl %>/'+ <%= entityInstance %>.id + '/edit'} }]"
+                                [routerLink]="[{ outlets: { popup: '<%= entityUrl %>/'+ <%= entityInstance %>.id + '/edit'} }]"
                                 replaceUrl="true"
                                 class="btn btn-primary btn-sm">
                             <span class="fa fa-pencil"></span>
                             <span class="hidden-md-down" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/entity', { outlets: { popup: '<%= entityUrl %>/'+ <%= entityInstance %>.id + '/delete'} }]"
+                                [routerLink]="[{ outlets: { popup: '<%= entityUrl %>/'+ <%= entityInstance %>.id + '/delete'} }]"
                                 replaceUrl="true"
                                 class="btn btn-danger btn-sm">
                             <span class="fa fa-remove"></span>
@@ -191,3 +191,4 @@
         <%_ } _%>
     <%_ } _%>
 </div>
+<router-outlet name="popup"></router-outlet>

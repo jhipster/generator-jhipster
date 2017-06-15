@@ -19,7 +19,7 @@
 <div>
     <h2>
         <span jhiTranslate="userManagement.home.title">Users</span>
-        <button class="btn btn-primary float-right" [routerLink]="['/admin', { outlets: { popup: ['user-management-new'] } }]">
+        <button class="btn btn-primary float-right" [routerLink]="[{ outlets: { popup: ['user-management-new'] } }]">
             <span class="fa fa-plus"></span> <span jhiTranslate="userManagement.home.createLabel">Create a new User</span>
         </button>
     </h2>
@@ -75,14 +75,14 @@
                             <span class="hidden-md-down" jhiTranslate="entity.action.view">View</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/admin', { outlets: { popup: 'user-management/'+ user.login + '/edit'} }]"
+                                [routerLink]="[{ outlets: { popup: 'user-management/'+ user.login + '/edit'} }]"
                                 replaceUrl="true"
                                 class="btn btn-primary btn-sm">
                             <span class="fa fa-pencil"></span>
                             <span class="hidden-md-down" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/admin', { outlets: { popup: 'user-management/'+ user.login + '/delete'} }]"
+                                [routerLink]="[{ outlets: { popup: 'user-management/'+ user.login + '/delete'} }]"
                                 replaceUrl="true"
                                 class="btn btn-danger btn-sm" [disabled]="currentAccount.login==user.login">
                             <span class="fa fa-remove"></span>
@@ -105,3 +105,4 @@
     </div>
     <%_ } _%>
 </div>
+<router-outlet name="popup"></router-outlet>
