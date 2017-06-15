@@ -58,7 +58,7 @@
                 <% if (enableTranslation) { %><td>{{user.langKey}}</td><% } %>
                 <td>
                     <div *ngFor="let authority of user.authorities">
-                        <span class="tag tag-info">{{ authority }}</span>
+                        <span class="badge badge-info">{{ authority }}</span>
                     </div>
                 </td>
                 <%_ if (databaseType !== 'cassandra') { _%>
