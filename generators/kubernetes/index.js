@@ -97,8 +97,12 @@ module.exports = KubernetesGenerator.extend({
             this.dockerRepositoryName = this.config.get('dockerRepositoryName');
             this.dockerPushCommand = this.config.get('dockerPushCommand');
             this.kubernetesNamespace = this.config.get('kubernetesNamespace');
+            this.jhipsterConsole = this.config.get('jhipsterConsole');
 
             this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
+            this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
+            this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
+            this.DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE;
             this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
             this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
             this.DOCKER_MYSQL = constants.DOCKER_MYSQL;
@@ -149,7 +153,8 @@ module.exports = KubernetesGenerator.extend({
         askForAdminPassword: prompts.askForAdminPassword,
         askForKubernetesNamespace: prompts.askForKubernetesNamespace,
         askForDockerRepositoryName: prompts.askForDockerRepositoryName,
-        askForDockerPushCommand: prompts.askForDockerPushCommand
+        askForDockerPushCommand: prompts.askForDockerPushCommand,
+        askForJhipsterConsole: prompts.askForJhipsterConsole
     },
 
     configuring: {

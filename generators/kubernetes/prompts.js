@@ -22,7 +22,8 @@ const dockerComposePrompts = require('../docker-compose/prompts');
 module.exports = _.extend({
     askForKubernetesNamespace,
     askForDockerRepositoryName,
-    askForDockerPushCommand
+    askForDockerPushCommand,
+    askForJhipsterConsole
 }, dockerComposePrompts);
 
 function askForKubernetesNamespace() {
@@ -69,6 +70,22 @@ function askForDockerPushCommand() {
 
     this.prompt(prompts).then((props) => {
         this.dockerPushCommand = props.dockerPushCommand;
+        done();
+    });
+}
+
+function askForJhipsterConsole() {
+    const done = this.async();
+
+    const prompts = [{
+        type: 'confirm',
+        name: 'jhipsterConsole',
+        message: 'Do you want to use JHipster Console for log aggregation (ELK)?',
+        default: this.jhipsterConsole ? this.jhipsterConsole : true
+    }];
+
+    this.prompt(prompts).then((props) => {
+        this.jhipsterConsole = props.jhipsterConsole;
         done();
     });
 }
