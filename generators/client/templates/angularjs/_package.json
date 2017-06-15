@@ -90,7 +90,7 @@
     <%_ } _%>
     "proxy-middleware": "0.15.0",
     "run-sequence": "1.2.2",
-    <%_ if (buildTool == 'maven') { _%>
+    <%_ if (buildTool === 'maven') { _%>
     "xml2js": "0.4.17",
     <%_ }
       otherModules.forEach(function(module) { _%>

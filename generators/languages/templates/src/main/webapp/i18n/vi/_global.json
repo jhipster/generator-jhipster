@@ -38,7 +38,7 @@
             },
             "admin": {
                 "main": "Quản trị",
-                <%_ if (applicationType == 'gateway') { _%>
+                <%_ if (applicationType === 'gateway') { _%>
                 "gateway": "Điều hướng",
                 <%_ } _%>
                 "userManagement": "Quản lý tài khoản",

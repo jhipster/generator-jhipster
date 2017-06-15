@@ -35,9 +35,9 @@ import { ResponseWrapper, createRequestOption } from '../../shared';
 @Injectable()
 export class <%= entityAngularName %>Service {
 
-    private resourceUrl = '<% if (applicationType == 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';
+    private resourceUrl = '<% if (applicationType === 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';
     <%_ if(searchEngine === 'elasticsearch') { _%>
-    private resourceSearchUrl = '<% if (applicationType == 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/_search/<%= entityApiUrl %>';
+    private resourceSearchUrl = '<% if (applicationType === 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/_search/<%= entityApiUrl %>';
     <%_ } _%>
 
     constructor(private http: Http<% if (hasDate) { %>, private dateUtils: JhiDateUtils<% } %>) { }
@@ -80,7 +80,7 @@ export class <%= entityAngularName %>Service {
         });
     }
 
-    find(id: <% if (pkType == 'String') { %>string<% } else { %>number<% } %>): Observable<<%= entityAngularName %>> {
+    find(id: <% if (pkType === 'String') { %>string<% } else { %>number<% } %>): Observable<<%= entityAngularName %>> {
         return this.http.get(`${this.resourceUrl}/${id}`).map((res: Response) => {
             <%_ if(hasDate) { _%>
             const jsonResponse = res.json();
@@ -98,7 +98,7 @@ export class <%= entityAngularName %>Service {
             .map((res: Response) => this.convertResponse(res));
     }
 
-    delete(id: <% if (pkType == 'String') { %>string<% } else { %>number<% } %>): Observable<Response> {
+    delete(id: <% if (pkType === 'String') { %>string<% } else { %>number<% } %>): Observable<Response> {
         return this.http.delete(`${this.resourceUrl}/${id}`);
     }
     <%_ if(searchEngine === 'elasticsearch') { _%>
@@ -123,7 +123,7 @@ export class <%= entityAngularName %>Service {
 
     private convertItemFromServer(entity: any) {
         <%_ for (idx in fields) { _%>
-            <%_ if (fields[idx].fieldType == 'LocalDate') { _%>
+            <%_ if (fields[idx].fieldType === 'LocalDate') { _%>
         entity.<%=fields[idx].fieldName%> = this.dateUtils
             .convertLocalDateFromServer(entity.<%=fields[idx].fieldName%>);
             <%_ } _%>
@@ -137,7 +137,7 @@ export class <%= entityAngularName %>Service {
 
     private convert(<%= entityInstance %>: <%= entityAngularName %>): <%= entityAngularName %> {
         const copy: <%= entityAngularName %> = Object.assign({}, <%= entityInstance %>);
-        <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
+        <%_ for (idx in fields){ if (fields[idx].fieldType === 'LocalDate') { _%>
         copy.<%=fields[idx].fieldName%> = this.dateUtils
             .convertLocalDateToServer(<%= entityInstance %>.<%=fields[idx].fieldName%>);
         <%_ } if (['Instant', 'ZonedDateTime'].includes(fields[idx].fieldType)) { %>

@@ -17,70 +17,70 @@
  limitations under the License.
 -%>
 package <%=packageName%>.domain;
-<% if (databaseType == 'cassandra') { %>
+<% if (databaseType === 'cassandra') { %>
 import com.datastax.driver.mapping.annotations.*;<% } %>
-import com.fasterxml.jackson.annotation.JsonIgnore;<% if (hibernateCache != 'no' && databaseType == 'sql') { %>
+import com.fasterxml.jackson.annotation.JsonIgnore;<% if (hibernateCache !== 'no' && databaseType === 'sql') { %>
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %>
-import java.time.LocalDate;<% if (databaseType == 'mongodb') { %>
+import java.time.LocalDate;<% if (databaseType === 'mongodb') { %>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;<% } %>
 
-<% if (databaseType == 'sql') { %>import javax.persistence.*;<% } %>
+<% if (databaseType === 'sql') { %>import javax.persistence.*;<% } %>
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;<% if (databaseType == 'cassandra') { %>
+import java.io.Serializable;<% if (databaseType === 'cassandra') { %>
 import java.util.Date;<% } %>
 
 /**
  * Persistent tokens are used by Spring Security to automatically log in users.
  *
  * @see <%=packageName%>.security.PersistentTokenRememberMeServices
- */<% if (databaseType == 'sql') { %>
+ */<% if (databaseType === 'sql') { %>
 @Entity
-@Table(name = "jhi_persistent_token")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'mongodb') { %>
-@Document(collection = "jhi_persistent_token")<% } %><% if (databaseType == 'cassandra') { %>
+@Table(name = "jhi_persistent_token")<% } %><% if (hibernateCache !== 'no' && databaseType === 'sql') { %>
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType === 'mongodb') { %>
+@Document(collection = "jhi_persistent_token")<% } %><% if (databaseType === 'cassandra') { %>
 @Table(name = "persistent_token")<% } %>
 public class PersistentToken implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private static final int MAX_USER_AGENT_LEN = 255;
-<% if (databaseType == 'sql' || databaseType == 'mongodb')  { %>
-    @Id<% } %><% if (databaseType == 'cassandra') { %>
+<% if (databaseType === 'sql' || databaseType === 'mongodb')  { %>
+    @Id<% } %><% if (databaseType === 'cassandra') { %>
     @PartitionKey<% } %>
     private String series;
 
     @JsonIgnore
-    @NotNull<% if (databaseType == 'sql') { %>
-    @Column(name = "token_value", nullable = false)<% } %><% if (databaseType == 'cassandra') { %>
+    @NotNull<% if (databaseType === 'sql') { %>
+    @Column(name = "token_value", nullable = false)<% } %><% if (databaseType === 'cassandra') { %>
     @Column(name = "token_value")<% } %>
     private String tokenValue;
-    <% if (databaseType == 'sql') { %>
+    <% if (databaseType === 'sql') { %>
     @Column(name = "token_date")
-    private LocalDate tokenDate;<% } %><% if (databaseType == 'mongodb') { %>
-    private LocalDate tokenDate;<% } %><% if (databaseType == 'cassandra') { %>
+    private LocalDate tokenDate;<% } %><% if (databaseType === 'mongodb') { %>
+    private LocalDate tokenDate;<% } %><% if (databaseType === 'cassandra') { %>
     @Column(name = "token_date")
     private Date tokenDate;<% } %>
 
     //an IPV6 address max length is 39 characters
-    @Size(min = 0, max = 39)<% if (databaseType == 'sql') { %>
-    @Column(name = "ip_address", length = 39)<% } %><% if (databaseType == 'cassandra') { %>
+    @Size(min = 0, max = 39)<% if (databaseType === 'sql') { %>
+    @Column(name = "ip_address", length = 39)<% } %><% if (databaseType === 'cassandra') { %>
     @Column(name = "ip_address")<% } %>
     private String ipAddress;
 
-    <% if (databaseType == 'sql' || databaseType == 'cassandra') { %>@Column(name = "user_agent")<% } %>
-    private String userAgent;<% if (databaseType == 'cassandra') { %>
+    <% if (databaseType === 'sql' || databaseType === 'cassandra') { %>@Column(name = "user_agent")<% } %>
+    private String userAgent;<% if (databaseType === 'cassandra') { %>
 
     private String login;
 
     @Column(name = "user_id")
-    private String userId;<% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+    private String userId;<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
 
     @JsonIgnore
-    <% if (databaseType == 'sql') { %>@ManyToOne<% } %><% if (databaseType == 'mongodb') { %>
+    <% if (databaseType === 'sql') { %>@ManyToOne<% } %><% if (databaseType === 'mongodb') { %>
     @DBRef<% } %>
     private User user;<% } %>
 
@@ -100,11 +100,11 @@ public class PersistentToken implements Serializable {
         this.tokenValue = tokenValue;
     }
 
-    public <% if (databaseType == 'sql' || databaseType == 'mongodb')  { %>LocalDate<% } %><% if (databaseType == 'cassandra') { %>Date<% } %> getTokenDate() {
+    public <% if (databaseType === 'sql' || databaseType === 'mongodb')  { %>LocalDate<% } %><% if (databaseType === 'cassandra') { %>Date<% } %> getTokenDate() {
         return tokenDate;
     }
 
-    public void setTokenDate(<% if (databaseType == 'sql' || databaseType == 'mongodb')  { %>LocalDate<% } %><% if (databaseType == 'cassandra') { %>Date<% } %> tokenDate) {
+    public void setTokenDate(<% if (databaseType === 'sql' || databaseType === 'mongodb')  { %>LocalDate<% } %><% if (databaseType === 'cassandra') { %>Date<% } %> tokenDate) {
         this.tokenDate = tokenDate;
     }
 
@@ -126,7 +126,7 @@ public class PersistentToken implements Serializable {
         } else {
             this.userAgent = userAgent;
         }
-    }<% if (databaseType == 'sql' || databaseType == 'mongodb')  { %>
+    }<% if (databaseType === 'sql' || databaseType === 'mongodb')  { %>
 
     public User getUser() {
         return user;
@@ -134,7 +134,7 @@ public class PersistentToken implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
-    }<% } %><% if (databaseType == 'cassandra') { %>
+    }<% } %><% if (databaseType === 'cassandra') { %>
 
     public String getLogin() {
         return login;

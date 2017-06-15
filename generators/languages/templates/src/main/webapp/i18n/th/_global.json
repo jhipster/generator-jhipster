@@ -38,7 +38,7 @@
             },
             "admin": {
                 "main": "ผู้ดูแลระบบ",
-                <%_ if (applicationType == 'gateway') { _%>
+                <%_ if (applicationType === 'gateway') { _%>
                 "gateway": "เกตเวย์",
                 <%_ } _%>
                 "userManagement": "จัดการผู้ใช้",

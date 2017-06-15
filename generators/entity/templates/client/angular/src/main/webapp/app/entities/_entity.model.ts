@@ -27,7 +27,7 @@ const enum <%= fields[idx].fieldType %> {<%
 
 };
 <%_ } } _%>
-<%_ if (dto == "no") {
+<%_ if (dto === "no") {
        for (const rel of differentRelationships) { _%>
 import { <%= rel.otherEntityAngularName %> } from '../<%= rel.otherEntityModulePath %>';
 <%_ }
@@ -35,7 +35,7 @@ import { <%= rel.otherEntityAngularName %> } from '../<%= rel.otherEntityModuleP
 const variables = {};
 const defaultVariablesValues = {};
 let tsKeyType;
-if (pkType == 'String') {
+if (pkType === 'String') {
     tsKeyType = 'string';
 } else {
     tsKeyType = 'number';
@@ -47,16 +47,16 @@ for (const idx in fields) {
     let tsType;
     if (fields[idx].fieldIsEnum) {
         tsType = fieldType;
-    } else if (fieldType == 'Boolean') {
+    } else if (fieldType === 'Boolean') {
         tsType = 'boolean';
         defaultVariablesValues[fieldName] = 'this.' + fieldName + ' = false;';
-    } else if (fieldType == 'Double' || fieldType == 'Float' || fieldType == 'Long' || fieldType == 'Integer' || fieldType == 'BigDecimal') {
+    } else if (fieldType === 'Double' || fieldType === 'Float' || fieldType === 'Long' || fieldType === 'Integer' || fieldType === 'BigDecimal') {
         tsType = 'number';
-    } else if (fieldType == 'String'  || fieldType == 'UUID') {
+    } else if (fieldType === 'String'  || fieldType === 'UUID') {
         tsType = 'string';
-    } else { //(fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'image' || fieldType == 'LocalDate'
+    } else { //(fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate'
         tsType = 'any';
-        if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent == 'image') {
+        if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent === 'image') {
             variables[fieldName + 'ContentType'] = fieldName + 'ContentType?: ' + 'string';
         }
     }
@@ -65,7 +65,7 @@ for (const idx in fields) {
 for (idx in relationships) {
     let fieldType;
     let fieldName;
-    if (dto == "no") {
+    if (dto === "no") {
         fieldType = relationships[idx].otherEntityAngularName;
         fieldName = relationships[idx].relationshipFieldName;
     } else {

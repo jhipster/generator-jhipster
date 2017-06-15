@@ -23,7 +23,7 @@ import <%=packageName%>.repository.PersistentTokenRepository;
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.service.util.RandomUtil;
 
-<%_ if (databaseType == 'cassandra') { _%>
+<%_ if (databaseType === 'cassandra') { _%>
 import com.datastax.driver.core.exceptions.DriverException;
 <%_ } _%>
 import com.google.common.cache.Cache;
@@ -32,22 +32,22 @@ import com.google.common.cache.CacheBuilder;
 import io.github.jhipster.config.JHipsterProperties;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import org.slf4j.LoggerFactory;<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
 import org.springframework.dao.DataAccessException;<%}%>
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.rememberme.*;
-import org.springframework.stereotype.Service;<% if (databaseType == 'sql') { %>
+import org.springframework.stereotype.Service;<% if (databaseType === 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<%}%>
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
-<%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 import java.time.LocalDate;
 <%_ } _%>
-<%_ if (databaseType == 'cassandra') { _%>
+<%_ if (databaseType === 'cassandra') { _%>
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
 import java.util.concurrent.TimeUnit;
@@ -124,20 +124,20 @@ public class PersistentTokenRememberMeServices extends
             }
 
             if (login == null) {
-                PersistentToken token = getPersistentToken(cookieTokens);<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-                login = token.getUser().getLogin();<%}%><% if (databaseType == 'cassandra') { %>
+                PersistentToken token = getPersistentToken(cookieTokens);<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+                login = token.getUser().getLogin();<%}%><% if (databaseType === 'cassandra') { %>
                 login = token.getLogin();<%}%>
 
                 // Token also matches, so login is valid. Update the token value, keeping the *same* series number.
-                log.debug("Refreshing persistent login token for user '{}', series '{}'", login, token.getSeries());<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-                token.setTokenDate(LocalDate.now());<%}%><% if (databaseType == 'cassandra') { %>
+                log.debug("Refreshing persistent login token for user '{}', series '{}'", login, token.getSeries());<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+                token.setTokenDate(LocalDate.now());<%}%><% if (databaseType === 'cassandra') { %>
                 token.setTokenDate(new Date());<%}%>
                 token.setTokenValue(RandomUtil.generateTokenData());
                 token.setIpAddress(request.getRemoteAddr());
                 token.setUserAgent(request.getHeader("User-Agent"));
                 try {
-                    <% if (databaseType == 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>persistentTokenRepository.save(token);<% } %>
-                    <%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
+                    <% if (databaseType === 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType === 'mongodb' || databaseType === 'cassandra') { %>persistentTokenRepository.save(token);<% } %>
+                    <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
                 } catch (DataAccessException e) {
                     <%_ } else { _%>
                 } catch (DriverException e) {
@@ -161,10 +161,10 @@ public class PersistentTokenRememberMeServices extends
         log.debug("Creating new persistent login for user {}", login);
         PersistentToken token = userRepository.findOneByLogin(login).map(u -> {
             PersistentToken t = new PersistentToken();
-            t.setSeries(RandomUtil.generateSeriesData());<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+            t.setSeries(RandomUtil.generateSeriesData());<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
             t.setUser(u);
             t.setTokenValue(RandomUtil.generateTokenData());
-            t.setTokenDate(LocalDate.now());<%}%><% if (databaseType == 'cassandra') { %>
+            t.setTokenDate(LocalDate.now());<%}%><% if (databaseType === 'cassandra') { %>
             t.setLogin(login);
             t.setUserId(u.getId());
             t.setTokenValue(RandomUtil.generateTokenData());
@@ -174,8 +174,8 @@ public class PersistentTokenRememberMeServices extends
             return t;
         }).orElseThrow(() -> new UsernameNotFoundException("User " + login + " was not found in the database"));
         try {
-            <% if (databaseType == 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>persistentTokenRepository.save(token);<% } %>
-            addCookie(token, request, response);<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+            <% if (databaseType === 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType === 'mongodb' || databaseType === 'cassandra') { %>persistentTokenRepository.save(token);<% } %>
+            addCookie(token, request, response);<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
         } catch (DataAccessException e) {<% } else { %>
         } catch (DriverException e) {<% } %>
             log.error("Failed to save persistent token ", e);
@@ -188,7 +188,7 @@ public class PersistentTokenRememberMeServices extends
      * The standard Spring Security implementations are too basic: they invalidate all tokens for the
      * current user, so when he logs out from one browser, all his other sessions are destroyed.
      */
-    @Override<% if (databaseType == 'sql') { %>
+    @Override<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         String rememberMeCookie = extractRememberMeCookie(request);
@@ -231,8 +231,8 @@ public class PersistentTokenRememberMeServices extends
             throw new CookieTheftException("Invalid remember-me token (Series/token) mismatch. Implies previous " +
                 "cookie theft attack.");
         }
-<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-        if (token.getTokenDate().plusDays(TOKEN_VALIDITY_DAYS).isBefore(LocalDate.now())) {<%}%><% if (databaseType == 'cassandra') { %>
+<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+        if (token.getTokenDate().plusDays(TOKEN_VALIDITY_DAYS).isBefore(LocalDate.now())) {<%}%><% if (databaseType === 'cassandra') { %>
         if (token.getTokenDate().toInstant().plus(TOKEN_VALIDITY_DAYS, ChronoUnit.DAYS).isBefore((new Date()).toInstant())) {<%}%>
             persistentTokenRepository.delete(token);
             throw new RememberMeAuthenticationException("Remember-me login has expired");

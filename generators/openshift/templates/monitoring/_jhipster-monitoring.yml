@@ -30,13 +30,13 @@ metadata:
   namespace: <%= openshiftNamespace %>
   annotations:
     description: This template defines objects that are required to spin up monitoring pod
-    tags: elasticsearch, logstash, kibana, zipkin, jhipster-monitoring<% if (storageType == 'persistent') { %> ,persistent <% } %> <% if (storageType == 'ephemeral') { %> ,ephemeral <% } %>
+    tags: elasticsearch, logstash, kibana, zipkin, jhipster-monitoring<% if (storageType === 'persistent') { %> ,persistent <% } %> <% if (storageType === 'ephemeral') { %> ,ephemeral <% } %>
     openshift.io/display-name: jhipster-monitoring-template
     openshift.io/long-description: "This template provides objects that are required to spin up a monitoring pod. It contains
     elasticsearch for storing logs, logstash for accumulating logs to elasticsearch, kibana for visualization and zipkin for tracing (for
     microservices).<% if (storageType =='persistent') { %>The database is stored on persistent storage, so any restart of the service will
      not cause any impact to the data. Please make sure you have provisioned PVs (Persistent Volumes) before using this template. <% }
-     %><% if (storageType == 'ephemeral') { %>The database is not stored on persistent storage, so any restart of the service will result
+     %><% if (storageType === 'ephemeral') { %>The database is not stored on persistent storage, so any restart of the service will result
       in all data being lost.<% } %>"
     openshift.io/provider-display-name: JHipster-OpenShift
 labels:
@@ -82,7 +82,7 @@ parameters:
     value: 1Gi
     required: true
 objects:
-<%_ if (storageType == 'persistent') { _%>
+<%_ if (storageType === 'persistent') { _%>
   -
     apiVersion: v1
     kind: PersistentVolumeClaim
@@ -192,11 +192,11 @@ objects:
         spec:
           volumes:
           - name: ${ES_APP_NAME}-data
-            <%_ if (storageType == 'persistent') { _%>
+            <%_ if (storageType === 'persistent') { _%>
             persistentVolumeClaim:
               claimName: ${ES_APP_NAME}
             <%_ } _%>
-            <%_ if (storageType == 'ephemeral') { _%>
+            <%_ if (storageType === 'ephemeral') { _%>
             emptyDir: {}
             <%_ } _%>
           containers:
@@ -270,11 +270,11 @@ objects:
         spec:
           volumes:
           - name: ${LS_APP_NAME}-data
-            <%_ if (storageType == 'persistent') { _%>
+            <%_ if (storageType === 'persistent') { _%>
             persistentVolumeClaim:
               claimName: ${LS_APP_NAME}
             <%_ } _%>
-            <%_ if (storageType == 'ephemeral') { _%>
+            <%_ if (storageType === 'ephemeral') { _%>
             emptyDir: {}
             <%_ } _%>
           - name: ${LS_APP_NAME}-config

@@ -21,14 +21,14 @@
     const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
     const mapper = entityInstance + 'Mapper';
     const entityListToDtoListReference = mapper + '.' + 'toDto';
-    if (pagination == 'no') { %>
+    if (pagination === 'no') { %>
     public List<<%= instanceType %>> getAll<%= entityClassPlural %>(<% if (fieldsContainNoOwnerOneToOne) { %>@RequestParam(required = false) String filter<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
         log.debug("REST request to get all <%= entityClassPlural %>");<% if (viaService) { %>
         return <%= entityInstance %>Service.findAll();<% } else if (dto === 'mapstruct') { %>
         List<<%= entityClass %>> <%= entityInstancePlural %> = <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>();
         return <%= entityListToDtoListReference %>(<%= entityInstancePlural %>);<% } else { %>
         return <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>();<% } %>
-    <% } if (pagination != 'no') { %>
+    <% } if (pagination !== 'no') { %>
     public ResponseEntity<List<<%= instanceType %>>> getAll<%= entityClassPlural %>(@ApiParam Pageable pageable<% if (fieldsContainNoOwnerOneToOne) { %>, @RequestParam(required = false) String filter<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
         log.debug("REST request to get a page of <%= entityClassPlural %>");<% if (viaService) { %>
         Page<<%= instanceType %>> page = <%= entityInstance %>Service.findAll(pageable);<% } else { %>

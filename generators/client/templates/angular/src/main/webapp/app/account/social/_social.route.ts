@@ -20,7 +20,7 @@ import { Route } from '@angular/router';
 
 import { UserRouteAccessService } from '../../shared';
 import { SocialRegisterComponent } from './social-register.component';
-<%_ if (authenticationType == 'jwt') { _%>
+<%_ if (authenticationType === 'jwt') { _%>
 import { SocialAuthComponent } from './social-auth.component';
 <%_ } _%>
 
@@ -33,7 +33,7 @@ export const socialRegisterRoute: Route = {
     },
     canActivate: [UserRouteAccessService]
 };
-<%_ if (authenticationType == 'jwt') { _%>
+<%_ if (authenticationType === 'jwt') { _%>
 
 export const socialAuthRoute: Route = {
     path: 'social-auth',

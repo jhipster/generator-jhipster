@@ -26,17 +26,17 @@
 
     <property name="now" value="now()" dbms="h2"/>
 
-    <%_ if (prodDatabaseType == 'mysql' || prodDatabaseType == 'mariadb') { _%>
+    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
     <property name="now" value="now()" dbms="mysql"/>
     <property name="autoIncrement" value="true"/>
     <%_ } _%>
-    <%_ if (prodDatabaseType == 'postgresql') { _%>
+    <%_ if (prodDatabaseType === 'postgresql') { _%>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
     <%_ } _%>
-    <%_ if (prodDatabaseType == 'oracle') { _%>
+    <%_ if (prodDatabaseType === 'oracle') { _%>
     <property name="now" value="sysdate" dbms="oracle"/>
     <%_ } _%>
-    <%_ if (prodDatabaseType == 'mssql') { _%>
+    <%_ if (prodDatabaseType === 'mssql') { _%>
     <property name="now" value="GETDATE()" dbms="mssql"/>
     <%_ } _%>
 
@@ -52,44 +52,44 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column><% for (idx in fields) {
             let nullable = true;
-            if (fields[idx].fieldValidate == true && fields[idx].fieldValidateRules.indexOf('required') != -1) {
+            if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.indexOf('required') !== -1) {
                 nullable = false;
             }
             let maxlength = 255;
-            if (fields[idx].fieldValidate == true && fields[idx].fieldValidateRules.indexOf('maxlength') != -1) {
+            if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.indexOf('maxlength') !== -1) {
                 maxlength = fields[idx].fieldValidateRulesMaxlength;
             }
             const fieldType = fields[idx].fieldType;
             const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
             const columnName = fields[idx].fieldNameAsDatabaseColumn;
             let columnType;
-            if (fieldType == 'String' || fields[idx].fieldIsEnum) {
+            if (fieldType === 'String' || fields[idx].fieldIsEnum) {
                 columnType="varchar(" + maxlength + ")";
-            } else if (fieldType == 'Integer') {
+            } else if (fieldType === 'Integer') {
                 columnType="integer";
-            } else if (fieldType == 'Long') {
+            } else if (fieldType === 'Long') {
                 columnType="bigint";
-            } else if (fieldType == 'Float') {
+            } else if (fieldType === 'Float') {
                 columnType="${floatType}";
-            } else if (fieldType == 'Double') {
+            } else if (fieldType === 'Double') {
                 columnType="double";
-            } else if (fieldType == 'BigDecimal') {
+            } else if (fieldType === 'BigDecimal') {
                 columnType="decimal(10,2)";
-            } else if (fieldType == 'LocalDate') {
+            } else if (fieldType === 'LocalDate') {
                 columnType="date";
-            } else if (fieldType == 'Instant') {
+            } else if (fieldType === 'Instant') {
                 columnType="timestamp";
-            } else if (fieldType == 'ZonedDateTime') {
+            } else if (fieldType === 'ZonedDateTime') {
                 columnType="timestamp";
-            } else if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') {
+            } else if (fieldType === 'byte[]' && fieldTypeBlobContent !== 'text') {
                 if (prodDatabaseType === 'mysql' || prodDatabaseType === 'postgresql') {
                     columnType="longblob";
                 } else {
                     columnType="blob";
                 }
-            } else if (fieldTypeBlobContent == 'text') {
+            } else if (fieldTypeBlobContent === 'text') {
                 columnType="clob";
-            } else if (fieldType == 'Boolean') {
+            } else if (fieldType === 'Boolean') {
                 if (prodDatabaseType === 'postgresql') {
                     columnType="boolean";
                 } else {
@@ -123,7 +123,7 @@
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
         <%_ for (const idx in fields) {
-            if (fields[idx].fieldType == 'ZonedDateTime' || fields[idx].fieldType == 'Instant') { _%>
+            if (fields[idx].fieldType === 'ZonedDateTime' || fields[idx].fieldType === 'Instant') { _%>
         <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%=fields[idx].fieldNameAsDatabaseColumn %>" columnDataType="datetime"/>
         <%_ }
         } _%>
@@ -132,7 +132,7 @@
             relationshipName = relationships[idx].relationshipName,
             ownerSide = relationships[idx].ownerSide,
             otherEntityName = relationships[idx].otherEntityName;
-            if (relationshipType == 'many-to-many' && ownerSide) {
+            if (relationshipType === 'many-to-many' && ownerSide) {
                 const joinTableName = getJoinTableName(name, relationshipName, prodDatabaseType);
           _%>
 

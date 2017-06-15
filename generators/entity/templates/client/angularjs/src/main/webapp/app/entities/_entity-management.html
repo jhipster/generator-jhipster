@@ -25,12 +25,12 @@
             <div class="col-xs-4 no-padding-left">
                 <button class="btn btn-primary" ui-sref="<%= entityStateName %>.new" >
                     <span class="glyphicon glyphicon-plus"></span>
-                    <span <% if (searchEngine == 'elasticsearch') { %>class="hidden-xs-down" <% } %> data-translate="<%= keyPrefix %>home.createLabel">
+                    <span <% if (searchEngine === 'elasticsearch') { %>class="hidden-xs-down" <% } %> data-translate="<%= keyPrefix %>home.createLabel">
                         Create new <%= entityClassHumanized %>
                     </span>
                 </button>
             </div>
-            <%_ if (searchEngine == 'elasticsearch') { _%>
+            <%_ if (searchEngine === 'elasticsearch') { _%>
             <div class="col-xs-8 no-padding-right">
                 <form name="searchForm" class="form-inline">
                     <div class="input-group pull-right" >
@@ -55,23 +55,23 @@
     <div class="table-responsive">
         <table class="jh-table table table-striped">
             <thead>
-                <tr<% if (pagination != 'no') { %> jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.<%=pagination != 'infinite-scroll' ? 'transition' : 'reset'%>()"<% } %>>
-                    <th<% if (pagination != 'no') { %> jh-sort-by="id"<% } %>><span data-translate="global.field.id">ID</span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
+                <tr<% if (pagination !== 'no') { %> jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.<%=pagination !== 'infinite-scroll' ? 'transition' : 'reset'%>()"<% } %>>
+                    <th<% if (pagination !== 'no') { %> jh-sort-by="id"<% } %>><span data-translate="global.field.id">ID</span><% if (pagination !== 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
                     <%_ for (idx in fields) { _%>
-                    <th<% if (pagination != 'no') { %> jh-sort-by="<%= fields[idx].fieldName%>"<% } %>><span data-translate="<%=keyPrefix + fields[idx].fieldName %>"><%= fields[idx].fieldNameHumanized %></span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
+                    <th<% if (pagination !== 'no') { %> jh-sort-by="<%= fields[idx].fieldName%>"<% } %>><span data-translate="<%=keyPrefix + fields[idx].fieldName %>"><%= fields[idx].fieldNameHumanized %></span><% if (pagination !== 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
                     <%_ } _%>
                     <%_ for (idx in relationships) { _%>
-                        <%_ if (relationships[idx].relationshipType == 'many-to-one'
-                                || (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide == true)
-                                || (relationships[idx].relationshipType == 'many-to-many' && relationships[idx].ownerSide == true && pagination == 'no')) {
-                            const fieldName = dto == 'no' ? "." + relationships[idx].otherEntityField : relationships[idx].otherEntityFieldCapitalized;_%>
-                    <th<% if (pagination != 'no') { %> jh-sort-by="<%=relationships[idx].relationshipName + (fieldName)%>"<% } %>><span data-translate="<%= keyPrefix + relationships[idx].relationshipName%>"><%= relationships[idx].relationshipNameHumanized %></span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
+                        <%_ if (relationships[idx].relationshipType === 'many-to-one'
+                                || (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide === true)
+                                || (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true && pagination === 'no')) {
+                            const fieldName = dto === 'no' ? "." + relationships[idx].otherEntityField : relationships[idx].otherEntityFieldCapitalized;_%>
+                    <th<% if (pagination !== 'no') { %> jh-sort-by="<%=relationships[idx].relationshipName + (fieldName)%>"<% } %>><span data-translate="<%= keyPrefix + relationships[idx].relationshipName%>"><%= relationships[idx].relationshipNameHumanized %></span><% if (pagination !== 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
                         <%_ } _%>
                     <%_ } _%>
                     <th></th>
                 </tr>
             </thead>
-            <tbody<% if (pagination == 'infinite-scroll') { %> infinite-scroll="vm.loadPage(vm.page + 1)" infinite-scroll-disabled="vm.page >= vm.links['last']"<% } %>>
+            <tbody<% if (pagination === 'infinite-scroll') { %> infinite-scroll="vm.loadPage(vm.page + 1)" infinite-scroll-disabled="vm.page >= vm.links['last']"<% } %>>
                 <tr ng-repeat="<%=entityInstance %> in vm.<%=entityInstancePlural %> track by <%=entityInstance %>.id">
                     <td><a ui-sref="<%= entityStateName %>-detail({id:<%= entityInstance %>.id})">{{<%=entityInstance %>.id}}</a></td>
                     <%_ for (idx in fields) {
@@ -79,14 +79,14 @@
                         const fieldNameCapitalized = fields[idx].fieldNameCapitalized;
                         const fieldType = fields[idx].fieldType;
                         const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent; _%>
-                        <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'image') { _%>
+                        <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image') { _%>
                     <td>
                         <a ng-if="<%= entityInstance %>.<%= fieldName %>" ng-click="vm.openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">
                             <img data-ng-src="{{'data:' + <%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fieldName%>}}" style="max-height: 30px;" alt="<%=entityInstance %> image"/>
                         </a>
                         <span ng-if="<%= entityInstance %>.<%= fieldName %>">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
                     </td>
-                        <%_ } else if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'any') { _%>
+                        <%_ } else if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any') { _%>
                     <td>
                         <a ng-if="<%= entityInstance %>.<%= fieldName %>" ng-click="vm.openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" data-translate="entity.action.open">open</a>
                         <span ng-if="<%= entityInstance %>.<%= fieldName %>">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
@@ -95,7 +95,7 @@
                     <td data-translate="{{'<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>}}">{{<%= entityInstance %>.<%= fieldName %>}}</td>
                         <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
                     <td>{{<%=entityInstance %>.<%=fieldName%> | date:'medium'}}</td>
-                    <%_ } else if (fieldType == 'LocalDate') { _%>
+                    <%_ } else if (fieldType === 'LocalDate') { _%>
                         <td>{{<%=entityInstance %>.<%=fieldName%> | date:'mediumDate'}}</td>
                         <%_ } else { _%>
                     <td>{{<%=entityInstance %>.<%=fieldName%>}}</td>
@@ -110,29 +110,29 @@
                             const otherEntityStateName = relationships[idx].otherEntityStateName;
                             const otherEntityField = relationships[idx].otherEntityField;
                             const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized; _%>
-                        <%_ if (relationshipType == 'many-to-one'
-                                || (relationshipType == 'one-to-one' && ownerSide == true)
-                                || (relationshipType == 'many-to-many' && ownerSide == true && pagination == 'no')) { _%>
+                        <%_ if (relationshipType === 'many-to-one'
+                                || (relationshipType === 'one-to-one' && ownerSide === true)
+                                || (relationshipType === 'many-to-many' && ownerSide === true && pagination === 'no')) { _%>
                     <td>
-                            <%_ if (otherEntityName == 'user') { _%>
-                                <%_ if (relationshipType == 'many-to-many') { _%>
+                            <%_ if (otherEntityName === 'user') { _%>
+                                <%_ if (relationshipType === 'many-to-many') { _%>
                         <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldNamePlural %>">
                             {{<%= relationshipFieldName %>.<%= otherEntityField %>}}{{$last ? '' : ', '}}
                         </span>
                                 <%_ } else { _%>
-                                    <%_ if (dto == 'no') { _%>
+                                    <%_ if (dto === 'no') { _%>
                         {{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}
                                     <%_ } else { _%>
                         {{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}
                                     <%_ } _%>
                                 <%_ } _%>
                             <%_ } else { _%>
-                                <%_ if (relationshipType == 'many-to-many') { _%>
+                                <%_ if (relationshipType === 'many-to-many') { _%>
                         <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldNamePlural %>">
                             <a class="form-control-static" ui-sref="<%= otherEntityStateName %>-detail({id: <%= relationshipFieldName %>.id})">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{$last ? '' : ', '}}
                         </span>
                                 <%_ } else { _%>
-                                    <%_ if (dto == 'no') { _%>
+                                    <%_ if (dto === 'no') { _%>
                         <a ui-sref="<%= otherEntityStateName %>-detail({id:<%= entityInstance + "." + relationshipFieldName + ".id" %>})">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</a>
                                     <%_ } else { _%>
                         <a ui-sref="<%= otherEntityStateName %>-detail({id:<%= entityInstance + "." + relationshipFieldName + "Id" %>})">{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</a>
@@ -168,12 +168,12 @@
             </tbody>
         </table>
     </div>
-    <%_ if (pagination == 'pager') { _%>
+    <%_ if (pagination === 'pager') { _%>
     <div class="text-center">
         <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
     </div>
     <uib-pager total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.transition()"></uib-pager>
-    <%_ } else if (pagination == 'pagination') { _%>
+    <%_ } else if (pagination === 'pagination') { _%>
     <div class="text-center">
         <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
         <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>

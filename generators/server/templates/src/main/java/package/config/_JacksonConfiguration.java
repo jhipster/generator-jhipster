@@ -18,7 +18,7 @@
 -%>
 package <%=packageName%>.config;
 
-<%_ if (databaseType == 'sql') { _%>
+<%_ if (databaseType === 'sql') { _%>
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 <%_ } _%>
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class JacksonConfiguration {
-<%_ if (databaseType == 'sql') { _%>
+<%_ if (databaseType === 'sql') { _%>
 
     /**
      * Support for Hibernate types in Jackson.

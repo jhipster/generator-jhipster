@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 package <%=packageName%>.service;
-<% if (databaseType == 'cassandra') { %>
+<% if (databaseType === 'cassandra') { %>
 import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.<%= mainClass %>;
 import <%=packageName%>.domain.User;
@@ -49,7 +49,7 @@ import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)
-public class MailServiceIntTest <% if (databaseType == 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+public class MailServiceIntTest <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     @Autowired
     private JHipsterProperties jHipsterProperties;

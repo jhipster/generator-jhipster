@@ -194,7 +194,7 @@
             </tbody>
         </table>
     </div>
-    <% if (hibernateCache == 'ehcache') { %>
+    <% if (hibernateCache === 'ehcache') { %>
     <h3 jhiTranslate="metrics.cache.title">Cache statistics</h3>
     <div class="table-responsive" *ngIf="!updatingMetrics">
         <table class="table table-striped">

@@ -20,11 +20,11 @@ package <%=packageName%>.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 
-<%_ if (authenticationType == 'session') { _%>
+<%_ if (authenticationType === 'session') { _%>
 import <%=packageName%>.domain.PersistentToken;
 <%_ } _%>
 import <%=packageName%>.domain.User;
-<%_ if (authenticationType == 'session') { _%>
+<%_ if (authenticationType === 'session') { _%>
 import <%=packageName%>.repository.PersistentTokenRepository;
 <%_ } _%>
 import <%=packageName%>.repository.UserRepository;
@@ -47,7 +47,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-<%_ if (authenticationType == 'session') { _%>
+<%_ if (authenticationType === 'session') { _%>
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 <%_ } _%>
@@ -67,18 +67,18 @@ public class AccountResource {
     private final UserService userService;
 
     private final MailService mailService;
-    <%_ if (authenticationType == 'session') { _%>
+    <%_ if (authenticationType === 'session') { _%>
 
     private final PersistentTokenRepository persistentTokenRepository;
     <%_ } _%>
 
     public AccountResource(UserRepository userRepository, UserService userService,
-            MailService mailService<% if (authenticationType == 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>) {
+            MailService mailService<% if (authenticationType === 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>) {
 
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
-        <%_ if (authenticationType == 'session') { _%>
+        <%_ if (authenticationType === 'session') { _%>
         this.persistentTokenRepository = persistentTokenRepository;
         <%_ } _%>
     }
@@ -107,7 +107,7 @@ public class AccountResource {
                     User user = userService
                         .createUser(managedUserVM.getLogin(), managedUserVM.getPassword(),
                             managedUserVM.getFirstName(), managedUserVM.getLastName(),
-                            managedUserVM.getEmail().toLowerCase()<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>, managedUserVM.getImageUrl()<% } %>,
+                            managedUserVM.getEmail().toLowerCase()<% if (databaseType === 'mongodb' || databaseType === 'sql') { %>, managedUserVM.getImageUrl()<% } %>,
                             managedUserVM.getLangKey());
 
                     mailService.sendActivationEmail(user);
@@ -195,7 +195,7 @@ public class AccountResource {
         }
         userService.changePassword(password);
         return new ResponseEntity<>(HttpStatus.OK);
-    }<% if (authenticationType == 'session') { %>
+    }<% if (authenticationType === 'session') { %>
 
     /**
      * GET  /account/sessions : get the current open sessions.
@@ -235,7 +235,7 @@ public class AccountResource {
         String decodedSeries = URLDecoder.decode(series, "UTF-8");
         userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(u ->
             persistentTokenRepository.findByUser(u).stream()
-                .filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries))<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+                .filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries))<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
                 .findAny().ifPresent(t -> persistentTokenRepository.delete(decodedSeries)));<% } else { %>
                 .findAny().ifPresent(persistentTokenRepository::delete));<% } %>
     }<% } %>

@@ -19,7 +19,7 @@
 <%_
 const i18nToLoad = [entityInstance];
 for (const idx in fields) {
-    if (fields[idx].fieldIsEnum == true) {
+    if (fields[idx].fieldIsEnum === true) {
         i18nToLoad.push(fields[idx].enumInstance);
     }
 }
@@ -54,7 +54,7 @@ export class <%= entityAngularName %>DeleteDialogComponent {
         this.activeModal.dismiss('cancel');
     }
 
-    confirmDelete(id: <% if (pkType == 'String') { %>string<% } else { %>number<% } %>) {
+    confirmDelete(id: <% if (pkType === 'String') { %>string<% } else { %>number<% } %>) {
         this.<%= entityInstance %>Service.delete(id).subscribe((response) => {
             this.eventManager.broadcast({
                 name: '<%= entityInstance %>ListModification',

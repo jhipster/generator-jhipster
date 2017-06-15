@@ -18,7 +18,7 @@
 -%>
 package <%= packageName %>.web.rest.errors;
 
-<%_ if (databaseType != 'no' && databaseType != 'cassandra') { _%>
+<%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
 import org.springframework.dao.ConcurrencyFailureException;
 <%_ } _%>
 import org.springframework.http.HttpStatus;
@@ -32,7 +32,7 @@ import java.util.Map;
 
 @RestController
 public class ExceptionTranslatorTestController {
-    <%_ if (databaseType != 'no' && databaseType != 'cassandra') { _%>
+    <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
 
     @GetMapping("/test/concurrency-failure")
     public void concurrencyFailure() {

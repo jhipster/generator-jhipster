@@ -17,14 +17,14 @@
  limitations under the License.
 -%>
 package <%=packageName%>.config;
-<%_ if (databaseType == 'mongodb') { _%>
+<%_ if (databaseType === 'mongodb') { _%>
 
 import com.github.mongobee.Mongobee;
 
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.domain.util.JSR310DateConverters.*;
 
-<%_ if (authenticationType == 'oauth2') { _%>
+<%_ if (authenticationType === 'oauth2') { _%>
 
 import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;
 <%_ } } else { _%>
@@ -33,19 +33,19 @@ import io.github.jhipster.config.JHipsterConstants;
 <%_ } _%>
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;<% if (hibernateCache == 'hazelcast') { %>
+import org.slf4j.LoggerFactory;<% if (hibernateCache === 'hazelcast') { %>
 import org.springframework.cache.CacheManager;<% } %>
-<%_ if (databaseType == 'mongodb') { _%>
+<%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.cloud.Cloud;
 import org.springframework.cloud.CloudException;
 <%_ } _%>
 import org.springframework.cloud.config.java.AbstractCloudConfig;
-<%_ if (databaseType == 'mongodb') { _%>
+<%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.cloud.service.ServiceInfo;
 import org.springframework.cloud.service.common.MongoServiceInfo;
 <%_ } _%>
 import org.springframework.context.annotation.*;
-<%_ if (databaseType == 'mongodb') { _%>
+<%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -54,33 +54,33 @@ import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventL
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 <%_ } _%>
-<%_ if (databaseType == 'sql') { _%>
+<%_ if (databaseType === 'sql') { _%>
 
 import javax.sql.DataSource;
 <%_ } _%>
-<%_ if (databaseType == 'mongodb') { _%>
+<%_ if (databaseType === 'mongodb') { _%>
 
 import java.util.ArrayList;
 import java.util.List;
 <%_ } _%>
 
 @Configuration
-<%_ if (databaseType == 'mongodb') { _%>
+<%_ if (databaseType === 'mongodb') { _%>
 @EnableMongoRepositories("<%=packageName%>.repository")
 <%_ } _%>
 @Profile(JHipsterConstants.SPRING_PROFILE_CLOUD)
 public class CloudDatabaseConfiguration extends AbstractCloudConfig {
 
     private final Logger log = LoggerFactory.getLogger(CloudDatabaseConfiguration.class);
-    <%_ if (databaseType == 'sql') { _%>
+    <%_ if (databaseType === 'sql') { _%>
 
     @Bean
-    public DataSource dataSource(<% if (hibernateCache == 'hazelcast') { %>CacheManager cacheManager<% } %>) {
+    public DataSource dataSource(<% if (hibernateCache === 'hazelcast') { %>CacheManager cacheManager<% } %>) {
         log.info("Configuring JDBC datasource from a cloud provider");
         return connectionFactory().dataSource();
     }
     <%_ } _%>
-    <%_ if (databaseType == 'mongodb') { _%>
+    <%_ if (databaseType === 'mongodb') { _%>
 
     @Bean
     public MongoDbFactory mongoFactory() {
@@ -100,7 +100,7 @@ public class CloudDatabaseConfiguration extends AbstractCloudConfig {
     @Bean
     public CustomConversions customConversions() {
         List<Converter<?, ?>> converterList = new ArrayList<>();
-        <%_ if (authenticationType == 'oauth2') { _%>
+        <%_ if (authenticationType === 'oauth2') { _%>
         converterList.add(new OAuth2AuthenticationReadConverter());
         <%_ } _%>
         converterList.add(DateToZonedDateTimeConverter.INSTANCE);

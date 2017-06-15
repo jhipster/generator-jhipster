@@ -26,7 +26,7 @@
         vm.predicate = 'id';
         vm.reset = reset;
         vm.reverse = true;
-        <%_ if (searchEngine == 'elasticsearch') { _%>
+        <%_ if (searchEngine === 'elasticsearch') { _%>
         vm.clear = clear;
         vm.loadAll = loadAll;
         vm.search = search;
@@ -39,7 +39,7 @@
         loadAll();
 
         function loadAll () {
-        <%_ if (searchEngine != 'elasticsearch') { _%>
+        <%_ if (searchEngine !== 'elasticsearch') { _%>
             <%= entityClass %>.query({
                 page: vm.page,
                 size: vm.itemsPerPage,
@@ -92,7 +92,7 @@
             vm.page = page;
             loadAll();
         }
-        <%_ if (searchEngine == 'elasticsearch') { _%>
+        <%_ if (searchEngine === 'elasticsearch') { _%>
 
         function clear () {
             vm.<%= entityInstancePlural %> = [];

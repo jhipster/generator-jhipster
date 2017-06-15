@@ -21,20 +21,20 @@ package <%=packageName%>.web.rest;
 import <%=packageName%>.config.Constants;
 import com.codahale.metrics.annotation.Timed;
 import <%=packageName%>.domain.User;
-import <%=packageName%>.repository.UserRepository;<% if (searchEngine == 'elasticsearch') { %>
+import <%=packageName%>.repository.UserRepository;<% if (searchEngine === 'elasticsearch') { %>
 import <%=packageName%>.repository.search.UserSearchRepository;<% } %>
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.service.MailService;
 import <%=packageName%>.service.UserService;
 import <%=packageName%>.service.dto.UserDTO;
 import <%=packageName%>.web.rest.vm.ManagedUserVM;
-import <%=packageName%>.web.rest.util.HeaderUtil;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import <%=packageName%>.web.rest.util.HeaderUtil;<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
 import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
 import io.github.jhipster.web.util.ResponseUtil;
 import io.swagger.annotations.ApiParam;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import org.slf4j.LoggerFactory;<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;<% } %>
@@ -46,7 +46,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;<% if (searchEngine == 'elasticsearch') { %>
+import java.util.*;<% if (searchEngine === 'elasticsearch') { %>
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -88,17 +88,17 @@ public class UserResource {
 
     private final MailService mailService;
 
-    private final UserService userService;<% if (searchEngine == 'elasticsearch') { %>
+    private final UserService userService;<% if (searchEngine === 'elasticsearch') { %>
 
     private final UserSearchRepository userSearchRepository;<% } %>
 
     public UserResource(UserRepository userRepository, MailService mailService,
-            UserService userService<% if (searchEngine == 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %>) {
+            UserService userService<% if (searchEngine === 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %>) {
 
         this.userRepository = userRepository;
         this.mailService = mailService;
         this.userService = userService;
-        <%_ if (searchEngine == 'elasticsearch') { _%>
+        <%_ if (searchEngine === 'elasticsearch') { _%>
         this.userSearchRepository = userSearchRepository;
         <%_ } _%>
     }
@@ -172,12 +172,12 @@ public class UserResource {
 
     /**
      * GET  /users : get all users.
-     *<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+     *<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
      * @param pageable the pagination information<% } %>
      * @return the ResponseEntity with status 200 (OK) and with body all users
      */
     @GetMapping("/users")
-    @Timed<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+    @Timed<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
     public ResponseEntity<List<UserDTO>> getAllUsers(@ApiParam Pageable pageable) {
         final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
@@ -226,7 +226,7 @@ public class UserResource {
         log.debug("REST request to delete User: {}", login);
         userService.deleteUser(login);
         return ResponseEntity.ok().headers(HeaderUtil.createAlert(<% if(enableTranslation) {%> "userManagement.deleted"<% } else { %> "A user is deleted with identifier " + login<% } %>, login)).build();
-    }<% if (searchEngine == 'elasticsearch') { %>
+    }<% if (searchEngine === 'elasticsearch') { %>
 
     /**
      * SEARCH  /_search/users/:query : search for the User corresponding

@@ -77,7 +77,7 @@ public class LoggingConfiguration {
         LogstashSocketAppender logstashAppender = new LogstashSocketAppender();
         logstashAppender.setName("LOGSTASH");
         logstashAppender.setContext(context);
-        <%_ if (serviceDiscoveryType && (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa')) { _%>
+        <%_ if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { _%>
         String customFields = "{\"app_name\":\"" + appName + "\",\"app_port\":\"" + serverPort + "\"," +
             "\"instance_id\":\"" + instanceId + "\"}";
         <%_ } else { _%>

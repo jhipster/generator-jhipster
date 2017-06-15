@@ -32,7 +32,7 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-<%_ if (serviceDiscoveryType == 'eureka') { _%>
+<%_ if (serviceDiscoveryType === 'eureka') { _%>
 eureka:
     client:
         enabled: true
@@ -65,7 +65,7 @@ zuul: # those values must be configured depending on the application specific ne
         max-per-route-connections: 100
     semaphore:
         max-semaphores: 500
-    <%_ if (serviceDiscoveryType == 'consul') { _%>
+    <%_ if (serviceDiscoveryType === 'consul') { _%>
     ignoredServices: 'consul,<%= baseName %>' # Prevent Consul and the "<%= baseName %>" app itself from having a Zuul route automatically created for them
     <%_ } _%>
 
@@ -97,14 +97,14 @@ management:
     health:
         mail:
             enabled: false # When using the MailService, configure an SMTP server and set this to true
-<%_ if (messageBroker == 'kafka') { _%>
+<%_ if (messageBroker === 'kafka') { _%>
         binders:
             enabled: true
 <%_ } _%>
 spring:
     application:
         name: <%= baseName %>
-    <%_ if (serviceDiscoveryType == 'consul') { _%>
+    <%_ if (serviceDiscoveryType === 'consul') { _%>
     cloud:
         consul:
             discovery:
@@ -120,7 +120,7 @@ spring:
     <%_ } _%>
     jackson:
         serialization.write_dates_as_timestamps: false
-    <%_ if (databaseType == 'sql') { _%>
+    <%_ if (databaseType === 'sql') { _%>
     jpa:
         open-in-view: false
         hibernate:
@@ -159,7 +159,7 @@ spring:
 security:
     basic:
         enabled: false
-    <%_ if (authenticationType == 'oauth2' || authenticationType == 'uaa') { _%>
+    <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
     oauth2:
         resource:
             filter-order: 3
@@ -210,7 +210,7 @@ jhipster:
         license-url:
 <%_ if (enableSocialSignIn) { _%>
     social:
-        <%_ if (authenticationType == 'jwt') { _%>
+        <%_ if (authenticationType === 'jwt') { _%>
         redirect-after-sign-in: "/#/social-auth"
         <%_ } else { _%>
         redirect-after-sign-in: "/#/"

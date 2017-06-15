@@ -75,7 +75,7 @@ export class LoginService {
             });
         });
     }
-    <%_ if (authenticationType == 'jwt') { _%>
+    <%_ if (authenticationType === 'jwt') { _%>
 
     loginWithToken(jwt, rememberMe) {
         return this.authServerProvider.loginWithToken(jwt, rememberMe);

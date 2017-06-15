@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<% if (authenticationType == 'uaa' || authenticationType == 'oauth2') { %>import java.nio.charset.StandardCharsets
+<% if (authenticationType === 'uaa' || authenticationType === 'oauth2') { %>import java.nio.charset.StandardCharsets
 import java.util.Base64
 
 <% } %>import _root_.io.gatling.core.scenario.Simulation
@@ -52,14 +52,14 @@ class <%= entityClass %>GatlingTest extends Simulation {
     val headers_http = Map(
         "Accept" -> """application/json"""
     )
-<%_ if (authenticationType == 'session') { _%>
+<%_ if (authenticationType === 'session') { _%>
 
     val headers_http_authenticated = Map(
         "Accept" -> """application/json""",
         "X-XSRF-TOKEN" -> "${xsrf_token}"
     )
 <%_ } _%>
-<%_ if (authenticationType == 'uaa' || authenticationType == 'oauth2') { _%>
+<%_ if (authenticationType === 'uaa' || authenticationType === 'oauth2') { _%>
 
     val authorization_header = "Basic " + Base64.getEncoder.encodeToString("<%= baseName%>app:my-secret-token-to-change-in-production".getBytes(StandardCharsets.UTF_8))
 
@@ -74,7 +74,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
         "Authorization" -> "Bearer ${access_token}"
     )
 <%_ } _%>
-<%_ if (authenticationType == 'jwt') { _%>
+<%_ if (authenticationType === 'jwt') { _%>
 
     val headers_http_authentication = Map(
         "Content-Type" -> """application/json""",
@@ -91,11 +91,11 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .exec(http("First unauthenticated request")
         .get("/api/account")
         .headers(headers_http)
-        .check(status.is(401))<% if (authenticationType == 'session') { %>
+        .check(status.is(401))<% if (authenticationType === 'session') { %>
         .check(headerRegex("Set-Cookie", "XSRF-TOKEN=(.*);[\\s]").saveAs("xsrf_token"))<% } %>).exitHereIfFailed
         .pause(10)
         .exec(http("Authentication")
-<%_ if (authenticationType == 'session') { _%>
+<%_ if (authenticationType === 'session') { _%>
         .post("/api/authentication")
         .headers(headers_http_authenticated)
         .formParam("j_username", "admin")
@@ -103,7 +103,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .formParam("remember-me", "true")
         .formParam("submit", "Login")
         .check(headerRegex("Set-Cookie", "XSRF-TOKEN=(.*);[\\s]").saveAs("xsrf_token"))).exitHereIfFailed
-<%_ } else if (authenticationType == 'uaa' || authenticationType == 'oauth2') { _%>
+<%_ } else if (authenticationType === 'uaa' || authenticationType === 'oauth2') { _%>
         .post("/oauth/token")
         .headers(headers_http_authentication)
         .formParam("username", "admin")
@@ -114,7 +114,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .formParam("client_id", "<%= baseName%>app")
         .formParam("submit", "Login")
         .check(jsonPath("$.access_token").saveAs("access_token"))).exitHereIfFailed
-<%_ } else if (authenticationType == 'jwt') { _%>
+<%_ } else if (authenticationType === 'jwt') { _%>
         .post("/api/authenticate")
         .headers(headers_http_authentication)
         .body(StringBody("""{"username":"admin", "password":"admin"}""")).asJSON
@@ -135,7 +135,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
             .exec(http("Create new <%= entityInstance %>")
             .post("<% if (applicationType === 'microservice') {%>/<%= baseName.toLowerCase() %><% } %>/api/<%= entityApiUrl %>")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null<% for (idx in fields) { %>, "<%= fields[idx].fieldName %>":<% if (fields[idx].fieldType == 'String') { %>"SAMPLE_TEXT"<% } else if (fields[idx].fieldType == 'Integer') { %>"0"<% } else if (fields[idx].fieldType == 'Instant' || fields[idx].fieldType == 'ZonedDateTime' || fields[idx].fieldType == 'LocalDate') { %>"2020-01-01T00:00:00.000Z"<% } else { %>null<% } } %>}""")).asJSON
+            .body(StringBody("""{"id":null<% for (idx in fields) { %>, "<%= fields[idx].fieldName %>":<% if (fields[idx].fieldType === 'String') { %>"SAMPLE_TEXT"<% } else if (fields[idx].fieldType === 'Integer') { %>"0"<% } else if (fields[idx].fieldType === 'Instant' || fields[idx].fieldType === 'ZonedDateTime' || fields[idx].fieldType === 'LocalDate') { %>"2020-01-01T00:00:00.000Z"<% } else { %>null<% } } %>}""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_<%= entityInstance %>_url"))).exitHereIfFailed
             .pause(10)

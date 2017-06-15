@@ -19,7 +19,7 @@
 <%_
 const i18nToLoad = [entityInstance];
 for (const idx in fields) {
-    if (fields[idx].fieldIsEnum == true) {
+    if (fields[idx].fieldIsEnum === true) {
         i18nToLoad.push(fields[idx].enumInstance);
     }
 }
@@ -75,7 +75,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     <%_ for (idx in fields) {
         const fieldName = fields[idx].fieldName;
         const fieldType = fields[idx].fieldType;
-        if (fieldType == 'LocalDate') { _%>
+        if (fieldType === 'LocalDate') { _%>
     <%= fieldName %>Dp: any;
         <%_ }
     } _%>
@@ -87,7 +87,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         <%_ } _%>
         private alertService: JhiAlertService,
         private <%= entityInstance %>Service: <%= entityAngularName %>Service,<% for (idx in differentRelationships) {
-        if (differentRelationships[idx].relationshipType != 'one-to-many') { %>
+        if (differentRelationships[idx].relationshipType !== 'one-to-many') { %>
         private <%= differentRelationships[idx].otherEntityName %>Service: <%= differentRelationships[idx].otherEntityAngularName %>Service,<% }
         }%>
         <%_ if (fieldsContainImageBlob) { _%>
@@ -189,7 +189,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     const entitiesSeen = [];
     for (idx in relationships) {
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
-        if(relationships[idx].relationshipType != 'one-to-many' && entitiesSeen.indexOf(otherEntityNameCapitalized) == -1) {
+        if(relationships[idx].relationshipType !== 'one-to-many' && entitiesSeen.indexOf(otherEntityNameCapitalized) === -1) {
     _%>
 
     track<%- otherEntityNameCapitalized -%>ById(index: number, item: <%- relationships[idx].otherEntityAngularName -%>) {

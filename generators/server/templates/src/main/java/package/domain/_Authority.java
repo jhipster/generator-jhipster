@@ -18,10 +18,10 @@
 -%>
 package <%=packageName%>.domain;
 
-<% if (hibernateCache != 'no' && databaseType == 'sql') { %>import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (databaseType == 'mongodb') { %>
+<% if (hibernateCache !== 'no' && databaseType === 'sql') { %>import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (databaseType === 'mongodb') { %>
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;<% } %><% if (databaseType == 'sql') { %>
+import org.springframework.data.mongodb.core.mapping.Document;<% } %><% if (databaseType === 'sql') { %>
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -32,10 +32,10 @@ import java.io.Serializable;
 
 /**
  * An authority (a security role) used by Spring Security.
- */<% if (databaseType == 'sql') { %>
+ */<% if (databaseType === 'sql') { %>
 @Entity
-@Table(name = "jhi_authority")<% if (hibernateCache != 'no') { %>
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType == 'mongodb') { %>
+@Table(name = "jhi_authority")<% if (hibernateCache !== 'no') { %>
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType === 'mongodb') { %>
 @Document(collection = "jhi_authority")<% } %>
 public class Authority implements Serializable {
 
@@ -43,7 +43,7 @@ public class Authority implements Serializable {
 
     @NotNull
     @Size(min = 0, max = 50)
-    @Id<% if (databaseType == 'sql') { %>
+    @Id<% if (databaseType === 'sql') { %>
     @Column(length = 50)<% } %>
     private String name;
 

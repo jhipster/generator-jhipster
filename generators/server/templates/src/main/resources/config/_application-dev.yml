@@ -30,7 +30,7 @@
 # Full reference is available at:
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
-<%_ if (serviceDiscoveryType == 'eureka') { _%>
+<%_ if (serviceDiscoveryType === 'eureka') { _%>
 
 eureka:
     instance:
@@ -54,16 +54,16 @@ spring:
             enabled: false # we use gulp + BrowserSync for livereload
     jackson:
         serialization.indent_output: true
-    <%_ if (messageBroker == 'kafka' || serviceDiscoveryType == 'consul') { _%>
+    <%_ if (messageBroker === 'kafka' || serviceDiscoveryType === 'consul') { _%>
     cloud:
-        <%_ if (serviceDiscoveryType == 'consul') { _%>
+        <%_ if (serviceDiscoveryType === 'consul') { _%>
         consul:
             discovery:
                prefer-ip-address: true
             host: localhost
             port: 8500
         <%_ } _%>
-        <%_ if (messageBroker == 'kafka') { _%>
+        <%_ if (messageBroker === 'kafka') { _%>
         stream:
             kafka:
                 binder:
@@ -74,22 +74,22 @@ spring:
                     destination: topic-jhipster
         <%_ } _%>
     <%_ } _%>
-    <%_ if (databaseType == 'sql') { _%>
+    <%_ if (databaseType === 'sql') { _%>
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        <%_ if (devDatabaseType == 'mysql') { _%>
+        <%_ if (devDatabaseType === 'mysql') { _%>
         url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false
         username: root
         password:
-        <%_ } else if (devDatabaseType == 'mariadb') { _%>
+        <%_ } else if (devDatabaseType === 'mariadb') { _%>
         url: jdbc:mariadb://localhost:3306/<%= baseName %>
         username: root
         password:
-        <%_ } else if (devDatabaseType == 'postgresql') { _%>
+        <%_ } else if (devDatabaseType === 'postgresql') { _%>
         url: jdbc:postgresql://localhost:5432/<%= baseName %>
         username: <%= baseName %>
         password:
-        <%_ } else if (devDatabaseType == 'oracle') { _%>
+        <%_ } else if (devDatabaseType === 'oracle') { _%>
         url: jdbc:oracle:thin:@localhost:1521:xe
         username: system
         password: oracle
@@ -97,16 +97,16 @@ spring:
         url: jdbc:sqlserver://localhost:1433;database=<%= baseName %>
         username: SA
         password: yourStrong(!)Password
-        <%_ } else if (devDatabaseType == 'h2Disk') { _%>
+        <%_ } else if (devDatabaseType === 'h2Disk') { _%>
         url: jdbc:h2:file:./<%= BUILD_DIR %>h2db/db/<%= lowercaseBaseName %>;DB_CLOSE_DELAY=-1
         username: <%= baseName %>
         password:
-        <%_ } else if (devDatabaseType == 'h2Memory') { _%>
+        <%_ } else if (devDatabaseType === 'h2Memory') { _%>
         url: jdbc:h2:mem:<%= lowercaseBaseName %>;DB_CLOSE_DELAY=-1
         username: <%= baseName %>
         password:
         <%_ } _%>
-        <%_ if (devDatabaseType == 'mysql' || devDatabaseType == 'mariadb' || devDatabaseType === 'mssql') { _%>
+        <%_ if (devDatabaseType === 'mysql' || devDatabaseType === 'mariadb' || devDatabaseType === 'mssql') { _%>
         hikari:
             data-source-properties:
                 cachePrepStmts: true
@@ -114,28 +114,28 @@ spring:
                 prepStmtCacheSqlLimit: 2048
                 useServerPrepStmts: true
         <%_ } _%>
-    <%_ if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
+    <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
     h2:
         console:
             enabled: false
     <%_ } _%>
     jpa:
-        <%_ if (devDatabaseType == 'mysql' || devDatabaseType == 'mariadb') { _%>
+        <%_ if (devDatabaseType === 'mysql' || devDatabaseType === 'mariadb') { _%>
         database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-        <%_ } else if (devDatabaseType == 'postgresql') { _%>
+        <%_ } else if (devDatabaseType === 'postgresql') { _%>
         database-platform: io.github.jhipster.domain.util.FixedPostgreSQL82Dialect
-        <%_ } else if (devDatabaseType == 'oracle') { _%>
+        <%_ } else if (devDatabaseType === 'oracle') { _%>
         database-platform: org.hibernate.dialect.Oracle12cDialect
         <%_ } else if (devDatabaseType === 'mssql') { _%>
         database-platform: org.hibernate.dialect.SQLServer2012Dialect
         <%_ } else { _%>
         database-platform: io.github.jhipster.domain.util.FixedH2Dialect
         <%_ } _%>
-        <%_ if (devDatabaseType == 'mysql' || devDatabaseType === 'mariadb') { _%>
+        <%_ if (devDatabaseType === 'mysql' || devDatabaseType === 'mariadb') { _%>
         database: MYSQL
-        <%_ } else if (devDatabaseType == 'postgresql') { _%>
+        <%_ } else if (devDatabaseType === 'postgresql') { _%>
         database: POSTGRESQL
-        <%_ } else if (devDatabaseType == 'oracle') { _%>
+        <%_ } else if (devDatabaseType === 'oracle') { _%>
         database: ORACLE
         <%_ } else if (devDatabaseType === 'mssql') { _%>
         database: SQL_SERVER
@@ -145,36 +145,36 @@ spring:
         show-sql: true
         properties:
             hibernate.id.new_generator_mappings: true
-            hibernate.cache.use_second_level_cache: <% if (hibernateCache == 'ehcache' || hibernateCache == 'hazelcast') { %>true<% } else { %>false<% } %>
+            hibernate.cache.use_second_level_cache: <% if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast') { %>true<% } else { %>false<% } %>
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
-            <%_ if (hibernateCache == 'ehcache') { _%>
+            <%_ if (hibernateCache === 'ehcache') { _%>
             hibernate.cache.region.factory_class: io.github.jhipster.config.jcache.NoDefaultJCacheRegionFactory
-            <%_ } else if (hibernateCache == 'hazelcast') { _%>
+            <%_ } else if (hibernateCache === 'hazelcast') { _%>
             hibernate.cache.region.factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
             hibernate.cache.hazelcast.instance_name: <%= baseName %>
             <%_ } _%>
-            <%_ if (hibernateCache == 'hazelcast') { _%>
+            <%_ if (hibernateCache === 'hazelcast') { _%>
             hibernate.cache.use_minimal_puts: true
             hibernate.cache.hazelcast.use_lite_member: true
             <%_ } _%>
     <%_ } _%>
-    <%_ if (databaseType == 'mongodb' || databaseType == 'cassandra' || applicationType == 'gateway' || searchEngine == 'elasticsearch') { _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra' || applicationType === 'gateway' || searchEngine === 'elasticsearch') { _%>
     data:
     <%_ } _%>
-    <%_ if (databaseType == 'mongodb') { _%>
+    <%_ if (databaseType === 'mongodb') { _%>
         mongodb:
             uri: mongodb://localhost:27017
             database: <%= baseName %>
     <%_ } _%>
-    <%_ if (databaseType == 'cassandra') { _%>
+    <%_ if (databaseType === 'cassandra') { _%>
         cassandra:
             contactPoints: localhost
             protocolVersion: V4
             compression: LZ4
             keyspaceName: <%= baseName %>
     <%_ } _%>
-    <%_ if (searchEngine == 'elasticsearch') { _%>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
         elasticsearch:
             cluster-name:
             cluster-nodes:
@@ -233,7 +233,7 @@ server:
 # ===================================================================
 
 jhipster:
-    <%_ if (applicationType == 'gateway') { _%>
+    <%_ if (applicationType === 'gateway') { _%>
     gateway:
         rate-limiting:
             enabled: false
@@ -244,14 +244,14 @@ jhipster:
     <%_ } _%>
     http:
         version: V_1_1 # To use HTTP/2 you will need SSL support (see above the "server.ssl" configuration)
-    <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast' ||  hibernateCache == 'ehcache') { _%>
+    <%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast' ||  hibernateCache === 'ehcache') { _%>
     cache: # Cache configuration
-        <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>
+        <%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { _%>
         hazelcast: # Hazelcast distributed cache
             time-to-live-seconds: 3600
             backup-count: 1
         <%_ } _%>
-        <%_ if (hibernateCache == 'ehcache') { _%>
+        <%_ if (hibernateCache === 'ehcache') { _%>
         ehcache: # Ehcache configuration
             time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
             max-entries: 100 # Number of objects in each cache entry
@@ -265,7 +265,7 @@ jhipster:
         exposed-headers:
         allow-credentials: true
         max-age: 1800
-    <%_ if (authenticationType == 'jwt') { _%>
+    <%_ if (authenticationType === 'jwt') { _%>
     security:
         authentication:
             jwt:
@@ -284,7 +284,7 @@ jhipster:
             client-id: internal
             client-secret: internal
     <%_ } _%>
-    <%_ if (authenticationType == 'oauth2' && databaseType != 'sql') { _%>
+    <%_ if (authenticationType === 'oauth2' && databaseType !== 'sql') { _%>
     security:
         authentication:
             oauth:
@@ -293,7 +293,7 @@ jhipster:
                 # Token is valid 30 minutes
                 token-validity-in-seconds: 1800
     <%_ } _%>
-<%_ if (authenticationType == 'session') { _%>
+<%_ if (authenticationType === 'session') { _%>
     security:
         remember-me:
             # security key (this key should be unique for your application, and kept secret)
@@ -321,7 +321,7 @@ jhipster:
             host: localhost
             port: 5000
             queue-size: 512
-    <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+    <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
         spectator-metrics: # Reports Spectator Circuit Breaker metrics in the logs
             enabled: false
             # edit spring.metrics.export.delay-millis to set report frequency

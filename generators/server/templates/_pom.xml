@@ -237,7 +237,7 @@
             <artifactId>metrics-json</artifactId>
             <version>${dropwizard-metrics.version}</version>
         </dependency>
-        <%_ if (hibernateCache == 'ehcache') { _%>
+        <%_ if (hibernateCache === 'ehcache') { _%>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-jcache</artifactId>
@@ -283,7 +283,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <%_ if (devDatabaseType != 'h2Disk' && devDatabaseType != 'h2Memory') { _%>
+            <%_ if (devDatabaseType !== 'h2Disk' && devDatabaseType !== 'h2Memory') { _%>
             <scope>test</scope>
             <%_ } _%>
         </dependency>
@@ -714,7 +714,7 @@
             <artifactId>spring-retry</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (serviceDiscoveryType == 'eureka') { _%>
+        <%_ if (serviceDiscoveryType === 'eureka') { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-eureka</artifactId>
@@ -724,7 +724,7 @@
             <artifactId>spring-cloud-starter-config</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (serviceDiscoveryType == 'consul') { _%>
+        <%_ if (serviceDiscoveryType === 'consul') { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-consul-discovery</artifactId>

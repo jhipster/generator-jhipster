@@ -21,7 +21,7 @@
         vm.openFile = DataUtils.openFile;
         vm.byteSize = DataUtils.byteSize;
         <%_ } _%>
-        <%_ if (searchEngine == 'elasticsearch') { _%>
+        <%_ if (searchEngine === 'elasticsearch') { _%>
         vm.clear = clear;
         vm.search = search;
         vm.loadAll = loadAll;
@@ -35,7 +35,7 @@
                 vm.searchQuery = null;
             });
         }
-        <%_ if (searchEngine == 'elasticsearch') { _%>
+        <%_ if (searchEngine === 'elasticsearch') { _%>
 
         function search() {
             if (!vm.searchQuery) {

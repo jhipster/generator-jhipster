@@ -58,7 +58,7 @@
                     </span>
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu>
-                    <%_ if (applicationType == 'gateway') { _%>
+                    <%_ if (applicationType === 'gateway') { _%>
                     <li>
                         <a class="dropdown-item" routerLink="gateway" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-road" aria-hidden="true"></i>
@@ -72,7 +72,7 @@
                             <span jhiTranslate="global.menu.admin.userManagement">User management</span>
                         </a>
                     </li>
-                    <%_ if (websocket == 'spring-websocket') { _%>
+                    <%_ if (websocket === 'spring-websocket') { _%>
                     <li>
                         <a class="dropdown-item" routerLink="<%=jhiPrefix%>-tracker" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-eye" aria-hidden="true"></i>
@@ -119,7 +119,7 @@
                         </a>
                     </li>
                     <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
-                    <%_ if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
+                    <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
                     <li *ngIf="!inProduction">
                         <a class="dropdown-item" href='./h2-console' target="_tab" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-hdd-o" aria-hidden="true"></i>
@@ -171,7 +171,7 @@
                             <span jhiTranslate="global.menu.account.password">Password</span>
                         </a>
                     </li>
-                    <%_ if (authenticationType == 'session') { _%>
+                    <%_ if (authenticationType === 'session') { _%>
                     <li *ngSwitchCase="true">
                         <a class="dropdown-item" routerLink="sessions" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-cloud" aria-hidden="true"></i>

@@ -19,16 +19,16 @@
 package <%=packageName%>.repository;
 
 import <%=packageName%>.domain.SocialUserConnection;
-<% if (databaseType == 'sql') { %>
-import org.springframework.data.jpa.repository.JpaRepository;<% } %><% if (databaseType == 'mongodb') { %>
+<% if (databaseType === 'sql') { %>
+import org.springframework.data.jpa.repository.JpaRepository;<% } %><% if (databaseType === 'mongodb') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;<% } %>
 import java.util.List;
 import java.util.Set;
 
 /**
- * Spring Data <% if (databaseType == 'sql') { %>JPA<% } else if (databaseType == 'mongodb') { %>MongoDB<% } %> repository for the Social User Connection entity.
+ * Spring Data <% if (databaseType === 'sql') { %>JPA<% } else if (databaseType === 'mongodb') { %>MongoDB<% } %> repository for the Social User Connection entity.
  */
-public interface SocialUserConnectionRepository extends <% if (databaseType == 'sql') { %>JpaRepository<% } else if (databaseType == 'mongodb') { %>MongoRepository<% } %><SocialUserConnection, <% if (databaseType == 'sql') { %>Long<% } else if (databaseType == 'mongodb') { %>String<% } %>> {
+public interface SocialUserConnectionRepository extends <% if (databaseType === 'sql') { %>JpaRepository<% } else if (databaseType === 'mongodb') { %>MongoRepository<% } %><SocialUserConnection, <% if (databaseType === 'sql') { %>Long<% } else if (databaseType === 'mongodb') { %>String<% } %>> {
 
     List<SocialUserConnection> findAllByProviderIdAndProviderUserId(String providerId, String providerUserId);
 

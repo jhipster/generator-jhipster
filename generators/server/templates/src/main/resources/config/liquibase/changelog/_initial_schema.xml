@@ -25,25 +25,25 @@
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <property name="now" value="now()" dbms="h2"/>
-    <%_ if (prodDatabaseType == 'mysql' || prodDatabaseType == 'mariadb') { _%>
+    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
     <property name="now" value="now()" dbms="mysql"/>
     <property name="autoIncrement" value="true"/>
     <%_ } _%>
-    <%_ if (prodDatabaseType == 'postgresql') { _%>
+    <%_ if (prodDatabaseType === 'postgresql') { _%>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
 
     <changeSet id="00000000000000" author="jhipster">
         <createSequence sequenceName="hibernate_sequence" startValue="1000" incrementBy="50"/>
     </changeSet>
     <%_ } _%>
-    <%_ if (prodDatabaseType == 'oracle') { _%>
+    <%_ if (prodDatabaseType === 'oracle') { _%>
     <property name="now" value="sysdate" dbms="oracle"/>
 
     <changeSet id="00000000000000" author="jhipster">
         <createSequence sequenceName="hibernate_sequence" startValue="1000" incrementBy="50"/>
     </changeSet>
     <%_ } _%>
-    <%_ if (prodDatabaseType == 'mssql') { _%>
+    <%_ if (prodDatabaseType === 'mssql') { _%>
     <property name="now" value="GETDATE()" dbms="mssql"/>
 
     <changeSet id="00000000000000" author="jhipster">
@@ -89,7 +89,7 @@
             <column name="last_modified_by" type="varchar(50)"/>
             <column name="last_modified_date" type="timestamp"/>
         </createTable>
-    <%_ if (prodDatabaseType != 'oracle') { _%>
+    <%_ if (prodDatabaseType !== 'oracle') { _%>
         <createIndex indexName="idx_user_login"
             tableName="jhi_user"
             unique="true">
@@ -118,7 +118,7 @@
         </createTable>
 
         <addPrimaryKey columnNames="user_id, authority_name" tableName="jhi_user_authority"/>
-    <%_ if (authenticationType == 'session') { _%>
+    <%_ if (authenticationType === 'session') { _%>
 
         <createTable tableName="jhi_persistent_token">
             <column name="series" type="varchar(20)">
@@ -145,7 +145,7 @@
                                  constraintName="fk_user_id"
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"/>
-    <%_ if (authenticationType == 'session') { _%>
+    <%_ if (authenticationType === 'session') { _%>
 
         <addForeignKeyConstraint baseColumnNames="user_id"
                                  baseTableName="jhi_persistent_token"
@@ -257,7 +257,7 @@
     <%_ } _%>
     </changeSet>
 
-    <%_ if (authenticationType == 'oauth2') { _%>
+    <%_ if (authenticationType === 'oauth2') { _%>
     <!-- Manage the OAuth authentication -->
     <changeSet id="00000000000002" author="jhipster">
         <createTable tableName="oauth_client_details">

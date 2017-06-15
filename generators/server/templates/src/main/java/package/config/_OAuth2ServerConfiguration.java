@@ -18,7 +18,7 @@
 -%>
 package <%=packageName%>.config;
 
-<%_ if (databaseType == 'mongodb') { _%>
+<%_ if (databaseType === 'mongodb') { _%>
 import <%=packageName%>.config.oauth2.MongoDBApprovalStore;
 import <%=packageName%>.config.oauth2.MongoDBAuthorizationCodeServices;
 import <%=packageName%>.config.oauth2.MongoDBClientDetailsService;
@@ -45,21 +45,21 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.approval.ApprovalStore;<% if (databaseType == 'sql') { %>
+import org.springframework.security.oauth2.provider.approval.ApprovalStore;<% if (databaseType === 'sql') { %>
 import org.springframework.security.oauth2.provider.approval.JdbcApprovalStore;<% } %>
-import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;<% if (databaseType == 'sql') { %>
+import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;<% if (databaseType === 'sql') { %>
 import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;<% } %>
-import org.springframework.security.oauth2.provider.token.TokenStore;<% if (databaseType == 'sql') { %>
+import org.springframework.security.oauth2.provider.token.TokenStore;<% if (databaseType === 'sql') { %>
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;<% } %>
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
-<%_ if (databaseType == 'sql') { _%>
+<%_ if (databaseType === 'sql') { _%>
 
 import javax.sql.DataSource;
 <%_ } _%>
 
 @Configuration
-public class OAuth2ServerConfiguration {<% if (databaseType == 'sql') { %>
+public class OAuth2ServerConfiguration {<% if (databaseType === 'sql') { %>
 
     private final DataSource dataSource;
 
@@ -70,7 +70,7 @@ public class OAuth2ServerConfiguration {<% if (databaseType == 'sql') { %>
     @Bean
     public JdbcTokenStore tokenStore() {
         return new JdbcTokenStore(dataSource);
-    }<% } %><% if (databaseType == 'mongodb') { %>
+    }<% } %><% if (databaseType === 'mongodb') { %>
 
     @Bean
     public TokenStore tokenStore(OAuth2AccessTokenRepository oAuth2AccessTokenRepository, OAuth2RefreshTokenRepository oAuth2RefreshTokenRepository) {
@@ -122,7 +122,7 @@ public class OAuth2ServerConfiguration {<% if (databaseType == 'sql') { %>
                 .antMatchers("/api/authenticate").permitAll()
                 .antMatchers("/api/register").permitAll()
                 .antMatchers("/api/profile-info").permitAll()
-                .antMatchers("/api/**").authenticated()<% if (websocket == 'spring-websocket') { %>
+                .antMatchers("/api/**").authenticated()<% if (websocket === 'spring-websocket') { %>
                 .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/websocket/**").permitAll()<% } %>
                 .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
@@ -144,7 +144,7 @@ public class OAuth2ServerConfiguration {<% if (databaseType == 'sql') { %>
         private final AuthenticationManager authenticationManager;
 
         private final TokenStore tokenStore;
-<%_ if (databaseType == 'sql') { _%>
+<%_ if (databaseType === 'sql') { _%>
 
         private final DataSource dataSource;
 
@@ -211,7 +211,7 @@ public class OAuth2ServerConfiguration {<% if (databaseType == 'sql') { %>
         }
 
         @Override
-        public void configure(ClientDetailsServiceConfigurer clients) throws Exception {<% if (databaseType == 'sql') { %>
+        public void configure(ClientDetailsServiceConfigurer clients) throws Exception {<% if (databaseType === 'sql') { %>
             clients.jdbc(dataSource);<% } else { %>
             clients.withClientDetails(new MongoDBClientDetailsService(oAuth2ClientDetailsRepository));<% } %>
         }

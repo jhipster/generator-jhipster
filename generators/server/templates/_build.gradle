@@ -237,7 +237,7 @@ dependencies {
     compile "com.hazelcast:hazelcast-hibernate52:${hazelcast_hibernate52_version}"
     compile "com.hazelcast:hazelcast-spring"
     <%_ } _%>
-    <%_ if ((clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') && hibernateCache != 'hazelcast') { _%>
+    <%_ if ((clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') && hibernateCache !== 'hazelcast') { _%>
     compile "com.hazelcast:hazelcast"
     compile "com.hazelcast:hazelcast-spring"
     <%_ } _%>
@@ -410,7 +410,7 @@ dependencies {
     <%_ if (gatlingTests) { _%>
     testCompile "io.gatling.highcharts:gatling-charts-highcharts:${gatling_version}"
     <%_ } _%>
-    <%_ if (devDatabaseType != 'h2Disk' && devDatabaseType != 'h2Memory') { _%>
+    <%_ if (devDatabaseType !== 'h2Disk' && devDatabaseType !== 'h2Memory') { _%>
     testCompile "com.h2database:h2"
     <%_ } _%>
     <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
