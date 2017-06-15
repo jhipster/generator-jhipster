@@ -31,5 +31,4 @@ export const entityRoute: Route = {
 export const LAZY_ROUTES = [
     adminRoute,
     entityRoute
-    
 ];

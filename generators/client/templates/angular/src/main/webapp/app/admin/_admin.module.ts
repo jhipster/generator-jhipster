@@ -24,7 +24,6 @@ import { <%=jhiPrefixCapitalized%>TrackerService } from './../shared/tracker/tra
 
 import { <%=angular2AppName%>SharedModule } from '../shared';
 import { customHttpProvider } from '../blocks/interceptor/http.provider';
-
 /* jhipster-needle-add-admin-module-import - JHipster will add admin modules imports here */
 
 import {
