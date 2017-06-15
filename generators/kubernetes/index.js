@@ -244,6 +244,9 @@ module.exports = KubernetesGenerator.extend({
         if (this.kubernetesNamespace !== 'default') {
             this.log(`  ${chalk.cyan('kubectl apply -f namespace.yml')}`);
         }
+        if (this.jhipsterConsole) {
+            this.log(`  ${chalk.cyan('kubectl apply -f console')}`);
+        }
         if (this.gatewayNb >= 1 || this.microserviceNb >= 1) {
             this.log(`  ${chalk.cyan('kubectl apply -f registry')}`);
         }
