@@ -78,6 +78,14 @@ spec:
         - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES
           value: <%= app.baseName.toLowerCase() %>-zookeeper.<%= kubernetesNamespace %>.svc.cluster.local
         <%_ } _%>
+        <%_ if (jhipsterConsole) { _%>
+        - name: JHIPSTER_METRICS_LOGS_ENABLED
+          value: 'true'
+        - name: JHIPSTER_LOGGING_LOGSTASH_ENABLED
+          value: 'true'
+        - name: JHIPSTER_LOGGING_LOGSTASH_HOST
+          value: jhipster-logstash
+        <%_ } _%>
         - name: JAVA_OPTS
           value: " -Xmx256m -Xms256m"
         resources:
