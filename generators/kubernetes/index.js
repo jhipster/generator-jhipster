@@ -236,6 +236,9 @@ module.exports = KubernetesGenerator.extend({
         }
 
         this.log('\nYou can deploy all your apps by running: ');
+        if (this.kubernetesNamespace !== 'default') {
+            this.log(`  ${chalk.cyan('kubectl apply -f namespace.yml')}`);
+        }
         if (this.gatewayNb >= 1 || this.microserviceNb >= 1) {
             this.log(`  ${chalk.cyan('kubectl apply -f registry')}`);
         }

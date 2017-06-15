@@ -40,6 +40,11 @@ function writeFiles() {
                 }
             }
         },
+        writeNamespace() {
+            if (this.kubernetesNamespace !== 'default') {
+                this.template('_namespace.yml', 'namespace.yml');
+            }
+        },
 
         writeRegistryFiles() {
             if (this.serviceDiscoveryType === 'eureka') {
