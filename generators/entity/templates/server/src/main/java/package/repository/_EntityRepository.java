@@ -23,7 +23,7 @@ import org.springframework.stereotype.Repository;
 <% if (databaseType === 'cassandra') { %>
 import com.datastax.driver.core.*;
 import com.datastax.driver.mapping.Mapper;
-import com.datastax.driver.mapping.MappingManager;<% } %><% if (databaseType=='sql') { %>
+import com.datastax.driver.mapping.MappingManager;<% } %><% if (databaseType === 'sql') { %>
 import org.springframework.data.jpa.repository.*;<% if (fieldsContainOwnerManyToMany==true) { %>
 import org.springframework.data.repository.query.Param;<% } %>
 <%_ let importList = fieldsContainOwnerManyToMany;
@@ -34,7 +34,7 @@ import org.springframework.data.repository.query.Param;<% } %>
     }
     if (importList === true) {
 _%>
-import java.util.List;<% }} %><% if (databaseType=='mongodb') { %>
+import java.util.List;<% }} %><% if (databaseType === 'mongodb') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;<% } %><% if (databaseType === 'cassandra') { %>
 
 import javax.validation.ConstraintViolation;
@@ -64,7 +64,7 @@ import java.util.UUID;<% } %>
 <%_ } if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 @SuppressWarnings("unused")
 @Repository
-public interface <%=entityClass%>Repository extends <% if (databaseType=='sql') { %>JpaRepository<% } %><% if (databaseType=='mongodb') { %>MongoRepository<% } %><<%=entityClass%>,<%= pkType %>> {
+public interface <%=entityClass%>Repository extends <% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><<%=entityClass%>,<%= pkType %>> {
     <%_ for (idx in relationships) {
         if (relationships[idx].relationshipType === 'many-to-one' && relationships[idx].otherEntityName === 'user') { _%>
 

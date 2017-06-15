@@ -44,11 +44,11 @@ import org.springframework.stereotype.Service;
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
-<% if (dto === 'mapstruct' && (pagination ==='no' ||  fieldsContainNoOwnerOneToOne === true)) { %>
-import java.util.LinkedList;<% } %><% if (pagination ==='no' ||  fieldsContainNoOwnerOneToOne === true) { %>
+<% if (dto === 'mapstruct' && (pagination === 'no' ||  fieldsContainNoOwnerOneToOne === true)) { %>
+import java.util.LinkedList;<% } %><% if (pagination === 'no' ||  fieldsContainNoOwnerOneToOne === true) { %>
 import java.util.List;<% } %><% if (databaseType === 'cassandra') { %>
-import java.util.UUID;<% } %><% if (fieldsContainNoOwnerOneToOne === true || (pagination ==='no' && ((searchEngine === 'elasticsearch' && !viaService) || dto === 'mapstruct'))) { %>
-import java.util.stream.Collectors;<% } %><% if (fieldsContainNoOwnerOneToOne === true || (pagination ==='no' && searchEngine === 'elasticsearch' && !viaService)) { %>
+import java.util.UUID;<% } %><% if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && ((searchEngine === 'elasticsearch' && !viaService) || dto === 'mapstruct'))) { %>
+import java.util.stream.Collectors;<% } %><% if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && searchEngine === 'elasticsearch' && !viaService)) { %>
 import java.util.stream.StreamSupport;<% } %><% if (searchEngine === 'elasticsearch') { %>
 
 import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
