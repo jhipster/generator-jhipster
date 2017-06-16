@@ -176,8 +176,7 @@ module.exports = JhipsterGenerator.extend({
     prompting: {
         askForInsightOptIn: prompts.askForInsightOptIn,
         askForApplicationType: prompts.askForApplicationType,
-        askForModuleName: prompts.askForModuleName,
-        askForMoreModules: prompts.askForMoreModules,
+        askForModuleName: prompts.askForModuleName
     },
 
     configuring: {
@@ -237,6 +236,8 @@ module.exports = JhipsterGenerator.extend({
     default: {
 
         askForTestOpts: prompts.askForTestOpts,
+
+        askForMoreModules: prompts.askForMoreModules,
 
         setSharedConfigOptions() {
             this.configOptions.lastQuestion = this.currentQuestion;
