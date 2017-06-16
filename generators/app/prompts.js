@@ -156,31 +156,36 @@ function askForMoreModules() {
 
 function askModulesToBeInstalled(done, generator) {
     generator.httpsGet('https://api.npms.io/v2/search?q=keywords:jhipster-module&from=0&size=50', (body) => {
-        const moduleResponse = JSON.parse(body);
-        const choices = [];
-        moduleResponse.results.forEach((modDef) => {
-            choices.push({
-                value: { name: modDef.package.name, version: modDef.package.version },
-                name: `(${modDef.package.name}-${modDef.package.version}) ${modDef.package.description}`
-            });
-        });
-        if (choices.length > 0) {
-            generator.prompt({
-                type: 'checkbox',
-                name: 'otherModules',
-                message: 'Which other modules would you like to use?',
-                choices,
-                default: []
-            }).then((prompt) => {
-                // [ {name: [moduleName], version:[version]}, ...]
-                generator.otherModules = [];
-                prompt.otherModules.forEach((module) => {
-                    generator.otherModules.push({ name: module.name, version: module.version });
+        try {
+            const moduleResponse = JSON.parse(body);
+            const choices = [];
+            moduleResponse.results.forEach((modDef) => {
+                choices.push({
+                    value: { name: modDef.package.name, version: modDef.package.version },
+                    name: `(${modDef.package.name}-${modDef.package.version}) ${modDef.package.description}`
                 });
-                generator.configOptions.otherModules = generator.otherModules;
-                done();
             });
-        } else {
+            if (choices.length > 0) {
+                generator.prompt({
+                    type: 'checkbox',
+                    name: 'otherModules',
+                    message: 'Which other modules would you like to use?',
+                    choices,
+                    default: []
+                }).then((prompt) => {
+                    // [ {name: [moduleName], version:[version]}, ...]
+                    generator.otherModules = [];
+                    prompt.otherModules.forEach((module) => {
+                        generator.otherModules.push({ name: module.name, version: module.version });
+                    });
+                    generator.configOptions.otherModules = generator.otherModules;
+                    done();
+                });
+            } else {
+                done();
+            }
+        } catch (err) {
+            generator.warning(`Error while parsing. Please install the modules manually or try again later. ${err.message}`);
             done();
         }
     }, (error) => {
