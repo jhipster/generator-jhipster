@@ -263,7 +263,7 @@ jhipster:
             time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
             max-entries: 100 # Number of objects in each cache entry
         <%_ } _%>
-        <%_ if (hibernateCache == 'infinispan') { _%>
+        <%_ if (hibernateCache === 'infinispan') { _%>
         infinispan:
             config-file: default-configs/default-jgroups-tcp.xml
             # local app cache
