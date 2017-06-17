@@ -188,7 +188,7 @@ module.exports = JhipsterServerGenerator.extend({
             }
             this.clusteredHttpSession = this.config.get('clusteredHttpSession') === 'no' ? false : this.config.get('clusteredHttpSession');
             if (this.hibernateCache === 'ehcache') {
-                this.clusteredHttpSession = false; // cannot use HazelCast/Infinispan clustering AND ehcache
+                this.clusteredHttpSession = false; // cannot use HazelCast clusering AND ehcache
             }
             this.buildTool = this.config.get('buildTool');
             this.enableSocialSignIn = this.config.get('enableSocialSignIn');

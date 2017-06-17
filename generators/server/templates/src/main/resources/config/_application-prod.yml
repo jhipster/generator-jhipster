@@ -138,7 +138,7 @@ spring:
             hibernate.cache.use_minimal_puts: true
             hibernate.cache.infinispan.entity.expiration.lifespan: 3600000
             hibernate.cache.infinispan.entity.eviction.max_entries: 1000
-            hibernate.cache.infinispan.jgroups_cfg: default-configs/default-jgroups-udp.xml
+            hibernate.cache.infinispan.jgroups_cfg: default-configs/default-jgroups-tcp.xml
             <%_ } _%>
             <%_ if (hibernateCache === 'hazelcast') { _%>
             hibernate.cache.use_minimal_puts: true
@@ -242,7 +242,7 @@ jhipster:
         <%_ } _%>
         <%_ if (hibernateCache === 'infinispan') { _%>
         infinispan:
-            config-file: default-configs/default-jgroups-udp.xml
+            config-file: default-configs/default-jgroups-tcp.xml
             # local app cache
             local:
               time-to-live-seconds: 60 # By default objects stay 1 hour (in minutes) in the cache

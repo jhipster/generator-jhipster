@@ -519,14 +519,6 @@ function askForOptionalItems() {
             }
         );
     }
-    if ((this.authenticationType === 'session') && (this.hibernateCache === 'no' || this.hibernateCache === 'infinispan')) {
-        choices.push(
-            {
-                name: '[BETA] Clustered HTTP sessions using Infinispan',
-                value: 'clusteredHttpSession:infinispan'
-            }
-        );
-    }
     if (applicationType === 'monolith' || applicationType === 'gateway') {
         choices.push(
             {
