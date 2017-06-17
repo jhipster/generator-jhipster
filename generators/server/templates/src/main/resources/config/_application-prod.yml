@@ -132,7 +132,7 @@ spring:
             <%_ } else if (hibernateCache === 'hazelcast') { _%>
             hibernate.cache.region.factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
             hibernate.cache.hazelcast.instance_name: <%= baseName %>
-            <%_ } else if (hibernateCache == 'infinispan') { _%>
+            <%_ } else if (hibernateCache === 'infinispan') { _%>
             hibernate.cache.region.factory_class: <%=packageName%>.config.CacheFactoryConfiguration
             hibernate.cache.inifinispan.statistics: false
             hibernate.cache.use_minimal_puts: true
