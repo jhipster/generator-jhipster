@@ -145,6 +145,11 @@ module.exports = function (config) {
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
         browsers: ['PhantomJS'],
 
+        // Ensure all browsers can run tests written in .ts files
+        mime: {
+            'text/x-typescript': ['ts','tsx']
+        },
+
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
         singleRun: !WATCH
