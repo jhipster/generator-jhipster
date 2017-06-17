@@ -55,7 +55,7 @@ apply plugin: 'com.moowork.gulp'
     <%_ } _%>
 <%_ } _%>
 apply plugin: 'io.spring.dependency-management'
-<%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa' || messageBroker === 'kafka') { _%>
+<%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa' || messageBroker === 'kafka' || hibernateCache === 'infinispan') { _%>
 dependencyManagement {
   imports {
     <%_ if (messageBroker === 'kafka') { _%>
@@ -63,6 +63,9 @@ dependencyManagement {
     <%_ } _%>
     <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
     mavenBom 'org.springframework.cloud:spring-cloud-dependencies:' + spring_cloud_version
+    <%_ } _%>
+    <%_ if (hibernateCache === 'infinispan') { _%>
+    mavenBom 'org.infinispan:infinispan-bom:' + infinispan_version
     <%_ } _%>
   }
 }
@@ -244,7 +247,19 @@ dependencies {
     <%_ if (clusteredHttpSession === 'hazelcast') { _%>
     compile "com.hazelcast:hazelcast-wm:${hazelcast_wm_version}"
     <%_ } _%>
-    <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || applicationType === 'gateway') { _%>
+    <%_ if (hibernateCache === 'infinispan') { _%>
+    compile "org.hibernate:hibernate-infinispan:${infinispan_hibernate52_version}"
+    <%_ } _%>
+    <%_ if (hibernateCache === 'infinispan') {_%>
+    compile "org.infinispan:infinispan-spring-boot-starter:${infinispan_boot_starter_version}"
+    compile "org.infinispan:infinispan-core"
+    compile "org.infinispan:infinispan-spring4-embedded:${infinispan_cloud_version}"
+    compile "org.infinispan:infinispan-spring4-common:${infinispan_cloud_version}"
+    compile ("org.infinispan:infinispan-cloud:${infinispan_cloud_version}") {
+        exclude module: 'undertow-core'
+    }
+    <%_ } _%>
+    <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || hibernateCache === 'infinispan' || applicationType === 'gateway') { _%>
     compile "javax.cache:cache-api"
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
