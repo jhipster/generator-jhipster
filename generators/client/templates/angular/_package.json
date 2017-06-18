@@ -55,6 +55,7 @@
   "devDependencies": {
     "@angular/cli": "1.0.6",
     "@angular/compiler-cli": "4.1.3",
+    "@ngtools/webpack": "1.4.1",
     "@types/jasmine": "2.5.47",
     "@types/node": "7.0.22",
     <%_ if (protractorTests) { _%>
@@ -151,7 +152,7 @@
     "webpack:build:vendor": "webpack --config webpack/webpack.vendor.js",
     "webpack:dev": "webpack-dev-server --config webpack/webpack.dev.js  --progress --inline --hot --profile --port=9060",
     "webpack:test": "<%= clientPackageManager %> run ngc && <%= clientPackageManager %> run test",
-    "webpack:prod": "<%= clientPackageManager %> run ngc && webpack -p --config webpack/webpack.vendor.js && webpack -p --config webpack/webpack.prod.js",
+    "webpack:prod": "<%= clientPackageManager %> run ngc && webpack --config webpack/webpack.prod.js",
     "test": "<%= clientPackageManager %> run lint && karma start src/test/javascript/karma.conf.js",
     "test:watch": "karma start src/test/javascript/karma.conf.js --watch",
     <%_ if (protractorTests) { _%>

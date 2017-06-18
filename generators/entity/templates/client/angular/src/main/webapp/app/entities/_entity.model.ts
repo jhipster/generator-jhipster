@@ -17,16 +17,16 @@
  limitations under the License.
 -%>
 <% const enumsAlreadyDeclared = [];
-    for (const idx in fields) {
-    if (fields[idx].fieldIsEnum && enumsAlreadyDeclared.indexOf(fields[idx].fieldType) === -1) {
-        enumsAlreadyDeclared.push(fields[idx].fieldType); %>
-const enum <%= fields[idx].fieldType %> {<%
-        const enums = fields[idx].fieldValues.split(',');
+    fields.forEach(field => {
+    if (field.fieldIsEnum && enumsAlreadyDeclared.indexOf(field.fieldType) === -1) {
+        enumsAlreadyDeclared.push(field.fieldType); %>
+const enum <%= field.fieldType %> {<%
+        const enums = field.fieldValues.split(',');
         for (let i = 0; i < enums.length; i++) { %>
     '<%= enums[i] %>'<%if (i < enums.length - 1) { %>,<% } } %>
 
-};
-<%_ } } _%>
+}
+<%_ } }); _%>
 <%_ if (dto === "no") {
        for (const rel of differentRelationships) { _%>
 import { <%= rel.otherEntityAngularName %> } from '../<%= rel.otherEntityModulePath %>';
@@ -41,11 +41,11 @@ if (pkType === 'String') {
     tsKeyType = 'number';
 }
 variables['id'] = 'id?: ' + tsKeyType;
-for (const idx in fields) {
-    const fieldType = fields[idx].fieldType;
-    const fieldName = fields[idx].fieldName;
+fields.forEach(field => {
+    const fieldType = field.fieldType;
+    const fieldName = field.fieldName;
     let tsType;
-    if (fields[idx].fieldIsEnum) {
+    if (field.fieldIsEnum) {
         tsType = fieldType;
     } else if (fieldType === 'Boolean') {
         tsType = 'boolean';
@@ -56,24 +56,30 @@ for (const idx in fields) {
         tsType = 'string';
     } else { //(fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate'
         tsType = 'any';
-        if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent === 'image') {
+        if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text') {
             variables[fieldName + 'ContentType'] = fieldName + 'ContentType?: ' + 'string';
         }
     }
     variables[fieldName] = fieldName + '?: ' + tsType;
-}
-for (idx in relationships) {
+});
+relationships.forEach(relationship => {
     let fieldType;
     let fieldName;
-    if (dto === "no") {
-        fieldType = relationships[idx].otherEntityAngularName;
-        fieldName = relationships[idx].relationshipFieldName;
+    const relationshipType = relationship.relationshipType;
+    if (relationshipType == 'one-to-many' || relationshipType == 'many-to-many') {
+        fieldType = `${relationship.otherEntityAngularName}[]`;
+        fieldName = relationship.relationshipFieldNamePlural;
     } else {
-        fieldType = tsKeyType;
-        fieldName = relationships[idx].relationshipFieldName + "Id";
+        if (dto === "no") {
+            fieldType = relationship.otherEntityAngularName;
+            fieldName = relationship.relationshipFieldName;
+        } else {
+            fieldType = tsKeyType;
+            fieldName = `${relationship.relationshipFieldName}Id`;
+        }
     }
     variables[fieldName] = fieldName + '?: ' + fieldType;
-}_%>
+});_%>
 export class <%= entityAngularName %> {
     constructor(<% for (idx in variables) { %>
         public <%- variables[idx] %>,<% } %>

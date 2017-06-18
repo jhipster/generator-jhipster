@@ -113,11 +113,13 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 '_app.main.ts',
+                '_app.main-aot.ts',
                 '_app.route.ts',
                 '_app.module.ts',
                 '_app.constants.ts',
                 '_polyfills.ts',
                 '_vendor.ts',
+                '_vendor-aot.ts',
                 'blocks/config/_prod.config.ts',
                 'blocks/config/_uib-pagination.config.ts',
                 // interceptors
