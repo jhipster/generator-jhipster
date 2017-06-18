@@ -139,8 +139,10 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb') { 
     private String resetKey;
 
     <%_ if (databaseType === 'sql' || databaseType === 'cassandra') { _%>
-    @Column(name = "reset_date")<% } else if (databaseType === 'mongodb') {%>
-    @Field("reset_date")<% }%>
+    @Column(name = "reset_date")
+    <%_ } else if (databaseType === 'mongodb') { _%>
+    @Field("reset_date")
+    <%_ } _%>
     private Instant resetDate = null;
 
     @JsonIgnore<% if (databaseType === 'sql') { %>

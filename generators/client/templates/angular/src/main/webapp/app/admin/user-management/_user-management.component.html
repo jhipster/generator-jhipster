@@ -50,15 +50,15 @@
                 <td>{{user.login}}</td>
                 <td>{{user.email}}</td>
                 <td>
-                    <span class="badge badge-danger hand" (click)="setActive(user, true)" *ngIf="!user.activated"
-                          jhiTranslate="userManagement.deactivated">Deactivated</span>
-                    <span class="badge badge-success hand" (click)="setActive(user, false)" *ngIf="user.activated"
-                          jhiTranslate="userManagement.activated">Activated</span>
+                    <button class="btn btn-danger btn-sm" (click)="setActive(user, true)" *ngIf="!user.activated"
+                            jhiTranslate="userManagement.deactivated">Deactivated</button>
+                    <button class="btn btn-success btn-sm" (click)="setActive(user, false)" *ngIf="user.activated"
+                            [disabled]="currentAccount.login === user.login" jhiTranslate="userManagement.activated">Activated</button>
                 </td>
                 <% if (enableTranslation) { %><td>{{user.langKey}}</td><% } %>
                 <td>
                     <div *ngFor="let authority of user.authorities">
-                        <span class="tag tag-info">{{ authority }}</span>
+                        <span class="badge badge-info">{{ authority }}</span>
                     </div>
                 </td>
                 <%_ if (databaseType !== 'cassandra') { _%>
@@ -84,7 +84,7 @@
                         <button type="submit"
                                 [routerLink]="['/', { outlets: { popup: 'user-management/'+ user.login + '/delete'} }]"
                                 replaceUrl="true"
-                                class="btn btn-danger btn-sm" [disabled]="currentAccount.login==user.login">
+                                class="btn btn-danger btn-sm" [disabled]="currentAccount.login === user.login">
                             <span class="fa fa-remove"></span>
                             <span class="hidden-md-down" jhiTranslate="entity.action.delete">Delete</span>
                         </button>
