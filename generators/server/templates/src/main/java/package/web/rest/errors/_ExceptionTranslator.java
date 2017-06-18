@@ -90,9 +90,9 @@ public class ExceptionTranslator {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorVM> processException(Exception ex) {
         if (log.isDebugEnabled()) {
-            log.debug("An unexpected error occured: {}", ex.getMessage(), ex);
+            log.debug("An unexpected error occurred: {}", ex.getMessage(), ex);
         } else {
-            log.error("An unexpected error occured: {}", ex.getMessage());
+            log.error("An unexpected error occurred: {}", ex.getMessage());
         }
         BodyBuilder builder;
         ErrorVM errorVM;

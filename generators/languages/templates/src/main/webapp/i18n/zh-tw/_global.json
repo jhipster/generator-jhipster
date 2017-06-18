@@ -110,7 +110,7 @@
         "ribbon": {
             "dev":"開發環境"
         },
-        "item-count": "Showing {{first}} - {{second}} of {{total}} items."
+        "item-count": "顯示第 {{first}} 至 {{second}} 筆，共 {{total}} 筆。"
     },
     "entity": {
         "action": {
