@@ -682,7 +682,7 @@ module.exports = class extends Generator {
             }, this);
         } catch (e) {
             this.log(e);
-            this.log(`${chalk.yellow('\nUnable to find ') + appName + chalk.yellow(' or missing required jhipster-needle. Reference to ') + adminAngularName + adminFolderName + adminFileName + enableTranslation + clientFramework} ${chalk.yellow(`not added to ${adminModulePath}.\n`)}`);
+            this.log(`${chalk.yellow('\nUnable to find ') + appName + chalk.yellow(' or missing required jhipster-needle. Reference to ') + angularName + folderName + fileName + enableTranslation + clientFramework} ${chalk.yellow(`not added to ${modulePath}.\n`)}`);
         }
     }
 
