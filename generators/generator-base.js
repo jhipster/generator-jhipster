@@ -650,7 +650,6 @@ module.exports = class extends Generator {
      * @param {string} clientFramework - The name of the client framework.
      */
     addAngularModule(appName, angularName, folderName, fileName, enableTranslation, clientFramework) {
-        // const adminModulePath = `${CLIENT_MAIN_SRC_DIR}app/admin/admin.module.ts`;
         const modulePath = `${CLIENT_MAIN_SRC_DIR}app/app.module.ts`;
         try {
             if (clientFramework === 'angular1') {
