@@ -38,6 +38,9 @@ function writeFiles() {
                 if (this.app.messageBroker === 'kafka') {
                     this.template('db/_kafka.yml', `${appName}/${appName}-kafka.yml`);
                 }
+                if ((this.app.applicationType === 'gateway' || this.app.applicationType === 'monolith') && this.kubernetesServiceType === 'Ingress') {
+                    this.template('_ingress.yml', `${appName}/${appName}-ingress.yml`);
+                }
             }
         },
 

@@ -16,20 +16,17 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: v1
-kind: Service
+apiVersion: extensions/v1beta1
+kind: Ingress
 metadata:
   name: <%= app.baseName.toLowerCase() %>
   namespace: <%= kubernetesNamespace %>
 spec:
-  selector:
-    app: <%= app.baseName.toLowerCase() %>
-  <%_ if (app.applicationType === 'monolith' || app.applicationType === 'gateway') { _%>
-    <%_ if (kubernetesServiceType !== 'Ingress') { _%>
-  type: <%= kubernetesServiceType %>
-    <%_ } else { _%>
-  type: ClusterIP
-    <%_ } _%>
-  <%_ } _%>
-  ports:
-  - port: <%= app.serverPort %>
+  rules:
+  - host: <%= app.baseName.toLowerCase() %>.<%= ingressDomain %>
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: <%= app.baseName.toLowerCase() %>
+          servicePort: <%= app.serverPort %>

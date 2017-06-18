@@ -23,7 +23,9 @@ module.exports = _.extend({
     askForKubernetesNamespace,
     askForDockerRepositoryName,
     askForDockerPushCommand,
-    askForJhipsterConsole
+    askForJhipsterConsole,
+    askForKubernetesServiceType,
+    askForIngressDomain
 }, dockerComposePrompts);
 
 function askForKubernetesNamespace() {
@@ -86,6 +88,67 @@ function askForJhipsterConsole() {
 
     this.prompt(prompts).then((props) => {
         this.jhipsterConsole = props.jhipsterConsole;
+        done();
+    });
+}
+
+function askForKubernetesServiceType() {
+    const done = this.async();
+
+    const prompts = [{
+        type: 'list',
+        name: 'kubernetesServiceType',
+        message: 'Choose the kubernetes service type for your edge services',
+        choices: [
+            {
+                value: 'LoadBalancer',
+                name: 'LoadBalancer - Let a kubernetes cloud provider automatically assign an IP'
+            },
+            {
+                value: 'NodePort',
+                name: 'NodePort - expose the services to a random port (30000 - 32767) on all cluster nodes'
+            },
+            {
+                value: 'Ingress',
+                name: 'Ingress - create ingresses for your services. Requires a running ingress controller'
+            }
+        ],
+        default: this.kubernetesServiceType ? this.kubernetesServiceType : 'LoadBalancer'
+    }];
+
+    this.prompt(prompts).then((props) => {
+        this.kubernetesServiceType = props.kubernetesServiceType;
+        done();
+    });
+}
+
+function askForIngressDomain() {
+    const done = this.async();
+    const kubernetesServiceType = this.kubernetesServiceType;
+
+    const prompts = [{
+        when: () => kubernetesServiceType === 'Ingress',
+        type: 'input',
+        name: 'ingressDomain',
+        message: 'What is the root FQDN for your ingress services (e.g. example.com, sub.domain.co, www.10.10.10.10.xip.io,...)?',
+        default: this.ingressDomain ? this.ingressDomain : 'mycompany.com',
+        validate: (input) => {
+            if (input.length === 0) {
+                return 'domain name cannot be empty';
+            }
+            if (input.charAt(0) === '.') {
+                return 'domain name cannot start with a "."';
+            }
+            if (!input.match(/^[\w]+[\w\.-]+[\w]{1,}$/)) {
+                return 'domain not valid';
+            }
+
+            return true;
+        }
+    }];
+
+    this.prompt(prompts).then((props) => {
+        this.ingressDomain = props.ingressDomain;
         done();
     });
 }

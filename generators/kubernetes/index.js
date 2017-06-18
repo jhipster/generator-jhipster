@@ -98,6 +98,8 @@ module.exports = KubernetesGenerator.extend({
             this.dockerPushCommand = this.config.get('dockerPushCommand');
             this.kubernetesNamespace = this.config.get('kubernetesNamespace');
             this.jhipsterConsole = this.config.get('jhipsterConsole');
+            this.kubernetesServiceType = this.config.get('kubernetesServiceType');
+            this.ingressDomain = this.config.get('ingressDomain');
 
             this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
             this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
@@ -154,7 +156,9 @@ module.exports = KubernetesGenerator.extend({
         askForKubernetesNamespace: prompts.askForKubernetesNamespace,
         askForDockerRepositoryName: prompts.askForDockerRepositoryName,
         askForDockerPushCommand: prompts.askForDockerPushCommand,
-        askForJhipsterConsole: prompts.askForJhipsterConsole
+        askForJhipsterConsole: prompts.askForJhipsterConsole,
+        askForKubernetesServiceType: prompts.askForKubernetesServiceType,
+        askForIngressDomain: prompts.askForIngressDomain
     },
 
     configuring: {
@@ -217,6 +221,8 @@ module.exports = KubernetesGenerator.extend({
             this.config.set('dockerRepositoryName', this.dockerRepositoryName);
             this.config.set('dockerPushCommand', this.dockerPushCommand);
             this.config.set('kubernetesNamespace', this.kubernetesNamespace);
+            this.config.set('kubernetesServiceType', this.kubernetesServiceType);
+            this.config.set('ingressDomain', this.ingressDomain);
         }
     },
 
