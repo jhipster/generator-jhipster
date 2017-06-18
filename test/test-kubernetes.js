@@ -28,7 +28,7 @@ const expectedFiles = {
         'jhgate/jhgate-ingress.yml'
     ],
     customnamespace: [
-        'samplemysql/namespace.yml'
+        'msmysql/namespace.yml'
     ],
     jhconsole: [
         'console/jhipster-console.yml',
@@ -207,9 +207,6 @@ describe('JHipster Kubernetes Sub Generator', () => {
         });
         it('creates expected gateway files', () => {
             assert.file(expectedFiles.jhgate);
-        });
-        it('creates expected mysql files', () => {
-            assert.file(expectedFiles.msmysql);
         });
         it('creates expected ingress files', () => {
             assert.file(expectedFiles.jhgateingress);
