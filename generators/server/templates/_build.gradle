@@ -265,8 +265,9 @@ dependencies {
     compile "org.hibernate:hibernate-jcache:${hibernate_version}"
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
-    compile "org.hibernate:hibernate-envers"
+    compile "org.hibernate:hibernate-envers:${hibernate_version}"
     compile "org.hibernate:hibernate-validator"
+    compile "org.hibernate:hibernate-entitymanager:${hibernate_version}"
     compile ("org.liquibase:liquibase-core")
     compile "com.mattbertolini:liquibase-slf4j:${liquibase_slf4j_version}"
     <%_ } _%>
