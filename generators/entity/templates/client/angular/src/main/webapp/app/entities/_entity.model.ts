@@ -17,27 +17,9 @@
  limitations under the License.
 -%>
 <%_
-differentRelationships.forEach(rel => {
-    if (rel.relationshipType === 'one-to-many' || rel.relationshipType === 'many-to-many' || dto === "no") { _%>
-import { <%= rel.otherEntityAngularName %> } from '../<%= rel.otherEntityModulePath %>';
-<%_ }
-}); _%>
-
-<%_ const enumsAlreadyDeclared = [];
-fields.forEach(field => {
-    if (field.fieldIsEnum && enumsAlreadyDeclared.indexOf(field.fieldType) === -1) {
-        enumsAlreadyDeclared.push(field.fieldType); _%>
-const enum <%= field.fieldType %> {<%
-        const enums = field.fieldValues.split(',');
-        for (let i = 0; i < enums.length; i++) { %>
-    '<%= enums[i] %>'<%if (i < enums.length - 1) { %>,<% }
-        } %>
-}
-
-<%_ }
-});
 const variables = {};
 const defaultVariablesValues = {};
+let hasUserRelationship = false;
 let tsKeyType;
 if (pkType === 'String') {
     tsKeyType = 'string';
@@ -71,11 +53,21 @@ relationships.forEach(relationship => {
     let fieldName;
     const relationshipType = relationship.relationshipType;
     if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
-        fieldType = `${relationship.otherEntityAngularName}[]`;
+        if (relationship.otherEntityAngularName === 'User') {
+            fieldType = 'User[]';
+            hasUserRelationship = true;
+        } else {
+            fieldType = 'BaseEntity[]';
+        }
         fieldName = relationship.relationshipFieldNamePlural;
     } else {
-        if (dto === "no") {
-            fieldType = relationship.otherEntityAngularName;
+        if (dto === 'no') {
+            if (relationship.otherEntityAngularName === 'User') {
+                fieldType = 'User';
+                hasUserRelationship = true;
+            } else {
+                fieldType = 'BaseEntity';
+            }
             fieldName = relationship.relationshipFieldName;
         } else {
             fieldType = tsKeyType;
@@ -83,8 +75,24 @@ relationships.forEach(relationship => {
         }
     }
     variables[fieldName] = fieldName + '?: ' + fieldType;
-});_%>
-export class <%= entityAngularName %> {
+});
+_%>
+import { BaseEntity<% if (hasUserRelationship) { %>, User<% } %> } from './../../shared';
+
+<%_ const enumsAlreadyDeclared = [];
+fields.forEach(field => {
+    if (field.fieldIsEnum && enumsAlreadyDeclared.indexOf(field.fieldType) === -1) {
+        enumsAlreadyDeclared.push(field.fieldType); _%>
+const enum <%= field.fieldType %> {<%
+        const enums = field.fieldValues.split(',');
+        for (let i = 0; i < enums.length; i++) { %>
+    '<%= enums[i] %>'<%if (i < enums.length - 1) { %>,<% }
+        } %>
+}
+
+<%_ }
+}); _%>
+export class <%= entityAngularName %> implements BaseEntity {
     constructor(<% for (idx in variables) { %>
         public <%- variables[idx] %>,<% } %>
     ) {<% for (idx in defaultVariablesValues) { %>
