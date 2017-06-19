@@ -21,6 +21,7 @@ const writeFilePlugin = require('write-file-webpack-plugin');
 const webpackMerge = require('webpack-merge');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 const execSync = require('child_process').execSync;
 const fs = require('fs');
 const path = require('path');
@@ -84,6 +85,13 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         }, {
             reload: false
         }),
+        new webpack.DllReferencePlugin({
+            context: './',
+            manifest: require(path.resolve('./<%= BUILD_DIR %>www/vendor.json'))
+        }),
+        new AddAssetHtmlPlugin([
+            { filepath: path.resolve('./<%= BUILD_DIR %>www/vendor.dll.js'), includeSourcemap: false }
+        ]),
         new ExtractTextPlugin('styles.css'),
         new webpack.NoEmitOnErrorsPlugin(),
         new webpack.NamedModulesPlugin(),

@@ -16,31 +16,16 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-{
-    "compilerOptions": {
-        "target": "es5",
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "sourceMap": true,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "removeComments": false,
-        "noImplicitAny": false,
-        "suppressImplicitAnyIndexErrors": true,
-        "outDir": "<%= DIST_DIR %>app",
-        "lib": ["dom", "es2015"],
-        "typeRoots": [
-            "node_modules/@types"
-        ]
-    },
+import { platformBrowser } from '@angular/platform-browser';
+import { ProdConfig } from './blocks/config/prod.config';
+import { <%=angular2AppName%>AppModuleNgFactory } from '../../../../<%= BUILD_DIR %>aot/src/main/webapp/app/app.module.ngfactory';
 
-    "files": [
-        "<%= MAIN_SRC_DIR %>app/app.module.ts",
-        "<%= MAIN_SRC_DIR %>app/app.main-aot.ts"
-    ],
+ProdConfig();
 
-    "angularCompilerOptions": {
-        "genDir": "<%= BUILD_DIR %>aot",
-        "skipMetadataEmit" : true
-    }
+if (module['hot']) {
+    module['hot'].accept();
 }
+
+platformBrowser().bootstrapModuleFactory(<%=angular2AppName%>AppModuleNgFactory)
+.then((success) => console.log(`Application started`))
+.catch((err) => console.error(err));

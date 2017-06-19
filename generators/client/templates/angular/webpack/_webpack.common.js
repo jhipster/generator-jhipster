@@ -21,7 +21,6 @@ const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const StringReplacePlugin = require('string-replace-webpack-plugin');
-const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 const WebpackNotifierPlugin = require('webpack-notifier');
 <%_ if (enableTranslation) { _%>
 const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin")
@@ -115,10 +114,6 @@ module.exports = (options) => {
             new CommonsChunkPlugin({
                 names: ['manifest', 'polyfills'].reverse()
             }),
-            new webpack.DllReferencePlugin({
-                context: './',
-                manifest: require(path.resolve('./<%= BUILD_DIR %>www/vendor.json'))
-            }),
             new CopyWebpackPlugin([
                 { from: './node_modules/core-js/client/shim.min.js', to: 'core-js-shim.min.js' },
                 { from: './node_modules/swagger-ui/dist', to: 'swagger-ui/dist' },
@@ -146,9 +141,6 @@ module.exports = (options) => {
                 chunksSortMode: 'dependency',
                 inject: 'body'
             }),
-            new AddAssetHtmlPlugin([
-                { filepath: path.resolve('./<%= BUILD_DIR %>www/vendor.dll.js'), includeSourcemap: false }
-            ]),
             new StringReplacePlugin(),
             new WebpackNotifierPlugin({
                 title: 'JHipster',
