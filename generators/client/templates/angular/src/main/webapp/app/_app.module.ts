@@ -33,6 +33,8 @@ import { <%=angular2AppName%>EntityModule } from './entities/entity.module';
 import { customHttpProvider } from './blocks/interceptor/http.provider';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
 
+// jhipster-needle-angular-add-module-import JHipster will add new module here
+
 import {
     <%=jhiPrefixCapitalized%>MainComponent,
     LayoutRoutingModule,
@@ -55,7 +57,8 @@ import {
         <%=angular2AppName%>HomeModule,
         <%=angular2AppName%>AdminModule,
         <%=angular2AppName%>AccountModule,
-        <%=angular2AppName%>EntityModule
+        <%=angular2AppName%>EntityModule,
+        // jhipster-needle-angular-add-module JHipster will add new module here
     ],
     declarations: [
         <%=jhiPrefixCapitalized%>MainComponent,
