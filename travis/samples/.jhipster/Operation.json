@@ -11,7 +11,7 @@
             "relationshipName": "label",
             "otherEntityName": "label",
             "relationshipType": "many-to-many",
-            "otherEntityField": "labelName",
+            "otherEntityField": "label",
             "ownerSide": true,
             "otherEntityRelationshipName": "operation"
         }
