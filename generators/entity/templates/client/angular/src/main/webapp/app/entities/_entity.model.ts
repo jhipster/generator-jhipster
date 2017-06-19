@@ -16,22 +16,26 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<% const enumsAlreadyDeclared = [];
-    fields.forEach(field => {
+<%_
+differentRelationships.forEach(rel => {
+    if (rel.relationshipType === 'one-to-many' || rel.relationshipType === 'many-to-many' || dto === "no") { _%>
+import { <%= rel.otherEntityAngularName %> } from '../<%= rel.otherEntityModulePath %>';
+<%_ }
+}); _%>
+
+<%_ const enumsAlreadyDeclared = [];
+fields.forEach(field => {
     if (field.fieldIsEnum && enumsAlreadyDeclared.indexOf(field.fieldType) === -1) {
-        enumsAlreadyDeclared.push(field.fieldType); %>
+        enumsAlreadyDeclared.push(field.fieldType); _%>
 const enum <%= field.fieldType %> {<%
         const enums = field.fieldValues.split(',');
         for (let i = 0; i < enums.length; i++) { %>
-    '<%= enums[i] %>'<%if (i < enums.length - 1) { %>,<% } } %>
+    '<%= enums[i] %>'<%if (i < enums.length - 1) { %>,<% }
+        } %>
+}
 
-}
-<%_ } }); _%>
-<%_ if (dto === "no") {
-       for (const rel of differentRelationships) { _%>
-import { <%= rel.otherEntityAngularName %> } from '../<%= rel.otherEntityModulePath %>';
 <%_ }
-}
+});
 const variables = {};
 const defaultVariablesValues = {};
 let tsKeyType;
@@ -66,7 +70,7 @@ relationships.forEach(relationship => {
     let fieldType;
     let fieldName;
     const relationshipType = relationship.relationshipType;
-    if (relationshipType == 'one-to-many' || relationshipType == 'many-to-many') {
+    if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
         fieldType = `${relationship.otherEntityAngularName}[]`;
         fieldName = relationship.relationshipFieldNamePlural;
     } else {
