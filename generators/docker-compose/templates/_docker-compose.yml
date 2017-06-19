@@ -55,29 +55,17 @@ services:
             service: jhipster-elasticsearch
     jhipster-logstash:
         extends:
-            file: jhipster-console.yml
-            service: jhipster-logstash
-        depends_on:
-            - jhipster-elasticsearch
+          file: jhipster-console.yml
+          service: jhipster-logstash
     jhipster-console:
         extends:
             file: jhipster-console.yml
             service: jhipster-console
-        depends_on:
-            - jhipster-elasticsearch
-    jhipster-import-dashboards:
-        extends:
-            file: jhipster-console.yml
-            service: jhipster-import-dashboards
-        depends_on:
-            - jhipster-elasticsearch
     <%_ if (composeApplicationType === 'microservice') { _%>
     jhipster-zipkin:
         extends:
             file: jhipster-console.yml
             service: jhipster-zipkin
-        depends_on:
-            - jhipster-elasticsearch
     <%_ } _%>
 <%_ } _%>
 <%_ if (monitoring === 'prometheus') { _%>

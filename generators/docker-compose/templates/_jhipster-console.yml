@@ -22,16 +22,13 @@ services:
         image: <%= DOCKER_JHIPSTER_ELASTICSEARCH %>
         ports:
             - 9200:9200
+            - 9300:9300
         # Uncomment this section to have elasticsearch data persisted to a volume
         #volumes:
         #   - ./log-data:/usr/share/elasticsearch/data
     jhipster-logstash:
         image: <%= DOCKER_JHIPSTER_LOGSTASH %>
-        command: logstash -f /usr/share/logstash/pipeline/logstash.conf
-        environment:
-            - INPUT_UDP_PORT=5000
-            - ELASTICSEARCH_HOST=jhipster-elasticsearch
-            - ELASTICSEARCH_PORT=9200
+        command: logstash -f /conf/logstash.conf
         ports:
             - 5000:5000/udp
         # Uncomment this section to have logstash config loaded from a volume
@@ -39,14 +36,8 @@ services:
         #    - ./log-conf/:/conf
     jhipster-console:
         image: <%= DOCKER_JHIPSTER_CONSOLE %>
-        environment:
-            - ELASTICSEARCH_URL=http://jhipster-elasticsearch:9200
         ports:
             - 5601:5601
-    jhipster-import-dashboards:
-        image: <%= DOCKER_JHIPSTER_IMPORT_DASHBOARDS %>
-        environment:
-            - ELASTICSEARCH_URL=http://jhipster-elasticsearch:9200
     <%_ if (composeApplicationType === 'microservice') { _%>
     jhipster-zipkin:
         image: <%= DOCKER_JHIPSTER_ZIPKIN %>
