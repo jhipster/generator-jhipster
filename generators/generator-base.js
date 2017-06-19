@@ -619,7 +619,7 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Add a new module to the angular application in "app.module.js".
+     * Add a new module to the AngularJS application in "app.module.js".
      *
      * @param {string} moduleName - module name
      *
@@ -636,6 +636,52 @@ module.exports = class extends Generator {
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + moduleName + chalk.yellow(' not added to JHipster app.\n'));
+        }
+    }
+
+    /**
+     * Add a new module in the TS modules file.
+     *
+     * @param {string} appName - Angular2 application name.
+     * @param {string} adminAngularName - The name of the new admin item.
+     * @param {string} adminFolderName - The name of the folder.
+     * @param {string} adminFileName - The name of the file.
+     * @param {boolean} enableTranslation - If translations are enabled or not.
+     * @param {string} clientFramework - The name of the client framework.
+     */
+    addAngularModule(appName, angularName, folderName, fileName, enableTranslation, clientFramework) {
+        const modulePath = `${CLIENT_MAIN_SRC_DIR}app/app.module.ts`;
+        try {
+            if (clientFramework === 'angular1') {
+                return;
+            }
+            let importStatement = `|import { ${appName}${angularName}Module } from './${folderName}/${fileName}.module';`;
+            if (importStatement.length > constants.LINE_LENGTH) {
+                importStatement =
+                    `|import {
+                     |    ${appName}${angularName}Module
+                     |} from './${folderName}/${fileName}.module';`;
+            }
+            jhipsterUtils.rewriteFile({
+                file: modulePath,
+                needle: 'jhipster-needle-angular-add-module-import',
+                splicable: [
+                    this.stripMargin(importStatement)
+                ]
+            }, this);
+
+            jhipsterUtils.rewriteFile({
+                file: modulePath,
+                needle: 'jhipster-needle-angular-add-module',
+                splicable: [
+                    this.stripMargin(
+                        `|${appName}${angularName}Module,`
+                    )
+                ]
+            }, this);
+        } catch (e) {
+            this.log(e);
+            this.log(`${chalk.yellow('\nUnable to find ') + appName + chalk.yellow(' or missing required jhipster-needle. Reference to ') + angularName + folderName + fileName + enableTranslation + clientFramework} ${chalk.yellow(`not added to ${modulePath}.\n`)}`);
         }
     }
 
