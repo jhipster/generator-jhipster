@@ -24,14 +24,18 @@
     <logger name="<%=packageName%>" level="INFO"/>
 
     <logger name="io.github.jhipster" level="WARN"/>
-<% if (databaseType === 'cassandra') { %>
-    <logger name="io.netty" level="WARN"/><% } %>
+
+    <%_ if (databaseType === 'cassandra') { _%>
+    <logger name="io.netty" level="WARN"/>
+    <%_ } _%>
     <logger name="javax.activation" level="WARN"/>
     <logger name="javax.mail" level="WARN"/>
     <logger name="javax.xml.bind" level="WARN"/>
     <logger name="ch.qos.logback" level="WARN"/>
-    <logger name="com.codahale.metrics" level="WARN"/><% if (databaseType === 'cassandra') { %>
-    <logger name="com.datastax" level="WARN"/><% } %>
+    <logger name="com.codahale.metrics" level="WARN"/>
+    <%_ if (databaseType === 'cassandra') { _%>
+    <logger name="com.datastax" level="WARN"/>
+    <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
     <logger name="com.netflix" level="WARN"/>
     <logger name="com.netflix.discovery" level="INFO"/>
@@ -40,12 +44,16 @@
     <logger name="com.sun" level="WARN"/>
     <logger name="com.zaxxer" level="WARN"/>
     <logger name="io.undertow" level="WARN"/>
-    <logger name="io.undertow.websockets.jsr" level="ERROR"/><% if (hibernateCache === 'ehcache') { %>
-    <logger name="org.ehcache" level="WARN"/><% } %>
+    <logger name="io.undertow.websockets.jsr" level="ERROR"/>
+    <%_ if (hibernateCache === 'ehcache') { _%>
+    <logger name="org.ehcache" level="WARN"/>
+    <%_ } _%>
     <logger name="org.apache" level="WARN"/>
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
-    <logger name="org.bson" level="WARN"/><% if (searchEngine === 'elasticsearch') { %>
-    <logger name="org.elasticsearch" level="WARN"/><% } %>
+    <logger name="org.bson" level="WARN"/>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <logger name="org.elasticsearch" level="WARN"/>
+    <%_ } _%>
     <logger name="org.hibernate.validator" level="WARN"/>
     <%_ if (databaseType === 'sql') { _%>
     <logger name="org.hibernate" level="WARN"/>
@@ -53,6 +61,9 @@
     <%_ } else if (databaseType === 'mongodb') { _%>
     <logger name="org.mongodb.driver" level="WARN"/>
     <logger name="org.reflections" level="WARN"/>
+    <%_ } _%>
+    <%_ if (hibernateCache === 'infinispan') { _%>
+    <logger name="org.infinispan" level="WARN"/>
     <%_ } _%>
     <logger name="org.springframework" level="WARN"/>
     <logger name="org.springframework.web" level="WARN"/>
@@ -75,6 +86,9 @@
     <logger name="sun.net.www" level="INFO"/>
     <%_ } _%>
     <logger name="sun.rmi.transport" level="WARN"/>
+    <%_ if (hibernateCache === 'infinispan') { _%>
+    <logger name="unknown.jul.logger" level="WARN"/>
+    <%_ } _%>
 
     <root level="WARN">
         <appender-ref ref="CONSOLE"/>

@@ -52,8 +52,10 @@ import java.time.Instant;
  * A user.
  */<% if (databaseType === 'sql') { %>
 @Entity
-@Table(name = "jhi_user")<% } %><% if (hibernateCache !== 'no' && databaseType === 'sql') { %>
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType === 'mongodb') { %>
+@Table(name = "jhi_user")<% } %>
+<%_ if (hibernateCache !== 'no' && databaseType === 'sql') { if (hibernateCache === 'infinispan') { _%>
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <%_ } else { _%>
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE) <%_ } } _%><% if (databaseType === 'mongodb') { %>
 @Document(collection = "jhi_user")<% } %><% if (databaseType === 'cassandra') { %>
 @Table(name = "user")<% } %><% if (searchEngine === 'elasticsearch') { %>
 @Document(indexName = "user")<% } %>
@@ -150,15 +152,21 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb') { 
     @JoinTable(
         name = "jhi_user_authority",
         joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-        inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})<% if (hibernateCache !== 'no') { %>
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType === 'sql') { %>
+        inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
+    <%_ if (hibernateCache !== 'no') { if (hibernateCache === 'infinispan') { _%>
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <%_ } else { _%>
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE) <%_ } } _%><% if (databaseType === 'sql') { %>
     @BatchSize(size = 20)<% } %><% } %><% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
     private Set<Authority> authorities = new HashSet<>();<% } %><% if (databaseType === 'cassandra') { %>
     private Set<String> authorities = new HashSet<>();<% } %><% if (authenticationType === 'session' && databaseType === 'sql') { %>
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")<% if (hibernateCache !== 'no') { %>
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
+    <%_ if (hibernateCache !== 'no') { if (hibernateCache === 'infinispan') { _%>
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    <%_ } else { _%>
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    <%_ } } _%>
     private Set<PersistentToken> persistentTokens = new HashSet<>();<% } %>
 
     public <% if (databaseType === 'sql') { %>Long<% } else if (databaseType === 'mongodb' || databaseType === 'cassandra') { %>String<% } %> getId() {

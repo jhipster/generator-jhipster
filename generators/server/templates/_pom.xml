@@ -77,19 +77,27 @@
         <%_ if (clusteredHttpSession === 'hazelcast') { _%>
         <hazelcast-wm.version>3.7</hazelcast-wm.version>
         <%_ } _%>
+        <%_ if (hibernateCache === 'infinispan') { _%>
+        <infinispan-hibernate52.version>5.2.8.Final</infinispan-hibernate52.version>
+        <%_ } _%>
+        <%_ if (hibernateCache === 'infinispan') { _%>
+        <infinispan.version>8.2.5.Final</infinispan.version>
+        <infinispan.cloud.version>9.0.0.Final</infinispan.cloud.version>
+        <infinispan.boot.starter.version>1.0.0.Final</infinispan.boot.starter.version>
+        <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
         <hibernate.version>5.2.8.Final</hibernate.version>
         <hikaricp.version>2.6.0</hikaricp.version>
         <%_ } _%>
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
         <java.version>1.<%= javaVersion %></java.version>
-        <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || applicationType === 'gateway') { _%>
+        <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || hibernateCache === 'infinispan' || applicationType === 'gateway') { _%>
         <jcache.version>1.0.0</jcache.version>
         <%_ } _%>
         <%_ if (gatlingTests) { _%>
         <jzlib.version>1.1.3</jzlib.version>
         <%_ } _%>
-        <jhipster.server.version>1.1.5</jhipster.server.version>
+        <jhipster.server.version>1.1.6</jhipster.server.version>
         <%_ if (authenticationType === 'jwt') { _%>
         <jjwt.version>0.7.0</jjwt.version>
         <%_ } _%>
@@ -192,7 +200,7 @@
         <%_ } _%>
     </properties>
 
-<%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa' || messageBroker === 'kafka') { _%>
+    <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa' || messageBroker === 'kafka' || hibernateCache === 'infinispan') { _%>
     <dependencyManagement>
         <dependencies>
             <%_ if (messageBroker === 'kafka') { _%>
@@ -209,6 +217,15 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
                 <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <%_ } _%>
+            <%_ if (hibernateCache === 'infinispan') { _%>
+            <dependency>
+                <groupId>org.infinispan</groupId>
+                <artifactId>infinispan-bom</artifactId>
+                <version>${infinispan.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -313,6 +330,45 @@
             <version>${hazelcast-wm.version}</version>
         </dependency>
         <%_ } _%>
+        <%_ if (hibernateCache === 'infinispan') { _%>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-infinispan</artifactId>
+            <version>${infinispan-hibernate52.version}</version>
+        </dependency>
+        <%_ } _%>
+        <%_ if (hibernateCache === 'infinispan') { _%>
+        <dependency>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-spring-boot-starter</artifactId>
+            <version>${infinispan.boot.starter.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-spring4-embedded</artifactId>
+            <version>${infinispan.cloud.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-spring4-common</artifactId>
+            <version>${infinispan.cloud.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-cloud</artifactId>
+            <version>${infinispan.cloud.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.undertow</groupId>
+                    <artifactId>undertow-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>org.awaitility</groupId>
             <artifactId>awaitility</artifactId>
@@ -395,7 +451,7 @@
             <version>${jzlib.version}</version>
         </dependency>
         <%_ } _%>
-        <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || applicationType === 'gateway') { _%>
+        <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || hibernateCache === 'infinispan' || applicationType === 'gateway') { _%>
         <dependency>
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>

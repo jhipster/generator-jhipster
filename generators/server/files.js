@@ -329,8 +329,11 @@ function writeFiles() {
 
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_package-info.java`, `${javaDir}config/package-info.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_AsyncConfiguration.java`, `${javaDir}config/AsyncConfiguration.java`);
-            if (this.hibernateCache === 'ehcache' || this.hibernateCache === 'hazelcast' || this.clusteredHttpSession === 'hazelcast' || this.applicationType === 'gateway') {
+            if (this.hibernateCache === 'ehcache' || this.hibernateCache === 'hazelcast' || this.hibernateCache === 'infinispan' || this.clusteredHttpSession === 'hazelcast' || this.applicationType === 'gateway') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/_CacheConfiguration.java`, `${javaDir}config/CacheConfiguration.java`);
+            }
+            if (this.hibernateCache === 'infinispan') {
+                this.template(`${SERVER_MAIN_SRC_DIR}package/config/_CacheFactoryConfiguration.java`, `${javaDir}config/CacheFactoryConfiguration.java`);
             }
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_Constants.java`, `${javaDir}config/Constants.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_DateTimeFormatConfiguration.java`, `${javaDir}config/DateTimeFormatConfiguration.java`);

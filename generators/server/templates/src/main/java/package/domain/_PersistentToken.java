@@ -39,8 +39,10 @@ import java.util.Date;<% } %>
  * @see <%=packageName%>.security.PersistentTokenRememberMeServices
  */<% if (databaseType === 'sql') { %>
 @Entity
-@Table(name = "jhi_persistent_token")<% } %><% if (hibernateCache !== 'no' && databaseType === 'sql') { %>
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType === 'mongodb') { %>
+@Table(name = "jhi_persistent_token")<% } %>
+<%_ if (hibernateCache !== 'no' && databaseType === 'sql') { if (hibernateCache === 'infinispan') { _%>
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <%_ } else { _%>
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<%_ } } _%><% if (databaseType === 'mongodb') { %>
 @Document(collection = "jhi_persistent_token")<% } %><% if (databaseType === 'cassandra') { %>
 @Table(name = "persistent_token")<% } %>
 public class PersistentToken implements Serializable {

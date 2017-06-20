@@ -43,8 +43,10 @@
     <logger name="<%=packageName%>" level="#logback.loglevel#"/>
 
     <logger name="io.github.jhipster" level="#logback.loglevel#"/>
-<% if (databaseType === 'cassandra') { %>
-    <logger name="io.netty" level="WARN"/><% } %>
+
+    <%_ if (databaseType === 'cassandra') { _%>
+    <logger name="io.netty" level="WARN"/>
+    <%_ } _%>
     <logger name="javax.activation" level="WARN"/>
     <logger name="javax.mail" level="WARN"/>
     <logger name="javax.xml.bind" level="WARN"/>
@@ -59,8 +61,10 @@
     <logger name="com.sun" level="WARN"/>
     <logger name="com.zaxxer" level="WARN"/>
     <logger name="io.undertow" level="WARN"/>
-    <logger name="io.undertow.websockets.jsr" level="ERROR"/><% if (hibernateCache === 'ehcache') { %>
-    <logger name="org.ehcache" level="WARN"/><% } %>
+    <logger name="io.undertow.websockets.jsr" level="ERROR"/>
+    <%_ if (hibernateCache === 'ehcache') { _%>
+    <logger name="org.ehcache" level="WARN"/>
+    <%_ } _%>
     <logger name="org.apache" level="WARN"/>
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
     <logger name="org.bson" level="WARN"/><% if (searchEngine === 'elasticsearch') { %>
@@ -72,6 +76,9 @@
     <%_ } else if (databaseType === 'mongodb') { _%>
     <logger name="org.mongodb.driver" level="WARN"/>
     <logger name="org.reflections" level="WARN"/>
+    <%_ } _%>
+    <%_ if (hibernateCache === 'infinispan') { _%>
+    <logger name="org.infinispan" level="WARN"/>
     <%_ } _%>
     <logger name="org.springframework" level="WARN"/>
     <logger name="org.springframework.web" level="WARN"/>
@@ -94,6 +101,9 @@
     <logger name="sun.net.www" level="INFO"/>
     <%_ } _%>
     <logger name="sun.rmi.transport" level="WARN"/>
+    <%_ if (hibernateCache === 'infinispan') { _%>
+    <logger name="unknown.jul.logger" level="WARN"/>
+    <%_ } _%>
 
     <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
         <resetJUL>true</resetJUL>
