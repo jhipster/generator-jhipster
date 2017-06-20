@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 package <%=packageName%>.config;
+
 import org.hibernate.cache.infinispan.InfinispanRegionFactory;
 import org.hibernate.service.ServiceRegistry;
 import org.infinispan.configuration.cache.CacheMode;
@@ -27,20 +28,23 @@ import org.infinispan.manager.EmbeddedCacheManager;
 import java.util.Properties;
 
 /**
- * Factory class for initializing hibernate-infinispan cache. This will be created through reflection. Post hibernate5, support
- * to manage it through Spring is been removed and there is no way to inject it using DI. This needs to be initialized from
+ * Factory class for initializing Hibernate 2nd-level cache with Infinispan cache.
+ *
+ * <p>
+ * This will be created through reflection. With Hibernate 5, support
+ * to manage this cache through Spring has been removed and there is no way to inject it using
+ * Dependency Injection. This needs to be initialized from
  * {@link CacheConfiguration#cacheConfigurer(io.github.jhipster.config.JHipsterProperties) CacheConfiguration } to keep the same cache manager
- * between app and hibernate layers.
+ * between the Spring Cache and Hibernate.
  */
 public class CacheFactoryConfiguration extends InfinispanRegionFactory {
 
-
     /**
-     * Defines L2 cache: hibernate-infinispan
+     * Defines an Hibernate L2 cache: hibernate-infinispan
      */
     @Override
     protected EmbeddedCacheManager createCacheManager(Properties properties, ServiceRegistry serviceRegistry) {
-        // Not a managed bean of spring context (as it gets created through reflection) and hence override thr static instance
+        // Not a managed bean from the Spring Context (as it gets created through reflection) and hence override the static instance
         return CacheConfiguration.getCacheManager();
     }
 

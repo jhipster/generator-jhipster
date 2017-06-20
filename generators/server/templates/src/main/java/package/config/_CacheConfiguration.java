@@ -313,8 +313,8 @@ public class CacheConfiguration {
     }
     <%_ } _%>
     <%_ } _%>
-
     <%_ if (hibernateCache === 'infinispan') { _%>
+
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
 
     // to initialize cache in a non spring managed beans
@@ -345,16 +345,22 @@ public class CacheConfiguration {
     }
 
     /**
+     * Inject a {@link org.infinispan.configuration.global.GlobalConfiguration GlobalConfiguration} for Infinispan cache.
      * <p>
-     * Shows how to inject a {@link org.infinispan.configuration.global.GlobalConfiguration GlobalConfiguration} for Infinispan cache. If
-     * jHipster-Registry is enabled, then host list will be populated from registry and will use customized channel for hosts discovery.
-     * If registry is not enabled, host discovery will be based on the default trasnport settings defined in config-file packaged within
-     * the jar. 'config-file' can be overridden using the application property <i>(jhipster.cache.inifnispan.config-file)</i>
+     * If the JHipster Registry is enabled, then the host list will be populated
+     * from Eureka.
      * </p>
-     *
      * <p>
-     * If registry is not defined, you have the choice of 'config-file' based on the underlying platform for hosts discovery. Infinispan
-     * supports discovery natively for most of the platforms like Kubernets/OpenShift, AWS, Azure and Google.
+     * If the JHipster Registry is not enabled, host discovery will be based on
+     * the default trasnport settings defined in the 'config-file' packaged within
+     * the Jar. The 'config-file' can be overridden using the application property
+     * <i>jhipster.cache.inifnispan.config-file</i>
+     * </p>
+     * <p>
+     * If the JHipster Registry is not defined, you have the choice of 'config-file'
+     * based on the underlying platform for hosts discovery. Infinispan
+     * supports discovery natively for most of the platforms like Kubernets/OpenShift,
+     * AWS, Azure and Google.
      * </p>
      */
     @Bean
@@ -380,9 +386,13 @@ public class CacheConfiguration {
     }
 
     /**
-     * Initialize cache configuration for L2 and application cache access.
-     * 'app' with three different modes local, distributed & replicated and L2 cache options are pre-configured.
-     * Supports both jCache and Spring cache abstractions.
+     * Initialize cache configuration for Hibernate L2 cache and Spring Cache.
+     * <p>
+     * There are three different modes: local, distributed & replicated and L2 cache options are pre-configured.
+     * </p>
+     * <p>
+     * It supports both jCache and Spring cache abstractions.
+     * </p>
      *
      * Usage:
      *  <ol>
@@ -391,13 +401,11 @@ public class CacheConfiguration {
      *          <pre class="code">@CacheResult(cacheName="dist-app-data") </pre>
      *              - for creating a distributed cache. In a similar way other cache names and options can be used
      *      </li>
-     *
      *      <li>
      *          Spring Cache:
      *          <pre class="code">@Cacheable(value = "repl-app-data") </pre>
      *              - for creating a replicated cache. In a similar way other cache names and options can be used
      *      </li>
-     *
      *      <li>
      *          Cache manager can also be injected through DI/CDI and data can be manipulated using Infinispan APIs,
      *          <pre class="code">
@@ -418,8 +426,7 @@ public class CacheConfiguration {
         final JHipsterProperties.Cache.Infinispan cacheInfo = jHipsterProperties.getCache().getInfinispan();
 
         return manager -> {
-
-            // initialize app cache
+            // initialize application cache
             manager.defineConfiguration("local-app-data", new ConfigurationBuilder().clustering().cacheMode(CacheMode.LOCAL)
                 .eviction().type(EvictionType.COUNT).size(cacheInfo.getLocal().getMaxEntries()).expiration()
                 .lifespan(cacheInfo.getLocal().getTimeToLiveSeconds(), TimeUnit.MINUTES).build());
@@ -431,7 +438,7 @@ public class CacheConfiguration {
                 .clustering().cacheMode(CacheMode.REPL_SYNC).eviction().type(EvictionType.COUNT).size(cacheInfo.getReplicated()
                 .getMaxEntries()).expiration().lifespan(cacheInfo.getReplicated().getTimeToLiveSeconds(), TimeUnit.MINUTES).build());
 
-            // initilaize L2 cache
+            // initilaize Hiberante L2 cache
             manager.defineConfiguration("entity", new ConfigurationBuilder().clustering().cacheMode(CacheMode.INVALIDATION_SYNC)
                 .locking().concurrencyLevel(1000).lockAcquisitionTimeout(15000).build());
             manager.defineConfiguration("replicated-entity", new ConfigurationBuilder().clustering().cacheMode(CacheMode.REPL_SYNC)
@@ -451,9 +458,11 @@ public class CacheConfiguration {
 
         <%_ if(serviceDiscoveryType === 'eureka') { _%>
     /**
-     * TCP channel with the host details populated from jHipster-Registry.
-     * MPING multicast is replaced with TCPPING with the host details discovered from registry and sends only unicast messages
-     * to the host list.
+     * TCP channel with the host details populated from the JHipster Registry.
+     * <p>
+     * MPING multicast is replaced with TCPPING with the host details discovered
+     * from registry and sends only unicast messages to the host list.
+     * </p>
      */
     private Channel getTransportChannel() {
         JChannel channel = new JChannel(false);
@@ -520,5 +529,4 @@ public class CacheConfiguration {
     }
         <%_ } _%>
     <%_ } _%>
-
 }
