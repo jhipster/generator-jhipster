@@ -437,6 +437,7 @@ module.exports = class extends Generator {
             { name: 'Dutch', value: 'nl' },
             { name: 'English', value: 'en' },
             { name: 'Estonian', value: 'et' },
+            { name: 'Farsi', value: 'fa'},
             { name: 'French', value: 'fr' },
             { name: 'Galician', value: 'gl' },
             { name: 'German', value: 'de' },

@@ -1,0 +1,158 @@
+<%#
+ Copyright 2013-2017 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://jhipster.github.io/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+    "global": {
+        "title": "<%= capitalizedBaseName %>",
+        "browsehappy": "شما از مرورگر <strong>قدیمی</strong> استفاده می‌کنید. لطفا <a href=\"http://browsehappy.com/?locale=en\">مرورگر خود را به روز کنید</a>",
+        "menu": {
+            "home": "خانه",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "entities": {
+                "main": "ماهیت ها",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+                "main": "حساب",
+                "settings": "تنضیمات",
+                "password": "رمزعبور",
+                "sessions": "نشست ها",
+                "login": "ورود",
+                "logout": "خروج",
+                "register": "ثبت نام"
+            },
+            "admin": {
+                "main": "مدیریت برتر",
+                <%_ if (applicationType === 'gateway') { _%>
+                "gateway": "دروازه",
+                <%_ } _%>
+                "userManagement": "مدیریت کاربر",
+                "tracker": "ردیاب کاربر",
+                "metrics": "معیارها",
+                "health": "سلامتی",
+                "configuration": "پیکربندی",
+                "logs": "وقایع ثبت شده",
+                "audits": "وقایع بازرسی",
+                "apidocs": "ای‌پی‌آی",
+                "database": "پایگاه داده",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+            },
+            "language": "زبان"
+        },
+        "form": {
+            "username": "نام کاربری",
+            "username.placeholder": "نام کاربری شما",
+            "newpassword": "رمزعبور جدید",
+            "newpassword.placeholder": "رمزعبور جدید",
+            "confirmpassword": "تصدیق رمزعبور جدید",
+            "confirmpassword.placeholder": "تصدیق رمزعبور جدید",
+            "email": "رایانامه",
+            "email.placeholder": "آدرس رایانامه شما"
+        },
+        "messages": {
+            "info": {
+                <%_ if (clientFramework === 'angular1') { _%>
+                "authenticated": "اگر مایل به ورود هستید؟ <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">ورود</a>.",
+                "register": "حساب کاربری ندارید؟ <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">ثبت حساب کاربری</a>"
+                <%_ } else { _%>
+                "authenticated": {
+                    "prefix": "اگر شما می‌خواهید",
+                    "link": "ورود",
+                    "suffix": ", می‌توانید از حساب پایه:<br/>- مدیریت برتر (login=\"admin\" and password=\"admin\") <br/>- کاربر (login=\"user\" and password=\"user\")."
+                },
+                "register": {
+                    "noaccount": "آیا هنوز حساب کاربری ندارید؟",
+                    "link": "ثبت نام حساب کاربری جدید"
+                }
+                <%_ } _%>
+            },
+            "error": {
+                "dontmatch": "رمزعبور و تصدیق رمزعبور یکی نیستند!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "رمزعبور شما ضروری است",
+                    "minlength": "رمزعبور شما باید حداقل ۴ کرکتر باشد",
+                    "maxlength": "رمز عبور شما نمی‌تواند بیش از ۵۰ کرکتر باشد.",
+                    "strength": "قدرتمندی رمزعبور:"
+                },
+                "confirmpassword": {
+                    "required": "تصدیق رمزعبور شما ضروری است",
+                    "minlength": "تصدیق رمزعبور شما باید حداقل ۴ کرکتر باشد",
+                    "maxlength": "تصدیق رمز عبور شما نمی‌تواند بیش از ۵۰ کرکتر باشد."
+                },
+                "email": {
+                    "required": "آدرس ایمیل شما ضروری است",
+                    "invalid": "آدرس ایمیل شما نامعتبر است",
+                    "minlength": "آدرس ایمیل شما حداقل باید ۵ کرکتر باشد",
+                    "maxlength": "آدرس ایمیل شما نمی‌تواند بیش از ۵۰ کرکتر باشد."
+                }
+            }
+        },
+        "field": {
+            "id": "شناسه"
+        },
+        "ribbon": {
+            "dev":"در حال توسعه"
+        },
+        "item-count": "نمایش {{first}} - {{second}} از {{total}} مورد."
+    },
+    "entity": {
+        "action": {
+            "addblob": "اضافه کردن فایل",
+            "addimage": "اضافه کردن تصویر",
+            "back": "برگشت",
+            "cancel": "انصراف",
+            "delete": "حذف",
+            "edit": "ویرایش",
+            "open": "باز",
+            "save": "ذخیره",
+            "view": "مشاهده"
+        },
+        "detail": {
+            "field": "فیلد",
+            "value": "مقدار"
+        },
+        "delete": {
+            "title": "تصدیق عملیات حذف"
+        },
+        "validation": {
+            "required": "وارد کردن این فیلد ضروری است",
+            "minlength": "این فیلد باید حداقل {{ min }} کراکتر باشد.",
+            "maxlength": "این فیلد نمی‌تواند بیشتر از {{ max }} کرکتر باشد",
+            "min": "این فیلد باید بیشتر از {{ min }} باشد.",
+            "max": "این فیلد نمی‌تواند بیش از {{ max }} باشد.",
+            "minbytes": "این فیلد باید بیش از {{ min }} بایت باشد.",
+            "maxbytes": "این فیلد نمی‌تواند بیش از {{ max }} بایت باشد.",
+            "pattern": "این فیلد باید بر طبق این الگو {{ pattern }} باشد.",
+            "number": "این فیلد باید عدد باشد.",
+            "datetimelocal": "این فیلد باید زمان باشد."
+        }
+    },
+    "error": {
+        "internalServerError": "خطای داخلی در سرور",
+        "server.not.reachable": "سرور در دسترس نیست",
+        "url.not.found": "پیدا نشد",
+        "NotNull": "فیلد {{ fieldName }} نمی‌تواند خالی باشد!",
+        "Size": "فیلد{{ fieldName }} نیازمندی‌های حداقل/حداکثر را ندارد!",
+        "userexists": "این نام کاربر در سیستم وجود دارد!",
+        "emailexists": "این آدرس ایمیل در سیستم وجود دارد!",
+        "idexists": "موجودیت جدید {{ entityName }} نمی‌تواند شناسه داشته‌باشد."
+    },
+    "footer": "این پاورقی است"
+}
