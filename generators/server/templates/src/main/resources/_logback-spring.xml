@@ -77,6 +77,9 @@
     <logger name="org.mongodb.driver" level="WARN"/>
     <logger name="org.reflections" level="WARN"/>
     <%_ } _%>
+    <%_ if (hibernateCache === 'infinispan') { _%>
+    <logger name="org.infinispan" level="WARN"/>
+    <%_ } _%>
     <logger name="org.springframework" level="WARN"/>
     <logger name="org.springframework.web" level="WARN"/>
     <logger name="org.springframework.security" level="WARN"/>
@@ -98,6 +101,9 @@
     <logger name="sun.net.www" level="INFO"/>
     <%_ } _%>
     <logger name="sun.rmi.transport" level="WARN"/>
+    <%_ if (hibernateCache === 'infinispan') { _%>
+    <logger name="unknown.jul.logger" level="WARN"/>
+    <%_ } _%>
 
     <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
         <resetJUL>true</resetJUL>
