@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "نشست های فعال برای [<b>{{username}}</b>]",
+        "table": {
+            "ipaddress": "IP آدرس",
+            "useragent": "User Agent",
+            "date": "زمان",
+            "button": "بی اعتبار کردن"
+        },
+        "messages": {
+            "success": "<strong>نشست بی اعتبار شد!</strong>",
+            "error": "<strong>یک خطا رخ داد!</strong> این نشست نمی‌تواند بی اعتبار شود."
+        }
+    }
+}

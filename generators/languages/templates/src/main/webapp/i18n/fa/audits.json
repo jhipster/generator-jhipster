@@ -1,0 +1,27 @@
+{
+    "audits": {
+        "title": "وقایع بازرسی",
+        "filter": {
+            "title": "فیلتر با زمان",
+            "from": "از",
+            "to": "تا",
+            "button": {
+                "weeks": "هفته ها",
+                "today": "امروز",
+                "clear": "پاک",
+                "close": "بسته"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "کاربر",
+                "date": "زمان",
+                "status": "حالت",
+                "data": "دیتا اضافی"
+            },
+            "data": {
+                "remoteAddress": "آدرس ریموت:"
+            }
+        }
+    }
+}
