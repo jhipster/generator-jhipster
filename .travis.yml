@@ -19,7 +19,6 @@ cache:
     - $HOME/.m2
     - $HOME/.gradle
     - $HOME/.yarn-cache
-    - node_modules
 env:
   global:
     - PROFILE=dev
