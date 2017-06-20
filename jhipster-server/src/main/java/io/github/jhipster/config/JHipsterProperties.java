@@ -353,7 +353,6 @@ public class JHipsterProperties {
                 }
 
             }
-
         }
     }
 
