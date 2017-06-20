@@ -21,48 +21,79 @@ let importApiModelProperty = false;
 let importJsonignore = false;
 let importSet = false;
 const uniqueEnums = {}; %><%- include imports -%>
-<% if (databaseType === 'cassandra') { %>
-import com.datastax.driver.mapping.annotations.*;<% } %><% if (importJsonignore === true) { %>
-import com.fasterxml.jackson.annotation.JsonIgnore;<% } %><% if (typeof javadoc != 'undefined') { %>
-import io.swagger.annotations.ApiModel;<% } %><% if (importApiModelProperty === true) { %>
-import io.swagger.annotations.ApiModelProperty;<% } %><% if (hibernateCache !== 'no') { %>
+
+<%_ if (databaseType === 'cassandra') { _%>
+import com.datastax.driver.mapping.annotations.*;
+<%_ } if (importJsonignore === true) { _%>
+import com.fasterxml.jackson.annotation.JsonIgnore;
+<%_ } if (typeof javadoc != 'undefined') { _%>
+import io.swagger.annotations.ApiModel;
+<%_ } if (importApiModelProperty === true) { _%>
+import io.swagger.annotations.ApiModelProperty;
+<%_ } if (hibernateCache !== 'no') { _%>
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (databaseType === 'mongodb') { %>
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+<%_ } if (databaseType === 'mongodb') { _%>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;<% } %><% if (searchEngine === 'elasticsearch') { %>
-import org.springframework.data.elasticsearch.annotations.Document;<% } %>
-<% if (databaseType === 'sql') { %>
-import javax.persistence.*;<% } %><% if (validation) { %>
-import javax.validation.constraints.*;<% } %>
-import java.io.Serializable;<% if (fieldsContainBigDecimal === true) { %>
-import java.math.BigDecimal;<% } %><% if (fieldsContainBlob && databaseType === 'cassandra') { %>
-import java.nio.ByteBuffer;<% } %><% if (fieldsContainInstant === true) { %>
-import java.time.Instant;<% } %><% if (fieldsContainLocalDate === true) { %>
-import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime === true) { %>
-import java.time.ZonedDateTime;<% } %><% if (importSet === true) { %>
+import org.springframework.data.mongodb.core.mapping.Field;
+<%_ } if (searchEngine === 'elasticsearch') { _%>
+import org.springframework.data.elasticsearch.annotations.Document;
+<%_ } if (databaseType === 'sql') { _%>
+
+import javax.persistence.*;
+<%_ } if (validation) { _%>
+import javax.validation.constraints.*;
+<%_ } _%>
+import java.io.Serializable;
+<%_ if (fieldsContainBigDecimal === true) { _%>
+import java.math.BigDecimal;
+<%_ } if (fieldsContainBlob && databaseType === 'cassandra') { _%>
+import java.nio.ByteBuffer;
+<%_ } if (fieldsContainInstant === true) { _%>
+import java.time.Instant;
+<%_ } if (fieldsContainLocalDate === true) { _%>
+import java.time.LocalDate;
+<%_ } if (fieldsContainZonedDateTime === true) { _%>
+import java.time.ZonedDateTime;
+<%_ } if (importSet === true) { _%>
 import java.util.HashSet;
-import java.util.Set;<% } %>
-import java.util.Objects;<% if (databaseType === 'cassandra') { %>
-import java.util.UUID;<% } %><% Object.keys(uniqueEnums).forEach(function(element) { %>
+import java.util.Set;
+<%_ } _%>
+import java.util.Objects;
+<%_ if (databaseType === 'cassandra') { _%>
+import java.util.UUID;
+<%_ }
+Object.keys(uniqueEnums).forEach(function(element) { _%>
 
-import <%=packageName%>.domain.enumeration.<%= element %>;<% }); %>
+import <%=packageName%>.domain.enumeration.<%= element %>;
+<%_ }); _%>
 
-<% if (typeof javadoc == 'undefined') { -%>
+<%_ if (typeof javadoc == 'undefined') { _%>
 /**
  * A <%= entityClass %>.
  */
-<% } else { -%>
+<%_ } else { _%>
 <%- formatAsClassJavadoc(javadoc) %>
 @ApiModel(description = "<%- formatAsApiDescription(javadoc) %>")
-<% } -%>
-<% if (databaseType === 'sql') { -%>
+<%_ } _%>
+<%_ if (databaseType === 'sql') { _%>
 @Entity
-@Table(name = "<%= entityTableName %>")<% if (hibernateCache !== 'no') { %>
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType === 'mongodb') { %>
-@Document(collection = "<%= entityTableName %>")<% } %><% if (databaseType === 'cassandra') { %>
-@Table(name = "<%= entityInstance %>")<% } %><% if (searchEngine === 'elasticsearch') { %>
-@Document(indexName = "<%= entityInstance.toLowerCase() %>")<% } %>
+@Table(name = "<%= entityTableName %>")
+<%_     if (hibernateCache !== 'no') {
+            if (hibernateCache === 'infinispan') { _%>
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+<%_         } else { _%>
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+<%_         }
+        }
+} if (databaseType === 'mongodb') { _%>
+@Document(collection = "<%= entityTableName %>")
+<%_ } if (databaseType === 'cassandra') { _%>
+@Table(name = "<%= entityInstance %>")
+<%_ } if (searchEngine === 'elasticsearch') { _%>
+@Document(indexName = "<%= entityInstance.toLowerCase() %>")
+<%_ } _%>
 public class <%= entityClass %> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -74,11 +105,14 @@ public class <%= entityClass %> implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     <%_ } _%>
-    private Long id;<% } %><% if (databaseType === 'mongodb') { %>
+    private Long id;
+<%_ } if (databaseType === 'mongodb') { _%>
     @Id
-    private String id;<% } %><% if (databaseType === 'cassandra') { %>
+    private String id;
+<%_ } if (databaseType === 'cassandra') { _%>
     @PartitionKey
-    private UUID id;<% } %>
+    private UUID id;
+<%_ } _%>
 
 <%_ for (idx in fields) {
     if (typeof fields[idx].javadoc !== 'undefined') { _%>
@@ -115,8 +149,8 @@ public class <%= entityClass %> implements Serializable {
     @Column(name = "<%-fieldNameAsDatabaseColumn %>", precision=10, scale=2<% if (required) { %>, nullable = false<% } %>)
         <%_ } else { _%>
     @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (fieldValidate === true) { %><% if (fieldValidateRules.indexOf('maxlength') !== -1) { %>, length = <%= fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% } %>)
-    <%_     }
-        } _%>
+        <%_ }
+    } _%>
     <%_ if (databaseType === 'mongodb') { _%>
     @Field("<%=fieldNameUnderscored %>")
     <%_ } _%>
@@ -164,48 +198,56 @@ public class <%= entityClass %> implements Serializable {
     _%>
     @OneToMany(mappedBy = "<%= otherEntityRelationshipName %>")
     @JsonIgnore
-    <%_     if (hibernateCache !== 'no') { _%>
+    <%_ if (hibernateCache !== 'no') {
+            if (hibernateCache === 'infinispan') { _%>
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+        <%_ } else { _%>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    <%_     } _%>
+        <%_ }
+    } _%>
     private Set<<%= otherEntityNameCapitalized %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
 
     <%_ } else if (relationshipType === 'many-to-one') { _%>
     @ManyToOne<% if (relationshipRequired) { %>(optional = false)<% } %>
-    <%_ if (relationshipValidate) { _%>
+        <%_ if (relationshipValidate) { _%>
     <%- include relationship_validators -%>
-    <%_ }_%>
+        <%_ }_%>
     private <%= otherEntityNameCapitalized %> <%= relationshipFieldName %>;
 
     <%_ } else if (relationshipType === 'many-to-many') { _%>
     @ManyToMany<% if (ownerSide === false) { %>(mappedBy = "<%= otherEntityRelationshipNamePlural %>")
     @JsonIgnore<% } %>
-    <%_     if (hibernateCache !== 'no') { _%>
+        <%_ if (hibernateCache !== 'no') {
+                if (hibernateCache === 'infinispan') { _%>
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+            <%_ } else { _%>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    <%_     }
-            if (ownerSide === true) { _%>
-    <%_ if (relationshipValidate) { _%>
+            <%_ }
+        } if (ownerSide === true) { _%>
+        <%_ if (relationshipValidate) { _%>
     <%- include relationship_validators -%>
-    <%_ }_%>
+        <%_ }_%>
     @JoinTable(name = "<%= joinTableName %>",
                joinColumns = @JoinColumn(name="<%= getPluralColumnName(name) %>_id", referencedColumnName="id"),
                inverseJoinColumns = @JoinColumn(name="<%= getPluralColumnName(relationships[idx].relationshipName) %>_id", referencedColumnName="id"))
-    <%_     } _%>
+        <%_ } _%>
     private Set<<%= otherEntityNameCapitalized %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
 
     <%_ } else { _%>
-    <%_     if (ownerSide) { _%>
+        <%_ if (ownerSide) { _%>
     @OneToOne<% if (relationshipRequired) { %>(optional = false)<% } %>
-    <%_ if (relationshipValidate) { _%>
+            <%_ if (relationshipValidate) { _%>
     <%- include relationship_validators -%>
-    <%_ }_%>
+            <%_ }_%>
     @JoinColumn(unique = true)
-    <%_    } else { _%>
+        <%_ } else { _%>
     @OneToOne(mappedBy = "<%= otherEntityRelationshipName %>")
     @JsonIgnore
-    <%_    } _%>
+        <%_ } _%>
     private <%= otherEntityNameCapitalized %> <%= relationshipFieldName %>;
 
-    <%_ } } _%>
+    <%_ }
+    } _%>
     public <% if (databaseType === 'sql') { %>Long<% } %><% if (databaseType === 'mongodb') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> getId() {
         return id;
     }
