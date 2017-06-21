@@ -74,7 +74,8 @@ module.exports = UpgradeGenerator.extend({
 
     _generate(version, callback) {
         this.log(`Regenerating application with JHipster ${version}...`);
-        shelljs.exec('jhipster --with-entities --force --skip-install', { silent: this.silent }, (code, msg, err) => {
+        const localBinPath = this.clientPackageManager === 'yarn' ? 'yarn bin' : 'npm bin';
+        shelljs.exec(`$(${localBinPath})/jhipster --with-entities --force --skip-install`, { silent: this.silent }, (code, msg, err) => {
             if (code === 0) this.log(chalk.green(`Successfully regenerated application with JHipster ${version}`));
             else this.error(`Something went wrong while generating project! ${err}`);
             callback();
@@ -256,6 +257,11 @@ module.exports = UpgradeGenerator.extend({
             insight.trackWithEvent('generator', 'upgrade');
         },
 
+        checkoutUpgradeBranch() {
+            const done = this.async();
+            this._gitCheckout(UPGRADE_BRANCH, done);
+        },
+
         updateJhipster() {
             this.log(chalk.yellow(`Updating ${GENERATOR_JHIPSTER} to ${this.latestVersion} . This might take some time...`));
             const done = this.async();
@@ -265,11 +271,6 @@ module.exports = UpgradeGenerator.extend({
                 else this.error(`Something went wrong while updating JHipster! ${msg} ${err}`);
                 done();
             });
-        },
-
-        checkoutUpgradeBranch() {
-            const done = this.async();
-            this._gitCheckout(UPGRADE_BRANCH, done);
         },
 
         generateWithLatestVersion() {
