@@ -52,14 +52,6 @@ module.exports = (options) => {
             rules: [
                 { test: /bootstrap\/dist\/js\/umd\//, loader: 'imports-loader?jQuery=jquery' },
                 {
-                    test: /\.ts$/,
-                    loaders: [
-                        'angular2-template-loader',
-                        'awesome-typescript-loader'
-                    ],
-                    exclude: ['node_modules/generator-jhipster']
-                },
-                {
                     test: /\.html$/,
                     loader: 'html-loader',
                     options: {

@@ -46,13 +46,19 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         filename: 'app/[hash].[name].bundle.js',
         chunkFilename: 'app/[hash].[id].chunk.js'
     },
+    module: {
+        rules: [{
+            test: /\.ts$/,
+            loader: '@ngtools/webpack'
+        }]
+    },
     plugins: [
         new ExtractTextPlugin('[hash].styles.css'),
         new Visualizer({
             // Webpack statistics in target folder
             filename: '../stats.html'
         }),
-        // AOT Plugin 
+        // AOT Plugin
         new AotPlugin({
             tsConfigPath: './tsconfig-aot.json',
             entryModule: root('src/main/webapp/app/app.module#<%=angular2AppName%>AppModule')
@@ -60,7 +66,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         new webpack.optimize.UglifyJsPlugin({
             beautify: false,
             comments: false,
-            sourcMap: true,
+            sourceMap: true,
             compress: {
                 screw_ie8: true,
                 warnings: false

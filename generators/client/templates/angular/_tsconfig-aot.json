@@ -28,14 +28,18 @@
         "noImplicitAny": false,
         "suppressImplicitAnyIndexErrors": true,
         "outDir": "<%= DIST_DIR %>app",
-        "lib": ["dom", "es2015"],
+        "lib": ["es6", "dom"],
         "typeRoots": [
             "node_modules/@types"
         ]
     },
 
-    "files": [
-        "<%= MAIN_SRC_DIR %>app/app.module.ts",
+    "include": [
+        "<%= MAIN_SRC_DIR %>app"
+    ],
+
+    "exclude": [
+        "node_modules/*",
         "<%= MAIN_SRC_DIR %>app/app.main-aot.ts"
     ],
 

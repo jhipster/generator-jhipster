@@ -72,6 +72,14 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
                 'tslint-loader'
             ],
             exclude: ['node_modules', new RegExp('reflect-metadata\\' + path.sep + 'Reflect\\.ts')]
+        },
+        {
+            test: /\.ts$/,
+            loaders: [
+                'angular2-template-loader',
+                'awesome-typescript-loader'
+            ],
+            exclude: ['node_modules/generator-jhipster']
         }]
     },
     plugins: [
