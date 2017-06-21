@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-version: '2'
+version: '2.1'
 services:
 <%_ for(let i = 0; i < appConfigs.length; i++) { _%>
 <%- appsYaml[i] %>
@@ -53,6 +53,8 @@ services:
         extends:
             file: jhipster-console.yml
             service: jhipster-elasticsearch
+        healthcheck:
+            readyness: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health?wait_for_status=yellow"]
     jhipster-logstash:
         extends:
             file: jhipster-console.yml
@@ -70,7 +72,8 @@ services:
             file: jhipster-console.yml
             service: jhipster-import-dashboards
         depends_on:
-            - jhipster-elasticsearch
+            jhipster-elasticsearch:
+                condition: service_healthy
     <%_ if (composeApplicationType === 'microservice') { _%>
     jhipster-zipkin:
         extends:

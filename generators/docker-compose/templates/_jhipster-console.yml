@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-version: '2'
+version: '2.1'
 services:
     jhipster-elasticsearch:
         image: <%= DOCKER_JHIPSTER_ELASTICSEARCH %>
