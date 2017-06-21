@@ -358,7 +358,9 @@ module.exports = JhipsterClientGenerator.extend({
                 this.warning('Install of dependencies failed!');
                 this.log(logMsg);
             } else if (this.clientFramework === 'angular1') {
-                this.spawnCommand('gulp', ['install']);
+                this.spawnCommandSync('gulp', ['install']);
+            } else {
+                this.spawnCommandSync(this.clientPackageManager, ['run', 'webpack:build']);
             }
         };
 
