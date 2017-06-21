@@ -23,8 +23,11 @@ import { Observable } from 'rxjs/Observable';
 
 export class NotificationInterceptor extends JhiHttpInterceptor {
 
+    private alertService: JhiAlertService;
+
     constructor(private injector: Injector) {
         super();
+        setTimeout(() => this.alertService = injector.get(JhiAlertService));
     }
 
     requestIntercept(options?: RequestOptionsArgs): RequestOptionsArgs {
@@ -43,7 +46,6 @@ export class NotificationInterceptor extends JhiHttpInterceptor {
                 headers.sort();
                 const alertKey = response.headers.get(headers[ 0 ]);
                 if (typeof alertKey === 'string') {
-                    const alertService: JhiAlertService = this.injector.get(JhiAlertService);
                     if (alertService) {
                         <%_ if (enableTranslation) { _%>
                         const alertParam = headers.length >= 2 ? response.headers.get(headers[ 1 ]) : null;
