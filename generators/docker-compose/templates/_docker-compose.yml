@@ -54,7 +54,7 @@ services:
             file: jhipster-console.yml
             service: jhipster-elasticsearch
         healthcheck:
-            readyness: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health?wait_for_status=yellow"]
+            test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health?wait_for_status=yellow"]
     jhipster-logstash:
         extends:
             file: jhipster-console.yml
