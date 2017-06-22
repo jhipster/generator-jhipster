@@ -424,6 +424,21 @@ module.exports = class extends Generator {
     }
 
     /**
+     * check if Right-to-Left support is necesary
+     */
+    isRTLSupportNecessary(languages) {
+        if (!languages) { return false; }
+        let res = false;
+        languages.forEach((language) => {
+            if (language === 'fa' ||
+                language === 'he') {
+                res = true;
+            }
+        });
+        return res;
+    }
+
+    /**
      * get all the languages options supported by JHipster
      */
     getAllSupportedLanguageOptions() {
@@ -437,7 +452,7 @@ module.exports = class extends Generator {
             { name: 'Dutch', value: 'nl' },
             { name: 'English', value: 'en' },
             { name: 'Estonian', value: 'et' },
-            { name: 'Farsi', value: 'fa'},
+            { name: 'Farsi', value: 'fa' },
             { name: 'French', value: 'fr' },
             { name: 'Galician', value: 'gl' },
             { name: 'German', value: 'de' },

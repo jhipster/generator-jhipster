@@ -35,6 +35,9 @@
             // if the current translation changes, update the window title
             var translateChangeSuccess = $rootScope.$on('$translateChangeSuccess', function() {
                 updateTitle();
+              <%_ if (enableRTLSupport) { _%>
+                updatePageDirection();
+              <%_ } _%>
             });
 
             $rootScope.$on('$destroy', function () {
@@ -43,6 +46,24 @@
                 }
             });
         }
+
+      <%_ if (enableRTLSupport) { _%>
+        // Update language and direction in index.html, e.g. <html dir="ltr" or <html dir="rtl"
+        function updatePageDirection() {
+          var currentLang = $translate.proposedLanguage() || $translate.use();
+          angular.element('html').attr('lang', currentLang);
+          angular.element('html').attr('dir', isRTL(currentLang) ? 'rtl' : 'ltr');
+        }
+
+        // Returns true if passed language key is a Right-to-Left language key
+        function isRTL(langKey) {
+          if (langKey === 'fa' ||
+              langKey === 'he') {
+              return true;
+          }
+          return false;
+        }
+      <%_ } _%>
 
         // update the window title using params in the following
         // precedence
