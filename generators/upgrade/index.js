@@ -32,7 +32,7 @@ util.inherits(UpgradeGenerator, BaseGenerator);
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 const UPGRADE_BRANCH = 'jhipster_upgrade';
 const GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES = '2.9.0';
-const GENERATOR_JHIPSTER_CLI_VERSION = "4.5.1"
+const GENERATOR_JHIPSTER_CLI_VERSION = '4.5.1';
 
 module.exports = UpgradeGenerator.extend({
     constructor: function (...args) { // eslint-disable-line object-shorthand
@@ -75,7 +75,7 @@ module.exports = UpgradeGenerator.extend({
 
     _generate(version, callback) {
         this.log(`Regenerating application with JHipster ${version}...`);
-        var generatorCommand = 'yo jhipster';
+        let generatorCommand = 'yo jhipster';
         if (semver.gte(version, GENERATOR_JHIPSTER_CLI_VERSION)) {
             generatorCommand = this.clientPackageManager === 'yarn' ? '$(yarn bin)/jhipster' : '$(npm bin)/jhipster';
         }
