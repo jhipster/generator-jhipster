@@ -89,6 +89,12 @@ import org.infinispan.eviction.EvictionType;
 import org.infinispan.manager.EmbeddedCacheManager;
 import org.infinispan.transaction.TransactionMode;
 import infinispan.autoconfigure.embedded.InfinispanEmbeddedCacheManagerAutoConfiguration;
+import org.infinispan.jcache.embedded.ConfigurationAdapter;
+import org.infinispan.jcache.embedded.JCache;
+import org.infinispan.jcache.embedded.JCacheManager;
+import javax.cache.Caching;
+import javax.cache.spi.CachingProvider;
+import java.net.URI;
     <%_ if (serviceDiscoveryType === 'eureka') { _%>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.infinispan.remoting.transport.jgroups.JGroupsTransport;
@@ -349,19 +355,19 @@ public class CacheConfiguration {
      * <p>
      * If the JHipster Registry is enabled, then the host list will be populated
      * from Eureka.
-     * </p>
+     *
      * <p>
      * If the JHipster Registry is not enabled, host discovery will be based on
-     * the default trasnport settings defined in the 'config-file' packaged within
+     * the default transport settings defined in the 'config-file' packaged within
      * the Jar. The 'config-file' can be overridden using the application property
      * <i>jhipster.cache.inifnispan.config-file</i>
-     * </p>
+     *
      * <p>
      * If the JHipster Registry is not defined, you have the choice of 'config-file'
      * based on the underlying platform for hosts discovery. Infinispan
      * supports discovery natively for most of the platforms like Kubernets/OpenShift,
      * AWS, Azure and Google.
-     * </p>
+     *
      */
     @Bean
     public InfinispanGlobalConfigurer globalConfiguration(JHipsterProperties jHipsterProperties) {
@@ -372,16 +378,22 @@ public class CacheConfiguration {
                 return () -> GlobalConfigurationBuilder
                     .defaultClusteredBuilder().transport().defaultTransport()
                     .addProperty("configurationFile", jHipsterProperties.getCache().getInfinispan().getConfigFile())
-                    .clusterName("infinispan-<%=baseName%>-cluster").globalJmxStatistics().allowDuplicateDomains(true).build();
+                    .clusterName("infinispan-<%=baseName%>-cluster").globalJmxStatistics()
+                    .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
+                    .allowDuplicateDomains(true).build();
             }
             return () -> GlobalConfigurationBuilder
                     .defaultClusteredBuilder().transport().transport(new JGroupsTransport(getTransportChannel()))
-                    .clusterName("infinispan-<%=baseName%>-cluster").globalJmxStatistics().allowDuplicateDomains(true).build();
+                    .clusterName("infinispan-<%=baseName%>-cluster").globalJmxStatistics()
+                    .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
+                    .allowDuplicateDomains(true).build();
         <%_ }else { _%>
             return () -> GlobalConfigurationBuilder
-                    .defaultClusteredBuilder().transport().defaultTransport().clusterName("infinispan-<%=baseName%>-cluster")
+                    .defaultClusteredBuilder().transport().defaultTransport()
                     .addProperty("configurationFile", jHipsterProperties.getCache().getInfinispan().getConfigFile())
-                    .globalJmxStatistics().allowDuplicateDomains(true).build();
+                    .clusterName("infinispan-<%=baseName%>-cluster").globalJmxStatistics()
+                    .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
+                    .allowDuplicateDomains(true).build();
         <%_ } _%>
     }
 
@@ -389,7 +401,7 @@ public class CacheConfiguration {
      * Initialize cache configuration for Hibernate L2 cache and Spring Cache.
      * <p>
      * There are three different modes: local, distributed & replicated and L2 cache options are pre-configured.
-     * </p>
+     *
      * <p>
      * It supports both jCache and Spring cache abstractions.
      * </p>
@@ -428,32 +440,95 @@ public class CacheConfiguration {
         return manager -> {
             // initialize application cache
             manager.defineConfiguration("local-app-data", new ConfigurationBuilder().clustering().cacheMode(CacheMode.LOCAL)
+                .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
                 .eviction().type(EvictionType.COUNT).size(cacheInfo.getLocal().getMaxEntries()).expiration()
                 .lifespan(cacheInfo.getLocal().getTimeToLiveSeconds(), TimeUnit.MINUTES).build());
             manager.defineConfiguration("dist-app-data", new ConfigurationBuilder()
-                .clustering().cacheMode(CacheMode.DIST_SYNC).hash().numOwners(cacheInfo.getDistributed().getInstanceCount()).eviction()
+                .clustering().cacheMode(CacheMode.DIST_SYNC).hash().numOwners(cacheInfo.getDistributed().getInstanceCount())
+                .jmxStatistics().enabled(cacheInfo.isStatsEnabled()).eviction()
                 .type(EvictionType.COUNT).size(cacheInfo.getDistributed().getMaxEntries()).expiration().lifespan(cacheInfo.getDistributed()
                 .getTimeToLiveSeconds(), TimeUnit.MINUTES).build());
-            manager.defineConfiguration("repl-app-data", new ConfigurationBuilder()
-                .clustering().cacheMode(CacheMode.REPL_SYNC).eviction().type(EvictionType.COUNT).size(cacheInfo.getReplicated()
+            manager.defineConfiguration("repl-app-data", new ConfigurationBuilder().clustering().cacheMode(CacheMode.REPL_SYNC)
+                .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
+                .eviction().type(EvictionType.COUNT).size(cacheInfo.getReplicated()
                 .getMaxEntries()).expiration().lifespan(cacheInfo.getReplicated().getTimeToLiveSeconds(), TimeUnit.MINUTES).build());
 
             // initilaize Hiberante L2 cache
             manager.defineConfiguration("entity", new ConfigurationBuilder().clustering().cacheMode(CacheMode.INVALIDATION_SYNC)
+                .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
                 .locking().concurrencyLevel(1000).lockAcquisitionTimeout(15000).build());
             manager.defineConfiguration("replicated-entity", new ConfigurationBuilder().clustering().cacheMode(CacheMode.REPL_SYNC)
+                .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
                 .locking().concurrencyLevel(1000).lockAcquisitionTimeout(15000).build());
             manager.defineConfiguration("local-query", new ConfigurationBuilder().clustering().cacheMode(CacheMode.LOCAL)
+                .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
                 .locking().concurrencyLevel(1000).lockAcquisitionTimeout(15000).build());
             manager.defineConfiguration("replicated-query", new ConfigurationBuilder().clustering().cacheMode(CacheMode.REPL_ASYNC)
+                .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
                 .locking().concurrencyLevel(1000).lockAcquisitionTimeout(15000).build());
             manager.defineConfiguration("timestamps", new ConfigurationBuilder().clustering().cacheMode(CacheMode.REPL_ASYNC)
+                .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
                 .locking().concurrencyLevel(1000).lockAcquisitionTimeout(15000).build());
-            manager.defineConfiguration("pending-puts", new ConfigurationBuilder().clustering().cacheMode(CacheMode.LOCAL).simpleCache
-                (true).transaction().transactionMode(TransactionMode.NON_TRANSACTIONAL).expiration().maxIdle(60000).build());
+            manager.defineConfiguration("pending-puts", new ConfigurationBuilder().clustering().cacheMode(CacheMode.LOCAL)
+                .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
+                .simpleCache(true).transaction().transactionMode(TransactionMode.NON_TRANSACTIONAL).expiration().maxIdle(60000).build());
 
             setCacheManager(manager);
         };
+    }
+
+    /**
+     * <p>
+     * Instance of {@link JCacheManager} with cache being managed by the underlying Infinispan layer. This helps to record stats
+     * info if enabled and the same is accessible through MBX:javax.cache,type=CacheStatistics.
+     *
+     * <p>
+     * jCache stats are at instance level. If you need stats at clustering level, then it needs to be retrieved from MBX:org.infinispan
+     *
+     */
+    @Bean
+    public JCacheManager getJCacheManager(@Autowired EmbeddedCacheManager cacheManager, @Autowired JHipsterProperties jHipsterProperties){
+        return new InfinispanJCacheManager(Caching.getCachingProvider().getDefaultURI(), cacheManager,
+            Caching.getCachingProvider(), jHipsterProperties);
+    }
+
+    class InfinispanJCacheManager extends JCacheManager {
+
+        public InfinispanJCacheManager(URI uri, EmbeddedCacheManager cacheManager, CachingProvider provider,
+                                       JHipsterProperties jHipsterProperties) {
+            super(uri, cacheManager, provider);
+            // register individual caches to make the stats info available.
+            <%_ if (!skipUserManagement) { _%>
+            registerPredefinedCache(<%=packageName%>.domain.User.class.getName(), new JCache<Object, Object>(
+                cacheManager.getCache(<%=packageName%>.domain.User.class.getName()).getAdvancedCache(), this,
+                ConfigurationAdapter.create()));
+            registerPredefinedCache(<%=packageName%>.domain.Authority.class.getName(), new JCache<Object, Object>(
+                cacheManager.getCache(<%=packageName%>.domain.Authority.class.getName()).getAdvancedCache(), this,
+                ConfigurationAdapter.create()));
+            registerPredefinedCache(<%=packageName%>.domain.User.class.getName() + ".authorities", new JCache<Object, Object>(
+                cacheManager.getCache(<%=packageName%>.domain.User.class.getName() + ".authorities").getAdvancedCache(), this,
+                ConfigurationAdapter.create()));
+                <%_ if (authenticationType === 'session') { _%>
+            registerPredefinedCache(<%=packageName%>.domain.PersistentToken.class.getName(), new JCache<Object, Object>(
+                cacheManager.getCache(<%=packageName%>.domain.PersistentToken.class.getName()).getAdvancedCache(), this,
+                ConfigurationAdapter.create()));
+            registerPredefinedCache(<%=packageName%>.domain.User.class.getName() + ".persistentTokens", new JCache<Object, Object>(
+                cacheManager.getCache(<%=packageName%>.domain.User.class.getName() + ".persistentTokens").getAdvancedCache(), this,
+                ConfigurationAdapter.create()));
+                <%_ } _%>
+                <%_ if (enableSocialSignIn) { _%>
+            registerPredefinedCache(<%=packageName%>.domain.SocialUserConnection.class.getName(), new JCache<Object, Object>(
+                cacheManager.getCache(<%=packageName%>.domain.SocialUserConnection.class.getName()).getAdvancedCache(), this,
+                ConfigurationAdapter.create()));
+                <%_ } _%>
+            <%_ } _%>
+            // jhipster-needle-infinispan-add-entry
+            if (jHipsterProperties.getCache().getInfinispan().isStatsEnabled()) {
+                for (String cacheName : cacheManager.getCacheNames()) {
+                    enableStatistics(cacheName, true);
+                }
+            }
+        }
     }
 
         <%_ if(serviceDiscoveryType === 'eureka') { _%>

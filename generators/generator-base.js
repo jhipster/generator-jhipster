@@ -713,15 +713,16 @@ module.exports = class extends Generator {
      * @param {array} relationships - the relationships of this entity
      * @param {string} packageName - the Java package name
      * @param {string} packageFolder - the Java package folder
+     * @param {string} cacheProvider - the cache provider
      */
-    addEntityToEhcache(entityClass, relationships, packageName, packageFolder) {
+    addEntityToCache(entityClass, relationships, packageName, packageFolder, cacheProvider) {
         // Add the entity to ehcache
-        this.addEntryToEhcache(`${packageName}.domain.${entityClass}.class.getName()`, packageFolder);
+        this.addEntryToCache(`${packageName}.domain.${entityClass}.class.getName()`, packageFolder, cacheProvider);
         // Add the collections linked to that entity to ehcache
         relationships.forEach((relationship) => {
             const relationshipType = relationship.relationshipType;
             if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
-                this.addEntryToEhcache(`${packageName}.domain.${entityClass}.class.getName() + ".${relationship.relationshipFieldNamePlural}"`, packageFolder);
+                this.addEntryToCache(`${packageName}.domain.${entityClass}.class.getName() + ".${relationship.relationshipFieldNamePlural}"`, packageFolder, cacheProvider);
             }
         });
     }
@@ -731,16 +732,30 @@ module.exports = class extends Generator {
      *
      * @param {string} entry - the entry (including package name) to cache.
      * @param {string} packageFolder - the Java package folder
+     * @param {string} cacheProvider - the cache provider
      */
-    addEntryToEhcache(entry, packageFolder) {
+    addEntryToCache(entry, packageFolder, cacheProvider) {
         try {
-            const ehcachePath = `${SERVER_MAIN_SRC_DIR}${packageFolder}/config/CacheConfiguration.java`;
-            jhipsterUtils.rewriteFile({
-                file: ehcachePath,
-                needle: 'jhipster-needle-ehcache-add-entry',
-                splicable: [`cm.createCache(${entry}, jcacheConfiguration);`
-                ]
-            }, this);
+            const cachePath = `${SERVER_MAIN_SRC_DIR}${packageFolder}/config/CacheConfiguration.java`;
+            if (cacheProvider === 'ehcache') {
+                jhipsterUtils.rewriteFile({
+                    file: cachePath,
+                    needle: 'jhipster-needle-ehcache-add-entry',
+                    splicable: [`cm.createCache(${entry}, jcacheConfiguration);`
+                    ]
+                }, this);
+            } else if (cacheProvider === 'infinispan') {
+                jhipsterUtils.rewriteFile({
+                    file: cachePath,
+                    needle: 'jhipster-needle-infinispan-add-entry',
+                    splicable: [`registerPredefinedCache(${entry}, new JCache<Object, Object>(
+                cacheManager.getCache(${entry}).getAdvancedCache(), this,
+                ConfigurationAdapter.create()));`
+                    ]
+                }, this);
+            } else {
+                // do nothing
+            }
         } catch (e) {
             this.log(chalk.yellow(`\nUnable to add ${entry} to CacheConfiguration.java file.\n\t${e.message}`));
         }

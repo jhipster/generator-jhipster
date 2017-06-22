@@ -217,7 +217,9 @@ repositories {
 dependencies {
     compile "io.github.jhipster:jhipster:${jhipster_server_version}"
     compile "io.dropwizard.metrics:metrics-core:${dropwizard_metrics_version}"
+    <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'infinispan') { _%>
     compile "io.dropwizard.metrics:metrics-jcache:${dropwizard_metrics_version}"
+    <%_ } _%>
     compile "io.dropwizard.metrics:metrics-jvm:${dropwizard_metrics_version}"
     compile "io.dropwizard.metrics:metrics-servlet:${dropwizard_metrics_version}"
     compile "io.dropwizard.metrics:metrics-json:${dropwizard_metrics_version}"
@@ -253,8 +255,7 @@ dependencies {
     <%_ if (hibernateCache === 'infinispan') {_%>
     compile "org.infinispan:infinispan-spring-boot-starter:${infinispan_boot_starter_version}"
     compile "org.infinispan:infinispan-core"
-    compile "org.infinispan:infinispan-spring4-embedded:${infinispan_cloud_version}"
-    compile "org.infinispan:infinispan-spring4-common:${infinispan_cloud_version}"
+    compile "org.infinispan:infinispan-jcache"
     compile ("org.infinispan:infinispan-cloud:${infinispan_cloud_version}") {
         exclude module: 'undertow-core'
     }
