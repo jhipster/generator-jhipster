@@ -247,6 +247,8 @@ public class JHipsterProperties {
 
             private String configFile = "default-configs/default-jgroups-tcp.xml";
 
+            private boolean statsEnabled;
+
             private final Local local = new Local();
 
             private final Distributed distributed = new Distributed();
@@ -259,6 +261,14 @@ public class JHipsterProperties {
 
             public void setConfigFile(String configFile) {
                 this.configFile = configFile;
+            }
+
+            public boolean isStatsEnabled() {
+                return statsEnabled;
+            }
+
+            public void setStatsEnabled(boolean statsEnabled) {
+                this.statsEnabled = statsEnabled;
             }
 
             public Local getLocal() {
