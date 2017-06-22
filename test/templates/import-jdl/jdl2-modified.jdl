@@ -1,0 +1,32 @@
+entity DepartmentAlt {
+  departmentId Long,
+  departmentName String required,
+  departmentDescription String
+  departmentCode String minlength(2) maxlength(2)
+  departmentNo Integer
+  departmentTime Instant
+}
+
+/**
+ * JobHistoryAlt comment.
+ */
+entity JobHistoryAlt {
+  startDate ZonedDateTime,
+  endDate ZonedDateTime
+}
+
+enum JobTypeAlt {
+  TYPE1, TYPE2
+}
+
+entity JobTaskAlt {
+  name String
+}
+
+relationship OneToOne {
+  JobHistoryAlt{department} to DepartmentAlt
+}
+
+relationship OneToMany {
+  JobHistoryAlt{tasks} to JobTaskAlt
+}
