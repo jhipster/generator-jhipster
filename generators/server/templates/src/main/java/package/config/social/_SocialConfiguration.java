@@ -53,8 +53,9 @@ import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 /**
  * Basic Spring Social configuration.
  *
- * <p>Creates the beans necessary to manage Connections to social services and
- * link accounts from those services to internal Users.</p>
+ * <p>
+ * Creates the beans necessary to manage Connections to social services and
+ * link accounts from those services to internal Users.
  */
 @Configuration
 @EnableSocial

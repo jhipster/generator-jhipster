@@ -349,19 +349,16 @@ public class CacheConfiguration {
      * <p>
      * If the JHipster Registry is enabled, then the host list will be populated
      * from Eureka.
-     * </p>
      * <p>
      * If the JHipster Registry is not enabled, host discovery will be based on
      * the default trasnport settings defined in the 'config-file' packaged within
      * the Jar. The 'config-file' can be overridden using the application property
      * <i>jhipster.cache.inifnispan.config-file</i>
-     * </p>
      * <p>
      * If the JHipster Registry is not defined, you have the choice of 'config-file'
      * based on the underlying platform for hosts discovery. Infinispan
      * supports discovery natively for most of the platforms like Kubernets/OpenShift,
      * AWS, Azure and Google.
-     * </p>
      */
     @Bean
     public InfinispanGlobalConfigurer globalConfiguration(JHipsterProperties jHipsterProperties) {
@@ -389,11 +386,9 @@ public class CacheConfiguration {
      * Initialize cache configuration for Hibernate L2 cache and Spring Cache.
      * <p>
      * There are three different modes: local, distributed & replicated and L2 cache options are pre-configured.
-     * </p>
      * <p>
      * It supports both jCache and Spring cache abstractions.
-     * </p>
-     *
+     * <p>
      * Usage:
      *  <ol>
      *      <li>
@@ -462,7 +457,6 @@ public class CacheConfiguration {
      * <p>
      * MPING multicast is replaced with TCPPING with the host details discovered
      * from registry and sends only unicast messages to the host list.
-     * </p>
      */
     private Channel getTransportChannel() {
         JChannel channel = new JChannel(false);
