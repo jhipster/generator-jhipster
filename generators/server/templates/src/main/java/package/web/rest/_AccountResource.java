@@ -72,7 +72,7 @@ public class AccountResource {
     private final PersistentTokenRepository persistentTokenRepository;
     <%_ } _%>
 
-    private final static String CHECK_ERROR_MESSAGE = "Incorrect password";
+    private static final String CHECK_ERROR_MESSAGE = "Incorrect password";
 
     public AccountResource(UserRepository userRepository, UserService userService,
             MailService mailService<% if (authenticationType === 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>) {
