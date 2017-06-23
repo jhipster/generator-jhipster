@@ -84,13 +84,14 @@ spec:
         # Registry configuration
         - name: SPRING_PROFILES_ACTIVE
           value: prod,native
-        - name: SECURITY_USER_PASSWORD
+        - name: JHIPSTER_REGISTRY_PASSWORD
           valueFrom:
             secretKeyRef:
               name: registry-secret
               key: registry-admin-password
         - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_SECRET
           value: my-secret-token-to-change-in-production
+        # Eureka specific tweaking
         - name: EUREKA_INSTANCE_LEASE_RENEWAL_INTERVAL_IN_SECONDS
           value: '15'
         - name: EUREKA_INSTANCE_LEASE_EXPIRATION_DURATION_IN_SECONDS
@@ -109,12 +110,14 @@ spec:
           value: '2000'
         - name: EUREKA_CLIENT_FETCH_REGISTRY
           value: 'true'
-        - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
-          value: 'true'
         - name: EUREKA_CLIENT_REGISTRY_FETCH_INTERVAL_SECONDS
           value: '15'
         - name: EUREKA_CLIENT_INITIAL_INSTANE_INFO_REPLICATION_INTERVAL_SECONDS
           value: '15'
+        - name: EUREKA_SERVER_REGISTRY_SYNC_RETRY_WAIT_MS
+          value: '500'
+        - name: EUREKA_SERVER_A_SGCACHE_EXPIRY_TIMEOUT_MS
+          value: '60000'
         # Example "prod" configuration
         # - name: SPRING_PROFILES_ACTIVE
         #   value: prod
@@ -134,16 +137,13 @@ spec:
             LAST_POD_INDEX=$((${CLUSTER_SIZE} - 1))
             REPLICAS=""
             for i in $(seq 0 $LAST_POD_INDEX); do
-              if [ ${STATEFULSET_NAME}-${i} != ${HOSTNAME} ]; then
-                if [ -z ${REPLICAS} ]; then
-                  REPLICAS="http://admin:${SECURITY_USER_PASSWORD}@${STATEFULSET_NAME}-${i}.jhipster-registry.${STATEFULSET_NAMESPACE}.svc.cluster.local:8761/eureka/"
-                else
-                  REPLICAS="${REPLICAS},http://admin:${SECURITY_USER_PASSWORD}@${STATEFULSET_NAME}-${i}.jhipster-registry.${STATEFULSET_NAMESPACE}.svc.cluster.local:8761/eureka/"
-                fi
+              REPLICAS="${REPLICAS}http://admin:${JHIPSTER_REGISTRY_PASSWORD}@${STATEFULSET_NAME}-${i}.jhipster-registry.${STATEFULSET_NAMESPACE}.svc.cluster.local:8761/eureka/"
+              if [ $i -lt $LAST_POD_INDEX ]; then
+                REPLICAS="${REPLICAS},"
               fi
             done
-            export EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=$REPLICAS
-            echo "EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=${REPLICAS}"
+            export EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=$REPLICAS
+            echo "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=${REPLICAS}"
 
             java -jar /jhipster-registry.war --spring.cloud.config.server.git.uri=${GIT_URI} --spring.cloud.config.server.git.search-paths=${GIT_SEARCH_PATHS} -Djava.security.egd=file:/dev/./urandom
         volumeMounts:
