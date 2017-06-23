@@ -254,7 +254,7 @@
             <artifactId>metrics-json</artifactId>
             <version>${dropwizard-metrics.version}</version>
         </dependency>
-        <%_ if (hibernateCache === 'ehcache') { _%>
+        <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'infinispan') { _%>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-jcache</artifactId>
@@ -349,13 +349,7 @@
         </dependency>
         <dependency>
             <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-spring4-embedded</artifactId>
-            <version>${infinispan.cloud.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-spring4-common</artifactId>
-            <version>${infinispan.cloud.version}</version>
+            <artifactId>infinispan-jcache</artifactId>
         </dependency>
         <dependency>
             <groupId>org.infinispan</groupId>
