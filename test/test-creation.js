@@ -416,6 +416,35 @@ describe('JHipster generator', () => {
         });
     });
 
+    describe('infinispan', () => {
+        beforeEach((done) => {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({ skipInstall: true, skipChecks: true })
+                .withPrompts({
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
+                    hibernateCache: 'infinispan',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: []
+                })
+                .on('end', done);
+        });
+        it('creates expected files with "Infinispan"', () => {
+            assert.file(expectedFiles.infinispan);
+        });
+    });
+
     describe('postgresql and elasticsearch', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
