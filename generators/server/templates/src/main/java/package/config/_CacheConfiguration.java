@@ -486,7 +486,7 @@ public class CacheConfiguration {
      *
      */
     @Bean
-    public JCacheManager getJCacheManager(@Autowired EmbeddedCacheManager cacheManager, @Autowired JHipsterProperties jHipsterProperties){
+    public JCacheManager getJCacheManager(EmbeddedCacheManager cacheManager, JHipsterProperties jHipsterProperties){
         return new InfinispanJCacheManager(Caching.getCachingProvider().getDefaultURI(), cacheManager,
             Caching.getCachingProvider(), jHipsterProperties);
     }
