@@ -63,7 +63,8 @@ describe('Generator Base', () => {
             });
             it('returns an up-to-date state', () => {
                 assert.deepEqual(
-                    BaseGenerator.prototype.getExistingEntities()[0]
+                    BaseGenerator.prototype.getExistingEntities()
+                        .find(it => it.name === 'Region')
                         .definition.fields[1],
                     { fieldName: 'regionDesc', fieldType: 'String' }
                 );
