@@ -1,3 +1,4 @@
 export interface BaseEntity {
-    id?: number | string;
+    // using type any to avoid methods complaining of invalid type
+    id?: any;
 };
