@@ -707,7 +707,7 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Add a new entity to the Ehcache, for the 2nd level cache of an entity and its relationships.
+     * Add a new entity to Ehcache, for the 2nd level cache of an entity and its relationships.
      *
      * @param {string} entityClass - the entity to cache
      * @param {array} relationships - the relationships of this entity
@@ -729,7 +729,7 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Add a new entity to the Ehcache, for the 2nd level cache of an entity and its relationships.
+     * Add a new entity to the chosen cache provider, for the 2nd level cache of an entity and its relationships.
      *
      * @param {string} entityClass - the entity to cache
      * @param {array} relationships - the relationships of this entity
@@ -750,7 +750,7 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Add a new entry to Ehcache in CacheConfiguration.java
+     * Add a new entry to the chosen cache provider in CacheConfiguration.java
      *
      * @param {string} entry - the entry (including package name) to cache
      * @param {string} packageFolder - the Java package folder
