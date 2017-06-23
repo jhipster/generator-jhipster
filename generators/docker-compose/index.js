@@ -59,6 +59,7 @@ module.exports = DockerComposeGenerator.extend({
             this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
             this.DOCKER_PROMETHEUS_ALERTMANAGER = constants.DOCKER_PROMETHEUS_ALERTMANAGER;
             this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
+            this.DOCKER_COMPOSE_VERSION = constants.DOCKER_COMPOSE_VERSION;
         },
 
         checkDocker: docker.checkDocker,

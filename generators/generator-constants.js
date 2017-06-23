@@ -43,6 +43,8 @@ const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.6.2';
 const DOCKER_GRAFANA = 'grafana/grafana:4.3.2';
 const DOCKER_JENKINS = 'jenkins:latest';
 
+const DOCKER_COMPOSE_VERSION = '2.1';
+
 // version of Node, Yarn, NPM
 const NODE_VERSION = '6.11.1';
 const YARN_VERSION = '0.27.5';
@@ -180,8 +182,8 @@ const constants = {
     YARN_VERSION,
     NPM_VERSION,
     DOCKER_JENKINS,
-
-    SQL_DB_OPTIONS
+    SQL_DB_OPTIONS,
+    DOCKER_COMPOSE_VERSION
 };
 
 module.exports = constants;
