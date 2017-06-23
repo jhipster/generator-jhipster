@@ -404,8 +404,7 @@ public class CacheConfiguration {
      *
      * <p>
      * It supports both jCache and Spring cache abstractions.
-     * </p>
-     *
+     * <p>
      * Usage:
      *  <ol>
      *      <li>
@@ -537,7 +536,6 @@ public class CacheConfiguration {
      * <p>
      * MPING multicast is replaced with TCPPING with the host details discovered
      * from registry and sends only unicast messages to the host list.
-     * </p>
      */
     private Channel getTransportChannel() {
         JChannel channel = new JChannel(false);
