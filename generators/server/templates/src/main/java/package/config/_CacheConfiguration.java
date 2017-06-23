@@ -323,7 +323,7 @@ public class CacheConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
 
-    // to initialize cache in a non spring managed beans
+    // Initialize the cache in a non Spring-managed bean
     private static EmbeddedCacheManager cacheManager;
         <%_ if (serviceDiscoveryType === 'eureka') { _%>
 
