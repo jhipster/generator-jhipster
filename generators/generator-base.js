@@ -775,8 +775,6 @@ module.exports = class extends Generator {
                 ConfigurationAdapter.create()));`
                     ]
                 }, this);
-            } else {
-                // do nothing
             }
         } catch (e) {
             this.log(chalk.yellow(`\nUnable to add ${entry} to CacheConfiguration.java file.\n\t${e.message}`));
