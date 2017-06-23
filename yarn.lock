@@ -496,6 +496,10 @@ decamelize@^1.1.2:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
 
+deep-equal@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/deep-equal/-/deep-equal-1.0.1.tgz#f5d260292b660e084eff4cdbc9f08ad3247448b5"
+
 deep-extend@^0.4.0:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/deep-extend/-/deep-extend-0.4.1.tgz#efe4113d08085f4e6f9687759810f807469e2253"
@@ -809,6 +813,12 @@ external-editor@^2.0.4:
 extsprintf@1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.0.2.tgz#e1080e0658e300b06294990cc70e1502235fd550"
+
+fast-json-patch@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/fast-json-patch/-/fast-json-patch-2.0.2.tgz#6a2dd37f7df69ebc10b7de730484318d6922fbb8"
+  dependencies:
+    deep-equal "^1.0.1"
 
 fast-levenshtein@~2.0.4:
   version "2.0.6"
