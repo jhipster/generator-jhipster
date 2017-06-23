@@ -29,6 +29,7 @@ const exec = require('child_process').exec;
 const os = require('os');
 const https = require('https');
 const pluralize = require('pluralize');
+const jhiCore = require('jhipster-core');
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./util');
 const constants = require('./generator-constants');
@@ -1438,14 +1439,21 @@ module.exports = class extends Generator {
             return e1.definition.changelogDate - e2.definition.changelogDate;
         }
 
-        if (shelljs.test('-d', JHIPSTER_CONFIG_DIR)) {
-            shelljs.ls(path.join(JHIPSTER_CONFIG_DIR, '*.json')).forEach((file) => {
-                const definition = this.fs.readJSON(file);
-                entities.push({ name: path.basename(file, '.json'), definition });
-            });
+        if (!shelljs.test('-d', JHIPSTER_CONFIG_DIR)) {
+            return entities;
         }
 
-        return entities.sort(isBefore);
+        return shelljs.ls(
+            path.join(JHIPSTER_CONFIG_DIR, '*.json')
+        ).reduce((acc, file) => {
+            try {
+                const definition = jhiCore.readEntityJSON(file);
+                acc.push({ name: path.basename(file, '.json'), definition });
+            } catch (error) {
+                // not an entity file / malformed?
+            }
+            return acc;
+        }, entities).sort(isBefore);
     }
 
     /**
