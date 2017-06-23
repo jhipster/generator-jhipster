@@ -246,17 +246,17 @@ jhipster:
             statsEnabled: true
             # local app cache
             local:
-              time-to-live-seconds: 60 # By default objects stay 1 hour (in minutes) in the cache
-              max-entries: 1000 # Number of objects in each cache entry
-            #distributed app cache
+                time-to-live-seconds: 60 # By default objects stay 1 hour (in minutes) in the cache
+                max-entries: 1000 # Number of objects in each cache entry
+            # distributed app cache
             distributed:
-              time-to-live-seconds: 60 # By default objects stay 1 hour (in minutes) in the cache
-              max-entries: 1000 # Number of objects in each cache entry
-              instance-count: 2
-            #replicated app cache
+                time-to-live-seconds: 60 # By default objects stay 1 hour (in minutes) in the cache
+                max-entries: 1000 # Number of objects in each cache entry
+                instance-count: 2
+            # replicated app cache
             replicated:
-              time-to-live-seconds: 60 # By default objects stay 1 hour (in minutes) in the cache
-              max-entries: 1000 # Number of objects in each cache entry
+                time-to-live-seconds: 60 # By default objects stay 1 hour (in minutes) in the cache
+                max-entries: 1000 # Number of objects in each cache entry
         <%_ } _%>
     <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>
