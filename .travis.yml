@@ -42,6 +42,7 @@ env:
     - JHIPSTER=app-ng2-gateway-eureka
     - JHIPSTER=app-ng2-gateway-consul
     - JHIPSTER=app-ng2-gateway-uaa
+    - JHIPSTER=app-ng2-infinispan
     - JHIPSTER=app-ng2-cassandra
     - JHIPSTER=app-ng2-mongodb
     - JHIPSTER=app-ng2-oauth2
