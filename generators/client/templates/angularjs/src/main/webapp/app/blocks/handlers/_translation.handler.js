@@ -23,9 +23,15 @@
         .module('<%=angularAppName%>')
         .factory('translationHandler', translationHandler);
 
+    <%_ if (enableRTLSupport) { _%>
+    translationHandler.$inject = ['$rootScope', '$window', '$state', '$translate', 'findLanguageRtlFromKeyFilter'];
+
+    function translationHandler($rootScope, $window, $state, $translate, findLanguageRtlFromKeyFilter) {
+    <%_ } else { _%>
     translationHandler.$inject = ['$rootScope', '$window', '$state', '$translate'];
 
     function translationHandler($rootScope, $window, $state, $translate) {
+    <%_ } _%>
         return {
             initialize: initialize,
             updateTitle: updateTitle
@@ -35,9 +41,9 @@
             // if the current translation changes, update the window title
             var translateChangeSuccess = $rootScope.$on('$translateChangeSuccess', function() {
                 updateTitle();
-              <%_ if (enableRTLSupport) { _%>
+                <%_ if (enableRTLSupport) { _%>
                 updatePageDirection();
-              <%_ } _%>
+                <%_ } _%>
             });
 
             $rootScope.$on('$destroy', function () {
@@ -47,7 +53,7 @@
             });
         }
 
-      <%_ if (enableRTLSupport) { _%>
+        <%_ if (enableRTLSupport) { _%>
         // Update language and direction in index.html, e.g. <html dir="ltr" or <html dir="rtl"
         function updatePageDirection() {
           var currentLang = $translate.proposedLanguage() || $translate.use();
@@ -57,13 +63,9 @@
 
         // Returns true if passed language key is a Right-to-Left language key
         function isRTL(langKey) {
-          if (langKey === 'fa' ||
-              langKey === 'he') {
-              return true;
-          }
-          return false;
+          return findLanguageRtlFromKeyFilter(langKey);
         }
-      <%_ } _%>
+        <%_ } _%>
 
         // update the window title using params in the following
         // precedence
