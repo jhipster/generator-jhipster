@@ -1450,6 +1450,7 @@ module.exports = class extends PrivateBase {
                 acc.push({ name: path.basename(file, '.json'), definition });
             } catch (error) {
                 // not an entity file / malformed?
+                this.warning(`Unable to parse entity file ${file}`);
             }
             return acc;
         }, entities).sort(isBefore);
