@@ -36,5 +36,8 @@
     "include": [
         "src/main/webapp/app",
         "src/test/javascript"
+    ],
+    "exclude": [
+        "<%= MAIN_SRC_DIR %>app/app.main-aot.ts"
     ]
 }

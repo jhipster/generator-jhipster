@@ -34,13 +34,9 @@
         ]
     },
 
-    "include": [
-        "<%= MAIN_SRC_DIR %>app"
-    ],
-
-    "exclude": [
-        "node_modules/*",
-        "<%= MAIN_SRC_DIR %>app/app.main-aot.ts"
+    "files": [
+       "<%= MAIN_SRC_DIR %>app/app.module.ts",
+       "<%= MAIN_SRC_DIR %>app/app.main-aot.ts"
     ],
 
     "angularCompilerOptions": {
