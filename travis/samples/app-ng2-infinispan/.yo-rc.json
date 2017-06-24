@@ -4,7 +4,6 @@
       "packageName": "io.github.jhipster.travis",
       "nativeLanguage": "en"
     },
-    "jhipsterVersion": "4.5.5",
     "baseName": "travisInfinispan",
     "packageName": "io.github.jhipster.travis",
     "packageFolder": "io/github/jhipster/travis",
@@ -27,6 +26,7 @@
     "clientPackageManager": "yarn",
     "applicationType": "monolith",
     "testFrameworks": [],
+    "travis": true,
     "jhiPrefix": "jhi",
     "enableTranslation": true,
     "nativeLanguage": "en",
