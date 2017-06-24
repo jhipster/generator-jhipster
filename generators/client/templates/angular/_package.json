@@ -60,17 +60,17 @@
     <%_ if (protractorTests) { _%>
     "@types/selenium-webdriver": "3.0.4",
     <%_ } _%>
-    "add-asset-html-webpack-plugin": "2.0.1",
+    "add-asset-html-webpack-plugin": "1.0.2",
     "angular2-template-loader": "0.6.2",
     "awesome-typescript-loader": "3.1.3",
     "browser-sync": "2.18.12",
     "browser-sync-webpack-plugin": "1.1.4",
     "codelyzer": "3.1.1",
     "copy-webpack-plugin": "4.0.1",
-    "css-loader": "0.28.4",
+    "css-loader": "0.28.3",
     "exports-loader": "0.6.4",
-    "extract-text-webpack-plugin": "2.1.2",
-    "file-loader": "0.11.2",
+    "extract-text-webpack-plugin": "2.1.0",
+    "file-loader": "0.11.1",
     "generator-jhipster": "<%= packagejs.version %>",
     "html-loader": "0.4.5",
     "html-webpack-plugin": "2.28.0",
@@ -90,7 +90,7 @@
     "karma-sourcemap-loader": "0.3.7",
     "karma-webpack": "2.0.3",
     <%_ if (enableTranslation) { _%>
-    "merge-jsons-webpack-plugin": "1.0.8",
+    "merge-jsons-webpack-plugin": "1.0.6",
     <%_ } _%>
     "phantomjs-prebuilt": "2.1.14",
     <%_ if (protractorTests) { _%>
@@ -101,7 +101,7 @@
     "rimraf": "2.6.1",
     "sourcemap-istanbul-instrumenter-loader": "0.2.0",
     "string-replace-webpack-plugin": "0.1.3",
-    "style-loader": "0.18.2",
+    "style-loader": "0.16.1",
     "to-string-loader": "1.1.5",
     <%_ if (protractorTests) { _%>
     "ts-node": "3.1.0",
@@ -110,9 +110,9 @@
     "tslint-loader": "3.5.3",
     "typescript": "2.3.4",
     <%_ if (useSass) { _%>
-    "sass-loader": "6.0.6",
+    "sass-loader": "5.0.1",
     "node-sass": "4.5.3",
-    "postcss-loader": "2.0.6",
+    "postcss-loader": "1.3.0",
     <%_ } _%>
     <%_ if (buildTool === 'maven') { _%>
     "xml2js": "0.4.17",
@@ -120,13 +120,13 @@
     <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
     <%_ }); _%>
-    "webpack": "3.0.0",
-    "webpack-dev-server": "2.5.0",
+    "webpack": "2.6.1",
+    "webpack-dev-server": "2.4.5",
     "webpack-merge": "4.1.0",
     "webpack-notifier": "1.5.0",
     "webpack-visualizer-plugin": "0.1.11",
     "web-app-manifest-loader": "0.1.1",
-    "write-file-webpack-plugin": "4.1.0"
+    "write-file-webpack-plugin": "3.4.2"
   },
   "engines": {
     "node": ">=6.9.0"

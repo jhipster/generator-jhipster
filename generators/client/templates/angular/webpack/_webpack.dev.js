@@ -67,7 +67,6 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     module: {
         rules: [{
             test: /\.ts$/,
-            enforce: 'pre',
             loaders: [
                 'tslint-loader'
             ],
