@@ -400,7 +400,7 @@ public class CacheConfiguration {
     /**
      * Initialize cache configuration for Hibernate L2 cache and Spring Cache.
      * <p>
-     * There are three different modes: local, distributed & replicated and L2 cache options are pre-configured.
+     * There are three different modes: local, distributed and replicated, and L2 cache options are pre-configured.
      *
      * <p>
      * It supports both jCache and Spring cache abstractions.
