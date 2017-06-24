@@ -424,23 +424,17 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * check if Right-to-Left support is necesary
+     * check if Right-to-Left support is necesary for i18n
+     * @param {string[]} languages - languages array
      */
-    isRTLSupportNecessary(languages) {
+    isI18nRTLSupportNecessary(languages) {
         if (!languages) {
             return false;
         }
-        let res = false;
-        languages.forEach((language) => {
-            this.getAllSupportedLanguageOptions().forEach((langObj) => {
-                if (langObj.value === language) {
-                    if (langObj.rtl) {
-                        res = true;
-                    }
-                }
-            });
-        });
-        return res;
+        const rtlLanguages = this.getAllSupportedLanguageOptions().filter(langObj => langObj.rtl);
+        return languages.some(
+            language => rtlLanguages.find(langObj => langObj.value === language).rtl
+        );
     }
 
     /**

@@ -24,7 +24,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { Ng2Webstorage } from 'ng2-webstorage';
 
-<%_ if (enableRTLSupport) { _%>
+<%_ if (enableI18nRTL) { _%>
 import { <%=angular2AppName%>SharedModule, UserRouteAccessService, FindLanguageFromKeyPipe } from './shared';
 <%_ } else { _%>
 import { <%=angular2AppName%>SharedModule, UserRouteAccessService } from './shared';
@@ -78,7 +78,7 @@ import {
         ProfileService,
         customHttpProvider(),
         PaginationConfig,
-        <%_ if (enableRTLSupport) { _%>
+        <%_ if (enableI18nRTL) { _%>
         FindLanguageFromKeyPipe,
         <%_ } _%>
         UserRouteAccessService

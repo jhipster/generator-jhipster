@@ -23,7 +23,7 @@
         .module('<%=angularAppName%>')
         .factory('translationHandler', translationHandler);
 
-    <%_ if (enableRTLSupport) { _%>
+    <%_ if (enableI18nRTL) { _%>
     translationHandler.$inject = ['$rootScope', '$window', '$state', '$translate', 'findLanguageRtlFromKeyFilter'];
 
     function translationHandler($rootScope, $window, $state, $translate, findLanguageRtlFromKeyFilter) {
@@ -41,7 +41,7 @@
             // if the current translation changes, update the window title
             var translateChangeSuccess = $rootScope.$on('$translateChangeSuccess', function() {
                 updateTitle();
-                <%_ if (enableRTLSupport) { _%>
+                <%_ if (enableI18nRTL) { _%>
                 updatePageDirection();
                 <%_ } _%>
             });
@@ -53,7 +53,7 @@
             });
         }
 
-        <%_ if (enableRTLSupport) { _%>
+        <%_ if (enableI18nRTL) { _%>
         // Update language and direction in index.html, e.g. <html dir="ltr" or <html dir="rtl"
         function updatePageDirection() {
           var currentLang = $translate.proposedLanguage() || $translate.use();
