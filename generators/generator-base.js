@@ -432,9 +432,10 @@ module.exports = class extends PrivateBase {
             return false;
         }
         const rtlLanguages = this.getAllSupportedLanguageOptions().filter(langObj => langObj.rtl);
-        return languages.some(
-            language => rtlLanguages.find(langObj => langObj.value === language).rtl
-        );
+        return languages.some((language) => {
+            const found = rtlLanguages.find(langObj => langObj.value === language);
+            return found && found.rtl;
+        });
     }
 
     /**
