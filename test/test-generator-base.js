@@ -1,6 +1,7 @@
-/* global describe, it*/
+/* global describe, before, it*/
 
 const assert = require('assert');
+const jhiCore = require('jhipster-core');
 const expectedFiles = require('./test-expected-files');
 const BaseGenerator = require('../generators/generator-base');
 
@@ -30,6 +31,43 @@ describe('Generator Base', () => {
         describe('when called', () => {
             it('returns an array', () => {
                 assert.notEqual(BaseGenerator.prototype.getAllSupportedLanguages().length, 0);
+            });
+        });
+    });
+    describe('getExistingEntities', () => {
+        describe('when entities change on-disk', () => {
+            before(() => {
+                const entities = {
+                    Region: {
+                        fluentMethods: true,
+                        relationships: [],
+                        fields: [
+                            {
+                                fieldName: 'regionName',
+                                fieldType: 'String'
+                            }
+                        ],
+                        changelogDate: '20170623093902',
+                        entityTableName: 'region',
+                        dto: 'mapstruct',
+                        pagination: 'no',
+                        service: 'serviceImpl',
+                        angularJSSuffix: 'mySuffix'
+                    }
+                };
+                jhiCore.exportToJSON(entities, true);
+                BaseGenerator.prototype.getExistingEntities();
+                entities.Region.fields.push(
+                    { fieldName: 'regionDesc', fieldType: 'String' });
+                jhiCore.exportToJSON(entities, true);
+            });
+            it('returns an up-to-date state', () => {
+                assert.deepEqual(
+                    BaseGenerator.prototype.getExistingEntities()
+                        .find(it => it.name === 'Region')
+                        .definition.fields[1],
+                    { fieldName: 'regionDesc', fieldType: 'String' }
+                );
             });
         });
     });
