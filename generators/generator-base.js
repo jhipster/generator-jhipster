@@ -2001,7 +2001,7 @@ module.exports = class extends Generator {
             let content = 'groupBy: [\n';
             for (let i = 0, len = languages.length; i < len; i++) {
                 const language = languages[i];
-                content += `                        { pattern: "./src/main/webapp/i18n/${language}/*.json", fileName: "./${this.BUILD_DIR}www/i18n/${language}.json" }${i !== languages.length - 1 ? ',' : ''}\n`;
+                content += `                        { pattern: "./src/main/webapp/i18n/${language}/*.json", fileName: "./i18n/${language}.json" }${i !== languages.length - 1 ? ',' : ''}\n`;
             }
             content +=
                 '                        // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n' +
