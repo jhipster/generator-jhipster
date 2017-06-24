@@ -16,11 +16,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (enableRTLSupport) { _%>
+import { Component, OnInit, Renderer } from '@angular/core';
+<%_ } else { _%>
 import { Component, OnInit } from '@angular/core';
+<%_ } _%>
 import { Router, ActivatedRouteSnapshot, NavigationEnd, RoutesRecognized } from '@angular/router';
+<%_ if (enableRTLSupport) {_%>
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+<%_ } _%>
 
 <%_ if (enableTranslation) { _%>
+<%_ if (enableRTLSupport) { _%>
+import { JhiLanguageHelper, StateStorageService, FindLanguageFromKeyPipe } from '../../shared';
+<%_ } else { _%>
 import { JhiLanguageHelper, StateStorageService } from '../../shared';
+<%_ } _%>
 <%_ } else { _%>
 import { Title } from '@angular/platform-browser';
 import { StateStorageService } from '../../shared';
@@ -35,6 +46,11 @@ export class <%=jhiPrefixCapitalized%>MainComponent implements OnInit {
     constructor(
         <%_ if (enableTranslation) { _%>
         private jhiLanguageHelper: JhiLanguageHelper,
+        <%_ if (enableRTLSupport) { _%>
+        private renderer: Renderer,
+        private translateService: TranslateService,
+        private findLanguageFromKeyPipe: FindLanguageFromKeyPipe,
+        <%_ } _%>
         <%_ } else { _%>
         private titleService: Title,
         <%_ } _%>
@@ -49,6 +65,13 @@ export class <%=jhiPrefixCapitalized%>MainComponent implements OnInit {
         }
         return title;
     }
+    <%_ if (enableRTLSupport) { _%>
+
+    private updatePageDirection() {
+        this.renderer.setElementAttribute(document.querySelector('html'), 'lang', this.translateService.currentLang);
+        this.renderer.setElementAttribute(document.querySelector('html'), 'dir', this.findLanguageFromKeyPipe.isRTL(this.translateService.currentLang) ? 'rtl' : 'ltr');
+    }
+    <%_ }_%>
 
     ngOnInit() {
         this.router.events.subscribe((event) => {
@@ -60,5 +83,10 @@ export class <%=jhiPrefixCapitalized%>MainComponent implements OnInit {
                 <%_ } _%>
             }
         });
+        <%_ if (enableRTLSupport) { _%>
+        this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
+            this.updatePageDirection();
+        });
+        <%_ } _%>
     }
 }
