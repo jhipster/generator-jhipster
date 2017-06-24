@@ -210,7 +210,7 @@ module.exports = UpgradeGenerator.extend({
                     this.gitExec(args, (code, msg, err) => {
                         if (code !== 0) {
                             this.error(`Unable to record current code has been generated with version ${
-                            this.currentVersion}:\n${msg} ${err}`);
+                                this.currentVersion}:\n${msg} ${err}`);
                         }
                         this.log(`Current code has been generated with version ${this.currentVersion}`);
                         done();

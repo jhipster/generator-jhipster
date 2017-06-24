@@ -43,7 +43,6 @@ const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
 module.exports = class extends Generator {
-
     constructor(args, opts) {
         super(args, opts);
         this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
@@ -1220,10 +1219,10 @@ module.exports = class extends Generator {
         switch (action) {
         case 'stripHtml' :
             regex = new RegExp([
-                /( (data-t|jhiT)ranslate="([a-zA-Z0-9 +{}'_](\.)?)+")/,                    // data-translate or jhiTranslate
-                /( translate(-v|V)alues="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|-|'|\s|\.|_)*?\}")/,    // translate-values or translateValues
-                /( translate-compile)/,                                                         // translate-compile
-                /( translate-value-max="[0-9{}()|]*")/,                                   // translate-value-max
+                /( (data-t|jhiT)ranslate="([a-zA-Z0-9 +{}'_](\.)?)+")/, // data-translate or jhiTranslate
+                /( translate(-v|V)alues="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|-|'|\s|\.|_)*?\}")/, // translate-values or translateValues
+                /( translate-compile)/, // translate-compile
+                /( translate-value-max="[0-9{}()|]*")/, // translate-value-max
             ].map(r => r.source).join('|'), 'g');
 
             jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, opt, template);
@@ -1231,9 +1230,9 @@ module.exports = class extends Generator {
         case 'stripJs' :
             regex = new RegExp([
                 /(,[\s]*(resolve):[\s]*[{][\s]*(translatePartialLoader)['a-zA-Z0-9$,(){.<%=\->;\s:[\]]*(;[\s]*\}\][\s]*\}))/, // ng1 resolve block
-                /([\s]import\s\{\s?JhiLanguageService\s?\}\sfrom\s["|']ng-jhipster["|'];)/,       // ng2 import jhiLanguageService
-                /(,?\s?JhiLanguageService,?\s?)/,                                                          // ng2 import jhiLanguageService
-                /(private\s[a-zA-Z0-9]*(L|l)anguageService\s?:\s?JhiLanguageService\s?,*[\s]*)/,          // ng2 jhiLanguageService constructor argument
+                /([\s]import\s\{\s?JhiLanguageService\s?\}\sfrom\s["|']ng-jhipster["|'];)/, // ng2 import jhiLanguageService
+                /(,?\s?JhiLanguageService,?\s?)/, // ng2 import jhiLanguageService
+                /(private\s[a-zA-Z0-9]*(L|l)anguageService\s?:\s?JhiLanguageService\s?,*[\s]*)/, // ng2 jhiLanguageService constructor argument
                 /(this\.[a-zA-Z0-9]*(L|l)anguageService\.setLocations\(\[['"a-zA-Z0-9\-_,\s]+\]\);[\s]*)/, // jhiLanguageService invocations
             ].map(r => r.source).join('|'), 'g');
 
@@ -1627,7 +1626,7 @@ module.exports = class extends Generator {
                 '-keypass password ' +
                 '-keysize 2048 ' +
                 `-dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`
-            , (code) => {
+                , (code) => {
                 if (code !== 0) {
                     this.error('\nFailed to create a KeyStore with \'keytool\'', code);
                 } else {
