@@ -269,17 +269,17 @@ jhipster:
             statsEnabled: true
             # local app cache
             local:
-              time-to-live-seconds: 60 # By default objects stay 1 hour (in minutes) in the cache
-              max-entries: 100 # Number of objects in each cache entry
-            #distributed app cache
+                time-to-live-seconds: 60 # By default objects stay 1 hour (in minutes) in the cache
+                max-entries: 100 # Number of objects in each cache entry
+            # distributed app cache
             distributed:
-              time-to-live-seconds: 60 # By default objects stay 1 hour (in minutes) in the cache
-              max-entries: 100 # Number of objects in each cache entry
-              instance-count: 1
-            #replicated app cache
+                time-to-live-seconds: 60 # By default objects stay 1 hour (in minutes) in the cache
+                max-entries: 100 # Number of objects in each cache entry
+                instance-count: 1
+            # replicated app cache
             replicated:
-              time-to-live-seconds: 60 # By default objects stay 1 hour (in minutes) in the cache
-              max-entries: 100 # Number of objects in each cache entry
+                time-to-live-seconds: 60 # By default objects stay 1 hour (in minutes) in the cache
+                max-entries: 100 # Number of objects in each cache entry
         <%_ } _%>
     <%_ } _%>
     # CORS is only enabled by default with the "dev" profile, so BrowserSync can access the API
