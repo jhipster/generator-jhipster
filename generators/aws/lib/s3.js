@@ -98,10 +98,11 @@ function findWarFilename(buildFolder, callback) {
         if (err) {
             error(err, callback);
         }
-        files.filter(file => file.substr(-FILE_EXTENSION.length) === FILE_EXTENSION)
-        .forEach((file) => {
-            warFilename = file;
-        });
+        files
+            .filter(file => file.substr(-FILE_EXTENSION.length) === FILE_EXTENSION)
+            .forEach((file) => {
+                warFilename = file;
+            });
         callback(null, warFilename);
     });
 }

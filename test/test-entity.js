@@ -37,7 +37,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/entities/foo/foo-delete-dialog.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/entities/foo/foo-detail.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/entities/foo/foo.service.ts`,
-        //CLIENT_TEST_SRC_DIR + 'spec/app/entities/foo/foo-detail.controller.spec.js'
+        // CLIENT_TEST_SRC_DIR + 'spec/app/entities/foo/foo-detail.controller.spec.js'
     ],
     clientWithSuffix: [
         `${CLIENT_MAIN_SRC_DIR}app/entities/foo/foos-management.html`,

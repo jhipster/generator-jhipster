@@ -58,7 +58,7 @@ module.exports = EntityGenerator.extend({
             type: String
         });
 
-         // This method adds support for a `--[no-]fluent-methods` flag
+        // This method adds support for a `--[no-]fluent-methods` flag
         this.option('fluent-methods', {
             desc: 'Generate fluent methods in entity beans to allow chained object construction',
             type: Boolean,
