@@ -109,24 +109,24 @@
     "tslint": "5.4.3",
     "tslint-loader": "3.5.3",
     "typescript": "2.3.4",
-    "webpack": "3.0.0",
-    "webpack-dev-server": "2.5.0",
-    "webpack-merge": "4.1.0",
-    "webpack-notifier": "1.5.0",
-    "webpack-visualizer-plugin": "0.1.11",
-    "web-app-manifest-loader": "0.1.1",
-    "write-file-webpack-plugin": "4.1.0",
+    <%_ if (useSass) { _%>
+    "sass-loader": "6.0.6",
+    "node-sass": "4.5.3",
+    "postcss-loader": "2.0.6",
+    <%_ } _%>
     <%_ if (buildTool === 'maven') { _%>
     "xml2js": "0.4.17",
     <%_ } _%>
     <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
     <%_ }); _%>
-    <%_ if (useSass) { _%>
-    "sass-loader": "6.0.6",
-    "node-sass": "4.5.3",
-    "postcss-loader": "2.0.6"
-    <%_ } _%>
+    "webpack": "3.0.0",
+    "webpack-dev-server": "2.5.0",
+    "webpack-merge": "4.1.0",
+    "webpack-notifier": "1.5.0",
+    "webpack-visualizer-plugin": "0.1.11",
+    "web-app-manifest-loader": "0.1.1",
+    "write-file-webpack-plugin": "4.1.0"
   },
   "engines": {
     "node": ">=6.9.0"
