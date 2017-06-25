@@ -30,7 +30,7 @@
         <dd>
             <%_ if (fields[idx].fieldIsEnum) { _%>
             <span jhiTranslate="{{'<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>}}">{{<%= entityInstance %>.<%= fieldName %>}}</span>
-            <%_ } else if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image') { _%>
+            <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'image') { _%>
             <div *ngIf="<%= entityInstance %>.<%= fieldName %>">
                 <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">
                     <img [src]="'data:' + <%=entityInstance %>.<%= fieldName %>ContentType + ';base64,' + <%= entityInstance %>.<%= fieldName %>" style="max-width: 100%;" alt="<%=entityInstance %> image"/>
@@ -41,7 +41,7 @@
             <span>{{<%=entityInstance %>.<%= fieldName %> | date:'medium'}}</span>
             <%_ } else if (fieldType === 'LocalDate') { _%>
             <span>{{<%=entityInstance %>.<%= fieldName %> | date:'mediumDate'}}</span>
-            <%_ } else if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any') { _%>
+            <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'any') { _%>
             <div *ngIf="<%= entityInstance %>.<%= fieldName %>">
                 <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" jhiTranslate="entity.action.open">open</a>
                 {{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}

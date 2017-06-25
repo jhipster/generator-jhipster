@@ -42,7 +42,7 @@ _%>
             let fieldInputType = 'text';
             let ngModelOption = '';
             const translationKey = keyPrefix + fieldName;
-            if (fieldType === 'Integer' || fieldType === 'Long' || fieldType === 'Float' || fieldType === 'Double' || fieldType === 'BigDecimal') {
+            if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) {
                 fieldInputType = 'number';
             } else if (fieldType === 'LocalDate') {
                 fieldInputType = 'date';
@@ -50,7 +50,7 @@ _%>
                 fieldInputType = 'datetime-local';
             } else if (fieldType === 'Boolean') {
                 fieldInputType = 'checkbox';
-            } else if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') {
+            } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent !== 'text') {
                 fieldInputType = 'hidden';
             }
         _%>
@@ -66,7 +66,7 @@ _%>
                 <%_ } _%>
             </select>
             <%_ } else { _%>
-            <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { _%>
+            <%_ if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent !== 'text') { _%>
             <div>
                 <%_ if (fieldTypeBlobContent === 'image') { _%>
                 <img [src]="'data:' + <%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fieldName%>" style="max-height: 100px;" *ngIf="<%= entityInstance %>.<%= fieldName %>" alt="<%=entityInstance %> image"/>
@@ -109,7 +109,7 @@ _%>
             <%_ } else { _%>
             <input type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>"
                 [(ngModel)]="<%= entityInstance %>.<%= fieldName %>" <%- include ng_validators %> />
-                <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { _%>
+                <%_ if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent !== 'text') { _%>
             <input type="hidden" class="form-control" name="<%= fieldName %>ContentType" id="field_<%= fieldName %>ContentType"
                 [(ngModel)]="<%= entityInstance %>.<%= fieldName %>ContentType" />
                 <%_ } _%>
@@ -165,7 +165,7 @@ _%>
                     This field should follow pattern for "<%= fieldNameHumanized %>".
                 </small>
                 <%_ } _%>
-                <%_ if (fieldType === 'Integer' || fieldType === 'Long' || fieldType === 'Float' || fieldType === 'Double' || fieldType === 'BigDecimal') { _%>
+                <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
                 <small class="form-text text-danger"
                     [hidden]="!editForm.controls.<%= fieldName %>?.errors?.number" jhiTranslate="entity.validation.number">
                     This field should be a number.

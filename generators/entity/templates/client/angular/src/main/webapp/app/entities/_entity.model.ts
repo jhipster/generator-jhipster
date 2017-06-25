@@ -36,13 +36,13 @@ fields.forEach(field => {
     } else if (fieldType === 'Boolean') {
         tsType = 'boolean';
         defaultVariablesValues[fieldName] = 'this.' + fieldName + ' = false;';
-    } else if (fieldType === 'Double' || fieldType === 'Float' || fieldType === 'Long' || fieldType === 'Integer' || fieldType === 'BigDecimal') {
+    } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) {
         tsType = 'number';
     } else if (fieldType === 'String'  || fieldType === 'UUID') {
         tsType = 'string';
     } else { //(fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate'
         tsType = 'any';
-        if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text') {
+        if (['byte[]', 'ByteBuffer'].includes(fieldType) && field.fieldTypeBlobContent !== 'text') {
             variables[fieldName + 'ContentType'] = fieldName + 'ContentType?: ' + 'string';
         }
     }

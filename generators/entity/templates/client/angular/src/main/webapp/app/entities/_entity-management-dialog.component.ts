@@ -51,7 +51,6 @@ import { <%= rel.otherEntityAngularName %>, <%= rel.otherEntityAngularName%>Serv
 import { ResponseWrapper } from '../../shared';
 <%_ } _%>
 <%_
-// TODO replace ng-file-upload dependency by an ng2 depedency
 // TODO Find a better way to format dates so that it works with NgbDatePicker
 _%>
 
