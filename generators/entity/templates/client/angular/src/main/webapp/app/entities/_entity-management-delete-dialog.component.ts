@@ -28,7 +28,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { JhiAlertService, JhiEventManager } from 'ng-jhipster';
+import { JhiEventManager } from 'ng-jhipster';
 
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { <%= entityAngularName %>PopupService } from './<%= entityFileName %>-popup.service';
@@ -45,7 +45,6 @@ export class <%= entityAngularName %>DeleteDialogComponent {
     constructor(
         private <%= entityInstance %>Service: <%= entityAngularName %>Service,
         public activeModal: NgbActiveModal,
-        private alertService: JhiAlertService,
         private eventManager: JhiEventManager
     ) {
     }
@@ -62,11 +61,6 @@ export class <%= entityAngularName %>DeleteDialogComponent {
             });
             this.activeModal.dismiss(true);
         });
-        <%_ if (enableTranslation) { _%>
-        this.alertService.success('<%= angularAppName %>.<%= entityTranslationKey %>.deleted', { param : id }, null);
-        <%_ } else { _%>
-        this.alertService.success(`A <%= entityClassHumanized %> is deleted with identifier ${id}`, null, null);
-        <%_ } _%>
     }
 }
 

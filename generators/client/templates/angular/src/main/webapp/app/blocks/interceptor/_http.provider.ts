@@ -57,7 +57,7 @@ export function interceptableFactory(
         <%_ } _%>
             // Other interceptors can be added here
             new ErrorHandlerInterceptor(eventManager),
-            new NotificationInterceptor()
+            new NotificationInterceptor(injector)
         ]
     );
 };
