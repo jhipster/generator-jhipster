@@ -27,7 +27,7 @@ const semver = require('semver');
 const exec = require('child_process').exec;
 const https = require('https');
 const packagejs = require('../package.json');
-const jhipsterUtils = require('./util');
+const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;

@@ -28,7 +28,7 @@ const os = require('os');
 const pluralize = require('pluralize');
 const jhiCore = require('jhipster-core');
 const packagejs = require('../package.json');
-const jhipsterUtils = require('./util');
+const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
 

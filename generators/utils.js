@@ -214,6 +214,12 @@ function deepFind(obj, path, placeholder) {
 }
 
 function getJavadoc(text, indentSize) {
+    if (!text) {
+        text = '';
+    }
+    if (text.indexOf('"') !== -1) {
+        text = text.replace(/"/g, '\\"');
+    }
     let javadoc = `${_.repeat(' ', indentSize)}/**`;
     const rows = text.split('\n');
     for (let i = 0; i < rows.length; i++) {
