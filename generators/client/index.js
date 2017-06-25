@@ -181,6 +181,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.enableTranslation = this.config.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
             this.nativeLanguage = this.config.get('nativeLanguage');
             this.languages = this.config.get('languages');
+            this.enableRTLSupport = this.isRTLSupportNecessary(this.languages);
             this.messageBroker = this.config.get('messageBroker');
             this.packagejs = packagejs;
             const baseName = this.config.get('baseName');
@@ -315,6 +316,7 @@ module.exports = JhipsterClientGenerator.extend({
             }
             if (this.configOptions.languages !== undefined) {
                 this.languages = this.configOptions.languages;
+                this.enableRTLSupport = this.isRTLSupportNecessary(this.languages);
             }
 
             if (this.configOptions.uaaBaseName !== undefined) {
