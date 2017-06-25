@@ -16,17 +16,38 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (enableI18nRTL) { _%>
+import { Injectable, RendererFactory2, Renderer2 } from '@angular/core';
+<%_ } else { _%>
 import { Injectable } from '@angular/core';
+<%_ } _%>
 import { Title } from '@angular/platform-browser';
 import { Router, ActivatedRouteSnapshot } from '@angular/router';
-import { TranslateService, TranslationChangeEvent, LangChangeEvent } from '@ngx-translate/core';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
 import { LANGUAGES } from './language.constants';
+<%_ if (enableI18nRTL) { _%>
+import { FindLanguageFromKeyPipe } from './find-language-from-key.pipe';
+<%_ } _%>
 
 @Injectable()
 export class JhiLanguageHelper {
+    <%_ if (enableI18nRTL) { _%>
+    renderer: Renderer2 = null;
 
-    constructor(private translateService: TranslateService, private titleService: Title, private router: Router) {
+    <%_ } _%>
+    constructor(
+        private translateService: TranslateService,
+        <%_ if (enableI18nRTL) { _%>
+        private rootRenderer: RendererFactory2,
+        private findLanguageFromKeyPipe: FindLanguageFromKeyPipe,
+        <%_ } _%>
+        private titleService: Title,
+        private router: Router
+    ) {
+        <%_ if (enableI18nRTL) { _%>
+        this.renderer = rootRenderer.createRenderer(document.querySelector('html'), null);
+        <%_ } _%>
         this.init();
     }
 
@@ -52,12 +73,12 @@ export class JhiLanguageHelper {
     }
 
     private init() {
-        this.translateService.onTranslationChange.subscribe((event: TranslationChangeEvent) => {
-            this.updateTitle();
-        });
-
         this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
+            this.renderer.setAttribute(document.querySelector('html'), 'lang', this.translateService.currentLang);
             this.updateTitle();
+            <%_ if (enableI18nRTL) { _%>
+            this.updatePageDirection();
+            <%_ } _%>
         });
     }
 
@@ -68,4 +89,10 @@ export class JhiLanguageHelper {
         }
         return title;
     }
+    <%_ if (enableI18nRTL) { _%>
+
+    private updatePageDirection() {
+        this.renderer.setAttribute(document.querySelector('html'), 'dir', this.findLanguageFromKeyPipe.isRTL(this.translateService.currentLang) ? 'rtl' : 'ltr');
+    }
+    <%_ }_%>
 }

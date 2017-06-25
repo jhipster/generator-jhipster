@@ -24,11 +24,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { Ng2Webstorage } from 'ng2-webstorage';
 
-<%_ if (enableI18nRTL) { _%>
-import { <%=angular2AppName%>SharedModule, UserRouteAccessService, FindLanguageFromKeyPipe } from './shared';
-<%_ } else { _%>
 import { <%=angular2AppName%>SharedModule, UserRouteAccessService } from './shared';
-<%_ } _%>
 import { <%=angular2AppName%>HomeModule } from './home/home.module';
 import { <%=angular2AppName%>AdminModule } from './admin/admin.module';
 import { <%=angular2AppName%>AccountModule } from './account/account.module';
@@ -78,9 +74,6 @@ import {
         ProfileService,
         customHttpProvider(),
         PaginationConfig,
-        <%_ if (enableI18nRTL) { _%>
-        FindLanguageFromKeyPipe,
-        <%_ } _%>
         UserRouteAccessService
     ],
     bootstrap: [ <%=jhiPrefixCapitalized%>MainComponent ]
