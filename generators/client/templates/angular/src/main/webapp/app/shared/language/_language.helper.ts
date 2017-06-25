@@ -16,11 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (enableI18nRTL) { _%>
 import { Injectable, RendererFactory2, Renderer2 } from '@angular/core';
-<%_ } else { _%>
-import { Injectable } from '@angular/core';
-<%_ } _%>
 import { Title } from '@angular/platform-browser';
 import { Router, ActivatedRouteSnapshot } from '@angular/router';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
@@ -32,22 +28,18 @@ import { FindLanguageFromKeyPipe } from './find-language-from-key.pipe';
 
 @Injectable()
 export class JhiLanguageHelper {
-    <%_ if (enableI18nRTL) { _%>
     renderer: Renderer2 = null;
 
-    <%_ } _%>
     constructor(
         private translateService: TranslateService,
-        <%_ if (enableI18nRTL) { _%>
         private rootRenderer: RendererFactory2,
+        <%_ if (enableI18nRTL) { _%>
         private findLanguageFromKeyPipe: FindLanguageFromKeyPipe,
         <%_ } _%>
         private titleService: Title,
         private router: Router
     ) {
-        <%_ if (enableI18nRTL) { _%>
         this.renderer = rootRenderer.createRenderer(document.querySelector('html'), null);
-        <%_ } _%>
         this.init();
     }
 
