@@ -50,9 +50,6 @@ import { <%= rel.otherEntityAngularName %>, <%= rel.otherEntityAngularName%>Serv
 <%_ if (hasRelationshipQuery) { _%>
 import { ResponseWrapper } from '../../shared';
 <%_ } _%>
-<%_
-// TODO Find a better way to format dates so that it works with NgbDatePicker
-_%>
 
 @Component({
     selector: '<%= jhiPrefix %>-<%= entityFileName %>-dialog',
