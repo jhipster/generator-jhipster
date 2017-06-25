@@ -17,12 +17,13 @@
  limitations under the License.
 -%>
 const webpack = require('webpack');
-const path = require('path');
+
+const utils = require('./utils.js');
 
 module.exports = {
     entry: {
         'vendor': [
-            './src/main/webapp/app/vendor',
+            './<%= MAIN_SRC_DIR %>app/vendor',
             '@angular/common',
             '@angular/compiler',
             '@angular/core',
@@ -70,13 +71,13 @@ module.exports = {
     },
     output: {
         filename: '[name].dll.js',
-        path: path.resolve('./<%= BUILD_DIR %>www'),
+        path: utils.root('<%= BUILD_DIR %>www'),
         library: '[name]'
     },
     plugins: [
         new webpack.DllPlugin({
             name: '[name]',
-            path: path.resolve('./<%= BUILD_DIR %>www/[name].json')
+            path: utils.root('<%= BUILD_DIR %>www/[name].json')
         })
     ]
 };

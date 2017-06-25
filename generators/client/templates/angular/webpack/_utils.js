@@ -17,9 +17,11 @@
  limitations under the License.
 -%>
 const fs = require('fs');
+const path = require('path');
 
 module.exports = {
-    parseVersion : parseVersion
+    parseVersion,
+    root
 };
 
 <%_ if (buildTool === 'maven') { _%>
@@ -53,3 +55,10 @@ function parseVersion() {
     return '0.0.1-SNAPSHOT';
 };
 <%_ } _%>
+
+const _root = path.resolve(__dirname, '..');
+
+function root(args) {
+  args = Array.prototype.slice.call(arguments, 0);
+  return path.join.apply(path, [_root].concat(args));
+}

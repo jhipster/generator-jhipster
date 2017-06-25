@@ -22,10 +22,6 @@ import { <%=angular2AppName%>AppModuleNgFactory } from '../../../../<%= BUILD_DI
 
 ProdConfig();
 
-if (module['hot']) {
-    module['hot'].accept();
-}
-
 platformBrowser().bootstrapModuleFactory(<%=angular2AppName%>AppModuleNgFactory)
 .then((success) => console.log(`Application started`))
 .catch((err) => console.error(err));

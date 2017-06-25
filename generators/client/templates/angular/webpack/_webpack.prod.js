@@ -22,27 +22,21 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const Visualizer = require('webpack-visualizer-plugin');
 const AotPlugin = require('@ngtools/webpack').AotPlugin;
-const path = require('path');
 
+const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
 
 const ENV = 'prod';
-const _root = path.resolve(__dirname, '..');
-
-function root(args) {
-  args = Array.prototype.slice.call(arguments, 0);
-  return path.join.apply(path, [_root].concat(args));
-}
 
 module.exports = webpackMerge(commonConfig({ env: ENV }), {
     devtool: 'source-map',
     entry: {
-        'polyfills': './src/main/webapp/app/polyfills',
-        'main': './src/main/webapp/app/app.main-aot',
-        'vendor': './src/main/webapp/app/vendor-aot'
+        'polyfills': './<%= MAIN_SRC_DIR %>app/polyfills',
+        'vendor': './<%= MAIN_SRC_DIR %>app/vendor-aot',
+        'main': './<%= MAIN_SRC_DIR %>app/app.main-aot'
     },
     output: {
-        path: path.resolve('./<%= BUILD_DIR %>www'),
+        path: utils.root('<%= BUILD_DIR %>www'),
         filename: 'app/[hash].[name].bundle.js',
         chunkFilename: 'app/[hash].[id].chunk.js'
     },
@@ -53,6 +47,9 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         }]
     },
     plugins: [
+        new webpack.optimize.CommonsChunkPlugin({
+            name: ['main', 'vendor', 'polyfills']
+        }),
         new ExtractTextPlugin('[hash].styles.css'),
         new Visualizer({
             // Webpack statistics in target folder
@@ -61,7 +58,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         // AOT Plugin
         new AotPlugin({
             tsConfigPath: './tsconfig-aot.json',
-            entryModule: root('src/main/webapp/app/app.module#<%=angular2AppName%>AppModule')
+            entryModule: utils.root('<%= MAIN_SRC_DIR %>app/app.module#<%=angular2AppName%>AppModule')
         }),
         new webpack.optimize.UglifyJsPlugin({
             beautify: false,

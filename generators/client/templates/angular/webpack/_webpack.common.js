@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 const webpack = require('webpack');
-const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const StringReplacePlugin = require('string-replace-webpack-plugin');
@@ -35,15 +34,6 @@ module.exports = (options) => {
         DEBUG_INFO_ENABLED: options.env === 'dev'
     };
     return {
-        entry: {
-            'polyfills': './src/main/webapp/app/polyfills',
-            <%_ if (useSass) { _%>
-            'global': './src/main/webapp/content/scss/global.scss',
-            <%_ } else { _%>
-            'global': './src/main/webapp/content/css/global.css',
-            <%_ } _%>
-            'main': './src/main/webapp/app/app.main'
-        },
         resolve: {
             extensions: ['.ts', '.js'],
             modules: ['node_modules']
@@ -61,7 +51,7 @@ module.exports = (options) => {
                         minifyJS:false,
                         minifyCSS:false
                     },
-                    exclude: ['./src/main/webapp/index.html']
+                    exclude: ['./<%= MAIN_SRC_DIR %>index.html']
                 },
                 <%_ if (useSass) { _%>
                 {
@@ -103,17 +93,14 @@ module.exports = (options) => {
             ]
         },
         plugins: [
-            new CommonsChunkPlugin({
-                names: ['manifest', 'polyfills'].reverse()
-            }),
             new CopyWebpackPlugin([
                 { from: './node_modules/core-js/client/shim.min.js', to: 'core-js-shim.min.js' },
                 { from: './node_modules/swagger-ui/dist', to: 'swagger-ui/dist' },
-                { from: './src/main/webapp/swagger-ui/', to: 'swagger-ui' },
-                { from: './src/main/webapp/favicon.ico', to: 'favicon.ico' },
-                { from: './src/main/webapp/manifest.webapp', to: 'manifest.webapp' },
-                // { from: './src/main/webapp/sw.js', to: 'sw.js' },
-                { from: './src/main/webapp/robots.txt', to: 'robots.txt' }
+                { from: './<%= MAIN_SRC_DIR %>swagger-ui/', to: 'swagger-ui' },
+                { from: './<%= MAIN_SRC_DIR %>favicon.ico', to: 'favicon.ico' },
+                { from: './<%= MAIN_SRC_DIR %>manifest.webapp', to: 'manifest.webapp' },
+                // { from: './<%= MAIN_SRC_DIR %>sw.js', to: 'sw.js' },
+                { from: './<%= MAIN_SRC_DIR %>robots.txt', to: 'robots.txt' }
             ]),
             new webpack.ProvidePlugin({
                 $: "jquery",
@@ -129,7 +116,7 @@ module.exports = (options) => {
             }),
             <%_ } _%>
             new HtmlWebpackPlugin({
-                template: './src/main/webapp/index.html',
+                template: './<%= MAIN_SRC_DIR %>index.html',
                 chunksSortMode: 'dependency',
                 inject: 'body'
             }),

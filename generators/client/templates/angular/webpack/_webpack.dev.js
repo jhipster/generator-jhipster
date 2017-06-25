@@ -26,12 +26,13 @@ const execSync = require('child_process').execSync;
 const fs = require('fs');
 const path = require('path');
 
+const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
 
-const ddlPath = './<%= BUILD_DIR %>www/vendor.json';
+const ddlPath = '<%= BUILD_DIR %>www/vendor.json';
 const ENV = 'dev';
 
-if (!fs.existsSync(ddlPath)) {
+if (!fs.existsSync(utils.root(ddlPath))) {
     execSync('webpack --config webpack/webpack.vendor.js');
 }
 
@@ -60,8 +61,17 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
             ws: true
         }<% } %>]
     },
+    entry: {
+        'polyfills': './<%= MAIN_SRC_DIR %>app/polyfills',
+        <%_ if (useSass) { _%>
+        'global': './<%= MAIN_SRC_DIR %>content/scss/global.scss',
+        <%_ } else { _%>
+        'global': './<%= MAIN_SRC_DIR %>content/css/global.css',
+        <%_ } _%>
+        'main': './<%= MAIN_SRC_DIR %>app/app.main'
+    },
     output: {
-        path: path.resolve('<%= BUILD_DIR %>www'),
+        path: utils.root('<%= BUILD_DIR %>www'),
         filename: 'app/[name].bundle.js',
         chunkFilename: 'app/[id].chunk.js'
     },
@@ -82,6 +92,9 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         }]
     },
     plugins: [
+        new webpack.optimize.CommonsChunkPlugin({
+            names: ['manifest', 'polyfills'].reverse()
+        }),
         new BrowserSyncPlugin({
             host: 'localhost',
             port: 9000,
@@ -94,17 +107,17 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         }),
         new webpack.DllReferencePlugin({
             context: './',
-            manifest: require(path.resolve('./<%= BUILD_DIR %>www/vendor.json'))
+            manifest: require(utils.root(ddlPath))
         }),
         new AddAssetHtmlPlugin([
-            { filepath: path.resolve('./<%= BUILD_DIR %>www/vendor.dll.js'), includeSourcemap: false }
+            { filepath: utils.root('<%= BUILD_DIR %>www/vendor.dll.js'), includeSourcemap: false }
         ]),
         new ExtractTextPlugin('styles.css'),
         new webpack.NoEmitOnErrorsPlugin(),
         new webpack.NamedModulesPlugin(),
         new writeFilePlugin(),
         new webpack.WatchIgnorePlugin([
-            path.resolve('./src/test'),
+            utils.root('src/test'),
         ])
     ]
 });
