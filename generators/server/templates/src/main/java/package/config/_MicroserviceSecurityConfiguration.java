@@ -18,7 +18,7 @@
 -%>
 package <%=packageName%>.config;
 
-<%_ if(authenticationType == 'jwt') { _%>
+<%_ if(authenticationType === 'jwt') { _%>
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.security.jwt.JWTConfigurer;
 import <%=packageName%>.security.jwt.TokenProvider;
@@ -89,7 +89,7 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
     }
 }
 <%_ } _%>
-<%_ if(authenticationType == 'uaa') { _%>
+<%_ if(authenticationType === 'uaa') { _%>
 import <%=packageName%>.config.oauth2.OAuth2JwtAccessTokenConverter;
 import <%=packageName%>.config.oauth2.OAuth2Properties;
 import <%=packageName%>.security.oauth2.OAuth2SignatureVerifierClient;

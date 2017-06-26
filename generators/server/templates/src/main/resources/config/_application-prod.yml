@@ -321,7 +321,7 @@ jhipster:
             # edit spring.metrics.export.delay-millis to set report frequency
     <%_ } _%>
 
-<%_ if (applicationType == 'uaa') { _%>
+<%_ if (applicationType === 'uaa') { _%>
 uaa:
     #be sure to to change to a different keystore in production!
     #create one using: keytool -genkeypair -keystore keystore_prod.jks -storepass <secretpasswd> -alias <myalias>
@@ -337,7 +337,7 @@ uaa:
         #change client secret in production, keep in sync with gateway configuration
         client-id: web_app
         secret: changeit
-<%_ } else if ((applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') && authenticationType == 'uaa') { _%>
+<%_ } else if ((applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
 oauth2:
     signature-verification:
         public-key-endpoint-uri: http://<%= uaaBaseName.toLowerCase() %>/oauth/token_key
@@ -349,7 +349,7 @@ oauth2:
         #change client secret in production, keep in sync with UAA configuration
         client-id: web_app
         secret: changeit
-    <%_ if (applicationType == 'gateway') { _%>
+    <%_ if (applicationType === 'gateway') { _%>
         # Controls session expiration due to inactivity (ignored for remember-me).
         # Negative values disable session inactivity expiration.
         session-timeout-in-seconds: 1800

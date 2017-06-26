@@ -309,7 +309,7 @@ jhipster:
             client-id: internal
             client-secret: internal
     <%_ } _%>
-    <%_ if (authenticationType == 'oauth2' && databaseType != 'sql') { _%>
+    <%_ if (authenticationType === 'oauth2' && databaseType !== 'sql') { _%>
     security:
         authentication:
             oauth:
@@ -352,7 +352,7 @@ jhipster:
             # edit spring.metrics.export.delay-millis to set report frequency
     <%_ } _%>
 
-<%_ if (applicationType == 'uaa') { _%>
+<%_ if (applicationType === 'uaa') { _%>
 uaa:
     key-store:
         name: keystore.jks
@@ -365,7 +365,7 @@ uaa:
         refresh-token-validity-in-seconds-for-remember-me: 604800
         client-id: web_app
         secret: changeit
-<%_ } else if ((applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') && authenticationType == 'uaa') { _%>
+<%_ } else if ((applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
 oauth2:
     signature-verification:
         public-key-endpoint-uri: http://<%= uaaBaseName.toLowerCase() %>/oauth/token_key
@@ -377,7 +377,7 @@ oauth2:
         #keep in sync with UAA configuration
         client-id: web_app
         secret: changeit
-    <%_ if (applicationType == 'gateway') { _%>
+    <%_ if (applicationType === 'gateway') { _%>
         # Controls session expiration due to inactivity (ignored for remember-me).
         # Negative values disable session inactivity expiration.
         session-timeout-in-seconds: 1800
