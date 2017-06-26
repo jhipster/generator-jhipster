@@ -1,0 +1,76 @@
+/*
+ * Copyright 2017 the original author or authors.
+ *
+ * This file is part of the JHipster project, see https://jhipster.github.io/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package io.github.jhipster.service.filter;
+
+/**
+ * Filter class for Comparable types, where less than / greater than / etc relations could be interpreted. 
+ * @param <FIELD_TYPE> the type of filter.
+ */
+public class RangeFilter<FIELD_TYPE extends Comparable<? super FIELD_TYPE>> extends Filter<FIELD_TYPE> {
+    private FIELD_TYPE greaterThan;
+    private FIELD_TYPE lessThan;
+    private FIELD_TYPE greaterOrEqualThan;
+    private FIELD_TYPE lessOrEqualThan;
+
+    public FIELD_TYPE getGreaterThan() { 
+        return greaterThan;
+    }
+
+    public void setGreaterThan(FIELD_TYPE greaterThan) {
+        this.greaterThan = greaterThan;
+    }
+
+    public FIELD_TYPE getGreaterOrEqualThan() { 
+        return greaterOrEqualThan;
+    }
+
+    public void setGreaterOrEqualThan(FIELD_TYPE greaterOrEqualThan) {
+        this.greaterOrEqualThan = greaterOrEqualThan;
+    }
+
+    public FIELD_TYPE getLessThan() {
+        return lessThan;
+    }
+
+    public void setLessThan(FIELD_TYPE lessThan) {
+        this.lessThan = lessThan;
+    }
+
+    public FIELD_TYPE getLessOrEqualThan() {
+        return lessOrEqualThan;
+    }
+
+    public void setLessOrEqualThan(FIELD_TYPE lessOrEqualThan) {
+        this.lessOrEqualThan = lessOrEqualThan;
+    }
+
+    @Override
+    public String toString() {
+        return "RangeFilter [" + (getGreaterThan() != null ? "greaterThan=" + getGreaterThan() + ", " : "")
+                + (getGreaterOrEqualThan() != null ? "greaterOrEqualThan=" + getGreaterOrEqualThan() + ", " : "")
+                + (getLessThan() != null ? "lessThan=" + getLessThan() + ", " : "")
+                + (getLessOrEqualThan() != null ? "lessOrEqualThan=" + getLessOrEqualThan() + ", " : "")
+                + (getEquals() != null ? "equals=" + getEquals() + ", " : "")
+                + (getSpecified() != null ? "specified=" + getSpecified() : "")
+                + (getIn() != null ? "in=" + getIn() : "")
+                + "]";
+    }
+
+}
