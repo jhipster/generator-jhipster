@@ -35,7 +35,7 @@
         <liquibase-slf4j.version>2.0.0</liquibase-slf4j.version>
         <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
         <prometheus-simpleclient.version>0.0.20</prometheus-simpleclient.version>
-        <springfox.version>2.6.1</springfox.version>
+        <springfox.version>2.7.0</springfox.version>
         <spring-cloud.version>Dalston.RELEASE</spring-cloud.version>
     </properties>
 

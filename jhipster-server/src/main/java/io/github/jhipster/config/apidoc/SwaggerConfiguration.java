@@ -21,6 +21,8 @@ package io.github.jhipster.config.apidoc;
 
 import static springfox.documentation.builders.PathSelectors.regex;
 
+import java.util.ArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -79,7 +81,8 @@ public class SwaggerConfiguration {
             jHipsterProperties.getSwagger().getTermsOfServiceUrl(),
             contact,
             jHipsterProperties.getSwagger().getLicense(),
-            jHipsterProperties.getSwagger().getLicenseUrl());
+            jHipsterProperties.getSwagger().getLicenseUrl(),
+            new ArrayList<>());
 
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
             .apiInfo(apiInfo)
