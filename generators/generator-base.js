@@ -49,6 +49,21 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
  * The method signatures in public API should not be changed without a major version change
  */
 module.exports = class extends PrivateBase {
+
+    /**
+     * Get the JHipster configuration from your .yo-rc.json
+     */
+     getJhipsterAppConfig() {
+         const fromPath = '.yo-rc.json';
+         if (shelljs.test('-f', fromPath)) {
+             const fileData = this.fs.readJSON(fromPath);
+             if (fileData && fileData['generator-jhipster']) {
+                 return fileData['generator-jhipster'];
+             }
+         }
+         return false;
+     }
+
     /**
      * Add a new menu element, at the root of the menu.
      *
