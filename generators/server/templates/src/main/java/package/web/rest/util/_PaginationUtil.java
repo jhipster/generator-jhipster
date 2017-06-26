@@ -37,6 +37,8 @@ import org.springframework.web.util.UriComponentsBuilder;
  */
 public final class PaginationUtil {
 
+    private static final Logger log = LoggerFactory.getLogger(PaginationUtil.class);
+
     private PaginationUtil() {
     }
 
@@ -73,7 +75,8 @@ public final class PaginationUtil {
         try {
             escapedQuery = URLEncoder.encode(query, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            // Ignore exception
+            log.info("Unsupported encoding exception");
+            log.trace("Unsupported encoding exception trace: {}", e);
         }
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Total-Count", Long.toString(page.getTotalElements()));
