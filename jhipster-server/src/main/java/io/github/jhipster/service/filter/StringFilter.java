@@ -26,7 +26,7 @@ public class StringFilter extends Filter<String> {
 
     private String contains;
 
-    public String getContains() { 
+    public String getContains() {
         return contains;
     }
 
@@ -37,10 +37,10 @@ public class StringFilter extends Filter<String> {
     @Override
     public String toString() {
         return "StringFilter ["
-                + (getContains() != null ? "contains=" + getContains() + ", " : "")
-                + (getEquals() != null ? "equals=" + getEquals() + ", " : "")
-                + (getSpecified() != null ? "specified=" + getSpecified() : "")
-                + "]";
+            + (getContains() != null ? "contains=" + getContains() + ", " : "")
+            + (getEquals() != null ? "equals=" + getEquals() + ", " : "")
+            + (getSpecified() != null ? "specified=" + getSpecified() : "")
+            + "]";
     }
 
 }

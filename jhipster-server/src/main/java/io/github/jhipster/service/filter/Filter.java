@@ -30,7 +30,7 @@ public class Filter<FIELD_TYPE> {
     private Boolean specified;
     private List<FIELD_TYPE> in;
 
-    public FIELD_TYPE getEquals() { 
+    public FIELD_TYPE getEquals() {
         return equals;
     }
 
@@ -57,11 +57,10 @@ public class Filter<FIELD_TYPE> {
     @Override
     public String toString() {
         return "Filter ["
-                + (getEquals() != null ? "equals=" + getEquals() + ", " : "")
-                + (getIn() != null ? "in=" + getIn() : "")
-                + (getSpecified() != null ? "specified=" + getSpecified() : "")
-                + "]";
+            + (getEquals() != null ? "equals=" + getEquals() + ", " : "")
+            + (getIn() != null ? "in=" + getIn() : "")
+            + (getSpecified() != null ? "specified=" + getSpecified() : "")
+            + "]";
     }
-
 
 }

@@ -20,16 +20,18 @@
 package io.github.jhipster.service.filter;
 
 /**
- * Filter class for Comparable types, where less than / greater than / etc relations could be interpreted. 
+ * Filter class for Comparable types, where less than / greater than / etc relations could be interpreted.
+ *
  * @param <FIELD_TYPE> the type of filter.
  */
 public class RangeFilter<FIELD_TYPE extends Comparable<? super FIELD_TYPE>> extends Filter<FIELD_TYPE> {
+
     private FIELD_TYPE greaterThan;
     private FIELD_TYPE lessThan;
     private FIELD_TYPE greaterOrEqualThan;
     private FIELD_TYPE lessOrEqualThan;
 
-    public FIELD_TYPE getGreaterThan() { 
+    public FIELD_TYPE getGreaterThan() {
         return greaterThan;
     }
 
@@ -37,7 +39,7 @@ public class RangeFilter<FIELD_TYPE extends Comparable<? super FIELD_TYPE>> exte
         this.greaterThan = greaterThan;
     }
 
-    public FIELD_TYPE getGreaterOrEqualThan() { 
+    public FIELD_TYPE getGreaterOrEqualThan() {
         return greaterOrEqualThan;
     }
 
@@ -64,13 +66,13 @@ public class RangeFilter<FIELD_TYPE extends Comparable<? super FIELD_TYPE>> exte
     @Override
     public String toString() {
         return "RangeFilter [" + (getGreaterThan() != null ? "greaterThan=" + getGreaterThan() + ", " : "")
-                + (getGreaterOrEqualThan() != null ? "greaterOrEqualThan=" + getGreaterOrEqualThan() + ", " : "")
-                + (getLessThan() != null ? "lessThan=" + getLessThan() + ", " : "")
-                + (getLessOrEqualThan() != null ? "lessOrEqualThan=" + getLessOrEqualThan() + ", " : "")
-                + (getEquals() != null ? "equals=" + getEquals() + ", " : "")
-                + (getSpecified() != null ? "specified=" + getSpecified() : "")
-                + (getIn() != null ? "in=" + getIn() : "")
-                + "]";
+            + (getGreaterOrEqualThan() != null ? "greaterOrEqualThan=" + getGreaterOrEqualThan() + ", " : "")
+            + (getLessThan() != null ? "lessThan=" + getLessThan() + ", " : "")
+            + (getLessOrEqualThan() != null ? "lessOrEqualThan=" + getLessOrEqualThan() + ", " : "")
+            + (getEquals() != null ? "equals=" + getEquals() + ", " : "")
+            + (getSpecified() != null ? "specified=" + getSpecified() : "")
+            + (getIn() != null ? "in=" + getIn() : "")
+            + "]";
     }
 
 }
