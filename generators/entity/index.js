@@ -472,7 +472,7 @@ module.exports = EntityGenerator.extend({
             if (!this.relationships) {
                 this.relationships = [];
             }
-            this.differentRelationships = [];
+            this.differentRelationships = {};
 
             // Load in-memory data for fields
             this.fields.forEach((field) => {
@@ -680,8 +680,11 @@ module.exports = EntityGenerator.extend({
                 const entityType = relationship.otherEntityNameCapitalized;
                 if (this.differentTypes.indexOf(entityType) === -1) {
                     this.differentTypes.push(entityType);
-                    this.differentRelationships.push(relationship);
                 }
+                if (!this.differentRelationships[entityType]) {
+                    this.differentRelationships[entityType] = [];
+                }
+                this.differentRelationships[entityType].push(relationship);
             });
 
             if (this.databaseType === 'cassandra' || this.databaseType === 'mongodb') {

@@ -37,16 +37,20 @@ import { <%= entityAngularName %>PopupService } from './<%= entityFileName %>-po
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 <%_
 let hasRelationshipQuery = false;
-for (const rel of differentRelationships) {
-    if (rel.relationshipType === 'one-to-one' && rel.ownerSide === true && rel.otherEntityName !== 'user') {
+Object.keys(differentRelationships).forEach(key => {
+    const hasAnyRelationshipQuery = differentRelationships[key].some(rel =>
+        (rel.relationshipType === 'one-to-one' && rel.ownerSide === true && rel.otherEntityName !== 'user')
+            || rel.relationshipType !== 'one-to-many'
+    );
+    if (hasAnyRelationshipQuery) {
         hasRelationshipQuery = true;
     }
-    if (rel.relationshipType !== 'one-to-many') {
-        hasRelationshipQuery = true;
+    if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
+        const uniqueRel = differentRelationships[key][0];
 _%>
-import { <%= rel.otherEntityAngularName %>, <%= rel.otherEntityAngularName%>Service } from '../<%= rel.otherEntityModulePath %>';
+import { <%= uniqueRel.otherEntityAngularName %>, <%= uniqueRel.otherEntityAngularName%>Service } from '../<%= uniqueRel.otherEntityModulePath %>';
 <%_ }
-} _%>
+}); _%>
 <%_ if (hasRelationshipQuery) { _%>
 import { ResponseWrapper } from '../../shared';
 <%_ } _%>
@@ -82,10 +86,11 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         private dataUtils: JhiDataUtils,
         <%_ } _%>
         private alertService: JhiAlertService,
-        private <%= entityInstance %>Service: <%= entityAngularName %>Service,<% for (idx in differentRelationships) {
-        if (differentRelationships[idx].relationshipType !== 'one-to-many') { %>
-        private <%= differentRelationships[idx].otherEntityName %>Service: <%= differentRelationships[idx].otherEntityAngularName %>Service,<% }
-        }%>
+        private <%= entityInstance %>Service: <%= entityAngularName %>Service,<% Object.keys(differentRelationships).forEach(key => {
+        if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
+            const uniqueRel = differentRelationships[key][0]; %>
+        private <%= uniqueRel.otherEntityName %>Service: <%= uniqueRel.otherEntityAngularName %>Service,<%
+        } });%>
         <%_ if (fieldsContainImageBlob) { _%>
         private elementRef: ElementRef,
         <%_ } _%>
