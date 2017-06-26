@@ -496,8 +496,6 @@ function writeFiles() {
                     this.template(`${SERVER_TEST_SRC_DIR}package/security/oauth2/_CookieTokenExtractorTest.java`, `${testDir}security/oauth2/CookieTokenExtractorTest.java`);
                     this.template(`${SERVER_TEST_SRC_DIR}package/security/oauth2/_CookieCollectionTest.java`, `${testDir}security/oauth2/CookieCollectionTest.java`);
                 }
-                this.template(`${SERVER_TEST_SRC_DIR}package/security/_UaaAuthenticationServiceTest.java`, `${testDir}security/UaaAuthenticationServiceTest.java`);
-                this.template(`${SERVER_TEST_SRC_DIR}package/security/_CookieTokenExtractorTest.java`, `${testDir}security/CookieTokenExtractorTest.java`);
             }
 
             // Create Gatling test files
