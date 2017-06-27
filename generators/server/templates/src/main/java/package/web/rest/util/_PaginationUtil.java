@@ -66,7 +66,7 @@ public final class PaginationUtil {
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
     public static HttpHeaders generateSearchPaginationHttpHeaders(String query, Page page, String baseUrl) {
-        String escapedQuery = query;
+        String escapedQuery;
         try {
             escapedQuery = URLEncoder.encode(query, "UTF-8");
         } catch (UnsupportedEncodingException e) {
