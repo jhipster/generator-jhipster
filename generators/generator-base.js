@@ -50,6 +50,22 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
  */
 module.exports = class extends PrivateBase {
     /**
+     * Get the JHipster configuration from the .yo-rc.json file.
+     *
+     * @param {string} namespace - namespace of the .yo-rc.json config file. By default: generator-jhipster
+     */
+    getJhipsterAppConfig(namespace = 'generator-jhipster') {
+        const fromPath = '.yo-rc.json';
+        if (shelljs.test('-f', fromPath)) {
+            const fileData = this.fs.readJSON(fromPath);
+            if (fileData && fileData[namespace]) {
+                return fileData[namespace];
+            }
+        }
+        return false;
+    }
+
+    /**
      * Add a new menu element, at the root of the menu.
      *
      * @param {string} routerName - The name of the AngularJS router that is added to the menu.
