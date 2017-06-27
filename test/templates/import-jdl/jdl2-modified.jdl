@@ -15,7 +15,8 @@ entity DepartmentAlt {
  */
 entity JobHistoryAlt {
   startDate ZonedDateTime,
-  endDate ZonedDateTime
+  endDate ZonedDateTime,
+  type JobTypeAlt
 }
 
 enum JobTypeAlt {
