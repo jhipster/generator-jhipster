@@ -5,6 +5,9 @@ entity DepartmentAlt {
   departmentCode String minlength(2) maxlength(2)
   departmentNo Integer
   departmentTime Instant
+  departmentSig Blob
+  departmentLogo ImageBlob
+  departmentNotes TextBlob minbytes(5)
 }
 
 /**
