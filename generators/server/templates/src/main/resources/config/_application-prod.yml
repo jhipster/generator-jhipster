@@ -324,7 +324,7 @@ jhipster:
 <%_ if (applicationType === 'uaa') { _%>
 uaa:
     #be sure to to change to a different keystore in production!
-    #create one using: keytool -genkeypair -keystore keystore_prod.jks -storepass <secretpasswd> -alias <myalias>
+    #create one using: keytool -genkeypair -keyalg RSA -keystore keystore_prod.jks -storepass <secretpasswd> -alias <myalias>
     key-store:
         name: keystore.jks
         password: password
