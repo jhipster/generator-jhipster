@@ -18,11 +18,39 @@
  */
 
 const jsonpatch = require('fast-json-patch');
+const _ = require('lodash');
 
-module.exports = { diff, patchToChangesetData };
+module.exports = { diff, isEnumType, isEnum, patchToChangesetData };
 
 function diff(before, after) {
     return jsonpatch.compare(before, after);
+}
+
+/**
+ * Return true if specified JDL field type is an enum, false otherwise
+ *
+ * @param {String} fieldType - JDL type name
+ * @returns {Boolean} - true if fieldType is an enum, false otherwise
+ */
+function isEnumType(fieldType) {
+    const nonEnumTypes = [
+        'String', 'Integer', 'Long', 'Float', 'Double', 'BigDecimal',
+        'LocalDate', 'Instant', 'ZonedDateTime', 'Boolean', 'byte[]',
+        'ByteBuffer'
+    ];
+    return !_.includes(nonEnumTypes, fieldType);
+}
+
+/**
+ * Return true if specified JDL field type is an enum in given DB
+ *
+ * @param {String} fieldType - JDL type name
+ * @param {String} databaseType - database type (sql, mongodb, cassandra)
+ * @returns {Boolean}
+ */
+function isEnum(fieldType, databaseType) {
+    return (databaseType === 'sql' || databaseType === 'mongodb')
+        && isEnumType(fieldType);
 }
 
 /**
