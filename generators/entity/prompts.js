@@ -929,6 +929,8 @@ function askForRelationship(done) {
                     return 'Your other entity name cannot be empty';
                 } else if (jhiCore.isReservedKeyword(input, 'JAVA')) {
                     return 'Your other entity name cannot contain a Java reserved keyword';
+                } else if ((input.toLowerCase() === 'user') && (this.applicationType === 'microservice')) {
+                    return 'Your entity cannot have a relationship with User because it\'s a gateway entity';
                 }
                 return true;
             },
