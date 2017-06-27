@@ -21,9 +21,6 @@ package <%=packageName%>.web.rest.util;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -36,8 +33,6 @@ import org.springframework.web.util.UriComponentsBuilder;
  * and follow <a href="http://tools.ietf.org/html/rfc5988">RFC 5988 (Link header)</a>.
  */
 public final class PaginationUtil {
-
-    private static final Logger log = LoggerFactory.getLogger(PaginationUtil.class);
 
     private PaginationUtil() {
     }
@@ -75,8 +70,7 @@ public final class PaginationUtil {
         try {
             escapedQuery = URLEncoder.encode(query, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            log.info("Unsupported encoding exception");
-            log.trace("Unsupported encoding exception trace: {}", e);
+            throw new RuntimeException(e);
         }
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Total-Count", Long.toString(page.getTotalElements()));
