@@ -28,7 +28,6 @@ import { <%=jhiPrefixCapitalized%>TrackerService } from '../../../../../../main/
 import { MockTrackerService } from '../../../helpers/mock-tracker.service';
 <%_ } _%>
 
-
 describe('Component Tests', () => {
 
     describe('PasswordComponent', () => {

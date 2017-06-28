@@ -25,5 +25,5 @@ export class MockTrackerService extends SpyObject {
         super(<%=jhiPrefixCapitalized%>TrackerService);
     }
 
-    connect () {}
+    connect() {}
 }

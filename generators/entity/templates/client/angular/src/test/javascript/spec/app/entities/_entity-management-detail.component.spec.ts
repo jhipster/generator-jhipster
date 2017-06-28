@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+/* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing';
 import { OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
@@ -60,7 +61,6 @@ describe('Component Tests', () => {
             service = fixture.debugElement.injector.get(<%= entityAngularName %>Service);
         });
 
-
         describe('OnInit', () => {
             it('Should call load all on init', () => {
             // GIVEN
@@ -73,7 +73,7 @@ describe('Component Tests', () => {
 
             // THEN
             expect(service.find).toHaveBeenCalledWith(123);
-            expect(comp.<%= entityInstance %>).toEqual(jasmine.objectContaining({id: <%_
+            expect(comp.<%= entityInstance %>).toEqual(jasmine.objectContaining({id: <%
             if (databaseType === 'sql' || databaseType === 'no') { %>10<% } else if (databaseType === 'mongodb' || databaseType === 'cassandra') { %>'aaa'<% } %>}));
             });
         });
