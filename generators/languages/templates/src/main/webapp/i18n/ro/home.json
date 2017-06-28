@@ -1,9 +1,9 @@
 {
     "home": {
         "title": "Bun venit, Java Hipster!",
-        "subtitle": "Aceasta e pagina ta de start",
+        "subtitle": "Aceasta este pagina ta de start",
         "logged": {
-            "message": "Ești înregistrat ca și \"{{username}}\"."
+            "message": "Ești autentificat cu numele de utilizator \"{{username}}\"."
         },
         "question": "Dacă ai orice întrebări în legatură cu JHipster:",
         "link": {
@@ -11,7 +11,7 @@
             "stackoverflow": "JHipster pe Stack Overflow",
             "bugtracker": "JHipster bug tracker",
             "chat": "Camera de chat publică pentru JHipster",
-            "follow": "contactează @java_hipster pe Twitter"
+            "follow": "Contactează @java_hipster pe Twitter"
         },
         "like": "Dacă iți place JHipster nu uita să ne dai o stea pe",
         "github": "GitHub"

@@ -19,12 +19,12 @@
 {
     "global": {
         "title": "<%= capitalizedBaseName %>",
-        "browsehappy": "Folosiți un browser <strong>vechi</strong> . Va rugăm <a href=\"http://browsehappy.com/?locale=en\"> să îl upgradați</a> pentru o experiența îmbunătațită.",
+        "browsehappy": "Folosiți un browser <strong>vechi</strong>. Va rugăm <a href=\"http://browsehappy.com/?locale=en\"> să îl actualizați</a> pentru o experiență îmbunătațită.",
         "menu": {
             "home": "Acasă",
             "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
             "entities": {
-                "main": "Entitați",
+                "main": "Entități",
                 "bankAccount": "ContBancar",
                 "label": "Etichetă",
                 "operation": "Operație",
@@ -36,7 +36,7 @@
                 "password": "Parolă",
                 "sessions": "Sesiuni",
                 "login": "Autentificare",
-                "logout": "Iesire",
+                "logout": "Ieșire",
                 "register": "Înregistrare"
             },
             "admin": {
@@ -44,7 +44,7 @@
                 <%_ if (applicationType === 'gateway') { _%>
                 "gateway": "Gateway",
                 <%_ } _%>
-                "userManagement": "User management",
+                "userManagement": "Gestiune utilizatori",
                 "tracker": "Informații utilizatori",
                 "metrics": "Metrici",
                 "health": "Stare",
@@ -66,8 +66,8 @@
         "form": {
             "username": "Utilizator",
             "username.placeholder": "Numele de utilizator",
-            "newpassword": "Parolă noua",
-            "newpassword.placeholder": "Parolă noua",
+            "newpassword": "Parolă nouă",
+            "newpassword.placeholder": "Parolă nouă",
             "confirmpassword": "Confirma parolă",
             "confirmpassword.placeholder": "Confirmați noua parolă",
             "email": "Email",
@@ -76,29 +76,29 @@
         "messages": {
             "info": {
                 <%_ if (clientFramework === 'angular1') { _%>
-                "authenticated": "Dacă doriți să vă <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">autentificați</a>, puteți încerca conturile implicite:<br/>- Administrator (login=\"admin\" si parola=\"admin\") <br/>- Utilizator (login=\"user\" si parola=\"user\").",
-                "register": "Înca nu aveți un cont? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Înregistrați un nou cont</a>"
+                "authenticated": "Dacă doriți să vă <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">autentificați</a>, puteți încerca conturile implicite:<br/>- Administrator (login=\"admin\" și parola=\"admin\") <br/>- Utilizator (login=\"user\" și parola=\"user\").",
+                "register": "Încă nu aveți un cont? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Înregistrați un cont nou</a>"
                 <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Dacă doriți să vă ",
                     "link": "autentificați",
-                    "suffix": ", puteți încerca conturile implicite:<br/>- Administrator (login=\"admin\" si parola=\"admin\") <br/>- Utilizator (login=\"user\" si parola=\"user\")."
+                    "suffix": ", puteți încerca conturile implicite:<br/>- Administrator (login=\"admin\" și parola=\"admin\") <br/>- Utilizator (login=\"user\" și parola=\"user\")."
                 },
                 "register": {
-                    "noaccount": "Înca nu aveți un cont?",
-                    "link": "Înregistrați un nou cont"
+                    "noaccount": "Încă nu aveți un cont?",
+                    "link": "Înregistrați un cont nou"
                 }
                 <%_ } _%>
             },
             "error": {
-                "dontmatch" : "Parola si confirmarea ei nu corespund!"
+                "dontmatch" : "Parola și confirmarea ei nu corespund!"
             },
             "validate": {
                 "newpassword": {
-                    "required": "Parola dumneavoastră este necesara.",
+                    "required": "Parola dumneavoastră este necesară.",
                     "minlength": "Parola dumneavoastră trebuie să aibă cel puțin 5 caractere.",
-                    "maxlength": "Parola dumneavoastră poate avea maxim 50 de caractere",
-                    "strength": "Puterea parolei:"
+                    "maxlength": "Parola dumneavoastră poate avea maxim 50 de caractere.",
+                    "strength": "Complexitatea parolei:"
                 },
                 "confirmpassword": {
                     "required": "Confirmarea parolei este necesară.",
@@ -107,7 +107,7 @@
                 },
                 "email": {
                     "required": "Emailul dumneavoastră este necesar.",
-                    "invalid": "Email invalid",
+                    "invalid": "Email invalid.",
                     "minlength": "Emailul dumneavoastră trebuie să aibă cel puțin 5 caractere",
                     "maxlength": "Emailul dumneavoastră nu poate avea mai mult de 50 de caractere."
                 }
@@ -119,19 +119,19 @@
         "ribbon": {
             "dev":"Development"
         },
-        "item-count": "Se afișează {{first}} - {{second}} de {{total}} elemente."
+        "item-count": "Se afișează {{first}} - {{second}} din {{total}} elemente."
     },
     "entity": {
         "action": {
-            "addblob": "Add blob",
-            "addimage": "Add image",
+            "addblob": "Adăugare blob",
+            "addimage": "Adăugare imagine",
             "back": "Înapoi",
-            "cancel": "Anulează",
-            "delete": "Șterge",
-            "edit": "Editează",
-            "open": "Open",
-            "save": "Salvează",
-            "view": "Vizualizează"
+            "cancel": "Anulare",
+            "delete": "Ștergere",
+            "edit": "Editare",
+            "open": "Deschidere",
+            "save": "Salvare",
+            "view": "Vizualizare"
         },
         "detail": {
             "field": "Câmp",
@@ -142,26 +142,26 @@
         },
         "validation": {
             "required": "Acest câmp este necesar.",
-            "minlength": "Acest câmp este necesar să aibă minimum {{min}} caractere.",
-            "maxlength": "Acest câmp nu poate să fie mai lung decât {{max}} caractere.",
-            "min": "Acest câmp trebuie să fie mai mult decât {{min}}.",
-            "max": "Acest câmp nu poate să fie mai mult decât {{max}}.",
-            "minbytes": "Acest câmp nu poate să fie mai mic decât {{min}} bytes.",
-            "maxbytes": "Acest câmp nu poate să fie mai mare decât {{max}} bytes.",
+            "minlength": "Acest câmp nu poate fi mai scurt de {{min}} caractere.",
+            "maxlength": "Acest câmp nu poate fi mai lung de {{max}} caractere.",
+            "min": "Acest câmp trebuie să aibă o valoare mai mare decât {{min}}.",
+            "max": "Acest câmp trebuie să aibă o valoare mai mică decât {{max}}.",
+            "minbytes": "Acest câmp nu poate să fie mai mic de {{min}} bytes.",
+            "maxbytes": "Acest câmp nu poate să fie mai mare de {{max}} bytes.",
             "pattern": "Acest câmp trebuie să corespundă șablonului {{pattern}}.",
             "number": "Acest câmp trebuie să fie numeric.",
-            "datetimelocal": "Acest câmp trebuie să conțină data si ora."
+            "datetimelocal": "Acest câmp trebuie să conțină data și ora."
         }
     },
     "error": {
-        "internalServerError": "Internal server error",
+        "internalServerError": "Eroare internă a serverului",
         "server.not.reachable": "Serverul este indisponibil",
-        "url.not.found": "Not found",
+        "url.not.found": "Nu a fost găsit",
         "NotNull": "Câmpul {{fieldName}} nu poate fi gol!",
-        "Size": "Câmpul {{fieldName}} nu corespunde ceințelor de dimensiune minimă/maximă!",
-        "userexists": "Login name already used!",
-        "emailexists": "Email is already in use!",
-        "idexists": "A new {{entityName}} cannot already have an ID"
+        "Size": "Câmpul {{fieldName}} nu corespunde cerințelor de dimensiune minimă/maximă!",
+        "userexists": "Numele de utilizator există deja!",
+        "emailexists": "Emailul este deja folosit!",
+        "idexists": "O nouă entitate {{entityName}} nu poate avea un ID existent"
     },
     "footer": "Acesta este subsolul paginii dumneavoastră"
 }
