@@ -38,10 +38,10 @@ export function interceptableFactory(
     backend: XHRBackend,
     defaultOptions: RequestOptions,
     <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-    <%_ if (authenticationType !== 'uaa') { _%>
+	<%_ if (authenticationType !== 'uaa') { _%>
     localStorage: LocalStorageService,
     sessionStorage: SessionStorageService,
-    <%_ } _%>
+	<%_ } _%>
     injector: Injector,
     <%_ } if (authenticationType === 'session') { _%>
     injector: Injector,
@@ -54,7 +54,7 @@ export function interceptableFactory(
         defaultOptions,
         [
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-        <%_ if (authenticationType !== 'uaa') { _%>
+		<%_ if (authenticationType !== 'uaa') { _%>
             new AuthInterceptor(localStorage, sessionStorage),
         <%_ } _%>
             new AuthExpiredInterceptor(injector),
