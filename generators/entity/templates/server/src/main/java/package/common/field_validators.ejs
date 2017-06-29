@@ -51,14 +51,15 @@ if (field.fieldValidate === true) {
         if (field.fieldType === 'Float' || field.fieldType === 'Double' || field.fieldType === 'BigDecimal') {
             validators.push('@DecimalMin(value = "' + field.fieldValidateRulesMin + '")');
         } else {
+            const isLong = (field.fieldValidateRulesMin > MAX_VALUE || field.fieldType == 'Long') ? 'L' : '';
             validators.push('@Min(value = ' + field.fieldValidateRulesMin + ')');
         }
     }
     if (rules.indexOf('max') !== -1) {
-        const isLong = (field.fieldValidateRulesMax > MAX_VALUE) ? 'L' : '';
         if (field.fieldType === 'Float' || field.fieldType === 'Double' || field.fieldType === 'BigDecimal') {
             validators.push('@DecimalMax(value = "' + field.fieldValidateRulesMax + '")');
         } else {
+            const isLong = (field.fieldValidateRulesMax > MAX_VALUE || field.fieldType == 'Long') ? 'L' : '';
             validators.push('@Max(value = ' + field.fieldValidateRulesMax + isLong + ')');
         }
     }
