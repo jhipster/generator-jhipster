@@ -59,7 +59,9 @@ const getArgs = (opts) => {
 const getFlagsFromArg = (arg) => {
     const rawArgs = arg.parent && arg.parent.rawArgs ? arg.parent.rawArgs : [];
     logger.debug(`Raw args ${rawArgs}`);
-    return rawArgs.filter(item => item.startsWith('--'));
+    const flags = rawArgs.join(':::').split(/(?=--)/g).filter(item => item.startsWith('--'));
+    logger.debug(`Flags ${flags}`);
+    return flags.map(item => item.replace(/:::/g, ' '));
 };
 
 /**
@@ -128,7 +130,6 @@ Object.keys(SUB_GENERATORS).forEach((key) => {
         .description(opts.desc)
         .action((args) => {
             logger.debug('Options passed:');
-            logger.debug(`args ${program.args}`);
             runYoCommand(key, program.args, opts);
         })
         .on('--help', () => {
