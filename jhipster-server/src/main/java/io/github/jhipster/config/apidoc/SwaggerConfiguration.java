@@ -20,6 +20,9 @@
 package io.github.jhipster.config.apidoc;
 
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+
 import static springfox.documentation.builders.PathSelectors.regex;
 
 import java.util.ArrayList;
@@ -40,6 +43,7 @@ import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
+import springfox.documentation.service.VendorExtension;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -118,7 +122,7 @@ public class SwaggerConfiguration {
         @Value("${info.project.version}") String appVersion) {
         return new Docket(DocumentationType.SWAGGER_2)
             .apiInfo(new ApiInfo(appName + " management API","Management endpoints documentation",
-                appVersion,"", ApiInfo.DEFAULT_CONTACT,"",""))
+                appVersion,"",ApiInfo.DEFAULT_CONTACT,"","", new ArrayList<VendorExtension>()))
             .groupName("management")
             .forCodeGeneration(true)
             .directModelSubstitute(java.nio.ByteBuffer.class, String.class)
