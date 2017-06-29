@@ -26,6 +26,8 @@ const shelljs = require('shelljs');
 const semver = require('semver');
 const exec = require('child_process').exec;
 const https = require('https');
+const jhiCore = require('jhipster-core');
+
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
@@ -523,5 +525,19 @@ module.exports = class extends Generator {
             return 'sql';
         }
         return db;
+    }
+
+    generateJDLFromEntities() {
+        const jdl = new jhiCore.JDLObject();
+        try {
+            const entities = {};
+            this.getExistingEntities().forEach((entity) => { entities[entity.name] = entity.definition; });
+            jhiCore.convertJsonEntitiesToJDL(entities, jdl);
+            jhiCore.convertJsonServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdl);
+        } catch (e) {
+            this.log(e.message || e);
+            this.error('\nError while parsing entities to JDL\n');
+        }
+        return jdl;
     }
 };
