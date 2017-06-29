@@ -513,4 +513,15 @@ module.exports = class extends Generator {
             hasManyToMany
         };
     }
+
+    /**
+     * Get DB type from DB value
+     * @param {string} db
+     */
+    getDBTypeFromDBValue(db) {
+        if (constants.SQL_DB_OPTIONS.map(db => db.value).includes(db)) {
+            return 'sql';
+        }
+        return db;
+    }
 };
