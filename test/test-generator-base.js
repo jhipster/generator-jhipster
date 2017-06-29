@@ -245,4 +245,22 @@ export * from './entityFolderName/entityFileName.state';`;
             assert.equal(BaseGenerator.prototype.stripMargin(content), out);
         });
     });
+
+    describe('getDBTypeFromDBValue', () => {
+        describe('when called with sql DB name', () => {
+            it('return SQL', () => {
+                assert.equal(BaseGenerator.prototype.getDBTypeFromDBValue('mysql'), 'sql');
+            });
+        });
+        describe('when called with mongo DB', () => {
+            it('return mongodb', () => {
+                assert.equal(BaseGenerator.prototype.getDBTypeFromDBValue('mongodb'), 'mongodb');
+            });
+        });
+        describe('when called with cassandra', () => {
+            it('return cassandra', () => {
+                assert.equal(BaseGenerator.prototype.getDBTypeFromDBValue('cassandra'), 'cassandra');
+            });
+        });
+    });
 });
