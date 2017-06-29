@@ -256,6 +256,8 @@ module.exports = JhipsterClientGenerator.extend({
         },
 
         saveConfig() {
+            this.config.set('jhipsterVersion', packagejs.version);
+            this.config.set('baseName', this.baseName);
             this.config.set('clientFramework', this.clientFramework);
             this.config.set('useSass', this.useSass);
             this.config.set('enableTranslation', this.enableTranslation);
@@ -264,6 +266,16 @@ module.exports = JhipsterClientGenerator.extend({
                 this.config.set('languages', this.languages);
             }
             this.config.set('clientPackageManager', this.clientPackageManager);
+            if (this.skipServer) {
+                this.authenticationType && this.config.set('authenticationType', this.authenticationType);
+                this.uaaBaseName && this.config.set('uaaBaseName', this.uaaBaseName);
+                this.hibernateCache && this.config.set('hibernateCache', this.hibernateCache);
+                this.websocket && this.config.set('websocket', this.websocket);
+                this.databaseType && this.config.set('databaseType', this.databaseType);
+                this.devDatabaseType && this.config.set('devDatabaseType', this.devDatabaseType);
+                this.searchEngine && this.config.set('searchEngine', this.searchEngine);
+                this.buildTool && this.config.set('buildTool', this.buildTool);
+            }
         }
     },
 

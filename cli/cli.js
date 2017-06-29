@@ -58,6 +58,7 @@ const getArgs = (opts) => {
 */
 const getFlagsFromArg = (arg) => {
     const rawArgs = arg.parent && arg.parent.rawArgs ? arg.parent.rawArgs : [];
+    logger.debug(`Raw args ${rawArgs}`);
     return rawArgs.filter(item => item.startsWith('--'));
 };
 
@@ -102,6 +103,7 @@ const getOptions = (args, opts) => {
  */
 const runYoCommand = (cmd, args, opts) => {
     const options = getOptions(args, opts);
+    logger.debug(`Options ${options}`);
     const command = `${JHIPSTER_NS}:${cmd}${options ? ` ${options}` : ''}`;
     logger.info(chalk.yellow(`Executing ${command}`));
     try {
@@ -126,7 +128,7 @@ Object.keys(SUB_GENERATORS).forEach((key) => {
         .description(opts.desc)
         .action((args) => {
             logger.debug('Options passed:');
-            logger.debug(opts);
+            logger.debug(`args ${program.args}`);
             runYoCommand(key, program.args, opts);
         })
         .on('--help', () => {
