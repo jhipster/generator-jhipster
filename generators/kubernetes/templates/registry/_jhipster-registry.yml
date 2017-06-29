@@ -139,12 +139,9 @@ spec:
             for i in $(seq 0 $LAST_POD_INDEX); do
               if [ ${STATEFULSET_NAME}-${i} != ${HOSTNAME} ]; then
                 if [ -z ${REPLICAS} ]; then
-                  REPLICAS="${REPLICAS}http://admin:${SECURITY_USER_PASSWORD}@${STATEFULSET_NAME}-${i}.jhipster-registry.${STATEFULSET_NAMESPACE}.svc.cluster.local:8761/eureka/"
+                  REPLICAS="http://admin:${SECURITY_USER_PASSWORD}@${STATEFULSET_NAME}-${i}.jhipster-registry.${STATEFULSET_NAMESPACE}.svc.cluster.local:8761/eureka/"
                 else
                   REPLICAS="${REPLICAS},http://admin:${SECURITY_USER_PASSWORD}@${STATEFULSET_NAME}-${i}.jhipster-registry.${STATEFULSET_NAMESPACE}.svc.cluster.local:8761/eureka/"
-                fi
-                if [ $i -lt $LAST_POD_INDEX ]; then
-                  REPLICAS="${REPLICAS}"
                 fi
               fi
             done

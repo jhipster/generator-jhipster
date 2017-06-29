@@ -136,12 +136,9 @@ objects:
                 for i in $(seq 0 $LAST_POD_INDEX); do
                   if [ ${STATEFULSET_NAME}-${i} != ${HOSTNAME} ]; then
                     if [ -z ${REPLICAS} ]; then
-                      REPLICAS="${REPLICAS}http://admin:${JHIPSTER_REGISTRY_PASSWORD}@${STATEFULSET_NAME}-${i}.jhipster-registry:8761/eureka/"
+                      REPLICAS="http://admin:${JHIPSTER_REGISTRY_PASSWORD}@${STATEFULSET_NAME}-${i}.jhipster-registry:8761/eureka/"
                     else
                       REPLICAS="${REPLICAS},http://admin:${JHIPSTER_REGISTRY_PASSWORD}@${STATEFULSET_NAME}-${i}.jhipster-registry:8761/eureka/"
-                    fi
-                    if [ $i -lt $LAST_POD_INDEX ]; then
-                      REPLICAS="${REPLICAS}"
                     fi
                   fi
                 done
