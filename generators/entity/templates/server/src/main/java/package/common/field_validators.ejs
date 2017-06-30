@@ -52,7 +52,7 @@ if (field.fieldValidate === true) {
             validators.push('@DecimalMin(value = "' + field.fieldValidateRulesMin + '")');
         } else {
             const isLong = (field.fieldValidateRulesMin > MAX_VALUE || field.fieldType == 'Long') ? 'L' : '';
-            validators.push('@Min(value = ' + field.fieldValidateRulesMin + ')');
+            validators.push('@Min(value = ' + field.fieldValidateRulesMin + isLong + ')');
         }
     }
     if (rules.indexOf('max') !== -1) {
