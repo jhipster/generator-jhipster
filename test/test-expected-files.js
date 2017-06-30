@@ -123,6 +123,10 @@ const expectedFiles = {
         '.editorconfig'
     ],
 
+    infinispan: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheFactoryConfiguration.java`
+    ],
+
     gatling: [
         `${TEST_DIR}gatling/conf/gatling.conf`
     ],

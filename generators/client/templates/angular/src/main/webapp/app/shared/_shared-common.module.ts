@@ -44,10 +44,11 @@ import {
         <%=jhiPrefixCapitalized%>AlertErrorComponent
     ],
     providers: [
-        <%_ if (enableTranslation) { _%>
+        <%_ if (enableI18nRTL) { _%>
+        FindLanguageFromKeyPipe,
+        <%_ } if (enableTranslation) { _%>
         JhiLanguageHelper,
-        <%_ } _%>
-        <%_ if (websocket === 'spring-websocket') { _%>
+        <%_ } if (websocket === 'spring-websocket') { _%>
         WindowRef,
         <%_ } _%>
         Title

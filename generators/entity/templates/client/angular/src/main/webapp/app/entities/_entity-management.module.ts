@@ -20,10 +20,10 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { <%= angular2AppName %>SharedModule } from '../../shared';
-<%_ for (const rel of differentRelationships) {
-       if (rel.otherEntityNameCapitalized === 'User') { _%>
+<%_ Object.keys(differentRelationships).forEach(key => {
+       if (key === 'User') { _%>
 import { <%= angular2AppName %>AdminModule } from '../../admin/admin.module';
-<%_ }} _%>
+<%_ }}); _%>
 import {
     <%= entityAngularName %>Service,
     <%= entityAngularName %>PopupService,
@@ -48,10 +48,10 @@ const ENTITY_STATES = [
 @NgModule({
     imports: [
         <%= angular2AppName %>SharedModule,
-        <%_ for (const rel of differentRelationships) {
-              if (rel.otherEntityNameCapitalized === 'User') { _%>
+        <%_ Object.keys(differentRelationships).forEach(key => {
+              if (key === 'User') { _%>
         <%= angular2AppName %>AdminModule,
-        <%_ }} _%>
+        <%_ }}); _%>
         RouterModule.forRoot(ENTITY_STATES, { useHash: true })
     ],
     declarations: [

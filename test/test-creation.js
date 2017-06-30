@@ -4,9 +4,9 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
-const getFilesForOptions = require('./test-utils').getFilesForOptions;
+const getFilesForOptions = require('./utils').getFilesForOptions;
 const expectedFiles = require('./test-expected-files');
-const shouldBeV3DockerfileCompatible = require('./test-utils').shouldBeV3DockerfileCompatible;
+const shouldBeV3DockerfileCompatible = require('./utils').shouldBeV3DockerfileCompatible;
 const constants = require('../generators/generator-constants');
 const angularJsfiles = require('../generators/client/files-angularjs').files;
 const angularfiles = require('../generators/client/files-angular').files;
@@ -413,6 +413,69 @@ describe('JHipster generator', () => {
                     serverSideOptions: []
                 })
                 .on('end', done);
+        });
+    });
+
+    describe('Infinispan', () => {
+        beforeEach((done) => {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({ skipInstall: true, skipChecks: true })
+                .withPrompts({
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
+                    hibernateCache: 'infinispan',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: []
+                })
+                .on('end', done);
+        });
+        it('creates expected files with "Infinispan"', () => {
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.client);
+            assert.file(expectedFiles.infinispan);
+        });
+    });
+
+    describe('Infinispan and Eureka', () => {
+        beforeEach((done) => {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({ skipInstall: true, skipChecks: true })
+                .withPrompts({
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    serviceDiscoveryType: 'eureka',
+                    authenticationType: 'jwt',
+                    hibernateCache: 'infinispan',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: []
+                })
+                .on('end', done);
+        });
+        it('creates expected files with "Infinispan and Eureka"', () => {
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.client);
+            assert.file(expectedFiles.eureka);
+            assert.file(expectedFiles.infinispan);
         });
     });
 

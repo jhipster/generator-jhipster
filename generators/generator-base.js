@@ -19,19 +19,18 @@
 
 const path = require('path');
 const _ = require('lodash');
-const Generator = require('yeoman-generator');
 const chalk = require('chalk');
-const Insight = require('insight');
 const fs = require('fs');
 const shelljs = require('shelljs');
 const semver = require('semver');
 const exec = require('child_process').exec;
 const os = require('os');
-const https = require('https');
 const pluralize = require('pluralize');
+const jhiCore = require('jhipster-core');
 const packagejs = require('../package.json');
-const jhipsterUtils = require('./util');
+const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
+const PrivateBase = require('./generator-base-private');
 
 const JHIPSTER_CONFIG_DIR = '.jhipster';
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
@@ -42,11 +41,28 @@ const CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
-module.exports = class extends Generator {
-
-    constructor(args, opts) {
-        super(args, opts);
-        this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
+/**
+ * This is the Generator base class.
+ * This provides all the public API methods exposed via the module system.
+ * The public API methods can be directly utilized as well using commonJS require.
+ *
+ * The method signatures in public API should not be changed without a major version change
+ */
+module.exports = class extends PrivateBase {
+    /**
+     * Get the JHipster configuration from the .yo-rc.json file.
+     *
+     * @param {string} namespace - namespace of the .yo-rc.json config file. By default: generator-jhipster
+     */
+    getJhipsterAppConfig(namespace = 'generator-jhipster') {
+        const fromPath = '.yo-rc.json';
+        if (shelljs.test('-f', fromPath)) {
+            const fileData = this.fs.readJSON(fromPath);
+            if (fileData && fileData[namespace]) {
+                return fileData[namespace];
+            }
+        }
+        return false;
     }
 
     /**
@@ -424,6 +440,18 @@ module.exports = class extends Generator {
     }
 
     /**
+     * check if Right-to-Left support is necesary for i18n
+     * @param {string[]} languages - languages array
+     */
+    isI18nRTLSupportNecessary(languages) {
+        if (!languages) {
+            return false;
+        }
+        const rtlLanguages = this.getAllSupportedLanguageOptions().filter(langObj => langObj.rtl);
+        return languages.some(lang => !!rtlLanguages.find(langObj => langObj.value === lang));
+    }
+
+    /**
      * get all the languages options supported by JHipster
      */
     getAllSupportedLanguageOptions() {
@@ -437,6 +465,7 @@ module.exports = class extends Generator {
             { name: 'Dutch', value: 'nl' },
             { name: 'English', value: 'en' },
             { name: 'Estonian', value: 'et' },
+            { name: 'Farsi', value: 'fa', rtl: true },
             { name: 'French', value: 'fr' },
             { name: 'Galician', value: 'gl' },
             { name: 'German', value: 'de' },
@@ -619,7 +648,7 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Add a new module to the angular application in "app.module.js".
+     * Add a new module to the AngularJS application in "app.module.js".
      *
      * @param {string} moduleName - module name
      *
@@ -636,6 +665,52 @@ module.exports = class extends Generator {
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + moduleName + chalk.yellow(' not added to JHipster app.\n'));
+        }
+    }
+
+    /**
+     * Add a new module in the TS modules file.
+     *
+     * @param {string} appName - Angular2 application name.
+     * @param {string} adminAngularName - The name of the new admin item.
+     * @param {string} adminFolderName - The name of the folder.
+     * @param {string} adminFileName - The name of the file.
+     * @param {boolean} enableTranslation - If translations are enabled or not.
+     * @param {string} clientFramework - The name of the client framework.
+     */
+    addAngularModule(appName, angularName, folderName, fileName, enableTranslation, clientFramework) {
+        const modulePath = `${CLIENT_MAIN_SRC_DIR}app/app.module.ts`;
+        try {
+            if (clientFramework === 'angular1') {
+                return;
+            }
+            let importStatement = `|import { ${appName}${angularName}Module } from './${folderName}/${fileName}.module';`;
+            if (importStatement.length > constants.LINE_LENGTH) {
+                importStatement =
+                    `|import {
+                     |    ${appName}${angularName}Module
+                     |} from './${folderName}/${fileName}.module';`;
+            }
+            jhipsterUtils.rewriteFile({
+                file: modulePath,
+                needle: 'jhipster-needle-angular-add-module-import',
+                splicable: [
+                    this.stripMargin(importStatement)
+                ]
+            }, this);
+
+            jhipsterUtils.rewriteFile({
+                file: modulePath,
+                needle: 'jhipster-needle-angular-add-module',
+                splicable: [
+                    this.stripMargin(
+                        `|${appName}${angularName}Module,`
+                    )
+                ]
+            }, this);
+        } catch (e) {
+            this.log(e);
+            this.log(`${chalk.yellow('\nUnable to find ') + appName + chalk.yellow(' or missing required jhipster-needle. Reference to ') + angularName + folderName + fileName + enableTranslation + clientFramework} ${chalk.yellow(`not added to ${modulePath}.\n`)}`);
         }
     }
 
@@ -661,40 +736,75 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Add a new entity to the Ehcache, for the 2nd level cache of an entity and its relationships.
+     * Add a new entity to Ehcache, for the 2nd level cache of an entity and its relationships.
      *
-     * @param {string} entityClass - the entity to cache.
+     * @param {string} entityClass - the entity to cache
      * @param {array} relationships - the relationships of this entity
      * @param {string} packageName - the Java package name
      * @param {string} packageFolder - the Java package folder
      */
     addEntityToEhcache(entityClass, relationships, packageName, packageFolder) {
-        // Add the entity to ehcache
-        this.addEntryToEhcache(`${packageName}.domain.${entityClass}.class.getName()`, packageFolder);
-        // Add the collections linked to that entity to ehcache
-        relationships.forEach((relationship) => {
-            const relationshipType = relationship.relationshipType;
-            if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
-                this.addEntryToEhcache(`${packageName}.domain.${entityClass}.class.getName() + ".${relationship.relationshipFieldNamePlural}"`, packageFolder);
-            }
-        });
+        this.addEntityToCache(entityClass, relationships, packageName, packageFolder, 'ehcache');
     }
 
     /**
      * Add a new entry to Ehcache in CacheConfiguration.java
      *
-     * @param {string} entry - the entry (including package name) to cache.
+     * @param {string} entry - the entry (including package name) to cache
      * @param {string} packageFolder - the Java package folder
      */
     addEntryToEhcache(entry, packageFolder) {
+        this.addEntryToCache(entry, packageFolder, 'ehcache');
+    }
+
+    /**
+     * Add a new entity to the chosen cache provider, for the 2nd level cache of an entity and its relationships.
+     *
+     * @param {string} entityClass - the entity to cache
+     * @param {array} relationships - the relationships of this entity
+     * @param {string} packageName - the Java package name
+     * @param {string} packageFolder - the Java package folder
+     * @param {string} cacheProvider - the cache provider
+     */
+    addEntityToCache(entityClass, relationships, packageName, packageFolder, cacheProvider) {
+        // Add the entity to ehcache
+        this.addEntryToCache(`${packageName}.domain.${entityClass}.class.getName()`, packageFolder, cacheProvider);
+        // Add the collections linked to that entity to ehcache
+        relationships.forEach((relationship) => {
+            const relationshipType = relationship.relationshipType;
+            if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
+                this.addEntryToCache(`${packageName}.domain.${entityClass}.class.getName() + ".${relationship.relationshipFieldNamePlural}"`, packageFolder, cacheProvider);
+            }
+        });
+    }
+
+    /**
+     * Add a new entry to the chosen cache provider in CacheConfiguration.java
+     *
+     * @param {string} entry - the entry (including package name) to cache
+     * @param {string} packageFolder - the Java package folder
+     * @param {string} cacheProvider - the cache provider
+     */
+    addEntryToCache(entry, packageFolder, cacheProvider) {
         try {
-            const ehcachePath = `${SERVER_MAIN_SRC_DIR}${packageFolder}/config/CacheConfiguration.java`;
-            jhipsterUtils.rewriteFile({
-                file: ehcachePath,
-                needle: 'jhipster-needle-ehcache-add-entry',
-                splicable: [`cm.createCache(${entry}, jcacheConfiguration);`
-                ]
-            }, this);
+            const cachePath = `${SERVER_MAIN_SRC_DIR}${packageFolder}/config/CacheConfiguration.java`;
+            if (cacheProvider === 'ehcache') {
+                jhipsterUtils.rewriteFile({
+                    file: cachePath,
+                    needle: 'jhipster-needle-ehcache-add-entry',
+                    splicable: [`cm.createCache(${entry}, jcacheConfiguration);`
+                    ]
+                }, this);
+            } else if (cacheProvider === 'infinispan') {
+                jhipsterUtils.rewriteFile({
+                    file: cachePath,
+                    needle: 'jhipster-needle-infinispan-add-entry',
+                    splicable: [`registerPredefinedCache(${entry}, new JCache<Object, Object>(
+                cacheManager.getCache(${entry}).getAdvancedCache(), this,
+                ConfigurationAdapter.create()));`
+                    ]
+                }, this);
+            }
         } catch (e) {
             this.log(chalk.yellow(`\nUnable to add ${entry} to CacheConfiguration.java file.\n\t${e.message}`));
         }
@@ -1139,10 +1249,10 @@ module.exports = class extends Generator {
         switch (action) {
         case 'stripHtml' :
             regex = new RegExp([
-                /( (data-t|jhiT)ranslate="([a-zA-Z0-9 +{}'_](\.)?)+")/,                    // data-translate or jhiTranslate
-                /( translate(-v|V)alues="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|-|'|\s|\.|_)*?\}")/,    // translate-values or translateValues
-                /( translate-compile)/,                                                         // translate-compile
-                /( translate-value-max="[0-9{}()|]*")/,                                   // translate-value-max
+                /( (data-t|jhiT)ranslate="([a-zA-Z0-9 +{}'_](\.)?)+")/, // data-translate or jhiTranslate
+                /( translate(-v|V)alues="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|-|'|\s|\.|_)*?\}")/, // translate-values or translateValues
+                /( translate-compile)/, // translate-compile
+                /( translate-value-max="[0-9{}()|]*")/, // translate-value-max
             ].map(r => r.source).join('|'), 'g');
 
             jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, opt, template);
@@ -1150,9 +1260,9 @@ module.exports = class extends Generator {
         case 'stripJs' :
             regex = new RegExp([
                 /(,[\s]*(resolve):[\s]*[{][\s]*(translatePartialLoader)['a-zA-Z0-9$,(){.<%=\->;\s:[\]]*(;[\s]*\}\][\s]*\}))/, // ng1 resolve block
-                /([\s]import\s\{\s?JhiLanguageService\s?\}\sfrom\s["|']ng-jhipster["|'];)/,       // ng2 import jhiLanguageService
-                /(,?\s?JhiLanguageService,?\s?)/,                                                          // ng2 import jhiLanguageService
-                /(private\s[a-zA-Z0-9]*(L|l)anguageService\s?:\s?JhiLanguageService\s?,*[\s]*)/,          // ng2 jhiLanguageService constructor argument
+                /([\s]import\s\{\s?JhiLanguageService\s?\}\sfrom\s["|']ng-jhipster["|'];)/, // ng2 import jhiLanguageService
+                /(,?\s?JhiLanguageService,?\s?)/, // ng2 import jhiLanguageService
+                /(private\s[a-zA-Z0-9]*(L|l)anguageService\s?:\s?JhiLanguageService\s?,*[\s]*)/, // ng2 jhiLanguageService constructor argument
                 /(this\.[a-zA-Z0-9]*(L|l)anguageService\.setLocations\(\[['"a-zA-Z0-9\-_,\s]+\]\);[\s]*)/, // jhiLanguageService invocations
             ].map(r => r.source).join('|'), 'g');
 
@@ -1357,14 +1467,22 @@ module.exports = class extends Generator {
             return e1.definition.changelogDate - e2.definition.changelogDate;
         }
 
-        if (shelljs.test('-d', JHIPSTER_CONFIG_DIR)) {
-            shelljs.ls(path.join(JHIPSTER_CONFIG_DIR, '*.json')).forEach((file) => {
-                const definition = this.fs.readJSON(file);
-                entities.push({ name: path.basename(file, '.json'), definition });
-            });
+        if (!shelljs.test('-d', JHIPSTER_CONFIG_DIR)) {
+            return entities;
         }
 
-        return entities.sort(isBefore);
+        return shelljs.ls(
+            path.join(JHIPSTER_CONFIG_DIR, '*.json')
+        ).reduce((acc, file) => {
+            try {
+                const definition = jhiCore.readEntityJSON(file);
+                acc.push({ name: path.basename(file, '.json'), definition });
+            } catch (error) {
+                // not an entity file / malformed?
+                this.warning(`Unable to parse entity file ${file}`);
+            }
+            return acc;
+        }, entities).sort(isBefore);
     }
 
     /**
@@ -1546,7 +1664,7 @@ module.exports = class extends Generator {
                 '-keypass password ' +
                 '-keysize 2048 ' +
                 `-dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`
-            , (code) => {
+                , (code) => {
                 if (code !== 0) {
                     this.error('\nFailed to create a KeyStore with \'keytool\'', code);
                 } else {
@@ -1806,473 +1924,5 @@ module.exports = class extends Generator {
             this.debug(`Time taken to write files: ${new Date() - startTime}ms`);
         }
         return filesOut;
-    }
-
-    /*= =======================================================================*/
-    /* private methods use within generator (not exposed to modules)*/
-    /*= =======================================================================*/
-
-    installI18nClientFilesByLanguage(_this, webappDir, lang) {
-        const generator = _this || this;
-        generator.copyI18nFilesByName(generator, webappDir, 'audits.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'configuration.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'error.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'gateway.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'login.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'logs.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'home.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'metrics.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'password.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'register.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'sessions.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'settings.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'user-management.json', lang);
-
-        // tracker.json for Websocket
-        if (this.websocket === 'spring-websocket') {
-            generator.copyI18nFilesByName(generator, webappDir, 'tracker.json', lang);
-        }
-
-        if (this.enableSocialSignIn) {
-            generator.copyI18nFilesByName(generator, webappDir, 'social.json', lang);
-        }
-
-        // Templates
-        generator.template(`${webappDir}i18n/${lang}/_activate.json`, `${webappDir}i18n/${lang}/activate.json`);
-        generator.template(`${webappDir}i18n/${lang}/_global.json`, `${webappDir}i18n/${lang}/global.json`);
-        generator.template(`${webappDir}i18n/${lang}/_health.json`, `${webappDir}i18n/${lang}/health.json`);
-        generator.template(`${webappDir}i18n/${lang}/_reset.json`, `${webappDir}i18n/${lang}/reset.json`);
-    }
-
-    installI18nServerFilesByLanguage(_this, resourceDir, lang) {
-        const generator = _this || this;
-        // Template the message server side properties
-        const langProp = lang.replace(/-/g, '_');
-        generator.template(`${resourceDir}i18n/_messages_${langProp}.properties`, `${resourceDir}i18n/messages_${langProp}.properties`);
-    }
-
-    copyI18n(language, prefix) {
-        try {
-            this.template(`${prefix}/i18n/_entity_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${this.entityInstance}.json`);
-            this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClass, language);
-        } catch (e) {
-            // An exception is thrown if the folder doesn't exist
-            // do nothing
-        }
-    }
-
-    copyEnumI18n(language, enumInfo, prefix) {
-        try {
-            this.template(`${prefix}/i18n/_enum.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.enumInstance}.json`, this, {}, enumInfo);
-        } catch (e) {
-            // An exception is thrown if the folder doesn't exist
-            // do nothing
-        }
-    }
-
-    updateLanguagesInLanguageConstant(languages) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/components/language/language.constants.js`;
-        try {
-            let content = '.constant(\'LANGUAGES\', [\n';
-            for (let i = 0, len = languages.length; i < len; i++) {
-                const language = languages[i];
-                content += `            '${language}'${i !== languages.length - 1 ? ',' : ''}\n`;
-            }
-            content +=
-                '            // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n' +
-                '        ]';
-
-            jhipsterUtils.replaceContent({
-                file: fullPath,
-                pattern: /\.constant.*LANGUAGES.*\[([^\]]*jhipster-needle-i18n-language-constant[^\]]*)\]/g,
-                content
-            }, this);
-        } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
-        }
-    }
-
-    updateLanguagesInLanguageConstantNG2(languages) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/shared/language/language.constants.ts`;
-        try {
-            let content = 'export const LANGUAGES: string[] = [\n';
-            for (let i = 0, len = languages.length; i < len; i++) {
-                const language = languages[i];
-                content += `    '${language}'${i !== languages.length - 1 ? ',' : ''}\n`;
-            }
-            content +=
-                '    // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n' +
-                '];';
-
-            jhipsterUtils.replaceContent({
-                file: fullPath,
-                pattern: /export.*LANGUAGES.*\[([^\]]*jhipster-needle-i18n-language-constant[^\]]*)\];/g,
-                content
-            }, this);
-        } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
-        }
-    }
-
-    updateLanguagesInWebpack(languages) {
-        const fullPath = 'webpack/webpack.common.js';
-        try {
-            let content = 'groupBy: [\n';
-            for (let i = 0, len = languages.length; i < len; i++) {
-                const language = languages[i];
-                content += `                        { pattern: "./src/main/webapp/i18n/${language}/*.json", fileName: "./${this.BUILD_DIR}www/i18n/${language}.json" }${i !== languages.length - 1 ? ',' : ''}\n`;
-            }
-            content +=
-                '                        // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n' +
-                '                    ]';
-
-            jhipsterUtils.replaceContent({
-                file: fullPath,
-                pattern: /groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g,
-                content
-            }, this);
-        } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
-        }
-    }
-
-    insight(trackingCode = 'UA-46075199-2', packageName = packagejs.name, packageVersion = packagejs.version) {
-        const insight = new Insight({
-            trackingCode,
-            packageName,
-            packageVersion
-        });
-
-        insight.trackWithEvent = (category, action) => {
-            insight.track(category, action);
-            insight.trackEvent({
-                category,
-                action,
-                label: `${category} ${action}`,
-                value: 1
-            });
-        };
-
-        return insight;
-    }
-
-    removeFile(file) {
-        if (shelljs.test('-f', file)) {
-            this.log(`Removing the file - ${file}`);
-            shelljs.rm(file);
-        }
-    }
-
-    removeFolder(folder) {
-        if (shelljs.test('-d', folder)) {
-            this.log(`Removing the folder - ${folder}`);
-            shelljs.rm('-rf', folder);
-        }
-    }
-
-    getDefaultAppName() {
-        return (/^[a-zA-Z0-9_]+$/.test(path.basename(process.cwd()))) ? path.basename(process.cwd()) : 'jhipster';
-    }
-
-    formatAsClassJavadoc(text) {
-        return jhipsterUtils.getJavadoc(text, 0);
-    }
-
-    formatAsFieldJavadoc(text) {
-        return jhipsterUtils.getJavadoc(text, 4);
-    }
-
-    formatAsApiDescription(text) {
-        const rows = text.split('\n');
-        let description = rows[0];
-        for (let i = 1; i < rows.length; i++) {
-            // discard empty rows
-            if (rows[i] !== '') {
-                // if simple text then put space between row strings
-                if (!description.endsWith('>') && !rows[i].startsWith('<')) {
-                    description += ' ';
-                }
-                description += rows[i];
-            }
-        }
-        return description;
-    }
-
-    isNumber(input) {
-        if (isNaN(this.filterNumber(input))) {
-            return false;
-        }
-        return true;
-    }
-
-    isSignedNumber(input) {
-        if (isNaN(this.filterNumber(input, true))) {
-            return false;
-        }
-        return true;
-    }
-
-    isSignedDecimalNumber(input) {
-        if (isNaN(this.filterNumber(input, true, true))) {
-            return false;
-        }
-        return true;
-    }
-
-    filterNumber(input, isSigned, isDecimal) {
-        const signed = isSigned ? '(\\-|\\+)?' : '';
-        const decimal = isDecimal ? '(\\.[0-9]+)?' : '';
-        const regex = new RegExp(`^${signed}([0-9]+${decimal})$`);
-
-        if (regex.test(input)) return Number(input);
-
-        return NaN;
-    }
-
-    isGitInstalled(callback) {
-        this.gitExec('--version', (code) => {
-            if (code !== 0) {
-                this.warning('git is not found on your computer.\n',
-                    ` Install git: ${chalk.yellow('https://git-scm.com/')}`
-                );
-            }
-            if (callback) callback(code);
-        });
-    }
-
-    getOptionFromArray(array, option) {
-        let optionValue = false;
-        array.forEach((value) => {
-            if (_.includes(value, option)) {
-                optionValue = value.split(':')[1];
-            }
-        });
-        optionValue = optionValue === 'true' ? true : optionValue;
-        return optionValue;
-    }
-
-    /**
-     * get hibernate SnakeCase in JHipster preferred style.
-     *
-     * @param {string} value - table column name or table name string
-     * @see org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
-     */
-    hibernateSnakeCase(value) {
-        let res = '';
-        if (value) {
-            value = value.replace('.', '_');
-            res = value[0];
-            for (let i = 1, len = value.length - 1; i < len; i++) {
-                if (value[i - 1] !== value[i - 1].toUpperCase() &&
-                    value[i] !== value[i].toLowerCase() &&
-                    value[i + 1] !== value[i + 1].toUpperCase()
-                ) {
-                    res += `_${value[i]}`;
-                } else {
-                    res += value[i];
-                }
-            }
-            res += value[value.length - 1];
-            res = res.toLowerCase();
-        }
-        return res;
-    }
-
-    contains(array, item) {
-        return _.includes(array, item);
-    }
-    /**
-     * Function to issue a https get request, and process the result
-     *
-     *  @param {string} url - the url to fetch
-     *  @param onSuccess - function, which gets called when the request succeeds, with the body of the response
-     *  @param onFail - callback when the get failed.
-     */
-    httpsGet(url, onSuccess, onFail) {
-        https.get(url, (res) => {
-            let body = '';
-            res.on('data', (chunk) => {
-                body += chunk;
-            });
-            res.on('end', () => {
-                onSuccess(body);
-            });
-        }).on('error', onFail);
-    }
-
-    /**
-     * Function to print a proper array with simple quoted strings
-     *
-     *  @param {array} array - the array to print
-     */
-    toArrayString(array) {
-        return `['${array.join('\', \'')}']`;
-    }
-
-    /**
-     * Strip margin indicated by pipe `|` from a string literal
-     */
-    stripMargin(content) {
-        return content.replace(/^[ ]*\|/gm, '');
-    }
-
-    /**
-     * Utility function to copy and process templates.
-     *
-     * @param {string} source
-     * @param {string} destination
-     * @param {*} generator
-     * @param {*} options
-     * @param {*} context
-     */
-    template(source, destination, generator, options = {}, context) {
-        const _this = generator || this;
-        const _context = context || _this;
-        jhipsterUtils.renderContent(source, _this, _context, options, (res) => {
-            _this.fs.write(_this.destinationPath(destination), res);
-        });
-    }
-
-    /**
-     * Utility function to copy files.
-     *
-     * @param {string} source - Original file.
-     * @param {string} destination - The resulting file.
-     */
-    copy(source, destination) {
-        this.fs.copy(this.templatePath(source), this.destinationPath(destination));
-    }
-
-    /**
-     * Print a debug message.
-     *
-     * @param {string} value - message to print
-     */
-    debug(msg) {
-        this.log(`${chalk.yellow.bold('DEBUG!')} ${msg}`);
-    }
-
-    checkJava() {
-        if (this.skipChecks || this.skipServer) return;
-        const done = this.async();
-        exec('java -version', (err, stdout, stderr) => {
-            if (err) {
-                this.warning('Java 8 is not found on your computer.');
-            } else {
-                const javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
-                if (!javaVersion.match(/1\.8/)) {
-                    this.warning(`Java 8 is not found on your computer. Your Java version is: ${chalk.yellow(javaVersion)}`);
-                }
-            }
-            done();
-        });
-    }
-
-    checkNode() {
-        if (this.skipChecks || this.skipServer) return;
-        const done = this.async();
-        exec('node -v', (err, stdout, stderr) => {
-            if (err) {
-                this.warning('NodeJS is not found on your system.');
-            } else {
-                const nodeVersion = semver.clean(stdout);
-                const nodeFromPackageJson = packagejs.engines.node;
-                if (!semver.satisfies(nodeVersion, nodeFromPackageJson)) {
-                    this.warning(`Your NodeJS version is too old (${nodeVersion}). You should use at least NodeJS ${chalk.bold(nodeFromPackageJson)}`);
-                }
-            }
-            done();
-        });
-    }
-
-    checkGit() {
-        if (this.skipChecks || this.skipClient) return;
-        const done = this.async();
-        this.isGitInstalled((code) => {
-            this.gitInstalled = code === 0;
-            done();
-        });
-    }
-
-    checkGitConnection() {
-        if (!this.gitInstalled) return;
-        const done = this.async();
-        exec('git ls-remote git://github.com/jhipster/generator-jhipster.git HEAD', { timeout: 15000 }, (error) => {
-            if (error) {
-                this.warning(`Failed to connect to "git://github.com"
-                     1. Check your Internet connection.
-                     2. If you are using an HTTP proxy, try this command: ${chalk.yellow('git config --global url."https://".insteadOf git://')}`
-                );
-            }
-            done();
-        });
-    }
-
-    checkYarn() {
-        if (this.skipChecks || !this.useYarn) return;
-        const done = this.async();
-        exec('yarn --version', (err) => {
-            if (err) {
-                this.warning('yarn is not found on your computer.\n',
-                    ' Using npm instead');
-                this.useYarn = false;
-            } else {
-                this.useYarn = true;
-            }
-            done();
-        });
-    }
-
-    generateEntityQueries(relationships, entityInstance, dto) {
-        const queries = [];
-        const variables = [];
-        let hasManyToMany = false;
-        relationships.forEach((relationship) => {
-            let query;
-            let variableName;
-            hasManyToMany = hasManyToMany || relationship.relationshipType === 'many-to-many';
-            if (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true && relationship.otherEntityName !== 'user') {
-                variableName = relationship.relationshipFieldNamePlural.toLowerCase();
-                if (variableName === entityInstance) {
-                    variableName += 'Collection';
-                }
-                const relationshipFieldName = `this.${entityInstance}.${relationship.relationshipFieldName}`;
-                const relationshipFieldNameIdCheck = dto === 'no' ?
-                    `!${relationshipFieldName} || !${relationshipFieldName}.id` :
-                    `!${relationshipFieldName}Id`;
-
-                query =
-        `this.${relationship.otherEntityName}Service
-            .query({filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'})
-            .subscribe((res: ResponseWrapper) => {
-                if (${relationshipFieldNameIdCheck}) {
-                    this.${variableName} = res.json;
-                } else {
-                    this.${relationship.otherEntityName}Service
-                        .find(${relationshipFieldName}${dto === 'no' ? '.id' : 'Id'})
-                        .subscribe((subRes: ${relationship.otherEntityAngularName}) => {
-                            this.${variableName} = [subRes].concat(res.json);
-                        }, (subRes: ResponseWrapper) => this.onError(subRes.json));
-                }
-            }, (res: ResponseWrapper) => this.onError(res.json));`;
-            } else if (relationship.relationshipType !== 'one-to-many') {
-                variableName = relationship.otherEntityNameCapitalizedPlural.toLowerCase();
-                if (variableName === entityInstance) {
-                    variableName += 'Collection';
-                }
-                query =
-        `this.${relationship.otherEntityName}Service.query()
-            .subscribe((res: ResponseWrapper) => { this.${variableName} = res.json; }, (res: ResponseWrapper) => this.onError(res.json));`;
-            }
-            if (variableName && !this.contains(queries, query)) {
-                queries.push(query);
-                variables.push(`${variableName}: ${relationship.otherEntityAngularName}[];`);
-            }
-        });
-        return {
-            queries,
-            variables,
-            hasManyToMany
-        };
     }
 };

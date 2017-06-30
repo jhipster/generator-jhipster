@@ -57,12 +57,9 @@ module.exports = ReportGenerator.extend({
 
         displayEntities() {
             const done = this.async();
-            this.log('\n##### **Entity configuration(s) `entityName.json` files generated in the `.jhipster` directory**\n');
-            shelljs.ls('.jhipster/*.json').forEach((file) => {
-                this.log(file.split('/')[1]);
-                const result = shelljs.cat(file);
-                this.log(`\n\`\`\`yaml\n${result}\n\`\`\`\n`);
-            });
+            this.log('\n##### **JDL for the Entity configuration(s) `entityName.json` files generated in the `.jhipster` directory**\n');
+            const jdl = this.generateJDLFromEntities();
+            this.log(`\n\`\`\`yaml\n${jdl.toString()}\n\`\`\`\n`);
             done();
         },
 

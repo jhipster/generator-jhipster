@@ -16,14 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-'use strict';
+const webpackConfig = require('../../../webpack/webpack.test.js');
 
-const path = require('path');
-const webpack = require('webpack');
 const WATCH = process.argv.indexOf('--watch') > -1;
-const LoaderOptionsPlugin = require("webpack/lib/LoaderOptionsPlugin");
 
-module.exports = function (config) {
+module.exports = (config) => {
     config.set({
 
         // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -48,63 +45,7 @@ module.exports = function (config) {
             'spec/entry.ts': ['webpack', 'sourcemap']
         },
 
-        webpack: {
-            resolve: {
-                extensions: ['.ts', '.js']
-            },
-            module: {
-                rules: [
-                    {
-                        test: /\.ts$/, enforce: 'pre', loader: 'tslint-loader', exclude: /(test|node_modules)/
-                    },
-                    {
-                        test: /\.ts$/,
-                        loaders: ['awesome-typescript-loader', 'angular2-template-loader?keepUrl=true'],
-                        exclude: /node_modules/
-                    },
-                    {
-                        test: /\.(html|css)$/,
-                        loader: 'raw-loader',
-                        exclude: /\.async\.(html|css)$/
-                    },
-                    {
-                        test: /\.async\.(html|css)$/,
-                        loaders: ['file?name=[name].[hash].[ext]', 'extract']
-                    },
-                    <%_ if (useSass) { _%>
-                    {
-                        test: /\.scss$/,
-                        loaders: ['to-string-loader', 'css-loader', 'sass-loader']
-                    },
-                    <%_ } _%>
-                    {
-                        test: /\.(jpe?g|png|gif|svg|woff2?|ttf|eot)$/i,
-                        loaders: ['file-loader?hash=sha512&digest=hex&name=[hash].[ext]']
-                    },
-                    {
-                        test: /src[\/|\\]main[\/|\\]webapp[\/|\\].+\.ts$/,
-                        enforce: 'post',
-                        exclude: /(test|node_modules)/,
-                        loader: 'sourcemap-istanbul-instrumenter-loader?force-sourcemap=true'
-                    }]
-            },
-            devtool: 'inline-source-map',
-            plugins: [
-                new webpack.ContextReplacementPlugin(
-                    // The (\\|\/) piece accounts for path separators in *nix and Windows
-                    /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-                    root('./src') // location of your src
-                ),
-                new LoaderOptionsPlugin({
-                    options: {
-                        tslint: {
-                            emitErrors: !WATCH,
-                            failOnHint: false
-                        }
-                    }
-                })
-            ]
-        },
+        webpack: webpackConfig(WATCH),
 
         // test results reporter to use
         // possible values: 'dots', 'progress'
@@ -155,7 +96,3 @@ module.exports = function (config) {
         singleRun: !WATCH
     });
 };
-
-function root(__path) {
-    return path.join(__dirname, __path);
-}

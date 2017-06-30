@@ -22,7 +22,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const StringReplacePlugin = require('string-replace-webpack-plugin');
 const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
-const WebpackNotifierPlugin = require('webpack-notifier');
 <%_ if (enableTranslation) { _%>
 const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin")
 <%_ } _%>
@@ -149,11 +148,7 @@ module.exports = (options) => {
             new AddAssetHtmlPlugin([
                 { filepath: path.resolve('./<%= BUILD_DIR %>www/vendor.dll.js'), includeSourcemap: false }
             ]),
-            new StringReplacePlugin(),
-            new WebpackNotifierPlugin({
-                title: 'JHipster',
-                contentImage: path.join(__dirname, 'logo-jhipster.png')
-            })
+            new StringReplacePlugin()
         ]
     };
 };

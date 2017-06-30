@@ -24,6 +24,7 @@ function writeFiles() {
     return {
         writeDockerCompose() {
             this.template('_docker-compose.yml', 'docker-compose.yml');
+            this.template('_README-DOCKER-COMPOSE.md', 'README-DOCKER-COMPOSE.md');
         },
 
         writeRegistryFiles() {

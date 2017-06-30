@@ -1,0 +1,56 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "divisionsPlace",
+            "otherEntityName": "place",
+            "otherEntityRelationshipName": "owner"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "relationshipName": "preferredPlace",
+            "otherEntityName": "place",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "preferredDivision"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "shortName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "numberOfPeople",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "divisionType",
+            "fieldType": "DivisionType",
+            "fieldValues": "SCHOOL,CLASS,SUBGROUP",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "colorBackground",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "colorText",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20170626061520",
+    "entityTableName": "division",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no"
+}

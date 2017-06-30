@@ -105,7 +105,7 @@ function classify(string) {
 function rewriteJSONFile(filePath, rewriteFile, generator) {
     const jsonObj = generator.fs.readJSON(filePath);
     rewriteFile(jsonObj, generator);
-    generator.fs.writeJSON(filePath, jsonObj, null, 4);
+    generator.fs.writeJSON(filePath, jsonObj, null, 2);
 }
 
 function copyWebResource(source, dest, regex, type, generator, opt = {}, template) {
@@ -214,6 +214,12 @@ function deepFind(obj, path, placeholder) {
 }
 
 function getJavadoc(text, indentSize) {
+    if (!text) {
+        text = '';
+    }
+    if (text.indexOf('"') !== -1) {
+        text = text.replace(/"/g, '\\"');
+    }
     let javadoc = `${_.repeat(' ', indentSize)}/**`;
     const rows = text.split('\n');
     for (let i = 0; i < rows.length; i++) {

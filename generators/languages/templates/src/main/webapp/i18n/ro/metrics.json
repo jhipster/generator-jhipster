@@ -1,15 +1,15 @@
 {
     "metrics": {
         "title": "Metrici aplicație",
-        "refresh.button": "Recreează",
-        "updating": "Recreere...",
+        "refresh.button": "Recreare",
+        "updating": "Se recreează...",
         "jvm": {
             "title": "Metrici JVM",
             "memory": {
                 "title": "Memorie",
-                "total": "Memorie Totală",
-                "heap": "Memorie Heap",
-                "nonheap": "Memorie Non-Heap"
+                "total": "Memorie totală",
+                "heap": "Memorie tip heap",
+                "nonheap": "Memorie tip non-heap"
             },
             "threads": {
                 "title": "Threads",
@@ -27,8 +27,8 @@
                     "waitedcount": "Waited Count",
                     "lockname": "Lock name",
                     "stacktrace": "Stacktrace",
-                    "show": "Arată",
-                    "hide": "Ascunde"
+                    "show": "Afișare",
+                    "hide": "Ascundere"
                 }
             },
             "gc": {
@@ -41,11 +41,11 @@
             "http": {
                 "title": "Conexiuni HTTP (evenimente pe secundă)",
                 "active": "Conexiuni Active:",
-                "total": "Conexiuni Totale :",
+                "total": "Conexiuni Totale:",
                 "table": {
                     "code": "Cod",
                     "count": "Număr",
-                    "mean": "Medie aritmentică",
+                    "mean": "Medie aritmetică",
                     "average": "Medie"
                 },
                 "code": {
@@ -59,7 +59,7 @@
             "title": "Statistici servicii (timpi in milisecunde)",
             "table": {
                 "name": "Nume serviciu",
-                "count": "Numar",
+                "count": "Număr",
                 "mean": "Medie",
                 "min": "Min",
                 "max": "Max",
@@ -78,7 +78,7 @@
         },
         "datasource": {
             "usage": "Folosire",
-            "title": "Statistici sursă date(timpi in milisecunde)",
+            "title": "Statistici sursă date (timpi in milisecunde)",
             "name": "Folosire pool",
             "count": "Număr",
             "mean": "Medie",

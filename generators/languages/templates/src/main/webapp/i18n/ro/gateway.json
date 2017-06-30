@@ -2,14 +2,14 @@
     "gateway": {
         "title": "Gateway",
         "routes": {
-            "title": "Current routes",
+            "title": "Rute curente",
             "url": "URL",
-            "service": "service",
-            "servers": "Available servers",
-            "error": "Warning: no server available!"
+            "service": "Serviciu",
+            "servers": "Servere disponibile",
+            "error": "Atenție: nu este disponibil niciun server!"
         },
         "refresh": {
-            "button": "Refresh"
+            "button": "Actualizare"
         }
     }
 }

@@ -5,7 +5,7 @@
             "ipaddress": "Adresa IP",
             "useragent": "User Agent",
             "date": "Data",
-            "button": "Invalidează"
+            "button": "Invalidare"
         },
         "messages": {
             "success": "<strong>Sesiune invalidată!</strong>",

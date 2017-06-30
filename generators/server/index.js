@@ -78,7 +78,7 @@ module.exports = JhipsterServerGenerator.extend({
 
         this.skipClient = !this.options['client-hook'] || this.configOptions.skipClient || this.config.get('skipClient');
         this.skipUserManagement = this.configOptions.skipUserManagement || this.options['skip-user-management'] || this.config.get('skipUserManagement');
-        this.enableTranslation = this.options.i18n;
+        this.enableTranslation = this.options.i18n || this.configOptions.enableTranslation || this.config.get('enableTranslation');
         this.testFrameworks = [];
 
         if (this.options.gatling) this.testFrameworks.push('gatling');
@@ -426,9 +426,11 @@ module.exports = JhipsterServerGenerator.extend({
     end() {
         if (this.prodDatabaseType === 'oracle') {
             this.log('\n\n');
-            this.warning(`${chalk.yellow.bold('You have selected Oracle database.\n')
+            this.warning(
+                `${chalk.yellow.bold('You have selected Oracle database.\n')
                 }Please follow our documentation on using Oracle to set up the \n` +
-                'Oracle proprietary JDBC driver.');
+                'Oracle proprietary JDBC driver.'
+            );
         }
         this.log(chalk.green.bold('\nServer application generated successfully.\n'));
 
