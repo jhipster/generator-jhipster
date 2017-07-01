@@ -20,7 +20,6 @@ const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const StringReplacePlugin = require('string-replace-webpack-plugin');
-const WebpackNotifierPlugin = require('webpack-notifier');
 <%_ if (enableTranslation) { _%>
 const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin")
 <%_ } _%>
@@ -120,11 +119,7 @@ module.exports = (options) => {
                 chunksSortMode: 'dependency',
                 inject: 'body'
             }),
-            new StringReplacePlugin(),
-            new WebpackNotifierPlugin({
-                title: 'JHipster',
-                contentImage: path.join(__dirname, 'logo-jhipster.png')
-            })
+            new StringReplacePlugin()
         ]
     };
 };

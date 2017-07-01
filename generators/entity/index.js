@@ -86,6 +86,12 @@ module.exports = EntityGenerator.extend({
             defaults: false
         });
 
+        // This adds support for a `--db` flag
+        this.option('db', {
+            desc: 'Provide DB option for the application when using skip-server flag',
+            type: String
+        });
+
         this.name = this.options.name;
         // remove extension if feeding json files
         if (this.name !== undefined) {
@@ -123,8 +129,9 @@ module.exports = EntityGenerator.extend({
             this.packageFolder = this.config.get('packageFolder');
             this.authenticationType = this.config.get('authenticationType');
             this.hibernateCache = this.config.get('hibernateCache');
-            this.databaseType = this.config.get('databaseType');
-            this.prodDatabaseType = this.config.get('prodDatabaseType');
+            this.databaseType = this.config.get('databaseType') || this.getDBTypeFromDBValue(this.options.db);
+            this.prodDatabaseType = this.config.get('prodDatabaseType') || this.options.db;
+            this.devDatabaseType = this.config.get('devDatabaseType') || this.options.db;
             this.searchEngine = this.config.get('searchEngine') === 'no' ? false : this.config.get('searchEngine');
             this.messageBroker = this.config.get('messageBroker') === 'no' ? false : this.config.get('messageBroker');
             this.enableTranslation = this.config.get('enableTranslation');
@@ -154,8 +161,8 @@ module.exports = EntityGenerator.extend({
                 }
             }
 
-            this.skipClient = this.applicationType === 'microservice' || this.config.get('skipClient') || this.options['skip-client'];
-            this.skipServer = this.config.get('skipServer') || this.options['skip-server'];
+            this.skipClient = this.applicationType === 'microservice' || this.options['skip-client'] || this.config.get('skipClient');
+            this.skipServer = this.options['skip-server'] || this.config.get('skipServer');
 
             this.angularAppName = this.getAngularAppName();
             this.angular2AppName = this.getAngular2AppName();
@@ -172,8 +179,12 @@ module.exports = EntityGenerator.extend({
         },
 
         validateDbExistence() {
-            if (this.databaseType === 'no' && !(this.authenticationType === 'uaa' && this.applicationType === 'gateway')) {
-                this.error(chalk.red('The entity cannot be generated as the application does not have a database configured!'));
+            if (!this.databaseType || (this.databaseType === 'no' && !(this.authenticationType === 'uaa' && this.applicationType === 'gateway'))) {
+                if (this.skipServer) {
+                    this.error(chalk.red('The entity cannot be generated as the database type is not known! Pass the --db <type> & --prod-db <db> flag in command line'));
+                } else {
+                    this.error(chalk.red('The entity cannot be generated as the application does not have a database configured!'));
+                }
             }
         },
 
@@ -216,7 +227,7 @@ module.exports = EntityGenerator.extend({
                 this.error(chalk.red('The table name cannot contain special characters'));
             } else if (entityTableName === '') {
                 this.error(chalk.red('The table name cannot be empty'));
-            } else if (!this.skipServer && jhiCore.isReservedTableName(entityTableName, prodDatabaseType)) {
+            } else if (jhiCore.isReservedTableName(entityTableName, prodDatabaseType)) {
                 this.warning(chalk.red(`The table name cannot contain the '${entityTableName.toUpperCase()}' reserved keyword, so it will be prefixed with 'jhi_'`));
                 this.entityTableName = `jhi_${entityTableName}`;
             } else if (prodDatabaseType === 'oracle' && entityTableName.length > 26) {
@@ -472,7 +483,7 @@ module.exports = EntityGenerator.extend({
             if (!this.relationships) {
                 this.relationships = [];
             }
-            this.differentRelationships = [];
+            this.differentRelationships = {};
 
             // Load in-memory data for fields
             this.fields.forEach((field) => {
@@ -680,8 +691,11 @@ module.exports = EntityGenerator.extend({
                 const entityType = relationship.otherEntityNameCapitalized;
                 if (this.differentTypes.indexOf(entityType) === -1) {
                     this.differentTypes.push(entityType);
-                    this.differentRelationships.push(relationship);
                 }
+                if (!this.differentRelationships[entityType]) {
+                    this.differentRelationships[entityType] = [];
+                }
+                this.differentRelationships[entityType].push(relationship);
             });
 
             if (this.databaseType === 'cassandra' || this.databaseType === 'mongodb') {

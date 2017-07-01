@@ -4,12 +4,12 @@
         "form": {
             "password": "Parolă",
             "password.placeholder": "Parola dumneavoastră",
-            "rememberme": "Login automat",
+            "rememberme": "Reautentificare automată",
             "button": "Autentificare"
         },
         "messages": {
             "error": {
-                "authentication": "<strong>Authentificare nereușită!</strong> Va rugăm să vă verificați credențialele si să încercați din nou."
+                "authentication": "<strong>Autentificarea nu a reușit!</strong>. Va rugăm să vă verificați credențialele și să încercați din nou."
             }
         },
         "password" : {

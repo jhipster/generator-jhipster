@@ -480,17 +480,17 @@ debug@2.6.0:
   dependencies:
     ms "0.7.2"
 
-debug@^2.0.0, debug@^2.6.8:
-  version "2.6.8"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.8.tgz#e731531ca2ede27d188222427da17821d68ff4fc"
-  dependencies:
-    ms "2.0.0"
-
-debug@^2.1.0, debug@^2.2.0:
+debug@^2.0.0, debug@^2.1.0, debug@^2.2.0:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.2.tgz#dfa96a861ee9b8c2f29349b3bcc41aa599a71e0f"
   dependencies:
     ms "0.7.2"
+
+debug@^2.6.8:
+  version "2.6.8"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.8.tgz#e731531ca2ede27d188222427da17821d68ff4fc"
+  dependencies:
+    ms "2.0.0"
 
 decamelize@^1.1.2:
   version "1.2.0"

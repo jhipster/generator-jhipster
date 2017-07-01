@@ -22,6 +22,7 @@ const webpackMerge = require('webpack-merge');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
+const WebpackNotifierPlugin = require('webpack-notifier');
 const execSync = require('child_process').execSync;
 const fs = require('fs');
 const path = require('path');
@@ -118,6 +119,10 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         new writeFilePlugin(),
         new webpack.WatchIgnorePlugin([
             utils.root('src/test'),
-        ])
+        ]),
+        new WebpackNotifierPlugin({
+            title: 'JHipster',
+            contentImage: path.join(__dirname, 'logo-jhipster.png')
+        })
     ]
 });

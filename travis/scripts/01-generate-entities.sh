@@ -52,6 +52,8 @@ elif [[ ("$JHIPSTER" == "app-mysql") || ("$JHIPSTER" == "app-ng2-psql-es-noi18n"
     moveEntity BankAccount
     moveEntity Label
     moveEntity Operation
+    moveEntity Place
+    moveEntity Division
 
     moveEntity FieldTestEntity
     moveEntity FieldTestMapstructEntity

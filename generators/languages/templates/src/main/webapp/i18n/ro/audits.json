@@ -2,14 +2,14 @@
     "audits": {
         "title": "Audit",
         "filter": {
-            "title": "Filtru pe date",
+            "title": "Filtru date",
             "from": "de la",
-            "to": "pana la",
+            "to": "până la",
             "button": {
-                "weeks": "Saptamani",
+                "weeks": "Săptămâni",
                 "today": "azi",
-                "clear": "sterge",
-                "close": "inchide"
+                "clear": "ștergere",
+                "close": "închidere"
             }
         },
         "table": {
@@ -17,7 +17,7 @@
                 "principal": "Utilizator",
                 "date": "Data",
                 "status": "Stare",
-                "data": "Extra data"
+                "data": "Informații adiționale"
             },
             "data": {
                 "remoteAddress": "Adresa:"

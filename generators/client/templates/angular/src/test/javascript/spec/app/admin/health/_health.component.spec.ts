@@ -22,7 +22,6 @@ import { <%=angular2AppName%>TestModule } from '../../../test.module';
 import { <%=jhiPrefixCapitalized%>HealthCheckComponent } from '../../../../../../main/webapp/app/admin/health/health.component';
 import { <%=jhiPrefixCapitalized%>HealthService } from '../../../../../../main/webapp/app/admin/health/health.service';
 
-
 describe('Component Tests', () => {
 
     describe('<%=jhiPrefixCapitalized%>HealthCheckComponent', () => {

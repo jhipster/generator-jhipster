@@ -4,12 +4,12 @@
         "routes": {
             "title": "Current routes",
             "url": "URL",
-            "service": "service",
-            "servers": "Available servers",
-            "error": "Warning: no server available!"
+            "service": "servis",
+            "servers": "Uygun sunucular",
+            "error": "Uyari: uygun sunucu bulunamadi!"
         },
         "refresh": {
-            "button": "Refresh"
+            "button": "Yenile"
         }
     }
 }

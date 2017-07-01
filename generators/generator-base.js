@@ -28,7 +28,7 @@ const os = require('os');
 const pluralize = require('pluralize');
 const jhiCore = require('jhipster-core');
 const packagejs = require('../package.json');
-const jhipsterUtils = require('./util');
+const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
 
@@ -49,6 +49,22 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
  * The method signatures in public API should not be changed without a major version change
  */
 module.exports = class extends PrivateBase {
+    /**
+     * Get the JHipster configuration from the .yo-rc.json file.
+     *
+     * @param {string} namespace - namespace of the .yo-rc.json config file. By default: generator-jhipster
+     */
+    getJhipsterAppConfig(namespace = 'generator-jhipster') {
+        const fromPath = '.yo-rc.json';
+        if (shelljs.test('-f', fromPath)) {
+            const fileData = this.fs.readJSON(fromPath);
+            if (fileData && fileData[namespace]) {
+                return fileData[namespace];
+            }
+        }
+        return false;
+    }
+
     /**
      * Add a new menu element, at the root of the menu.
      *

@@ -1,31 +1,30 @@
 /* global describe, beforeEach, it*/
+
 const assert = require('yeoman-assert');
-const Generator = require('../generators/generator-base');
-const constants = require('../generators/generator-constants');
+const utils = require('../generators/utils');
 
-const DOCKER_DIR = constants.DOCKER_DIR;
-
-module.exports = {
-    getFilesForOptions,
-    shouldBeV3DockerfileCompatible
-};
-
-function getFilesForOptions(files, options, prefix, excludeFiles) {
-    const generator = options;
-    if (excludeFiles === undefined) {
-        return Generator.prototype.writeFilesToDisk(files, generator, true, prefix);
-    }
-    return Generator.prototype.writeFilesToDisk(files, generator, true, prefix)
-        .filter(file => excludeFiles.indexOf(file) === -1);
-}
-
-function shouldBeV3DockerfileCompatible(databaseType) {
-    it('creates compose file without container_name, external_links, links', () => {
-        assert.noFileContent(`${DOCKER_DIR}app.yml`, /container_name:/);
-        assert.noFileContent(`${DOCKER_DIR}app.yml`, /external_links:/);
-        assert.noFileContent(`${DOCKER_DIR}app.yml`, /links:/);
-        assert.noFileContent(`${DOCKER_DIR + databaseType}.yml`, /container_name:/);
-        assert.noFileContent(`${DOCKER_DIR + databaseType}.yml`, /external_links:/);
-        assert.noFileContent(`${DOCKER_DIR + databaseType}.yml`, /links:/);
+describe('JHipster Utils', () => {
+    describe('::getJavadoc', () => {
+        describe('when passing a negative or nil increment', () => {
+            it('returns the comment with no increment', () => {
+                assert.textEqual(utils.getJavadoc('whatever', -42), '/**\n * whatever\n */');
+                assert.textEqual(utils.getJavadoc('whatever', 0), '/**\n * whatever\n */');
+            });
+        });
+        describe('when passing a positive increment', () => {
+            it('returns the comment with the increment', () => {
+                assert.textEqual(utils.getJavadoc('whatever', 1), ' /**\n  * whatever\n  */');
+            });
+        });
+        describe('when passing a nil comment', () => {
+            it('inserts an empty comment instead of failing', () => {
+                assert.textEqual(utils.getJavadoc(null, 1), ' /**\n  * \n  */');
+            });
+        });
+        describe('when passing a comment containing double quotes', () => {
+            it('escapes the quotes', () => {
+                assert.textEqual(utils.getJavadoc('Comment="KO"', 1), ' /**\n  * Comment=\\"KO\\"\n  */');
+            });
+        });
     });
-}
+});
