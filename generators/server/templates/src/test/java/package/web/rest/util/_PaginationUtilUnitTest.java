@@ -59,6 +59,7 @@ public class PaginationUtilUnitTest {
         assertTrue(Long.valueOf(xTotalCountHeaders.get(0)).equals(400L));
     }
 
+    <%_ if (searchEngine === 'elasticsearch') { _%>
     @Test
     public void commaTest() {
         String baseUrl = "/api/_search/example";
@@ -173,5 +174,5 @@ public class PaginationUtilUnitTest {
         assertTrue(xTotalCountHeaders.size() == 1);
         assertTrue(Long.valueOf(xTotalCountHeaders.get(0)).equals(0L));
     }
-
+    <%_ }  _%>
 }
