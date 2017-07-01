@@ -22,11 +22,11 @@
         "refresh.button": "Yenile",
         "stacktrace": "Yığın İzleme",
         "details": {
-            "details": "Details",
-            "properties": "Properties",
-            "name": "Name",
-            "value": "Value",
-            "error": "Error"
+            "details": "Detaylar",
+            "properties": "Ozellikler",
+            "name": "Ad",
+            "value": "Deger",
+            "error": "Hata"
         },
         "indicator": {
             <%_ if (messageBroker === 'kafka') { _%>

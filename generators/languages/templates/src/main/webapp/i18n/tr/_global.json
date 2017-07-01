@@ -41,7 +41,7 @@
                 <%_ if (applicationType === 'gateway') { _%>
                 "gateway": "Gateway",
                 <%_ } _%>
-                "userManagement": "User management",
+                "userManagement": "Kullanıcı yönetimi",
                 "tracker": "Kullanıcı Takip",
                 "metrics": "Ölçümler",
                 "health": "Heath",
@@ -76,7 +76,7 @@
                     "suffix": " yapmak istiyorsanız, varsayılan hesaplardan birini deneyebilirsiniz:<br/>- Yönetici (kullanıcı adı=\"admin\" ve şifre=\"admin\") <br/>- Kullanıcı (kullanıcı adı=\"user\" and şifre=\"user\")."
                 },
                 "register": {
-                    "noaccount": "YHenüz bir hesabınız yok mu?",
+                    "noaccount": "Henüz bir hesabınız yok mu?",
                     "link": "Yeni hesap oluştur"
                 }
                 <%_ } _%>
@@ -120,7 +120,7 @@
             "cancel": "İptal",
             "delete": "Sil",
             "edit": "Düzenle",
-            "open": "Open",
+            "open": "Aç",
             "save": "Kaydet",
             "view": "Görüntüle"
         },
@@ -133,12 +133,12 @@
         },
         "validation": {
             "required": "Bu alan gerekli.",
-            "minlength": "Bu alan minimum {{min}} karakterden oluşabilir.",
-            "maxlength": "Bu alan maksimum {{max}} karakterden oluşabilir.",
-            "min": "Bu alan minimum {{min}} olmalı.",
-            "max": "Bu alan maksimum {{max}} olmalı.",
-            "minbytes": "Bu alanan minimum {{min}} byte olmalı.",
-            "maxbytes": "Bu alan maksimum {{max}} byte olmalı.",
+            "minlength": "Bu alan en az {{min}} karakterden oluşabilir.",
+            "maxlength": "Bu alan en fazla {{max}} karakterden oluşabilir.",
+            "min": "Bu alan en az {{min}} olmalı.",
+            "max": "Bu alan en fazla {{max}} olmalı.",
+            "minbytes": "Bu alanan en az {{min}} byte olmalı.",
+            "maxbytes": "Bu alan en fazla {{max}} byte olmalı.",
             "pattern": "Bu alan {{pattern}} şablonuna uymuyor.",
             "number": "Bu alan numara içermeli.",
             "datetimelocal": "Bu alan tarih veya zaman içermeli."
@@ -147,7 +147,7 @@
     "error": {
         "internalServerError": "Internal server error",
         "server.not.reachable": "Sunucuya ulaşılamıyor",
-        "url.not.found": "Not found",
+        "url.not.found": "Bulunamadı",
         "NotNull": "{{fieldName}} alanı boş bırakılamaz!",
         "Size": "{{fieldName}} alanı min/max gerekliliklere uymuyor!",
         "userexists": "Login name already used!",
