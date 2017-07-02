@@ -18,7 +18,9 @@
 -%>
 package <%=packageName%>.web.rest.util;
 
+<%_ if (searchEngine === 'elasticsearch') { _%>
 import java.io.UnsupportedEncodingException;
+<%_ } _%>
 import java.net.URLEncoder;
 
 import org.springframework.data.domain.Page;
