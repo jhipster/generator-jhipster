@@ -23,14 +23,13 @@ const StringReplacePlugin = require('string-replace-webpack-plugin');
 <%_ if (enableTranslation) { _%>
 const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin")
 <%_ } _%>
-const path = require('path');
 
-const parseVersion = require('./utils.js').parseVersion;
+const utils = require('./utils.js');
 
 module.exports = (options) => {
     const DATAS = {
-        VERSION: `'${parseVersion()}'`,
-        DEBUG_INFO_ENABLED: options.env === 'dev'
+        VERSION: `'${utils.parseVersion()}'`,
+        DEBUG_INFO_ENABLED: options.env === 'development'
     };
     return {
         resolve: {
@@ -92,6 +91,34 @@ module.exports = (options) => {
             ]
         },
         plugins: [
+            new webpack.DefinePlugin({
+                'process.env': {
+                    'NODE_ENV': JSON.stringify(options.env)
+                }
+            }),
+            new webpack.optimize.CommonsChunkPlugin({
+                name: 'polyfills',
+                chunks: ['polyfills']
+            }),
+            new webpack.optimize.CommonsChunkPlugin({
+                name: 'vendor',
+                chunks: ['main'],
+                minChunks: module => utils.isExternalLib(module)
+            }),
+            new webpack.optimize.CommonsChunkPlugin({
+                name: ['polyfills', 'vendor'].reverse()
+            }),
+            new webpack.optimize.CommonsChunkPlugin({
+                name: ['manifest'],
+                minChunks: Infinity,
+            }),
+            /**
+             * See: https://github.com/angular/angular/issues/11580
+             */
+            new webpack.ContextReplacementPlugin(
+                /angular(\\|\/)core(\\|\/)@angular/,
+                utils.root('<%= MAIN_SRC_DIR %>app'), {}
+            ),
             new CopyWebpackPlugin([
                 { from: './node_modules/core-js/client/shim.min.js', to: 'core-js-shim.min.js' },
                 { from: './node_modules/swagger-ui/dist', to: 'swagger-ui/dist' },

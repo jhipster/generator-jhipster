@@ -21,7 +21,6 @@ const writeFilePlugin = require('write-file-webpack-plugin');
 const webpackMerge = require('webpack-merge');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 const WebpackNotifierPlugin = require('webpack-notifier');
 const execSync = require('child_process').execSync;
 const fs = require('fs');
@@ -30,12 +29,7 @@ const path = require('path');
 const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
 
-const ddlPath = '<%= BUILD_DIR %>www/vendor.json';
-const ENV = 'dev';
-
-if (!fs.existsSync(utils.root(ddlPath))) {
-    execSync('webpack --config webpack/webpack.vendor.js');
-}
+const ENV = 'development';
 
 module.exports = webpackMerge(commonConfig({ env: ENV }), {
     devtool: 'inline-source-map',
@@ -63,13 +57,13 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         }<% } %>]
     },
     entry: {
-        'polyfills': './<%= MAIN_SRC_DIR %>app/polyfills',
+        polyfills: './<%= MAIN_SRC_DIR %>app/polyfills',
         <%_ if (useSass) { _%>
-        'global': './<%= MAIN_SRC_DIR %>content/scss/global.scss',
+        global: './<%= MAIN_SRC_DIR %>content/scss/global.scss',
         <%_ } else { _%>
-        'global': './<%= MAIN_SRC_DIR %>content/css/global.css',
+        global: './<%= MAIN_SRC_DIR %>content/css/global.css',
         <%_ } _%>
-        'main': './<%= MAIN_SRC_DIR %>app/app.main'
+        main: './<%= MAIN_SRC_DIR %>app/app.main'
     },
     output: {
         path: utils.root('<%= BUILD_DIR %>www'),
@@ -93,9 +87,6 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         }]
     },
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin({
-            names: ['manifest', 'polyfills'].reverse()
-        }),
         new BrowserSyncPlugin({
             host: 'localhost',
             port: 9000,
@@ -106,13 +97,6 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         }, {
             reload: false
         }),
-        new webpack.DllReferencePlugin({
-            context: './',
-            manifest: require(utils.root(ddlPath))
-        }),
-        new AddAssetHtmlPlugin([
-            { filepath: utils.root('<%= BUILD_DIR %>www/vendor.dll.js'), includeSourcemap: false }
-        ]),
         new ExtractTextPlugin('styles.css'),
         new webpack.NoEmitOnErrorsPlugin(),
         new webpack.NamedModulesPlugin(),

@@ -42,7 +42,6 @@ const files = {
                 'webpack/_webpack.common.js',
                 'webpack/_webpack.dev.js',
                 'webpack/_webpack.prod.js',
-                'webpack/_webpack.vendor.js',
                 'webpack/_webpack.test.js',
                 { file: 'webpack/logo-jhipster.png', method: 'copy' }
             ]
@@ -120,7 +119,6 @@ const files = {
                 '_app.constants.ts',
                 '_polyfills.ts',
                 '_vendor.ts',
-                '_vendor-aot.ts',
                 'blocks/config/_prod.config.ts',
                 'blocks/config/_uib-pagination.config.ts',
                 // interceptors

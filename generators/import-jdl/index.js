@@ -123,8 +123,8 @@ module.exports = JDLGenerator.extend({
         };
         // rebuild client for Angular
         const rebuildClient = () => {
-            this.log(`\n${chalk.bold.green('Running `webpack:build:dev` to update client app')}\n`);
-            this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build:dev']);
+            this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app')}\n`);
+            this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build']);
         };
 
         if (!this.options['skip-install'] && !this.skipClient) {

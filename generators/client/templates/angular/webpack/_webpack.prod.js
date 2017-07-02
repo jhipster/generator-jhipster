@@ -21,44 +21,56 @@ const webpackMerge = require('webpack-merge');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const Visualizer = require('webpack-visualizer-plugin');
-const AotPlugin = require('@ngtools/webpack').AotPlugin;
+const ngcWebpack = require('ngc-webpack');
+const path = require('path');
 
 const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
 
-const ENV = 'prod';
+const ENV = 'production';
 
 module.exports = webpackMerge(commonConfig({ env: ENV }), {
     devtool: 'source-map',
     entry: {
-        'polyfills': './<%= MAIN_SRC_DIR %>app/polyfills',
-        'vendor': './<%= MAIN_SRC_DIR %>app/vendor-aot',
-        'main': './<%= MAIN_SRC_DIR %>app/app.main-aot'
+        polyfills: './<%= MAIN_SRC_DIR %>app/polyfills',
+        <%_ if (useSass) { _%>
+        global: './<%= MAIN_SRC_DIR %>content/scss/global.scss',
+        <%_ } else { _%>
+        global: './<%= MAIN_SRC_DIR %>content/css/global.css',
+        <%_ } _%>
+        main: './<%= MAIN_SRC_DIR %>app/app.main-aot'
     },
     output: {
         path: utils.root('<%= BUILD_DIR %>www'),
-        filename: 'app/[hash].[name].bundle.js',
-        chunkFilename: 'app/[hash].[id].chunk.js'
+        filename: 'app/[name].[hash].bundle.js',
+        chunkFilename: 'app/[id].[hash].chunk.js'
     },
     module: {
         rules: [{
             test: /\.ts$/,
-            loader: '@ngtools/webpack'
+            enforce: 'pre',
+            loaders: 'tslint-loader',
+            exclude: ['node_modules', new RegExp('reflect-metadata\\' + path.sep + 'Reflect\\.ts')]
+        },
+        {
+            test: /\.ts$/,
+            use: [
+                { loader: 'angular2-template-loader' },
+                {
+                    loader: 'awesome-typescript-loader',
+                    options: {
+                        configFileName: 'tsconfig-aot.json'
+                    },
+                }
+            ],
+            exclude: ['node_modules/generator-jhipster']
         }]
     },
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin({
-            name: ['main', 'vendor', 'polyfills']
-        }),
         new ExtractTextPlugin('[hash].styles.css'),
         new Visualizer({
             // Webpack statistics in target folder
             filename: '../stats.html'
-        }),
-        // AOT Plugin
-        new AotPlugin({
-            tsConfigPath: './tsconfig-aot.json',
-            entryModule: utils.root('<%= MAIN_SRC_DIR %>app/app.module#<%=angular2AppName%>AppModule')
         }),
         new webpack.optimize.UglifyJsPlugin({
             beautify: false,
@@ -72,6 +84,15 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
                 keep_fnames: true,
                 screw_i8: true
             }
+        }),
+        new ngcWebpack.NgcWebpackPlugin({
+            disabled: false,
+            tsConfig: utils.root('tsconfig-aot.json'),
+            resourceOverride: ''
+        }),
+        new webpack.LoaderOptionsPlugin({
+            minimize: true,
+            debug: false
         })
     ]
 });

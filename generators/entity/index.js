@@ -732,8 +732,8 @@ module.exports = EntityGenerator.extend({
         // rebuild client for Angular
         const rebuildClient = () => {
             const done = this.async();
-            this.log(`\n${chalk.bold.green('Running `webpack:build:dev` to update client app\n')}`);
-            this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build:dev']).on('close', () => {
+            this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app\n')}`);
+            this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build']).on('close', () => {
                 done();
             });
         };

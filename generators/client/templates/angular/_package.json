@@ -60,7 +60,6 @@
     <%_ if (protractorTests) { _%>
     "@types/selenium-webdriver": "3.0.4",
     <%_ } _%>
-    "add-asset-html-webpack-plugin": "1.0.2",
     "angular2-template-loader": "0.6.2",
     "awesome-typescript-loader": "3.1.3",
     "browser-sync": "2.18.12",
@@ -92,6 +91,7 @@
     <%_ if (enableTranslation) { _%>
     "merge-jsons-webpack-plugin": "1.0.6",
     <%_ } _%>
+    "ngc-webpack": "3.0.0",
     "phantomjs-prebuilt": "2.1.14",
     <%_ if (protractorTests) { _%>
     "protractor": "5.1.2",
@@ -137,12 +137,14 @@
     "ngc": "ngc -p tsconfig-aot.json",
     "cleanup": "rimraf <%= BUILD_DIR %>{aot,www}",
     "start": "<%= clientPackageManager %> run webpack:dev",
-    "webpack:dev": "webpack-dev-server --config webpack/webpack.dev.js --progress --inline --hot --profile --port=9060",
-    "webpack:build:vendor": "webpack --config webpack/webpack.vendor.js --progress --profile",
-    "webpack:build:dev": "webpack --config webpack/webpack.dev.js --progress --profile",
-    "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:vendor && <%= clientPackageManager %> run webpack:build:dev",
-    "webpack:prod": "<%= clientPackageManager %> run cleanup && webpack -p --config webpack/webpack.prod.js --progress --profile --bail",
+    "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --progress --inline --hot --profile --port=9060",
+    "webpack:build:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --progress --profile",
+    "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:main",
+    "webpack:prod:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --progress --profile",
+    "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:prod:main",
     "webpack:test": "<%= clientPackageManager %> run test",
+    "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
+    "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js",
     "test": "karma start src/test/javascript/karma.conf.js",
     "test:watch": "karma start src/test/javascript/karma.conf.js --watch",
     <%_ if (protractorTests) { _%>
