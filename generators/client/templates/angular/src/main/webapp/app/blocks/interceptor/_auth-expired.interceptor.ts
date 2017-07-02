@@ -22,6 +22,7 @@ import { Observable } from 'rxjs/Observable';
 import { Injector } from '@angular/core';
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { LoginService } from '../../shared/login/login.service';
+import { Router } from '@angular/router';
 <%_ } if (authenticationType === 'session') { _%>
 import { AuthServerProvider } from '../../shared/auth/auth-session.service';
 import { StateStorageService } from '../../shared/auth/state-storage.service';
@@ -51,6 +52,8 @@ export class AuthExpiredInterceptor extends JhiHttpInterceptor {
             if (error.status === 401) {
                 const loginService: LoginService = this.injector.get(LoginService);
                 loginService.logout();
+                const router = this.injector.get(Router);
+                router.navigate(['accessdenied']);
             }
             return Observable.throw(error);
         });
