@@ -30,7 +30,7 @@ const commonConfig = require('./webpack.common.js');
 const ENV = 'production';
 
 module.exports = webpackMerge(commonConfig({ env: ENV }), {
-    devtool: 'source-map',
+    // devtool: 'source-map', // Enable source maps. Please note that this will slow down the build
     entry: {
         polyfills: './<%= MAIN_SRC_DIR %>app/polyfills',
         <%_ if (useSass) { _%>
@@ -75,7 +75,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         new webpack.optimize.UglifyJsPlugin({
             beautify: false,
             comments: false,
-            sourceMap: true,
+            // sourceMap: true, // Enable source maps. Please note that this will slow down the build
             compress: {
                 screw_ie8: true,
                 warnings: false

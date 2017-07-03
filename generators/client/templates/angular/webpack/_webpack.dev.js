@@ -32,7 +32,7 @@ const commonConfig = require('./webpack.common.js');
 const ENV = 'development';
 
 module.exports = webpackMerge(commonConfig({ env: ENV }), {
-    devtool: 'inline-source-map',
+    devtool: 'eval-source-map',
     devServer: {
         contentBase: './<%= BUILD_DIR %>www',
         proxy: [{
