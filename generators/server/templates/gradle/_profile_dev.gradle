@@ -50,7 +50,7 @@ task gulpConstantDev(type: GulpTask) {
 }
     <%_ } else { _%>
 task webpackBuildDev(type: <%= clientPackageManager.charAt(0).toUpperCase() + clientPackageManager.slice(1) %>Task) {
-    args = ["run", "webpack:build:dev"]
+    args = ["run", "webpack:build"]
 }
     <%_ } _%>
 

@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-/* after changing this file run '<%= clientPackageManager %> run webpack:build:vendor' or '<%= clientPackageManager %> install' or '<%= clientPackageManager %> run webpack:build' */
+/* after changing this file run '<%= clientPackageManager %> run webpack:build' */
 /* tslint:disable */
 <%_ if (useSass) { _%>
 import '../content/scss/vendor.scss';

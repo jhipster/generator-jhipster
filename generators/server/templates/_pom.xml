@@ -1250,7 +1250,7 @@
                                 </goals>
                                 <phase>generate-resources</phase>
                                 <configuration>
-                                    <arguments>run webpack:build:dev</arguments>
+                                    <arguments>run webpack:build</arguments>
                                 </configuration>
                             </execution>
                         </executions>

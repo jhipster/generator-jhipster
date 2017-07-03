@@ -42,7 +42,6 @@ const files = {
                 'webpack/_webpack.common.js',
                 'webpack/_webpack.dev.js',
                 'webpack/_webpack.prod.js',
-                'webpack/_webpack.vendor.js',
                 'webpack/_webpack.test.js',
                 { file: 'webpack/logo-jhipster.png', method: 'copy' }
             ]
@@ -114,6 +113,7 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 '_app.main.ts',
+                '_app.main-aot.ts',
                 '_app.route.ts',
                 '_app.module.ts',
                 '_app.constants.ts',

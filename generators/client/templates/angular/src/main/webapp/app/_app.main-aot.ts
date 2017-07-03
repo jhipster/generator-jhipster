@@ -16,28 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-{
-    "compilerOptions": {
-        "target": "es5",
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "sourceMap": true,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "removeComments": false,
-        "noImplicitAny": false,
-        "suppressImplicitAnyIndexErrors": true,
-        "outDir": "<%= DIST_DIR %>app",
-        "lib": ["es6", "dom"],
-        "typeRoots": [
-            "node_modules/@types"
-        ]
-    },
-    "include": [
-        "<%= MAIN_SRC_DIR %>app",
-        "<%= TEST_SRC_DIR %>"
-    ],
-    "exclude": [
-        "<%= MAIN_SRC_DIR %>app/app.main-aot.ts"
-    ]
-}
+import { platformBrowser } from '@angular/platform-browser';
+import { ProdConfig } from './blocks/config/prod.config';
+import { <%=angular2AppName%>AppModuleNgFactory } from '../../../../<%= BUILD_DIR %>aot/src/main/webapp/app/app.module.ngfactory';
+
+ProdConfig();
+
+platformBrowser().bootstrapModuleFactory(<%=angular2AppName%>AppModuleNgFactory)
+.then((success) => console.log(`Application started`))
+.catch((err) => console.error(err));
