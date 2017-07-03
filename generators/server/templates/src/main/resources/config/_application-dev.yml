@@ -213,15 +213,6 @@ liquibase:
     contexts: dev
 <%_ } _%>
 
-# CORS is only enabled with the "dev" profile for endpoints, so BrowserSync can access the Management API
-endpoints:
-    cors:
-        allowed-origins: "*"
-        allowed-methods: GET, PUT, POST, DELETE, OPTIONS
-        allowed-headers: "*"
-        allow-credentials: true
-        max-age: 1800
-
 # ===================================================================
 # To enable SSL, generate a certificate using:
 # keytool -genkey -alias <%= baseName %> -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
