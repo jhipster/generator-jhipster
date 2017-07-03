@@ -14,7 +14,7 @@
         </p>
         <p>
             <a th:href="@{|${baseUrl}/#/activate?key=${user.activationKey}|}"
-               th:text="|${user.login}|">Activation Link</a>
+               th:text="@{|${baseUrl}/#/activate?key=${user.activationKey}|}">Activation Link</a>
         </p>
         <p>
             <span th:text="#{email.activation.text2}">Regards, </span>
