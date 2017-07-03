@@ -60,8 +60,8 @@ describe('JHipster generator', () => {
                 testFrameworks: []
             }));
             assert.noFile([
-                `${TEST_DIR}gatling/gatling.conf`,
-                `${TEST_DIR}gatling/logback.xml`
+                `${TEST_DIR}gatling/conf/gatling.conf`,
+                `${TEST_DIR}gatling/conf/logback.xml`
             ]);
         });
         it('contains clientFramework with angular1 value', () => {
@@ -925,8 +925,8 @@ describe('JHipster generator', () => {
                 ]
             }));
             assert.noFile([
-                `${TEST_DIR}gatling/gatling.conf`,
-                `${TEST_DIR}gatling/logback.xml`
+                `${TEST_DIR}gatling/conf/gatling.conf`,
+                `${TEST_DIR}gatling/conf/logback.xml`
             ]);
         });
     });
@@ -973,8 +973,8 @@ describe('JHipster generator', () => {
                 `${TEST_DIR}features/user/user.feature`
             ]);
             assert.noFile([
-                `${TEST_DIR}gatling/gatling.conf`,
-                `${TEST_DIR}gatling/logback.xml`
+                `${TEST_DIR}gatling/conf/gatling.conf`,
+                `${TEST_DIR}gatling/conf/logback.xml`
             ]);
         });
     });

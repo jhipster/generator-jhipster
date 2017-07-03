@@ -474,9 +474,9 @@ function writeFiles() {
             if (this.gatlingTests) {
                 this.copy(`${TEST_DIR}gatling/conf/gatling.conf`, `${TEST_DIR}gatling/conf/gatling.conf`);
                 this.copy(`${TEST_DIR}gatling/conf/logback.xml`, `${TEST_DIR}gatling/conf/logback.xml`);
-                mkdirp(`${TEST_DIR}gatling/data`);
-                mkdirp(`${TEST_DIR}gatling/bodies`);
-                mkdirp(`${TEST_DIR}gatling/simulations`);
+                mkdirp(`${TEST_DIR}gatling/user-files/data`);
+                mkdirp(`${TEST_DIR}gatling/user-files/bodies`);
+                mkdirp(`${TEST_DIR}gatling/user-files/simulations`);
             }
 
             // Create Cucumber test files

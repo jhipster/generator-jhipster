@@ -68,8 +68,8 @@
         <frontend-maven-plugin.version>1.4</frontend-maven-plugin.version>
         <%_ } _%>
         <%_ if (gatlingTests) { _%>
-        <gatling.version>2.2.3</gatling.version>
-        <gatling-maven-plugin.version>2.2.1</gatling-maven-plugin.version>
+        <gatling.version>2.2.5</gatling.version>
+        <gatling-maven-plugin.version>2.2.4</gatling-maven-plugin.version>
         <%_ } _%>
         <%_ if (hibernateCache === 'hazelcast') { _%>
         <hazelcast-hibernate52.version>1.2</hazelcast-hibernate52.version>
@@ -891,10 +891,15 @@
                 <version>${gatling-maven-plugin.version}</version>
                 <configuration>
                     <configFolder><%= TEST_DIR %>gatling/conf</configFolder>
-                    <dataFolder><%= TEST_DIR %>gatling/data</dataFolder>
-                    <resultsFolder>target/gatling/results</resultsFolder>
-                    <bodiesFolder><%= TEST_DIR %>gatling/bodies</bodiesFolder>
-                    <simulationsFolder><%= TEST_DIR %>gatling/simulations</simulationsFolder>
+                    <dataFolder><%= TEST_DIR %>gatling/user-files/data</dataFolder>
+                    <resultsFolder>target/gatling/results/${maven.build.timestamp}/</resultsFolder>
+                    <bodiesFolder><%= TEST_DIR %>gatling/user-files/bodies</bodiesFolder>
+                    <simulationsFolder><%= TEST_DIR %>gatling/user-files/simulations</simulationsFolder>
+                    <!-- If uncommented, these arguments below will be applied to all your gatling tests -->
+                    <!--<jvmArgs>
+                        <jvmArg>-Dusers=100</jvmArg>
+                        <jvmArg>-Dramp=1</jvmArg>
+                    </jvmArgs>-->
                     <!--
                     This will run multiple simulations one by one. Useful when doing Gatling
                     tests in CI.
