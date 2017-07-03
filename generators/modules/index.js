@@ -40,6 +40,10 @@ module.exports = ModulesGenerator.extend({
 
         this.log(`Composing JHipster configuration with module ${chalk.red(jhipsterVar.moduleName)}`);
 
+        this.warning(`${chalk.red('DEPRECATED:')} The JHipster module sub-generator is deprecated.
+            Please import the ${chalk.yellow('generator-base.js')} using commonJS require or ES2015 import.
+            See ${chalk.yellow('https://jhipster.github.io/modules/creating-a-module')} for more details.`);
+
         const baseName = this.config.get('baseName');
         const packageName = this.config.get('packageName');
         const packageFolder = this.config.get('packageFolder');
