@@ -59,7 +59,7 @@
         'vi': { name: 'Tiếng Việt' },
         'zh-cn': { name: '中文（简体）' },
         'zh-tw': { name: '繁體中文' }
-    }
+    };
 
     function findLanguageFromKey() {
         return findLanguageFromKeyFilter;
