@@ -21,7 +21,7 @@ describe('::exportApplications', () => {
   describe('when passing valid arguments', () => {
     describe('when exporting an application to JSON', () => {
       const parsed = parseFromFiles(['./test/test_files/application.jdl']);
-
+      // Exporter.exportApplicationsToJSON();
       it('parses it', () => {
         expect(parsed).not.to.be.null;
         expect(parsed.applications.length).to.equal(1);
