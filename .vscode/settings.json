@@ -1,0 +1,14 @@
+{
+  "files.exclude": {
+    "node_modules": "explorerExcludedFiles",
+    ".idea": "explorerExcludedFiles",
+    "test/temp": "explorerExcludedFiles",
+    "npm-debug.log": "explorerExcludedFiles",
+    "out/": "explorerExcludedFiles",
+    ".jhipster/": "explorerExcludedFiles",
+    "jhipster-jdl.jh": "explorerExcludedFiles",
+    ".sonar": "explorerExcludedFiles",
+    "coverage/*": "explorerExcludedFiles",
+    "sonar-project.properties": "explorerExcludedFiles"
+  }
+}
