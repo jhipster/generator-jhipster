@@ -2,7 +2,9 @@
 
 const expect = require('chai').expect,
   fail = expect.fail,
+  fs = require('fs'),
   Exporter = require('../../../lib/export/jhipster_application_exporter'),
+  JDLParser = require('../../../lib/parser/jdl_parser'),
   parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
 
 describe('::exportApplications', () => {
@@ -20,19 +22,16 @@ describe('::exportApplications', () => {
   });
   describe('when passing valid arguments', () => {
     describe('when exporting an application to JSON', () => {
-      const parsed = parseFromFiles(['./test/test_files/application.jdl']);
-      // Exporter.exportApplicationsToJSON();
-      it('parses it', () => {
-        expect(parsed).not.to.be.null;
-        expect(parsed.applications.length).to.equal(1);
-        expect(parsed.applications[0]).to.deep.equal({
-          baseName: 'toto',
-          path: '../../toto',
-          packageFolder: 'com/mathieu/sample',
-          packageName: 'com.mathieu.sample',
-          enableTranslation: false,
-          languages: ['en', 'fr']
-        });
+      before(() => {
+        Exporter.exportApplications(
+          JDLParser.parse(
+            parseFromFiles(['./test/test_files/application.jdl']), 'sql', 'monolith').applications);
+      });
+      after(() => {
+        fs.unlinkSync('./test.json');
+      });
+      it('exports it', () => {
+        fs.readFileSync('./test.json');
       });
     });
   });
