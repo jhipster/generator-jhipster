@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "lint": "eslint .",
-    "lint-fix": "eslint.js . --fix",
+    "lint-fix": "eslint . --fix",
     "check-dependencies": "node ./scripts/check_dependencies.js",
     "test": "npm run lint && mocha test",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha test --",
@@ -44,10 +44,10 @@
     "lodash": "4.17.4"
   },
   "devDependencies": {
-    "chai": "3.5.0",
-    "eslint": "3.19.0",
+    "chai": "4.0.2",
+    "eslint": "4.1.1",
     "istanbul": "0.4.5",
-    "mocha": "3.3.0",
+    "mocha": "3.4.2",
     "mocha-clean": "1.0.0",
     "pegjs": "0.10.0"
   },
