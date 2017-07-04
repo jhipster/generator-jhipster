@@ -18,7 +18,7 @@
 -%>
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { <%=angular2AppName%>TestModule } from '../../../test.module';
+import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { <%=jhiPrefixCapitalized%>HealthCheckComponent } from '../../../../../../main/webapp/app/admin/health/health.component';
 import { <%=jhiPrefixCapitalized%>HealthService } from '../../../../../../main/webapp/app/admin/health/health.service';
 
@@ -32,7 +32,7 @@ describe('Component Tests', () => {
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                imports: [<%=angular2AppName%>TestModule],
+                imports: [<%=angularXAppName%>TestModule],
                 declarations: [<%=jhiPrefixCapitalized%>HealthCheckComponent],
                 providers: [
                     <%=jhiPrefixCapitalized%>HealthService,

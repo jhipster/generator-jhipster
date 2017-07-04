@@ -165,7 +165,7 @@ module.exports = EntityGenerator.extend({
             this.skipServer = this.options['skip-server'] || this.config.get('skipServer');
 
             this.angularAppName = this.getAngularAppName();
-            this.angular2AppName = this.getAngular2AppName();
+            this.angularXAppName = this.getAngular2AppName();
             this.jhipsterConfigDirectory = '.jhipster';
             this.mainClass = this.getMainClassName();
             this.microserviceAppName = '';
@@ -664,10 +664,10 @@ module.exports = EntityGenerator.extend({
                 }
                 if (_.isUndefined(relationship.otherEntityModuleName)) {
                     if (relationship.otherEntityNameCapitalized !== 'User') {
-                        relationship.otherEntityModuleName = `${this.angular2AppName + relationship.otherEntityNameCapitalized}Module`;
+                        relationship.otherEntityModuleName = `${this.angularXAppName + relationship.otherEntityNameCapitalized}Module`;
                         relationship.otherEntityModulePath = _.kebabCase(_.lowerFirst(relationship.otherEntityName));
                     } else {
-                        relationship.otherEntityModuleName = `${this.angular2AppName}SharedModule`;
+                        relationship.otherEntityModuleName = `${this.angularXAppName}SharedModule`;
                         relationship.otherEntityModulePath = '../shared';
                     }
                 }

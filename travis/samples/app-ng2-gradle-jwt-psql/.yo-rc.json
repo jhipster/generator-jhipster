@@ -31,6 +31,6 @@
     "serviceDiscoveryType": false,
     "jwtSecretKey": "82c6dce0d969c5bc3ab2530ecc5c18baaef1c987",
     "clientPackageManager": "yarn",
-    "clientFramework": "angular2"
+    "clientFramework": "angularX"
   }
 }

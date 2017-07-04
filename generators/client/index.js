@@ -172,6 +172,10 @@ module.exports = JhipsterClientGenerator.extend({
                 /* for backward compatibility */
                 this.clientFramework = 'angular1';
             }
+            if (this.clientFramework === 'angular2') {
+                /* for backward compatibility */
+                this.clientFramework = 'angularX';
+            }
             this.useSass = this.config.get('useSass');
             this.enableTranslation = this.config.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
             this.nativeLanguage = this.config.get('nativeLanguage');
@@ -246,7 +250,7 @@ module.exports = JhipsterClientGenerator.extend({
             // Application name modified, using each technology's conventions
             this.camelizedBaseName = _.camelCase(this.baseName);
             this.angularAppName = this.getAngularAppName();
-            this.angular2AppName = this.getAngular2AppName();
+            this.angularXAppName = this.getAngular2AppName();
             this.capitalizedBaseName = _.upperFirst(this.baseName);
             this.dasherizedBaseName = _.kebabCase(this.baseName);
             this.lowercaseBaseName = this.baseName.toLowerCase();

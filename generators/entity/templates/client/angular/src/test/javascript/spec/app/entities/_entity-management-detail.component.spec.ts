@@ -23,7 +23,7 @@ import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
 import { JhiDateUtils, JhiDataUtils, JhiEventManager } from 'ng-jhipster';
-import { <%=angular2AppName%>TestModule } from '../../../test.module';
+import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { MockActivatedRoute } from '../../../helpers/mock-route.service';
 import { <%= entityAngularName %>DetailComponent } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>-detail.component';
 import { <%= entityAngularName %>Service } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
@@ -38,7 +38,7 @@ describe('Component Tests', () => {
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                imports: [<%=angular2AppName%>TestModule],
+                imports: [<%=angularXAppName%>TestModule],
                 declarations: [<%= entityAngularName %>DetailComponent],
                 providers: [
                     JhiDateUtils,

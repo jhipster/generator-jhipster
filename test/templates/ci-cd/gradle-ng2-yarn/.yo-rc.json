@@ -17,7 +17,7 @@
     "enableSocialSignIn": false,
     "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
     "buildTool": "gradle",
-    "clientFramework": "angular2",
+    "clientFramework": "angularX",
     "clientPackageManager": "yarn",
     "testFrameworks": [
       "gatling"

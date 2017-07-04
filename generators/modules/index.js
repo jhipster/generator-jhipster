@@ -82,7 +82,7 @@ module.exports = ModulesGenerator.extend({
         jhipsterVar.clientPackageManager = this.config.get('clientPackageManager');
 
         jhipsterVar.angularAppName = this.getAngularAppName();
-        jhipsterVar.angular2AppName = this.getAngular2AppName();
+        jhipsterVar.angularXAppName = this.getAngular2AppName();
         jhipsterVar.mainClassName = this.getMainClassName();
         jhipsterVar.javaDir = `${constants.SERVER_MAIN_SRC_DIR + packageFolder}/`;
         jhipsterVar.resourceDir = constants.SERVER_MAIN_RES_DIR;

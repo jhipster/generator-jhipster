@@ -19,10 +19,10 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { <%= angular2AppName %>SharedModule } from '../../shared';
+import { <%= angularXAppName %>SharedModule } from '../../shared';
 <%_ Object.keys(differentRelationships).forEach(key => {
        if (key === 'User') { _%>
-import { <%= angular2AppName %>AdminModule } from '../../admin/admin.module';
+import { <%= angularXAppName %>AdminModule } from '../../admin/admin.module';
 <%_ }}); _%>
 import {
     <%= entityAngularName %>Service,
@@ -47,10 +47,10 @@ const ENTITY_STATES = [
 
 @NgModule({
     imports: [
-        <%= angular2AppName %>SharedModule,
+        <%= angularXAppName %>SharedModule,
         <%_ Object.keys(differentRelationships).forEach(key => {
               if (key === 'User') { _%>
-        <%= angular2AppName %>AdminModule,
+        <%= angularXAppName %>AdminModule,
         <%_ }}); _%>
         RouterModule.forRoot(ENTITY_STATES, { useHash: true })
     ],
@@ -78,4 +78,4 @@ const ENTITY_STATES = [
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class <%= angular2AppName %><%= entityAngularName %>Module {}
+export class <%= angularXAppName %><%= entityAngularName %>Module {}
