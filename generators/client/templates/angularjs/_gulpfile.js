@@ -139,7 +139,7 @@ gulp.task('ngconstant:dev', function () {
         constants: {
             VERSION: util.parseVersion(),
             DEBUG_INFO_ENABLED: true,
-            BUILD_TIMESTAMP: new Date().getTime()
+            BUILD_TIMESTAMP: ''
         },
         template: config.constantTemplate,
         stream: true
