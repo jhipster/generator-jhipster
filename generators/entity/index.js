@@ -165,7 +165,7 @@ module.exports = EntityGenerator.extend({
             this.skipServer = this.options['skip-server'] || this.config.get('skipServer');
 
             this.angularAppName = this.getAngularAppName();
-            this.angularXAppName = this.getAngular2AppName();
+            this.angularXAppName = this.angularXAppName();
             this.jhipsterConfigDirectory = '.jhipster';
             this.mainClass = this.getMainClassName();
             this.microserviceAppName = '';

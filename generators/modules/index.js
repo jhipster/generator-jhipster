@@ -82,7 +82,7 @@ module.exports = ModulesGenerator.extend({
         jhipsterVar.clientPackageManager = this.config.get('clientPackageManager');
 
         jhipsterVar.angularAppName = this.getAngularAppName();
-        jhipsterVar.angularXAppName = this.getAngular2AppName();
+        jhipsterVar.angular2AppName = this.angularXAppName();
         jhipsterVar.mainClassName = this.getMainClassName();
         jhipsterVar.javaDir = `${constants.SERVER_MAIN_SRC_DIR + packageFolder}/`;
         jhipsterVar.resourceDir = constants.SERVER_MAIN_RES_DIR;
@@ -157,7 +157,7 @@ module.exports = ModulesGenerator.extend({
         jhipsterFunc.printJHipsterLogo = this.printJHipsterLogo;
         jhipsterFunc.checkForNewVersion = this.checkForNewVersion;
         jhipsterFunc.getAngularAppName = this.getAngularAppName;
-        jhipsterFunc.getAngular2AppName = this.getAngular2AppName;
+        jhipsterFunc.getAngular2AppName = this.angularXAppName;
         jhipsterFunc.getMainClassName = this.getMainClassName;
         jhipsterFunc.askModuleName = this.askModuleName;
         jhipsterFunc.aski18n = this.aski18n;
