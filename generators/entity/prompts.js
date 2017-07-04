@@ -1026,7 +1026,7 @@ function askForRelationship(done) {
                 (response.relationshipType === 'one-to-one' && response.ownerSide === true))),
             type: 'input',
             name: 'otherEntityField',
-            message: response => `When you display this relationship with Angular, which field from '${response.otherEntityName}' do you want to use?`,
+            message: response => `When you display this relationship with Angular, which field from '${response.otherEntityName}' do you want to use? This field will be displayed as a String, so it cannot be a Blob`,
             default: 'id'
         },
         {
