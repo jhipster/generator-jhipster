@@ -17,8 +17,8 @@
  limitations under the License.
 -%>
 {
+    "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
     "project": {
-        "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
         "name": "<%= dasherizedBaseName %>"
     },
     "apps": [{
@@ -49,8 +49,6 @@
         ],
         "scripts": []
     }],
-    "addons": [],
-    "packages": [],
     <%_ if (protractorTests) { _%>
     "e2e": {
         "protractor": {
@@ -77,9 +75,9 @@
         "styleExt": "css",
         <%_ } _%>
         "prefixInterfaces": false,
-        "inline": {
-            "style": true,
-            "template": false
+        "component" : {
+            "inlineStyle" : true,
+            "inlineTemplate": false
         },
         "spec": {
             "component": false,
