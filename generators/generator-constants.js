@@ -61,6 +61,29 @@ const SUPPORTED_VALIDATION_RULES = ['required', 'max', 'min', 'maxlength', 'minl
 const JHIPSTER_DOCUMENTATION_URL = 'https://jhipster.github.io';
 const JHIPSTER_DOCUMENTATION_ARCHIVE_PATH = '/documentation-archive/';
 
+const SQL_DB_OPTIONS = [
+    {
+        value: 'mysql',
+        name: 'MySQL'
+    },
+    {
+        value: 'mariadb',
+        name: 'MariaDB'
+    },
+    {
+        value: 'postgresql',
+        name: 'PostgreSQL'
+    },
+    {
+        value: 'oracle',
+        name: 'Oracle (Please follow our documentation to use the Oracle proprietary driver)'
+    },
+    {
+        value: 'mssql',
+        name: 'Microsoft SQL Server'
+    }
+];
+
 const constants = {
     QUESTIONS: 16, // maximum possible number of questions
     CLIENT_QUESTIONS: 4,
@@ -114,7 +137,9 @@ const constants = {
     NODE_VERSION,
     YARN_VERSION,
     NPM_VERSION,
-    DOCKER_JENKINS
+    DOCKER_JENKINS,
+
+    SQL_DB_OPTIONS
 };
 
 module.exports = constants;

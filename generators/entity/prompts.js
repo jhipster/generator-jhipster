@@ -929,6 +929,8 @@ function askForRelationship(done) {
                     return 'Your other entity name cannot be empty';
                 } else if (jhiCore.isReservedKeyword(input, 'JAVA')) {
                     return 'Your other entity name cannot contain a Java reserved keyword';
+                } else if ((input.toLowerCase() === 'user') && (this.applicationType === 'microservice')) {
+                    return 'Your entity cannot have a relationship with User because it\'s a gateway entity';
                 }
                 return true;
             },
@@ -1024,7 +1026,7 @@ function askForRelationship(done) {
                 (response.relationshipType === 'one-to-one' && response.ownerSide === true))),
             type: 'input',
             name: 'otherEntityField',
-            message: response => `When you display this relationship with Angular, which field from '${response.otherEntityName}' do you want to use?`,
+            message: response => `When you display this relationship with Angular, which field from '${response.otherEntityName}' do you want to use? This field will be displayed as a String, so it cannot be a Blob`,
             default: 'id'
         },
         {

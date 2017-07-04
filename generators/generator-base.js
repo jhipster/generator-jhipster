@@ -50,6 +50,22 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
  */
 module.exports = class extends PrivateBase {
     /**
+     * Get the JHipster configuration from the .yo-rc.json file.
+     *
+     * @param {string} namespace - namespace of the .yo-rc.json config file. By default: generator-jhipster
+     */
+    getJhipsterAppConfig(namespace = 'generator-jhipster') {
+        const fromPath = '.yo-rc.json';
+        if (shelljs.test('-f', fromPath)) {
+            const fileData = this.fs.readJSON(fromPath);
+            if (fileData && fileData[namespace]) {
+                return fileData[namespace];
+            }
+        }
+        return false;
+    }
+
+    /**
      * Add a new menu element, at the root of the menu.
      *
      * @param {string} routerName - The name of the AngularJS router that is added to the menu.
@@ -212,7 +228,7 @@ module.exports = class extends PrivateBase {
             if (clientFramework === 'angular1') {
                 return;
             }
-            const appName = this.getAngular2AppName();
+            const appName = this.angularXAppName();
             let importStatement = `|import { ${appName}${entityAngularName}Module } from './${entityFolderName}/${entityFileName}.module';`;
             if (importStatement.length > constants.LINE_LENGTH) {
                 importStatement =
@@ -1711,6 +1727,10 @@ module.exports = class extends PrivateBase {
      * get the Angular 2+ application name.
      */
     getAngular2AppName() {
+        return this.angularXAppName();
+    }
+
+    angularXAppName() {
         return _.upperFirst(_.camelCase(this.baseName, true));
     }
 

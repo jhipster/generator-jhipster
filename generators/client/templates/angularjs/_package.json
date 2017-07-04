@@ -21,6 +21,7 @@
   "version": "0.0.0",
   "description": "Description for <%= baseName %>",
   "private": true,
+  "license": "UNLICENSED",
   "cacheDirectories": [
     "node_modules",
     "<%= MAIN_SRC_DIR %>bower_components"

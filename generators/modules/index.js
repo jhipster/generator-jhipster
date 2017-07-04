@@ -40,6 +40,10 @@ module.exports = ModulesGenerator.extend({
 
         this.log(`Composing JHipster configuration with module ${chalk.red(jhipsterVar.moduleName)}`);
 
+        this.warning(`${chalk.red('DEPRECATED!')} The JHipster module sub-generator is deprecated.`);
+        this.warning(`Please import the ${chalk.yellow('generator-base.js')} using commonJS require or ES2015 import.`);
+        this.warning(`See ${chalk.yellow('https://jhipster.github.io/modules/creating-a-module')} for more details.\n`);
+
         const baseName = this.config.get('baseName');
         const packageName = this.config.get('packageName');
         const packageFolder = this.config.get('packageFolder');
@@ -78,7 +82,7 @@ module.exports = ModulesGenerator.extend({
         jhipsterVar.clientPackageManager = this.config.get('clientPackageManager');
 
         jhipsterVar.angularAppName = this.getAngularAppName();
-        jhipsterVar.angular2AppName = this.getAngular2AppName();
+        jhipsterVar.angular2AppName = this.angularXAppName();
         jhipsterVar.mainClassName = this.getMainClassName();
         jhipsterVar.javaDir = `${constants.SERVER_MAIN_SRC_DIR + packageFolder}/`;
         jhipsterVar.resourceDir = constants.SERVER_MAIN_RES_DIR;
@@ -153,7 +157,7 @@ module.exports = ModulesGenerator.extend({
         jhipsterFunc.printJHipsterLogo = this.printJHipsterLogo;
         jhipsterFunc.checkForNewVersion = this.checkForNewVersion;
         jhipsterFunc.getAngularAppName = this.getAngularAppName;
-        jhipsterFunc.getAngular2AppName = this.getAngular2AppName;
+        jhipsterFunc.getAngular2AppName = this.angularXAppName;
         jhipsterFunc.getMainClassName = this.getMainClassName;
         jhipsterFunc.askModuleName = this.askModuleName;
         jhipsterFunc.aski18n = this.aski18n;

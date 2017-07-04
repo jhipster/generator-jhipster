@@ -1,6 +1,6 @@
 {
-  "name": "<%=angular2AppName%>",
-  "short_name": "<%=angular2AppName%>",
+  "name": "<%=angularXAppName%>",
+  "short_name": "<%=angularXAppName%>",
   "icons": [
       {
           "src": "./content/images/logo-jhipster.png",

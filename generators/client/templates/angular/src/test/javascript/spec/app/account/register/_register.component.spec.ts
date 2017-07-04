@@ -23,7 +23,7 @@ import { Observable } from 'rxjs/Rx';
 import { JhiLanguageService } from 'ng-jhipster';
 import { MockLanguageService } from '../../../helpers/mock-language.service';
 <%_ } _%>
-import { <%=angular2AppName%>TestModule } from '../../../test.module';
+import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { LoginModalService } from '../../../../../../main/webapp/app/shared';
 import { Register } from '../../../../../../main/webapp/app/account/register/register.service';
 import { RegisterComponent } from '../../../../../../main/webapp/app/account/register/register.component';
@@ -36,7 +36,7 @@ describe('Component Tests', () => {
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                imports: [<%=angular2AppName%>TestModule],
+                imports: [<%=angularXAppName%>TestModule],
                 declarations: [RegisterComponent],
                 providers: [
                     Register,
@@ -63,7 +63,7 @@ describe('Component Tests', () => {
             comp.ngOnInit();
         });
 
-        it('should ensure the two passwords entered match', function () {
+        it('should ensure the two passwords entered match', () => {
             comp.registerAccount.password = 'password';
             comp.confirmPassword = 'non-matching';
 

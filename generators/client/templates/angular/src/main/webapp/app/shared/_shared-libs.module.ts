@@ -48,4 +48,4 @@ import { CookieModule } from 'ngx-cookie';
         InfiniteScrollModule
     ]
 })
-export class <%=angular2AppName%>SharedLibsModule {}
+export class <%=angularXAppName%>SharedLibsModule {}

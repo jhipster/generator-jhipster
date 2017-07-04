@@ -18,6 +18,11 @@
 -%>
 package <%=packageName%>.web.rest.util;
 
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+<%_ } _%>
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -63,7 +68,12 @@ public final class PaginationUtil {
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
     public static HttpHeaders generateSearchPaginationHttpHeaders(String query, Page page, String baseUrl) {
-        String escapedQuery = query.replace(",", "%2C");
+        String escapedQuery;
+        try {
+            escapedQuery = URLEncoder.encode(query, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Total-Count", Long.toString(page.getTotalElements()));
         String link = "";

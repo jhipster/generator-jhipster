@@ -58,7 +58,7 @@ describe('<%= entityClass %> e2e test', () => {
         });
     });
 
-    it('should load create <%= entityClass %> dialog', function () {
+    it('should load create <%= entityClass %> dialog', () => {
         element(by.css('button.create-<%= entityUrl %>')).click().then(() => {
             <%_ if (enableTranslation) { _%>
             const expectVal = /<%= angularAppName %>.<%= entityTranslationKey %>.home.createOrEditLabel/;
@@ -73,7 +73,7 @@ describe('<%= entityClass %> e2e test', () => {
         });
     });
 
-    afterAll(function () {
+    afterAll(() => {
         accountMenu.click();
         logout.click();
     });

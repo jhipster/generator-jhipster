@@ -32,6 +32,12 @@ module.exports = JDLGenerator.extend({
         generator.apply(this, args);
         this.argument('jdlFiles', { type: Array, required: true });
         this.jdlFiles = this.options.jdlFiles;
+
+        // This adds support for a `--db` flag
+        this.option('db', {
+            desc: 'Provide DB option for the application when using skip-server flag',
+            type: String
+        });
     },
 
     initializing: {
@@ -48,7 +54,9 @@ module.exports = JDLGenerator.extend({
         getConfig() {
             this.applicationType = this.config.get('applicationType');
             this.baseName = this.config.get('baseName');
-            this.prodDatabaseType = this.config.get('prodDatabaseType');
+            this.databaseType = this.config.get('databaseType') || this.getDBTypeFromDBValue(this.options.db);
+            this.prodDatabaseType = this.config.get('prodDatabaseType') || this.options.db;
+            this.devDatabaseType = this.config.get('devDatabaseType') || this.options.db;
             this.skipClient = this.config.get('skipClient');
             this.clientFramework = this.config.get('clientFramework');
             if (!this.clientFramework) {
@@ -115,8 +123,8 @@ module.exports = JDLGenerator.extend({
         };
         // rebuild client for Angular
         const rebuildClient = () => {
-            this.log(`\n${chalk.bold.green('Running `webpack:build:dev` to update client app')}\n`);
-            this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build:dev']);
+            this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app')}\n`);
+            this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build']);
         };
 
         if (!this.options['skip-install'] && !this.skipClient) {

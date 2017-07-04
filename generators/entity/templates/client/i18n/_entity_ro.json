@@ -21,15 +21,15 @@
         "<%= entityTranslationKey %>" : {
             "home": {
                 "title": "<%= entityClassPluralHumanized  %>",
-                "createLabel": "Crează o nouă <%= entityClassHumanized %>",
-                "createOrEditLabel": "Crează sau editează o <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
-                "search": "Search for <%= entityClassHumanized %>"<% } %>
+                "createLabel": "Creeare o nouă entitate <%= entityClassHumanized %>",
+                "createOrEditLabel": "Creeare sau editare <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
+                "search": "Căutare după <%= entityClassHumanized %>"<% } %>
             },<% if (!microserviceAppName) { %>
-            "created": "O nouă <%= entityClassHumanized %> este creată cu identificatorul {{ param }}",
-            "updated": "O <%= entityClassHumanized %> este editată cu identificatorul {{ param }}",
-            "deleted": "O <%= entityClassHumanized %> este stearsă cu identificatorul {{ param }}",<% } %>
+            "created": "A fost creată o nouă entitate <%= entityClassHumanized %> cu identificatorul {{ param }}",
+            "updated": "<%= entityClassHumanized %> cu identificatorul {{ param }} a fost actualizată",
+            "deleted": "<%= entityClassHumanized %> cu identificatorul {{ param }} a fost ștearsă",<% } %>
             "delete": {
-                "question": "Ești sigur că dorești să stergi <%= entityClassHumanized %> {{ id }}?"
+                "question": "Sunteți sigur că doriți să ștergeți <%= entityClassHumanized %> {{ id }}?"
             },
             "detail": {
                 "title": "<%= entityClassHumanized %>"
@@ -40,9 +40,9 @@
     }<% if (microserviceAppName) { %>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
-            "created": "O nouă <%= entityClassHumanized %> este creată cu identificatorul {{ param }}",
-            "updated": "O <%= entityClassHumanized %> este editată cu identificatorul {{ param }}",
-            "deleted": "O <%= entityClassHumanized %> este stearsă cu identificatorul {{ param }}"
+            "created": "A fost creată o nouă entitate <%= entityClassHumanized %> cu identificatorul {{ param }}",
+            "updated": "Entitatea <%= entityClassHumanized %> cu identificatorul {{ param }} a fost actualizată",
+            "deleted": "Entitatea <%= entityClassHumanized %> cu identificatorul {{ param }} a fost ștearsă"
         }
     }<% } %>
 }

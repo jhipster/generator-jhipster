@@ -51,37 +51,36 @@ function askForApplicationType() {
     if (this.existingProject) return;
 
     const DEFAULT_APPTYPE = 'monolith';
-    if (this.skipServer) {
-        this.applicationType = this.configOptions.applicationType = DEFAULT_APPTYPE;
-        return;
-    }
 
     const done = this.async();
 
-    this.prompt({
-        type: 'list',
-        name: 'applicationType',
-        message: response => this.getNumberedQuestion('Which *type* of application would you like to create?', true),
-        choices: [
-            {
-                value: DEFAULT_APPTYPE,
-                name: 'Monolithic application (recommended for simple projects)'
-            },
-            {
-                value: 'microservice',
-                name: 'Microservice application'
-            },
-            {
-                value: 'gateway',
-                name: 'Microservice gateway'
-            },
-            {
-                value: 'uaa',
-                name: '[BETA] JHipster UAA server (for microservice OAuth2 authentication)'
-            }
-        ],
-        default: DEFAULT_APPTYPE
-    }).then((prompt) => {
+    const promise = this.skipServer
+        ? Promise.resolve({ applicationType: DEFAULT_APPTYPE })
+        : this.prompt({
+            type: 'list',
+            name: 'applicationType',
+            message: response => this.getNumberedQuestion('Which *type* of application would you like to create?', true),
+            choices: [
+                {
+                    value: DEFAULT_APPTYPE,
+                    name: 'Monolithic application (recommended for simple projects)'
+                },
+                {
+                    value: 'microservice',
+                    name: 'Microservice application'
+                },
+                {
+                    value: 'gateway',
+                    name: 'Microservice gateway'
+                },
+                {
+                    value: 'uaa',
+                    name: '[BETA] JHipster UAA server (for microservice OAuth2 authentication)'
+                }
+            ],
+            default: DEFAULT_APPTYPE
+        });
+    promise.then((prompt) => {
         this.applicationType = this.configOptions.applicationType = prompt.applicationType;
         done();
     });
