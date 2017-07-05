@@ -20,8 +20,8 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
 import {
-    <%=angular2AppName%>SharedLibsModule,
-    <%=angular2AppName%>SharedCommonModule,
+    <%=angularXAppName%>SharedLibsModule,
+    <%=angularXAppName%>SharedCommonModule,
     CSRFService,
     <%_ if (!skipServer) { _%>
     AuthServerProvider,
@@ -47,8 +47,8 @@ import {
 
 @NgModule({
     imports: [
-        <%=angular2AppName%>SharedLibsModule,
-        <%=angular2AppName%>SharedCommonModule
+        <%=angularXAppName%>SharedLibsModule,
+        <%=angularXAppName%>SharedCommonModule
     ],
     declarations: [
         <%_ if (enableSocialSignIn) { _%>
@@ -80,7 +80,7 @@ import {
     ],
     entryComponents: [<%=jhiPrefixCapitalized%>LoginModalComponent],
     exports: [
-        <%=angular2AppName%>SharedCommonModule,
+        <%=angularXAppName%>SharedCommonModule,
         <%_ if (enableSocialSignIn) { _%>
         <%=jhiPrefixCapitalized%>SocialComponent,
         <%_ } _%>
@@ -91,4 +91,4 @@ import {
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 
 })
-export class <%=angular2AppName%>SharedModule {}
+export class <%=angularXAppName%>SharedModule {}

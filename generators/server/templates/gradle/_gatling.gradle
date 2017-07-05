@@ -21,7 +21,7 @@ apply plugin: 'scala'
 sourceSets {
     test {
         scala {
-            srcDirs = ['<%= TEST_DIR %>gatling/simulations']
+            srcDirs = ['<%= TEST_DIR %>gatling/user-files/simulations']
             output.classesDir = '<%= BUILD_DIR %>test-classes'
         }
     }
@@ -57,7 +57,7 @@ task gatlingRunAll(dependsOn: 'manifestJar') {
     description = 'Run all available Gatling simulations.'
 
     doLast {
-        FileTree tree = fileTree(dir: './src/test/gatling/simulations')
+        FileTree tree = fileTree(dir: './src/test/gatling/user-files/simulations')
         tree.include '**/*.scala'
         tree.each {File file ->
             def simulationClassName = file.name.replaceFirst(".scala", "")
@@ -73,10 +73,10 @@ def createGatlingRunTask(def gatlingSimulationClassName) {
 
         final def sourceSet = sourceSets.test
 
-        def String gatlingDataFolder = "$project.rootDir.absolutePath/src/test/gatling/data"
+        def String gatlingDataFolder = "$project.rootDir.absolutePath/src/test/gatling/user-files/data"
         def String gatlingReportsFolder = "$project.buildDir.absolutePath/reports/gatling"
-        def String gatlingBodiesFolder = "$project.rootDir.absolutePath/src/test/gatling/bodies"
-        def String gatlingSimulationsFolder = "$project.rootDir.absolutePath/src/test/gatling/simulations"
+        def String gatlingBodiesFolder = "$project.rootDir.absolutePath/src/test/user-files/gatling/bodies"
+        def String gatlingSimulationsFolder = "$project.rootDir.absolutePath/src/test/user-files/gatling/simulations"
 
         classpath sourceSet.output + files(manifestJar.archivePath) + files("src/test/gatling/conf")
         main = "io.gatling.app.Gatling"

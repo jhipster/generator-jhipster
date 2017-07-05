@@ -18,10 +18,10 @@
 -%>
 import { platformBrowser } from '@angular/platform-browser';
 import { ProdConfig } from './blocks/config/prod.config';
-import { <%=angular2AppName%>AppModuleNgFactory } from '../../../../<%= BUILD_DIR %>aot/src/main/webapp/app/app.module.ngfactory';
+import { <%=angularXAppName%>AppModuleNgFactory } from '../../../../<%= BUILD_DIR %>aot/src/main/webapp/app/app.module.ngfactory';
 
 ProdConfig();
 
-platformBrowser().bootstrapModuleFactory(<%=angular2AppName%>AppModuleNgFactory)
+platformBrowser().bootstrapModuleFactory(<%=angularXAppName%>AppModuleNgFactory)
 .then((success) => console.log(`Application started`))
 .catch((err) => console.error(err));

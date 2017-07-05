@@ -31,6 +31,6 @@
     "messageBroker": false,
     "jwtSecretKey": "6eca1d24b145ed1fafc738d2afa023a3362b6813",
     "clientPackageManager": "yarn",
-    "clientFramework": "angular2"
+    "clientFramework": "angularX"
   }
 }

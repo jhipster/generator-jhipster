@@ -22,7 +22,7 @@ import { RouterModule } from '@angular/router';
 import { <%=jhiPrefixCapitalized%>TrackerService } from './../shared/tracker/tracker.service';
 <%_ } _%>
 
-import { <%=angular2AppName%>SharedModule } from '../shared';
+import { <%=angularXAppName%>SharedModule } from '../shared';
 /* jhipster-needle-add-admin-module-import - JHipster will add admin modules imports here */
 
 import {
@@ -68,7 +68,7 @@ import {
 
 @NgModule({
     imports: [
-        <%=angular2AppName%>SharedModule,
+        <%=angularXAppName%>SharedModule,
         RouterModule.forRoot(adminState, { useHash: true }),
         /* jhipster-needle-add-admin-module - JHipster will add admin modules here */
     ],
@@ -128,4 +128,4 @@ import {
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class <%=angular2AppName%>AdminModule {}
+export class <%=angularXAppName%>AdminModule {}
