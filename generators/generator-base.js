@@ -228,7 +228,7 @@ module.exports = class extends PrivateBase {
             if (clientFramework === 'angular1') {
                 return;
             }
-            const appName = this.angularXAppName();
+            const appName = this.getAngularXAppName();
             let importStatement = `|import { ${appName}${entityAngularName}Module } from './${entityFolderName}/${entityFileName}.module';`;
             if (importStatement.length > constants.LINE_LENGTH) {
                 importStatement =
@@ -1727,10 +1727,10 @@ module.exports = class extends PrivateBase {
      * get the Angular 2+ application name.
      */
     getAngular2AppName() {
-        return this.angularXAppName();
+        return this.getAngularXAppName();
     }
 
-    angularXAppName() {
+    getAngularXAppName() {
         return _.upperFirst(_.camelCase(this.baseName, true));
     }
 
