@@ -78,7 +78,9 @@ module.exports = ModulesGenerator.extend({
         jhipsterVar.jhiPrefixCapitalized = _.upperFirst(jhipsterVar.jhiPrefix);
         jhipsterVar.jhipsterVersion = this.config.get('jhipsterVersion');
         jhipsterVar.serverPort = this.config.get('serverPort');
-        jhipsterVar.clientFramework = this.config.get('clientFramework');
+        // For backward compatibility
+        const clientFramework = this.config.get('clientFramework');
+        jhipsterVar.clientFramework = clientFramework === 'angularX' ? 'angular2' : clientFramework;
         jhipsterVar.clientPackageManager = this.config.get('clientPackageManager');
 
         jhipsterVar.angularAppName = this.getAngularAppName();
