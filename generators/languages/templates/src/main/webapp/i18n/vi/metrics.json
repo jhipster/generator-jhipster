@@ -56,7 +56,7 @@
             }
         },
         "servicesstats": {
-            "title": "Thống kê các dịch vụ (thời gian tính theo mini giây)",
+            "title": "Thống kê các dịch vụ (thời gian tính theo mili giây)",
             "table": {
                 "name": "Tên dịch vụ",
                 "count": "Số lượng",
@@ -79,7 +79,7 @@
         },
         "datasource": {
             "usage": "Sử dụng",
-            "title": "Thống kê truy cập cơ sở dữ liệu (thời gian tính theo mini giây)",
+            "title": "Thống kê truy cập cơ sở dữ liệu (thời gian tính theo mili giây)",
             "name": "Sử dụng vùng chứa",
             "count": "Số lượng",
             "mean": "Bình quân",
