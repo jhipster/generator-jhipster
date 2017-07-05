@@ -25,7 +25,8 @@ exports.config = {
     specs: [
         './e2e/account/*.spec.ts',
         './e2e/admin/*.spec.ts',
-        './e2e/entities/*.spec.ts'
+        './e2e/entities/*.spec.ts',
+        /* jhipster-needle-add-protractor-tests - JHipster will add protractors tests here */
     ],
 
     capabilities: {
