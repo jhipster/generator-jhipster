@@ -18,14 +18,14 @@
 -%>
 package <%=packageName%>.web.rest.util;
 
-<%_ if (searchEngine === 'elasticsearch') { _%>
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-<%_ } _%>
-
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.util.UriComponentsBuilder;
+<%_ if (searchEngine === 'elasticsearch') { _%>
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+<%_ } _%>
 
 /**
  * Utility class for handling pagination.
