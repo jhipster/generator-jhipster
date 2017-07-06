@@ -110,7 +110,7 @@
         "ribbon": {
             "dev":"Development"
         },
-        "item-count": "Showing {{first}} - {{second}} of {{total}} items."
+        "item-count": "Toplam {{total}} kaydın {{first}} - {{second}} arası gösteriliyor."
     },
     "entity": {
         "action": {
@@ -150,8 +150,8 @@
         "url.not.found": "Bulunamadı",
         "NotNull": "{{fieldName}} alanı boş bırakılamaz!",
         "Size": "{{fieldName}} alanı min/max gerekliliklere uymuyor!",
-        "userexists": "Login name already used!",
-        "emailexists": "Email is already in use!",
+        "userexists": "Kullanıcı adı daha önce alınmış!",
+        "emailexists": "E-posta adresi zaten kullanılıyor!",
         "idexists": "A new {{entityName}} cannot already have an ID"
     },
     "footer": "Burası sayfa alt bilgisi"
