@@ -16,23 +16,32 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: Prometheus
+metadata:
+  name: <%= kubernetesNamespace %>
+  namespace: <%= kubernetesNamespace %>
+spec:
+  version: v1.6.2
+  serviceMonitorSelector:
+    matchLabels:
+      team: <%= kubernetesNamespace %>
+  resources:
+    requests:
+      memory: 400Mi
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: <%= app.baseName.toLowerCase() %>
+  name: prometheus-<%= kubernetesNamespace %>
   namespace: <%= kubernetesNamespace %>
-  labels:
-    app: <%= app.baseName.toLowerCase() %>
 spec:
-  selector:
-    app: <%= app.baseName.toLowerCase() %>
-  <%_ if (app.applicationType === 'monolith' || app.applicationType === 'gateway') { _%>
-    <%_ if (kubernetesServiceType !== 'Ingress') { _%>
-  type: <%= kubernetesServiceType %>
-    <%_ } else { _%>
-  type: ClusterIP
-    <%_ } _%>
-  <%_ } _%>
+  type: NodePort
   ports:
   - name: web
-    port: <%= app.serverPort %>
+    nodePort: 30901
+    port: 9090
+    protocol: TCP
+    targetPort: web
+  selector:
+    prometheus: <%= kubernetesNamespace %>

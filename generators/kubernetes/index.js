@@ -98,6 +98,7 @@ module.exports = KubernetesGenerator.extend({
             this.dockerPushCommand = this.config.get('dockerPushCommand');
             this.kubernetesNamespace = this.config.get('kubernetesNamespace');
             this.jhipsterConsole = this.config.get('jhipsterConsole');
+            this.prometheusOperator = this.config.get('prometheusOperator');
             this.kubernetesServiceType = this.config.get('kubernetesServiceType');
             this.ingressDomain = this.config.get('ingressDomain');
 
@@ -157,6 +158,7 @@ module.exports = KubernetesGenerator.extend({
         askForDockerRepositoryName: prompts.askForDockerRepositoryName,
         askForDockerPushCommand: prompts.askForDockerPushCommand,
         askForJhipsterConsole: prompts.askForJhipsterConsole,
+        askForPrometheusOperator: prompts.askForPrometheusOperator,
         askForKubernetesServiceType: prompts.askForKubernetesServiceType,
         askForIngressDomain: prompts.askForIngressDomain
     },
@@ -252,6 +254,9 @@ module.exports = KubernetesGenerator.extend({
         }
         if (this.jhipsterConsole) {
             this.log(`  ${chalk.cyan('kubectl apply -f console')}`);
+        }
+        if (this.prometheusOperator) {
+            this.log(`  ${chalk.cyan('kubectl apply -f prometheus-tpr.yml')}`);
         }
         if (this.gatewayNb >= 1 || this.microserviceNb >= 1) {
             this.log(`  ${chalk.cyan('kubectl apply -f registry')}`);

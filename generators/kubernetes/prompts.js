@@ -24,6 +24,7 @@ module.exports = _.extend({
     askForDockerRepositoryName,
     askForDockerPushCommand,
     askForJhipsterConsole,
+    askForPrometheusOperator,
     askForKubernetesServiceType,
     askForIngressDomain
 }, dockerComposePrompts);
@@ -88,6 +89,22 @@ function askForJhipsterConsole() {
 
     this.prompt(prompts).then((props) => {
         this.jhipsterConsole = props.jhipsterConsole;
+        done();
+    });
+}
+
+function askForPrometheusOperator() {
+    const done = this.async();
+
+    const prompts = [{
+        type: 'confirm',
+        name: 'prometheusOperator',
+        message: 'Do you want to export your services for Prometheus (needs a running prometheus operator)?',
+        default: this.prometheusOperator ? this.prometheusOperator : true
+    }];
+
+    this.prompt(prompts).then((props) => {
+        this.prometheusOperator = props.prometheusOperator;
         done();
     });
 }

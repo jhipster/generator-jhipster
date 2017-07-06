@@ -86,6 +86,12 @@ spec:
         - name: JHIPSTER_LOGGING_LOGSTASH_HOST
           value: jhipster-logstash
         <%_ } _%>
+        <%_ if (prometheusOperator) { _%>
+        - name: JHIPSTER_METRICS_PROMETHEUS_ENABLED
+          value: 'true'
+        - name: JHIPSTER_METRICS_PROMETHEUS_ENDPOINT
+          value: /prometheusMetrics
+        <%_ } _%>
         - name: JAVA_OPTS
           value: " -Xmx256m -Xms256m"
         resources:

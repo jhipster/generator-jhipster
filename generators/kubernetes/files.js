@@ -41,6 +41,9 @@ function writeFiles() {
                 if ((this.app.applicationType === 'gateway' || this.app.applicationType === 'monolith') && this.kubernetesServiceType === 'Ingress') {
                     this.template('_ingress.yml', `${appName}/${appName}-ingress.yml`);
                 }
+                if (this.prometheusOperator) {
+                    this.template('_prometheus.yml', `${appName}/${appName}-prometheus.yml`);
+                }
             }
         },
 
@@ -57,6 +60,12 @@ function writeFiles() {
                 this.template('console/_jhipster-logstash.yml', 'console/jhipster-logstash.yml');
                 this.template('console/_jhipster-console.yml', 'console/jhipster-console.yml');
             }
+        },
+
+        writePrometheusTpr() {
+                if (this.prometheusOperator) {
+                    this.template('_prometheus-tpr.yml', `prometheus-tpr.yml`);
+                }
         },
 
         writeRegistryFiles() {
