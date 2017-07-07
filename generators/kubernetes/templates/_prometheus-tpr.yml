@@ -16,6 +16,44 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: prometheus-<%= kubernetesNamespace %>
+  namespace: <%= kubernetesNamespace %>
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: prometheus-<%= kubernetesNamespace %>
+  namespace: <%= kubernetesNamespace %>
+rules:
+- apiGroups: [""]
+  resources:
+  - nodes
+  - services
+  - endpoints
+  - pods
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources:
+  - configmaps
+  verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: prometheus-<%= kubernetesNamespace %>
+  namespace: <%= kubernetesNamespace %>
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: prometheus-<%= kubernetesNamespace %>
+subjects:
+- kind: ServiceAccount
+  name: prometheus-<%= kubernetesNamespace %>
+  namespace: <%= kubernetesNamespace %>
+---
 apiVersion: monitoring.coreos.com/v1alpha1
 kind: Prometheus
 metadata:
@@ -23,6 +61,7 @@ metadata:
   namespace: <%= kubernetesNamespace %>
 spec:
   version: v1.6.2
+  serviceAccountName: prometheus-<%= kubernetesNamespace %>
   serviceMonitorSelector:
     matchLabels:
       team: <%= kubernetesNamespace %>
