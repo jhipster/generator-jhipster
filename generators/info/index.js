@@ -49,7 +49,9 @@ module.exports = ReportGenerator.extend({
 
         displayConfiguration() {
             const done = this.async();
-            const result = shelljs.cat('.yo-rc.json');
+            let result = shelljs.cat('.yo-rc.json');
+            result = result.replace(/"rememberMeKey": ".*"/g, '"rememberMeKey": "replaced-by-jhipster-info"');
+            result = result.replace(/"jwtSecretKey": ".*"/g, '"jwtSecretKey": "replaced-by-jhipster-info"');
             this.log(`${'\n##### **JHipster configuration, a `.yo-rc.json` file generated in the root folder**\n' +
                 '\n```yaml\n'}${result}\n\`\`\`\n`);
             done();
