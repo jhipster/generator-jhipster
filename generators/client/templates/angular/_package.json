@@ -109,7 +109,7 @@
     <%_ } _%>
     "tslint": "5.5.0",
     "tslint-loader": "3.5.3",
-    "typescript": "2.4.1",
+    "typescript": "2.3.4",
     <%_ if (useSass) { _%>
     "sass-loader": "6.0.6",
     "node-sass": "4.5.3",
