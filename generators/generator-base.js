@@ -534,6 +534,9 @@ module.exports = class extends PrivateBase {
         const fullPath = 'bower.json';
         try {
             jhipsterUtils.rewriteJSONFile(fullPath, (jsonObj) => {
+                if (jsonObj.dependencies === undefined) {
+                    jsonObj.dependencies = {};
+                }
                 jsonObj.dependencies[name] = version;
             }, this);
         } catch (e) {
@@ -603,6 +606,9 @@ module.exports = class extends PrivateBase {
         const fullPath = 'package.json';
         try {
             jhipsterUtils.rewriteJSONFile(fullPath, (jsonObj) => {
+                if (jsonObj.dependencies === undefined) {
+                    jsonObj.dependencies = {};
+                }
                 jsonObj.dependencies[name] = version;
             }, this);
         } catch (e) {
@@ -621,6 +627,9 @@ module.exports = class extends PrivateBase {
         const fullPath = 'package.json';
         try {
             jhipsterUtils.rewriteJSONFile(fullPath, (jsonObj) => {
+                if (jsonObj.devDependencies === undefined) {
+                    jsonObj.devDependencies = {};
+                }
                 jsonObj.devDependencies[name] = version;
             }, this);
         } catch (e) {
@@ -639,6 +648,9 @@ module.exports = class extends PrivateBase {
         const fullPath = 'package.json';
         try {
             jhipsterUtils.rewriteJSONFile(fullPath, (jsonObj) => {
+                if (jsonObj.scripts === undefined) {
+                    jsonObj.scripts = {};
+                }
                 jsonObj.scripts[name] = data;
             }, this);
         } catch (e) {
