@@ -97,18 +97,14 @@ objects:
                   key: registry-admin-password
             - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_SECRET
               value: my-secret-token-to-change-in-production
-            - name: EUREKA_INSTANCE_LEASE_RENEWAL_INTERVAL_IN_SECONDS
-              value: '15'
             - name: EUREKA_INSTANCE_LEASE_EXPIRATION_DURATION_IN_SECONDS
-              value: '60'
+              value: '10'
             - name: EUREKA_SERVER_PEER_EUREKA_NODES_UPDATE_INTERVAL_MS
-              value: '15000'
+              value: '5000'
             - name: EUREKA_SERVER_RENAWAL_THRESHOLD_UPDATE_INTERVAL_MS
-              value: '15000'
+              value: '10000'
             - name: EUREKA_SERVER_REGISTRY_SYNC_RETRIES
               value: '3'
-            - name: EUREKA_SERVER_EVICTION_INTERVAL_TIMER_IN_MS
-              value: '30000'
             - name: EUREKA_SERVER_ENABLE_SELF_PRESERVATION
               value: 'false'
             - name: EUREKA_SERVER_PEER_NODE_CONNECT_TIMEOUT_MS
@@ -117,10 +113,6 @@ objects:
               value: 'true'
             - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
               value: 'true'
-            - name: EUREKA_CLIENT_REGISTRY_FETCH_INTERVAL_SECONDS
-              value: '15'
-            - name: EUREKA_CLIENT_INITIAL_INSTANE_INFO_REPLICATION_INTERVAL_SECONDS
-              value: '15'
             command:
               - "/bin/sh"
               - "-ec"
@@ -134,12 +126,10 @@ objects:
                 REPLICAS=""
 
                 for i in $(seq 0 $LAST_POD_INDEX); do
-                  if [ ${STATEFULSET_NAME}-${i} != ${HOSTNAME} ]; then
-                    if [ -z ${REPLICAS} ]; then
-                      REPLICAS="http://admin:${JHIPSTER_REGISTRY_PASSWORD}@${STATEFULSET_NAME}-${i}.jhipster-registry:8761/eureka/"
-                    else
-                      REPLICAS="${REPLICAS},http://admin:${JHIPSTER_REGISTRY_PASSWORD}@${STATEFULSET_NAME}-${i}.jhipster-registry:8761/eureka/"
-                    fi
+                  if [ -z ${REPLICAS} ]; then
+                    REPLICAS="http://admin:${JHIPSTER_REGISTRY_PASSWORD}@${STATEFULSET_NAME}-${i}.jhipster-registry:8761/eureka/"
+                  else
+                    REPLICAS="${REPLICAS},http://admin:${JHIPSTER_REGISTRY_PASSWORD}@${STATEFULSET_NAME}-${i}.jhipster-registry:8761/eureka/"
                   fi
                 done
 

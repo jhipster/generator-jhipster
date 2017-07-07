@@ -57,10 +57,14 @@ objects:
         <%_ if (serviceDiscoveryType === 'eureka') {  _%>
         eureka:
           client:
-            initial-instance-info-replication-interval-seconds: 15
-            registry-fetch-interval-seconds: 15
+            initial-instance-info-replication-interval-seconds: 10
+            instance-info-replication-interval-seconds: 10
+            registry-fetch-interval-seconds: 10
             fetch-registry: true
             register-with-eureka: true
+            eureka-service-url-poll-interval-seconds: 10
+          instance:
+            lease-renewal-interval-in-seconds: 5
         <%_ } _%>
         jhipster:
           security:
@@ -74,5 +78,5 @@ objects:
           client:
             service-url:
               # This must contain a list of all Eureka server replicas for registry HA to work correctly
-              defaultZone: <% for(let i = 0; i < registryReplicas; i++){ %>http://admin:${jhipster.registry.password}@jhipster-registry-<%- i %>.jhipster-registry/eureka/<% if (i < registryReplicas-1) { _%>,<% }} %>
+              defaultZone: http://admin:${jhipster.registry.password}@jhipster-registry:8761/eureka/
       <%_ } _%>
