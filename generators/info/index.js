@@ -33,7 +33,7 @@ module.exports = ReportGenerator.extend({
 
     initializing: {
         sayHello() {
-            console.log(chalk.white('Welcome to the JHipster Information Sub-Generator\n'));
+            this.log(chalk.white('Welcome to the JHipster Information Sub-Generator\n'));
         },
 
         checkJHipster() {
@@ -61,15 +61,15 @@ module.exports = ReportGenerator.extend({
             const done = this.async();
             console.log('\n##### **JDL for the Entity configuration(s) `entityName.json` files generated in the `.jhipster` directory**\n');
             try {
-                this.getExistingEntities().forEach((entity) => { 
-                    let json = JSON.stringify(entity, null, 4);
+                this.getExistingEntities().forEach((entity) => {
+                    const json = JSON.stringify(entity, null, 4);
                     console.log(`<details>\n<summary>${entity.name}.json</summary>\n<pre>\n${json}\n</pre>\n</details>\n`);
                 });
             } catch (e) {
                 console.log(e.message || e);
                 this.error('\nError while parsing entities\n');
             }
-            console.log(`\n`);
+            console.log('\n');
             done();
         },
 
