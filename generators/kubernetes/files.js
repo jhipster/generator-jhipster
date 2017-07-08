@@ -63,9 +63,9 @@ function writeFiles() {
         },
 
         writePrometheusTpr() {
-                if (this.prometheusOperator) {
-                    this.template('_prometheus-tpr.yml', `prometheus-tpr.yml`);
-                }
+            if (this.prometheusOperator) {
+                this.template('_prometheus-tpr.yml', 'prometheus-tpr.yml');
+            }
         },
 
         writeRegistryFiles() {
