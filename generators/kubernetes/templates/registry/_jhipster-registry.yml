@@ -142,8 +142,8 @@ spec:
                 REPLICAS="${REPLICAS},"
               fi
             done
-            export EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=$REPLICAS
-            echo "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=${REPLICAS}"
+            export EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=$REPLICAS
+            echo "EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=${REPLICAS}"
 
             java -jar /jhipster-registry.war --spring.cloud.config.server.git.uri=${GIT_URI} --spring.cloud.config.server.git.search-paths=${GIT_SEARCH_PATHS} -Djava.security.egd=file:/dev/./urandom
         volumeMounts:
