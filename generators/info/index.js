@@ -33,15 +33,15 @@ module.exports = ReportGenerator.extend({
 
     initializing: {
         sayHello() {
-            this.log(chalk.white('Welcome to the JHipster Information Sub-Generator\n'));
+            console.log(chalk.white('Welcome to the JHipster Information Sub-Generator\n'));
         },
 
         checkJHipster() {
             const done = this.async();
-            this.log('##### **JHipster Version(s)**');
+            console.log('##### **JHipster Version(s)**');
             shelljs.exec('npm list generator-jhipster', { silent: true }, (err, stdout, stderr) => {
                 if (stdout) {
-                    this.log(`\n\`\`\`\n${stdout}\`\`\`\n`);
+                    console.log(`\n\`\`\`\n${stdout}\`\`\`\n`);
                 }
                 done();
             });
@@ -52,25 +52,33 @@ module.exports = ReportGenerator.extend({
             let result = shelljs.cat('.yo-rc.json');
             result = result.replace(/"rememberMeKey": ".*"/g, '"rememberMeKey": "replaced-by-jhipster-info"');
             result = result.replace(/"jwtSecretKey": ".*"/g, '"jwtSecretKey": "replaced-by-jhipster-info"');
-            this.log(`${'\n##### **JHipster configuration, a `.yo-rc.json` file generated in the root folder**\n' +
-                '\n```yaml\n'}${result}\n\`\`\`\n`);
+            console.log(`${'\n##### **JHipster configuration, a `.yo-rc.json` file generated in the root folder**\n' +
+                '\n<details>\n<summary>.yo-rc.json file</summary>\n<pre>\n'}${result}\n</pre>\n</details>`);
             done();
         },
 
         displayEntities() {
             const done = this.async();
-            this.log('\n##### **JDL for the Entity configuration(s) `entityName.json` files generated in the `.jhipster` directory**\n');
-            const jdl = this.generateJDLFromEntities();
-            this.log(`\n\`\`\`yaml\n${jdl.toString()}\n\`\`\`\n`);
+            console.log('\n##### **JDL for the Entity configuration(s) `entityName.json` files generated in the `.jhipster` directory**\n');
+            try {
+                this.getExistingEntities().forEach((entity) => { 
+                    let json = JSON.stringify(entity, null, 4);
+                    console.log(`<details>\n<summary>${entity.name}.json</summary>\n<pre>\n${json}\n</pre>\n</details>\n`);
+                });
+            } catch (e) {
+                console.log(e.message || e);
+                this.error('\nError while parsing entities\n');
+            }
+            console.log(`\n`);
             done();
         },
 
         checkJava() {
             const done = this.async();
-            this.log('\n##### **Browsers and Operating System**\n');
+            console.log('\n##### **Environment and Tools**\n');
             shelljs.exec('java -version', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
-                    this.log(stderr);
+                    console.log(stderr);
                 }
                 done();
             });
@@ -80,7 +88,7 @@ module.exports = ReportGenerator.extend({
             const done = this.async();
             shelljs.exec('git version', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
-                    this.log(stdout);
+                    console.log(stdout);
                 }
                 done();
             });
@@ -90,7 +98,7 @@ module.exports = ReportGenerator.extend({
             const done = this.async();
             shelljs.exec('node -v', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
-                    this.log(`node: ${stdout}`);
+                    console.log(`node: ${stdout}`);
                 }
                 done();
             });
@@ -100,7 +108,7 @@ module.exports = ReportGenerator.extend({
             const done = this.async();
             shelljs.exec('npm -v', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
-                    this.log(`npm: ${stdout}`);
+                    console.log(`npm: ${stdout}`);
                 }
                 done();
             });
@@ -110,7 +118,7 @@ module.exports = ReportGenerator.extend({
             const done = this.async();
             shelljs.exec('bower -v', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
-                    this.log(`bower: ${stdout}`);
+                    console.log(`bower: ${stdout}`);
                 }
                 done();
             });
@@ -120,8 +128,8 @@ module.exports = ReportGenerator.extend({
             const done = this.async();
             shelljs.exec('gulp -v', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
-                    this.log('gulp:');
-                    this.log(stdout);
+                    console.log('gulp:');
+                    console.log(stdout);
                 }
                 done();
             });
@@ -131,7 +139,7 @@ module.exports = ReportGenerator.extend({
             const done = this.async();
             shelljs.exec('yo --version', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
-                    this.log(`yeoman: ${stdout}`);
+                    console.log(`yeoman: ${stdout}`);
                 }
                 done();
             });
@@ -141,7 +149,7 @@ module.exports = ReportGenerator.extend({
             const done = this.async();
             shelljs.exec('yarn --version', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
-                    this.log(`yarn: ${stdout}`);
+                    console.log(`yarn: ${stdout}`);
                 }
                 done();
             });
@@ -151,7 +159,7 @@ module.exports = ReportGenerator.extend({
             const done = this.async();
             shelljs.exec('docker -v', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
-                    this.log(stdout);
+                    console.log(stdout);
                 }
                 done();
             });
@@ -161,7 +169,7 @@ module.exports = ReportGenerator.extend({
             const done = this.async();
             shelljs.exec('docker-compose -v', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
-                    this.log(stdout);
+                    console.log(stdout);
                 }
                 done();
             });
