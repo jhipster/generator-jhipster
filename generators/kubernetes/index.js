@@ -266,10 +266,11 @@ module.exports = KubernetesGenerator.extend({
         }
 
         if (this.gatewayNb + this.monolithicNb >= 1) {
+            const namespaceSuffix = this.kubernetesNamespace === 'default' ? '' : ` -n ${this.kubernetesNamespace}`;
             this.log('\nUse these commands to find your application\'s IP addresses:');
             for (let i = 0; i < this.appsFolders.length; i++) {
                 if (this.appConfigs[i].applicationType === 'gateway' || this.appConfigs[i].applicationType === 'monolith') {
-                    this.log(`  ${chalk.cyan(`kubectl get svc ${this.appConfigs[i].baseName.toLowerCase()}`)}`);
+                    this.log(`  ${chalk.cyan(`kubectl get svc ${this.appConfigs[i].baseName.toLowerCase()}${namespaceSuffix}`)}`);
                 }
             }
             this.log();

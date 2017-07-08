@@ -47,6 +47,10 @@ function writeFiles() {
             }
         },
 
+        writeReadme() {
+            this.template('_README-KUBERNETES.md', 'README.md');
+        },
+
         writeNamespace() {
             if (this.kubernetesNamespace !== 'default') {
                 this.template('_namespace.yml', 'namespace.yml');
