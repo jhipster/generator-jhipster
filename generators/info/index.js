@@ -26,7 +26,11 @@ const ReportGenerator = generator.extend({});
 
 util.inherits(ReportGenerator, BaseGenerator);
 
+// We use console.log() in this generator because we want to print on stdout not on
+// stderr unlike yeoman's log() so that user can easily redirect output to a file.
+/* eslint-disable no-console */
 module.exports = ReportGenerator.extend({
+
     constructor: function (...args) { // eslint-disable-line object-shorthand
         generator.apply(this, args);
     },
@@ -39,7 +43,7 @@ module.exports = ReportGenerator.extend({
         checkJHipster() {
             const done = this.async();
             console.log('##### **JHipster Version(s)**');
-            shelljs.exec('npm list generator-jhipster', { silent: true }, (err, stdout, stderr) => {
+            shelljs.exec('npm list generator-sjhipster', { silent: true }, (err, stdout, stderr) => {
                 if (stdout) {
                     console.log(`\n\`\`\`\n${stdout}\`\`\`\n`);
                 }
@@ -52,24 +56,17 @@ module.exports = ReportGenerator.extend({
             let result = shelljs.cat('.yo-rc.json');
             result = result.replace(/"rememberMeKey": ".*"/g, '"rememberMeKey": "replaced-by-jhipster-info"');
             result = result.replace(/"jwtSecretKey": ".*"/g, '"jwtSecretKey": "replaced-by-jhipster-info"');
-            console.log(`${'\n##### **JHipster configuration, a `.yo-rc.json` file generated in the root folder**\n' +
-                '\n<details>\n<summary>.yo-rc.json file</summary>\n<pre>\n'}${result}\n</pre>\n</details>`);
+            console.log('\n##### **JHipster configuration, a `.yo-rc.json` file generated in the root folder**\n');
+            console.log(`\n<details>\n<summary>.yo-rc.json file</summary>\n<pre>\n${result}\n</pre>\n</details>\n`);
             done();
         },
 
         displayEntities() {
             const done = this.async();
             console.log('\n##### **JDL for the Entity configuration(s) `entityName.json` files generated in the `.jhipster` directory**\n');
-            try {
-                this.getExistingEntities().forEach((entity) => {
-                    const json = JSON.stringify(entity, null, 4);
-                    console.log(`<details>\n<summary>${entity.name}.json</summary>\n<pre>\n${json}\n</pre>\n</details>\n`);
-                });
-            } catch (e) {
-                console.log(e.message || e);
-                this.error('\nError while parsing entities\n');
-            }
-            console.log('\n');
+            const jdl = this.generateJDLFromEntities();
+            console.log('<details>\n<summary>JDL entity definitions</summary>\n');
+            console.log(`<pre>\n${jdl.toString()}\n</pre>\n</details>\n`);
             done();
         },
 
@@ -176,3 +173,4 @@ module.exports = ReportGenerator.extend({
         }
     }
 });
+/* eslint-enable no-console */
