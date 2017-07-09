@@ -29,12 +29,12 @@ buildscript {
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
-        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.1"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.5"
         classpath "net.ltgt.gradle:gradle-apt-plugin:0.9"
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
         classpath "org.springframework.build.gradle:propdeps-plugin:0.0.7"
         <%_ if (!skipClient) { _%>
-        classpath "com.moowork.gradle:gradle-node-plugin:1.1.1"
+        classpath "com.moowork.gradle:gradle-node-plugin:1.2.0"
         <%_ } _%>
         classpath "io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE"
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
@@ -55,7 +55,7 @@ apply plugin: 'com.moowork.gulp'
     <%_ } _%>
 <%_ } _%>
 apply plugin: 'io.spring.dependency-management'
-<%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa' || messageBroker === 'kafka') { _%>
+<%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa' || messageBroker === 'kafka' || hibernateCache === 'infinispan') { _%>
 dependencyManagement {
   imports {
     <%_ if (messageBroker === 'kafka') { _%>
@@ -63,6 +63,9 @@ dependencyManagement {
     <%_ } _%>
     <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
     mavenBom 'org.springframework.cloud:spring-cloud-dependencies:' + spring_cloud_version
+    <%_ } _%>
+    <%_ if (hibernateCache === 'infinispan') { _%>
+    mavenBom 'org.infinispan:infinispan-bom:' + infinispan_version
     <%_ } _%>
   }
 }
@@ -214,7 +217,9 @@ repositories {
 dependencies {
     compile "io.github.jhipster:jhipster:${jhipster_server_version}"
     compile "io.dropwizard.metrics:metrics-core:${dropwizard_metrics_version}"
+    <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'infinispan') { _%>
     compile "io.dropwizard.metrics:metrics-jcache:${dropwizard_metrics_version}"
+    <%_ } _%>
     compile "io.dropwizard.metrics:metrics-jvm:${dropwizard_metrics_version}"
     compile "io.dropwizard.metrics:metrics-servlet:${dropwizard_metrics_version}"
     compile "io.dropwizard.metrics:metrics-json:${dropwizard_metrics_version}"
@@ -237,14 +242,25 @@ dependencies {
     compile "com.hazelcast:hazelcast-hibernate52:${hazelcast_hibernate52_version}"
     compile "com.hazelcast:hazelcast-spring"
     <%_ } _%>
-    <%_ if ((clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') && hibernateCache != 'hazelcast') { _%>
+    <%_ if ((clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') && hibernateCache !== 'hazelcast') { _%>
     compile "com.hazelcast:hazelcast"
     compile "com.hazelcast:hazelcast-spring"
     <%_ } _%>
     <%_ if (clusteredHttpSession === 'hazelcast') { _%>
     compile "com.hazelcast:hazelcast-wm:${hazelcast_wm_version}"
     <%_ } _%>
-    <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || applicationType === 'gateway') { _%>
+    <%_ if (hibernateCache === 'infinispan') { _%>
+    compile "org.hibernate:hibernate-infinispan:${infinispan_hibernate52_version}"
+    <%_ } _%>
+    <%_ if (hibernateCache === 'infinispan') {_%>
+    compile "org.infinispan:infinispan-spring-boot-starter:${infinispan_boot_starter_version}"
+    compile "org.infinispan:infinispan-core"
+    compile "org.infinispan:infinispan-jcache"
+    compile ("org.infinispan:infinispan-cloud:${infinispan_cloud_version}") {
+        exclude module: 'undertow-core'
+    }
+    <%_ } _%>
+    <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || hibernateCache === 'infinispan' || applicationType === 'gateway') { _%>
     compile "javax.cache:cache-api"
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
@@ -265,8 +281,9 @@ dependencies {
     compile "org.hibernate:hibernate-jcache:${hibernate_version}"
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
-    compile "org.hibernate:hibernate-envers"
+    compile "org.hibernate:hibernate-envers:${hibernate_version}"
     compile "org.hibernate:hibernate-validator"
+    compile "org.hibernate:hibernate-entitymanager:${hibernate_version}"
     compile ("org.liquibase:liquibase-core")
     compile "com.mattbertolini:liquibase-slf4j:${liquibase_slf4j_version}"
     <%_ } _%>
@@ -303,6 +320,7 @@ dependencies {
     <%_ } _%>
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"
     <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
+    compile "com.google.guava:guava:18.0"
     compile "com.datastax.cassandra:cassandra-driver-extras:" + dependencyManagement.managedVersions["com.datastax.cassandra:cassandra-driver-core"]
     compile "com.datastax.cassandra:cassandra-driver-mapping"
     <%_ } _%>
@@ -410,7 +428,7 @@ dependencies {
     <%_ if (gatlingTests) { _%>
     testCompile "io.gatling.highcharts:gatling-charts-highcharts:${gatling_version}"
     <%_ } _%>
-    <%_ if (devDatabaseType != 'h2Disk' && devDatabaseType != 'h2Memory') { _%>
+    <%_ if (devDatabaseType !== 'h2Disk' && devDatabaseType !== 'h2Memory') { _%>
     testCompile "com.h2database:h2"
     <%_ } _%>
     <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
@@ -435,7 +453,7 @@ task cleanResources(type: Delete) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.5'
+    gradleVersion = '4.0'
 }
 
 task stage(dependsOn: 'bootRepackage') {

@@ -18,11 +18,11 @@
 -%>
 package <%= packageName %>.web.rest.errors;
 
-<%_ if (databaseType == 'cassandra') { _%>
+<%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
-<%_ if (authenticationType == 'uaa') { _%>
+<%_ if (authenticationType === 'uaa') { _%>
 import <%= packageName %>.config.SecurityBeanOverrideConfiguration;
 <%_ } _%>
 import org.junit.Before;
@@ -51,7 +51,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
 <%_ } _%>
-public class ExceptionTranslatorIntTest <% if (databaseType == 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+public class ExceptionTranslatorIntTest <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     @Autowired
     private ExceptionTranslatorTestController controller;
@@ -67,7 +67,7 @@ public class ExceptionTranslatorIntTest <% if (databaseType == 'cassandra') { %>
             .setControllerAdvice(exceptionTranslator)
             .build();
     }
-    <%_ if (databaseType != 'no' && databaseType != 'cassandra') { _%>
+    <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
 
     @Test
     public void testConcurrencyFailure() throws Exception {

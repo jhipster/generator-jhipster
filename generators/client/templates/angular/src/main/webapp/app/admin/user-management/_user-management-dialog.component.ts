@@ -20,7 +20,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { JhiAlertService, JhiEventManager } from 'ng-jhipster';
+import { JhiEventManager } from 'ng-jhipster';
 
 import { UserModalService } from './user-modal.service';
 import { <% if (enableTranslation) { %>JhiLanguageHelper,<% } %> User, UserService } from '../../shared';
@@ -75,25 +75,14 @@ export class UserMgmtDialogComponent implements OnInit {
         this.goToPreviousUrl();
         this.isSaving = true;
         if (this.user.id !== null) {
-            this.userService.update(this.user).subscribe((response) => this.onSaveSuccess(response, false), () => this.onSaveError());
+            this.userService.update(this.user).subscribe((response) => this.onSaveSuccess(response), () => this.onSaveError());
         } else {<% if (!enableTranslation) { %>
             this.user.langKey = 'en';<% } %>
-            this.userService.create(this.user).subscribe((response) => this.onSaveSuccess(response, true), () => this.onSaveError());
+            this.userService.create(this.user).subscribe((response) => this.onSaveSuccess(response), () => this.onSaveError());
         }
     }
 
-    private onSaveSuccess(result, isCreated: boolean) {
-        <%_ if (enableTranslation) { _%>
-        this.alertService.success(
-            isCreated ? 'userManagement.created'
-            : 'userManagement.updated',
-            { param : result.json.login }, null);
-        <%_ } else { _%>
-        this.alertService.success(
-            isCreated ? `A new user is created with identifier ${result.json.login}`
-            : `An user is updated with identifier ${result.json.login}`,
-            null, null);
-        <%_ } _%>
+    private onSaveSuccess(result) {
         this.eventManager.broadcast({ name: 'userListModification', content: 'OK' });
         this.isSaving = false;
         this.activeModal.dismiss(result);

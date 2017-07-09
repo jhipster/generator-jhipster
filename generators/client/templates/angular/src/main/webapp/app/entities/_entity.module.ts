@@ -30,4 +30,5 @@ import { customHttpProvider } from '../blocks/interceptor/http.provider';
     providers: [customHttpProvider()],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
+
 export default class <%=angular2AppName%>EntityModule {}

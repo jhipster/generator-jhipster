@@ -20,7 +20,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { LoginService } from '../../shared';
-import { CookieService } from 'angular2-cookie/core';
+import { CookieService } from 'ngx-cookie';
 
 @Component({
     selector: '<%=jhiPrefix%>-auth',

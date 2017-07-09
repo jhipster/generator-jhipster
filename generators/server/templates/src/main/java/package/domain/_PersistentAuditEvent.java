@@ -17,12 +17,12 @@
  limitations under the License.
 -%>
 package <%=packageName%>.domain;
-<%_ if (databaseType == 'mongodb') { _%>
+<%_ if (databaseType === 'mongodb') { _%>
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-<%_ } else if (databaseType == 'sql') { _%>
+<%_ } else if (databaseType === 'sql') { _%>
 
 import javax.persistence.*;
 <%_ } _%>
@@ -35,14 +35,14 @@ import java.util.Map;
 /**
  * Persist AuditEvent managed by the Spring Boot actuator
  * @see org.springframework.boot.actuate.audit.AuditEvent
- */<% if (databaseType == 'sql') { %>
+ */<% if (databaseType === 'sql') { %>
 @Entity
-@Table(name = "jhi_persistent_audit_event")<% } %><% if (databaseType == 'mongodb') { %>
+@Table(name = "jhi_persistent_audit_event")<% } %><% if (databaseType === 'mongodb') { %>
 @Document(collection = "jhi_persistent_audit_event")<% } %>
 public class PersistentAuditEvent implements Serializable {
 
-    @Id<% if (databaseType == 'sql') { %>
-    <%_ if (prodDatabaseType == 'mysql' || prodDatabaseType == 'mariadb') { _%>
+    @Id<% if (databaseType === 'sql') { %>
+    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     <%_ }  else { _%>
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
@@ -53,22 +53,22 @@ public class PersistentAuditEvent implements Serializable {
     @Field("event_id")
     private String id;<% } %>
 
-    @NotNull<% if (databaseType == 'sql') { %>
+    @NotNull<% if (databaseType === 'sql') { %>
     @Column(nullable = false)<% } %>
     private String principal;
-<% if (databaseType == 'sql') { %>
+<% if (databaseType === 'sql') { %>
     @Column(name = "event_date")<% } %>
-    private Instant auditEventDate;<% if (databaseType == 'sql') { %>
-    @Column(name = "event_type")<% } %><% if (databaseType == 'mongodb') { %>
+    private Instant auditEventDate;<% if (databaseType === 'sql') { %>
+    @Column(name = "event_type")<% } %><% if (databaseType === 'mongodb') { %>
     @Field("event_type")<% } %>
     private String auditEventType;
-<% if (databaseType == 'sql') { %>
+<% if (databaseType === 'sql') { %>
     @ElementCollection
     @MapKeyColumn(name = "name")
     @Column(name = "value")
     @CollectionTable(name = "jhi_persistent_audit_evt_data", joinColumns=@JoinColumn(name="event_id"))<% } %>
     private Map<String, String> data = new HashMap<>();
-<% if (databaseType == 'sql') { %>
+<% if (databaseType === 'sql') { %>
     public Long getId() {
         return id;
     }

@@ -130,4 +130,5 @@ import {
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
+
 export default class <%=angular2AppName%>AdminModule {}

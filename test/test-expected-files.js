@@ -123,6 +123,10 @@ const expectedFiles = {
         '.editorconfig'
     ],
 
+    infinispan: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheFactoryConfiguration.java`
+    ],
+
     gatling: [
         `${TEST_DIR}gatling/conf/gatling.conf`
     ],
@@ -333,13 +337,9 @@ const expectedFiles = {
         `${SERVER_MAIN_RES_DIR}i18n/messages_fr.properties`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/global.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/global.json`,
-        `${CLIENT_MAIN_SRC_DIR}app/components/language/language.controller.js`,
-        `${CLIENT_MAIN_SRC_DIR}app/components/language/language.service.js`,
-        `${CLIENT_MAIN_SRC_DIR}app/components/language/language.filter.js`,
-        `${CLIENT_MAIN_SRC_DIR}app/components/language/language.constants.js`,
-        `${CLIENT_MAIN_SRC_DIR}app/blocks/config/translation.config.js`,
-        `${CLIENT_MAIN_SRC_DIR}app/blocks/config/translation-storage.provider.js`,
-        `${CLIENT_MAIN_SRC_DIR}app/blocks/handlers/translation.handler.js`
+        `${CLIENT_MAIN_SRC_DIR}app/shared/language/language.constants.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/language/language.helper.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
     ],
 
     socialLogin: [
@@ -359,12 +359,12 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/PersistentToken.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/PersistentTokenRepository.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/PersistentTokenRememberMeServices.java`,
-        `${CLIENT_MAIN_SRC_DIR}app/account/sessions/sessions.html`,
-        `${CLIENT_MAIN_SRC_DIR}app/account/sessions/sessions.state.js`,
-        `${CLIENT_MAIN_SRC_DIR}app/account/sessions/sessions.controller.js`,
-        `${CLIENT_MAIN_SRC_DIR}app/services/auth/sessions.service.js`,
-        `${CLIENT_MAIN_SRC_DIR}app/services/auth/auth.session.service.js`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/account/sessions/sessions.controller.spec.js`
+        `${CLIENT_MAIN_SRC_DIR}app/account/sessions/sessions.component.html`,
+        `${CLIENT_MAIN_SRC_DIR}app/account/sessions/sessions.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/account/sessions/sessions.route.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/account/sessions/sessions.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/auth/auth-session.service.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/account/sessions/sessions.component.spec.ts`
     ],
 
     jwtServer: [
@@ -396,10 +396,10 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/gateway/ratelimiting/RateLimitingFilter.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/vm/RouteVM.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/GatewayResource.java`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway.controller.js`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway.state.js`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway.html`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway-routes.service.js`
+        `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway.route.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway.component.html`,
+        `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway-routes.service.ts`
     ],
 
     microservice: [

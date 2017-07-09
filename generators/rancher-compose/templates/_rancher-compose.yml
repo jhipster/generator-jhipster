@@ -41,12 +41,12 @@ services:
         scale: 1
 <%_ } _%>
 
-<%_ if (serviceDiscoveryType == 'eureka') { _%>
+<%_ if (serviceDiscoveryType === 'eureka') { _%>
     jhipster-registry:
         scale: 1
 <%_ } _%>
 
-<%_ if (serviceDiscoveryType == 'consul') { _%>
+<%_ if (serviceDiscoveryType === 'consul') { _%>
     consul:
         scale: 1
     consul-config-loader:

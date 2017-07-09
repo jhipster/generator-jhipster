@@ -19,7 +19,7 @@
 <%_
 const i18nToLoad = [entityInstance];
 for (const idx in fields) {
-    if (fields[idx].fieldIsEnum == true) {
+    if (fields[idx].fieldIsEnum === true) {
         i18nToLoad.push(fields[idx].enumInstance);
     }
 }
@@ -37,23 +37,23 @@ import { <%= entityAngularName %>PopupService } from './<%= entityFileName %>-po
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 <%_
 let hasRelationshipQuery = false;
-for (const rel of differentRelationships) {
-    if (rel.relationshipType === 'one-to-one' && rel.ownerSide === true && rel.otherEntityName !== 'user') {
+Object.keys(differentRelationships).forEach(key => {
+    const hasAnyRelationshipQuery = differentRelationships[key].some(rel =>
+        (rel.relationshipType === 'one-to-one' && rel.ownerSide === true && rel.otherEntityName !== 'user')
+            || rel.relationshipType !== 'one-to-many'
+    );
+    if (hasAnyRelationshipQuery) {
         hasRelationshipQuery = true;
     }
-    if (rel.relationshipType !== 'one-to-many') {
-        hasRelationshipQuery = true;
+    if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
+        const uniqueRel = differentRelationships[key][0];
 _%>
-import { <%= rel.otherEntityAngularName %>, <%= rel.otherEntityAngularName%>Service } from '../<%= rel.otherEntityModulePath %>';
+import { <%= uniqueRel.otherEntityAngularName %>, <%= uniqueRel.otherEntityAngularName%>Service } from '../<%= uniqueRel.otherEntityModulePath %>';
 <%_ }
-} _%>
+}); _%>
 <%_ if (hasRelationshipQuery) { _%>
 import { ResponseWrapper } from '../../shared';
 <%_ } _%>
-<%_
-// TODO replace ng-file-upload dependency by an ng2 depedency
-// TODO Find a better way to format dates so that it works with NgbDatePicker
-_%>
 
 @Component({
     selector: '<%= jhiPrefix %>-<%= entityFileName %>-dialog',
@@ -75,7 +75,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     <%_ for (idx in fields) {
         const fieldName = fields[idx].fieldName;
         const fieldType = fields[idx].fieldType;
-        if (fieldType == 'LocalDate') { _%>
+        if (fieldType === 'LocalDate') { _%>
     <%= fieldName %>Dp: any;
         <%_ }
     } _%>
@@ -86,10 +86,11 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         private dataUtils: JhiDataUtils,
         <%_ } _%>
         private alertService: JhiAlertService,
-        private <%= entityInstance %>Service: <%= entityAngularName %>Service,<% for (idx in differentRelationships) {
-        if (differentRelationships[idx].relationshipType != 'one-to-many') { %>
-        private <%= differentRelationships[idx].otherEntityName %>Service: <%= differentRelationships[idx].otherEntityAngularName %>Service,<% }
-        }%>
+        private <%= entityInstance %>Service: <%= entityAngularName %>Service,<% Object.keys(differentRelationships).forEach(key => {
+        if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
+            const uniqueRel = differentRelationships[key][0]; %>
+        private <%= uniqueRel.otherEntityName %>Service: <%= uniqueRel.otherEntityAngularName %>Service,<%
+        } });%>
         <%_ if (fieldsContainImageBlob) { _%>
         private elementRef: ElementRef,
         <%_ } _%>
@@ -151,31 +152,19 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         this.isSaving = true;
         if (this.<%= entityInstance %>.id !== undefined) {
             this.subscribeToSaveResponse(
-                this.<%= entityInstance %>Service.update(this.<%= entityInstance %>), false);
+                this.<%= entityInstance %>Service.update(this.<%= entityInstance %>));
         } else {
             this.subscribeToSaveResponse(
-                this.<%= entityInstance %>Service.create(this.<%= entityInstance %>), true);
+                this.<%= entityInstance %>Service.create(this.<%= entityInstance %>));
         }
     }
 
-    private subscribeToSaveResponse(result: Observable<<%= entityAngularName %>>, isCreated: boolean) {
+    private subscribeToSaveResponse(result: Observable<<%= entityAngularName %>>) {
         result.subscribe((res: <%= entityAngularName %>) =>
-            this.onSaveSuccess(res, isCreated), (res: Response) => this.onSaveError(res));
+            this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
     }
 
-    private onSaveSuccess(result: <%= entityAngularName %>, isCreated: boolean) {
-        <%_ if (enableTranslation) { _%>
-        this.alertService.success(
-            isCreated ? '<%= angularAppName %>.<%= entityTranslationKey %>.created'
-            : '<%= angularAppName %>.<%= entityTranslationKey %>.updated',
-            { param : result.id }, null);
-        <%_ } else { _%>
-        this.alertService.success(
-            isCreated ? `A new <%= entityClassHumanized %> is created with identifier ${result.id}`
-            : `A <%= entityClassHumanized %> is updated with identifier ${result.id}`,
-            null, null);
-        <%_ } _%>
-
+    private onSaveSuccess(result: <%= entityAngularName %>) {
         this.eventManager.broadcast({ name: '<%= entityInstance %>ListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
@@ -198,7 +187,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     const entitiesSeen = [];
     for (idx in relationships) {
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
-        if(relationships[idx].relationshipType != 'one-to-many' && entitiesSeen.indexOf(otherEntityNameCapitalized) == -1) {
+        if(relationships[idx].relationshipType !== 'one-to-many' && entitiesSeen.indexOf(otherEntityNameCapitalized) === -1) {
     _%>
 
     track<%- otherEntityNameCapitalized -%>ById(index: number, item: <%- relationships[idx].otherEntityAngularName -%>) {

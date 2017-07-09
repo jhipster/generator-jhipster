@@ -4,9 +4,9 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
-const getFilesForOptions = require('./test-utils').getFilesForOptions;
+const getFilesForOptions = require('./utils').getFilesForOptions;
 const expectedFiles = require('./test-expected-files');
-const shouldBeV3DockerfileCompatible = require('./test-utils').shouldBeV3DockerfileCompatible;
+const shouldBeV3DockerfileCompatible = require('./utils').shouldBeV3DockerfileCompatible;
 const constants = require('../generators/generator-constants');
 const angularJsfiles = require('../generators/client/files-angularjs').files;
 const angularfiles = require('../generators/client/files-angular').files;
@@ -17,7 +17,7 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const TEST_DIR = constants.TEST_DIR;
 
 describe('JHipster generator', () => {
-    describe('default configuration', () => {
+    describe('default configuration with AngularJS', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({ skipInstall: true })
@@ -60,8 +60,8 @@ describe('JHipster generator', () => {
                 testFrameworks: []
             }));
             assert.noFile([
-                `${TEST_DIR}gatling/gatling.conf`,
-                `${TEST_DIR}gatling/logback.xml`
+                `${TEST_DIR}gatling/conf/gatling.conf`,
+                `${TEST_DIR}gatling/conf/logback.xml`
             ]);
         });
         it('contains clientFramework with angular1 value', () => {
@@ -76,13 +76,13 @@ describe('JHipster generator', () => {
         shouldBeV3DockerfileCompatible('mysql');
     });
 
-    describe('default configuration with angular2', () => {
+    describe('default configuration with angularX', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
                     baseName: 'jhipster',
-                    clientFramework: 'angular2',
+                    clientFramework: 'angularX',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
                     serviceDiscoveryType: false,
@@ -104,7 +104,7 @@ describe('JHipster generator', () => {
                 .on('end', done);
         });
 
-        it('creates expected default files for angular2', () => {
+        it('creates expected default files for angularX', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.jwtServer);
             assert.file(expectedFiles.maven);
@@ -118,8 +118,8 @@ describe('JHipster generator', () => {
                 testFrameworks: []
             }));
         });
-        it('contains clientFramework with angular2 value', () => {
-            assert.fileContent('.yo-rc.json', /"clientFramework": "angular2"/);
+        it('contains clientFramework with angularX value', () => {
+            assert.fileContent('.yo-rc.json', /"clientFramework": "angularX"/);
         });
     });
 
@@ -131,6 +131,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    clientFramework: 'angularX',
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
@@ -156,7 +157,7 @@ describe('JHipster generator', () => {
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.dockerServices);
             assert.file(expectedFiles.mysql);
-            assert.file(getFilesForOptions(angularJsfiles, {
+            assert.file(getFilesForOptions(angularfiles, {
                 useSass: false,
                 enableTranslation: true,
                 serviceDiscoveryType: false,
@@ -164,7 +165,7 @@ describe('JHipster generator', () => {
                 testFrameworks: []
             }));
         });
-        it('contains clientPackageManager with yarn value', () => {
+        it('contains clientPackageManager with npm value', () => {
             assert.fileContent('.yo-rc.json', /"clientPackageManager": "npm"/);
         });
         it('contains install-node-and-npm in pom.xml', () => {
@@ -180,6 +181,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    clientFramework: 'angularX',
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
@@ -205,7 +207,7 @@ describe('JHipster generator', () => {
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.dockerServices);
             assert.file(expectedFiles.mariadb);
-            assert.file(getFilesForOptions(angularJsfiles, {
+            assert.file(getFilesForOptions(angularfiles, {
                 useSass: false,
                 enableTranslation: true,
                 serviceDiscoveryType: false,
@@ -224,6 +226,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    clientFramework: 'angularX',
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
@@ -245,10 +248,9 @@ describe('JHipster generator', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.jwtServer);
             assert.file(expectedFiles.gradle);
-            assert.file(['gradle/yeoman.gradle']);
             assert.file(expectedFiles.dockerServices);
             assert.file(expectedFiles.mysql);
-            assert.file(getFilesForOptions(angularJsfiles, {
+            assert.file(getFilesForOptions(angularfiles, {
                 useSass: false,
                 enableTranslation: true,
                 serviceDiscoveryType: false,
@@ -266,6 +268,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.otherpackage',
                     packageFolder: 'com/otherpackage',
+                    clientFramework: 'angularX',
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
@@ -300,6 +303,7 @@ describe('JHipster generator', () => {
                     baseName: '21Points',
                     packageName: 'com.otherpackage',
                     packageFolder: 'com/otherpackage',
+                    clientFramework: 'angularX',
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
@@ -333,6 +337,7 @@ describe('JHipster generator', () => {
                     baseName: 'myapplication',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    clientFramework: 'angularX',
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
@@ -352,9 +357,9 @@ describe('JHipster generator', () => {
 
         it('creates expected files with correct application name', () => {
             assert.file([
-                `${CLIENT_MAIN_SRC_DIR}app/home/home.state.js`
+                `${CLIENT_MAIN_SRC_DIR}app/home/home.route.ts`
             ]);
-            assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/home/home.state.js`, /myapplicationApp/);
+            assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/app.module.ts`, /MyapplicationAppModule/);
         });
     });
 
@@ -366,6 +371,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    clientFramework: 'angularX',
                     serviceDiscoveryType: false,
                     authenticationType: 'oauth2',
                     hibernateCache: 'ehcache',
@@ -398,6 +404,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    clientFramework: 'angularX',
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
                     hibernateCache: 'hazelcast',
@@ -416,6 +423,71 @@ describe('JHipster generator', () => {
         });
     });
 
+    describe('Infinispan', () => {
+        beforeEach((done) => {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({ skipInstall: true, skipChecks: true })
+                .withPrompts({
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    clientFramework: 'angular1',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
+                    hibernateCache: 'infinispan',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: []
+                })
+                .on('end', done);
+        });
+        it('creates expected files with "Infinispan"', () => {
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.client);
+            assert.file(expectedFiles.infinispan);
+        });
+    });
+
+    describe('Infinispan and Eureka', () => {
+        beforeEach((done) => {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({ skipInstall: true, skipChecks: true })
+                .withPrompts({
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    serviceDiscoveryType: 'eureka',
+                    clientFramework: 'angular1',
+                    authenticationType: 'jwt',
+                    hibernateCache: 'infinispan',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: []
+                })
+                .on('end', done);
+        });
+        it('creates expected files with "Infinispan and Eureka"', () => {
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.client);
+            assert.file(expectedFiles.eureka);
+            assert.file(expectedFiles.infinispan);
+        });
+    });
+
     describe('postgresql and elasticsearch', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
@@ -424,6 +496,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    clientFramework: 'angularX',
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
                     hibernateCache: 'no',
@@ -460,6 +533,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    clientFramework: 'angularX',
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
                     hibernateCache: 'no',
@@ -493,6 +567,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    clientFramework: 'angularX',
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
                     hibernateCache: 'no',
@@ -528,6 +603,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    clientFramework: 'angularX',
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
                     hibernateCache: 'no',
@@ -561,6 +637,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    clientFramework: 'angularX',
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
                     hibernateCache: 'no',
@@ -593,6 +670,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    clientFramework: 'angularX',
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
                     hibernateCache: 'hazelcast',
@@ -622,6 +700,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    clientFramework: 'angularX',
                     serviceDiscoveryType: false,
                     authenticationType: 'session',
                     hibernateCache: 'ehcache',
@@ -643,7 +722,7 @@ describe('JHipster generator', () => {
 
         it('creates expected files with social login for HTTP session enabled', () => {
             assert.file(expectedFiles.session);
-            assert.file(getFilesForOptions(angularJsfiles, {
+            assert.file(getFilesForOptions(angularfiles, {
                 useSass: false,
                 enableTranslation: true,
                 serviceDiscoveryType: false,
@@ -662,6 +741,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    clientFramework: 'angularX',
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
@@ -682,7 +762,7 @@ describe('JHipster generator', () => {
         });
 
         it('creates expected files with social login for JWT authentication enabled', () => {
-            assert.file(getFilesForOptions(angularJsfiles, {
+            assert.file(getFilesForOptions(angularfiles, {
                 useSass: false,
                 enableTranslation: true,
                 serviceDiscoveryType: false,
@@ -701,6 +781,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    clientFramework: 'angularX',
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
@@ -720,7 +801,7 @@ describe('JHipster generator', () => {
 
         it('creates expected files with JWT authentication', () => {
             assert.file(expectedFiles.jwtServer);
-            assert.file(getFilesForOptions(angularJsfiles, {
+            assert.file(getFilesForOptions(angularfiles, {
                 useSass: false,
                 enableTranslation: true,
                 serviceDiscoveryType: false,
@@ -738,6 +819,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    clientFramework: 'angularX',
                     serviceDiscoveryType: false,
                     authenticationType: 'session',
                     hibernateCache: 'ehcache',
@@ -757,7 +839,7 @@ describe('JHipster generator', () => {
 
         it('creates expected files with HTTP session authentication', () => {
             assert.file(expectedFiles.session);
-            assert.file(getFilesForOptions(angularJsfiles, {
+            assert.file(getFilesForOptions(angularfiles, {
                 useSass: false,
                 enableTranslation: true,
                 serviceDiscoveryType: false,
@@ -775,6 +857,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    clientFramework: 'angularX',
                     serverPort: '8080',
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
@@ -822,6 +905,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    clientFramework: 'angularX',
                     serverPort: '8080',
                     authenticationType: 'jwt',
                     serviceDiscoveryType: false,
@@ -852,7 +936,7 @@ describe('JHipster generator', () => {
 
         it('creates expected files with Protractor enabled', () => {
             assert.file(expectedFiles.server);
-            assert.file(getFilesForOptions(angularJsfiles, {
+            assert.file(getFilesForOptions(angularfiles, {
                 useSass: false,
                 enableTranslation: true,
                 serviceDiscoveryType: false,
@@ -862,8 +946,8 @@ describe('JHipster generator', () => {
                 ]
             }));
             assert.noFile([
-                `${TEST_DIR}gatling/gatling.conf`,
-                `${TEST_DIR}gatling/logback.xml`
+                `${TEST_DIR}gatling/conf/gatling.conf`,
+                `${TEST_DIR}gatling/conf/logback.xml`
             ]);
         });
     });
@@ -876,6 +960,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    clientFramework: 'angularX',
                     serverPort: '8080',
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
@@ -910,8 +995,8 @@ describe('JHipster generator', () => {
                 `${TEST_DIR}features/user/user.feature`
             ]);
             assert.noFile([
-                `${TEST_DIR}gatling/gatling.conf`,
-                `${TEST_DIR}gatling/logback.xml`
+                `${TEST_DIR}gatling/conf/gatling.conf`,
+                `${TEST_DIR}gatling/conf/logback.xml`
             ]);
         });
     });
@@ -943,7 +1028,7 @@ describe('JHipster generator', () => {
         it('creates expected files for default configuration with skip client option enabled', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.maven);
-            assert.noFile(getFilesForOptions(angularJsfiles, {
+            assert.noFile(getFilesForOptions(angularfiles, {
                 useSass: false,
                 enableTranslation: true,
                 serviceDiscoveryType: false,
@@ -980,7 +1065,7 @@ describe('JHipster generator', () => {
         it('creates expected files for default configuration with skip client option enabled', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.gradle);
-            assert.noFile(getFilesForOptions(angularJsfiles, {
+            assert.noFile(getFilesForOptions(angularfiles, {
                 useSass: false,
                 enableTranslation: true,
                 serviceDiscoveryType: false,
@@ -1000,6 +1085,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    clientFramework: 'angularX',
                     serviceDiscoveryType: 'eureka',
                     authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
@@ -1069,6 +1155,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    clientFramework: 'angular1',
                     authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
                     databaseType: 'sql',
@@ -1102,6 +1189,7 @@ describe('JHipster generator', () => {
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
+                    clientFramework: 'angularX',
                     serviceDiscoveryType: 'consul',
                     authenticationType: 'jwt',
                     hibernateCache: 'ehcache',
@@ -1302,7 +1390,7 @@ describe('JHipster server generator', () => {
             assert.file(expectedFiles.jwtServer);
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.gatling);
-            assert.noFile(getFilesForOptions(angularJsfiles, {
+            assert.noFile(getFilesForOptions(angularfiles, {
                 useSass: false,
                 enableTranslation: true,
                 serviceDiscoveryType: false,
@@ -1382,13 +1470,13 @@ describe('JHipster client generator', () => {
                     enableTranslation: true,
                     nativeLanguage: 'en',
                     languages: ['fr'],
-                    clientFramework: 'angular2',
+                    clientFramework: 'angularX',
                     useSass: true
                 })
                 .on('end', done);
         });
 
-        it('creates expected files for default configuration for client-2 generator', () => {
+        it('creates expected files for default configuration for client generator', () => {
             assert.noFile(expectedFiles.server);
             assert.noFile(expectedFiles.maven);
             assert.file(expectedFiles.i18nJson);
@@ -1400,8 +1488,8 @@ describe('JHipster client generator', () => {
                 testFrameworks: []
             }));
         });
-        it('contains clientFramework with angular2 value', () => {
-            assert.fileContent('.yo-rc.json', /"clientFramework": "angular2"/);
+        it('contains clientFramework with angularX value', () => {
+            assert.fileContent('.yo-rc.json', /"clientFramework": "angularX"/);
         });
         it('contains clientPackageManager with yarn value', () => {
             assert.fileContent('.yo-rc.json', /"clientPackageManager": "yarn"/);
@@ -1418,7 +1506,7 @@ describe('JHipster client generator', () => {
                     enableTranslation: true,
                     nativeLanguage: 'en',
                     languages: ['fr'],
-                    clientFramework: 'angular2',
+                    clientFramework: 'angularX',
                     useSass: true
                 })
                 .on('end', done);
@@ -1436,8 +1524,8 @@ describe('JHipster client generator', () => {
                 testFrameworks: []
             }));
         });
-        it('contains clientFramework with angular2 value', () => {
-            assert.fileContent('.yo-rc.json', /"clientFramework": "angular2"/);
+        it('contains clientFramework with angularX value', () => {
+            assert.fileContent('.yo-rc.json', /"clientFramework": "angularX"/);
         });
         it('contains clientPackageManager with npm value', () => {
             assert.fileContent('.yo-rc.json', /"clientPackageManager": "npm"/);

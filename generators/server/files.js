@@ -329,8 +329,11 @@ function writeFiles() {
 
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_package-info.java`, `${javaDir}config/package-info.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_AsyncConfiguration.java`, `${javaDir}config/AsyncConfiguration.java`);
-            if (this.hibernateCache === 'ehcache' || this.hibernateCache === 'hazelcast' || this.clusteredHttpSession === 'hazelcast' || this.applicationType === 'gateway') {
+            if (this.hibernateCache === 'ehcache' || this.hibernateCache === 'hazelcast' || this.hibernateCache === 'infinispan' || this.clusteredHttpSession === 'hazelcast' || this.applicationType === 'gateway') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/_CacheConfiguration.java`, `${javaDir}config/CacheConfiguration.java`);
+            }
+            if (this.hibernateCache === 'infinispan') {
+                this.template(`${SERVER_MAIN_SRC_DIR}package/config/_CacheFactoryConfiguration.java`, `${javaDir}config/CacheFactoryConfiguration.java`);
             }
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_Constants.java`, `${javaDir}config/Constants.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_DateTimeFormatConfiguration.java`, `${javaDir}config/DateTimeFormatConfiguration.java`);
@@ -449,6 +452,7 @@ function writeFiles() {
             this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_ProfileInfoResourceIntTest.java`, `${testDir}web/rest/ProfileInfoResourceIntTest.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/errors/_ExceptionTranslatorIntTest.java`, `${testDir}web/rest/errors/ExceptionTranslatorIntTest.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/errors/_ExceptionTranslatorTestController.java`, `${testDir}web/rest/errors/ExceptionTranslatorTestController.java`);
+            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/util/_PaginationUtilUnitTest.java`, `${testDir}web/rest/util/PaginationUtilUnitTest.java`);
 
             this.template(`${SERVER_TEST_RES_DIR}config/_application.yml`, `${SERVER_TEST_RES_DIR}config/application.yml`);
             this.template(`${SERVER_TEST_RES_DIR}_logback.xml`, `${SERVER_TEST_RES_DIR}logback.xml`);
@@ -470,9 +474,9 @@ function writeFiles() {
             if (this.gatlingTests) {
                 this.copy(`${TEST_DIR}gatling/conf/gatling.conf`, `${TEST_DIR}gatling/conf/gatling.conf`);
                 this.copy(`${TEST_DIR}gatling/conf/logback.xml`, `${TEST_DIR}gatling/conf/logback.xml`);
-                mkdirp(`${TEST_DIR}gatling/data`);
-                mkdirp(`${TEST_DIR}gatling/bodies`);
-                mkdirp(`${TEST_DIR}gatling/simulations`);
+                mkdirp(`${TEST_DIR}gatling/user-files/data`);
+                mkdirp(`${TEST_DIR}gatling/user-files/bodies`);
+                mkdirp(`${TEST_DIR}gatling/user-files/simulations`);
             }
 
             // Create Cucumber test files

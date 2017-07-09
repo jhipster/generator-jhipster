@@ -90,7 +90,7 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
                 .antMatchers("/api/account/reset_password/init").permitAll()
                 .antMatchers("/api/account/reset_password/finish").permitAll()
                 .antMatchers("/api/profile-info").permitAll()
-                .antMatchers("/api/**").authenticated()<% if (websocket == 'spring-websocket') { %>
+                .antMatchers("/api/**").authenticated()<% if (websocket === 'spring-websocket') { %>
                 .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/websocket/**").permitAll()<% } %>
                 .antMatchers("/management/health").permitAll()

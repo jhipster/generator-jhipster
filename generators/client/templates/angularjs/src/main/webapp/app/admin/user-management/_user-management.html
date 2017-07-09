@@ -51,14 +51,14 @@
                     <button class="btn btn-danger btn-xs" ng-click="vm.setActive(user, true)" ng-show="!user.activated"
                             data-translate="userManagement.deactivated">Deactivated</button>
                     <button class="btn btn-success btn-xs" ng-click="vm.setActive(user, false)" ng-show="user.activated"
-                            ng-disabled="vm.currentAccount.login==user.login" data-translate="userManagement.activated">Activated</button>
+                            ng-disabled="vm.currentAccount.login === user.login" data-translate="userManagement.activated">Activated</button>
                 </td>
                 <% if (enableTranslation) { %><td>{{user.langKey}}</td><% } %>
                 <td>
                     <div ng-repeat="authority in user.authorities">
                         <span class="label label-info">{{ authority }}</span>
                     </div>
-                </td><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+                </td><% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
                 <td>{{user.createdDate | date:'dd/MM/yy HH:mm'}}</td>
                 <td>{{user.lastModifiedBy}}</td>
                 <td>{{user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</td><% } %>
@@ -78,7 +78,7 @@
                         </button>
                         <button type="submit"
                                 ui-sref="user-management.delete({login:user.login})"
-                                class="btn btn-danger btn-sm" ng-disabled="vm.currentAccount.login==user.login">
+                                class="btn btn-danger btn-sm" ng-disabled="vm.currentAccount.login === user.login">
                             <span class="glyphicon glyphicon-remove-circle"></span>
                             <span class="hidden-xs hidden-sm" data-translate="entity.action.delete"></span>
                         </button>

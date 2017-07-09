@@ -47,12 +47,6 @@ module.exports = JhipsterClientGenerator.extend({
             defaults: false
         });
 
-        // This adds support for a `--auth` flag
-        this.option('auth', {
-            desc: 'Provide authentication type for the application',
-            type: String
-        });
-
         // This adds support for a `--uaa-base-name` flag
         this.option('uaa-base-name', {
             desc: 'Provide the name of UAA server, when using --auth uaa',
@@ -71,15 +65,15 @@ module.exports = JhipsterClientGenerator.extend({
             type: String
         });
 
-        // This adds support for a `--dev-db` flag
-        this.option('dev-db', {
-            desc: 'Provide development DB option for the application',
+        // This adds support for a `--auth` flag
+        this.option('auth', {
+            desc: 'Provide authentication type for the application',
             type: String
         });
 
         // This adds support for a `--db` flag
         this.option('db', {
-            desc: 'Provide DB type for the application',
+            desc: 'Provide DB name for the application',
             type: String
         });
 
@@ -125,7 +119,7 @@ module.exports = JhipsterClientGenerator.extend({
 
         this.skipServer = this.configOptions.skipServer || this.config.get('skipServer');
         this.skipUserManagement = this.configOptions.skipUserManagement || this.options['skip-user-management'] || this.config.get('skipUserManagement');
-        this.authenticationType = this.options.auth;
+        this.authenticationType = this.options.auth || this.configOptions.authenticationType || this.config.get('authenticationType');
         const uaaBaseName = this.options.uaaBaseName || this.configOptions.uaaBaseName || this.options['uaa-base-name'] || this.config.get('uaaBaseName');
         if (this.options.auth === 'uaa' && _.isNil(uaaBaseName)) {
             this.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
@@ -134,11 +128,12 @@ module.exports = JhipsterClientGenerator.extend({
 
         this.buildTool = this.options.build;
         this.websocket = this.options.websocket;
-        this.devDatabaseType = this.options['dev-db'];
-        this.databaseType = this.options.db;
-        this.enableSocialSignIn = this.options.social;
-        this.searchEngine = this.options['search-engine'];
-        this.hibernateCache = this.options['hb-cache'];
+        this.devDatabaseType = this.options.db || this.configOptions.devDatabaseType || this.config.get('devDatabaseType');
+        this.prodDatabaseType = this.options.db || this.configOptions.prodDatabaseType || this.config.get('prodDatabaseType');
+        this.databaseType = this.getDBTypeFromDBValue(this.options.db) || this.configOptions.databaseType || this.config.get('databaseType');
+        this.enableSocialSignIn = this.options.social || this.config.get('enableSocialSignIn');
+        this.searchEngine = this.options['search-engine'] || this.config.get('searchEngine');
+        this.hibernateCache = this.options['hb-cache'] || this.config.get('hibernateCache');
         this.otherModules = this.configOptions.otherModules || [];
         this.jhiPrefix = this.configOptions.jhiPrefix || this.config.get('jhiPrefix') || this.options['jhi-prefix'];
         this.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
@@ -177,10 +172,15 @@ module.exports = JhipsterClientGenerator.extend({
                 /* for backward compatibility */
                 this.clientFramework = 'angular1';
             }
+            if (this.clientFramework === 'angular2') {
+                /* for backward compatibility */
+                this.clientFramework = 'angularX';
+            }
             this.useSass = this.config.get('useSass');
             this.enableTranslation = this.config.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
             this.nativeLanguage = this.config.get('nativeLanguage');
             this.languages = this.config.get('languages');
+            this.enableI18nRTL = this.isI18nRTLSupportNecessary(this.languages);
             this.messageBroker = this.config.get('messageBroker');
             this.packagejs = packagejs;
             const baseName = this.config.get('baseName');
@@ -209,6 +209,12 @@ module.exports = JhipsterClientGenerator.extend({
                 } else {
                     this.clientPackageManager = 'npm';
                 }
+            }
+        },
+
+        validateSkipServer() {
+            if (this.skipServer && !(this.databaseType && this.devDatabaseType && this.prodDatabaseType && this.authenticationType)) {
+                this.error(`When using skip-server flag, you must pass a database option and authentication type using ${chalk.yellow('--db')} and ${chalk.yellow('--auth')} flags`);
             }
         }
     },
@@ -244,7 +250,7 @@ module.exports = JhipsterClientGenerator.extend({
             // Application name modified, using each technology's conventions
             this.camelizedBaseName = _.camelCase(this.baseName);
             this.angularAppName = this.getAngularAppName();
-            this.angular2AppName = this.getAngular2AppName();
+            this.angularXAppName = this.getAngularXAppName();
             this.capitalizedBaseName = _.upperFirst(this.baseName);
             this.dasherizedBaseName = _.kebabCase(this.baseName);
             this.lowercaseBaseName = this.baseName.toLowerCase();
@@ -255,6 +261,8 @@ module.exports = JhipsterClientGenerator.extend({
         },
 
         saveConfig() {
+            this.config.set('jhipsterVersion', packagejs.version);
+            this.config.set('baseName', this.baseName);
             this.config.set('clientFramework', this.clientFramework);
             this.config.set('useSass', this.useSass);
             this.config.set('enableTranslation', this.enableTranslation);
@@ -263,6 +271,17 @@ module.exports = JhipsterClientGenerator.extend({
                 this.config.set('languages', this.languages);
             }
             this.config.set('clientPackageManager', this.clientPackageManager);
+            if (this.skipServer) {
+                this.authenticationType && this.config.set('authenticationType', this.authenticationType);
+                this.uaaBaseName && this.config.set('uaaBaseName', this.uaaBaseName);
+                this.hibernateCache && this.config.set('hibernateCache', this.hibernateCache);
+                this.websocket && this.config.set('websocket', this.websocket);
+                this.databaseType && this.config.set('databaseType', this.databaseType);
+                this.devDatabaseType && this.config.set('devDatabaseType', this.devDatabaseType);
+                this.prodDatabaseType && this.config.set('prodDatabaseType', this.prodDatabaseType);
+                this.searchEngine && this.config.set('searchEngine', this.searchEngine);
+                this.buildTool && this.config.set('buildTool', this.buildTool);
+            }
         }
     },
 
@@ -315,6 +334,7 @@ module.exports = JhipsterClientGenerator.extend({
             }
             if (this.configOptions.languages !== undefined) {
                 this.languages = this.configOptions.languages;
+                this.enableI18nRTL = this.isI18nRTLSupportNecessary(this.languages);
             }
 
             if (this.configOptions.uaaBaseName !== undefined) {
@@ -358,7 +378,9 @@ module.exports = JhipsterClientGenerator.extend({
                 this.warning('Install of dependencies failed!');
                 this.log(logMsg);
             } else if (this.clientFramework === 'angular1') {
-                this.spawnCommand('gulp', ['install']);
+                this.spawnCommandSync('gulp', ['install']);
+            } else {
+                this.spawnCommandSync(this.clientPackageManager, ['run', 'webpack:build']);
             }
         };
 

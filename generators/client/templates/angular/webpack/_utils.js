@@ -17,12 +17,15 @@
  limitations under the License.
 -%>
 const fs = require('fs');
+const path = require('path');
 
 module.exports = {
-    parseVersion : parseVersion
+    parseVersion,
+    root,
+    isExternalLib
 };
 
-<%_ if (buildTool == 'maven') { _%>
+<%_ if (buildTool === 'maven') { _%>
 const parseString = require('xml2js').parseString;
 // return the version number from `pom.xml` file
 function parseVersion() {
@@ -40,7 +43,7 @@ function parseVersion() {
     }
     return version;
 }
-<%_ } else if (buildTool == 'gradle') { _%>
+<%_ } else if (buildTool === 'gradle') { _%>
 // Returns the second occurrence of the version number from `build.gradle` file
 function parseVersion() {
     const versionRegex = /^version\s*=\s*[',"]([^',"]*)[',"]/gm; // Match and group the version number
@@ -53,3 +56,18 @@ function parseVersion() {
     return '0.0.1-SNAPSHOT';
 };
 <%_ } _%>
+
+const _root = path.resolve(__dirname, '..');
+
+function root(args) {
+  args = Array.prototype.slice.call(arguments, 0);
+  return path.join.apply(path, [_root].concat(args));
+}
+
+function isExternalLib(module, check = /node_modules/) {
+    const req = module.userRequest;
+    if (typeof req !== 'string') {
+        return false;
+    }
+    return req.search(check) >= 0;
+}

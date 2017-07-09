@@ -45,7 +45,7 @@ This application is configured for Service Discovery and Configuration with <% i
 <%_ if(skipClient) { _%>
 To start your application in the dev profile, simply run:
 
-    <% if (buildTool == 'maven') { %>./mvnw<% } %><% if (buildTool == 'gradle'){ %>./gradlew<% } %>
+    <% if (buildTool === 'maven') { %>./mvnw<% } %><% if (buildTool === 'gradle'){ %>./gradlew<% } %>
 
 <%_ } _%>
 <%_ if(!skipClient) { _%>
@@ -74,8 +74,8 @@ We use [Gulp][] as our build system. Install the Gulp command-line tool globally
 
 Run the following commands in two separate terminals to create a blissful development experience where your browser
 auto-refreshes when files change on your hard drive.
-<% if (buildTool == 'maven') { %>
-    ./mvnw<% } %><% if (buildTool == 'gradle') { %>
+<% if (buildTool === 'maven') { %>
+    ./mvnw<% } %><% if (buildTool === 'gradle') { %>
     ./gradlew<% } %>
 <%_ if (clientFramework !== 'angular1') { _%>
     <%= clientPackageManager %> start
@@ -139,16 +139,16 @@ will generate few files:
 ## Building for production
 
 To optimize the <%= baseName %> application for production, run:
-<% if (buildTool == 'maven') { %>
-    ./mvnw -Pprod clean package<% } %><% if (buildTool == 'gradle') { %>
+<% if (buildTool === 'maven') { %>
+    ./mvnw -Pprod clean package<% } %><% if (buildTool === 'gradle') { %>
     ./gradlew -Pprod clean bootRepackage<% } %>
 
 <%_ if(!skipClient) { _%>
 This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
 <%_ } _%>
 To ensure everything worked, run:
-<% if (buildTool == 'maven') { %>
-    java -jar target/*.war<% } %><% if (buildTool == 'gradle') { %>
+<% if (buildTool === 'maven') { %>
+    java -jar target/*.war<% } %><% if (buildTool === 'gradle') { %>
     java -jar build/libs/*.war<% } %>
 
 <% if(!skipClient) { %>Then navigate to [http://localhost:<%= serverPort %>](http://localhost:<%= serverPort %>) in your browser.
@@ -159,7 +159,7 @@ Refer to [Using JHipster in production][] for more details.
 
 To launch your application's tests, run:
 
-    <% if (buildTool == 'maven') { %>./mvnw clean test<% } else { %>./gradlew test<% } %>
+    <% if (buildTool === 'maven') { %>./mvnw clean test<% } else { %>./gradlew test<% } %>
 <% if(!skipClient) { %>
 ### Client tests
 
@@ -172,12 +172,12 @@ Unit tests are run by [Karma][] and written with [Jasmine][]. They're located in
 <%_ } _%>
 
 <% if (protractorTests) { %>UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in [<%= CLIENT_TEST_SRC_DIR %>e2e](<%= CLIENT_TEST_SRC_DIR %>e2e)
-and can be run by starting Spring Boot in one terminal (`<% if (buildTool == 'maven') { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`<% if (clientFramework !== 'angular1') { %><%= clientPackageManager %> run e2e<% } else { %>gulp itest<% } %>`) in a second one.<% } %>
+and can be run by starting Spring Boot in one terminal (`<% if (buildTool === 'maven') { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`<% if (clientFramework !== 'angular1') { %><%= clientPackageManager %> run e2e<% } else { %>gulp itest<% } %>`) in a second one.<% } %>
 <% } %><% if (gatlingTests) { %>### Other tests
 
 Performance tests are run by [Gatling][] and written in Scala. They're located in [src/test/gatling](src/test/gatling) and can be run with:
 
-    <% if (buildTool == 'maven') { %>./mvnw gatling:execute<% } else { %>./gradlew gatlingRun<% } %>
+    <% if (buildTool === 'maven') { %>./mvnw gatling:execute<% } else { %>./gradlew gatlingRun<% } %>
 <% } %>
 For more information, refer to the [Running tests page][].
 
@@ -195,7 +195,7 @@ To stop it and remove the container, run:
 You can also fully dockerize your application and all the services that it depends on.
 To achieve this, first build a docker image of your app by running:
 
-    <% if (buildTool == 'maven') { %>./mvnw package -Pprod docker:build<% } %><% if (buildTool == 'gradle') { %>./gradlew bootRepackage -Pprod buildDocker<% } %>
+    <% if (buildTool === 'maven') { %>./mvnw package -Pprod docker:build<% } %><% if (buildTool === 'gradle') { %>./gradlew bootRepackage -Pprod buildDocker<% } %>
 
 Then run:
 
@@ -209,13 +209,13 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 
 [JHipster Homepage and latest documentation]: <%= DOCUMENTATION_URL %>
 [JHipster <%= jhipsterVersion %> archive]: <%= DOCUMENTATION_ARCHIVE_URL %>
-<% if (applicationType == 'gateway' || applicationType == 'microservice' || applicationType == 'uaa') { %>[Doing microservices with JHipster]: <%= DOCUMENTATION_ARCHIVE_URL %>/microservices-architecture/<% } %>
-<%_ if (applicationType == 'uaa') { _%>[Using UAA for Microservice Security]: <%= DOCUMENTATION_ARCHIVE_URL %>/using-uaa/<%_ } _%>
+<% if (applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { %>[Doing microservices with JHipster]: <%= DOCUMENTATION_ARCHIVE_URL %>/microservices-architecture/<% } %>
+<%_ if (applicationType === 'uaa') { _%>[Using UAA for Microservice Security]: <%= DOCUMENTATION_ARCHIVE_URL %>/using-uaa/<%_ } _%>
 [Using JHipster in development]: <%= DOCUMENTATION_ARCHIVE_URL %>/development/
-<%_ if (serviceDiscoveryType == 'eureka') { _%>
+<%_ if (serviceDiscoveryType === 'eureka') { _%>
 [Service Discovery and Configuration with the JHipster-Registry]: <%= DOCUMENTATION_ARCHIVE_URL %>/microservices-architecture/#jhipster-registry
 <%_ } _%>
-<%_ if (serviceDiscoveryType == 'consul') { _%>
+<%_ if (serviceDiscoveryType === 'consul') { _%>
 [Service Discovery and Configuration with Consul]: <%= DOCUMENTATION_ARCHIVE_URL %>/microservices-architecture/#consul
 <%_ } _%>
 [Using Docker and Docker-Compose]: <%= DOCUMENTATION_ARCHIVE_URL %>/docker-compose

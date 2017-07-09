@@ -51,37 +51,36 @@ function askForApplicationType() {
     if (this.existingProject) return;
 
     const DEFAULT_APPTYPE = 'monolith';
-    if (this.skipServer) {
-        this.applicationType = this.configOptions.applicationType = DEFAULT_APPTYPE;
-        return;
-    }
 
     const done = this.async();
 
-    this.prompt({
-        type: 'list',
-        name: 'applicationType',
-        message: response => this.getNumberedQuestion('Which *type* of application would you like to create?', true),
-        choices: [
-            {
-                value: DEFAULT_APPTYPE,
-                name: 'Monolithic application (recommended for simple projects)'
-            },
-            {
-                value: 'microservice',
-                name: 'Microservice application'
-            },
-            {
-                value: 'gateway',
-                name: 'Microservice gateway'
-            },
-            {
-                value: 'uaa',
-                name: '[BETA] JHipster UAA server (for microservice OAuth2 authentication)'
-            }
-        ],
-        default: DEFAULT_APPTYPE
-    }).then((prompt) => {
+    const promise = this.skipServer
+        ? Promise.resolve({ applicationType: DEFAULT_APPTYPE })
+        : this.prompt({
+            type: 'list',
+            name: 'applicationType',
+            message: response => this.getNumberedQuestion('Which *type* of application would you like to create?', true),
+            choices: [
+                {
+                    value: DEFAULT_APPTYPE,
+                    name: 'Monolithic application (recommended for simple projects)'
+                },
+                {
+                    value: 'microservice',
+                    name: 'Microservice application'
+                },
+                {
+                    value: 'gateway',
+                    name: 'Microservice gateway'
+                },
+                {
+                    value: 'uaa',
+                    name: '[BETA] JHipster UAA server (for microservice OAuth2 authentication)'
+                }
+            ],
+            default: DEFAULT_APPTYPE
+        });
+    promise.then((prompt) => {
         this.applicationType = this.configOptions.applicationType = prompt.applicationType;
         done();
     });
@@ -156,31 +155,36 @@ function askForMoreModules() {
 
 function askModulesToBeInstalled(done, generator) {
     generator.httpsGet('https://api.npms.io/v2/search?q=keywords:jhipster-module&from=0&size=50', (body) => {
-        const moduleResponse = JSON.parse(body);
-        const choices = [];
-        moduleResponse.results.forEach((modDef) => {
-            choices.push({
-                value: { name: modDef.package.name, version: modDef.package.version },
-                name: `(${modDef.package.name}-${modDef.package.version}) ${modDef.package.description}`
-            });
-        });
-        if (choices.length > 0) {
-            generator.prompt({
-                type: 'checkbox',
-                name: 'otherModules',
-                message: 'Which other modules would you like to use?',
-                choices,
-                default: []
-            }).then((prompt) => {
-                // [ {name: [moduleName], version:[version]}, ...]
-                generator.otherModules = [];
-                prompt.otherModules.forEach((module) => {
-                    generator.otherModules.push({ name: module.name, version: module.version });
+        try {
+            const moduleResponse = JSON.parse(body);
+            const choices = [];
+            moduleResponse.results.forEach((modDef) => {
+                choices.push({
+                    value: { name: modDef.package.name, version: modDef.package.version },
+                    name: `(${modDef.package.name}-${modDef.package.version}) ${modDef.package.description}`
                 });
-                generator.configOptions.otherModules = generator.otherModules;
-                done();
             });
-        } else {
+            if (choices.length > 0) {
+                generator.prompt({
+                    type: 'checkbox',
+                    name: 'otherModules',
+                    message: 'Which other modules would you like to use?',
+                    choices,
+                    default: []
+                }).then((prompt) => {
+                    // [ {name: [moduleName], version:[version]}, ...]
+                    generator.otherModules = [];
+                    prompt.otherModules.forEach((module) => {
+                        generator.otherModules.push({ name: module.name, version: module.version });
+                    });
+                    generator.configOptions.otherModules = generator.otherModules;
+                    done();
+                });
+            } else {
+                done();
+            }
+        } catch (err) {
+            generator.warning(`Error while parsing. Please install the modules manually or try again later. ${err.message}`);
             done();
         }
     }, (error) => {

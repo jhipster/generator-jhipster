@@ -43,4 +43,4 @@ import { MockLanguageService } from './helpers/mock-language.service';
         }
     ]
 })
-export class <%=angular2AppName%>TestModule {}
+export class <%=angularXAppName%>TestModule {}

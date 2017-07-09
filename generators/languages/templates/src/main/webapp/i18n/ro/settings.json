@@ -6,25 +6,25 @@
             "firstname.placeholder": "Prenumele dumneavoastră",
             "lastname": "Nume",
             "lastname.placeholder": "Numele dumneavoastră",
-            "language": "Limba",
-            "button": "Salvează"
+            "language": "Limbă",
+            "button": "Salvare"
         },
         "messages": {
             "error": {
                 "fail": "<strong>Eroare!</strong> Setările nu au putut fi salvate.",
-                "emailexists": "<strong>Emailul a fost deja folosit!</strong> Vă rugăm să alegeți un altul."
+                "emailexists": "<strong>Acest email a mai fost folosit!</strong> Vă rugăm să alegeți altul."
             },
             "success": "<strong>Setări salvate!</strong>",
             "validate": {
                 "firstname": {
                     "required": "Prenumele dumneavoastră este necesar",
-                    "minlength": "Prenumele dumneavoastră trebuie să aibă cel puțin 1 caracter",
-                    "maxlength": "Prenumele dumneavoastră nu trebuie să aibă mai mult de 50 de caractere"
+                    "minlength": "Prenumele nu poate fi mai scurt de 1 caracter",
+                    "maxlength": "Prenumele nu poate fi mai lung de 50 de caractere"
                 },
                 "lastname": {
                     "required": "Numele dumneavoastră este necesar",
-                    "minlength": "Numele dumneavoastră trebuie să aibă cel puțin 1 caracter",
-                    "maxlength": "Numele dumneavoastră nu trebuie să aibă mai mult de 50 de caractere"
+                    "minlength": "Numele nu poate fi mai scurt de 1 caracter",
+                    "maxlength": "Numele nu poate fi mai lung de 50 caractere"
                 }
             }
         }

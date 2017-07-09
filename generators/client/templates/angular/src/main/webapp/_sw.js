@@ -1,5 +1,5 @@
-var dataCacheName = '"<%=angular2AppName%>-v1';
-var cacheName = '"<%=angular2AppName%>-1';
+var dataCacheName = '<%=angularXAppName%>-v1';
+var cacheName = '<%=angularXAppName%>-1';
 var filesToCache = [
     '/',
     '/index.html'

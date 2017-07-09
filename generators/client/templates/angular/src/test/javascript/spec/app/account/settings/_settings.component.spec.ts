@@ -21,7 +21,7 @@ import { Observable } from 'rxjs/Rx';
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageHelper } from '../../../../../../main/webapp/app/shared';
 <%_ } _%>
-import { <%=angular2AppName%>TestModule } from '../../../test.module';
+import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { Principal, AccountService } from '../../../../../../main/webapp/app/shared';
 import { SettingsComponent } from '../../../../../../main/webapp/app/account/settings/settings.component';
 import { MockAccountService } from '../../../helpers/mock-account.service';
@@ -30,7 +30,6 @@ import { MockPrincipal } from '../../../helpers/mock-principal.service';
 import { <%=jhiPrefixCapitalized%>TrackerService } from '../../../../../../main/webapp/app/shared/tracker/tracker.service';
 import { MockTrackerService } from '../../../helpers/mock-tracker.service';
 <%_ } _%>
-
 
 describe('Component Tests', () => {
 
@@ -43,7 +42,7 @@ describe('Component Tests', () => {
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                imports: [<%=angular2AppName%>TestModule],
+                imports: [<%=angularXAppName%>TestModule],
                 declarations: [SettingsComponent],
                 providers: [
                     {
@@ -78,9 +77,9 @@ describe('Component Tests', () => {
             mockPrincipal = fixture.debugElement.injector.get(Principal);
         });
 
-        it('should send the current identity upon save', function () {
+        it('should send the current identity upon save', () => {
             // GIVEN
-            let accountValues = {
+            const accountValues = {
                 firstName: 'John',
                 lastName: 'Doe',
 
@@ -101,9 +100,9 @@ describe('Component Tests', () => {
             expect(comp.settingsAccount).toEqual(accountValues);
         });
 
-        it('should notify of success upon successful save', function () {
+        it('should notify of success upon successful save', () => {
             // GIVEN
-            let accountValues = {
+            const accountValues = {
                 firstName: 'John',
                 lastName: 'Doe'
             };
@@ -117,7 +116,7 @@ describe('Component Tests', () => {
             expect(comp.success).toBe('OK');
         });
 
-        it('should notify of error upon failed save', function () {
+        it('should notify of error upon failed save', () => {
             // GIVEN
             mockAuth.saveSpy.and.returnValue(Observable.throw('ERROR'));
 

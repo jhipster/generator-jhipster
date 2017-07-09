@@ -19,11 +19,11 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { <%= angular2AppName %>SharedModule } from '../../shared';
-<%_ for (const rel of differentRelationships) {
-       if (rel.otherEntityNameCapitalized === 'User') { _%>
-import { <%= angular2AppName %>AdminModule } from '../../admin/admin.module';
-<%_ }} _%>
+import { <%= angularXAppName %>SharedModule } from '../../shared';
+<%_ Object.keys(differentRelationships).forEach(key => {
+       if (key === 'User') { _%>
+import { <%= angularXAppName %>AdminModule } from '../../admin/admin.module';
+<%_ }}); _%>
 import {
     <%= entityAngularName %>Service,
     <%= entityAngularName %>PopupService,
@@ -45,12 +45,12 @@ const ENTITY_STATES = [
 
 @NgModule({
     imports: [
-        <%= angular2AppName %>SharedModule,
-        <%_ for (const rel of differentRelationships) {
-              if (rel.otherEntityNameCapitalized === 'User') { _%>
-        <%= angular2AppName %>AdminModule,
-        <%_ }} _%>
-        RouterModule.forChild(ENTITY_STATES)
+        <%= angularXAppName %>SharedModule,
+        <%_ Object.keys(differentRelationships).forEach(key => {
+              if (key === 'User') { _%>
+        <%= angularXAppName %>AdminModule,
+        <%_ }}); _%>
+        RouterModule.forRoot(ENTITY_STATES)
     ],
     declarations: [
         <%= entityAngularName %>Component,
@@ -76,4 +76,4 @@ const ENTITY_STATES = [
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class <%= angular2AppName %><%= entityAngularName %>Module {}
+export class <%= angularXAppName %><%= entityAngularName %>Module {}

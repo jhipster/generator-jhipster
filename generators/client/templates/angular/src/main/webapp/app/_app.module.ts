@@ -33,6 +33,8 @@ import { customHttpProvider } from './blocks/interceptor/http.provider';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
 import { LAZY_ROUTES } from './lazy.route';
 
+// jhipster-needle-angular-add-module-import JHipster will add new module here
+
 import {
     <%=jhiPrefixCapitalized%>MainComponent,
     LayoutRoutingModule,
@@ -56,6 +58,7 @@ import {
         <%=angular2AppName%>SharedModule,
         <%=angular2AppName%>HomeModule,
         <%=angular2AppName%>AccountModule,
+        // jhipster-needle-angular-add-module JHipster will add new module here
     ],
     declarations: [
         <%=jhiPrefixCapitalized%>MainComponent,
@@ -75,4 +78,4 @@ import {
     ],
     bootstrap: [ <%=jhiPrefixCapitalized%>MainComponent ]
 })
-export class <%=angular2AppName%>AppModule {}
+export class <%=angularXAppName%>AppModule {}

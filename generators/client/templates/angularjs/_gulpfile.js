@@ -138,7 +138,8 @@ gulp.task('ngconstant:dev', function () {
         name: '<%= angularAppName %>',
         constants: {
             VERSION: util.parseVersion(),
-            DEBUG_INFO_ENABLED: true
+            DEBUG_INFO_ENABLED: true,
+            BUILD_TIMESTAMP: ''
         },
         template: config.constantTemplate,
         stream: true
@@ -152,7 +153,8 @@ gulp.task('ngconstant:prod', function () {
         name: '<%= angularAppName %>',
         constants: {
             VERSION: util.parseVersion(),
-            DEBUG_INFO_ENABLED: false
+            DEBUG_INFO_ENABLED: false,
+            BUILD_TIMESTAMP: new Date().getTime()
         },
         template: config.constantTemplate,
         stream: true
@@ -211,7 +213,7 @@ gulp.task('itest', ['protractor']);
 
 gulp.task('watch', function () {
     gulp.watch('bower.json', ['install']);
-    gulp.watch(['gulpfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>], ['ngconstant:dev']);
+    gulp.watch(['gulpfile.js', <% if(buildTool === 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>], ['ngconstant:dev']);
     gulp.watch(<% if(useSass) { %>config.sassSrc<% } else { %>config.app + 'content/css/**/*.css'<% } %>, ['styles']);
     gulp.watch(config.app + 'content/images/**', ['images']);
     gulp.watch(config.app + 'app/**/*.js', ['inject:app']);

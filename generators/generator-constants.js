@@ -18,7 +18,7 @@
  */
 
 // version of docker images
-const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v3.0.1';
+const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v3.0.3';
 const DOCKER_JAVA_JRE = 'openjdk:8-jre-alpine';
 const DOCKER_MYSQL = 'mysql:5.7.18';
 const DOCKER_MARIADB = 'mariadb:10.1.17';
@@ -30,22 +30,22 @@ const DOCKER_ORACLE = 'sath89/oracle-12c:latest';
 const DOCKER_ELASTICSEARCH = 'elasticsearch:2.4.1';
 const DOCKER_KAFKA = 'wurstmeister/kafka:0.10.1.1';
 const DOCKER_ZOOKEEPER = 'wurstmeister/zookeeper:3.4.6';
-const DOCKER_SONAR = 'sonarqube:6.2-alpine';
+const DOCKER_SONAR = 'sonarqube:6.4-alpine';
 const DOCKER_JHIPSTER_CONSOLE = 'jhipster/jhipster-console:v2.0.1';
 const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v2.0.1';
 const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v2.0.1';
 const DOCKER_JHIPSTER_ZIPKIN = 'jhipster/jhipster-zipkin:v2.0.1';
-const DOCKER_CONSUL = 'consul:0.7.2';
-const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.2.1';
-const DOCKER_PROMETHEUS = 'prom/prometheus:v1.4.1';
-const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.5.1';
-const DOCKER_GRAFANA = 'grafana/grafana:4.0.2';
+const DOCKER_CONSUL = 'consul:0.8.3';
+const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.2.2';
+const DOCKER_PROMETHEUS = 'prom/prometheus:v1.6.3';
+const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.6.2';
+const DOCKER_GRAFANA = 'grafana/grafana:4.3.2';
 const DOCKER_JENKINS = 'jenkins:latest';
 
 // version of Node, Yarn, NPM
-const NODE_VERSION = '6.10.3';
-const YARN_VERSION = '0.24.4';
-const NPM_VERSION = '4.5.0';
+const NODE_VERSION = '6.11.0';
+const YARN_VERSION = '0.24.6';
+const NPM_VERSION = '5.0.3';
 
 // all constants used throughout all generators
 
@@ -60,6 +60,29 @@ const SUPPORTED_VALIDATION_RULES = ['required', 'max', 'min', 'maxlength', 'minl
 // documentation constants
 const JHIPSTER_DOCUMENTATION_URL = 'https://jhipster.github.io';
 const JHIPSTER_DOCUMENTATION_ARCHIVE_PATH = '/documentation-archive/';
+
+const SQL_DB_OPTIONS = [
+    {
+        value: 'mysql',
+        name: 'MySQL'
+    },
+    {
+        value: 'mariadb',
+        name: 'MariaDB'
+    },
+    {
+        value: 'postgresql',
+        name: 'PostgreSQL'
+    },
+    {
+        value: 'oracle',
+        name: 'Oracle (Please follow our documentation to use the Oracle proprietary driver)'
+    },
+    {
+        value: 'mssql',
+        name: 'Microsoft SQL Server'
+    }
+];
 
 const constants = {
     QUESTIONS: 16, // maximum possible number of questions
@@ -114,7 +137,9 @@ const constants = {
     NODE_VERSION,
     YARN_VERSION,
     NPM_VERSION,
-    DOCKER_JENKINS
+    DOCKER_JENKINS,
+
+    SQL_DB_OPTIONS
 };
 
 module.exports = constants;

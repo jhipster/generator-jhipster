@@ -41,7 +41,7 @@ function askForStorageType() {
         return;
     }
 
-    // prompt this only when prodDatabaseType != 'no' for any of the chosen apps
+    // prompt this only when prodDatabaseType !== 'no' for any of the chosen apps
     const prompts = [{
         type: 'list',
         name: 'storageType',

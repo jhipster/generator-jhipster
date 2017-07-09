@@ -34,7 +34,7 @@
             getPreviousState: getPreviousState,
             login: login,
             logout: logout,
-            <%_ if (authenticationType == 'jwt') { _%>
+            <%_ if (authenticationType === 'jwt') { _%>
             loginWithToken: loginWithToken,
             <%_ } _%>
             resetPasswordFinish: resetPasswordFinish,
@@ -67,7 +67,7 @@
                 var isAuthenticated = Principal.isAuthenticated();
 
                 // an authenticated user can't access to login and register pages
-                if (isAuthenticated && $rootScope.toState.parent === 'account' && ($rootScope.toState.name === 'login' || $rootScope.toState.name === 'register'<% if (authenticationType == 'jwt') { %> || $rootScope.toState.name === 'social-auth'<% } %>)) {
+                if (isAuthenticated && $rootScope.toState.parent === 'account' && ($rootScope.toState.name === 'login' || $rootScope.toState.name === 'register'<% if (authenticationType === 'jwt') { %> || $rootScope.toState.name === 'social-auth'<% } %>)) {
                     $state.go('home');
                 }
 
@@ -154,7 +154,7 @@
             return deferred.promise;
         }
 
-        <%_ if (authenticationType == 'jwt') { _%>
+        <%_ if (authenticationType === 'jwt') { _%>
         function loginWithToken(jwt, rememberMe) {
             return AuthServerProvider.loginWithToken(jwt, rememberMe);
         }

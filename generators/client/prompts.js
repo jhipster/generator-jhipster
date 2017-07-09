@@ -43,15 +43,15 @@ function askForClient() {
             applicationType !== 'microservice' && applicationType !== 'uaa'),
         choices: [
             {
-                value: 'angular1',
-                name: 'AngularJS 1.x'
+                value: 'angularX',
+                name: 'Angular 4'
             },
             {
-                value: 'angular2',
-                name: '[BETA] Angular 4'
+                value: 'angular1',
+                name: 'AngularJS 1.x'
             }
         ],
-        default: 'angular1'
+        default: 'angularX'
     }).then((prompt) => {
         this.clientFramework = prompt.clientFramework;
         done();

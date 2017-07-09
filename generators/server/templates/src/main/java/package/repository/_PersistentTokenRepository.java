@@ -17,18 +17,18 @@
  limitations under the License.
 -%>
 package <%=packageName%>.repository;
-<% if (databaseType == 'cassandra') { %>
+<% if (databaseType === 'cassandra') { %>
 import com.datastax.driver.core.*;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;<% } %>
 import <%=packageName%>.domain.PersistentToken;
-import <%=packageName%>.domain.User;<% if (databaseType == 'sql') { %>
+import <%=packageName%>.domain.User;<% if (databaseType === 'sql') { %>
 import java.time.LocalDate;
 import org.springframework.data.jpa.repository.JpaRepository;
-<% } %><% if (databaseType == 'mongodb') { %>
+<% } %><% if (databaseType === 'mongodb') { %>
 import java.time.LocalDate;
 import org.springframework.data.mongodb.repository.MongoRepository;
-<% } %><% if (databaseType == 'cassandra') { %>
+<% } %><% if (databaseType === 'cassandra') { %>
 import org.springframework.stereotype.Repository;
 
 import javax.validation.ConstraintViolation;
@@ -37,24 +37,24 @@ import javax.validation.Validator;
 
 import java.util.ArrayList;<% } %>
 import java.util.List;
-<%_ if (databaseType == 'cassandra') { _%>
+<%_ if (databaseType === 'cassandra') { _%>
 import java.util.Set;
 <%_ } _%>
 
-<% if (databaseType == 'sql') { %>/**
+<% if (databaseType === 'sql') { %>/**
  * Spring Data JPA repository for the PersistentToken entity.
- */<% } %><% if (databaseType == 'mongodb') { %>/**
+ */<% } %><% if (databaseType === 'mongodb') { %>/**
  * Spring Data MongoDB repository for the PersistentToken entity.
- */<% } %><% if (databaseType == 'cassandra') { %>/**
+ */<% } %><% if (databaseType === 'cassandra') { %>/**
  * Cassandra repository for the PersistentToken entity.
- */<% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-public interface PersistentTokenRepository extends <% if (databaseType == 'sql') { %>JpaRepository<% } %><% if (databaseType == 'mongodb') { %>MongoRepository<% } %><PersistentToken, String> {
+ */<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+public interface PersistentTokenRepository extends <% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><PersistentToken, String> {
 
     List<PersistentToken> findByUser(User user);
 
     List<PersistentToken> findByTokenDateBefore(LocalDate localDate);
 
-}<% } else if (databaseType == 'cassandra') { %>
+}<% } else if (databaseType === 'cassandra') { %>
 @Repository
 public class PersistentTokenRepository {
 

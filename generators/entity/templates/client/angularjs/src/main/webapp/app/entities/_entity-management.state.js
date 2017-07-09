@@ -29,7 +29,7 @@
         $stateProvider
         .state('<%= entityStateName %>', {
             parent: 'entity',
-            url: '/<%= entityUrl %><% if (pagination == 'pagination' || pagination == 'pager') { %>?page&sort&search<% } %>',
+            url: '/<%= entityUrl %><% if (pagination === 'pagination' || pagination === 'pager') { %>?page&sort&search<% } %>',
             data: {
                 authorities: ['ROLE_USER'],
                 pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
@@ -41,7 +41,7 @@
                     controllerAs: 'vm'
                 }
             },
-            <%_ if (pagination == 'pagination' || pagination == 'pager'){ _%>
+            <%_ if (pagination === 'pagination' || pagination === 'pager'){ _%>
             params: {
                 page: {
                     value: '1',
@@ -55,7 +55,7 @@
             },
             <%_ } _%>
             resolve: {
-            <%_ if (pagination == 'pagination' || pagination == 'pager'){ _%>
+            <%_ if (pagination === 'pagination' || pagination === 'pager'){ _%>
                 pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
                     return {
                         page: PaginationUtil.parsePage($stateParams.page),
@@ -64,12 +64,12 @@
                         ascending: PaginationUtil.parseAscending($stateParams.sort),
                         search: $stateParams.search
                     };
-                }]<%= (pagination == 'pagination' || pagination == 'pager' && enableTranslation) ? ',' : '' %>
+                }]<%= (pagination === 'pagination' || pagination === 'pager' && enableTranslation) ? ',' : '' %>
             <%_ } if (enableTranslation){ _%>
                 translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                     $translatePartialLoader.addPart('<%= entityInstance %>');<%
                     for (const idx in fields) {
-                      if (fields[idx].fieldIsEnum == true) { %>
+                      if (fields[idx].fieldIsEnum === true) { %>
                     $translatePartialLoader.addPart('<%= fields[idx].enumInstance %>');<% }} %>
                     $translatePartialLoader.addPart('global');
                     return $translate.refresh();
@@ -95,7 +95,7 @@
                 translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                     $translatePartialLoader.addPart('<%= entityInstance %>');<%
                     for (const idx in fields) {
-                      if (fields[idx].fieldIsEnum == true) { %>
+                      if (fields[idx].fieldIsEnum === true) { %>
                     $translatePartialLoader.addPart('<%= fields[idx].enumInstance %>');<% }} %>
                     return $translate.refresh();
                 }],<% } %>
@@ -154,11 +154,11 @@
                         entity: function () {
                             return {
                                 <%_ for (idx in fields) { _%>
-                                    <%_ if (fields[idx].fieldType == 'Boolean' && fields[idx].fieldValidate == true && fields[idx].fieldValidateRules.indexOf('required') != -1) { _%>
+                                    <%_ if (fields[idx].fieldType === 'Boolean' && fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.indexOf('required') !== -1) { _%>
                                 <%= fields[idx].fieldName %>: false,
                                     <%_ } else { _%>
                                 <%= fields[idx].fieldName %>: null,
-                                        <%_ if ((fields[idx].fieldType == 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent != 'text') { _%>
+                                        <%_ if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
                                 <%= fields[idx].fieldName %>ContentType: null,
                                         <%_ } _%>
                                     <%_ } _%>

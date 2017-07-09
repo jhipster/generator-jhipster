@@ -25,7 +25,7 @@ for (idx in relationships) {
         break;
     }
 }
-if (importApiModelProperty == false) {
+if (!importApiModelProperty) {
   for (idx in fields) {
       if (typeof fields[idx].javadoc != 'undefined') {
           importApiModelProperty = true;
@@ -35,16 +35,16 @@ if (importApiModelProperty == false) {
 }
 
 for (idx in relationships) {
-    if (relationships[idx].relationshipType == 'one-to-many'
-        || relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide == false
-        || relationships[idx].relationshipType == 'many-to-many' && relationships[idx].ownerSide == false) {
+    if (relationships[idx].relationshipType === 'one-to-many'
+        || relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide === false
+        || relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === false) {
         importJsonignore = true;
         break;
     }
 }
 
 for (idx in relationships) {
-    if (relationships[idx].relationshipType == 'one-to-many' || relationships[idx].relationshipType == 'many-to-many') {
+    if (relationships[idx].relationshipType === 'one-to-many' || relationships[idx].relationshipType === 'many-to-many') {
         importSet = true;
         break;
     }

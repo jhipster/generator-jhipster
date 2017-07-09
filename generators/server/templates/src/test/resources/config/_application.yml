@@ -31,7 +31,7 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-<%_ if (serviceDiscoveryType == 'eureka') { _%>
+<%_ if (serviceDiscoveryType === 'eureka') { _%>
 eureka:
     client:
         enabled: true
@@ -47,7 +47,7 @@ spring:
         serialization.write_dates_as_timestamps: false
     cache:
         type: none
-    <%_ if (messageBroker == 'kafka') { _%>
+    <%_ if (messageBroker === 'kafka') { _%>
     cloud:
         stream:
             kafka:
@@ -58,7 +58,7 @@ spring:
                 output:
                     destination: topic-jhipster
     <%_ } _%>
-    <%_ if (databaseType == 'sql') { _%>
+    <%_ if (databaseType === 'sql') { _%>
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1
@@ -82,10 +82,10 @@ spring:
             hibernate.generate_statistics: true
             hibernate.hbm2ddl.auto: validate
     <%_ } _%>
-    <%_ if (databaseType == 'mongodb' || databaseType == 'cassandra' || applicationType == 'gateway' || searchEngine == 'elasticsearch') { _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra' || applicationType === 'gateway' || searchEngine === 'elasticsearch') { _%>
     data:
     <%_ } _%>
-    <%_ if (databaseType == 'mongodb') { _%>
+    <%_ if (databaseType === 'mongodb') { _%>
         mongodb:
             host: localhost
             port: 27117
@@ -98,11 +98,11 @@ spring:
             protocolVersion: V4
             compression: NONE
             keyspaceName: cassandra_unit_keyspace
-    <%_ if (applicationType == 'gateway') { _%>
+    <%_ if (applicationType === 'gateway') { _%>
             repositories:
                 enabled: false
     <%_ } } _%>
-    <%_ if (searchEngine == 'elasticsearch') { _%>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
         elasticsearch:
             cluster-name:
             cluster-nodes:
@@ -155,10 +155,10 @@ jhipster:
         from: test@localhost
         base-url: http://127.0.0.1:8080
 <%_ } _%>
-<%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
+<%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
     security:
         authentication:
-    <%_ if (authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
+    <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
             jwt:
                 secret: <%= jwtSecretKey %>
                 # Token is valid 24 hours
@@ -173,7 +173,7 @@ jhipster:
             client-id: internal
             client-secret: internal
     <%_ } _%>
-    <%_ if (authenticationType == 'oauth2') { _%>
+    <%_ if (authenticationType === 'oauth2') { _%>
             oauth:
                 client-id: <%= baseName %>app
                 client-secret: my-secret-token-to-change-in-production
@@ -181,7 +181,7 @@ jhipster:
                 token-validity-in-seconds: 1800
     <%_ } _%>
 <%_ } _%>
-<%_ if (authenticationType == 'session') { _%>
+<%_ if (authenticationType === 'session') { _%>
     security:
         remember-me:
             # security key (this key should be unique for your application, and kept secret)

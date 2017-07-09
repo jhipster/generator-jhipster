@@ -90,6 +90,18 @@ module.exports = JhipsterGenerator.extend({
             defaults: false
         });
 
+        // This adds support for a `--auth` flag
+        this.option('auth', {
+            desc: 'Provide authentication type for the application when skipping server',
+            type: String
+        });
+
+        // This adds support for a `--db` flag
+        this.option('db', {
+            desc: 'Provide DB name for the application when skipping server',
+            type: String
+        });
+
         this.currentQuestion = 0;
         this.totalQuestions = constants.QUESTIONS;
         this.skipClient = this.configOptions.skipClient = this.options['skip-client'] || this.config.get('skipClient');
@@ -176,8 +188,7 @@ module.exports = JhipsterGenerator.extend({
     prompting: {
         askForInsightOptIn: prompts.askForInsightOptIn,
         askForApplicationType: prompts.askForApplicationType,
-        askForModuleName: prompts.askForModuleName,
-        askForMoreModules: prompts.askForMoreModules,
+        askForModuleName: prompts.askForModuleName
     },
 
     configuring: {
@@ -205,8 +216,12 @@ module.exports = JhipsterGenerator.extend({
                 this.configOptions.enableTranslation = this.options.i18n;
             }
             if (this.skipServer) {
-                this.generatorType = 'client';
                 // defaults to use when skipping server
+                this.generatorType = 'client';
+                this.configOptions.databaseType = this.getDBTypeFromDBValue(this.options.db);
+                this.configOptions.devDatabaseType = this.options.db;
+                this.configOptions.prodDatabaseType = this.options.db;
+                this.configOptions.authenticationType = this.options.auth;
             }
             this.configOptions.clientPackageManager = this.clientPackageManager;
         },
@@ -237,6 +252,8 @@ module.exports = JhipsterGenerator.extend({
     default: {
 
         askForTestOpts: prompts.askForTestOpts,
+
+        askForMoreModules: prompts.askForMoreModules,
 
         setSharedConfigOptions() {
             this.configOptions.lastQuestion = this.currentQuestion;

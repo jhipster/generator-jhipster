@@ -21,7 +21,7 @@
         vm.reverse = pagingParams.ascending;
         vm.transition = transition;
         vm.itemsPerPage = paginationConstants.itemsPerPage;
-        <%_ if (searchEngine == 'elasticsearch') { _%>
+        <%_ if (searchEngine === 'elasticsearch') { _%>
         vm.clear = clear;
         vm.search = search;
         vm.loadAll = loadAll;
@@ -36,7 +36,7 @@
         loadAll();
 
         function loadAll () {
-        <%_ if (searchEngine != 'elasticsearch') { _%>
+        <%_ if (searchEngine !== 'elasticsearch') { _%>
             <%= entityClass %>.query({
                 page: pagingParams.page - 1,
                 size: vm.itemsPerPage,
@@ -89,7 +89,7 @@
                 search: vm.currentSearch
             });
         }
-        <%_ if (searchEngine == 'elasticsearch') { _%>
+        <%_ if (searchEngine === 'elasticsearch') { _%>
 
         function search(searchQuery) {
             if (!searchQuery){

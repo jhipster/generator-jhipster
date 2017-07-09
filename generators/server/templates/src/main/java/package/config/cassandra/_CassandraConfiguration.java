@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;<% if (applicationType == 'gateway' && databaseType != 'cassandra') { %>
+import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;<% if (applicationType === 'gateway' && databaseType !== 'cassandra') { %>
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;<% } %>
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -48,7 +48,7 @@ import com.datastax.driver.extras.codecs.jdk8.InstantCodec;
 import com.datastax.driver.extras.codecs.jdk8.LocalDateCodec;
 import com.datastax.driver.extras.codecs.jdk8.ZonedDateTimeCodec;
 
-@Configuration<% if (applicationType == 'gateway' && databaseType != 'cassandra') { %>
+@Configuration<% if (applicationType === 'gateway' && databaseType !== 'cassandra') { %>
 @ConditionalOnProperty("jhipster.gateway.rate-limiting.enabled")<% } %>
 @EnableConfigurationProperties(CassandraProperties.class)
 @Profile({JHipsterConstants.SPRING_PROFILE_DEVELOPMENT, JHipsterConstants.SPRING_PROFILE_PRODUCTION})

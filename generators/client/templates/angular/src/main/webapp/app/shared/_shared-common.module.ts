@@ -23,7 +23,7 @@ import { Title } from '@angular/platform-browser';
 import { WindowRef } from './tracker/window.service';
 <%_ } _%>
 import {
-    <%=angular2AppName%>SharedLibsModule,
+    <%=angularXAppName%>SharedLibsModule,
     <%_ if (enableTranslation) { _%>
     JhiLanguageHelper,
     FindLanguageFromKeyPipe,
@@ -34,7 +34,7 @@ import {
 
 @NgModule({
     imports: [
-        <%=angular2AppName%>SharedLibsModule
+        <%=angularXAppName%>SharedLibsModule
     ],
     declarations: [
         <%_ if (enableTranslation) { _%>
@@ -44,16 +44,17 @@ import {
         <%=jhiPrefixCapitalized%>AlertErrorComponent
     ],
     providers: [
-        <%_ if (enableTranslation) { _%>
+        <%_ if (enableI18nRTL) { _%>
+        FindLanguageFromKeyPipe,
+        <%_ } if (enableTranslation) { _%>
         JhiLanguageHelper,
-        <%_ } _%>
-        <%_ if (websocket === 'spring-websocket') { _%>
+        <%_ } if (websocket === 'spring-websocket') { _%>
         WindowRef,
         <%_ } _%>
         Title
     ],
     exports: [
-        <%=angular2AppName%>SharedLibsModule,
+        <%=angularXAppName%>SharedLibsModule,
         <%_ if (enableTranslation) { _%>
         FindLanguageFromKeyPipe,
         <%_ } _%>
@@ -61,4 +62,4 @@ import {
         <%=jhiPrefixCapitalized%>AlertErrorComponent
     ]
 })
-export class <%=angular2AppName%>SharedCommonModule {}
+export class <%=angularXAppName%>SharedCommonModule {}

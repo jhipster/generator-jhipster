@@ -17,14 +17,14 @@
  limitations under the License.
 -%>
 package <%=packageName%>.service;
-<%  const instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
-    const instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance; %>
-<%_ if (dto == 'mapstruct') { _%>
+<%  const instanceType = (dto === 'mapstruct') ? entityClass + 'DTO' : entityClass;
+    const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance; %>
+<%_ if (dto === 'mapstruct') { _%>
 import <%=packageName%>.service.dto.<%= entityClass %>DTO;
 <%_ } else { _%>
 import <%=packageName%>.domain.<%= entityClass %>;
 <%_ } _%>
-<%_ if (pagination != 'no') { _%>
+<%_ if (pagination !== 'no') { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
@@ -47,12 +47,12 @@ public interface <%= entityClass %>Service {
 
     /**
      *  Get all the <%= entityInstancePlural %>.
-     *<% if (pagination != 'no') { %>
+     *<% if (pagination !== 'no') { %>
      *  @param pageable the pagination information<% } %>
      *  @return the list of entities
      */
-    <% if (pagination != 'no') { %>Page<<%= instanceType %><% } else { %>List<<%= instanceType %><% } %>> findAll(<% if (pagination != 'no') { %>Pageable pageable<% } %>);
-<% for (idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { -%>
+    <% if (pagination !== 'no') { %>Page<<%= instanceType %><% } else { %>List<<%= instanceType %><% } %>> findAll(<% if (pagination !== 'no') { %>Pageable pageable<% } %>);
+<% for (idx in relationships) { if (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide !== true) { -%>
     /**
      *  Get all the <%= entityClass %>DTO where <%= relationships[idx].relationshipNameCapitalized %> is null.
      *
@@ -74,15 +74,15 @@ public interface <%= entityClass %>Service {
      *
      *  @param id the id of the entity
      */
-    void delete(<%= pkType %> id);<% if (searchEngine == 'elasticsearch') { %>
+    void delete(<%= pkType %> id);<% if (searchEngine === 'elasticsearch') { %>
 
     /**
      * Search for the <%= entityInstance %> corresponding to the query.
      *
      *  @param query the query of the search
-     *  <% if (pagination != 'no') { %>
+     *  <% if (pagination !== 'no') { %>
      *  @param pageable the pagination information<% } %>
      *  @return the list of entities
      */
-    <% if (pagination != 'no') { %>Page<<%= instanceType %><% } else { %>List<<%= instanceType %><% } %>> search(String query<% if (pagination != 'no') { %>, Pageable pageable<% } %>);<% } %>
+    <% if (pagination !== 'no') { %>Page<<%= instanceType %><% } else { %>List<<%= instanceType %><% } %>> search(String query<% if (pagination !== 'no') { %>, Pageable pageable<% } %>);<% } %>
 }

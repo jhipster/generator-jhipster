@@ -149,9 +149,9 @@ const serverFiles = {
             condition: generator => generator.gatlingTests,
             path: TEST_DIR,
             templates: [{
-                file: 'gatling/simulations/_EntityGatlingTest.scala',
+                file: 'gatling/user-files/simulations/_EntityGatlingTest.scala',
                 options: { interpolate: INTERPOLATE_REGEX },
-                renameTo: generator => `gatling/simulations/${generator.entityClass}GatlingTest.scala`
+                renameTo: generator => `gatling/user-files/simulations/${generator.entityClass}GatlingTest.scala`
             }]
         }
     ]
@@ -361,8 +361,8 @@ function writeFiles() {
                 }
                 this.addChangelogToLiquibase(`${this.changelogDate}_added_entity_${this.entityClass}`);
 
-                if (this.hibernateCache === 'ehcache') {
-                    this.addEntityToEhcache(this.entityClass, this.relationships, this.packageName, this.packageFolder);
+                if (this.hibernateCache === 'ehcache' || this.hibernateCache === 'infinispan') {
+                    this.addEntityToCache(this.entityClass, this.relationships, this.packageName, this.packageFolder, this.hibernateCache);
                 }
             }
         },
@@ -374,7 +374,7 @@ function writeFiles() {
                     field.enumInstance = _.lowerFirst(fieldType);
                     const enumInfo = {
                         enumName: fieldType,
-                        enumValues: field.fieldValues,
+                        enumValues: field.fieldValues.split(',').join(', '),
                         enumInstance: field.enumInstance,
                         angularAppName: this.angularAppName,
                         enums: field.fieldValues.replace(/\s/g, '').split(','),

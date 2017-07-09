@@ -21,6 +21,8 @@ const path = require('path');
 const shelljs = require('shelljs');
 const crypto = require('crypto');
 
+const constants = require('../generator-constants');
+
 module.exports = {
     askForModuleName,
     askForServerSideOpts,
@@ -240,28 +242,7 @@ function askForServerSideOpts() {
             type: 'list',
             name: 'prodDatabaseType',
             message: response => this.getNumberedQuestion('Which *production* database would you like to use?', response.databaseType === 'sql'),
-            choices: [
-                {
-                    value: 'mysql',
-                    name: 'MySQL'
-                },
-                {
-                    value: 'mariadb',
-                    name: 'MariaDB'
-                },
-                {
-                    value: 'postgresql',
-                    name: 'PostgreSQL'
-                },
-                {
-                    value: 'oracle',
-                    name: 'Oracle (Please follow our documentation to use the Oracle proprietary driver)'
-                },
-                {
-                    value: 'mssql',
-                    name: 'Microsoft SQL Server'
-                }
-            ],
+            choices: constants.SQL_DB_OPTIONS,
             default: 0
         },
         {
@@ -396,6 +377,10 @@ function askForServerSideOpts() {
                 {
                     value: 'hazelcast',
                     name: 'Yes, with HazelCast (distributed cache, for multiple nodes)'
+                },
+                {
+                    value: 'infinispan',
+                    name: '[BETA] Yes, with Infinispan (hybrid cache, for multiple nodes)'
                 },
                 {
                     value: 'no',

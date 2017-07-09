@@ -44,7 +44,7 @@ services:
         #ports:
         #    - 9092:9092  # Uncomment to make Kafka available externally
 <%_ } _%>
-<%_ if (serviceDiscoveryType == 'eureka') { _%>
+<%_ if (serviceDiscoveryType === 'eureka') { _%>
     jhipster-registry:
         image: <%= DOCKER_JHIPSTER_REGISTRY %>
         #volumes:
@@ -80,7 +80,7 @@ services:
         labels:
           io.rancher.sidekicks: registry-config-sidekick
 <%_ } _%>
-<%_ if (serviceDiscoveryType == 'consul') { _%>
+<%_ if (serviceDiscoveryType === 'consul') { _%>
     consul:
         image: <%= DOCKER_CONSUL %>
         ports:

@@ -76,7 +76,7 @@
                                 <span data-translate="global.menu.account.password">Password</span>
                             </a>
                         </li>
-                        <%_ if (authenticationType == 'session') { _%>
+                        <%_ if (authenticationType === 'session') { _%>
                         <li ui-sref-active="active" ng-switch-when="true">
                             <a ui-sref="sessions" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-cloud"></span>&nbsp;
@@ -113,7 +113,7 @@
                         </span>
                     </a>
                     <ul class="dropdown-menu" uib-dropdown-menu>
-                        <%_ if (applicationType == 'gateway') { _%>
+                        <%_ if (applicationType === 'gateway') { _%>
                         <li ui-sref-active="active">
                             <a ui-sref="gateway" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-road"></span>&nbsp;
@@ -127,7 +127,7 @@
                                 <span data-translate="global.menu.admin.userManagement">User management</span>
                             </a>
                         </li>
-                        <%_ if (websocket == 'spring-websocket') { _%>
+                        <%_ if (websocket === 'spring-websocket') { _%>
                         <li ui-sref-active="active">
                             <a ui-sref="<%=jhiPrefix%>-tracker" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-eye-open"></span>&nbsp;
@@ -174,7 +174,7 @@
                             </a>
                         </li>
                         <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
-                        <%_ if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
+                        <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
                         <li ng-hide="vm.inProduction">
                             <a href='/h2-console' target="_tab" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-hdd"></span>&nbsp;

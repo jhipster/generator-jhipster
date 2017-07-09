@@ -54,7 +54,7 @@ export class <%= entityAngularName %>PopupService {
             this.<%= entityInstance %>Service.find(id).subscribe((<%= entityInstance %>) => {
                 <%_ if (hasDate) { _%>
                     <%_ for (idx in fields) { _%>
-                        <%_ if (fields[idx].fieldType == 'LocalDate') { _%>
+                        <%_ if (fields[idx].fieldType === 'LocalDate') { _%>
                 if (<%= entityInstance %>.<%=fields[idx].fieldName%>) {
                     <%= entityInstance %>.<%=fields[idx].fieldName%> = {
                         year: <%= entityInstance %>.<%=fields[idx].fieldName%>.getFullYear(),

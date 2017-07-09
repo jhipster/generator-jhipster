@@ -32,6 +32,7 @@ util.inherits(UpgradeGenerator, BaseGenerator);
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 const UPGRADE_BRANCH = 'jhipster_upgrade';
 const GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES = '2.9.0';
+const GENERATOR_JHIPSTER_CLI_VERSION = '4.5.1';
 
 module.exports = UpgradeGenerator.extend({
     constructor: function (...args) { // eslint-disable-line object-shorthand
@@ -74,7 +75,11 @@ module.exports = UpgradeGenerator.extend({
 
     _generate(version, callback) {
         this.log(`Regenerating application with JHipster ${version}...`);
-        shelljs.exec('jhipster --with-entities --force --skip-install', { silent: this.silent }, (code, msg, err) => {
+        let generatorCommand = 'yo jhipster';
+        if (semver.gte(version, GENERATOR_JHIPSTER_CLI_VERSION)) {
+            generatorCommand = this.clientPackageManager === 'yarn' ? '$(yarn bin)/jhipster' : '$(npm bin)/jhipster';
+        }
+        shelljs.exec(`${generatorCommand} --with-entities --force --skip-install`, { silent: this.silent }, (code, msg, err) => {
             if (code === 0) this.log(chalk.green(`Successfully regenerated application with JHipster ${version}`));
             else this.error(`Something went wrong while generating project! ${err}`);
             callback();
@@ -168,7 +173,7 @@ module.exports = UpgradeGenerator.extend({
             const done = this.async();
             this.gitExec(['status', '--porcelain'], (code, msg, err) => {
                 if (code !== 0) this.error(`Unable to check for local changes:\n${msg} ${err}`);
-                if (msg != null && msg !== '') {
+                if (msg) {
                     this.warning(' local changes found.\n' +
                         '\tPlease commit/stash them before upgrading');
                     this.error('Exiting process');
@@ -205,7 +210,7 @@ module.exports = UpgradeGenerator.extend({
                     this.gitExec(args, (code, msg, err) => {
                         if (code !== 0) {
                             this.error(`Unable to record current code has been generated with version ${
-                            this.currentVersion}:\n${msg} ${err}`);
+                                this.currentVersion}:\n${msg} ${err}`);
                         }
                         this.log(`Current code has been generated with version ${this.currentVersion}`);
                         done();
@@ -256,6 +261,11 @@ module.exports = UpgradeGenerator.extend({
             insight.trackWithEvent('generator', 'upgrade');
         },
 
+        checkoutUpgradeBranch() {
+            const done = this.async();
+            this._gitCheckout(UPGRADE_BRANCH, done);
+        },
+
         updateJhipster() {
             this.log(chalk.yellow(`Updating ${GENERATOR_JHIPSTER} to ${this.latestVersion} . This might take some time...`));
             const done = this.async();
@@ -265,11 +275,6 @@ module.exports = UpgradeGenerator.extend({
                 else this.error(`Something went wrong while updating JHipster! ${msg} ${err}`);
                 done();
             });
-        },
-
-        checkoutUpgradeBranch() {
-            const done = this.async();
-            this._gitCheckout(UPGRADE_BRANCH, done);
         },
 
         generateWithLatestVersion() {

@@ -41,7 +41,7 @@ export * from './sessions/session.model';
 export * from './settings/settings.component';
 export * from './settings/settings.route';
 <%_ if (enableSocialSignIn) { _%>
-	<%_ if (authenticationType == 'jwt') { _%>
+	<%_ if (authenticationType === 'jwt') { _%>
 export * from './social/social-auth.component';
 	<%_ } _%>
 export * from './social/social-register.component';

@@ -23,7 +23,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
-<%_ if (databaseType != 'no' && databaseType != 'cassandra') { _%>
+<%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
 import org.springframework.dao.ConcurrencyFailureException;
 <%_ } _%>
 import org.springframework.http.HttpStatus;
@@ -43,7 +43,7 @@ import org.springframework.web.bind.annotation.*;
 public class ExceptionTranslator {
 
     private final Logger log = LoggerFactory.getLogger(ExceptionTranslator.class);
-<%_ if (databaseType != 'no' && databaseType != 'cassandra') { _%>
+<%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
 
     @ExceptionHandler(ConcurrencyFailureException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
@@ -90,9 +90,9 @@ public class ExceptionTranslator {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorVM> processException(Exception ex) {
         if (log.isDebugEnabled()) {
-            log.debug("An unexpected error occured: {}", ex.getMessage(), ex);
+            log.debug("An unexpected error occurred: {}", ex.getMessage(), ex);
         } else {
-            log.error("An unexpected error occured: {}", ex.getMessage());
+            log.error("An unexpected error occurred: {}", ex.getMessage());
         }
         BodyBuilder builder;
         ErrorVM errorVM;

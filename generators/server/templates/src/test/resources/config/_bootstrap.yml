@@ -16,13 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (serviceDiscoveryType == 'eureka') { _%>
+<%_ if (serviceDiscoveryType === 'eureka') { _%>
 spring:
     cloud:
         config:
             enabled: false
 <%_ } _%>
-<%_ if (serviceDiscoveryType == 'consul') { _%>
+<%_ if (serviceDiscoveryType === 'consul') { _%>
 spring:
     cloud:
         consul:

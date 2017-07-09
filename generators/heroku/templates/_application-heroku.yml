@@ -29,7 +29,7 @@
 # ===================================================================
 
 eureka:
-<%_ if (applicationType != 'gateway') { _%>
+<%_ if (applicationType !== 'gateway') { _%>
     instance:
         hostname: <%= herokuAppName %>.herokuapp.com
         non-secure-port: 80

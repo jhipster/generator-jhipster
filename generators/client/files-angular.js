@@ -42,7 +42,7 @@ const files = {
                 'webpack/_webpack.common.js',
                 'webpack/_webpack.dev.js',
                 'webpack/_webpack.prod.js',
-                'webpack/_webpack.vendor.js',
+                'webpack/_webpack.test.js',
                 { file: 'webpack/logo-jhipster.png', method: 'copy' }
             ]
         }
@@ -113,6 +113,7 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 '_app.main.ts',
+                '_app.main-aot.ts',
                 '_app.route.ts',
                 '_lazy.route.ts',
                 '_app.module.ts',
@@ -372,6 +373,7 @@ const files = {
                 // models
                 'shared/model/_response-wrapper.model.ts',
                 'shared/model/_request-util.ts',
+                'shared/model/_base-entity.ts',
                 'shared/user/_account.model.ts',
                 // login
                 'shared/login/_login.component.ts',

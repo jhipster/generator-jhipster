@@ -55,7 +55,7 @@ export class UserService {
     }
 
     authorities(): Observable<string[]> {
-<%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
         return this.http.get('<% if (authenticationType === 'uaa') { %><%= uaaBaseName.toLowerCase() %>/<% } %>api/users/authorities').map((res: Response) => {
             const json = res.json();
             return <string[]> json;

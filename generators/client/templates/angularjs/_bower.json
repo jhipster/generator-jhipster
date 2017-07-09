@@ -54,7 +54,7 @@
     "modernizr": "3.3.1",
     "ng-file-upload": "12.0.4",
     "ngInfiniteScroll": "1.3.0",
-    <%_ if (websocket == 'spring-websocket') { _%>
+    <%_ if (websocket === 'spring-websocket') { _%>
     "sockjs-client": "1.1.1",
     "stomp-websocket": "2.3.4",
     <%_ } _%>

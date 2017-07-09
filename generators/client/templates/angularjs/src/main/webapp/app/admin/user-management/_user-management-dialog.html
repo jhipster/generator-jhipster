@@ -26,7 +26,7 @@
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
-        <div class="form-group">
+        <div class="form-group" ng-show="vm.user.id">
             <label data-translate="global.field.id">ID</label>
             <input type="text" class="form-control" name="id"
                    ng-model="vm.user.id" readonly>
@@ -35,7 +35,7 @@
         <div class="form-group">
             <label class="control-label" data-translate="userManagement.login">Login</label>
             <input type="text" class="form-control" name="login"
-                   ng-model="vm.user.login" ng-required="vm.user.id == null" ng-minlength=1 ng-maxlength=50 ng-pattern="/^[_'.@A-Za-z0-9-]*$/">
+                   ng-model="vm.user.login" required ng-minlength=1 ng-maxlength=50 ng-pattern="/^[_'.@A-Za-z0-9-]*$/">
 
             <div ng-show="editForm.login.$invalid">
                 <p class="help-block"

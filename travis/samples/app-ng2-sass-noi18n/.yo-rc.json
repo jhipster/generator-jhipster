@@ -27,6 +27,6 @@
     "serviceDiscoveryType": false,
     "enableTranslation": false,
     "clientPackageManager": "yarn",
-    "clientFramework": "angular2"
+    "clientFramework": "angularX"
   }
 }

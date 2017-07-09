@@ -16,65 +16,83 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<% const enumsAlreadyDeclared = [];
-    for (const idx in fields) {
-    if (fields[idx].fieldIsEnum && enumsAlreadyDeclared.indexOf(fields[idx].fieldType) === -1) {
-        enumsAlreadyDeclared.push(fields[idx].fieldType); %>
-const enum <%= fields[idx].fieldType %> {<%
-        const enums = fields[idx].fieldValues.split(',');
-        for (let i = 0; i < enums.length; i++) { %>
-    '<%= enums[i] %>'<%if (i < enums.length - 1) { %>,<% } } %>
-
-};
-<%_ } } _%>
-<%_ if (dto == "no") {
-       for (const rel of differentRelationships) { _%>
-import { <%= rel.otherEntityAngularName %> } from '../<%= rel.otherEntityModulePath %>';
-<%_ }
-}
+<%_
 const variables = {};
 const defaultVariablesValues = {};
+let hasUserRelationship = false;
 let tsKeyType;
-if (pkType == 'String') {
+if (pkType === 'String') {
     tsKeyType = 'string';
 } else {
     tsKeyType = 'number';
 }
 variables['id'] = 'id?: ' + tsKeyType;
-for (const idx in fields) {
-    const fieldType = fields[idx].fieldType;
-    const fieldName = fields[idx].fieldName;
+fields.forEach(field => {
+    const fieldType = field.fieldType;
+    const fieldName = field.fieldName;
     let tsType;
-    if (fields[idx].fieldIsEnum) {
+    if (field.fieldIsEnum) {
         tsType = fieldType;
-    } else if (fieldType == 'Boolean') {
+    } else if (fieldType === 'Boolean') {
         tsType = 'boolean';
         defaultVariablesValues[fieldName] = 'this.' + fieldName + ' = false;';
-    } else if (fieldType == 'Double' || fieldType == 'Float' || fieldType == 'Long' || fieldType == 'Integer' || fieldType == 'BigDecimal') {
+    } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) {
         tsType = 'number';
-    } else if (fieldType == 'String'  || fieldType == 'UUID') {
+    } else if (fieldType === 'String'  || fieldType === 'UUID') {
         tsType = 'string';
-    } else { //(fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'image' || fieldType == 'LocalDate'
+    } else { //(fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate'
         tsType = 'any';
-        if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent == 'image') {
+        if (['byte[]', 'ByteBuffer'].includes(fieldType) && field.fieldTypeBlobContent !== 'text') {
             variables[fieldName + 'ContentType'] = fieldName + 'ContentType?: ' + 'string';
         }
     }
     variables[fieldName] = fieldName + '?: ' + tsType;
-}
-for (idx in relationships) {
+});
+relationships.forEach(relationship => {
     let fieldType;
     let fieldName;
-    if (dto == "no") {
-        fieldType = relationships[idx].otherEntityAngularName;
-        fieldName = relationships[idx].relationshipFieldName;
+    const relationshipType = relationship.relationshipType;
+    if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
+        if (relationship.otherEntityAngularName === 'User') {
+            fieldType = 'User[]';
+            hasUserRelationship = true;
+        } else {
+            fieldType = 'BaseEntity[]';
+        }
+        fieldName = relationship.relationshipFieldNamePlural;
     } else {
-        fieldType = tsKeyType;
-        fieldName = relationships[idx].relationshipFieldName + "Id";
+        if (dto === 'no') {
+            if (relationship.otherEntityAngularName === 'User') {
+                fieldType = 'User';
+                hasUserRelationship = true;
+            } else {
+                fieldType = 'BaseEntity';
+            }
+            fieldName = relationship.relationshipFieldName;
+        } else {
+            fieldType = tsKeyType;
+            fieldName = `${relationship.relationshipFieldName}Id`;
+        }
     }
     variables[fieldName] = fieldName + '?: ' + fieldType;
-}_%>
-export class <%= entityAngularName %> {
+});
+_%>
+import { BaseEntity<% if (hasUserRelationship) { %>, User<% } %> } from './../../shared';
+
+<%_ const enumsAlreadyDeclared = [];
+fields.forEach(field => {
+    if (field.fieldIsEnum && enumsAlreadyDeclared.indexOf(field.fieldType) === -1) {
+        enumsAlreadyDeclared.push(field.fieldType); _%>
+const enum <%= field.fieldType %> {<%
+        const enums = field.fieldValues.split(',');
+        for (let i = 0; i < enums.length; i++) { %>
+    '<%= enums[i] %>'<%if (i < enums.length - 1) { %>,<% }
+        } %>
+}
+
+<%_ }
+}); _%>
+export class <%= entityAngularName %> implements BaseEntity {
     constructor(<% for (idx in variables) { %>
         public <%- variables[idx] %>,<% } %>
     ) {<% for (idx in defaultVariablesValues) { %>

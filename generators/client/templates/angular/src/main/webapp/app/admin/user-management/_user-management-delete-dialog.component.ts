@@ -19,7 +19,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { JhiAlertService, JhiEventManager } from 'ng-jhipster';
+import { JhiEventManager } from 'ng-jhipster';
 
 import { User, UserService } from '../../shared';
 import { UserModalService } from './user-modal.service';
@@ -59,11 +59,6 @@ export class UserMgmtDeleteDialogComponent {
                 content: 'Deleted a user'});
             this.activeModal.dismiss(true);
         });
-        <%_ if (enableTranslation) { _%>
-        this.alertService.success('userManagement.deleted', { param : login }, null);
-        <%_ } else { _%>
-        this.alertService.success(`An user is deleted with identifier ${login}`, null, null);
-        <%_ } _%>
     }
 }
 
