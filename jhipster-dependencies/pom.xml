@@ -3,12 +3,6 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<groupId>org.springframework.boot</groupId>
-		<version>1.5.4.RELEASE</version>
-		<relativePath />
-	</parent>
 
 	<groupId>io.github.jhipster</groupId>
 	<artifactId>jhipster-parent</artifactId>
@@ -17,17 +11,14 @@
 	<name>JHipster parent project</name>
 	<description>Parent project embedding the server side jhipster stuff</description>
 	<url>https://github.com/jhipster/jhipster</url>
-	<issueManagement>
-		<system>Github</system>
-		<url>https://github.com/jhipster/generator-jhipster/issues</url>
-	</issueManagement>
-	<licenses>
-		<license>
-			<name>Apache Licence 2.0</name>
-			<distribution>repo</distribution>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-		</license>
-	</licenses>
+	<!-- please override it in the child pom -->
+	<scm>
+		<connection>scm:git:git@github.com:jhipster/jhipster-parent.git</connection>
+		<developerConnection>scm:git:git@github.com:jhipster/jhipster-parent.git</developerConnection>
+		<url>https://github.com/jhipster/jhipster-parent</url>
+		<tag>HEAD</tag>
+	</scm>
+
 
 	<distributionManagement>
 		<snapshotRepository>
@@ -39,6 +30,7 @@
 			<name>Sonatype OSS Nexus Release Repository</name>
 			<url>https://oss.sonatype.org/</url>
 		</repository>
+		<!-- please override it in the child pom -->
 		<site>
 			<id>github-pages</id>
 			<name>Github GH Pages</name>
@@ -46,17 +38,17 @@
 		</site>
 	</distributionManagement>
 	<modules>
-		<module>jhipster-reporting</module>
+		<module>jhipster-dependencies</module>
 	</modules>
 
 	<properties>
 		<!-- generic properties -->
-		<maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
 		<encoding>UTF-8</encoding>
+		<java.version>1.8</java.version>
+		<maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+		<maven.version>3.0.0</maven.version>
 		<project.reporting.outputEncoding>${encoding}</project.reporting.outputEncoding>
 		<project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
-		<project.license>apache_v2</project.license>
-
 		<!-- plugins versions -->
 		<org.apache.maven.doxia_doxia-module-markdown.version>1.7</org.apache.maven.doxia_doxia-module-markdown.version>
 		<org.apache.maven.plugins_maven-enforcer-plugin.version>1.4.1</org.apache.maven.plugins_maven-enforcer-plugin.version>
@@ -70,10 +62,8 @@
 		<org.apache.rat_apache-rat-plugin.version>0.11</org.apache.rat_apache-rat-plugin.version>
 		<org.kohsuke_pgp-maven-plugin.version>1.1</org.kohsuke_pgp-maven-plugin.version>
 		<org.sonatype.plugins_nexus-staging-maven-plugin.version>1.6.7</org.sonatype.plugins_nexus-staging-maven-plugin.version>
-
 		<!-- generic versions -->
 		<org.apache.maven.scm.version>1.9.1</org.apache.maven.scm.version>
-
 	</properties>
 	<build>
 		<defaultGoal>install</defaultGoal>
@@ -94,6 +84,12 @@
 				<version>${org.apache.maven.scm_maven-scm-provider-gitexe.version}</version>
 			</extension>
 		</extensions>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+			</plugin>
+		</plugins>
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -102,22 +98,26 @@
 					<version>${org.apache.maven.plugins_maven-enforcer-plugin.version}</version>
 					<executions>
 						<execution>
-							<id>enforce-maven</id>
+							<id>enforce-versions</id>
 							<goals>
 								<goal>enforce</goal>
 							</goals>
-							<configuration>
-								<rules>
-									<requireMavenVersion>
-										<version>(,2.1.0),(2.1.0,2.2.0),(2.2.0,)</version>
-										<message>Maven 2.1.0 and 2.2.0 produce incorrect GPG
-											signatures
-											and checksums respectively.</message>
-									</requireMavenVersion>
-								</rules>
-							</configuration>
 						</execution>
 					</executions>
+					<configuration>
+						<rules>
+							<requireMavenVersion>
+								<message>You are running an older version of Maven. JHipster
+									requires at least Maven ${maven.version}</message>
+								<version>[${maven.version},)</version>
+							</requireMavenVersion>
+							<requireJavaVersion>
+								<message>You are running an older version of Java. JHipster
+									requires at least JDK ${java.version}</message>
+								<version>[${java.version}.0,)</version>
+							</requireJavaVersion>
+						</rules>
+					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -137,17 +137,15 @@
 						<dependency>
 							<groupId>org.apache.maven.scm</groupId>
 							<artifactId>maven-scm-provider-gitexe</artifactId>
-							<version>${org.apache.maven.maven-scm-provider-gitexe.version}</version>
+							<version>${org.apache.maven.scm_maven-scm-provider-gitexe.version}</version>
 						</dependency>
 					</dependencies>
 					<configuration>
 						<localCheckout>true</localCheckout>
 						<pushChanges>true</pushChanges>
-						<useReleaseProfile>false</useReleaseProfile>
 						<preparationGoals>clean install</preparationGoals>
 						<goals>deploy</goals>
 						<!-- The profile we want to use when doing the release -->
-						<releaseProfiles>release</releaseProfiles>
 						<autoVersionSubmodules>true</autoVersionSubmodules>
 					</configuration>
 				</plugin>
@@ -242,6 +240,7 @@
 			<id>release</id>
 			<build>
 				<plugins>
+
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-javadoc-plugin</artifactId>
@@ -266,6 +265,7 @@
 							</execution>
 						</executions>
 					</plugin>
+
 					<plugin>
 						<groupId>org.kohsuke</groupId>
 						<artifactId>pgp-maven-plugin</artifactId>
