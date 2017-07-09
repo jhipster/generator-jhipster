@@ -49,6 +49,10 @@ function askForClient() {
             {
                 value: 'angular1',
                 name: 'AngularJS 1.x'
+            },
+            {
+                value: 'react',
+                name: '[BETA] React'
             }
         ],
         default: 'angularX'
