@@ -1,0 +1,93 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>io.github.jhipster</groupId>
+		<artifactId>jhipster-parent</artifactId>
+		<version>1.1.9-SNAPSHOT</version>
+	</parent>
+	<artifactId>jhipster-reporting</artifactId>
+	<packaging>pom</packaging>
+	<name>Pom reporting</name>
+	<description>Reporting configuration for the entire Jhipster submodules</description>
+	<properties>
+		<org.apache.maven.plugins_maven-checkstyle-plugin.version>2.15</org.apache.maven.plugins_maven-checkstyle-plugin.version>
+		<org.apache.maven.plugins_maven-jxr-plugin.version>2.5</org.apache.maven.plugins_maven-jxr-plugin.version>
+		<org.apache.maven.plugins_maven-pmd-plugin.version>3.4</org.apache.maven.plugins_maven-pmd-plugin.version>
+		<org.apache.maven.plugins_maven-project-info-reports-plugin.version>2.8</org.apache.maven.plugins_maven-project-info-reports-plugin.version>
+		<org.apache.maven.plugins_maven-surefire-report-plugin.version>2.18.1</org.apache.maven.plugins_maven-surefire-report-plugin.version>
+		<org.codehaus.mojo_findbugs-maven-plugin.version>3.0.1</org.codehaus.mojo_findbugs-maven-plugin.version>
+		<org.codehaus.mojo_versions-maven-plugin.version>2.1</org.codehaus.mojo_versions-maven-plugin.version>
+	</properties>
+	<reporting>
+		<plugins>
+			<!-- not working in the build pipeline <plugin> <groupId>org.apache.maven.plugins</groupId> 
+				<artifactId>maven-changelog-plugin</artifactId> <version>${maven-changelog-plugin.version}</version> 
+				</plugin> -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>${org.apache.maven.plugins_maven-checkstyle-plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<reportSets>
+					<reportSet>
+						<id>jdoc</id>
+						<reports>
+							<report>javadoc</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>${org.apache.maven.plugins_maven-jxr-plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>${org.apache.maven.plugins_maven-pmd-plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>${org.apache.maven.plugins_maven-project-info-reports-plugin.version}</version>
+				<configuration>
+					<dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<version>${org.apache.maven.plugins_maven-surefire-report-plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<version>${org.codehaus.mojo_findbugs-maven-plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<version>${org.codehaus.mojo_versions-maven-plugin.version}</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>dependency-updates-report</report>
+							<report>plugin-updates-report</report>
+							<report>property-updates-report</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+		</plugins>
+	</reporting>
+
+	<modules>
+		<module>jhipster-plugins</module>
+	</modules>
+</project>

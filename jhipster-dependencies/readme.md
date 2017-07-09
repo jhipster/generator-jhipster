@@ -1,0 +1,1 @@
+if you want to customize the generated site, look at this file: src/site/site.xml  

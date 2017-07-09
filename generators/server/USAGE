@@ -1,7 +1,0 @@
-Description:
-    Creates a new JHipster server side application based on the selected options
-
-Example:
-    jhipster server
-
-    This will create a Spring Boot server side app

@@ -1,9 +1,0 @@
-version: '2'
-services:
-    samplemysql-elasticsearch:
-        image: elasticsearch:2.4.0
-        # volumes:
-        #     - ~/volumes/jhipster/sampleMysql/elasticsearch/:/usr/share/elasticsearch/data/
-        ports:
-            - 9200:9200
-            - 9300:9300

@@ -1,9 +1,0 @@
-version: '2'
-services:
-    mspsql-elasticsearch:
-        image: elasticsearch:1.7.5
-        # volumes:
-        #     - ~/volumes/jhipster/mspsql/elasticsearch/:/usr/share/elasticsearch/data/
-        ports:
-            - 9200:9200
-            - 9300:9300

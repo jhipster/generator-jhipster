@@ -1,5 +1,0 @@
-Description:
-    Initializes a AWS app and generates a WAR file that is ready to push to AWS.
-
-Example:
-    jhipster aws

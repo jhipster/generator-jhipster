@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="Jhipster" xmlns="http://maven.apache.org/DECORATION/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
+
+	<bannerLeft>
+		<name>Github</name>
+		<href>https://github.com/jhipster/jhipster-parent</href>
+	</bannerLeft>
+
+	<skin>
+		<groupId>org.apache.maven.skins</groupId>
+		<artifactId>maven-fluido-skin</artifactId>
+		<version>1.5</version>
+	</skin>
+	<custom>
+		<fluidoSkin>
+			<sideBarEnabled>true</sideBarEnabled>
+			<topBarEnabled>true</topBarEnabled>
+			
+			<googleSearch>
+				<sitesearch />
+			</googleSearch>
+			<sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
+			<gitHub>
+				<projectId>jhipster/jhipster-parent</projectId>
+				<ribbonOrientation>right</ribbonOrientation>
+				<ribbonColor>green</ribbonColor>
+			</gitHub>
+			<googlePlusOne />
+			<twitter>
+				<user>java_hipster</user>
+				<showUser>true</showUser>
+				<showFollowers>true</showFollowers>
+			</twitter>
+			<facebookLike />
+		</fluidoSkin>
+		<custom.fluidoSkin.googleSearch.sitesearch>http://jhipster.github.io/jhipster/</custom.fluidoSkin.googleSearch.sitesearch>
+	</custom>
+
+
+	<body>
+		<links>
+			<item name="Jhipster generator repo" href="https://github.com/jhipster/generator-jhipster" />
+		</links>
+
+		<menu name="Documentation" >
+			<item href="readme.html" name="readme" />
+		</menu>
+		<menu ref="reports" inherit="bottom" />
+	</body>
+</project>
