@@ -1,57 +1,36 @@
-const webpack = require('webpack');
-const writeFilePlugin = require('write-file-webpack-plugin');
-const webpackMerge = require('webpack-merge');
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const WebpackNotifierPlugin = require('webpack-notifier');
+/* eslint-disable */
 const path = require('path');
-
-const utils = require('./utils.js');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpackMerge = require('webpack-merge');
 const commonConfig = require('./webpack.common.js');
+/* eslint-enable */
 
-const ENV = 'development';
-
-module.exports = webpackMerge(commonConfig({ env: ENV }), {
-  devtool: 'eval-source-map',
-  entry: [
-    'react-hot-loader/patch',
-    './src/main/webapp/app/index'
-  ],
+module.exports = webpackMerge(commonConfig(), {
+  devtool: 'inline-source-map',
   output: {
-    path: utils.root('<%= BUILD_DIR %>www'),
-    filename: 'app/[name].bundle.js',
-    chunkFilename: 'app/[id].chunk.js'
+    path: path.resolve('./<%= BUILD_DIR %>www'),
+    filename: '[name].bundle.js',
+    chunkFilename: '[id].chunk.js'
   },
+  plugins: [
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('development')
+      }
+    })
+  ],
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
-        use: [{
-          loader: 'react-hot-loader/webpack',
-        },
-        {
-          loader: 'awesome-typescript-loader',
-          options: {
-            useCache: true
-          }
-        }],
-        include: [utils.root('./src/main/webapp/app')],
-        exclude: ['node_modules']
-      },
-      {
-        test: /\.scss$/,
-        loaders: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
-      },
-      {
-        test: /\.css$/,
-        loaders: ['style-loader', 'css-loader']
+        test: /\.js$/,
+        loaders: ['babel-loader?cacheDirectory'],
+        include: path.resolve('./src/main/webapp/app')
       }
     ]
   },
   devServer: {
-    stats: {
-      children: false
-    },
-    hot: true,
     contentBase: './<%= BUILD_DIR %>www',
     proxy: [
       {
@@ -66,28 +45,5 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         ws: true
       }
     ]
-  },
-  plugins: [
-    new BrowserSyncPlugin({
-      host: 'localhost',
-      port: 8000,
-      proxy: {
-        target: 'http://localhost:9060',
-        ws: true
-      }
-    }, {
-        reload: false
-    }),
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.NamedModulesPlugin(),
-    new writeFilePlugin(),
-    new webpack.WatchIgnorePlugin([
-      utils.root('src/test'),
-    ]),
-    new WebpackNotifierPlugin({
-      title: 'JHipster',
-      contentImage: path.join(__dirname, 'logo-jhipster.png')
-    })
-  ]
+  }
 });
