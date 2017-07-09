@@ -28,7 +28,7 @@ const expectedFiles = {
         'jhgate/jhgate-ingress.yml'
     ],
     customnamespace: [
-        'msmysql/namespace.yml'
+        'namespace.yml'
     ],
     jhconsole: [
         'console/jhipster-console.yml',
