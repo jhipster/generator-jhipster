@@ -1,5 +1,23 @@
+/**
+ * Copyright 2013-2017 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://jhipster.github.io/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 const mkdirp = require('mkdirp');
-const constants = require('generator-jhipster/generators/generator-constants');
+const constants = require('../generator-constants');
 
 /* Constants use throughout */
 const MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
@@ -11,83 +29,83 @@ const REACT_DIR = constants.ANGULAR_DIR;
  * For any other config an object { file:.., method:.., template:.. } can be used
 */
 const files = {
-  common: [
-    {
-      templates: [
-        '_package.json',
-        '_.eslintrc.json',
-        '_.babelrc',
-        '_.editorconfig',
-        'webpack/webpack.common.js',
-        'webpack/webpack.dev.js',
-        'webpack/webpack.prod.js'
-      ]
-    }
-  ],
-  sass: [
-    {
-      condition: generator => generator.useSass,
-      templates: [
-        { file: '_postcss.config.js', method: 'copy' }
-      ]
-    }
-  ],
-  image: [
-    {
-      path: MAIN_SRC_DIR,
-      templates: [
-        { file: 'static/images/logo-jhipster-react.svg', method: 'copy' }
-      ]
-    }
-  ],
-  swagger: [
-    {
-      path: MAIN_SRC_DIR,
-      templates: [
-        'swagger-ui/_index.html',
-        { file: 'swagger-ui/images/_throbber.gif', method: 'copy' }
-      ]
-    }
-  ],
-  commonWeb: [
-    {
-      path: MAIN_SRC_DIR,
-      templates: [
-        { file: 'favicon.ico', method: 'copy' },
-        'robots.txt',
-        '404.html',
-        'index.html'
-      ]
-    }
-  ],
-  reactApp: [
-    {
-      path: REACT_DIR,
-      templates: [
-        'app.js',
-        'index.js',
-        'routes.js',
-        'config/constants.js',
-        'config/theme.js',
-        'config/devtools.js',
-        'config/promise-middleware.js',
-        'config/store.js'
-      ]
-    },
-    {
-      condition: generator => generator.enableTranslation,
-      path: REACT_DIR,
-      templates: [
-        'config/translation.js'
-      ]
-    },
-    {
-      condition: generator => generator.useSass,
-      path: REACT_DIR,
-      templates: [
-        { file: 'app.scss', method: 'copy' }
-      ]
-    },
+    common: [
+        {
+            templates: [
+                '_package.json',
+                '_.eslintrc.json',
+                '_.babelrc',
+                '_.editorconfig',
+                'webpack/webpack.common.js',
+                'webpack/webpack.dev.js',
+                'webpack/webpack.prod.js'
+            ]
+        }
+    ],
+    sass: [
+        {
+            condition: generator => generator.useSass,
+            templates: [
+                { file: '_postcss.config.js', method: 'copy' }
+            ]
+        }
+    ],
+    image: [
+        {
+            path: MAIN_SRC_DIR,
+            templates: [
+                { file: 'static/images/logo-jhipster-react.svg', method: 'copy' }
+            ]
+        }
+    ],
+    swagger: [
+        {
+            path: MAIN_SRC_DIR,
+            templates: [
+                'swagger-ui/_index.html',
+                { file: 'swagger-ui/images/_throbber.gif', method: 'copy' }
+            ]
+        }
+    ],
+    commonWeb: [
+        {
+            path: MAIN_SRC_DIR,
+            templates: [
+                { file: 'favicon.ico', method: 'copy' },
+                'robots.txt',
+                '404.html',
+                'index.html'
+            ]
+        }
+    ],
+    reactApp: [
+        {
+            path: REACT_DIR,
+            templates: [
+                'app.js',
+                'index.js',
+                'routes.js',
+                'config/constants.js',
+                'config/theme.js',
+                'config/devtools.js',
+                'config/promise-middleware.js',
+                'config/store.js'
+            ]
+        },
+        {
+            condition: generator => generator.enableTranslation,
+            path: REACT_DIR,
+            templates: [
+                'config/translation.js'
+            ]
+        },
+        {
+            condition: generator => generator.useSass,
+            path: REACT_DIR,
+            templates: [
+                { file: 'app.scss', method: 'copy' }
+            ]
+        },
     // {
     //   condition: generator => generator.authenticationType === 'oauth2' || generator.authenticationType === 'jwt' || generator.authenticationType === 'uaa',
     //   path: REACT_DIR,
@@ -102,47 +120,47 @@ const files = {
     //     'blocks/interceptor/_auth-expired.interceptor.js'
     //   ]
     // }
-  ],
-  reactMain: [
-    {
-      path: REACT_DIR,
-      templates: [
-        // home module
-        'modules/home/index.js',
-        { file: 'modules/home/home.js', method: 'processJsx' },
-        // login module
-        'modules/login/index.js',
-        { file: 'modules/login/login.js', method: 'processJsx' },
-        { file: 'modules/login/login-modal.js', method: 'processJsx' }
-      ]
-    },
-    {
-      condition: generator => generator.useSass,
-      path: REACT_DIR,
-      templates: [
-        'modules/home/home.scss',
-      ]
-    }
-  ],
-  reducers: [
-    {
-      path: REACT_DIR,
-      templates: [
-        // home module
-        'reducers/index.js',
-        'reducers/administration.js',
-        'reducers/authentication.js'
-      ]
-    },
-    {
-      condition: generator => generator.enableTranslation,
-      path: REACT_DIR,
-      templates: [
-        'reducers/locale.js'
-      ]
-    }
-  ],
-  // accountModule: [
+    ],
+    reactMain: [
+        {
+            path: REACT_DIR,
+            templates: [
+                // home module
+                'modules/home/index.js',
+                { file: 'modules/home/home.js', method: 'processJsx' },
+                // login module
+                'modules/login/index.js',
+                { file: 'modules/login/login.js', method: 'processJsx' },
+                { file: 'modules/login/login-modal.js', method: 'processJsx' }
+            ]
+        },
+        {
+            condition: generator => generator.useSass,
+            path: REACT_DIR,
+            templates: [
+                'modules/home/home.scss',
+            ]
+        }
+    ],
+    reducers: [
+        {
+            path: REACT_DIR,
+            templates: [
+                // home module
+                'reducers/index.js',
+                'reducers/administration.js',
+                'reducers/authentication.js'
+            ]
+        },
+        {
+            condition: generator => generator.enableTranslation,
+            path: REACT_DIR,
+            templates: [
+                'reducers/locale.js'
+            ]
+        }
+    ],
+    // accountModule: [
     // {
     //   path: REACT_DIR,
     //   templates: [
@@ -204,74 +222,74 @@ const files = {
     //     'account/password/_password-strength-bar.css'
     //   ]
     // }
-  // ],
-  adminModule: [
-    {
-      path: REACT_DIR,
-      templates: [
-        // admin modules
-        { file: 'modules/administration/audits/audits.js', method: 'processJsx' },
-        { file: 'modules/administration/configuration/configuration.js', method: 'processJsx' },
-        { file: 'modules/administration/docs/docs.js', method: 'processJsx' },
-        { file: 'modules/administration/health/health.js', method: 'processJsx' },
-        { file: 'modules/administration/health/health-detail/health-detail.js', method: 'processJsx' },
-        { file: 'modules/administration/health/health-detail/health-modal.js', method: 'processJsx' },
-        { file: 'modules/administration/health/health-detail/index.js', method: 'processJsx' },
-        { file: 'modules/administration/logs/logs.js', method: 'processJsx' },
-        { file: 'modules/administration/metrics/metrics.js', method: 'processJsx' },
-        { file: 'modules/administration/metrics/metrics-detail/metrics-detail.js', method: 'processJsx' },
-        { file: 'modules/administration/metrics/metrics-detail/metrics-modal.js', method: 'processJsx' },
-        { file: 'modules/administration/metrics/metrics-detail/index.js', method: 'processJsx' },
-      ]
-    },
-    // {
-    //   condition: generator => generator.websocket === 'spring-websocket',
-    //   path: REACT_DIR,
-    //   templates: [
-    //     { file: 'modules/administration/tracker/Tracker.js', method: 'processJsx' }
-    //   ]
-    // },
-    {
-      condition: generator => !generator.skipUserManagement,
-      path: REACT_DIR,
-      templates: [
-        { file: 'modules/administration/user-management/user-management.js', method: 'processJsx' },
-        // { file: 'modules/administration/user-management/UserManagementDetail.js', method: 'processJsx' },
-        // { file: 'modules/administration/user-management/UserManagementDialog.js', method: 'processJsx' },
-        // { file: 'modules/administration/user-management/UserManagementDeleteDialog.js', method: 'processJsx' }
-      ]
-    },
-    {
-      condition: generator => generator.applicationType === 'gateway',
-      path: REACT_DIR,
-      templates: [
-        { file: 'modules/administration/gateway/gateway.js', method: 'processJsx' }
-      ]
-    }
-  ],
-  angularShared: [
-    {
-      path: REACT_DIR,
-      templates: [
-        // layouts
-        'shared/components/footer/footer.js',
-        'shared/components/header/header.js',
-        'shared/components/private-route/private-route.js',
-        // interceptors
-        'shared/interceptors/axios.js',
-        // util
-        'shared/util/global-style.js',
-        'shared/util/log-util.js'
-      ]
-    },
-    {
-      condition: generator => generator.useSass,
-      path: REACT_DIR,
-      templates: [
-        'shared/components/header/header.scss',
-        'shared/variables.scss'
-      ]
-    },
+    // ],
+    adminModule: [
+        {
+            path: REACT_DIR,
+            templates: [
+                // admin modules
+                { file: 'modules/administration/audits/audits.js', method: 'processJsx' },
+                { file: 'modules/administration/configuration/configuration.js', method: 'processJsx' },
+                { file: 'modules/administration/docs/docs.js', method: 'processJsx' },
+                { file: 'modules/administration/health/health.js', method: 'processJsx' },
+                { file: 'modules/administration/health/health-detail/health-detail.js', method: 'processJsx' },
+                { file: 'modules/administration/health/health-detail/health-modal.js', method: 'processJsx' },
+                { file: 'modules/administration/health/health-detail/index.js', method: 'processJsx' },
+                { file: 'modules/administration/logs/logs.js', method: 'processJsx' },
+                { file: 'modules/administration/metrics/metrics.js', method: 'processJsx' },
+                { file: 'modules/administration/metrics/metrics-detail/metrics-detail.js', method: 'processJsx' },
+                { file: 'modules/administration/metrics/metrics-detail/metrics-modal.js', method: 'processJsx' },
+                { file: 'modules/administration/metrics/metrics-detail/index.js', method: 'processJsx' },
+            ]
+        },
+        // {
+        //   condition: generator => generator.websocket === 'spring-websocket',
+        //   path: REACT_DIR,
+        //   templates: [
+        //     { file: 'modules/administration/tracker/Tracker.js', method: 'processJsx' }
+        //   ]
+        // },
+        {
+            condition: generator => !generator.skipUserManagement,
+            path: REACT_DIR,
+            templates: [
+                { file: 'modules/administration/user-management/user-management.js', method: 'processJsx' },
+                // { file: 'modules/administration/user-management/UserManagementDetail.js', method: 'processJsx' },
+                // { file: 'modules/administration/user-management/UserManagementDialog.js', method: 'processJsx' },
+                // { file: 'modules/administration/user-management/UserManagementDeleteDialog.js', method: 'processJsx' }
+            ]
+        },
+        {
+            condition: generator => generator.applicationType === 'gateway',
+            path: REACT_DIR,
+            templates: [
+                { file: 'modules/administration/gateway/gateway.js', method: 'processJsx' }
+            ]
+        }
+    ],
+    angularShared: [
+        {
+            path: REACT_DIR,
+            templates: [
+                // layouts
+                'shared/components/footer/footer.js',
+                'shared/components/header/header.js',
+                'shared/components/private-route/private-route.js',
+                // interceptors
+                'shared/interceptors/axios.js',
+                // util
+                'shared/util/global-style.js',
+                'shared/util/log-util.js'
+            ]
+        },
+        {
+            condition: generator => generator.useSass,
+            path: REACT_DIR,
+            templates: [
+                'shared/components/header/header.scss',
+                'shared/variables.scss'
+            ]
+        },
     // {
     //   condition: generator => generator.enableTranslation,
     //   path: REACT_DIR,
@@ -289,104 +307,104 @@ const files = {
     //     'shared/user/_user.service.js'
     //   ]
     // }
-  ],
-  // angularAuthService: [
-  //   {
-  //     path: REACT_DIR,
-  //     templates: [
-  //       'shared/auth/_auth.service.js',
-  //       'shared/auth/_csrf.service.js',
-  //       'shared/auth/_state-storage.service.js',
-  //       'shared/auth/_principal.service.js',
-  //       'shared/auth/_has-any-authority.directive.js',
-  //       'shared/auth/_account.service.js',
-  //       'shared/auth/_user-route-access-service.js'
-  //     ]
-  //   },
-  //   {
-  //     condition: generator => generator.authenticationType === 'oauth2',
-  //     path: REACT_DIR,
-  //     templates: [
-  //       'shared/auth/_auth-oauth2.service.js'
-  //     ]
-  //   },
-  //   {
-  //     condition: generator => generator.authenticationType === 'jwt' || generator.authenticationType === 'uaa',
-  //     path: REACT_DIR,
-  //     templates: [
-  //       'shared/auth/_auth-jwt.service.js'
-  //     ]
-  //   },
-  //   {
-  //     condition: generator => generator.authenticationType === 'session',
-  //     path: REACT_DIR,
-  //     templates: [
-  //       'shared/auth/_auth-session.service.js'
-  //     ]
-  //   }
-  // ],
-  // clientTestFw: [
-  //   {
-  //     path: TEST_SRC_DIR,
-  //     templates: [
-  //       '_karma.conf.js',
-  //       'spec/_entry.js',
-  //       'spec/_test.module.js',
-  //       'spec/app/account/activate/_activate.component.spec.js',
-  //       'spec/app/account/password/_password.component.spec.js',
-  //       'spec/app/account/password/_password-strength-bar.component.spec.js',
-  //       'spec/app/account/password-reset/init/_password-reset-init.component.spec.js',
-  //       'spec/app/account/password-reset/finish/_password-reset-finish.component.spec.js',
-  //       'spec/app/account/register/_register.component.spec.js',
-  //       'spec/app/account/settings/_settings.component.spec.js',
-  //       'spec/app/admin/health/_health.component.spec.js',
-  //       'spec/app/admin/audits/_audits.component.spec.js',
-  //       'spec/helpers/_spyobject.js',
-  //       'spec/helpers/_mock-account.service.js',
-  //       'spec/helpers/_mock-principal.service.js',
-  //       'spec/helpers/_mock-route.service.js'
-  //     ]
-  //   },
-  //   {
-  //     condition: generator => generator.authenticationType === 'session',
-  //     path: TEST_SRC_DIR,
-  //     templates: [
-  //       'spec/app/account/sessions/_sessions.component.spec.js',
-  //     ]
-  //   },
-  //   {
-  //     condition: generator => generator.enableTranslation,
-  //     path: TEST_SRC_DIR,
-  //     templates: [
-  //       'spec/helpers/_mock-language.service.js'
-  //     ]
-  //   },
-  //   {
-  //     condition: generator => generator.websocket === 'spring-websocket',
-  //     path: TEST_SRC_DIR,
-  //     templates: [
-  //       'spec/helpers/_mock-tracker.service.js'
-  //     ]
-  //   },
-  //   {
-  //     condition: generator => generator.protractorTests,
-  //     path: TEST_SRC_DIR,
-  //     templates: [
-  //       'e2e/account/_account.spec.js',
-  //       'e2e/admin/_administration.spec.js',
-  //       '_protractor.conf.js'
-  //     ]
-  //   }
-  // ]
+    ],
+    // angularAuthService: [
+    //   {
+    //     path: REACT_DIR,
+    //     templates: [
+    //       'shared/auth/_auth.service.js',
+    //       'shared/auth/_csrf.service.js',
+    //       'shared/auth/_state-storage.service.js',
+    //       'shared/auth/_principal.service.js',
+    //       'shared/auth/_has-any-authority.directive.js',
+    //       'shared/auth/_account.service.js',
+    //       'shared/auth/_user-route-access-service.js'
+    //     ]
+    //   },
+    //   {
+    //     condition: generator => generator.authenticationType === 'oauth2',
+    //     path: REACT_DIR,
+    //     templates: [
+    //       'shared/auth/_auth-oauth2.service.js'
+    //     ]
+    //   },
+    //   {
+    //     condition: generator => generator.authenticationType === 'jwt' || generator.authenticationType === 'uaa',
+    //     path: REACT_DIR,
+    //     templates: [
+    //       'shared/auth/_auth-jwt.service.js'
+    //     ]
+    //   },
+    //   {
+    //     condition: generator => generator.authenticationType === 'session',
+    //     path: REACT_DIR,
+    //     templates: [
+    //       'shared/auth/_auth-session.service.js'
+    //     ]
+    //   }
+    // ],
+    // clientTestFw: [
+    //   {
+    //     path: TEST_SRC_DIR,
+    //     templates: [
+    //       '_karma.conf.js',
+    //       'spec/_entry.js',
+    //       'spec/_test.module.js',
+    //       'spec/app/account/activate/_activate.component.spec.js',
+    //       'spec/app/account/password/_password.component.spec.js',
+    //       'spec/app/account/password/_password-strength-bar.component.spec.js',
+    //       'spec/app/account/password-reset/init/_password-reset-init.component.spec.js',
+    //       'spec/app/account/password-reset/finish/_password-reset-finish.component.spec.js',
+    //       'spec/app/account/register/_register.component.spec.js',
+    //       'spec/app/account/settings/_settings.component.spec.js',
+    //       'spec/app/admin/health/_health.component.spec.js',
+    //       'spec/app/admin/audits/_audits.component.spec.js',
+    //       'spec/helpers/_spyobject.js',
+    //       'spec/helpers/_mock-account.service.js',
+    //       'spec/helpers/_mock-principal.service.js',
+    //       'spec/helpers/_mock-route.service.js'
+    //     ]
+    //   },
+    //   {
+    //     condition: generator => generator.authenticationType === 'session',
+    //     path: TEST_SRC_DIR,
+    //     templates: [
+    //       'spec/app/account/sessions/_sessions.component.spec.js',
+    //     ]
+    //   },
+    //   {
+    //     condition: generator => generator.enableTranslation,
+    //     path: TEST_SRC_DIR,
+    //     templates: [
+    //       'spec/helpers/_mock-language.service.js'
+    //     ]
+    //   },
+    //   {
+    //     condition: generator => generator.websocket === 'spring-websocket',
+    //     path: TEST_SRC_DIR,
+    //     templates: [
+    //       'spec/helpers/_mock-tracker.service.js'
+    //     ]
+    //   },
+    //   {
+    //     condition: generator => generator.protractorTests,
+    //     path: TEST_SRC_DIR,
+    //     templates: [
+    //       'e2e/account/_account.spec.js',
+    //       'e2e/admin/_administration.spec.js',
+    //       '_protractor.conf.js'
+    //     ]
+    //   }
+    // ]
 };
 
 module.exports = {
-  writeFiles,
-  files
+    writeFiles,
+    files
 };
 
 function writeFiles() {
-  mkdirp(MAIN_SRC_DIR);
-  // write React files
-  this.writeFilesToDisk(files, this, false);
+    mkdirp(MAIN_SRC_DIR);
+    // write React files
+    this.writeFilesToDisk(files, this, false, 'react');
 }
