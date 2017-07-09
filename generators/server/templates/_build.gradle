@@ -104,7 +104,7 @@ if (OperatingSystem.current().isWindows()) {
         addResources = false
         dependsOn pathingJar
         doFirst {
-            classpath = files("$buildDir/classes/main", "$buildDir/resources/main", pathingJar.archivePath)
+            classpath = files("$buildDir/classes/java/main", "$buildDir/resources/main", pathingJar.archivePath)
         }
     }
 } else {
