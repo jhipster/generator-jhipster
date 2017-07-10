@@ -16,16 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.jhipster.service.filter;
 
+import java.math.BigDecimal;
+
 /**
- * Filter class for {@link Integer} type attributes.
+ * Filter class for {@link BigDecimal} type attributes.
  * @see RangeFilter
  */
-public class IntegerFilter extends RangeFilter<Integer> {
-
-    public IntegerFilter() {
-    }
+public class BigDecimalFilter extends RangeFilter<BigDecimal> {
 
 }

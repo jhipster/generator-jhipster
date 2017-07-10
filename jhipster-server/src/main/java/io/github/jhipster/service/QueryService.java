@@ -22,6 +22,7 @@ package io.github.jhipster.service;
 import java.util.Collection;
 
 import javax.persistence.criteria.CriteriaBuilder.In;
+import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 
 import org.springframework.data.jpa.domain.Specification;
@@ -35,6 +36,7 @@ import io.github.jhipster.service.filter.StringFilter;
 /**
  * Base service for constructing and executing complex queries.
  *
+ * @param <ENTITY> the type of the entity which is queried.
  */
 @Transactional(readOnly = true)
 public abstract class QueryService<ENTITY> {
@@ -45,6 +47,7 @@ public abstract class QueryService<ENTITY> {
      * @param filter the individual attribute filter coming from the frontend.
      * @param field the JPA static metamodel representing the field.
      * @return a Specification
+     * @param <X> The type of the attribute which is filtered.
      */
     protected <X> Specification<ENTITY> buildSpecification(Filter<X> filter, SingularAttribute<? super ENTITY, X> field) {
         if (filter.getEquals() != null) {
@@ -86,6 +89,7 @@ public abstract class QueryService<ENTITY> {
      * @param filter the individual attribute filter coming from the frontend.
      * @param field the JPA static metamodel representing the field.
      * @return a Specification
+     * @param <X> The type of the attribute which is filtered.
      */
     protected <X extends Comparable<? super X>> Specification<ENTITY> buildRangeSpecification(RangeFilter<X> filter,
             SingularAttribute<? super ENTITY, X> field) {
@@ -114,10 +118,46 @@ public abstract class QueryService<ENTITY> {
         return result;
     }
 
+    /**
+     * Helper function to return a specification for filtering on one-to-one or many-to-one reference.
+     * Usage:
+     * <pre>
+     *   Specification&lt;Employee&gt; specByProjectId = buildReferringEntitySpecification(criteria.getProjectId(), Employee_.project, Project_.id);
+     *   Specification&lt;Employee&gt; specByProjectName = buildReferringEntitySpecification(criteria.getProjectName(), Employee_.project, Project_.name);
+     * </pre>
+     * @param filter the filter object which contains a value, which needs to match or a flag if nullness is checked.
+     * @param reference the attribute of the static metamodel for the referring entity.
+     * @param valueField the attribute of the static metamodel of the referred entity, where the equality should be checked.
+     * @return a Specification
+     * @param <OTHER> The type of the referenced entity
+     * @param <X> The type of the attribute which is filtered.
+     */
     protected <OTHER, X> Specification<ENTITY> buildReferringEntitySpecification(Filter<X> filter, SingularAttribute<? super ENTITY, OTHER> reference,
-            SingularAttribute<OTHER, X> idField) {
+            SingularAttribute<OTHER, X> valueField) {
         if (filter.getEquals() != null) {
-            return equalsSpecification(reference, idField, filter.getEquals());
+            return equalsSpecification(reference, valueField, filter.getEquals());
+        } else if (filter.getSpecified() != null) {
+            return byFieldSpecified(reference, filter.getSpecified());
+        }
+        return null;
+    }
+
+    /**
+     * Helper function to return a specification for filtering on one-to-many or many-to-many reference.
+     * Usage:
+     * <pre>
+     *   Specification&lt;Employee&gt; specByEmployeeId = buildReferringEntitySpecification(criteria.getEmployeId(), Project_.employees, Employee_.id);
+     *   Specification&lt;Employee&gt; specByEmployeeName = buildReferringEntitySpecification(criteria.getEmployeName(), Project_.project, Project_.name);
+     * </pre>
+     * @param filter the filter object which contains a value, which needs to match or a flag if emptiness is checked.
+     * @param reference the attribute of the static metamodel for the referring entity.
+     * @param valueField the attribute of the static metamodel of the referred entity, where the equality should be checked.
+     * @return a Specification
+     */
+    protected <OTHER, X> Specification<ENTITY> buildReferringEntitySpecification(Filter<X> filter, SetAttribute<ENTITY, OTHER> reference,
+            SingularAttribute<OTHER, X> valueField) {
+        if (filter.getEquals() != null) {
+            return equalsSetSpecification(reference, valueField, filter.getEquals());
         } else if (filter.getSpecified() != null) {
             return byFieldSpecified(reference, filter.getSpecified());
         }
@@ -133,12 +173,20 @@ public abstract class QueryService<ENTITY> {
         return (root, query, builder) -> builder.equal(root.get(reference).get(idField), value);
     }
 
+    protected <OTHER, X> Specification<ENTITY> equalsSetSpecification(SetAttribute<? super ENTITY, OTHER> reference, SingularAttribute<OTHER, X> idField,
+            X value) {
+        return (root, query, builder) -> builder.equal(root.join(reference).get(idField), value);
+    }
     protected Specification<ENTITY> likeUpperSpecification(SingularAttribute<? super ENTITY, String> field, final String value) {
         return (root, query, builder) -> builder.like(builder.upper(root.get(field)), wrapLikeQuery(value));
     }
 
     protected <X> Specification<ENTITY> byFieldSpecified(SingularAttribute<? super ENTITY, X> field, final boolean specified) {
         return specified ? (root, query, builder) -> builder.isNotNull(root.get(field)) : (root, query, builder) -> builder.isNull(root.get(field));
+    }
+
+    protected <X> Specification<ENTITY> byFieldSpecified(SetAttribute<ENTITY, X> field, final boolean specified) {
+        return specified ? (root, query, builder) -> builder.isNotEmpty(root.get(field)) : (root, query, builder) -> builder.isEmpty(root.get(field));
     }
 
     protected <X> Specification<ENTITY> valueIn(SingularAttribute<? super ENTITY, X> field, final Collection<X> values) {
