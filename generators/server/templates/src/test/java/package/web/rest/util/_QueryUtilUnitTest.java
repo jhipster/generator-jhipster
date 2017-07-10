@@ -50,4 +50,9 @@ public class QueryUtilUnitTest {
     public void decodeQueryInvalidArgument() throws Exception {
         QueryUtil.decodeQuery("%+");
     }
+
+    @Test()
+    public void decodeQueryEmpty() throws Exception {
+        assertThat(QueryUtil.decodeQuery("")).isEqualTo("");
+    }
 }

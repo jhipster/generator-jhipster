@@ -29,13 +29,17 @@ public class QueryUtil {
      * Decodes the query string as encoded on client side using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent">encodeURIComponent</a>.
      * @param query the client encoded query string
      * @return the decoded query string
-     * @throws {IllegalArgumentException} the query string must be correctly encoded
+     * @throws IllegalArgumentException if the query string is not correctly encoded
      */
     public static String decodeQuery(final String query) {
         final String decodedQuery;
         try {
-            decodedQuery = URLDecoder.decode(query, "UTF-8");
-        } catch (final UnsupportedEncodingException ex) {
+            if (query.isEmpty()) {
+                decodedQuery = "";
+            } else {
+                decodedQuery = URLDecoder.decode(query, "UTF-8");
+            }
+        } catch (final UnsupportedEncodingException|IllegalArgumentException ex) {
             throw new IllegalArgumentException("Invalid encoded query string", ex);
         }
         return decodedQuery;
