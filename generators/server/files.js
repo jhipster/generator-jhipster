@@ -417,6 +417,7 @@ function writeFiles() {
 
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/util/_HeaderUtil.java`, `${javaDir}web/rest/util/HeaderUtil.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/util/_PaginationUtil.java`, `${javaDir}web/rest/util/PaginationUtil.java`);
+            this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/util/_QueryUtil.java`, `${javaDir}web/rest/util/QueryUtil.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_package-info.java`, `${javaDir}web/rest/package-info.java`);
 
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_LogsResource.java`, `${javaDir}web/rest/LogsResource.java`);
@@ -453,6 +454,7 @@ function writeFiles() {
             this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/errors/_ExceptionTranslatorIntTest.java`, `${testDir}web/rest/errors/ExceptionTranslatorIntTest.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/errors/_ExceptionTranslatorTestController.java`, `${testDir}web/rest/errors/ExceptionTranslatorTestController.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/util/_PaginationUtilUnitTest.java`, `${testDir}web/rest/util/PaginationUtilUnitTest.java`);
+            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/util/_QueryUtilUnitTest.java`, `${testDir}web/rest/util/QueryUtilUnitTest.java`);
 
             this.template(`${SERVER_TEST_RES_DIR}config/_application.yml`, `${SERVER_TEST_RES_DIR}config/application.yml`);
             this.template(`${SERVER_TEST_RES_DIR}_logback.xml`, `${SERVER_TEST_RES_DIR}logback.xml`);

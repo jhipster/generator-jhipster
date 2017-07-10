@@ -9,7 +9,7 @@ export const createRequestOption = (req?: any): BaseRequestOptions => {
         if (req.sort) {
             params.paramsMap.set('sort', req.sort);
         }
-        params.set('query', req.query);
+        params.set('query', encodeURIComponent(req.query));
 
         options.params = params;
     }

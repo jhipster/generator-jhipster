@@ -51,7 +51,8 @@ import java.util.UUID;<% } %><% if (fieldsContainNoOwnerOneToOne === true || (pa
 import java.util.stream.Collectors;<% } %><% if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && searchEngine === 'elasticsearch' && !viaService)) { %>
 import java.util.stream.StreamSupport;<% } %><% if (searchEngine === 'elasticsearch') { %>
 
-import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
+import static org.elasticsearch.index.query.QueryBuilders.*;
+import static <%=packageName%>.web.rest.util.QueryUtil.decodeQuery;<% } %>
 
 /**
  * Service Implementation for managing <%= entityClass %>.
@@ -147,7 +148,7 @@ public class <%= serviceClassName %> <% if (service === 'serviceImpl') { %>imple
         log.debug("Request to search <%= entityClassPlural %> for query {}", query);<%- include('../../common/search_stream_template', {viaService: viaService}); -%>
         <%_ } else { _%>
         log.debug("Request to search for a page of <%= entityClassPlural %> for query {}", query);
-        Page<<%= entityClass %>> result = <%= entityInstance %>SearchRepository.search(queryStringQuery(query), pageable);
+        Page<<%= entityClass %>> result = <%= entityInstance %>SearchRepository.search(queryStringQuery(decodeQuery(query)), pageable);
             <%_ if (dto === 'mapstruct') { _%>
         return result.map(<%= entityToDtoReference %>);
             <%_ } else { _%>
