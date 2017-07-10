@@ -25,4 +25,7 @@ eg $input-color: red;
 ****************************/
 
 @import 'node_modules/bootstrap/scss/bootstrap';
+<%_ if (enableI18nRTL) { _%>
+@import 'src/main/webapp/content/scss/rtl.scss';
+<%_ } _%>
 @import 'node_modules/font-awesome/scss/font-awesome';
