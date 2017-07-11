@@ -146,7 +146,7 @@ const getCommandOptions = (pkg, argv) => {
         });
         return flags;
     }
-    return undefined;
+    return {};
 };
 
 module.exports = {
