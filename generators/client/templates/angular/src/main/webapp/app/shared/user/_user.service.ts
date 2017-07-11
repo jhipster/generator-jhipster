@@ -21,6 +21,7 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
 import { User } from './user.model';
+import { AuthoritiesConstants } from '../auth/authorities-constants';
 import { ResponseWrapper } from '../model/response-wrapper.model';
 import { createRequestOption } from '../model/request-util';
 
@@ -61,7 +62,7 @@ export class UserService {
             return <string[]> json;
         });
 <%_ } else { _%>
-        return Observable.of(['ROLE_USER', 'ROLE_ADMIN']);
+        return Observable.of([AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN]);
 <%_ } _%>
     }
 

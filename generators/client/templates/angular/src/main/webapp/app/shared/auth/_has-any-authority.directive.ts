@@ -25,9 +25,15 @@ import { Principal } from './principal.service';
  *
  * @howToUse
  * ```
- *     <some-element *jhiHasAnyAuthority="'ROLE_ADMIN'">...</some-element>
+ *     <some-element *jhiHasAnyAuthority="AuthoritiesConstants.ADMIN">...</some-element>
  *
- *     <some-element *jhiHasAnyAuthority="['ROLE_ADMIN', 'ROLE_USER']">...</some-element>
+ *     <some-element *jhiHasAnyAuthority="[AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER]">...</some-element>
+ * ```
+ * AuthoritiesConstants needs to be exposed in the component properties accesible from view, add in component:
+ * ```
+ * import { AuthoritiesConstants } from '../../shared';
+ * ...
+ * AuthoritiesConstants = AuthoritiesConstants;
  * ```
  */
 @Directive({
