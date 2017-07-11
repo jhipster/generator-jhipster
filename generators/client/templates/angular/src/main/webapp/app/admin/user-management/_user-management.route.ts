@@ -26,7 +26,7 @@ import { UserMgmtDetailComponent } from './user-management-detail.component';
 import { UserDialogComponent } from './user-management-dialog.component';
 import { UserDeleteDialogComponent } from './user-management-delete-dialog.component';
 
-import { Principal } from '../../shared';
+import { Principal, AuthoritiesConstants } from '../../shared';
 
 @Injectable()
 export class UserResolve implements CanActivate {
@@ -34,7 +34,7 @@ export class UserResolve implements CanActivate {
     constructor(private principal: Principal) { }
 
     canActivate() {
-        return this.principal.identity().then((account) => this.principal.hasAnyAuthority(['ROLE_ADMIN']));
+        return this.principal.identity().then((account) => this.principal.hasAnyAuthority([AuthoritiesConstants.ADMIN]));
     }
 }
 
