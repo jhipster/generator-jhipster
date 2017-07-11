@@ -33,7 +33,7 @@ import { Principal } from './principal.service';
  * ```
  * import { AuthoritiesConstants } from '../../shared';
  * ...
- * AuthoritiesConstants = AuthoritiesConstants;
+ * authoritiesConstants = AuthoritiesConstants;
  * ```
  */
 @Directive({

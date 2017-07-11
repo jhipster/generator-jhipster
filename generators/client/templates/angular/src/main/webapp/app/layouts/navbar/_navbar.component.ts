@@ -40,7 +40,7 @@ import { VERSION, DEBUG_INFO_ENABLED } from '../../app.constants';
 })
 export class NavbarComponent implements OnInit {
 
-    AuthoritiesConstants = AuthoritiesConstants;
+    authoritiesConstants = AuthoritiesConstants;
     inProduction: boolean;
     isNavbarCollapsed: boolean;
     languages: any[];
