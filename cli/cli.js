@@ -56,7 +56,7 @@ const runYoCommand = (cmd, args, opts) => {
     logger.debug(`args: ${toString(args)}`);
     logger.debug(`opts: ${toString(opts)}`);
     const command = getCommand(cmd, args, opts);
-    const options = getCommandOptions();
+    const options = getCommandOptions(packageJson, process.argv.slice(2));
     logger.info(chalk.yellow(`Executing ${command}`));
     logger.info(chalk.yellow(`Options: ${toString(options)}`));
     try {
