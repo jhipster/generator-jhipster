@@ -61,6 +61,7 @@
     <%_ if (protractorTests) { _%>
     "@types/selenium-webdriver": "3.0.4",
     <%_ } _%>
+    "angular-router-loader": "0.6.0",
     "angular2-template-loader": "0.6.2",
     "awesome-typescript-loader": "3.2.1",
     "browser-sync": "2.18.12",

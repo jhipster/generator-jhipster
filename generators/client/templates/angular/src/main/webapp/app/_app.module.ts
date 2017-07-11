@@ -23,15 +23,15 @@ import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { Ng2Webstorage } from 'ng2-webstorage';
+import { RouterModule } from '@angular/router';
 
-import { <%=angularXAppName%>SharedModule, UserRouteAccessService } from './shared';
-import { <%=angularXAppName%>HomeModule } from './home/home.module';
-import { <%=angularXAppName%>AdminModule } from './admin/admin.module';
-import { <%=angularXAppName%>AccountModule } from './account/account.module';
-import { <%=angularXAppName%>EntityModule } from './entities/entity.module';
+import { <%=angular2AppName%>SharedModule, UserRouteAccessService } from './shared';
+import { <%=angular2AppName%>HomeModule } from './home/home.module';
+import { <%=angular2AppName%>AccountModule } from './account/account.module';
 
 import { customHttpProvider } from './blocks/interceptor/http.provider';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
+import { LAZY_ROUTES } from './lazy.route';
 
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 
@@ -48,16 +48,16 @@ import {
     ErrorComponent
 } from './layouts';
 
+
 @NgModule({
     imports: [
         BrowserModule,
         LayoutRoutingModule,
         Ng2Webstorage.forRoot({ prefix: 'jhi', separator: '-'}),
-        <%=angularXAppName%>SharedModule,
-        <%=angularXAppName%>HomeModule,
-        <%=angularXAppName%>AdminModule,
-        <%=angularXAppName%>AccountModule,
-        <%=angularXAppName%>EntityModule,
+        RouterModule.forRoot(LAZY_ROUTES, { useHash: true }),
+        <%=angular2AppName%>SharedModule,
+        <%=angular2AppName%>HomeModule,
+        <%=angular2AppName%>AccountModule,
         // jhipster-needle-angular-add-module JHipster will add new module here
     ],
     declarations: [

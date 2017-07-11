@@ -80,6 +80,38 @@ export const <%= entityInstance %>Route: Routes = [
             authorities: ['ROLE_USER'],
             pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
         },
+        children: [
+            {
+                path: '<%= entityUrl %>-new',
+                component: <%= entityAngularName %>PopupComponent,
+                data: {
+                    authorities: ['ROLE_USER'],
+                    pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
+                },
+                canActivate: [UserRouteAccessService],
+                outlet: 'popup'
+            },
+            {
+                path: '<%= entityUrl %>/:id/edit',
+                component: <%= entityAngularName %>PopupComponent,
+                data: {
+                    authorities: ['ROLE_USER'],
+                    pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
+                },
+                canActivate: [UserRouteAccessService],
+                outlet: 'popup'
+            },
+            {
+                path: '<%= entityUrl %>/:id/delete',
+                component: <%= entityAngularName %>DeletePopupComponent,
+                data: {
+                    authorities: ['ROLE_USER'],
+                    pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
+                },
+                canActivate: [UserRouteAccessService],
+                outlet: 'popup'
+            }
+        ] ,
         canActivate: [UserRouteAccessService]
     }, {
         path: '<%= entityUrl %>/:id',
@@ -88,39 +120,18 @@ export const <%= entityInstance %>Route: Routes = [
             authorities: ['ROLE_USER'],
             pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
         },
+        children: [
+            {
+                path: '<%= entityUrl %>/:id/edit',
+                component: <%= entityAngularName %>PopupComponent,
+                data: {
+                    authorities: ['ROLE_USER'],
+                    pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
+                },
+                canActivate: [UserRouteAccessService],
+                outlet: 'popup'
+            }
+        ],
         canActivate: [UserRouteAccessService]
-    }
-];
-
-export const <%= entityInstance %>PopupRoute: Routes = [
-    {
-        path: '<%= entityUrl %>-new',
-        component: <%= entityAngularName %>PopupComponent,
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
-        },
-        canActivate: [UserRouteAccessService],
-        outlet: 'popup'
-    },
-    {
-        path: '<%= entityUrl %>/:id/edit',
-        component: <%= entityAngularName %>PopupComponent,
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
-        },
-        canActivate: [UserRouteAccessService],
-        outlet: 'popup'
-    },
-    {
-        path: '<%= entityUrl %>/:id/delete',
-        component: <%= entityAngularName %>DeletePopupComponent,
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
-        },
-        canActivate: [UserRouteAccessService],
-        outlet: 'popup'
     }
 ];

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors from the JHipster project.
+ Copyright 2013-2017 the original author or authors.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -16,19 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { customHttpProvider } from '../blocks/interceptor/http.provider';
+import { Route } from '@angular/router';
 
-/* jhipster-needle-add-entity-module-import - JHipster will add entity modules imports here */
+export const adminRoute: Route = {
+    path: 'admin',
+    loadChildren:'./admin/admin.module'
+};
 
-@NgModule({
-    imports: [
-        /* jhipster-needle-add-entity-module - JHipster will add entity modules here */
-    ],
-    declarations: [],
-    entryComponents: [],
-    providers: [customHttpProvider()],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
-})
+export const entityRoute: Route = {
+    path: 'entity',
+    loadChildren:'./entities/entity.module'
+};
 
-export default class <%=angular2AppName%>EntityModule {}
+export const LAZY_ROUTES = [
+    adminRoute,
+    entityRoute
+];

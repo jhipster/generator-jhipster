@@ -115,6 +115,7 @@ const files = {
                 '_app.main.ts',
                 '_app.main-aot.ts',
                 '_app.route.ts',
+                '_lazy.route.ts',
                 '_app.module.ts',
                 '_app.constants.ts',
                 '_polyfills.ts',

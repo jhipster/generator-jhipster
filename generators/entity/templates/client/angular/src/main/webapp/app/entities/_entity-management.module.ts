@@ -34,7 +34,6 @@ import {
     <%= entityAngularName %>DeletePopupComponent,
     <%= entityAngularName %>DeleteDialogComponent,
     <%= entityInstance %>Route,
-    <%= entityInstance %>PopupRoute,
     <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
     <%= entityAngularName %>ResolvePagingParams,
     <%_ } _%>
@@ -42,7 +41,6 @@ import {
 
 const ENTITY_STATES = [
     ...<%= entityInstance %>Route,
-    ...<%= entityInstance %>PopupRoute,
 ];
 
 @NgModule({
@@ -52,7 +50,7 @@ const ENTITY_STATES = [
               if (key === 'User') { _%>
         <%= angularXAppName %>AdminModule,
         <%_ }}); _%>
-        RouterModule.forRoot(ENTITY_STATES, { useHash: true })
+        RouterModule.forRoot(ENTITY_STATES)
     ],
     declarations: [
         <%= entityAngularName %>Component,

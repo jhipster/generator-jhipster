@@ -63,7 +63,24 @@ export const userMgmtRoute: Routes = [
         },
         data: {
             pageTitle: 'userManagement.home.title'
-        }
+        },
+        children: [
+            {
+                path: 'user-management-new',
+                component: UserDialogComponent,
+                outlet: 'popup'
+            },
+            {
+                path: 'user-management/:login/edit',
+                component: UserDialogComponent,
+                outlet: 'popup'
+            },
+            {
+                path: 'user-management/:login/delete',
+                component: UserDeleteDialogComponent,
+                outlet: 'popup'
+            }
+        ]
     },
     {
         path: 'user-management/:login',
@@ -74,20 +91,3 @@ export const userMgmtRoute: Routes = [
     }
 ];
 
-export const userDialogRoute: Routes = [
-    {
-        path: 'user-management-new',
-        component: UserDialogComponent,
-        outlet: 'popup'
-    },
-    {
-        path: 'user-management/:login/edit',
-        component: UserDialogComponent,
-        outlet: 'popup'
-    },
-    {
-        path: 'user-management/:login/delete',
-        component: UserDeleteDialogComponent,
-        outlet: 'popup'
-    }
-];

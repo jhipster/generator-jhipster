@@ -201,7 +201,7 @@ module.exports = class extends PrivateBase {
                     splicable: [
                         this.stripMargin(
                             `|<li>
-                             |                        <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                             |                        <a class="dropdown-item" routerLink="entity/${routerName}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                              |                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                              |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${_.camelCase(routerName)}"` : ''}>${_.startCase(routerName)}</span>
                              |                        </a>

@@ -25,7 +25,7 @@ for (const idx in fields) {
 }
 _%>
 import { Component, OnInit, OnDestroy<% if (fieldsContainImageBlob) { %>, ElementRef<% } %> } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Response } from '@angular/http';
 
 import { Observable } from 'rxjs/Rx';
@@ -94,7 +94,8 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         <%_ if (fieldsContainImageBlob) { _%>
         private elementRef: ElementRef,
         <%_ } _%>
-        private eventManager: JhiEventManager
+        private eventManager: JhiEventManager,
+        private router: Router
     ) {
     }
 
@@ -132,14 +133,22 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     clearInputImage(field: string, fieldContentType: string, idInput: string) {
         this.dataUtils.clearInputImage(this.<%= entityInstance %>, this.elementRef, field, fieldContentType, idInput);
     }
-
     <%_ } _%>
     <%_ } _%>
+    
+    goToPreviousUrl() {
+        let currentUrl: string = this.router.url;
+        let previousUrl: string = currentUrl.substr(0, (currentUrl.indexOf("(")-1)); 
+        this.router.navigate([previousUrl]);
+    }
+    
     clear() {
+        this.goToPreviousUrl();
         this.activeModal.dismiss('cancel');
     }
 
     save() {
+        this.goToPreviousUrl();
         this.isSaving = true;
         if (this.<%= entityInstance %>.id !== undefined) {
             this.subscribeToSaveResponse(
