@@ -1,0 +1,30 @@
+{
+    "userManagement": {
+        "home": {
+            "title": "Pengguna",
+            "createLabel": "Buat pengguna baru",
+            "createOrEditLabel": "Buat atau edit pengguna"
+        },
+        "created": "Pengguna baru dibuat dengan ID {{ param }}",
+        "updated": "Pengguna dengan ID {{ param }} sudah diubah",
+        "deleted": "Pengguna dengan ID {{ param }} sudah dihapus",
+        "delete": {
+            "question": "Apakah anda yakin ingin menghapus pengguna {{ login }}?"
+        },
+        "detail": {
+            "title": "Pengguna"
+        },
+        "login": "Login",
+        "firstName": "Nama Depan",
+        "lastName": "Nama Belakang",
+        "email": "Email",
+        "activated": "Aktif",
+        "deactivated": "Tidak aktif",
+        "profiles": "Profil",
+        "langKey": "Bahasa",
+        "createdBy": "Dibuat oleha",
+        "createdDate": "Dibuat tanggal",
+        "lastModifiedBy": "Diubah oleh",
+        "lastModifiedDate": "Diubah tanggal"
+    }
+}

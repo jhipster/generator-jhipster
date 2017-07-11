@@ -1,0 +1,158 @@
+<%#
+ Copyright 2013-2017 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://jhipster.github.io/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+    "global": {
+        "title": "<%= capitalizedBaseName %>",
+        "browsehappy": "Anda menggunakan browser versi lama. Silakan <a href=\"http://browsehappy.com/?locale=en\">perbaharui browser anda</a> untuk meningkatkan kenyamanan anda.",
+        "menu": {
+            "home": "Home",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "entities": {
+                "main": "Entities",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+                "main": "Akun",
+                "settings": "Pengaturan",
+                "password": "Password",
+                "sessions": "Sesi",
+                "login": "Login",
+                "logout": "Logout",
+                "register": "Mendaftar"
+            },
+            "admin": {
+                "main": "Administrasi",
+                <%_ if (applicationType === 'gateway') { _%>
+                "gateway": "Gateway",
+                <%_ } _%>
+                "userManagement": "Manajemen pengguna",
+                "tracker": "Pelacak pengguna",
+                "metrics": "Pengukuran Aplikasi",
+                "health": "Kesehatan Aplikasi",
+                "configuration": "Konfigurasi",
+                "logs": "Logs",
+                "audits": "Audit",
+                "apidocs": "API",
+                "database": "Database",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+            },
+            "language": "Bahasa"
+        },
+        "form": {
+            "username": "Username",
+            "username.placeholder": "Username anda",
+            "newpassword": "Password baru",
+            "newpassword.placeholder": "Ketik password baru anda disini",
+            "confirmpassword": "Konfirmasi password baru",
+            "confirmpassword.placeholder": "Ketik konfirmasi password baru anda disini",
+            "email": "Email",
+            "email.placeholder": "Email anda"
+        },
+        "messages": {
+            "info": {
+                <%_ if (clientFramework === 'angular1') { _%>
+                "authenticated": "Jika anda ingin <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">login</a>, anda bisa coba menggunakan akun yang sudah ada:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\").",
+                "register": "Anda belum punya akun? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Buat akun baru anda disini</a>"
+                <%_ } else { _%>
+                "authenticated": {
+                    "prefix": "Jika anda ingin ",
+                    "link": "login",
+                    "suffix": ", anda bisa coba menggunakan akun yang sudah ada:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\")."
+                },
+                "register": {
+                    "noaccount": "Anda belum punya akun?",
+                    "link": "Buat akun baru anda disini"
+                }
+                <%_ } _%>
+            },
+            "error": {
+                "dontmatch": "Password dan konfirmasi password tidak sama!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Password anda diperlukan.",
+                    "minlength": "Password anda diperlukan setidaknya minimal 4 karakter.",
+                    "maxlength": "Password anda tidak boleh lebih dari 50 karakter.",
+                    "strength": "Ukuran keamanan password:"
+                },
+                "confirmpassword": {
+                    "required": "Konfirmasi password anda diperlukan.",
+                    "minlength": "Konfirmasi Password anda diperlukan setidaknya minimal 4 karakter.",
+                    "maxlength": "Konfirmasi Password anda tidak boleh lebih dari 50 karakter."
+                },
+                "email": {
+                    "required": "Email anda diperlukan.",
+                    "invalid": "Email anda tidak valid.",
+                    "minlength": "Email anda diperlukan setidaknya minimal 5 karakter.",
+                    "maxlength": "Email anda tidak boleh lebih dari 50 karakater."
+                }
+            }
+        },
+        "field": {
+            "id": "ID"
+        },
+        "ribbon": {
+            "dev":"Fase Pengembangan"
+        },
+        "item-count": "Showing {{first}} - {{second}} of {{total}} items."
+    },
+    "entity": {
+        "action": {
+            "addblob": "Tambah blob",
+            "addimage": "Tambah gambar",
+            "back": "Kembali",
+            "cancel": "Batal",
+            "delete": "Hapus",
+            "edit": "Ubah",
+            "open": "Buka",
+            "save": "Simpan",
+            "view": "Tampilkan"
+        },
+        "detail": {
+            "field": "Inputan",
+            "value": "Nilai"
+        },
+        "delete": {
+            "title": "Konfirmasi proses penghapusan"
+        },
+        "validation": {
+            "required": "Inputan ini diperlukan.",
+            "minlength": "Inputan ini diperlukan minimal {{ min }} karakter.",
+            "maxlength": "Inputan ini tidak boleh lebih dari {{ max }} karakter.",
+            "min": "Inputan ini harus minimal {{ min }}.",
+            "max": "Inputan ini tidak boleh lebih dari {{ max }}.",
+            "minbytes": "Inputan ini harus minimal {{ min }} bytes.",
+            "maxbytes": "Inputan ini tidak boleh lebih dari {{ max }} bytes.",
+            "pattern": "Inputan ini harus mengikuti pola {{ pattern }}.",
+            "number": "Inputan ini harus angka.",
+            "datetimelocal": "Inputan ini harus tanggal dan jam."
+        }
+    },
+    "error": {
+        "internalServerError": "Error internal server",
+        "server.not.reachable": "Server tidak bisa diakses",
+        "url.not.found": "Tidak ditemukan",
+        "NotNull": "Inputan {{ fieldName }} tidak bioleh kosong!",
+        "Size": "Inputan {{ fieldName }} tidak memenuhi syarat min/max yang ditetapkan!",
+        "userexists": "Nama login sudah digunakan!",
+        "emailexists": "Alamat email sudah digunakan!",
+        "idexists": "{{ entityName }} yang baru tidak boleh menggunakan id yang sudah ada"
+    },
+    "footer": "Ini bagian footer aplikasi anda"
+}

@@ -1,0 +1,10 @@
+{
+    "configuration": {
+        "title": "Konfigurasi",
+        "filter": "Filter (by awalan)",
+        "table": {
+            "prefix": "Awalan",
+            "properties": "Properties"
+        }
+    }
+}
