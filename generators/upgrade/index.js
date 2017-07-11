@@ -23,6 +23,7 @@ const chalk = require('chalk');
 const BaseGenerator = require('../generator-base');
 const shelljs = require('shelljs');
 const semver = require('semver');
+const constants = require('../generator-constants');
 
 const UpgradeGenerator = generator.extend({});
 
@@ -32,7 +33,7 @@ util.inherits(UpgradeGenerator, BaseGenerator);
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 const UPGRADE_BRANCH = 'jhipster_upgrade';
 const GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES = '2.9.0';
-const GENERATOR_JHIPSTER_CLI_VERSION = '4.5.1';
+const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
 module.exports = UpgradeGenerator.extend({
     constructor: function (...args) { // eslint-disable-line object-shorthand
@@ -75,10 +76,7 @@ module.exports = UpgradeGenerator.extend({
 
     _generate(version, callback) {
         this.log(`Regenerating application with JHipster ${version}...`);
-        let generatorCommand = 'yo jhipster';
-        if (semver.gte(version, GENERATOR_JHIPSTER_CLI_VERSION)) {
-            generatorCommand = this.clientPackageManager === 'yarn' ? '$(yarn bin)/jhipster' : '$(npm bin)/jhipster';
-        }
+        const generatorCommand = 'yo jhipster';
         shelljs.exec(`${generatorCommand} --with-entities --force --skip-install`, { silent: this.silent }, (code, msg, err) => {
             if (code === 0) this.log(chalk.green(`Successfully regenerated application with JHipster ${version}`));
             else this.error(`Something went wrong while generating project! ${err}`);
@@ -108,6 +106,7 @@ module.exports = UpgradeGenerator.extend({
                     this.error('bower install failed.');
                 }
             }
+            shelljs.rm('-Rf', `${SERVER_MAIN_RES_DIR}keystore.jks`);
             this._gitCommitAll(`Generated with JHipster ${version}`, () => {
                 callback();
             });
