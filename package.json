@@ -52,6 +52,7 @@
     "jhipster-core": "1.3.4",
     "js-yaml": "3.8.4",
     "lodash": "4.17.4",
+    "meow": "3.7.0",
     "mkdirp": "0.5.1",
     "pluralize": "5.0.0",
     "randexp": "0.4.5",
