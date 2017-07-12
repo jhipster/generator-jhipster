@@ -22,8 +22,6 @@ const webpackMerge = require('webpack-merge');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const WebpackNotifierPlugin = require('webpack-notifier');
-const execSync = require('child_process').execSync;
-const fs = require('fs');
 const path = require('path');
 
 const utils = require('./utils.js');
