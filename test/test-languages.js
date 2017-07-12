@@ -11,6 +11,7 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
 describe('JHipster generator languages', () => {
     const languages = [
+        { name: 'Bahasa Indonesia', value: 'id' },
         { name: 'Armenian', value: 'hy' },
         { name: 'Catalan', value: 'ca' },
         { name: 'Chinese (Simplified)', value: 'zh-cn' },
@@ -24,7 +25,6 @@ describe('JHipster generator languages', () => {
         { name: 'Greek', value: 'el' },
         { name: 'Hindi', value: 'hi' },
         { name: 'Hungarian', value: 'hu' },
-        { name: 'Bahasa Indonesia', value: 'id' },
         { name: 'Italian', value: 'it' },
         { name: 'Japanese', value: 'ja' },
         { name: 'Korean', value: 'ko' },
