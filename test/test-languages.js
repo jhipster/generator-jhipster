@@ -24,7 +24,7 @@ describe('JHipster generator languages', () => {
         { name: 'Greek', value: 'el' },
         { name: 'Hindi', value: 'hi' },
         { name: 'Hungarian', value: 'hu' },
-        { name: 'Indonesia', value: 'id' },
+        { name: 'Bahasa Indonesia', value: 'id' },
         { name: 'Italian', value: 'it' },
         { name: 'Japanese', value: 'ja' },
         { name: 'Korean', value: 'ko' },
