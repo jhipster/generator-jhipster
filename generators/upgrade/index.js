@@ -33,7 +33,7 @@ util.inherits(UpgradeGenerator, BaseGenerator);
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 const UPGRADE_BRANCH = 'jhipster_upgrade';
 const GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES = '2.9.0';
-const GENERATOR_JHIPSTER_CLI_VERSION = '4.5.1';
+const FIRST_CLI_SUPPORTED_VERSION = '4.5.1'; // The first version in which CLI support was added
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
 module.exports = UpgradeGenerator.extend({
@@ -78,7 +78,7 @@ module.exports = UpgradeGenerator.extend({
     _generate(version, callback) {
         this.log(`Regenerating application with JHipster ${version}...`);
         let generatorCommand = 'yo jhipster';
-        if (semver.gte(version, GENERATOR_JHIPSTER_CLI_VERSION)) {
+        if (semver.gte(version, FIRST_CLI_SUPPORTED_VERSION)) {
             generatorCommand = this.clientPackageManager === 'yarn' ? '$(yarn bin)/jhipster' : '$(npm bin)/jhipster';
         }
         shelljs.exec(`${generatorCommand} --with-entities --force --skip-install`, { silent: this.silent }, (code, msg, err) => {
