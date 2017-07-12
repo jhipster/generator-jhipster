@@ -34,7 +34,7 @@
     "@angular/platform-browser": "4.2.6",
     "@angular/platform-browser-dynamic": "4.2.6",
     "@angular/router": "4.2.6",
-    "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.27",
+    "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.28",
     "bootstrap": "4.0.0-alpha.6",
     "core-js": "2.4.1",
     "font-awesome": "4.7.0",
@@ -121,7 +121,7 @@
     <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
     <%_ }); _%>
-    "webpack": "3.1.0",
+    "webpack": "3.2.0",
     "webpack-dev-server": "2.5.1",
     "webpack-merge": "4.1.0",
     "webpack-notifier": "1.5.0",
