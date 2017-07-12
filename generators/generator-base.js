@@ -456,6 +456,7 @@ module.exports = class extends PrivateBase {
      */
     getAllSupportedLanguageOptions() {
         return [
+            { name: 'Arabic (Libya)', value: 'ar-ly', rtl: true },
             { name: 'Armenian', value: 'hy' },
             { name: 'Indonesian', value: 'id' },
             { name: 'Catalan', value: 'ca' },

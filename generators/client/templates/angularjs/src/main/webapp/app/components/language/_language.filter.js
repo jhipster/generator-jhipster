@@ -25,6 +25,7 @@
         .filter('findLanguageRtlFromKey', findLanguageRtlFromKey);
 
     var languages = {
+        'ar-ly': { name: 'العربية', rtl: true },
         'id': { name: 'Bahasa Indonesia' },
         'ca': { name: 'Català' },
         'cs': { name: 'Český' },
