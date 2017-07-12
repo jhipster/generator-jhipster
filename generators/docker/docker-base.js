@@ -21,7 +21,6 @@ const shelljs = require('shelljs');
 const chalk = require('chalk');
 const _ = require('lodash');
 const crypto = require('crypto');
-const BaseGenerator = require('../generator-base');
 
 /**
  * This is the Generator base class.
@@ -30,71 +29,77 @@ const BaseGenerator = require('../generator-base');
  *
  * The method signatures in public API should not be changed without a major version change
  */
-module.exports = class extends BaseGenerator {
-    checkDocker() {
-        const done = this.async();
-
-        shelljs.exec('docker -v', { silent: true }, (code, stdout, stderr) => {
-            if (stderr) {
-                this.log(chalk.red('Docker version 1.10.0 or later is not installed on your computer.\n' +
-                    '         Read http://docs.docker.com/engine/installation/#installation\n'));
-            } else {
-                const dockerVersion = stdout.split(' ')[2].replace(/,/g, '');
-                const dockerVersionMajor = dockerVersion.split('.')[0];
-                const dockerVersionMinor = dockerVersion.split('.')[1];
-                if (dockerVersionMajor < 1 || (dockerVersionMajor === 1 && dockerVersionMinor < 10)) {
-                    this.log(chalk.red(`${'Docker version 1.10.0 or later is not installed on your computer.\n' +
-                        '         Docker version found: '}${dockerVersion}\n` +
-                        '         Read http://docs.docker.com/engine/installation/#installation\n'));
-                }
-            }
-            done();
-        });
-    }
-
-    checkImages() {
-        this.log('\nChecking Docker images in applications\' directories...');
-
-        let imagePath = '';
-        let runCommand = '';
-        this.warning = false;
-        this.warningMessage = 'To generate the missing Docker image(s), please run:\n';
-        this.appsFolders.forEach((appsFolder, index) => {
-            const appConfig = this.appConfigs[index];
-            if (appConfig.buildTool === 'maven') {
-                imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/target/docker/${_.kebabCase(appConfig.baseName)}-*.war`);
-                runCommand = './mvnw package -Pprod docker:build';
-            } else {
-                imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/build/docker/${_.kebabCase(appConfig.baseName)}-*.war`);
-                runCommand = './gradlew -Pprod bootRepackage buildDocker';
-            }
-            if (shelljs.ls(imagePath).length === 0) {
-                this.warning = true;
-                this.warningMessage += `  ${chalk.cyan(runCommand)} in ${this.destinationPath(this.directoryPath + appsFolder)}\n`;
-            }
-        });
-    }
-
-    generateJwtSecret() {
-        if (this.jwtSecretKey === undefined) {
-            this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
-        }
-    }
-
-    configureImageNames() {
-        for (let i = 0; i < this.appsFolders.length; i++) {
-            const originalImageName = this.appConfigs[i].baseName.toLowerCase();
-            const targetImageName = this.dockerRepositoryName ? `${this.dockerRepositoryName}/${originalImageName}` : originalImageName;
-            this.appConfigs[i].targetImageName = targetImageName;
-        }
-    }
-
-    setAppsFolderPaths() {
-        if (this.applicationType) return;
-        this.appsFolderPaths = [];
-        for (let i = 0; i < this.appsFolders.length; i++) {
-            const path = this.destinationPath(this.directoryPath + this.appsFolders[i]);
-            this.appsFolderPaths.push(path);
-        }
-    }
+module.exports = {
+    checkDocker,
+    checkImages,
+    generateJwtSecret,
+    configureImageNames,
+    setAppsFolderPaths,
 };
+
+function checkDocker() {
+    const done = this.async();
+
+    shelljs.exec('docker -v', { silent: true }, (code, stdout, stderr) => {
+        if (stderr) {
+            this.log(chalk.red('Docker version 1.10.0 or later is not installed on your computer.\n' +
+                '         Read http://docs.docker.com/engine/installation/#installation\n'));
+        } else {
+            const dockerVersion = stdout.split(' ')[2].replace(/,/g, '');
+            const dockerVersionMajor = dockerVersion.split('.')[0];
+            const dockerVersionMinor = dockerVersion.split('.')[1];
+            if (dockerVersionMajor < 1 || (dockerVersionMajor === 1 && dockerVersionMinor < 10)) {
+                this.log(chalk.red(`${'Docker version 1.10.0 or later is not installed on your computer.\n' +
+                    '         Docker version found: '}${dockerVersion}\n` +
+                    '         Read http://docs.docker.com/engine/installation/#installation\n'));
+            }
+        }
+        done();
+    });
+}
+
+function checkImages() {
+    this.log('\nChecking Docker images in applications\' directories...');
+
+    let imagePath = '';
+    let runCommand = '';
+    this.warning = false;
+    this.warningMessage = 'To generate the missing Docker image(s), please run:\n';
+    this.appsFolders.forEach((appsFolder, index) => {
+        const appConfig = this.appConfigs[index];
+        if (appConfig.buildTool === 'maven') {
+            imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/target/docker/${_.kebabCase(appConfig.baseName)}-*.war`);
+            runCommand = './mvnw package -Pprod docker:build';
+        } else {
+            imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/build/docker/${_.kebabCase(appConfig.baseName)}-*.war`);
+            runCommand = './gradlew -Pprod bootRepackage buildDocker';
+        }
+        if (shelljs.ls(imagePath).length === 0) {
+            this.warning = true;
+            this.warningMessage += `  ${chalk.cyan(runCommand)} in ${this.destinationPath(this.directoryPath + appsFolder)}\n`;
+        }
+    });
+}
+
+function generateJwtSecret() {
+    if (this.jwtSecretKey === undefined) {
+        this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
+    }
+}
+
+function configureImageNames() {
+    for (let i = 0; i < this.appsFolders.length; i++) {
+        const originalImageName = this.appConfigs[i].baseName.toLowerCase();
+        const targetImageName = this.dockerRepositoryName ? `${this.dockerRepositoryName}/${originalImageName}` : originalImageName;
+        this.appConfigs[i].targetImageName = targetImageName;
+    }
+}
+
+function setAppsFolderPaths() {
+    if (this.applicationType) return;
+    this.appsFolderPaths = [];
+    for (let i = 0; i < this.appsFolders.length; i++) {
+        const path = this.destinationPath(this.directoryPath + this.appsFolders[i]);
+        this.appsFolderPaths.push(path);
+    }
+}

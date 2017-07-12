@@ -4,10 +4,11 @@ const shelljs = require('shelljs');
 const util = require('util');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
-const DockerGenerator = require('../docker-base');
+const BaseGenerator = require('../../generator-base');
+const docker = require('../docker-base');
 
 const OpenShiftGenerator = generator.extend({});
-util.inherits(OpenShiftGenerator, DockerGenerator);
+util.inherits(OpenShiftGenerator, BaseGenerator);
 
 /* Constants used throughout */
 const constants = require('../../generator-constants');
@@ -32,7 +33,7 @@ module.exports = OpenShiftGenerator.extend({
             this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())} or in the root directory path that you select in the subsequent step`));
         },
 
-        checkDocker: this.checkDocker,
+        checkDocker: docker.checkDocker,
 
         checkOpenShift() {
             if (this.skipChecks) return;
@@ -88,6 +89,29 @@ module.exports = OpenShiftGenerator.extend({
         }
     },
 
+    _getAppFolders(input) {
+        const files = shelljs.ls('-l', this.destinationPath(input));
+        const appsFolders = [];
+
+        files.forEach((file) => {
+            if (file.isDirectory()) {
+                if ((shelljs.test('-f', `${file.name}/.yo-rc.json`))
+                    && (shelljs.test('-f', `${file.name}/src/main/docker/app.yml`))) {
+                    try {
+                        const fileData = this.fs.readJSON(`${file.name}/.yo-rc.json`);
+                        if (fileData['generator-jhipster'].baseName !== undefined) {
+                            appsFolders.push(file.name.match(/([^/]*)\/*$/)[1]);
+                        }
+                    } catch (err) {
+                        this.log(chalk.red(`${file}: this .yo-rc.json can't be read`));
+                    }
+                }
+            }
+        });
+
+        return appsFolders;
+    },
+
     prompting: {
         askForApplicationType: prompts.askForApplicationType,
         askForPath: prompts.askForPath,
@@ -107,10 +131,10 @@ module.exports = OpenShiftGenerator.extend({
             insight.trackWithEvent('generator', 'openshift');
         },
 
-        checkImages: this.checkImages,
-        generateJwtSecret: this.generateJwtSecret,
-        configureImageNames: this.configureImageNames,
-        setAppsFolderPaths: this.setAppsFolderPaths,
+        checkImages: docker.checkImages,
+        generateJwtSecret: docker.generateJwtSecret,
+        configureImageNames: docker.configureImageNames,
+        setAppsFolderPaths: docker.setAppsFolderPaths,
 
         // place holder for future changes (may be prompt or something else)
         setRegistryReplicas() {

@@ -18,17 +18,17 @@
  */
 const generators = require('yeoman-generator');
 const chalk = require('chalk');
-const shelljs = require('shelljs');
 const jsyaml = require('js-yaml');
 const pathjs = require('path');
 const util = require('util');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
-const DockerGenerator = require('../docker-base');
+const BaseGenerator = require('../../generator-base');
+const docker = require('../docker-base');
 
 const RancherGenerator = generators.extend({});
 
-util.inherits(RancherGenerator, DockerGenerator);
+util.inherits(RancherGenerator, BaseGenerator);
 
 /* Constants used throughout */
 const constants = require('../../generator-constants');
@@ -49,7 +49,7 @@ module.exports = RancherGenerator.extend({
 
     initializing: {
         sayHello() {
-            this.log(chalk.white(`${chalk.bold('🐮')} [BETA] Welcome to the JHipster Rancher Compose Generator ${chalk.bold('🐮')}`));
+            this.log(chalk.white(`${chalk.bold('🐮')} [BETA] WWWelcome to the JHipster Rancher Compose Generator ${chalk.bold('🐮')}`));
             this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
         },
 
@@ -68,27 +68,7 @@ module.exports = RancherGenerator.extend({
             this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
         },
 
-        checkDocker() {
-            if (this.skipChecks) return;
-            const done = this.async();
-
-            shelljs.exec('docker -v', { silent: true }, (code, stdout, stderr) => {
-                if (stderr) {
-                    this.log(chalk.red('Docker version 1.10.0 or later is not installed on your computer.\n' +
-                        '         Read http://docs.docker.com/engine/installation/#installation\n'));
-                } else {
-                    const dockerVersion = stdout.split(' ')[2].replace(/,/g, '');
-                    const dockerVersionMajor = dockerVersion.split('.')[0];
-                    const dockerVersionMinor = dockerVersion.split('.')[1];
-                    if (dockerVersionMajor < 1 || (dockerVersionMajor === 1 && dockerVersionMinor < 10)) {
-                        this.log(chalk.red(`${'Docker version 1.10.0 or later is not installed on your computer.\n' +
-                            '         Docker version found: '}${dockerVersion}\n` +
-                            '         Read http://docs.docker.com/engine/installation/#installation\n'));
-                    }
-                }
-                done();
-            });
-        },
+        checkDocker: docker.checkDockerBase,
 
         loadConfig() {
             this.defaultAppsFolders = this.config.get('appsFolders');
@@ -130,10 +110,10 @@ module.exports = RancherGenerator.extend({
             insight.trackWithEvent('generator', 'rancher-compose');
         },
 
-        checkImages: this.checkImages,
-        generateJwtSecret: this.generateJwtSecret,
-        configureImageNames: this.configureImageNames,
-        setAppsFolderPaths: this.setAppsFolderPaths,
+        checkImages: docker.checkImages,
+        generateJwtSecret: docker.generateJwtSecret,
+        configureImageNames: docker.configureImageNames,
+        setAppsFolderPaths: docker.setAppsFolderPaths,
 
         setAppsYaml() {
             this.appsYaml = [];

@@ -16,7 +16,7 @@ describe('JHipster Rancher Compose Sub Generator', () => {
     describe('only gateway', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/rancher-compose'))
+                .run(require.resolve('../generators/docker/rancher-compose'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -43,7 +43,7 @@ describe('JHipster Rancher Compose Sub Generator', () => {
     describe('only one microservice', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/rancher-compose'))
+                .run(require.resolve('../generators/docker/rancher-compose'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -70,7 +70,7 @@ describe('JHipster Rancher Compose Sub Generator', () => {
     describe('gateway and one microservice', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/rancher-compose'))
+                .run(require.resolve('../generators/docker/rancher-compose'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -99,7 +99,7 @@ describe('JHipster Rancher Compose Sub Generator', () => {
     describe('gateway and one microservice, with elk', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/rancher-compose'))
+                .run(require.resolve('../generators/docker/rancher-compose'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -128,7 +128,7 @@ describe('JHipster Rancher Compose Sub Generator', () => {
     describe('gateway and one microservice, with prometheus', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/rancher-compose'))
+                .run(require.resolve('../generators/docker/rancher-compose'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -157,7 +157,7 @@ describe('JHipster Rancher Compose Sub Generator', () => {
     describe('gateway, uaa server and one microservice, with elk', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/rancher-compose'))
+                .run(require.resolve('../generators/docker/rancher-compose'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -194,7 +194,7 @@ describe('JHipster Rancher Compose Sub Generator', () => {
     describe('loadbalancing and multi microservices, with elk', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/rancher-compose'))
+                .run(require.resolve('../generators/docker/rancher-compose'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -236,7 +236,7 @@ describe('JHipster Rancher Compose Sub Generator', () => {
     describe('loadbalancing, gateway and multi microservices, with 1 mongodb cluster ', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/rancher-compose'))
+                .run(require.resolve('../generators/docker/rancher-compose'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -280,7 +280,7 @@ describe('JHipster Rancher Compose Sub Generator', () => {
     describe('gateway and 1 microservice, with Cassandra cluster', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/rancher-compose'))
+                .run(require.resolve('../generators/docker/rancher-compose'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -313,7 +313,7 @@ describe('JHipster Rancher Compose Sub Generator', () => {
     describe('loadbalancing and a monolith app', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/rancher-compose'))
+                .run(require.resolve('../generators/docker/rancher-compose'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })

@@ -24,11 +24,12 @@ const pathjs = require('path');
 const util = require('util');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
-const DockerGenerator = require('../docker-base');
+const BaseGenerator = require('../../generator-base');
+const docker = require('../docker-base');
 
 const DockerComposeGenerator = generator.extend({});
 
-util.inherits(DockerComposeGenerator, DockerGenerator);
+util.inherits(DockerComposeGenerator, BaseGenerator);
 
 const constants = require('../../generator-constants');
 
@@ -59,7 +60,7 @@ module.exports = DockerComposeGenerator.extend({
             this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
         },
 
-        checkDocker: this.checkDocker,
+        checkDocker: docker.checkDocker,
 
         checkDockerCompose() {
             const done = this.async();
@@ -117,9 +118,9 @@ module.exports = DockerComposeGenerator.extend({
             insight.trackWithEvent('generator', 'docker-compose');
         },
 
-        checkImages: this.checkImages,
-        generateJwtSecret: this.generateJwtSecret,
-        setAppsFolderPaths: this.setAppsFolderPaths,
+        checkImages: docker.checkImages,
+        generateJwtSecret: docker.generateJwtSecret,
+        setAppsFolderPaths: docker.setAppsFolderPaths,
 
         setAppsYaml() {
             this.appsYaml = [];

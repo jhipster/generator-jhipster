@@ -16,6 +16,7 @@ module.exports = {
         desc: 'Generate a `deploy/cloudfoundry` folder with a specific manifest.yml to deploy to Cloud Foundry'
     },
     'docker-compose': {
+        subFolder: 'docker',
         desc: 'Create all required Docker deployment configuration for the selected applications'
     },
     entity: {
@@ -37,6 +38,7 @@ module.exports = {
         desc: 'Display information about your current project and system'
     },
     kubernetes: {
+        subFolder: 'docker',
         desc: 'Deploy the current application to Kubernetes'
     },
     languages: {
@@ -44,9 +46,11 @@ module.exports = {
         desc: 'Select languages from a list of available languages. The i18n files will be copied to the /webapp/i18n folder'
     },
     openshift: {
+        subFolder: 'docker',
         desc: 'Deploy the current application to OpenShift'
     },
     'rancher-compose': {
+        subFolder: 'docker',
         desc: 'Deploy the current application to Rancher'
     },
     server: {
