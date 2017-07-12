@@ -60,7 +60,8 @@ import java.util.UUID;<% } %><% if (!viaService && (searchEngine === 'elasticsea
 import java.util.stream.Collectors;<% } %><% if (searchEngine === 'elasticsearch' || fieldsContainNoOwnerOneToOne === true) { %>
 import java.util.stream.StreamSupport;<% } %><% if (searchEngine === 'elasticsearch') { %>
 
-import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
+import static org.elasticsearch.index.query.QueryBuilders.*;
+import static <%=packageName%>.web.rest.util.QueryUtil.decodeQuery;<% } %>
 
 /**
  * REST controller for managing <%= entityClass %>.

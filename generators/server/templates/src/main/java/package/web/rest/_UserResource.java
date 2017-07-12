@@ -50,7 +50,8 @@ import java.util.*;<% if (searchEngine === 'elasticsearch') { %>
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
+import static org.elasticsearch.index.query.QueryBuilders.*;
+import static <%=packageName%>.web.rest.util.QueryUtil.decodeQuery;<% } %>
 
 /**
  * REST controller for managing users.
@@ -238,7 +239,7 @@ public class UserResource {
     @Timed
     public List<User> search(@PathVariable String query) {
         return StreamSupport
-            .stream(userSearchRepository.search(queryStringQuery(query)).spliterator(), false)
+            .stream(userSearchRepository.search(queryStringQuery(decodeQuery(query))).spliterator(), false)
             .collect(Collectors.toList());
     }<% } %>
 }
