@@ -22,14 +22,14 @@ const shelljs = require('shelljs');
 const util = require('util');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
-const BaseGenerator = require('../../generator-base');
+const BaseGenerator = require('../generator-base');
 const docker = require('../docker-base');
 
 const KubernetesGenerator = generator.extend({});
 util.inherits(KubernetesGenerator, BaseGenerator);
 
 /* Constants used throughout */
-const constants = require('../../generator-constants');
+const constants = require('../generator-constants');
 
 module.exports = KubernetesGenerator.extend({
     constructor: function (...args) { // eslint-disable-line object-shorthand

@@ -17,24 +17,6 @@
  * limitations under the License.
  */
 const _ = require('lodash');
-const dockerPrompts = require('../prompts');
+const dockerPrompts = require('../docker-prompts');
 
-module.exports = _.extend({
-    askForRancherLoadBalancing
-}, dockerPrompts);
-
-function askForRancherLoadBalancing() {
-    const done = this.async();
-
-    const prompts = [{
-        type: 'confirm',
-        name: 'enableRancherLoadBalancing',
-        message: 'Would you like to enable rancher load balancing support?',
-        default: false
-    }];
-
-    this.prompt(prompts).then((props) => {
-        this.enableRancherLoadBalancing = props.enableRancherLoadBalancing;
-        done();
-    });
-}
+module.exports = _.extend({}, dockerPrompts);

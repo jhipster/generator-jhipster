@@ -4,14 +4,14 @@ const shelljs = require('shelljs');
 const util = require('util');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
-const BaseGenerator = require('../../generator-base');
+const BaseGenerator = require('../generator-base');
 const docker = require('../docker-base');
 
 const OpenShiftGenerator = generator.extend({});
 util.inherits(OpenShiftGenerator, BaseGenerator);
 
 /* Constants used throughout */
-const constants = require('../../generator-constants');
+const constants = require('../generator-constants');
 
 module.exports = OpenShiftGenerator.extend({
     constructor: function (...args) { // eslint-disable-line object-shorthand

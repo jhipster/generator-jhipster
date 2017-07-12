@@ -31,7 +31,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     describe('only gateway', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/docker/docker-compose'))
+                .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -62,7 +62,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     describe('only one microservice', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/docker/docker-compose'))
+                .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -93,7 +93,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     describe('gateway and one microservice', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/docker/docker-compose'))
+                .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -125,7 +125,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     describe('gateway and one microservice, with elk', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/docker/docker-compose'))
+                .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -160,7 +160,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     describe('gateway and one microservice, with prometheus', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/docker/docker-compose'))
+                .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -195,7 +195,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     describe('gateway, uaa server and one microservice, with elk', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/docker/docker-compose'))
+                .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -232,7 +232,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     describe('gateway and multi microservices, with elk', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/docker/docker-compose'))
+                .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -270,7 +270,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     describe('gateway and multi microservices, with 1 mongodb cluster', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/docker/docker-compose'))
+                .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -309,7 +309,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     describe('gateway and 1 microservice, with Cassandra cluster', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/docker/docker-compose'))
+                .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -344,7 +344,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     describe('monolith', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/docker/docker-compose'))
+                .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })

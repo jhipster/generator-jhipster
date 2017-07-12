@@ -57,7 +57,7 @@ describe('JHipster OpenShift Sub Generator', () => {
     describe('only gateway', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/docker/openshift'))
+                .run(require.resolve('../generators/openshift'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -92,7 +92,7 @@ describe('JHipster OpenShift Sub Generator', () => {
     describe('gateway and one microservice with mysql', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/docker/openshift'))
+                .run(require.resolve('../generators/openshift'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -128,7 +128,7 @@ describe('JHipster OpenShift Sub Generator', () => {
     describe('gateway and one microservice with mysql and elk', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/docker/openshift'))
+                .run(require.resolve('../generators/openshift'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -167,7 +167,7 @@ describe('JHipster OpenShift Sub Generator', () => {
     describe('two microservices backed by mysql and postgres without gateway', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/docker/openshift'))
+                .run(require.resolve('../generators/openshift'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -206,7 +206,7 @@ describe('JHipster OpenShift Sub Generator', () => {
     describe('gateway with multiple microservices backed by mysql, postgres, mongo, cassandra and mariadb', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/docker/openshift'))
+                .run(require.resolve('../generators/openshift'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -257,7 +257,7 @@ describe('JHipster OpenShift Sub Generator', () => {
     describe('monolith application', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/docker/openshift'))
+                .run(require.resolve('../generators/openshift'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -285,7 +285,7 @@ describe('JHipster OpenShift Sub Generator', () => {
     describe('monolith application with elk', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/docker/openshift'))
+                .run(require.resolve('../generators/openshift'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })

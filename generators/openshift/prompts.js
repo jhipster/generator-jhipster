@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const dockerPrompts = require('../prompts');
+const dockerPrompts = require('../docker-prompts');
 
 module.exports = _.extend({
     askForOpenShiftNamespace,

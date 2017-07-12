@@ -60,7 +60,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     describe('only gateway', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/docker/kubernetes'))
+                .run(require.resolve('../generators/kubernetes'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -92,7 +92,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     describe('gateway and mysql microservice', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/docker/kubernetes'))
+                .run(require.resolve('../generators/kubernetes'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -124,7 +124,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     describe('MySQL and PostgreSQL microservices without gateway', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/docker/kubernetes'))
+                .run(require.resolve('../generators/kubernetes'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -159,7 +159,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     describe('gateway, mysql, psql, mongodb, mariadb microservices', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/docker/kubernetes'))
+                .run(require.resolve('../generators/kubernetes'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -203,7 +203,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     describe('monolith application', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/docker/kubernetes'))
+                .run(require.resolve('../generators/kubernetes'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
@@ -231,7 +231,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     describe('Kafka application', () => {
         beforeEach((done) => {
             helpers
-                .run(require.resolve('../generators/docker/kubernetes'))
+                .run(require.resolve('../generators/kubernetes'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })

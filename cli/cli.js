@@ -36,12 +36,7 @@ logger.init(program);
 
 /* Register yeoman generators */
 Object.keys(SUB_GENERATORS).forEach((generator) => {
-    const opts = SUB_GENERATORS[generator];
-    let path = generator;
-    if (opts.subFolder) {
-        path = `${opts.subFolder}/${generator}`;
-    }
-    env.register(require.resolve(`../generators/${path}`), `${JHIPSTER_NS}:${generator}`);
+    env.register(require.resolve(`../generators/${generator}`), `${JHIPSTER_NS}:${generator}`);
 });
 
 const done = () => {

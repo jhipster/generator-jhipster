@@ -16,35 +16,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const generator = require('yeoman-generator');
+const generators = require('yeoman-generator');
 const chalk = require('chalk');
-const shelljs = require('shelljs');
 const jsyaml = require('js-yaml');
 const pathjs = require('path');
 const util = require('util');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
-const BaseGenerator = require('../../generator-base');
+const BaseGenerator = require('../generator-base');
 const docker = require('../docker-base');
 
-const DockerComposeGenerator = generator.extend({});
+const RancherGenerator = generators.extend({});
 
-util.inherits(DockerComposeGenerator, BaseGenerator);
+util.inherits(RancherGenerator, BaseGenerator);
 
-const constants = require('../../generator-constants');
+/* Constants used throughout */
+const constants = require('../generator-constants');
 
-module.exports = DockerComposeGenerator.extend({
+module.exports = RancherGenerator.extend({
     constructor: function (...args) { // eslint-disable-line object-shorthand
-        generator.apply(this, args);
+        generators.apply(this, args);
+
+        // This adds support for a `--skip-checks` flag
+        this.option('skip-checks', {
+            desc: 'Check the status of the required tools',
+            type: Boolean,
+            defaults: false
+        });
+
+        this.skipChecks = this.options['skip-checks'];
     },
 
     initializing: {
         sayHello() {
-            this.log(chalk.white(`${chalk.bold('🐳')}  Welcome to the JHipster Docker Compose Sub-Generator ${chalk.bold('🐳')}`));
+            this.log(chalk.white(`${chalk.bold('🐮')} [BETA] Welcome to the JHipster Rancher Compose Generator ${chalk.bold('🐮')}`));
             this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
         },
 
-        setupServerConsts() {
+        setupServerVars() {
             // Make constants available in templates
             this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
             this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
@@ -52,7 +61,6 @@ module.exports = DockerComposeGenerator.extend({
             this.DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE;
             this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
             this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
-            this.DOCKER_JHIPSTER_ZIPKIN = constants.DOCKER_JHIPSTER_ZIPKIN;
             this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
             this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
             this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
@@ -60,33 +68,11 @@ module.exports = DockerComposeGenerator.extend({
             this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
         },
 
-        checkDocker: docker.checkDocker,
-
-        checkDockerCompose() {
-            const done = this.async();
-
-            shelljs.exec('docker-compose -v', { silent: true }, (code, stdout, stderr) => {
-                if (stderr) {
-                    this.log(chalk.red('Docker Compose 1.6.0 or later is not installed on your computer.\n' +
-                        '         Read https://docs.docker.com/compose/install/\n'));
-                } else {
-                    const composeVersion = stdout.split(' ')[2].replace(/,/g, '');
-                    const composeVersionMajor = composeVersion.split('.')[0];
-                    const composeVersionMinor = composeVersion.split('.')[1];
-                    if (composeVersionMajor < 1 || (composeVersionMajor === 1 && composeVersionMinor < 6)) {
-                        this.log(chalk.red(`${'Docker Compose version 1.6.0 or later is not installed on your computer.\n' +
-                            '         Docker Compose version found: '}${composeVersion}\n` +
-                            '         Read https://docs.docker.com/compose/install/\n'));
-                    }
-                }
-                done();
-            });
-        },
+        checkDocker: docker.checkDockerBase,
 
         loadConfig() {
             this.defaultAppsFolders = this.config.get('appsFolders');
             this.directoryPath = this.config.get('directoryPath');
-            this.clusteredDbApps = this.config.get('clusteredDbApps');
             this.monitoring = this.config.get('monitoring');
             this.useKafka = false;
             this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
@@ -95,6 +81,9 @@ module.exports = DockerComposeGenerator.extend({
             }
             this.adminPassword = this.config.get('adminPassword');
             this.jwtSecretKey = this.config.get('jwtSecretKey');
+            this.dockerRepositoryName = this.config.get('dockerRepositoryName');
+            this.dockerPushCommand = this.config.get('dockerPushCommand');
+            this.enableRancherLoadBalancing = this.config.get('enableRancherLoadBalancing');
 
             if (this.defaultAppsFolders !== undefined) {
                 this.log('\nFound .yo-rc.json config file...');
@@ -103,30 +92,36 @@ module.exports = DockerComposeGenerator.extend({
     },
 
     prompting: {
+
         askForApplicationType: prompts.askForApplicationType,
         askForPath: prompts.askForPath,
         askForApps: prompts.askForApps,
-        askForClustersMode: prompts.askForClustersMode,
         askForMonitoring: prompts.askForMonitoring,
         askForServiceDiscovery: prompts.askForServiceDiscovery,
-        askForAdminPassword: prompts.askForAdminPassword
+        askForAdminPassword: prompts.askForAdminPassword,
+        askForRancherLoadBalancing: prompts.askForRancherLoadBalancing,
+        askForDockerRepositoryName: prompts.askForDockerRepositoryName,
+        askForDockerPushCommand: prompts.askForDockerPushCommand
     },
 
     configuring: {
         insight() {
             const insight = this.insight();
-            insight.trackWithEvent('generator', 'docker-compose');
+            insight.trackWithEvent('generator', 'rancher-compose');
         },
 
         checkImages: docker.checkImages,
         generateJwtSecret: docker.generateJwtSecret,
+        configureImageNames: docker.configureImageNames,
         setAppsFolderPaths: docker.setAppsFolderPaths,
 
         setAppsYaml() {
             this.appsYaml = [];
+            this.frontAppName = '';
+            this.hasFrontApp = false;
 
             let portIndex = 8080;
-            this.appsFolders.forEach((appsFolder, index) => {
+            this.appsFolders.forEach(function (appsFolder, index) {
                 const appConfig = this.appConfigs[index];
                 const lowercaseBaseName = appConfig.baseName.toLowerCase();
                 const parentConfiguration = {};
@@ -141,10 +136,18 @@ module.exports = DockerComposeGenerator.extend({
                     ports[0] = portIndex;
                     yamlConfig.ports[0] = ports.join(':');
                     portIndex++;
+
+                    // Register gateway of monolith app name
+                    this.hasFrontApp = true;
+                    this.frontAppPort = ports[0];
+                    this.frontAppName = `${lowercaseBaseName}-app`;
                 }
 
+                // change target image name
+                yamlConfig.image = this.dockerRepositoryName ? `${this.dockerRepositoryName}/${yamlConfig.image}` : yamlConfig.image;
+
                 // Add monitoring configuration for monolith directly in the docker-compose file as they can't get them from the config server
-                if (appConfig.applicationType === 'monolith' && this.monitoring === 'elk') {
+                if (this.monitoring === 'elk') {
                     yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_ENABLED=true');
                     yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_HOST=jhipster-logstash');
                     yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_ENABLED=true');
@@ -169,7 +172,7 @@ module.exports = DockerComposeGenerator.extend({
                     let relativePath = '';
                     const databaseYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/${database}.yml`));
                     const databaseServiceName = `${lowercaseBaseName}-${database}`;
-                    let databaseYamlConfig = databaseYaml.services[databaseServiceName];
+                    const databaseYamlConfig = databaseYaml.services[databaseServiceName];
                     delete databaseYamlConfig.ports;
 
                     if (database === 'cassandra') {
@@ -190,18 +193,6 @@ module.exports = DockerComposeGenerator.extend({
                         cassandraMigrationConfig.volumes[0] = `${cqlFilesRelativePath}:/cql:ro`;
 
                         parentConfiguration[`${databaseServiceName}-migration`] = cassandraMigrationConfig;
-                    }
-
-                    if (appConfig.clusteredDb) {
-                        const clusterDbYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/mongodb-cluster.yml`));
-                        relativePath = pathjs.relative(this.destinationRoot(), `${path}/src/main/docker`);
-                        const mongodbNodeConfig = clusterDbYaml.services[`${databaseServiceName}-node`];
-                        const mongoDbConfigSrvConfig = clusterDbYaml.services[`${databaseServiceName}-config`];
-                        mongodbNodeConfig.build.context = relativePath;
-                        databaseYamlConfig = clusterDbYaml.services[databaseServiceName];
-                        delete databaseYamlConfig.ports;
-                        parentConfiguration[`${databaseServiceName}-node`] = mongodbNodeConfig;
-                        parentConfiguration[`${databaseServiceName}-config`] = mongoDbConfigSrvConfig;
                     }
 
                     parentConfiguration[databaseServiceName] = databaseYamlConfig;
@@ -229,20 +220,51 @@ module.exports = DockerComposeGenerator.extend({
                     yamlArray[j] = yamlArray[j].replace(/'/g, '');
                 }
                 yamlString = yamlArray.join('\n');
-                yamlString = yamlString.replace(/>-\n/g, '');
-                yamlString = yamlString.replace(/-\s\s+/g, '- ');
+                yamlString = yamlString.replace(new RegExp('>-\\n {16}', 'g'), '');
                 this.appsYaml.push(yamlString);
-            });
+            }, this);
+        },
+
+
+        setAppsRancherYaml() {
+            this.appsRancherYaml = [];
+
+            this.appsYaml.forEach(function (appYaml, index) {
+                // Add application configuration
+                const yaml = jsyaml.load(appYaml);
+                const rancherConfiguration = {};
+
+                Object.keys(yaml).forEach((service, index) => {
+                    // Create rancher default configuration for this service
+                    rancherConfiguration[service] = { scale: 1 };
+                });
+
+                // Dump the file
+                let yamlString = jsyaml.dump(rancherConfiguration, { indent: 4 });
+
+                // Fix the output file which is totally broken!!!
+                const yamlArray = yamlString.split('\n');
+                for (let j = 0; j < yamlArray.length; j++) {
+                    yamlArray[j] = `    ${yamlArray[j]}`;
+                    yamlArray[j] = yamlArray[j].replace(/'/g, '');
+                }
+                yamlString = yamlArray.join('\n');
+                yamlString = yamlString.replace('>-\n                ', '');
+                yamlString = yamlString.replace('>-\n                ', '');
+                this.appsRancherYaml.push(yamlString);
+            }, this);
         },
 
         saveConfig() {
             this.config.set('appsFolders', this.appsFolders);
             this.config.set('directoryPath', this.directoryPath);
-            this.config.set('clusteredDbApps', this.clusteredDbApps);
             this.config.set('monitoring', this.monitoring);
             this.config.set('serviceDiscoveryType', this.serviceDiscoveryType);
             this.config.set('adminPassword', this.adminPassword);
             this.config.set('jwtSecretKey', this.jwtSecretKey);
+            this.config.set('dockerRepositoryName', this.dockerRepositoryName);
+            this.config.set('dockerPushCommand', this.dockerPushCommand);
+            this.config.set('enableRancherLoadBalancing', this.enableRancherLoadBalancing);
         }
     },
 
@@ -251,22 +273,20 @@ module.exports = DockerComposeGenerator.extend({
     end() {
         if (this.warning) {
             this.log('\n');
-            this.log(chalk.red('Docker Compose configuration generated with missing images!'));
+            this.log(chalk.red('Rancher Compose configuration generated with missing images!'));
             this.log(chalk.red(this.warningMessage));
         } else {
-            this.log(`\n${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
+            this.log(`\n${chalk.bold.green('Rancher Compose configuration successfully generated!')}`);
         }
-        this.log(`You can launch all your infrastructure by running : ${chalk.cyan('docker-compose up -d')}`);
-        if (this.gatewayNb + this.monolithicNb > 1) {
-            this.log('\nYour applications will be accessible on these URLs:');
-            let portIndex = 8080;
-            this.appConfigs.forEach((appConfig) => {
-                if (appConfig.applicationType === 'gateway' || appConfig.applicationType === 'monolith') {
-                    this.log(`\t- ${appConfig.baseName}: http://localhost:${portIndex}`);
-                    portIndex++;
-                }
-            });
-            this.log('\n');
+
+        this.log(`${chalk.yellow.bold('WARNING!')} You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:`);
+        for (let i = 0; i < this.appsFolders.length; i++) {
+            const originalImageName = this.appConfigs[i].baseName.toLowerCase();
+            const targetImageName = this.appConfigs[i].targetImageName;
+            if (originalImageName !== targetImageName) {
+                this.log(chalk.cyan(`docker tag ${originalImageName} ${targetImageName}`));
+            }
+            this.log(chalk.cyan(`${this.dockerPushCommand} ${targetImageName}`));
         }
     }
 });
