@@ -1448,7 +1448,7 @@ module.exports = class extends PrivateBase {
                     this.composeWith(module.generatorCallback, options);
                 } catch (err) {
                     this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
-                        chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow(`'npm -g ${module.npmPackageName}'`));
+                        chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow(`'npm install -g ${module.npmPackageName}'`));
                 }
             }
         });
