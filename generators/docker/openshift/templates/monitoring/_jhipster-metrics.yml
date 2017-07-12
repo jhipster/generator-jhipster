@@ -1,0 +1,464 @@
+<%#
+ Copyright 2013-2017 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://jhipster.github.io/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+# Metrics Monitoring template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the metrics service. This defines prometheus for
+# metrics aggregation and grafana for visualization. This template can even be saved in OpenShift namespace as well so that have the
+# flexibility to do any project specific customizations. Pls note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch
+# that as those parameters will be referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: jhipster-metrics-template
+  namespace: <%= openshiftNamespace %>
+  annotations:
+    description: This template defines objects that are required to spin up metrics monitoring pod
+    tags: prometheus, alertmanager, grafana, jhipster-metrics<% if (storageType === 'persistent') { %> ,persistent <% } %> <% if (storageType === 'ephemeral') { %> ,ephemeral <% } %>
+    openshift.io/display-name: jhipster-metrics-monitoring-template
+    openshift.io/long-description: "This template provides objects that are required to spin up a metrics monitoring pod. It contains
+    prometheus for metrics aggregation, and grafana for visualization .<% if(storageType =='persistent') { %>The database is stored on persistent storage, so any restart of the service will not cause any impact to the data.
+     Please make sure you have provisioned PVs (Persistent Volumes) before using this template. <% } %><% if (storageType === 'ephemeral') {
+     %>The database is not stored on persistent storage, so any restart of the service will result in all data being lost.<% } %>"
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: jhipster-metrics
+  createdBy: JHipster-Team
+parameters:
+  -
+    name: PT_APP_NAME
+    value: jhipster-prometheus
+    description: Name of the prometheus application
+    required: true
+    displayName: Prometheus Application Name
+  -
+    name: AM_APP_NAME
+    value: jhipster-alertmanager
+    description: Name of the alert manager application
+    required: true
+    displayName: Alert Manager Application Name
+  -
+    name: GF_APP_NAME
+    value: jhipster-grafana
+    description: Name of the grafana application
+    required: true
+    displayName: Grafana Application Name
+  -
+    name: SVC_ID
+    value: jhipster
+    description: Name of the service account
+    required: true
+    displayName: "*** PLEASE DO NOT CHANGE THIS ***"
+  -
+    name: VOLUME_CAPACITY
+    displayName: Volume Capacity
+    description: Volume space available for data, e.g. 512Mi, 2Gi.
+    value: 1Gi
+    required: true
+objects:
+  <%_ if (storageType === 'persistent') { _%>
+  -
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: ${PT_APP_NAME}
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: "${VOLUME_CAPACITY}"
+  -
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: ${AM_APP_NAME}
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: "${VOLUME_CAPACITY}"
+  -
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: ${GF_APP_NAME}
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: "${VOLUME_CAPACITY}"
+  <%_ } _%>
+  -
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: metrics-config
+    #common configuration shared between all applications
+    data:
+      prometheus.conf: |-
+        # Sample global config for monitoring JHipster applications
+        global:
+          scrape_interval:     15s # By default, scrape targets every 15 seconds.
+          evaluation_interval: 15s # By default, scrape targets every 15 seconds.
+          # scrape_timeout is set to the global default (10s).
+
+          # Attach these labels to any time series or alerts when communicating with
+          # external systems (federation, remote storage, Alertmanager).
+          external_labels:
+              monitor: 'my-project'
+
+        # Load and evaluate rules in this file every 'evaluation_interval' seconds.
+        rule_files:
+          - "alert.rules"
+          # - "first.rules"
+          # - "second.rules"
+
+        # A scrape configuration containing exactly one endpoint to scrape:
+        # Here it's Prometheus itself.
+        scrape_configs:
+          # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+          - job_name: 'prometheus'
+
+            # Override the global default and scrape targets from this job every 5 seconds.
+            scrape_interval: 5s
+
+            # scheme defaults to 'http'.
+            metrics_path: /prometheusMetrics
+            static_configs:
+              - targets:
+                  <%= appsToMonitorList %>
+          # This is to scrape metrics of all the pods, containers, services from the openshift cluster
+          #- job_name: 'openshift-nodes'
+          #  scheme: https  # remove if you want to scrape metrics on insecure port
+          #  tls_config:
+          #    ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          #  bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+          #  kubernetes_sd_configs:
+          #    - role: node
+          #  relabel_configs:
+          #    - action: labelmap
+          #      regex: __meta_openshift_node_label_(.+)
+          #  metric_relabel_configs:
+          #    - action: replace
+          #      source_labels: [id]
+          #      regex: '^/machine\.slice/machine-rkt\\x2d([^\\]+)\\.+/([^/]+)\.service$'
+          #      target_label: rkt_container_name
+          #      replacement: '${2}-${1}'
+          #    - action: replace
+          #      source_labels: [id]
+          #      regex: '^/system\.slice/(.+)\.service$'
+          #      target_label: systemd_service_name
+          #      replacement: '${1}'
+      alertmanager.conf: |-
+        route:
+          receiver: 'webhook'
+          group_by: ['alertname']
+          group_wait:      10s
+          group_interval:  1m
+          repeat_interval: 2h
+
+        receivers:
+        - name: 'webhook'
+          webhook_configs:
+          # For testing, create a sample alerting webhook at http://webhook.site/
+          - url: 'http://webhook.site/9e24e73e-d938-409e-96e6-77ecadab1558'
+            send_resolved: true
+      alertrules.conf: |-
+        # Sample alerting rules
+
+        ALERT first_registration
+          IF com_mycompany_myapp_web_rest_AccountResource_registerAccount_count == 1
+          ANNOTATIONS {
+            summary = "Your first user has registered his account. Congrats !",
+            description = "Current AccountResource_registerAccount_count value: {{ $value }}"
+          }
+  -
+    apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: ${PT_APP_NAME}
+      labels:
+        app: ${PT_APP_NAME}
+    spec:
+# This is to define the deployment strategy (either be Rolling or Recreate)
+#     strategy:
+#       type: Rolling
+#       rollingParams:
+#         updatePeriodSeconds: 1
+#         intervalSeconds: 1
+#         timeoutSeconds: 600
+#         maxUnavailable: 25%
+#         maxSurge: 25%
+#       resources:
+      triggers:
+        -
+          type: ConfigChange
+      replicas: 1
+      selector:
+        app: ${PT_APP_NAME}
+      template:
+        metadata:
+          labels:
+            app: ${PT_APP_NAME}
+        spec:
+          volumes:
+          - name: ${PT_APP_NAME}-data
+            <%_ if (storageType === 'persistent') { _%>
+            persistentVolumeClaim:
+              claimName: ${PT_APP_NAME}
+            <%_ } _%>
+            <%_ if (storageType === 'ephemeral') { _%>
+            emptyDir: {}
+            <%_ } _%>
+          - name: ${PT_APP_NAME}-config
+            configMap:
+              name: metrics-config
+              items:
+              - key: prometheus.conf
+                path: prometheus.yml
+              - key: alertrules.conf
+                path: alert.rules
+          containers:
+          - name: ${PT_APP_NAME}
+            image: <%= DOCKER_PROMETHEUS %>
+            command:
+              - '/bin/prometheus'
+              - '-config.file=/etc/prometheus/prometheus.yml'
+              - '-storage.local.path=/prometheus'
+              - '-alertmanager.url=http://jhipster-alertmanager:9093'
+            ports:
+            - containerPort: 9090
+              name: tcp
+              protocol: TCP
+            volumeMounts:
+            - name: ${PT_APP_NAME}-data
+              mountPath: /prometheus
+            - name: ${PT_APP_NAME}-config
+              mountPath: /etc/prometheus
+            resources:
+            imagePullPolicy: IfNotPresent
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+  -
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: ${PT_APP_NAME}
+      labels:
+        app: ${PT_APP_NAME}
+    spec:
+      ports:
+        -
+          name: tcp
+          port: 9090
+          protocol: TCP
+          targetPort: 9090
+      selector:
+        app: ${PT_APP_NAME}
+  -
+    apiVersion: v1
+    kind: Route
+    metadata:
+      name: ${PT_APP_NAME}
+    spec:
+      to:
+        kind: Service
+        name: ${PT_APP_NAME}
+        weight: "100"
+      port:
+        targetPort: "tcp"
+      wildcardPolicy: None
+  -
+    apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: ${AM_APP_NAME}
+      labels:
+        app: ${AM_APP_NAME}
+    spec:
+# This is to define the deployment strategy (either be Rolling or Recreate)
+#     strategy:
+#       type: Rolling
+#       rollingParams:
+#         updatePeriodSeconds: 1
+#         intervalSeconds: 1
+#         timeoutSeconds: 600
+#         maxUnavailable: 25%
+#         maxSurge: 25%
+#       resources:
+      triggers:
+        -
+          type: ConfigChange
+      replicas: 1
+      selector:
+        app: ${AM_APP_NAME}
+      template:
+        metadata:
+          labels:
+            app: ${AM_APP_NAME}
+        spec:
+          volumes:
+          - name: ${AM_APP_NAME}-data
+            <%_ if (storageType === 'persistent') { _%>
+            persistentVolumeClaim:
+              claimName: ${AM_APP_NAME}
+            <%_ } _%>
+            <%_ if (storageType === 'ephemeral') { _%>
+            emptyDir: {}
+            <%_ } _%>
+          - name: ${AM_APP_NAME}-config
+            configMap:
+              name: metrics-config
+              items:
+              - key: alertmanager.conf
+                path: config.yml
+          containers:
+          - name: ${AM_APP_NAME}
+            image: <%= DOCKER_PROMETHEUS_ALERTMANAGER %>
+            ports:
+            - containerPort: 9093
+              name: tcp
+            volumeMounts:
+            - name: ${AM_APP_NAME}-config
+              mountPath: /etc/alertmanager
+            - name: ${AM_APP_NAME}-data
+              mountPath: /alertmanager
+            resources:
+            imagePullPolicy: IfNotPresent
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+  -
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: ${AM_APP_NAME}
+      labels:
+        app: ${AM_APP_NAME}
+    spec:
+      ports:
+        -
+          name: tcp
+          port: 9093
+          targetPort: 9093
+      selector:
+        app: ${AM_APP_NAME}
+  -
+    apiVersion: v1
+    kind: Route
+    metadata:
+      name: ${AM_APP_NAME}
+    spec:
+      to:
+        kind: Service
+        name: ${AM_APP_NAME}
+        weight: "100"
+      port:
+        targetPort: "tcp"
+      wildcardPolicy: None
+  -
+    apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: ${GF_APP_NAME}
+      labels:
+        app: ${GF_APP_NAME}
+    spec:
+# This is to define the deployment strategy (either be Rolling or Recreate)
+#     strategy:
+#       type: Rolling
+#       rollingParams:
+#         updatePeriodSeconds: 1
+#         intervalSeconds: 1
+#         timeoutSeconds: 600
+#         maxUnavailable: 25%
+#         maxSurge: 25%
+#       resources:
+      triggers:
+        -
+          type: ConfigChange
+      replicas: 1
+      selector:
+        app: ${GF_APP_NAME}
+      template:
+        metadata:
+          labels:
+            app: ${GF_APP_NAME}
+        spec:
+          volumes:
+          - name: ${GF_APP_NAME}-data
+            <%_ if (storageType === 'persistent') { _%>
+            persistentVolumeClaim:
+              claimName: ${GF_APP_NAME}
+            <%_ } _%>
+            <%_ if (storageType === 'ephemeral') { _%>
+            emptyDir: {}
+            <%_ } _%>
+          containers:
+          - name: ${GF_APP_NAME}
+            image: <%= DOCKER_GRAFANA %>
+            env:
+            - name: GF_SECURITY_ADMIN_PASSWORD
+              value: jhipster
+            - name: GF_USERS_ALLOW_SIGN_UP
+              value: "false"
+            ports:
+            - containerPort: 3000
+              name: http
+              protocol: TCP
+            volumeMounts:
+            - name: ${GF_APP_NAME}-data
+              mountPath: /var/lib/grafana
+            resources:
+            imagePullPolicy: IfNotPresent
+          serviceAccount: ${SVC_ID}
+          serviceAccountName: ${SVC_ID}
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+  -
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: ${GF_APP_NAME}
+      labels:
+        app: ${GF_APP_NAME}
+    spec:
+      ports:
+        -
+          name: http
+          port: 3000
+          protocol: TCP
+          targetPort: 3000
+      selector:
+        app: ${GF_APP_NAME}
+  -
+    apiVersion: v1
+    kind: Route
+    metadata:
+      name: ${GF_APP_NAME}
+    spec:
+      to:
+        kind: Service
+        name: ${GF_APP_NAME}
+        weight: "100"
+      port:
+        targetPort: "http"
+      wildcardPolicy: None

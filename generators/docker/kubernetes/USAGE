@@ -1,0 +1,8 @@
+Description:
+    Creates all required Kubernetes deployment configuration for the selected applications.
+
+Example:
+    jhipster kubernetes
+
+    This will create:
+        [application]/*.yml
