@@ -457,7 +457,7 @@ module.exports = class extends PrivateBase {
     getAllSupportedLanguageOptions() {
         return [
             { name: 'Armenian', value: 'hy' },
-            { name: 'Bahasa Indonesia', value: 'id' },
+            { name: 'Indonesian', value: 'id' },
             { name: 'Catalan', value: 'ca' },
             { name: 'Chinese (Simplified)', value: 'zh-cn' },
             { name: 'Chinese (Traditional)', value: 'zh-tw' },
