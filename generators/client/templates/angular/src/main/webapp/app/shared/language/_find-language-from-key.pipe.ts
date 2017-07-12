@@ -35,6 +35,7 @@ export class FindLanguageFromKeyPipe implements PipeTransform {
         'hu': { name: 'Magyar' },
         'hi': { name: 'हिंदी' },
         'hy': { name: 'Հայերեն' },
+        'id': { name: 'Bahasa Indonesia' },
         'it': { name: 'Italiano' },
         'ja': { name: '日本語' },
         'ko': { name: '한국어' },

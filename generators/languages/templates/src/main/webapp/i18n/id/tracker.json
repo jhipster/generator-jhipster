@@ -1,0 +1,12 @@
+{
+    "tracker": {
+        "title": "Real-time aktivitas user",
+        "table": {
+            "userlogin": "User",
+            "ipaddress": "Alamat IP",
+            "userAgent": "User agent",
+            "page": "Halaman yang dibuka",
+            "time": "Waktu"
+        }
+    }
+}
