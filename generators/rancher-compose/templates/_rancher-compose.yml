@@ -61,7 +61,8 @@ services:
     jhipster-console:
         scale: 1
     <%_ if (composeApplicationType === 'microservice') { _%>
-    jhipster-zipkin:
-        scale: 1
+    # Uncomment this section to enable Zipkin
+    #jhipster-zipkin:
+    #    scale: 1
     <%_ } _%>
 <%_ } _%>
