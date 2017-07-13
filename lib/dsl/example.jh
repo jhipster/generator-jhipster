@@ -106,6 +106,6 @@ relationship OneToOne {
 paginate JobHistory, Employee with infinite-scroll
 paginate Job with pagination
 
-dto Employee with mapstruct
+dto * with mapstruct
 
 service Employee with serviceClass
