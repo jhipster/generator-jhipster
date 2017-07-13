@@ -562,6 +562,10 @@ module.exports = class extends Generator {
         return jdl;
     }
 
+    /**
+     * Generate language objects in array of "'en': { name: 'English' }" format
+     * @param {string[]} languages
+     */
     generateLanguageOptions(languages) {
         const selectedLangs = this.getAllSupportedLanguageOptions().filter(lang => languages.includes(lang.value));
         return selectedLangs.map(
