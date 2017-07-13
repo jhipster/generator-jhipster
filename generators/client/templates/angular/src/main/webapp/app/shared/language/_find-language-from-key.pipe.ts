@@ -20,7 +20,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({name: 'findLanguageFromKey'})
 export class FindLanguageFromKeyPipe implements PipeTransform {
-    private languages: any = {
+    <%_ var languagesPool = {
         'ar-ly': { name: 'العربية', rtl: true },
         'ca': { name: 'Català' },
         'cs': { name: 'Český' },
@@ -57,6 +57,11 @@ export class FindLanguageFromKeyPipe implements PipeTransform {
         'vi': { name: 'Tiếng Việt' },
         'zh-cn': { name: '中文（简体）' },
         'zh-tw': { name: '繁體中文' }
+    }; _%>
+    private languages: any = {
+    <%_ for (var i = 0; i < languages.length; i++) { _%>
+        '<%= languages[i] %>': { name: '<%= languagesPool[languages[i]].name %>'<%_ if (languagesPool[languages[i]].rtl) { _%>, rtl: true <%_ } _%> },
+    <%_ } _%>
     };
     transform(lang: string): string {
         return this.languages[lang].name;

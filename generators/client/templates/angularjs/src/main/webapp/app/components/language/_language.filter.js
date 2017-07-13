@@ -24,7 +24,7 @@
         .filter('findLanguageFromKey', findLanguageFromKey)
         .filter('findLanguageRtlFromKey', findLanguageRtlFromKey);
 
-    var languages = {
+<%_ var languagesPool = {
         'ar-ly': { name: 'العربية', rtl: true },
         'id': { name: 'Bahasa Indonesia' },
         'ca': { name: 'Català' },
@@ -61,6 +61,11 @@
         'vi': { name: 'Tiếng Việt' },
         'zh-cn': { name: '中文（简体）' },
         'zh-tw': { name: '繁體中文' }
+    }; _%>
+    var languages = {
+    <%_ for (var i = 0; i < languages.length; i++) { _%>
+        '<%= languages[i] %>': { name: '<%= languagesPool[languages[i]].name %>'<%_ if (languagesPool[languages[i]].rtl) { _%>, rtl: true <%_ } _%> },
+    <%_ } _%>
     };
 
     function findLanguageFromKey() {
