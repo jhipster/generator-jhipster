@@ -195,6 +195,7 @@ module.exports = LanguagesGenerator.extend({
             insight.track('languages/language', language);
         });
         if (!this.skipClient) {
+            this.updateLanguagesInLanguagePipe(this.config.get('languages'));
             if (this.clientFramework === 'angular1') {
                 this.updateLanguagesInLanguageConstant(this.config.get('languages'));
             } else {
