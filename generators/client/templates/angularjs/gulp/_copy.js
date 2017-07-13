@@ -88,6 +88,7 @@ function common() {
         config.app + 'robots.txt',
         config.app + 'favicon.ico',
         config.app + '.htaccess',
+        config.app + 'manifest.webapp',
         config.app + 'sw.js'
     ], { dot: true })
         .pipe(plumber({errorHandler: handleErrors}))
