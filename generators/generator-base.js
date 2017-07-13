@@ -456,7 +456,9 @@ module.exports = class extends PrivateBase {
      */
     getAllSupportedLanguageOptions() {
         return [
+            { name: 'Arabic (Libya)', value: 'ar-ly', rtl: true },
             { name: 'Armenian', value: 'hy' },
+            { name: 'Indonesian', value: 'id' },
             { name: 'Catalan', value: 'ca' },
             { name: 'Chinese (Simplified)', value: 'zh-cn' },
             { name: 'Chinese (Traditional)', value: 'zh-tw' },
@@ -534,6 +536,9 @@ module.exports = class extends PrivateBase {
         const fullPath = 'bower.json';
         try {
             jhipsterUtils.rewriteJSONFile(fullPath, (jsonObj) => {
+                if (jsonObj.dependencies === undefined) {
+                    jsonObj.dependencies = {};
+                }
                 jsonObj.dependencies[name] = version;
             }, this);
         } catch (e) {
@@ -603,6 +608,9 @@ module.exports = class extends PrivateBase {
         const fullPath = 'package.json';
         try {
             jhipsterUtils.rewriteJSONFile(fullPath, (jsonObj) => {
+                if (jsonObj.dependencies === undefined) {
+                    jsonObj.dependencies = {};
+                }
                 jsonObj.dependencies[name] = version;
             }, this);
         } catch (e) {
@@ -621,6 +629,9 @@ module.exports = class extends PrivateBase {
         const fullPath = 'package.json';
         try {
             jhipsterUtils.rewriteJSONFile(fullPath, (jsonObj) => {
+                if (jsonObj.devDependencies === undefined) {
+                    jsonObj.devDependencies = {};
+                }
                 jsonObj.devDependencies[name] = version;
             }, this);
         } catch (e) {
@@ -639,6 +650,9 @@ module.exports = class extends PrivateBase {
         const fullPath = 'package.json';
         try {
             jhipsterUtils.rewriteJSONFile(fullPath, (jsonObj) => {
+                if (jsonObj.scripts === undefined) {
+                    jsonObj.scripts = {};
+                }
                 jsonObj.scripts[name] = data;
             }, this);
         } catch (e) {
@@ -1435,7 +1449,7 @@ module.exports = class extends PrivateBase {
                     this.composeWith(module.generatorCallback, options);
                 } catch (err) {
                     this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
-                        chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow(`'npm -g ${module.npmPackageName}'`));
+                        chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow(`'npm install -g ${module.npmPackageName}'`));
                 }
             }
         });
@@ -1871,7 +1885,7 @@ module.exports = class extends PrivateBase {
         }
         buildCmd += ` -P${profile}`;
         const child = {};
-        child.stdout = exec(buildCmd, cb).stdout;
+        child.stdout = exec(buildCmd, { maxBuffer: 1024 * 500 }, cb).stdout;
         child.buildCmd = buildCmd;
 
         return child;

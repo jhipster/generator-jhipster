@@ -18,5 +18,8 @@
 -%>
 /* after changing this file run '<%= clientPackageManager %> run webpack:build' */
 @import '~bootstrap/dist/css/bootstrap.min.css';
+<%_ if (enableI18nRTL) { _%>
+@import 'rtl.css';
+<%_ } _%>
 @import '~font-awesome/css/font-awesome.css';
 

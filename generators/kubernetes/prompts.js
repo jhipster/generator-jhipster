@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 const _ = require('lodash');
-const dockerComposePrompts = require('../docker-compose/prompts');
+const dockerPrompts = require('../docker-prompts');
 
 module.exports = _.extend({
     askForKubernetesNamespace,
@@ -27,7 +27,7 @@ module.exports = _.extend({
     askForPrometheusOperator,
     askForKubernetesServiceType,
     askForIngressDomain
-}, dockerComposePrompts);
+}, dockerPrompts);
 
 function askForKubernetesNamespace() {
     const done = this.async();

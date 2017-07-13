@@ -110,7 +110,7 @@
         "ribbon": {
             "dev":"Development"
         },
-        "item-count": "Showing {{first}} - {{second}} of {{total}} items."
+        "item-count": "显示第 {{first}} - {{second}} 条，共 {{total}} 条"
     },
     "entity": {
         "action": {

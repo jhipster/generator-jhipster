@@ -62,7 +62,6 @@ import { ResponseWrapper } from '../../shared';
 export class <%= entityAngularName %>DialogComponent implements OnInit {
 
     <%= entityInstance %>: <%= entityAngularName %>;
-    authorities: any[];
     isSaving: boolean;
     <%_
     const query = generateEntityQueries(relationships, entityInstance, dto);
@@ -100,7 +99,6 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
 
     ngOnInit() {
         this.isSaving = false;
-        this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
         <%_ for (idx in queries) { _%>
         <%- queries[idx] %>
         <%_ } _%>

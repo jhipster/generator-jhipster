@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import { Routes } from '@angular/router';
+import { AuthoritiesConstants } from '../shared';
 
 import {
     <%_ if (devDatabaseType !== 'cassandra') { _%>
@@ -64,7 +65,7 @@ const ADMIN_ROUTES = [
 export const adminState: Routes = [{
     path: '',
     data: {
-        authorities: ['ROLE_ADMIN']
+        authorities: [AuthoritiesConstants.ADMIN]
     },
     canActivate: [UserRouteAccessService],
     children: ADMIN_ROUTES
