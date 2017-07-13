@@ -43,9 +43,9 @@ const DOCKER_GRAFANA = 'grafana/grafana:4.3.2';
 const DOCKER_JENKINS = 'jenkins:latest';
 
 // version of Node, Yarn, NPM
-const NODE_VERSION = '6.11.0';
-const YARN_VERSION = '0.24.6';
-const NPM_VERSION = '5.0.3';
+const NODE_VERSION = '6.11.1';
+const YARN_VERSION = '0.27.5';
+const NPM_VERSION = '5.3.0';
 
 // all constants used throughout all generators
 
