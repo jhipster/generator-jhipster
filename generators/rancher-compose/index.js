@@ -18,19 +18,17 @@
  */
 const generators = require('yeoman-generator');
 const chalk = require('chalk');
-const shelljs = require('shelljs');
-const crypto = require('crypto');
-const _ = require('lodash');
 const jsyaml = require('js-yaml');
 const pathjs = require('path');
 const util = require('util');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
-const scriptBase = require('../generator-base');
+const BaseGenerator = require('../generator-base');
+const docker = require('../docker-base');
 
 const RancherGenerator = generators.extend({});
 
-util.inherits(RancherGenerator, scriptBase);
+util.inherits(RancherGenerator, BaseGenerator);
 
 /* Constants used throughout */
 const constants = require('../generator-constants');
@@ -70,27 +68,7 @@ module.exports = RancherGenerator.extend({
             this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
         },
 
-        checkDocker() {
-            if (this.skipChecks) return;
-            const done = this.async();
-
-            shelljs.exec('docker -v', { silent: true }, (code, stdout, stderr) => {
-                if (stderr) {
-                    this.log(chalk.red('Docker version 1.10.0 or later is not installed on your computer.\n' +
-                        '         Read http://docs.docker.com/engine/installation/#installation\n'));
-                } else {
-                    const dockerVersion = stdout.split(' ')[2].replace(/,/g, '');
-                    const dockerVersionMajor = dockerVersion.split('.')[0];
-                    const dockerVersionMinor = dockerVersion.split('.')[1];
-                    if (dockerVersionMajor < 1 || (dockerVersionMajor === 1 && dockerVersionMinor < 10)) {
-                        this.log(chalk.red(`${'Docker version 1.10.0 or later is not installed on your computer.\n' +
-                            '         Docker version found: '}${dockerVersion}\n` +
-                            '         Read http://docs.docker.com/engine/installation/#installation\n'));
-                    }
-                }
-                done();
-            });
-        },
+        checkDocker: docker.checkDockerBase,
 
         loadConfig() {
             this.defaultAppsFolders = this.config.get('appsFolders');
@@ -113,29 +91,6 @@ module.exports = RancherGenerator.extend({
         }
     },
 
-    _getAppFolders(input) {
-        const files = shelljs.ls('-l', this.destinationPath(input));
-        const appsFolders = [];
-
-        files.forEach((file) => {
-            if (file.isDirectory()) {
-                if ((shelljs.test('-f', `${file.name}/.yo-rc.json`))
-                    && (shelljs.test('-f', `${file.name}/src/main/docker/app.yml`))) {
-                    try {
-                        const fileData = this.fs.readJSON(`${file.name}/.yo-rc.json`);
-                        if (fileData['generator-jhipster'].baseName !== undefined) {
-                            appsFolders.push(file.name.match(/([^/]*)\/*$/)[1]);
-                        }
-                    } catch (err) {
-                        this.log(chalk.red(`${file}: this .yo-rc.json can't be read`));
-                    }
-                }
-            }
-        });
-
-        return appsFolders;
-    },
-
     prompting: {
 
         askForApplicationType: prompts.askForApplicationType,
@@ -155,50 +110,10 @@ module.exports = RancherGenerator.extend({
             insight.trackWithEvent('generator', 'rancher-compose');
         },
 
-        checkImages() {
-            this.log('\nChecking Docker images in applications\' directories...');
-
-            let imagePath = '';
-            let runCommand = '';
-            this.warning = false;
-            this.warningMessage = 'To generate Docker image, please run:\n';
-            for (let i = 0; i < this.appsFolders.length; i++) {
-                if (this.appConfigs[i].buildTool === 'maven') {
-                    imagePath = this.destinationPath(`${this.directoryPath + this.appsFolders[i]}/target/docker/${_.kebabCase(this.appConfigs[i].baseName)}-*.war`);
-                    runCommand = './mvnw package -Pprod docker:build';
-                } else {
-                    imagePath = this.destinationPath(`${this.directoryPath + this.appsFolders[i]}/build/docker/${_.kebabCase(this.appConfigs[i].baseName)}-*.war`);
-                    runCommand = './gradlew -Pprod bootRepackage buildDocker';
-                }
-                if (shelljs.ls(imagePath).length === 0) {
-                    this.warning = true;
-                    this.warningMessage += `  ${chalk.cyan(runCommand)} in ${this.destinationPath(this.directoryPath + this.appsFolders[i])}\n`;
-                }
-            }
-        },
-
-        configureImageNames() {
-            for (let i = 0; i < this.appsFolders.length; i++) {
-                const originalImageName = this.appConfigs[i].baseName.toLowerCase();
-                const targetImageName = this.dockerRepositoryName ? `${this.dockerRepositoryName}/${originalImageName}` : originalImageName;
-                this.appConfigs[i].targetImageName = targetImageName;
-            }
-        },
-
-        generateJwtSecret() {
-            if (this.jwtSecretKey === undefined) {
-                this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
-            }
-        },
-
-        setAppsFolderPaths() {
-            if (this.applicationType) return;
-            this.appsFolderPaths = [];
-            for (let i = 0; i < this.appsFolders.length; i++) {
-                const path = this.destinationPath(this.directoryPath + this.appsFolders[i]);
-                this.appsFolderPaths.push(path);
-            }
-        },
+        checkImages: docker.checkImages,
+        generateJwtSecret: docker.generateJwtSecret,
+        configureImageNames: docker.configureImageNames,
+        setAppsFolderPaths: docker.setAppsFolderPaths,
 
         setAppsYaml() {
             this.appsYaml = [];
