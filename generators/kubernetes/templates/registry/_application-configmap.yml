@@ -30,14 +30,15 @@ data:
     <%_ if (serviceDiscoveryType === 'eureka') { _%>
     eureka:
       client:
-        initial-instance-info-replication-interval-seconds: 10
-        instance-info-replication-interval-seconds: 10
-        registry-fetch-interval-seconds: 10
+        initial-instance-info-replication-interval-seconds: 15
+        instance-info-replication-interval-seconds: 15
+        registry-fetch-interval-seconds: 15
         fetch-registry: true
         register-with-eureka: true
-        eureka-service-url-poll-interval-seconds: 10
+        eureka-service-url-poll-interval-seconds: 15
       instance:
         lease-renewal-interval-in-seconds: 10
+        registry-default-open-for-traffic-count: 0
     <%_ } _%>
     jhipster:
       security:
@@ -56,5 +57,5 @@ data:
     eureka:
       client:
         service-url:
-          defaultZone: http://admin:admin@jhipster-registry-0.jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/,http://admin:admin@jhipster-registry-1.jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/
+          defaultZone: http://admin:${jhipster.registry.password}@jhipster-registry-0.jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/,http://admin:${jhipster.registry.password}@jhipster-registry-1.jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/
   <%_ } _%>

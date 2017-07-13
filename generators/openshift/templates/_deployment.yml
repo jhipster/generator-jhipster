@@ -140,7 +140,7 @@ objects:
               value: prod,swagger
             <%_ if (app.serviceDiscoveryType === 'eureka') { _%>
             - name: SPRING_CLOUD_CONFIG_URI
-              value: http://admin:${jhipster.registry.password}@jhipster-registry/config
+              value: http://admin:${jhipster.registry.password}@jhipster-registry:8761/config
             - name: JHIPSTER_REGISTRY_PASSWORD
               valueFrom:
                 secretKeyRef:
