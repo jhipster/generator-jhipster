@@ -80,4 +80,17 @@ export * from './entityFolderName/entityFileName.state';`;
             });
         });
     });
+
+    describe('skipLanguageForLocale', () => {
+        describe('when called with english', () => {
+            it('return false', () => {
+                assert.equal(BaseGenerator.skipLanguageForLocale('en'), false);
+            });
+        });
+        describe('when called with languages ar-ly', () => {
+            it('return true', () => {
+                assert.equal(BaseGenerator.skipLanguageForLocale('ar-ly'), true);
+            });
+        });
+    });
 });

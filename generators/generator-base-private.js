@@ -572,4 +572,13 @@ module.exports = class extends Generator {
             lang => `'${lang.value}': { name: '${lang.dispName}'${lang.rtl ? ', rtl: true' : ''} }`
         );
     }
+
+    /**
+     * Check if language should be skipped for locale setting
+     * @param {string} language
+     */
+    skipLanguageForLocale(language) {
+        const out = this.getAllSupportedLanguageOptions().filter(lang => language === lang.value);
+        return out && out[0] && !!out[0].skipForLocale;
+    }
 };

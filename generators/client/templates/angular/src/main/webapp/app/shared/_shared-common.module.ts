@@ -54,7 +54,7 @@ import {
         Title,
         {
             provide: LOCALE_ID,
-        <%_ if (nativeLanguage === 'ar-ly') { _%>
+        <%_ if (skipLanguageForLocale(nativeLanguage)) { _%>
             useValue: 'en'
         <%_ } else { _%>
             useValue: '<%= nativeLanguage %>'
