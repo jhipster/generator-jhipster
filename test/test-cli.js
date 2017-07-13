@@ -32,14 +32,4 @@ describe('jhipster cli test', () => {
             done();
         });
     });
-
-    // TODO figure out a way to get this test working
-    /* it('should run default on missing command', function (done) {
-        this.timeout(4000);
-
-        exec(cmd, (error, stdout, stderr) => {
-            assert(!error);
-            done();
-        });
-    });*/
 });
