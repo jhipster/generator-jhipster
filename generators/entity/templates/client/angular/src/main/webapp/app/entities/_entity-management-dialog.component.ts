@@ -204,7 +204,6 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
 })
 export class <%= entityAngularName %>PopupComponent implements OnInit, OnDestroy {
 
-    modalRef: NgbModalRef;
     routeSub: any;
 
     constructor(
@@ -215,10 +214,10 @@ export class <%= entityAngularName %>PopupComponent implements OnInit, OnDestroy
     ngOnInit() {
         this.routeSub = this.route.params.subscribe((params) => {
             if ( params['id'] ) {
-                this.modalRef = this.<%= entityInstance %>PopupService
+                this.<%= entityInstance %>PopupService
                     .open(<%= entityAngularName %>DialogComponent, params['id']);
             } else {
-                this.modalRef = this.<%= entityInstance %>PopupService
+                this.<%= entityInstance %>PopupService
                     .open(<%= entityAngularName %>DialogComponent);
             }
         });
