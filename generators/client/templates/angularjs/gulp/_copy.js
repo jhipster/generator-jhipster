@@ -88,8 +88,8 @@ function common() {
         config.app + 'robots.txt',
         config.app + 'favicon.ico',
         config.app + '.htaccess',
-        config.app + 'manifest.webapp',
-        config.app + 'sw.js'
+        // config.app + 'sw.js',
+        config.app + 'manifest.webapp'
     ], { dot: true })
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist))
