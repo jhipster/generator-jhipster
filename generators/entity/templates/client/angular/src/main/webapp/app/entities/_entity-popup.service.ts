@@ -33,7 +33,8 @@ _%>
 
 @Injectable()
 export class <%= entityAngularName %>PopupService {
-    private isOpen = false;
+    private ngbModalRef: NgbModalRef;
+
     constructor(
         <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
         private datePipe: DatePipe,
@@ -42,38 +43,47 @@ export class <%= entityAngularName %>PopupService {
         private router: Router,
         private <%= entityInstance %>Service: <%= entityAngularName %>Service
 
-    ) {}
+    ) {
+        this.ngbModalRef = null;
+    }
 
-    open(component: Component, id?: number | any): NgbModalRef {
-        if (this.isOpen) {
-            return;
-        }
-        this.isOpen = true;
+    open(component: Component, id?: number | any): Promise<NgbModalRef> {
+        return new Promise<NgbModalRef>((resolve, reject) => {
+            const isOpen = this.ngbModalRef !== null;
+            if (isOpen) {
+                resolve(this.ngbModalRef);
+            }
 
-        if (id) {
-            this.<%= entityInstance %>Service.find(id).subscribe((<%= entityInstance %>) => {
-                <%_ if (hasDate) { _%>
-                    <%_ for (idx in fields) { _%>
-                        <%_ if (fields[idx].fieldType === 'LocalDate') { _%>
-                if (<%= entityInstance %>.<%=fields[idx].fieldName%>) {
-                    <%= entityInstance %>.<%=fields[idx].fieldName%> = {
-                        year: <%= entityInstance %>.<%=fields[idx].fieldName%>.getFullYear(),
-                        month: <%= entityInstance %>.<%=fields[idx].fieldName%>.getMonth() + 1,
-                        day: <%= entityInstance %>.<%=fields[idx].fieldName%>.getDate()
-                    };
-                }
-                        <%_ } _%>
-                        <%_ if (['Instant', 'ZonedDateTime'].includes(fields[idx].fieldType)) { _%>
-                <%= entityInstance %>.<%=fields[idx].fieldName%> = this.datePipe
-                    .transform(<%= entityInstance %>.<%=fields[idx].fieldName%>, 'yyyy-MM-ddThh:mm');
-                        <%_ } _%>
-                <%_ } _%>
-                <%_ } _%>
-                this.<%= entityInstance %>ModalRef(component, <%= entityInstance %>);
-            });
-        } else {
-            return this.<%= entityInstance %>ModalRef(component, new <%= entityAngularName %>());
-        }
+            if (id) {
+                this.<%= entityInstance %>Service.find(id).subscribe((<%= entityInstance %>) => {
+                    <%_ if (hasDate) { _%>
+                        <%_ for (idx in fields) { _%>
+                            <%_ if (fields[idx].fieldType === 'LocalDate') { _%>
+                    if (<%= entityInstance %>.<%=fields[idx].fieldName%>) {
+                        <%= entityInstance %>.<%=fields[idx].fieldName%> = {
+                            year: <%= entityInstance %>.<%=fields[idx].fieldName%>.getFullYear(),
+                            month: <%= entityInstance %>.<%=fields[idx].fieldName%>.getMonth() + 1,
+                            day: <%= entityInstance %>.<%=fields[idx].fieldName%>.getDate()
+                        };
+                    }
+                            <%_ } _%>
+                            <%_ if (['Instant', 'ZonedDateTime'].includes(fields[idx].fieldType)) { _%>
+                    <%= entityInstance %>.<%=fields[idx].fieldName%> = this.datePipe
+                        .transform(<%= entityInstance %>.<%=fields[idx].fieldName%>, 'yyyy-MM-ddThh:mm');
+                            <%_ } _%>
+                    <%_ } _%>
+                    <%_ } _%>
+                    this.ngbModalRef = this.<%= entityInstance %>ModalRef(component, <%= entityInstance %>);
+                    resolve(this.ngbModalRef);
+                });
+            } else {
+                // setTimeout used as a workaround for getting ExpressionChangedAfterItHasBeenCheckedError
+                setTimeout(() => {
+                    this.ngbModalRef = this.<%= entityInstance %>ModalRef(component, new <%= entityAngularName %>());
+                    resolve(this.ngbModalRef);
+                }, 0);
+            }
+        });
     }
 
     <%_ if (entityInstance.length <= 30) { _%>
@@ -86,10 +96,10 @@ export class <%= entityAngularName %>PopupService {
         modalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
         modalRef.result.then((result) => {
             this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
-            this.isOpen = false;
+            this.ngbModalRef = null;
         }, (reason) => {
             this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
-            this.isOpen = false;
+            this.ngbModalRef = null;
         });
         return modalRef;
     }

@@ -70,7 +70,6 @@ export class <%= entityAngularName %>DeleteDialogComponent {
 })
 export class <%= entityAngularName %>DeletePopupComponent implements OnInit, OnDestroy {
 
-    modalRef: NgbModalRef;
     routeSub: any;
 
     constructor(
@@ -80,7 +79,7 @@ export class <%= entityAngularName %>DeletePopupComponent implements OnInit, OnD
 
     ngOnInit() {
         this.routeSub = this.route.params.subscribe((params) => {
-            this.modalRef = this.<%= entityInstance %>PopupService
+            this.<%= entityInstance %>PopupService
                 .open(<%= entityAngularName %>DeleteDialogComponent, params['id']);
         });
     }
