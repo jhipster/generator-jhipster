@@ -109,7 +109,7 @@
     <%_ } _%>
     "tslint": "5.5.0",
     "tslint-loader": "3.5.3",
-    "typescript": "2.3.4",
+    "typescript": "2.4.1",
     <%_ if (useSass) { _%>
     "sass-loader": "6.0.6",
     "node-sass": "4.5.3",
@@ -133,8 +133,8 @@
     "node": ">=6.9.0"
   },
   "scripts": {
-    "lint": "tslint '<%= MAIN_SRC_DIR%>app/**/*.ts' '<%= TEST_SRC_DIR%>**/*.ts'",
-    "lint:fix": "tslint '<%= MAIN_SRC_DIR%>app/**/*.ts' '<%= TEST_SRC_DIR%>**/*.ts' --fix",
+    "lint": "tslint --type-check --project './tsconfig.json' -e 'node_modules/**'",
+    "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "ngc": "ngc -p tsconfig-aot.json",
     "cleanup": "rimraf <%= BUILD_DIR %>{aot,www}",
     "start": "<%= clientPackageManager %> run webpack:dev",
@@ -147,7 +147,7 @@
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js",
     "test": "karma start src/test/javascript/karma.conf.js",
-    "test:watch": "karma start src/test/javascript/karma.conf.js --watch",
+    "test:watch": "<%= clientPackageManager %> test -- --watch",
     <%_ if (protractorTests) { _%>
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
     "postinstall": "webdriver-manager update && node node_modules/phantomjs-prebuilt/install.js"

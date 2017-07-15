@@ -26,6 +26,7 @@
         "experimentalDecorators": true,
         "removeComments": false,
         "noImplicitAny": false,
+        "skipLibCheck": true,
         "suppressImplicitAnyIndexErrors": true,
         "outDir": "<%= DIST_DIR %>app",
         "lib": ["es6", "dom"],
