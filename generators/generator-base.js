@@ -855,7 +855,7 @@ module.exports = class extends PrivateBase {
                 file: fullPath,
                 needle,
                 splicable: [
-                    `<include file="classpath:config/liquibase/changelog/${changelogName}.xml" relativeToChangelogFile="false"/>`
+                    `<include file="config/liquibase/changelog/${changelogName}.xml" relativeToChangelogFile="false"/>`
                 ]
             }, this);
         } catch (e) {
