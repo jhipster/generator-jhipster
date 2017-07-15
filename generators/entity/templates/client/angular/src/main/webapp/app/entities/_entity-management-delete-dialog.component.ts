@@ -80,7 +80,7 @@ export class <%= entityAngularName %>DeletePopupComponent implements OnInit, OnD
     ngOnInit() {
         this.routeSub = this.route.params.subscribe((params) => {
             this.<%= entityInstance %>PopupService
-                .open(<%= entityAngularName %>DeleteDialogComponent, params['id']);
+                .open(<%= entityAngularName %>DeleteDialogComponent as Component, params['id']);
         });
     }
 

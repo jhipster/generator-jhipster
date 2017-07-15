@@ -215,10 +215,10 @@ export class <%= entityAngularName %>PopupComponent implements OnInit, OnDestroy
         this.routeSub = this.route.params.subscribe((params) => {
             if ( params['id'] ) {
                 this.<%= entityInstance %>PopupService
-                    .open(<%= entityAngularName %>DialogComponent, params['id']);
+                    .open(<%= entityAngularName %>DialogComponent as Component, params['id']);
             } else {
                 this.<%= entityInstance %>PopupService
-                    .open(<%= entityAngularName %>DialogComponent);
+                    .open(<%= entityAngularName %>DialogComponent as Component);
             }
         });
     }
