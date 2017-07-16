@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 const jhiCore = require('jhipster-core');
-const expectedFiles = require('./test-expected-files');
+const expectedFiles = require('./utils/expected-files');
 const BaseGenerator = require('../generators/generator-base').prototype;
 
 BaseGenerator.log = (msg) => { console.log(msg); }; // eslint-disable-line no-console
