@@ -21,8 +21,9 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const StringReplacePlugin = require('string-replace-webpack-plugin');
 <%_ if (enableTranslation) { _%>
-const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin")
+const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin");
 <%_ } _%>
+const path = require('path');
 
 const utils = require('./utils.js');
 
@@ -78,6 +79,12 @@ module.exports = (options) => {
                 {
                     test: /manifest.webapp$/,
                     loader: 'file-loader?name=manifest.webapp!web-app-manifest-loader'
+                },
+                {
+                    test: /\.ts$/,
+                    enforce: 'pre',
+                    loaders: 'tslint-loader',
+                    exclude: ['node_modules', new RegExp('reflect-metadata\\' + path.sep + 'Reflect\\.ts')]
                 },
                 {
                     test: /app.constants.ts$/,
