@@ -47,9 +47,11 @@ Object.keys(differentRelationships).forEach(key => {
     }
     if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
         const uniqueRel = differentRelationships[key][0];
+        if (uniqueRel.otherEntityAngularName !== entityAngularName) {
 _%>
 import { <%= uniqueRel.otherEntityAngularName %>, <%= uniqueRel.otherEntityAngularName%>Service } from '../<%= uniqueRel.otherEntityModulePath %>';
-<%_ }
+<%_     }
+    }
 }); _%>
 <%_ if (hasRelationshipQuery) { _%>
 import { ResponseWrapper } from '../../shared';
@@ -85,11 +87,16 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         private dataUtils: JhiDataUtils,
         <%_ } _%>
         private alertService: JhiAlertService,
-        private <%= entityInstance %>Service: <%= entityAngularName %>Service,<% Object.keys(differentRelationships).forEach(key => {
-        if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
-            const uniqueRel = differentRelationships[key][0]; %>
-        private <%= uniqueRel.otherEntityName %>Service: <%= uniqueRel.otherEntityAngularName %>Service,<%
-        } });%>
+        private <%= entityInstance %>Service: <%= entityAngularName %>Service,
+        <%_ Object.keys(differentRelationships).forEach(key => {
+            if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
+                const uniqueRel = differentRelationships[key][0];
+                if (uniqueRel.otherEntityAngularName !== entityAngularName) { _%>
+        private <%= uniqueRel.otherEntityName %>Service: <%= uniqueRel.otherEntityAngularName %>Service,
+        <%_
+                }
+            }
+        }); _%>
         <%_ if (fieldsContainImageBlob) { _%>
         private elementRef: ElementRef,
         <%_ } _%>
