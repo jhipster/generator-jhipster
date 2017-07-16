@@ -297,15 +297,16 @@ function askForAdminPassword() {
 }
 
 function getAppFolders(input, composeApplicationType) {
-    const files = shelljs.ls('-l', this.destinationPath(input));
+    const destinationPath = this.destinationPath(input);
+    const files = shelljs.ls('-l', destinationPath);
     const appsFolders = [];
 
     files.forEach((file) => {
         if (file.isDirectory()) {
-            if ((shelljs.test('-f', `${input + file.name}/.yo-rc.json`))
-                && (shelljs.test('-f', `${input + file.name}/src/main/docker/app.yml`))) {
+            if ((shelljs.test('-f', `${destinationPath}/${file.name}/.yo-rc.json`))
+                && (shelljs.test('-f', `${destinationPath}/${file.name}/src/main/docker/app.yml`))) {
                 try {
-                    const fileData = this.fs.readJSON(`${input + file.name}/.yo-rc.json`);
+                    const fileData = this.fs.readJSON(`${destinationPath}/${file.name}/.yo-rc.json`);
                     if ((fileData['generator-jhipster'].baseName !== undefined)
                         && ((composeApplicationType === undefined)
                             || (composeApplicationType === fileData['generator-jhipster'].applicationType)
