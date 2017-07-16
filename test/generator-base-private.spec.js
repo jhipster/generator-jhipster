@@ -1,6 +1,6 @@
 /* global describe, before, it*/
 
-const assert = require('assert');
+const expect = require('chai').expect;
 // using base generator which extends the private base
 const BaseGenerator = require('../generators/generator-base').prototype;
 
@@ -23,7 +23,7 @@ export * from './entityFolderName/entityFileName-delete-dialog.component';
 export * from './entityFolderName/entityFileName-detail.component';
 export * from './entityFolderName/entityFileName.component';
 export * from './entityFolderName/entityFileName.state';`;
-            assert.equal(BaseGenerator.stripMargin(content), out);
+            expect(BaseGenerator.stripMargin(content)).to.equal(out);
         });
         it('should produce correct indented output without margin', () => {
             const routerName = 'routerName';
@@ -43,24 +43,24 @@ export * from './entityFolderName/entityFileName.state';`;
         <span data-translate="global.menu.routerName">routerName</span>
     </a>
 </li>`;
-            assert.equal(BaseGenerator.stripMargin(content), out);
+            expect(BaseGenerator.stripMargin(content)).to.equal(out);
         });
     });
 
     describe('getDBTypeFromDBValue', () => {
         describe('when called with sql DB name', () => {
             it('return SQL', () => {
-                assert.equal(BaseGenerator.getDBTypeFromDBValue('mysql'), 'sql');
+                expect(BaseGenerator.getDBTypeFromDBValue('mysql')).to.equal('sql');
             });
         });
         describe('when called with mongo DB', () => {
             it('return mongodb', () => {
-                assert.equal(BaseGenerator.getDBTypeFromDBValue('mongodb'), 'mongodb');
+                expect(BaseGenerator.getDBTypeFromDBValue('mongodb')).to.equal('mongodb');
             });
         });
         describe('when called with cassandra', () => {
             it('return cassandra', () => {
-                assert.equal(BaseGenerator.getDBTypeFromDBValue('cassandra'), 'cassandra');
+                expect(BaseGenerator.getDBTypeFromDBValue('cassandra')).to.equal('cassandra');
             });
         });
     });
@@ -68,12 +68,12 @@ export * from './entityFolderName/entityFileName.state';`;
     describe('generateLanguageOptions', () => {
         describe('when called with empty array', () => {
             it('return empty', () => {
-                assert.deepEqual(BaseGenerator.generateLanguageOptions([]), []);
+                expect(BaseGenerator.generateLanguageOptions([])).to.eql([]);
             });
         });
         describe('when called with languages array', () => {
             it('return languages pipe syntax', () => {
-                assert.deepEqual(BaseGenerator.generateLanguageOptions(['en', 'fr']), [
+                expect(BaseGenerator.generateLanguageOptions(['en', 'fr'])).to.eql([
                     `'en': { name: 'English' }`, // eslint-disable-line
                     `'fr': { name: 'Français' }` // eslint-disable-line
                 ]);
@@ -84,12 +84,12 @@ export * from './entityFolderName/entityFileName.state';`;
     describe('skipLanguageForLocale', () => {
         describe('when called with english', () => {
             it('return false', () => {
-                assert.equal(BaseGenerator.skipLanguageForLocale('en'), false);
+                expect(BaseGenerator.skipLanguageForLocale('en')).to.equal(false);
             });
         });
         describe('when called with languages ar-ly', () => {
             it('return true', () => {
-                assert.equal(BaseGenerator.skipLanguageForLocale('ar-ly'), true);
+                expect(BaseGenerator.skipLanguageForLocale('ar-ly')).to.equal(true);
             });
         });
     });

@@ -1,6 +1,6 @@
 /* global describe, before, it*/
 
-const assert = require('assert');
+const expect = require('chai').expect;
 const jhiCore = require('jhipster-core');
 const expectedFiles = require('./utils/expected-files');
 const BaseGenerator = require('../generators/generator-base').prototype;
@@ -11,26 +11,26 @@ describe('Generator Base', () => {
     describe('getAllSupportedLanguages', () => {
         describe('when called', () => {
             it('returns an array', () => {
-                assert.notEqual(BaseGenerator.getAllSupportedLanguages().length, 0);
+                expect(BaseGenerator.getAllSupportedLanguages()).to.not.have.length(0);
             });
         });
     });
     describe('isSupportedLanguage', () => {
         describe('when called with valid language', () => {
             it('returns true', () => {
-                assert.equal(BaseGenerator.isSupportedLanguage('en'), true);
+                expect(BaseGenerator.isSupportedLanguage('en')).to.equal(true);
             });
         });
         describe('when called with invalid language', () => {
             it('returns false', () => {
-                assert.equal(BaseGenerator.isSupportedLanguage('ab'), false);
+                expect(BaseGenerator.isSupportedLanguage('ab')).to.equal(false);
             });
         });
     });
     describe('getAllSupportedLanguageOptions', () => {
         describe('when called', () => {
             it('returns an array', () => {
-                assert.notEqual(BaseGenerator.getAllSupportedLanguages().length, 0);
+                expect(BaseGenerator.getAllSupportedLanguages()).to.not.have.length(0);
             });
         });
     });
@@ -62,10 +62,10 @@ describe('Generator Base', () => {
                 jhiCore.exportToJSON(entities, true);
             });
             it('returns an up-to-date state', () => {
-                assert.deepEqual(
-                    BaseGenerator.getExistingEntities()
-                        .find(it => it.name === 'Region')
-                        .definition.fields[1],
+                expect(BaseGenerator.getExistingEntities()
+                    .find(it => it.name === 'Region')
+                    .definition.fields[1]
+                ).to.eql(
                     { fieldName: 'regionDesc', fieldType: 'String' }
                 );
             });
@@ -74,62 +74,62 @@ describe('Generator Base', () => {
     describe('getTableName', () => {
         describe('when called with a value', () => {
             it('returns a table name', () => {
-                assert.equal(BaseGenerator.getTableName('tableName'), 'table_name');
+                expect(BaseGenerator.getTableName('tableName')).to.equal('table_name');
             });
         });
     });
     describe('getColumnName', () => {
         describe('when called with a value', () => {
             it('returns a column name', () => {
-                assert.equal(BaseGenerator.getColumnName('colName'), 'col_name');
-                assert.equal(BaseGenerator.getColumnName('colNName'), 'colnname');
+                expect(BaseGenerator.getColumnName('colName')).to.equal('col_name');
+                expect(BaseGenerator.getColumnName('colNName')).to.equal('colnname');
             });
         });
     });
     describe('getPluralColumnName', () => {
         describe('when called with a value', () => {
             it('returns a plural column name', () => {
-                assert.equal(BaseGenerator.getPluralColumnName('colName'), 'col_names');
+                expect(BaseGenerator.getPluralColumnName('colName')).to.equal('col_names');
             });
         });
     });
     describe('getJoinTableName', () => {
         describe('when called with a value', () => {
             it('returns a join table name', () => {
-                assert.equal(BaseGenerator.getJoinTableName('entityName', 'relationshipName', 'mysql'), 'entity_name_relationship_name');
+                expect(BaseGenerator.getJoinTableName('entityName', 'relationshipName', 'mysql')).to.equal('entity_name_relationship_name');
             });
         });
         describe('when called with a long name', () => {
             it('returns a proper join table name', () => {
-                assert.equal(BaseGenerator.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle').length, 30);
-                assert.equal(BaseGenerator.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle'), 'entity_name_lon_relationship_n');
+                expect(BaseGenerator.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle')).to.have.length(30);
+                expect(BaseGenerator.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle')).to.equal('entity_name_lon_relationship_n');
             });
         });
     });
     describe('getConstraintName', () => {
         describe('when called with a value', () => {
             it('returns a constraint name', () => {
-                assert.equal(BaseGenerator.getConstraintName('entityName', 'relationshipName', 'mysql'), 'fk_entity_name_relationship_name_id');
+                expect(BaseGenerator.getConstraintName('entityName', 'relationshipName', 'mysql')).to.equal('fk_entity_name_relationship_name_id');
             });
         });
         describe('when called with a long name', () => {
             it('returns a proper constraint name', () => {
-                assert.equal(BaseGenerator.getConstraintName('entityNameLongerName', 'relationshipName', 'oracle').length, 30);
-                assert.equal(BaseGenerator.getConstraintName('entityNameLongerName', 'relationshipName', 'oracle'), 'entity_name_lo_relationship_id');
+                expect(BaseGenerator.getConstraintName('entityNameLongerName', 'relationshipName', 'oracle')).to.have.length(30);
+                expect(BaseGenerator.getConstraintName('entityNameLongerName', 'relationshipName', 'oracle')).to.equal('entity_name_lo_relationship_id');
             });
         });
     });
     describe('printJHipsterLogo', () => {
         describe('when called', () => {
             it('prints the logo', () => {
-                assert.equal(BaseGenerator.printJHipsterLogo(), undefined);
+                expect(BaseGenerator.printJHipsterLogo()).to.equal(undefined);
             });
         });
     });
     describe('checkForNewVersion', () => {
         describe('when called', () => {
             it('prints the new version info', () => {
-                assert.equal(BaseGenerator.checkForNewVersion(), undefined);
+                expect(BaseGenerator.checkForNewVersion()).to.equal(undefined);
             });
         });
     });
@@ -137,13 +137,13 @@ describe('Generator Base', () => {
         describe('when called with name', () => {
             it('return the angular app name', () => {
                 BaseGenerator.baseName = 'myTest';
-                assert.equal(BaseGenerator.getAngularAppName(), 'myTestApp');
+                expect(BaseGenerator.getAngularAppName()).to.equal('myTestApp');
             });
         });
         describe('when called with name having App', () => {
             it('return the angular app name', () => {
                 BaseGenerator.baseName = 'myApp';
-                assert.equal(BaseGenerator.getAngularAppName(), 'myApp');
+                expect(BaseGenerator.getAngularAppName()).to.equal('myApp');
             });
         });
     });
@@ -151,19 +151,19 @@ describe('Generator Base', () => {
         describe('when called with name', () => {
             it('return the app name', () => {
                 BaseGenerator.baseName = 'myTest';
-                assert.equal(BaseGenerator.getMainClassName(), 'MyTestApp');
+                expect(BaseGenerator.getMainClassName()).to.equal('MyTestApp');
             });
         });
         describe('when called with name having App', () => {
             it('return the app name', () => {
                 BaseGenerator.baseName = 'myApp';
-                assert.equal(BaseGenerator.getMainClassName(), 'MyApp');
+                expect(BaseGenerator.getMainClassName()).to.equal('MyApp');
             });
         });
         describe('when called with name having invalid java chars', () => {
             it('return the default app name', () => {
                 BaseGenerator.baseName = '9myApp';
-                assert.equal(BaseGenerator.getMainClassName(), 'Application');
+                expect(BaseGenerator.getMainClassName()).to.equal('Application');
             });
         });
     });
@@ -183,7 +183,7 @@ describe('Generator Base', () => {
                 filesToAssert = filesToAssert.concat(expectedFiles.jwtClient);
                 filesToAssert = filesToAssert.concat(expectedFiles.userManagement).sort();
                 const out = BaseGenerator.writeFilesToDisk(files, generator, true).sort();
-                assert.deepEqual(out, filesToAssert);
+                expect(out).to.eql(filesToAssert);
             });
         });
         describe('when called with default angular client options skipping user-management', () => {
@@ -201,7 +201,7 @@ describe('Generator Base', () => {
                 filesToAssert = filesToAssert.concat(expectedFiles.jwtClient);
                 filesToAssert = filesToAssert.sort();
                 const out = BaseGenerator.writeFilesToDisk(files, generator, true).sort();
-                assert.deepEqual(out, filesToAssert);
+                expect(out).to.eql(filesToAssert);
             });
         });
     });
