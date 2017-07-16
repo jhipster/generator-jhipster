@@ -46,6 +46,7 @@
     "commander": "2.10.0",
     "didyoumean": "1.2.1",
     "ejs": "2.5.6",
+    "fast-json-patch": "^2.0.2",
     "glob": "7.1.2",
     "html-wiring": "1.2.0",
     "insight": "0.8.4",

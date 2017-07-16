@@ -5,6 +5,7 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
+const shelljs = require('shelljs');
 
 describe('JHipster generator import jdl', () => {
     describe('imports a JDL model from single file', () => {
@@ -58,6 +59,36 @@ describe('JHipster generator import jdl', () => {
                 '.jhipster/WishList.json'
 
             ]);
+        });
+    });
+
+    describe('imports updated JDL models', () => {
+        beforeEach((done) => {
+            helpers.run(require.resolve('../generators/import-jdl'))
+                .inTmpDir((dir) => {
+                    fse.copySync(path.join(__dirname, '../test/templates/import-jdl'), dir);
+                })
+                .withArguments(['jdl2.jdl'])
+                .then((dir) => {
+                    helpers.run(require.resolve('../generators/import-jdl'))
+                        .cd(dir)
+                        .withArguments(['jdl2-modified.jdl'])
+                        .on('end', done);
+                });
+        });
+
+        it('creates entity json files', () => {
+            assert.file([
+                '.jhipster/DepartmentAlt.json',
+                '.jhipster/JobHistoryAlt.json',
+                '.jhipster/JobTaskAlt.json'
+            ]);
+        });
+
+        it('creates a liquibase changelog file', () => {
+            const changelogs = shelljs.ls(
+                'src/main/resources/config/liquibase/changelog/*_changelog.xml');
+            assert.notEqual(changelogs.length, 0);
         });
     });
 });
