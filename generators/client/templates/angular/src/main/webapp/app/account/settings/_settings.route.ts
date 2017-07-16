@@ -18,14 +18,14 @@
 -%>
 import { Route } from '@angular/router';
 
-import { UserRouteAccessService, AuthoritiesConstants } from '../../shared';
+import { UserRouteAccessService } from '../../shared';
 import { SettingsComponent } from './settings.component';
 
 export const settingsRoute: Route = {
     path: 'settings',
     component: SettingsComponent,
     data: {
-        authorities: [AuthoritiesConstants.USER],
+        authorities: ['ROLE_USER'],
         pageTitle: 'global.menu.account.settings'
     },
     canActivate: [UserRouteAccessService]
