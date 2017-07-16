@@ -87,7 +87,7 @@ _%>
                         <span class="fa fa-times"></span>
                     </button>
                 </div>
-                <input type="file"<% if (fieldTypeBlobContent === 'image') { %> id="fileImage"<% } %> (change)="setFileData($event, <%= entityInstance %>, '<%= fieldName %>', <% if (fieldTypeBlobContent === 'image') { %>true)" accept="image/*" jhiTranslate="entity.action.addimage"<% } else { %>false)" jhiTranslate="entity.action.addblob"<% } %>/>
+                <input type="file" id="file_<%= fieldName %>" (change)="setFileData($event, <%= entityInstance %>, '<%= fieldName %>', <% if (fieldTypeBlobContent === 'image') { %>true)" accept="image/*" jhiTranslate="entity.action.addimage"<% } else { %>false)" jhiTranslate="entity.action.addblob"<% } %>/>
             </div>
             <%_ } _%>
             <%_ if (fieldType === 'LocalDate') { _%>
