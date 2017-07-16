@@ -748,6 +748,49 @@ describe('JHipster generator', () => {
                 assert.file([`${SERVER_MAIN_RES_DIR}i18n/messages.properties`]);
             });
         });
+
+        describe('with RTL support', () => {
+            beforeEach((done) => {
+                helpers.run(path.join(__dirname, '../generators/app'))
+                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withPrompts({
+                        baseName: 'jhipster',
+                        clientFramework: 'angularX',
+                        packageName: 'com.mycompany.myapp',
+                        packageFolder: 'com/mycompany/myapp',
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        hibernateCache: 'ehcache',
+                        databaseType: 'sql',
+                        devDatabaseType: 'h2Memory',
+                        prodDatabaseType: 'mysql',
+                        useSass: false,
+                        enableTranslation: true,
+                        nativeLanguage: 'en',
+                        languages: ['ar-ly'],
+                        buildTool: 'maven',
+                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                        skipClient: false,
+                        skipUserManagement: false,
+                        serverSideOptions: []
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected default files for i18n with RTL support', () => {
+                assert.file(expectedFiles.i18nRtl);
+                assert.file(getFilesForOptions(angularfiles, {
+                    useSass: false,
+                    enableTranslation: true,
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
+                    testFrameworks: []
+                }));
+            });
+            it('contains updatePageDirection in language helper', () => {
+                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/shared/language/language.helper.ts`, /private updatePageDirection/);
+            });
+        });
     });
 
     context('social login', () => {

@@ -342,6 +342,17 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
     ],
 
+    i18nRtl: [
+        `${SERVER_MAIN_RES_DIR}i18n/messages_en.properties`,
+        `${SERVER_MAIN_RES_DIR}i18n/messages_ar_ly.properties`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/en/global.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/ar-ly/global.json`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/language/language.constants.ts`,
+        `${CLIENT_MAIN_SRC_DIR}content/css/rtl.css`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/language/language.helper.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
+    ],
+
     socialLogin: [
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/social/SocialConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/SocialUserConnection.java`,
