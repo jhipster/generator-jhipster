@@ -53,7 +53,7 @@ public class AuditEventConverter {
      * @return the converted list.
      */
     public AuditEvent convertToAuditEvent(PersistentAuditEvent persistentAuditEvent) {
-        if(persistentAuditEvent == null){
+        if (persistentAuditEvent == null) {
             return null;
         }
         return new AuditEvent(Date.from(persistentAuditEvent.getAuditEventDate()), persistentAuditEvent.getPrincipal(),
