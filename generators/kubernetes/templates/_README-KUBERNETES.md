@@ -108,7 +108,7 @@ $ kubectl get svc prometheus-<%= kubernetesNamespace %><%= kubernetesNamespace =
 The registry is deployed using a headless service in kubernetes, so the primary service has no IP address, and cannot get a node port. You can create a secondary service for any type, using:
 
 ```
-$ kubectl kubectl expose service jhipster-registry --type=NodePort --name=exposed-registry<%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
+$ kubectl expose service jhipster-registry --type=NodePort --name=exposed-registry<%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
 and explore the details using
