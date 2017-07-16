@@ -76,8 +76,15 @@ module.exports = KubernetesGenerator.extend({
             this.dockerRepositoryName = this.config.get('dockerRepositoryName');
             this.dockerPushCommand = this.config.get('dockerPushCommand');
             this.kubernetesNamespace = this.config.get('kubernetesNamespace');
+            this.jhipsterConsole = this.config.get('jhipsterConsole');
+            this.prometheusOperator = this.config.get('prometheusOperator');
+            this.kubernetesServiceType = this.config.get('kubernetesServiceType');
+            this.ingressDomain = this.config.get('ingressDomain');
 
             this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
+            this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
+            this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
+            this.DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE;
             this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
             this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
             this.DOCKER_MYSQL = constants.DOCKER_MYSQL;
@@ -128,7 +135,11 @@ module.exports = KubernetesGenerator.extend({
         askForAdminPassword: prompts.askForAdminPassword,
         askForKubernetesNamespace: prompts.askForKubernetesNamespace,
         askForDockerRepositoryName: prompts.askForDockerRepositoryName,
-        askForDockerPushCommand: prompts.askForDockerPushCommand
+        askForDockerPushCommand: prompts.askForDockerPushCommand,
+        askForJhipsterConsole: prompts.askForJhipsterConsole,
+        askForPrometheusOperator: prompts.askForPrometheusOperator,
+        askForKubernetesServiceType: prompts.askForKubernetesServiceType,
+        askForIngressDomain: prompts.askForIngressDomain
     },
 
     configuring: {
@@ -151,6 +162,8 @@ module.exports = KubernetesGenerator.extend({
             this.config.set('dockerRepositoryName', this.dockerRepositoryName);
             this.config.set('dockerPushCommand', this.dockerPushCommand);
             this.config.set('kubernetesNamespace', this.kubernetesNamespace);
+            this.config.set('kubernetesServiceType', this.kubernetesServiceType);
+            this.config.set('ingressDomain', this.ingressDomain);
         }
     },
 
@@ -175,6 +188,15 @@ module.exports = KubernetesGenerator.extend({
         }
 
         this.log('\nYou can deploy all your apps by running: ');
+        if (this.kubernetesNamespace !== 'default') {
+            this.log(`  ${chalk.cyan('kubectl apply -f namespace.yml')}`);
+        }
+        if (this.jhipsterConsole) {
+            this.log(`  ${chalk.cyan('kubectl apply -f console')}`);
+        }
+        if (this.prometheusOperator) {
+            this.log(`  ${chalk.cyan('kubectl apply -f prometheus-tpr.yml')}`);
+        }
         if (this.gatewayNb >= 1 || this.microserviceNb >= 1) {
             this.log(`  ${chalk.cyan('kubectl apply -f registry')}`);
         }
@@ -183,10 +205,11 @@ module.exports = KubernetesGenerator.extend({
         }
 
         if (this.gatewayNb + this.monolithicNb >= 1) {
+            const namespaceSuffix = this.kubernetesNamespace === 'default' ? '' : ` -n ${this.kubernetesNamespace}`;
             this.log('\nUse these commands to find your application\'s IP addresses:');
             for (let i = 0; i < this.appsFolders.length; i++) {
                 if (this.appConfigs[i].applicationType === 'gateway' || this.appConfigs[i].applicationType === 'monolith') {
-                    this.log(`  ${chalk.cyan(`kubectl get svc ${this.appConfigs[i].baseName.toLowerCase()}`)}`);
+                    this.log(`  ${chalk.cyan(`kubectl get svc ${this.appConfigs[i].baseName.toLowerCase()}${namespaceSuffix}`)}`);
                 }
             }
             this.log();

@@ -17,36 +17,16 @@
  limitations under the License.
 -%>
 apiVersion: extensions/v1beta1
-kind: Deployment
+kind: Ingress
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-mongodb
+  name: <%= app.baseName.toLowerCase() %>
   namespace: <%= kubernetesNamespace %>
 spec:
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: <%= app.baseName.toLowerCase() %>-mongodb
-    spec:
-      volumes:
-      - name: data
-        emptyDir: {}
-      containers:
-      - name: mongo
-        image: <%= DOCKER_MONGODB %>
-        ports:
-        - containerPort: 27017
-        volumeMounts:
-        - name: data
-          mountPath: /data/db/
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: <%= app.baseName.toLowerCase() %>-mongodb
-  namespace: <%= kubernetesNamespace %>
-spec:
-  selector:
-    app: <%= app.baseName.toLowerCase() %>-mongodb
-  ports:
-  - port: 27017
+  rules:
+  - host: <%= app.baseName.toLowerCase() %>.<%= ingressDomain %>
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: <%= app.baseName.toLowerCase() %>
+          servicePort: <%= app.serverPort %>

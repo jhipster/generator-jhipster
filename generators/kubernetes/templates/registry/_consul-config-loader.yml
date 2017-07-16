@@ -20,6 +20,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: consul-config-loader
+  namespace: <%= kubernetesNamespace %>
 spec:
   replicas: 1
   template:
