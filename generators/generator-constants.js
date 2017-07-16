@@ -18,7 +18,7 @@
  */
 
 // version of docker images
-const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v3.0.3';
+const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v3.1.0';
 const DOCKER_JAVA_JRE = 'openjdk:8-jre-alpine';
 const DOCKER_MYSQL = 'mysql:5.7.18';
 const DOCKER_MARIADB = 'mariadb:10.1.17';
@@ -43,9 +43,9 @@ const DOCKER_GRAFANA = 'grafana/grafana:4.3.2';
 const DOCKER_JENKINS = 'jenkins:latest';
 
 // version of Node, Yarn, NPM
-const NODE_VERSION = '6.11.0';
-const YARN_VERSION = '0.24.6';
-const NPM_VERSION = '5.0.3';
+const NODE_VERSION = '6.11.1';
+const YARN_VERSION = '0.27.5';
+const NPM_VERSION = '5.3.0';
 
 // all constants used throughout all generators
 
@@ -84,6 +84,45 @@ const SQL_DB_OPTIONS = [
     }
 ];
 
+const LANGUAGES = [
+    { name: 'Arabic (Libya)', dispName: 'العربية', value: 'ar-ly', rtl: true, skipForLocale: true },
+    { name: 'Armenian', dispName: 'Հայերեն', value: 'hy' },
+    { name: 'Catalan', dispName: 'Català', value: 'ca' },
+    { name: 'Chinese (Simplified)', dispName: '中文（简体）', value: 'zh-cn' },
+    { name: 'Chinese (Traditional)', dispName: '繁體中文', value: 'zh-tw' },
+    { name: 'Czech', dispName: 'Český', value: 'cs' },
+    { name: 'Danish', dispName: 'Dansk', value: 'da' },
+    { name: 'Dutch', dispName: 'Nederlands', value: 'nl' },
+    { name: 'English', dispName: 'English', value: 'en' },
+    { name: 'Estonian', dispName: 'Eesti', value: 'et' },
+    { name: 'Farsi', dispName: 'فارسی', value: 'fa', rtl: true },
+    { name: 'French', dispName: 'Français', value: 'fr' },
+    { name: 'Galician', dispName: 'Galego', value: 'gl' },
+    { name: 'German', dispName: 'Deutsch', value: 'de' },
+    { name: 'Greek', dispName: 'Ελληνικά', value: 'el' },
+    { name: 'Hindi', dispName: 'हिंदी', value: 'hi' },
+    { name: 'Hungarian', dispName: 'Magyar', value: 'hu' },
+    { name: 'Indonesian', dispName: 'Bahasa Indonesia', value: 'id' },
+    { name: 'Italian', dispName: 'Italiano', value: 'it' },
+    { name: 'Japanese', dispName: '日本語', value: 'ja' },
+    { name: 'Korean', dispName: '한국어', value: 'ko' },
+    { name: 'Marathi', dispName: 'मराठी', value: 'mr' },
+    { name: 'Polish', dispName: 'Polski', value: 'pl' },
+    { name: 'Portuguese (Brazilian)', dispName: 'Português (Brasil)', value: 'pt-br' },
+    { name: 'Portuguese', dispName: 'Português', value: 'pt-pt' },
+    { name: 'Romanian', dispName: 'Română', value: 'ro' },
+    { name: 'Russian', dispName: 'Русский', value: 'ru' },
+    { name: 'Slovak', dispName: 'Slovenský', value: 'sk' },
+    { name: 'Serbian', dispName: 'Srpski', value: 'sr' },
+    { name: 'Spanish', dispName: 'Español', value: 'es' },
+    { name: 'Swedish', dispName: 'Svenska', value: 'sv' },
+    { name: 'Turkish', dispName: 'Türkçe', value: 'tr' },
+    { name: 'Tamil', dispName: 'தமிழ்', value: 'ta' },
+    { name: 'Thai', dispName: 'ไทย', value: 'th' },
+    { name: 'Ukrainian', dispName: 'Українська', value: 'ua' },
+    { name: 'Vietnamese', dispName: 'Tiếng Việt', value: 'vi' }
+];
+
 const constants = {
     QUESTIONS: 16, // maximum possible number of questions
     CLIENT_QUESTIONS: 4,
@@ -91,6 +130,7 @@ const constants = {
     INTERPOLATE_REGEX: /<%:([\s\S]+?)%>/g, // so that tags in templates do not get mistreated as _ templates
     DOCKER_DIR: `${MAIN_DIR}docker/`,
     LINE_LENGTH: 180,
+    LANGUAGES,
 
     MAIN_DIR,
     TEST_DIR,

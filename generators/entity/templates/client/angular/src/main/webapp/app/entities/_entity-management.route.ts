@@ -47,8 +47,6 @@ import {
 } from './<%= entityFileName %>-delete-dialog.component';
 <%_ } _%>
 
-import { Principal } from '../../shared';
-
 <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
 @Injectable()
 export class <%= entityAngularName %>ResolvePagingParams implements Resolve<any> {

@@ -38,6 +38,37 @@ function writeFiles() {
                 if (this.app.messageBroker === 'kafka') {
                     this.template('db/_kafka.yml', `${appName}/${appName}-kafka.yml`);
                 }
+                if ((this.app.applicationType === 'gateway' || this.app.applicationType === 'monolith') && this.kubernetesServiceType === 'Ingress') {
+                    this.template('_ingress.yml', `${appName}/${appName}-ingress.yml`);
+                }
+                if (this.prometheusOperator) {
+                    this.template('_prometheus.yml', `${appName}/${appName}-prometheus.yml`);
+                }
+            }
+        },
+
+        writeReadme() {
+            this.template('_README-KUBERNETES.md', 'README.md');
+        },
+
+        writeNamespace() {
+            if (this.kubernetesNamespace !== 'default') {
+                this.template('_namespace.yml', 'namespace.yml');
+            }
+        },
+
+        writeJhipsterConsole() {
+            if (this.jhipsterConsole) {
+                this.template('console/_logstash-config.yml', 'console/logstash-config.yml');
+                this.template('console/_jhipster-elasticsearch.yml', 'console/jhipster-elasticsearch.yml');
+                this.template('console/_jhipster-logstash.yml', 'console/jhipster-logstash.yml');
+                this.template('console/_jhipster-console.yml', 'console/jhipster-console.yml');
+            }
+        },
+
+        writePrometheusTpr() {
+            if (this.prometheusOperator) {
+                this.template('_prometheus-tpr.yml', 'prometheus-tpr.yml');
             }
         },
 

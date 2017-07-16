@@ -21,6 +21,21 @@ const expectedFiles = {
         'jhgate/jhgate-mysql.yml',
         'jhgate/jhgate-service.yml'
     ],
+    jhgateingress: [
+        'jhgate/jhgate-deployment.yml',
+        'jhgate/jhgate-mysql.yml',
+        'jhgate/jhgate-service.yml',
+        'jhgate/jhgate-ingress.yml'
+    ],
+    customnamespace: [
+        'namespace.yml'
+    ],
+    jhconsole: [
+        'console/jhipster-console.yml',
+        'console/jhipster-elasticsearch.yml',
+        'console/jhipster-logstash.yml',
+        'console/logstash-config.yml',
+    ],
     msmysql: [
         'msmysql/msmysql-deployment.yml',
         'msmysql/msmysql-mysql.yml',
@@ -74,7 +89,9 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     adminPassword: 'meetup',
                     dockerRepositoryName: 'jhipsterrepository',
                     dockerPushCommand: 'docker push',
-                    kubernetesNamespace: 'jhipsternamespace'
+                    kubernetesNamespace: 'jhipsternamespace',
+                    jhipsterConsole: false,
+                    kubernetesServiceType: 'LoadBalancer'
                 })
                 .on('end', done);
         });
@@ -106,7 +123,10 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     ],
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
-                    kubernetesNamespace: 'default'
+                    kubernetesNamespace: 'default',
+                    jhipsterConsole: false,
+                    kubernetesServiceType: 'LoadBalancer'
+
                 })
                 .on('end', done);
         });
@@ -118,6 +138,78 @@ describe('JHipster Kubernetes Sub Generator', () => {
         });
         it('creates expected mysql files', () => {
             assert.file(expectedFiles.msmysql);
+        });
+    });
+
+    describe('mysql microservice with custom namespace and jhipster-console', () => {
+        beforeEach((done) => {
+            helpers
+                .run(require.resolve('../generators/kubernetes'))
+                .inTmpDir((dir) => {
+                    fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+                })
+                .withOptions({ skipChecks: true })
+                .withPrompts({
+                    composeApplicationType: 'microservice',
+                    directoryPath: './',
+                    chosenApps: [
+                        '02-mysql'
+                    ],
+                    dockerRepositoryName: 'jhipster',
+                    dockerPushCommand: 'docker push',
+                    kubernetesNamespace: 'mynamespace',
+                    jhipsterConsole: true,
+                    kubernetesServiceType: 'LoadBalancer'
+
+                })
+                .on('end', done);
+        });
+        it('creates expected registry files', () => {
+            assert.file(expectedFiles.eurekaregistry);
+        });
+        it('creates expected mysql files', () => {
+            assert.file(expectedFiles.msmysql);
+        });
+        it('creates expected jhipster-console files', () => {
+            assert.file(expectedFiles.jhconsole);
+        });
+        it('creates expected namespace file', () => {
+            assert.file(expectedFiles.customnamespace);
+        });
+    });
+
+    describe('gateway and ingress', () => {
+        beforeEach((done) => {
+            helpers
+                .run(require.resolve('../generators/kubernetes'))
+                .inTmpDir((dir) => {
+                    fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+                })
+                .withOptions({ skipChecks: true })
+                .withPrompts({
+                    composeApplicationType: 'microservice',
+                    directoryPath: './',
+                    chosenApps: [
+                        '01-gateway'
+                    ],
+                    dockerRepositoryName: 'jhipster',
+                    dockerPushCommand: 'docker push',
+                    kubernetesNamespace: 'default',
+                    jhipsterConsole: false,
+                    kubernetesServiceType: 'Ingress',
+                    ingressDomain: 'example.com'
+
+                })
+                .on('end', done);
+        });
+        it('creates expected registry files', () => {
+            assert.file(expectedFiles.eurekaregistry);
+        });
+        it('creates expected gateway files', () => {
+            assert.file(expectedFiles.jhgate);
+        });
+        it('creates expected ingress files', () => {
+            assert.file(expectedFiles.jhgateingress);
         });
     });
 
@@ -138,7 +230,10 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     ],
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
-                    kubernetesNamespace: 'default'
+                    kubernetesNamespace: 'default',
+                    jhipsterConsole: false,
+                    kubernetesServiceType: 'LoadBalancer'
+
                 })
                 .on('end', done);
         });
@@ -176,7 +271,10 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     ],
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
-                    kubernetesNamespace: 'default'
+                    kubernetesNamespace: 'default',
+                    jhipsterConsole: false,
+                    kubernetesServiceType: 'LoadBalancer'
+
                 })
                 .on('end', done);
         });
@@ -216,7 +314,10 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     ],
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
-                    kubernetesNamespace: 'default'
+                    kubernetesNamespace: 'default',
+                    jhipsterConsole: false,
+                    kubernetesServiceType: 'LoadBalancer'
+
                 })
                 .on('end', done);
         });
@@ -244,7 +345,10 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     ],
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
-                    kubernetesNamespace: 'default'
+                    kubernetesNamespace: 'default',
+                    jhipsterConsole: false,
+                    kubernetesServiceType: 'LoadBalancer'
+
                 })
                 .on('end', done);
         });

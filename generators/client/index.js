@@ -322,6 +322,9 @@ module.exports = JhipsterClientGenerator.extend({
             if (this.configOptions.authenticationType) {
                 this.authenticationType = this.configOptions.authenticationType;
             }
+            if (this.configOptions.otherModules) {
+                this.otherModules = this.configOptions.otherModules;
+            }
             if (this.configOptions.testFrameworks) {
                 this.testFrameworks = this.configOptions.testFrameworks;
             }

@@ -1,0 +1,27 @@
+{
+    "audits": {
+        "title": "Audit",
+        "filter": {
+            "title": "Filter per tanggal",
+            "from": "dari",
+            "to": "ke",
+            "button": {
+                "weeks": "Minggu",
+                "today": "hari ini",
+                "clear": "bersihkan",
+                "close": "tutup"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "User",
+                "date": "Tanggal",
+                "status": "Status",
+                "data": "Data tambahan"
+            },
+            "data": {
+                "remoteAddress": "Remote Address:"
+            }
+        }
+    }
+}

@@ -19,7 +19,7 @@
 <div>
     <h2>
         <span jhiTranslate="userManagement.home.title">Users</span>
-        <button class="btn btn-primary float-right" [routerLink]="['/', { outlets: { popup: ['user-management-new'] } }]">
+        <button class="btn btn-primary float-right jh-create-entity" [routerLink]="['/', { outlets: { popup: ['user-management-new'] } }]">
             <span class="fa fa-plus"></span> <span jhiTranslate="userManagement.home.createLabel">Create a new User</span>
         </button>
     </h2>
@@ -28,7 +28,7 @@
         <table class="table table-striped">
             <thead>
             <tr<% if (databaseType !== 'cassandra') { %> jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)"<% } %>>
-            <th<% if (databaseType !== 'cassandra') { %> jhiSortBy="id"<% } %>><span jhiTranslate="global.field.id">ID</span><%_ if (databaseType !== 'cassandra') { _%> <span class="fa fa-sort"></span><%_ } _%></th>
+                <th<% if (databaseType !== 'cassandra') { %> jhiSortBy="id"<% } %>><span jhiTranslate="global.field.id">ID</span><% if (databaseType !== 'cassandra') { %> <span class="fa fa-sort"></span><% } %></th>
                 <th<% if (databaseType !== 'cassandra') { %> jhiSortBy="login"<% } %>><span jhiTranslate="userManagement.login">Login</span><% if (databaseType !== 'cassandra') { %> <span class="fa fa-sort"></span><% } %></th>
                 <th<% if (databaseType !== 'cassandra') { %> jhiSortBy="email"<% } %>><span jhiTranslate="userManagement.email">Email</span><% if (databaseType !== 'cassandra') { %> <span class="fa fa-sort"></span><% } %></th>
                 <th></th>

@@ -1,7 +1,7 @@
 /* global describe, beforeEach, it*/
 const assert = require('yeoman-assert');
-const Generator = require('../generators/generator-base');
-const constants = require('../generators/generator-constants');
+const Generator = require('../../generators/generator-base');
+const constants = require('../../generators/generator-constants');
 
 const DOCKER_DIR = constants.DOCKER_DIR;
 

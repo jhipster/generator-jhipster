@@ -20,11 +20,19 @@ apiVersion: v1
 kind: Service
 metadata:
   name: <%= app.baseName.toLowerCase() %>
+  namespace: <%= kubernetesNamespace %>
+  labels:
+    app: <%= app.baseName.toLowerCase() %>
 spec:
   selector:
     app: <%= app.baseName.toLowerCase() %>
   <%_ if (app.applicationType === 'monolith' || app.applicationType === 'gateway') { _%>
-  type: LoadBalancer
+    <%_ if (kubernetesServiceType !== 'Ingress') { _%>
+  type: <%= kubernetesServiceType %>
+    <%_ } else { _%>
+  type: ClusterIP
+    <%_ } _%>
   <%_ } _%>
   ports:
-  - port: <%= app.serverPort %>
+  - name: web
+    port: <%= app.serverPort %>

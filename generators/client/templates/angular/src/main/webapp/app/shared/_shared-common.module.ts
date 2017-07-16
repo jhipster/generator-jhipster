@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
 <%_ if (websocket === 'spring-websocket') { _%>
@@ -51,7 +51,15 @@ import {
         <%_ } if (websocket === 'spring-websocket') { _%>
         WindowRef,
         <%_ } _%>
-        Title
+        Title,
+        {
+            provide: LOCALE_ID,
+        <%_ if (skipLanguageForLocale(nativeLanguage)) { _%>
+            useValue: 'en'
+        <%_ } else { _%>
+            useValue: '<%= nativeLanguage %>'
+        <%_ } _%>
+        },
     ],
     exports: [
         <%=angularXAppName%>SharedLibsModule,

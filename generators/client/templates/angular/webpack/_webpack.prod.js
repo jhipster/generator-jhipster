@@ -18,7 +18,6 @@
 -%>
 const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const Visualizer = require('webpack-visualizer-plugin');
 const ngcWebpack = require('ngc-webpack');

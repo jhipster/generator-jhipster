@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Configuration;
 public class JacksonConfiguration {
 <%_ if (databaseType === 'sql') { _%>
 
-    /**
+    /*
      * Support for Hibernate types in Jackson.
      */
     @Bean
@@ -39,7 +39,7 @@ public class JacksonConfiguration {
     }
 <%_ } _%>
 
-    /**
+    /*
      * Jackson Afterburner module to speed up serialization/deserialization.
      */
     @Bean

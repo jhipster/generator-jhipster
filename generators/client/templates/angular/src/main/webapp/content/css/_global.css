@@ -250,36 +250,4 @@ Social Buttons
     color: #fff;
 }
 <%_ } _%>
-
-<%_ if (enableI18nRTL) { _%>
-/* ==========================================================================
-Right-to-Left support
-========================================================================== */
-html[dir=rtl] .col-xs-1, html[dir=rtl] .col-xs-2, html[dir=rtl] .col-xs-3, html[dir=rtl] .col-xs-4, html[dir=rtl] .col-xs-5, html[dir=rtl] .col-xs-6, html[dir=rtl] .col-xs-7, html[dir=rtl] .col-xs-8, html[dir=rtl] .col-xs-9, html[dir=rtl] .col-xs-10, html[dir=rtl] .col-xs-11, html[dir=rtl] .col-xs-12,
-html[dir=rtl] .col-sm-1, html[dir=rtl] .col-sm-2, html[dir=rtl] .col-sm-3, html[dir=rtl] .col-sm-4, html[dir=rtl] .col-sm-5, html[dir=rtl] .col-sm-6, html[dir=rtl] .col-sm-7, html[dir=rtl] .col-sm-8, html[dir=rtl] .col-sm-9, html[dir=rtl] .col-sm-10, html[dir=rtl] .col-sm-11, html[dir=rtl] .col-sm-12,
-html[dir=rtl] .col-md-1, html[dir=rtl] .col-md-2, html[dir=rtl] .col-md-3, html[dir=rtl] .col-md-4, html[dir=rtl] .col-md-5, html[dir=rtl] .col-md-6, html[dir=rtl] .col-md-7, html[dir=rtl] .col-md-8, html[dir=rtl] .col-md-9, html[dir=rtl] .col-md-10, html[dir=rtl] .col-md-11, html[dir=rtl] .col-md-12,
-html[dir=rtl] .col-lg-1, html[dir=rtl] .col-lg-2, html[dir=rtl] .col-lg-3, html[dir=rtl] .col-lg-4, html[dir=rtl] .col-lg-5, html[dir=rtl] .col-lg-6, html[dir=rtl] .col-lg-7, html[dir=rtl] .col-lg-8, html[dir=rtl] .col-lg-9, html[dir=rtl] .col-lg-10, html[dir=rtl] .col-lg-11, html[dir=rtl] .col-lg-12 {
-    float: right;
-}
-
-html[dir=rtl] .navbar-nav > li {
-    float: right;
-}
-
-html[dir=rtl] .dl-horizontal dt {
-    float:right;
-}
-
-html[dir=rtl] th {
-    text-align: right;
-}
-
-html[dir=rtl] .dropdown-menu {
-    text-align: right;
-}
-
-html[dir=rtl] .modal-footer {
-    text-align: left;
-}
-<%_ } _%>
 /* jhipster-needle-css-add-main JHipster will add new css style */

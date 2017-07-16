@@ -1,12 +1,11 @@
 const generator = require('yeoman-generator');
 const chalk = require('chalk');
 const shelljs = require('shelljs');
-const crypto = require('crypto');
-const _ = require('lodash');
 const util = require('util');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
 const BaseGenerator = require('../generator-base');
+const docker = require('../docker-base');
 
 const OpenShiftGenerator = generator.extend({});
 util.inherits(OpenShiftGenerator, BaseGenerator);
@@ -34,27 +33,7 @@ module.exports = OpenShiftGenerator.extend({
             this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())} or in the root directory path that you select in the subsequent step`));
         },
 
-        checkDocker() {
-            if (this.skipChecks) return;
-            const done = this.async();
-
-            shelljs.exec('docker -v', { silent: true }, (code, stdout, stderr) => {
-                if (stderr) {
-                    this.log(`${chalk.yellow.bold('WARNING!')} Docker version 1.10.0 or later is not installed on your computer.\n` +
-                        '         Read http://docs.docker.com/engine/installation/#installation\n');
-                } else {
-                    const dockerVersion = stdout.split(' ')[2].replace(/,/g, '');
-                    const dockerVersionMajor = dockerVersion.split('.')[0];
-                    const dockerVersionMinor = dockerVersion.split('.')[1];
-                    if (dockerVersionMajor < 1 || (dockerVersionMajor === 1 && dockerVersionMinor < 10)) {
-                        this.log(`${chalk.yellow.bold('WARNING!')} Docker version 1.10.0 or later is not installed on your computer.\n` +
-                            `         Docker version found: ${dockerVersion}\n` +
-                            '         Read http://docs.docker.com/engine/installation/#installation\n');
-                    }
-                }
-                done();
-            });
-        },
+        checkDocker: docker.checkDocker,
 
         checkOpenShift() {
             if (this.skipChecks) return;
@@ -152,50 +131,10 @@ module.exports = OpenShiftGenerator.extend({
             insight.trackWithEvent('generator', 'openshift');
         },
 
-        checkImages() {
-            this.log('\nChecking Docker images in applications\' directories...');
-
-            let imagePath = '';
-            let runCommand = '';
-            this.warning = false;
-            this.warningMessage = 'To generate Docker image, please run:\n';
-            for (let i = 0; i < this.appsFolders.length; i++) {
-                if (this.appConfigs[i].buildTool === 'maven') {
-                    imagePath = this.destinationPath(`${this.directoryPath + this.appsFolders[i]}/target/docker/${_.kebabCase(this.appConfigs[i].baseName)}-*.war`);
-                    runCommand = './mvnw package -Pprod docker:build';
-                } else {
-                    imagePath = this.destinationPath(`${this.directoryPath + this.appsFolders[i]}/build/docker/${_.kebabCase(this.appConfigs[i].baseName)}-*.war`);
-                    runCommand = './gradlew -Pprod bootRepackage buildDocker';
-                }
-                if (shelljs.ls(imagePath).length === 0) {
-                    this.warning = true;
-                    this.warningMessage += `  ${chalk.cyan(runCommand)} in ${this.destinationPath(this.directoryPath + this.appsFolders[i])}\n`;
-                }
-            }
-        },
-
-        configureImageNames() {
-            for (let i = 0; i < this.appsFolders.length; i++) {
-                const originalImageName = this.appConfigs[i].baseName.toLowerCase();
-                const targetImageName = this.dockerRepositoryName ? `${this.dockerRepositoryName}/${originalImageName}` : originalImageName;
-                this.appConfigs[i].targetImageName = targetImageName;
-            }
-        },
-
-        generateJwtSecret() {
-            if (this.jwtSecretKey === undefined) {
-                this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
-            }
-        },
-
-        setAppsFolderPaths() {
-            if (this.applicationType) return;
-            this.appsFolderPaths = [];
-            for (let i = 0; i < this.appsFolders.length; i++) {
-                const path = this.destinationPath(this.directoryPath + this.appsFolders[i]);
-                this.appsFolderPaths.push(path);
-            }
-        },
+        checkImages: docker.checkImages,
+        generateJwtSecret: docker.generateJwtSecret,
+        configureImageNames: docker.configureImageNames,
+        setAppsFolderPaths: docker.setAppsFolderPaths,
 
         // place holder for future changes (may be prompt or something else)
         setRegistryReplicas() {
