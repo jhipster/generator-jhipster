@@ -19,45 +19,38 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-mariadb
+  name: jhipster-elasticsearch
   namespace: <%= kubernetesNamespace %>
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: <%= app.baseName.toLowerCase() %>-mariadb
+        app: jhipster-elasticsearch
     spec:
-      volumes:
-      - name: data
-        emptyDir: {}
       containers:
-      - name: mariadb
-        image: <%= DOCKER_MARIADB %>
-        env:
-        - name: MYSQL_USER
-          value: root
-        - name: MYSQL_ALLOW_EMPTY_PASSWORD
-          value: 'yes'
-        - name: MYSQL_DATABASE
-          value: <%= app.baseName.toLowerCase() %>
-#        command:
-#        - mysqld
-#        - --lower_case_table_names=1
-#        - --skip-ssl
+      - image: <%= DOCKER_JHIPSTER_ELASTICSEARCH %>
+        name: jhipster-elasticsearch
         ports:
-        - containerPort: 3306
-        volumeMounts:
-        - name: data
-          mountPath: /var/lib/mysql/
+        - containerPort: 9200
+        - containerPort: 9300
+        resources: {}
+      restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-mariadb
+  name: jhipster-elasticsearch
   namespace: <%= kubernetesNamespace %>
+  labels:
+    app: jhipster-elasticsearch
 spec:
-  selector:
-    app: <%= app.baseName.toLowerCase() %>-mariadb
   ports:
-  - port: 3306
+  - name: "9200"
+    port: 9200
+    targetPort: 9200
+  - name: "9300"
+    port: 9300
+    targetPort: 9300
+  selector:
+    app: jhipster-elasticsearch

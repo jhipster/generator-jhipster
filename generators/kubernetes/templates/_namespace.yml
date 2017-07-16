@@ -16,37 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  name: <%= app.baseName.toLowerCase() %>-mongodb
-  namespace: <%= kubernetesNamespace %>
-spec:
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: <%= app.baseName.toLowerCase() %>-mongodb
-    spec:
-      volumes:
-      - name: data
-        emptyDir: {}
-      containers:
-      - name: mongo
-        image: <%= DOCKER_MONGODB %>
-        ports:
-        - containerPort: 27017
-        volumeMounts:
-        - name: data
-          mountPath: /data/db/
----
 apiVersion: v1
-kind: Service
+kind: Namespace
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-mongodb
-  namespace: <%= kubernetesNamespace %>
-spec:
-  selector:
-    app: <%= app.baseName.toLowerCase() %>-mongodb
-  ports:
-  - port: 27017
+  name: <%= kubernetesNamespace %>
+

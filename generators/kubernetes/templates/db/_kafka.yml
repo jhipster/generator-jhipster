@@ -20,6 +20,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: <%= app.baseName.toLowerCase() %>-kafka
+  namespace: <%= kubernetesNamespace %>
 spec:
   replicas: 1
   template:
@@ -46,6 +47,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: <%= app.baseName.toLowerCase() %>-kafka
+  namespace: <%= kubernetesNamespace %>
 spec:
   selector:
     app: <%= app.baseName.toLowerCase() %>-kafka
@@ -56,6 +58,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: <%= app.baseName.toLowerCase() %>-zookeeper
+  namespace: <%= kubernetesNamespace %>
 spec:
   replicas: 1
   template:
@@ -73,6 +76,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: <%= app.baseName.toLowerCase() %>-zookeeper
+  namespace: <%= kubernetesNamespace %>
 spec:
   selector:
     app: <%= app.baseName.toLowerCase() %>-zookeeper
