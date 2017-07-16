@@ -1,12 +1,14 @@
-'use strict';
 
-const expect = require('chai').expect,
-  fail = expect.fail,
-  Reader = require('../../../lib/reader/json_file_reader'),
-  Parser = require('../../../lib/parser/json_parser'),
-  UnaryOptions = require('../../../lib/core/jhipster/unary_options').UNARY_OPTIONS,
-  BinaryOptions = require('../../../lib/core/jhipster/binary_options').BINARY_OPTIONS,
-  BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').BINARY_OPTION_VALUES;
+
+/* eslint-disable no-new, no-unused-expressions */
+const expect = require('chai').expect;
+
+const fail = expect.fail;
+const Reader = require('../../../lib/reader/json_file_reader');
+const Parser = require('../../../lib/parser/json_parser');
+const UnaryOptions = require('../../../lib/core/jhipster/unary_options').UNARY_OPTIONS;
+const BinaryOptions = require('../../../lib/core/jhipster/binary_options').BINARY_OPTIONS;
+const BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').BINARY_OPTION_VALUES;
 
 describe('::parse', () => {
   const entities = {
@@ -136,8 +138,8 @@ describe('::parse', () => {
     });
     it('parses comments in relationships for owned', () => {
       const entities = {
-        'Department': Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Department.json'),
-        'Employee': Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Employee.json')
+        Department: Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Department.json'),
+        Employee: Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Employee.json')
       };
       entities.Department.relationships.filter(r => r.relationshipName === 'employee')[0].javadoc = undefined;
       const content = Parser.parseEntities(entities);
@@ -223,5 +225,4 @@ describe('::parse', () => {
       });
     });
   });
-
 });

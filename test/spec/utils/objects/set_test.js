@@ -1,17 +1,18 @@
-'use strict';
 
-const expect = require('chai').expect,
-  Set = require('../../../../lib/utils/objects/set');
+
+/* eslint-disable no-new, no-unused-expressions */
+const expect = require('chai').expect;
+const Set = require('../../../../lib/utils/objects/set');
 
 describe('Set', () => {
   describe('::new', () => {
     describe('with no arg', () => {
       it('creates a new Set', () => {
-        new Set();
+        new Set(); // eslint-disable-line
       });
     });
     describe('with an array', () => {
-      it("creates a Set with the array's elements", () => {
+      it('creates a Set with the array\'s elements', () => {
         const set = new Set([1, 2, 3, 4]);
         expect(set.size()).to.eq(4);
       });
@@ -57,7 +58,7 @@ describe('Set', () => {
         }
       });
     });
-    describe("when trying to add an array's elements", () => {
+    describe('when trying to add an array\'s elements', () => {
       describe('but every element already exists in the Set', () => {
         it('returns false', () => {
           const mySet = new Set();
@@ -90,7 +91,7 @@ describe('Set', () => {
       });
     });
     describe('when passing an empty Set', () => {
-      it("doesn't change the Set and returns false", () => {
+      it('doesn\'t change the Set and returns false', () => {
         const mySet = new Set();
         mySet.addArrayElements([1, 2, 3, 4, 5, 6]);
         const myOtherSet = new Set();
@@ -100,7 +101,7 @@ describe('Set', () => {
       });
     });
     describe('when passing a Set containing already present elements', () => {
-      it("doesn't change the Set and returns false", () => {
+      it('doesn\'t change the Set and returns false', () => {
         const mySet = new Set();
         mySet.addArrayElements([1, 2, 3, 4, 5, 6]);
         const myOtherSet = new Set();
@@ -167,7 +168,7 @@ describe('Set', () => {
         const mySet = new Set();
         mySet.addArrayElements([1, 2, 3, 4, 5, 6]);
         const array = [];
-        mySet.forEach(function (element) {
+        mySet.forEach((element) => {
           array.push(element);
         });
         expect(array.length).to.eq(6);
@@ -189,12 +190,9 @@ describe('Set', () => {
       it('executes it for each element and returns the new Set', () => {
         const mySet = new Set();
         mySet.addArrayElements([1, 2, 3, 4, 5, 6]);
-        const myNewSet = mySet.filter(function (element) {
-          return element > 3;
-        });
+        const myNewSet = mySet.filter(element => element > 3);
         expect(myNewSet).not.to.be.null;
-        expect(myNewSet.size()).to.eq(3);
-        myNewSet.forEach(function (element) {
+        myNewSet.forEach((element) => {
           expect(element > 3).to.be.true;
         });
       });
@@ -215,12 +213,10 @@ describe('Set', () => {
       it('executes it for each element and returns the new Set', () => {
         const mySet = new Set();
         mySet.addArrayElements([1, 2, 3, 4, 5, 6]);
-        const myNewSet = mySet.map(function (element) {
-          return element * 7;
-        });
+        const myNewSet = mySet.map(element => element * 7);
         expect(myNewSet).not.to.be.null;
         expect(myNewSet.size()).to.eq(6);
-        myNewSet.forEach(function (element) {
+        myNewSet.forEach((element) => {
           expect(element >= 7).to.be.true;
         });
       });

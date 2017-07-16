@@ -1,8 +1,8 @@
-'use strict';
 
-const fail = require('chai').expect,
-  glob = require('glob'),
-  CLIEngine = require('eslint').CLIEngine;
+
+const fail = require('chai').expect;
+const glob = require('glob'); // eslint-disable-line import/no-extraneous-dependencies
+const CLIEngine = require('eslint').CLIEngine;
 
 const paths = glob.sync('./+(lib|module|scripts|test)/**/*.js');
 const engine = new CLIEngine({
@@ -26,8 +26,6 @@ function generateTest(result) {
 }
 
 function formatMessages(messages) {
-  const errors = messages.map((message) => {
-    return `${message.line}:${message.column} ${message.message.slice(0, -1)} - ${message.ruleId}\n`;
-  });
+  const errors = messages.map(message => `${message.line}:${message.column} ${message.message.slice(0, -1)} - ${message.ruleId}\n`);
   return `\n${errors.join('')}`;
 }

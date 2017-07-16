@@ -1,9 +1,11 @@
-'use strict';
 
-const expect = require('chai').expect,
-  FormatUtils = require('../../../lib/utils/format_utils'),
-  formatComment = FormatUtils.formatComment,
-  dateFormatForLiquibase = FormatUtils.dateFormatForLiquibase;
+
+/* eslint-disable no-new, no-unused-expressions */
+const expect = require('chai').expect;
+const FormatUtils = require('../../../lib/utils/format_utils');
+
+const formatComment = FormatUtils.formatComment;
+const dateFormatForLiquibase = FormatUtils.dateFormatForLiquibase;
 
 describe('FormatUtils', () => {
   describe('::formatComment', () => {
@@ -18,27 +20,27 @@ describe('FormatUtils', () => {
       const expectedResult3 = 'multi word\tcomment';
 
       describe(buildTestTitle(oneLineComment1), () => {
-        it('returns ' + buildTestTitle(expectedResult1), () => {
+        it(`returns ${buildTestTitle(expectedResult1)}`, () => {
           expect(formatComment(oneLineComment1)).to.eq(expectedResult1);
         });
       });
       describe(buildTestTitle(oneLineComment2), () => {
-        it('returns ' + buildTestTitle(expectedResult1), () => {
+        it(`returns ${buildTestTitle(expectedResult1)}`, () => {
           expect(formatComment(oneLineComment2)).to.eq(expectedResult1);
         });
       });
       describe(buildTestTitle(oneLineComment3), () => {
-        it('returns ' + buildTestTitle(expectedResult2), () => {
+        it(`returns ${buildTestTitle(expectedResult2)}`, () => {
           expect(formatComment(oneLineComment3)).to.eq(expectedResult2);
         });
       });
       describe(buildTestTitle(oneLineComment4), () => {
-        it('returns ' + buildTestTitle(expectedResult3), () => {
+        it(`returns ${buildTestTitle(expectedResult3)}`, () => {
           expect(formatComment(oneLineComment4)).to.eq(expectedResult3);
         });
       });
       describe(buildTestTitle(oneLineComment5), () => {
-        it('returns ' + buildTestTitle(expectedResult3), () => {
+        it(`returns ${buildTestTitle(expectedResult3)}`, () => {
           expect(formatComment(oneLineComment5)).to.eq(expectedResult3);
         });
       });
@@ -53,17 +55,17 @@ describe('FormatUtils', () => {
       const expectedResult3 = 'abcde\nfghij\nnothing';
 
       describe(buildTestTitle(multiLineComment1), () => {
-        it('returns ' + buildTestTitle(expectedResult1), () => {
+        it(`returns ${buildTestTitle(expectedResult1)}`, () => {
           expect(formatComment(multiLineComment1)).to.eq(expectedResult1);
         });
       });
       describe(buildTestTitle(multiLineComment2), () => {
-        it('returns ' + buildTestTitle(expectedResult2), () => {
+        it(`returns ${buildTestTitle(expectedResult2)}`, () => {
           expect(formatComment(multiLineComment2)).to.eq(expectedResult2);
         });
       });
       describe(buildTestTitle(multiLineComment3), () => {
-        it('returns ' + buildTestTitle(expectedResult3), () => {
+        it(`returns ${buildTestTitle(expectedResult3)}`, () => {
           expect(formatComment(multiLineComment3)).to.eq(expectedResult3);
         });
       });
@@ -75,33 +77,33 @@ describe('FormatUtils', () => {
         const now = new Date();
         const increment = 1000042;
         const result =
-          dateFormatForLiquibase({date: now, increment: increment});
+          dateFormatForLiquibase({ date: now, increment });
         now.setSeconds(now.getUTCSeconds() + increment);
-        const now_utc = new Date(
+        const nowUtc = new Date(
           now.getUTCFullYear(),
           now.getUTCMonth(),
           now.getUTCDate(),
           now.getUTCHours(),
           now.getUTCMinutes(),
           now.getUTCSeconds());
-        const year = `${now_utc.getFullYear()}`;
-        let month = `${now_utc.getMonth() + 1}`;
+        const year = `${nowUtc.getFullYear()}`;
+        let month = `${nowUtc.getMonth() + 1}`;
         if (month.length === 1) {
           month = `0${month}`;
         }
-        let day = `${now_utc.getDate()}`;
+        let day = `${nowUtc.getDate()}`;
         if (day.length === 1) {
           day = `0${day}`;
         }
-        let hour = `${now_utc.getHours()}`;
+        let hour = `${nowUtc.getHours()}`;
         if (hour.length === 1) {
           hour = `0${hour}`;
         }
-        let minute = `${now_utc.getMinutes()}`;
+        let minute = `${nowUtc.getMinutes()}`;
         if (minute.length === 1) {
           minute = `0${minute}`;
         }
-        let second = `${now_utc.getSeconds()}`;
+        let second = `${nowUtc.getSeconds()}`;
         if (second.length === 1) {
           second = `0${second}`;
         }
@@ -118,32 +120,32 @@ describe('FormatUtils', () => {
     describe('when not passing the increment', () => {
       it('formats the current time for liquibase with no increment', () => {
         const now = new Date();
-        const result = dateFormatForLiquibase({date: now});
-        const now_utc = new Date(
+        const result = dateFormatForLiquibase({ date: now });
+        const nowUtc = new Date(
           now.getUTCFullYear(),
           now.getUTCMonth(),
           now.getUTCDate(),
           now.getUTCHours(),
           now.getUTCMinutes(),
           now.getUTCSeconds());
-        const year = `${now_utc.getFullYear()}`;
-        let month = `${now_utc.getMonth() + 1}`;
+        const year = `${nowUtc.getFullYear()}`;
+        let month = `${nowUtc.getMonth() + 1}`;
         if (month.length === 1) {
           month = `0${month}`;
         }
-        let day = `${now_utc.getDate()}`;
+        let day = `${nowUtc.getDate()}`;
         if (day.length === 1) {
           day = `0${day}`;
         }
-        let hour = `${now_utc.getHours()}`;
+        let hour = `${nowUtc.getHours()}`;
         if (hour.length === 1) {
           hour = `0${hour}`;
         }
-        let minute = `${now_utc.getMinutes()}`;
+        let minute = `${nowUtc.getMinutes()}`;
         if (minute.length === 1) {
           minute = `0${minute}`;
         }
-        let second = `${(now_utc.getSeconds()) % 60}`;
+        let second = `${(nowUtc.getSeconds()) % 60}`;
         if (second.length === 1) {
           second = `0${second}`;
         }

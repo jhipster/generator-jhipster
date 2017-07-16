@@ -1,20 +1,22 @@
-'use strict';
 
-const expect = require('chai').expect,
-  fail = expect.fail,
-  parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles,
-  JDLParser = require('../../../lib/parser/jdl_parser'),
-  JDLEntity = require('../../../lib/core/jdl_entity'),
-  JDLEnum = require('../../../lib/core/jdl_enum'),
-  JDLField = require('../../../lib/core/jdl_field'),
-  JDLValidation = require('../../../lib/core/jdl_validation'),
-  JDLUnaryOption = require('../../../lib/core/jdl_unary_option'),
-  JDLBinaryOption = require('../../../lib/core/jdl_binary_option'),
-  FieldTypes = require('../../../lib/core/jhipster/field_types').SQL_TYPES,
-  Validations = require('../../../lib/core/jhipster/validations').VALIDATIONS,
-  UnaryOptions = require('../../../lib/core/jhipster/unary_options').UNARY_OPTIONS,
-  BinaryOptions = require('../../../lib/core/jhipster/binary_options').BINARY_OPTIONS,
-  BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').BINARY_OPTION_VALUES;
+
+/* eslint-disable no-new, no-unused-expressions */
+const expect = require('chai').expect;
+
+const fail = expect.fail;
+const parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
+const JDLParser = require('../../../lib/parser/jdl_parser');
+const JDLEntity = require('../../../lib/core/jdl_entity');
+const JDLEnum = require('../../../lib/core/jdl_enum');
+const JDLField = require('../../../lib/core/jdl_field');
+const JDLValidation = require('../../../lib/core/jdl_validation');
+const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
+const JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
+const FieldTypes = require('../../../lib/core/jhipster/field_types').SQL_TYPES;
+const Validations = require('../../../lib/core/jhipster/validations').VALIDATIONS;
+const UnaryOptions = require('../../../lib/core/jhipster/unary_options').UNARY_OPTIONS;
+const BinaryOptions = require('../../../lib/core/jhipster/binary_options').BINARY_OPTIONS;
+const BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').BINARY_OPTION_VALUES;
 
 describe('JDLParser', () => {
   describe('::parse', () => {
@@ -41,7 +43,7 @@ describe('JDLParser', () => {
           }
         });
       });
-      describe("because the database type doesn't exist", () => {
+      describe('because the database type doesn\'t exist', () => {
         it('fails', () => {
           try {
             JDLParser.parse({
@@ -71,7 +73,7 @@ describe('JDLParser', () => {
               departmentName: new JDLField({
                 name: 'departmentName',
                 type: FieldTypes.STRING,
-                validations: {required: new JDLValidation({name: Validations.REQUIRED})}
+                validations: { required: new JDLValidation({ name: Validations.REQUIRED }) }
               })
             }
           }));
@@ -87,7 +89,7 @@ describe('JDLParser', () => {
                 name: 'endDate',
                 type: FieldTypes.ZONED_DATE_TIME
               }),
-              language: new JDLField({name: 'language', type: 'Language'})
+              language: new JDLField({ name: 'language', type: 'Language' })
             },
             comment: 'JobHistory comment.'
           }));
@@ -99,7 +101,7 @@ describe('JDLParser', () => {
             name: 'Job',
             tableName: 'Job',
             fields: {
-              jobId: new JDLField({name: 'jobId', type: FieldTypes.LONG}),
+              jobId: new JDLField({ name: 'jobId', type: FieldTypes.LONG }),
               jobTitle: new JDLField({
                 name: 'jobTitle',
                 type: FieldTypes.STRING,
@@ -114,7 +116,7 @@ describe('JDLParser', () => {
                   })
                 }
               }),
-              jobType: new JDLField({name: 'jobType', type: 'JobType'}),
+              jobType: new JDLField({ name: 'jobType', type: 'JobType' }),
               minSalary: new JDLField({
                 name: 'minSalary',
                 type: FieldTypes.LONG
@@ -165,7 +167,7 @@ describe('JDLParser', () => {
       });
       describe('with an application type', () => {
         const input = parseFromFiles(['./test/test_files/invalid_field_type.jdl']);
-        it("doesn't check for field types", () => {
+        it('doesn\'t check for field types', () => {
           JDLParser.parse(input, 'sql', 'gateway');
         });
       });
@@ -177,15 +179,15 @@ describe('JDLParser', () => {
           expect(content.relationships.relationships.OneToOne['OneToOne_A{b}_B{a}'].isInjectedFieldInToRequired).to.be.false;
         });
       });
-      describe("with a field name 'id'", () => {
+      describe('with a field name \'id\'', () => {
         const input = parseFromFiles(['./test/test_files/id_field.jdl']);
         const content = JDLParser.parse(input, 'sql');
-        it("doesn't add it", () => {
+        it('doesn\'t add it', () => {
           expect(content.entities.A).to.deep.eq(new JDLEntity({
             name: 'A',
             tableName: 'A',
             fields: {
-              email: new JDLField({name: 'email', type: FieldTypes.STRING})
+              email: new JDLField({ name: 'email', type: FieldTypes.STRING })
             }
           }));
         });
@@ -521,7 +523,7 @@ describe('JDLParser', () => {
       describe('when having constants', () => {
         const input = parseFromFiles(['./test/test_files/constants.jdl']);
         const content = JDLParser.parse(input, 'sql');
-        it("assigns the constants' value when needed", () => {
+        it('assigns the constants\' value when needed', () => {
           expect(content.entities.A.fields).to.deep.eq({
             name: {
               name: 'name',

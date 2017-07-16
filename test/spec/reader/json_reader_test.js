@@ -1,9 +1,11 @@
-'use strict';
 
-const expect = require('chai').expect,
-  fail = expect.fail,
-  parseFromDir = require('../../../lib/reader/json_reader').parseFromDir,
-  UnaryOptions = require('../../../lib/core/jhipster/unary_options').UNARY_OPTIONS;
+
+/* eslint-disable no-new, no-unused-expressions */
+const expect = require('chai').expect;
+
+const fail = expect.fail;
+const parseFromDir = require('../../../lib/reader/json_reader').parseFromDir;
+const UnaryOptions = require('../../../lib/core/jhipster/unary_options').UNARY_OPTIONS;
 
 describe('::parseFromDir', () => {
   describe('when passing invalid parameters', () => {
@@ -17,7 +19,7 @@ describe('::parseFromDir', () => {
         }
       });
     });
-    describe("such as a file", () => {
+    describe('such as a file', () => {
       it('throws an error', () => {
         try {
           parseFromDir('../../test_files/invalid_file.txt');

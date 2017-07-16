@@ -1,10 +1,12 @@
-'use strict';
 
-const expect = require('chai').expect,
-  fail = expect.fail,
-  JDLParser = require('../../../lib/parser/jdl_parser'),
-  EntityParser = require('../../../lib/parser/entity_parser'),
-  parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
+
+/* eslint-disable no-new, no-unused-expressions */
+const expect = require('chai').expect;
+
+const fail = expect.fail;
+const JDLParser = require('../../../lib/parser/jdl_parser');
+const EntityParser = require('../../../lib/parser/entity_parser');
+const parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
 
 describe('::convert', () => {
   describe('when passing invalid parameters', () => {
@@ -22,7 +24,7 @@ describe('::convert', () => {
       const input = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
       it('throws an error', () => {
         try {
-          EntityParser.parse({jdlObject: JDLParser.parse(input, 'sql')});
+          EntityParser.parse({ jdlObject: JDLParser.parse(input, 'sql') });
           fail();
         } catch (error) {
           expect(error.name).to.eq('NullPointerException');
@@ -92,7 +94,6 @@ describe('::convert', () => {
         expect(content.Department.entityTableName).to.eq('department');
         expect(content.Employee.javadoc).to.eq('The Employee entity.');
         expect(content.Employee.pagination).to.eq('infinite-scroll');
-
       });
     });
     describe('when converting JDL to entity json for Cassandra type', () => {
@@ -159,70 +160,70 @@ describe('::convert', () => {
         expect(content.A.relationships).to.deep.eq(
           [
             {
-              'relationshipName': 'bbbb',
-              'otherEntityName': 'b',
-              'relationshipType': 'one-to-one',
-              'otherEntityField': 'id',
-              'ownerSide': true,
-              'otherEntityRelationshipName': 'aaaa'
+              relationshipName: 'bbbb',
+              otherEntityName: 'b',
+              relationshipType: 'one-to-one',
+              otherEntityField: 'id',
+              ownerSide: true,
+              otherEntityRelationshipName: 'aaaa'
             },
             {
-              'relationshipName': 'b',
-              'otherEntityName': 'b',
-              'relationshipType': 'one-to-many',
-              'otherEntityRelationshipName': 'a'
+              relationshipName: 'b',
+              otherEntityName: 'b',
+              relationshipType: 'one-to-many',
+              otherEntityRelationshipName: 'a'
             },
             {
-              'relationshipName': 'bb',
-              'otherEntityName': 'b',
-              'relationshipType': 'many-to-one',
-              'otherEntityField': 'id'
+              relationshipName: 'bb',
+              otherEntityName: 'b',
+              relationshipType: 'many-to-one',
+              otherEntityField: 'id'
             },
             {
-              'relationshipName': 'bbb',
-              'otherEntityName': 'b',
-              'relationshipType': 'many-to-many',
-              'otherEntityField': 'id',
-              'ownerSide': true,
-              'otherEntityRelationshipName': 'aaa'
+              relationshipName: 'bbb',
+              otherEntityName: 'b',
+              relationshipType: 'many-to-many',
+              otherEntityField: 'id',
+              ownerSide: true,
+              otherEntityRelationshipName: 'aaa'
             }
           ]
         );
         expect(content.B.relationships).to.deep.eq(
           [
             {
-              'relationshipName': 'aaaa',
-              'otherEntityName': 'a',
-              'relationshipType': 'one-to-one',
-              'ownerSide': false,
-              'otherEntityRelationshipName': 'bbbb'
+              relationshipName: 'aaaa',
+              otherEntityName: 'a',
+              relationshipType: 'one-to-one',
+              ownerSide: false,
+              otherEntityRelationshipName: 'bbbb'
             },
             {
-              'relationshipName': 'a',
-              'otherEntityName': 'a',
-              'relationshipType': 'many-to-one',
-              'otherEntityField': 'id'
+              relationshipName: 'a',
+              otherEntityName: 'a',
+              relationshipType: 'many-to-one',
+              otherEntityField: 'id'
             },
             {
-              'relationshipName': 'aa',
-              'otherEntityName': 'a',
-              'relationshipType': 'one-to-many',
-              'otherEntityRelationshipName': 'bb'
+              relationshipName: 'aa',
+              otherEntityName: 'a',
+              relationshipType: 'one-to-many',
+              otherEntityRelationshipName: 'bb'
             },
             {
-              'relationshipName': 'aaa',
-              'otherEntityName': 'a',
-              'relationshipType': 'many-to-many',
-              'ownerSide': false,
-              'otherEntityRelationshipName': 'bbb'
+              relationshipName: 'aaa',
+              otherEntityName: 'a',
+              relationshipType: 'many-to-many',
+              ownerSide: false,
+              otherEntityRelationshipName: 'bbb'
             }
           ]
         );
       });
     });
     describe('when converting a JDL with blobs', () => {
-      let input = parseFromFiles(['./test/test_files/blob_jdl.jdl']);
-      let content = EntityParser.parse({
+      const input = parseFromFiles(['./test/test_files/blob_jdl.jdl']);
+      const content = EntityParser.parse({
         jdlObject: JDLParser.parse(input, 'sql'),
         databaseType: 'sql'
       });
@@ -230,19 +231,19 @@ describe('::convert', () => {
         expect(content.A.fields).to.deep.eq(
           [
             {
-              "fieldName": "anyBlob",
-              "fieldType": "byte[]",
-              "fieldTypeBlobContent": "any"
+              fieldName: 'anyBlob',
+              fieldType: 'byte[]',
+              fieldTypeBlobContent: 'any'
             },
             {
-              "fieldName": "imageBlob",
-              "fieldType": "byte[]",
-              "fieldTypeBlobContent": "image"
+              fieldName: 'imageBlob',
+              fieldType: 'byte[]',
+              fieldTypeBlobContent: 'image'
             },
             {
-              "fieldName": "textBlob",
-              "fieldType": "byte[]",
-              "fieldTypeBlobContent": "text"
+              fieldName: 'textBlob',
+              fieldType: 'byte[]',
+              fieldTypeBlobContent: 'text'
             }
           ]
         );

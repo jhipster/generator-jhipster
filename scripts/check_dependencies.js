@@ -1,7 +1,7 @@
-'use strict';
 
-const spawn = require('child_process').spawn,
-  chalk = require('chalk');
+
+const spawn = require('child_process').spawn;
+const chalk = require('chalk'); // eslint-disable-line import/no-extraneous-dependencies, no-console
 
 const WIN_PLATFORM = process.platform === 'win32';
 
@@ -18,9 +18,9 @@ outDatedCommand.stdout.on('data', (data) => {
   const dependencies = JSON.parse(data || {});
   const dependenciesToUpdate = Object.keys(dependencies).sort();
   console.info(`There ${dependenciesToUpdate.length === 1 ? 'is' : 'are'} ${dependenciesToUpdate.length} dependenc${dependenciesToUpdate.length === 1 ? 'y' : 'ies'} to update:`);
-  for (let dependency of dependenciesToUpdate) {
+  dependenciesToUpdate.forEach((dependency) => {
     console.info(`\t${dependency} to v${dependencies[dependency].latest}`);
-  }
+  });
 });
 
 outDatedCommand.stderr.on('data', (data) => {

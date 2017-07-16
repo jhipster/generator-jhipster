@@ -1,11 +1,13 @@
-'use strict';
 
-const expect = require('chai').expect,
-  fail = expect.fail,
-  JDLEntity = require('../../../lib/core/jdl_entity'),
-  JDLRelationship = require('../../../lib/core/jdl_relationship'),
-  RELATIONSHIP_TYPES = require('../../../lib/core/jhipster/relationship_types').RELATIONSHIP_TYPES,
-  JDLRelationships = require('../../../lib/core/jdl_relationships');
+
+/* eslint-disable no-new, no-unused-expressions */
+const expect = require('chai').expect;
+
+const fail = expect.fail;
+const JDLEntity = require('../../../lib/core/jdl_entity');
+const JDLRelationship = require('../../../lib/core/jdl_relationship');
+const RELATIONSHIP_TYPES = require('../../../lib/core/jhipster/relationship_types').RELATIONSHIP_TYPES;
+const JDLRelationships = require('../../../lib/core/jdl_relationships');
 
 describe('JDLRelationships', () => {
   describe('#add', () => {
@@ -30,8 +32,8 @@ describe('JDLRelationships', () => {
         it('fails', () => {
           try {
             new JDLRelationships().add({
-              to: {name: 'A'},
-              from: {name: 'B'}
+              to: { name: 'A' },
+              from: { name: 'B' }
             });
             fail();
           } catch (error) {

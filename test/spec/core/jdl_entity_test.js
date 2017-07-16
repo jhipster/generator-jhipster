@@ -1,10 +1,12 @@
-'use strict';
 
-const expect = require('chai').expect,
-  fail = expect.fail,
-  JDLEntity = require('../../../lib/core/jdl_entity'),
-  JDLField = require('../../../lib/core/jdl_field'),
-  JDLValidation = require('../../../lib/core/jdl_validation');
+
+/* eslint-disable no-new, no-unused-expressions */
+const expect = require('chai').expect;
+const JDLEntity = require('../../../lib/core/jdl_entity');
+const JDLField = require('../../../lib/core/jdl_field');
+const JDLValidation = require('../../../lib/core/jdl_validation');
+
+const fail = expect.fail;
 
 describe('JDLEntity', () => {
   describe('::new', () => {
@@ -21,7 +23,7 @@ describe('JDLEntity', () => {
     describe('when not passing the name', () => {
       it('fails', () => {
         try {
-          new JDLEntity({name: null, comment: 'My entity'});
+          new JDLEntity({ name: null, comment: 'My entity' });
           fail();
         } catch (error) {
           expect(error.name).to.eq('NullPointerException');
@@ -30,7 +32,7 @@ describe('JDLEntity', () => {
     });
     describe('when not passing the table name', () => {
       it('uses the names as value', () => {
-        const entity = new JDLEntity({name: 'Abc'});
+        const entity = new JDLEntity({ name: 'Abc' });
         expect(entity.tableName).to.eq('Abc');
       });
     });
@@ -66,14 +68,14 @@ describe('JDLEntity', () => {
       describe('without a name attribute', () => {
         it('returns false', () => {
           expect(
-            JDLEntity.isValid({tableName: 'Something', fields: []})
+            JDLEntity.isValid({ tableName: 'Something', fields: [] })
           ).to.be.false;
         });
       });
       describe('without a table name', () => {
         it('returns false', () => {
           expect(
-            JDLEntity.isValid({name: 'Something', fields: []})
+            JDLEntity.isValid({ name: 'Something', fields: [] })
           ).to.be.false;
         });
       });
@@ -81,7 +83,9 @@ describe('JDLEntity', () => {
         it('returns false', () => {
           expect(
             JDLEntity.isValid({
-              name: 'Something', tableName: 't_something', fields: [{
+              name: 'Something',
+              tableName: 't_something',
+              fields: [{
                 type: 'String',
                 comment: 'comment',
                 validations: []
@@ -94,7 +98,7 @@ describe('JDLEntity', () => {
     describe('when checking the validity of a valid object', () => {
       it('returns true', () => {
         expect(
-          JDLEntity.isValid({name: 'Valid', tableName: 't_valid', fields: []})
+          JDLEntity.isValid({ name: 'Valid', tableName: 't_valid', fields: [] })
         ).to.be.true;
       });
     });
@@ -116,7 +120,7 @@ describe('JDLEntity', () => {
           ).to.eq(`The passed field '' must be valid for entity '${entity.name}'.\nErrors: No field`);
         }
         try {
-          entity.addField({name: 'myField'});
+          entity.addField({ name: 'myField' });
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
@@ -132,9 +136,9 @@ describe('JDLEntity', () => {
           name: 'Abc',
           tableName: 'String'
         });
-        const validField = new JDLField({name: 'myField', type: 'String'});
+        const validField = new JDLField({ name: 'myField', type: 'String' });
         entity.addField(validField);
-        expect(entity.fields).to.deep.eq({myField: validField});
+        expect(entity.fields).to.deep.eq({ myField: validField });
       });
     });
   });

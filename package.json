@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "lint": "eslint .",
-    "lint-fix": "eslint.js . --fix",
+    "lint-fix": "npm run lint -- --fix",
     "check-dependencies": "node ./scripts/check_dependencies.js",
     "test": "npm run lint && mocha test",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha test --",
@@ -46,6 +46,8 @@
   "devDependencies": {
     "chai": "3.5.0",
     "eslint": "3.19.0",
+    "eslint-config-airbnb-base": "11.2.0",
+    "eslint-plugin-import": "2.6.0",
     "istanbul": "0.4.5",
     "mocha": "3.3.0",
     "mocha-clean": "1.0.0",
