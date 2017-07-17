@@ -86,6 +86,33 @@ Add the `help` flag on any command to see how you can use it. For example, `<%= 
 
 The `<%= clientPackageManager %> run` command will list all of the scripts available to run for this project.
 
+### Service workers
+
+Service workers are commented by default, to enable them please uncomment the following code.
+
+* The service worker registering script in index.html
+```
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+        .register('./sw.js')
+        .then(function() { console.log('Service Worker Registered'); });
+    }
+</script>
+```
+<%_ if (clientFramework !== 'angular1') { _%>
+* The copy file option in webpack-common.js
+```js
+{ from: './src/main/webapp/sw.js', to: 'sw.js' },
+```
+<%_ } else { _%>
+* The copy file option in gulp/copy.js
+```js
+config.app + 'sw.js',
+```
+<%_ } _%>
+Note: Add the respective scripts/assets in `sw.js` that is needed to be cached.
+
 ### Managing dependencies
 
 For example, to add [Leaflet][] library as a runtime dependency of your application, you would run following command:
