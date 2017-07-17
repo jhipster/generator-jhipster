@@ -16,7 +16,7 @@ This is the JHipster bug tracker, and it is used for [Issues and Bugs](#issue) a
 If you have a question on using JHipster, or if you need help with your JHipster project, please [read our help page](https://jhipster.github.io/help/) and use the [JHipster tag on StackOverflow](http://stackoverflow.com/tags/jhipster) or join our [Gitter.im chat room](https://gitter.im/jhipster/generator-jhipster).
 
 ## <a name="issue"></a> Issues and Bugs
-If you find a bug in the source code or a mistake in the documentation, you can help us by submitting a ticket to our [GitHub issues](https://github.com/jhipster/generator-jhipster/issues). Even better, you can submit a Pull Request to our [JHipster generator project](https://github.com/jhipster/generator-jhipster) or to our [Documentation project](https://github.com/jhipster/jhipster.github.io).
+If you find a bug in the source code or a mistake in the documentation, you can help us by [submitting a ticket](https://opensource.guide/how-to-contribute/#opening-an-issue) to our [GitHub issues](https://github.com/jhipster/generator-jhipster/issues). Even better, you can submit a Pull Request to our [JHipster generator project](https://github.com/jhipster/generator-jhipster) or to our [Documentation project](https://github.com/jhipster/jhipster.github.io).
 
 **Please see the Submission Guidelines below**.
 
@@ -29,7 +29,7 @@ would like to implement a new feature then consider what kind of change it is:
 
 ## <a name="submit"></a> Submission Guidelines
 
-### Submitting an Issue
+### [Submitting an Issue](https://opensource.guide/how-to-contribute/#opening-an-issue)
 Before you submit your issue search the [archive](https://github.com/jhipster/generator-jhipster/issues?utf8=%E2%9C%93&q=is%3Aissue), maybe your question was already answered.
 
 If your issue appears to be a bug, and has not been reported, open a new issue.
@@ -57,7 +57,7 @@ You can run `jhipster info` in your project folder to get most of the above requ
 
 Issues opened without any of these info will be **closed** without any explanation.
 
-### Submitting a Pull Request
+### [Submitting a Pull Request](https://opensource.guide/how-to-contribute/#opening-a-pull-request)
 Before you submit your pull request consider the following guidelines:
 
 * Search [GitHub](https://github.com/jhipster/generator-jhipster/pulls?utf8=%E2%9C%93&q=is%3Apr) for an open or closed Pull Request
