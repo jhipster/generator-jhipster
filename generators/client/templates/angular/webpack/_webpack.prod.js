@@ -27,6 +27,10 @@ const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
 
 const ENV = 'production';
+<%_ if (useSass) { _%>
+const extractSASS = new ExtractTextPlugin(`[name]-sass.[hash].css`);
+<%_ } _%>
+const extractCSS = new ExtractTextPlugin(`[name].[hash].css`);
 
 module.exports = webpackMerge(commonConfig({ env: ENV }), {
     // devtool: 'source-map', // Enable source maps. Please note that this will slow down the build
@@ -57,10 +61,39 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
                 }
             ],
             exclude: ['node_modules/generator-jhipster']
+        },
+        <%_ if (useSass) { _%>
+        {
+            test: /\.scss$/,
+            loaders: ['to-string-loader', 'css-loader', 'sass-loader'],
+            exclude: /(vendor\.scss|global\.scss)/
+        },
+        {
+            test: /(vendor\.scss|global\.scss)/,
+            use: extractSASS.extract({
+                fallback: 'style-loader',
+                use: ['css-loader', 'postcss-loader', 'sass-loader']
+            })
+        },
+        <%_ } _%>
+        {
+            test: /\.css$/,
+            loaders: ['to-string-loader', 'css-loader'],
+            exclude: /(vendor\.css|global\.css)/
+        },
+        {
+            test: /(vendor\.css|global\.css)/,
+            use: extractCSS.extract({
+                fallback: 'style-loader',
+                use: ['css-loader']
+            })
         }]
     },
     plugins: [
-        new ExtractTextPlugin('[hash].styles.css'),
+        <%_ if (useSass) { _%>
+        extractSASS,
+        <%_ } _%>
+        extractCSS,
         new Visualizer({
             // Webpack statistics in target folder
             filename: '../stats.html'
