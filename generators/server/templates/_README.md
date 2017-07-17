@@ -111,7 +111,7 @@ Service workers are commented by default, to enable them please uncomment the fo
 config.app + 'sw.js',
 ```
 <%_ } _%>
-Note: Add the respective scripts/assets in `sw.js` 
+Note: Add the respective scripts/assets in `sw.js` that is needed to be cached.
 
 ### Managing dependencies
 
