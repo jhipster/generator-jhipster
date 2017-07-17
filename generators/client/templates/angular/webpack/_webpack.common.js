@@ -121,7 +121,9 @@ module.exports = (options) => {
             ),
             new CopyWebpackPlugin([
                 { from: './node_modules/core-js/client/shim.min.js', to: 'core-js-shim.min.js' },
-                { from: './node_modules/swagger-ui/dist', to: 'swagger-ui/dist' },
+                { from: './node_modules/swagger-ui/dist/css', to: 'swagger-ui/dist/css' },
+                { from: './node_modules/swagger-ui/dist/lib', to: 'swagger-ui/dist/lib' },
+                { from: './node_modules/swagger-ui/dist/swagger-ui.min.js', to: 'swagger-ui/dist/swagger-ui.min.js' },
                 { from: './<%= MAIN_SRC_DIR %>swagger-ui/', to: 'swagger-ui' },
                 { from: './<%= MAIN_SRC_DIR %>favicon.ico', to: 'favicon.ico' },
                 { from: './<%= MAIN_SRC_DIR %>manifest.webapp', to: 'manifest.webapp' },
