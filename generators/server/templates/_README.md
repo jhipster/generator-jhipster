@@ -103,7 +103,7 @@ Service workers are commented by default, to enable them please uncomment the fo
 <%_ if (clientFramework !== 'angular1') { _%>
 * The copy file option in webpack-common.js
 ```js
-{ from: './<%= MAIN_SRC_DIR %>sw.js', to: 'sw.js' },
+{ from: './src/main/webapp/sw.js', to: 'sw.js' },
 ```
 <%_ } else { _%>
 * The copy file option in gulp/copy.js
