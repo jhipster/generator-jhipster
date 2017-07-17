@@ -71,6 +71,12 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     module: {
         rules: [{
             test: /\.ts$/,
+            enforce: 'pre',
+            loaders: 'tslint-loader',
+            options: { typeCheck: true },
+            exclude: ['node_modules', new RegExp('reflect-metadata\\' + path.sep + 'Reflect\\.ts')]
+        },{
+            test: /\.ts$/,
             loaders: [
                 'angular2-template-loader',
                 'awesome-typescript-loader'
