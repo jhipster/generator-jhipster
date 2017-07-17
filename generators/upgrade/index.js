@@ -156,8 +156,8 @@ module.exports = UpgradeGenerator.extend({
             const done = this.async();
             const gitInit = () => {
                 this.gitExec('init', (code, msg, err) => {
-                    if (code !== 0) this.error(`Unable to initialize a new git repository:\n${msg} ${err}`);
-                    this.log('Initialized a new git repository');
+                    if (code !== 0) this.error(`Unable to initialize a new Git repository:\n${msg} ${err}`);
+                    this.log('Initialized a new Git repository');
                     this._gitCommitAll('Initial', () => {
                         done();
                     });
@@ -188,7 +188,7 @@ module.exports = UpgradeGenerator.extend({
         detectCurrentBranch() {
             const done = this.async();
             this.gitExec(['rev-parse', '-q', '--abbrev-ref', 'HEAD'], (code, msg, err) => {
-                if (code !== 0) this.error(`Unable to detect current git branch:\n${msg} ${err}`);
+                if (code !== 0) this.error(`Unable to detect current Git branch:\n${msg} ${err}`);
                 this.sourceBranch = msg.replace('\n', '');
                 done();
             });

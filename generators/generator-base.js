@@ -1489,7 +1489,7 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * executes a git command using shellJS
+     * executes a Git command using shellJS
      * gitExec(args [, options ], callback)
      *
      * @param {string|array} args - can be an array of arguments or a string command

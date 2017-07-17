@@ -67,7 +67,7 @@ services:
             - JHIPSTER_METRICS_PROMETHEUS_ENDPOINT=/prometheusMetrics
             <%_ } _%>
             - SPRING_CLOUD_CONFIG_SERVER_NATIVE_SEARCH_LOCATIONS=file:./config/
-            # Uncomment to use a git configuration source instead of the local filesystem
+            # Uncomment to use a Git configuration source instead of the local filesystem
             # mounted from the registry-config-sidekick volume
             # - GIT_URI=https://github.com/jhipster/jhipster-registry/
             # - GIT_SEARCH_PATHS=central-config
