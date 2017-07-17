@@ -8,12 +8,12 @@ Greetings, Java Hipster!
 [![Build Status][travis-image]][travis-url]
 [![Dependency Status][daviddm-image]][daviddm-url]
 
-Full documentation and information is available on our website at [http://jhipster.github.io/][jhipster-url]
+Full documentation and information is available on our website at [https://jhipster.github.io/][jhipster-url]
 
 Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submitting an issue. If your issue is a bug, please use the bug template pre populated [here](https://github.com/jhipster/generator-jhipster/issues/new). For feature requests and queries you can use [this template][feature-template].
 
 [jhipster-image]: https://raw.githubusercontent.com/jhipster/jhipster.github.io/master/images/logo/logo-jhipster2x.png
-[jhipster-url]: http://jhipster.github.io/
+[jhipster-url]: https://jhipster.github.io/
 [npm-image]: https://badge.fury.io/js/generator-jhipster.svg
 [npm-url]: https://npmjs.org/package/generator-jhipster
 [travis-image]: https://travis-ci.org/jhipster/generator-jhipster.svg?branch=master
