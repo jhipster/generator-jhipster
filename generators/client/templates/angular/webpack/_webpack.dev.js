@@ -20,7 +20,6 @@ const webpack = require('webpack');
 const writeFilePlugin = require('write-file-webpack-plugin');
 const webpackMerge = require('webpack-merge');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const WebpackNotifierPlugin = require('webpack-notifier');
 const path = require('path');
 
@@ -74,13 +73,34 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
             enforce: 'pre',
             loaders: 'tslint-loader',
             exclude: ['node_modules', new RegExp('reflect-metadata\\' + path.sep + 'Reflect\\.ts')]
-        },{
+        },
+        {
             test: /\.ts$/,
             loaders: [
                 'angular2-template-loader',
                 'awesome-typescript-loader'
             ],
             exclude: ['node_modules/generator-jhipster']
+        },
+        <%_ if (useSass) { _%>
+        {
+            test: /\.scss$/,
+            loaders: ['to-string-loader', 'css-loader', 'sass-loader'],
+            exclude: /(vendor\.scss|global\.scss)/
+        },
+        {
+            test: /(vendor\.scss|global\.scss)/,
+            loaders: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
+        },
+        <%_ } _%>
+        {
+            test: /\.css$/,
+            loaders: ['to-string-loader', 'css-loader'],
+            exclude: /(vendor\.css|global\.css)/
+        },
+        {
+            test: /(vendor\.css|global\.css)/,
+            loaders: ['style-loader', 'css-loader']
         }]
     },
     plugins: [
@@ -94,7 +114,6 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         }, {
             reload: false
         }),
-        new ExtractTextPlugin('styles.css'),
         new webpack.NoEmitOnErrorsPlugin(),
         new webpack.NamedModulesPlugin(),
         new writeFilePlugin(),

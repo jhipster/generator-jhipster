@@ -36,6 +36,9 @@ module.exports = (options) => {
             extensions: ['.ts', '.js'],
             modules: ['node_modules']
         },
+        stats: {
+            children: false
+        },
         module: {
             rules: [
                 { test: /bootstrap\/dist\/js\/umd\//, loader: 'imports-loader?jQuery=jquery' },
@@ -50,26 +53,6 @@ module.exports = (options) => {
                         minifyCSS:false
                     },
                     exclude: ['./<%= MAIN_SRC_DIR %>index.html']
-                },
-                <%_ if (useSass) { _%>
-                {
-                    test: /\.scss$/,
-                    loaders: ['to-string-loader', 'css-loader', 'sass-loader'],
-                    exclude: /(vendor\.scss|global\.scss)/
-                },
-                {
-                    test: /(vendor\.scss|global\.scss)/,
-                    loaders: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
-                },
-                <%_ } _%>
-                {
-                    test: /\.css$/,
-                    loaders: ['to-string-loader', 'css-loader'],
-                    exclude: /(vendor\.css|global\.css)/
-                },
-                {
-                    test: /(vendor\.css|global\.css)/,
-                    loaders: ['style-loader', 'css-loader']
                 },
                 {
                     test: /\.(jpe?g|png|gif|svg|woff2?|ttf|eot)$/i,
