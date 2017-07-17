@@ -142,7 +142,7 @@ public class SocialService {
     }
 
     /**
-     * @return login if provider manage a login like Twitter or Github otherwise email address.
+     * @return login if provider manage a login like Twitter or GitHub otherwise email address.
      *         Because provider like Google or Facebook didn't provide login or login like "12099388847393"
      */
     private String getLoginDependingOnProviderId(UserProfile userProfile, String providerId) {

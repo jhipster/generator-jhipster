@@ -181,7 +181,7 @@ Here are the most important steps.
 
 Go to the [generator-jhipster project](https://github.com/jhipster/generator-jhipster) and click on the "fork" button. You can then clone your own fork of the project, and start working on it.
 
-[Please read the Github forking documentation for more information](https://help.github.com/articles/fork-a-repo)
+[Please read the GitHub forking documentation for more information](https://help.github.com/articles/fork-a-repo)
 
 ### Set NPM/YARN to use the cloned project
 
@@ -268,7 +268,7 @@ Each commit message consists of a **header**, a **body** and a **footer**.
 ```
 
 Any line of the commit message cannot be longer 100 characters! This allows the message to be easier
-to read on Github as well as in various git tools.
+to read on GitHub as well as in various git tools.
 
 ### Header
 The Header contains a succinct description of the change:
@@ -286,7 +286,7 @@ The Body should include the motivation for the change and contrast this with pre
 ### Footer
 The footer is the place to reference GitHub issues that this commit **Closes**.
 
-You **must** use the [Github keywords](https://help.github.com/articles/closing-issues-via-commit-messages) for
+You **must** use the [GitHub keywords](https://help.github.com/articles/closing-issues-via-commit-messages) for
 automatically closing the issues referenced in your commit.
 
 ### Example
