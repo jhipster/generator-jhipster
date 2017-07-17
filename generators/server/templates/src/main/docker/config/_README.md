@@ -28,4 +28,4 @@ When running the consul.yml or app.yml docker-compose files, files located in `c
 will get automatically loaded in Consul's K/V store. Adding or editing files will trigger a reloading.
 <%_ } _%>
 
-For more info, refer to http://jhipster.github.io/microservices-architecture/#registry_app_configuration
+For more info, refer to https://jhipster.github.io/microservices-architecture/#registry_app_configuration
