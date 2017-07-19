@@ -18,7 +18,6 @@
 -%>
 package <%= packageName %>.web.rest;
 
-import io.github.jhipster.config.JHipsterProperties;
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
@@ -26,88 +25,73 @@ import <%= packageName %>.<%= mainClass %>;
 <%_ if (authenticationType === 'uaa') { _%>
 import <%= packageName %>.config.SecurityBeanOverrideConfiguration;
 <%_ } _%>
+import <%= packageName %>.web.rest.vm.LoggerVM;
+import ch.qos.logback.classic.AsyncAppender;
+import ch.qos.logback.classic.LoggerContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * Test class for the ProfileInfoResource REST controller.
+ * Test class for the LogsResource REST controller.
  *
- * @see ProfileInfoResource
- **/
+ * @see LogsResource
+ */
 @RunWith(SpringRunner.class)
 <%_ if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>
 @SpringBootTest(classes = {<%= mainClass %>.class, SecurityBeanOverrideConfiguration.class})
 <%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
 <%_ } _%>
-public class ProfileInfoResourceIntTest <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+public class ITLogsResource <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
-    @Mock
-    private Environment environment;
-
-    @Mock
-    private JHipsterProperties jHipsterProperties;
-
-    private MockMvc restProfileMockMvc;
+    private MockMvc restLogsMockMvc;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        String mockProfile[] = {"test"};
-        JHipsterProperties.Ribbon ribbon = new JHipsterProperties.Ribbon();
-        ribbon.setDisplayOnActiveProfiles(mockProfile);
-        when(jHipsterProperties.getRibbon()).thenReturn(ribbon);
 
-        String activeProfiles[] = {"test"};
-        when(environment.getDefaultProfiles()).thenReturn(activeProfiles);
-        when(environment.getActiveProfiles()).thenReturn(activeProfiles);
-
-        ProfileInfoResource profileInfoResource = new ProfileInfoResource(environment, jHipsterProperties);
-        this.restProfileMockMvc = MockMvcBuilders
-            .standaloneSetup(profileInfoResource)
+        LogsResource logsResource = new LogsResource();
+        this.restLogsMockMvc = MockMvcBuilders
+            .standaloneSetup(logsResource)
             .build();
     }
 
     @Test
-    public void getProfileInfoWithRibbon() throws Exception {
-        restProfileMockMvc.perform(get("/api/profile-info"))
+    public void getAllLogs()throws Exception {
+        restLogsMockMvc.perform(get("/management/logs"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE));
     }
 
     @Test
-    public void getProfileInfoWithoutRibbon() throws Exception {
-        JHipsterProperties.Ribbon ribbon = new JHipsterProperties.Ribbon();
-        ribbon.setDisplayOnActiveProfiles(null);
-        when(jHipsterProperties.getRibbon()).thenReturn(ribbon);
+    public void changeLogs()throws Exception {
+        LoggerVM logger = new LoggerVM();
+        logger.setLevel("INFO");
+        logger.setName("ROOT");
 
-        restProfileMockMvc.perform(get("/api/profile-info"))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE));
+        restLogsMockMvc.perform(put("/management/logs")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(logger)))
+            .andExpect(status().isNoContent());
     }
 
     @Test
-    public void getProfileInfoWithoutActiveProfiles() throws Exception {
-        String emptyProfile[] = {};
-        when(environment.getDefaultProfiles()).thenReturn(emptyProfile);
-        when(environment.getActiveProfiles()).thenReturn(emptyProfile);
-
-        restProfileMockMvc.perform(get("/api/profile-info"))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE));
+    public void testLogstashAppender() {
+        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
+        assertThat(context.getLogger("ROOT").getAppender("ASYNC_LOGSTASH")).isInstanceOf(AsyncAppender.class);
     }
 }

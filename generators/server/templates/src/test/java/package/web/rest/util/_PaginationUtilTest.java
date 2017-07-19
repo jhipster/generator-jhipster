@@ -36,7 +36,7 @@ import org.springframework.http.HttpHeaders;
  *
  * @see PaginationUtil
  */
-public class PaginationUtilUnitTest {
+public class PaginationUtilTest {
 
     @Test
     public void generatePaginationHttpHeadersTest() {

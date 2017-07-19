@@ -30,7 +30,7 @@ import scala.concurrent.duration._
 /**
  * Performance test for the <%= entityClass %> entity.
  */
-class <%= entityClass %>GatlingTest extends Simulation {
+class ITGatling<%= entityClass %> extends Simulation {
 
     val context: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
     // Log all HTTP requests

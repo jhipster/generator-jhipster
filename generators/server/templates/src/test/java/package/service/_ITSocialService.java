@@ -50,7 +50,7 @@ import static org.mockito.Mockito.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)<% if (databaseType === 'sql') { %>
 @Transactional<% } %>
-public class SocialServiceIntTest {
+public class ITSocialService {
 
     @Autowired
     private AuthorityRepository authorityRepository;
