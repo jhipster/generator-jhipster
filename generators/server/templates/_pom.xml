@@ -1001,6 +1001,18 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>    
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <%_ if (cucumberTests) { _%>
                 <executions>
@@ -1009,7 +1021,7 @@
                         <configuration>
                             <excludes>
                                 <exclude>**/Abstract*.java</exclude>
-                                <exclude>**/*Cucumber*.java</exclude>
+                                <exclude>**/IT*Cucumber*.java</exclude>
                             </excludes>
                         </configuration>
                     </execution>
@@ -1020,13 +1032,18 @@
                         </goals>
                         <configuration>
                             <includes>
-                                <include>**/*Cucumber*.java</include>
+                                <include>**/IT*Cucumber*.java</include>
                             </includes>
                         </configuration>
                     </execution>
                 </executions>
-                <%_ } _%>
+                <%_ }  _%>
                 <configuration>
+                    <%_ if (!cucumberTests) { _%>
+                    <excludes>
+                        <exclude>**/IT*.java</exclude>
+                    </excludes>
+                    <%_ } %>
                     <!-- Force alphabetical order to have a reproducible build -->
                     <runOrder>alphabetical</runOrder>
                 </configuration>
@@ -1056,6 +1073,28 @@
                         <configuration>
                             <dataFile>${project.testresult.directory}/coverage/jacoco/jacoco.exec</dataFile>
                             <outputDirectory>${project.testresult.directory}/coverage/jacoco</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>pre-integration-test</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <destFile>${project.testresult.directory}/coverage/jacoco/jacoco-it.exec</destFile>
+                            <propertyName>failsafeArgLine</propertyName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>post-integration-test</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <dataFile>${project.testresult.directory}/coverage/jacoco/jacoco-it.exec</dataFile>
+                            <outputDirectory>${pproject.testresult.directory}/coverage/jacoco</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
