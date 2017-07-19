@@ -51,7 +51,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)<% if (databaseType === 'sql') { %>
 @Transactional<% } %>
-public class CustomAuditEventRepositoryIntTest {
+public class ITCustomAuditEventRepository {
 
     @Autowired
     private PersistenceAuditEventRepository persistenceAuditEventRepository;
