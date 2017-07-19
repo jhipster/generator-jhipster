@@ -445,7 +445,7 @@ function writeFiles() {
                 this.template(`${SERVER_TEST_RES_DIR}_cassandra-random-port.yml`, `${SERVER_TEST_RES_DIR}cassandra-random-port.yml`);
             }
 
-            this.template(`${SERVER_TEST_SRC_DIR}package/config/_WebConfigurerTest.java`, `${testDir}config/WebConfigurerTest.java`);
+            this.template(`${SERVER_TEST_SRC_DIR}package/config/_WebConfigurerUnitTest.java`, `${testDir}config/WebConfigurerUnitTest.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/config/_WebConfigurerTestController.java`, `${testDir}config/WebConfigurerTestController.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_TestUtil.java`, `${testDir}web/rest/TestUtil.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_LogsResourceIntTest.java`, `${testDir}web/rest/LogsResourceIntTest.java`);
@@ -459,7 +459,7 @@ function writeFiles() {
 
             // Create Gateway tests files
             if (this.applicationType === 'gateway') {
-                this.template(`${SERVER_TEST_SRC_DIR}package/gateway/responserewriting/_SwaggerBasePathRewritingFilterTest.java`, `${testDir}gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java`);
+                this.template(`${SERVER_TEST_SRC_DIR}package/gateway/responserewriting/_SwaggerBasePathRewritingFilterUnitTest.java`, `${testDir}gateway/responserewriting/SwaggerBasePathRewritingFilterUnitTest.java`);
             }
             if (this.serviceDiscoveryType) {
                 this.template(`${SERVER_TEST_RES_DIR}config/_bootstrap.yml`, `${SERVER_TEST_RES_DIR}config/bootstrap.yml`);
@@ -481,7 +481,7 @@ function writeFiles() {
 
             // Create Cucumber test files
             if (this.cucumberTests) {
-                this.template(`${SERVER_TEST_SRC_DIR}package/cucumber/_CucumberTest.java`, `${testDir}cucumber/CucumberTest.java`);
+                this.template(`${SERVER_TEST_SRC_DIR}package/cucumber/_CucumberIntTest.java`, `${testDir}cucumber/CucumberIntTest.java`);
                 this.template(`${SERVER_TEST_SRC_DIR}package/cucumber/stepdefs/_StepDefs.java`, `${testDir}cucumber/stepdefs/StepDefs.java`);
                 this.copy(`${TEST_DIR}features/gitkeep`, `${TEST_DIR}features/.gitkeep`);
             }
@@ -573,8 +573,8 @@ function writeFiles() {
             this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_AccountResourceIntTest.java`, `${testDir}web/rest/AccountResourceIntTest.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/security/_SecurityUtilsUnitTest.java`, `${testDir}security/SecurityUtilsUnitTest.java`);
             if (this.authenticationType === 'jwt') {
-                this.template(`${SERVER_TEST_SRC_DIR}package/security/jwt/_JWTFilterTest.java`, `${testDir}security/jwt/JWTFilterTest.java`);
-                this.template(`${SERVER_TEST_SRC_DIR}package/security/jwt/_TokenProviderTest.java`, `${testDir}security/jwt/TokenProviderTest.java`);
+                this.template(`${SERVER_TEST_SRC_DIR}package/security/jwt/_JWTFilterUnitTest.java`, `${testDir}security/jwt/JWTFilterUnitTest.java`);
+                this.template(`${SERVER_TEST_SRC_DIR}package/security/jwt/_TokenProviderUnitTest.java`, `${testDir}security/jwt/TokenProviderUnitTest.java`);
                 this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_UserJWTControllerIntTest.java`, `${testDir}web/rest/UserJWTControllerIntTest.java`);
             }
 

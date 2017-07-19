@@ -35,7 +35,7 @@ import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JWTFilterTest {
+public class JWTFilterUnitTest {
 
 
     private TokenProvider tokenProvider;
