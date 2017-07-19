@@ -1,0 +1,27 @@
+{
+    "audits": {
+        "title": "ऑडिट ",
+        "filter": {
+            "title": "फिल्टर प्रति तारीख",
+            "from": "पासून",
+            "to": "ला",
+            "button": {
+                "weeks": "आठवडे",
+                "today": "आज",
+                "clear": "स्वच्छ",
+                "close": "बंद"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "वापरकर्ता",
+                "date": "तारीख",
+                "status": "स्थिति",
+                "data": "अतिरिक्त डेटा"
+            },
+            "data": {
+                "remoteAddress": "दूरस्थ पत्ता:"
+            }
+        }
+    }
+}

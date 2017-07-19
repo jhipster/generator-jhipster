@@ -1,0 +1,10 @@
+{
+    "configuration": {
+        "title": "Configuratie",
+        "filter": "Filteren (op voorvoegsel)",
+        "table": {
+            "prefix": "Voorvoegsel",
+            "properties": "Eigenschappen"
+        }
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "[<b>{{username}}</b>] Active 세션",
+        "table": {
+            "ipaddress": "IP 주소",
+            "useragent": "User Agent",
+            "date": "날짜",
+            "button": "무효화"
+        },
+        "messages": {
+            "success": "<strong>세션이 무효화되었습니다!</strong>",
+            "error": "<strong>에러가 발생했습니다!</strong> 세션은 무효화되지 않습니다."
+        }
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "Actieve sessies voor [<b>{{username}}</b>]",
+        "table": {
+            "ipaddress": "IP adres",
+            "useragent": "User Agent",
+            "date": "datum",
+            "button": "Ongeldig maken"
+        },
+        "messages": {
+            "success": "<strong>Sessie ongeldig gemaakt!</strong>",
+            "error": "<strong>Er is een fout opgetreden!</strong> De sessie kon niet worden ongeldig gemaakt.."
+        }
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "configuration": {
+        "title": "Beállítások",
+        "filter": "Szűrés (prefix alapján)",
+        "table": {
+            "prefix": "Prefix",
+            "properties": "Beállítások"
+        }
+    }
+}

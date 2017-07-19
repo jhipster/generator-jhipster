@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "[<b>{{username}}</b>] के सक्रिय सत्र",
+        "table": {
+            "ipaddress": "IP address",
+            "useragent": "उपयोगकर्ता एजेंट",
+            "date": "दिनांक",
+            "button": "रद्द"
+        },
+        "messages": {
+            "success": "<strong>सत्र रद्द!</strong>",
+            "error": "<strong>कोई त्रुटि उत्पन्न हुई!</strong> सत्र रद्द नहीं  हो सकता है."
+        }
+    }
+}

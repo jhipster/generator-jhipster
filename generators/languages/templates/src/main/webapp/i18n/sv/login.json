@@ -1,0 +1,19 @@
+{
+    "login": {
+        "title": "Logga in",
+        "form": {
+            "password": "Lösenord",
+            "password.placeholder": "Ditt lösenord",
+            "rememberme": "Kom ihåg mig",
+            "button": "Logga in"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>Inloggningen misslyckades!</strong> Kontrollera ditt användarnamn och lösenord och prova igen."
+            }
+        },
+        "password" : {
+            "forgot": "Har du glömt ditt lösenord?"
+        }
+    }
+}

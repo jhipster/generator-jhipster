@@ -1,0 +1,15 @@
+{
+    "gateway": {
+        "title": "Gateway",
+        "routes": {
+            "title": "routes saat ini",
+            "url": "URL",
+            "service": "service",
+            "servers": "server tersedia",
+            "error": "Warning: server tidak tersedia!"
+        },
+        "refresh": {
+            "button": "Refresh"
+        }
+    }
+}

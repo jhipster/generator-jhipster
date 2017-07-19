@@ -1,0 +1,19 @@
+{
+    "home": {
+        "title": "Üdvözöljük, Java Hipster!",
+        "subtitle": "Ez a nyitóképernyőd",
+        "logged": {
+            "message": "Ön \"{{username}}\"-ként lépett be."
+        },
+        "question": "Ha bármi kérdése van a JHipster-ről:",
+        "link": {
+            "homepage": "JHipster honlapja",
+            "stackoverflow": "JHipster a Stack Overflow-n",
+            "bugtracker": "JHipster hibakövető",
+            "chat": "JHipster public chat room",
+            "follow": "lépjen kapcsolatba @java_hipster -rel a Twitter-en"
+        },
+        "like": "Ha tetszik a JHipster, ne feledjen csillagot adni a",
+        "github": "GitHub-on"
+    }
+}

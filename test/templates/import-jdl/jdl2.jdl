@@ -1,0 +1,20 @@
+entity DepartmentAlt {
+  departmentId Long,
+  departmentName String required
+}
+
+/**
+ * JobHistoryAlt comment.
+ */
+entity JobHistoryAlt {
+  startDate ZonedDateTime,
+  endDate ZonedDateTime
+}
+
+enum JobTypeAlt {
+  TYPE1, TYPE2
+}
+
+relationship OneToOne {
+  JobHistoryAlt{department} to DepartmentAlt
+}

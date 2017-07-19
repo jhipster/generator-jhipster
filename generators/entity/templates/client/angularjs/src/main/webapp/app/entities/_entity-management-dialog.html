@@ -1,0 +1,264 @@
+<%#
+ Copyright 2013-2017 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://jhipster.github.io/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%
+const keyPrefix = angularAppName + '.'+ entityTranslationKey + '.';
+const ngValidators = './ng_validators';
+%>
+<form name="editForm" role="form" novalidate ng-submit="vm.save()"<% if (validation) { %> show-validation<% } %>>
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="my<%= entityClass %>Label" data-translate="<%= keyPrefix %>home.createOrEditLabel">Create or edit a <%= entityClassHumanized %></h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" ng-show="vm.<%=entityInstance %>.id">
+            <label for="id" data-translate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="vm.<%=entityInstance %>.id" readonly />
+        </div>
+        <%_ for (idx in fields) {
+            const fieldName = fields[idx].fieldName;
+            const fieldNameCapitalized = fields[idx].fieldNameCapitalized;
+            const fieldNameHumanized = fields[idx].fieldNameHumanized;
+            const fieldType = fields[idx].fieldType;
+            const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
+            let fieldInputType = 'text';
+            let ngModelOption = '';
+            const translationKey = keyPrefix + fieldName;
+            if (fieldType === 'Integer' || fieldType === 'Long' || fieldType === 'Float' || fieldType === 'Double' || fieldType === 'BigDecimal') {
+                fieldInputType = 'number';
+            } else if (fieldType === 'LocalDate') {
+                fieldInputType = 'date';
+            } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) {
+                fieldInputType = 'datetime-local';
+            } else if (fieldType === 'Boolean') {
+                fieldInputType = 'checkbox';
+            } else if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') {
+                fieldInputType = 'hidden';
+            } _%>
+        <div class="form-group"<% if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { %> ngf-drop ngf-change="vm.set<%=fieldNameCapitalized %>($file, vm.<%= entityInstance %>)"<% if (fieldTypeBlobContent === 'image') { %> ngf-pattern="'image/*'"<% } %><% } %>>
+            <label class="control-label" data-translate="<%= translationKey %>" for="field_<%= fieldName %>"><%= fieldNameHumanized %></label>
+            <%_ if (fields[idx].fieldIsEnum) { _%>
+            <select class="form-control" name="<%= fieldName %>" ng-model="vm.<%= entityInstance %>.<%= fieldName %>" id="field_<%= fieldName %>"<% if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.indexOf('required') !== -1) { %> required<% } %>>
+                <%_ const enumPrefix = angularAppName + '.'+ fieldType;
+                    const values = fields[idx].fieldValues.replace(/\s/g, '').split(',');
+                    for (key in values) {
+                        const value = values[key]; _%>
+                <option value="<%= value %>" data-translate="<%=enumPrefix%>.<%=value%>"><%= value %></option>
+                <%_ } _%>
+            </select>
+            <%_ } else { _%>
+                <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { _%>
+            <div>
+                    <%_ if (fieldTypeBlobContent === 'image') { _%>
+                <img data-ng-src="{{'data:' + vm.<%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + vm.<%=entityInstance %>.<%=fieldName%>}}" style="max-height: 100px;" ng-if="vm.<%= entityInstance %>.<%= fieldName %>" alt="<%=entityInstance %> image"/>
+                    <%_ } _%>
+                <div ng-if="vm.<%= entityInstance %>.<%= fieldName %>" class="help-block clearfix">
+                    <%_ if (fieldTypeBlobContent === 'any') { _%>
+                    <a class="pull-left" ng-click="vm.openFile(vm.<%= entityInstance %>.<%= fieldName %>ContentType, vm.<%= entityInstance %>.<%= fieldName %>)" data-translate="entity.action.open">open</a><br>
+                    <span class="pull-left">{{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}</span>
+                    <%_ } else { _%>
+                    <span class="pull-left">{{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}</span>
+                    <%_ } _%>
+                    <button type="button" ng-click="vm.<%= entityInstance %>.<%= fieldName %>=null;vm.<%= entityInstance %>.<%= fieldName %>ContentType=null;"
+                            class="btn btn-default btn-xs pull-right">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </div>
+                <button type="button" ngf-select class="btn btn-default btn-block"
+                        ngf-change="vm.set<%=fieldNameCapitalized %>($file, vm.<%= entityInstance %>)"<% if (fieldTypeBlobContent === 'image') { %> accept="image/*" data-translate="entity.action.addimage"<% } else { %> data-translate="entity.action.addblob"<% } %>>
+                    <% if (fieldTypeBlobContent === 'image') { %>Add image<% } else { %>Add blob<% } %>
+                </button>
+            </div>
+                <%_ } _%>
+                <%_ if (fieldType === 'LocalDate') { _%>
+                <div class="input-group">
+                    <input id="field_<%= fieldName %>" type="text" class="form-control" name="<%= fieldName %>" uib-datepicker-popup="{{dateformat}}" ng-model="vm.<%= entityInstance %>.<%= fieldName %>" is-open="vm.datePickerOpenStatus.<%=fieldName %>"
+                    <%- include(ngValidators) %>/>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('<%=fieldName %>')"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+                <%_ } else if(['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+                <div class="input-group">
+                    <input id="field_<%= fieldName %>" type="text" class="form-control" name="<%= fieldName %>" datetime-picker="{{dateformat}}" ng-model="vm.<%= entityInstance %>.<%= fieldName %>" is-open="vm.datePickerOpenStatus.<%=fieldName %>"
+                    <%- include(ngValidators) %>/>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('<%=fieldName %>')"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+                <%_ } else if(fieldType === 'Boolean') { _%>
+                <input type="<%= fieldInputType %>" name="<%= fieldName %>" id="field_<%= fieldName %>"
+                          ng-model="vm.<%= entityInstance %>.<%= fieldName %>"/>
+                <%_ } else if(fieldTypeBlobContent === 'text') { _%>
+                <textarea class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>"
+                    ng-model="vm.<%= entityInstance %>.<%= fieldName %>" <%- include(ngValidators) %>></textarea>
+                <%_ } else { _%>
+            <input type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>"
+                    ng-model="vm.<%= entityInstance %>.<%= fieldName %>"
+                    <%- include(ngValidators) %>/>
+                    <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { _%>
+            <input type="hidden" class="form-control" name="<%= fieldName %>ContentType" id="field_<%= fieldName %>ContentType"
+                    ng-model="vm.<%= entityInstance %>.<%= fieldName %>ContentType" />
+                    <%_ } _%>
+                <%_ } _%>
+            <%_ } _%>
+            <%_ if (fields[idx].fieldValidate === true) { _%>
+            <div ng-show="editForm.<%= fieldName %>.$invalid">
+                <%_ if (fields[idx].fieldValidateRules.indexOf('required') !== -1) { _%>
+                <p class="help-block"
+                    ng-show="editForm.<%= fieldName %>.$error.required" data-translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <%_ } _%>
+                <%_ if (fields[idx].fieldValidateRules.indexOf('minlength') !== -1) { _%>
+                <p class="help-block"
+                    ng-show="editForm.<%= fieldName %>.$error.minlength" data-translate="entity.validation.minlength" translate-value-min="<%= fields[idx].fieldValidateRulesMinlength %>">
+                    This field is required to be at least <%= fields[idx].fieldValidateRulesMinlength %> characters.
+                </p>
+                <%_ } _%>
+                <%_ if (fields[idx].fieldValidateRules.indexOf('maxlength') !== -1) { _%>
+                <p class="help-block"
+                    ng-show="editForm.<%= fieldName %>.$error.maxlength" data-translate="entity.validation.maxlength" translate-value-max="<%= fields[idx].fieldValidateRulesMaxlength %>">
+                    This field cannot be longer than <%= fields[idx].fieldValidateRulesMaxlength %> characters.
+                </p>
+                <%_ } _%>
+                <%_ if (fields[idx].fieldValidateRules.indexOf('min') !== -1) { _%>
+                <p class="help-block"
+                    ng-show="editForm.<%= fieldName %>.$error.min" data-translate="entity.validation.min" translate-value-min="<%= fields[idx].fieldValidateRulesMin %>">
+                    This field should be at least <%= fields[idx].fieldValidateRulesMin %>.
+                </p>
+                <%_ } _%>
+                <%_ if (fields[idx].fieldValidateRules.indexOf('max') !== -1) { _%>
+                <p class="help-block"
+                    ng-show="editForm.<%= fieldName %>.$error.max" data-translate="entity.validation.max" translate-value-max="<%= fields[idx].fieldValidateRulesMax %>">
+                    This field cannot be more than <%= fields[idx].fieldValidateRulesMax %>.
+                </p>
+                <%_ } _%>
+                <%_ if (fields[idx].fieldValidateRules.indexOf('minbytes') !== -1) { _%>
+                <p class="help-block"
+                   ng-show="editForm.<%= fieldName %>.$error.minbytes" data-translate="entity.validation.minbytes" translate-value-min="<%= fields[idx].fieldValidateRulesMinbytes %>">
+                    This field should be at least <%= fields[idx].fieldValidateRulesMinbytes %>.
+                </p>
+                <%_ } _%>
+                <%_ if (fields[idx].fieldValidateRules.indexOf('maxbytes') !== -1) { _%>
+                <p class="help-block"
+                   ng-show="editForm.<%= fieldName %>.$error.maxbytes" data-translate="entity.validation.maxbytes" translate-value-max="<%= fields[idx].fieldValidateRulesMaxbytes %>">
+                    This field cannot be more than <%= fields[idx].fieldValidateRulesMaxbytes %>.
+                </p>
+                <%_ } _%>
+                <%_ if (fields[idx].fieldValidateRules.indexOf('pattern') !== -1) { _%>
+                <p class="help-block"
+                    ng-show="editForm.<%= fieldName %>.$error.pattern" data-translate="entity.validation.pattern" translate-value-pattern="<%= fieldNameHumanized %>">
+                    This field should follow pattern for "<%= fieldNameHumanized %>".
+                </p>
+                <%_ } _%>
+                <%_ if (fieldType === 'Integer' || fieldType === 'Long' || fieldType === 'Float' || fieldType === 'Double' || fieldType === 'BigDecimal') { _%>
+                <p class="help-block"
+                    ng-show="editForm.<%= fieldName %>.$error.number" data-translate="entity.validation.number">
+                    This field should be a number.
+                </p>
+                <%_ } _%>
+                <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+                <p class="help-block"
+                    ng-show="editForm.<%= fieldName %>.$error.ZonedDateTimelocal" data-translate="entity.validation.ZonedDateTimelocal">
+                    This field should be a date and time.
+                </p>
+                <%_ } _%>
+            </div>
+            <%_ } _%>
+        </div>
+        <%_ } _%>
+
+        <%_ for (idx in relationships) {
+            const relationshipType = relationships[idx].relationshipType;
+            const ownerSide = relationships[idx].ownerSide;
+            const otherEntityName = relationships[idx].otherEntityName;
+            const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
+            const relationshipName = relationships[idx].relationshipName;
+            const relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
+            const relationshipFieldName = relationships[idx].relationshipFieldName;
+            const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+            const otherEntityField = relationships[idx].otherEntityField;
+            const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
+            const relationshipRequired = relationships[idx].relationshipRequired;
+            const translationKey = keyPrefix + relationshipName; _%>
+            <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true && otherEntityName === 'user')) { _%>
+        <div class="form-group">
+            <label data-translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
+                <%_ if (dto === 'no') { _%>
+            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=otherEntityNamePlural.toLowerCase() %> track by <%=otherEntityName %>.id"<% if (relationshipRequired) { %> required<% } %>>
+                <%_ if (!relationshipRequired) { _%>
+                <option value=""></option>
+                <%_ } _%>
+            </select>
+                <%_ } else { _%>
+            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>Id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=otherEntityNamePlural.toLowerCase() %>"            <% if (relationshipRequired) { %> required<% } %>>
+                <%_ if (!relationshipRequired) { _%>
+                <option value=""></option>
+                <%_ } _%>
+            </select>
+            <%_ } _%>
+        </div>
+            <%_ } else if (relationshipType === 'one-to-one' && ownerSide === true) { _%>
+        <div class="form-group">
+            <label data-translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
+                <%_ if (dto === 'no') { _%>
+            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=relationshipFieldNamePlural.toLowerCase() %> | orderBy:'id' track by <%=otherEntityName %>.id"<% if (relationshipRequired) { %> required<% } %>>
+                <%_ if (!relationshipRequired) { _%>
+                <option value=""></option>
+                <%_ } _%>
+            </select>
+                <%_ } else { _%>
+            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>Id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=relationshipFieldNamePlural.toLowerCase() %> | orderBy:'id'"<% if (relationshipRequired) { %> required<% } %>>
+                <%_ if (!relationshipRequired) { _%>
+                <option value=""></option>
+                <%_ } _%>
+            </select>
+                <%_ } _%>
+        </div>
+            <%_ } else if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { _%>
+        <div class="form-group">
+            <label data-translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
+            <select class="form-control" id="field_<%= relationshipName %>" multiple name="<%= relationshipName %>" ng-model="vm.<%=entityInstance %>.<%=relationshipFieldNamePlural %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=otherEntityNamePlural.toLowerCase() %> track by <%=otherEntityName %>.id"<% if (relationshipRequired) { %> required<% } %>></select>
+        </div>
+            <%_ } _%>
+            <%_ if (relationships[idx].relationshipValidate === true) { _%>
+        <div ng-show="editForm.<%= relationshipName %>.$invalid">
+                <%_ if (relationshipRequired) { _%>
+            <p class="help-block"
+                ng-show="editForm.<%= relationshipName %>.$error.required" data-translate="entity.validation.required">
+                This field is required.
+            </p>
+                <%_ } _%>
+        </div>
+            <%_ } _%>
+        <%_ } _%>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span data-translate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span data-translate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

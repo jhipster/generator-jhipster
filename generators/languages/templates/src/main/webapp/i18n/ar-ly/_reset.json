@@ -1,0 +1,49 @@
+<%#
+ Copyright 2013-2017 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://jhipster.github.io/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+    "reset": {
+        "request": {
+            "title": "اعادة ضبط كلمه السر",
+            "form": {
+                "button": "اعد ضبط كلمه السر"
+            },
+            "messages": {
+                "info": "أدخل عنوان البريد الإلكتروني الذي استخدمته للتسجيل",
+                "success": "تحقق من رسائل البريد الإلكتروني للحصول على تفاصيل حول كيفية إعادة ضبط كلمة المرور الخاصة بك.",
+                "notfound": "<strong>لم يتم تسجيل عنوان البريد الإلكتروني!</strong> يرجى المراجعة وحاول مرة أخرى"
+            }
+        },
+        "finish" : {
+            "title": "اعادة ضبط كلمة السر",
+            "form": {
+                "button": "تحقق من صحة كلمة المرور الجديدة"
+            },
+            "messages": {
+                "info": "اختر كلمة مرور جديدة",
+                <%_ if (clientFramework === 'angular1') { _%>
+                "success": "<strong>تم إعادة ضبط كلمة المرور الخاصة بك.</strong> من فضلك <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">تسجيل الدخول</a>.",
+                <%_ } else { _%>
+                "success": "<strong>تم إعادة ضبط كلمة المرور الخاصة بك.</strong> من فضلك ",
+                <%_ } _%>
+                "keymissing": "مفتاح إعادة الضبط مفقود.",
+                "error": "كلمة السر لا يمكن إعادة ضبطها. تذكر طلب كلمة المرور صالح فقط لمدة 24 ساعة."
+            }
+        }
+    }
+}

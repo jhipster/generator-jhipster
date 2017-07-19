@@ -1,0 +1,19 @@
+{
+    "login": {
+        "title": "登入",
+        "form": {
+            "password": "密碼",
+            "password.placeholder": "您的密碼",
+            "rememberme": "自動登入",
+            "button": "登入"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>登入失敗!</strong> 請檢查您的憑證再重試一次。"
+            }
+        },
+        "password" : {
+            "forgot": "忘記密碼?"
+        }
+    }
+}

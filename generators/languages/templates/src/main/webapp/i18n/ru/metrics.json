@@ -1,0 +1,93 @@
+{
+    "metrics": {
+        "title": "Метрики приложения",
+        "refresh.button": "Обновить",
+        "updating": "Обновление...",
+        "jvm": {
+            "title": "JVM Метрики",
+            "memory": {
+                "title": "Память",
+                "total": "Всего памяти",
+                "heap": "Куча",
+                "nonheap": "Не куча"
+            },
+            "threads": {
+                "title": "Потоки",
+                "all": "Все",
+                "runnable": "Активные",
+                "timedwaiting": "Временное ожидание",
+                "waiting": "Ожидание",
+                "blocked": "Заблокированные",
+                "dump": {
+                    "title": "Дамп потоков",
+                    "id": "Id: ",
+                    "blockedtime": "Заблокированные Время",
+                    "blockedcount": "Заблокированные Количество",
+                    "waitedtime": "Ожидающие Время",
+                    "waitedcount": "Ожидающие Количество",
+                    "lockname": "Название блокировки",
+                    "stacktrace": "Stacktrace",
+                    "show": "Показать",
+                    "hide": "Скрыть"
+                }
+            },
+            "gc": {
+                "title": "Сборщики мусора",
+                "marksweepcount": "Mark Sweep количество",
+                "marksweeptime": "Mark Sweep время",
+                "scavengecount": "Сборка мусора количество",
+                "scavengetime": "Сборка мусора время"
+            },
+            "http": {
+                "title": "HTTP запросы (событий в секунду)",
+                "active": "Активные запросы:",
+                "total": "Всего запросов:",
+                "table": {
+                    "code": "Код",
+                    "count": "Количество",
+                    "mean": "Среднее",
+                    "average": "Среднее"
+                },
+                "code": {
+                    "ok": "Ок",
+                    "notfound": "Не найдено",
+                    "servererror": "Ошибка сервера"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Статистика сервисов (время в милисекундах)",
+            "table": {
+                "name": "Название сервиса",
+                "count": "Количество",
+                "mean": "Среднее",
+                "min": "Мин",
+                "max": "Макс",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "cache": {
+            "title": "статистика",
+            "cachename": "Название кеша",
+            "hits": "Попаданий",
+            "misses": "Промахов",
+            "evictions": "Количество очисток"
+        },
+        "datasource": {
+            "usage": "Usage",
+            "title": "Статистика DataSource (время в миллисекундах)",
+            "name": "Pool usage",
+            "count": "Count",
+            "mean": "Среднее",
+            "min": "Минимум",
+            "max": "Максимум",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
+        }
+    }
+}

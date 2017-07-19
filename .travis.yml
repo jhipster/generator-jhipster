@@ -1,0 +1,90 @@
+os:
+  - linux
+services:
+  - docker
+language: node_js
+node_js:
+  - "6.11.1"
+jdk:
+  - oraclejdk8
+addons:
+  apt:
+    sources:
+    - google-chrome
+    packages:
+    - google-chrome-stable
+cache:
+  yarn: true
+  directories:
+    - $HOME/.m2
+    - $HOME/.gradle
+    - $HOME/.yarn-cache
+env:
+  global:
+    - PROFILE=dev
+    - RUN_APP=1
+    - PROTRACTOR=0
+    - JHIPSTER_TRAVIS=$TRAVIS_BUILD_DIR/travis
+    - JHIPSTER_SAMPLES=$JHIPSTER_TRAVIS/samples
+    - JHIPSTER_SCRIPTS=$JHIPSTER_TRAVIS/scripts
+    - APP_FOLDER=$HOME/app
+    - UAA_APP_FOLDER=$HOME/uaa
+    # environment properties
+    - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
+    - SPRING_JPA_SHOW_SQL=false
+  matrix:
+    - JHIPSTER=app-default-from-scratch PROFILE=prod RUN_APP=0
+    - JHIPSTER=app-ng2-default PROTRACTOR=1
+    - JHIPSTER=app-ng2-psql-es-noi18n PROFILE=prod PROTRACTOR=1
+    - JHIPSTER=app-ng2-gradle-jwt-psql PROTRACTOR=1
+    - JHIPSTER=app-ng2-social-websocket PROTRACTOR=1
+    - JHIPSTER=app-ng2-sass-noi18n PROTRACTOR=1
+    - JHIPSTER=app-ng2-gateway-eureka
+    - JHIPSTER=app-ng2-gateway-consul
+    - JHIPSTER=app-ng2-gateway-uaa
+    - JHIPSTER=app-ng2-infinispan
+    - JHIPSTER=app-ng2-cassandra
+    - JHIPSTER=app-ng2-mongodb
+    - JHIPSTER=app-ng2-oauth2
+    - JHIPSTER=app-mysql PROFILE=prod PROTRACTOR=1
+    - JHIPSTER=app-gradle PROTRACTOR=1
+    - JHIPSTER=app-hazelcast-cucumber
+    - JHIPSTER=app-mariadb-kafka
+    - JHIPSTER=app-jwt
+    - JHIPSTER=app-microservice-eureka
+    - JHIPSTER=app-microservice-consul
+
+before_install:
+  - jdk_switcher use oraclejdk8
+  - java -version
+  - export TZ=Australia/Canberra
+  - date
+  - sudo /etc/init.d/mysql stop
+  - sudo /etc/init.d/postgresql stop
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  # Repo for Yarn
+  - curl -o- -L https://yarnpkg.com/install.sh | bash
+  - export PATH=$HOME/.yarn/bin:$PATH
+  - yarn global add yo bower gulp-cli
+install:
+  - cd "$TRAVIS_BUILD_DIR"/
+  - yarn install
+  - yarn link
+  - if [ "$JHIPSTER" == "app-default-from-scratch" ]; then
+        yarn run test;
+    fi
+  - $JHIPSTER_SCRIPTS/01-generate-entities.sh
+  - $JHIPSTER_SCRIPTS/02-generate-project.sh
+script:
+  - $JHIPSTER_SCRIPTS/03-docker-compose.sh
+  - $JHIPSTER_SCRIPTS/04-tests.sh
+  - $JHIPSTER_SCRIPTS/05-run.sh
+  - $JHIPSTER_SCRIPTS/06-sonar.sh
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/479b810ad42c816679fb
+    on_success: always  # options: [always|never|change] default: always
+    on_failure: always  # options: [always|never|change] default: always
+    on_start: false     # default: false

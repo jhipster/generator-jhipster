@@ -1,0 +1,15 @@
+{
+    "social": {
+        "btnLabel": "Prijavite se putem {{ label }} naloga",
+        "register": {
+            "title": "Registracija putem {{ label }} naloga",
+            "errorTitle": "Registracija putem eksternog naloga",
+            "messages": {
+                "success": "<strong>Registracija je uspela!</strong> Molimo Vas proverite svoj email za potvrdu.",
+                "error": {
+                    "fail": "<strong>Registracija nije uspela!</strong> Nastavao je problem prilikom validacije Vašeg eksternog naloga. Savetujemo Vam da probate sa drugim eksternim nalogom."
+                }
+            }
+        }
+    }
+}

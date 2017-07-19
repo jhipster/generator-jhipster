@@ -1,0 +1,15 @@
+{
+    "social": {
+        "btnLabel": "Autentificare cu {{ label }}",
+        "register": {
+            "title": "Înregistrați-vă cu {{ label }}",
+            "errorTitle": "Înregistrare cu un cont extern",
+            "messages": {
+                "success": "<strong>Înregistrare salvată!</strong> Vă rugăm să vă verificați emailul pentu confirmare.",
+                "error": {
+                    "fail": "<strong>Înregistrare eșuată!</strong> A apărut o problemă în timpul validării contului dumneavoastră extern, vă sfătuim să încercați cu o altă conexiune."
+                }
+            }
+        }
+    }
+}

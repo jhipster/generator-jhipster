@@ -1,0 +1,87 @@
+<%#
+ Copyright 2013-2017 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://jhipster.github.io/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_
+const i18nToLoad = [entityInstance];
+for (const idx in fields) {
+    if (fields[idx].fieldIsEnum === true) {
+        i18nToLoad.push(fields[idx].enumInstance);
+    }
+}
+_%>
+<%= entityInstancePlural %>: <%= entityAngularName %>[];
+    currentAccount: any;
+    eventSubscriber: Subscription;
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    currentSearch: string;
+    <%_ } _%>
+
+    constructor(
+        private <%= entityInstance %>Service: <%= entityAngularName %>Service,
+        private alertService: JhiAlertService,
+        <%_ if (fieldsContainBlob) { _%>
+        private dataUtils: JhiDataUtils,
+        <%_ } _%>
+        private eventManager: JhiEventManager,
+        <%_ if (searchEngine === 'elasticsearch') { _%>
+        private activatedRoute: ActivatedRoute,
+        <%_ } _%>
+        private principal: Principal
+    ) {
+        <%_ if (searchEngine === 'elasticsearch') { _%>
+        this.currentSearch = activatedRoute.snapshot.params['search'] ? activatedRoute.snapshot.params['search'] : '';
+        <%_ } _%>
+    }
+
+    loadAll() {
+        <%_ if (searchEngine === 'elasticsearch') { _%>
+        if (this.currentSearch) {
+            this.<%= entityInstance %>Service.search({
+                query: this.currentSearch,
+                }).subscribe(
+                    (res: ResponseWrapper) => this.<%= entityInstancePlural %> = res.json,
+                    (res: ResponseWrapper) => this.onError(res.json)
+                );
+            return;
+       }
+       <%_ } _%>
+        this.<%= entityInstance %>Service.query().subscribe(
+            (res: ResponseWrapper) => {
+                this.<%= entityInstancePlural %> = res.json;
+                <%_ if (searchEngine === 'elasticsearch') { _%>
+                this.currentSearch = '';
+                <%_ } _%>
+            },
+            (res: ResponseWrapper) => this.onError(res.json)
+        );
+    }
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+
+    search(query) {
+        if (!query) {
+            return this.clear();
+        }
+        this.currentSearch = query;
+        this.loadAll();
+    }
+
+    clear() {
+        this.currentSearch = '';
+        this.loadAll();
+    }
+    <%_ } _%>

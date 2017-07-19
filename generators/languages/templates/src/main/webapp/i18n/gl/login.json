@@ -1,0 +1,19 @@
+{
+    "login": {
+        "title": "Iniciar a sesión",
+        "form": {
+            "password": "Contrasinal",
+            "password.placeholder": "O seu contrasinal",
+            "rememberme": "Iniciar a sesión automáticamente",
+            "button": "Iniciar sesión"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>O inicio de sesión fallou!</strong> Por favor revise as credenciais e tente de novo."
+            }
+        },
+        "password" : {
+            "forgot": "Esqueceu o seu contrasinal?"
+        }
+    }
+}

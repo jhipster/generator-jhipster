@@ -1,0 +1,12 @@
+{
+    "tracker": {
+        "title": "Real-time user activities",
+        "table": {
+            "userlogin": "பயணர்",
+            "ipaddress": "ஐ.பி முகவரி",
+            "userAgent": "உலாவி",
+            "page": "தற்போதைய பக்கம்",
+            "time": "நேரம்"
+        }
+    }
+}

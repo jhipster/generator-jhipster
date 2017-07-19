@@ -1,0 +1,15 @@
+{
+    "social": {
+        "btnLabel": "Login dengan {{ label }}",
+        "register": {
+            "title": "Mendaftar dengan {{ label }}",
+            "errorTitle": "Mendaftar dengan akun lain",
+            "messages": {
+                "success": "<strong>Pendaftaran berhasil!</strong> Silakan cek email untuk melakukan aktivasi akun.",
+                "error": {
+                    "fail": "<strong>Pendaftaran gagal!</strong> Ada masalah saat melakukan pengecekan akun lain anda, kami menyarankan untuk menggunakan akun yang lain lagi."
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,32 @@
+{
+    "settings": {
+        "title": "[<b>{{username}}</b>] 사용자 설정",
+        "form": {
+            "firstname": "이름",
+            "firstname.placeholder": "이름",
+            "lastname": "성",
+            "lastname.placeholder": "성",
+            "language": "언어",
+            "button": "저장"
+        },
+        "messages": {
+            "error": {
+                "fail": "<strong>에러가 발생했습니다!</strong> 사용자 설정은 저장되지 않습니다.",
+                "emailexists": "<strong>이미 사용중인 이메일입니다!</strong> 다른 이메일 주소를 선택해 주세요."
+            },
+            "success": "<strong>사용자 설정 저장 완료!</strong>",
+            "validate": {
+                "firstname": {
+                    "required": "이름을 입력해 주세요.",
+                    "minlength": "이름은 최소 1자 이상이어야 합니다",
+                    "maxlength": "이름은 최대 50자 까지입니다"
+                },
+                "lastname": {
+                    "required": "성을 입력해 주세요.",
+                    "minlength": "성은 최소 1자 이상이어야 합니다",
+                    "maxlength": "성은 최대 50자 까지입니다"
+                }
+            }
+        }
+    }
+}

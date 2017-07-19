@@ -1,0 +1,15 @@
+{
+    "social": {
+        "btnLabel": "Logar com {{ label }}",
+        "register": {
+            "title": "Cadastrar com {{ label }}",
+            "errorTitle": "Cadastrar com uma conta externa",
+            "messages": {
+                "success": "<strong>Cadastro realizado com sucesso!</strong> Por favor, verifique seu email para confirmar.",
+                "error": {
+                    "fail": "<strong>Falha no cadastro!</strong> Ocorreu um problema de validação da sua conta externa. Por favor, tente novamente."
+                }
+            }
+        }
+    }
+}

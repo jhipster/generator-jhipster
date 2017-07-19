@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "Aktívne sedenia používateľa [<b>{{username}}</b>]",
+        "table": {
+            "ipaddress": "IP adresa",
+            "useragent": "User Agent",
+            "date": "Dátum",
+            "button": "Zrušiť"
+        },
+        "messages": {
+            "success": "<strong>Sedenie bolo zrušené!</strong>",
+            "error": "<strong>Vyskytla sa chyba!</strong> Sedenie nemohlo byť zrušené."
+        }
+    }
+}

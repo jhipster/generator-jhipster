@@ -1,0 +1,7 @@
+Description:
+    Creates a new JHipster application based on the selected options
+
+Example:
+    jhipster
+
+    This will compose jhipster:client, jhipster:server and jhipster:languages to scaffold a full application

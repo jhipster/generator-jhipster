@@ -1,0 +1,27 @@
+version: '2'
+services:
+    mscassandra-app:
+        image: mscassandra
+        environment:
+            - SPRING_PROFILES_ACTIVE=prod
+            - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+            - SPRING_DATA_CASSANDRA_CONTACTPOINTS=cassandra
+            - JHIPSTER_SLEEP=30 # gives time for the Cassandra cluster to start and execute the migration scripts
+    mscassandra-cassandra:
+        extends:
+            file: cassandra-cluster.yml
+            service: mscassandra-cassandra
+    mscassandra-cassandra-node:
+        image: cassandra:2.2.5
+        environment:
+            - CASSANDRA_SEEDS=mscassandra-cassandra
+    mscassandra-cassandra-migration:
+        extends:
+            file: cassandra-migration.yml
+            service: mscassandra-cassandra-migration
+        environment:
+            - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql
+    jhipster-registry:
+        extends:
+            file: jhipster-registry.yml
+            service: jhipster-registry

@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "Active sessions for [<b>{{username}}</b>]",
+        "table": {
+            "ipaddress": "Alamat IP",
+            "useragent": "User Agent",
+            "date": "Tanggal",
+            "button": "Invalidate"
+        },
+        "messages": {
+            "success": "<strong>Session invalidated!</strong>",
+            "error": "<strong>Muncul error!</strong> Sesi tidak bisa di invalidated."
+        }
+    }
+}

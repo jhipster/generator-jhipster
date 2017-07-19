@@ -1,0 +1,24 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "baseName": "sampleMysql",
+    "packageName": "com.mycompany.myapp",
+    "packageFolder": "com/mycompany/myapp",
+    "authenticationType": "session",
+    "hibernateCache": "ehcache",
+    "clusteredHttpSession": "no",
+    "websocket": "no",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "mysql",
+    "searchEngine": "no",
+    "useSass": false,
+    "buildTool": "maven",
+    "enableTranslation": true,
+    "enableSocialSignIn": false,
+    "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+    "testFrameworks": [
+      "gatling"
+    ]
+  }
+}

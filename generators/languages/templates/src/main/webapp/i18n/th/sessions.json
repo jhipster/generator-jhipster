@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "Active sessions for [<b>{{username}}</b>]",
+        "table": {
+            "ipaddress": "IP address",
+            "useragent": "User Agent",
+            "date": "วันที่",
+            "button": "ลบ session"
+        },
+        "messages": {
+            "success": "<strong>Session ถูกลบแล้ว!</strong>",
+            "error": "<strong>เกิดความผิดพลาด!</strong> session ไม่สามารถลบได้."
+        }
+    }
+}

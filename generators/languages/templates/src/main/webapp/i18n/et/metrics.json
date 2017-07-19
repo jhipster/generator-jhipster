@@ -1,0 +1,101 @@
+{
+    "metrics": {
+        "title": "Rakenduse meetrika",
+        "refresh.button": "Värskenda",
+        "updating": "Uuendame...",
+        "jvm": {
+            "title": "JVM meetrika",
+            "memory": {
+                "title": "Mälu",
+                "total": "Kogu mälu",
+                "heap": "Heap Memory",
+                "nonheap": "Non-Heap Memory"
+            },
+            "threads": {
+                "title": "Lõimed",
+                "all": "Kõik",
+                "runnable": "Käivitatud",
+                "timedwaiting": "Ajaga ootel",
+                "waiting": "Määramatult ootel",
+                "blocked": "Blokeeritud",
+                "dump": {
+                    "title": "Lõimede tõmmis",
+                    "id": "Id: ",
+                    "blockedtime": "Blokeeritud aeg",
+                    "blockedcount": "Blokeerimiste arv",
+                    "waitedtime": "Oodatud aeg",
+                    "waitedcount": "Ootamiste arv",
+                    "lockname": "Luku nimi",
+                    "stacktrace": "Stacktrace",
+                    "show": "Näita Stacktrace",
+                    "hide": "Peida Stacktrace"
+                }
+            },
+            "gc": {
+                "title": "Garbage collections",
+                "marksweepcount": "Mark Sweep count",
+                "marksweeptime": "Mark Sweep time",
+                "scavengecount": "Scavenge count",
+                "scavengetime": "Scavenge time"
+            },
+            "http": {
+                "title": "HTTP päringud (sündmusi sekundis)",
+                "active": "Aktiivsed päringud:",
+                "total": "Kokku päringuid:",
+                "table": {
+                    "code": "Kood",
+                    "count": "Arv",
+                    "mean": "Keskväärtus",
+                    "average": "Keskmine"
+                },
+                "code": {
+                    "ok": "Ok",
+                    "notfound": "Ei leitud",
+                    "servererror": "Serveri viga"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Teenuste statistika (aeg on millisekundites)",
+            "table": {
+                "name": "Teenuse nimi",
+                "count": "Arv",
+                "mean": "Keskväärtus",
+                "min": "Min",
+                "max": "Maks",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "cache": {
+            "title": "Cache statistics",
+            "cachename": "Cache name",
+            "hits": "Cache Hits",
+            "misses": "Cache Misses",
+            "gets": "Cache Gets",
+            "puts": "Cache Puts",
+            "removals": "Cache Removals",
+            "evictions": "Cache Evictions",
+            "hitPercent": "Cache Hit %",
+            "missPercent": "Cache Miss %",
+            "averageGetTime": "Average get time (µs)",
+            "averagePutTime": "Average put time (µs)",
+            "averageRemoveTime": "Average remove time (µs)"
+        },
+        "datasource": {
+            "usage": "Kasutus",
+            "title": "Andmeallika statistika (aeg on millisekundites)",
+            "name": "Puuli kasutamine",
+            "count": "Arv",
+            "mean": "Keskväärtus",
+            "min": "Min",
+            "max": "Maks",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
+        }
+    }
+}

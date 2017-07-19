@@ -1,0 +1,12 @@
+node_modules
+.idea
+*.iml
+*.ipr
+*.iws
+atlassian-ide-plugin.xml
+/.project
+test/temp/
+*debug.log*
+.vscode
+yarn.lock
+.DS_Store

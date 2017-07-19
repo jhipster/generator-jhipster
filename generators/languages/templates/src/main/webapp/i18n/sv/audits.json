@@ -1,0 +1,27 @@
+{
+    "audits": {
+        "title": "Granskningar",
+        "filter": {
+            "title": "Filter per datum",
+            "from": "från",
+            "to": "till",
+            "button": {
+                "weeks": "Veckor",
+                "today": "idag",
+                "clear": "rensa",
+                "close": "stäng"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Användare",
+                "date": "Datum",
+                "status": "Status",
+                "data": "Extra data"
+            },
+            "data": {
+                "remoteAddress": "Fjärradress:"
+            }
+        }
+    }
+}

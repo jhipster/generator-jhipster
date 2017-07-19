@@ -1,0 +1,7 @@
+Description:
+    Creates a new JHipster client side application based on the selected options
+
+Example:
+    jhipster client
+
+    This will create an AngularJS client app

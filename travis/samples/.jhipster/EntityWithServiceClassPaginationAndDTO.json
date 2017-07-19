@@ -1,0 +1,15 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "lena",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20160806123744",
+    "entityTableName": "entity_with_service_class_pagination_and_dto",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass"
+}

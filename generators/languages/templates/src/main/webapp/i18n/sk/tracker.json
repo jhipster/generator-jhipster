@@ -1,0 +1,12 @@
+{
+    "tracker": {
+        "title": "Real-time používateľské aktivity",
+        "table": {
+            "userlogin": "Používateľ",
+            "ipaddress": "IP Adresa",
+            "userAgent": "User agent",
+            "page": "Aktuálna stránka",
+            "time": "Čas"
+        }
+    }
+}

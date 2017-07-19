@@ -1,0 +1,24 @@
+{
+    "register": {
+        "title": "註冊",
+        "form": {
+            "button": "註冊"
+        },
+        "messages": {
+            "validate": {
+                "login": {
+                    "required": "您的帳號是必填欄位。",
+                    "minlength": "您的帳號長度至少要有 1 個字元。",
+                    "maxlength": "您的帳號長度不能超過 50 個字元。",
+                    "pattern": "你的帳號只能使用小寫英文及數字"
+                }
+            },
+            "success": "<strong>註冊成功!</strong> 請檢查您的電子郵件信箱進行確認。",
+            "error": {
+                "fail": "<strong>註冊失敗!</strong> 請稍後再試。",
+                "userexists": "<strong>帳號已經被註冊!</strong> 請選擇其他帳號。",
+                "emailexists": "<strong>電子郵件已經註冊過!</strong> 請使用其他電子郵件地址。"
+            }
+        }
+    }
+}

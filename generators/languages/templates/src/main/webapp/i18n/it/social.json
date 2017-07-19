@@ -1,0 +1,15 @@
+{
+    "social": {
+        "btnLabel": "Accedi con {{ label }}",
+        "register": {
+            "title": "Registrati con {{ label }}",
+            "errorTitle": "Registrato con un account esterno",
+            "messages": {
+                "success": "<strong>Registrazione salvata!</strong> Si prega di controllare l'email per confermare la registrazione.",
+                "error": {
+                    "fail": "<strong>Registrazione fallita!</strong>Si è verificato un errore durante la validazione del tuo account esterno. Si consiglia di provare con un altro servizio."
+                }
+            }
+        }
+    }
+}

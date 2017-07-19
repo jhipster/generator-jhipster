@@ -1,0 +1,14 @@
+version: '2'
+services:
+    samplemysql-app:
+        image: samplemysql
+        environment:
+            - SPRING_PROFILES_ACTIVE=prod,swagger
+            - SPRING_DATASOURCE_URL=jdbc:mysql://samplemysql-mysql:3306/samplemysql?useUnicode=true&characterEncoding=utf8&useSSL=false
+            - JHIPSTER_SLEEP=10 # gives time for the database to boot before the application
+        ports:
+            - 8080:8080
+    samplemysql-mysql:
+        extends:
+            file: mysql.yml
+            service: samplemysql-mysql

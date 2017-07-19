@@ -1,0 +1,36 @@
+{
+  "generator-jhipster": {
+    "baseName": "travisNg2Jwt",
+    "packageName": "io.github.jhipster.travis",
+    "packageFolder": "io/github/jhipster/travis",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "hibernateCache": "ehcache",
+    "clusteredHttpSession": false,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "postgresql",
+    "prodDatabaseType": "postgresql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "buildTool": "gradle",
+    "enableSocialSignIn": false,
+    "useSass": false,
+    "applicationType": "monolith",
+    "testFrameworks": [
+      "gatling",
+      "protractor"
+    ],
+    "jhiPrefix": "jhi",
+    "enableTranslation": true,
+    "nativeLanguage": "en",
+    "languages": [
+      "en"
+    ],
+    "travis": true,
+    "serviceDiscoveryType": false,
+    "jwtSecretKey": "82c6dce0d969c5bc3ab2530ecc5c18baaef1c987",
+    "clientPackageManager": "yarn",
+    "clientFramework": "angularX"
+  }
+}

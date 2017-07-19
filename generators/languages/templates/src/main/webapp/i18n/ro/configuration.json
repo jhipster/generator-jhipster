@@ -1,0 +1,10 @@
+{
+    "configuration": {
+        "title": "Configurare",
+        "filter": "Filtru (după prefix)",
+        "table": {
+            "prefix": "Prefix",
+            "properties": "Proprietăți"
+        }
+    }
+}

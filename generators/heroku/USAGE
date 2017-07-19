@@ -1,0 +1,10 @@
+Description:
+    Initializes a Heroku app and generates a WAR file that is ready to push to Heroku.
+
+Example:
+    jhipster heroku
+
+    This will create:
+        Procfile
+        src/main/java/your_package_name/config/HerokuDatabaseConfiguration.java
+        gradle/heroku.gradle

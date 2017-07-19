@@ -1,0 +1,27 @@
+{
+    "audits": {
+        "title": "Denetim",
+        "filter": {
+            "title": "Tarihleri filtrele",
+            "from": "kimden",
+            "to": "kime",
+            "button": {
+                "weeks": "Hafta",
+                "today": "bugün",
+                "clear": "temizle",
+                "close": "kapat"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Kullanıcı",
+                "date": "Tarih",
+                "status": "Durum",
+                "data": "Ekstra bilgi"
+            },
+            "data": {
+                "remoteAddress": "Uzak Adres:"
+            }
+        }
+    }
+}

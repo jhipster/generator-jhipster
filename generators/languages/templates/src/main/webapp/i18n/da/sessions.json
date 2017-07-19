@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "Aktive sessioner for [<b>{{username}}</b>]",
+        "table": {
+            "ipaddress": "IP-adresse",
+            "useragent": "User Agent",
+            "date": "Dato",
+            "button": "Luk"
+        },
+        "messages": {
+            "success": "<strong>Session lukket!</strong>",
+            "error": "<strong>Der opstod en fejl!</strong> Sessionen kunne ikke lukkes."
+        }
+    }
+}

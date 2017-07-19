@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "Các phiên đăng nhập hiện tại của [<b>{{username}}</b>]",
+        "table": {
+            "ipaddress": "Địa chỉ IP",
+            "useragent": "Trình duyệt",
+            "date": "Ngày",
+            "button": "Đóng phiên này"
+        },
+        "messages": {
+            "success": "<strong>Phiên đăng nhập đã được đóng!</strong>",
+            "error": "<strong>Có lỗi xảy ra!</strong> Không thể đóng phiên đăng nhập."
+        }
+    }
+}

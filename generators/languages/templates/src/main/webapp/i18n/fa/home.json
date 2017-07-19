@@ -1,0 +1,19 @@
+{
+    "home": {
+        "title": "خوش آمدید, Java Hipster!",
+        "subtitle": "این صفحه اصلی شماست",
+        "logged": {
+            "message": "شما وارد شدید با کاربر \"{{username}}\"."
+        },
+        "question": "اگر سوالی دارید؟ در مورد JHipster:",
+        "link": {
+            "homepage": "JHipster صفحه اصلی",
+            "stackoverflow": "JHipster در Stack Overflow",
+            "bugtracker": "JHipster bug tracker",
+            "chat": "JHipster public chat room",
+            "follow": "دنبال کنید @java_hipster در Twitter"
+        },
+        "like": "اگر JHipster را دوست دارید، فراموش نکنید بهش ستاره بدید در",
+        "github": "GitHub"
+    }
+}

@@ -1,0 +1,93 @@
+{
+    "metrics": {
+        "title": "मेट्रिक्स अर्ज",
+        "refresh.button": "Refresh",
+        "updating": "अद्यतनित करीत आहे...",
+        "jvm": {
+            "title": "JVM मेट्रिक्स",
+            "memory": {
+                "title": "मेमरी",
+                "total": "एकूण मेमरी",
+                "heap": "हीप मेमरी",
+                "nonheap": "नॉन-भांड्याखाली सारा मेमरी"
+            },
+            "threads": {
+                "title": "थ्रेड्स",
+                "all": "सर्व",
+                "runnable": "Runnable",
+                "timedwaiting": "समयोचित प्रतिक्षा",
+                "waiting": "प्रतीक्षा",
+                "blocked": "अवरोधित",
+                "dump": {
+                    "title": "थ्रेड्स डंप",
+                    "id": "Id: ",
+                    "blockedtime": "वेळ अवरोधित",
+                    "blockedcount": "अवरोधित संख्या",
+                    "waitedtime": "वेळ वाट पाहिली",
+                    "waitedcount": "वेळ वाट पाहिली संख्या",
+                    "lockname": "लॉक  नाव ",
+                    "stacktrace": "Stacktrace",
+                    "show": "Stacktrace दाखवा ",
+                    "hide": "Stacktrace लपवा "
+                }
+            },
+            "gc": {
+                "title": "कचरा संग्रह",
+                "marksweepcount": "मार्क स्वीप मोजणी",
+                "marksweeptime": "मार्क स्वीप वेळ",
+                "scavengecount": "संख्या झाडणे",
+                "scavengetime": "वेळ झाडणे"
+            },
+            "http": {
+                "title": "HTTP विनंत्या (प्रति सेकंद घटना)",
+                "active": "सक्रिय विनंत्या:",
+                "total": "एकूण विनंत्या:",
+                "table": {
+                    "code": "कोड",
+                    "count": "गणना",
+                    "mean": "मध्य ",
+                    "average": "सरासरी"
+                },
+                "code": {
+                    "ok": "ठीक ",
+                    "notfound": "आढळले नाही",
+                    "servererror": "सर्व्हर त्रुटी"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "सेवा आकडेवारी (मिलिसेकंद वेळ)",
+            "table": {
+                "name": "सेवा नाव",
+                "count": "गणना",
+                "mean": "मध्य",
+                "min": "किमान",
+                "max": "कमाल",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "cache": {
+            "title": "Cache आकडेवारी",
+            "cachename": "कॅशे नाव",
+            "hits": "हिट्स",
+            "misses": "Misses",
+            "evictions": "जमा मोजणी"
+        },
+        "datasource": {
+            "usage": "वापर",
+            "title": "माहितीचा स्रोत आकडेवारी (मिलिसेकंद वेळ)",
+            "name": "पूल वापर",
+            "count": "गणना",
+            "mean": "मध्य",
+            "min": "किमान",
+            "max": "कमाल",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
+        }
+    }
+}

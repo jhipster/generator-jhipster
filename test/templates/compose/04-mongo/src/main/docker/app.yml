@@ -1,0 +1,17 @@
+version: '2'
+services:
+    msmongodb-app:
+        image: msmongodb
+        environment:
+            - SPRING_PROFILES_ACTIVE=prod
+            - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+            - SPRING_DATA_MONGODB_URI=mongodb://msmongodb-mongodb:27017
+            - SPRING_DATA_MONGODB_DATABASE=msmongodb
+    msmongodb-mongodb:
+        extends:
+            file: mongodb.yml
+            service: msmongodb-mongodb
+    jhipster-registry:
+        extends:
+            file: jhipster-registry.yml
+            service: jhipster-registry

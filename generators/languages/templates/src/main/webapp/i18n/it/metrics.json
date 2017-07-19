@@ -1,0 +1,93 @@
+{
+    "metrics": {
+        "title": "Metriche dell'applicazione",
+        "refresh.button": "Aggiorna",
+        "updating": "Aggiornamento...",
+        "jvm": {
+            "title": "Metriche di JVM",
+            "memory": {
+                "title": "Memoria",
+                "total": "Memoria Totale",
+                "heap": "Memoria Heap",
+                "nonheap": "Memoria Non-Heap"
+            },
+            "threads": {
+                "title": "Threads",
+                "all": "Tutti",
+                "runnable": "Runnable",
+                "timedwaiting": "Timed waiting",
+                "waiting": "Waiting",
+                "blocked": "Blocked",
+                "dump": {
+                    "title": "Threads dump",
+                    "id": "Id: ",
+                    "blockedtime": "Blocked Time",
+                    "blockedcount": "Blocked Count",
+                    "waitedtime": "Waited Time",
+                    "waitedcount": "Waited Count",
+                    "lockname": "Lock name",
+                    "stacktrace": "Stacktrace",
+                    "show": "Show",
+                    "hide": "Hide"
+                }
+            },
+            "gc": {
+                "title": "Garbage collections",
+                "marksweepcount": "Mark Sweep count",
+                "marksweeptime": "Mark Sweep time",
+                "scavengecount": "Scavenge count",
+                "scavengetime": "Scavenge time"
+            },
+            "http": {
+                "title": "Richieste HTTP (eventi al secondo)",
+                "active": "Richieste attive:",
+                "total": "Richieste totali:",
+                "table": {
+                    "code": "Codice",
+                    "count": "Numero",
+                    "mean": "Mediana",
+                    "average": "Media"
+                },
+                "code": {
+                    "ok": "Ok",
+                    "notfound": "Non trovato/i",
+                    "servererror": "Errore Server"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Statistiche Servizi (in millisecondi)",
+            "table": {
+                "name": "Nome servizio",
+                "count": "Count",
+                "mean": "Mean",
+                "min": "Min",
+                "max": "Max",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "cache": {
+            "title": "Statistiche cache",
+            "cachename": "Nome Cache",
+            "hits": "Hits",
+            "misses": "Misses",
+            "evictions": "Evictions"
+        },
+        "datasource": {
+            "usage": "Utilizzo",
+            "title": "Statistiche DataSource (in millisecondi)",
+            "name": "Pool usage",
+            "count": "Count",
+            "mean": "Mean",
+            "min": "Min",
+            "max": "Max",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
+        }
+    }
+}
