@@ -71,8 +71,8 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/FooRepository.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/FooResource.java`,
         // SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIntTest.java`,
-        `${TEST_DIR}gatling/user-files/simulations/FooGatlingTest.scala`
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/ITFooResource.java`,
+        `${TEST_DIR}gatling/user-files/simulations/ITGatlingFoo.scala`
     ]
 };
 describe('JHipster generator entity for angular1', () => {
