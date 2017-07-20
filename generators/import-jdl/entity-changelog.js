@@ -20,7 +20,9 @@
 const jsonpatch = require('fast-json-patch');
 const _ = require('lodash');
 
-module.exports = { diff, isEnumType, isEnum, patchToChangesetData };
+module.exports = {
+    diff, isEnumType, isEnum, jdlTypeToDbType, patchToChangesetData
+};
 
 function diff(before, after) {
     return jsonpatch.compare(before, after);
@@ -51,6 +53,57 @@ function isEnumType(fieldType) {
 function isEnum(fieldType, databaseType) {
     return (databaseType === 'sql' || databaseType === 'mongodb')
         && isEnumType(fieldType);
+}
+
+/**
+ * Determine correct DB type for given (JDL) field
+ *
+ * @param {Object} field - JDL field
+ * @param {String} databaseType - database type (sql, mongodb, cassandra)
+ * @returns {String} - type to use in liquibase column definition
+ */
+function jdlTypeToDbType(field, databaseType) {
+    switch (true) {
+    case field.fieldType === 'String' || isEnum(field.fieldType, databaseType): {
+        let maxlength = 255;
+        if (field.fieldValidateRulesMaxlength) {
+            maxlength = field.fieldValidateRulesMaxlength;
+        }
+        return `varchar(${maxlength})`;
+    }
+    case field.fieldType === 'Integer':
+        return 'integer';
+    case field.fieldType === 'Long':
+        return 'bigint';
+    case field.fieldType === 'Float':
+        // TODO: this relies on `floatType` being defined in the liquibase
+        //   changelog but lets it handle differences accross databases
+        return '${floatType}'; // eslint-disable-line no-template-curly-in-string
+    case field.fieldType === 'Double':
+        return 'double';
+    case field.fieldType === 'BigDecimal':
+        return 'decimal(10,2)';
+    case field.fieldType === 'LocalDate':
+        return 'date';
+    case field.fieldType === 'Instant':
+        return 'timestamp';
+    case field.fieldType === 'ZonedDateTime':
+        return 'timestamp';
+    case field.fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text':
+        if (databaseType === 'mysql' || databaseType === 'postgresql') {
+            return 'longblob';
+        }
+        return 'blob';
+    case field.fieldTypeBlobContent === 'text':
+        return 'clob';
+    case field.fieldType === 'Boolean':
+        if (databaseType === 'postgresql') {
+            return 'boolean';
+        }
+        return 'bit';
+    default:
+        return undefined;
+    }
 }
 
 /**

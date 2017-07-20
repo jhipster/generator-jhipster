@@ -36,6 +36,153 @@ describe.only('JHipster entity changelogs', () => {
         });
     });
 
+    describe('jdlTypeToDbType', () => {
+        const tests = [
+            {
+                field: {
+                    fieldName: 'someName',
+                    fieldType: 'String'
+                },
+                databaseType: 'sql',
+                expected: 'varchar(255)'
+            },
+            {
+                field: {
+                    fieldName: 'someLimitedString',
+                    fieldType: 'String',
+                    fieldValidateRules: ['maxlength'],
+                    fieldValidateRulesMaxlength: 20
+                },
+                databaseType: 'sql',
+                expected: 'varchar(20)'
+            },
+            {
+                field: {
+                    fieldName: 'someNo',
+                    fieldType: 'Integer'
+                },
+                databaseType: 'sql',
+                expected: 'integer'
+            },
+            {
+                field: {
+                    fieldName: 'someLong',
+                    fieldType: 'Long'
+                },
+                databaseType: 'sql',
+                expected: 'bigint'
+            },
+            {
+                field: {
+                    fieldName: 'someFloat',
+                    fieldType: 'Float'
+                },
+                expected: '${floatType}' // eslint-disable-line no-template-curly-in-string
+            },
+            {
+                field: {
+                    fieldName: 'someDouble',
+                    fieldType: 'Double'
+                },
+                databaseType: 'sql',
+                expected: 'double'
+            },
+            {
+                field: {
+                    fieldName: 'someBigDecimal',
+                    fieldType: 'BigDecimal'
+                },
+                databaseType: 'sql',
+                expected: 'decimal(10,2)'
+            },
+            {
+                field: {
+                    fieldName: 'someDate',
+                    fieldType: 'LocalDate'
+                },
+                databaseType: 'sql',
+                expected: 'date'
+            },
+            {
+                field: {
+                    fieldName: 'someInstant',
+                    fieldType: 'Instant'
+                },
+                databaseType: 'sql',
+                expected: 'timestamp'
+            },
+            {
+                field: {
+                    fieldName: 'someZonedDateTime',
+                    fieldType: 'ZonedDateTime'
+                },
+                databaseType: 'sql',
+                expected: 'timestamp'
+            },
+            {
+                field: {
+                    fieldName: 'someByteArray',
+                    fieldType: 'byte[]',
+                    fieldTypeBlobContent: 'any'
+                },
+                databaseType: 'postgresql',
+                expected: 'longblob'
+            },
+            {
+                field: {
+                    fieldName: 'someByteArray',
+                    fieldType: 'byte[]',
+                    fieldTypeBlobContent: 'any'
+                },
+                databaseType: 'mysql',
+                expected: 'longblob'
+            },
+            {
+                field: {
+                    fieldName: 'someByteArray',
+                    fieldType: 'byte[]',
+                    fieldTypeBlobContent: 'any'
+                },
+                databaseType: 'sql',
+                expected: 'blob'
+            },
+            {
+                field: {
+                    fieldName: 'someByteArray',
+                    fieldType: 'byte[]',
+                    fieldTypeBlobContent: 'text'
+                },
+                databaseType: 'sql',
+                expected: 'clob'
+            },
+            {
+                field: {
+                    fieldName: 'someBoolean',
+                    fieldType: 'Boolean'
+                },
+                databaseType: 'postgresql',
+                expected: 'boolean'
+            },
+            {
+                field: {
+                    fieldName: 'someBoolean',
+                    fieldType: 'Boolean'
+                },
+                databaseType: 'sql',
+                expected: 'bit'
+            },
+        ];
+
+        tests.forEach((test) => {
+            it(`converts ${test.field.fieldType} to ${test.expected} type correctly`, () => {
+                assert.equal(
+                    entityChangelog.jdlTypeToDbType(
+                        test.field, test.databaseType),
+                    test.expected);
+            });
+        });
+    });
+
     describe('patchToChangesetData', () => {
         it('produces a rename change/refactoring given a table name change', () => {
             const entityBefore = { entityTableName: 'table_name' };
