@@ -211,7 +211,12 @@ describe.only('JHipster entity changelogs', () => {
                     fields: [
                         { fieldName: 'foo', fieldType: 'Integer' },
                         { fieldName: 'bar', fieldType: 'String' },
-                        { fieldName: 'baz', fieldType: 'Instant' }
+                        { fieldName: 'baz', fieldType: 'Instant' },
+                        {
+                            fieldName: 'qux',
+                            fieldType: 'BigDecimal',
+                            fieldValidateRules: ['required']
+                        }
                     ],
                     entityTableName: 'table_name'
                 },
@@ -225,6 +230,15 @@ describe.only('JHipster entity changelogs', () => {
                         op: 'add',
                         path: '/fields/2',
                         value: { fieldName: 'baz', fieldType: 'Instant' }
+                    },
+                    {
+                        op: 'add',
+                        path: '/fields/3',
+                        value: {
+                            fieldName: 'qux',
+                            fieldType: 'BigDecimal',
+                            fieldValidateRules: ['required']
+                        }
                     }
                 ]
             };
@@ -236,7 +250,8 @@ describe.only('JHipster entity changelogs', () => {
                 tableName: 'table_name',
                 columns: [
                     { name: 'bar', type: 'varchar(255)', nullable: true },
-                    { name: 'baz', type: 'timestamp', nullable: true }
+                    { name: 'baz', type: 'timestamp', nullable: true },
+                    { name: 'qux', type: 'decimal(10,2)', nullable: false }
                 ]
             }]);
         });
