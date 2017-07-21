@@ -229,7 +229,8 @@ describe.only('JHipster entity changelogs', () => {
                 ]
             };
 
-            const changeset = entityChangelog.patchToChangesetData(ctx);
+            const dbType = 'sql';
+            const changeset = entityChangelog.patchToChangesetData(ctx, dbType);
             assert.deepEqual(changeset, [{
                 change: 'addColumn',
                 tableName: 'table_name',

@@ -112,8 +112,10 @@ function jdlTypeToDbType(field, databaseType) {
  *
  * @param {Object} ctx - context object containing entity definitions before
  * and after the change, and the diff
+ * @param {String} dbType - type of production database (sql, postgresql,
+ * mysql, mongodb, cassandra, etc.)
  */
-function patchToChangesetData(ctx) {
+function patchToChangesetData(ctx, dbType) {
     const lqChangeset = [];
 
     // placeholders for column add/remove changes, so we can group all
