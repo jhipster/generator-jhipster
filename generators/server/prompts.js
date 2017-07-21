@@ -17,8 +17,6 @@
  * limitations under the License.
  */
 
-const path = require('path');
-const shelljs = require('shelljs');
 const crypto = require('crypto');
 
 const constants = require('../generator-constants');
@@ -36,10 +34,9 @@ function askForModuleName() {
     this.askModuleName(this);
 }
 
-function askForServerSideOpts() {
-    if (this.existingProject) return;
+function askForServerSideOpts(meta) {
+    if (!meta && this.existingProject) return;
 
-    const done = this.async();
     const applicationType = this.applicationType;
     let defaultPort = applicationType === 'gateway' ? '8080' : '8081';
     if (applicationType === 'uaa') {
@@ -161,7 +158,7 @@ function askForServerSideOpts() {
             ),
             default: '../uaa',
             validate: (input) => {
-                const uaaAppData = getUaaAppName.call(this, input);
+                const uaaAppData = this.getUaaAppName(input);
 
                 if (uaaAppData && uaaAppData.baseName && uaaAppData.applicationType === 'uaa') {
                     return true;
@@ -407,6 +404,10 @@ function askForServerSideOpts() {
         }
     ];
 
+    if (meta) return prompts; // eslint-disable-line consistent-return
+
+    const done = this.async();
+
     this.prompt(prompts).then((props) => {
         this.serviceDiscoveryType = props.serviceDiscoveryType;
         this.authenticationType = props.authenticationType;
@@ -445,7 +446,7 @@ function askForServerSideOpts() {
         this.prodDatabaseType = props.prodDatabaseType;
         this.searchEngine = props.searchEngine;
         this.buildTool = props.buildTool;
-        this.uaaBaseName = getUaaAppName.call(this, props.uaaBaseName).baseName;
+        this.uaaBaseName = this.getUaaAppName(props.uaaBaseName).baseName;
 
         if (this.databaseType === 'no') {
             this.devDatabaseType = 'no';
@@ -468,10 +469,9 @@ function askForServerSideOpts() {
     });
 }
 
-function askForOptionalItems() {
-    if (this.existingProject) return;
+function askForOptionalItems(meta) {
+    if (!meta && this.existingProject) return;
 
-    const done = this.async();
     const applicationType = this.applicationType;
     const choices = [];
     const defaultChoice = [];
@@ -516,14 +516,19 @@ function askForOptionalItems() {
         }
     );
 
+    const PROMPTS = {
+        type: 'checkbox',
+        name: 'serverSideOptions',
+        message: response => this.getNumberedQuestion('Which other technologies would you like to use?', true),
+        choices,
+        default: defaultChoice
+    };
+
+    if (meta) return PROMPTS; // eslint-disable-line consistent-return
+
+    const done = this.async();
     if (choices.length > 0) {
-        this.prompt({
-            type: 'checkbox',
-            name: 'serverSideOptions',
-            message: response => this.getNumberedQuestion('Which other technologies would you like to use?', true),
-            choices,
-            default: defaultChoice
-        }).then((prompt) => {
+        this.prompt(PROMPTS).then((prompt) => {
             this.serverSideOptions = prompt.serverSideOptions;
             this.clusteredHttpSession = this.getOptionFromArray(this.serverSideOptions, 'clusteredHttpSession');
             this.websocket = this.getOptionFromArray(this.serverSideOptions, 'websocket');
@@ -545,24 +550,4 @@ function askFori18n() {
     if (this.existingProject || this.configOptions.skipI18nQuestion) return;
 
     this.aski18n(this);
-}
-
-function getUaaAppName(input) {
-    if (!input) return false;
-
-    input = input.trim();
-    let fromPath = '';
-    if (path.isAbsolute(input)) {
-        fromPath = `${input}/.yo-rc.json`;
-    } else {
-        fromPath = this.destinationPath(`${input}/.yo-rc.json`);
-    }
-
-    if (shelljs.test('-f', fromPath)) {
-        const fileData = this.fs.readJSON(fromPath);
-        if (fileData && fileData['generator-jhipster']) {
-            return fileData['generator-jhipster'];
-        } return false;
-    }
-    return false;
 }

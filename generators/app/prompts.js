@@ -47,39 +47,42 @@ function askForInsightOptIn() {
     });
 }
 
-function askForApplicationType() {
-    if (this.existingProject) return;
+function askForApplicationType(meta) {
+    if (!meta && this.existingProject) return;
 
     const DEFAULT_APPTYPE = 'monolith';
+    const PROMPT = {
+        type: 'list',
+        name: 'applicationType',
+        message: response => this.getNumberedQuestion('Which *type* of application would you like to create?', true),
+        choices: [
+            {
+                value: DEFAULT_APPTYPE,
+                name: 'Monolithic application (recommended for simple projects)'
+            },
+            {
+                value: 'microservice',
+                name: 'Microservice application'
+            },
+            {
+                value: 'gateway',
+                name: 'Microservice gateway'
+            },
+            {
+                value: 'uaa',
+                name: '[BETA] JHipster UAA server (for microservice OAuth2 authentication)'
+            }
+        ],
+        default: DEFAULT_APPTYPE
+    };
+
+    if (meta) return PROMPT; // eslint-disable-line consistent-return
 
     const done = this.async();
 
     const promise = this.skipServer
         ? Promise.resolve({ applicationType: DEFAULT_APPTYPE })
-        : this.prompt({
-            type: 'list',
-            name: 'applicationType',
-            message: response => this.getNumberedQuestion('Which *type* of application would you like to create?', true),
-            choices: [
-                {
-                    value: DEFAULT_APPTYPE,
-                    name: 'Monolithic application (recommended for simple projects)'
-                },
-                {
-                    value: 'microservice',
-                    name: 'Microservice application'
-                },
-                {
-                    value: 'gateway',
-                    name: 'Microservice gateway'
-                },
-                {
-                    value: 'uaa',
-                    name: '[BETA] JHipster UAA server (for microservice OAuth2 authentication)'
-                }
-            ],
-            default: DEFAULT_APPTYPE
-        });
+        : this.prompt(PROMPT);
     promise.then((prompt) => {
         this.applicationType = this.configOptions.applicationType = prompt.applicationType;
         done();
@@ -101,33 +104,37 @@ function askFori18n() {
     this.aski18n(this);
 }
 
-function askForTestOpts() {
-    if (this.existingProject) return;
+function askForTestOpts(meta) {
+    if (!meta && this.existingProject) return;
 
     const choices = [];
     const defaultChoice = [];
-    if (!this.skipServer) {
+    if (meta || !this.skipServer) {
         // all server side test frameworks should be added here
         choices.push(
             { name: 'Gatling', value: 'gatling' },
             { name: 'Cucumber', value: 'cucumber' }
         );
     }
-    if (!this.skipClient) {
+    if (meta || !this.skipClient) {
         // all client side test frameworks should be added here
         choices.push(
             { name: 'Protractor', value: 'protractor' }
         );
     }
-    const done = this.async();
-
-    this.prompt({
+    const PROMPT = {
         type: 'checkbox',
         name: 'testFrameworks',
         message: response => this.getNumberedQuestion('Besides JUnit and Karma, which testing frameworks would you like to use?', true),
         choices,
         default: defaultChoice
-    }).then((prompt) => {
+    };
+
+    if (meta) return PROMPT; // eslint-disable-line consistent-return
+
+    const done = this.async();
+
+    this.prompt(PROMPT).then((prompt) => {
         this.testFrameworks = prompt.testFrameworks;
         done();
     });
