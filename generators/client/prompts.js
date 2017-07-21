@@ -29,13 +29,12 @@ function askForModuleName() {
     this.askModuleName(this);
 }
 
-function askForClient() {
-    if (this.existingProject) return;
+function askForClient(meta) {
+    if (!meta && this.existingProject) return;
 
-    const done = this.async();
     const applicationType = this.applicationType;
 
-    this.prompt({
+    const PROMPT = {
         type: 'list',
         name: 'clientFramework',
         when: response => (applicationType !== 'microservice' && applicationType !== 'uaa'),
@@ -52,7 +51,13 @@ function askForClient() {
             }
         ],
         default: 'angularX'
-    }).then((prompt) => {
+    };
+
+    if (meta) return PROMPT; // eslint-disable-line consistent-return
+
+    const done = this.async();
+
+    this.prompt(PROMPT).then((prompt) => {
         this.clientFramework = prompt.clientFramework;
         done();
     });

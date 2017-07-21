@@ -581,4 +581,28 @@ module.exports = class extends Generator {
         const out = this.getAllSupportedLanguageOptions().filter(lang => language === lang.value);
         return out && out[0] && !!out[0].skipForLocale;
     }
+
+    /**
+     * Get UAA app name from path provided.
+     * @param {string} input
+     */
+    getUaaAppName(input) {
+        if (!input) return false;
+
+        input = input.trim();
+        let fromPath = '';
+        if (path.isAbsolute(input)) {
+            fromPath = `${input}/.yo-rc.json`;
+        } else {
+            fromPath = this.destinationPath(`${input}/.yo-rc.json`);
+        }
+
+        if (shelljs.test('-f', fromPath)) {
+            const fileData = this.fs.readJSON(fromPath);
+            if (fileData && fileData['generator-jhipster']) {
+                return fileData['generator-jhipster'];
+            } return false;
+        }
+        return false;
+    }
 };
