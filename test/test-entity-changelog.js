@@ -279,5 +279,42 @@ describe.only('JHipster entity changelogs', () => {
                 ]
             }]);
         });
+
+        it('produces additional content-type column for blobs', () => {
+            const ctx = {
+                before: { fields: [] },
+                after: {
+                    fields: [
+                        {
+                            fieldName: 'foo',
+                            fieldType: 'byte[]',
+                            fieldTypeBlobContent: 'any'
+                        }
+                    ],
+                    entityTableName: 'table_name'
+                },
+                diff: [
+                    {
+                        op: 'add',
+                        path: '/fields/0',
+                        value: {
+                            fieldName: 'foo',
+                            fieldType: 'byte[]',
+                            fieldTypeBlobContent: 'any'
+                        }
+                    }
+                ]
+            };
+
+            const changeset = entityChangelog.patchToChangesetData(ctx, 'sql');
+            assert.deepEqual(changeset, [{
+                change: 'addColumn',
+                tableName: 'table_name',
+                columns: [
+                    { name: 'foo', type: 'blob', nullable: true },
+                    { name: 'foo_content_type', type: 'varchar(255)', nullable: true }
+                ]
+            }]);
+        });
     });
 });

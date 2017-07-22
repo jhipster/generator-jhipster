@@ -162,11 +162,22 @@ function patchToChangesetData(ctx, dbType) {
                         columns: []
                     };
                 }
+
+                const field = operation.value;
+
                 addColumnChange.columns.push({
-                    name: operation.value.fieldName,
-                    type: jdlTypeToDbType(operation.value, dbType),
-                    nullable: isNullable(operation.value)
+                    name: field.fieldName,
+                    type: jdlTypeToDbType(field, dbType),
+                    nullable: isNullable(field)
                 });
+
+                if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text') {
+                    addColumnChange.columns.push({
+                        name: `${field.fieldName}_content_type`,
+                        type: 'varchar(255)',
+                        nullable: isNullable(field)
+                    });
+                }
             } else {
                 throw new Error(`unknown operation ${operation.op} on ${operation.path}`);
             }
