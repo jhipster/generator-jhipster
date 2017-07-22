@@ -164,7 +164,8 @@ function patchToChangesetData(ctx, dbType) {
                 }
                 addColumnChange.columns.push({
                     name: operation.value.fieldName,
-                    type: jdlTypeToDbType(operation.value, dbType)
+                    type: jdlTypeToDbType(operation.value, dbType),
+                    nullable: isNullable(operation.value)
                 });
             } else {
                 throw new Error(`unknown operation ${operation.op} on ${operation.path}`);
