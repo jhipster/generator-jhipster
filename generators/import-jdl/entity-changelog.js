@@ -21,7 +21,7 @@ const jsonpatch = require('fast-json-patch');
 const _ = require('lodash');
 
 module.exports = {
-    diff, isEnumType, isEnum, jdlTypeToDbType, patchToChangesetData
+    diff, isEnumType, isEnum, jdlTypeToDbType, isNullable, patchToChangesetData
 };
 
 function diff(before, after) {
@@ -104,6 +104,16 @@ function jdlTypeToDbType(field, databaseType) {
     default:
         return undefined;
     }
+}
+
+/**
+ * Return true if given field is nullable (not required), false otherwise
+ *
+ * @param {Object} field - JDL field
+ * @returns {Boolean} - whether field is nullable
+ */
+function isNullable(field) {
+    return !_.get(field, 'fieldValidateRules', []).includes('required');
 }
 
 /**

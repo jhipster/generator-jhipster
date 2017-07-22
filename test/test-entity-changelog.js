@@ -183,6 +183,30 @@ describe.only('JHipster entity changelogs', () => {
         });
     });
 
+    describe('isNullable', () => {
+        const tests = [
+            {
+                field: { fieldName: 'foo' },
+                expected: true
+            },
+            {
+                field: { fieldName: 'bar', fieldValidateRules: ['required'] },
+                expected: false
+            },
+            {
+                field: { fieldName: 'baz', fieldValidateRules: ['max'] },
+                expected: true
+            }
+        ];
+
+        tests.forEach((test) => {
+            it(`detects${test.expected ? '' : ' not'} nullable fields`, () => {
+                assert.equal(
+                    entityChangelog.isNullable(test.field), test.expected);
+            });
+        });
+    });
+
     describe('patchToChangesetData', () => {
         it('produces a rename change/refactoring given a table name change', () => {
             const entityBefore = { entityTableName: 'table_name' };
