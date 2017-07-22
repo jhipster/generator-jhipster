@@ -29,7 +29,6 @@
       "allowShortCircuit": true,
       "allowTernary": true
     }],
-
     "no-multi-assign": "off",
     "no-param-reassign": "off",
     "no-shadow": "off"
