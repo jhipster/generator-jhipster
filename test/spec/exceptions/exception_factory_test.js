@@ -1,5 +1,3 @@
-
-
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
 const BuildException = require('../../../lib/exceptions/exception_factory').BuildException;

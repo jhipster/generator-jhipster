@@ -1,5 +1,3 @@
-
-
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
 const isReserved = require('../../../../lib/core/jhipster/reserved_keywords').isReserved;

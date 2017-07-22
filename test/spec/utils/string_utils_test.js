@@ -1,4 +1,3 @@
-
 /* define global expect */
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;

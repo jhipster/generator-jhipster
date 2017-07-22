@@ -1,5 +1,3 @@
-
-
 const BINARY_OPTIONS = require('../lib/core/jhipster/binary_options');
 const UNARY_OPTIONS = require('../lib/core/jhipster/unary_options');
 const RELATIONSHIP_TYPES = require('../lib/core/jhipster/relationship_types');

@@ -1,5 +1,3 @@
-
-
 const fail = require('chai').expect;
 const glob = require('glob'); // eslint-disable-line import/no-extraneous-dependencies
 const CLIEngine = require('eslint').CLIEngine;

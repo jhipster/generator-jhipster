@@ -1,5 +1,3 @@
-
-
 const spawn = require('child_process').spawn;
 const chalk = require('chalk'); // eslint-disable-line import/no-extraneous-dependencies
 const winston = require('winston');

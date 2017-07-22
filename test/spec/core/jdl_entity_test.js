@@ -1,5 +1,3 @@
-
-
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
 const JDLEntity = require('../../../lib/core/jdl_entity');

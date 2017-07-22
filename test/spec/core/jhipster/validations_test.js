@@ -1,5 +1,3 @@
-
-
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
 const VALIDATIONS = require('../../../../lib/core/jhipster/validations').VALIDATIONS;

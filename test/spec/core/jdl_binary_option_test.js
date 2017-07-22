@@ -1,5 +1,3 @@
-
-
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
 const JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
