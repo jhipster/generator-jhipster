@@ -1,16 +1,17 @@
-@import 'shared/variables';
+@import 'shared-variables';
+// Import Bootstrap source files from node_modules
+@import "node_modules/bootstrap/scss/bootstrap";
 
 body {
   background: #fafafa;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: $text-color;
   margin: 0;
 }
 
 * {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  &:after, &::before {
+  &:after,
+  &::before {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
   }
@@ -19,13 +20,86 @@ body {
 a {
   text-decoration: none;
   &:hover {
-    text-decoration: underline;
+    text-decoration: none;
   }
 }
+
+
+/* ==========================================================================
+SideDock style
+========================================================================== */
+
+.app-container {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  -ms-flex: 0 1 auto;
+  -webkit-box-flex: 0;
+  flex: 0 1 auto;
+  -ms-flex-direction: row;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  overflow: hidden;
+  .side-bar-container {
+    -ms-flex: 0 0 auto;
+    -webkit-box-flex: 0;
+    flex: 0 0 auto;
+    height: 100%;
+    a, a:hover, a:active {
+      text-decoration: none;
+    }
+  }
+  .main-push-container {
+    z-index: 99;
+    height: 100%;
+    padding: 0;
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
+    -webkit-box-flex: 1;
+    flex-grow: 1;
+    -ms-flex-preferred-size: 0;
+    flex-basis: 0;
+    max-width: 100%;
+    width: calc(100% - 300px);
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+    .main-container-wrapper {
+      height: 100%;
+      .main-container {
+        height: 100%;
+      }
+    }
+    .view-container {
+      height: calc(100% - 65px);
+      width: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      .page-content {
+        padding: 1rem;
+      }
+    }
+  }
+}
+
+.fullscreen {
+  position: fixed;
+  top: 64px;
+  left: 60px;
+  width: calc(100% - 60px) !important;
+  height: 100% !important;
+  background-color: $widget-background-color !important;
+  z-index: 999;
+  padding: 5px 25px 50px 25px !important;
+}
+
 
 /* ==========================================================================
 Browser Upgrade Prompt
 ========================================================================== */
+
 .browserupgrade {
   margin: 0.2em 0;
   background: #ccc;
@@ -33,55 +107,194 @@ Browser Upgrade Prompt
   padding: 0.2em 0;
 }
 
+/* ==========================================================================
+Custom button styles
+========================================================================== */
+
+.icon-button > .btn {
+  background-color: transparent;
+  border-color: transparent;
+  padding: 0.5rem;
+  line-height: 1rem;
+  &:hover {
+    background-color: transparent;
+    border-color: transparent;
+  }
+  &:focus {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+}
 
 /* ==========================================================================
 Generic styles
 ========================================================================== */
+
 /* other generic styles */
 
-.vertical {
-  flex-direction: column;
+.title {
+  font-size: 1.25em;
+  margin: 1px 10px 1px 10px;
 }
 
-.card {
-    padding: 1.5%;
-    margin-top: 20px;
-    border: none;
+.description {
+  font-size: 0.9em;
+  margin: 1px 10px 1px 10px;
+}
+
+.shadow {
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
+  border-radius: 2px;
 }
 
 .error {
-    color: white;
-    background-color: red;
-}
-
-.pad {
-    padding: 10px;
+  color: white;
+  background-color: red;
 }
 
 .break {
-    white-space: normal;
-    word-break:break-all;
+  white-space: normal;
+  word-break: break-all;
 }
 
-.voffset  { margin-top: 2px; }
-.voffset1 { margin-top: 5px; }
-.voffset2 { margin-top: 10px; }
-.voffset3 { margin-top: 15px; }
-.voffset4 { margin-top: 30px; }
-.voffset5 { margin-top: 40px; }
-.voffset6 { margin-top: 60px; }
-.voffset7 { margin-top: 80px; }
-.voffset8 { margin-top: 100px; }
-.voffset9 { margin-top: 150px; }
+.break-word {
+  white-space: normal;
+  word-break: keep-all;
+}
+
+/* padding helpers */
+
+@mixin pad($size, $side) {
+  @if $size=='' {
+    @if $side=='' {
+      .pad {
+        padding: 10px !important;
+      }
+    }
+    @else {
+      .pad {
+        padding-#{$side}: 10px !important;
+      }
+    }
+  }
+  @else {
+    @if $side=='' {
+      .pad-#{$size} {
+        padding: #{$size}px !important;
+      }
+    }
+    @else {
+      .pad-#{$side}-#{$size} {
+        padding-#{$side}: #{$size}px !important;
+      }
+    }
+  }
+}
+
+@include pad("", "");
+@include pad("2", "");
+@include pad("3", "");
+@include pad("5", "");
+@include pad("10", "");
+@include pad("20", "");
+@include pad("25", "");
+@include pad("30", "");
+@include pad("50", "");
+@include pad("75", "");
+@include pad("100", "");
+@include pad("4", "top");
+@include pad("5", "top");
+@include pad("10", "top");
+@include pad("20", "top");
+@include pad("25", "top");
+@include pad("30", "top");
+@include pad("50", "top");
+@include pad("75", "top");
+@include pad("100", "top");
+@include pad("4", "bottom");
+@include pad("5", "bottom");
+@include pad("10", "bottom");
+@include pad("20", "bottom");
+@include pad("25", "bottom");
+@include pad("30", "bottom");
+@include pad("50", "bottom");
+@include pad("75", "bottom");
+@include pad("100", "bottom");
+@include pad("5", "right");
+@include pad("10", "right");
+@include pad("20", "right");
+@include pad("25", "right");
+@include pad("30", "right");
+@include pad("50", "right");
+@include pad("75", "right");
+@include pad("100", "right");
+@include pad("5", "left");
+@include pad("10", "left");
+@include pad("20", "left");
+@include pad("25", "left");
+@include pad("30", "left");
+@include pad("50", "left");
+@include pad("75", "left");
+@include pad("100", "left");
+
+@mixin no-padding($side) {
+  @if $side=='all' {
+    .no-padding {
+      padding: 0 !important;
+    }
+  }
+  @else {
+    .no-padding-#{$side} {
+      padding-#{$side}: 0 !important;
+    }
+  }
+}
+
+@include no-padding("left");
+@include no-padding("right");
+@include no-padding("top");
+@include no-padding("bottom");
+@include no-padding("all");
+
+/* end of padding helpers */
+
+.no-margin {
+  margin: 0px;
+}
+@mixin voffset($size) {
+  @if $size=='' {
+    .voffset {
+      margin-top: 2px !important;
+    }
+  }
+  @else {
+    .voffset-#{$size} {
+      margin-top: #{$size}px !important;
+    }
+  }
+}
+
+@include voffset("");
+@include voffset("5");
+@include voffset("10");
+@include voffset("15");
+@include voffset("30");
+@include voffset("40");
+@include voffset("60");
+@include voffset("80");
+@include voffset("100");
+@include voffset("150");
 
 .readonly {
   background-color: #eee;
   opacity: 1;
 }
 
+
 /* ==========================================================================
 make sure browsers use the pointer cursor for anchors, even with no href
 ========================================================================== */
+
 a:hover {
   cursor: pointer;
 }
@@ -90,7 +303,7 @@ a:hover {
   cursor: pointer;
 }
 
-button.anchorBtn {
+button.anchor-btn {
   background: none;
   border: none;
   padding: 0;
@@ -99,14 +312,51 @@ button.anchorBtn {
   width: 100%;
 }
 
-a.anchorBtn:hover {
+a.anchor-btn:hover {
   text-decoration: none;
 }
+
+@mixin material-btn() {
+  border: 10px;
+  box-sizing: border-box;
+  display: inline-block;
+  font-family: Roboto, sans-serif;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  cursor: pointer;
+  text-decoration: none;
+  margin: 0px;
+  outline: none;
+  font-size: inherit;
+  font-weight: inherit;
+  position: relative;
+  z-index: 1;
+  height: 36px;
+  line-height: 36px;
+  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  border-radius: 2px;
+  user-select: none;
+  overflow: hidden;
+  text-align: center;
+}
+
+a.primary-btn {
+  @include material-btn();
+  padding: 0 16px;
+  min-width: 88px;
+  color: rgb(0, 188, 212);
+  background-color: rgba(0, 0, 0, 0);
+  &:hover {
+    background-color: rgba(153, 153, 153, 0.2);
+  }
+}
+
 
 /* ==========================================================================
 Metrics and Health styles
 ========================================================================== */
-#threadDump .popover, #healthCheck .popover {
+
+#threadDump .popover,
+#healthCheck .popover {
   top: inherit;
   display: block;
   font-size: 10px;
@@ -121,83 +371,39 @@ Metrics and Health styles
   min-width: 400px;
 }
 
+
 /* ==========================================================================
 start Password strength bar style
 ========================================================================== */
+
 ul#strengthBar {
-  display:inline;
-  list-style:none;
-  margin:0;
-  margin-left:15px;
-  padding:0;
-  vertical-align:2px;
+  display: inline;
+  list-style: none;
+  margin: 0;
+  margin-left: 15px;
+  padding: 0;
+  vertical-align: 2px;
 }
 
 .point:last {
-  margin:0 !important;
-}
-.point {
-  background:#DDD;
-  border-radius:2px;
-  display:inline-block;
-  height:5px;
-  margin-right:1px;
-  width:20px;
+  margin: 0 !important;
 }
 
-/* ==========================================================================
-entity tables helpers
-========================================================================== */
-/* Remove Bootstrap padding from the element
-   http://stackoverflow.com/questions/19562903/remove-padding-from-columns-in-bootstrap-3 */
-@mixin no-padding($side) {
-    @if $side == 'all' {
-        .no-padding {
-            padding: 0 !important;
-        }
-    } @else {
-        .no-padding-#{$side} {
-            padding-#{$side}: 0 !important;
-        }
-    }
+.point {
+  background: #DDD;
+  border-radius: 2px;
+  display: inline-block;
+  height: 5px;
+  margin-right: 1px;
+  width: 20px;
 }
-@include no-padding("left");
-@include no-padding("right");
-@include no-padding("top");
-@include no-padding("bottom");
-@include no-padding("all");
+
 
 /* bootstrap 3 input-group 100% width
    http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
-.width-min { width: 1% !important; }
 
-/* Makes toolbar not wrap on smaller screens
- http://www.sketchingwithcss.com/samplechapter/cheatsheet.html#right */
-.flex-btn-group-container {
-  display: -webkit-flex;
-  display: flex;
-  -webkit-flex-direction: row;
-  flex-direction: row;
-  -webkit-justify-content: flex-end;
-  justify-content: flex-end;
-}
-
-.jh-table > {
-    tbody > tr > td {
-        /* Align text in td verifically (top aligned by Bootstrap) */
-        vertical-align: middle;
-    }
-    thead > tr > th > {
-        .glyphicon-sort, .glyphicon-sort-by-attributes, .glyphicon-sort-by-attributes-alt {
-            /* less visible sorting icons */
-            opacity: 0.5;
-            &:hover {
-                /* full visible sorting icons and pointer when mouse is over them */
-                opacity: 1;
-                cursor: pointer;
-            }
-        }
-    }
+.width-min {
+  width: 1% !important;
 }
 
 /* jhipster-needle-css-add-main JHipster will add new css style */
