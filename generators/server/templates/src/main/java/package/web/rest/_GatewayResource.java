@@ -65,7 +65,7 @@ public class GatewayResource {
             RouteVM routeVM = new RouteVM();
             routeVM.setPath(route.getFullPath());
             routeVM.setServiceId(route.getId());
-            routeVM.setServiceInstances(discoveryClient.getInstances(route.getId()));
+            routeVM.setServiceInstances(discoveryClient.getInstances(route.getLocation()));
             routeVMs.add(routeVM);
         });
         return new ResponseEntity<>(routeVMs, HttpStatus.OK);
