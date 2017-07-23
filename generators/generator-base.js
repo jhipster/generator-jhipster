@@ -1423,6 +1423,19 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Copy JSX templates after stripping translation keys when translation is disabled.
+     *
+     * @param {string} source - path of the source file to copy from
+     * @param {string} dest - path of the destination file to copy to
+     * @param {object} generator - context that can be used as the generator instance or data to process template
+     * @param {object} opt - options that can be passed to template method
+     * @param {boolean} template - flag to use template method instead of copy
+     */
+    processJsx(source, dest, generator, opt, template) {
+        this.copyTemplate(source, dest, 'stripJs', generator, opt, template);
+    }
+
+    /**
      * Rewrite the specified file with provided content at the needle location
      *
      * @param {string} filePath - path of the source file to rewrite
