@@ -1,0 +1,49 @@
+@import '../../../shared-variables';
+// the spinner item color
+$primary-color: $app-primary-color;
+// Import only the animations that would be needed to reduce the file size
+@import 'node_modules/loaders.css/src/animations/ball-triangle-trace.scss';
+@import 'node_modules/loaders.css/src/animations/ball-pulse.scss';
+
+.loader-container-stage {
+  height: 80%;
+  .loader-container {
+    height: 100%;
+    .loading-icon {
+      position: relative;
+      top: 50%;
+      width: auto;
+      margin: auto;
+      .loader-hidden {
+        display: none;
+      }
+      .loader-active {
+        display: block;
+      }
+      .loader {
+        width: 20px;
+        margin: auto;
+        .loader-inner {
+          width: 100%;
+          > div {
+            background-color: $app-primary-color;
+          }
+        }
+        /* animation specific prepend animation name with `loader-` */
+        &.loader-ball-pulse {
+          width: 60px;
+          .ball-pulse > div {
+            width: 10px;
+            height: 10px;
+          }
+        }
+      }
+      .loading-text {
+        width: auto;
+        text-align: center;
+        color: #aba4a4;
+        padding: 40px 0px;
+      }
+    }
+  }
+}
