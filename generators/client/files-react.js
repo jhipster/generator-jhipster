@@ -33,12 +33,15 @@ const files = {
         {
             templates: [
                 '_package.json',
-                '_.eslintrc.json',
-                '_.babelrc',
+                '_tslint.json',
+                '_tsconfig.json',
                 '_.editorconfig',
+                'webpack/logo-jhipster.png',
                 'webpack/webpack.common.js',
                 'webpack/webpack.dev.js',
-                'webpack/webpack.prod.js'
+                'webpack/webpack.prod.js',
+                'webpack/webpack.test.js',
+                'webpack/utils.js'
             ]
         }
     ],
@@ -63,7 +66,7 @@ const files = {
             path: MAIN_SRC_DIR,
             templates: [
                 'swagger-ui/_index.html',
-                { file: 'swagger-ui/images/_throbber.gif', method: 'copy' }
+                { file: 'swagger-ui/dist/images/_throbber.gif', method: 'copy' }
             ]
         }
     ],
