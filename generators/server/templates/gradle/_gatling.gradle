@@ -75,8 +75,8 @@ def createGatlingRunTask(def gatlingSimulationClassName) {
 
         def String gatlingDataFolder = "$project.rootDir.absolutePath/src/test/gatling/user-files/data"
         def String gatlingReportsFolder = "$project.buildDir.absolutePath/reports/gatling"
-        def String gatlingBodiesFolder = "$project.rootDir.absolutePath/src/test/user-files/gatling/bodies"
-        def String gatlingSimulationsFolder = "$project.rootDir.absolutePath/src/test/user-files/gatling/simulations"
+        def String gatlingBodiesFolder = "$project.rootDir.absolutePath/src/test/gatling/user-files/bodies"
+        def String gatlingSimulationsFolder = "$project.rootDir.absolutePath/src/test/gatling/user-files/simulations"
 
         classpath sourceSet.output + files(manifestJar.archivePath) + files("src/test/gatling/conf")
         main = "io.gatling.app.Gatling"

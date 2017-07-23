@@ -38,6 +38,13 @@ module.exports = JDLGenerator.extend({
             desc: 'Provide DB option for the application when using skip-server flag',
             type: String
         });
+
+        // This adds support for a `--json-only` flag
+        this.option('json-only', {
+            desc: 'Generate only the JSON files and skip entity regeneration',
+            type: Boolean,
+            defaults: false
+        });
     },
 
     initializing: {
@@ -89,7 +96,13 @@ module.exports = JDLGenerator.extend({
                     applicationType: this.applicationType
                 });
                 this.log('Writing entity JSON files.');
-                jhiCore.exportToJSON(entities, this.options.force);
+                this.changedEntities = jhiCore.exportToJSON(entities, this.options.force);
+                this.updatedKeys = Object.keys(this.changedEntities);
+                if (this.updatedKeys.length > 0) {
+                    this.log(`Updated entities are: ${chalk.yellow(this.updatedKeys)}`);
+                } else {
+                    this.log(chalk.yellow('No change in entity configurations. No entities were updated'));
+                }
             } catch (e) {
                 this.log(e);
                 this.error('\nError while parsing entities from JDL\n');
@@ -97,18 +110,26 @@ module.exports = JDLGenerator.extend({
         },
 
         generateEntities() {
+            if (this.updatedKeys.length === 0) return;
+
+            if (this.options['json-only']) {
+                this.log('Entity JSON files created. Entitiy generation skipped.');
+                return;
+            }
             this.log('Generating entities.');
             try {
                 this.getExistingEntities().forEach((entity) => {
-                    this.composeWith(require.resolve('../entity'), {
-                        regenerate: true,
-                        'skip-install': true,
-                        'skip-client': entity.definition.skipClient,
-                        'skip-server': entity.definition.skipServer,
-                        'no-fluent-methods': entity.definition.noFluentMethod,
-                        'skip-user-management': entity.definition.skipUserManagement,
-                        arguments: [entity.name],
-                    });
+                    if (this.updatedKeys.includes(entity.name)) {
+                        this.composeWith(require.resolve('../entity'), {
+                            regenerate: true,
+                            'skip-install': true,
+                            'skip-client': entity.definition.skipClient,
+                            'skip-server': entity.definition.skipServer,
+                            'no-fluent-methods': entity.definition.noFluentMethod,
+                            'skip-user-management': entity.definition.skipUserManagement,
+                            arguments: [entity.name],
+                        });
+                    }
                 });
             } catch (e) {
                 this.error(`Error while generating entities from parsed JDL\n${e}`);
@@ -127,7 +148,7 @@ module.exports = JDLGenerator.extend({
             this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build']);
         };
 
-        if (!this.options['skip-install'] && !this.skipClient) {
+        if (!this.options['skip-install'] && !this.skipClient && !this.options['json-only']) {
             if (this.clientFramework === 'angular1') {
                 injectJsFilesToIndex();
             } else {

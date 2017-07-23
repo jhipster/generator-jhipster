@@ -4,7 +4,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - "6.11.0"
+  - "6.11.1"
 jdk:
   - oraclejdk8
 addons:
@@ -79,7 +79,7 @@ install:
 script:
   - $JHIPSTER_SCRIPTS/03-docker-compose.sh
   - $JHIPSTER_SCRIPTS/04-tests.sh
-  - travis_wait 30 $JHIPSTER_SCRIPTS/05-run.sh
+  - $JHIPSTER_SCRIPTS/05-run.sh
   - $JHIPSTER_SCRIPTS/06-sonar.sh
 notifications:
   webhooks:

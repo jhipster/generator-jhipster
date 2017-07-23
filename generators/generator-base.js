@@ -455,43 +455,7 @@ module.exports = class extends PrivateBase {
      * get all the languages options supported by JHipster
      */
     getAllSupportedLanguageOptions() {
-        return [
-            { name: 'Armenian', value: 'hy' },
-            { name: 'Catalan', value: 'ca' },
-            { name: 'Chinese (Simplified)', value: 'zh-cn' },
-            { name: 'Chinese (Traditional)', value: 'zh-tw' },
-            { name: 'Czech', value: 'cs' },
-            { name: 'Danish', value: 'da' },
-            { name: 'Dutch', value: 'nl' },
-            { name: 'English', value: 'en' },
-            { name: 'Estonian', value: 'et' },
-            { name: 'Farsi', value: 'fa', rtl: true },
-            { name: 'French', value: 'fr' },
-            { name: 'Galician', value: 'gl' },
-            { name: 'German', value: 'de' },
-            { name: 'Greek', value: 'el' },
-            { name: 'Hindi', value: 'hi' },
-            { name: 'Hungarian', value: 'hu' },
-            { name: 'Bahasa Indonesia', value: 'id' },
-            { name: 'Italian', value: 'it' },
-            { name: 'Japanese', value: 'ja' },
-            { name: 'Korean', value: 'ko' },
-            { name: 'Marathi', value: 'mr' },
-            { name: 'Polish', value: 'pl' },
-            { name: 'Portuguese (Brazilian)', value: 'pt-br' },
-            { name: 'Portuguese', value: 'pt-pt' },
-            { name: 'Romanian', value: 'ro' },
-            { name: 'Russian', value: 'ru' },
-            { name: 'Slovak', value: 'sk' },
-            { name: 'Serbian', value: 'sr' },
-            { name: 'Spanish', value: 'es' },
-            { name: 'Swedish', value: 'sv' },
-            { name: 'Turkish', value: 'tr' },
-            { name: 'Tamil', value: 'ta' },
-            { name: 'Thai', value: 'th' },
-            { name: 'Ukrainian', value: 'ua' },
-            { name: 'Vietnamese', value: 'vi' }
-        ];
+        return constants.LANGUAGES;
     }
 
     /**
@@ -854,7 +818,7 @@ module.exports = class extends PrivateBase {
                 file: fullPath,
                 needle,
                 splicable: [
-                    `<include file="classpath:config/liquibase/changelog/${changelogName}.xml" relativeToChangelogFile="false"/>`
+                    `<include file="config/liquibase/changelog/${changelogName}.xml" relativeToChangelogFile="false"/>`
                 ]
             }, this);
         } catch (e) {
@@ -1448,7 +1412,7 @@ module.exports = class extends PrivateBase {
                     this.composeWith(module.generatorCallback, options);
                 } catch (err) {
                     this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
-                        chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow(`'npm -g ${module.npmPackageName}'`));
+                        chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow(`'npm install -g ${module.npmPackageName}'`));
                 }
             }
         });
@@ -1525,7 +1489,7 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * executes a git command using shellJS
+     * executes a Git command using shellJS
      * gitExec(args [, options ], callback)
      *
      * @param {string|array} args - can be an array of arguments or a string command

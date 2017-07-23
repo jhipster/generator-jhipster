@@ -483,7 +483,7 @@ function writeFiles() {
             if (this.cucumberTests) {
                 this.template(`${SERVER_TEST_SRC_DIR}package/cucumber/_CucumberTest.java`, `${testDir}cucumber/CucumberTest.java`);
                 this.template(`${SERVER_TEST_SRC_DIR}package/cucumber/stepdefs/_StepDefs.java`, `${testDir}cucumber/stepdefs/StepDefs.java`);
-                mkdirp(`${TEST_DIR}features/`);
+                this.copy(`${TEST_DIR}features/gitkeep`, `${TEST_DIR}features/.gitkeep`);
             }
 
             // Create Elasticsearch test files

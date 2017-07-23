@@ -58,6 +58,13 @@ const files = {
                 'content/css/_vendor.css',
                 'content/css/_documentation.css'
             ]
+        },
+        {
+            condition: generator => !generator.useSass && generator.enableI18nRTL,
+            path: MAIN_SRC_DIR,
+            templates: [
+                'content/css/_rtl.css',
+            ]
         }
     ],
     sass: [
@@ -67,6 +74,13 @@ const files = {
             templates: [
                 'content/scss/_global.scss',
                 'content/scss/_vendor.scss'
+            ]
+        },
+        {
+            condition: generator => generator.useSass && generator.enableI18nRTL,
+            path: MAIN_SRC_DIR,
+            templates: [
+                'content/scss/_rtl.scss',
             ]
         },
         {
@@ -91,7 +105,7 @@ const files = {
             path: MAIN_SRC_DIR,
             templates: [
                 'swagger-ui/_index.html',
-                { file: 'swagger-ui/images/_throbber.gif', method: 'copy' }
+                { file: 'swagger-ui/dist/images/_throbber.gif', method: 'copy' }
             ]
         }
     ],

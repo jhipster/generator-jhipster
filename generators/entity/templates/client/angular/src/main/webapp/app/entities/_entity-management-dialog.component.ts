@@ -47,9 +47,11 @@ Object.keys(differentRelationships).forEach(key => {
     }
     if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
         const uniqueRel = differentRelationships[key][0];
+        if (uniqueRel.otherEntityAngularName !== entityAngularName) {
 _%>
 import { <%= uniqueRel.otherEntityAngularName %>, <%= uniqueRel.otherEntityAngularName%>Service } from '../<%= uniqueRel.otherEntityModulePath %>';
-<%_ }
+<%_     }
+    }
 }); _%>
 <%_ if (hasRelationshipQuery) { _%>
 import { ResponseWrapper } from '../../shared';
@@ -62,7 +64,6 @@ import { ResponseWrapper } from '../../shared';
 export class <%= entityAngularName %>DialogComponent implements OnInit {
 
     <%= entityInstance %>: <%= entityAngularName %>;
-    authorities: any[];
     isSaving: boolean;
     <%_
     const query = generateEntityQueries(relationships, entityInstance, dto);
@@ -86,11 +87,16 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         private dataUtils: JhiDataUtils,
         <%_ } _%>
         private alertService: JhiAlertService,
-        private <%= entityInstance %>Service: <%= entityAngularName %>Service,<% Object.keys(differentRelationships).forEach(key => {
-        if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
-            const uniqueRel = differentRelationships[key][0]; %>
-        private <%= uniqueRel.otherEntityName %>Service: <%= uniqueRel.otherEntityAngularName %>Service,<%
-        } });%>
+        private <%= entityInstance %>Service: <%= entityAngularName %>Service,
+        <%_ Object.keys(differentRelationships).forEach(key => {
+            if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
+                const uniqueRel = differentRelationships[key][0];
+                if (uniqueRel.otherEntityAngularName !== entityAngularName) { _%>
+        private <%= uniqueRel.otherEntityName %>Service: <%= uniqueRel.otherEntityAngularName %>Service,
+        <%_
+                }
+            }
+        }); _%>
         <%_ if (fieldsContainImageBlob) { _%>
         private elementRef: ElementRef,
         <%_ } _%>
@@ -100,7 +106,6 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
 
     ngOnInit() {
         this.isSaving = false;
-        this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
         <%_ for (idx in queries) { _%>
         <%- queries[idx] %>
         <%_ } _%>
@@ -206,7 +211,6 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
 })
 export class <%= entityAngularName %>PopupComponent implements OnInit, OnDestroy {
 
-    modalRef: NgbModalRef;
     routeSub: any;
 
     constructor(
@@ -217,11 +221,11 @@ export class <%= entityAngularName %>PopupComponent implements OnInit, OnDestroy
     ngOnInit() {
         this.routeSub = this.route.params.subscribe((params) => {
             if ( params['id'] ) {
-                this.modalRef = this.<%= entityInstance %>PopupService
-                    .open(<%= entityAngularName %>DialogComponent, params['id']);
+                this.<%= entityInstance %>PopupService
+                    .open(<%= entityAngularName %>DialogComponent as Component, params['id']);
             } else {
-                this.modalRef = this.<%= entityInstance %>PopupService
-                    .open(<%= entityAngularName %>DialogComponent);
+                this.<%= entityInstance %>PopupService
+                    .open(<%= entityAngularName %>DialogComponent as Component);
             }
         });
     }

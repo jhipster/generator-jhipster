@@ -20,6 +20,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: <%= app.baseName.toLowerCase() %>-mysql
+  namespace: <%= kubernetesNamespace %>
 spec:
   replicas: 1
   template:
@@ -54,6 +55,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: <%= app.baseName.toLowerCase() %>-mysql
+  namespace: <%= kubernetesNamespace %>
 spec:
   selector:
     app: <%= app.baseName.toLowerCase() %>-mysql

@@ -71,7 +71,7 @@ public interface <%=entityClass%>Repository extends <% if (databaseType === 'sql
     @Query("select <%= entityTableName %> from <%= entityClass %> <%= entityTableName %> where <%= entityTableName %>.<%= relationships[idx].relationshipFieldName %>.login = ?#{principal.username}")
     List<<%= entityClass %>> findBy<%= relationships[idx].relationshipNameCapitalized %>IsCurrentUser();
     <%_ } } _%>
-    <% if (fieldsContainOwnerManyToMany === true) { %>
+    <%_ if (fieldsContainOwnerManyToMany === true) { _%>
     @Query("select distinct <%= entityTableName %> from <%= entityClass %> <%= entityTableName %><% for (idx in relationships) {
     if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { %> left join fetch <%=entityTableName%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%>")
     List<<%=entityClass%>> findAllWithEagerRelationships();
@@ -79,7 +79,8 @@ public interface <%=entityClass%>Repository extends <% if (databaseType === 'sql
     @Query("select <%= entityTableName %> from <%= entityClass %> <%= entityTableName %><% for (idx in relationships) {
     if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { %> left join fetch <%=entityTableName%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%> where <%=entityTableName%>.id =:id")
     <%=entityClass%> findOneWithEagerRelationships(@Param("id") Long id);
-    <% } %>
+    <%_ } _%>
+
 }
 <%_ } if (databaseType === 'cassandra') { _%>
 @Repository

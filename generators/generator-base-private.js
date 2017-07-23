@@ -114,10 +114,9 @@ module.exports = class extends Generator {
         const fullPath = `${CLIENT_MAIN_SRC_DIR}app/components/language/language.constants.js`;
         try {
             let content = '.constant(\'LANGUAGES\', [\n';
-            for (let i = 0, len = languages.length; i < len; i++) {
-                const language = languages[i];
+            languages.forEach((language, i) => {
                 content += `            '${language}'${i !== languages.length - 1 ? ',' : ''}\n`;
-            }
+            });
             content +=
                 '            // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n' +
                 '        ]';
@@ -136,10 +135,9 @@ module.exports = class extends Generator {
         const fullPath = `${CLIENT_MAIN_SRC_DIR}app/shared/language/language.constants.ts`;
         try {
             let content = 'export const LANGUAGES: string[] = [\n';
-            for (let i = 0, len = languages.length; i < len; i++) {
-                const language = languages[i];
+            languages.forEach((language, i) => {
                 content += `    '${language}'${i !== languages.length - 1 ? ',' : ''}\n`;
-            }
+            });
             content +=
                 '    // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n' +
                 '];';
@@ -154,14 +152,37 @@ module.exports = class extends Generator {
         }
     }
 
+    updateLanguagesInLanguagePipe(languages) {
+        let fullPath = `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`;
+        if (this.clientFramework === 'angular1') {
+            fullPath = `${CLIENT_MAIN_SRC_DIR}app/components/language/language.filter.js`;
+        }
+        try {
+            let content = '{\n';
+            this.generateLanguageOptions(languages).forEach((ln, i) => {
+                content += `        ${ln}${i !== languages.length - 1 ? ',' : ''}\n`;
+            });
+            content +=
+                '        // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object\n' +
+                '    };';
+
+            jhipsterUtils.replaceContent({
+                file: fullPath,
+                pattern: /{\s*('[a-z-]*':)?([^=]*jhipster-needle-i18n-language-key-pipe[^;]*)\};/g,
+                content
+            }, this);
+        } catch (e) {
+            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Language pipe not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
+        }
+    }
+
     updateLanguagesInWebpack(languages) {
         const fullPath = 'webpack/webpack.common.js';
         try {
             let content = 'groupBy: [\n';
-            for (let i = 0, len = languages.length; i < len; i++) {
-                const language = languages[i];
+            languages.forEach((language, i) => {
                 content += `                        { pattern: "./src/main/webapp/i18n/${language}/*.json", fileName: "./i18n/${language}.json" }${i !== languages.length - 1 ? ',' : ''}\n`;
-            }
+            });
             content +=
                 '                        // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n' +
                 '                    ]';
@@ -539,5 +560,49 @@ module.exports = class extends Generator {
             this.error('\nError while parsing entities to JDL\n');
         }
         return jdl;
+    }
+
+    /**
+     * Generate language objects in array of "'en': { name: 'English' }" format
+     * @param {string[]} languages
+     */
+    generateLanguageOptions(languages) {
+        const selectedLangs = this.getAllSupportedLanguageOptions().filter(lang => languages.includes(lang.value));
+        return selectedLangs.map(
+            lang => `'${lang.value}': { name: '${lang.dispName}'${lang.rtl ? ', rtl: true' : ''} }`
+        );
+    }
+
+    /**
+     * Check if language should be skipped for locale setting
+     * @param {string} language
+     */
+    skipLanguageForLocale(language) {
+        const out = this.getAllSupportedLanguageOptions().filter(lang => language === lang.value);
+        return out && out[0] && !!out[0].skipForLocale;
+    }
+
+    /**
+     * Get UAA app name from path provided.
+     * @param {string} input
+     */
+    getUaaAppName(input) {
+        if (!input) return false;
+
+        input = input.trim();
+        let fromPath = '';
+        if (path.isAbsolute(input)) {
+            fromPath = `${input}/.yo-rc.json`;
+        } else {
+            fromPath = this.destinationPath(`${input}/.yo-rc.json`);
+        }
+
+        if (shelljs.test('-f', fromPath)) {
+            const fileData = this.fs.readJSON(fromPath);
+            if (fileData && fileData['generator-jhipster']) {
+                return fileData['generator-jhipster'];
+            } return false;
+        }
+        return false;
     }
 };

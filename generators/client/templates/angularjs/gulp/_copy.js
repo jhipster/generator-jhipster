@@ -84,7 +84,13 @@ function fonts() {
 }
 
 function common() {
-    return gulp.src([config.app + 'robots.txt', config.app + 'favicon.ico', config.app + '.htaccess'], { dot: true })
+    return gulp.src([
+        config.app + 'robots.txt',
+        config.app + 'favicon.ico',
+        config.app + '.htaccess',
+        // config.app + 'sw.js',
+        config.app + 'manifest.webapp'
+    ], { dot: true })
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist))
         .pipe(gulp.dest(config.dist));

@@ -20,6 +20,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: <%= app.baseName.toLowerCase() %>
+  namespace: <%= kubernetesNamespace %>
 spec:
   replicas: 1
   template:
@@ -77,5 +78,39 @@ spec:
         - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES
           value: <%= app.baseName.toLowerCase() %>-zookeeper.<%= kubernetesNamespace %>.svc.cluster.local
         <%_ } _%>
+        <%_ if (jhipsterConsole) { _%>
+        - name: JHIPSTER_METRICS_LOGS_ENABLED
+          value: 'true'
+        - name: JHIPSTER_LOGGING_LOGSTASH_ENABLED
+          value: 'true'
+        - name: JHIPSTER_LOGGING_LOGSTASH_HOST
+          value: jhipster-logstash
+        <%_ } _%>
+        <%_ if (prometheusOperator) { _%>
+        - name: JHIPSTER_METRICS_PROMETHEUS_ENABLED
+          value: 'true'
+        - name: JHIPSTER_METRICS_PROMETHEUS_ENDPOINT
+          value: /prometheusMetrics
+        <%_ } _%>
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "500m"
+          limits:
+            memory: "512Mi"
+            cpu: "1"
         ports:
-        - containerPort: <%= app.serverPort %>
+        - name: web
+          containerPort: <%= app.serverPort %>
+        readinessProbe:
+          httpGet:
+            path: /management/health
+            port: web
+        livenessProbe:
+          httpGet:
+            path: /management/health
+            port: web
+          initialDelaySeconds: 180
+

@@ -20,15 +20,20 @@
 const program = require('commander');
 const yeoman = require('yeoman-environment');
 const chalk = require('chalk');
+
 const packageJson = require('../package.json');
 const logger = require('./utils').logger;
 const initHelp = require('./utils').initHelp;
+const toString = require('./utils').toString;
+const getCommand = require('./utils').getCommand;
+const getCommandOptions = require('./utils').getCommandOptions;
+const getArgs = require('./utils').getArgs;
+const CLI_NAME = require('./utils').CLI_NAME;
 const initAutoCompletion = require('./completion').init;
 const SUB_GENERATORS = require('./commands');
 
 const version = packageJson.version;
 const env = yeoman.createEnv();
-const CLI_NAME = 'jhipster';
 const JHIPSTER_NS = CLI_NAME;
 
 /* setup debugging */
@@ -44,72 +49,18 @@ const done = () => {
 };
 
 /**
- * Get arguments
-*/
-const getArgs = (opts) => {
-    if (opts.argument) {
-        return `[${opts.argument.join(' ')}]`;
-    }
-    return '';
-};
-
-/**
- * Get flags for command from an argument
-*/
-const getFlagsFromArg = (arg) => {
-    const rawArgs = arg.parent && arg.parent.rawArgs ? arg.parent.rawArgs : [];
-    logger.debug(`Raw args ${rawArgs}`);
-    const flags = rawArgs.join(':::').split(/(?=--)/g).filter(item => item.startsWith('--'));
-    logger.debug(`Flags ${flags}`);
-    return flags.map(item => item.replace(/:::/g, ' '));
-};
-
-/**
- * Get options from arguments
-*/
-const getOptionsFromArgs = (args) => {
-    const options = [];
-    args.forEach((item) => {
-        if (typeof item == 'string') {
-            options.push(item);
-        } else if (typeof item == 'object') {
-            if (Array.isArray(item)) {
-                options.push(...item);
-            } else {
-                options.push(getFlagsFromArg(item));
-            }
-        }
-    });
-    return options;
-};
-
-/**
- *  Get options for the command
- */
-const getOptions = (args, opts) => {
-    let options = [];
-    if (opts.argument && opts.argument.length > 0) {
-        logger.debug('Arguments found');
-        logger.debug(getOptionsFromArgs(args).join(' '));
-        options = getOptionsFromArgs(args);
-    }
-    if (args.length === 1) {
-        logger.debug('No Arguments found looking for flags');
-        options = getFlagsFromArg(args[0]);
-    }
-    return options.join(' ').trim();
-};
-
-/**
  *  Run a yeoman command
  */
 const runYoCommand = (cmd, args, opts) => {
-    const options = getOptions(args, opts);
-    logger.debug(`Options ${options}`);
-    const command = `${JHIPSTER_NS}:${cmd}${options ? ` ${options}` : ''}`;
+    logger.debug(`cmd: ${toString(cmd)}`);
+    logger.debug(`args: ${toString(args)}`);
+    logger.debug(`opts: ${toString(opts)}`);
+    const command = getCommand(cmd, args, opts);
+    const options = getCommandOptions(packageJson, process.argv.slice(2));
     logger.info(chalk.yellow(`Executing ${command}`));
+    logger.info(chalk.yellow(`Options: ${toString(options)}`));
     try {
-        env.run(command, done);
+        env.run(command, options, done);
     } catch (e) {
         logger.error(e.message);
         logger.log(e);
@@ -129,7 +80,6 @@ Object.keys(SUB_GENERATORS).forEach((key) => {
     command.allowUnknownOption()
         .description(opts.desc)
         .action((args) => {
-            logger.debug('Options passed:');
             runYoCommand(key, program.args, opts);
         })
         .on('--help', () => {
@@ -150,5 +100,5 @@ program.parse(process.argv);
 if (program.args.length < 1) {
     logger.debug('No command specified. Running default');
     logger.info(chalk.yellow('Running default command'));
-    runYoCommand('app', [{ parent: { rawArgs: program.rawArgs } }], {});
+    runYoCommand('app', [], {});
 }

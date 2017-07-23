@@ -26,20 +26,20 @@
     "node_modules"
   ],
   "dependencies": {
-    "@angular/common": "4.2.5",
-    "@angular/compiler": "4.2.5",
-    "@angular/core": "4.2.5",
-    "@angular/forms": "4.2.5",
-    "@angular/http": "4.2.5",
-    "@angular/platform-browser": "4.2.5",
-    "@angular/platform-browser-dynamic": "4.2.5",
-    "@angular/router": "4.2.5",
-    "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.27",
+    "@angular/common": "4.2.6",
+    "@angular/compiler": "4.2.6",
+    "@angular/core": "4.2.6",
+    "@angular/forms": "4.2.6",
+    "@angular/http": "4.2.6",
+    "@angular/platform-browser": "4.2.6",
+    "@angular/platform-browser-dynamic": "4.2.6",
+    "@angular/router": "4.2.6",
+    "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.28",
     "bootstrap": "4.0.0-alpha.6",
     "core-js": "2.4.1",
     "font-awesome": "4.7.0",
     "jquery": "3.2.1",
-    "ng-jhipster": "0.2.6",
+    "ng-jhipster": "0.2.7",
     "ng2-webstorage": "1.8.0",
     "ngx-cookie": "1.0.0",
     "ngx-infinite-scroll": "0.5.1",
@@ -51,13 +51,13 @@
     "webstomp-client": "1.0.6",
     <%_ } _%>
     "tether": "1.4.0",
-    "zone.js": "0.8.12"
+    "zone.js": "0.8.13"
   },
   "devDependencies": {
     "@angular/cli": "1.2.0",
-    "@angular/compiler-cli": "4.2.5",
+    "@angular/compiler-cli": "4.2.6",
     "@types/jasmine": "2.5.53",
-    "@types/node": "8.0.8",
+    "@types/node": "8.0.13",
     <%_ if (protractorTests) { _%>
     "@types/selenium-webdriver": "3.0.4",
     <%_ } _%>
@@ -69,7 +69,7 @@
     "copy-webpack-plugin": "4.0.1",
     "css-loader": "0.28.4",
     "exports-loader": "0.6.4",
-    "extract-text-webpack-plugin": "2.1.2",
+    "extract-text-webpack-plugin": "3.0.0",
     "file-loader": "0.11.2",
     "generator-jhipster": "<%= packagejs.version %>",
     "html-loader": "0.4.5",
@@ -88,7 +88,7 @@
     "karma-phantomjs-launcher": "1.0.4",
     "karma-remap-istanbul": "0.6.0",
     "karma-sourcemap-loader": "0.3.7",
-    "karma-webpack": "2.0.3",
+    "karma-webpack": "2.0.4",
     <%_ if (enableTranslation) { _%>
     "merge-jsons-webpack-plugin": "1.0.8",
     <%_ } _%>
@@ -109,7 +109,7 @@
     <%_ } _%>
     "tslint": "5.5.0",
     "tslint-loader": "3.5.3",
-    "typescript": "2.3.4",
+    "typescript": "2.4.1",
     <%_ if (useSass) { _%>
     "sass-loader": "6.0.6",
     "node-sass": "4.5.3",
@@ -121,7 +121,7 @@
     <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
     <%_ }); _%>
-    "webpack": "3.1.0",
+    "webpack": "3.3.0",
     "webpack-dev-server": "2.5.1",
     "webpack-merge": "4.1.0",
     "webpack-notifier": "1.5.0",
@@ -133,21 +133,22 @@
     "node": ">=6.9.0"
   },
   "scripts": {
-    "lint": "tslint '<%= MAIN_SRC_DIR%>app/**/*.ts' '<%= TEST_SRC_DIR%>**/*.ts'",
-    "lint:fix": "tslint '<%= MAIN_SRC_DIR%>app/**/*.ts' '<%= TEST_SRC_DIR%>**/*.ts' --fix",
+    "lint": "tslint --type-check --project './tsconfig.json' -e 'node_modules/**'",
+    "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "ngc": "ngc -p tsconfig-aot.json",
     "cleanup": "rimraf <%= BUILD_DIR %>{aot,www}",
+    "clean-www": "rimraf <%= BUILD_DIR %>/www/app/{src,<%= BUILD_DIR %>}",
     "start": "<%= clientPackageManager %> run webpack:dev",
     "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --progress --inline --hot --profile --port=9060",
     "webpack:build:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --progress --profile",
     "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:main",
     "webpack:prod:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --progress --profile",
-    "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:prod:main",
+    "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:prod:main && <%= clientPackageManager %> run clean-www",
     "webpack:test": "<%= clientPackageManager %> run test",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js",
     "test": "karma start src/test/javascript/karma.conf.js",
-    "test:watch": "karma start src/test/javascript/karma.conf.js --watch",
+    "test:watch": "<%= clientPackageManager %> test -- --watch",
     <%_ if (protractorTests) { _%>
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
     "postinstall": "webdriver-manager update && node node_modules/phantomjs-prebuilt/install.js"

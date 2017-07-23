@@ -21,7 +21,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const StringReplacePlugin = require('string-replace-webpack-plugin');
 <%_ if (enableTranslation) { _%>
-const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin")
+const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin");
 <%_ } _%>
 
 const utils = require('./utils.js');
@@ -35,6 +35,9 @@ module.exports = (options) => {
         resolve: {
             extensions: ['.ts', '.js'],
             modules: ['node_modules']
+        },
+        stats: {
+            children: false
         },
         module: {
             rules: [
@@ -50,26 +53,6 @@ module.exports = (options) => {
                         minifyCSS:false
                     },
                     exclude: ['./<%= MAIN_SRC_DIR %>index.html']
-                },
-                <%_ if (useSass) { _%>
-                {
-                    test: /\.scss$/,
-                    loaders: ['to-string-loader', 'css-loader', 'sass-loader'],
-                    exclude: /(vendor\.scss|global\.scss)/
-                },
-                {
-                    test: /(vendor\.scss|global\.scss)/,
-                    loaders: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
-                },
-                <%_ } _%>
-                {
-                    test: /\.css$/,
-                    loaders: ['to-string-loader', 'css-loader'],
-                    exclude: /(vendor\.css|global\.css)/
-                },
-                {
-                    test: /(vendor\.css|global\.css)/,
-                    loaders: ['style-loader', 'css-loader']
                 },
                 {
                     test: /\.(jpe?g|png|gif|svg|woff2?|ttf|eot)$/i,
@@ -121,7 +104,9 @@ module.exports = (options) => {
             ),
             new CopyWebpackPlugin([
                 { from: './node_modules/core-js/client/shim.min.js', to: 'core-js-shim.min.js' },
-                { from: './node_modules/swagger-ui/dist', to: 'swagger-ui/dist' },
+                { from: './node_modules/swagger-ui/dist/css', to: 'swagger-ui/dist/css' },
+                { from: './node_modules/swagger-ui/dist/lib', to: 'swagger-ui/dist/lib' },
+                { from: './node_modules/swagger-ui/dist/swagger-ui.min.js', to: 'swagger-ui/dist/swagger-ui.min.js' },
                 { from: './<%= MAIN_SRC_DIR %>swagger-ui/', to: 'swagger-ui' },
                 { from: './<%= MAIN_SRC_DIR %>favicon.ico', to: 'favicon.ico' },
                 { from: './<%= MAIN_SRC_DIR %>manifest.webapp', to: 'manifest.webapp' },
