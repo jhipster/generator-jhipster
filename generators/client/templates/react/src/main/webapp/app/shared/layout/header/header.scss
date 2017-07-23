@@ -1,7 +1,4 @@
-
-$header-color:                  #fff;
-$header-color-secondary:        #bbb;
-$header-color-hover:              darken( $header-color, 20% );
+@import '../../../shared-variables';
 
 /* ==========================================================================
 Developement Ribbon
@@ -9,14 +6,14 @@ Developement Ribbon
 .ribbon {
     background-color: rgba(170, 0, 0, 0.5);
     left: -3.5em;
-    -moz-transform: rotate(-45deg);
-    -ms-transform: rotate(-45deg);
-    -o-transform: rotate(-45deg);
-    -webkit-transform: rotate(-45deg);
-    transform: rotate(-45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
     overflow: hidden;
     position: absolute;
-    top: 30px;
+    bottom: 40px;
     white-space: nowrap;
     width: 15em;
     z-index: 99999;
@@ -38,38 +35,14 @@ Developement Ribbon
 /* ==========================================================================
 Navbar styles
 ========================================================================== */
-.jh-navbar {
-    background-color: #353d47;
-    padding: .2em 1em;
-    .profile-image {
-        margin: -10px 0px;
-        height: 40px;
-        width: 40px;
-        border-radius: 50%;
+.navbar {
+  background-color: $header-bg-color;
+  .menu-button {
+    color: $header-color;
+    &:hover {
+      color: $header-color-hover;
     }
-    .dropdown-item.active, .dropdown-item.active:focus, .dropdown-item.active:hover {
-        background-color: #353d47;
-    }
-    .dropdown-toggle::after {
-        margin-left: 0.15em;
-    }
-    ul.navbar-nav {
-        padding: 0.5em;
-        .nav-item {
-            margin-left: 1.5rem;
-        }
-    }
-    a.nav-link {
-        font-weight: 400;
-    }
-    .jh-navbar-toggler {
-        color: #ccc;
-        font-size: 1.5em;
-        padding: 10px;
-        &:hover {
-            color: #fff;
-        }
-    }
+  }
 }
 .navbar-version {
   font-size: 10px;
@@ -77,18 +50,8 @@ Navbar styles
   padding: 0 0 0 10px;
 }
 
-.brand-logo {
-  &:hover {
-    text-decoration: none;
-  }
-  .brand-icon {
-    height: 35px;
-    width: auto;
-    display: inline-block;
-    img {
-      height: 45px;
-    }
-  }
+.brand-logo:hover {
+  text-decoration: none;
 }
 
 .brand-title {
@@ -100,10 +63,7 @@ Navbar styles
   }
 }
 
-.loading-bar {
-  height: 3px;
-  background-color: #009CD8;
-  position: absolute;
-  top: 0px;
-  z-index: 1031
+.logo .logo-img {
+  height: 45px;
+  display: inline-block;
 }

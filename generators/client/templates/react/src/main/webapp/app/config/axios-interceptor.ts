@@ -1,16 +1,13 @@
 import axios from 'axios';
-import { getBasePath } from '../shared/util/url-util';
-import Storage from '../shared/util/storage-util';
 
 const TIMEOUT = 1000000; // 10000
 const setupAxiosInterceptors = (onUnauthenticated, clearAuthToken) => {
   const onRequestSuccess = config => {
-    const token = Storage.local.get('jhi-authenticationToken') || Storage.session.get('jhi-authenticationToken');
+    const token = localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     config.timeout = TIMEOUT;
-    config.url = `${getBasePath().replace(/\/$/, '')}${config.url}`;
     return config;
   };
   const onResponseSuccess = response => response;

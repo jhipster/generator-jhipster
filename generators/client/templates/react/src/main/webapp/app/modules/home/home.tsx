@@ -1,11 +1,16 @@
-import './home.scss';
-
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import * as Translate from 'react-translate-component';
 import { connect } from 'react-redux';
+import { Button, Input } from 'reactstrap';
 
+import { log } from '../../shared/util/log-util';
+import { containerSize } from '../../shared/util/dom-utils';
 import { getSession } from '../../reducers/authentication';
+
+import appConfig from '../../config/constants';
+
+import './home.scss';
 
 export interface IHomeProp {
   account: any;
@@ -104,7 +109,7 @@ export class Home extends React.Component<IHomeProp, IHomeState> {
           </p>
         </div>
         <div className="col-md-3 pad">
-          <span className="hipster img-fluid rounded" />
+          <span className="hipster img-fluid img-rounded" />
         </div>
       </div>
     );
