@@ -85,21 +85,23 @@ const files = {
         {
             path: REACT_DIR,
             templates: [
-                'app.js',
-                'index.js',
-                'routes.js',
-                'config/constants.js',
-                'config/theme.js',
-                'config/devtools.js',
-                'config/promise-middleware.js',
-                'config/store.js'
+                'app.tsx',
+                'index.tsx',
+                'routes.tsx',
+                'config/constants.ts',
+                'config/axios-interceptor.ts',
+                'config/devtools.tsx',
+                'config/error-middleware.ts',
+                'config/logger-middleware.ts',
+                'config/notification-middleware.ts',
+                'config/store.ts'
             ]
         },
         {
             condition: generator => generator.enableTranslation,
             path: REACT_DIR,
             templates: [
-                'config/translation.js'
+                'config/translation.ts'
             ]
         },
         {
@@ -129,12 +131,12 @@ const files = {
             path: REACT_DIR,
             templates: [
                 // home module
-                'modules/home/index.js',
-                { file: 'modules/home/home.js', method: 'processJsx' },
+                { file: 'modules/home/home.tsx', method: 'processJsx' },
                 // login module
-                'modules/login/index.js',
-                { file: 'modules/login/login.js', method: 'processJsx' },
-                { file: 'modules/login/login-modal.js', method: 'processJsx' }
+                'modules/login/index.ts',
+                { file: 'modules/login/login.tsx', method: 'processJsx' },
+                { file: 'modules/login/logout.tsx', method: 'processJsx' },
+                { file: 'modules/login/login-modal.tsx', method: 'processJsx' }
             ]
         },
         {
@@ -150,16 +152,17 @@ const files = {
             path: REACT_DIR,
             templates: [
                 // home module
-                'reducers/index.js',
-                'reducers/administration.js',
-                'reducers/authentication.js'
+                'reducers/index.ts',
+                'reducers/action-type.util.ts',
+                'reducers/administration.ts',
+                'reducers/authentication.ts'
             ]
         },
         {
             condition: generator => generator.enableTranslation,
             path: REACT_DIR,
             templates: [
-                'reducers/locale.js'
+                'reducers/locale.ts'
             ]
         }
     ],
@@ -231,18 +234,18 @@ const files = {
             path: REACT_DIR,
             templates: [
                 // admin modules
-                { file: 'modules/administration/audits/audits.js', method: 'processJsx' },
-                { file: 'modules/administration/configuration/configuration.js', method: 'processJsx' },
-                { file: 'modules/administration/docs/docs.js', method: 'processJsx' },
-                { file: 'modules/administration/health/health.js', method: 'processJsx' },
-                { file: 'modules/administration/health/health-detail/health-detail.js', method: 'processJsx' },
-                { file: 'modules/administration/health/health-detail/health-modal.js', method: 'processJsx' },
-                { file: 'modules/administration/health/health-detail/index.js', method: 'processJsx' },
-                { file: 'modules/administration/logs/logs.js', method: 'processJsx' },
-                { file: 'modules/administration/metrics/metrics.js', method: 'processJsx' },
-                { file: 'modules/administration/metrics/metrics-detail/metrics-detail.js', method: 'processJsx' },
-                { file: 'modules/administration/metrics/metrics-detail/metrics-modal.js', method: 'processJsx' },
-                { file: 'modules/administration/metrics/metrics-detail/index.js', method: 'processJsx' },
+                { file: 'modules/administration/audits/audits.tsx', method: 'processJsx' },
+                { file: 'modules/administration/configuration/configuration.tsx', method: 'processJsx' },
+                { file: 'modules/administration/docs/docs.tsx', method: 'processJsx' },
+                { file: 'modules/administration/health/health.tsx', method: 'processJsx' },
+                // { file: 'modules/administration/health/health-detail/health-detail.tsx', method: 'processJsx' },
+                // { file: 'modules/administration/health/health-detail/health-modal.tsx', method: 'processJsx' },
+                // { file: 'modules/administration/health/health-detail/index.js', method: 'processJsx' },
+                { file: 'modules/administration/logs/logs.tsx', method: 'processJsx' },
+                { file: 'modules/administration/metrics/metrics.tsx', method: 'processJsx' },
+                // { file: 'modules/administration/metrics/metrics-detail/metrics-detail.tsx', method: 'processJsx' },
+                // { file: 'modules/administration/metrics/metrics-detail/metrics-modal.tsx', method: 'processJsx' },
+                // { file: 'modules/administration/metrics/metrics-detail/index.tsx', method: 'processJsx' },
             ]
         },
         // {
@@ -256,7 +259,7 @@ const files = {
             condition: generator => !generator.skipUserManagement,
             path: REACT_DIR,
             templates: [
-                { file: 'modules/administration/user-management/user-management.js', method: 'processJsx' },
+                { file: 'modules/administration/user-management/user-management.tsx', method: 'processJsx' },
                 // { file: 'modules/administration/user-management/UserManagementDetail.js', method: 'processJsx' },
                 // { file: 'modules/administration/user-management/UserManagementDialog.js', method: 'processJsx' },
                 // { file: 'modules/administration/user-management/UserManagementDeleteDialog.js', method: 'processJsx' }
@@ -266,7 +269,7 @@ const files = {
             condition: generator => generator.applicationType === 'gateway',
             path: REACT_DIR,
             templates: [
-                { file: 'modules/administration/gateway/gateway.js', method: 'processJsx' }
+                { file: 'modules/administration/gateway/gateway.tsx', method: 'processJsx' }
             ]
         }
     ],
@@ -275,14 +278,12 @@ const files = {
             path: REACT_DIR,
             templates: [
                 // layouts
-                'shared/components/footer/footer.js',
-                'shared/components/header/header.js',
-                'shared/components/private-route/private-route.js',
-                // interceptors
-                'shared/interceptors/axios.js',
+                'shared/layout/footer/footer.tsx',
+                'shared/layout/header/header.tsx',
+                'shared/layout/private-route/private-route.tsx',
                 // util
-                'shared/util/global-style.js',
-                'shared/util/log-util.js'
+                'shared/util/log-util.ts',
+                'shared/util/promise-utils.ts'
             ]
         },
         {
