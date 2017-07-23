@@ -1,48 +1,78 @@
-/* eslint-disable */
-const path = require('path');
 const webpack = require('webpack');
-// const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpackMerge = require('webpack-merge');
-const commonConfig = require('./webpack.common.js');
-/* eslint-enable */
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-module.exports = webpackMerge(commonConfig(), {
-  devtool: 'source-map',
-  output: {
-    path: path.resolve('./<%= BUILD_DIR %>www'),
-    filename: '[name].js'
+const utils = require('./utils.js');
+const commonConfig = require('./webpack.common.js');
+
+const ENV = 'production';
+const extractCSS = new ExtractTextPlugin(`[name].[hash].css`);
+const extractSASS = new ExtractTextPlugin(`[name]-sass.[hash].css`);
+
+module.exports = webpackMerge(commonConfig({ env: ENV }), {
+  // devtool: 'source-map', // Enable source maps. Please note that this will slow down the build
+  entry: {
+    main: './src/main/webapp/app/index'
   },
-  plugins: [
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendors',
-      minChunks(module) {
-        return (module.resource && module.resource.indexOf(path.resolve('node_modules')) === 0);
-      }
-    }),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      }
-    }),
-        // this conflicts with -p option
-    new webpack.optimize.UglifyJsPlugin({
-      compressor: {
-        warnings: false
-      }
-    })
-  ],
+  output: {
+    path: utils.root('<%= BUILD_DIR %>www'),
+    filename: 'app/[name].[hash].bundle.js',
+    chunkFilename: 'app/[id].[hash].chunk.js'
+  },
   module: {
     rules: [
       {
         enforce: 'pre',
-        test: /\.css$/,
+        test: /\.s?css$/,
         loader: 'stripcomment-loader'
       },
       {
-        test: /\.js$/,
-        loaders: ['babel-loader'],
-        include: path.resolve('./src/main/webapp/app')
+        test: /\.tsx?$/,
+        use: [{
+          loader: 'awesome-typescript-loader',
+          options: {
+            useCache: false
+          }
+        }],
+        include: [utils.root('./src/main/webapp/app')],
+        exclude: ['node_modules']
+      },
+      {
+        test: /\.scss$/,
+        use: extractSASS.extract({
+          fallback: 'style-loader',
+          use: ['css-loader', 'postcss-loader', 'sass-loader']
+        })
+      },
+      {
+        test: /\.css$/,
+        use: extractCSS.extract({
+          fallback: 'style-loader',
+          use: ['css-loader']
+        })
       }
     ]
-  }
+  },
+  plugins: [
+    // this conflicts with -p option
+    new webpack.optimize.UglifyJsPlugin({
+      beautify: false,
+      comments: false,
+      // sourceMap: true, // Enable source maps. Please note that this will slow down the build
+      compress: {
+        screw_ie8: true,
+        warnings: false
+      },
+      mangle: {
+        keep_fnames: true,
+        screw_i8: true
+      }
+    }),
+    extractCSS,
+    extractSASS,
+    new webpack.LoaderOptionsPlugin({
+      minimize: true,
+      debug: false
+    })
+  ]
 });
