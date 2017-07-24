@@ -50,8 +50,8 @@
             "status": "Status"
         },
         "status": {
-            "UP": "NAIK",
-            "DOWN": "TURUN"
+            "UP": "BAIK",
+            "DOWN": "BERMASALAH"
         }
     }
 }

@@ -14,7 +14,7 @@
         },
         "table": {
             "header": {
-                "principal": "User",
+                "principal": "Pengguna",
                 "date": "Tanggal",
                 "status": "Status",
                 "data": "Data tambahan"
