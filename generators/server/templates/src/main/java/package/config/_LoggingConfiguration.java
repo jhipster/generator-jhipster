@@ -78,7 +78,7 @@ public class LoggingConfiguration {
     public void addLogstashAppender(LoggerContext context) {
         log.info("Initializing Logstash logging");
 
-        LogstashSocketAppender logstashAppender = new LogstashSocketAppender();
+        LogstashTcpSocketAppender logstashAppender = new LogstashTcpSocketAppender();
         logstashAppender.setName("LOGSTASH");
         logstashAppender.setContext(context);
         <%_ if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { _%>
@@ -88,16 +88,15 @@ public class LoggingConfiguration {
         String customFields = "{\"app_name\":\"" + appName + "\",\"app_port\":\"" + serverPort + "\"}";
         <%_ } _%>
 
-		//More documentation is available at: https://github.com/logstash/logstash-logback-encoder
+        //More documentation is available at: https://github.com/logstash/logstash-logback-encoder
         LogstashEncoder logstashEncoder=new LogstashEncoder();
         // Set the Logstash appender config from JHipster properties
-		logstashEncoder.setCustomFields(customFields);
-		// Set the Logstash appender config from JHipster properties
+        logstashEncoder.setCustomFields(customFields);
+        // Set the Logstash appender config from JHipster properties
         logstashAppender.addDestinations(new InetSocketAddress(jHipsterProperties.getLogging().getLogstash().getHost(),jHipsterProperties.getLogging().getLogstash().getPort()));
         
-		
+        
         ShortenedThrowableConverter throwableConverter = new ShortenedThrowableConverter();
-        //throwableConverter.setMaxLength(2048);
         throwableConverter.setMaxDepthPerThrowable(30);
         throwableConverter.setRootCauseFirst(true);
         logstashEncoder.setThrowableConverter(throwableConverter);
