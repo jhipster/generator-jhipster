@@ -47,6 +47,7 @@ module.exports = HerokuGenerator.extend({
         this.angularAppName = this.getAngularAppName();
         this.buildTool = this.config.get('buildTool');
         this.applicationType = this.config.get('applicationType');
+        this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
         this.herokuAppName = this.config.get('herokuAppName');
         this.dynoSize = 'Free';
     },
@@ -278,7 +279,7 @@ module.exports = HerokuGenerator.extend({
             if (this.abort || this.herokuAppExists) return;
             const done = this.async();
 
-            if (this.applicationType === 'microservice' || this.applicationType === 'gateway') {
+            if (this.serviceDiscoveryType === 'eureka') {
                 const prompts = [
                     {
                         type: 'input',
