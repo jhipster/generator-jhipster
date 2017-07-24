@@ -79,7 +79,8 @@ module.exports = UpgradeGenerator.extend({
         this.log(`Regenerating application with JHipster ${version}...`);
         let generatorCommand = 'yo jhipster';
         if (semver.gte(version, FIRST_CLI_SUPPORTED_VERSION)) {
-            generatorCommand = this.clientPackageManager === 'yarn' ? '$(yarn bin)/jhipster' : '$(npm bin)/jhipster';
+            const generatorDir = this.clientPackageManager === 'yarn' ? shelljs.exec('yarn bin') : shelljs.exec('npm bin');
+            generatorCommand = `${generatorDir.replace('\n', '')}/jhipster`;
         }
         shelljs.exec(`${generatorCommand} --with-entities --force --skip-install`, { silent: this.silent }, (code, msg, err) => {
             if (code === 0) this.log(chalk.green(`Successfully regenerated application with JHipster ${version}`));
