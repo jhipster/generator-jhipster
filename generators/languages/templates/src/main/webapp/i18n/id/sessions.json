@@ -5,11 +5,11 @@
             "ipaddress": "Alamat IP",
             "useragent": "User Agent",
             "date": "Tanggal",
-            "button": "Invalidate"
+            "button": "Validasi Ulang"
         },
         "messages": {
-            "success": "<strong>Session invalidated!</strong>",
-            "error": "<strong>Muncul error!</strong> Sesi tidak bisa di invalidated."
+            "success": "<strong>Session berhasil divalidasi ulang!</strong>",
+            "error": "<strong>Muncul error!</strong> Sesi tidak bisa di validasi ulang."
         }
     }
 }
