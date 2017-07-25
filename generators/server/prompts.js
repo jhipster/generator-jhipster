@@ -191,6 +191,10 @@ function askForServerSideOpts() {
                     name: 'MongoDB'
                 },
                 {
+                    value: 'couchbase',
+                    name: 'Couchbase'
+                },
+                {
                     value: 'cassandra',
                     name: 'Cassandra'
                 }
@@ -212,6 +216,10 @@ function askForServerSideOpts() {
                 {
                     value: 'mongodb',
                     name: 'MongoDB'
+                },
+                {
+                    value: 'couchbase',
+                    name: 'Couchbase'
                 }
             ],
             default: 0
@@ -229,6 +237,10 @@ function askForServerSideOpts() {
                 {
                     value: 'mongodb',
                     name: 'MongoDB'
+                },
+                {
+                    value: 'couchbase',
+                    name: 'Couchbase'
                 },
                 {
                     value: 'cassandra',
@@ -454,6 +466,10 @@ function askForServerSideOpts() {
         } else if (this.databaseType === 'mongodb') {
             this.devDatabaseType = 'mongodb';
             this.prodDatabaseType = 'mongodb';
+            this.hibernateCache = 'no';
+        } else if (this.databaseType === 'couchbase') {
+            this.devDatabaseType = 'couchbase';
+            this.prodDatabaseType = 'couchbase';
             this.hibernateCache = 'no';
         } else if (this.databaseType === 'cassandra') {
             this.devDatabaseType = 'cassandra';

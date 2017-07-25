@@ -1,0 +1,15 @@
+-- create indexes
+CREATE INDEX type ON jhipster(`_class`)
+    WITH { "defer_build" : true };
+
+CREATE INDEX user_mail ON jhipster(email)
+    WHERE `_class` = "io.github.jhipster.domain.User"
+    WITH { "defer_build" : true };
+
+CREATE INDEX audit_event ON jhipster(principal, event_date, event_type)
+    WHERE `_class` = "io.github.jhipster.domain.PersistentAuditEvent"
+    WITH { "defer_build" : true };
+
+-- build indexes asynchronously
+BUILD INDEX ON jhipster(type, user_mail, audit_event);
+

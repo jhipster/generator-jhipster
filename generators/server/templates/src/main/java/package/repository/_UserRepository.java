@@ -24,7 +24,7 @@ import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
 <%_ } _%>
 import <%=packageName%>.domain.User;
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
@@ -62,14 +62,19 @@ import java.time.Instant;
  * Spring Data MongoDB repository for the User entity.
  */
 <%_ } _%>
+<%_ if (databaseType === 'couchbase') { _%>
+/**
+ * Spring Data Couchbase repository for the User entity.
+ */
+<%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
 /**
  * Cassandra repository for the User entity.
  */
 <%_ } _%>
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 @Repository
-public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRepository<User, Long><% } %><% if (databaseType === 'mongodb') { %>MongoRepository<User, String><% } %> {
+public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRepository<User, Long><% } %><% if (databaseType === 'mongodb') { %>MongoRepository<User, String><% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<User, String><% } %> {
 
     Optional<User> findOneByActivationKey(String activationKey);
 
@@ -79,8 +84,13 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
 
     Optional<User> findOneByEmail(String email);
 
+    <%_ if (databaseType === 'couchbase') { _%>
+    default Optional<User> findOneByLogin(String login) {
+        return Optional.ofNullable(findOne(User.PREFIX + N1qlCouchbaseRepository.DELIMITER + login));
+    }
+    <%_ } else { _%>
     Optional<User> findOneByLogin(String login);
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ } _%><%_ if (databaseType === 'sql') { _%>
 
     @EntityGraph(attributePaths = "authorities")
     User findOneWithAuthoritiesById(<%= pkType %> id);

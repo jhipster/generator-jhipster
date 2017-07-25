@@ -128,6 +128,10 @@
         <%_ if (databaseType === 'mongodb') { _%>
         <mongobee.version>0.12</mongobee.version>
         <%_ } _%>
+        <%_ if (databaseType === 'couchbase') { _%>
+        <couchmove.version>1.0</couchmove.version>
+        <couchbase-testcontainer.version>1.0</couchbase-testcontainer.version>
+        <%_ } _%>
         <node.version>v<%= NODE_VERSION %></node.version>
         <%_ if (clientPackageManager === 'npm') { _%>
         <npm.version><%= NPM_VERSION %></npm.version>
@@ -432,6 +436,14 @@
             <scope>test</scope>
         </dependency>
         <%_ } _%>
+        <%_ if (databaseType === 'couchbase') { _%>
+        <dependency>
+            <groupId>com.github.differentway</groupId>
+            <artifactId>couchbase-testcontainer</artifactId>
+            <version>${couchbase-testcontainer.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <%_ } _%>
         <%_ if (gatlingTests) { _%>
         <dependency>
             <groupId>io.gatling.highcharts</groupId>
@@ -545,6 +557,13 @@
             <version>${mongobee.version}</version>
         </dependency>
         <%_ } _%>
+        <%_ if (databaseType === 'couchbase') { _%>
+        <dependency>
+            <groupId>com.github.differentway</groupId>
+            <artifactId>couchmove</artifactId>
+            <version>${couchmove.version}</version>
+        </dependency>
+        <%_ } _%>
         <%_ if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { _%>
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -603,10 +622,10 @@
             <artifactId>jna</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (databaseType === 'mongodb') { _%>
+        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+            <artifactId>spring-boot-starter-data-<%=databaseType%></artifactId>
         </dependency>
         <%_ } _%>
         <%_ if (messageBroker === 'kafka') { _%>

@@ -22,7 +22,7 @@ package <%= packageName %>.web.rest;
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
-<%_ if (databaseType !== 'cassandra') { _%>
+<%_ if (databaseType !== 'cassandra' && databaseType !== 'couchbase') { _%>
 import <%= packageName %>.domain.Authority;
 <%_ } _%>
 import <%= packageName %>.domain.User;
@@ -69,10 +69,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-<%_ if (databaseType !== 'sql') { _%>
+<%_ if (databaseType === 'cassandra') { _%>
 import java.util.UUID;
 <%_ } _%>
 
+<%_ if (databaseType === 'couchbase') { _%>
+import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
+<%_ } _%>
 <%_ if (enableSocialSignIn) { _%>
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 <%_ } _%>
@@ -91,14 +94,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = <%= mainClass %>.class)
 public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
+    private static final String DEFAULT_LOGIN = "johndoe";
+    private static final String UPDATED_LOGIN = "jhipster";
+
     <%_ if (databaseType === 'sql') { _%>
     private static final Long DEFAULT_ID = 1L;
+    <%_ } else if (databaseType === 'couchbase'){ _%>
+    private static final String DEFAULT_ID = User.PREFIX + DEFAULT_LOGIN;
     <%_ } else { _%>
     private static final String DEFAULT_ID = "id1";
     <%_ } _%>
-
-    private static final String DEFAULT_LOGIN = "johndoe";
-    private static final String UPDATED_LOGIN = "jhipster";
 
     private static final String DEFAULT_PASSWORD = "passjohndoe";
     private static final String UPDATED_PASSWORD = "passjhipster";
@@ -192,6 +197,9 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
 
     @Before
     public void initTest() {
+        <%_ if (databaseType === 'couchbase') { _%>
+        mockAuthentication();
+        <%_ } _%>
         <%_ if (databaseType !== 'sql') { _%>
         userRepository.deleteAll();
         <%_ } _%>
@@ -259,7 +267,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         ManagedUserVM managedUserVM = new ManagedUserVM(
             <%_ if (databaseType === 'cassandra') { _%>
             UUID.randomUUID().toString(),
-            <%_ } else if (databaseType === 'mongodb') { _%>
+            <%_ } else if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
             "1L",
             <%_ } else { _%>
             1L,
@@ -697,7 +705,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         List<User> userList = userRepository.findAll();
         assertThat(userList).hasSize(databaseSizeBeforeDelete - 1);
     }
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 
     @Test
     <%_ if (databaseType === 'sql') { _%>
@@ -774,7 +782,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         assertThat(user.getLastModifiedBy()).isNull();
         assertThat(user.getLastModifiedDate()).isNotNull();
         <%_ } _%>
-        assertThat(user.getAuthorities())<% if (databaseType !== 'cassandra') { %>.extracting("name")<%_ } _%>.containsExactly(AuthoritiesConstants.USER);
+        assertThat(user.getAuthorities())<% if (databaseType !== 'cassandra' && databaseType !== 'couchbase') { %>.extracting("name")<%_ } _%>.containsExactly(AuthoritiesConstants.USER);
     }
 
     @Test
@@ -785,7 +793,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         user.setCreatedDate(Instant.now());
         user.setLastModifiedBy(DEFAULT_LOGIN);
         user.setLastModifiedDate(Instant.now());
-
+        <%_ } if (databaseType !== 'cassandra' && databaseType !== 'couchbase') { _%>
         Set<Authority> authorities = new HashSet<>();
         Authority authority = new Authority();
         authority.setName(AuthoritiesConstants.USER);

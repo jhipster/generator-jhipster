@@ -43,7 +43,8 @@
             "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql') { %>,
             "db": "데이터베이스"<% } %><% if (databaseType === 'mongodb') { %>,
             "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
-            "cassandra": "Cassandra"<% } %>
+            "cassandra": "Cassandra"<% } %><% if (databaseType === 'couchbase') { %>,
+            "couchbase": "Couchbase"<% } %>
         },
         "table": {
             "service": "서비스 이름",

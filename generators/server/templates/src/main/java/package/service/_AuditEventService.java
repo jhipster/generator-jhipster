@@ -60,7 +60,7 @@ public class AuditEventService {
             .map(auditEventConverter::convertToAuditEvent);
     }
 
-    public Optional<AuditEvent> find(<% if (databaseType === 'sql') { %>Long <% } %><% if (databaseType === 'mongodb') { %>String <% } %>id) {
+    public Optional<AuditEvent> find(<% if (databaseType === 'sql') { %>Long <% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>String <% } %>id) {
         return Optional.ofNullable(persistenceAuditEventRepository.findOne(id)).map
             (auditEventConverter::convertToAuditEvent);
     }

@@ -24,7 +24,7 @@ import io.github.jhipster.config.liquibase.AsyncSpringLiquibase;
 
 import liquibase.integration.spring.SpringLiquibase;
 <%_ } _%>
-<%_ if (databaseType === 'mongodb' && authenticationType === 'oauth2') { _%>
+<%_ if ((databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'oauth2') { _%>
 
 import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;
 <%_ } _%>
@@ -32,6 +32,14 @@ import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;
 
 import com.github.mongobee.Mongobee;
 import com.mongodb.MongoClient;
+<%_ } _%>
+<%_ if (databaseType === 'couchbase') { _%>
+
+import com.couchbase.client.java.Bucket;
+import com.github.couchmove.Couchmove;
+import <%=packageName%>.repository.CustomN1qlCouchbaseRepository;
+<%_ } _%>
+<%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.domain.util.JSR310DateConverters.DateToZonedDateTimeConverter;
 import io.github.jhipster.domain.util.JSR310DateConverters.ZonedDateTimeToDateConverter;
@@ -42,21 +50,26 @@ import org.h2.tools.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (databaseType === 'mongodb') { %>
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
-import org.springframework.boot.autoconfigure.mongo.MongoProperties;<% } %><% if (databaseType === 'sql') { %>
+import org.springframework.boot.autoconfigure.mongo.MongoProperties;<% } %><% if (databaseType === 'couchbase') { %>
+import org.springframework.boot.autoconfigure.couchbase.CouchbaseAutoConfiguration;<% } %><% if (databaseType === 'sql') { %>
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;<% } %>
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;<% if (databaseType === 'mongodb') { %>
-import org.springframework.context.annotation.Import;<% } %><% if (databaseType === 'mongodb' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>
+import org.springframework.context.annotation.Configuration;<% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
+import org.springframework.context.annotation.Import;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>
 import org.springframework.context.annotation.Profile;<% } %><% if (databaseType === 'sql') { %>
-import org.springframework.core.env.Environment;<% } %><% if (databaseType === 'mongodb') { %>
+import org.springframework.core.env.Environment;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
 import org.springframework.core.convert.converter.Converter;<% } %><% if (searchEngine === 'elasticsearch') { %>
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;<% } %><% if (databaseType === 'mongodb') { %>
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.CustomConversions;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;<% } %><% if (databaseType === 'couchbase') { %>
+import org.springframework.data.couchbase.core.convert.CustomConversions;
+import org.springframework.data.couchbase.core.mapping.event.ValidatingCouchbaseEventListener;
+import org.springframework.data.couchbase.repository.auditing.EnableCouchbaseAuditing;
+import org.springframework.data.couchbase.repository.config.EnableCouchbaseRepositories;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;<% } %>
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.core.task.TaskExecutor;
@@ -68,7 +81,7 @@ import javax.sql.DataSource;
 <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 import java.sql.SQLException;
 <%_ } } _%>
-<%_ if (databaseType === 'mongodb') { _%>
+<%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,11 +91,14 @@ import java.util.List;
 @EnableJpaRepositories("<%=packageName%>.repository")
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @EnableTransactionManagement<% } %><% if (searchEngine === 'elasticsearch') { %>
-@EnableElasticsearchRepositories("<%=packageName%>.repository.search")<% } %><% if (databaseType === 'mongodb') { %>
-@Profile("!" + JHipsterConstants.SPRING_PROFILE_CLOUD)
+@EnableElasticsearchRepositories("<%=packageName%>.repository.search")<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
+@Profile("!" + JHipsterConstants.SPRING_PROFILE_CLOUD)<% } %><% if (databaseType === 'mongodb') { %>
 @EnableMongoRepositories("<%=packageName%>.repository")
 @Import(value = MongoAutoConfiguration.class)
-@EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")<% } %>
+@EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")<% } %><% if (databaseType === 'couchbase') { %>
+@EnableCouchbaseRepositories(repositoryBaseClass = CustomN1qlCouchbaseRepository.class, basePackages = "<%=packageName%>.repository")
+@Import(value = CouchbaseAutoConfiguration.class)
+@EnableCouchbaseAuditing(auditorAwareRef = "springSecurityAuditorAware")<% } %>
 public class DatabaseConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);<% if (databaseType === 'sql') { %>
@@ -130,7 +146,12 @@ public class DatabaseConfiguration {
     @Bean
     public ValidatingMongoEventListener validatingMongoEventListener() {
         return new ValidatingMongoEventListener(validator());
-    }
+    }<% } %><% if (databaseType === 'couchbase') { %>
+
+    @Bean
+    public ValidatingCouchbaseEventListener validatingCouchbaseEventListener() {
+        return new ValidatingCouchbaseEventListener(validator());
+    }<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
 
     @Bean
     public LocalValidatorFactoryBean validator() {
@@ -144,7 +165,7 @@ public class DatabaseConfiguration {
         converters.add(DateToZonedDateTimeConverter.INSTANCE);
         converters.add(ZonedDateTimeToDateConverter.INSTANCE);
         return new CustomConversions(converters);
-    }
+    }<% } %><% if (databaseType === 'mongodb') { %>
 
     @Bean
     public Mongobee mongobee(MongoClient mongoClient, MongoTemplate mongoTemplate, MongoProperties mongoProperties) {
@@ -156,5 +177,13 @@ public class DatabaseConfiguration {
         mongobee.setChangeLogsScanPackage("<%=packageName%>.config.dbmigrations");
         mongobee.setEnabled(true);
         return mongobee;
+    }<% } %><% if (databaseType === 'couchbase') { %>
+
+    @Bean
+    public Couchmove couchmove(Bucket couchbaseBucket) {
+        log.debug("Configuring Couchmove");
+        Couchmove couchMove = new Couchmove(couchbaseBucket, "config/couchmove/changelog");
+        couchMove.migrate();
+        return couchMove;
     }<% } %>
 }

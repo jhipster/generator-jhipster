@@ -24,6 +24,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.springframework.http.MediaType;
+<%_ if (databaseType === 'couchbase') { _%>
+import org.springframework.security.authentication.TestingAuthenticationToken;
+import org.springframework.security.test.context.TestSecurityContextHolder;
+<%_ } _%>
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -75,6 +79,13 @@ public class TestUtil {
         }
         return byteArray;
     }
+    <% if (databaseType === 'couchbase') { %>
+    /**
+     * Mock user authentication for Spring SpEL expression used in {@link <%=packageName%>.repository.N1qlCouchbaseRepository}
+     */
+    public static void mockAuthentication() {
+        TestSecurityContextHolder.getContext().setAuthentication(new TestingAuthenticationToken("user", null));
+    }<% } %>
 
     /**
      * A matcher that tests that the examined string represents the same instant as the reference datetime.
@@ -133,7 +144,7 @@ public class TestUtil {
         // Test with an instance of the same class
         Object domainObject2 = clazz.getConstructor().newInstance();
         assertThat(domainObject1).isNotEqualTo(domainObject2);
-        <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+        <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
         // HashCodes are equals because the objects are not persisted yet
         assertThat(domainObject1.hashCode()).isEqualTo(domainObject2.hashCode());
         <%_ } _%>

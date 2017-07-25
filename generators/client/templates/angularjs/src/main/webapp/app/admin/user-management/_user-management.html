@@ -58,7 +58,7 @@
                     <div ng-repeat="authority in user.authorities">
                         <span class="label label-info">{{ authority }}</span>
                     </div>
-                </td><% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+                </td><% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
                 <td>{{user.createdDate | date:'dd/MM/yy HH:mm'}}</td>
                 <td>{{user.lastModifiedBy}}</td>
                 <td>{{user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</td><% } %>

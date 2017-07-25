@@ -165,6 +165,12 @@ spring:
             cluster-name:
             cluster-nodes: localhost:9300
     <%_ } _%>
+    <%_ if (databaseType === 'couchbase') { _%>
+    couchbase:
+        bootstrap-hosts: localhost
+        bucket:
+            name: <%= baseName %>
+    <%_ } _%>
     mail:
         host: localhost
         port: 25

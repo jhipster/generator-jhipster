@@ -21,7 +21,7 @@ package <%=packageName%>.web.rest.vm;
 import <%=packageName%>.service.dto.UserDTO;
 import javax.validation.constraints.Size;
 
-<%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
+<%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
 import java.time.Instant;
 <%_ } _%>
 import java.util.Set;
@@ -42,13 +42,13 @@ public class ManagedUserVM extends UserDTO {
         // Empty constructor needed for Jackson.
     }
 
-    public ManagedUserVM(<% if (databaseType === 'mongodb' || databaseType === 'cassandra') { %>String<% } else { %>Long<% } %> id, String login, String password, String firstName, String lastName,
-                         String email, boolean activated<% if (databaseType === 'mongodb' || databaseType === 'sql') { %>, String imageUrl<% } %>, String langKey,
-                         <% if (databaseType === 'mongodb' || databaseType === 'sql') { %>String createdBy, Instant createdDate, String lastModifiedBy, Instant lastModifiedDate,
+    public ManagedUserVM(<% if (databaseType === 'sql') { %>Long<% } else { %>String<% } %> id, String login, String password, String firstName, String lastName,
+                         String email, boolean activated<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>, String imageUrl<% } %>, String langKey,
+                         <% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>String createdBy, Instant createdDate, String lastModifiedBy, Instant lastModifiedDate,
                         <% } %>Set<String> authorities) {
 
-        super(id, login, firstName, lastName, email, activated<% if (databaseType === 'mongodb' || databaseType === 'sql') { %>, imageUrl<% } %>, langKey,
-            <% if (databaseType === 'mongodb' || databaseType === 'sql') { %>createdBy, createdDate, lastModifiedBy, lastModifiedDate,  <% } %>authorities);
+        super(id, login, firstName, lastName, email, activated<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>, imageUrl<% } %>, langKey,
+            <% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>createdBy, createdDate, lastModifiedBy, lastModifiedDate,  <% } %>authorities);
 
         this.password = password;
     }

@@ -101,6 +101,12 @@ services:
             file: mongodb.yml
             service: <%= baseName.toLowerCase() %>-mongodb
     <%_ } _%>
+    <%_ if (prodDatabaseType === 'couchbase') { _%>
+    <%= baseName.toLowerCase() %>-couchbase:
+        extends:
+            file: couchbase.yml
+            service: <%= baseName.toLowerCase() %>-couchbase
+    <%_ } _%>
     <%_ if (prodDatabaseType === 'mssql') { _%>
     <%= baseName.toLowerCase() %>-mssql:
         extends:
