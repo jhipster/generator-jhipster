@@ -121,7 +121,7 @@
     <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
     <%_ }); _%>
-    "webpack": "3.3.0",
+    "webpack": "3.4.0",
     "webpack-dev-server": "2.5.1",
     "webpack-merge": "4.1.0",
     "webpack-notifier": "1.5.0",
