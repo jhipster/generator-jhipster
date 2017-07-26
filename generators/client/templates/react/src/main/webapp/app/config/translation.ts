@@ -9,7 +9,7 @@ const mergeTranslations = requireContext => requireContext.keys().reduce(
 
 const translations = {
 <%_ languages.forEach((lang, index) => { _%>
-   <%= lang %>: mergeTranslations(require.context('i18n/<%= lang %>', false, /.json$/))<%= index !== languages.length - 1 ? ',' : '' %>
+   <%= lang %>: mergeTranslations(require.context('../../i18n/<%= lang %>', false, /.json$/))<%= index !== languages.length - 1 ? ',' : '' %>
 <%_ }); _%>
 };
 
