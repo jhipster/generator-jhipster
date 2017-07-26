@@ -8,7 +8,7 @@ import { Link } from 'react-router';
 import LoadingBar from 'react-redux-loading-bar';
 
 import { locales } from '../../../config/translation';
-import IconButton from '../../ui-components/icon-button/icon-button';
+import IconButton from '../../shared/components/icon-button/icon-button';
 import appConfig from '../../../config/constants';
 import './header.scss';
 
