@@ -287,6 +287,13 @@ const files = {
                 'shared/util/log-util.ts',
                 'shared/util/promise-utils.ts',
                 'shared/util/dom-utils.ts',
+                // components
+                'shared/components/icon-button/icon-button.tsx',
+                'shared/components/font-icon/font-icon.tsx',
+                'shared/components/loader/loader.tsx',
+                'shared/components/loader/loader.scss',
+                // model
+                'shared/model/redux-action.type.ts'
             ]
         },
         {
