@@ -38,6 +38,7 @@
     "pretest": "eslint .",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
+    "test:unit": "mocha --timeout 20000 --slow 0 --reporter spec",
     "test": "mocha --timeout 20000 --slow 0 --reporter spec test/*.spec.js"
   },
   "dependencies": {
