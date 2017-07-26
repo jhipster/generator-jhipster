@@ -26,14 +26,14 @@
     "node_modules"
   ],
   "dependencies": {
-    "@angular/common": "4.2.6",
-    "@angular/compiler": "4.2.6",
-    "@angular/core": "4.2.6",
-    "@angular/forms": "4.2.6",
-    "@angular/http": "4.2.6",
-    "@angular/platform-browser": "4.2.6",
-    "@angular/platform-browser-dynamic": "4.2.6",
-    "@angular/router": "4.2.6",
+    "@angular/common": "4.3.1",
+    "@angular/compiler": "4.3.1",
+    "@angular/core": "4.3.1",
+    "@angular/forms": "4.3.1",
+    "@angular/http": "4.3.1",
+    "@angular/platform-browser": "4.3.1",
+    "@angular/platform-browser-dynamic": "4.3.1",
+    "@angular/router": "4.3.1",
     "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.28",
     "bootstrap": "4.0.0-alpha.6",
     "core-js": "2.4.1",
@@ -55,7 +55,7 @@
   },
   "devDependencies": {
     "@angular/cli": "1.2.0",
-    "@angular/compiler-cli": "4.2.6",
+    "@angular/compiler-cli": "4.3.1",
     "@types/jasmine": "2.5.53",
     "@types/node": "8.0.13",
     <%_ if (protractorTests) { _%>
