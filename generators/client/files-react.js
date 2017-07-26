@@ -291,7 +291,6 @@ const files = {
                 'shared/components/icon-button/icon-button.tsx',
                 'shared/components/font-icon/font-icon.tsx',
                 'shared/components/loader/loader.tsx',
-                'shared/components/loader/loader.scss',
                 // model
                 'shared/model/redux-action.type.ts'
             ]
@@ -300,8 +299,11 @@ const files = {
             condition: generator => generator.useSass,
             path: REACT_DIR,
             templates: [
-                'shared/components/header/header.scss',
-                'shared/variables.scss'
+                'shared/layout/header/header.scss',
+                'shared/layout/footer/footer.scss',
+                'shared/components/loader/loader.scss',
+                '_shared-variables.scss',
+                'app.scss'
             ]
         },
     // {
