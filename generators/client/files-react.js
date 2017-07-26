@@ -155,7 +155,9 @@ const files = {
                 'reducers/index.ts',
                 'reducers/action-type.util.ts',
                 'reducers/administration.ts',
-                'reducers/authentication.ts'
+                'reducers/authentication.ts',
+                'reducers/layout.ts',
+                'reducers/system-property.ts'
             ]
         },
         {
@@ -283,7 +285,8 @@ const files = {
                 'shared/layout/private-route/private-route.tsx',
                 // util
                 'shared/util/log-util.ts',
-                'shared/util/promise-utils.ts'
+                'shared/util/promise-utils.ts',
+                'shared/util/dom-utils.ts',
             ]
         },
         {
