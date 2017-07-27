@@ -50,6 +50,7 @@ module.exports = DockerComposeGenerator.extend({
             this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
             this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
             this.DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE;
+            this.DOCKER_JHIPSTER_CURATOR = constants.DOCKER_JHIPSTER_CURATOR;
             this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
             this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
             this.DOCKER_JHIPSTER_IMPORT_DASHBOARDS = constants.DOCKER_JHIPSTER_IMPORT_DASHBOARDS;
@@ -90,6 +91,7 @@ module.exports = DockerComposeGenerator.extend({
             this.directoryPath = this.config.get('directoryPath');
             this.clusteredDbApps = this.config.get('clusteredDbApps');
             this.monitoring = this.config.get('monitoring');
+            this.consoleOptions = this.config.get('consoleOptions');
             this.useKafka = false;
             this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
             if (this.serviceDiscoveryType === undefined) {
@@ -110,6 +112,7 @@ module.exports = DockerComposeGenerator.extend({
         askForApps: prompts.askForApps,
         askForClustersMode: prompts.askForClustersMode,
         askForMonitoring: prompts.askForMonitoring,
+        askForConsoleOptions: prompts.askForConsoleOptions,
         askForServiceDiscovery: prompts.askForServiceDiscovery,
         askForAdminPassword: prompts.askForAdminPassword
     },
@@ -242,6 +245,7 @@ module.exports = DockerComposeGenerator.extend({
             this.config.set('directoryPath', this.directoryPath);
             this.config.set('clusteredDbApps', this.clusteredDbApps);
             this.config.set('monitoring', this.monitoring);
+            this.config.set('consoleOptions', this.consoleOptions);
             this.config.set('serviceDiscoveryType', this.serviceDiscoveryType);
             this.config.set('adminPassword', this.adminPassword);
             this.config.set('jwtSecretKey', this.jwtSecretKey);

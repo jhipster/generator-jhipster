@@ -70,9 +70,16 @@ services:
             file: jhipster-console.yml
             service: jhipster-import-dashboards
         depends_on:
-            jhipster-elasticsearch:
-                condition: service_healthy
-    <%_ if (composeApplicationType === 'microservice') { _%>
+            - jhipster-elasticsearch
+    <%_ if (consoleOptions.includes('curator')) { _%>
+    jhipster-curator:
+        extends:
+            file: jhipster-console.yml
+            service: jhipster-curator
+        depends_on:
+            - jhipster-elasticsearch
+    <%_ } _%>
+    <%_ if (consoleOptions.includes('zipkin')) { _%>
     jhipster-zipkin:
         extends:
             file: jhipster-console.yml

@@ -32,10 +32,11 @@ const DOCKER_KAFKA = 'wurstmeister/kafka:0.10.1.1';
 const DOCKER_ZOOKEEPER = 'wurstmeister/zookeeper:3.4.6';
 const DOCKER_SONAR = 'sonarqube:6.4-alpine';
 const DOCKER_JHIPSTER_CONSOLE = 'jhipster/jhipster-console:v2.2.0';
-const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v2.1.0';
-const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v2.1.0';
-const DOCKER_JHIPSTER_IMPORT_DASHBOARDS = 'jhipster/jhipster-import-dashboards:v2.1.0';
-const DOCKER_JHIPSTER_ZIPKIN = 'jhipster/jhipster-zipkin:v2.1.0';
+const DOCKER_JHIPSTER_CURATOR = 'jhipster/jhipster-curator:v2.2.0';
+const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v2.2.0';
+const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v2.2.0';
+const DOCKER_JHIPSTER_IMPORT_DASHBOARDS = 'jhipster/jhipster-import-dashboards:v2.2.0';
+const DOCKER_JHIPSTER_ZIPKIN = 'jhipster/jhipster-zipkin:v2.2.0';
 const DOCKER_CONSUL = 'consul:0.8.3';
 const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.2.2';
 const DOCKER_PROMETHEUS = 'prom/prometheus:v1.6.3';
@@ -168,6 +169,7 @@ const constants = {
     DOCKER_ZOOKEEPER,
     DOCKER_SONAR,
     DOCKER_JHIPSTER_CONSOLE,
+    DOCKER_JHIPSTER_CURATOR,
     DOCKER_JHIPSTER_ELASTICSEARCH,
     DOCKER_JHIPSTER_LOGSTASH,
     DOCKER_JHIPSTER_IMPORT_DASHBOARDS,
