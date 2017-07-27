@@ -88,7 +88,7 @@ public class LoggingConfiguration {
         String customFields = "{\"app_name\":\"" + appName + "\",\"app_port\":\"" + serverPort + "\"}";
         <%_ } _%>
 
-        //More documentation is available at: https://github.com/logstash/logstash-logback-encoder
+        // More documentation is available at: https://github.com/logstash/logstash-logback-encoder
         LogstashEncoder logstashEncoder=new LogstashEncoder();
         // Set the Logstash appender config from JHipster properties
         logstashEncoder.setCustomFields(customFields);
@@ -96,15 +96,11 @@ public class LoggingConfiguration {
         logstashAppender.addDestinations(new InetSocketAddress(jHipsterProperties.getLogging().getLogstash().getHost(),jHipsterProperties.getLogging().getLogstash().getPort()));
         
         ShortenedThrowableConverter throwableConverter = new ShortenedThrowableConverter();
-        throwableConverter.setMaxDepthPerThrowable(30);
         throwableConverter.setRootCauseFirst(true);
         logstashEncoder.setThrowableConverter(throwableConverter);
         logstashEncoder.setCustomFields(customFields);
+
         logstashAppender.setEncoder(logstashEncoder);
-
-        logstashAppender.setKeepAliveDuration(Duration.buildByMinutes(5));
-        logstashAppender.setReconnectionDelay(Duration.buildBySeconds(1));
-
         logstashAppender.start();
 
         // Wrap the appender in an Async appender for performance
