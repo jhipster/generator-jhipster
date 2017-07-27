@@ -401,7 +401,7 @@ module.exports = EntityGenerator.extend({
                 this.service = 'no';
             }
             if (_.isUndefined(this.pagination)) {
-                if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
+                if (this.databaseType === 'sql' || this.databaseType === 'mongodb' || this.databaseType === 'couchbase') {
                     this.warning(`pagination is missing in .jhipster/${this.name}.json, using no as fallback`);
                     this.pagination = 'no';
                 } else {
@@ -426,7 +426,7 @@ module.exports = EntityGenerator.extend({
             this.data.dto = this.dto;
             this.data.service = this.service;
             this.data.entityTableName = this.entityTableName;
-            if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
+            if (this.databaseType === 'sql' || this.databaseType === 'mongodb' || this.databaseType === 'couchbase') {
                 this.data.pagination = this.pagination;
             } else {
                 this.data.pagination = 'no';
@@ -495,7 +495,7 @@ module.exports = EntityGenerator.extend({
 
                 const nonEnumType = _.includes(['String', 'Integer', 'Long', 'Float', 'Double', 'BigDecimal',
                     'LocalDate', 'Instant', 'ZonedDateTime', 'Boolean', 'byte[]', 'ByteBuffer'], fieldType);
-                if ((this.databaseType === 'sql' || this.databaseType === 'mongodb') && !nonEnumType) {
+                if ((this.databaseType === 'sql' || this.databaseType === 'mongodb' || this.databaseType === 'couchbase') && !nonEnumType) {
                     field.fieldIsEnum = true;
                 } else {
                     field.fieldIsEnum = false;
@@ -698,7 +698,7 @@ module.exports = EntityGenerator.extend({
                 this.differentRelationships[entityType].push(relationship);
             });
 
-            if (this.databaseType === 'cassandra' || this.databaseType === 'mongodb') {
+            if (this.databaseType === 'cassandra' || this.databaseType === 'mongodb' || this.databaseType === 'couchbase') {
                 this.pkType = 'String';
             } else {
                 this.pkType = 'Long';
