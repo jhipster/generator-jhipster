@@ -18,6 +18,8 @@
 -%>
 package <%=packageName%>.config;
 
+import java.net.InetSocketAddress;
+
 import io.github.jhipster.config.JHipsterProperties;
 
 import ch.qos.logback.classic.AsyncAppender;
@@ -25,7 +27,9 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.spi.LoggerContextListener;
 import ch.qos.logback.core.spi.ContextAwareBase;
-import net.logstash.logback.appender.LogstashSocketAppender;
+import ch.qos.logback.core.util.Duration;
+import net.logstash.logback.appender.LogstashTcpSocketAppender;
+import net.logstash.logback.encoder.LogstashEncoder;
 import net.logstash.logback.stacktrace.ShortenedThrowableConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +78,7 @@ public class LoggingConfiguration {
     public void addLogstashAppender(LoggerContext context) {
         log.info("Initializing Logstash logging");
 
-        LogstashSocketAppender logstashAppender = new LogstashSocketAppender();
+        LogstashTcpSocketAppender logstashAppender = new LogstashTcpSocketAppender();
         logstashAppender.setName("LOGSTASH");
         logstashAppender.setContext(context);
         <%_ if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { _%>
@@ -84,17 +88,19 @@ public class LoggingConfiguration {
         String customFields = "{\"app_name\":\"" + appName + "\",\"app_port\":\"" + serverPort + "\"}";
         <%_ } _%>
 
+        // More documentation is available at: https://github.com/logstash/logstash-logback-encoder
+        LogstashEncoder logstashEncoder=new LogstashEncoder();
         // Set the Logstash appender config from JHipster properties
-        logstashAppender.setSyslogHost(jHipsterProperties.getLogging().getLogstash().getHost());
-        logstashAppender.setPort(jHipsterProperties.getLogging().getLogstash().getPort());
-        logstashAppender.setCustomFields(customFields);
-
-        // Limit the maximum length of the forwarded stacktrace so that it won't exceed the 8KB UDP limit of logstash
+        logstashEncoder.setCustomFields(customFields);
+        // Set the Logstash appender config from JHipster properties
+        logstashAppender.addDestinations(new InetSocketAddress(jHipsterProperties.getLogging().getLogstash().getHost(),jHipsterProperties.getLogging().getLogstash().getPort()));
+        
         ShortenedThrowableConverter throwableConverter = new ShortenedThrowableConverter();
-        throwableConverter.setMaxLength(7500);
         throwableConverter.setRootCauseFirst(true);
-        logstashAppender.setThrowableConverter(throwableConverter);
+        logstashEncoder.setThrowableConverter(throwableConverter);
+        logstashEncoder.setCustomFields(customFields);
 
+        logstashAppender.setEncoder(logstashEncoder);
         logstashAppender.start();
 
         // Wrap the appender in an Async appender for performance
