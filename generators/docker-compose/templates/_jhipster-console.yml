@@ -35,6 +35,7 @@ services:
             - LOGSTASH_DEBUG=false
         ports:
             - 5000:5000
+            - 5000:5000/udp
         # Uncomment this section to have logstash config loaded from a volume
         #volumes:
         #    - ./log-conf/:/conf
