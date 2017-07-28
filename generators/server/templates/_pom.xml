@@ -1286,7 +1286,7 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
                         <configuration>
-                            <%_ if (!skipClient) { _%>
+                            <%_ if (!skipClient && clientFramework !== 'angular1') { _%>
                             <warSourceDirectory><%= CLIENT_DIST_DIR %></warSourceDirectory>
                             <%_ } _%>
                         </configuration>
