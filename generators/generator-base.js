@@ -1444,8 +1444,14 @@ module.exports = class extends PrivateBase {
                 try {
                     this.composeWith(require.resolve(generatorTocall), options);
                 } catch (err) {
-                    this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
-                        chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow(`'npm install -g ${module.npmPackageName}'`));
+                    try {
+                        // Fallback for legacy modules
+                        this.composeWith(module.generatorCallback, options);
+                    } catch (e) {
+                        this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
+                            chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow(`'npm install -g ${module.npmPackageName}'`));
+                        this.debug('ERROR:', e);
+                    }
                     this.debug('ERROR:', err);
                 }
             }
