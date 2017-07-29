@@ -1440,7 +1440,7 @@ module.exports = class extends PrivateBase {
             if (module.hookFor === hookFor && module.hookType === hookType) {
                 // compose with the modules callback generator
                 const hook = module.generatorCallback.split(':')[1];
-                const generatorTocall = `${module.npmPackageName}/generators/${hook || module.hookFor}`;
+                const generatorTocall = `${module.npmPackageName}/generators/${hook || 'app'}`;
                 try {
                     this.composeWith(require.resolve(generatorTocall), options);
                 } catch (err) {
