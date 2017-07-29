@@ -104,7 +104,7 @@ module.exports = JDLGenerator.extend({
                     this.log(chalk.yellow('No change in entity configurations. No entities were updated'));
                 }
             } catch (e) {
-                this.log(e);
+                this.debug('Error:', e);
                 this.error('\nError while parsing entities from JDL\n');
             }
         },
@@ -132,6 +132,7 @@ module.exports = JDLGenerator.extend({
                     }
                 });
             } catch (e) {
+                this.debug('Error:', e);
                 this.error(`Error while generating entities from parsed JDL\n${e}`);
             }
         }
