@@ -316,6 +316,7 @@ function getAppFolders(input, composeApplicationType) {
                     }
                 } catch (err) {
                     this.log(chalk.red(`${file}: this .yo-rc.json can't be read`));
+                    this.debug('Error:', err);
                 }
             }
         }

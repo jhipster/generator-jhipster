@@ -244,6 +244,7 @@ module.exports = EntityGenerator.extend({
             this.fileData = this.fs.readJSON(this.fromPath);
         } catch (err) {
             this.error(chalk.red('\nThe entity configuration file could not be read!\n'));
+            this.debug('Error:', err);
         }
         this.relationships = this.fileData.relationships || [];
         this.fields = this.fileData.fields || [];
@@ -763,6 +764,7 @@ module.exports = EntityGenerator.extend({
                 }
             } catch (err) {
                 this.log(`\n${chalk.bold.red('Running post run module hooks failed. No modification done to the generated entity.')}`);
+                this.debug('Error:', err);
             }
         },
 

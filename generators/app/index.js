@@ -353,6 +353,7 @@ module.exports = JhipsterGenerator.extend({
                 }
             } catch (err) {
                 this.log(`\n${chalk.bold.red('Running post run module hooks failed. No modification done to the generated app.')}`);
+                this.debug('Error:', err);
             }
         }
     }
