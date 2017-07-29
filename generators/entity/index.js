@@ -721,31 +721,6 @@ module.exports = EntityGenerator.extend({
 
     writing: writeFiles(),
 
-    install() {
-        const injectJsFilesToIndex = () => {
-            const done = this.async();
-            this.log(`\n${chalk.bold.green('Running `gulp inject` to add JavaScript to index.html\n')}`);
-            this.spawnCommand('gulp', ['inject:app']).on('close', () => {
-                done();
-            });
-        };
-        // rebuild client for Angular
-        const rebuildClient = () => {
-            const done = this.async();
-            this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app\n')}`);
-            this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build']).on('close', () => {
-                done();
-            });
-        };
-        if (!this.options['skip-install'] && !this.skipClient) {
-            if (this.clientFramework === 'angular1') {
-                injectJsFilesToIndex();
-            } else {
-                rebuildClient();
-            }
-        }
-    },
-
     end: {
         afterRunHook() {
             try {
@@ -788,6 +763,32 @@ module.exports = EntityGenerator.extend({
                 }
             } catch (err) {
                 this.log(`\n${chalk.bold.red('Running post run module hooks failed. No modification done to the generated entity.')}`);
+            }
+        },
+
+
+        install() {
+            const injectJsFilesToIndex = () => {
+                const done = this.async();
+                this.log(`\n${chalk.bold.green('Running `gulp inject` to add JavaScript to index.html\n')}`);
+                this.spawnCommand('gulp', ['inject:app']).on('close', () => {
+                    done();
+                });
+            };
+            // rebuild client for Angular
+            const rebuildClient = () => {
+                const done = this.async();
+                this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app\n')}`);
+                this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build']).on('close', () => {
+                    done();
+                });
+            };
+            if (!this.options['skip-install'] && !this.skipClient) {
+                if (this.clientFramework === 'angular1') {
+                    injectJsFilesToIndex();
+                } else {
+                    rebuildClient();
+                }
             }
         }
     }
