@@ -863,6 +863,27 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * A a new changeset to a Liquibase changelog file for entity.
+     *
+     * @param {string} filePath - The full path of the changelog file.
+     * @param {string} content - The content to be added as changeset
+     */
+    addChangesetToLiquibaseEntityChangelog(filePath, content) {
+        try {
+            jhipsterUtils.rewriteFile({
+                file: filePath,
+                needle: 'jhipster-needle-liquibase-add-changeset',
+                splicable: [
+                    content
+                ]
+            }, this);
+        } catch (e) {
+            this.log(chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required jhipster-needle. Changeset not added.\n') + e);
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
      * Add a new social button in the login and register modules
      *
      * @param {string} socialName - name of the social module. ex: 'facebook'

@@ -148,4 +148,5 @@
         <addPrimaryKey columnNames="<%= getPluralColumnName(name) %>_id, <%= getPluralColumnName(relationshipName) %>_id" tableName="<%= joinTableName %>"/>
         <% } %><% } %>
     </changeSet>
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>
