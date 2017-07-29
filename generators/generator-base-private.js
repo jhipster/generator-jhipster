@@ -409,8 +409,11 @@ module.exports = class extends Generator {
      *
      * @param {string} value - message to print
      */
-    debug(msg) {
-        this.log(`${chalk.yellow.bold('DEBUG!')} ${msg}`);
+    debug(msg, ...args) {
+        if (this.isDebugEnabled || (this.options && this.options.debug)) {
+            this.log(`${chalk.yellow.bold('DEBUG!')} ${msg}`);
+            args.forEach(arg => this.log(arg));
+        }
     }
 
     checkJava() {

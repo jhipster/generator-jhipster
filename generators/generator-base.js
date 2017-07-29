@@ -1406,6 +1406,7 @@ module.exports = class extends PrivateBase {
         const modules = this.getModuleHooks();
         // run through all module hooks, which matches the hookFor and hookType
         modules.forEach((module) => {
+            this.debug('Composing module with config:', module);
             if (module.hookFor === hookFor && module.hookType === hookType) {
                 // compose with the modules callback generator
                 try {
@@ -1413,6 +1414,7 @@ module.exports = class extends PrivateBase {
                 } catch (err) {
                     this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
                         chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow(`'npm install -g ${module.npmPackageName}'`));
+                    this.debug('ERROR:', err);
                 }
             }
         });
@@ -1901,9 +1903,7 @@ module.exports = class extends PrivateBase {
                 }
             }
         }
-        if (this.isDebugEnabled) {
-            this.debug(`Time taken to write files: ${new Date() - startTime}ms`);
-        }
+        this.debug(`Time taken to write files: ${new Date() - startTime}ms`);
         return filesOut;
     }
 };
