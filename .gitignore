@@ -10,3 +10,4 @@ test/temp/
 .vscode
 yarn.lock
 .DS_Store
+.jhipster
