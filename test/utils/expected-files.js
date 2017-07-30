@@ -111,13 +111,13 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/LogsResource.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/UserResource.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/SecurityUtilsTest.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/ITUserService.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/ITAccountResource.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/ITAuditResource.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/ITLogsResource.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/ITProfileInfoResource.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/UserServiceIntTest.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/AccountResourceIntTest.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/AuditResourceIntTest.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/LogsResourceIntTest.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/ProfileInfoResourceIntTest.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/TestUtil.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/ITUserResource.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/UserResourceIntTest.java`,
         `${SERVER_TEST_RES_DIR}config/application.yml`,
         `${SERVER_TEST_RES_DIR}logback.xml`,
         '.editorconfig'
@@ -362,8 +362,8 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/social/CustomSignInAdapter.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/SocialService.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/SocialController.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/ITCustomSocialUsersConnectionRepository.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/ITSocialService.java`
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/CustomSocialUsersConnectionRepositoryIntTest.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/SocialServiceIntTest.java`
     ],
 
     session: [
