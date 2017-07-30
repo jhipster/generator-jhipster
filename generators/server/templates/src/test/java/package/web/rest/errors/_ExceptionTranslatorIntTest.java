@@ -51,7 +51,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
 <%_ } _%>
-public class ITExceptionTranslator <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+public class ExceptionTranslatorIntTest <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     @Autowired
     private ExceptionTranslatorTestController controller;

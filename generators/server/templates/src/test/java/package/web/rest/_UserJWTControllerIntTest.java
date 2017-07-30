@@ -55,7 +55,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)
-public class ITUserJWTController <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+public class UserJWTControllerIntTest <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     @Autowired
     private TokenProvider tokenProvider;

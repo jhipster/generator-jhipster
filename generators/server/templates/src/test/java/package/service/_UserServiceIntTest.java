@@ -53,7 +53,7 @@ import static org.assertj.core.api.Assertions.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)<% if (databaseType === 'sql') { %>
 @Transactional<% } %>
-public class ITUserService <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{<% if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { %>
+public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{<% if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { %>
 
     @Autowired
     private PersistentTokenRepository persistentTokenRepository;<% } %>

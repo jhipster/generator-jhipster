@@ -50,7 +50,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)<% if (databaseType === 'sql') { %>
 @Transactional<% } %>
-public class ITCustomSocialUsersConnectionRepository {
+public class CustomSocialUsersConnectionRepositoryIntTest {
 
     private ConnectionFactoryRegistry connectionFactoryRegistry;
 

@@ -448,9 +448,9 @@ function writeFiles() {
             this.template(`${SERVER_TEST_SRC_DIR}package/config/_WebConfigurerTest.java`, `${testDir}config/WebConfigurerTest.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/config/_WebConfigurerTestController.java`, `${testDir}config/WebConfigurerTestController.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_TestUtil.java`, `${testDir}web/rest/TestUtil.java`);
-            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_ITLogsResource.java`, `${testDir}web/rest/ITLogsResource.java`);
-            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_ITProfileInfoResource.java`, `${testDir}web/rest/ITProfileInfoResource.java`);
-            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/errors/_ITExceptionTranslator.java`, `${testDir}web/rest/errors/ITExceptionTranslator.java`);
+            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_LogsResourceIntTest.java`, `${testDir}web/rest/LogsResourceIntTest.java`);
+            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_ProfileInfoResourceIntTest.java`, `${testDir}web/rest/ProfileInfoResourceIntTest.java`);
+            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/errors/_ExceptionTranslatorIntTest.java`, `${testDir}web/rest/errors/ExceptionTranslatorIntTest.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/errors/_ExceptionTranslatorTestController.java`, `${testDir}web/rest/errors/ExceptionTranslatorTestController.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/util/_PaginationUtilTest.java`, `${testDir}web/rest/util/PaginationUtilTest.java`);
 
@@ -481,7 +481,7 @@ function writeFiles() {
 
             // Create Cucumber test files
             if (this.cucumberTests) {
-                this.template(`${SERVER_TEST_SRC_DIR}package/cucumber/_ITCucumber.java`, `${testDir}cucumber/ITCucumber.java`);
+                this.template(`${SERVER_TEST_SRC_DIR}package/cucumber/_CucumberIntTest.java`, `${testDir}cucumber/CucumberIntTest.java`);
                 this.template(`${SERVER_TEST_SRC_DIR}package/cucumber/stepdefs/_StepDefs.java`, `${testDir}cucumber/stepdefs/StepDefs.java`);
                 this.copy(`${TEST_DIR}features/gitkeep`, `${TEST_DIR}features/.gitkeep`);
             }
@@ -562,25 +562,25 @@ function writeFiles() {
             this.copy(`${SERVER_TEST_RES_DIR}mails/_testEmail.html`, `${SERVER_TEST_RES_DIR}mails/testEmail.html`);
             this.copy(`${SERVER_TEST_RES_DIR}i18n/_messages_en.properties`, `${SERVER_TEST_RES_DIR}i18n/messages_en.properties`);
 
-            this.template(`${SERVER_TEST_SRC_DIR}package/service/_ITMailService.java`, `${testDir}service/ITMailService.java`);
-            this.template(`${SERVER_TEST_SRC_DIR}package/service/_ITUserService.java`, `${testDir}service/ITUserService.java`);
-            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_ITUserResource.java`, `${testDir}web/rest/ITUserResource.java`);
+            this.template(`${SERVER_TEST_SRC_DIR}package/service/_MailServiceIntTest.java`, `${testDir}service/MailServiceIntTest.java`);
+            this.template(`${SERVER_TEST_SRC_DIR}package/service/_UserServiceIntTest.java`, `${testDir}service/UserServiceIntTest.java`);
+            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_UserResourceIntTest.java`, `${testDir}web/rest/UserResourceIntTest.java`);
             if (this.enableSocialSignIn) {
-                this.template(`${SERVER_TEST_SRC_DIR}package/repository/_ITCustomSocialUsersConnectionRepository.java`, `${testDir}repository/ITCustomSocialUsersConnectionRepository.java`);
-                this.template(`${SERVER_TEST_SRC_DIR}package/service/_ITSocialService.java`, `${testDir}service/ITSocialService.java`);
+                this.template(`${SERVER_TEST_SRC_DIR}package/repository/_CustomSocialUsersConnectionRepositoryIntTest.java`, `${testDir}repository/CustomSocialUsersConnectionRepositoryIntTest.java`);
+                this.template(`${SERVER_TEST_SRC_DIR}package/service/_SocialServiceIntTest.java`, `${testDir}service/SocialServiceIntTest.java`);
             }
 
-            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_ITAccountResource.java`, `${testDir}web/rest/ITAccountResource.java`);
+            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_AccountResourceIntTest.java`, `${testDir}web/rest/AccountResourceIntTest.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/security/_SecurityUtilsTest.java`, `${testDir}security/SecurityUtilsTest.java`);
             if (this.authenticationType === 'jwt') {
                 this.template(`${SERVER_TEST_SRC_DIR}package/security/jwt/_JWTFilterTest.java`, `${testDir}security/jwt/JWTFilterTest.java`);
                 this.template(`${SERVER_TEST_SRC_DIR}package/security/jwt/_TokenProviderTest.java`, `${testDir}security/jwt/TokenProviderTest.java`);
-                this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_ITUserJWTController.java`, `${testDir}web/rest/ITUserJWTController.java`);
+                this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_UserJWTControllerIntTest.java`, `${testDir}web/rest/UserJWTControllerIntTest.java`);
             }
 
             if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
-                this.template(`${SERVER_TEST_SRC_DIR}package/repository/_ITCustomAuditEventRepository.java`, `${testDir}repository/ITCustomAuditEventRepository.java`);
-                this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_ITAuditResource.java`, `${testDir}web/rest/ITAuditResource.java`);
+                this.template(`${SERVER_TEST_SRC_DIR}package/repository/_CustomAuditEventRepositoryIntTest.java`, `${testDir}repository/CustomAuditEventRepositoryIntTest.java`);
+                this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_AuditResourceIntTest.java`, `${testDir}web/rest/AuditResourceIntTest.java`);
             }
             // Cucumber user management tests
             if (this.cucumberTests) {

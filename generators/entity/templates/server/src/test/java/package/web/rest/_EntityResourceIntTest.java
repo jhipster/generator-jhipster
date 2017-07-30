@@ -83,7 +83,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
 <%_ } _%>
-public class IT<%= entityClass %>Resource <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+public class <%= entityClass %>ResourceIntTest <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 <%_
     let oldSource = '';
     try {

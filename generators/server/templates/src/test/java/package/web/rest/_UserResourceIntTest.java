@@ -89,7 +89,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)
-public class ITUserResource <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     <%_ if (databaseType === 'sql') { _%>
     private static final Long DEFAULT_ID = 1L;

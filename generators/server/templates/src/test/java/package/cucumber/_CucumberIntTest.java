@@ -27,6 +27,6 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(plugin = "pretty", features = "<%= TEST_DIR %>features")
-public class ITCucumber <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest<% } %> {
+public class CucumberIntTest <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest<% } %> {
 
 }

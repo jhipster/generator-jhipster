@@ -1012,6 +1012,9 @@
                     </execution>
                 </executions>
                 <configuration>
+                		<includes>
+                         <include>**/*IntTest.java</include>
+					</includes>
                     <!-- Sets the VM argument line used when integration tests are run. -->
                     <argLine>${failsafeArgLine}</argLine>
                 </configuration>
@@ -1019,36 +1022,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <%_ if (cucumberTests) { _%>
-                <executions>
-                    <execution>
-                        <id>default-test</id>
-                        <configuration>
-                            <excludes>
-                                <exclude>**/Abstract*.java</exclude>
-                                <exclude>**/IT*Cucumber*.java</exclude>
-                            </excludes>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>without-cucumber</id>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                        <configuration>
-                            <includes>
-                                <include>**/IT*Cucumber*.java</include>
-                            </includes>
-                        </configuration>
-                    </execution>
-                </executions>
-                <%_ }  _%>
                 <configuration>
-                    <%_ if (!cucumberTests) { _%>
-                    <excludes>
-                        <exclude>**/IT*.java</exclude>
+                   <excludes>
+                       <exclude>**/Abstract*.java</exclude>
+                        <exclude>**/*IntTest.java</exclude>
                     </excludes>
-                    <%_ } %>
                     <!-- Force alphabetical order to have a reproducible build -->
                     <argLine>${surefireArgLine}</argLine>
                     <runOrder>alphabetical</runOrder>

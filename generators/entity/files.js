@@ -140,18 +140,18 @@ const serverFiles = {
         {
             path: SERVER_TEST_SRC_DIR,
             templates: [{
-                file: 'package/web/rest/_ITEntityResource.java',
+                file: 'package/web/rest/_EntityResourceIntTest.java',
                 options: { context: { randexp, _, chalkRed: chalk.red, fs, SERVER_TEST_SRC_DIR } },
-                renameTo: generator => `${generator.packageFolder}/web/rest/IT${generator.entityClass}Resource.java`
+                renameTo: generator => `${generator.packageFolder}/web/rest/${generator.entityClass}ResourceIntTest.java`
             }]
         },
         {
             condition: generator => generator.gatlingTests,
             path: TEST_DIR,
             templates: [{
-                file: 'gatling/user-files/simulations/_ITGatlingEntity.scala',
+                file: 'gatling/user-files/simulations/_GatlingEntityIntTest.scala',
                 options: { interpolate: INTERPOLATE_REGEX },
-                renameTo: generator => `gatling/user-files/simulations/ITGatling${generator.entityClass}.scala`
+                renameTo: generator => `gatling/user-files/simulations/Gatling${generator.entityClass}IntTest.scala`
             }]
         }
     ]
