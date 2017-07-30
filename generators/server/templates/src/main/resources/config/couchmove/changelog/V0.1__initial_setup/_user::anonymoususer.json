@@ -9,5 +9,5 @@
     "created_by": "system",
     "last_modified_by": "system",
     "authorities": [],
-    "_class": "io.github.jhipster.domain.User"
+    "_class": "<%=packageName%>.domain.User"
 }

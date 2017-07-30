@@ -11,5 +11,5 @@
     "authorities": [
         "ROLE_USER"
     ],
-    "_class": "io.github.jhipster.domain.User"
+    "_class": "<%=packageName%>.domain.User"
 }
