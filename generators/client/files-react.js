@@ -88,6 +88,7 @@ const files = {
                 'app.tsx',
                 'index.tsx',
                 'routes.tsx',
+                'typings.d.ts',
                 'config/constants.ts',
                 'config/axios-interceptor.ts',
                 'config/devtools.tsx',
