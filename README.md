@@ -5,15 +5,51 @@ Greetings, Java Hipster!
 
 
 [![NPM version][npm-image]][npm-url]
-[![Build Status][travis-image]][travis-url]
+[![Build Status][travis-image]][travis-url-main]
 [![Dependency Status][daviddm-image]][daviddm-url]
+
+
+## Travis Builds
+
+Additionnal builds on [hipster-labs/jhipster-travis-build](https://github.com/hipster-labs/jhipster-travis-build)
+
+| Type          | Status                                                   | Description                    |
+|:--------------|:---------------------------------------------------------|:-------------------------------|
+| docker        | [![Build Status][image-docker]][travis-url]              | Build for testing Docker image |
+| ng1-maven     | [![Build Status][image-ng1-maven]][travis-url]           | Builds for ng1 Maven           |
+| ngx-maven     | [![Build Status][image-ngx-maven]][travis-url]           | Builds for ngx Maven           |
+| ngx-gradle    | [![Build Status][image-ngx-gradle]][travis-url]          | Builds for ngx Gradle          |
+| microservices | [![Build Status][image-microservices]][travis-url]       | Builds for Microservices       |
+| react         | [![Build Status][image-react]][travis-url]               | Builds for React               |
+
+## Analysis of the sample JHipster project
+
+[![sonar-quality-gate][sonar-quality-gate]][sonar-url]
+[![sonar-coverage][sonar-coverage]][sonar-url]
+[![sonar-bugs][sonar-bugs]][sonar-url]
+[![sonar-vulnerabilities][sonar-vulnerabilities]][sonar-url]
+
 
 Full documentation and information is available on our website at [https://jhipster.github.io/][jhipster-url]
 
 Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submitting an issue. If your issue is a bug, please use the bug template pre populated [here](https://github.com/jhipster/generator-jhipster/issues/new). For feature requests and queries you can use [this template][feature-template].
 
+[travis-url]: https://travis-ci.org/hipster-labs/jhipster-travis-build/branches
+[image-docker]: https://travis-ci.org/hipster-labs/jhipster-travis-build.svg?branch=docker
+[image-ng1-maven]: https://travis-ci.org/hipster-labs/jhipster-travis-build.svg?branch=ng1-maven
+[image-ngx-maven]: https://travis-ci.org/hipster-labs/jhipster-travis-build.svg?branch=ngx-maven
+[image-ngx-gradle]: https://travis-ci.org/hipster-labs/jhipster-travis-build.svg?branch=ngx-gradle
+[image-microservices]: https://travis-ci.org/hipster-labs/jhipster-travis-build.svg?branch=microservices
+[image-react]: https://travis-ci.org/hipster-labs/jhipster-travis-build.svg?branch=react
+
+[sonar-url]: https://sonarqube.com/dashboard?id=io.github.jhipster.sample%3Ajhipster-sample-application
+[sonar-quality-gate]: https://sonarqube.com/api/badges/gate?key=io.github.jhipster.sample%3Ajhipster-sample-application
+[sonar-coverage]: https://sonarqube.com/api/badges/measure?key=io.github.jhipster.sample%3Ajhipster-sample-application&metric=coverage
+[sonar-bugs]: https://sonarqube.com/api/badges/measure?key=io.github.jhipster.sample%3Ajhipster-sample-application&metric=bugs
+[sonar-vulnerabilities]: https://sonarqube.com/api/badges/measure?key=io.github.jhipster.sample%3Ajhipster-sample-application&metric=vulnerabilities
+
 [jhipster-image]: https://raw.githubusercontent.com/jhipster/jhipster.github.io/master/images/logo/logo-jhipster2x.png
-[jhipster-url]: https://jhipster.github.io/
+[jhipster-url-main]: https://jhipster.github.io/
 [npm-image]: https://badge.fury.io/js/generator-jhipster.svg
 [npm-url]: https://npmjs.org/package/generator-jhipster
 [travis-image]: https://travis-ci.org/jhipster/generator-jhipster.svg?branch=master
