@@ -41,10 +41,6 @@ buildscript {
     }
 }
 
-plugins {
-    id 'net.ltgt.apt' version '0.9'
-}
-
 apply plugin: 'java'
 sourceCompatibility=1.<%= javaVersion %>
 targetCompatibility=1.<%= javaVersion %>
@@ -60,7 +56,6 @@ apply plugin: 'com.moowork.gulp'
 <%_ } _%>
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'idea'
-apply plugin: 'net.ltgt.apt'
 <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa' || messageBroker === 'kafka' || hibernateCache === 'infinispan') { _%>
 dependencyManagement {
   imports {
