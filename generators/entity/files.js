@@ -149,9 +149,9 @@ const serverFiles = {
             condition: generator => generator.gatlingTests,
             path: TEST_DIR,
             templates: [{
-                file: 'gatling/user-files/simulations/_EntityGatlingTest.scala',
+                file: 'gatling/user-files/simulations/_GatlingEntityIntTest.scala',
                 options: { interpolate: INTERPOLATE_REGEX },
-                renameTo: generator => `gatling/user-files/simulations/${generator.entityClass}GatlingTest.scala`
+                renameTo: generator => `gatling/user-files/simulations/Gatling${generator.entityClass}IntTest.scala`
             }]
         }
     ]

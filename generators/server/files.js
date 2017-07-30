@@ -439,7 +439,7 @@ function writeFiles() {
             mkdirp(testDir);
 
             if (this.databaseType === 'cassandra') {
-                this.template(`${SERVER_TEST_SRC_DIR}package/_CassandraKeyspaceUnitTest.java`, `${testDir}CassandraKeyspaceUnitTest.java`);
+                this.template(`${SERVER_TEST_SRC_DIR}package/_CassandraKeyspaceTest.java`, `${testDir}CassandraKeyspaceTest.java`);
                 this.template(`${SERVER_TEST_SRC_DIR}package/_AbstractCassandraTest.java`, `${testDir}AbstractCassandraTest.java`);
                 this.template(`${SERVER_TEST_SRC_DIR}package/config/_CassandraTestConfiguration.java`, `${testDir}config/CassandraTestConfiguration.java`);
                 this.template(`${SERVER_TEST_RES_DIR}_cassandra-random-port.yml`, `${SERVER_TEST_RES_DIR}cassandra-random-port.yml`);
@@ -452,7 +452,7 @@ function writeFiles() {
             this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_ProfileInfoResourceIntTest.java`, `${testDir}web/rest/ProfileInfoResourceIntTest.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/errors/_ExceptionTranslatorIntTest.java`, `${testDir}web/rest/errors/ExceptionTranslatorIntTest.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/errors/_ExceptionTranslatorTestController.java`, `${testDir}web/rest/errors/ExceptionTranslatorTestController.java`);
-            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/util/_PaginationUtilUnitTest.java`, `${testDir}web/rest/util/PaginationUtilUnitTest.java`);
+            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/util/_PaginationUtilTest.java`, `${testDir}web/rest/util/PaginationUtilTest.java`);
 
             this.template(`${SERVER_TEST_RES_DIR}config/_application.yml`, `${SERVER_TEST_RES_DIR}config/application.yml`);
             this.template(`${SERVER_TEST_RES_DIR}_logback.xml`, `${SERVER_TEST_RES_DIR}logback.xml`);
@@ -481,7 +481,7 @@ function writeFiles() {
 
             // Create Cucumber test files
             if (this.cucumberTests) {
-                this.template(`${SERVER_TEST_SRC_DIR}package/cucumber/_CucumberTest.java`, `${testDir}cucumber/CucumberTest.java`);
+                this.template(`${SERVER_TEST_SRC_DIR}package/cucumber/_CucumberIntTest.java`, `${testDir}cucumber/CucumberIntTest.java`);
                 this.template(`${SERVER_TEST_SRC_DIR}package/cucumber/stepdefs/_StepDefs.java`, `${testDir}cucumber/stepdefs/StepDefs.java`);
                 this.copy(`${TEST_DIR}features/gitkeep`, `${TEST_DIR}features/.gitkeep`);
             }
@@ -571,7 +571,7 @@ function writeFiles() {
             }
 
             this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_AccountResourceIntTest.java`, `${testDir}web/rest/AccountResourceIntTest.java`);
-            this.template(`${SERVER_TEST_SRC_DIR}package/security/_SecurityUtilsUnitTest.java`, `${testDir}security/SecurityUtilsUnitTest.java`);
+            this.template(`${SERVER_TEST_SRC_DIR}package/security/_SecurityUtilsTest.java`, `${testDir}security/SecurityUtilsTest.java`);
             if (this.authenticationType === 'jwt') {
                 this.template(`${SERVER_TEST_SRC_DIR}package/security/jwt/_JWTFilterTest.java`, `${testDir}security/jwt/JWTFilterTest.java`);
                 this.template(`${SERVER_TEST_SRC_DIR}package/security/jwt/_TokenProviderTest.java`, `${testDir}security/jwt/TokenProviderTest.java`);

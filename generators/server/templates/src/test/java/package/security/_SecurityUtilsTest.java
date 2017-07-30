@@ -35,7 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 *
 * @see SecurityUtils
 */
-public class SecurityUtilsUnitTest {
+public class SecurityUtilsTest {
 
     @Test
     public void testgetCurrentUserLogin() {
