@@ -45,6 +45,7 @@ import com.zaxxer.hikari.HikariDataSource;
 <%_ } _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.beans.factory.annotation.Autowired;
 <%_ } _%>
@@ -127,8 +128,10 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
         }
         if (jHipsterProperties.getMetrics().getLogs().isEnabled()) {
             log.info("Initializing Metrics Log reporting");
+            Marker metricsMarker = org.slf4j.MarkerFactory.getMarker("metrics");
             final Slf4jReporter reporter = Slf4jReporter.forRegistry(metricRegistry)
                 .outputTo(LoggerFactory.getLogger("metrics"))
+                .markWith(metricsMarker)
                 .convertRatesTo(TimeUnit.SECONDS)
                 .convertDurationsTo(TimeUnit.MILLISECONDS)
                 .build();
