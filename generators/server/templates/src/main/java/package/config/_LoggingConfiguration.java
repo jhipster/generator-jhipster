@@ -68,10 +68,13 @@ public class LoggingConfiguration {
     private final ConsulRegistration consulRegistration;
     <%_ } _%>
 
+    private final String version;
+
     private final JHipsterProperties jHipsterProperties;
 
     public LoggingConfiguration(@Value("${spring.application.name}") String appName, @Value("${server.port}") String serverPort,
-        <% if (serviceDiscoveryType === "eureka") { %>EurekaInstanceConfigBean eurekaInstanceConfigBean,<% } %><% if (serviceDiscoveryType === "consul") { %> ConsulRegistration consulRegistration,<% } %> JHipsterProperties jHipsterProperties) {
+        <% if (serviceDiscoveryType === "eureka") { %>EurekaInstanceConfigBean eurekaInstanceConfigBean,<% } %><% if (serviceDiscoveryType === "consul") { %> ConsulRegistration consulRegistration,<% } %> JHipsterProperties jHipsterProperties, @Value("${info.project.version}")
+String version) {
         this.appName = appName;
         this.serverPort = serverPort;
         <%_ if (serviceDiscoveryType === 'eureka') { _%>
@@ -81,6 +84,7 @@ public class LoggingConfiguration {
         this.consulRegistration = consulRegistration;
         <%_ } _%>
         this.jHipsterProperties = jHipsterProperties;
+        this.version = version;
         if (jHipsterProperties.getLogging().getLogstash().isEnabled()) {
             addLogstashAppender(context);
 
@@ -99,7 +103,7 @@ public class LoggingConfiguration {
         logstashAppender.setContext(context);
         <%_ if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { _%>
         String customFields = "{\"app_name\":\"" + appName + "\",\"app_port\":\"" + serverPort + "\"," +
-            "\"instance_id\":\"" + <% if (serviceDiscoveryType === "eureka") { %>eurekaInstanceConfigBean.getInstanceId()<% } %><% if (serviceDiscoveryType === "consul") { %>consulRegistration.getInstanceId()<% } %> + "\"}";
+            "\"instance_id\":\"" + <% if (serviceDiscoveryType === "eureka") { %>eurekaInstanceConfigBean.getInstanceId()<% } %><% if (serviceDiscoveryType === "consul") { %>consulRegistration.getInstanceId()<% } %> + "\"," + "\"version\":\"" + version + "\"}";
         <%_ } else { _%>
         String customFields = "{\"app_name\":\"" + appName + "\",\"app_port\":\"" + serverPort + "\"}";
         <%_ } _%>
