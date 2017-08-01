@@ -55,13 +55,13 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         rules: [{
             test: /\.ts$/,
             use: [
-                { loader: 'angular2-template-loader' },
                 {
                     loader: 'awesome-typescript-loader',
                     options: {
                         configFileName: 'tsconfig-aot.json'
                     },
-                }
+                },
+                { loader: 'angular2-template-loader' }
             ],
             exclude: ['node_modules/generator-jhipster']
         },
