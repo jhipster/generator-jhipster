@@ -92,7 +92,7 @@
     <%_ if (enableTranslation) { _%>
     "merge-jsons-webpack-plugin": "1.0.8",
     <%_ } _%>
-    "ngc-webpack": "3.0.0",
+    "ngc-webpack": "3.1.0",
     "phantomjs-prebuilt": "2.1.14",
     <%_ if (protractorTests) { _%>
     "protractor": "5.1.2",
@@ -121,6 +121,7 @@
     <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
     <%_ }); _%>
+    "uglifyjs-webpack-plugin": "1.0.0-beta.2",
     "webpack": "3.4.0",
     "webpack-dev-server": "2.5.1",
     "webpack-merge": "4.1.0",

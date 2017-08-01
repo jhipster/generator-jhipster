@@ -21,6 +21,7 @@ const webpackMerge = require('webpack-merge');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const Visualizer = require('webpack-visualizer-plugin');
 const ngcWebpack = require('ngc-webpack');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const path = require('path');
 
 const utils = require('./utils.js');
@@ -33,7 +34,9 @@ const extractSASS = new ExtractTextPlugin(`[name]-sass.[hash].css`);
 const extractCSS = new ExtractTextPlugin(`[name].[hash].css`);
 
 module.exports = webpackMerge(commonConfig({ env: ENV }), {
-    // devtool: 'source-map', // Enable source maps. Please note that this will slow down the build
+    // Enable source maps. Please note that this will slow down the build.
+    // You have to enable it in UglifyJSPlugin config below and in tsconfig-aot.json as well
+    // devtool: 'source-map',
     entry: {
         polyfills: './<%= MAIN_SRC_DIR %>app/polyfills',
         <%_ if (useSass) { _%>
@@ -98,17 +101,30 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
             // Webpack statistics in target folder
             filename: '../stats.html'
         }),
-        new webpack.optimize.UglifyJsPlugin({
-            beautify: false,
-            comments: false,
-            // sourceMap: true, // Enable source maps. Please note that this will slow down the build
-            compress: {
-                screw_ie8: true,
-                warnings: false
-            },
-            mangle: {
-                keep_fnames: true,
-                screw_i8: true
+        new UglifyJSPlugin({
+            parallel: true,
+            uglifyOptions: {
+                ie8: false,
+                // sourceMap: true, // Enable source maps. Please note that this will slow down the build
+                compress: {
+                    dead_code: true,
+                    warnings: false,
+                    properties: true,
+                    drop_debugger: true,
+                    conditionals: true,
+                    booleans: true,
+                    loops: true,
+                    unused: true,
+                    toplevel: true,
+                    if_return: true,
+                    inline: true,
+                    join_vars: true
+                },
+                output: {
+                    comments: false,
+                    beautify: false,
+                    indent_level: 2
+                }
             }
         }),
         new ngcWebpack.NgcWebpackPlugin({
