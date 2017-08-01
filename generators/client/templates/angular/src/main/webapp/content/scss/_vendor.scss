@@ -23,7 +23,9 @@ $fa-font-path: '~font-awesome/fonts';
 put Sass variables here:
 eg $input-color: red;
 ****************************/
-
+// Override Boostrap variables
+@import "bootstrap-variables";
+// Import Bootstrap source files from node_modules
 @import 'node_modules/bootstrap/scss/bootstrap';
 <%_ if (enableI18nRTL) { _%>
 @import 'src/main/webapp/content/scss/rtl.scss';
