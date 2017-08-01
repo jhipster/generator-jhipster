@@ -72,6 +72,7 @@ const files = {
             condition: generator => generator.useSass,
             path: MAIN_SRC_DIR,
             templates: [
+                'content/scss/__bootstrap-variables.scss',
                 'content/scss/_global.scss',
                 'content/scss/_vendor.scss'
             ]
