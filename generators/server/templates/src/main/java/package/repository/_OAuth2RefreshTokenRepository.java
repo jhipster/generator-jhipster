@@ -19,12 +19,19 @@
 package <%=packageName%>.repository;
 
 import <%=packageName%>.domain.OAuth2AuthenticationRefreshToken;
+<%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.mongodb.repository.MongoRepository;
+<%_ } _%>
 
 /**
- * Spring Data MongoDB repository for the OAuth2AuthenticationRefreshToken entity.
+ * Spring Data <% if (databaseType === 'couchbase') { %>Couchbase<% } else { %>MongoDB<% } %> repository for the OAuth2AuthenticationRefreshToken entity.
  */
-public interface OAuth2RefreshTokenRepository extends MongoRepository<OAuth2AuthenticationRefreshToken, String> {
-
+public interface OAuth2RefreshTokenRepository extends <% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } else { %>MongoRepository<% } %><OAuth2AuthenticationRefreshToken, String> {
+<% if (databaseType === 'couchbase') { %>
+    default OAuth2AuthenticationRefreshToken findByTokenId(String tokenId) {
+        return findOne(OAuth2AuthenticationRefreshToken.PREFIX + DELIMITER + tokenId);
+    }
+<% } else { %>
     OAuth2AuthenticationRefreshToken findByTokenId(String tokenId);
+<% } %>
 }

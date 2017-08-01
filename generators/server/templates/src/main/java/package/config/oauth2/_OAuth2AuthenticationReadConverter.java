@@ -18,7 +18,12 @@
 -%>
 package <%=packageName%>.config.oauth2;
 
+<%_ if (databaseType === 'couchbase') { _%>
+import org.springframework.data.couchbase.core.mapping.CouchbaseDocument;
+import org.springframework.data.couchbase.core.mapping.CouchbaseList;
+<%_ } else { _%>
 import com.mongodb.DBObject;
+<% } %>
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,37 +38,50 @@ import java.util.*;
 
 /**
  * Converter to deserialize back into an OAuth2Authentication Object made necessary because
- * Spring Mongo can't map clientAuthentication to authorizationRequest.
+ * Spring <% if (databaseType === 'couchbase') { %>Couchbase<% } else { %>Mongo<% } %> can't map clientAuthentication to authorizationRequest.
  */
 @ReadingConverter
-public class OAuth2AuthenticationReadConverter implements Converter<DBObject, OAuth2Authentication> {
+public class OAuth2AuthenticationReadConverter implements Converter<<% if (databaseType === 'couchbase') { %>CouchbaseDocument<% } else { %>DBObject<% } %>, OAuth2Authentication> {
 
     @Override
-    public OAuth2Authentication convert(DBObject source) {
-        DBObject storedRequest = (DBObject)source.get("storedRequest");
-        List<String> rsIds = (List<String>)storedRequest.get("resourceIds");
+    @SuppressWarnings("unchecked")
+    public OAuth2Authentication convert(<% if (databaseType === 'couchbase') { %>CouchbaseDocument<% } else { %>DBObject<% } %> source) {
+        <%_ if (databaseType === 'couchbase') { _%>
+        Map<String, Object> storedRequest = ((CouchbaseDocument) source.get("storedRequest")).export();
+        <%_ } else { _%>
+        DBObject storedRequest = (DBObject) source.get("storedRequest");
+        <%_ } _%>
         OAuth2Request oAuth2Request = new OAuth2Request(
-            (Map<String, String>)storedRequest.get("requestParameters"),
-            (String)storedRequest.get("clientId"),
+            (Map<String, String>) storedRequest.get("requestParameters"),
+            (String) storedRequest.get("clientId"),
             getAuthorities((List<Map<String, String>>) storedRequest.get("authorities")),
             (boolean) storedRequest.get("approved"),
-            new HashSet<>((List<String>)storedRequest.get("scope")),
-            new HashSet<>((List<String>)storedRequest.get("resourceIds")),
-            (String)storedRequest.get("redirectUri"),
-            new HashSet<>((List<String>)storedRequest.get("responseTypes")),
-            (Map<String, Serializable>)storedRequest.get("extensionProperties"));
+            new HashSet<>((List<String>) storedRequest.get("scope")),
+            new HashSet<>((List<String>) storedRequest.get("resourceIds")),
+            (String) storedRequest.get("redirectUri"),
+            new HashSet<>((List<String>) storedRequest.get("responseTypes")),
+            (Map<String, Serializable>) storedRequest.get("extensionProperties"));
 
-        DBObject userAuthorization = (DBObject)source.get("userAuthentication");
+        <% if (databaseType === 'couchbase') { %>CouchbaseDocument<% } else { %>DBObject<% } %> userAuthorization = (<% if (databaseType === 'couchbase') { %>CouchbaseDocument<% } else { %>DBObject<% } %>) source.get("userAuthentication");
         Object principal = getPrincipalObject(userAuthorization.get("principal"));
-        Authentication userAuthentication = new UsernamePasswordAuthenticationToken(principal,
-                userAuthorization.get("credentials"), getAuthorities((List<Map<String, String>>) userAuthorization.get("authorities")));
+        Authentication userAuthentication = new UsernamePasswordAuthenticationToken(principal, userAuthorization.get("credentials"),
+        <%_ if (databaseType === 'couchbase') { _%>
+            getAuthorities((List) ((CouchbaseList) userAuthorization.get("authorities")).export()));
+        <%_ } else { _%>
+            getAuthorities((List<Map<String, String>>) userAuthorization.get("authorities")));
+        <%_ } _%>
 
-        return new OAuth2Authentication(oAuth2Request,  userAuthentication );
+        return new OAuth2Authentication(oAuth2Request,  userAuthentication);
     }
 
+@SuppressWarnings("unchecked")
     private Object getPrincipalObject(Object principal) {
-        if(principal instanceof DBObject) {
-            DBObject principalDBObject = (DBObject)principal;
+        if(principal instanceof <% if (databaseType === 'couchbase') { %>CouchbaseDocument<% } else { %>DBObject<% } %>) {
+            <%_ if (databaseType === 'couchbase') { _%>
+            Map<String, Object> principalDBObject = ((CouchbaseDocument) principal).export();
+            <%_ } else { _%>
+            DBObject principalDBObject = (DBObject) principal;
+            <%_ } _%>
 
             String userName = (String) principalDBObject.get("username");
             String password = "";
@@ -81,7 +99,7 @@ public class OAuth2AuthenticationReadConverter implements Converter<DBObject, OA
 
     private Collection<GrantedAuthority> getAuthorities(List<Map<String, String>> authorities) {
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>(authorities.size());
-        for(Map<String, String> authority : authorities) {
+        for (Map<String, String> authority : authorities) {
             grantedAuthorities.add(new SimpleGrantedAuthority(authority.get("role")));
         }
         return grantedAuthorities;

@@ -23,11 +23,11 @@ import <%=packageName%>.repository.OAuth2CodeRepository;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.code.RandomValueAuthorizationCodeServices;
 
-public class MongoDBAuthorizationCodeServices extends RandomValueAuthorizationCodeServices {
+public class DocumentDBAuthorizationCodeServices extends RandomValueAuthorizationCodeServices {
 
     private final OAuth2CodeRepository oAuth2CodeRepository;
 
-    public MongoDBAuthorizationCodeServices(OAuth2CodeRepository oAuth2CodeRepository) {
+    public DocumentDBAuthorizationCodeServices(OAuth2CodeRepository oAuth2CodeRepository) {
         this.oAuth2CodeRepository = oAuth2CodeRepository;
     }
 

@@ -30,8 +30,6 @@ import java.io.Serializable;
  */
 public class CustomN1qlCouchbaseRepository<T, ID extends Serializable> extends N1qlCouchbaseRepository<T, ID> {
 
-    private static final String DELIMITER = "::";
-
     private final CouchbasePersistentEntity<?> persistentEntity;
 
     /**

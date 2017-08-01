@@ -20,11 +20,11 @@ package <%=packageName%>.repository;
 
 
 import <%=packageName%>.domain.OAuth2AuthenticationClientDetails;
+<%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.mongodb.repository.MongoRepository;
+<%_ } _%>
 
-import java.util.List;
-
-public interface OAuth2ClientDetailsRepository extends MongoRepository<OAuth2AuthenticationClientDetails, String> {
+public interface OAuth2ClientDetailsRepository extends <% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } else { %>MongoRepository<% } %><OAuth2AuthenticationClientDetails, String> {
 
     OAuth2AuthenticationClientDetails findOneByClientId(String clientId);
 }

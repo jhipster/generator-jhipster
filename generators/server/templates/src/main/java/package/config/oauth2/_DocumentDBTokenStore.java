@@ -34,9 +34,9 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * A MongoDB implementation of the TokenStore.
+ * A <%if (databaseType === 'couchbase') { %>Couchbase<% } else { %>MongoDB<% } %> implementation of the TokenStore.
  */
-public class MongoDBTokenStore implements TokenStore {
+public class DocumentDBTokenStore implements TokenStore {
 
     private final OAuth2AccessTokenRepository oAuth2AccessTokenRepository;
 
@@ -44,8 +44,8 @@ public class MongoDBTokenStore implements TokenStore {
 
     private AuthenticationKeyGenerator authenticationKeyGenerator = new DefaultAuthenticationKeyGenerator();
 
-    public MongoDBTokenStore(final OAuth2AccessTokenRepository oAuth2AccessTokenRepository,
-                             final OAuth2RefreshTokenRepository oAuth2RefreshTokenRepository) {
+    public DocumentDBTokenStore(final OAuth2AccessTokenRepository oAuth2AccessTokenRepository,
+                                final OAuth2RefreshTokenRepository oAuth2RefreshTokenRepository) {
         this.oAuth2AccessTokenRepository = oAuth2AccessTokenRepository;
         this.oAuth2RefreshTokenRepository = oAuth2RefreshTokenRepository;
     }

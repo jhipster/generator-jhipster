@@ -30,7 +30,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-public class MongoDBApprovalStore implements ApprovalStore {
+public class DocumentDBApprovalStore implements ApprovalStore {
 
     private final Log logger = LogFactory.getLog(getClass());
 
@@ -38,7 +38,7 @@ public class MongoDBApprovalStore implements ApprovalStore {
 
     private boolean handleRevocationsAsExpiry = false;
 
-    public MongoDBApprovalStore(final OAuth2ApprovalRepository oAuth2ApprovalRepository) {
+    public DocumentDBApprovalStore(final OAuth2ApprovalRepository oAuth2ApprovalRepository) {
         this.oAuth2ApprovalRepository = oAuth2ApprovalRepository;
     }
 
@@ -51,12 +51,12 @@ public class MongoDBApprovalStore implements ApprovalStore {
         logger.debug(String.format("adding approvals: [%s]", approvals));
 
         for (final Approval approval : approvals) {
-            List<OAuth2AuthenticationApproval> mongoDBApprovals = this.oAuth2ApprovalRepository
+            List<OAuth2AuthenticationApproval> dbApprovals = this.oAuth2ApprovalRepository
                 .findByUserIdAndClientIdAndScope(approval.getUserId(), approval.getClientId(), approval.getScope());
 
-            if (!mongoDBApprovals.isEmpty()) {
-                for (final OAuth2AuthenticationApproval mongoDBApproval : mongoDBApprovals) {
-                    updateApproval(mongoDBApproval, approval);
+            if (!dbApprovals.isEmpty()) {
+                for (final OAuth2AuthenticationApproval dbApproval : dbApprovals) {
+                    updateApproval(dbApproval, approval);
                 }
             } else {
                 updateApproval(new OAuth2AuthenticationApproval(), approval);
@@ -65,17 +65,17 @@ public class MongoDBApprovalStore implements ApprovalStore {
         return true;
     }
 
-    private void updateApproval(final OAuth2AuthenticationApproval mongoDBApproval, final Approval approval) {
+    private void updateApproval(final OAuth2AuthenticationApproval dbApproval, final Approval approval) {
         logger.debug(String.format("refreshing approval: [%s]", approval));
 
-        mongoDBApproval.setExpiresAt(approval.getExpiresAt());
-        mongoDBApproval.setStatus(approval.getStatus() == null ? Approval.ApprovalStatus.APPROVED : approval.getStatus());
-        mongoDBApproval.setLastUpdatedAt(approval.getLastUpdatedAt());
-        mongoDBApproval.setUserId(approval.getUserId());
-        mongoDBApproval.setClientId(approval.getClientId());
-        mongoDBApproval.setScope(approval.getScope());
+        dbApproval.setExpiresAt(approval.getExpiresAt());
+        dbApproval.setStatus(approval.getStatus() == null ? Approval.ApprovalStatus.APPROVED : approval.getStatus());
+        dbApproval.setLastUpdatedAt(approval.getLastUpdatedAt());
+        dbApproval.setUserId(approval.getUserId());
+        dbApproval.setClientId(approval.getClientId());
+        dbApproval.setScope(approval.getScope());
 
-        this.oAuth2ApprovalRepository.save(mongoDBApproval);
+        this.oAuth2ApprovalRepository.save(dbApproval);
     }
 
     @Override
@@ -84,19 +84,19 @@ public class MongoDBApprovalStore implements ApprovalStore {
         boolean success = true;
 
         for (final Approval approval : approvals) {
-            List<OAuth2AuthenticationApproval> mongoDBApprovals = this.oAuth2ApprovalRepository
+            List<OAuth2AuthenticationApproval> dbApprovals = this.oAuth2ApprovalRepository
                 .findByUserIdAndClientIdAndScope(approval.getUserId(), approval.getClientId(), approval.getScope());
 
-            if (mongoDBApprovals.size() != 1) {
+            if (dbApprovals.size() != 1) {
                 success = false;
             }
 
-            for (final OAuth2AuthenticationApproval mongoDBApproval : mongoDBApprovals) {
+            for (final OAuth2AuthenticationApproval dbApproval : dbApprovals) {
                 if (handleRevocationsAsExpiry) {
-                    mongoDBApproval.setExpiresAt(new Date());
-                    this.oAuth2ApprovalRepository.save(mongoDBApproval);
+                    dbApproval.setExpiresAt(new Date());
+                    this.oAuth2ApprovalRepository.save(dbApproval);
                 } else {
-                    this.oAuth2ApprovalRepository.delete(mongoDBApproval);
+                    this.oAuth2ApprovalRepository.delete(dbApproval);
                 }
             }
         }

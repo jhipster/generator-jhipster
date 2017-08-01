@@ -66,6 +66,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.CustomConversions;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;<% } %><% if (databaseType === 'couchbase') { %>
+import org.springframework.data.couchbase.config.BeanNames;
 import org.springframework.data.couchbase.core.convert.CustomConversions;
 import org.springframework.data.couchbase.core.mapping.event.ValidatingCouchbaseEventListener;
 import org.springframework.data.couchbase.repository.auditing.EnableCouchbaseAuditing;
@@ -158,7 +159,7 @@ public class DatabaseConfiguration {
         return new LocalValidatorFactoryBean();
     }
 
-    @Bean
+    @Bean<% if (databaseType === 'couchbase') { %>(name = BeanNames.COUCHBASE_CUSTOM_CONVERSIONS)<% } %>
     public CustomConversions customConversions() {
         List<Converter<?, ?>> converters = new ArrayList<>();<% if (authenticationType === 'oauth2') { %>
         converters.add(new OAuth2AuthenticationReadConverter());<% } %>

@@ -20,24 +20,46 @@ package <%=packageName%>.domain;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
+<%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.mongodb.core.mapping.Document;
+<%_ } else { _%>
+import org.springframework.data.couchbase.core.mapping.Document;
+import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
+import org.springframework.data.couchbase.core.mapping.id.IdPrefix;
+<%_ } _%>
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.client.BaseClientDetails;
+<%_ if (databaseType === 'mongodb') { _%>
 
 import java.util.UUID;
+<%_ } _%>
 
-@Document(collection = "OAUTH_AUTHENTICATION_CLIENT_DETAILS")
+<%_ if (databaseType === 'couchbase') { _%>
+import static io.github.jhipster.repository.N1qlCouchbaseRepository.DELIMITER;
+import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
+<%_ } _%>
+
+@Document<% if (databaseType === 'mongodb') { %>(collection = "OAUTH_AUTHENTICATION_CLIENT_DETAILS")<% } %>
 public class OAuth2AuthenticationClientDetails extends BaseClientDetails implements ClientDetails {
 
     private static final long serialVersionUID = 1L;
+<% if (databaseType === 'couchbase') { %>
+    public static final String PREFIX = "client_details";
 
-    @Id
+    @SuppressWarnings("unused")
+    @IdPrefix
+    private String prefix = PREFIX;
+<% } %>
+    @Id<% if (databaseType === 'couchbase') { %>
+    @GeneratedValue(strategy = UNIQUE, delimiter = DELIMITER)<% } %>
     private String id;
 
     @PersistenceConstructor
     public OAuth2AuthenticationClientDetails() {
         super();
+        <%_ if (databaseType === 'mongodb') { _%>
         this.id = UUID.randomUUID().toString();
+        <%_ } _%>
     }
 
     @Override

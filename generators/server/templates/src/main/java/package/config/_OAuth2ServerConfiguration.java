@@ -18,11 +18,11 @@
 -%>
 package <%=packageName%>.config;
 
-<%_ if (databaseType === 'mongodb') { _%>
-import <%=packageName%>.config.oauth2.MongoDBApprovalStore;
-import <%=packageName%>.config.oauth2.MongoDBAuthorizationCodeServices;
-import <%=packageName%>.config.oauth2.MongoDBClientDetailsService;
-import <%=packageName%>.config.oauth2.MongoDBTokenStore;
+<%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+import <%=packageName%>.config.oauth2.DocumentDBApprovalStore;
+import <%=packageName%>.config.oauth2.DocumentDBAuthorizationCodeServices;
+import <%=packageName%>.config.oauth2.DocumentDBClientDetailsService;
+import <%=packageName%>.config.oauth2.DocumentDBTokenStore;
 import <%=packageName%>.repository.*;
 <%_ } _%>
 import <%=packageName%>.security.AuthoritiesConstants;
@@ -70,11 +70,11 @@ public class OAuth2ServerConfiguration {<% if (databaseType === 'sql') { %>
     @Bean
     public JdbcTokenStore tokenStore() {
         return new JdbcTokenStore(dataSource);
-    }<% } %><% if (databaseType === 'mongodb') { %>
+    }<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
 
     @Bean
     public TokenStore tokenStore(OAuth2AccessTokenRepository oAuth2AccessTokenRepository, OAuth2RefreshTokenRepository oAuth2RefreshTokenRepository) {
-        return new MongoDBTokenStore(oAuth2AccessTokenRepository, oAuth2RefreshTokenRepository);
+        return new DocumentDBTokenStore(oAuth2AccessTokenRepository, oAuth2RefreshTokenRepository);
     }<% } %>
 
     @Configuration
@@ -186,12 +186,12 @@ public class OAuth2ServerConfiguration {<% if (databaseType === 'sql') { %>
 
         @Bean
         public ApprovalStore approvalStore() {
-            return new MongoDBApprovalStore(oAuth2ApprovalRepository);
+            return new DocumentDBApprovalStore(oAuth2ApprovalRepository);
         }
 
         @Bean
         protected AuthorizationCodeServices authorizationCodeServices() {
-            return new MongoDBAuthorizationCodeServices(oAuth2CodeRepository);
+            return new DocumentDBAuthorizationCodeServices(oAuth2CodeRepository);
         }
 <%_ } _%>
 
@@ -213,7 +213,7 @@ public class OAuth2ServerConfiguration {<% if (databaseType === 'sql') { %>
         @Override
         public void configure(ClientDetailsServiceConfigurer clients) throws Exception {<% if (databaseType === 'sql') { %>
             clients.jdbc(dataSource);<% } else { %>
-            clients.withClientDetails(new MongoDBClientDetailsService(oAuth2ClientDetailsRepository));<% } %>
+            clients.withClientDetails(new DocumentDBClientDetailsService(oAuth2ClientDetailsRepository));<% } %>
         }
     }
 }

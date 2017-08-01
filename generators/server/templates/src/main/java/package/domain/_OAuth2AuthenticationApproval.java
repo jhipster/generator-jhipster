@@ -20,24 +20,46 @@ package <%=packageName%>.domain;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
+<%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.mongodb.core.mapping.Document;
+<%_ } else { _%>
+import org.springframework.data.couchbase.core.mapping.Document;
+import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
+import org.springframework.data.couchbase.core.mapping.id.IdPrefix;
+<%_ } _%>
 import org.springframework.security.oauth2.provider.approval.Approval;
 
 import java.io.Serializable;
+<%_ if (databaseType === 'mongodb') { _%>
 import java.util.UUID;
+<%_ } _%>
 
-@Document(collection = "OAUTH_AUTHENTICATION_APPROVAL")
+<%_ if (databaseType === 'couchbase') { _%>
+import static io.github.jhipster.repository.N1qlCouchbaseRepository.DELIMITER;
+import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
+<%_ } _%>
+
+@Document<% if (databaseType === 'mongodb') { %>(collection = "OAUTH_AUTHENTICATION_APPROVAL")<% } %>
 public class OAuth2AuthenticationApproval extends Approval implements Serializable {
 
     private static final long serialVersionUID = 1L;
+<% if (databaseType === 'couchbase') { %>
+    public static final String PREFIX = "authentication_approval";
 
-    @Id
+    @SuppressWarnings("unused")
+    @IdPrefix
+    private String prefix = PREFIX;
+<% } %>
+    @Id<% if (databaseType === 'couchbase') { %>
+    @GeneratedValue(strategy = UNIQUE, delimiter = DELIMITER)<% } %>
     private String id;
 
     @PersistenceConstructor
     public OAuth2AuthenticationApproval() {
         super();
+        <%_ if (databaseType === 'mongodb') { _%>
         this.id = UUID.randomUUID().toString();
+        <%_ } _%>
     }
 
     @Override

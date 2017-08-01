@@ -197,6 +197,10 @@ function writeFiles() {
                     this.template(`${SERVER_MAIN_RES_DIR}/config/couchmove/changelog/V0.1__initial_setup/_user::anonymoususer.json`, `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user::anonymoususer.json`);
                     this.template(`${SERVER_MAIN_RES_DIR}/config/couchmove/changelog/V0.1__initial_setup/_user::system.json`, `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user::system.json`);
                     this.template(`${SERVER_MAIN_RES_DIR}/config/couchmove/changelog/V0.1__initial_setup/_user::user.json`, `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user::user.json`);
+                    if (this.authenticationType === 'oauth2') {
+                        this.template(`${SERVER_MAIN_RES_DIR}/config/couchmove/changelog/V0.1__initial_setup/_client_details::jhipsterapp.json`, `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/client_details::jhipsterapp.json`);
+                        this.template(`${SERVER_MAIN_RES_DIR}/config/couchmove/changelog/V0.1__initial_setup/_client_details::swagger_ui.json`, `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/client_details::swagger_ui.json`);
+                    }
                 }
             }
 
@@ -264,12 +268,12 @@ function writeFiles() {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/_OAuth2ServerConfiguration.java`, `${javaDir}config/OAuth2ServerConfiguration.java`);
             }
 
-            if (this.databaseType === 'mongodb' && this.authenticationType === 'oauth2') {
+            if ((this.databaseType === 'mongodb' || this.databaseType === 'couchbase') && this.authenticationType === 'oauth2') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/oauth2/_OAuth2AuthenticationReadConverter.java`, `${javaDir}config/oauth2/OAuth2AuthenticationReadConverter.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/config/oauth2/_MongoDBApprovalStore.java`, `${javaDir}config/oauth2/MongoDBApprovalStore.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/config/oauth2/_MongoDBAuthorizationCodeServices.java`, `${javaDir}config/oauth2/MongoDBAuthorizationCodeServices.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/config/oauth2/_MongoDBClientDetailsService.java`, `${javaDir}config/oauth2/MongoDBClientDetailsService.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/config/oauth2/_MongoDBTokenStore.java`, `${javaDir}config/oauth2/MongoDBTokenStore.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/config/oauth2/_DocumentDBApprovalStore.java`, `${javaDir}config/oauth2/DocumentDBApprovalStore.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/config/oauth2/_DocumentDBAuthorizationCodeServices.java`, `${javaDir}config/oauth2/DocumentDBAuthorizationCodeServices.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/config/oauth2/_DocumentDBClientDetailsService.java`, `${javaDir}config/oauth2/DocumentDBClientDetailsService.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/config/oauth2/_DocumentDBTokenStore.java`, `${javaDir}config/oauth2/DocumentDBTokenStore.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/domain/_OAuth2AuthenticationAccessToken.java`, `${javaDir}domain/OAuth2AuthenticationAccessToken.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/domain/_OAuth2AuthenticationApproval.java`, `${javaDir}domain/OAuth2AuthenticationApproval.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/domain/_OAuth2AuthenticationClientDetails.java`, `${javaDir}domain/OAuth2AuthenticationClientDetails.java`);

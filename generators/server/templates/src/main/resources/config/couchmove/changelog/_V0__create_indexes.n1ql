@@ -10,6 +10,27 @@ CREATE INDEX audit_event ON jhipster(principal, event_date, event_type)
     WHERE `_class` = "<%=packageName%>.domain.PersistentAuditEvent"
     WITH { "defer_build" : true };
 
+<%_ if (authenticationType === 'oauth2') { _%>
+CREATE INDEX client_details ON jhipster(clientId)
+    WHERE `_class` = "io.github.jhipster.domain.OAuth2AuthenticationClientDetails"
+    WITH { "defer_build" : true };
+
+CREATE INDEX authentication_approval ON jhipster(clientId, userId, scope)
+    WHERE `_class` = "io.github.jhipster.domain.OAuth2AuthenticationApproval"
+    WITH { "defer_build" : true };
+
+CREATE INDEX access_token_refresh ON jhipster(refreshToken)
+    WHERE `_class` = "io.github.jhipster.domain.OAuth2AuthenticationAccessToken"
+    WITH { "defer_build" : true };
+
+CREATE INDEX access_token_id ON jhipster(authenticationId)
+    WHERE `_class` = "io.github.jhipster.domain.OAuth2AuthenticationAccessToken"
+    WITH { "defer_build" : true };
+
+CREATE INDEX access_token_user ON jhipster(clientId, userName)
+    WHERE `_class` = "io.github.jhipster.domain.OAuth2AuthenticationAccessToken"
+    WITH { "defer_build" : true };
+<% } %>
 -- build indexes asynchronously
-BUILD INDEX ON jhipster(type, user_mail, audit_event);
+BUILD INDEX ON jhipster(type, user_mail, audit_event<%_ if (authenticationType === 'oauth2') { _%>, client_details, authentication_approval, access_token_refresh, access_token_id, access_token_user<%_ } _%>);
 

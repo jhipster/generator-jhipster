@@ -19,9 +19,16 @@
 package <%=packageName%>.repository;
 
 import <%=packageName%>.domain.OAuth2AuthenticationCode;
+<%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.mongodb.repository.MongoRepository;
+<%_ } _%>
 
-public interface OAuth2CodeRepository extends MongoRepository<OAuth2AuthenticationCode, String> {
-
+public interface OAuth2CodeRepository extends <% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } else { %>MongoRepository<% } %><OAuth2AuthenticationCode, String> {
+<% if (databaseType === 'couchbase') { %>
+    default OAuth2AuthenticationCode findOneByCode(String code) {
+        return findOne(OAuth2AuthenticationCode.PREFIX + DELIMITER + code);
+    }
+<% } else { %>
     OAuth2AuthenticationCode findOneByCode(String code);
+<%_ } _%>
 }

@@ -28,13 +28,13 @@ import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MongoDBClientDetailsService implements ClientDetailsService, ClientRegistrationService {
+public class DocumentDBClientDetailsService implements ClientDetailsService, ClientRegistrationService {
 
     private PasswordEncoder passwordEncoder = NoOpPasswordEncoder.getInstance();
 
     private OAuth2ClientDetailsRepository oAuth2ClientDetailsRepository;
 
-    public MongoDBClientDetailsService(OAuth2ClientDetailsRepository oAuth2ClientDetailsRepository) {
+    public DocumentDBClientDetailsService(OAuth2ClientDetailsRepository oAuth2ClientDetailsRepository) {
         this.oAuth2ClientDetailsRepository = oAuth2ClientDetailsRepository;
     }
 
@@ -47,20 +47,20 @@ public class MongoDBClientDetailsService implements ClientDetailsService, Client
 
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
-        OAuth2AuthenticationClientDetails mongoClientDetails = oAuth2ClientDetailsRepository.findOneByClientId(clientId);
-        if (mongoClientDetails == null) {
+        OAuth2AuthenticationClientDetails dbClientDetails = oAuth2ClientDetailsRepository.findOneByClientId(clientId);
+        if (dbClientDetails == null) {
             throw new NoSuchClientException("No client with requested id: " + clientId);
         }
-        return mongoClientDetails;
+        return dbClientDetails;
     }
 
     @Override
     public void addClientDetails(ClientDetails clientDetails) throws ClientAlreadyExistsException {
-        OAuth2AuthenticationClientDetails mongoClientDetails = oAuth2ClientDetailsRepository.findOneByClientId(clientDetails.getClientId());
-        if ( mongoClientDetails != null) {
+        OAuth2AuthenticationClientDetails dbClientDetails = oAuth2ClientDetailsRepository.findOneByClientId(clientDetails.getClientId());
+        if ( dbClientDetails != null) {
             throw new ClientAlreadyExistsException("Client already exists: " + clientDetails.getClientId());
         }
-        saveClientDetails(mongoClientDetails, clientDetails);
+        saveClientDetails(dbClientDetails, clientDetails);
     }
 
     @Override
@@ -73,21 +73,21 @@ public class MongoDBClientDetailsService implements ClientDetailsService, Client
 
     @Override
     public void updateClientSecret(String clientId, String secret) throws NoSuchClientException {
-        OAuth2AuthenticationClientDetails mongoClientDetails = oAuth2ClientDetailsRepository.findOneByClientId(clientId);
-        if (mongoClientDetails == null) {
+        OAuth2AuthenticationClientDetails dbClientDetails = oAuth2ClientDetailsRepository.findOneByClientId(clientId);
+        if (dbClientDetails == null) {
             throw new NoSuchClientException("No client found with id = " + clientId);
         }
-        mongoClientDetails.setClientSecret(passwordEncoder.encode(secret));
-        oAuth2ClientDetailsRepository.save(mongoClientDetails);
+        dbClientDetails.setClientSecret(passwordEncoder.encode(secret));
+        oAuth2ClientDetailsRepository.save(dbClientDetails);
     }
 
     @Override
     public void removeClientDetails(String clientId) throws NoSuchClientException {
-        OAuth2AuthenticationClientDetails mongoClientDetails = oAuth2ClientDetailsRepository.findOneByClientId(clientId);
-        if (mongoClientDetails == null) {
+        OAuth2AuthenticationClientDetails dbClientDetails = oAuth2ClientDetailsRepository.findOneByClientId(clientId);
+        if (dbClientDetails == null) {
             throw new NoSuchClientException("No client found with id = " + clientId);
         }
-        oAuth2ClientDetailsRepository.delete(mongoClientDetails);
+        oAuth2ClientDetailsRepository.delete(dbClientDetails);
     }
 
     @Override
@@ -95,20 +95,20 @@ public class MongoDBClientDetailsService implements ClientDetailsService, Client
         return new ArrayList<>(oAuth2ClientDetailsRepository.findAll());
     }
 
-    public void saveClientDetails(OAuth2AuthenticationClientDetails mongoClientDetails, ClientDetails clientDetails) {
-        mongoClientDetails.setClientId(clientDetails.getClientId());
-        mongoClientDetails.setClientSecret(clientDetails.getClientSecret() != null ? passwordEncoder.encode(clientDetails.getClientSecret()) : null);
-        mongoClientDetails.setScope(clientDetails.getScope());
-        mongoClientDetails.setResourceIds(clientDetails.getResourceIds());
-        mongoClientDetails.setAuthorizedGrantTypes(clientDetails.getAuthorizedGrantTypes());
-        mongoClientDetails.setRegisteredRedirectUri(clientDetails.getRegisteredRedirectUri());
-        mongoClientDetails.setAuthorities(clientDetails.getAuthorities());
-        mongoClientDetails.setAccessTokenValiditySeconds(clientDetails.getAccessTokenValiditySeconds());
-        mongoClientDetails.setRefreshTokenValiditySeconds(clientDetails.getRefreshTokenValiditySeconds());
-        mongoClientDetails.setAdditionalInformation(clientDetails.getAdditionalInformation());
+    public void saveClientDetails(OAuth2AuthenticationClientDetails dbClientDetails, ClientDetails clientDetails) {
+        dbClientDetails.setClientId(clientDetails.getClientId());
+        dbClientDetails.setClientSecret(clientDetails.getClientSecret() != null ? passwordEncoder.encode(clientDetails.getClientSecret()) : null);
+        dbClientDetails.setScope(clientDetails.getScope());
+        dbClientDetails.setResourceIds(clientDetails.getResourceIds());
+        dbClientDetails.setAuthorizedGrantTypes(clientDetails.getAuthorizedGrantTypes());
+        dbClientDetails.setRegisteredRedirectUri(clientDetails.getRegisteredRedirectUri());
+        dbClientDetails.setAuthorities(clientDetails.getAuthorities());
+        dbClientDetails.setAccessTokenValiditySeconds(clientDetails.getAccessTokenValiditySeconds());
+        dbClientDetails.setRefreshTokenValiditySeconds(clientDetails.getRefreshTokenValiditySeconds());
+        dbClientDetails.setAdditionalInformation(clientDetails.getAdditionalInformation());
         if(clientDetails instanceof BaseClientDetails) {
-            mongoClientDetails.setAutoApproveScopes(((BaseClientDetails)clientDetails).getAutoApproveScopes());
+            dbClientDetails.setAutoApproveScopes(((BaseClientDetails)clientDetails).getAutoApproveScopes());
         }
-        oAuth2ClientDetailsRepository.save(mongoClientDetails);
+        oAuth2ClientDetailsRepository.save(dbClientDetails);
     }
 }
