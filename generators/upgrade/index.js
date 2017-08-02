@@ -225,7 +225,7 @@ module.exports = UpgradeGenerator.extend({
             const installJhipsterLocally = (version, callback) => {
                 this.log(`Installing JHipster ${version} locally`);
                 const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn add' : 'npm install';
-                shelljs.exec(`${commandPrefix} ${GENERATOR_JHIPSTER}@${version} --dev --no-lockfile`, { silent: this.silent }, (code, msg, err) => {
+                shelljs.exec(`${commandPrefix} ${GENERATOR_JHIPSTER}@${version} --dev --no-lockfile --ignore-scripts`, { silent: this.silent }, (code, msg, err) => {
                     if (code === 0) this.log(chalk.green(`Installed ${GENERATOR_JHIPSTER}@${version}`));
                     else this.error(`Something went wrong while installing the JHipster generator! ${msg} ${err}`);
                     callback();
@@ -274,7 +274,7 @@ module.exports = UpgradeGenerator.extend({
             this.log(chalk.yellow(`Updating ${GENERATOR_JHIPSTER} to ${this.latestVersion} . This might take some time...`));
             const done = this.async();
             const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn add' : 'npm install';
-            shelljs.exec(`${commandPrefix} ${GENERATOR_JHIPSTER}@${this.latestVersion} --dev --no-lockfile`, { silent: this.silent }, (code, msg, err) => {
+            shelljs.exec(`${commandPrefix} ${GENERATOR_JHIPSTER}@${this.latestVersion} --dev --no-lockfile --ignore-scripts`, { silent: this.silent }, (code, msg, err) => {
                 if (code === 0) this.log(chalk.green(`Updated ${GENERATOR_JHIPSTER} to version ${this.latestVersion}`));
                 else this.error(`Something went wrong while updating JHipster! ${msg} ${err}`);
                 done();
