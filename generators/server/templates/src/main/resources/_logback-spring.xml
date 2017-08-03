@@ -112,15 +112,6 @@
         <resetJUL>true</resetJUL>
     </contextListener>
 
-        <!--
-    Filter out metrics logs, they should only be forwarded to logstash
-    (see MetricsConfiguration.java#L88)
-    -->
-    <turboFilter class="ch.qos.logback.classic.turbo.MarkerFilter">
-        <Marker>metrics</Marker>
-        <OnMatch>DENY</OnMatch>
-    </turboFilter>
-
     <root level="#logback.loglevel#">
         <appender-ref ref="CONSOLE"/>
 <!--
