@@ -198,7 +198,7 @@ _%>
         const translationKey = keyPrefix + relationshipName; _%>
         <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true && otherEntityName === 'user')) { _%>
         <div class="form-group">
-            <label jhiTranslate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
+            <label class="form-control-label" jhiTranslate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
             <%_ if (dto === 'no') { _%>
             <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" [(ngModel)]="<%= entityInstance %>.<%=relationshipFieldName %>" <% if (relationshipRequired) { %> required<% } %>>
                 <%_ if (!relationshipRequired) { _%>
@@ -217,7 +217,7 @@ _%>
         </div>
         <%_ } else if (relationshipType === 'one-to-one' && ownerSide === true) { _%>
         <div class="form-group">
-            <label jhiTranslate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
+            <label class="form-control-label" jhiTranslate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
             <%_ if (dto === 'no') { _%>
             <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" [(ngModel)]="<%= entityInstance %>.<%=relationshipFieldName %>"<% if (relationshipRequired) { %> required<% } %>>
                 <%_ if (!relationshipRequired) { _%>
