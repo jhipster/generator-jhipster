@@ -121,16 +121,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     }
 
     setFileData(event, entity, field, isImage) {
-        if (event && event.target.files && event.target.files[0]) {
-            const file = event.target.files[0];
-            if (isImage && !/^image\//.test(file.type)) {
-                return;
-            }
-            this.dataUtils.toBase64(file, (base64Data) => {
-                entity[field] = base64Data;
-                entity[`${field}ContentType`] = file.type;
-            });
-        }
+        this.dataUtils.setFileData(event, entity, field, isImage);
     }
 
     <%_ if (fieldsContainImageBlob) { _%>
