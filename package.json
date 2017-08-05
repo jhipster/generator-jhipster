@@ -34,7 +34,7 @@
     "url": "git://github.com/jhipster/generator-jhipster.git"
   },
   "scripts": {
-    "install": "tabtab install --name jhipster --auto",
+    "completion": "tabtab install --name jhipster --auto",
     "pretest": "eslint .",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
