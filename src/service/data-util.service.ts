@@ -104,7 +104,7 @@ export class JhiDataUtils {
         return size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' bytes';
     }
 
-    setFileData (event, entity, field: string, isImage: boolean) {
+    setFileData(event, entity, field: string, isImage: boolean) {
         if (event && event.target.files && event.target.files[0]) {
             const file = event.target.files[0];
             if (isImage && !/^image\//.test(file.type)) {
