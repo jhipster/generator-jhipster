@@ -94,7 +94,7 @@ public class LoggingConfiguration {
         logstashEncoder.setCustomFields(customFields);
         // Set the Logstash appender config from JHipster properties
         logstashAppender.addDestinations(new InetSocketAddress(jHipsterProperties.getLogging().getLogstash().getHost(),jHipsterProperties.getLogging().getLogstash().getPort()));
-        
+
         ShortenedThrowableConverter throwableConverter = new ShortenedThrowableConverter();
         throwableConverter.setRootCauseFirst(true);
         logstashEncoder.setThrowableConverter(throwableConverter);
