@@ -103,4 +103,17 @@ export class JhiDataUtils {
     private formatAsBytes(size: number): string {
         return size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' bytes';
     }
+
+    setFileData (event, entity, field: string, isImage: boolean) {
+        if (event && event.target.files && event.target.files[0]) {
+            const file = event.target.files[0];
+            if (isImage && !/^image\//.test(file.type)) {
+                return;
+            }
+            this.toBase64(file, (base64Data) => {
+                entity[field] = base64Data;
+                entity[`${field}ContentType`] = file.type;
+            });
+        }
+    }
 }
