@@ -9,7 +9,7 @@ const engine = new CLIEngine({
 });
 const results = engine.executeOnFiles(paths).results;
 
-describe.only('ESLint', () => {
+describe('ESLint', () => {
   for (let i = 0; i < results.length; i++) {
     generateTest(results[i]);
   }
