@@ -45,12 +45,12 @@
     "winston": "2.3.1"
   },
   "devDependencies": {
-    "chai": "4.1.0",
+    "chai": "4.1.1",
     "eslint": "4.3.0",
-    "eslint-config-airbnb-base": "11.2.0",
+    "eslint-config-airbnb-base": "11.3.1",
     "eslint-plugin-import": "2.7.0",
     "istanbul": "0.4.5",
-    "mocha": "3.4.2",
+    "mocha": "3.5.0",
     "mocha-clean": "1.0.0",
     "pegjs": "0.10.0"
   },
