@@ -89,6 +89,7 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements AfterViewIn
             // // since login is succesful, go to stored previousState and clear previousState
             const redirect = this.stateStorageService.getUrl();
             if (redirect) {
+                this.stateStorageService.storeUrl(null);
                 this.router.navigate([redirect]);
             }
         }).catch(() => {
