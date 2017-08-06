@@ -22,11 +22,10 @@ import com.datastax.driver.core.*;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;<% } %>
 import <%=packageName%>.domain.PersistentToken;
-import <%=packageName%>.domain.User;<% if (databaseType === 'sql') { %>
-import java.time.LocalDate;
+import <%=packageName%>.domain.User;<% if (databaseType !== 'cassandra') { %>
+import java.time.LocalDate;<% } %><% if (databaseType === 'sql') { %>
 import org.springframework.data.jpa.repository.JpaRepository;
 <% } %><% if (databaseType === 'mongodb') { %>
-import java.time.LocalDate;
 import org.springframework.data.mongodb.repository.MongoRepository;
 <% } %><% if (databaseType === 'cassandra') { %>
 import org.springframework.stereotype.Repository;
@@ -45,12 +44,27 @@ import java.util.Set;
  * Spring Data JPA repository for the PersistentToken entity.
  */<% } %><% if (databaseType === 'mongodb') { %>/**
  * Spring Data MongoDB repository for the PersistentToken entity.
+ */<% } %><% if (databaseType === 'couchbase') { %>/**
+ * Spring Data Couchbase repository for the PersistentToken entity.
  */<% } %><% if (databaseType === 'cassandra') { %>/**
  * Cassandra repository for the PersistentToken entity.
- */<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
-public interface PersistentTokenRepository extends <% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><PersistentToken, String> {
+ */<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
+public interface PersistentTokenRepository extends <% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><PersistentToken, String> {
+<% if (databaseType === 'couchbase') { %>
+    default PersistentToken findBySeries(String series) {
+        return findOne(PersistentToken.PREFIX + DELIMITER + series);
+    }
 
-    List<PersistentToken> findByUser(User user);
+    default void deleteBySeries(String series) {
+        delete(PersistentToken.PREFIX + DELIMITER + series);
+    }
+
+    default List<PersistentToken> findByUser(User user) {
+        return findByLogin(user.getLogin());
+    }
+
+    List<PersistentToken> findByLogin(String login);<% } else { %>
+    List<PersistentToken> findByUser(User user);<% } %>
 
     List<PersistentToken> findByTokenDateBefore(LocalDate localDate);
 

@@ -802,10 +802,10 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
 
         PersistentToken token = new PersistentToken();
-        token.setSeries("current-sessions");<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-        token.setUser(user);<% } else { %>
-        token.setUserId(user.getId());
-        token.setLogin(user.getLogin());<% } %>
+        token.setSeries("current-sessions");<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+        token.setUser(user);<% } else { %><% if (databaseType === 'cassandra') { %>
+        token.setUserId(user.getId());<% } else { %>
+        token.setLogin(user.getLogin());<% } %><% } %>
         token.setTokenValue("current-session-data");<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
         token.setTokenDate(LocalDate.of(2017, 3, 23));<% } else { %>
         token.setTokenDate(new Date(1490714757123L));<% } %>
@@ -835,10 +835,10 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
 
         PersistentToken token = new PersistentToken();
-        token.setSeries("invalidate-session");<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-        token.setUser(user);<% } else { %>
-        token.setUserId(user.getId());
-        token.setLogin(user.getLogin());<% } %>
+        token.setSeries("invalidate-session");<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+        token.setUser(user);<% } else { %><% if (databaseType === 'cassandra') { %>
+        token.setUserId(user.getId());<% } else { %>
+        token.setLogin(user.getLogin());<% } %><% } %>
         token.setTokenValue("invalidate-data");<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
         token.setTokenDate(LocalDate.of(2017, 3, 23));<% } else { %>
         token.setTokenDate(new Date(1490714757123L));<% } %>

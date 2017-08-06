@@ -160,8 +160,9 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
 
     private void generateUserToken(User user, String tokenSeries, LocalDate localDate) {
         PersistentToken token = new PersistentToken();
-        token.setSeries(tokenSeries);
-        token.setUser(user);
+        token.setSeries(tokenSeries);<% if (databaseType === 'couchbase') { %>
+        token.setLogin(user.getLogin());<% } else { %>
+        token.setUser(user);<% } %>
         token.setTokenValue(tokenSeries + "-data");
         token.setTokenDate(localDate);
         token.setIpAddress("127.0.0.1");

@@ -32,7 +32,7 @@ import com.google.common.cache.CacheBuilder;
 import io.github.jhipster.config.JHipsterProperties;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+import org.slf4j.LoggerFactory;<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
 import org.springframework.dao.DataAccessException;<%}%>
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -44,7 +44,7 @@ import org.springframework.transaction.annotation.Transactional;<%}%>
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import java.time.LocalDate;
 <%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
@@ -125,19 +125,19 @@ public class PersistentTokenRememberMeServices extends
 
             if (login == null) {
                 PersistentToken token = getPersistentToken(cookieTokens);<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
-                login = token.getUser().getLogin();<%}%><% if (databaseType === 'cassandra') { %>
+                login = token.getUser().getLogin();<% } else { %>
                 login = token.getLogin();<%}%>
 
                 // Token also matches, so login is valid. Update the token value, keeping the *same* series number.
-                log.debug("Refreshing persistent login token for user '{}', series '{}'", login, token.getSeries());<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+                log.debug("Refreshing persistent login token for user '{}', series '{}'", login, token.getSeries());<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
                 token.setTokenDate(LocalDate.now());<%}%><% if (databaseType === 'cassandra') { %>
                 token.setTokenDate(new Date());<%}%>
                 token.setTokenValue(RandomUtil.generateTokenData());
                 token.setIpAddress(request.getRemoteAddr());
                 token.setUserAgent(request.getHeader("User-Agent"));
                 try {
-                    <% if (databaseType === 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType === 'mongodb' || databaseType === 'cassandra') { %>persistentTokenRepository.save(token);<% } %>
-                    <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+                    <% if (databaseType === 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } else { %>persistentTokenRepository.save(token);<% } %>
+                    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
                 } catch (DataAccessException e) {
                     <%_ } else { _%>
                 } catch (DriverException e) {
@@ -162,20 +162,18 @@ public class PersistentTokenRememberMeServices extends
         PersistentToken token = userRepository.findOneByLogin(login).map(u -> {
             PersistentToken t = new PersistentToken();
             t.setSeries(RandomUtil.generateSeriesData());<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
-            t.setUser(u);
+            t.setUser(u);<% } else { %>
+            t.setLogin(login);<% } %><% if (databaseType === 'cassandra') { %>
+            t.setUserId(u.getId());<% } %>
             t.setTokenValue(RandomUtil.generateTokenData());
-            t.setTokenDate(LocalDate.now());<%}%><% if (databaseType === 'cassandra') { %>
-            t.setLogin(login);
-            t.setUserId(u.getId());
-            t.setTokenValue(RandomUtil.generateTokenData());
-            t.setTokenDate(new Date());<% } %>
+            t.setTokenDate(<% if (databaseType === 'cassandra') { %>new Date()<% } else { %>LocalDate.now()<% } %>);
             t.setIpAddress(request.getRemoteAddr());
             t.setUserAgent(request.getHeader("User-Agent"));
             return t;
         }).orElseThrow(() -> new UsernameNotFoundException("User " + login + " was not found in the database"));
         try {
-            <% if (databaseType === 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType === 'mongodb' || databaseType === 'cassandra') { %>persistentTokenRepository.save(token);<% } %>
-            addCookie(token, request, response);<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+            <% if (databaseType === 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } else { %>persistentTokenRepository.save(token);<% } %>
+            addCookie(token, request, response);<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
         } catch (DataAccessException e) {<% } else { %>
         } catch (DriverException e) {<% } %>
             log.error("Failed to save persistent token ", e);
@@ -216,7 +214,7 @@ public class PersistentTokenRememberMeServices extends
         }
         String presentedSeries = cookieTokens[0];
         String presentedToken = cookieTokens[1];
-        PersistentToken token = persistentTokenRepository.findOne(presentedSeries);
+        PersistentToken token = persistentTokenRepository.<% if (databaseType === 'couchbase') { %>findBySeries<% } else { %>findOne<% } %>(presentedSeries);
 
         if (token == null) {
             // No series match, so we can't authenticate using this cookie
@@ -231,7 +229,7 @@ public class PersistentTokenRememberMeServices extends
             throw new CookieTheftException("Invalid remember-me token (Series/token) mismatch. Implies previous " +
                 "cookie theft attack.");
         }
-<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
         if (token.getTokenDate().plusDays(TOKEN_VALIDITY_DAYS).isBefore(LocalDate.now())) {<%}%><% if (databaseType === 'cassandra') { %>
         if (token.getTokenDate().toInstant().plus(TOKEN_VALIDITY_DAYS, ChronoUnit.DAYS).isBefore((new Date()).toInstant())) {<%}%>
             persistentTokenRepository.delete(token);
