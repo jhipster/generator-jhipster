@@ -88,6 +88,20 @@ const serverFiles = {
             ]
         },
         {
+            condition: generator => generator.jpaMetamodelFiltering,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/service/dto/_EntityCriteria.java',
+                    renameTo: generator => `${generator.packageFolder}/service/dto/${generator.entityClass}Criteria.java`
+                },
+                {
+                    file: 'package/service/_EntityQueryService.java',
+                    renameTo: generator => `${generator.packageFolder}/service/${generator.entityClass}QueryService.java`
+                },
+            ]
+        },
+        {
             condition: generator => generator.searchEngine === 'elasticsearch',
             path: SERVER_MAIN_SRC_DIR,
             templates: [{

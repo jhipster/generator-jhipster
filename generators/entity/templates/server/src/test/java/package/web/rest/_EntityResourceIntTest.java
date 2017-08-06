@@ -36,6 +36,10 @@ import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% 
 import <%=packageName%>.service.dto.<%= entityClass %>DTO;
 import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;<% } %>
 import <%=packageName%>.web.rest.errors.ExceptionTranslator;
+<%_ if (jpaMetamodelFiltering) { _%>
+import <%=packageName%>.service.dto.<%= entityClass %>Criteria;
+import <%=packageName%>.service.<%= entityClass %>QueryService;
+<%_ } _%>
 
 import org.junit.Before;
 import org.junit.Test;
@@ -252,6 +256,11 @@ _%>
 
     @Autowired
     private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;<% } %>
+    <%_ if (jpaMetamodelFiltering) { _%>
+
+    @Autowired
+    private <%= entityClass %>QueryService <%= entityInstance %>QueryService;
+    <%_ } _%>
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -275,9 +284,9 @@ _%>
     public void setup() {
         MockitoAnnotations.initMocks(this);
         <%_ if (service !== 'no') { _%>
-        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Service);
+        final <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Service<% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %>);
         <%_ } else { _%>
-        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Repository<% if (dto === 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, <%= entityInstance %>SearchRepository<% } %>);
+        final <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Repository<% if (dto === 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, <%= entityInstance %>SearchRepository<% } %><% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %>);
         <%_ } _%>
         this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -454,6 +463,117 @@ _%>
             <%_ } _%>
             .andExpect(jsonPath("$.<%=fields[idx].fieldName%>").value(<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%><% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (fields[idx].fieldType === 'Integer') { %><% } else if (fields[idx].fieldType === 'Long') { %>.intValue()<% } else if (fields[idx].fieldType === 'Float' || fields[idx].fieldType === 'Double') { %>.doubleValue()<% } else if (fields[idx].fieldType === 'BigDecimal') { %>.intValue()<% } else if (fields[idx].fieldType === 'Boolean') { %>.booleanValue()<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else { %>.toString()<% } %>))<% } %>;
     }
+<%_ if (jpaMetamodelFiltering) {
+        fields.forEach((searchBy) => {
+            // we can't filter by all the fields.
+            if (isFilterableType(searchBy.fieldType)) {
+                 _%>
+
+    @Test<% if (databaseType === 'sql') { %>
+    @Transactional<% } %>
+    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsEqualToSomething() throws Exception {
+        // Initialize the database
+        <%= entityInstance %>Repository.saveAndFlush(<%= entityInstance %>);
+
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> equals to <%='DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase()%>
+        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.equals=" + <%='DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase()%>);
+
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> equals to <%='UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase()%>
+        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.equals=" + <%='UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase()%>);
+    }
+
+    @Test<% if (databaseType === 'sql') { %>
+    @Transactional<% } %>
+    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsInShouldWork() throws Exception {
+        // Initialize the database
+        <%= entityInstance %>Repository.saveAndFlush(<%= entityInstance %>);
+
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> in <%='DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase()%> or <%='UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase()%>
+        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.in=" + <%='DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase()%> + "," + <%='UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase()%>);
+
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> equals to <%='UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase()%>
+        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.in=" + <%='UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase()%>);
+    }
+
+    @Test<% if (databaseType === 'sql') { %>
+    @Transactional<% } %>
+    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsNullOrNotNull() throws Exception {
+        // Initialize the database
+        <%= entityInstance %>Repository.saveAndFlush(<%= entityInstance %>);
+
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is not null
+        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.specified=true");
+
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is null
+        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.specified=false");
+    }
+<%_
+            }
+            // the range criterias
+            if (['Byte', 'Short', 'Integer', 'Long', 'LocalDate', 'ZonedDateTime'].includes(searchBy.fieldType)) { 
+              var defaultValue = 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase();
+              var biggerValue = 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase();
+              if (searchBy.fieldValidate === true && searchBy.fieldValidateRules.includes('max')) {
+                  // if maximum is specified the updated variable is smaller than the default one!
+                  biggerValue = '(' + defaultValue + ' + 1)';
+              }
+            _%>
+
+    @Test<% if (databaseType === 'sql') { %>
+    @Transactional<% } %>
+    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        <%= entityInstance %>Repository.saveAndFlush(<%= entityInstance %>);
+
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> greater than or equals to <%= defaultValue %>
+        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.greaterOrEqualThan=" + <%= defaultValue %>);
+
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> greater than or equals to <%= biggerValue %>
+        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.greaterOrEqualThan=" + <%= biggerValue %>);
+    }
+
+    @Test<% if (databaseType === 'sql') { %>
+    @Transactional<% } %>
+    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsLessThanSomething() throws Exception {
+        // Initialize the database
+        <%= entityInstance %>Repository.saveAndFlush(<%= entityInstance %>);
+
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> less than or equals to <%= defaultValue %>
+        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.lessThan=" + <%= defaultValue %>);
+
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> less than or equals to <%= biggerValue %>
+        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.lessThan=" + <%= biggerValue %>);
+    }
+
+<%_         } _%>
+<%_     }); _%>
+
+    /**
+     * Executes the search, and checks that the default entity is returned
+     */
+    private void default<%= entityClass %>ShouldBeFound(String filter) throws Exception {
+        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().intValue())))<% fields.forEach((field) => { %>
+            <%_ if ((field.fieldType === 'byte[]' || field.fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text') { _%>
+            .andExpect(jsonPath("$.[*].<%=field.fieldName%>ContentType").value(hasItem(<%='DEFAULT_' + field.fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE)))
+            <%_ } _%>
+            .andExpect(jsonPath("$.[*].<%=field.fieldName%>").value(hasItem(<% if ((field.fieldType === 'byte[]' || field.fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else if (field.fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%='DEFAULT_' + field.fieldNameUnderscored.toUpperCase()%><% if ((field.fieldType === 'byte[]' || field.fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (field.fieldType === 'Integer') { %><% } else if (field.fieldType === 'Long') { %>.intValue()<% } else if (field.fieldType === 'Float' || field.fieldType === 'Double') { %>.doubleValue()<% } else if (field.fieldType === 'BigDecimal') { %>.intValue()<% } else if (field.fieldType === 'Boolean') { %>.booleanValue()<% } else if (field.fieldType === 'ZonedDateTime') { %>)<% } else { %>.toString()<% } %>)))<% }); %>;
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned
+     */
+    private void default<%= entityClass %>ShouldNotBeFound(String filter) throws Exception {
+        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+    }
+
+<%_  } _%>
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
