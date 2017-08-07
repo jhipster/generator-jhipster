@@ -26,7 +26,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+<%_if (databaseType !== 'couchbase') { _%>
 import org.springframework.dao.DataIntegrityViolationException;
+<%_ } _%>
 import org.springframework.social.connect.*;
 import org.springframework.social.connect.support.ConnectionFactoryRegistry;
 import org.springframework.social.connect.support.OAuth1ConnectionFactory;
@@ -44,6 +46,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+<%_if (databaseType === 'couchbase') { _%>
+import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
+<%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
@@ -65,6 +70,9 @@ public class CustomSocialUsersConnectionRepositoryIntTest {
 
     @Before
     public void setUp() {
+        <%_ if (databaseType === 'couchbase') { _%>
+        mockAuthentication();
+        <%_ } _%>
 		socialUserConnectionRepository.deleteAll();
 
         connectionFactoryRegistry = new ConnectionFactoryRegistry();
@@ -92,9 +100,7 @@ public class CustomSocialUsersConnectionRepositoryIntTest {
         insertFacebookConnection();
         insertFacebookConnectionSameFacebookUser();
         List<String> localUserIds = usersConnectionRepository.findUserIdsWithConnection(connectionRepository.getPrimaryConnection(TestFacebookApi.class));
-        assertEquals(2, localUserIds.size());
-        assertEquals("1", localUserIds.get(0));
-        assertEquals("2", localUserIds.get(1));
+        assertThat(localUserIds).containsExactly("1", "2");
     }
 
     @Test
@@ -287,7 +293,7 @@ public class CustomSocialUsersConnectionRepositoryIntTest {
         assertEquals(connection, restoredConnection);
         assertNewConnection(restoredConnection);
     }
-
+<% if (databaseType !== 'couchbase') { %>
     @Test(expected = DataIntegrityViolationException.class)
     public void addConnectionDuplicate() {
         Connection<TestFacebookApi> connection = connectionFactory.createConnection(new AccessGrant("123456789", null, "987654321", 3600L));
@@ -295,7 +301,7 @@ public class CustomSocialUsersConnectionRepositoryIntTest {
         connectionRepository.addConnection(connection);<% if (databaseType === 'sql') { %>
         socialUserConnectionRepository.flush();<% } %>
     }
-
+<% } %>
     @Test
     public void updateConnectionProfileFields() {
         connectionFactoryRegistry.addConnectionFactory(new TestTwitterConnectionFactory());

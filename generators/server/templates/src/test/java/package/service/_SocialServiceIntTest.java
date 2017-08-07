@@ -44,6 +44,9 @@ import org.springframework.util.MultiValueMap;
 
 import java.util.Optional;
 
+<%_if (databaseType === 'couchbase') { _%>
+import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
+<%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -79,6 +82,9 @@ public class SocialServiceIntTest {
 
     @Before
     public void setup() {
+        <%_ if (databaseType === 'couchbase') { _%>
+        mockAuthentication();
+        <%_ } _%>
         MockitoAnnotations.initMocks(this);
         doNothing().when(mockMailService).sendSocialRegistrationValidationEmail(anyObject(), anyString());
         doNothing().when(mockConnectionRepository).addConnection(anyObject());
@@ -216,7 +222,7 @@ public class SocialServiceIntTest {
         assertThat(user.getActivated()).isEqualTo(true);
         assertThat(user.getPassword()).isNotEmpty();
         Authority userAuthority = authorityRepository.findOne("ROLE_USER");
-        assertThat(user.getAuthorities().toArray()).containsExactly(userAuthority);
+        assertThat(user.getAuthorities().toArray()).containsExactly(userAuthority<%if (databaseType === 'couchbase') { %>.getName()<% } %>);
 
         // Teardown
         userRepository.delete(user);
@@ -415,6 +421,6 @@ public class SocialServiceIntTest {
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setImageUrl(imageUrl);
-        return userRepository.<% if (databaseType === 'sql') { %>saveAndFlush<% } else if (databaseType === 'mongodb') { %>save<% } %>(user);
+        return userRepository.<% if (databaseType === 'sql') { %>saveAndFlush<% } else if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>save<% } %>(user);
     }
 }

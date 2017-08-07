@@ -38,7 +38,17 @@ CREATE INDEX token_login ON jhipster(login)
 CREATE INDEX token_date ON jhipster(tokenDate)
     WHERE `_class` = "io.github.jhipster.domain.PersistentToken"
     WITH { "defer_build" : true };
-<% } %>
+<%_ } _%>
+<% if (enableSocialSignIn) { %>
+CREATE INDEX social_user ON jhipster(userId, providerId, providerUserId)
+    WHERE `_class` = "io.github.jhipster.domain.SocialUserConnectionRepository"
+    WITH { "defer_build" : true };
+
+CREATE INDEX social_provider ON jhipster(providerId, providerUserId)
+    WHERE `_class` = "io.github.jhipster.domain.SocialUserConnectionRepository"
+    WITH { "defer_build" : true };
+<%_ } _%>
+
 -- build indexes asynchronously
-BUILD INDEX ON jhipster(type, user_mail, audit_event<% if (authenticationType === 'oauth2') { %>, client_details, authentication_approval, access_token_refresh, access_token_id, access_token_user<% } else if (authenticationType === 'session') { %>, token_login, token_date<% } %>);
+BUILD INDEX ON jhipster(type, user_mail, audit_event<% if (authenticationType === 'oauth2') { %>, client_details, authentication_approval, access_token_refresh, access_token_id, access_token_user<% } else if (authenticationType === 'session') { %>, token_login, token_date<% } %><% if (enableSocialSignIn) { %>, social_user, social_provider<% } %>);
 
