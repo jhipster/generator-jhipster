@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see http://www.jhipster.tech/
+ This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,15 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-FROM <%= DOCKER_JAVA_JRE %>
-
-ENV SPRING_OUTPUT_ANSI_ENABLED=ALWAYS \
-    JHIPSTER_SLEEP=0 \
-    JAVA_OPTS="<%_ if (hibernateCache === 'infinispan') { _%>-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true<%_ } _%>"
-
-ADD @project.build.finalName@.war /app.war
-
-EXPOSE <%= serverPort %><% if (hibernateCache === 'hazelcast') { %> 5701/udp<% } %>
-CMD echo "The application will start in ${JHIPSTER_SLEEP}s..." && \
-    sleep ${JHIPSTER_SLEEP} && \
-    java ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom -jar /app.war
+# https://docs.docker.com/engine/reference/builder/#dockerignore-file
+# by default ignore everything except the jar file
+**/*
+!*.jar
+!*.war
