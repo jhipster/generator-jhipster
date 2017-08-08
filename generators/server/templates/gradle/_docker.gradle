@@ -24,6 +24,10 @@ task buildDocker(type: Exec) {
             from "src/main/docker/"
             into "build/docker/"
             include "*"
+            exclude "**/*.yml"
+            filter {
+                it.replace('@project.build.finalName@', rootProject.name + '-' + version)
+            }
         }
         copy {
             from "build/libs"
