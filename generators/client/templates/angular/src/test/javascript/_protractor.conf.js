@@ -43,7 +43,7 @@ exports.config = {
 
     jasmineNodeOpts: {
         showColors: true,
-        defaultTimeoutInterval: 60000
+        defaultTimeoutInterval: 720000
     },
 
     beforeLaunch: function() {
