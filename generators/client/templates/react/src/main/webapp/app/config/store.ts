@@ -6,26 +6,28 @@ import DevTools from './devtools';
 import errorMiddleware from './error-middleware';
 import notificationMiddleware from './notification-middleware';
 import loggerMiddleware from './logger-middleware';
+import { loadingBarMiddleware } from 'react-redux-loading-bar';
 
-const middlewares = [
+const defaultMiddlewares = [
   thunkMiddleware,
   errorMiddleware,
   notificationMiddleware,
   promiseMiddleware(),
+  loadingBarMiddleware(),
   loggerMiddleware
 ];
-const composedMiddlewares = process.env.NODE_ENV === 'development' ?
-  compose(applyMiddleware(...middlewares), DevTools.instrument()) :
-  compose(applyMiddleware(...middlewares));
+const composedMiddlewares = middlewares => process.env.NODE_ENV === 'development' ?
+  compose(applyMiddleware(...defaultMiddlewares, ...middlewares), DevTools.instrument()) :
+  compose(applyMiddleware(...defaultMiddlewares, ...middlewares));
 
-const initialize = (initialState = {}) => {
-  const store = createStore(reducer, initialState, composedMiddlewares);
+const initialize = (initialState = {}, middlewares = []) => {
+  const store = createStore(reducer, initialState, composedMiddlewares(middlewares));
 
   // Enable Webpack hot module replacement for reducers
   if (module.hot) {
     // TODO : see if reducers can be moved to feature modules and still get HMR working
     module.hot.accept('../reducers', () => {
-      const nextReducer = require('../reducers');
+      const nextReducer = require('../reducers').default;
       store.replaceReducer(nextReducer);
     });
   }

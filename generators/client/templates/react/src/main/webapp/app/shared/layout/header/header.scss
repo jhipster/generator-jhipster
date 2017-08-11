@@ -1,4 +1,7 @@
-@import '../../../shared-variables';
+
+$header-color:                  #fff;
+$header-color-secondary:        #bbb;
+$header-color-hover:              darken( $header-color, 20% );
 
 /* ==========================================================================
 Developement Ribbon
@@ -35,14 +38,38 @@ Developement Ribbon
 /* ==========================================================================
 Navbar styles
 ========================================================================== */
-.navbar {
-  background-color: $header-bg-color;
-  .menu-button {
-    color: $header-color;
-    &:hover {
-      color: $header-color-hover;
+.jh-navbar {
+    background-color: #353d47;
+    padding: .2em 1em;
+    .profile-image {
+        margin: -10px 0px;
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
     }
-  }
+    .dropdown-item.active, .dropdown-item.active:focus, .dropdown-item.active:hover {
+        background-color: #353d47;
+    }
+    .dropdown-toggle::after {
+        margin-left: 0.15em;
+    }
+    ul.navbar-nav {
+        padding: 0.5em;
+        .nav-item {
+            margin-left: 1.5rem;
+        }
+    }
+    a.nav-link {
+        font-weight: 400;
+    }
+    .jh-navbar-toggler {
+        color: #ccc;
+        font-size: 1.5em;
+        padding: 10px;
+        &:hover {
+            color: #fff;
+        }
+    }
 }
 .navbar-version {
   font-size: 10px;
@@ -50,8 +77,18 @@ Navbar styles
   padding: 0 0 0 10px;
 }
 
-.brand-logo:hover {
-  text-decoration: none;
+.brand-logo {
+  &:hover {
+    text-decoration: none;
+  }
+  .brand-icon {
+    height: 35px;
+    width: auto;
+    display: inline-block;
+    img {
+      height: 45px;
+    }
+  }
 }
 
 .brand-title {
@@ -63,7 +100,10 @@ Navbar styles
   }
 }
 
-.logo .logo-img {
-  height: 45px;
-  display: inline-block;
+.loading-bar {
+  height: 3px;
+  background-color: #009CD8;
+  position: absolute;
+  top: 0px;
+  z-index: 1031
 }

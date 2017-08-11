@@ -12,26 +12,6 @@ const ENV = 'development';
 
 module.exports = webpackMerge(commonConfig({ env: ENV }), {
   devtool: 'eval-source-map',
-  devServer: {
-    stats: {
-      children: false
-    },
-    hot: true,
-    contentBase: './<%= BUILD_DIR %>www',
-    proxy: [
-      {
-        context: [
-          '/api', '/management', '/swagger-resources', '/v2/api-docs', '/h2-console'
-        ],
-        target: 'http://127.0.0.1:8080',
-        secure: false
-      }, {
-        context: ['/websocket'],
-        target: 'ws://127.0.0.1:8080',
-        ws: true
-      }
-    ]
-  },
   entry: [
     'react-hot-loader/patch',
     './src/main/webapp/app/index'
@@ -67,12 +47,32 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
       }
     ]
   },
+  devServer: {
+    stats: {
+      children: false
+    },
+    hot: true,
+    contentBase: './<%= BUILD_DIR %>www',
+    proxy: [
+      {
+        context: [
+          '/api', '/management', '/swagger-resources', '/v2/api-docs', '/h2-console'
+        ],
+        target: 'http://127.0.0.1:8080',
+        secure: false
+      }, {
+        context: ['/websocket'],
+        target: 'ws://127.0.0.1:8080',
+        ws: true
+      }
+    ]
+  },
   plugins: [
     new BrowserSyncPlugin({
       host: 'localhost',
       port: 8000,
       proxy: {
-        target: 'http://localhost:8005',
+        target: 'http://localhost:9060',
         ws: true
       }
     }, {

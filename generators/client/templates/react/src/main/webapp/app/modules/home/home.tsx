@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import * as Translate from 'react-translate-component';
 import { connect } from 'react-redux';
 import { Button, Input } from 'reactstrap';
