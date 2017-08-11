@@ -1,60 +1,129 @@
+import './header.scss';
+
 import * as React from 'react';
 import * as Translate from 'react-translate-component';
 import {
-  Navbar,
-  Dropdown, DropdownToggle, DropdownMenu, DropdownItem
+  Navbar, NavDropdown,
+  Nav, NavItem, NavLink, NavbarToggler, NavbarBrand, Collapse, UncontrolledNavDropdown,
+  Dropdown, DropdownToggle, DropdownMenu, DropdownItem, UncontrolledDropdown
 } from 'reactstrap';
-import { Link } from 'react-router';
+import { NavLink as Link } from 'react-router-dom';
 import LoadingBar from 'react-redux-loading-bar';
 
 import { locales } from '../../../config/translation';
-import IconButton from '../../../shared/components/icon-button/icon-button';
 import appConfig from '../../../config/constants';
-import './header.scss';
+
+const devEnv = process.env.NODE_ENV === 'development';
 
 export interface IHeaderProps {
   currentLocale: string;
   onLocaleChange: Function;
 }
 
-const Header = ({ currentLocale, onLocaleChange }: IHeaderProps) => {
-  <%_ if (enableTranslation) { _%>
-  const handleChange = (event, index, language) => {
-    onLocaleChange(language);
-  };
-  <%_ } _%>
+const BrandIcon = props => (
+  <div {...props} className="brand-icon">
+    <img
+      src="static/images/logo-jhipster-react.svg"
+      alt="Logo"
+    />
+  </div>
+);
+export class Header extends React.Component<IHeaderProps, { menuOpen: boolean }> {
 
-  const renderDevRibbon = () => (
+  constructor(props) {
+    super(props);
+    this.state = {
+      menuOpen: false
+    };
+  }
+
+  <%_ if (enableTranslation) { _%>
+  handleChange = (event, index, language) => {
+    onLocaleChange(language);
+  }
+
+  <%_ } _%>
+  renderDevRibbon = () => (
     process.env.NODE_ENV === 'development' ?
       <div className="ribbon dev"><a href=""><Translate content="global.ribbon.dev" /></a></div> :
       null
-  );
+  )
 
-  return (
-    <div>
-      {renderDevRibbon()}
-      <Navbar className="pad-5">
-        <div className="navbar-brand">
-          <Link to="/" className="brand-logo">
-            <span className="brand-title"><Translate with={appConfig} content="global.title">JHipster</Translate></span>
+  toggleMenu = () => {
+    this.setState({ menuOpen: !this.state.menuOpen });
+  }
+
+  render() {
+    return (
+      <div>
+        {this.renderDevRibbon()}
+        <LoadingBar className="loading-bar"/>
+        <Navbar inverse toggleable fixed="top" className="jh-navbar">
+          <NavbarToggler right onClick={this.toggleMenu} />
+          <NavbarBrand tag={Link} to="/" className="brand-logo">
+            <BrandIcon />
+            <span className="brand-title"><Translate with={appConfig} content="global.title">AppName</Translate></span>
             <span className="navbar-version">{appConfig.version}</span>
-          </Link>
-        </div>
-        {locales.length > 1 ?
-          <Dropdown toggle={handleChange}>
-            <DropdownToggle caret>
-              {currentLocale}
-            </DropdownToggle>
-            <DropdownMenu>
-              {locales.map(lang => <DropdownItem key={lang} value={lang}>{lang.toUpperCase()}</DropdownItem>)}
-            </DropdownMenu>
-          </Dropdown> : null
-        }
-      </Navbar>
-      <LoadingBar />
-    </div>
-  );
-};
+          </NavbarBrand>
+          <Collapse isOpen={this.state.menuOpen} navbar>
+            <Nav className="ml-auto" navbar>
+              <NavItem>
+                <NavLink tag={Link} to="/">
+                  {/* <i className="fa fa-home" aria-hidden="true"/> */}
+                  <span>Home</span>
+                </NavLink>
+              </NavItem>
+              <UncontrolledNavDropdown>
+                <DropdownToggle nav caret>
+                  Entities
+                </DropdownToggle>
+                <DropdownMenu right>
+                  {/* Nothing yet  */}
+                </DropdownMenu>
+              </UncontrolledNavDropdown>
+              {devEnv ?
+                <UncontrolledNavDropdown>
+                  <DropdownToggle nav caret>
+                    Administration
+                  </DropdownToggle>
+                  <DropdownMenu right>
+                    <DropdownItem tag={Link} to="/admin/health">Health</DropdownItem>
+                    <DropdownItem tag={Link} to="/admin/metrics">Metrics</DropdownItem>
+                    <DropdownItem tag={Link} to="/admin/configuration">Configuration</DropdownItem>
+                    <DropdownItem tag={Link} to="/admin/docs">API Docs</DropdownItem>
+                  </DropdownMenu>
+                </UncontrolledNavDropdown> : null
+              }
+              <UncontrolledNavDropdown>
+                <DropdownToggle nav caret>
+                  Account
+                </DropdownToggle>
+                <DropdownMenu right>
+                  <DropdownItem tag={Link} to="/account/settings">Settings</DropdownItem>
+                  <DropdownItem tag={Link} to="/account/password">Password</DropdownItem>
+                  <DropdownItem tag={Link} to="/logout">Logout</DropdownItem>
+                  <DropdownItem tag={Link} to="/login">Login</DropdownItem>
+                </DropdownMenu>
+              </UncontrolledNavDropdown>
+            <%_ if (enableTranslation) { _%>
+              { locales.length > 1 ?
+                <NavDropdown toggle={this.handleChange}>
+                  <DropdownToggle caret>
+                    {this.props.currentLocale}
+                  </DropdownToggle>
+                  <DropdownMenu right>
+                    {locales.map(lang => <DropdownItem key={lang} value={lang}>{lang.toUpperCase()}</DropdownItem>)}
+                  </DropdownMenu>
+                </NavDropdown> : null
+              }
+            <%_ } _%>
+            </Nav>
+          </Collapse>
+        </Navbar>
+      </div>
+    );
+  }
+}
 
 export default Header;
 // import React, { Component, PropTypes } from 'react';
@@ -81,12 +150,10 @@ export default Header;
 //       sidebarOpen: false
 //     };
 //   }
-//   <%_ if (enableTranslation) { _%>
-//   handleChange = (event, index, language) => {
+////   handleChange = (event, index, language) => {
 //     this.props.onLocaleChange(language);
 //   };
-//   <%_ } _%>
-
+//
 //   toggleSideBar = () => {
 //     this.setState({
 //       sidebarOpen: !this.state.sidebarOpen
@@ -171,16 +238,7 @@ export default Header;
 //           initiallyOpen={false}
 //           primaryTogglesNestedList
 //           nestedItems={[
-//             <%_ if (applicationType === 'gateway') { _%>
-//             <Link to="/admin/gateway">
-//               <ListItem
-//                 key={4.1} innerDivStyle={menuListStyle}
-//                 primaryText={<Translate content="global.menu.admin.gateway" />}
-//                 leftIcon={<ActionHome />}
-//               />
-//             </Link>
-//             <%_ } _%>
-//             <Link to="/admin/user-management">
+////             <Link to="/admin/user-management">
 //               <ListItem
 //                 key={4.2} innerDivStyle={menuListStyle}
 //                 leftIcon={<SocialGroup />}
@@ -201,10 +259,7 @@ export default Header;
 //                 primaryText={<Translate content="global.menu.admin.health" />}
 //               />
 //             </Link>,
-//             <%_ if (websocket == 'spring-websocket') { _%>
-//               // TODO
-//             <%_ } _%>
-//             <Link to="/admin/configuration">
+////             <Link to="/admin/configuration">
 //               <ListItem
 //                 key={4.5} innerDivStyle={menuListStyle}
 //                 leftIcon={<ActionBuild />}
@@ -231,7 +286,7 @@ export default Header;
 //                 leftIcon={<AvLibraryBooks />}
 //                 primaryText={<Translate content="global.menu.admin.apidocs" />}
 //               />
-//             </Link><% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>,
+//             </Link>,
 //             <a href="/h2-console">
 //               <ListItem
 //                 key={4.9} innerDivStyle={menuListStyle}
@@ -239,8 +294,7 @@ export default Header;
 //                 primaryText={<Translate content="global.menu.admin.database" />}
 //               />
 //             </a>
-//             <%_ } _%>
-//           ]}
+////           ]}
 //         />
 //       );
 //     }
@@ -252,20 +306,18 @@ export default Header;
 //           title={
 //             <div>
 //               <Link to="/" className="brand-logo">
-//                 <span className="brand-title"><Translate content="global.title"><%= capitalizedBaseName %></Translate></span>
+//                 <span className="brand-title"><Translate content="global.title">Jhipster</Translate></span>
 //                 <span className="navbar-version">{appConfig.version}</span>
 //               </Link>
 //             </div>
 //           }
 //           onLeftIconButtonTouchTap={this.toggleSideBar}
-//           <%_ if (enableTranslation) { _%>
-//           iconElementRight={
+////           iconElementRight={
 //             <DropDownMenu value={currentLocale} onChange={this.handleChange} underlineStyle={{ borderTop: 'none' }} labelStyle={{ color: HEADER_COLOR }}>
 //               {locales.map(lang => <MenuItem key={lang} value={lang} primaryText={lang.toUpperCase()} />)}
 //             </DropDownMenu>
 //           }
-//           <%_ } _%>
-//         />
+////         />
 //         <Drawer open={this.state.sidebarOpen} docked={false} onRequestChange={sidebarOpen => this.setState({ sidebarOpen })}>
 //           <List>
 //             <Subheader>Application Menu</Subheader>
@@ -281,10 +333,7 @@ export default Header;
 //                 menuItemAccountLogin,
 //                 menuItemAccountRegister,
 //                 menuItemAccountSettings,
-//                 <%_ if (authenticationType == 'session') { _%>
-//                   // TODO
-//                 <%_ } _%>
-//                 menuItemAccountPassword,
+////                 menuItemAccountPassword,
 //                 menuItemAccountSignOut
 //               ]}
 //             />

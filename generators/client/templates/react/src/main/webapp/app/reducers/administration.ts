@@ -183,10 +183,10 @@ export const getEnv = () => ({
 export const getAudits = (fromDate, toDate, page = 0, size = 20) => {
   let requestUrl = `/management/jhipster/audits?page=${page}&size=${size}`;
   if (toDate) {
-    requestUrl += `&toDate=${toDate}`; // eslint-disable-line fp/no-mutation
+    requestUrl += `&toDate=${toDate}`;
   }
   if (fromDate) {
-    requestUrl += `&fromDate=${fromDate}`; // eslint-disable-line fp/no-mutation
+    requestUrl += `&fromDate=${fromDate}`;
   }
   return {
     type: ACTION_TYPES.FETCH_AUDITS,

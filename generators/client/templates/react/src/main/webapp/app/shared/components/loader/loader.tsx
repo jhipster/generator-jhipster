@@ -40,8 +40,8 @@ const Types = {
 
 const range = x => {
   const arr = [];
-  for (let i = 0; i < x; i++) { // eslint-disable-line fp/no-mutation
-    arr.push(i); // eslint-disable-line fp/no-mutating-methods
+  for (let i = 0; i < x; i++) {
+    arr.push(i);
   }
   return arr;
 };
@@ -72,9 +72,9 @@ const loader = (type, noText) => {
   );
 };
 
-const renderLoader = (loading, type, noText, children) => loading ? loader(type, noText) : <div>{children}</div>;
+const renderLoader = (loading, type, noText, children) => loading ? loader(type, noText) : children;
 
-const Loader = ({ loading, type = DEFAULT_LOADER, noText = false, children }) => ( // eslint-disable-line react/prop-types
+const Loader = ({ loading, type = DEFAULT_LOADER, noText = false, children }) => (
   <CSSTransitionGroup
     className="loader-container-stage"
     transitionName="crossfade"
