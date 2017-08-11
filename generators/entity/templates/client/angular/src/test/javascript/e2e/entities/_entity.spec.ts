@@ -108,6 +108,9 @@ describe('<%= entityClass %> e2e test', () => {
         <%= entityInstance %>DialogPage.set<%= fieldNameCapitalized %>Input(absolutePath);
         <%_ } else if(fieldIsEnum) { _%>
         <%= entityInstance %>DialogPage.<%=fieldName %>SelectLastOption();
+        <%_ } else if(fieldType === 'UUID'){ _%>
+        <%= entityInstance %>DialogPage.set<%= fieldNameCapitalized %>Input('64c99148-3908-465d-8c4a-e510e3ade974');
+        expect(<%= entityInstance %>DialogPage.get<%= fieldNameCapitalized %>Input()).toMatch('64c99148-3908-465d-8c4a-e510e3ade974');
         <%_ } else { _%>
         <%= entityInstance %>DialogPage.set<%= fieldNameCapitalized %>Input('<%= fieldName %>');
         expect(<%= entityInstance %>DialogPage.get<%= fieldNameCapitalized %>Input()).toMatch('<%= fieldName %>');
