@@ -12,6 +12,7 @@
     "bootstrap": "4.0.0-alpha.6",
     "counterpart": "0.18.1",
     "lodash": "4.17.4",
+    "loaders.css": "0.1.2",
     "moment": "2.18.1",
     "react": "15.6.1",
     "react-addons-css-transition-group": "15.6.0",
@@ -139,8 +140,10 @@
     "webpack:test": "<%= clientPackageManager %> run test",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js",
-    "test": "karma start src/test/javascript/karma.conf.js",
-    "test:watch": "<%= clientPackageManager %> test -- --watch",
+    "test": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> test:start -- --browsers Chrome",
+    "test:ci": "<%= clientPackageManager %> test:start -- --browsers PhantomJS",
+    "test:start": "karma start src/test/javascript/karma.conf.js",
+    "test:watch": "<%= clientPackageManager %> test:ci -- --watch",
     <%_ if (protractorTests) { _%>
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
     "postinstall": "webdriver-manager update && node node_modules/phantomjs-prebuilt/install.js"
