@@ -21,7 +21,7 @@ const constants = require('../generator-constants');
 
 /* Constants use throughout */
 const MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
-// const TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
+const TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 const REACT_DIR = constants.ANGULAR_DIR;
 
 /**
@@ -152,6 +152,7 @@ const files = {
             path: REACT_DIR,
             templates: [
                 // home module
+                'reducers/index.ts',
                 'reducers/action-type.util.ts',
                 'reducers/administration.ts',
                 'reducers/authentication.ts',
@@ -288,6 +289,7 @@ const files = {
                 'shared/util/promise-utils.ts',
                 'shared/util/dom-utils.ts',
                 'shared/util/url-util.ts',
+                'shared/util/storage-util.ts',
                 // components
                 'shared/components/icon-button/icon-button.tsx',
                 'shared/components/font-icon/font-icon.tsx',
@@ -360,28 +362,34 @@ const files = {
     //     ]
     //   }
     // ],
-    // clientTestFw: [
-    //   {
-    //     path: TEST_SRC_DIR,
-    //     templates: [
-    //       '_karma.conf.js',
-    //       'spec/_entry.js',
-    //       'spec/_test.module.js',
-    //       'spec/app/account/activate/_activate.component.spec.js',
-    //       'spec/app/account/password/_password.component.spec.js',
-    //       'spec/app/account/password/_password-strength-bar.component.spec.js',
-    //       'spec/app/account/password-reset/init/_password-reset-init.component.spec.js',
-    //       'spec/app/account/password-reset/finish/_password-reset-finish.component.spec.js',
-    //       'spec/app/account/register/_register.component.spec.js',
-    //       'spec/app/account/settings/_settings.component.spec.js',
-    //       'spec/app/admin/health/_health.component.spec.js',
-    //       'spec/app/admin/audits/_audits.component.spec.js',
-    //       'spec/helpers/_spyobject.js',
-    //       'spec/helpers/_mock-account.service.js',
-    //       'spec/helpers/_mock-principal.service.js',
-    //       'spec/helpers/_mock-route.service.js'
-    //     ]
-    //   },
+    clientTestFw: [
+        {
+            path: TEST_SRC_DIR,
+            templates: [
+                'karma.conf.js',
+                'spec/entry.ts',
+                'spec/app/utils.ts',
+                'spec/app/config/notification-middleware.spec.ts',
+                'spec/app/shared/components/font-icon.spec.tsx',
+                'spec/app/shared/components/icon-button.spec.tsx',
+                'spec/app/shared/components/loader.spec.tsx',
+                'spec/app/shared/layout/header.spec.tsx',
+                'spec/app/shared/util/storage-util.spec.ts',
+                // 'spec/app/account/activate/_activate.component.spec.js',
+                // 'spec/app/account/password/_password.component.spec.js',
+                // 'spec/app/account/password/_password-strength-bar.component.spec.js',
+                // 'spec/app/account/password-reset/init/_password-reset-init.component.spec.js',
+                // 'spec/app/account/password-reset/finish/_password-reset-finish.component.spec.js',
+                // 'spec/app/account/register/_register.component.spec.js',
+                // 'spec/app/account/settings/_settings.component.spec.js',
+                // 'spec/app/admin/health/_health.component.spec.js',
+                // 'spec/app/admin/audits/_audits.component.spec.js',
+                // 'spec/helpers/_spyobject.js',
+                // 'spec/helpers/_mock-account.service.js',
+                // 'spec/helpers/_mock-principal.service.js',
+                // 'spec/helpers/_mock-route.service.js'
+            ]
+        },
     //   {
     //     condition: generator => generator.authenticationType === 'session',
     //     path: TEST_SRC_DIR,
@@ -412,7 +420,7 @@ const files = {
     //       '_protractor.conf.js'
     //     ]
     //   }
-    // ]
+    ]
 };
 
 module.exports = {

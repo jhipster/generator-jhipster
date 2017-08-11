@@ -3,10 +3,14 @@ import { mount } from 'enzyme';
 import { expect } from 'chai';
 import { Tooltip } from 'reactstrap';
 
-import IconButton from '../../../../../../main/webapp/app/shared/ui-components/icon-button/icon-button';
+import IconButton from '../../../../../../main/webapp/app/shared/components/icon-button/icon-button';
 
 describe('IconButton', () => {
   let mountedWrapper;
+  // To avoid addEventListener methods causing error
+  Tooltip.prototype.addTargetEvents = () => {};
+  Tooltip.prototype.removeTargetEvents = () => {};
+
   const wrapper = () => {
     if (!mountedWrapper) {
       mountedWrapper = mount(
