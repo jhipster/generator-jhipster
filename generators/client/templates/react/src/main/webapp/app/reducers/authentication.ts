@@ -1,12 +1,13 @@
-import { hashHistory } from 'react-router';
 import axios from 'axios';
 
 import { REQUEST, SUCCESS, FAILURE } from './action-type.util';
+import Storage from '../shared/util/storage-util';
 
 export const ACTION_TYPES = {
   LOGIN: 'authentication/LOGIN',
   GET_SESSION: 'authentication/GET_SESSION',
   LOGOUT: 'authentication/LOGOUT',
+  CLEAR_AUTH: 'authentication/CLEAR_AUTH',
   ERROR_MESSAGE: 'authentication/ERROR_MESSAGE'
 };
 
@@ -58,9 +59,7 @@ export default (state = initialState, action) => {
       };
     case SUCCESS(ACTION_TYPES.GET_SESSION):
       {
-        const isAuthenticated = action.payload && action.payload.data
-          ? state.loginSuccess && action.payload.data.activated
-          : false;
+        const isAuthenticated = action.payload && action.payload.data && action.payload.data.activated;
         return {
           ...state,
           isAuthenticated,
@@ -72,6 +71,12 @@ export default (state = initialState, action) => {
       return {
         ...initialState,
         redirectMessage: action.message
+      };
+    case ACTION_TYPES.CLEAR_AUTH:
+      return {
+        ...state,
+        loading: false,
+        isAuthenticated: false
       };
     default:
       return state;
@@ -86,11 +91,11 @@ export const getSession = () => dispatch => dispatch({
 });
 
 export const clearAuthToken = () => {
-  if (localStorage.getItem('jhi-authenticationToken')) {
-    localStorage.removeItem('jhi-authenticationToken');
+  if (Storage.local.get('jhi-authenticationToken')) {
+    Storage.local.remove('jhi-authenticationToken');
   }
-  if (sessionStorage.getItem('jhi-authenticationToken')) {
-    sessionStorage.removeItem('jhi-authenticationToken');
+  if (Storage.session.get('jhi-authenticationToken')) {
+    Storage.session.remove('jhi-authenticationToken');
   }
 };
 
@@ -103,13 +108,11 @@ export const login = (username, password, rememberMe = false) => async (dispatch
   if (bearerToken && bearerToken.slice(0, 7) === 'Bearer ') {
     const jwt = bearerToken.slice(7, bearerToken.length);
     if (rememberMe) {
-      localStorage.setItem('jhi-authenticationToken', jwt);
+      Storage.local.set('jhi-authenticationToken', jwt);
     } else {
-      sessionStorage.setItem('jhi-authenticationToken', jwt);
+      Storage.session.set('jhi-authenticationToken', jwt);
     }
   }
-  const routingState = getState().routing.locationBeforeTransitions.state || {};
-  hashHistory.push(routingState.nextPathname || '/');
   dispatch(getSession());
 };
 
@@ -119,22 +122,11 @@ export const logout = () => async dispatch => {
     payload: axios.get('/api/account')
   });
   clearAuthToken();
-  hashHistory.push('/');
 };
 
-const getCurrentPath = getState => {
-  const currentPath = getState().routing.locationBeforeTransitions.pathname;
-  if (currentPath === '/login') {
-    return getState().routing.locationBeforeTransitions.state.nextPathname || '/';
-  }
-  return currentPath;
-};
-
-export const redirectToLoginWithMessage = messageKey => (dispatch, getState) => {
+export const clearAuthentication = messageKey => (dispatch, getState) => {
   dispatch(displayAuthError(messageKey));
-
-  hashHistory.replace({
-    pathname: '/login',
-    state: { nextPathname: getCurrentPath(getState) }
+  dispatch({
+    type: ACTION_TYPES.CLEAR_AUTH
   });
 };

@@ -1,37 +1,35 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-
+import { Redirect } from 'react-router-dom';
 import LoginModal from './login-modal';
 import { login } from '../../reducers/authentication';
 
 export interface ILoginProps {
   isAuthenticated: boolean;
   loginError?: boolean;
+  location: any;
   login: Function;
 }
 
 export interface ILoginState {
   showModal: boolean;
+  redirectToReferrer: boolean;
 }
 
 export class Login extends React.Component<ILoginProps, ILoginState> {
 
   constructor(props) {
     super(props);
-    this.state = {// eslint-disable-line immutable/no-mutation
-      showModal: false
+    this.state = {
+      showModal: !props.isAuthenticated,
+      redirectToReferrer: props.isAuthenticated
     };
   }
 
-  componentWillMount() {
+  componentWillReceiveProps(nextProps: ILoginProps) {
     this.setState({
-      showModal: !this.props.isAuthenticated
-    });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      showModal: !nextProps.isAuthenticated
+      showModal: !nextProps.isAuthenticated,
+      redirectToReferrer: nextProps.isAuthenticated
     });
   }
 
@@ -44,9 +42,14 @@ export class Login extends React.Component<ILoginProps, ILoginState> {
   }
 
   render() {
+    const { from } = this.props.location.state || { from: { pathname: '/' } };
+    const { showModal, redirectToReferrer } = this.state;
+    if (redirectToReferrer) {
+      return <Redirect to={from} />;
+    }
     return (
       <LoginModal
-        showModal={this.state.showModal}
+        showModal={showModal}
         handleLogin={this.handleLogin}
         handleClose={this.handleClose}
         loginError={this.props.loginError}

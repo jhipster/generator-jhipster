@@ -134,7 +134,6 @@ const files = {
                 // home module
                 { file: 'modules/home/home.tsx', method: 'processJsx' },
                 // login module
-                'modules/login/index.ts',
                 { file: 'modules/login/login.tsx', method: 'processJsx' },
                 { file: 'modules/login/logout.tsx', method: 'processJsx' },
                 { file: 'modules/login/login-modal.tsx', method: 'processJsx' }
@@ -153,7 +152,6 @@ const files = {
             path: REACT_DIR,
             templates: [
                 // home module
-                'reducers/index.ts',
                 'reducers/action-type.util.ts',
                 'reducers/administration.ts',
                 'reducers/authentication.ts',
@@ -237,6 +235,7 @@ const files = {
             path: REACT_DIR,
             templates: [
                 // admin modules
+                { file: 'modules/administration/index.tsx', method: 'processJsx' },
                 { file: 'modules/administration/audits/audits.tsx', method: 'processJsx' },
                 { file: 'modules/administration/configuration/configuration.tsx', method: 'processJsx' },
                 { file: 'modules/administration/docs/docs.tsx', method: 'processJsx' },
@@ -288,6 +287,7 @@ const files = {
                 'shared/util/log-util.ts',
                 'shared/util/promise-utils.ts',
                 'shared/util/dom-utils.ts',
+                'shared/util/url-util.ts',
                 // components
                 'shared/components/icon-button/icon-button.tsx',
                 'shared/components/font-icon/font-icon.tsx',
@@ -303,7 +303,7 @@ const files = {
                 'shared/layout/header/header.scss',
                 'shared/layout/footer/footer.scss',
                 'shared/components/loader/loader.scss',
-                '_shared-variables.scss',
+                '__bootstrap-variables.scss',
                 'app.scss'
             ]
         },

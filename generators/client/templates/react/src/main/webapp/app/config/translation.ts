@@ -1,6 +1,7 @@
 /* global: require*/
 import * as counterpart from 'counterpart';
 import { setLocale } from '../reducers/locale';
+import Storage from '../shared/util/storage-util';
 
 const mergeTranslations = requireContext => requireContext.keys().reduce(
   (merged, key) => ({ ...merged, ...requireContext(key) }),
@@ -14,7 +15,7 @@ const translations = {
 };
 
 let currentLocale;
-const savedLocale = localStorage.getItem('locale') || 'en';
+const savedLocale = Storage.local.get('locale', 'en');
 
 export const locales = Object.keys(translations);
 
@@ -24,9 +25,9 @@ export const registerLocales = store => {
   });
   store.subscribe(() => {
     const previousLocale = currentLocale;
-    currentLocale = store.getState().locale.currentLocale; // eslint-disable-line fp/no-mutation
+    currentLocale = store.getState().locale.currentLocale;
     if (previousLocale !== currentLocale) {
-      localStorage.setItem('locale', currentLocale);
+      Storage.local.set('locale', currentLocale);
       counterpart.setLocale(currentLocale);
     }
   });
