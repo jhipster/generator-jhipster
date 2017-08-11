@@ -2,7 +2,7 @@ import * as React from 'react';
 import { mount } from 'enzyme';
 import { expect } from 'chai';
 
-import Loader from '../../../../../../main/webapp/app/shared/ui-components/loader/loader';
+import Loader from '../../../../../../main/webapp/app/shared/components/loader/loader';
 
 describe('Loader', () => {
   let mountedWrapper;

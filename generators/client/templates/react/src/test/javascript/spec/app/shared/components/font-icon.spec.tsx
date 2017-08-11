@@ -2,7 +2,7 @@ import * as React from 'react';
 import { mount } from 'enzyme';
 import { expect } from 'chai';
 
-import FontIcon from '../../../../../../main/webapp/app/shared/ui-components/font-icon/font-icon';
+import FontIcon from '../../../../../../main/webapp/app/shared/components/font-icon/font-icon';
 
 describe('FontIcon', () => {
   let mountedWrapper;

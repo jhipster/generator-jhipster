@@ -8,7 +8,6 @@ import { HashRouter as Router } from 'react-router-dom';
 import { getSession, logout } from './reducers/authentication';
 import { setLocale } from './reducers/locale';
 import Header from './shared/layout/header/header';
-import appConfig from './config/constants';
 import AppRoutes from './routes';
 export interface IAppProps {
   location: any;

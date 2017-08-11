@@ -5,7 +5,7 @@ import * as Translate from 'react-translate-component';
 import {
   Navbar, NavDropdown,
   Nav, NavItem, NavLink, NavbarToggler, NavbarBrand, Collapse, UncontrolledNavDropdown,
-  Dropdown, DropdownToggle, DropdownMenu, DropdownItem, UncontrolledDropdown
+  DropdownToggle, DropdownMenu, DropdownItem
 } from 'reactstrap';
 import { NavLink as Link } from 'react-router-dom';
 import LoadingBar from 'react-redux-loading-bar';
@@ -39,7 +39,7 @@ export class Header extends React.Component<IHeaderProps, { menuOpen: boolean }>
 
   <%_ if (enableTranslation) { _%>
   handleChange = (event, index, language) => {
-    onLocaleChange(language);
+    this.props.onLocaleChange(language);
   }
 
   <%_ } _%>
