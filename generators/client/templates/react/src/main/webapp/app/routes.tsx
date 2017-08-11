@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
 import PrivateRoute from './shared/layout/private-route/private-route';
 import Login from './modules/login/login';
