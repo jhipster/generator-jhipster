@@ -114,7 +114,7 @@ spring:
     <%_ if (databaseType === 'couchbase') { _%>
     couchbase:
         bucket:
-            name: <%= baseName %>
+            name: jhipster
     <%_ } _%>
     mail:
         host: localhost
