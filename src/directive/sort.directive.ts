@@ -61,7 +61,7 @@ export class JhiSortDirective {
 
     private resetClasses() {
         const allThIcons = this.element.querySelectorAll(this.sortIconSelector);
-        for (var i = 0; i < allThIcons.length; i++) {
+        for (let i = 0; i < allThIcons.length; i++) {
             allThIcons[i].classList.remove(this.sortAscIcon);
             allThIcons[i].classList.remove(this.sortDescIcon);
             allThIcons[i].classList.add(this.sortIcon);
