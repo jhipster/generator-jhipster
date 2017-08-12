@@ -1,54 +1,50 @@
 -- create indexes
-CREATE INDEX type ON jhipster(`_class`)
+CREATE INDEX type ON ${bucket}(`_class`)
     WITH { "defer_build" : true };
 
-CREATE INDEX user_mail ON jhipster(email)
+CREATE INDEX user_mail ON ${bucket}(email)
     WHERE `_class` = "<%=packageName%>.domain.User"
     WITH { "defer_build" : true };
 
-CREATE INDEX audit_event ON jhipster(principal, event_date, event_type)
+CREATE INDEX audit_event ON ${bucket}(principal, event_date, event_type)
     WHERE `_class` = "<%=packageName%>.domain.PersistentAuditEvent"
+    WITH { "defer_build" : true };<% if (authenticationType === 'oauth2') { %>
+
+CREATE INDEX client_details ON ${bucket}(clientId)
+    WHERE `_class` = "io.github.${bucket}.domain.OAuth2AuthenticationClientDetails"
     WITH { "defer_build" : true };
 
-<%_ if (authenticationType === 'oauth2') { _%>
-CREATE INDEX client_details ON jhipster(clientId)
-    WHERE `_class` = "io.github.jhipster.domain.OAuth2AuthenticationClientDetails"
+CREATE INDEX authentication_approval ON ${bucket}(clientId, userId, scope)
+    WHERE `_class` = "io.github.${bucket}.domain.OAuth2AuthenticationApproval"
     WITH { "defer_build" : true };
 
-CREATE INDEX authentication_approval ON jhipster(clientId, userId, scope)
-    WHERE `_class` = "io.github.jhipster.domain.OAuth2AuthenticationApproval"
+CREATE INDEX access_token_refresh ON ${bucket}(refreshToken)
+    WHERE `_class` = "io.github.${bucket}.domain.OAuth2AuthenticationAccessToken"
     WITH { "defer_build" : true };
 
-CREATE INDEX access_token_refresh ON jhipster(refreshToken)
-    WHERE `_class` = "io.github.jhipster.domain.OAuth2AuthenticationAccessToken"
+CREATE INDEX access_token_id ON ${bucket}(authenticationId)
+    WHERE `_class` = "io.github.${bucket}.domain.OAuth2AuthenticationAccessToken"
     WITH { "defer_build" : true };
 
-CREATE INDEX access_token_id ON jhipster(authenticationId)
-    WHERE `_class` = "io.github.jhipster.domain.OAuth2AuthenticationAccessToken"
+CREATE INDEX access_token_user ON ${bucket}(clientId, userName)
+    WHERE `_class` = "io.github.${bucket}.domain.OAuth2AuthenticationAccessToken"
+    WITH { "defer_build" : true };<% } else if (authenticationType === 'session') { %>
+
+CREATE INDEX token_login ON ${bucket}(login)
+    WHERE `_class` = "io.github.${bucket}.domain.PersistentToken"
     WITH { "defer_build" : true };
 
-CREATE INDEX access_token_user ON jhipster(clientId, userName)
-    WHERE `_class` = "io.github.jhipster.domain.OAuth2AuthenticationAccessToken"
-    WITH { "defer_build" : true };
-<%_ } else if (authenticationType === 'session') { _%>
-CREATE INDEX token_login ON jhipster(login)
-    WHERE `_class` = "io.github.jhipster.domain.PersistentToken"
+CREATE INDEX token_date ON ${bucket}(tokenDate)
+    WHERE `_class` = "io.github.${bucket}.domain.PersistentToken"
+    WITH { "defer_build" : true };<% } %><% if (enableSocialSignIn) { %>
+
+CREATE INDEX social_user ON ${bucket}(userId, providerId, providerUserId)
+    WHERE `_class` = "io.github.${bucket}.domain.SocialUserConnectionRepository"
     WITH { "defer_build" : true };
 
-CREATE INDEX token_date ON jhipster(tokenDate)
-    WHERE `_class` = "io.github.jhipster.domain.PersistentToken"
-    WITH { "defer_build" : true };
-<%_ } _%>
-<% if (enableSocialSignIn) { %>
-CREATE INDEX social_user ON jhipster(userId, providerId, providerUserId)
-    WHERE `_class` = "io.github.jhipster.domain.SocialUserConnectionRepository"
-    WITH { "defer_build" : true };
-
-CREATE INDEX social_provider ON jhipster(providerId, providerUserId)
-    WHERE `_class` = "io.github.jhipster.domain.SocialUserConnectionRepository"
-    WITH { "defer_build" : true };
-<%_ } _%>
+CREATE INDEX social_provider ON ${bucket}(providerId, providerUserId)
+    WHERE `_class` = "io.github.${bucket}.domain.SocialUserConnectionRepository"
+    WITH { "defer_build" : true };<% } %>
 
 -- build indexes asynchronously
-BUILD INDEX ON jhipster(type, user_mail, audit_event<% if (authenticationType === 'oauth2') { %>, client_details, authentication_approval, access_token_refresh, access_token_id, access_token_user<% } else if (authenticationType === 'session') { %>, token_login, token_date<% } %><% if (enableSocialSignIn) { %>, social_user, social_provider<% } %>);
-
+BUILD INDEX ON ${bucket}(type, user_mail, audit_event<% if (authenticationType === 'oauth2') { %>, client_details, authentication_approval, access_token_refresh, access_token_id, access_token_user<% } else if (authenticationType === 'session') { %>, token_login, token_date<% } %><% if (enableSocialSignIn) { %>, social_user, social_provider<% } %>);
