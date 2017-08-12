@@ -65,6 +65,6 @@ export class JhiSortDirective {
             allThIcons[i].classList.remove(this.sortAscIcon);
             allThIcons[i].classList.remove(this.sortDescIcon);
             allThIcons[i].classList.add(this.sortIcon);
-        }
+        };
     };
 }
