@@ -51,7 +51,9 @@ import java.util.Set;
 <%_ if (databaseType !== 'cassandra') { _%>
 import java.time.Instant;
 <%_ } _%>
-
+<% if (databaseType === 'couchbase') { %>
+import static <%=packageName%>.config.Constants.ID_DELIMITER;
+<% } %>
 <%_ if (databaseType === 'sql') { _%>
 /**
  * Spring Data JPA repository for the User entity.
@@ -86,7 +88,7 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
 
     <%_ if (databaseType === 'couchbase') { _%>
     default Optional<User> findOneByLogin(String login) {
-        return Optional.ofNullable(findOne(User.PREFIX + N1qlCouchbaseRepository.DELIMITER + login));
+        return Optional.ofNullable(findOne(User.PREFIX + ID_DELIMITER + login));
     }
     <%_ } else { _%>
     Optional<User> findOneByLogin(String login);

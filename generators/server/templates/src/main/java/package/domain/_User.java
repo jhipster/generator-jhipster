@@ -59,7 +59,7 @@ import java.util.Set;
 import java.time.Instant;
 
 <%_ if (databaseType === 'couchbase') { _%>
-import static io.github.jhipster.repository.N1qlCouchbaseRepository.DELIMITER;
+import static <%=packageName%>.config.Constants.ID_DELIMITER;
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.USE_ATTRIBUTES;
 
 <%_ } _%>
@@ -94,7 +94,7 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || 
     private String prefix = PREFIX;<% } %>
 <% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
     @Id<% } %><% if (databaseType === 'couchbase') { %>
-    @GeneratedValue(strategy = USE_ATTRIBUTES, delimiter = DELIMITER)<% } %><% if (databaseType === 'cassandra') { %>
+    @GeneratedValue(strategy = USE_ATTRIBUTES, delimiter = ID_DELIMITER)<% } %><% if (databaseType === 'cassandra') { %>
     @PartitionKey<% } %>
     private String id;<% } %>
 

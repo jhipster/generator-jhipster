@@ -76,7 +76,7 @@ import <%=packageName%>.domain.enumeration.<%= element %>;
 <%_ }); _%>
 
 <%_ if (databaseType === 'couchbase') { _%>
-import static io.github.jhipster.repository.N1qlCouchbaseRepository.DELIMITER;
+import static <%=packageName%>.config.Constants.ID_DELIMITER;
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
 <%_ } _%>
 
@@ -127,7 +127,7 @@ public class <%= entityClass %> implements Serializable {
     private String prefix = PREFIX;
 <%_ } if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
     @Id<% if (databaseType === 'couchbase') { %>
-    @GeneratedValue(strategy = UNIQUE, delimiter = DELIMITER)<% } %>
+    @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)<% } %>
     private String id;
 <%_ } if (databaseType === 'cassandra') { %>
     @PartitionKey

@@ -38,7 +38,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 <%_ if (databaseType === 'couchbase') { _%>
-import static io.github.jhipster.repository.N1qlCouchbaseRepository.DELIMITER;
+import static <%=packageName%>.config.Constants.ID_DELIMITER;
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
 
 <%_ } _%>
@@ -68,7 +68,7 @@ public class PersistentAuditEvent implements Serializable {
     @Column(name = "event_id")
     private Long id;<% } else { %>
     <%_ if (databaseType === 'couchbase') { _%>
-    @GeneratedValue(strategy = UNIQUE, delimiter = DELIMITER)
+    @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)
     <%_ }  else { _%>
     @Field("event_id")
     <%_ } _%>

@@ -37,7 +37,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;<% if (databaseType === 'cassandra') { %>
 import java.util.Date;<% } %>
 <% if (databaseType === 'couchbase') { %>
-import static io.github.jhipster.repository.N1qlCouchbaseRepository.DELIMITER;
+import static <%=packageName%>.config.Constants.ID_DELIMITER;
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.USE_ATTRIBUTES;
 <% } %>
 /**
@@ -66,7 +66,7 @@ public class PersistentToken implements Serializable {
     private String prefix = PREFIX;
 
     @Id
-    @GeneratedValue(strategy = USE_ATTRIBUTES, delimiter = DELIMITER)
+    @GeneratedValue(strategy = USE_ATTRIBUTES, delimiter = ID_DELIMITER)
     private String id;
 
     @IdAttribute<%_ } _%>

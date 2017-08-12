@@ -31,8 +31,6 @@ import java.util.List;
 @NoRepositoryBean
 public interface N1qlCouchbaseRepository<T, ID extends Serializable> extends CouchbasePagingAndSortingRepository<T, ID> {
 
-    String DELIMITER = "::";
-
     @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter}")
     List<T> findAll();
 

@@ -36,7 +36,7 @@ import java.util.UUID;
 <%_ } _%>
 
 <%_ if (databaseType === 'couchbase') { _%>
-import static io.github.jhipster.repository.N1qlCouchbaseRepository.DELIMITER;
+import static <%=packageName%>.config.Constants.ID_DELIMITER;
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.USE_ATTRIBUTES;
 <%_ } _%>
 
@@ -52,7 +52,7 @@ public class OAuth2AuthenticationCode implements Serializable {
     private String prefix = PREFIX;
 <% } %>
     @Id<% if (databaseType === 'couchbase') { %>
-    @GeneratedValue(strategy = USE_ATTRIBUTES, delimiter = DELIMITER)<% } %>
+    @GeneratedValue(strategy = USE_ATTRIBUTES, delimiter = ID_DELIMITER)<% } %>
     private String id;
 
     <%_ if (databaseType === 'couchbase') { _%>

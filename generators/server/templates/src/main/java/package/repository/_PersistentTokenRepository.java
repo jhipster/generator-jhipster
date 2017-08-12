@@ -39,7 +39,9 @@ import java.util.List;
 <%_ if (databaseType === 'cassandra') { _%>
 import java.util.Set;
 <%_ } _%>
-
+<% if (databaseType === 'couchbase') { %>
+import static <%=packageName%>.config.Constants.ID_DELIMITER;
+<% } %>
 <% if (databaseType === 'sql') { %>/**
  * Spring Data JPA repository for the PersistentToken entity.
  */<% } %><% if (databaseType === 'mongodb') { %>/**
@@ -52,11 +54,11 @@ import java.util.Set;
 public interface PersistentTokenRepository extends <% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><PersistentToken, String> {
 <% if (databaseType === 'couchbase') { %>
     default PersistentToken findBySeries(String series) {
-        return findOne(PersistentToken.PREFIX + DELIMITER + series);
+        return findOne(PersistentToken.PREFIX + ID_DELIMITER + series);
     }
 
     default void deleteBySeries(String series) {
-        delete(PersistentToken.PREFIX + DELIMITER + series);
+        delete(PersistentToken.PREFIX + ID_DELIMITER + series);
     }
 
     default List<PersistentToken> findByUser(User user) {

@@ -35,7 +35,7 @@ import java.util.UUID;
 <%_ } _%>
 
 <%_ if (databaseType === 'couchbase') { _%>
-import static io.github.jhipster.repository.N1qlCouchbaseRepository.DELIMITER;
+import static <%=packageName%>.config.Constants.ID_DELIMITER;
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
 <%_ } _%>
 
@@ -51,7 +51,7 @@ public class OAuth2AuthenticationClientDetails extends BaseClientDetails impleme
     private String prefix = PREFIX;
 <% } %>
     @Id<% if (databaseType === 'couchbase') { %>
-    @GeneratedValue(strategy = UNIQUE, delimiter = DELIMITER)<% } %>
+    @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)<% } %>
     private String id;
 
     @PersistenceConstructor

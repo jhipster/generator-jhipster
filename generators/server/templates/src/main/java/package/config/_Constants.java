@@ -28,6 +28,9 @@ public final class Constants {
 
     public static final String SYSTEM_ACCOUNT = "system";
     public static final String ANONYMOUS_USER = "anonymoususer";
+    <% if (databaseType === 'couchbase') { %>
+    public static final String ID_DELIMITER = "::";
+    <% } %>
 
     private Constants() {
     }

@@ -47,7 +47,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
 <% if (databaseType === 'couchbase') { %>
-import static io.github.jhipster.repository.N1qlCouchbaseRepository.DELIMITER;
+import static <%=packageName%>.config.Constants.ID_DELIMITER;
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
 <% } %>
 /**
@@ -83,7 +83,7 @@ public class SocialUserConnection implements Serializable {
     <%_ } _%>
     private Long id;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
     @Id<% if (databaseType === 'couchbase') { %>
-    @GeneratedValue(strategy = UNIQUE, delimiter = DELIMITER)
+    @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)
     private String id;<% } %><% } %>
 
     @NotNull<% if (databaseType === 'sql') { %>
