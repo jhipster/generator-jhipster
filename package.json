@@ -42,7 +42,7 @@
     "test": "mocha --timeout 20000 --slow 0 --reporter spec test/*.spec.js"
   },
   "dependencies": {
-    "chalk": "2.0.1",
+    "chalk": "2.1.0",
     "cheerio": "0.22.0",
     "commander": "2.10.0",
     "didyoumean": "1.2.1",
