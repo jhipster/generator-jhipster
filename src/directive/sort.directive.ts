@@ -61,10 +61,11 @@ export class JhiSortDirective {
 
     private resetClasses() {
         const allThIcons = this.element.querySelectorAll(this.sortIconSelector);
-        allThIcons.forEach((value) => {
-            value.classList.remove(this.sortAscIcon);
-            value.classList.remove(this.sortDescIcon);
-            value.classList.add(this.sortIcon);
-        });
+        // Use normal loop instead of forEach because IE does not support forEach on NodeList.
+        for (let i = 0; i < allThIcons.length; i++) {
+            allThIcons[i].classList.remove(this.sortAscIcon);
+            allThIcons[i].classList.remove(this.sortDescIcon);
+            allThIcons[i].classList.add(this.sortIcon);
+        };
     };
 }
