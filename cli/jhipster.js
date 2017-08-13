@@ -35,24 +35,33 @@ if (!semver.satisfies(currentNodeVersion, minimumNodeVersion)) {
     process.exit(1);
 }
 
-requireCLI();
+let preferGlobal = false;
+if (process.argv.length >= 3) {
+    if (process.argv[2] === 'upgrade') {
+        // Prefer global version for `jhipster upgrade` to get most recent code
+        preferGlobal = true;
+    }
+}
+requireCLI(preferGlobal);
 
 /*
  * Require cli.js giving priority to local version over global one if it exists.
  */
-function requireCLI() {
+function requireCLI(preferGlobal) {
     /* eslint-disable global-require */
-    try {
-        const localCLI = require.resolve(path.join(process.cwd(), 'node_modules', 'generator-jhipster', 'cli', 'cli.js'));
-        if (__dirname !== path.dirname(localCLI)) {
-            // load local version
-            /* eslint-disable import/no-dynamic-require */
-            logger.info('Using JHipster locally installed in current project\'s node_modules');
-            require(localCLI);
-            return;
+    if (!preferGlobal) {
+        try {
+            const localCLI = require.resolve(path.join(process.cwd(), 'node_modules', 'generator-jhipster', 'cli', 'cli.js'));
+            if (__dirname !== path.dirname(localCLI)) {
+                // load local version
+                /* eslint-disable import/no-dynamic-require */
+                logger.info('Using JHipster locally installed in current project\'s node_modules');
+                require(localCLI);
+                return;
+            }
+        } catch (e) {
+            // Unable to find local version, so global one will be loaded anyway
         }
-    } catch (e) {
-        // Unable to find local version, so global one will be loaded anyway
     }
     // load global version
     logger.info('Using JHipster globally installed');
