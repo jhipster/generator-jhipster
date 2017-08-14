@@ -127,6 +127,7 @@ function writeFiles() {
                 this.template('gradle/_docker.gradle', 'gradle/docker.gradle');
                 this.template('gradle/_profile_dev.gradle', 'gradle/profile_dev.gradle', this, { interpolate: INTERPOLATE_REGEX });
                 this.template('gradle/_profile_prod.gradle', 'gradle/profile_prod.gradle', this, { interpolate: INTERPOLATE_REGEX });
+                this.template('gradle/_swagger.gradle', 'gradle/swagger.gradle');
                 this.template('gradle/_mapstruct.gradle', 'gradle/mapstruct.gradle', this, { interpolate: INTERPOLATE_REGEX });
                 this.template('gradle/_graphite.gradle', 'gradle/graphite.gradle');
                 this.template('gradle/_prometheus.gradle', 'gradle/prometheus.gradle');
@@ -169,6 +170,8 @@ function writeFiles() {
             this.template(`${SERVER_MAIN_RES_DIR}config/_application.yml`, `${SERVER_MAIN_RES_DIR}config/application.yml`);
             this.template(`${SERVER_MAIN_RES_DIR}config/_application-dev.yml`, `${SERVER_MAIN_RES_DIR}config/application-dev.yml`);
             this.template(`${SERVER_MAIN_RES_DIR}config/_application-prod.yml`, `${SERVER_MAIN_RES_DIR}config/application-prod.yml`);
+
+            this.template(`${SERVER_MAIN_RES_DIR}swagger/_api.yml`, `${SERVER_MAIN_RES_DIR}swagger/api.yml`);
 
             if (this.databaseType === 'sql') {
                 this.template(`${SERVER_MAIN_RES_DIR}/config/liquibase/changelog/_initial_schema.xml`, `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/00000000000000_initial_schema.xml`, this, { interpolate: INTERPOLATE_REGEX });

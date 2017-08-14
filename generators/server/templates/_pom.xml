@@ -192,6 +192,7 @@
         <spring-social-google.version>1.0.0.RELEASE</spring-social-google.version>
         <%_ } _%>
         <springfox.version>2.7.0</springfox.version>
+        <swagger-codegen-maven-plugin.version>2.2.3</swagger-codegen-maven-plugin.version>
         <%_ if (databaseType === 'sql') { _%>
         <validation-api.version>1.1.0.Final</validation-api.version>
         <%_ } _%>
@@ -1136,6 +1137,33 @@
                         </resource>
                     </resources>
                 </configuration>
+            </plugin>
+            <plugin>
+                <!-- 
+                    Plugin that provides API-first development using swagger-codegen to 
+                    generate Spring-MVC endpoint stubs at compile time from a swagger definition file 
+                -->
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-codegen-maven-plugin</artifactId>
+                <version>${swagger-codegen-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec><%= SERVER_MAIN_RES_DIR %>swagger/api.yml</inputSpec>
+                            <language>spring</language>
+                            <apiPackage><%= packageName %>.web.api</apiPackage>
+                            <modelPackage><%= packageName %>.web.api.model</modelPackage>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                            <configOptions>
+                                <interfaceOnly>true</interfaceOnly>
+                                <java8>true</java8>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <!-- jhipster-needle-maven-add-plugin -->
         </plugins>

@@ -23,6 +23,7 @@ const expectedFiles = {
         'gradle/profile_dev.gradle',
         'gradle/profile_prod.gradle',
         'gradle/sonar.gradle',
+        'gradle/swagger.gradle',
         'gradle/wrapper/gradle-wrapper.jar',
         'gradle/wrapper/gradle-wrapper.properties'
     ],
@@ -53,6 +54,7 @@ const expectedFiles = {
         `${SERVER_MAIN_RES_DIR}config/liquibase/users_authorities.csv`,
         `${SERVER_MAIN_RES_DIR}mails/activationEmail.html`,
         `${SERVER_MAIN_RES_DIR}mails/passwordResetEmail.html`,
+        `${SERVER_MAIN_RES_DIR}swagger/api.yml`,
         `${SERVER_MAIN_RES_DIR}i18n/messages.properties`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/JhipsterApp.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/ApplicationWebXml.java`,
