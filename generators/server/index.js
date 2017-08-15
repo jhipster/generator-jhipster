@@ -154,6 +154,11 @@ module.exports = JhipsterServerGenerator.extend({
                 this.messageBroker = false;
             }
 
+            this.apiFirst = this.config.get('apiFirst') === 'no' ? false : this.config.get('apiFirst');
+            if (this.apiFirst === undefined) {
+                this.apiFirst = false;
+            }
+
             this.serviceDiscoveryType = this.config.get('serviceDiscoveryType') === 'no' ? false : this.config.get('serviceDiscoveryType');
             if (this.serviceDiscoveryType === undefined) {
                 this.serviceDiscoveryType = false;
@@ -259,6 +264,11 @@ module.exports = JhipsterServerGenerator.extend({
                     this.serviceDiscoveryType = false;
                 }
 
+                // If the service discovery is not defined, it is disabled by default
+                if (this.apiFirst === undefined) {
+                    this.apiFirst = false;
+                }
+
                 // If translation is not defined, it is enabled by default
                 if (this.enableTranslation === undefined) {
                     this.enableTranslation = true;
@@ -304,6 +314,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.configOptions.serviceDiscoveryType = this.serviceDiscoveryType;
             this.configOptions.buildTool = this.buildTool;
             this.configOptions.enableSocialSignIn = this.enableSocialSignIn;
+            this.configOptions.apiFirst = this.apiFirst;
             this.configOptions.authenticationType = this.authenticationType;
             this.configOptions.uaaBaseName = this.uaaBaseName;
             this.configOptions.serverPort = this.serverPort;
@@ -337,6 +348,7 @@ module.exports = JhipsterServerGenerator.extend({
             insight.track('app/serviceDiscoveryType', this.serviceDiscoveryType);
             insight.track('app/buildTool', this.buildTool);
             insight.track('app/enableSocialSignIn', this.enableSocialSignIn);
+            insight.track('app/apiFirst', this.apiFirst);
         },
 
         configureGlobal() {
@@ -381,6 +393,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.config.set('serviceDiscoveryType', this.serviceDiscoveryType);
             this.config.set('buildTool', this.buildTool);
             this.config.set('enableSocialSignIn', this.enableSocialSignIn);
+            this.config.set('apiFirst', this.apiFirst);
             this.config.set('jwtSecretKey', this.jwtSecretKey);
             this.config.set('rememberMeKey', this.rememberMeKey);
             this.config.set('enableTranslation', this.enableTranslation);

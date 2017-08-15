@@ -37,7 +37,9 @@ buildscript {
         classpath "com.moowork.gradle:gradle-node-plugin:1.2.0"
         <%_ } _%>
         classpath "io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE"
+        <%_ if (apiFirst === 'swagger') { _%>
         classpath "gradle.plugin.org.detoeuf:swagger-codegen-plugin:1.7.4"
+        <%_ } _%>
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
     }
 }
@@ -163,7 +165,9 @@ apply from: 'gradle/gatling.gradle'
 <%_ } _%>
 apply from: 'gradle/mapstruct.gradle'
 apply from: 'gradle/docker.gradle'
+<%_ if (apiFirst === 'swagger') { _%>
 apply from: 'gradle/swagger.gradle'
+<%_ } _%>
 //jhipster-needle-gradle-apply-from - JHipster will add additional gradle scripts to be applied here
 
 if (project.hasProperty('prod')) {
