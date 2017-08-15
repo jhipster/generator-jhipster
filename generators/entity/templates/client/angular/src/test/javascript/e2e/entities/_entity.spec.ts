@@ -18,7 +18,12 @@
 -%>
 import { browser, element, by, $ } from 'protractor';
 import { NavBarPage } from './../page-objects/jhi-page-objects';
-<%_ for (let field of fields) { if (field.fieldTypeBlobContent !== 'text') {%>var path = require('path');<% break;}} %>
+<%_ for (let field of fields) {
+    if (field.fieldTypeBlobContent !== 'text') {
+        %>const path = require('path');<%
+        break;
+    }
+} %>
 <%_
 let elementGetter = `getText()`;
 let openBlockComment = ``;
@@ -39,9 +44,13 @@ describe('<%= entityClass %> e2e test', () => {
     let navBarPage: NavBarPage;
     let <%= entityInstance %>DialogPage: <%= entityClass %>DialogPage;
     let <%= entityInstance %>ComponentsPage: <%= entityClass %>ComponentsPage;
-    <%_ for (let field of fields) { if (field.fieldTypeBlobContent !== 'text') { _%>
-    var fileToUpload = '../../../../main/webapp/content/images/logo-jhipster.png', absolutePath = path.resolve(__dirname, fileToUpload);
-    <% break;}} %>
+    <%_ for (let field of fields) {
+        if (field.fieldTypeBlobContent !== 'text') { _%>
+    const fileToUpload = '../../../../main/webapp/content/images/logo-jhipster.png';
+    const absolutePath = path.resolve(__dirname, fileToUpload);
+    <%  break;
+        }
+    } %>
 
     beforeAll(() => {
         browser.get('/');
