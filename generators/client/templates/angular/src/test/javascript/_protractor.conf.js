@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-const HtmlScreenshotReporter = require("protractor-jasmine2-screenshot-reporter");
+const HtmlScreenshotReporter = require('protractor-jasmine2-screenshot-reporter');
 const JasmineReporters = require('jasmine-reporters');
 
 exports.config = {
