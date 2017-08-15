@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { browser, element, by } from 'protractor';
-import { NavBarPage } from './../pageObjects/jhi-page-objects.spec';
+import { NavBarPage } from './../page-objects/jhi-page-objects';
 <%_
 let elementGetter = `getText()`;
 if (enableTranslation) {

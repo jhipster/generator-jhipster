@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { browser, element, by, $ } from 'protractor';
-import { NavBarPage } from './../pageObjects/jhi-page-objects.spec';
+import { NavBarPage } from './../page-objects/jhi-page-objects';
 <%_ for (let field of fields) { if (field.fieldTypeBlobContent !== 'text') {%>var path = require('path');<% break;}} %>
 <%_
 let elementGetter = `getText()`;
@@ -25,7 +25,7 @@ let openBlockComment = ``;
 let closeBlockComment = ``;
 if (enableTranslation) {
     elementGetter = `getAttribute('jhiTranslate')`;
-}  
+}
 for (let relationship of relationships) {
     if (relationship.relationshipRequired) {
         openBlockComment = `/*`;
@@ -72,7 +72,7 @@ describe('<%= entityClass %> e2e test', () => {
         <%_ } _%>
         <%= entityInstance %>DialogPage.close();
     });
-    
+
    <%= openBlockComment %> it('should create and save <%= entityClassPlural %>', () => {
         <%= entityInstance %>ComponentsPage.clickOnCreateButton();
         <%_ fields.forEach((field) => {
@@ -217,7 +217,7 @@ export class <%= entityClass %>DialogPage {
     get<%= fieldNameCapitalized %>Input = function () {
         return this.<%= fieldName %>Input.getAttribute('value');
     }
-    
+
     <%_ } else { _%>
     set<%= fieldNameCapitalized %>Input = function (<%= fieldName %>) {
         this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
