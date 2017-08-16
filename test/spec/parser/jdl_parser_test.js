@@ -127,7 +127,7 @@ describe('JDLParser', () => {
               })
             }
           }));
-          expect(content.options).to.deep.eq([
+          expect(content.getOptions()).to.deep.eq([
             new JDLUnaryOption({
               name: UnaryOptions.SKIP_SERVER,
               entityNames: ['Country']
@@ -277,7 +277,7 @@ describe('JDLParser', () => {
         let input = parseFromFiles(['./test/test_files/fluent_methods.jdl']);
         let content = JDLParser.parse(input, 'sql');
         it('adds it correctly', () => {
-          expect(content.options).to.deep.eq([
+          expect(content.getOptions()).to.deep.eq([
             new JDLUnaryOption({
               name: UnaryOptions.NO_FLUENT_METHOD,
               entityNames: ['A']
@@ -285,7 +285,7 @@ describe('JDLParser', () => {
           ]);
           input = parseFromFiles(['./test/test_files/fluent_methods2.jdl']);
           content = JDLParser.parse(input, 'sql');
-          expect(content.options).to.deep.eq([
+          expect(content.getOptions()).to.deep.eq([
             new JDLUnaryOption({
               name: UnaryOptions.NO_FLUENT_METHOD,
               entityNames: ['*'],
@@ -440,33 +440,34 @@ describe('JDLParser', () => {
             },
             comment: undefined
           });
-          expect(content.options.length).to.eq(7);
-          expect(content.options[0].name).to.eq('skipClient');
-          expect(content.options[0].entityNames.toString()).to.eq('[G]');
-          expect(content.options[0].excludedNames.toString()).to.eq('[]');
-          expect(content.options[1].name).to.eq('skipServer');
-          expect(content.options[1].entityNames.toString()).to.eq('[B,D]');
-          expect(content.options[1].excludedNames.toString()).to.eq('[D]');
-          expect(content.options[2].name).to.eq('dto');
-          expect(content.options[2].value).to.eq('mapstruct');
-          expect(content.options[2].entityNames.toString()).to.eq('[*]');
-          expect(content.options[2].excludedNames.toString()).to.eq('[G]');
-          expect(content.options[3].name).to.eq('service');
-          expect(content.options[3].entityNames.toString()).to.eq('[G]');
-          expect(content.options[3].excludedNames.toString()).to.eq('[]');
-          expect(content.options[3].value).to.eq('serviceImpl');
-          expect(content.options[4].name).to.eq('service');
-          expect(content.options[4].entityNames.toString()).to.eq('[A,C,D]');
-          expect(content.options[4].excludedNames.toString()).to.eq('[]');
-          expect(content.options[4].value).to.eq('serviceClass');
-          expect(content.options[5].name).to.eq('pagination');
-          expect(content.options[5].entityNames.toString()).to.eq('[*]');
-          expect(content.options[5].excludedNames.toString()).to.eq('[G]');
-          expect(content.options[5].value).to.eq('pager');
-          expect(content.options[6].name).to.eq('pagination');
-          expect(content.options[6].entityNames.toString()).to.eq('[G]');
-          expect(content.options[6].excludedNames.toString()).to.eq('[]');
-          expect(content.options[6].value).to.eq('pagination');
+          const options = content.getOptions();
+          expect(options.length).to.eq(7);
+          expect(options[0].name).to.eq('skipClient');
+          expect(options[0].entityNames.toString()).to.eq('[G]');
+          expect(options[0].excludedNames.toString()).to.eq('[]');
+          expect(options[1].name).to.eq('skipServer');
+          expect(options[1].entityNames.toString()).to.eq('[B,D]');
+          expect(options[1].excludedNames.toString()).to.eq('[D]');
+          expect(options[2].name).to.eq('dto');
+          expect(options[2].value).to.eq('mapstruct');
+          expect(options[2].entityNames.toString()).to.eq('[*]');
+          expect(options[2].excludedNames.toString()).to.eq('[G]');
+          expect(options[3].name).to.eq('service');
+          expect(options[3].entityNames.toString()).to.eq('[G]');
+          expect(options[3].excludedNames.toString()).to.eq('[]');
+          expect(options[3].value).to.eq('serviceImpl');
+          expect(options[4].name).to.eq('service');
+          expect(options[4].entityNames.toString()).to.eq('[A,C,D]');
+          expect(options[4].excludedNames.toString()).to.eq('[]');
+          expect(options[4].value).to.eq('serviceClass');
+          expect(options[5].name).to.eq('pagination');
+          expect(options[5].entityNames.toString()).to.eq('[*]');
+          expect(options[5].excludedNames.toString()).to.eq('[G]');
+          expect(options[5].value).to.eq('pager');
+          expect(options[6].name).to.eq('pagination');
+          expect(options[6].entityNames.toString()).to.eq('[G]');
+          expect(options[6].excludedNames.toString()).to.eq('[]');
+          expect(options[6].value).to.eq('pagination');
         });
       });
       describe('when having two consecutive comments for fields', () => {
