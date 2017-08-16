@@ -70,9 +70,9 @@ describe('account', () => {
             expect(value).toMatch(expect1);
         });
         signInPage.clearUserName();
-        signInPage.setUserName('admin')
+        signInPage.setUserName('admin');
         signInPage.clearPassword();
-        signInPage.setPassword('admin')
+        signInPage.setPassword('admin');
         signInPage.login();
 
         browser.waitForAngular();
