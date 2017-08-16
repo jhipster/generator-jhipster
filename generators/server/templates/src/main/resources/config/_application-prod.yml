@@ -145,7 +145,7 @@ spring:
             hibernate.cache.hazelcast.use_lite_member: true
             <%_ } _%>
     <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra' || applicationType === 'gateway' || searchEngine === 'elasticsearch') { _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra' || searchEngine === 'elasticsearch') { _%>
     data:
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
