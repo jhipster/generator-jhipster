@@ -20,6 +20,7 @@ const JDLRelationship = require('../lib/core/jdl_relationship');
 const JDLRelationships = require('../lib/core/jdl_relationships');
 const JDLUnaryOption = require('../lib/core/jdl_unary_option');
 const JDLBinaryOption = require('../lib/core/jdl_binary_option');
+const JDLOptions = require('../lib/core/jdl_options');
 const JSONExporter = require('../lib/export/json_exporter');
 const exportToJDL = require('../lib/export/jdl_exporter').exportToJDL;
 const JSONFileReader = require('../lib/reader/json_file_reader');
@@ -51,6 +52,7 @@ module.exports = {
   JDLRelationships,
   JDLUnaryOption,
   JDLBinaryOption,
+  JDLOptions,
   /* JDL reading */
   parse: JDLReader.parse,
   parseFromFiles: JDLReader.parseFromFiles,
