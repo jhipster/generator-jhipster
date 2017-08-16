@@ -97,7 +97,7 @@ module.exports = UpgradeGenerator.extend({
                 callback();
             });
         };
-        this.gitExec(['add', '-A'], { maxBuffer: 1024 * 500 }, (code, msg, err) => {
+        this.gitExec(['add', '-A'], { maxBuffer: 1024 * 10000 }, (code, msg, err) => {
             if (code !== 0) this.error(`Unable to add resources in git:\n${err}`);
             commit();
         });

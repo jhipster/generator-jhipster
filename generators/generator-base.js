@@ -1913,7 +1913,7 @@ module.exports = class extends PrivateBase {
         }
         buildCmd += ` -P${profile}`;
         const child = {};
-        child.stdout = exec(buildCmd, { maxBuffer: 1024 * 500 }, cb).stdout;
+        child.stdout = exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout;
         child.buildCmd = buildCmd;
 
         return child;
