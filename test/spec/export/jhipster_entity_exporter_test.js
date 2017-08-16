@@ -1,12 +1,12 @@
-'use strict';
+/* eslint-disable no-new, no-unused-expressions */
+const expect = require('chai').expect;
+const fs = require('fs');
+const Exporter = require('../../../lib/export/jhipster_entity_exporter');
+const JDLParser = require('../../../lib/parser/jdl_parser');
+const EntityParser = require('../../../lib/parser/entity_parser');
+const parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
 
-const expect = require('chai').expect,
-  fs = require('fs'),
-  fail = expect.fail,
-  Exporter = require('../../../lib/export/jhipster_entity_exporter'),
-  JDLParser = require('../../../lib/parser/jdl_parser'),
-  EntityParser = require('../../../lib/parser/entity_parser'),
-  parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
+const fail = expect.fail;
 
 describe('::exportEntities', () => {
   describe('when passing invalid parameters', () => {
@@ -29,8 +29,9 @@ describe('::exportEntities', () => {
         databaseType: 'sql'
       });
       Exporter.exportEntities(content);
-      const department = JSON.parse(fs.readFileSync('.jhipster/Department.json', {encoding: 'utf-8'}));
-      const jobHistory = JSON.parse(fs.readFileSync('.jhipster/JobHistory.json', {encoding: 'utf-8'}));
+      const department = JSON.parse(fs.readFileSync('.jhipster/Department.json', { encoding: 'utf-8' }));
+      const jobHistory = JSON.parse(fs.readFileSync('.jhipster/JobHistory.json', { encoding: 'utf-8' }));
+
       it('exports it', () => {
         expect(fs.statSync('.jhipster/Department.json').isFile()).to.be.true;
         expect(fs.statSync('.jhipster/JobHistory.json').isFile()).to.be.true;
@@ -42,30 +43,30 @@ describe('::exportEntities', () => {
         expect(fs.statSync('.jhipster/Region.json').isFile()).to.be.true;
         expect(department.relationships).to.deep.eq([
           {
-            "relationshipType": "one-to-one",
-            "relationshipName": "location",
-            "otherEntityName": "location",
-            "otherEntityField": "id",
-            "ownerSide": true,
-            "otherEntityRelationshipName": "department"
+            relationshipType: 'one-to-one',
+            relationshipName: 'location',
+            otherEntityName: 'location',
+            otherEntityField: 'id',
+            ownerSide: true,
+            otherEntityRelationshipName: 'department'
           },
           {
-            "relationshipType": "one-to-many",
-            "javadoc": "A relationship",
-            "relationshipName": "employee",
-            "otherEntityName": "employee",
-            "otherEntityRelationshipName": "department"
+            relationshipType: 'one-to-many',
+            javadoc: 'A relationship',
+            relationshipName: 'employee',
+            otherEntityName: 'employee',
+            otherEntityRelationshipName: 'department'
           }
         ]);
         expect(department.fields).to.deep.eq([
           {
-            "fieldName": "departmentId",
-            "fieldType": "Long"
+            fieldName: 'departmentId',
+            fieldType: 'Long'
           },
           {
-            "fieldName": "departmentName",
-            "fieldType": "String",
-            "fieldValidateRules": ["required"]
+            fieldName: 'departmentName',
+            fieldType: 'String',
+            fieldValidateRules: ['required']
           }
         ]);
         expect(department.dto).to.eq('no');
@@ -73,43 +74,43 @@ describe('::exportEntities', () => {
         expect(department.pagination).to.eq('no');
         expect(jobHistory.relationships).to.deep.eq([
           {
-            "relationshipType": "one-to-one",
-            "relationshipName": "department",
-            "otherEntityName": "department",
-            "otherEntityField": "id",
-            "ownerSide": true,
-            "otherEntityRelationshipName": "jobHistory"
+            relationshipType: 'one-to-one',
+            relationshipName: 'department',
+            otherEntityName: 'department',
+            otherEntityField: 'id',
+            ownerSide: true,
+            otherEntityRelationshipName: 'jobHistory'
           },
           {
-            "relationshipType": "one-to-one",
-            "relationshipName": "job",
-            "otherEntityName": "job",
-            "otherEntityField": "id",
-            "ownerSide": true,
-            "otherEntityRelationshipName": "jobHistory"
+            relationshipType: 'one-to-one',
+            relationshipName: 'job',
+            otherEntityName: 'job',
+            otherEntityField: 'id',
+            ownerSide: true,
+            otherEntityRelationshipName: 'jobHistory'
           },
           {
-            "relationshipType": "one-to-one",
-            "relationshipName": "employee",
-            "otherEntityName": "employee",
-            "otherEntityField": "id",
-            "ownerSide": true,
-            "otherEntityRelationshipName": "jobHistory"
+            relationshipType: 'one-to-one',
+            relationshipName: 'employee',
+            otherEntityName: 'employee',
+            otherEntityField: 'id',
+            ownerSide: true,
+            otherEntityRelationshipName: 'jobHistory'
           }
         ]);
         expect(jobHistory.fields).to.deep.eq([
           {
-            "fieldName": "startDate",
-            "fieldType": "ZonedDateTime"
+            fieldName: 'startDate',
+            fieldType: 'ZonedDateTime'
           },
           {
-            "fieldName": "endDate",
-            "fieldType": "ZonedDateTime"
+            fieldName: 'endDate',
+            fieldType: 'ZonedDateTime'
           },
           {
-            "fieldName": "language",
-            "fieldType": "Language",
-            "fieldValues": "FRENCH,ENGLISH,SPANISH"
+            fieldName: 'language',
+            fieldType: 'Language',
+            fieldValues: 'FRENCH,ENGLISH,SPANISH'
           }
         ]);
         expect(jobHistory.dto).to.eq('no');
@@ -133,10 +134,10 @@ describe('::exportEntities', () => {
         jdlObject: JDLParser.parse(input, 'sql'),
         databaseType: 'sql'
       });
-      it('exports it with same changeLogDate', function (done) {
+      it('exports it with same changeLogDate', (done) => {
         Exporter.exportEntities(content);
         expect(fs.statSync('.jhipster/A.json').isFile()).to.be.true;
-        const changeLogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', {encoding: 'utf-8'})).changelogDate;
+        const changeLogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', { encoding: 'utf-8' })).changelogDate;
         setTimeout(() => {
           input = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
           content = EntityParser.parse({
@@ -145,7 +146,7 @@ describe('::exportEntities', () => {
           });
           Exporter.exportEntities(content, true);
           expect(fs.statSync('.jhipster/A.json').isFile()).to.be.true;
-          const newChangeLogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', {encoding: 'utf-8'})).changelogDate;
+          const newChangeLogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', { encoding: 'utf-8' })).changelogDate;
           expect(newChangeLogDate).to.eq(changeLogDate);
           // clean up the mess...
           fs.unlinkSync('.jhipster/A.json');

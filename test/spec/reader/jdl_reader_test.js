@@ -1,10 +1,10 @@
-'use strict';
+/* eslint-disable no-new, no-unused-expressions */
+const expect = require('chai').expect;
+const fs = require('fs');
 
-const expect = require('chai').expect,
-  fs = require('fs'),
-  fail = expect.fail,
-  parse = require('../../../lib/reader/jdl_reader').parse,
-  parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
+const fail = expect.fail;
+const parse = require('../../../lib/reader/jdl_reader').parse;
+const parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
 
 describe('::parse', () => {
   describe('when passing invalid parameters', () => {
@@ -61,7 +61,7 @@ describe('::parseFromFiles', () => {
         }
       });
     });
-    describe("such as files without the '.jh' or '.jdl' file extension", () => {
+    describe('such as files without the \'.jh\' or \'.jdl\' file extension', () => {
       it('throws an error', () => {
         try {
           parseFromFiles(['../../test_files/invalid_file.txt']);

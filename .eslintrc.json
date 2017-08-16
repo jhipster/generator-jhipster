@@ -4,17 +4,33 @@
     "node": true,
     "mocha": true
   },
-  "extends": "eslint:recommended",
+  "extends": ["airbnb-base"],
   "rules": {
     "indent": ["error", 2],
     "linebreak-style": ["error", "unix"],
-    "quotes": ["off", "single"],
-    "semi": ["error", "always"],
-    "no-console": ["off"],
-    "no-irregular-whitespace": 2,
-    "no-multi-str": 2,
-    "no-unused-vars": [2, {"vars": "local", "args": "none"}],
+    "eol-last": 2,
+    "quotes": [2, "single"],
+    "semi": [2, "always"],
+    "eqeqeq": [2, "smart"],
     "no-use-before-define": [2, "nofunc"],
-    "no-var": ["error"]
+    "no-unused-vars": [2, {
+      "vars": "local",
+      "args": "none"
+    }],
+    "no-multi-str": 2,
+    "no-irregular-whitespace": 2,
+    "comma-dangle": "off",
+    "max-len": "off",
+    "func-names": "off",
+    "class-methods-use-this": "off",
+    "no-underscore-dangle": "off",
+    "no-plusplus": "off",
+    "no-unused-expressions": [2, {
+      "allowShortCircuit": true,
+      "allowTernary": true
+    }],
+    "no-multi-assign": "off",
+    "no-param-reassign": "off",
+    "no-shadow": "off"
   }
 }

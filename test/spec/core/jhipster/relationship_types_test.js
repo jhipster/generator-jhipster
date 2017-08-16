@@ -1,8 +1,7 @@
-'use strict';
-
-const expect = require('chai').expect,
-  RELATIONSHIP_TYPES = require('../../../../lib/core/jhipster/relationship_types').RELATIONSHIP_TYPES,
-  exists = require('../../../../lib/core/jhipster/relationship_types').exists;
+/* eslint-disable no-new, no-unused-expressions */
+const expect = require('chai').expect;
+const RELATIONSHIP_TYPES = require('../../../../lib/core/jhipster/relationship_types').RELATIONSHIP_TYPES;
+const exists = require('../../../../lib/core/jhipster/relationship_types').exists;
 
 describe('RELATIONSHIP_TYPES', () => {
   describe('::exists', () => {

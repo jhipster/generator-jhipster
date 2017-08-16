@@ -1,10 +1,10 @@
-'use strict';
+/* eslint-disable no-new, no-unused-expressions */
+const expect = require('chai').expect;
 
-const expect = require('chai').expect,
-  fail = expect.fail,
-  FieldTypes = require('../../../../lib/core/jhipster/field_types'),
-  Validations = require('../../../../lib/core/jhipster/validations').VALIDATIONS,
-  JDLEnum = require('../../../../lib/core/jdl_enum');
+const fail = expect.fail;
+const FieldTypes = require('../../../../lib/core/jhipster/field_types');
+const Validations = require('../../../../lib/core/jhipster/validations').VALIDATIONS;
+const JDLEnum = require('../../../../lib/core/jdl_enum');
 
 describe('FieldTypes', () => {
   describe('::isSQLType', () => {
@@ -42,7 +42,7 @@ describe('FieldTypes', () => {
     });
     describe('when passing an enum', () => {
       it('returns true', () => {
-        expect(FieldTypes.isSQLType(new JDLEnum({name: 'MyEnum'}))).to.be.true;
+        expect(FieldTypes.isSQLType(new JDLEnum({ name: 'MyEnum' }))).to.be.true;
       });
     });
   });
@@ -81,7 +81,7 @@ describe('FieldTypes', () => {
     });
     describe('when passing an enum', () => {
       it('returns true', () => {
-        expect(FieldTypes.isMongoDBType(new JDLEnum({name: 'MyEnum'}))).to.be.true;
+        expect(FieldTypes.isMongoDBType(new JDLEnum({ name: 'MyEnum' }))).to.be.true;
       });
     });
   });
@@ -120,7 +120,7 @@ describe('FieldTypes', () => {
     });
     describe('when passing an enum', () => {
       it('returns false', () => {
-        expect(FieldTypes.isCassandraType(new JDLEnum({name: 'MyEnum'}))).to.be.false;
+        expect(FieldTypes.isCassandraType(new JDLEnum({ name: 'MyEnum' }))).to.be.false;
       });
     });
   });
@@ -135,7 +135,7 @@ describe('FieldTypes', () => {
         }
         try {
           FieldTypes.getIsType(null, () => {
-            //do nothing
+            // do nothing
           });
           fail();
         } catch (error) {
@@ -151,7 +151,7 @@ describe('FieldTypes', () => {
     describe('when passing a valid argument and callback', () => {
       it('returns true', () => {
         expect(FieldTypes.getIsType('sql', () => {
-          //do nothing
+          // do nothing
         })).to.eq(FieldTypes.isSQLType);
       });
     });

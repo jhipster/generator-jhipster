@@ -1,12 +1,12 @@
-'use strict';
+/* eslint-disable no-new, no-unused-expressions */
+const expect = require('chai').expect;
 
-const expect = require('chai').expect,
-  fail = expect.fail,
-  Reader = require('../../../lib/reader/json_file_reader'),
-  Parser = require('../../../lib/parser/json_parser'),
-  UnaryOptions = require('../../../lib/core/jhipster/unary_options').UNARY_OPTIONS,
-  BinaryOptions = require('../../../lib/core/jhipster/binary_options').BINARY_OPTIONS,
-  BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').BINARY_OPTION_VALUES;
+const fail = expect.fail;
+const Reader = require('../../../lib/reader/json_file_reader');
+const Parser = require('../../../lib/parser/json_parser');
+const UnaryOptions = require('../../../lib/core/jhipster/unary_options').UNARY_OPTIONS;
+const BinaryOptions = require('../../../lib/core/jhipster/binary_options').BINARY_OPTIONS;
+const BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').BINARY_OPTION_VALUES;
 
 describe('::parse', () => {
   const entities = {
@@ -51,58 +51,58 @@ describe('::parse', () => {
     });
     it('parses options', () => {
       expect(
-        content.options.filter(
+        content.getOptions().filter(
           option =>
             option.name === BinaryOptions.DTO &&
-          option.value === BinaryOptionValues.dto.MAPSTRUCT &&
-          option.entityNames.has('Employee')
+            option.value === BinaryOptionValues.dto.MAPSTRUCT &&
+            option.entityNames.has('Employee')
         ).length
       ).to.eq(1);
       expect(
-        content.options.filter(
+        content.getOptions().filter(
           option =>
             option.name === BinaryOptions.PAGINATION &&
-          option.value === BinaryOptionValues.pagination['INFINITE-SCROLL'] &&
-          option.entityNames.has('Employee')
+            option.value === BinaryOptionValues.pagination['INFINITE-SCROLL'] &&
+            option.entityNames.has('Employee')
         ).length
       ).to.eq(1);
       expect(
-        content.options.filter(
+        content.getOptions().filter(
           option =>
             option.name === BinaryOptions.SERVICE &&
-          option.value === BinaryOptionValues.service.SERVICE_CLASS &&
-          option.entityNames.has('Employee')
+            option.value === BinaryOptionValues.service.SERVICE_CLASS &&
+            option.entityNames.has('Employee')
         ).length
       ).to.eq(1);
       expect(
-        content.options.filter(
+        content.getOptions().filter(
           option =>
             option.name === BinaryOptions.SEARCH_ENGINE &&
-          option.value === BinaryOptionValues.searchEngine.ELASTIC_SEARCH &&
-          option.entityNames.has('Employee')
+            option.value === BinaryOptionValues.searchEngine.ELASTIC_SEARCH &&
+            option.entityNames.has('Employee')
         ).length
       ).to.eq(1);
       expect(
-        content.options.filter(
+        content.getOptions().filter(
           option =>
             option.name === BinaryOptions.MICROSERVICE &&
-          option.value === 'mymicroservice' &&
-          option.entityNames.has('Employee')
+            option.value === 'mymicroservice' &&
+            option.entityNames.has('Employee')
         ).length
       ).to.eq(1);
       expect(
-        content.options.filter(
+        content.getOptions().filter(
           option =>
             option.name === BinaryOptions.ANGULAR_SUFFIX &&
-          option.value === 'myentities' &&
-          option.entityNames.has('Employee')
+            option.value === 'myentities' &&
+            option.entityNames.has('Employee')
         ).length
       ).to.eq(1);
       expect(
-        content.options.filter(
+        content.getOptions().filter(
           option =>
             option.name === UnaryOptions.NO_FLUENT_METHOD &&
-          option.entityNames.has('Employee')
+            option.entityNames.has('Employee')
         ).length
       ).to.eq(1);
     });
@@ -136,8 +136,8 @@ describe('::parse', () => {
     });
     it('parses comments in relationships for owned', () => {
       const entities = {
-        'Department': Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Department.json'),
-        'Employee': Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Employee.json')
+        Department: Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Department.json'),
+        Employee: Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Employee.json')
       };
       entities.Department.relationships.filter(r => r.relationshipName === 'employee')[0].javadoc = undefined;
       const content = Parser.parseEntities(entities);
@@ -170,11 +170,11 @@ describe('::parse', () => {
     const yoRcJson = Reader.readEntityJSON('./test/test_files/jhipster_app/.yo-rc.json');
     const content = Parser.parseServerOptions(yoRcJson['generator-jhipster']);
     it('parses server options', () => {
-      expect(content.options.filter(
+      expect(content.getOptions().filter(
         option => option.name === UnaryOptions.SKIP_CLIENT && option.entityNames.has('*')).length
       ).to.eq(1);
       expect(
-        content.options.filter(
+        content.getOptions().filter(
           option => option.name === UnaryOptions.SKIP_SERVER && option.entityNames.has('*')).length
       ).to.eq(1);
     });
@@ -223,5 +223,4 @@ describe('::parse', () => {
       });
     });
   });
-
 });

@@ -1,10 +1,10 @@
-'use strict';
+/* eslint-disable no-new, no-unused-expressions */
+const expect = require('chai').expect;
 
-const expect = require('chai').expect,
-  fail = expect.fail,
-  JDLField = require('../../../lib/core/jdl_field'),
-  JDLValidation = require('../../../lib/core/jdl_validation'),
-  VALIDATIONS = require('../../../lib/core/jhipster/validations').VALIDATIONS;
+const fail = expect.fail;
+const JDLField = require('../../../lib/core/jdl_field');
+const JDLValidation = require('../../../lib/core/jdl_validation');
+const VALIDATIONS = require('../../../lib/core/jhipster/validations').VALIDATIONS;
 
 describe('JDLField', () => {
   describe('::new', () => {
@@ -21,13 +21,13 @@ describe('JDLField', () => {
     describe('when not passing the name or the type', () => {
       it('fails', () => {
         try {
-          new JDLField({name: null, type: 'String'});
+          new JDLField({ name: null, type: 'String' });
           fail();
         } catch (error) {
           expect(error.name).to.eq('NullPointerException');
         }
         try {
-          new JDLField({name: 'abc', type: null});
+          new JDLField({ name: 'abc', type: null });
           fail();
         } catch (error) {
           expect(error.name).to.eq('NullPointerException');
@@ -60,12 +60,12 @@ describe('JDLField', () => {
       });
       describe('without a name attribute', () => {
         it('returns false', () => {
-          expect(JDLField.isValid({type: 'String'})).to.be.false;
+          expect(JDLField.isValid({ type: 'String' })).to.be.false;
         });
       });
       describe('without a type attribute', () => {
         it('returns false', () => {
-          expect(JDLField.isValid({name: 'myField'})).to.be.false;
+          expect(JDLField.isValid({ name: 'myField' })).to.be.false;
         });
       });
       describe('because its validations are invalid', () => {
@@ -84,7 +84,7 @@ describe('JDLField', () => {
     });
     describe('when checking the validity of a valid object', () => {
       it('returns true', () => {
-        expect(JDLField.isValid({name: 'myField', type: 'String'})).to.be.true;
+        expect(JDLField.isValid({ name: 'myField', type: 'String' })).to.be.true;
       });
     });
   });
@@ -104,7 +104,7 @@ describe('JDLField', () => {
           expect(error.message).to.eq('The passed validation must be valid.\nErrors: No validation');
         }
         try {
-          field.addValidation({name: VALIDATIONS.MIN});
+          field.addValidation({ name: VALIDATIONS.MIN });
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
@@ -119,9 +119,9 @@ describe('JDLField', () => {
           type: 'String',
           comment: 'comment'
         });
-        const validation = {name: VALIDATIONS.MIN, value: 42};
+        const validation = { name: VALIDATIONS.MIN, value: 42 };
         field.addValidation(validation);
-        expect(field.validations).to.deep.eq({min: validation});
+        expect(field.validations).to.deep.eq({ min: validation });
       });
     });
   });

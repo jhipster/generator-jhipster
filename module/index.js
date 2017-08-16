@@ -1,46 +1,34 @@
-'use strict';
-
-const BINARY_OPTIONS = require('../lib/core/jhipster/binary_options'),
-  UNARY_OPTIONS = require('../lib/core/jhipster/unary_options'),
-  RELATIONSHIP_TYPES = require('../lib/core/jhipster/relationship_types'),
-  FIELD_TYPES = require('../lib/core/jhipster/field_types'),
-  VALIDATIONS = require('../lib/core/jhipster/validations'),
-  DATABASE_TYPES = require('../lib/core/jhipster/database_types'),
-  JDLReader = require('../lib/reader/jdl_reader'),
-  JsonReader = require('../lib/reader/json_reader'),
-  convertToJDL = require('../lib/parser/jdl_parser').parse,
-  convertToJHipsterJSON = require('../lib/parser/entity_parser').parse,
-  JsonParser = require('../lib/parser/json_parser');
-
-const JDLObject = require('../lib/core/jdl_object'),
-  JDLApplication = require('../lib/core/jdl_application'),
-  JDLEntity = require('../lib/core/jdl_entity'),
-  JDLField = require('../lib/core/jdl_field'),
-  JDLValidation = require('../lib/core/jdl_validation'),
-  JDLEnum = require('../lib/core/jdl_enum'),
-  JDLRelationship = require('../lib/core/jdl_relationship'),
-  JDLRelationships = require('../lib/core/jdl_relationships'),
-  JDLUnaryOption = require('../lib/core/jdl_unary_option'),
-  JDLBinaryOption = require('../lib/core/jdl_binary_option');
-
-const JHipsterApplicationExporter = require('../lib/export/jhipster_application_exporter'),
-  exportApplications = JHipsterApplicationExporter.exportApplications;
-
-const JHipsterEntityExporter = require('../lib/export/jhipster_entity_exporter'),
-  exportEntities = JHipsterEntityExporter.exportEntities,
-  createJHipsterEntityFolderFolder = JHipsterEntityExporter.createJHipsterEntityFolderFolder;
-
+const BINARY_OPTIONS = require('../lib/core/jhipster/binary_options');
+const UNARY_OPTIONS = require('../lib/core/jhipster/unary_options');
+const RELATIONSHIP_TYPES = require('../lib/core/jhipster/relationship_types');
+const FIELD_TYPES = require('../lib/core/jhipster/field_types');
+const VALIDATIONS = require('../lib/core/jhipster/validations');
+const DATABASE_TYPES = require('../lib/core/jhipster/database_types');
+const JDLReader = require('../lib/reader/jdl_reader');
+const JsonReader = require('../lib/reader/json_reader');
+const JDLParser = require('../lib/parser/jdl_parser');
+const EntityParser = require('../lib/parser/entity_parser');
+const JsonParser = require('../lib/parser/json_parser');
+const JDLObject = require('../lib/core/jdl_object');
+const JDLApplication = require('../lib/core/jdl_application');
+const JDLEntity = require('../lib/core/jdl_entity');
+const JDLField = require('../lib/core/jdl_field');
+const JDLValidation = require('../lib/core/jdl_validation');
+const JDLEnum = require('../lib/core/jdl_enum');
+const JDLRelationship = require('../lib/core/jdl_relationship');
+const JDLRelationships = require('../lib/core/jdl_relationships');
+const JDLUnaryOption = require('../lib/core/jdl_unary_option');
+const JDLBinaryOption = require('../lib/core/jdl_binary_option');
+const JDLOptions = require('../lib/core/jdl_options');
+const JHipsterApplicationExporter = require('../lib/export/jhipster_application_exporter');
+const JHipsterEntityExporter = require('../lib/export/jhipster_entity_exporter');
 const JDLExporter = require('../lib/export/jdl_exporter');
-
-const JSONFileReader = require('../lib/reader/json_file_reader'),
-  toFilePath = JSONFileReader.toFilePath,
-  readEntityJSON = JSONFileReader.readEntityJSON;
-
-const ReservedKeywords = require('../lib/core/jhipster/reserved_keywords'),
-  ObjectUtils = require('../lib/utils/object_utils'),
-  FormatUtils = require('../lib/utils/format_utils'),
-  StringUtils = require('../lib/utils/string_utils'),
-  Set = require('../lib/utils/objects/set');
+const JSONFileReader = require('../lib/reader/json_file_reader');
+const ReservedKeywords = require('../lib/core/jhipster/reserved_keywords');
+const ObjectUtils = require('../lib/utils/object_utils');
+const FormatUtils = require('../lib/utils/format_utils');
+const StringUtils = require('../lib/utils/string_utils');
+const Set = require('../lib/utils/objects/set');
 
 module.exports = {
   /* JHipster notions */
@@ -56,16 +44,17 @@ module.exports = {
   isReservedFieldName: ReservedKeywords.isReservedFieldName,
 
   /* JDL objects */
-  JDLObject: JDLObject,
-  JDLApplication: JDLApplication,
-  JDLEntity: JDLEntity,
-  JDLField: JDLField,
-  JDLValidation: JDLValidation,
-  JDLEnum: JDLEnum,
-  JDLRelationship: JDLRelationship,
-  JDLRelationships: JDLRelationships,
-  JDLUnaryOption: JDLUnaryOption,
-  JDLBinaryOption: JDLBinaryOption,
+  JDLObject,
+  JDLApplication,
+  JDLEntity,
+  JDLField,
+  JDLValidation,
+  JDLEnum,
+  JDLRelationship,
+  JDLRelationships,
+  JDLUnaryOption,
+  JDLBinaryOption,
+  JDLOptions,
 
   /* JDL reading */
   parse: JDLReader.parse,
@@ -73,17 +62,19 @@ module.exports = {
   /* Json reading */
   parseJsonFromDir: JsonReader.parseFromDir,
   /* JDL conversion */
-  convertToJDL: convertToJDL,
-  convertToJHipsterJSON: convertToJHipsterJSON,
+  convertToJDL: JDLParser.parse,
+  convertToJHipsterJSON: EntityParser.parse,
   /* Json conversion */
   convertJsonEntitiesToJDL: JsonParser.parseEntities,
   convertJsonServerOptionsToJDL: JsonParser.parseServerOptions,
 
   /* Application exporting */
-  exportApplications: exportApplications,
+  exportApplications: JHipsterApplicationExporter.exportApplications,
 
   /* Entity exporting */
-  exportEntities: exportEntities,
+  exportEntities: JHipsterEntityExporter.exportEntities,
+  createJHipsterEntityFolderFolder: JHipsterEntityExporter.createJHipsterEntityFolderFolder,
+  filterOutUnchangedEntities: JHipsterEntityExporter.filterOutUnchangedEntities,
 
   /* JDL exporting */
   exportToJDL: JDLExporter.exportToJDL,
@@ -92,15 +83,12 @@ module.exports = {
   isJDLFile: JDLReader.checkFileIsJDLFile,
 
   /* JSON utils */
-  ObjectUtils: ObjectUtils,
-  createJHipsterEntityFolderFolder: createJHipsterEntityFolderFolder,
-
-  /* JSON file reading */
-  readEntityJSON: readEntityJSON,
-  toFilePath: toFilePath,
+  ObjectUtils,
+  readEntityJSON: JSONFileReader.readEntityJSON,
+  toFilePath: JSONFileReader.toFilePath,
 
   /* Objects */
-  Set: Set,
+  Set,
 
   /* Utils */
   camelCase: StringUtils.camelCase,

@@ -1,9 +1,10 @@
-'use strict';
+/* define global expect */
+/* eslint-disable no-new, no-unused-expressions */
+const expect = require('chai').expect;
 
-const expect = require('chai').expect,
-  fail = expect.fail,
-  camelCase = require('../../../lib/utils/string_utils').camelCase,
-  isNilOrEmpty = require('../../../lib/utils/string_utils').isNilOrEmpty;
+const fail = expect.fail;
+const camelCase = require('../../../lib/utils/string_utils').camelCase;
+const isNilOrEmpty = require('../../../lib/utils/string_utils').isNilOrEmpty;
 
 describe('StringUtils', () => {
   describe('::camelCase', () => {

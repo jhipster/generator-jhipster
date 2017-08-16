@@ -1,9 +1,8 @@
-'use strict';
-
-const expect = require('chai').expect,
-  isReserved = require('../../../../lib/core/jhipster/reserved_keywords').isReserved,
-  isReservedClassName = require('../../../../lib/core/jhipster/reserved_keywords').isReservedClassName,
-  isReservedFieldName = require('../../../../lib/core/jhipster/reserved_keywords').isReservedFieldName;
+/* eslint-disable no-new, no-unused-expressions */
+const expect = require('chai').expect;
+const isReserved = require('../../../../lib/core/jhipster/reserved_keywords').isReserved;
+const isReservedClassName = require('../../../../lib/core/jhipster/reserved_keywords').isReservedClassName;
+const isReservedFieldName = require('../../../../lib/core/jhipster/reserved_keywords').isReservedFieldName;
 
 describe('ReservedKeywords', () => {
   describe('::isReserved', () => {

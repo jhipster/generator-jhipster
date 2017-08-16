@@ -1,9 +1,8 @@
-'use strict';
-
-const expect = require('chai').expect,
-  BINARY_OPTIONS = require('../../../../lib/core/jhipster/binary_options').BINARY_OPTIONS,
-  BINARY_OPTION_VALUE = require('../../../../lib/core/jhipster/binary_options').BINARY_OPTION_VALUES,
-  exists = require('../../../../lib/core/jhipster/binary_options').exists;
+/* eslint-disable no-new, no-unused-expressions */
+const expect = require('chai').expect;
+const BINARY_OPTIONS = require('../../../../lib/core/jhipster/binary_options').BINARY_OPTIONS;
+const BINARY_OPTION_VALUE = require('../../../../lib/core/jhipster/binary_options').BINARY_OPTION_VALUES;
+const exists = require('../../../../lib/core/jhipster/binary_options').exists;
 
 describe('BINARY_OPTIONS', () => {
   describe('::exists', () => {

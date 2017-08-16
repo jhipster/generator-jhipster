@@ -1,7 +1,6 @@
-'use strict';
-
-const expect = require('chai').expect,
-  JDLApplication = require('../../../lib/core/jdl_application');
+/* eslint-disable no-unused-expressions */
+const expect = require('chai').expect;
+const JDLApplication = require('../../../lib/core/jdl_application');
 
 describe('JDLApplication', () => {
   describe('::new', () => {

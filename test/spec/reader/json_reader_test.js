@@ -1,9 +1,9 @@
-'use strict';
+/* eslint-disable no-new, no-unused-expressions */
+const expect = require('chai').expect;
 
-const expect = require('chai').expect,
-  fail = expect.fail,
-  parseFromDir = require('../../../lib/reader/json_reader').parseFromDir,
-  UnaryOptions = require('../../../lib/core/jhipster/unary_options').UNARY_OPTIONS;
+const fail = expect.fail;
+const parseFromDir = require('../../../lib/reader/json_reader').parseFromDir;
+const UnaryOptions = require('../../../lib/core/jhipster/unary_options').UNARY_OPTIONS;
 
 describe('::parseFromDir', () => {
   describe('when passing invalid parameters', () => {
@@ -17,7 +17,7 @@ describe('::parseFromDir', () => {
         }
       });
     });
-    describe("such as a file", () => {
+    describe('such as a file', () => {
       it('throws an error', () => {
         try {
           parseFromDir('../../test_files/invalid_file.txt');
@@ -51,8 +51,8 @@ describe('::parseFromDir', () => {
         expect(content.entities.Task).not.to.be.undefined;
         expect(content.entities.NoEntity).to.be.undefined;
         expect(content.entities.BadEntity).to.be.undefined;
-        expect(content.options.filter(o => o.name === UnaryOptions.SKIP_CLIENT).length).eq(1);
-        expect(content.options.filter(o => o.name === UnaryOptions.SKIP_SERVER).length).eq(1);
+        expect(content.getOptions().filter(o => o.name === UnaryOptions.SKIP_CLIENT).length).eq(1);
+        expect(content.getOptions().filter(o => o.name === UnaryOptions.SKIP_SERVER).length).eq(1);
       });
     });
   });
