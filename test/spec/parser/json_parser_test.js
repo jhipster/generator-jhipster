@@ -51,7 +51,7 @@ describe('::parse', () => {
     });
     it('parses options', () => {
       expect(
-        content.options.filter(
+        content.getOptions().filter(
           option =>
             option.name === BinaryOptions.DTO &&
             option.value === BinaryOptionValues.dto.MAPSTRUCT &&
@@ -59,7 +59,7 @@ describe('::parse', () => {
         ).length
       ).to.eq(1);
       expect(
-        content.options.filter(
+        content.getOptions().filter(
           option =>
             option.name === BinaryOptions.PAGINATION &&
             option.value === BinaryOptionValues.pagination['INFINITE-SCROLL'] &&
@@ -67,7 +67,7 @@ describe('::parse', () => {
         ).length
       ).to.eq(1);
       expect(
-        content.options.filter(
+        content.getOptions().filter(
           option =>
             option.name === BinaryOptions.SERVICE &&
             option.value === BinaryOptionValues.service.SERVICE_CLASS &&
@@ -75,7 +75,7 @@ describe('::parse', () => {
         ).length
       ).to.eq(1);
       expect(
-        content.options.filter(
+        content.getOptions().filter(
           option =>
             option.name === BinaryOptions.SEARCH_ENGINE &&
             option.value === BinaryOptionValues.searchEngine.ELASTIC_SEARCH &&
@@ -83,7 +83,7 @@ describe('::parse', () => {
         ).length
       ).to.eq(1);
       expect(
-        content.options.filter(
+        content.getOptions().filter(
           option =>
             option.name === BinaryOptions.MICROSERVICE &&
             option.value === 'mymicroservice' &&
@@ -91,7 +91,7 @@ describe('::parse', () => {
         ).length
       ).to.eq(1);
       expect(
-        content.options.filter(
+        content.getOptions().filter(
           option =>
             option.name === BinaryOptions.ANGULAR_SUFFIX &&
             option.value === 'myentities' &&
@@ -99,7 +99,7 @@ describe('::parse', () => {
         ).length
       ).to.eq(1);
       expect(
-        content.options.filter(
+        content.getOptions().filter(
           option =>
             option.name === UnaryOptions.NO_FLUENT_METHOD &&
             option.entityNames.has('Employee')
@@ -170,11 +170,11 @@ describe('::parse', () => {
     const yoRcJson = Reader.readEntityJSON('./test/test_files/jhipster_app/.yo-rc.json');
     const content = Parser.parseServerOptions(yoRcJson['generator-jhipster']);
     it('parses server options', () => {
-      expect(content.options.filter(
+      expect(content.getOptions().filter(
         option => option.name === UnaryOptions.SKIP_CLIENT && option.entityNames.has('*')).length
       ).to.eq(1);
       expect(
-        content.options.filter(
+        content.getOptions().filter(
           option => option.name === UnaryOptions.SKIP_SERVER && option.entityNames.has('*')).length
       ).to.eq(1);
     });
