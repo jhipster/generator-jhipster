@@ -176,6 +176,43 @@ describe('JDLBinaryOption', () => {
       });
     });
   });
+  describe('#addEntitiesFromAnotherOption', () => {
+    const option = new JDLBinaryOption({
+      name: BINARY_OPTIONS.DTO,
+      value: BINARY_OPTION_VALUES.dto.MAPSTRUCT,
+      entityNames: ['B', 'C'],
+      excludedNames: ['Z']
+    });
+
+    describe('when passing an invalid option', () => {
+      it('returns false', () => {
+        expect(option.addEntitiesFromAnotherOption(null)).to.be.false;
+      });
+    });
+    describe('when passing a valid option', () => {
+      let returned;
+
+      before(() => {
+        const option2 = new JDLBinaryOption({
+          name: BINARY_OPTIONS.DTO,
+          value: BINARY_OPTION_VALUES.dto.MAPSTRUCT,
+          entityNames: ['A', 'C'],
+          excludedNames: ['Y']
+        });
+        returned = option.addEntitiesFromAnotherOption(option2);
+      });
+
+      it('returns true', () => {
+        expect(returned).to.be.true;
+      });
+      it('adds the source entities to the target option', () => {
+        expect(option.entityNames.toString()).to.equal('[B,C,A]');
+      });
+      it('adds the excluded source entities to the target option', () => {
+        expect(option.excludedNames.toString()).to.equal('[Z,Y]');
+      });
+    });
+  });
   describe('#excludeEntity', () => {
     describe('when passing a nil entity', () => {
       it('fails', () => {

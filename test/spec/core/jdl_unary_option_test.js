@@ -137,6 +137,41 @@ describe('JDLUnaryOption', () => {
       });
     });
   });
+  describe('#addEntitiesFromAnotherOption', () => {
+    const option = new JDLUnaryOption({
+      name: UNARY_OPTIONS.SKIP_SERVER,
+      entityNames: ['B', 'C'],
+      excludedNames: ['Z']
+    });
+
+    describe('when passing an invalid option', () => {
+      it('returns false', () => {
+        expect(option.addEntitiesFromAnotherOption(null)).to.be.false;
+      });
+    });
+    describe('when passing a valid option', () => {
+      let returned;
+
+      before(() => {
+        const option2 = new JDLUnaryOption({
+          name: UNARY_OPTIONS.SKIP_SERVER,
+          entityNames: ['A', 'C'],
+          excludedNames: ['Y']
+        });
+        returned = option.addEntitiesFromAnotherOption(option2);
+      });
+
+      it('returns true', () => {
+        expect(returned).to.be.true;
+      });
+      it('adds the source entities to the target option', () => {
+        expect(option.entityNames.toString()).to.equal('[B,C,A]');
+      });
+      it('adds the excluded source entities to the target option', () => {
+        expect(option.excludedNames.toString()).to.equal('[Z,Y]');
+      });
+    });
+  });
   describe('#excludeEntity', () => {
     describe('when passing a nil entity', () => {
       it('fails', () => {
