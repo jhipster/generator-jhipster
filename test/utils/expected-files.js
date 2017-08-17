@@ -394,11 +394,11 @@ const expectedFiles = {
         `${DOCKER_DIR}kafka.yml`
     ],
 
-    apiFirst: [
+    swaggerCodegen: [
         `${SERVER_MAIN_RES_DIR}swagger/api.yml`,
     ],
 
-    apiFirstGradle: [
+    swaggerCodegenGradle: [
         'gradle/swagger.gradle',
     ],
 

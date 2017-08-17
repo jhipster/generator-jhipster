@@ -512,7 +512,7 @@ function askForOptionalItems(meta) {
     choices.push(
         {
             name: 'API first development using swagger-codegen',
-            value: 'apiFirst:swagger'
+            value: 'enableSwaggerCodegen:true'
         }
     );
 
@@ -542,7 +542,7 @@ function askForOptionalItems(meta) {
             this.searchEngine = this.getOptionFromArray(this.serverSideOptions, 'searchEngine');
             this.enableSocialSignIn = this.getOptionFromArray(this.serverSideOptions, 'enableSocialSignIn');
             this.messageBroker = this.getOptionFromArray(this.serverSideOptions, 'messageBroker');
-            this.apiFirst = this.getOptionFromArray(this.serverSideOptions, 'apiFirst');
+            this.enableSwaggerCodegen = this.getOptionFromArray(this.serverSideOptions, 'enableSwaggerCodegen');
             // Only set this option if it hasn't been set in a previous question, as it's only optional for monoliths
             if (!this.serviceDiscoveryType) {
                 this.serviceDiscoveryType = this.getOptionFromArray(this.serverSideOptions, 'serviceDiscoveryType');

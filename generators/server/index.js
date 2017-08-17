@@ -154,10 +154,7 @@ module.exports = JhipsterServerGenerator.extend({
                 this.messageBroker = false;
             }
 
-            this.apiFirst = this.config.get('apiFirst') === 'no' ? false : this.config.get('apiFirst');
-            if (this.apiFirst === undefined) {
-                this.apiFirst = false;
-            }
+            this.enableSwaggerCodegen = this.config.get('enableSwaggerCodegen');
 
             this.serviceDiscoveryType = this.config.get('serviceDiscoveryType') === 'no' ? false : this.config.get('serviceDiscoveryType');
             if (this.serviceDiscoveryType === undefined) {
@@ -304,7 +301,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.configOptions.serviceDiscoveryType = this.serviceDiscoveryType;
             this.configOptions.buildTool = this.buildTool;
             this.configOptions.enableSocialSignIn = this.enableSocialSignIn;
-            this.configOptions.apiFirst = this.apiFirst;
+            this.configOptions.enableSwaggerCodegen = this.enableSwaggerCodegen;
             this.configOptions.authenticationType = this.authenticationType;
             this.configOptions.uaaBaseName = this.uaaBaseName;
             this.configOptions.serverPort = this.serverPort;
@@ -338,7 +335,7 @@ module.exports = JhipsterServerGenerator.extend({
             insight.track('app/serviceDiscoveryType', this.serviceDiscoveryType);
             insight.track('app/buildTool', this.buildTool);
             insight.track('app/enableSocialSignIn', this.enableSocialSignIn);
-            insight.track('app/apiFirst', this.apiFirst);
+            insight.track('app/enableSwaggerCodegen', this.enableSwaggerCodegen);
         },
 
         configureGlobal() {
@@ -383,7 +380,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.config.set('serviceDiscoveryType', this.serviceDiscoveryType);
             this.config.set('buildTool', this.buildTool);
             this.config.set('enableSocialSignIn', this.enableSocialSignIn);
-            this.config.set('apiFirst', this.apiFirst);
+            this.config.set('enableSwaggerCodegen', this.enableSwaggerCodegen);
             this.config.set('jwtSecretKey', this.jwtSecretKey);
             this.config.set('rememberMeKey', this.rememberMeKey);
             this.config.set('enableTranslation', this.enableTranslation);
@@ -415,7 +412,6 @@ module.exports = JhipsterServerGenerator.extend({
             this.protractorTests = this.testFrameworks.indexOf('protractor') !== -1;
             this.gatlingTests = this.testFrameworks.indexOf('gatling') !== -1;
             this.cucumberTests = this.testFrameworks.indexOf('cucumber') !== -1;
-            this.enableSwaggerCodegen = this.apiFirst === 'swagger';
         },
 
         composeLanguages() {

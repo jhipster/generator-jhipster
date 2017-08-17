@@ -646,7 +646,7 @@ describe('JHipster generator', () => {
                             'en'
                         ],
                         serverSideOptions: [
-                            'apiFirst:swagger'
+                            'enableSwaggerCodegen:true'
                         ]
                     })
                     .on('end', done);
@@ -656,7 +656,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.gatling);
-                assert.file(expectedFiles.apiFirst);
+                assert.file(expectedFiles.swaggerCodegen);
             });
         });
 
@@ -694,7 +694,7 @@ describe('JHipster generator', () => {
                             'en'
                         ],
                         serverSideOptions: [
-                            'apiFirst:swagger'
+                            'enableSwaggerCodegen:true'
                         ]
                     })
                     .on('end', done);
@@ -705,8 +705,8 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.gradle);
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.gatling);
-                assert.file(expectedFiles.apiFirst);
-                assert.file(expectedFiles.apiFirstGradle);
+                assert.file(expectedFiles.swaggerCodegen);
+                assert.file(expectedFiles.swaggerCodegenGradle);
             });
         });
     });
