@@ -216,7 +216,7 @@ objects:
           port: 27017
           targetPort: 27017
         -
-          name: mongodb-bc
+          name: mongodb
           protocol: TCP
           port: 80
           targetPort: 27017
