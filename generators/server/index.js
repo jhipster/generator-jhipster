@@ -259,16 +259,6 @@ module.exports = JhipsterServerGenerator.extend({
                     this.enableSocialSignIn = false;
                 }
 
-                // If the service discovery is not defined, it is disabled by default
-                if (this.serviceDiscoveryType === undefined) {
-                    this.serviceDiscoveryType = false;
-                }
-
-                // If the service discovery is not defined, it is disabled by default
-                if (this.apiFirst === undefined) {
-                    this.apiFirst = false;
-                }
-
                 // If translation is not defined, it is enabled by default
                 if (this.enableTranslation === undefined) {
                     this.enableTranslation = true;
@@ -425,6 +415,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.protractorTests = this.testFrameworks.indexOf('protractor') !== -1;
             this.gatlingTests = this.testFrameworks.indexOf('gatling') !== -1;
             this.cucumberTests = this.testFrameworks.indexOf('cucumber') !== -1;
+            this.enableSwaggerCodegen = this.apiFirst === 'swagger';
         },
 
         composeLanguages() {

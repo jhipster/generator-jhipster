@@ -137,7 +137,7 @@ function writeFiles() {
                 if (this.databaseType === 'sql') {
                     this.template('gradle/_liquibase.gradle', 'gradle/liquibase.gradle');
                 }
-                if (this.apiFirst === 'swagger') {
+                if (this.enableSwaggerCodegen) {
                     this.template('gradle/_swagger.gradle', 'gradle/swagger.gradle');
                 }
                 this.copy('gradlew', 'gradlew');
@@ -173,7 +173,7 @@ function writeFiles() {
             this.template(`${SERVER_MAIN_RES_DIR}config/_application-dev.yml`, `${SERVER_MAIN_RES_DIR}config/application-dev.yml`);
             this.template(`${SERVER_MAIN_RES_DIR}config/_application-prod.yml`, `${SERVER_MAIN_RES_DIR}config/application-prod.yml`);
 
-            if (this.apiFirst === 'swagger') {
+            if (this.enableSwaggerCodegen) {
                 this.template(`${SERVER_MAIN_RES_DIR}swagger/_api.yml`, `${SERVER_MAIN_RES_DIR}swagger/api.yml`);
             }
 
