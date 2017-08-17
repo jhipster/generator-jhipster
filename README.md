@@ -12,7 +12,7 @@ Greetings, Java Hipster!
 
 ## Travis Builds
 
-Additionnal builds on [hipster-labs/jhipster-travis-build](https://github.com/hipster-labs/jhipster-travis-build)
+Additional builds on [hipster-labs/jhipster-travis-build](https://github.com/hipster-labs/jhipster-travis-build)
 
 | Type          | Status                                                   | Description                    |
 |:--------------|:---------------------------------------------------------|:-------------------------------|
