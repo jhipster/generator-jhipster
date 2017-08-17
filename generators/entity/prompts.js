@@ -269,7 +269,7 @@ function askForTableName() {
         }
     ];
     this.prompt(prompts).then((props) => {
-        /* overwrite the table name for the entity using name obtained from the user*/
+        /* overwrite the table name for the entity using name obtained from the user */
         if (props.entityTableName !== this.entityTableName) {
             this.entityTableName = _.snakeCase(props.entityTableName).toLowerCase();
         }

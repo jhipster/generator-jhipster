@@ -48,9 +48,9 @@ module.exports = class extends Generator {
         this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
     }
 
-    /*= =======================================================================*/
-    /* private methods use within generator (not exposed to modules)*/
-    /*= =======================================================================*/
+    /* ======================================================================== */
+    /* private methods use within generator (not exposed to modules) */
+    /* ======================================================================== */
 
     installI18nClientFilesByLanguage(_this, webappDir, lang) {
         const generator = _this || this;
