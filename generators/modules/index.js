@@ -74,6 +74,7 @@ module.exports = ModulesGenerator.extend({
         jhipsterVar.languages = this.config.get('languages');
         jhipsterVar.enableSocialSignIn = this.config.get('enableSocialSignIn');
         jhipsterVar.testFrameworks = this.config.get('testFrameworks');
+        jhipsterVar.apiFirst = this.config.get('apiFirst');
         jhipsterVar.jhiPrefix = this.config.get('jhiPrefix');
         jhipsterVar.jhiPrefixCapitalized = _.upperFirst(jhipsterVar.jhiPrefix);
         jhipsterVar.jhipsterVersion = this.config.get('jhipsterVersion');

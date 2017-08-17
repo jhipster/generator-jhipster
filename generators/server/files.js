@@ -137,6 +137,9 @@ function writeFiles() {
                 if (this.databaseType === 'sql') {
                     this.template('gradle/_liquibase.gradle', 'gradle/liquibase.gradle');
                 }
+                if (this.enableSwaggerCodegen) {
+                    this.template('gradle/_swagger.gradle', 'gradle/swagger.gradle');
+                }
                 this.copy('gradlew', 'gradlew');
                 this.copy('gradlew.bat', 'gradlew.bat');
                 this.copy('gradle/wrapper/gradle-wrapper.jar', 'gradle/wrapper/gradle-wrapper.jar');
@@ -169,6 +172,10 @@ function writeFiles() {
             this.template(`${SERVER_MAIN_RES_DIR}config/_application.yml`, `${SERVER_MAIN_RES_DIR}config/application.yml`);
             this.template(`${SERVER_MAIN_RES_DIR}config/_application-dev.yml`, `${SERVER_MAIN_RES_DIR}config/application-dev.yml`);
             this.template(`${SERVER_MAIN_RES_DIR}config/_application-prod.yml`, `${SERVER_MAIN_RES_DIR}config/application-prod.yml`);
+
+            if (this.enableSwaggerCodegen) {
+                this.template(`${SERVER_MAIN_RES_DIR}swagger/_api.yml`, `${SERVER_MAIN_RES_DIR}swagger/api.yml`);
+            }
 
             if (this.databaseType === 'sql') {
                 this.template(`${SERVER_MAIN_RES_DIR}/config/liquibase/changelog/_initial_schema.xml`, `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/00000000000000_initial_schema.xml`, this, { interpolate: INTERPOLATE_REGEX });

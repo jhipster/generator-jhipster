@@ -611,6 +611,104 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.messageBroker);
             });
         });
+
+        describe('API first using swagger-codegen (maven)', () => {
+            beforeEach((done) => {
+                helpers.run(path.join(__dirname, '../generators/app'))
+                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withPrompts({
+                        baseName: 'jhipster',
+                        packageName: 'com.mycompany.myapp',
+                        packageFolder: 'com/mycompany/myapp',
+                        clientFramework: 'angularX',
+                        serverPort: '8080',
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        hibernateCache: 'ehcache',
+                        clusteredHttpSession: false,
+                        websocket: false,
+                        databaseType: 'sql',
+                        devDatabaseType: 'h2Disk',
+                        prodDatabaseType: 'mysql',
+                        searchEngine: false,
+                        buildTool: 'maven',
+                        enableSocialSignIn: false,
+                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                        useSass: false,
+                        applicationType: 'monolith',
+                        testFrameworks: [
+                            'gatling'
+                        ],
+                        jhiPrefix: 'jhi',
+                        enableTranslation: true,
+                        nativeLanguage: 'en',
+                        languages: [
+                            'en'
+                        ],
+                        serverSideOptions: [
+                            'apiFirst:swagger'
+                        ]
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected files with Swagger API first enabled', () => {
+                assert.file(expectedFiles.server);
+                assert.file(expectedFiles.jwtServer);
+                assert.file(expectedFiles.gatling);
+                assert.file(expectedFiles.apiFirst);
+            });
+        });
+
+        describe('API first using swagger-codegen (gradle)', () => {
+            beforeEach((done) => {
+                helpers.run(path.join(__dirname, '../generators/app'))
+                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withPrompts({
+                        baseName: 'jhipster',
+                        packageName: 'com.mycompany.myapp',
+                        packageFolder: 'com/mycompany/myapp',
+                        clientFramework: 'angularX',
+                        serverPort: '8080',
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        hibernateCache: 'ehcache',
+                        clusteredHttpSession: false,
+                        websocket: false,
+                        databaseType: 'sql',
+                        devDatabaseType: 'h2Disk',
+                        prodDatabaseType: 'mysql',
+                        searchEngine: false,
+                        buildTool: 'gradle',
+                        enableSocialSignIn: false,
+                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                        useSass: false,
+                        applicationType: 'monolith',
+                        testFrameworks: [
+                            'gatling'
+                        ],
+                        jhiPrefix: 'jhi',
+                        enableTranslation: true,
+                        nativeLanguage: 'en',
+                        languages: [
+                            'en'
+                        ],
+                        serverSideOptions: [
+                            'apiFirst:swagger'
+                        ]
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected files with Swagger API first enabled', () => {
+                assert.file(expectedFiles.server);
+                assert.file(expectedFiles.gradle);
+                assert.file(expectedFiles.jwtServer);
+                assert.file(expectedFiles.gatling);
+                assert.file(expectedFiles.apiFirst);
+                assert.file(expectedFiles.apiFirstGradle);
+            });
+        });
     });
 
     context('Application names', () => {
