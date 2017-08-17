@@ -157,7 +157,8 @@ const files = {
                 'reducers/administration.ts',
                 'reducers/authentication.ts',
                 'reducers/layout.ts',
-                'reducers/system-property.ts'
+                'reducers/system-property.ts',
+                'reducers/account.ts'
             ]
         },
         {
@@ -168,26 +169,26 @@ const files = {
             ]
         }
     ],
-    // accountModule: [
-    // {
-    //   path: REACT_DIR,
-    //   templates: [
-    //     'account/_index.js',
-    //     { file: 'account/_account.route.js', method: 'processJsx' },
-    //     { file: 'account/activate/_activate.route.js', method: 'processJsx' },
-    //     { file: 'account/activate/_activate.component.js', method: 'processJsx' },
-    //     { file: 'account/password/_password.route.js', method: 'processJsx' },
-    //     { file: 'account/password/_password.component.js', method: 'processJsx' },
-    //     { file: 'account/register/_register.route.js', method: 'processJsx' },
-    //     { file: 'account/register/_register.component.js', method: 'processJsx' },
-    //     { file: 'account/password-reset/init/_password-reset-init.route.js', method: 'processJsx' },
-    //     { file: 'account/password-reset/init/_password-reset-init.component.js', method: 'processJsx' },
-    //     { file: 'account/password-reset/finish/_password-reset-finish.route.js', method: 'processJsx' },
-    //     { file: 'account/password-reset/finish/_password-reset-finish.component.js', method: 'processJsx' },
-    //     { file: 'account/settings/_settings.route.js', method: 'processJsx' },
-    //     { file: 'account/settings/_settings.component.js', method: 'processJsx' }
-    //   ]
-    // },
+    accountModule: [
+        {
+            path: REACT_DIR,
+            templates: [
+                // 'account/_index.js',
+                // { file: 'account/_account.route.js', method: 'processJsx' },
+                // { file: 'account/activate/_activate.route.js', method: 'processJsx' },
+                // { file: 'account/activate/_activate.component.js', method: 'processJsx' },
+                // { file: 'account/password/_password.route.js', method: 'processJsx' },
+                { file: 'modules/account/password/password.tsx', method: 'processJsx' },
+                // { file: 'account/register/_register.route.js', method: 'processJsx' },
+                // { file: 'account/register/_register.component.js', method: 'processJsx' },
+                // { file: 'account/password-reset/init/_password-reset-init.route.js', method: 'processJsx' },
+                // { file: 'account/password-reset/init/_password-reset-init.component.js', method: 'processJsx' },
+                // { file: 'account/password-reset/finish/_password-reset-finish.route.js', method: 'processJsx' },
+                // { file: 'account/password-reset/finish/_password-reset-finish.component.js', method: 'processJsx' },
+                { file: 'modules/account/settings/settings.tsx', method: 'processJsx' }
+                // { file: 'account/settings/_settings.component.js', method: 'processJsx' }
+            ]
+        }
     // {
     //   condition: generator => generator.authenticationType === 'session',
     //   path: REACT_DIR,
@@ -230,7 +231,7 @@ const files = {
     //     'account/password/_password-strength-bar.css'
     //   ]
     // }
-    // ],
+    ],
     adminModule: [
         {
             path: REACT_DIR,
