@@ -5,7 +5,7 @@ import { messages } from '../config/constants';
 import { ICrudPutAction } from '../shared/model/redux-action.type';
 
 export const ACTION_TYPES = {
-  CREATE_PROPERTY: 'systemProperty/CREATE_PROJECT',
+  CREATE_PROPERTY: 'systemProperty/CREATE_PROPERTY',
   UPDATE_ACCOUNT: 'systemProperty/UPDATE_ACCOUNT',
   UPDATE_PASSWORD: 'systemProperty/UPDATE_PASSWORD'
 };
