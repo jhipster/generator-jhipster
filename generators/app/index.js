@@ -232,7 +232,8 @@ module.exports = JhipsterGenerator.extend({
             this.composeWith(require.resolve('../server'), {
                 'client-hook': !this.skipClient,
                 configOptions: this.configOptions,
-                force: this.options.force
+                force: this.options.force,
+                debug: this.isDebugEnabled
             });
         },
 
@@ -242,7 +243,8 @@ module.exports = JhipsterGenerator.extend({
             this.composeWith(require.resolve('../client'), {
                 'skip-install': this.options['skip-install'],
                 configOptions: this.configOptions,
-                force: this.options.force
+                force: this.options.force,
+                debug: this.isDebugEnabled
             });
         },
 

@@ -121,6 +121,7 @@ module.exports = JDLGenerator.extend({
                     if (this.updatedKeys.includes(entity.name)) {
                         this.composeWith(require.resolve('../entity'), {
                             force: this.options.force,
+                            debug: this.options.debug,
                             regenerate: true,
                             'skip-install': true,
                             'skip-client': entity.definition.skipClient,

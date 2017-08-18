@@ -1880,12 +1880,13 @@ module.exports = class extends PrivateBase {
             // skip client if app type is server
             const skipClient = type && type === 'server';
             generator.composeWith(require.resolve('./languages'), {
+                configOptions,
                 'skip-install': true,
                 'skip-server': skipServer,
                 'skip-client': skipClient,
-                configOptions,
+                languages: generator.languages,
                 force: generator.options.force,
-                languages: generator.languages
+                debug: generator.options.debug
             });
         }
     }
