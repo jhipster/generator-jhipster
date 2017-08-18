@@ -5,9 +5,8 @@ import { messages } from '../config/constants';
 import { ICrudPutAction } from '../shared/model/redux-action.type';
 
 export const ACTION_TYPES = {
-  CREATE_PROPERTY: 'systemProperty/CREATE_PROPERTY',
-  UPDATE_ACCOUNT: 'systemProperty/UPDATE_ACCOUNT',
-  UPDATE_PASSWORD: 'systemProperty/UPDATE_PASSWORD'
+  UPDATE_ACCOUNT: 'account/UPDATE_ACCOUNT',
+  UPDATE_PASSWORD: 'account/UPDATE_PASSWORD'
 };
 
 const initialState = {
@@ -21,7 +20,6 @@ const initialState = {
 // Reducer
 export default (state = initialState, action) => {
   switch (action.type) {
-    case REQUEST(ACTION_TYPES.CREATE_PROPERTY):
     case REQUEST(ACTION_TYPES.UPDATE_ACCOUNT):
       return {
         ...state,
@@ -36,9 +34,7 @@ export default (state = initialState, action) => {
         updateSuccess: false,
         loading: true
       };
-    case FAILURE(ACTION_TYPES.CREATE_PROPERTY):
     case FAILURE(ACTION_TYPES.UPDATE_ACCOUNT):
-    case SUCCESS(ACTION_TYPES.CREATE_PROPERTY):
     case SUCCESS(ACTION_TYPES.UPDATE_ACCOUNT):
       return {
         ...state,
