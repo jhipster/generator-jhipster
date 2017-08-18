@@ -55,7 +55,7 @@ function requireCLI(preferGlobal) {
             if (__dirname !== path.dirname(localCLI)) {
                 // load local version
                 /* eslint-disable import/no-dynamic-require */
-                logger.info('Using JHipster locally installed in current project\'s node_modules');
+                logger.info('Using JHipster version installed locally in current project\'s node_modules');
                 require(localCLI);
                 return;
             }
@@ -64,7 +64,7 @@ function requireCLI(preferGlobal) {
         }
     }
     // load global version
-    logger.info('Using JHipster globally installed');
+    logger.info('Using JHipster version installed globally');
     require('./cli');
     /* eslint-enable  */
 }
