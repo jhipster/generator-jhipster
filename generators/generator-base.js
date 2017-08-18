@@ -1452,8 +1452,9 @@ module.exports = class extends PrivateBase {
      * @param {string} hookFor : "app" or "entity"
      * @param {string} hookType : "pre" or "post"
      * @param options : the options to pass to the hooks
+     * @param cb : callback to trigger at the end
      */
-    callHooks(hookFor, hookType, options) {
+    callHooks(hookFor, hookType, options, cb) {
         const modules = this.getModuleHooks();
         // run through all module hooks, which matches the hookFor and hookType
         modules.forEach((module) => {
@@ -1483,6 +1484,8 @@ module.exports = class extends PrivateBase {
                 }
             }
         });
+        this.debug('calling callback');
+        cb && cb();
     }
 
     /**

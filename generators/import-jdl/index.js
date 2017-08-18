@@ -111,7 +111,6 @@ module.exports = JDLGenerator.extend({
 
         generateEntities() {
             if (this.updatedKeys.length === 0) return;
-
             if (this.options['json-only']) {
                 this.log('Entity JSON files created. Entitiy generation skipped.');
                 return;
@@ -121,6 +120,7 @@ module.exports = JDLGenerator.extend({
                 this.getExistingEntities().forEach((entity) => {
                     if (this.updatedKeys.includes(entity.name)) {
                         this.composeWith(require.resolve('../entity'), {
+                            force: this.options.force,
                             regenerate: true,
                             'skip-install': true,
                             'skip-client': entity.definition.skipClient,
@@ -135,25 +135,17 @@ module.exports = JDLGenerator.extend({
                 this.debug('Error:', e);
                 this.error(`Error while generating entities from parsed JDL\n${e}`);
             }
-        }
+        },
+
     },
 
-    install() {
-        const injectJsFilesToIndex = () => {
-            this.log(`\n${chalk.bold.green('Running gulp Inject to add javascript to index\n')}`);
-            this.spawnCommand('gulp', ['inject:app']);
-        };
-        // rebuild client for Angular
-        const rebuildClient = () => {
-            this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app')}\n`);
-            this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build']);
-        };
-
+    end() {
         if (!this.options['skip-install'] && !this.skipClient && !this.options['json-only']) {
+            this.debug('Building client');
             if (this.clientFramework === 'angular1') {
-                injectJsFilesToIndex();
+                this.injectJsFilesToIndex();
             } else {
-                rebuildClient();
+                this.rebuildClient();
             }
         }
     }

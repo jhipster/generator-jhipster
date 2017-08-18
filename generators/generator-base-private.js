@@ -641,4 +641,22 @@ module.exports = class extends Generator {
             to.jpaMetamodelFiltering = false;
         }
     }
+
+    // rebuild client for Angular1
+    injectJsFilesToIndex() {
+        const done = this.async();
+        this.log(`\n${chalk.bold.green('Running `gulp inject` to add JavaScript to index.html\n')}`);
+        this.spawnCommand('gulp', ['inject:app']).on('close', () => {
+            done();
+        });
+    }
+
+    // rebuild client for Angular
+    rebuildClient() {
+        const done = this.async();
+        this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app\n')}`);
+        this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build']).on('close', () => {
+            done();
+        });
+    }
 };

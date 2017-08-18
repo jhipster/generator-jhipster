@@ -730,8 +730,9 @@ module.exports = EntityGenerator.extend({
 
     writing: writeFiles(),
 
-    end: {
+    install: {
         afterRunHook() {
+            const done = this.async();
             try {
                 const modules = this.getModuleHooks();
                 if (modules.length > 0) {
@@ -769,38 +770,26 @@ module.exports = EntityGenerator.extend({
                     this.callHooks('entity', 'post', {
                         entityConfig,
                         force: this.options.force
-                    });
+                    }, done);
+                } else {
+                    done();
                 }
             } catch (err) {
                 this.log(`\n${chalk.bold.red('Running post run module hooks failed. No modification done to the generated entity.')}`);
                 this.debug('Error:', err);
-            }
-        },
-
-
-        install() {
-            const injectJsFilesToIndex = () => {
-                const done = this.async();
-                this.log(`\n${chalk.bold.green('Running `gulp inject` to add JavaScript to index.html\n')}`);
-                this.spawnCommand('gulp', ['inject:app']).on('close', () => {
-                    done();
-                });
-            };
-            // rebuild client for Angular
-            const rebuildClient = () => {
-                const done = this.async();
-                this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app\n')}`);
-                this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build']).on('close', () => {
-                    done();
-                });
-            };
-            if (!this.options['skip-install'] && !this.skipClient) {
-                if (this.clientFramework === 'angular1') {
-                    injectJsFilesToIndex();
-                } else {
-                    rebuildClient();
-                }
+                done();
             }
         }
+    },
+
+    end() {
+        if (!this.options['skip-install'] && !this.skipClient) {
+            if (this.clientFramework === 'angular1') {
+                this.injectJsFilesToIndex();
+            } else {
+                this.rebuildClient();
+            }
+        }
+        this.log(chalk.bold.green('Entity generation completed'));
     }
 });
