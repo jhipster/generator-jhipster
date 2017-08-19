@@ -332,10 +332,10 @@ validation
   / MAXBYTES SPACE* '(' SPACE* int:INTEGER SPACE* ')' { return { key: 'maxbytes', value: int }; }
   / MAXBYTES SPACE* '(' SPACE* constantName:CONSTANT_NAME SPACE* ')' { return { key: 'maxbytes', value: constantName, constant: true }; }
   / MIN SPACE* '(' SPACE* int:INTEGER SPACE* ')' { return { key: 'min', value: int };}
-  / MIN SPACE* '(' SPACE* constantName:CONSTANT_NAME SPACE* ')' { return { key: 'min', value: constantName, constant: true };}
+  / MIN SPACE* '(' SPACE* constantName:CONSTANT_NAME SPACE* ')' { return { key: 'min', value: constantName, constant: true }; }
   / MAX SPACE* '(' SPACE* int:INTEGER SPACE* ')' { return { key: 'max', value: int };}
-  / MAX SPACE* '(' SPACE* constantName:CONSTANT_NAME SPACE* ')' { return { key: 'max', value: constantName, constant: true };}
-  / PATTERN SPACE* '('  APOSTROPHE regex:REGEX APOSTROPHE SPACE* ')' { return { key: 'pattern', value: regex }; }
+  / MAX SPACE* '(' SPACE* constantName:CONSTANT_NAME SPACE* ')' { return { key: 'max', value: constantName, constant: true }; }
+  / PATTERN SPACE* '(' SPACE* FORWARD_SLASH regex:REGEX FORWARD_SLASH SPACE* ')' { return { key: 'pattern', value: regex }; }
 
 // Comments
 comment = commentStart notAComment:notAComment* commentStop { return notAComment.join(''); }
@@ -378,6 +378,8 @@ MAX = 'max'
 MIN = 'min'
 PATTERN = 'pattern'
 
+REGEX = pattern:[^\n\r/]* { return pattern.join(''); }
+
 ENUMNAME = head:[A-Z]tail:[A-z0-9]* { return `${head}${tail.join('')}`; }
 ENUMPROP = underscore:[_]*head:[A-Z0-9]tail:[A-Z0-9_]* {
     return `${underscore.join('')}${head}${tail.join('')}`;
@@ -389,5 +391,4 @@ ENTITY_NAME = head:[A-Z]tail:[A-z0-9]* { return `${head}${tail.join('')}`; }
 FIELD_NAME = head:[a-zA-Z]tail:[A-z0-9]* { return `${head}${tail.join('')}`; }
 SPACE = ['\n'|'\t'|'\r'|' '|\u2028|\u2029]
 SPACE_WITHOUT_NEWLINE = ['\t'|' '|\u2028|\u2029]
-REGEX = word:[A-z0-9!@#$%^&*()_+\-=\[\]{};':\\|,.<>\/? ]* { return word.join('') }
-APOSTROPHE = ["|']
+FORWARD_SLASH = [/]
