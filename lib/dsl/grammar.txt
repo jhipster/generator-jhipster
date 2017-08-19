@@ -576,4 +576,3 @@ FIELD_NAME = head:[a-zA-Z]tail:[A-z0-9]* { return `${head}${tail.join('')}`; }
 SPACE = ['\n'|'\t'|'\r'|' '|\u2028|\u2029]
 SPACE_WITHOUT_NEWLINE = ['\t'|' '|\u2028|\u2029]
 FORWARD_SLASH = [/]
-APOSTROPHE = ["|']
