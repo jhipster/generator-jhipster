@@ -454,6 +454,23 @@ const expectedFiles = {
         `${DOCKER_DIR}mongodb/scripts/init_replicaset.js`
     ],
 
+    couchbase: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/N1qlCouchbaseRepository.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/CustomN1qlCouchbaseRepository.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/DatabaseTestConfiguration.java`,
+        `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0__create_indexes.n1ql`,
+        `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/ROLE_ADMIN.json`,
+        `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/ROLE_USER.json`,
+        `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user::admin.json`,
+        `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user::system.json`,
+        `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user::user.json`,
+        `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user::anonymoususer.json`,
+        `${DOCKER_DIR}couchbase.yml`,
+        `${DOCKER_DIR}couchbase-cluster.yml`,
+        `${DOCKER_DIR}couchbase/Couchbase.Dockerfile`,
+        `${DOCKER_DIR}couchbase/scripts/configure-node.sh`
+    ],
+
     cassandra: [
         `${SERVER_MAIN_RES_DIR}config/cql/create-keyspace-prod.cql`,
         `${SERVER_MAIN_RES_DIR}config/cql/create-keyspace.cql`,
