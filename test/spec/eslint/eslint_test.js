@@ -18,9 +18,7 @@ describe('ESLint', () => {
 function generateTest(result) {
   it(`validates ${result.filePath}`, () => {
     if (result.filePath.indexOf('pegjs_parser.js') === -1 && result.messages.length > 0) {
-      if (result.messages.length > 0) {
-        fail('', '', formatMessages(result.messages));
-      }
+      fail('', '', formatMessages(result.messages));
     }
   });
 }
