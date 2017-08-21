@@ -65,12 +65,14 @@ import java.time.ZonedDateTime;
 import java.time.ZoneOffset;<% } %><% if (fieldsContainLocalDate === true || fieldsContainZonedDateTime === true) { %>
 import java.time.ZoneId;<% } %><% if (fieldsContainInstant === true) { %>
 import java.time.temporal.ChronoUnit;<% } %>
-import java.util.List;<% if (databaseType === 'cassandra') { %>
+import java.util.List;
+import java.util.Optional;<% if (databaseType === 'cassandra') { %>
 import java.util.UUID;<% } %>
 <% if (fieldsContainZonedDateTime === true) { %>
 import static <%=packageName%>.web.rest.TestUtil.sameInstant;<% } %>
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -375,8 +377,9 @@ _%>
         <%_ }} if (searchEngine === 'elasticsearch') { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
-        <%= entityClass %> <%= entityInstance %>Es = <%= entityInstance %>SearchRepository.findOne(test<%= entityClass %>.getId());
-        assertThat(<%= entityInstance %>Es).isEqualToComparingFieldByField(test<%= entityClass %>);
+        Optional<<%= entityClass %>> <%= entityInstance %>Es = <%= entityInstance %>SearchRepository.findById(test<%= entityClass %>.getId());
+        assertTrue(<%= entityInstance %>Es.isPresent());
+        assertThat(<%= entityInstance %>Es.get()).isEqualToComparingFieldByField(test<%= entityClass %>);
         <%_ } _%>
     }
 
@@ -510,7 +513,7 @@ _%>
 <%_
             }
             // the range criterias
-            if (['Byte', 'Short', 'Integer', 'Long', 'LocalDate', 'ZonedDateTime'].includes(searchBy.fieldType)) { 
+            if (['Byte', 'Short', 'Integer', 'Long', 'LocalDate', 'ZonedDateTime'].includes(searchBy.fieldType)) {
               var defaultValue = 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase();
               var biggerValue = 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase();
               if (searchBy.fieldValidate === true && searchBy.fieldValidateRules.includes('max')) {
@@ -597,7 +600,10 @@ _%>
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll().size();
 
         // Update the <%= entityInstance %>
-        <%= entityClass %> updated<%= entityClass %> = <%= entityInstance %>Repository.findOne(<%= entityInstance %>.getId());
+        Optional<<%= entityClass %>> optionalUpdated<%= entityClass %> = <%= entityInstance %>Repository.<%_ if (databaseType !== 'cassandra') { _%>findById<%_ } else { _%>findOne<%_ }_%>(<%= entityInstance %>.getId());
+        assertTrue(optionalUpdated<%= entityClass %>.isPresent());
+        <%= entityClass %> updated<%= entityClass %> = optionalUpdated<%= entityClass %>.get();
+
         <%_ if (fluentMethods && fields.length > 0) { _%>
         updated<%= entityClass %><% for (idx in fields) { %>
             .<%= fields[idx].fieldName %>(<%='UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase()%>)<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>
@@ -635,8 +641,9 @@ _%>
         <%_ } } if (searchEngine === 'elasticsearch') { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
-        <%= entityClass %> <%= entityInstance %>Es = <%= entityInstance %>SearchRepository.findOne(test<%= entityClass %>.getId());
-        assertThat(<%= entityInstance %>Es).isEqualToComparingFieldByField(test<%= entityClass %>);
+        Optional<<%= entityClass %>> <%= entityInstance %>Es = <%= entityInstance %>SearchRepository.findById(test<%= entityClass %>.getId());
+        assertTrue(<%= entityInstance %>Es.isPresent());
+        assertThat(<%= entityInstance %>Es.get()).isEqualToComparingFieldByField(test<%= entityClass %>);
         <%_ } _%>
     }
 
@@ -678,7 +685,7 @@ _%>
             .andExpect(status().isOk());<% if (searchEngine === 'elasticsearch') { %>
 
         // Validate Elasticsearch is empty
-        boolean <%= entityInstance %>ExistsInEs = <%= entityInstance %>SearchRepository.exists(<%= entityInstance %>.getId());
+        boolean <%= entityInstance %>ExistsInEs = <%= entityInstance %>SearchRepository.existsById(<%= entityInstance %>.getId());
         assertThat(<%= entityInstance %>ExistsInEs).isFalse();<% } %>
 
         // Validate the database is empty

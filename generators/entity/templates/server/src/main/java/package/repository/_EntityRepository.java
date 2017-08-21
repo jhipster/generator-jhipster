@@ -34,7 +34,8 @@ import org.springframework.data.repository.query.Param;<% } %>
     }
     if (importList === true) {
 _%>
-import java.util.List;<% }} %><% if (databaseType === 'mongodb') { %>
+import java.util.List;<% if (fieldsContainOwnerManyToMany === true) { %>
+import java.util.Optional;<%_ } _%><% }} %><% if (databaseType === 'mongodb') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;<% } %><% if (databaseType === 'cassandra') { %>
 
 import javax.validation.ConstraintViolation;
@@ -78,7 +79,7 @@ public interface <%=entityClass%>Repository extends <% if (databaseType === 'sql
 
     @Query("select <%= entityTableName %> from <%= entityClass %> <%= entityTableName %><% for (idx in relationships) {
     if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { %> left join fetch <%=entityTableName%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%> where <%=entityTableName%>.id =:id")
-    <%=entityClass%> findOneWithEagerRelationships(@Param("id") Long id);
+    Optional<<%=entityClass%>> findOneWithEagerRelationships(@Param("id") Long id);
     <%_ } _%>
 
 }
