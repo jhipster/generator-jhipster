@@ -31,7 +31,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
-import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 <%_ if (enableSocialSignIn) { _%>
 import org.apache.commons.lang3.StringUtils;
 <%_ } _%>

@@ -22,6 +22,8 @@ import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.config.JHipsterProperties;<% if (!skipClient) { %>
 import io.github.jhipster.web.filter.CachingHttpHeadersFilter;<% } %>
 
+import io.undertow.UndertowOptions;
+
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
 import com.codahale.metrics.servlets.MetricsServlet;<% if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { %>
