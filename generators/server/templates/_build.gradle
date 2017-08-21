@@ -25,6 +25,7 @@ buildscript {
         mavenCentral()
         jcenter()
         maven { url "http://repo.spring.io/plugins-release" }
+        maven { url "https://repo.spring.io/snapshot" }
         maven { url "http://repo.spring.io/milestone" }
         maven { url "https://plugins.gradle.org/m2/" }
     }
@@ -76,8 +77,9 @@ dependencyManagement {
 <%_ } _%>
 defaultTasks 'bootRun'
 
-bootRepackage {
-   mainClass = '<%= packageName %>.<%= mainClass %>'
+bootWar {
+    mainClass = '<%= packageName %>.<%= mainClass %>'
+    enabled = false
 }
 
 war {
@@ -85,8 +87,7 @@ war {
 }
 
 springBoot {
-    mainClass = '<%= packageName %>.<%= mainClass %>'
-    executable = true
+//    executable = true
     buildInfo()
 }
 
@@ -105,7 +106,7 @@ if (OperatingSystem.current().isWindows()) {
     }
 
     bootRun {
-        addResources = false
+//        addResources = false
         dependsOn pathingJar
         doFirst {
             classpath = files("$buildDir/classes/java/main", "$buildDir/resources/main", pathingJar.archivePath)
@@ -113,7 +114,7 @@ if (OperatingSystem.current().isWindows()) {
     }
 } else {
     bootRun {
-        addResources = false
+//        addResources = false
     }
 }
 
