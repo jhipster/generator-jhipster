@@ -16,32 +16,35 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import groovy.json.JsonSlurper
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 import org.gradle.internal.os.OperatingSystem
 
 buildscript {
     repositories {
         mavenLocal()
-        mavenCentral()
         jcenter()
         maven { url "http://repo.spring.io/plugins-release" }
-        maven { url "http://repo.spring.io/milestone" }
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
-        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.5"
-        classpath "net.ltgt.gradle:gradle-apt-plugin:0.9"
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
         classpath "org.springframework.build.gradle:propdeps-plugin:0.0.7"
-        <%_ if (!skipClient) { _%>
-        classpath "com.moowork.gradle:gradle-node-plugin:1.2.0"
-        <%_ } _%>
-        classpath "io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE"
         <%_ if (enableSwaggerCodegen) { _%>
         classpath "gradle.plugin.org.detoeuf:swagger-codegen-plugin:1.7.4"
         <%_ } _%>
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
     }
+}
+
+plugins {
+    id "org.sonarqube" version "2.5"
+    id "net.ltgt.apt" version "0.11"
+    id "io.spring.dependency-management" version "1.0.3.RELEASE"
+    id "com.bmuschko.docker-remote-api" version "3.1.0"
+     <%_ if (!skipClient) { _%>
+    id "com.moowork.node" version "1.2.0"
+    <%_ } _%>
+    //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
 }
 
 apply plugin: 'java'
@@ -58,6 +61,7 @@ apply plugin: 'com.moowork.gulp'
     <%_ } _%>
 <%_ } _%>
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'com.bmuschko.docker-remote-api'
 apply plugin: 'idea'
 <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa' || messageBroker === 'kafka' || hibernateCache === 'infinispan') { _%>
 dependencyManagement {
@@ -165,7 +169,6 @@ apply from: 'gradle/liquibase.gradle'
 apply from: 'gradle/gatling.gradle'
 <%_ } _%>
 apply from: 'gradle/mapstruct.gradle'
-apply from: 'gradle/docker.gradle'
 <%_ if (enableSwaggerCodegen) { _%>
 apply from: 'gradle/swagger.gradle'
 <%_ } _%>
@@ -208,14 +211,7 @@ configurations {
 
 repositories {
     mavenLocal()
-    mavenCentral()
     jcenter()
-    maven { url 'http://repo.spring.io/milestone' }
-    maven { url 'http://repo.spring.io/snapshot' }
-    maven { url 'https://repository.jboss.org/nexus/content/repositories/releases' }
-    maven { url 'https://oss.sonatype.org/content/repositories/releases' }
-    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
-    maven { url 'http://repo.maven.apache.org/maven2' }
     <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
     maven { url "https://maven.oracle.com" }
     <%_ } _%>
@@ -455,12 +451,23 @@ clean {
     delete "target"
 }
 
+task copyDockerFiles(type: Copy) {
+    from 'src/main/docker'
+    from "${project.buildDir}/libs"
+    into { "${project.buildDir}/docker" }
+}
+
+task buildDocker(type: DockerBuildImage, dependsOn: 'copyDockerFiles') {
+    inputDir = project.file("${project.buildDir}/docker")
+    tags = ["<%= baseName.toLowerCase() %>:${project.version}"]
+}
+
 task cleanResources(type: Delete) {
     delete 'build/resources'
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.0'
+    gradleVersion = '4.1'
 }
 
 task stage(dependsOn: 'bootRepackage') {
