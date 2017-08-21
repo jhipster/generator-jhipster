@@ -132,7 +132,7 @@ public abstract class QueryService<ENTITY> {
      * @param reference  the attribute of the static metamodel for the referring entity.
      * @param valueField the attribute of the static metamodel of the referred entity, where the equality should be
      *                   checked.
-     * @param <OTHER>    The type of the referenced entity
+     * @param <OTHER>    The type of the referenced entity.
      * @param <X>        The type of the attribute which is filtered.
      * @return a Specification
      */
@@ -161,6 +161,8 @@ public abstract class QueryService<ENTITY> {
      * @param reference  the attribute of the static metamodel for the referring entity.
      * @param valueField the attribute of the static metamodel of the referred entity, where the equality should be
      *                   checked.
+     * @param <OTHER>    The type of the referenced entity.
+     * @param <X>        The type of the attribute which is filtered.
      * @return a Specification
      */
     protected <OTHER, X> Specification<ENTITY> buildReferringEntitySpecification(Filter<X> filter,
