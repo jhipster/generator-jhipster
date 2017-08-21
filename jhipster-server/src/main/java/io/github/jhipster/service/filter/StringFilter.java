@@ -20,7 +20,15 @@
 package io.github.jhipster.service.filter;
 
 /**
- * Class for filtering attributes with String type.
+ * Class for filtering attributes with {@link String} type.
+ * It can be added to a criteria class as a member, to support the following query parameters:
+ * <code>
+ *      fieldName.equals='something'
+ *      fieldName.specified=true
+ *      fieldName.specified=false
+ *      fieldName.in='something','other'
+ *      fieldName.contains='thing'
+ * </code>
  */
 public class StringFilter extends Filter<String> {
 

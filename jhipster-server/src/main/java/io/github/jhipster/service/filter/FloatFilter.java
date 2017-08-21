@@ -16,16 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.jhipster.service.filter;
 
 /**
- * Filter class for {@link Integer} type attributes.
+ * Filter class for {@link Float} type attributes.
  * @see RangeFilter
  */
-public class IntegerFilter extends RangeFilter<Integer> {
+public class FloatFilter extends RangeFilter<Float> {
 
-    public IntegerFilter() {
+    public FloatFilter() {
     }
 
 }

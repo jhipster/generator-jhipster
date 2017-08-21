@@ -27,6 +27,7 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 /**
  * Filter class for {@link ZonedDateTime} type attributes.
+ * @see RangeFilter
  */
 public class ZonedDateTimeFilter extends RangeFilter<ZonedDateTime> {
 

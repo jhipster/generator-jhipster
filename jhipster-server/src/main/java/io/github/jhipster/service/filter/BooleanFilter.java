@@ -16,16 +16,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.jhipster.service.filter;
 
 /**
- * Filter class for {@link Integer} type attributes.
- * @see RangeFilter
+ * Class for filtering attributes with {@link Boolean} type.
+ * It can be added to a criteria class as a member, to support the following query parameters:
+ * <pre>
+ *      fieldName.equals=true 
+ *      fieldName.specified=true
+ *      fieldName.specified=false
+ *      fieldName.in=true,false
+ * </pre>
  */
-public class IntegerFilter extends RangeFilter<Integer> {
+public class BooleanFilter extends Filter<Boolean> {
 
-    public IntegerFilter() {
+    public BooleanFilter() {
     }
 
 }
