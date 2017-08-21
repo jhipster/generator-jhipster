@@ -27,6 +27,7 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 /**
  * Filter class for {@link LocalDate} type attributes.
+ *
  * @see RangeFilter
  */
 public class LocalDateFilter extends RangeFilter<LocalDate> {

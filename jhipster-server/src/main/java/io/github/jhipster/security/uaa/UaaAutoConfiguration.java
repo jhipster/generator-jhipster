@@ -19,13 +19,14 @@
 
 package io.github.jhipster.security.uaa;
 
-import io.github.jhipster.config.JHipsterProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
+
+import io.github.jhipster.config.JHipsterProperties;
 
 @Configuration
 @ConditionalOnClass({ ClientCredentialsResourceDetails.class, LoadBalancerClient.class })

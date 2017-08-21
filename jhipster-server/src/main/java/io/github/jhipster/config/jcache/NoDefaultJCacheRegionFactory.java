@@ -26,8 +26,8 @@ import org.hibernate.cache.jcache.JCacheRegionFactory;
 import org.hibernate.cache.spi.CacheDataDescription;
 
 /**
- * Extends the default {@code JCacheRegionFactory} but makes sure all caches are already existing to prevent
- * spontaneous creation of badly configured caches (e.g. {@code new MutableConfiguration()}.
+ * Extends the default {@code JCacheRegionFactory} but makes sure all caches are already existing to prevent spontaneous
+ * creation of badly configured caches (e.g. {@code new MutableConfiguration()}.
  */
 public class NoDefaultJCacheRegionFactory extends JCacheRegionFactory {
 

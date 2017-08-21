@@ -28,9 +28,7 @@ import org.springframework.web.cors.CorsConfiguration;
 /**
  * Properties specific to JHipster.
  *
- * <p>
- * Properties are configured in the application.yml file.
- * </p>
+ * <p> Properties are configured in the application.yml file. </p>
  */
 @ConfigurationProperties(prefix = "jhipster", ignoreUnknownFields = false)
 public class JHipsterProperties {

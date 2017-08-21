@@ -19,10 +19,6 @@
 
 package io.github.jhipster.config.apidoc;
 
-
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-
 import static springfox.documentation.builders.PathSelectors.regex;
 
 import java.util.ArrayList;
@@ -41,9 +37,7 @@ import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.config.JHipsterProperties;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.schema.TypeNameExtractor;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
-import springfox.documentation.service.VendorExtension;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -51,9 +45,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 /**
  * Springfox Swagger configuration.
  *
- * Warning! When having a lot of REST endpoints, Springfox can become a performance issue. In that
- * case, you can use a specific Spring profile for this class, so that only front-end developers
- * have access to the Swagger view.
+ * Warning! When having a lot of REST endpoints, Springfox can become a performance issue. In that case, you can use a
+ * specific Spring profile for this class, so that only front-end developers have access to the Swagger view.
  */
 @Configuration
 @ConditionalOnClass({ ApiInfo.class, BeanValidatorPluginsConfiguration.class })
@@ -110,10 +103,9 @@ public class SwaggerConfiguration {
     /**
      * Springfox configuration for the management endpoints (actuator) Swagger docs.
      *
-     * @param appName the application name
+     * @param appName               the application name
      * @param managementContextPath the path to access management endpoints
-     * @param appVersion the application version
-     *
+     * @param appVersion            the application version
      * @return the Swagger Springfox configuration
      */
     @Bean
@@ -121,8 +113,8 @@ public class SwaggerConfiguration {
         @Value("${management.context-path}") String managementContextPath,
         @Value("${info.project.version}") String appVersion) {
         return new Docket(DocumentationType.SWAGGER_2)
-            .apiInfo(new ApiInfo(appName + " management API","Management endpoints documentation",
-                appVersion,"",ApiInfo.DEFAULT_CONTACT,"","", new ArrayList<VendorExtension>()))
+            .apiInfo(new ApiInfo(appName + " management API", "Management endpoints documentation",
+                appVersion, "", ApiInfo.DEFAULT_CONTACT, "", "", new ArrayList<VendorExtension>()))
             .groupName("management")
             .forCodeGeneration(true)
             .directModelSubstitute(java.nio.ByteBuffer.class, String.class)

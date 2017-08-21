@@ -19,14 +19,14 @@
 
 package io.github.jhipster.security.uaa;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
-
-import java.net.URI;
-import java.net.URISyntaxException;
 
 @ConditionalOnMissingBean
 public class LoadBalancedResourceDetails extends ClientCredentialsResourceDetails {

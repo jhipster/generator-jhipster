@@ -22,8 +22,8 @@ package io.github.jhipster.service.filter;
 import java.util.List;
 
 /**
- * Base class for the various attribute filters.
- * It can be added to a criteria class as a member, to support the following query parameters:
+ * Base class for the various attribute filters. It can be added to a criteria class as a member, to support the
+ * following query parameters:
  * <pre>
  *      fieldName.equals='something'
  *      fieldName.specified=true

@@ -19,9 +19,7 @@
 
 package io.github.jhipster.config.metrics;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.MarkerFactory;
+import org.slf4j.*;
 import org.springframework.boot.actuate.metrics.Metric;
 import org.springframework.boot.actuate.metrics.writer.Delta;
 import org.springframework.boot.actuate.metrics.writer.MetricWriter;
@@ -66,13 +64,15 @@ public class SpectatorLogMetricWriter implements MetricWriter {
             }
         }
 
-        log.info(MarkerFactory.getMarker("metrics"),"type=GAUGE, hystrix_type={}, service={}, method={}, name={}, value={}", hystrixType, serviceName,
+        log.info(MarkerFactory.getMarker("metrics"), "type=GAUGE, hystrix_type={}, service={}, method={}, name={}, " +
+                "value={}", hystrixType, serviceName,
             methodName, metricName, metric.getValue());
     }
 
     @Override
     public void increment(Delta<?> metric) {
-        log.info(MarkerFactory.getMarker("metrics"),"type=COUNTER, name={}, count={}", metric.getName(), metric.getValue());
+        log.info(MarkerFactory.getMarker("metrics"), "type=COUNTER, name={}, count={}", metric.getName(), metric
+            .getValue());
     }
 
     @Override

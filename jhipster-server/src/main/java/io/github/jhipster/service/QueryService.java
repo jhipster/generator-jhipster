@@ -20,7 +20,6 @@
 package io.github.jhipster.service;
 
 import java.util.Collection;
-
 import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;
@@ -29,9 +28,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.RangeFilter;
-import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.*;
 
 /**
  * Base service for constructing and executing complex queries.
@@ -42,14 +39,16 @@ import io.github.jhipster.service.filter.StringFilter;
 public abstract class QueryService<ENTITY> {
 
     /**
-     * Helper function to return a specification for filtering on a single
-     * field, where equality, and null/non-null conditions are supported.
+     * Helper function to return a specification for filtering on a single field, where equality, and null/non-null
+     * conditions are supported.
+     *
      * @param filter the individual attribute filter coming from the frontend.
-     * @param field the JPA static metamodel representing the field.
+     * @param field  the JPA static metamodel representing the field.
+     * @param <X>    The type of the attribute which is filtered.
      * @return a Specification
-     * @param <X> The type of the attribute which is filtered.
      */
-    protected <X> Specification<ENTITY> buildSpecification(Filter<X> filter, SingularAttribute<? super ENTITY, X> field) {
+    protected <X> Specification<ENTITY> buildSpecification(Filter<X> filter, SingularAttribute<? super ENTITY, X>
+        field) {
         if (filter.getEquals() != null) {
             return equalsSpecification(field, filter.getEquals());
         } else if (filter.getIn() != null) {
@@ -61,14 +60,15 @@ public abstract class QueryService<ENTITY> {
     }
 
     /**
-     * Helper function to return a specification for filtering on a
-     * {@link String} field, where equality, containment, and null/non-null
-     * conditions are supported.
+     * Helper function to return a specification for filtering on a {@link String} field, where equality, containment,
+     * and null/non-null conditions are supported.
+     *
      * @param filter the individual attribute filter coming from the frontend.
-     * @param field the JPA static metamodel representing the field.
+     * @param field  the JPA static metamodel representing the field.
      * @return a Specification
      */
-    protected Specification<ENTITY> buildStringSpecification(StringFilter filter, SingularAttribute<? super ENTITY, String> field) {
+    protected Specification<ENTITY> buildStringSpecification(StringFilter filter, SingularAttribute<? super ENTITY,
+        String> field) {
         if (filter.getEquals() != null) {
             return equalsSpecification(field, filter.getEquals());
         } else if (filter.getIn() != null) {
@@ -82,17 +82,17 @@ public abstract class QueryService<ENTITY> {
     }
 
     /**
-     * Helper function to return a specification for filtering on a single
-     * {@link Comparable}, where equality, less than, greater than and
-     * less-than-or-equal-to and greater-than-or-equal-to and null/non-null
-     * conditions are supported.
+     * Helper function to return a specification for filtering on a single {@link Comparable}, where equality, less
+     * than, greater than and less-than-or-equal-to and greater-than-or-equal-to and null/non-null conditions are
+     * supported.
+     *
      * @param filter the individual attribute filter coming from the frontend.
-     * @param field the JPA static metamodel representing the field.
+     * @param field  the JPA static metamodel representing the field.
+     * @param <X>    The type of the attribute which is filtered.
      * @return a Specification
-     * @param <X> The type of the attribute which is filtered.
      */
     protected <X extends Comparable<? super X>> Specification<ENTITY> buildRangeSpecification(RangeFilter<X> filter,
-            SingularAttribute<? super ENTITY, X> field) {
+        SingularAttribute<? super ENTITY, X> field) {
         if (filter.getEquals() != null) {
             return equalsSpecification(field, filter.getEquals());
         } else if (filter.getIn() != null) {
@@ -119,21 +119,26 @@ public abstract class QueryService<ENTITY> {
     }
 
     /**
-     * Helper function to return a specification for filtering on one-to-one or many-to-one reference.
-     * Usage:
+     * Helper function to return a specification for filtering on one-to-one or many-to-one reference. Usage:
      * <pre>
-     *   Specification&lt;Employee&gt; specByProjectId = buildReferringEntitySpecification(criteria.getProjectId(), Employee_.project, Project_.id);
-     *   Specification&lt;Employee&gt; specByProjectName = buildReferringEntitySpecification(criteria.getProjectName(), Employee_.project, Project_.name);
+     *   Specification&lt;Employee&gt; specByProjectId = buildReferringEntitySpecification(criteria.getProjectId(),
+     * Employee_.project, Project_.id);
+     *   Specification&lt;Employee&gt; specByProjectName = buildReferringEntitySpecification(criteria.getProjectName(),
+     * Employee_.project, Project_.name);
      * </pre>
-     * @param filter the filter object which contains a value, which needs to match or a flag if nullness is checked.
-     * @param reference the attribute of the static metamodel for the referring entity.
-     * @param valueField the attribute of the static metamodel of the referred entity, where the equality should be checked.
+     *
+     * @param filter     the filter object which contains a value, which needs to match or a flag if nullness is
+     *                   checked.
+     * @param reference  the attribute of the static metamodel for the referring entity.
+     * @param valueField the attribute of the static metamodel of the referred entity, where the equality should be
+     *                   checked.
+     * @param <OTHER>    The type of the referenced entity
+     * @param <X>        The type of the attribute which is filtered.
      * @return a Specification
-     * @param <OTHER> The type of the referenced entity
-     * @param <X> The type of the attribute which is filtered.
      */
-    protected <OTHER, X> Specification<ENTITY> buildReferringEntitySpecification(Filter<X> filter, SingularAttribute<? super ENTITY, OTHER> reference,
-            SingularAttribute<OTHER, X> valueField) {
+    protected <OTHER, X> Specification<ENTITY> buildReferringEntitySpecification(Filter<X> filter,
+        SingularAttribute<? super ENTITY, OTHER> reference,
+        SingularAttribute<OTHER, X> valueField) {
         if (filter.getEquals() != null) {
             return equalsSpecification(reference, valueField, filter.getEquals());
         } else if (filter.getSpecified() != null) {
@@ -143,19 +148,24 @@ public abstract class QueryService<ENTITY> {
     }
 
     /**
-     * Helper function to return a specification for filtering on one-to-many or many-to-many reference.
-     * Usage:
+     * Helper function to return a specification for filtering on one-to-many or many-to-many reference. Usage:
      * <pre>
-     *   Specification&lt;Employee&gt; specByEmployeeId = buildReferringEntitySpecification(criteria.getEmployeId(), Project_.employees, Employee_.id);
-     *   Specification&lt;Employee&gt; specByEmployeeName = buildReferringEntitySpecification(criteria.getEmployeName(), Project_.project, Project_.name);
+     *   Specification&lt;Employee&gt; specByEmployeeId = buildReferringEntitySpecification(criteria.getEmployeId(),
+     * Project_.employees, Employee_.id);
+     *   Specification&lt;Employee&gt; specByEmployeeName = buildReferringEntitySpecification(criteria.getEmployeName(),
+     * Project_.project, Project_.name);
      * </pre>
-     * @param filter the filter object which contains a value, which needs to match or a flag if emptiness is checked.
-     * @param reference the attribute of the static metamodel for the referring entity.
-     * @param valueField the attribute of the static metamodel of the referred entity, where the equality should be checked.
+     *
+     * @param filter     the filter object which contains a value, which needs to match or a flag if emptiness is
+     *                   checked.
+     * @param reference  the attribute of the static metamodel for the referring entity.
+     * @param valueField the attribute of the static metamodel of the referred entity, where the equality should be
+     *                   checked.
      * @return a Specification
      */
-    protected <OTHER, X> Specification<ENTITY> buildReferringEntitySpecification(Filter<X> filter, SetAttribute<ENTITY, OTHER> reference,
-            SingularAttribute<OTHER, X> valueField) {
+    protected <OTHER, X> Specification<ENTITY> buildReferringEntitySpecification(Filter<X> filter,
+        SetAttribute<ENTITY, OTHER> reference,
+        SingularAttribute<OTHER, X> valueField) {
         if (filter.getEquals() != null) {
             return equalsSetSpecification(reference, valueField, filter.getEquals());
         } else if (filter.getSpecified() != null) {
@@ -168,29 +178,37 @@ public abstract class QueryService<ENTITY> {
         return (root, query, builder) -> builder.equal(root.get(field), value);
     }
 
-    protected <OTHER, X> Specification<ENTITY> equalsSpecification(SingularAttribute<? super ENTITY, OTHER> reference, SingularAttribute<OTHER, X> idField,
-            X value) {
+    protected <OTHER, X> Specification<ENTITY> equalsSpecification(SingularAttribute<? super ENTITY, OTHER>
+        reference, SingularAttribute<OTHER, X> idField,
+        X value) {
         return (root, query, builder) -> builder.equal(root.get(reference).get(idField), value);
     }
 
-    protected <OTHER, X> Specification<ENTITY> equalsSetSpecification(SetAttribute<? super ENTITY, OTHER> reference, SingularAttribute<OTHER, X> idField,
-            X value) {
+    protected <OTHER, X> Specification<ENTITY> equalsSetSpecification(SetAttribute<? super ENTITY, OTHER> reference,
+        SingularAttribute<OTHER, X> idField,
+        X value) {
         return (root, query, builder) -> builder.equal(root.join(reference).get(idField), value);
     }
-    protected Specification<ENTITY> likeUpperSpecification(SingularAttribute<? super ENTITY, String> field, final String value) {
+
+    protected Specification<ENTITY> likeUpperSpecification(SingularAttribute<? super ENTITY, String> field, final
+    String value) {
         return (root, query, builder) -> builder.like(builder.upper(root.get(field)), wrapLikeQuery(value));
     }
 
-    protected <X> Specification<ENTITY> byFieldSpecified(SingularAttribute<? super ENTITY, X> field, final boolean specified) {
-        return specified ? (root, query, builder) -> builder.isNotNull(root.get(field)) : (root, query, builder) -> builder.isNull(root.get(field));
+    protected <X> Specification<ENTITY> byFieldSpecified(SingularAttribute<? super ENTITY, X> field, final boolean
+        specified) {
+        return specified ? (root, query, builder) -> builder.isNotNull(root.get(field)) : (root, query, builder) ->
+            builder.isNull(root.get(field));
     }
 
     protected <X> Specification<ENTITY> byFieldSpecified(SetAttribute<ENTITY, X> field, final boolean specified) {
-        return specified ? (root, query, builder) -> builder.isNotEmpty(root.get(field)) : (root, query, builder) -> builder.isEmpty(root.get(field));
+        return specified ? (root, query, builder) -> builder.isNotEmpty(root.get(field)) : (root, query, builder) ->
+            builder.isEmpty(root.get(field));
     }
 
-    protected <X> Specification<ENTITY> valueIn(SingularAttribute<? super ENTITY, X> field, final Collection<X> values) {
-        return (root, query, builder) -> { 
+    protected <X> Specification<ENTITY> valueIn(SingularAttribute<? super ENTITY, X> field, final Collection<X>
+        values) {
+        return (root, query, builder) -> {
             In<X> in = builder.in(root.get(field));
             for (X value : values) {
                 in = in.value(value);
@@ -199,19 +217,23 @@ public abstract class QueryService<ENTITY> {
         };
     }
 
-    protected <X extends Comparable<? super X>> Specification<ENTITY> greaterThanOrEqualTo(SingularAttribute<? super ENTITY, X> field, final X value) {
+    protected <X extends Comparable<? super X>> Specification<ENTITY> greaterThanOrEqualTo(SingularAttribute<? super
+        ENTITY, X> field, final X value) {
         return (root, query, builder) -> builder.greaterThanOrEqualTo(root.get(field), value);
     }
 
-    protected <X extends Comparable<? super X>> Specification<ENTITY> greaterThan(SingularAttribute<? super ENTITY, X> field, final X value) {
+    protected <X extends Comparable<? super X>> Specification<ENTITY> greaterThan(SingularAttribute<? super ENTITY,
+        X> field, final X value) {
         return (root, query, builder) -> builder.greaterThan(root.get(field), value);
     }
 
-    protected <X extends Comparable<? super X>> Specification<ENTITY> lessThanOrEqualTo(SingularAttribute<? super ENTITY, X> field, final X value) {
+    protected <X extends Comparable<? super X>> Specification<ENTITY> lessThanOrEqualTo(SingularAttribute<? super
+        ENTITY, X> field, final X value) {
         return (root, query, builder) -> builder.lessThanOrEqualTo(root.get(field), value);
     }
 
-    protected <X extends Comparable<? super X>> Specification<ENTITY> lessThan(SingularAttribute<? super ENTITY, X> field, final X value) {
+    protected <X extends Comparable<? super X>> Specification<ENTITY> lessThan(SingularAttribute<? super ENTITY, X>
+        field, final X value) {
         return (root, query, builder) -> builder.lessThan(root.get(field), value);
     }
 

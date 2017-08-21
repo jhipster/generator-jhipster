@@ -30,8 +30,8 @@ import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.util.WebUtils;
 
 /**
- * Angular cookie saved the locale with a double quote (%22en%22).
- * So the default CookieLocaleResolver#StringUtils.parseLocaleString(localePart)
+ * Angular cookie saved the locale with a double quote (%22en%22). So the default CookieLocaleResolver#StringUtils
+ * .parseLocaleString(localePart)
  * is not able to parse the locale.
  *
  * This class will check if a double quote has been added, if so it will remove it.

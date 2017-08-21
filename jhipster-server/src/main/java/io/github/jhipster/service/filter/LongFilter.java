@@ -21,6 +21,7 @@ package io.github.jhipster.service.filter;
 
 /**
  * Filter class for {@link Long} type attributes.
+ *
  * @see RangeFilter
  */
 public class LongFilter extends RangeFilter<Long> {

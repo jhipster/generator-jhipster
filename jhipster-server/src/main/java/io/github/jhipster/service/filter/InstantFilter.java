@@ -26,6 +26,7 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 /**
  * Filter class for {@link Instant} type attributes.
+ *
  * @see RangeFilter
  */
 public class InstantFilter extends RangeFilter<Instant> {
