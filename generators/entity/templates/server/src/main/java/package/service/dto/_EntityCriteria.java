@@ -1,15 +1,18 @@
 package <%= packageName %>.service.dto;
 
-import java.io.Serializable;<% if (fieldsContainBigDecimal === true) { %>
-import java.math.BigDecimal;<% } %>
+import java.io.Serializable;
 <%_ for (idx in fields) { if (fields[idx].fieldIsEnum === true) { _%>
 import <%= packageName %>.domain.enumeration.<%= fields[idx].fieldType %>;
 <%_ } } _%>
+import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-import io.github.jhipster.service.filter.RangeFilter;
+<%_ if (fieldsContainBigDecimal === true) { _%>
+import io.github.jhipster.service.filter.BigDecimalFilter;<% } %>
 <%_ if (fieldsContainInstant === true) { _%>
 import io.github.jhipster.service.filter.InstantFilter;<% } %>
 <%_ if (fieldsContainLocalDate === true) { _%>
@@ -28,10 +31,8 @@ import io.github.jhipster.service.filter.ZonedDateTimeFilter;<% } %>
       if (field.fieldIsEnum == true) {
         filterType = fieldType + 'Filter';
         extraFilters[fieldType] = {type : filterType, superType: 'Filter<' + fieldType + '>', fieldType:fieldType};
-      } else if (['LocalDate', 'ZonedDateTime', 'Instant', 'String', 'Long', 'Integer'].includes(fieldType)) {
+      } else if (['LocalDate', 'ZonedDateTime', 'Instant', 'String', 'Long', 'Integer', 'Float', 'Double', 'BigDecimal', 'Boolean'].includes(fieldType)) {
         filterType = fieldType + 'Filter';
-      } else if (['Float', 'Double', 'BigDecimal'].includes(fieldType)) {
-        filterType = 'RangeFilter<' + fieldType + '>';
       } else {
         filterType = 'Filter<' + fieldType + '>';
       }
