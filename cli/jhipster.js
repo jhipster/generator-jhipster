@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+const program = require('commander');
 const semver = require('semver');
 const packageJson = require('../package.json');
 const logger = require('./utils').logger;
@@ -35,21 +35,31 @@ if (!semver.satisfies(currentNodeVersion, minimumNodeVersion)) {
     process.exit(1);
 }
 
-let preferGlobal = false;
-if (process.argv.length >= 3) {
-    if (process.argv[2] === 'upgrade') {
-        // Prefer global version for `jhipster upgrade` to get most recent code
-        preferGlobal = true;
-    }
-}
-requireCLI(preferGlobal);
+let preferLocal = true;
+
+program.command('upgrade')
+    .allowUnknownOption()
+    .option('-l, --prefer-local', 'Always resolve node modules locally (useful when using linked module)')
+    .action((options) => {
+        if (options.preferLocal === undefined) {
+            // Prefer global version for `jhipster upgrade` to get most recent code
+            preferLocal = false;
+        }
+    });
+
+// Default case
+program.allowUnknownOption();
+
+program.parse(process.argv);
+
+requireCLI(preferLocal);
 
 /*
  * Require cli.js giving priority to local version over global one if it exists.
  */
-function requireCLI(preferGlobal) {
+function requireCLI(preferLocal) {
     /* eslint-disable global-require */
-    if (!preferGlobal) {
+    if (preferLocal) {
         try {
             const localCLI = require.resolve(path.join(process.cwd(), 'node_modules', 'generator-jhipster', 'cli', 'cli.js'));
             if (__dirname !== path.dirname(localCLI)) {

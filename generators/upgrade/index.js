@@ -53,26 +53,28 @@ module.exports = UpgradeGenerator.extend({
             this.clientPackageManager = this.config.get('clientPackageManager');
             this.clientFramework = this.config.get('clientFramework');
             this.skipInstall = this.options['skip-install'];
-            this.silent = !this.options.verbose;
+            this.silent = this.options.silent;
             this.targetVersion = this.options['target-version'];
         }
     },
 
     _gitCheckout(branch, callback) {
-        this.gitExec(['checkout', '-q', branch], (code, msg, err) => {
+        this.gitExec(['checkout', '-q', branch], { silent: this.silent }, (code, msg, err) => {
             if (code !== 0) this.error(`Unable to checkout branch ${branch}:\n${err}`);
-            this.log(`Checked out branch "${branch}"`);
+            this.success(`Checked out branch "${branch}"`);
             callback();
         });
     },
 
     _cleanUp() {
+        const filesToKeep = ['.yo-rc.json', '.jhipster', 'node_modules', '.git', '.idea', '.mvn'];
         shelljs.ls('-A').forEach((file) => {
-            if (['.yo-rc.json', '.jhipster', 'node_modules', '.git', '.idea'].indexOf(file) === -1) {
+            if (filesToKeep.indexOf(file) === -1) {
+                this.info(`Removing ${file}`);
                 shelljs.rm('-rf', file);
             }
         });
-        this.log('Cleaned up directory');
+        this.success('Cleaned up project directory');
     },
 
     _generate(version, callback) {
@@ -82,8 +84,10 @@ module.exports = UpgradeGenerator.extend({
             const generatorDir = this.clientPackageManager === 'yarn' ? shelljs.exec('yarn bin', { silent: this.silent }).stdout : shelljs.exec('npm bin', { silent: this.silent }).stdout;
             generatorCommand = `${generatorDir.replace('\n', '')}/jhipster`;
         }
-        shelljs.exec(`${generatorCommand} --with-entities --force --skip-install`, { silent: this.silent }, (code, msg, err) => {
-            if (code === 0) this.log(chalk.green(`Successfully regenerated application with JHipster ${version}`));
+        const regenerateCmd = `${generatorCommand} --with-entities --force --skip-install`;
+        this.info(regenerateCmd);
+        shelljs.exec(regenerateCmd, { silent: this.silent }, (code, msg, err) => {
+            if (code === 0) this.success(`Successfully regenerated application with JHipster ${version}`);
             else this.error(`Something went wrong while generating project! ${err}`);
             callback();
         });
@@ -91,13 +95,13 @@ module.exports = UpgradeGenerator.extend({
 
     _gitCommitAll(commitMsg, callback) {
         const commit = () => {
-            this.gitExec(['commit', '-q', '-m', `"${commitMsg}"`, '-a', '--allow-empty'], (code, msg, err) => {
+            this.gitExec(['commit', '-q', '-m', `"${commitMsg}"`, '-a', '--allow-empty'], { silent: this.silent }, (code, msg, err) => {
                 if (code !== 0) this.error(`Unable to commit in git:\n${err}`);
-                this.log(`Committed with message "${commitMsg}"`);
+                this.success(`Committed with message "${commitMsg}"`);
                 callback();
             });
         };
-        this.gitExec(['add', '-A'], { maxBuffer: 1024 * 10000 }, (code, msg, err) => {
+        this.gitExec(['add', '-A'], { maxBuffer: 1024 * 10000, silent: this.silent }, (code, msg, err) => {
             if (code !== 0) this.error(`Unable to add resources in git:\n${err}`);
             commit();
         });
@@ -106,12 +110,15 @@ module.exports = UpgradeGenerator.extend({
     _regenerate(version, callback) {
         this._generate(version, () => {
             if (this.clientFramework === 'angular1' && version === this.latestVersion) {
+                this.info('bower install');
                 const result = this.spawnCommandSync('bower', ['install']);
                 if (result.status !== 0) {
                     this.error('bower install failed.');
                 }
             }
-            shelljs.rm('-Rf', `${SERVER_MAIN_RES_DIR}keystore.jks`);
+            const keystore = `${SERVER_MAIN_RES_DIR}keystore.jks`;
+            this.info(`Removing ${keystore}`);
+            shelljs.rm('-Rf', keystore);
             this._gitCommitAll(`Generated with JHipster ${version}`, () => {
                 callback();
             });
@@ -143,7 +150,7 @@ module.exports = UpgradeGenerator.extend({
                 }
                 this.latestVersion = this.clientPackageManager === 'yarn' ? msg.split('\n')[1] : msg.replace('\n', '');
                 if (semver.lt(this.currentVersion, this.latestVersion)) {
-                    this.log(chalk.green(`New ${GENERATOR_JHIPSTER} version found: ${this.latestVersion}`));
+                    this.success(`New ${GENERATOR_JHIPSTER} version found: ${this.latestVersion}`);
                 } else if (this.force) {
                     this.log(chalk.yellow('Forced re-generation'));
                 } else {
@@ -156,18 +163,18 @@ module.exports = UpgradeGenerator.extend({
         assertGitRepository() {
             const done = this.async();
             const gitInit = () => {
-                this.gitExec('init', (code, msg, err) => {
+                this.gitExec('init', { silent: this.silent }, (code, msg, err) => {
                     if (code !== 0) this.error(`Unable to initialize a new Git repository:\n${msg} ${err}`);
-                    this.log('Initialized a new Git repository');
+                    this.success('Initialized a new Git repository');
                     this._gitCommitAll('Initial', () => {
                         done();
                     });
                 });
             };
-            this.gitExec(['rev-parse', '-q', '--is-inside-work-tree'], (code, msg, err) => {
+            this.gitExec(['rev-parse', '-q', '--is-inside-work-tree'], { silent: this.silent }, (code, msg, err) => {
                 if (code !== 0) gitInit();
                 else {
-                    this.log('Git repository detected');
+                    this.success('Git repository detected');
                     done();
                 }
             });
@@ -175,7 +182,7 @@ module.exports = UpgradeGenerator.extend({
 
         assertNoLocalChanges() {
             const done = this.async();
-            this.gitExec(['status', '--porcelain'], (code, msg, err) => {
+            this.gitExec(['status', '--porcelain'], { silent: this.silent }, (code, msg, err) => {
                 if (code !== 0) this.error(`Unable to check for local changes:\n${msg} ${err}`);
                 if (msg) {
                     this.warning(' local changes found.\n' +
@@ -188,7 +195,7 @@ module.exports = UpgradeGenerator.extend({
 
         detectCurrentBranch() {
             const done = this.async();
-            this.gitExec(['rev-parse', '-q', '--abbrev-ref', 'HEAD'], (code, msg, err) => {
+            this.gitExec(['rev-parse', '-q', '--abbrev-ref', 'HEAD'], { silent: this.silent }, (code, msg, err) => {
                 if (code !== 0) this.error(`Unable to detect current Git branch:\n${msg} ${err}`);
                 this.sourceBranch = msg.replace('\n', '');
                 done();
@@ -198,7 +205,7 @@ module.exports = UpgradeGenerator.extend({
         prepareUpgradeBranch() {
             const done = this.async();
             const getGitVersion = (callback) => {
-                this.gitExec(['--version'], (code, msg) => {
+                this.gitExec(['--version'], { silent: this.silent }, (code, msg) => {
                     callback(String(msg.match(/([0-9]+\.[0-9]+\.[0-9]+)/g)));
                 });
             };
@@ -211,12 +218,12 @@ module.exports = UpgradeGenerator.extend({
                     } else {
                         args = ['merge', '--strategy=ours', '-q', '--no-edit', '--allow-unrelated-histories', UPGRADE_BRANCH];
                     }
-                    this.gitExec(args, (code, msg, err) => {
+                    this.gitExec(args, { silent: this.silent }, (code, msg, err) => {
                         if (code !== 0) {
                             this.error(`Unable to record current code has been generated with version ${
                                 this.currentVersion}:\n${msg} ${err}`);
                         }
-                        this.log(`Current code has been generated with version ${this.currentVersion}`);
+                        this.success(`Current code has been generated with version ${this.currentVersion}`);
                         done();
                     });
                 });
@@ -225,8 +232,10 @@ module.exports = UpgradeGenerator.extend({
             const installJhipsterLocally = (version, callback) => {
                 this.log(`Installing JHipster ${version} locally`);
                 const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn add' : 'npm install';
-                shelljs.exec(`${commandPrefix} ${GENERATOR_JHIPSTER}@${version} --dev --no-lockfile --ignore-scripts`, { silent: this.silent }, (code, msg, err) => {
-                    if (code === 0) this.log(chalk.green(`Installed ${GENERATOR_JHIPSTER}@${version}`));
+                const generatorCommand = `${commandPrefix} ${GENERATOR_JHIPSTER}@${version} --dev --no-lockfile --ignore-scripts`;
+                this.info(generatorCommand);
+                shelljs.exec(generatorCommand, { silent: this.silent }, (code, msg, err) => {
+                    if (code === 0) this.success(`Installed ${GENERATOR_JHIPSTER}@${version}`);
                     else this.error(`Something went wrong while installing the JHipster generator! ${msg} ${err}`);
                     callback();
                 });
@@ -245,14 +254,14 @@ module.exports = UpgradeGenerator.extend({
             };
 
             const createUpgradeBranch = () => {
-                this.gitExec(['checkout', '--orphan', UPGRADE_BRANCH], (code, msg, err) => {
+                this.gitExec(['checkout', '--orphan', UPGRADE_BRANCH], { silent: this.silent }, (code, msg, err) => {
                     if (code !== 0) this.error(`Unable to create ${UPGRADE_BRANCH} branch:\n${msg} ${err}`);
-                    this.log(`Created branch ${UPGRADE_BRANCH}`);
+                    this.success(`Created branch ${UPGRADE_BRANCH}`);
                     regenerate();
                 });
             };
 
-            this.gitExec(['rev-parse', '-q', '--verify', UPGRADE_BRANCH], (code, msg, err) => {
+            this.gitExec(['rev-parse', '-q', '--verify', UPGRADE_BRANCH], { silent: this.silent }, (code, msg, err) => {
                 if (code !== 0) createUpgradeBranch();
                 else done();
             });
@@ -274,8 +283,10 @@ module.exports = UpgradeGenerator.extend({
             this.log(chalk.yellow(`Updating ${GENERATOR_JHIPSTER} to ${this.latestVersion} . This might take some time...`));
             const done = this.async();
             const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn add' : 'npm install';
-            shelljs.exec(`${commandPrefix} ${GENERATOR_JHIPSTER}@${this.latestVersion} --dev --no-lockfile --ignore-scripts`, { silent: this.silent }, (code, msg, err) => {
-                if (code === 0) this.log(chalk.green(`Updated ${GENERATOR_JHIPSTER} to version ${this.latestVersion}`));
+            const generatorCommand = `${commandPrefix} ${GENERATOR_JHIPSTER}@${this.latestVersion} --dev --no-lockfile --ignore-scripts`;
+            this.info(generatorCommand);
+            shelljs.exec(generatorCommand, { silent: this.silent }, (code, msg, err) => {
+                if (code === 0) this.success(`Updated ${GENERATOR_JHIPSTER} to version ${this.latestVersion}`);
                 else this.error(`Something went wrong while updating JHipster! ${msg} ${err}`);
                 done();
             });
@@ -295,24 +306,40 @@ module.exports = UpgradeGenerator.extend({
         mergeChangesBack() {
             this.log(`Merging changes back to ${this.sourceBranch}...`);
             const done = this.async();
-            this.gitExec(['merge', '-q', UPGRADE_BRANCH], (code, msg, err) => {
-                this.log(chalk.green('Merge done!'));
+            this.gitExec(['merge', '-q', UPGRADE_BRANCH], { silent: this.silent }, (code, msg, err) => {
+                this.success('Merge done!');
                 done();
             });
         }
     },
 
+    checkConflictsInPackageJson() {
+        const done = this.async();
+        this.gitExec(['diff', '--name-only', '--diff-filter=U', 'package.json'], { silent: this.silent }, (code, msg, err) => {
+            if (code !== 0) this.error(`Unable to check for conflicts in package.json:\n${msg} ${err}`);
+            if (msg) {
+                const installCommand = this.clientPackageManager === 'yarn' ? 'yarn' : 'npm install';
+                this.warning(`There are conflicts in package.json, please fix them and then run ${installCommand}`);
+                this.skipInstall = true;
+            }
+            done();
+        });
+    },
+
     install() {
         const done = this.async();
         if (!this.skipInstall) {
-            shelljs.rm('-rf', 'node_modules');
             this.log('Installing dependencies, please wait...');
+            this.info('Removing the node_modules directory');
+            shelljs.rm('-rf', 'node_modules');
             const installCommand = this.clientPackageManager === 'yarn' ? 'yarn' : 'npm install';
+            this.info(installCommand);
             shelljs.exec(installCommand, { silent: this.silent }, (code, msg, err) => {
                 if (code !== 0) {
                     this.error(`${installCommand} failed.`);
                 }
                 if (this.clientFramework === 'angular1') {
+                    this.info('bower install');
                     this.spawnCommandSync('bower', ['install']);
                 }
                 done();
@@ -321,14 +348,22 @@ module.exports = UpgradeGenerator.extend({
             if (this.clientFramework !== 'angular1') {
                 const logMsg =
                     `Start your Webpack development server with:\n${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
-                this.log(chalk.green(logMsg));
+                this.success(logMsg);
             }
             done();
         }
     },
 
     end() {
-        this.log(chalk.green.bold('\nUpgraded successfully. Please now fix conflicts if any, and commit!'));
+        const done = this.async();
+        this.gitExec(['diff', '--name-only', '--diff-filter=U'], { silent: this.silent }, (code, msg, err) => {
+            if (code !== 0) this.error(`Unable to check for conflicts:\n${msg} ${err}`);
+            this.success(chalk.bold('Upgraded successfully.'));
+            if (msg) {
+                this.warning(`Please fix conflicts listed below and commit!\n${msg}`);
+            }
+            done();
+        });
     }
 
 });
