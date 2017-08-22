@@ -192,10 +192,12 @@ function askModulesToBeInstalled(done, generator) {
             }
         } catch (err) {
             generator.warning(`Error while parsing. Please install the modules manually or try again later. ${err.message}`);
+            generator.debug('Error:', err);
             done();
         }
     }, (error) => {
         generator.warning(`Unable to contact server to fetch additional modules: ${error.message}`);
+        generator.debug('Error:', error);
         done();
     });
 }

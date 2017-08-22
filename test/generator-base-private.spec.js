@@ -1,4 +1,4 @@
-/* global describe, before, it*/
+/* global describe, before, it */
 
 const expect = require('chai').expect;
 // using base generator which extends the private base

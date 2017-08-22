@@ -72,6 +72,7 @@ const files = {
             condition: generator => generator.useSass,
             path: MAIN_SRC_DIR,
             templates: [
+                'content/scss/__bootstrap-variables.scss',
                 'content/scss/_global.scss',
                 'content/scss/_vendor.scss'
             ]
@@ -505,6 +506,7 @@ const files = {
             templates: [
                 'e2e/account/_account.spec.ts',
                 'e2e/admin/_administration.spec.ts',
+                'e2e/page-objects/_jhi-page-objects.ts',
                 '_protractor.conf.js'
             ]
         }

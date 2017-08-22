@@ -79,7 +79,7 @@ node {
             <%_ if (clientPackageManager === 'yarn') { _%>
 <%= indent %>            sh "./mvnw com.github.eirslett:frontend-maven-plugin:yarn -Dfrontend.yarn.arguments=test"
             <%_ } else if (clientPackageManager === 'npm') { _%>
-<%= indent %>            sh "./mvnw com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.yarn.arguments=test"
+<%= indent %>            sh "./mvnw com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments=test"
             <%_ } _%>
         <%_ } _%>
 <%= indent %>        } catch(err) {

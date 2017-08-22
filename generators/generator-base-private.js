@@ -48,9 +48,9 @@ module.exports = class extends Generator {
         this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
     }
 
-    /*= =======================================================================*/
-    /* private methods use within generator (not exposed to modules)*/
-    /*= =======================================================================*/
+    /* ======================================================================== */
+    /* private methods use within generator (not exposed to modules) */
+    /* ======================================================================== */
 
     installI18nClientFilesByLanguage(_this, webappDir, lang) {
         const generator = _this || this;
@@ -96,6 +96,7 @@ module.exports = class extends Generator {
             this.template(`${prefix}/i18n/_entity_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${this.entityInstance}.json`);
             this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClass, language);
         } catch (e) {
+            this.debug('Error:', e);
             // An exception is thrown if the folder doesn't exist
             // do nothing
         }
@@ -105,6 +106,7 @@ module.exports = class extends Generator {
         try {
             this.template(`${prefix}/i18n/_enum.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.enumInstance}.json`, this, {}, enumInfo);
         } catch (e) {
+            this.debug('Error:', e);
             // An exception is thrown if the folder doesn't exist
             // do nothing
         }
@@ -128,6 +130,7 @@ module.exports = class extends Generator {
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
+            this.debug('Error:', e);
         }
     }
 
@@ -149,6 +152,7 @@ module.exports = class extends Generator {
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
+            this.debug('Error:', e);
         }
     }
 
@@ -173,6 +177,7 @@ module.exports = class extends Generator {
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Language pipe not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
+            this.debug('Error:', e);
         }
     }
 
@@ -194,6 +199,7 @@ module.exports = class extends Generator {
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
+            this.debug('Error:', e);
         }
     }
 
@@ -409,8 +415,11 @@ module.exports = class extends Generator {
      *
      * @param {string} value - message to print
      */
-    debug(msg) {
-        this.log(`${chalk.yellow.bold('DEBUG!')} ${msg}`);
+    debug(msg, ...args) {
+        if (this.isDebugEnabled || (this.options && this.options.debug)) {
+            this.log(`${chalk.yellow.bold('DEBUG!')} ${msg}`);
+            args.forEach(arg => this.log(arg));
+        }
     }
 
     checkJava() {
@@ -604,5 +613,50 @@ module.exports = class extends Generator {
             } return false;
         }
         return false;
+    }
+
+    /**
+     * Return the method name which converts the filter to specification
+     * @param {string} fieldType
+     */
+    getSpecificationBuilder(fieldType) {
+        if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'LocalDate', 'ZonedDateTime', 'Instant'].includes(fieldType)) {
+            return 'buildRangeSpecification';
+        }
+        if (fieldType === 'String') {
+            return 'buildStringSpecification';
+        }
+        return 'buildSpecification';
+    }
+
+    isFilterableType(fieldType) {
+        // Float, Double, BigDecimal and Boolean should work - new server library release needed
+        return !(['byte[]', 'ByteBuffer', 'Float', 'Double', 'BigDecimal', 'Boolean'].includes(fieldType));
+    }
+
+    copyFilteringFlag(from, to) {
+        if (this.databaseType === 'sql' && this.service !== 'no') {
+            to.jpaMetamodelFiltering = from.jpaMetamodelFiltering;
+        } else {
+            to.jpaMetamodelFiltering = false;
+        }
+    }
+
+    // rebuild client for Angular1
+    injectJsFilesToIndex() {
+        const done = this.async();
+        this.log(`\n${chalk.bold.green('Running `gulp inject` to add JavaScript to index.html\n')}`);
+        this.spawnCommand('gulp', ['inject:app']).on('close', () => {
+            done();
+        });
+    }
+
+    // rebuild client for Angular
+    rebuildClient() {
+        const done = this.async();
+        this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app\n')}`);
+        this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build']).on('close', () => {
+            done();
+        });
     }
 };

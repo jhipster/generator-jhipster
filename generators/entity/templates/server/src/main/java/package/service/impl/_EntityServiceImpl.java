@@ -61,7 +61,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
 public class <%= serviceClassName %> <% if (service === 'serviceImpl') { %>implements <%= entityClass %>Service<% } %>{
 
     private final Logger log = LoggerFactory.getLogger(<%= serviceClassName %>.class);
-<%- include('../../common/inject_template', {viaService: viaService, constructorName: serviceClassName}); -%>
+<%- include('../../common/inject_template', {viaService: viaService, constructorName: serviceClassName, queryService: false}); -%>
 
     /**
      * Save a <%= entityInstance %>.

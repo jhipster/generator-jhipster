@@ -69,7 +69,7 @@ export class <%= entityAngularName %>PopupService {
                             <%_ } _%>
                             <%_ if (['Instant', 'ZonedDateTime'].includes(fields[idx].fieldType)) { _%>
                     <%= entityInstance %>.<%=fields[idx].fieldName%> = this.datePipe
-                        .transform(<%= entityInstance %>.<%=fields[idx].fieldName%>, 'yyyy-MM-ddThh:mm');
+                        .transform(<%= entityInstance %>.<%=fields[idx].fieldName%>, 'yyyy-MM-ddTHH:mm:ss');
                             <%_ } _%>
                     <%_ } _%>
                     <%_ } _%>
