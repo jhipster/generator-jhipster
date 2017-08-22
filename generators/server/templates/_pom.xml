@@ -23,7 +23,7 @@
     <parent>
         <artifactId>spring-boot-starter-parent</artifactId>
         <groupId>org.springframework.boot</groupId>
-        <version>1.5.4.RELEASE</version>
+        <version>1.5.6.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -179,10 +179,10 @@
 
         <!-- Spring properties -->
         <%_ if (messageBroker === 'kafka') { _%>
-        <spring-cloud-stream.version>Chelsea.SR1</spring-cloud-stream.version>
+        <spring-cloud-stream.version>Chelsea.SR2</spring-cloud-stream.version>
         <%_ } _%>
         <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
-        <spring-cloud.version>Dalston.RELEASE</spring-cloud.version>
+        <spring-cloud.version>Dalston.SR2</spring-cloud.version>
         <%_ } _%>
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
         <spring-security-oauth.version>2.0.12.RELEASE</spring-security-oauth.version>
