@@ -227,9 +227,7 @@ dependencies {
     compile "io.dropwizard.metrics:metrics-servlet:${dropwizard_metrics_version}"
     compile "io.dropwizard.metrics:metrics-json:${dropwizard_metrics_version}"
     compile "io.dropwizard.metrics:metrics-servlets:${dropwizard_metrics_version}"
-    compile ("net.logstash.logback:logstash-logback-encoder:${logstash_logback_encoder_version}") {
-        exclude(group: 'ch.qos.logback')
-    }
+    compile "net.logstash.logback:logstash-logback-encoder:${logstash_logback_encoder_version}"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-json-org"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
