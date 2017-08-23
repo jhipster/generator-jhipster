@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 package <%=packageName%>.service;
+
 <%_ const serviceClassName = entityClass + 'QueryService';
     const instanceType = (dto === 'mapstruct') ? entityClass + 'DTO' : entityClass;
     const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
@@ -32,7 +33,6 @@ package <%=packageName%>.service;
 import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime === true) { %>
 import java.time.ZonedDateTime;<% } if (fieldsContainBigDecimal === true) { %>
 import java.math.BigDecimal;<% } %>
-
 import java.util.List;
 
 import org.slf4j.Logger;
