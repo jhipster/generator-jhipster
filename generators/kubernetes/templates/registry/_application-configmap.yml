@@ -33,6 +33,9 @@ data:
         service-url:
           # This must contain a list of all Eureka server replicas for registry HA to work correctly
           defaultZone: http://admin:${jhipster.registry.password}@jhipster-registry-0.jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/,http://admin:${jhipster.registry.password}@jhipster-registry-1.jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/
+        initial-instance-info-replication-interval-seconds: 15
+        registry-fetch-interval-seconds: 15
+        fetch-registry: true
     <%_ } _%>
     jhipster:
       security:
@@ -42,3 +45,4 @@ data:
   #application-prod.yml: |-
   #  configserver:
   #    status: Connected in prod
+
