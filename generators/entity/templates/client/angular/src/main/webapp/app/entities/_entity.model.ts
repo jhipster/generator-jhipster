@@ -83,7 +83,7 @@ import { BaseEntity<% if (hasUserRelationship) { %>, User<% } %> } from './../..
 fields.forEach(field => {
     if (field.fieldIsEnum && enumsAlreadyDeclared.indexOf(field.fieldType) === -1) {
         enumsAlreadyDeclared.push(field.fieldType); _%>
-const enum <%= field.fieldType %> {<%
+export const enum <%= field.fieldType %> {<%
         const enums = field.fieldValues.split(',');
         for (let i = 0; i < enums.length; i++) { %>
     '<%= enums[i] %>'<%if (i < enums.length - 1) { %>,<% }
