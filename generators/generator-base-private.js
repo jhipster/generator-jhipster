@@ -630,8 +630,7 @@ module.exports = class extends Generator {
     }
 
     isFilterableType(fieldType) {
-        // Float, Double, BigDecimal and Boolean should work - new server library release needed
-        return !(['byte[]', 'ByteBuffer', 'Float', 'Double', 'BigDecimal', 'Boolean'].includes(fieldType));
+        return !(['byte[]', 'ByteBuffer'].includes(fieldType));
     }
 
     copyFilteringFlag(from, to) {
