@@ -17,7 +17,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const program = require('commander');
 const semver = require('semver');
 const packageJson = require('../package.json');
 const logger = require('./utils').logger;
@@ -37,20 +36,12 @@ if (!semver.satisfies(currentNodeVersion, minimumNodeVersion)) {
 
 let preferLocal = true;
 
-program.command('upgrade')
-    .allowUnknownOption()
-    .option('-l, --prefer-local', 'Always resolve node modules locally (useful when using linked module)')
-    .action((options) => {
-        if (options.preferLocal === undefined) {
-            // Prefer global version for `jhipster upgrade` to get most recent code
-            preferLocal = false;
-        }
-    });
-
-// Default case
-program.allowUnknownOption();
-
-program.parse(process.argv);
+// Don't use commander for parsing command line to avoid polluting it in cli.js 
+// --prefer-local: Always resolve node modules locally (useful when using linked module)
+if ((process.argv.indexOf('upgrade') > -1) && (process.argv.indexOf('--prefer-local') < 0)) {
+    // Prefer global version for `jhipster upgrade` to get most recent code
+    preferLocal = false;
+}
 
 requireCLI(preferLocal);
 
