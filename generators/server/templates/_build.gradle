@@ -16,7 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 import org.gradle.internal.os.OperatingSystem
 
 buildscript {
@@ -446,17 +445,6 @@ dependencies {
 
 clean {
     delete "target"
-}
-
-task copyDockerFiles(type: Copy) {
-    from 'src/main/docker'
-    from "${project.buildDir}/libs"
-    into { "${project.buildDir}/docker" }
-}
-
-task buildDocker(type: DockerBuildImage, dependsOn: 'copyDockerFiles') {
-    inputDir = project.file("${project.buildDir}/docker")
-    tags = ["<%= baseName.toLowerCase() %>:${project.version}"]
 }
 
 task cleanResources(type: Delete) {
