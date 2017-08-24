@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2017 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see https://jhipster.github.io/
+ * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -61,7 +61,7 @@ const CLIENT_DIST_DIR = 'www/';
 const SUPPORTED_VALIDATION_RULES = ['required', 'max', 'min', 'maxlength', 'minlength', 'maxbytes', 'minbytes', 'pattern'];
 
 // documentation constants
-const JHIPSTER_DOCUMENTATION_URL = 'https://jhipster.github.io';
+const JHIPSTER_DOCUMENTATION_URL = 'http://www.jhipster.tech';
 const JHIPSTER_DOCUMENTATION_ARCHIVE_PATH = '/documentation-archive/';
 
 const SQL_DB_OPTIONS = [
