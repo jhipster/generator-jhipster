@@ -40,7 +40,6 @@ plugins {
     id "org.sonarqube" version "2.5"
     id "net.ltgt.apt" version "0.11"
     id "io.spring.dependency-management" version "1.0.3.RELEASE"
-    id "com.bmuschko.docker-remote-api" version "3.1.0"
      <%_ if (!skipClient) { _%>
     id "com.moowork.node" version "1.2.0"
     <%_ } _%>
@@ -61,7 +60,6 @@ apply plugin: 'com.moowork.gulp'
     <%_ } _%>
 <%_ } _%>
 apply plugin: 'io.spring.dependency-management'
-apply plugin: 'com.bmuschko.docker-remote-api'
 apply plugin: 'idea'
 <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa' || messageBroker === 'kafka' || hibernateCache === 'infinispan') { _%>
 dependencyManagement {
@@ -79,6 +77,11 @@ dependencyManagement {
 }
 <%_ } _%>
 defaultTasks 'bootRun'
+
+group = '<%= packageName %>'
+version = '0.0.1-SNAPSHOT'
+
+description = ''
 
 bootRepackage {
    mainClass = '<%= packageName %>.<%= mainClass %>'
@@ -161,6 +164,7 @@ cucumberTest.finalizedBy(testReport)
 apply from: 'gradle/yeoman.gradle'
     <%_ } _%>
 <%_ } _%>
+apply from: 'gradle/docker.gradle'
 apply from: 'gradle/sonar.gradle'
 <%_ if (databaseType === 'sql') { _%>
 apply from: 'gradle/liquibase.gradle'
@@ -193,11 +197,6 @@ if (project.hasProperty('zipkin')) {
     apply from: 'gradle/zipkin.gradle'
 }
 <%_ } _%>
-
-group = '<%= packageName %>'
-version = '0.0.1-SNAPSHOT'
-
-description = ''
 
 configurations {
     providedRuntime
