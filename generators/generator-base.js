@@ -1575,12 +1575,15 @@ module.exports = class extends PrivateBase {
         }
         if (options.async === undefined) options.async = true;
         if (options.silent === undefined) options.silent = true;
+        if (options.trace === undefined) options.trace = true;
 
         if (!Array.isArray(args)) {
             args = [args];
         }
         const command = `git ${args.join(' ')}`;
-        this.info(command);
+        if (options.trace) {
+            this.info(command);
+        }
         shelljs.exec(command, options, callback);
     }
 
