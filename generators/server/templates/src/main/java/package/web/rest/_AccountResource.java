@@ -183,12 +183,12 @@ public class AccountResource {
     }
 
     /**
-     * POST  /account/change_password : changes the current user's password
+     * POST  /account/change-password : changes the current user's password
      *
      * @param password the new password
      * @return the ResponseEntity with status 200 (OK), or status 400 (Bad Request) if the new password is not strong enough
      */
-    @PostMapping(path = "/account/change_password",
+    @PostMapping(path = "/account/change-password",
         produces = MediaType.TEXT_PLAIN_VALUE)
     @Timed
     public ResponseEntity changePassword(@RequestBody String password) {
@@ -248,7 +248,7 @@ public class AccountResource {
      * @param mail the mail of the user
      * @return the ResponseEntity with status 200 (OK) if the email was sent, or status 400 (Bad Request) if the email address is not registered
      */
-    @PostMapping(path = "/account/reset_password/init",
+    @PostMapping(path = "/account/reset-password/init",
         produces = MediaType.TEXT_PLAIN_VALUE)
     @Timed
     public ResponseEntity requestPasswordReset(@RequestBody String mail) {
@@ -266,7 +266,7 @@ public class AccountResource {
      * @return the ResponseEntity with status 200 (OK) if the password has been reset,
      * or status 400 (Bad Request) or 500 (Internal Server Error) if the password could not be reset
      */
-    @PostMapping(path = "/account/reset_password/finish",
+    @PostMapping(path = "/account/reset-password/finish",
         produces = MediaType.TEXT_PLAIN_VALUE)
     @Timed
     public ResponseEntity<String> finishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {

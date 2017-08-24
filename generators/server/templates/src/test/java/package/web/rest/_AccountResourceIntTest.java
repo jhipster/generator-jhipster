@@ -720,7 +720,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
         user.setEmail("change-password@example.com");
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
 
-        restMvc.perform(post("/api/account/change_password").content("new password"))
+        restMvc.perform(post("/api/account/change-password").content("new password"))
             .andExpect(status().isOk());
 
         User updatedUser = userRepository.findOneByLogin("change-password").orElse(null);
@@ -740,7 +740,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
         user.setEmail("change-password-too-small@example.com");
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
 
-        restMvc.perform(post("/api/account/change_password").content("new"))
+        restMvc.perform(post("/api/account/change-password").content("new"))
             .andExpect(status().isBadRequest());
 
         User updatedUser = userRepository.findOneByLogin("change-password-too-small").orElse(null);
@@ -760,7 +760,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
         user.setEmail("change-password-too-long@example.com");
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
 
-        restMvc.perform(post("/api/account/change_password").content(RandomStringUtils.random(101)))
+        restMvc.perform(post("/api/account/change-password").content(RandomStringUtils.random(101)))
             .andExpect(status().isBadRequest());
 
         User updatedUser = userRepository.findOneByLogin("change-password-too-long").orElse(null);
@@ -780,7 +780,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
         user.setEmail("change-password-empty@example.com");
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
 
-        restMvc.perform(post("/api/account/change_password").content(RandomStringUtils.random(0)))
+        restMvc.perform(post("/api/account/change-password").content(RandomStringUtils.random(0)))
             .andExpect(status().isBadRequest());
 
         User updatedUser = userRepository.findOneByLogin("change-password-empty").orElse(null);
