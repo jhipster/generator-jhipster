@@ -243,7 +243,7 @@ public class AccountResource {
     }<% } %>
 
     /**
-     * POST   /account/reset_password/init : Send an email to reset the password of the user
+     * POST   /account/reset-password/init : Send an email to reset the password of the user
      *
      * @param mail the mail of the user
      * @return the ResponseEntity with status 200 (OK) if the email was sent, or status 400 (Bad Request) if the email address is not registered
@@ -260,7 +260,7 @@ public class AccountResource {
     }
 
     /**
-     * POST   /account/reset_password/finish : Finish to reset the password of the user
+     * POST   /account/reset-password/finish : Finish to reset the password of the user
      *
      * @param keyAndPassword the generated key and the new password
      * @return the ResponseEntity with status 200 (OK) if the password has been reset,

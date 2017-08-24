@@ -160,8 +160,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/swagger-ui/index.html")<% if (authenticationType === 'oauth2') { %>
             .antMatchers("/api/register")
             .antMatchers("/api/activate")
-            .antMatchers("/api/account/reset_password/init")
-            .antMatchers("/api/account/reset_password/finish")<% } %>
+            .antMatchers("/api/account/reset-password/init")
+            .antMatchers("/api/account/reset-password/finish")<% } %>
             .antMatchers("/test/**")<% if (devDatabaseType !== 'h2Disk' && devDatabaseType !== 'h2Memory') { %>;<% } else { %>
             .antMatchers("/h2-console/**");<% } %>
     }<% if (authenticationType === 'session' || authenticationType === 'jwt') { %>
@@ -216,8 +216,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/register").permitAll()
             .antMatchers("/api/activate").permitAll()
             .antMatchers("/api/authenticate").permitAll()
-            .antMatchers("/api/account/reset_password/init").permitAll()
-            .antMatchers("/api/account/reset_password/finish").permitAll()
+            .antMatchers("/api/account/reset-password/init").permitAll()
+            .antMatchers("/api/account/reset-password/finish").permitAll()
             .antMatchers("/api/profile-info").permitAll()
             .antMatchers("/api/**").authenticated()<% if (websocket === 'spring-websocket') { %>
             .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)

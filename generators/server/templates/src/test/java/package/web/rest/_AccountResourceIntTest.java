@@ -868,7 +868,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
         user.setEmail("password-reset@example.com");
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
 
-        restMvc.perform(post("/api/account/reset_password/init")
+        restMvc.perform(post("/api/account/reset-password/init")
             .content("password-reset@example.com"))
             .andExpect(status().isOk());
     }
@@ -876,7 +876,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
     @Test
     public void testRequestPasswordResetWrongEmail() throws Exception {
         restMvc.perform(
-            post("/api/account/reset_password/init")
+            post("/api/account/reset-password/init")
                 .content("password-reset-wrong-email@example.com"))
             .andExpect(status().isBadRequest());
     }
@@ -900,7 +900,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
         keyAndPassword.setNewPassword("new password");
 
         restMvc.perform(
-            post("/api/account/reset_password/finish")
+            post("/api/account/reset-password/finish")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(keyAndPassword)))
             .andExpect(status().isOk());
@@ -928,7 +928,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
         keyAndPassword.setNewPassword("foo");
 
         restMvc.perform(
-            post("/api/account/reset_password/finish")
+            post("/api/account/reset-password/finish")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(keyAndPassword)))
             .andExpect(status().isBadRequest());
@@ -946,7 +946,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
         keyAndPassword.setNewPassword("new password");
 
         restMvc.perform(
-            post("/api/account/reset_password/finish")
+            post("/api/account/reset-password/finish")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(keyAndPassword)))
             .andExpect(status().isInternalServerError());
