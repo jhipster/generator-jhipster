@@ -1573,13 +1573,17 @@ module.exports = class extends PrivateBase {
         if (arguments.length < 3) {
             options = {};
         }
-        options.async = true;
-        options.silent = true;
+        if (options.async === undefined) options.async = true;
+        if (options.silent === undefined) options.silent = true;
+        if (options.trace === undefined) options.trace = true;
 
         if (!Array.isArray(args)) {
             args = [args];
         }
         const command = `git ${args.join(' ')}`;
+        if (options.trace) {
+            this.info(command);
+        }
         shelljs.exec(command, options, callback);
     }
 
@@ -1689,6 +1693,24 @@ module.exports = class extends PrivateBase {
      */
     warning(msg) {
         this.log(`${chalk.yellow.bold('WARNING!')} ${msg}`);
+    }
+
+    /**
+     * Print an info message.
+     *
+     * @param {string} value - message to print
+     */
+    info(msg) {
+        this.log.info(msg);
+    }
+
+    /**
+     * Print a success message.
+     *
+     * @param {string} value - message to print
+     */
+    success(msg) {
+        this.log.ok(msg);
     }
 
     /**

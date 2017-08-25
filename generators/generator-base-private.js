@@ -297,7 +297,7 @@ module.exports = class extends Generator {
     }
 
     isGitInstalled(callback) {
-        this.gitExec('--version', (code) => {
+        this.gitExec('--version', { trace: false }, (code) => {
             if (code !== 0) {
                 this.warning('git is not found on your computer.\n',
                     ` Install git: ${chalk.yellow('https://git-scm.com/')}`
