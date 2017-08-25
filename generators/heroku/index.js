@@ -258,7 +258,7 @@ module.exports = HerokuGenerator.extend({
             }
 
             this.log(chalk.bold('\nProvisioning addons'));
-            exec(`heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`, {}, (err, stdout, stderr) => {
+            exec(`heroku addons:create ${dbAddOn} --as DATABASE --app ${this.herokuAppName}`, {}, (err, stdout, stderr) => {
                 if (err) {
                     const verifyAccountUrl = 'https://heroku.com/verify';
                     if (_.includes(err, verifyAccountUrl)) {
