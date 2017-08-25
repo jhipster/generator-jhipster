@@ -110,6 +110,9 @@ function writeFiles() {
                 }
             }
 
+            if (this.enableSwaggerCodegen) {
+                this.template(`${DOCKER_DIR}_swagger-editor.yml`, `${DOCKER_DIR}swagger-editor.yml`);
+            }
 
             this.template(`${DOCKER_DIR}_sonar.yml`, `${DOCKER_DIR}sonar.yml`);
         },

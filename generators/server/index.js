@@ -127,6 +127,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
             this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
             this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
+            this.DOCKER_SWAGGER_EDITOR = constants.DOCKER_SWAGGER_EDITOR;
 
             this.NODE_VERSION = constants.NODE_VERSION;
             this.YARN_VERSION = constants.YARN_VERSION;
