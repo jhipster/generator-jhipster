@@ -707,8 +707,10 @@ module.exports = EntityGenerator.extend({
                 this.differentRelationships[entityType].push(relationship);
             });
 
-            if (this.databaseType === 'cassandra' || this.databaseType === 'mongodb') {
+            if (this.databaseType === 'mongodb') {
                 this.pkType = 'String';
+            } else if (this.databaseType === 'cassandra') {
+                this.pkType = 'UUID';
             } else {
                 this.pkType = 'Long';
             }

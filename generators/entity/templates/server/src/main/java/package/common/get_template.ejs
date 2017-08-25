@@ -23,6 +23,6 @@
     var returnPrefix = returnDirectly ? 'return' : 'Optional<' + instanceType + '> ' +  instanceName + ' =';
     if (!viaService) {
 %>
-        <% if (dto === 'mapstruct') { %>Optional<<%= entityClass %>> <%= entityInstance %> = <% } else { %><%- returnPrefix %> <% } %><% if (databaseType === 'sql' || databaseType === 'mongodb') { %><%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany === true) { %>findOneWithEagerRelationships<% } else { %>findById<% } %>(id)<% } %><% if (databaseType === 'cassandra') { %><%= entityInstance %>Repository.findOne(UUID.fromString(id))<% } %>;<% if (dto === 'mapstruct') { %>
+        <% if (dto === 'mapstruct') { %>Optional<<%= entityClass %>> <%= entityInstance %> = <% } else { %><%- returnPrefix %> <% } %><%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany === true) { %>findOneWithEagerRelationships<% } else { %>findById<% } %>(id);<% if (dto === 'mapstruct') { %>
         <%- returnPrefix %> <%= entityInstance %>.map(<%= entityToDto %>);<% } } else { %>
         <%- returnPrefix %> <%= entityInstance %>Service.findOne(id);<% } %>

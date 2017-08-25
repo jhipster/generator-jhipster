@@ -21,7 +21,7 @@ const variables = {};
 const defaultVariablesValues = {};
 let hasUserRelationship = false;
 let tsKeyType;
-if (pkType === 'String') {
+if (pkType === 'String' || pkType === 'UUID') {
     tsKeyType = 'string';
 } else {
     tsKeyType = 'number';

@@ -458,7 +458,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         int databaseSizeBeforeUpdate = userRepository.findAll().size();
 
         // Update the user
-        Optional<User> optionalUpdatedUser = userRepository.<%_ if (databaseType !== 'cassandra') { _%>findById<%_ } else { _%>findOne<%_ }_%>(user.getId());
+        Optional<User> optionalUpdatedUser = userRepository.findById(user.getId());
         assertTrue(optionalUpdatedUser.isPresent());
         User updatedUser = optionalUpdatedUser.get();
 
@@ -515,7 +515,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         int databaseSizeBeforeUpdate = userRepository.findAll().size();
 
         // Update the user
-        Optional<User> optionalUpdatedUser = userRepository.<%_ if (databaseType !== 'cassandra') { _%>findById<%_ } else { _%>findOne<%_ }_%>(user.getId());
+        Optional<User> optionalUpdatedUser = userRepository.findById(user.getId());
         assertTrue(optionalUpdatedUser.isPresent());
         User updatedUser = optionalUpdatedUser.get();
 
@@ -591,7 +591,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         <%_ } _%>
 
         // Update the user
-        Optional<User> optionalUpdatedUser = userRepository.<%_ if (databaseType !== 'cassandra') { _%>findById<%_ } else { _%>findOne<%_ }_%>(user.getId());
+        Optional<User> optionalUpdatedUser = userRepository.findById(user.getId());
         assertTrue(optionalUpdatedUser.isPresent());
         User updatedUser = optionalUpdatedUser.get();
 
@@ -654,7 +654,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         <%_ } _%>
 
         // Update the user
-        Optional<User> optionalUpdatedUser = userRepository.<%_ if (databaseType !== 'cassandra') { _%>findById<%_ } else { _%>findOne<%_ }_%>(user.getId());
+        Optional<User> optionalUpdatedUser = userRepository.findById(user.getId());
         assertTrue(optionalUpdatedUser.isPresent());
         User updatedUser = optionalUpdatedUser.get();
 

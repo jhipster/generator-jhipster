@@ -18,6 +18,16 @@
 -%>
 package <%=packageName%>.config.cassandra;
 
+import com.datastax.driver.core.*;
+import com.datastax.driver.core.policies.LoadBalancingPolicy;
+import com.datastax.driver.core.ProtocolVersion;
+import com.datastax.driver.core.policies.ReconnectionPolicy;
+import com.datastax.driver.core.policies.RetryPolicy;
+import com.datastax.driver.extras.codecs.jdk8.InstantCodec;
+import com.datastax.driver.extras.codecs.jdk8.LocalDateCodec;
+import com.datastax.driver.extras.codecs.jdk8.LocalTimeCodec;
+import com.datastax.driver.extras.codecs.jdk8.ZonedDateTimeCodec;
+
 import io.github.jhipster.config.JHipsterConstants;
 
 import org.slf4j.Logger;
@@ -31,97 +41,90 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.util.StringUtils;
+import org.springframework.data.cassandra.config.AbstractCassandraConfiguration;
+import org.springframework.data.cassandra.config.CassandraClusterFactoryBean;
+import org.springframework.data.cassandra.config.ClusterBuilderConfigurer;
+import org.springframework.data.cassandra.config.CompressionType;
 
 import com.codahale.metrics.MetricRegistry;
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.DataType;
-import com.datastax.driver.core.ProtocolVersion;
-import com.datastax.driver.core.QueryOptions;
-import com.datastax.driver.core.Session;
-import com.datastax.driver.core.SocketOptions;
-import com.datastax.driver.core.TupleType;
-import com.datastax.driver.core.policies.LoadBalancingPolicy;
-import com.datastax.driver.core.policies.ReconnectionPolicy;
-import com.datastax.driver.core.policies.RetryPolicy;
-import com.datastax.driver.extras.codecs.jdk8.InstantCodec;
-import com.datastax.driver.extras.codecs.jdk8.LocalDateCodec;
-import com.datastax.driver.extras.codecs.jdk8.ZonedDateTimeCodec;
+
 
 @Configuration<% if (applicationType === 'gateway' && databaseType !== 'cassandra') { %>
 @ConditionalOnProperty("jhipster.gateway.rate-limiting.enabled")<% } %>
 @EnableConfigurationProperties(CassandraProperties.class)
 @Profile({JHipsterConstants.SPRING_PROFILE_DEVELOPMENT, JHipsterConstants.SPRING_PROFILE_PRODUCTION})
-public class CassandraConfiguration {
+public class CassandraConfiguration extends AbstractCassandraConfiguration {
 
     @Value("${spring.data.cassandra.protocolVersion:V4}")
     private ProtocolVersion protocolVersion;
+
+    @Autowired
+    CassandraProperties properties;
 
     @Autowired(required = false)
     MetricRegistry metricRegistry;
 
     private final Logger log = LoggerFactory.getLogger(CassandraConfiguration.class);
 
+    @Override
+    protected String getKeyspaceName() {
+        return properties.getKeyspaceName();
+    }
+
+    @Override
     @Bean
-    public Cluster cluster(CassandraProperties properties) {
-        Cluster.Builder builder = Cluster.builder()
-                .withClusterName(properties.getClusterName())
-                .withProtocolVersion(protocolVersion)
-                .withPort(getPort(properties));
+    public CassandraClusterFactoryBean cluster() {
+        final CassandraClusterFactoryBean cluster = new CassandraClusterFactoryBean();
+        cluster.setClusterName(properties.getClusterName());
+        cluster.setProtocolVersion(protocolVersion);
+        cluster.setPort(properties.getPort());
 
         if (properties.getUsername() != null) {
-            builder.withCredentials(properties.getUsername(), properties.getPassword());
+            cluster.setUsername(properties.getUsername());
+            cluster.setPassword(properties.getPassword());
         }
-        if (properties.getCompression() != null) {
-            builder.withCompression(properties.getCompression());
+        if (properties.getCompression() != null && !properties.getCompression().toString().isEmpty()) {
+            cluster.setCompressionType(CompressionType.valueOf(properties.getCompression().toString().toUpperCase()));
         }
         if (properties.getLoadBalancingPolicy() != null) {
             LoadBalancingPolicy policy = instantiate(properties.getLoadBalancingPolicy());
-            builder.withLoadBalancingPolicy(policy);
+            cluster.setLoadBalancingPolicy(policy);
         }
-        builder.withQueryOptions(getQueryOptions(properties));
+        cluster.setQueryOptions(getQueryOptions());
         if (properties.getReconnectionPolicy() != null) {
             ReconnectionPolicy policy = instantiate(properties.getReconnectionPolicy());
-            builder.withReconnectionPolicy(policy);
+            cluster.setReconnectionPolicy(policy);
         }
         if (properties.getRetryPolicy() != null) {
             RetryPolicy policy = instantiate(properties.getRetryPolicy());
-            builder.withRetryPolicy(policy);
+            cluster.setRetryPolicy(policy);
         }
-        builder.withSocketOptions(getSocketOptions(properties));
+        cluster.setSocketOptions(getSocketOptions());
         if (properties.isSsl()) {
-            builder.withSSL();
+            cluster.setSslEnabled(true);
         }
         String points = properties.getContactPoints();
-        builder.addContactPoints(StringUtils.commaDelimitedListToStringArray(points));
-
-        Cluster cluster = builder.build();
-
-        TupleType tupleType = cluster.getMetadata()
-            .newTupleType(DataType.timestamp(), DataType.varchar());
-
-        cluster.getConfiguration().getCodecRegistry()
-                .register(LocalDateCodec.instance)
-                .register(InstantCodec.instance)
-                .register(new ZonedDateTimeCodec(tupleType));
-
-        if (metricRegistry != null) {
-            cluster.init();
-            metricRegistry.registerAll(cluster.getMetrics().getRegistry());
-        }
-
+        cluster.setContactPoints(points);
         return cluster;
     }
 
-    protected int getPort(CassandraProperties properties) {
-        return properties.getPort();
+    @Override
+    protected ClusterBuilderConfigurer getClusterBuilderConfigurer() {
+        return clusterBuilder -> {
+            clusterBuilder.getConfiguration().getCodecRegistry()
+                .register(InstantCodec.instance,
+                    LocalDateCodec.instance,
+                    LocalTimeCodec.instance,
+                    new ZonedDateTimeCodec(cluster().getObject().getMetadata().newTupleType(DataType.timestamp(), DataType.varchar())));
+            if (metricRegistry != null) {
+                cluster().getObject().init();
+                metricRegistry.registerAll(cluster().getObject().getMetrics().getRegistry());
+            }
+            return clusterBuilder;
+        };
     }
 
-    public static <T> T instantiate(Class<T> type) {
-        return BeanUtils.instantiate(type);
-    }
-
-    private QueryOptions getQueryOptions(CassandraProperties properties) {
+    protected QueryOptions getQueryOptions() {
         QueryOptions options = new QueryOptions();
         if (properties.getConsistencyLevel() != null) {
             options.setConsistencyLevel(properties.getConsistencyLevel());
@@ -133,16 +136,14 @@ public class CassandraConfiguration {
         return options;
     }
 
-    private SocketOptions getSocketOptions(CassandraProperties properties) {
+    protected SocketOptions getSocketOptions() {
         SocketOptions options = new SocketOptions();
         options.setConnectTimeoutMillis(properties.getConnectTimeoutMillis());
         options.setReadTimeoutMillis(properties.getReadTimeoutMillis());
         return options;
     }
 
-    @Bean(destroyMethod = "close")
-    public Session session(CassandraProperties properties, Cluster cluster) {
-        log.debug("Configuring Cassandra session");
-        return StringUtils.hasText(properties.getKeyspaceName()) ? cluster.connect(properties.getKeyspaceName()) : cluster.connect();
+    public static <T> T instantiate(Class<T> type) {
+        return BeanUtils.instantiateClass(type);
     }
 }

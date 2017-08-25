@@ -94,7 +94,7 @@ spring:
     <%_ if (databaseType === 'cassandra') { _%>
         cassandra:
             contactPoints: localhost
-            port: 0
+            port: 49142 # port to bind to the embedded Cassandra server: see native_transport_port in ../cassandra-random-port.yml
             protocolVersion: V4
             compression: NONE
             keyspaceName: cassandra_unit_keyspace
@@ -206,4 +206,4 @@ jhipster:
 # https://jhipster.github.io/common-application-properties/
 # ===================================================================
 
-application:
+#application:

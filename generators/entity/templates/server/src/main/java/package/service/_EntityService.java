@@ -32,6 +32,9 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 <%_ } _%>
 import java.util.Optional;
+<%_ if (databaseType === 'cassandra') { _%>
+import java.util.UUID;
+<%_ } _%>
 
 /**
  * Service Interface for managing <%= entityClass %>.

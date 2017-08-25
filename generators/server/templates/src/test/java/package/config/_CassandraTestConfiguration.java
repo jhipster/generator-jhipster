@@ -43,7 +43,6 @@ public class CassandraTestConfiguration extends CassandraConfiguration {
      * @param properties
      * @return
      */
-    @Override
     protected int getPort(CassandraProperties properties) {
         int port = properties.getPort();
         if (port == 0) {

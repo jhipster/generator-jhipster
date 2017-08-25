@@ -94,7 +94,11 @@ public class <%= entityClass %>Resource {
         log.debug("REST request to save <%= entityClass %> : {}", <%= instanceName %>);
         if (<%= instanceName %>.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new <%= entityInstance %> cannot already have an ID")).body(null);
-        }<%- include('../../common/save_template', {viaService: viaService, returnDirectly: false}); -%>
+        }
+        <%_ if (databaseType === 'cassandra') { %>
+        <%= instanceName %>.setId(UUID.randomUUID());
+        <%_ } _%>
+        <%- include('../../common/save_template', {viaService: viaService, returnDirectly: false}); -%>
         return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);

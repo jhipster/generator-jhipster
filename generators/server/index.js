@@ -347,7 +347,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.humanizedBaseName = _.startCase(this.baseName);
             this.mainClass = this.getMainClassName();
 
-            if (this.databaseType === 'cassandra' || this.databaseType === 'mongodb') {
+            if (this.databaseType === 'mongodb' || this.databaseType === 'cassandra') {
                 this.pkType = 'String';
             } else {
                 this.pkType = 'Long';

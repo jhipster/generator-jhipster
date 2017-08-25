@@ -433,6 +433,8 @@ _%>
     @Transactional<% } %>
     public void getAll<%= entityClassPlural %>() throws Exception {
         // Initialize the database
+        <% if (databaseType === 'cassandra') { _%><%= entityInstance %>.setId(UUID.randomUUID());
+        <%_ } _%>
         <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 
         // Get all the <%= entityInstance %>List
@@ -452,6 +454,8 @@ _%>
     @Transactional<% } %>
     public void get<%= entityClass %>() throws Exception {
         // Initialize the database
+        <% if (databaseType === 'cassandra') { _%><%= entityInstance %>.setId(UUID.randomUUID());
+        <%_ } _%>
         <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 
         // Get the <%= entityInstance %>
@@ -590,6 +594,8 @@ _%>
     @Transactional<% } %>
     public void update<%= entityClass %>() throws Exception {
         // Initialize the database
+        <% if (databaseType === 'cassandra') { _%><%= entityInstance %>.setId(UUID.randomUUID());
+        <%_ } _%>
 <%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
         <%= entityInstance %>Service.save(<%= entityInstance %>);
 <%_ } else { _%>
@@ -600,7 +606,7 @@ _%>
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll().size();
 
         // Update the <%= entityInstance %>
-        Optional<<%= entityClass %>> optionalUpdated<%= entityClass %> = <%= entityInstance %>Repository.<%_ if (databaseType !== 'cassandra') { _%>findById<%_ } else { _%>findOne<%_ }_%>(<%= entityInstance %>.getId());
+        Optional<<%= entityClass %>> optionalUpdated<%= entityClass %> = <%= entityInstance %>Repository.findById(<%= entityInstance %>.getId());
         assertTrue(optionalUpdated<%= entityClass %>.isPresent());
         <%= entityClass %> updated<%= entityClass %> = optionalUpdated<%= entityClass %>.get();
 
@@ -670,6 +676,8 @@ _%>
     @Transactional<% } %>
     public void delete<%= entityClass %>() throws Exception {
         // Initialize the database
+        <% if (databaseType === 'cassandra') { _%><%= entityInstance %>.setId(UUID.randomUUID());
+        <%_ } _%>
 <%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
         <%= entityInstance %>Service.save(<%= entityInstance %>);
 <%_ } else { _%>
@@ -697,6 +705,8 @@ _%>
     @Transactional<% } %>
     public void search<%= entityClass %>() throws Exception {
         // Initialize the database
+        <% if (databaseType === 'cassandra') { _%><%= entityInstance %>.setId(UUID.randomUUID());
+        <%_ } _%>
 <%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
         <%= entityInstance %>Service.save(<%= entityInstance %>);
 <%_ } else { _%>
