@@ -257,6 +257,15 @@ applicationContentDecl
   / SKIP_SERVER SPACE* skipServer:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
     return addToApplicationDecl(applicationContentDecl, 'skipServer', skipServer);
   }
+  / ENTITIES SPACE+ entities:simpleEntityList SPACE* ex:exclusion? SPACE* applicationContentDecl:applicationContentDecl {
+    const entityEntries = [];
+    for (let i = 0; i < entities.length; i++) {
+      if (entities[i].trim().length !== 0) {
+        entityEntries.push(entities[i].trim());
+      }
+    }
+    return addToApplicationDecl(applicationContentDecl, 'entities', entityEntries);
+  }
   / comment SPACE* applicationContentDecl:applicationContentDecl { return applicationContentDecl; }
   / ''
 
@@ -462,6 +471,11 @@ entityList
   / ALL SPACE* WITH SPACE* method:([A-z0-9-]+) { return ['*', method.toString().replace(/,/g,'')]; }
   / e:ENTITY_NAME SPACE* WITH SPACE* method:([A-z0-9-]+) { return [e, method.toString().replace(/,/g,'')]; }
 
+simpleEntityList
+  = e:ENTITY_NAME SPACE* ',' SPACE* sub:simpleEntityList { return addUniqueElements([e], sub); }
+  / STAR SPACE* { return ['*']; }
+  / ALL SPACE* { return ['*']; }
+  / e:ENTITY_NAME SPACE* { return [e]; }
 
 relationshipType
 = ONE_TO_ONE { return 'one-to-one'; }
@@ -525,6 +539,7 @@ CLIENT_FRAMEWORK = 'clientFramework'
 NATIVE_LANGUAGE = 'nativeLanguage'
 FRONT_END_BUILDER = 'frontendBuilder'
 SKIP_USER_MANAGEMENT = 'skipUserManagement'
+ENTITIES = 'entities'
 // skipClient & skipServer are already defined
 TRUE = 'true'
 FALSE = 'false'
