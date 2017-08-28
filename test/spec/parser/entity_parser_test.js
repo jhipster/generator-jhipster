@@ -249,5 +249,16 @@ describe('::convert', () => {
         );
       });
     });
+    describe('when converting a JDL with filtering', () => {
+      const input = parseFromFiles(['./test/test_files/filtering.jdl']);
+      const content = EntityParser.parse({
+        jdlObject: JDLParser.parse(input, 'sql'),
+        databaseType: 'sql'
+      });
+      it('converts it', () => {
+        expect(content.A.jpaMetamodelFiltering).to.be.true;
+        expect(content.B.jpaMetamodelFiltering).to.be.false;
+      });
+    });
   });
 });
