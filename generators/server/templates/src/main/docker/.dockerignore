@@ -21,3 +21,6 @@
 **/*
 !*.jar
 !*.war
+<%_ if (prodDatabaseType === 'cassandra') { _%>
+!cassandra/
+<%_ } _%>
