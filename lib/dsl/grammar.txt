@@ -57,6 +57,7 @@
     searchEngine: {},
     noClient: { list: [], excluded: [] },
     noServer: { list: [], excluded: [] },
+    filter: { list: [], excluded: [] },
     angularSuffix: {},
     noFluentMethod: { list: [], excluded: [] }
   };
@@ -123,6 +124,10 @@ prog
   }
   / SPACE* noFluentMethod:noFluentMethod SPACE* p:prog {
     parsed.noFluentMethod = noFluentMethod;
+    return parsed;
+  }
+  / SPACE* filter:filterDecl SPACE* p:prog {
+    parsed.filter = filter;
     return parsed;
   }
   / '' { return parsed; }
@@ -451,6 +456,22 @@ subNoServerDecl
   / ALL { return ['*']; }
   / e:ENTITY_NAME { return [e]; }
 
+// JPA Metamodel filter option
+filterDecl
+  = FILTER SPACE decl:subFilterDecl SPACE* ex:exclusion? SPACE*  {
+    addUniqueElements(parsed.filter.list, decl);
+    if (ex) {
+      addUniqueElements(parsed.filter.excluded, ex);
+    }
+    return parsed.filter;
+  }
+
+subFilterDecl
+  = e:ENTITY_NAME SPACE* ',' SPACE* sub:subFilterDecl { return addUniqueElements([e], sub); }
+  / STAR { return ['*']; }
+  / ALL { return ['*']; }
+  / e:ENTITY_NAME { return [e]; }
+
 
 // angularSuffix option
 angularSuffixDecl
@@ -567,6 +588,7 @@ SEARCH = 'search'
 SKIP_CLIENT = 'skipClient'
 SKIP_SERVER = 'skipServer'
 ANGULAR_SUFFIX = 'angularSuffix'
+FILTER = 'filter'
 // validations
 REQUIRED = 'required'
 MINLENGTH = 'minlength'

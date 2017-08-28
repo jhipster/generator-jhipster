@@ -622,6 +622,14 @@ describe('JDLParser', () => {
           expect(application.skipServer).to.be.false;
         });
       });
+      describe('when parsing filtered entities', () => {
+        const input = parseFromFiles(['./test/test_files/filtering.jdl']);
+        const content = JDLParser.parse(input, 'sql');
+        it('works', () => {
+          expect(content.options.options.filter.entityNames.has('*')).to.be.true;
+          expect(content.options.options.filter.excludedNames.has('B')).to.be.true;
+        });
+      });
     });
   });
 });
