@@ -1155,7 +1155,7 @@
                 -->
                 <configuration>
                     <repository>${project.artifactId}</repository>
-                    <tag>${project.version}</tag>
+                    <tag>latest</tag>
                     <contextDirectory>${project.build.directory}</contextDirectory>
                 </configuration>
             </plugin>
