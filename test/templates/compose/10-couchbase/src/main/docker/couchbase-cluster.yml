@@ -1,6 +1,6 @@
 version: '2'
 services:
-    <%= baseName.toLowerCase() %>-couchbase:
+    mscouchbase-couchbase:
         build:
             context: .
             dockerfile: couchbase/Couchbase.Dockerfile
@@ -11,13 +11,13 @@ services:
             - 11210:11210
         environment:
             - TYPE=MASTER
-            - BUCKET=<%= baseName %>
-    <%= baseName.toLowerCase() %>-couchbase-node:
+            - BUCKET=mscouchbase
+    mscouchbase-couchbase-node:
         build:
             context: .
             dockerfile: couchbase/Couchbase.Dockerfile
         environment:
             - TYPE=WORKER
-            - BUCKET=<%= baseName %>
-            - COUCHBASE_MASTER=<%= baseName.toLowerCase() %>-couchbase
+            - BUCKET=mscouchbase
+            - COUCHBASE_MASTER=mscouchbase-couchbase
             - AUTO_REBALANCE=false

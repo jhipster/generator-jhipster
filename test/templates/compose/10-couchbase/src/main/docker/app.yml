@@ -1,0 +1,17 @@
+version: '2'
+services:
+    mscouchbase-app:
+        image: mscouchbase
+        environment:
+            - SPRING_PROFILES_ACTIVE=prod
+            - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+            - SPRING_COUCHBASE_BOOTSTRAP_HOSTS=mscouchbase-couchbase
+            - SPRING_COUCHBASE_BUCKET_NAME=mscouchbase
+    mscouchbase-couchbase:
+        extends:
+            file: couchbase.yml
+            service: mscouchbase-couchbase
+    jhipster-registry:
+        extends:
+            file: jhipster-registry.yml
+            service: jhipster-registry

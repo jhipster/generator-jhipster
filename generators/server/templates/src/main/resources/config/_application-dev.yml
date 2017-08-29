@@ -194,7 +194,7 @@ spring:
     couchbase:
         bootstrap-hosts: localhost
         bucket:
-            name: jhipster
+            name: <%= baseName %>
     <%_ } _%>
     mail:
         host: localhost

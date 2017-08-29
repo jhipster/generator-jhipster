@@ -129,7 +129,7 @@
         <mongobee.version>0.12</mongobee.version>
         <%_ } _%>
         <%_ if (databaseType === 'couchbase') { _%>
-        <couchmove.version>1.0</couchmove.version>
+        <couchmove.version>1.0.1</couchmove.version>
         <couchbase-testcontainer.version>1.0</couchbase-testcontainer.version>
         <%_ } _%>
         <node.version>v<%= NODE_VERSION %></node.version>

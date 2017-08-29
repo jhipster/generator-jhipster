@@ -1,4 +1,4 @@
-FROM couchbase/server:4.6.2
+FROM <%= DOCKER_COUCHBASE %>
 
 COPY couchbase/scripts/configure-node.sh /
 

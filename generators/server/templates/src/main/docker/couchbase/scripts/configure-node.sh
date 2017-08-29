@@ -23,8 +23,8 @@ curl http://127.0.0.1:8091/settings/web -d port=8091 -d username=Administrator -
 echo "Setup Memory Optimized Indexes"
 curl -u Administrator:password -X POST http://127.0.0.1:8091/settings/indexes -d 'storageMode=memory_optimized'
 
-echo "Setup bucket jhipster"
-curl -u Administrator:password -X POST http://127.0.0.1:8091/pools/default/buckets -d name=jhipster -d bucketType=couchbase -d ramQuotaMB=300 -dauthType=sasl
+echo "Setup bucket $BUCKET"
+curl -u Administrator:password -X POST http://127.0.0.1:8091/pools/default/buckets -d name=$BUCKET -d bucketType=couchbase -d ramQuotaMB=300 -dauthType=sasl
 
 # Load travel-sample bucket
 #curl -u Administrator:password -X POST http://127.0.0.1:8091/sampleBuckets/install -d '["travel-sample"]'
