@@ -127,6 +127,7 @@
         <%_ } _%>
         <%_ if (databaseType === 'mongodb') { _%>
         <mongobee.version>0.12</mongobee.version>
+        <guava.version>23.0</guava.version>
         <%_ } _%>
         <node.version>v<%= NODE_VERSION %></node.version>
         <%_ if (clientPackageManager === 'npm') { _%>
@@ -542,6 +543,11 @@
         </dependency>
         <%_ } _%>
         <%_ if (databaseType === 'mongodb') { _%>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.github.mongobee</groupId>
             <artifactId>mongobee</artifactId>
@@ -1136,9 +1142,9 @@
             </plugin>
             <%_ if (enableSwaggerCodegen) { _%>
             <plugin>
-                <!-- 
-                    Plugin that provides API-first development using swagger-codegen to 
-                    generate Spring-MVC endpoint stubs at compile time from a swagger definition file 
+                <!--
+                    Plugin that provides API-first development using swagger-codegen to
+                    generate Spring-MVC endpoint stubs at compile time from a swagger definition file
                 -->
                 <groupId>io.swagger</groupId>
                 <artifactId>swagger-codegen-maven-plugin</artifactId>
