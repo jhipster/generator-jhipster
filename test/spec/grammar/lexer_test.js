@@ -1,6 +1,6 @@
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
-const lexerModule = require('../../../lib/dsl/chev_grammar');
+const lexerModule = require('../../../lib/dsl/poc/lexer');
 
 const JDLLexer = lexerModule.JDLLexer;
 
