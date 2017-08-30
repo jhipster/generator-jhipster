@@ -29,17 +29,48 @@ describe('Chevrotain Parser POC', () => {
     });
 
     it('Can parse a simple valid JDL text using a custom startRule', () => {
-      // TODO: TBD
+      const input = `{
+        startDate ZonedDateTime,
+        endDate ZonedDateTime,
+        language Language
+      }`;
+
+      const result = parse(input, 'entityBody');
+      expect(result.parseErrors).to.be.empty;
+
+      const cst = result.cst;
+      expect(cst.name).to.equal('entityBody');
+      expect(cst.children.fieldDec[0].children.NAME[0].image).to.equal('startDate');
+      expect(cst.children.fieldDec[1].children.NAME[0].image).to.equal('endDate');
+      expect(cst.children.fieldDec[2].children.NAME[0].image).to.equal('language');
     });
 
-    it('Can parse a simple invalid JDL text with a single syntax error', () => {
-      // TODO: TBD
+    it('Can parse a simple invalid JDL text with a SINGLE syntax error', () => {
+      const input = `
+        myConst1 = 1
+        myConst2 = 3, /* <-- comma should not be here */
+        myConst3 = 9
+      `;
+
+      const result = parse(input);
+      expect(result.parseErrors).to.have.lengthOf(1);
+      expect(result.parseErrors[0].message).to.equal('Expecting token of type --> EOF <-- but found --> \',\' <--');
     });
 
-    it('Can parse a simple invalid JDL text with multiple syntax errors', () => {
-      // TODO: TBD
+    it('Can parse a simple invalid JDL text with MULTIPLE syntax errors', () => {
+      const input = `
+        myConst1 = 1
+        myConst2 = 3, /* <-- comma should not be here */
+        myConst3 /* forgot the equals sign */ 9
+      `;
+
+      const result = parse(input);
+      expect(result.parseErrors).to.have.lengthOf(2);
+      expect(result.parseErrors[0].message).to.equal('Expecting token of type --> EOF <-- but found --> \',\' <--');
+      expect(result.parseErrors[1].message).to.equal('Expecting token of type --> EQUALS <-- but found --> \'9\' <--');
     });
 
+    // TODO: combine with syntax errors specs?
     it('Can recover from errors and continue parsing #1 (single token insertion)', () => {
       // TODO: TBD
     });
