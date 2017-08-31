@@ -25,6 +25,7 @@ buildscript {
         mavenCentral()
         jcenter()
         maven { url "http://repo.spring.io/plugins-release" }
+        maven { url "https://repo.spring.io/snapshot" }
         maven { url "http://repo.spring.io/milestone" }
         maven { url "https://plugins.gradle.org/m2/" }
     }
@@ -76,8 +77,9 @@ dependencyManagement {
 <%_ } _%>
 defaultTasks 'bootRun'
 
-bootRepackage {
-   mainClass = '<%= packageName %>.<%= mainClass %>'
+bootWar {
+    mainClass = '<%= packageName %>.<%= mainClass %>'
+    enabled = false
 }
 
 war {
@@ -85,8 +87,7 @@ war {
 }
 
 springBoot {
-    mainClass = '<%= packageName %>.<%= mainClass %>'
-    executable = true
+//    executable = true
     buildInfo()
 }
 
@@ -105,7 +106,7 @@ if (OperatingSystem.current().isWindows()) {
     }
 
     bootRun {
-        addResources = false
+//        addResources = false
         dependsOn pathingJar
         doFirst {
             classpath = files("$buildDir/classes/java/main", "$buildDir/resources/main", pathingJar.archivePath)
@@ -113,7 +114,7 @@ if (OperatingSystem.current().isWindows()) {
     }
 } else {
     bootRun {
-        addResources = false
+//        addResources = false
     }
 }
 
@@ -309,7 +310,14 @@ dependencies {
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
     compile "org.springframework.boot:spring-boot-starter-data-mongodb"
-    <%_ } _%>
+    <%_ if (reactive && databaseType === 'mongodb') { _%>
+    compile "org.springframework.boot:spring-boot-starter-data-mongodb-reactive"
+    <%_ }} _%>
+    <%_ if (databaseType === 'cassandra') { _%>
+        compile "org.springframework.boot:spring-boot-starter-data-cassandra"
+        <%_ if (reactive && databaseType === 'cassandra') { _%>
+            compile "org.springframework.boot:spring-boot-starter-data-cassandra-reactive"
+            <%_ }} _%>
     <%_ if (messageBroker === 'kafka') { _%>
     compile "org.springframework.cloud:spring-cloud-stream"
     compile "org.springframework.cloud:spring-cloud-stream-binder-kafka"
@@ -319,6 +327,9 @@ dependencies {
     compile ("org.springframework.boot:spring-boot-starter-web") {
         exclude module: 'spring-boot-starter-tomcat'
     }
+    <%_ if (reactive) { _%>
+    compile "org.springframework.boot:spring-boot-starter-webflux"
+    <%_ } _%>
     compile "org.springframework.boot:spring-boot-starter-undertow"
     <%_ if (websocket === 'spring-websocket') { _%>
     compile "org.springframework.boot:spring-boot-starter-websocket"

@@ -156,6 +156,11 @@ module.exports = JhipsterServerGenerator.extend({
 
             this.enableSwaggerCodegen = this.config.get('enableSwaggerCodegen');
 
+            this.reactive = this.config.get('reactive') === false ? false : this.config.get('reactive');
+            if (this.reactive === undefined) {
+                this.reactive = false;
+            }
+
             this.serviceDiscoveryType = this.config.get('serviceDiscoveryType') === 'no' ? false : this.config.get('serviceDiscoveryType');
             if (this.serviceDiscoveryType === undefined) {
                 this.serviceDiscoveryType = false;
@@ -298,6 +303,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.configOptions.prodDatabaseType = this.prodDatabaseType;
             this.configOptions.searchEngine = this.searchEngine;
             this.configOptions.messageBroker = this.messageBroker;
+            this.configOptions.reactive = this.reactive;
             this.configOptions.serviceDiscoveryType = this.serviceDiscoveryType;
             this.configOptions.buildTool = this.buildTool;
             this.configOptions.enableSocialSignIn = this.enableSocialSignIn;
@@ -332,6 +338,7 @@ module.exports = JhipsterServerGenerator.extend({
             insight.track('app/prodDatabaseType', this.prodDatabaseType);
             insight.track('app/searchEngine', this.searchEngine);
             insight.track('app/messageBroker', this.messageBroker);
+            insight.track('app/reactive', this.reactive);
             insight.track('app/serviceDiscoveryType', this.serviceDiscoveryType);
             insight.track('app/buildTool', this.buildTool);
             insight.track('app/enableSocialSignIn', this.enableSocialSignIn);
@@ -347,7 +354,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.humanizedBaseName = _.startCase(this.baseName);
             this.mainClass = this.getMainClassName();
 
-            if (this.databaseType === 'cassandra' || this.databaseType === 'mongodb') {
+            if (this.databaseType === 'mongodb' || this.databaseType === 'cassandra') {
                 this.pkType = 'String';
             } else {
                 this.pkType = 'Long';
@@ -377,6 +384,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.config.set('prodDatabaseType', this.prodDatabaseType);
             this.config.set('searchEngine', this.searchEngine);
             this.config.set('messageBroker', this.messageBroker);
+            this.config.set('reactive', this.reactive);
             this.config.set('serviceDiscoveryType', this.serviceDiscoveryType);
             this.config.set('buildTool', this.buildTool);
             this.config.set('enableSocialSignIn', this.enableSocialSignIn);

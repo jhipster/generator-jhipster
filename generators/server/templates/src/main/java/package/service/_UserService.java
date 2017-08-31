@@ -156,7 +156,7 @@ public class UserService {
         String imageUrl<% } %>, String langKey) {
 
         User newUser = new User();<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
-        Authority authority = authorityRepository.findOne(AuthoritiesConstants.USER);
+        Optional<Authority> authority = authorityRepository.findById(AuthoritiesConstants.USER);
         Set<Authority> authorities = new HashSet<>();<% } %><% if (databaseType === 'cassandra') { %>
         newUser.setId(UUID.randomUUID().toString());
         Set<String> authorities = new HashSet<>();<% } %>
@@ -176,7 +176,9 @@ public class UserService {
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
-        authorities.add(authority);
+        if(authority.isPresent()) {
+            authorities.add(authority.get());
+        }
         <%_ } _%>
         <%_ if (databaseType === 'cassandra') { _%>
         authorities.add(AuthoritiesConstants.USER);
@@ -207,7 +209,7 @@ public class UserService {
         if (userDTO.getAuthorities() != null) {
             Set<Authority> authorities = new HashSet<>();
             userDTO.getAuthorities().forEach(
-                authority -> authorities.add(authorityRepository.findOne(authority))
+                authority -> authorityRepository.findById(authority).ifPresent(authorities::add)
             );
             user.setAuthorities(authorities);
         }
@@ -263,8 +265,8 @@ public class UserService {
      * @return updated user
      */
     public Optional<UserDTO> updateUser(UserDTO userDTO) {
-        return Optional.of(userRepository
-            .findOne(userDTO.getId()))
+        return userRepository
+            .findById(userDTO.getId())
             .map(user -> {
                 user.setLogin(userDTO.getLogin());
                 user.setFirstName(userDTO.getFirstName());
@@ -279,8 +281,8 @@ public class UserService {
                 Set<Authority> managedAuthorities = user.getAuthorities();
                 managedAuthorities.clear();
                 userDTO.getAuthorities().stream()
-                    .map(authorityRepository::findOne)
-                    .forEach(managedAuthorities::add);
+                    .map(authorityRepository::findById)
+                    .forEach(authority -> authority.ifPresent(managedAuthorities::add));
                 <%_ } else { // Cassandra _%>
                 user.setAuthorities(userDTO.getAuthorities());
                 <%_ } _%>
@@ -352,22 +354,22 @@ public class UserService {
     <%_ if (databaseType === 'sql') { _%>
     @Transactional(readOnly = true)
     <%_ } _%>
-    public User getUserWithAuthorities(<%= pkType %> id) {
+    public Optional<User> getUserWithAuthorities(<%= pkType %> id) {
         <%_ if (databaseType === 'sql') { _%>
         return userRepository.findOneWithAuthoritiesById(id);
         <%_ } else { // MongoDB and Cassandra _%>
-        return userRepository.findOne(id);
+        return userRepository.findById(id);
         <%_ } _%>
     }
 
     <%_ if (databaseType === 'sql') { _%>
     @Transactional(readOnly = true)
     <%_ } _%>
-    public User getUserWithAuthorities() {
+    public Optional<User> getUserWithAuthorities() {
         <%_ if (databaseType === 'sql') { _%>
-        return userRepository.findOneWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin()).orElse(null);
+        return userRepository.findOneWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin());
         <%_ } else { // MongoDB and Cassandra _%>
-        return userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).orElse(null);
+        return userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
         <%_ } _%>
     }
     <%_ if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { _%>

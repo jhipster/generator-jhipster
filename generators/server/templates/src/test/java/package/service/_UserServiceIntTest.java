@@ -171,7 +171,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
 
     @Test
     public void assertThatAnonymousUserIsNotGet() {<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
-        final PageRequest pageable = new PageRequest(0, (int) userRepository.count());
+        final PageRequest pageable = PageRequest.of(0, (int) userRepository.count());
         final Page<UserDTO> allManagedUsers = userService.getAllManagedUsers(pageable);
         assertThat(allManagedUsers.getContent().stream()<% } %><% if (databaseType === 'cassandra') { %>
         final List<UserDTO> allManagedUsers = userService.getAllManagedUsers();

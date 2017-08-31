@@ -80,8 +80,8 @@ public class SocialServiceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        doNothing().when(mockMailService).sendSocialRegistrationValidationEmail(anyObject(), anyString());
-        doNothing().when(mockConnectionRepository).addConnection(anyObject());
+        doNothing().when(mockMailService).sendSocialRegistrationValidationEmail(any(), anyString());
+        doNothing().when(mockConnectionRepository).addConnection(any());
         when(mockUsersConnectionRepository.createConnectionRepository(anyString())).thenReturn(mockConnectionRepository);
 
         socialService = new SocialService(mockUsersConnectionRepository, authorityRepository,
@@ -215,7 +215,7 @@ public class SocialServiceIntTest {
         User user = userRepository.findOneByEmail("mail@mail.com").get();
         assertThat(user.getActivated()).isEqualTo(true);
         assertThat(user.getPassword()).isNotEmpty();
-        Authority userAuthority = authorityRepository.findOne("ROLE_USER");
+        Authority userAuthority = authorityRepository.findById("ROLE_USER").get();
         assertThat(user.getAuthorities().toArray()).containsExactly(userAuthority);
 
         // Teardown
@@ -375,7 +375,7 @@ public class SocialServiceIntTest {
         socialService.createSocialUser(connection, "fr");
 
         //Verify
-        verify(mockMailService, times(1)).sendSocialRegistrationValidationEmail(anyObject(), anyString());
+        verify(mockMailService, times(1)).sendSocialRegistrationValidationEmail(any(), anyString());
 
         // Teardown
         User userToDelete = userRepository.findOneByEmail("mail@mail.com").get();

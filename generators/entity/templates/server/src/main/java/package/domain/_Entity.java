@@ -23,7 +23,8 @@ let importSet = false;
 const uniqueEnums = {}; %><%- include imports -%>
 
 <%_ if (databaseType === 'cassandra') { _%>
-import com.datastax.driver.mapping.annotations.*;
+import org.springframework.data.cassandra.core.mapping.PrimaryKey;
+import org.springframework.data.cassandra.core.mapping.Table;
 <%_ } if (importJsonignore === true) { _%>
 import com.fasterxml.jackson.annotation.JsonIgnore;
 <%_ } if (typeof javadoc != 'undefined') { _%>
@@ -90,7 +91,7 @@ import <%=packageName%>.domain.enumeration.<%= element %>;
 } if (databaseType === 'mongodb') { _%>
 @Document(collection = "<%= entityTableName %>")
 <%_ } if (databaseType === 'cassandra') { _%>
-@Table(name = "<%= entityInstance %>")
+@Table("<%= entityInstance %>")
 <%_ } if (searchEngine === 'elasticsearch') { _%>
 @Document(indexName = "<%= entityInstance.toLowerCase() %>")
 <%_ } _%>
@@ -110,7 +111,7 @@ public class <%= entityClass %> implements Serializable {
     @Id
     private String id;
 <%_ } if (databaseType === 'cassandra') { _%>
-    @PartitionKey
+    @PrimaryKey
     private UUID id;
 <%_ } _%>
 

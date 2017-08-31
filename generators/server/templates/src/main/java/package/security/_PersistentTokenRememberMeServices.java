@@ -50,6 +50,7 @@ import java.time.LocalDate;
 <%_ if (databaseType === 'cassandra') { _%>
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.Arrays;
 import java.util.Date;
@@ -216,11 +217,14 @@ public class PersistentTokenRememberMeServices extends
         }
         String presentedSeries = cookieTokens[0];
         String presentedToken = cookieTokens[1];
-        PersistentToken token = persistentTokenRepository.findOne(presentedSeries);
+        Optional<PersistentToken> tokenOptional = persistentTokenRepository.findById(presentedSeries);
+        PersistentToken token;
 
-        if (token == null) {
+        if (!tokenOptional.isPresent()) {
             // No series match, so we can't authenticate using this cookie
             throw new RememberMeAuthenticationException("No persistent token found for series id: " + presentedSeries);
+        } else {
+            token = tokenOptional.get();
         }
 
         // We have a match for this user/series combination

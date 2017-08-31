@@ -17,10 +17,13 @@
  limitations under the License.
 -%>
 <% if (!viaService) {
-    if (databaseType === 'sql' || databaseType === 'mongodb') { %>
-        <%= entityInstance %>Repository.delete(id);<% } %><% if (databaseType === 'cassandra') { %>
-        <%= entityInstance %>Repository.delete(UUID.fromString(id));<% } %><% if (searchEngine === 'elasticsearch') { %><% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
-        <%= entityInstance %>SearchRepository.delete(id);<% } %><% if (databaseType === 'cassandra') { %>
-        <%= entityInstance %>SearchRepository.delete(UUID.fromString(id));<% } %><% }
+    if (!reactive) { %>
+        <%= entityInstance %>Repository.deleteById(id);<% } %><% if (reactive) { %>
+        return <%= entityInstance %>Repository.findById(id)
+            .map(saved<%= entityClass %> -> {
+                 <%= entityInstance %>Repository.deleteById(id).subscribe();
+                 return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("<%= entityInstance %>", id<% if (databaseType === 'cassandra') { %>.toString()<% } %>)).build();
+            });<% } %><% if (searchEngine === 'elasticsearch') { %>
+        <%= entityInstance %>SearchRepository.deleteById(id);<% }
 } else { %>
-        <%= entityInstance %>Service.delete(id);<% } %>
+        <%if (reactive) { %>return <%}%><%= entityInstance %>Service.delete(id);<% } %>

@@ -286,7 +286,7 @@ listen_address: 127.0.0.1
 
 start_native_transport: true
 # port for the CQL native transport to listen for clients on
-native_transport_port: 0
+native_transport_port: 49142
 
 # Whether to start the thrift rpc server.
 start_rpc: true

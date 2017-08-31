@@ -41,6 +41,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
+import java.util.NoSuchElementException;
 
 @Service
 public class SocialService {
@@ -122,7 +123,10 @@ public class SocialService {
         String login = getLoginDependingOnProviderId(userProfile, providerId);
         String encryptedPassword = passwordEncoder.encode(RandomStringUtils.random(10));
         Set<Authority> authorities = new HashSet<>(1);
-        authorities.add(authorityRepository.findOne("ROLE_USER"));
+
+        Optional<Authority> authorityOptional = authorityRepository.findById("ROLE_USER");
+        if (!authorityOptional.isPresent()) throw new NoSuchElementException();
+        authorities.add(authorityOptional.get());
 
         User newUser = new User();
         newUser.setLogin(login);

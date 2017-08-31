@@ -24,6 +24,7 @@ import <%=packageName%>.AbstractCassandraTest;
 import <%=packageName%>.<%= mainClass %>;
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.UserRepository;
+import com.mycompany.myapp.security.AuthoritiesConstants;
 import <%=packageName%>.security.jwt.TokenProvider;
 import <%=packageName%>.web.rest.vm.LoginVM;
 import org.junit.Before;
@@ -40,6 +41,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
 
+import java.util.HashSet;
+import java.util.Set;
 <%_ if (databaseType === 'cassandra') { _%>
 import java.util.UUID;
 
@@ -91,7 +94,11 @@ public class UserJWTControllerIntTest <% if (databaseType === 'cassandra') { %>e
         user.setEmail("user-jwt-controller@example.com");
         user.setActivated(true);
         user.setPassword(passwordEncoder.encode("test"));
-
+        <%_ if (databaseType === 'cassandra') { _%>
+        Set<String> authorities = new HashSet<>();
+        authorities.add(AuthoritiesConstants.USER);
+        user.setAuthorities(authorities);
+        <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
         userRepository.saveAndFlush(user);
         <%_ } else if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
@@ -122,7 +129,11 @@ public class UserJWTControllerIntTest <% if (databaseType === 'cassandra') { %>e
         user.setEmail("user-jwt-controller-remember-me@example.com");
         user.setActivated(true);
         user.setPassword(passwordEncoder.encode("test"));
-
+        <%_ if (databaseType === 'cassandra') { _%>
+        Set<String> authorities = new HashSet<>();
+        authorities.add(AuthoritiesConstants.USER);
+        user.setAuthorities(authorities);
+        <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
         userRepository.saveAndFlush(user);
         <%_ } else if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>

@@ -69,6 +69,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.Optional;
 <%_ if (databaseType !== 'sql') { _%>
 import java.util.UUID;
 <%_ } _%>
@@ -77,6 +78,7 @@ import java.util.UUID;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 <%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -456,7 +458,9 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         int databaseSizeBeforeUpdate = userRepository.findAll().size();
 
         // Update the user
-        User updatedUser = userRepository.findOne(user.getId());
+        Optional<User> optionalUpdatedUser = userRepository.findById(user.getId());
+        assertTrue(optionalUpdatedUser.isPresent());
+        User updatedUser = optionalUpdatedUser.get();
 
         Set<String> authorities = new HashSet<>();
         authorities.add("ROLE_USER");
@@ -511,7 +515,9 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         int databaseSizeBeforeUpdate = userRepository.findAll().size();
 
         // Update the user
-        User updatedUser = userRepository.findOne(user.getId());
+        Optional<User> optionalUpdatedUser = userRepository.findById(user.getId());
+        assertTrue(optionalUpdatedUser.isPresent());
+        User updatedUser = optionalUpdatedUser.get();
 
         Set<String> authorities = new HashSet<>();
         authorities.add("ROLE_USER");
@@ -585,7 +591,9 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         <%_ } _%>
 
         // Update the user
-        User updatedUser = userRepository.findOne(user.getId());
+        Optional<User> optionalUpdatedUser = userRepository.findById(user.getId());
+        assertTrue(optionalUpdatedUser.isPresent());
+        User updatedUser = optionalUpdatedUser.get();
 
         Set<String> authorities = new HashSet<>();
         authorities.add("ROLE_USER");
@@ -646,7 +654,9 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         <%_ } _%>
 
         // Update the user
-        User updatedUser = userRepository.findOne(user.getId());
+        Optional<User> optionalUpdatedUser = userRepository.findById(user.getId());
+        assertTrue(optionalUpdatedUser.isPresent());
+        User updatedUser = optionalUpdatedUser.get();
 
         Set<String> authorities = new HashSet<>();
         authorities.add("ROLE_USER");

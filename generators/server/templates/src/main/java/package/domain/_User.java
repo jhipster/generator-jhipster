@@ -19,14 +19,19 @@
 package <%=packageName%>.domain;
 
 import <%=packageName%>.config.Constants;
-<% if (databaseType === 'cassandra') { %>
-import com.datastax.driver.mapping.annotations.*;<% } %>
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.apache.commons.lang3.StringUtils;<% if (databaseType === 'sql') { %>
+import org.apache.commons.lang3.StringUtils;
+<% if (databaseType === 'sql') { %>
 import org.hibernate.annotations.BatchSize;<% } %><% if (hibernateCache !== 'no' && databaseType === 'sql') { %>
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %>
 import org.hibernate.validator.constraints.Email;
+<%_ if (databaseType === 'cassandra') { _%>
+import org.springframework.data.cassandra.core.mapping.Column;
+import org.springframework.data.cassandra.core.mapping.PrimaryKey;
+import org.springframework.data.cassandra.core.mapping.Table;
+<%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import org.springframework.data.elasticsearch.annotations.Document;
 <%_ } _%>
@@ -59,7 +64,7 @@ import java.time.Instant;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <%_ } else { _%>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE) <%_ } } _%><% if (databaseType === 'mongodb') { %>
 @Document(collection = "jhi_user")<% } %><% if (databaseType === 'cassandra') { %>
-@Table(name = "user")<% } %><% if (searchEngine === 'elasticsearch') { %>
+@Table("user")<% } %><% if (searchEngine === 'elasticsearch') { %>
 @Document(indexName = "user")<% } %>
 public class User<% if (databaseType === 'sql' || databaseType === 'mongodb') { %> extends AbstractAuditingEntity<% } %> implements Serializable {
 
@@ -75,7 +80,7 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb') { 
     private Long id;<% } %><% if (databaseType === 'mongodb') { %>
     @Id
     private String id;<% } %><% if (databaseType === 'cassandra') { %>
-    @PartitionKey
+    @PrimaryKey
     private String id;<% } %>
 
     <%_ let columnMax = 50;
@@ -118,7 +123,7 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb') { 
     @Size(min = 2, max = 5)<% if (databaseType === 'sql') { %>
     @Column(name = "lang_key", length = 5)<% } %><% if (databaseType === 'mongodb') { %>
     @Field("lang_key")<% } %><% if (databaseType === 'cassandra') { %>
-    @Column(name = "lang_key")<% } %>
+    @Column("lang_key")<% } %>
     private String langKey;
     <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
 
@@ -131,22 +136,23 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb') { 
     @Size(max = 20)<% if (databaseType === 'sql') { %>
     @Column(name = "activation_key", length = 20)<% } %><% if (databaseType === 'mongodb') { %>
     @Field("activation_key")<% } %><% if (databaseType === 'cassandra') { %>
-    @Column(name = "activation_key")<% } %>
+    @Column("activation_key")<% } %>
     @JsonIgnore
     private String activationKey;
 
     @Size(max = 20)<% if (databaseType === 'sql') { %>
     @Column(name = "reset_key", length = 20)<% } %><% if (databaseType === 'mongodb') { %>
     @Field("reset_key")<% } %><% if (databaseType === 'cassandra') { %>
-    @Column(name = "reset_key")<% } %>
+    @Column("reset_key")<% } %>
     @JsonIgnore
     private String resetKey;
 
-    <%_ if (databaseType === 'sql' || databaseType === 'cassandra') { _%>
+    <%_ if (databaseType === 'sql') { _%>
     @Column(name = "reset_date")
-    <%_ } else if (databaseType === 'mongodb') { _%>
+    <%_ } if (databaseType === 'mongodb') { _%>
     @Field("reset_date")
-    <%_ } _%>
+    <%_ } if (databaseType === 'cassandra') { _%>
+    @Column("reset_key")<%_ } _%>
     private Instant resetDate = null;
 
     @JsonIgnore<% if (databaseType === 'sql') { %>
