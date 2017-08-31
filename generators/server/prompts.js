@@ -508,14 +508,12 @@ function askForOptionalItems(meta) {
             }
         );
     }
-
     choices.push(
         {
             name: 'API first development using swagger-codegen',
             value: 'enableSwaggerCodegen:true'
         }
     );
-
     choices.push(
         {
             name: '[BETA] Asynchronous messages using Apache Kafka',
