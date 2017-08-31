@@ -17,20 +17,20 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 
 import { Log } from './log.model';
 
 @Injectable()
 export class LogsService {
-    constructor(private http: Http) { }
+    constructor(private http: HttpClient) { }
 
-    changeLevel(log: Log): Observable<Response> {
+    changeLevel(log: Log): Observable<any> {
         return this.http.put('management/logs', log);
     }
 
     findAll(): Observable<Log[]> {
-        return this.http.get('management/logs').map((res: Response) => res.json());
+        return this.http.get<Log[]>('management/logs');
     }
 }

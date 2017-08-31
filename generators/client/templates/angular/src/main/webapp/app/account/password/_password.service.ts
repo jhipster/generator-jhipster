@@ -17,13 +17,13 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 
 @Injectable()
 export class PasswordService {
 
-    constructor(private http: Http) {}
+    constructor(private http: HttpClient) {}
 
     save(newPassword: string): Observable<any> {
         return this.http.post(<% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account/change-password'<%} else { %>'api/account/change-password'<% } %>, newPassword);

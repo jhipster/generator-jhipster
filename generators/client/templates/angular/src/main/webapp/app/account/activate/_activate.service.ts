@@ -17,20 +17,17 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { Http, Response, URLSearchParams } from '@angular/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 
 @Injectable()
 export class ActivateService {
 
-    constructor(private http: Http) {}
+    constructor(private http: HttpClient) {}
 
     get(key: string): Observable<any> {
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('key', key);
-
         return this.http.get(<% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/activate'<%} else { %>'api/activate'<% } %>, {
-            search: params
-        }).map((res: Response) => res);
+            params: new HttpParams().set('key', key)
+        });
     }
 }
