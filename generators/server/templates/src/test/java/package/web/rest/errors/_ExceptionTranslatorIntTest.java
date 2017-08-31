@@ -109,7 +109,7 @@ public class ExceptionTranslatorIntTest <% if (databaseType === 'cassandra') { %
     public void testAccessDenied() throws Exception {
         mockMvc.perform(get("/test/access-denied"))
             .andExpect(status().isForbidden())
-            .andExpect(jsonPath("$.message").value(ErrorConstants.ERR_ACCESS_DENIED))
+            .andExpect(jsonPath("$.message").value("error.http.403"))
             .andExpect(jsonPath("$.description").value("test access denied!"));
     }
 
@@ -125,7 +125,7 @@ public class ExceptionTranslatorIntTest <% if (databaseType === 'cassandra') { %
     public void testExceptionWithResponseStatus() throws Exception {
         mockMvc.perform(get("/test/response-status"))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.message").value("error.400"))
+            .andExpect(jsonPath("$.message").value("error.http.400"))
             .andExpect(jsonPath("$.description").value("test response status"));
     }
 

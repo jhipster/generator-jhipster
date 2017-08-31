@@ -1,6 +1,12 @@
 {
     "error": {
         "title": "ผิดพลาด!",
-        "403": "คุณไม่ได้รับอนุญาตให้เข้าถึงหน้าเวปนี้."
+        "http": {
+            "403": "คุณไม่ได้รับอนุญาตให้เข้าถึงหน้าเวปนี้."
+        },
+        "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",
+        "validation": "Validation error on the server.",
+        "methodNotSupported": "The HTTP verb you used is not supported for this URL.",
+        "internalServerError": "Internal server error."
     }
 }

@@ -1,6 +1,12 @@
 {
     "error": {
         "title": "Pagina di errore!",
-        "403": "Non si dispongono i privilegi sufficienti per accedere a qusta pagina."
+        "http": {
+            "403": "Non si dispongono i privilegi sufficienti per accedere a qusta pagina."
+        },
+        "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",
+        "validation": "Validation error on the server.",
+        "methodNotSupported": "The HTTP verb you used is not supported for this URL.",
+        "internalServerError": "Internal server error."
     }
 }

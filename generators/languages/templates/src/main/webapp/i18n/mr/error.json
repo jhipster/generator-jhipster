@@ -1,6 +1,12 @@
 {
     "error": {
         "title": "त्रुटी पृष्ठ!",
-        "403": "आपण पृष्ठ प्रवेश करण्यास अधिकृत नाही."
+        "http": {
+            "403": "आपण पृष्ठ प्रवेश करण्यास अधिकृत नाही."
+        },
+        "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",
+        "validation": "Validation error on the server.",
+        "methodNotSupported": "The HTTP verb you used is not supported for this URL.",
+        "internalServerError": "Internal server error."
     }
 }
