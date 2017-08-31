@@ -78,7 +78,7 @@
         <hazelcast-wm.version>3.7</hazelcast-wm.version>
         <%_ } _%>
         <%_ if (hibernateCache === 'infinispan') { _%>
-        <infinispan-hibernate52.version>5.2.8.Final</infinispan-hibernate52.version>
+        <infinispan-hibernate52.version>5.2.10.Final</infinispan-hibernate52.version>
         <%_ } _%>
         <%_ if (hibernateCache === 'infinispan') { _%>
         <infinispan.version>8.2.5.Final</infinispan.version>
@@ -86,7 +86,7 @@
         <infinispan.boot.starter.version>1.0.0.Final</infinispan.boot.starter.version>
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
-        <hibernate.version>5.2.8.Final</hibernate.version>
+        <hibernate.version>5.2.10.Final</hibernate.version>
         <hikaricp.version>2.6.0</hikaricp.version>
         <%_ } _%>
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
