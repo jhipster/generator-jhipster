@@ -48,11 +48,15 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.http.MediaType;
+import org.springframework.http.MediaType;<% if (reactive) { %>
+import org.springframework.http.ResponseEntity;<% } %>
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit4.SpringRunner;<% if (!reactive) { %>
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;<% if (databaseType === 'sql') { %>
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;<% } else { %>
+import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Mono;<% } %>
+<% if (databaseType === 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %><% if (fieldsContainBlob === true) { %>
 import org.springframework.util.Base64Utils;<% } %>
 <% if (databaseType === 'sql') { %>
@@ -65,16 +69,17 @@ import java.time.ZonedDateTime;
 import java.time.ZoneOffset;<% } %><% if (fieldsContainLocalDate === true || fieldsContainZonedDateTime === true) { %>
 import java.time.ZoneId;<% } %><% if (fieldsContainInstant === true) { %>
 import java.time.temporal.ChronoUnit;<% } %>
-import java.util.List;
-import java.util.Optional;<% if (databaseType === 'cassandra') { %>
+import java.util.List;<% if (!reactive) { %>
+import java.util.Optional;<% } %><% if (databaseType === 'cassandra') { %>
 import java.util.UUID;<% } %>
 <% if (fieldsContainZonedDateTime === true) { %>
 import static <%=packageName%>.web.rest.TestUtil.sameInstant;<% } %>
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;<% if (!reactive) { %>
 import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;<% } else { %>
+import static org.junit.Assert.assertNotNull;<% } %>
 
 <%_ for (idx in fields) { if (fields[idx].fieldIsEnum === true) { _%>import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;
 <%_ } } _%>
@@ -278,7 +283,11 @@ _%>
     private EntityManager em;
 <%_ } _%>
 
+<%_ if (!reactive) { _%>
     private MockMvc rest<%= entityClass %>MockMvc;
+<%_ } else { %>
+    private WebTestClient webTestClient;
+<%_ } %>
 
     private <%= entityClass %> <%= entityInstance %>;
 
@@ -290,10 +299,17 @@ _%>
         <%_ } else { _%>
         final <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Repository<% if (dto === 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, <%= entityInstance %>SearchRepository<% } %><% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %>);
         <%_ } _%>
+        <%_ if (!reactive) { _%>
         this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setMessageConverters(jacksonMessageConverter).build();
+        <%_ } else { _%>
+        this.webTestClient = WebTestClient.bindToController(<%= entityInstance %>Resource)
+//            .argumentResolvers(pageableArgumentResolver)
+            .controllerAdvice(exceptionTranslator)
+            .build();
+        <%_ } _%>
     }
 
     /**
@@ -340,8 +356,8 @@ _%>
     @Before
     public void initTest() {
         <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
-        <%= entityInstance %>Repository.deleteAll();
-        <%_ } if (searchEngine === 'elasticsearch') { _%>
+        <%= entityInstance %>Repository.deleteAll()<% } if (reactive) { %>.block()<% } %>;
+        <%_ if (searchEngine === 'elasticsearch') { _%>
         <%= entityInstance %>SearchRepository.deleteAll();
         <%_ } _%>
         <%= entityInstance %> = createEntity(<% if (databaseType === 'sql') { %>em<% } %>);
@@ -350,19 +366,27 @@ _%>
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void create<%= entityClass %>() throws Exception {
-        int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll().size();
+        int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>.collectList().block()<% } %>.size();
 
         // Create the <%= entityClass %>
         <%_ if (dto === 'mapstruct') { _%>
         <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.toDto(<%= entityInstance %>);
-        <%_ } _%>
+        <%_ } _%><%_ if (!reactive) { %>
         rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %><% if (dto === 'mapstruct') { %>DTO<% } %>)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isCreated());<%_ } else { _%>
+            webTestClient.post()
+            .uri("/api/<%= entityApiUrl %>")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .syncBody(<%= entityInstance %><% if (dto === 'mapstruct') { %>DTO<% } %>)
+            .exchange()
+            .expectStatus()
+            .isCreated();
+            <%_ } _%>
 
         // Validate the <%= entityClass %> in the database
-        List<<%= entityClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
+        List<<%= entityClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeCreate + 1);
         <%= entityClass %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
         <%_ for (idx in fields) { if (fields[idx].fieldType === 'ZonedDateTime') { _%>
@@ -386,7 +410,7 @@ _%>
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void create<%= entityClass %>WithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll().size();
+        int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>.collectList().block()<% } %>.size();
 
         // Create the <%= entityClass %> with an existing ID
         <%= entityInstance %>.setId(<% if (databaseType === 'sql') { %>1L<% } else if (databaseType === 'mongodb') { %>"existing_id"<% } else if (databaseType === 'cassandra') { %>UUID.randomUUID()<% } %>);
@@ -395,13 +419,21 @@ _%>
         <%_ } _%>
 
         // An entity with an existing ID cannot be created, so this API call must fail
+        <%_ if (!reactive) { _%>
         rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %><% if (dto === 'mapstruct') { %>DTO<% } %>)))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isBadRequest());<%_ } else { _%>
+        webTestClient.post()
+            .uri("/api/<%= entityApiUrl %>")
+            .syncBody(<%= entityInstance %><% if (dto === 'mapstruct') { %>DTO<% } %>)
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
+            <%_ } _%>
 
         // Validate the Alice in the database
-        List<<%= entityClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
+        List<<%= entityClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeCreate);
     }
 <% for (idx in fields) { %><% if (fields[idx].fieldValidate === true) {
@@ -413,19 +445,27 @@ _%>
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void check<%= fields[idx].fieldInJavaBeanMethod %>IsRequired() throws Exception {
-        int databaseSizeBeforeTest = <%= entityInstance %>Repository.findAll().size();
+        int databaseSizeBeforeTest = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>.collectList().block()<% } %>.size();
         // set the field null
         <%= entityInstance %>.set<%= fields[idx].fieldInJavaBeanMethod %>(null);
 
         // Create the <%= entityClass %>, which fails.<% if (dto === 'mapstruct') { %>
         <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.toDto(<%= entityInstance %>);<% } %>
 
+        <%_ if (!reactive) { _%>
         rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %><% if (dto === 'mapstruct') { %>DTO<% } %>)))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isBadRequest());<%_ } else { _%>
+        webTestClient.post()
+            .uri("/api/<%= entityApiUrl %>")
+            .syncBody(<%= entityInstance %><% if (dto === 'mapstruct') { %>DTO<% } %>)
+            .exchange()
+            .expectStatus()
+            .is5xxServerError();
+            <%_ } _%>// spring error...
 
-        List<<%= entityClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
+        List<<%= entityClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeTest);
     }
 <%  } } } %>
@@ -435,9 +475,10 @@ _%>
         // Initialize the database
         <% if (databaseType === 'cassandra') { _%><%= entityInstance %>.setId(UUID.randomUUID());
         <%_ } _%>
-        <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
+        <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= entityInstance %>)<% if (reactive) { %>.block()<% } %>;
 
         // Get all the <%= entityInstance %>List
+        <%_ if (!reactive) { %>
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %><% if (databaseType !== 'cassandra') { %>?sort=id,desc<% } %>"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))<% if (databaseType === 'sql') { %>
@@ -448,6 +489,17 @@ _%>
             .andExpect(jsonPath("$.[*].<%=fields[idx].fieldName%>ContentType").value(hasItem(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE)))
             <%_ } _%>
             .andExpect(jsonPath("$.[*].<%=fields[idx].fieldName%>").value(hasItem(<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%><% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (fields[idx].fieldType === 'Integer') { %><% } else if (fields[idx].fieldType === 'Long') { %>.intValue()<% } else if (fields[idx].fieldType === 'Float' || fields[idx].fieldType === 'Double') { %>.doubleValue()<% } else if (fields[idx].fieldType === 'BigDecimal') { %>.intValue()<% } else if (fields[idx].fieldType === 'Boolean') { %>.booleanValue()<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else { %>.toString()<% } %>)))<% } %>;
+        <%_ } else { _%>
+        <%= entityClass %> result = webTestClient.get()
+            .uri("/api/<%= entityApiUrl %><% if (databaseType !== 'cassandra') { %>?sort=id,desc<% } %>")
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .returnResult(<%= entityClass %>.class)
+            .getResponseBody()
+            .blockFirst();
+        assertThat(result.equals(<%= entityInstance %>));
+        <%_ } _%>
     }
 
     @Test<% if (databaseType === 'sql') { %>
@@ -456,9 +508,10 @@ _%>
         // Initialize the database
         <% if (databaseType === 'cassandra') { _%><%= entityInstance %>.setId(UUID.randomUUID());
         <%_ } _%>
-        <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
+        <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= entityInstance %>)<% if (reactive) { %>.block()<% } %>;
 
         // Get the <%= entityInstance %>
+        <%_ if (!reactive) { _%>
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>/{id}", <%= entityInstance %>.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))<% if (databaseType === 'sql') { %>
@@ -468,8 +521,15 @@ _%>
             <%_ if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
             .andExpect(jsonPath("$.<%=fields[idx].fieldName%>ContentType").value(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE))
             <%_ } _%>
-            .andExpect(jsonPath("$.<%=fields[idx].fieldName%>").value(<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%><% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (fields[idx].fieldType === 'Integer') { %><% } else if (fields[idx].fieldType === 'Long') { %>.intValue()<% } else if (fields[idx].fieldType === 'Float' || fields[idx].fieldType === 'Double') { %>.doubleValue()<% } else if (fields[idx].fieldType === 'BigDecimal') { %>.intValue()<% } else if (fields[idx].fieldType === 'Boolean') { %>.booleanValue()<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else { %>.toString()<% } %>))<% } %>;
-    }
+            .andExpect(jsonPath("$.<%=fields[idx].fieldName%>").value(<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%><% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (fields[idx].fieldType === 'Integer') { %><% } else if (fields[idx].fieldType === 'Long') { %>.intValue()<% } else if (fields[idx].fieldType === 'Float' || fields[idx].fieldType === 'Double') { %>.doubleValue()<% } else if (fields[idx].fieldType === 'BigDecimal') { %>.intValue()<% } else if (fields[idx].fieldType === 'Boolean') { %>.booleanValue()<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else { %>.toString()<% } %>))<% } %>;<%_ } else { _%>
+        webTestClient.get()
+            .uri("/api/<%= entityApiUrl %>/{id}", <%= entityInstance %>.getId())
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .expectBody(<%= entityClass %>.class)
+            .isEqualTo(<%= entityInstance %>);<%_ } _%>
+        }
 <%_ if (jpaMetamodelFiltering) {
         fields.forEach((searchBy) => {
             // we can't filter by all the fields.
@@ -586,29 +646,37 @@ _%>
     @Transactional<% } %>
     public void getNonExisting<%= entityClass %>() throws Exception {
         // Get the <%= entityInstance %>
+        <%_ if (!reactive) { _%>
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>/{id}", <% if (databaseType === 'sql' || databaseType === 'mongodb') { %>Long.MAX_VALUE<% } %><% if (databaseType === 'cassandra') { %>UUID.randomUUID().toString()<% } %>))
-            .andExpect(status().isNotFound());
-    }
+            .andExpect(status().isNotFound());<%_ } else { _%>
+        webTestClient.get()
+            .uri("/api/labels/{id}", <% if (databaseType === 'sql' || databaseType === 'mongodb') { %>Long.MAX_VALUE<% } %><% if (databaseType === 'cassandra') { %>UUID.randomUUID().toString()<% } %>)
+            .exchange()
+            .expectStatus()
+            .isNotFound();<%_ } _%>
+        }
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void update<%= entityClass %>() throws Exception {
         // Initialize the database
-        <% if (databaseType === 'cassandra') { _%><%= entityInstance %>.setId(UUID.randomUUID());
+        <%_ if (databaseType === 'cassandra') { _%><%= entityInstance %>.setId(UUID.randomUUID());
         <%_ } _%>
-<%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
-        <%= entityInstance %>Service.save(<%= entityInstance %>);
-<%_ } else { _%>
-        <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);<% if (searchEngine === 'elasticsearch') { %>
+        <%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
+        <%= entityInstance %>Service.save(<%= entityInstance %>)<% if (reactive) { %>.block()<% } %>;
+        <%_ } else { _%>
+        <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= entityInstance %>)<% if (reactive) { %>.block()<% } %>;<% if (searchEngine === 'elasticsearch') { %>
         <%= entityInstance %>SearchRepository.save(<%= entityInstance %>);<%_ } _%>
 <%_ } _%>
 
-        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll().size();
+        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>.collectList().block()<% } %>.size();
 
         // Update the <%= entityInstance %>
-        Optional<<%= entityClass %>> optionalUpdated<%= entityClass %> = <%= entityInstance %>Repository.findById(<%= entityInstance %>.getId());
+        <%_ if (!reactive) { %>Optional<<%= entityClass %>> optionalUpdated<%= entityClass %> = <%= entityInstance %>Repository.findById(<%= entityInstance %>.getId());
         assertTrue(optionalUpdated<%= entityClass %>.isPresent());
-        <%= entityClass %> updated<%= entityClass %> = optionalUpdated<%= entityClass %>.get();
+        <%= entityClass %> updated<%= entityClass %> = optionalUpdated<%= entityClass %>.get();<%_ } else { _%>
+        <%= entityClass %> updated<%= entityClass %> = <%= entityInstance %>Repository.findById(<%= entityInstance %>.getId()).block();
+        assertNotNull(updated<%= entityClass %>);<%_ } _%>
 
         <%_ if (fluentMethods && fields.length > 0) { _%>
         updated<%= entityClass %><% for (idx in fields) { %>
@@ -626,13 +694,22 @@ _%>
         <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.toDto(updated<%= entityClass %>);
         <%_ } _%>
 
+        <%_ if (!reactive) { _%>
         rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(<% if (dto === 'mapstruct') { %><%= entityInstance %>DTO<% } else { %>updated<%= entityClass %><% } %>)))
-            .andExpect(status().isOk());
+            .andExpect(status().isOk());<%_ } else { _%>
+        webTestClient.put()
+            .uri("/api/<%= entityApiUrl %>")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .syncBody(<% if (dto === 'mapstruct') { %><%= entityInstance %>DTO<% } else { %>updated<%= entityClass %><% } %>)
+            .exchange()
+            .expectStatus()
+            .isOk();
+            <%_ } _%>
 
         // Validate the <%= entityClass %> in the database
-        List<<%= entityClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
+        List<<%= entityClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
         <%= entityClass %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
         <%_ for (idx in fields) { if (fields[idx].fieldType === 'ZonedDateTime') { _%>
@@ -656,19 +733,28 @@ _%>
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void updateNonExisting<%= entityClass %>() throws Exception {
-        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll().size();
+        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>.collectList().block()<% } %>.size();
 
         // Create the <%= entityClass %><% if (dto === 'mapstruct') { %>
         <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.toDto(<%= entityInstance %>);<% } %>
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
+        <%_ if (!reactive) { _%>
         rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %><% if (dto === 'mapstruct') { %>DTO<% } %>)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isCreated());<%_ } else { _%>
+        webTestClient.put()
+            .uri("/api/<%= entityApiUrl %>")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .syncBody(<%= entityInstance %><% if (dto === 'mapstruct') { %>DTO<% } %>)
+            .exchange()
+            .expectStatus()
+            .isCreated();
+            <%_ } _%>
 
         // Validate the <%= entityClass %> in the database
-        List<<%= entityClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
+        List<<%= entityClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate + 1);
     }
 
@@ -678,26 +764,37 @@ _%>
         // Initialize the database
         <% if (databaseType === 'cassandra') { _%><%= entityInstance %>.setId(UUID.randomUUID());
         <%_ } _%>
-<%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
-        <%= entityInstance %>Service.save(<%= entityInstance %>);
-<%_ } else { _%>
-        <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);<% if (searchEngine === 'elasticsearch') { %>
+<% if (service !== 'no' && dto !== 'mapstruct') { _%>
+        <%= entityInstance %>Service.save(<%= entityInstance %>)<% if (reactive) { %>.block()<% } %>;
+        <%_ } else { _%>
+        <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= entityInstance %>)<% if (reactive) { %>.block()<% } %>;<% if (searchEngine === 'elasticsearch') { %>
         <%= entityInstance %>SearchRepository.save(<%= entityInstance %>);<%_ } _%>
 <%_ } _%>
 
-        int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll().size();
+        int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>.collectList().block()<% } %>.size();
 
         // Get the <%= entityInstance %>
+        <%_ if (!reactive) { _%>
         rest<%= entityClass %>MockMvc.perform(delete("/api/<%= entityApiUrl %>/{id}", <%= entityInstance %>.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
-            .andExpect(status().isOk());<% if (searchEngine === 'elasticsearch') { %>
-
+            .andExpect(status().isOk());<%_ } else { _%>
+        webTestClient.delete()
+            .uri("/api/<%= entityApiUrl %>/{id}", <%= entityInstance %>.getId())
+            .accept(TestUtil.APPLICATION_JSON_UTF8)
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .returnResult(ResponseEntity.class)
+            .getResponseBody()
+            .blockFirst();
+            <%_ } _%>
+        <% if (searchEngine === 'elasticsearch') { %>
         // Validate Elasticsearch is empty
         boolean <%= entityInstance %>ExistsInEs = <%= entityInstance %>SearchRepository.existsById(<%= entityInstance %>.getId());
         assertThat(<%= entityInstance %>ExistsInEs).isFalse();<% } %>
 
         // Validate the database is empty
-        List<<%= entityClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
+        List<<%= entityClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeDelete - 1);
     }<% if (searchEngine === 'elasticsearch') { %>
 
@@ -715,6 +812,7 @@ _%>
 <%_ } _%>
 
         // Search the <%= entityInstance %>
+        <%_ if (!reactive) { _%>
         rest<%= entityClass %>MockMvc.perform(get("/api/_search/<%= entityApiUrl %>?query=id:" + <%= entityInstance %>.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))<% if (databaseType === 'sql') { %>
@@ -723,8 +821,16 @@ _%>
             .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().toString())))<% } %><% for (idx in fields) {%>
             <%_ if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
             .andExpect(jsonPath("$.[*].<%=fields[idx].fieldName%>ContentType").value(hasItem(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE)))
-            <%_ } _%>
-            .andExpect(jsonPath("$.[*].<%=fields[idx].fieldName%>").value(hasItem(<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%><% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (fields[idx].fieldType === 'Integer') { %><% } else if (fields[idx].fieldType === 'Long') { %>.intValue()<% } else if (fields[idx].fieldType === 'Float' || fields[idx].fieldType === 'Double') { %>.doubleValue()<% } else if (fields[idx].fieldType === 'BigDecimal') { %>.intValue()<% } else if (fields[idx].fieldType === 'Boolean') { %>.booleanValue()<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else { %>.toString()<% } %>)))<% } %>;
+        <%_ } _%>
+            .andExpect(jsonPath("$.[*].<%=fields[idx].fieldName%>").value(hasItem(<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%><% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (fields[idx].fieldType === 'Integer') { %><% } else if (fields[idx].fieldType === 'Long') { %>.intValue()<% } else if (fields[idx].fieldType === 'Float' || fields[idx].fieldType === 'Double') { %>.doubleValue()<% } else if (fields[idx].fieldType === 'BigDecimal') { %>.intValue()<% } else if (fields[idx].fieldType === 'Boolean') { %>.booleanValue()<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else { %>.toString()<% } %>)))<% } %>;<%_ } else { _%>
+        webTestClient.get()
+            .uri("/api/_search/<%= entityApiUrl %>?query=id:" + <%= entityInstance %>.getId())
+            .accept(TestUtil.APPLICATION_JSON_UTF8)
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .expectBody(<%= entityClass %>.class)
+            .isEqualTo(<%= entityInstance %>);<%_ } _%>
     }<% } %>
 
     @Test<% if (databaseType === 'sql') { %>

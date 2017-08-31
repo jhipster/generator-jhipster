@@ -41,7 +41,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.data.cassandra.config.AbstractCassandraConfiguration;
+import org.springframework.data.cassandra.config.Abstract<% if (reactive) { %>Reactive<% } %>CassandraConfiguration;
 import org.springframework.data.cassandra.config.CassandraClusterFactoryBean;
 import org.springframework.data.cassandra.config.ClusterBuilderConfigurer;
 import org.springframework.data.cassandra.config.CompressionType;
@@ -53,7 +53,7 @@ import com.codahale.metrics.MetricRegistry;
 @ConditionalOnProperty("jhipster.gateway.rate-limiting.enabled")<% } %>
 @EnableConfigurationProperties(CassandraProperties.class)
 @Profile({JHipsterConstants.SPRING_PROFILE_DEVELOPMENT, JHipsterConstants.SPRING_PROFILE_PRODUCTION})
-public class CassandraConfiguration extends AbstractCassandraConfiguration {
+public class CassandraConfiguration extends Abstract<% if (reactive) { %>Reactive<% } %>CassandraConfiguration {
 
     @Value("${spring.data.cassandra.protocolVersion:V4}")
     private ProtocolVersion protocolVersion;
@@ -105,23 +105,15 @@ public class CassandraConfiguration extends AbstractCassandraConfiguration {
         }
         String points = properties.getContactPoints();
         cluster.setContactPoints(points);
-        return cluster;
-    }
-
-    @Override
-    protected ClusterBuilderConfigurer getClusterBuilderConfigurer() {
-        return clusterBuilder -> {
+        cluster.setClusterBuilderConfigurer(clusterBuilder -> {
+            log.info(String.valueOf(clusterBuilder.getConfiguration().getCodecRegistry()==null));
             clusterBuilder.getConfiguration().getCodecRegistry()
-                .register(InstantCodec.instance,
-                    LocalDateCodec.instance,
-                    LocalTimeCodec.instance,
-                    new ZonedDateTimeCodec(cluster().getObject().getMetadata().newTupleType(DataType.timestamp(), DataType.varchar())));
-            if (metricRegistry != null) {
-                cluster().getObject().init();
-                metricRegistry.registerAll(cluster().getObject().getMetrics().getRegistry());
-            }
+                .register(LocalDateCodec.instance,
+                    InstantCodec.instance,
+                    new ZonedDateTimeCodec(TupleType.of(protocolVersion, clusterBuilder.getConfiguration().getCodecRegistry(), DataType.timestamp(), DataType.varchar())));
             return clusterBuilder;
-        };
+        });
+        return cluster;
     }
 
     protected QueryOptions getQueryOptions() {

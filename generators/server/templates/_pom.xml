@@ -617,10 +617,22 @@
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
         <%_ } _%>
+        <%_ if (databaseType === 'mongodb' && reactive) { _%>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
+        </dependency>
+        <%_ } _%>
         <%_ if (databaseType === 'cassandra') { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-cassandra</artifactId>
+        </dependency>
+        <%_ } _%>
+        <%_ if (databaseType === 'cassandra' && reactive) { _%>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-cassandra-reactive</artifactId>
         </dependency>
         <%_ } _%>
         <%_ if (messageBroker === 'kafka') { _%>
@@ -686,6 +698,13 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <%_ if (reactive) { _%>
+        <!-- reactive -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <%_ } _%>
         <%_ if (websocket === 'spring-websocket') { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>

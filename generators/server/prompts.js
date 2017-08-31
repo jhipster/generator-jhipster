@@ -523,6 +523,13 @@ function askForOptionalItems(meta) {
         }
     );
 
+    choices.push(
+        {
+            name: '[BETA] Reactive entities',
+            value: 'reactive:true'
+        }
+    );
+
     const PROMPTS = {
         type: 'checkbox',
         name: 'serverSideOptions',
@@ -543,6 +550,7 @@ function askForOptionalItems(meta) {
             this.enableSocialSignIn = this.getOptionFromArray(this.serverSideOptions, 'enableSocialSignIn');
             this.messageBroker = this.getOptionFromArray(this.serverSideOptions, 'messageBroker');
             this.enableSwaggerCodegen = this.getOptionFromArray(this.serverSideOptions, 'enableSwaggerCodegen');
+            this.reactive = this.getOptionFromArray(this.serverSideOptions, 'reactive');
             // Only set this option if it hasn't been set in a previous question, as it's only optional for monoliths
             if (!this.serviceDiscoveryType) {
                 this.serviceDiscoveryType = this.getOptionFromArray(this.serverSideOptions, 'serviceDiscoveryType');

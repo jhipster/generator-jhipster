@@ -16,8 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<% if (!viaService) { %>
-        <%= entityInstance %>Repository.deleteById(id);<% if (searchEngine === 'elasticsearch') { %>
+<% if (!viaService) {
+    if (!reactive) { %>
+        <%= entityInstance %>Repository.deleteById(id);<% } %><% if (reactive) { %>
+        return <%= entityInstance %>Repository.findById(id)
+            .map(saved<%= entityClass %> -> {
+                 <%= entityInstance %>Repository.deleteById(id).subscribe();
+                 return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("<%= entityInstance %>", id<% if (databaseType === 'cassandra') { %>.toString()<% } %>)).build();
+            });<% } %><% if (searchEngine === 'elasticsearch') { %>
         <%= entityInstance %>SearchRepository.deleteById(id);<% }
 } else { %>
-        <%= entityInstance %>Service.delete(id);<% } %>
+        <%if (reactive) { %>return <%}%><%= entityInstance %>Service.delete(id);<% } %>

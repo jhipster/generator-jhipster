@@ -37,8 +37,8 @@ import java.util.Optional;<%_ } _%><% }} %>
 import java.util.UUID;
 <%_ } _%>
 <% if (databaseType === 'mongodb') { %>
-import org.springframework.data.mongodb.repository.MongoRepository;<% } %><% if (databaseType === 'cassandra') { %>
-import org.springframework.data.cassandra.repository.CassandraRepository;
+import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive<% } %>MongoRepository;<% } %><% if (databaseType === 'cassandra') { %>
+import org.springframework.data.cassandra.repository.<% if (reactive) { %>Reactive<% } %>CassandraRepository;
 <% } %>
 
 <%_ if (databaseType === 'sql') { _%>
@@ -56,7 +56,7 @@ import org.springframework.data.cassandra.repository.CassandraRepository;
 <%_ } _%>
 @SuppressWarnings("unused")
 @Repository
-public interface <%=entityClass%>Repository extends <% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'cassandra') { %>CassandraRepository<% } %><<%=entityClass%>, <%= pkType %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%=entityClass%>><% } %> {
+public interface <%=entityClass%>Repository extends <% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %><% if (reactive) { %>Reactive<% } %>MongoRepository<% } %><% if (databaseType === 'cassandra') { %><% if (reactive) { %>Reactive<% } %>CassandraRepository<% } %><<%=entityClass%>, <%= pkType %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%=entityClass%>><% } %> {
     <%_ for (idx in relationships) {
         if (relationships[idx].relationshipType === 'many-to-one' && relationships[idx].otherEntityName === 'user') { _%>
 

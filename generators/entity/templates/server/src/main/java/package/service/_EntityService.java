@@ -28,6 +28,14 @@ import <%=packageName%>.domain.<%= entityClass %>;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
+<%_ if (reactive) { _%>
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import com.mycompany.myapp.web.rest.util.HeaderUtil;
+import org.springframework.http.ResponseEntity;
+<%_ } else { %>
+import java.util.Optional;
+<%_ } _%>
 <%_ if (pagination === 'no' || fieldsContainNoOwnerOneToOne === true) { _%>
 import java.util.List;
 <%_ } _%>
@@ -47,7 +55,7 @@ public interface <%= entityClass %>Service {
      * @param <%= instanceName %> the entity to save
      * @return the persisted entity
      */
-    <%= instanceType %> save(<%= instanceType %> <%= instanceName %>);
+    <% if (reactive) { %>Mono<<%= instanceType %>><% } else { %><%= instanceType %><% } %> save(<%= instanceType %> <%= instanceName %>);
 
     /**
      *  Get all the <%= entityInstancePlural %>.
@@ -55,8 +63,8 @@ public interface <%= entityClass %>Service {
      *  @param pageable the pagination information<% } %>
      *  @return the list of entities
      */
-    <% if (pagination !== 'no') { %>Page<<%= instanceType %><% } else { %>List<<%= instanceType %><% } %>> findAll(<% if (pagination !== 'no') { %>Pageable pageable<% } %>);
-<% for (idx in relationships) { if (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide !== true) { -%>
+    <% if (reactive) { %> Flux<<%= instanceType %><% } else { if (pagination !== 'no') { %>Page<<%= instanceType %> <% } else { %>List<<%= instanceType %><% }} %>> findAll(<% if (pagination !== 'no') { %>Pageable pageable<% } %>);
+    <% for (idx in relationships) { if (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide !== true) { -%>
     /**
      *  Get all the <%= entityClass %>DTO where <%= relationships[idx].relationshipNameCapitalized %> is null.
      *
@@ -71,14 +79,14 @@ public interface <%= entityClass %>Service {
      *  @param id the id of the entity
      *  @return the entity
      */
-    Optional<<%= instanceType %>> findOne(<%= pkType %> id);
+    <% if (reactive) { %>Mono<<%= instanceType %>><% } else { %>Optional<<%= instanceType %>><% } %> findOne(<%= pkType %> id);
 
     /**
      *  Delete the "id" <%= entityInstance %>.
      *
      *  @param id the id of the entity
      */
-    void delete(<%= pkType %> id);<% if (searchEngine === 'elasticsearch') { %>
+    <% if (reactive) { %>Mono<ResponseEntity<Void>><% } else { %>void<% } %> delete(<%= pkType %> id);<% if (searchEngine === 'elasticsearch') { %>
 
     /**
      * Search for the <%= entityInstance %> corresponding to the query.
@@ -89,4 +97,6 @@ public interface <%= entityClass %>Service {
      *  @return the list of entities
      */
     <% if (pagination !== 'no') { %>Page<<%= instanceType %><% } else { %>List<<%= instanceType %><% } %>> search(String query<% if (pagination !== 'no') { %>, Pageable pageable<% } %>);<% } %>
+
+    <% if (pagination !== 'no' && reactive) { %>Mono<Long> count();<% } %>
 }

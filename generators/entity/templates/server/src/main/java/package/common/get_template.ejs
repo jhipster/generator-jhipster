@@ -20,9 +20,9 @@
     const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
     const mapper = entityInstance  + 'Mapper';
     const entityToDto = mapper + '::' + 'toDto';
-    var returnPrefix = returnDirectly ? 'return' : 'Optional<' + instanceType + '> ' +  instanceName + ' =';
-    if (!viaService) {
+    var returnPrefix = returnDirectly ? 'return' : ((reactive) ? 'Mono<' : 'Optional<') + instanceType + '> ' +  instanceName + ' =';
 %>
-        <% if (dto === 'mapstruct') { %>Optional<<%= entityClass %>> <%= entityInstance %> = <% } else { %><%- returnPrefix %> <% } %><%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany === true) { %>findOneWithEagerRelationships<% } else { %>findById<% } %>(id);<% if (dto === 'mapstruct') { %>
+        <% if (!viaService) {
+        if (dto === 'mapstruct') { if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= entityClass %>> <%= entityInstance %> = <% } else { %><%- returnPrefix %> <% } %><%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany === true) { %>findOneWithEagerRelationships<% } else { %>findById<% } %>(id);<% if (dto === 'mapstruct') { %>
         <%- returnPrefix %> <%= entityInstance %>.map(<%= entityToDto %>);<% } } else { %>
         <%- returnPrefix %> <%= entityInstance %>Service.findOne(id);<% } %>

@@ -26,6 +26,9 @@ import <%=packageName%>.domain.<%= entityClass %>;
 import <%=packageName%>.service.<%= entityClass %>Service;<% } else { %>
 import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine === 'elasticsearch') { %>
 import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% }} %>
+<%_ if (reactive) { _%>
+import <%=packageName%>.web.rest.util.AsyncUtil;
+<%_ } _%>
 import <%=packageName%>.web.rest.util.HeaderUtil;<% if (pagination !== 'no') { %>
 import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
 <%_ if (dto === 'mapstruct') { _%>
@@ -51,6 +54,10 @@ import org.springframework.http.HttpStatus;
 <%_ } _%>
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+<% if (reactive) { _%>
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+<%_ } _%>
 <% if (validation) { %>
 import javax.validation.Valid;<% } %>
 import java.net.URI;
@@ -90,18 +97,21 @@ public class <%= entityClass %>Resource {
      */
     @PostMapping("/<%= entityApiUrl %>")
     @Timed
-    public ResponseEntity<<%= instanceType %>> create<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
+    public <% if (reactive) { %>Mono<ResponseEntity<<%= instanceType %>>><% }else { %>ResponseEntity<<%= instanceType %>><% }%> create<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
         log.debug("REST request to save <%= entityClass %> : {}", <%= instanceName %>);
         if (<%= instanceName %>.getId() != null) {
-            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new <%= entityInstance %> cannot already have an ID")).body(null);
+            return <% if (reactive) { %>Mono.just(<% } %>ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new <%= entityInstance %> cannot already have an ID")).body(null)<% if (reactive) { %>)<% } %>;
         }
         <%_ if (databaseType === 'cassandra') { %>
         <%= instanceName %>.setId(UUID.randomUUID());
         <%_ } _%>
         <%- include('../../common/save_template', {viaService: viaService, returnDirectly: false}); -%>
-        return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.getId()))
+        <% if (!reactive) { %>return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+            .body(result);<% } else { %>return result.map((<%= instanceType %> saved<%= instanceType%>) ->
+            ResponseEntity.created(URI.create("/api/<%= entityApiUrl %>/" + saved<%= instanceType%>.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, saved<%= instanceType%>.getId().toString()))
+            .body(saved<%= instanceType%>));<% } %>
     }
 
     /**
@@ -115,14 +125,17 @@ public class <%= entityClass %>Resource {
      */
     @PutMapping("/<%= entityApiUrl %>")
     @Timed
-    public ResponseEntity<<%= instanceType %>> update<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
+    public <% if (reactive) { %>Mono<ResponseEntity<<%= instanceType %>>><% }else { %>ResponseEntity<<%= instanceType %>><% }%> update<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
         log.debug("REST request to update <%= entityClass %> : {}", <%= instanceName %>);
         if (<%= instanceName %>.getId() == null) {
             return create<%= entityClass %>(<%= instanceName %>);
         }<%- include('../../common/save_template', {viaService: viaService, returnDirectly: false}); -%>
-        return ResponseEntity.ok()
+        <% if (!reactive) { %>return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, <%= instanceName %>.getId().toString()))
-            .body(result);
+            .body(result);<% } else { %>return result.map((<%= entityClass %><% if (dto === 'mapstruct') { %>DTO<% } %> saved<%= entityClass %>) ->
+            ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, saved<%= entityClass %>.getId()<% if (databaseType === 'cassandra') { %>.toString()<% } %>))
+                .body(saved<%= entityClass %>));<% } %>
     }
 
     /**
@@ -134,7 +147,7 @@ public class <%= entityClass %>Resource {
      * @return the ResponseEntity with status 200 (OK) and the list of <%= entityInstancePlural %> in body
      */
     @GetMapping("/<%= entityApiUrl %>")
-    @Timed<%- include('../../common/get_all_template', {viaService: viaService}); -%>
+    @Timed<%- include('../../common/get_all_template', {viaService: viaService}) -%>
 
     /**
      * GET  /<%= entityApiUrl %>/:id : get the "id" <%= entityInstance %>.
@@ -144,9 +157,9 @@ public class <%= entityClass %>Resource {
      */
     @GetMapping("/<%= entityApiUrl %>/{id}")
     @Timed
-    public ResponseEntity<<%= instanceType %>> get<%= entityClass %>(@PathVariable <%= pkType %> id) {
-        log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {viaService: viaService, returnDirectly:false}); -%>
-        return ResponseUtil.wrapOrNotFound(<%= instanceName %>);
+    public <% if (reactive) { %>Mono<ResponseEntity<<%= instanceType %>>><% } else { %>ResponseEntity<<%= instanceType %>><% } %> get<%= entityClass %>(@PathVariable <%= pkType %> id) {
+        log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {viaService: viaService, reactive: reactive, returnDirectly:false}) -%>
+        return <% if (reactive) { %>Async<% } else { %>Response<% } %>Util.wrapOrNotFound(<%= instanceName %>);
     }
 
     /**
@@ -157,9 +170,9 @@ public class <%= entityClass %>Resource {
      */
     @DeleteMapping("/<%= entityApiUrl %>/{id}")
     @Timed
-    public ResponseEntity<Void> delete<%= entityClass %>(@PathVariable <%= pkType %> id) {
-        log.debug("REST request to delete <%= entityClass %> : {}", id);<%- include('../../common/delete_template', {viaService: viaService}); -%>
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id<% if (pkType !== 'String') { %>.toString()<% } %>)).build();
+    public <% if (reactive) { %>Mono<ResponseEntity<Void>><% }else { %>ResponseEntity<Void><% }%> delete<%= entityClass %>(@PathVariable <%= pkType %> id) {
+        log.debug("REST request to delete <%= entityClass %> : {}", id);<%- include('../../common/delete_template', {viaService: viaService, reactive: reactive}); -%>
+        <% if (!reactive) { %>return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id<% if (pkType !== 'String') { %>.toString()<% } %>)).build();<% } %>
     }<% if (searchEngine === 'elasticsearch') { %>
 
     /**

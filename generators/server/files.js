@@ -424,6 +424,7 @@ function writeFiles() {
 
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/util/_HeaderUtil.java`, `${javaDir}web/rest/util/HeaderUtil.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/util/_PaginationUtil.java`, `${javaDir}web/rest/util/PaginationUtil.java`);
+            if (this.reactive) this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/util/_AsyncUtil.java`, `${javaDir}web/rest/util/AsyncUtil.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_package-info.java`, `${javaDir}web/rest/package-info.java`);
 
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_LogsResource.java`, `${javaDir}web/rest/LogsResource.java`);
