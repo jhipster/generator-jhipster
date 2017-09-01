@@ -2,6 +2,7 @@
     "error": {
         "title": "त्रुटि पृष्ठ!",
         "http": {
+            "400": "Bad request.",
             "403": "आप पृष्ठ तक पहुँचने के लिए अधिकृत नहीं हैं."
         },
         "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",

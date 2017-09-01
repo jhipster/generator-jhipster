@@ -2,6 +2,7 @@
     "error": {
         "title": "Ошибка!",
         "http": {
+            "400": "Bad request.",
             "403": "Вы не авторизованы для доступа к странице"
         },
         "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",

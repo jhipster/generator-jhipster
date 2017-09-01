@@ -2,6 +2,7 @@
     "error": {
         "title": "Foutpagina!",
         "http": {
+            "400": "Bad request.",
             "403": "U bent niet bevoegd om de pagina te openen."
         },
         "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",

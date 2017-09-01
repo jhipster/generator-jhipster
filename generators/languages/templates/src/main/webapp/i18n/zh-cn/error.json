@@ -2,6 +2,7 @@
     "error": {
         "title": "错误页面!",
         "http": {
+            "400": "Bad request.",
             "403": "您没有权限访问此页面."
         },
         "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",

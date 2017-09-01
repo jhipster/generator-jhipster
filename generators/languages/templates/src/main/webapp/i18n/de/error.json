@@ -2,6 +2,7 @@
     "error": {
         "title": "Fehlerseite!",
         "http": {
+            "400": "Bad request.",
             "403": "Sie haben nicht die nötigen Berechtigungen diese Seite anzuzeigen."
         },
         "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",

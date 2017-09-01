@@ -2,6 +2,7 @@
     "error": {
         "title": "Felsida!",
         "http": {
+            "400": "Bad request.",
             "403": "Du har inte behörighet till att komma åt sidan."
         },
         "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",

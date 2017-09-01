@@ -2,6 +2,7 @@
     "error": {
         "title": "錯誤頁面!",
         "http": {
+            "400": "Bad request.",
             "403": "您沒有權限存取此頁面。"
         },
         "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",

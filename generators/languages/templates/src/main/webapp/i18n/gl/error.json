@@ -2,6 +2,7 @@
     "error": {
         "title": "Páxina de erro!",
         "http": {
+            "400": "Bad request.",
             "403": "Non ten permisos para acceder á páxina."
         },
         "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",

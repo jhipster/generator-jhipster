@@ -2,6 +2,7 @@
     "error": {
         "title": "ผิดพลาด!",
         "http": {
+            "400": "Bad request.",
             "403": "คุณไม่ได้รับอนุญาตให้เข้าถึงหน้าเวปนี้."
         },
         "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",

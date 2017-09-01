@@ -2,6 +2,7 @@
     "error": {
         "title": "Vealeht!",
         "http": {
+            "400": "Bad request.",
             "403": "Teil puuduvad õigused selle lehe nägemiseks."
         },
         "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",

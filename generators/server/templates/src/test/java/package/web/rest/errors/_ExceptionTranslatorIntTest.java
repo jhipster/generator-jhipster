@@ -106,6 +106,20 @@ public class ExceptionTranslatorIntTest <% if (databaseType === 'cassandra') { %
     }
 
     @Test
+    public void testMissingServletRequestPartException() throws Exception {
+        mockMvc.perform(get("/test/missing-servlet-request-part"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("error.http.400"));
+    }
+
+    @Test
+    public void testMissingServletRequestParameterException() throws Exception {
+        mockMvc.perform(get("/test/missing-servlet-request-parameter"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("error.http.400"));
+    }
+
+    @Test
     public void testAccessDenied() throws Exception {
         mockMvc.perform(get("/test/access-denied"))
             .andExpect(status().isForbidden())

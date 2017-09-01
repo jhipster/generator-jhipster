@@ -2,6 +2,7 @@
     "error": {
         "title": "에러 페이지!",
         "http": {
+            "400": "Bad request.",
             "403": "이 페이지에 접근할 권한이 없습니다."
         },
         "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",
