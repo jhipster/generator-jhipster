@@ -1314,6 +1314,14 @@
                         <configuration>
                             <%_ if (!skipClient) { _%>
                             <warSourceDirectory><% if (clientFramework !== 'angular1') { %><%= CLIENT_DIST_DIR %><% } else { %><%= CLIENT_MAIN_SRC_DIR %><% } %></warSourceDirectory>
+                            <webResources>
+                                <resource>
+                                    <directory>src/main/webapp</directory>
+                                    <includes>
+                                        <include>WEB-INF/**</include>
+                                    </includes>
+                                </resource>
+                            </webResources>
                             <%_ } _%>
                         </configuration>
                     </plugin>
@@ -1352,6 +1360,14 @@
                         <configuration>
                             <%_ if (!skipClient) { _%>
                             <warSourceDirectory><%= CLIENT_DIST_DIR %></warSourceDirectory>
+                            <webResources>
+                                <resource>
+                                    <directory>src/main/webapp</directory>
+                                    <includes>
+                                        <include>WEB-INF/**</include>
+                                    </includes>
+                                </resource>
+                            </webResources>
                             <%_ } _%>
                         </configuration>
                     </plugin>
