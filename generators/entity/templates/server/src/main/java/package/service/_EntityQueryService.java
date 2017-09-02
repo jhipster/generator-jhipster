@@ -61,7 +61,7 @@ import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;
  * Service for executing complex queries for <%= entityClass %> entities in the database.
  * The main input is a {@link <%= entityClass %>Criteria} which get's converted to {@link Specifications},
  * in a way that all the filters must apply.
- * It returns a {@link List} of {%link <%= instanceType %>} or a {@link Page} of {%link <%= instanceType %>} which fullfills the criterias
+ * It returns a {@link List} of {%link <%= instanceType %>} or a {@link Page} of {%link <%= instanceType %>} which fulfills the criterias
  */
 @Service<% if (databaseType === 'sql') { %>
 @Transactional(readOnly = true)<% } %>
