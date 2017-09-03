@@ -71,6 +71,9 @@ html[dir=rtl] {
     .col-lg-12 {
         float: right;
     }
+    body {
+        text-align: right;
+    }
     .navbar-nav>li {
         float: right;
     }
@@ -82,6 +85,9 @@ html[dir=rtl] {
     }
     .dropdown-menu {
         text-align: right;
+    }
+    .modal-header .close{
+        margin-left: 0rem;
     }
     .modal-footer {
         text-align: left;
