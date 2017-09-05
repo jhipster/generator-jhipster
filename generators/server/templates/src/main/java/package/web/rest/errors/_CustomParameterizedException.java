@@ -18,8 +18,12 @@
 -%>
 package <%=packageName%>.web.rest.errors;
 
+import org.zalando.problem.AbstractThrowableProblem;
+
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.zalando.problem.Status.BAD_REQUEST;
 
 /**
  * Custom, parameterized exception, which can be translated on the client side.
@@ -35,33 +39,34 @@ import java.util.Map;
  * "error.myCustomError" :  "The server says {{param0}} to {{param1}}"
  * </pre>
  */
-public class CustomParameterizedException extends RuntimeException {
+public class CustomParameterizedException extends AbstractThrowableProblem {
 
     private static final long serialVersionUID = 1L;
 
     private static final String PARAM = "param";
 
-    private final String message;
-
-    private final Map<String, String> paramMap = new HashMap<>();
-
     public CustomParameterizedException(String message, String... params) {
-        super(message);
-        this.message = message;
+        this(message, toParamMap(params));
+    }
+
+    public CustomParameterizedException(String message, Map<String, Object> paramMap) {
+        super(ErrorConstants.PARAMETERIZED_TYPE, "Parameterized Exception", BAD_REQUEST, null, null, null, toProblemParameters(message, paramMap));
+    }
+
+    public static Map<String, Object> toParamMap(String... params) {
+        Map<String, Object> paramMap = new HashMap<>();
         if (params != null && params.length > 0) {
             for (int i = 0; i < params.length; i++) {
                 paramMap.put(PARAM + i, params[i]);
             }
         }
+        return paramMap;
     }
 
-    public CustomParameterizedException(String message, Map<String, String> paramMap) {
-        super(message);
-        this.message = message;
-        this.paramMap.putAll(paramMap);
-    }
-
-    public ParameterizedErrorVM getErrorVM() {
-        return new ParameterizedErrorVM(message, paramMap);
+    public static Map<String, Object> toProblemParameters(String message, Map<String, Object> paramMap) {
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("message", message);
+        parameters.put("params", paramMap);
+        return parameters;
     }
 }
