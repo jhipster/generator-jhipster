@@ -387,7 +387,9 @@ public class UserService {
             user.getPersistentTokens().remove(token);<% } %>
             persistentTokenRepository.delete(token);
         });
-    }<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+    }
+    <%_ } _%>
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 
     /**
      * Not activated users should be automatically deleted after 3 days.
