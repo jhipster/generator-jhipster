@@ -134,69 +134,77 @@ prog
 
 // Application Declaration
 applicationDecl
-  = APPLICATION SPACE* '{' SPACE* CONFIG SPACE* '{' SPACE* applicationContent:applicationContentDecl? SPACE* '}'SPACE* '}' {
-    return applicationContent;
-  }
-  / APPLICATION SPACE* '{' SPACE* '}' {
-    return {};
+  = APPLICATION SPACE* '{' SPACE* applicationSubDecl:applicationSubDecl SPACE* '}' {
+    return applicationSubDecl;
   }
 
-applicationContentDecl
-  = BASE_NAME SPACE* baseName:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
-    return addToApplicationDecl(applicationContentDecl, 'baseName', baseName.join(''));
+applicationSubDecl
+  = SPACE* CONFIG SPACE* '{' SPACE* applicationConfigDecl:applicationConfigDecl? SPACE* '}' SPACE* applicationSubDecl:applicationSubDecl {
+    applicationSubDecl.config = applicationConfigDecl || {};
+    return applicationSubDecl;
   }
-  / PATH SPACE* path:[^\n]+ SPACE* applicationContentDecl:applicationContentDecl {
-    return addToApplicationDecl(applicationContentDecl, 'path', path.join(''));
+  / SPACE* 'entities' SPACE* entityList:simpleEntityList SPACE* exclusion:exclusion? SPACE* applicationSubDecl:applicationSubDecl {
+    applicationSubDecl.entities = { entityList, exclusion };
+    return applicationSubDecl;
   }
-  / PACKAGE_NAME SPACE* packageName:(([a-z]+'.')*[a-z]+) SPACE* applicationContentDecl:applicationContentDecl {
-    applicationContentDecl = addToApplicationDecl(
-      applicationContentDecl,
+  / '' { return { config: {} }; }
+
+applicationConfigDecl
+  = BASE_NAME SPACE* baseName:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'baseName', baseName.join(''));
+  }
+  / PATH SPACE* path:[^\n]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'path', path.join(''));
+  }
+  / PACKAGE_NAME SPACE* packageName:(([a-z]+'.')*[a-z]+) SPACE* applicationConfigDecl:applicationConfigDecl {
+    applicationConfigDecl = addToApplicationDecl(
+      applicationConfigDecl,
       'packageName',
       packageName.join('').replace(/,/g, '')
     );
     return addToApplicationDecl(
-      applicationContentDecl,
+      applicationConfigDecl,
       'packageFolder',
-      applicationContentDecl.packageName.replace(/[.]/g, '/')
+      applicationConfigDecl.packageName.replace(/[.]/g, '/')
     );
   }
-  / AUTHENTICATION_TYPE SPACE* authenticationType:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
-    return addToApplicationDecl(applicationContentDecl, 'authenticationType', authenticationType.join(''));
+  / AUTHENTICATION_TYPE SPACE* authenticationType:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'authenticationType', authenticationType.join(''));
   }
-  / HIBERNATE_CACHE SPACE* hibernateCache:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
-    return addToApplicationDecl(applicationContentDecl, 'hibernateCache', hibernateCache.join(''));
+  / HIBERNATE_CACHE SPACE* hibernateCache:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'hibernateCache', hibernateCache.join(''));
   }
-  / CLUSTERED_HTTP_SESSION SPACE* clusteredHttpSession:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
-    return addToApplicationDecl(applicationContentDecl, 'clusteredHttpSession', clusteredHttpSession.join(''));
+  / CLUSTERED_HTTP_SESSION SPACE* clusteredHttpSession:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'clusteredHttpSession', clusteredHttpSession.join(''));
   }
-  / WEBSOCKET SPACE* websocket:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
-    return addToApplicationDecl(applicationContentDecl, 'websocket', websocket.join(''));
+  / WEBSOCKET SPACE* websocket:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'websocket', websocket.join(''));
   }
-  / DATABASE_TYPE SPACE* databaseType:[a-z]+ SPACE* applicationContentDecl:applicationContentDecl {
-    return addToApplicationDecl(applicationContentDecl, 'databaseType', databaseType.join(''));
+  / DATABASE_TYPE SPACE* databaseType:[a-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'databaseType', databaseType.join(''));
   }
-  / DEV_DATABASE_TYPE SPACE* devDatabaseType:[A-z0-9]+ SPACE* applicationContentDecl:applicationContentDecl {
-    return addToApplicationDecl(applicationContentDecl, 'devDatabaseType', devDatabaseType.join(''));
+  / DEV_DATABASE_TYPE SPACE* devDatabaseType:[A-z0-9]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'devDatabaseType', devDatabaseType.join(''));
   }
-  / PROD_DATABASE_TYPE SPACE* prodDatabaseType:[A-z0-9]+ SPACE* applicationContentDecl:applicationContentDecl {
-    return addToApplicationDecl(applicationContentDecl, 'prodDatabaseType', prodDatabaseType.join(''));
+  / PROD_DATABASE_TYPE SPACE* prodDatabaseType:[A-z0-9]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'prodDatabaseType', prodDatabaseType.join(''));
   }
-  / USE_COMPASS SPACE* useCompass:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
-    return addToApplicationDecl(applicationContentDecl, 'useCompass', useCompass);
+  / USE_COMPASS SPACE* useCompass:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'useCompass', useCompass);
   }
-  / BUILD_TOOL SPACE* buildTool:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
-    return addToApplicationDecl(applicationContentDecl, 'buildTool', buildTool.join(''));
+  / BUILD_TOOL SPACE* buildTool:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'buildTool', buildTool.join(''));
   }
-  / SEARCH_ENGINE SPACE* searchEngine:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
-    return addToApplicationDecl(applicationContentDecl, 'searchEngine', searchEngine);
+  / SEARCH_ENGINE SPACE* searchEngine:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'searchEngine', searchEngine);
   }
-  / ENABLE_TRANSLATION SPACE* enableTranslation:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
-    return addToApplicationDecl(applicationContentDecl, 'enableTranslation', enableTranslation);
+  / ENABLE_TRANSLATION SPACE* enableTranslation:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'enableTranslation', enableTranslation);
   }
-  / APPLICATION_TYPE SPACE* applicationType:[a-z]+ SPACE* applicationContentDecl:applicationContentDecl {
-    return addToApplicationDecl(applicationContentDecl, 'applicationType', applicationType.join(''));
+  / APPLICATION_TYPE SPACE* applicationType:[a-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'applicationType', applicationType.join(''));
   }
-  / TEST_FRAMEWORK SPACE* testFrameworks:[a-z, ]+ SPACE* applicationContentDecl:applicationContentDecl {
+  / TEST_FRAMEWORK SPACE* testFrameworks:[a-z, ]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     const testFrameworkEntries = [];
     const results = testFrameworks.join('').split(',');
     for (let i = 0; i < results.length; i++) {
@@ -204,9 +212,9 @@ applicationContentDecl
         testFrameworkEntries.push(results[i].trim());
       }
     }
-    return addToApplicationDecl(applicationContentDecl, 'testFrameworks', testFrameworkEntries);
+    return addToApplicationDecl(applicationConfigDecl, 'testFrameworks', testFrameworkEntries);
   }
-  / LANGUAGES SPACE* languages:[a-z, ]+ SPACE* applicationContentDecl:applicationContentDecl {
+  / LANGUAGES SPACE* languages:[a-z, ]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     const languageEntries = [];
     const results = languages.join('').split(',');
     for (let i = 0; i < results.length; i++) {
@@ -214,67 +222,58 @@ applicationContentDecl
         languageEntries.push(results[i].trim());
       }
     }
-    return addToApplicationDecl(applicationContentDecl, 'languages', languageEntries);
+    return addToApplicationDecl(applicationConfigDecl, 'languages', languageEntries);
   }
-  / SERVER_PORT SPACE* serverPort:[0-9]+ SPACE* applicationContentDecl:applicationContentDecl {
-  	return addToApplicationDecl(applicationContentDecl, 'serverPort', parseInt(serverPort.join(''), 10));
+  / SERVER_PORT SPACE* serverPort:[0-9]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+  	return addToApplicationDecl(applicationConfigDecl, 'serverPort', parseInt(serverPort.join(''), 10));
   }
-  / ENABLE_SOCIAL_SIGN_IN SPACE* enableSocialSignIn:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
-    return addToApplicationDecl(applicationContentDecl, 'enableSocialSignIn', enableSocialSignIn);
+  / ENABLE_SOCIAL_SIGN_IN SPACE* enableSocialSignIn:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'enableSocialSignIn', enableSocialSignIn);
   }
-  / USE_SASS SPACE* useSass:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
-    return addToApplicationDecl(applicationContentDecl, 'useSass', useSass);
+  / USE_SASS SPACE* useSass:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'useSass', useSass);
   }
-  / JHI_PREFIX SPACE* jhiPrefix:[A-z0-9_-]+ SPACE* applicationContentDecl:applicationContentDecl {
-    return addToApplicationDecl(applicationContentDecl, 'jhiPrefix', jhiPrefix.join(''));
+  / JHI_PREFIX SPACE* jhiPrefix:[A-z0-9_-]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'jhiPrefix', jhiPrefix.join(''));
   }
-  / MESSAGE_BROKER SPACE* messageBroker:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
-    return addToApplicationDecl(applicationContentDecl, 'messageBroker', messageBroker);
+  / MESSAGE_BROKER SPACE* messageBroker:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'messageBroker', messageBroker);
   }
-  / SERVICE_DISCOVERY_TYPE SPACE* serviceDiscoveryType:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
+  / SERVICE_DISCOVERY_TYPE SPACE* serviceDiscoveryType:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     const choice = serviceDiscoveryType.join('');
     switch (choice) {
     case 'true':
-      return addToApplicationDecl(applicationContentDecl, 'serviceDiscoveryType', true);
+      return addToApplicationDecl(applicationConfigDecl, 'serviceDiscoveryType', true);
       break;
     case 'false':
-      return addToApplicationDecl(applicationContentDecl, 'serviceDiscoveryType', false);
+      return addToApplicationDecl(applicationConfigDecl, 'serviceDiscoveryType', false);
       break;
     default:
-      return addToApplicationDecl(applicationContentDecl, 'serviceDiscoveryType', choice.join(''));
+      return addToApplicationDecl(applicationConfigDecl, 'serviceDiscoveryType', choice.join(''));
     }
   }
-  / CLIENT_PACKAGE_MANAGER SPACE* clientPackageManager:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
-    return addToApplicationDecl(applicationContentDecl, 'clientPackageManager', clientPackageManager.join(''));
+  / CLIENT_PACKAGE_MANAGER SPACE* clientPackageManager:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'clientPackageManager', clientPackageManager.join(''));
   }
-  / CLIENT_FRAMEWORK SPACE* clientFramework:[A-z0-9]+ SPACE* applicationContentDecl:applicationContentDecl {
-    return addToApplicationDecl(applicationContentDecl, 'clientFramework', clientFramework.join(''));
+  / CLIENT_FRAMEWORK SPACE* clientFramework:[A-z0-9]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'clientFramework', clientFramework.join(''));
   }
-  / NATIVE_LANGUAGE SPACE* nativeLanguage:[a-z]+ applicationContentDecl:applicationContentDecl {
-    return addToApplicationDecl(applicationContentDecl, 'nativeLanguage', nativeLanguage.join(''));
+  / NATIVE_LANGUAGE SPACE* nativeLanguage:[a-z]+ applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'nativeLanguage', nativeLanguage.join(''));
   }
-  / FRONT_END_BUILDER SPACE* frontEndBuilder:[A-z]+ applicationContentDecl:applicationContentDecl {
-    return addToApplicationDecl(applicationContentDecl, 'frontEndBuilder', frontEndBuilder.join(''));
+  / FRONT_END_BUILDER SPACE* frontEndBuilder:[A-z]+ applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'frontEndBuilder', frontEndBuilder.join(''));
   }
-  / SKIP_USER_MANAGEMENT SPACE* skipUserManagement:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
-    return addToApplicationDecl(applicationContentDecl, 'skipUserManagement', skipUserManagement.join(''));
+  / SKIP_USER_MANAGEMENT SPACE* skipUserManagement:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'skipUserManagement', skipUserManagement.join(''));
   }
-  / SKIP_CLIENT SPACE* skipClient:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
-    return addToApplicationDecl(applicationContentDecl, 'skipClient', skipClient);
+  / SKIP_CLIENT SPACE* skipClient:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'skipClient', skipClient);
   }
-  / SKIP_SERVER SPACE* skipServer:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
-    return addToApplicationDecl(applicationContentDecl, 'skipServer', skipServer);
+  / SKIP_SERVER SPACE* skipServer:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'skipServer', skipServer);
   }
-  / ENTITIES SPACE+ entities:simpleEntityList SPACE* ex:exclusion? SPACE* applicationContentDecl:applicationContentDecl {
-    const entityEntries = [];
-    for (let i = 0; i < entities.length; i++) {
-      if (entities[i].trim().length !== 0) {
-        entityEntries.push(entities[i].trim());
-      }
-    }
-    return addToApplicationDecl(applicationContentDecl, 'entities', entityEntries);
-  }
-  / comment SPACE* applicationContentDecl:applicationContentDecl { return applicationContentDecl; }
+  / comment SPACE* applicationConfigDecl:applicationConfigDecl { return applicationConfigDecl; }
   / ''
 
 booleanChoice

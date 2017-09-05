@@ -34,7 +34,7 @@ describe('JDLObject', () => {
         const object = new JDLObject();
         const application = new JDLApplication({});
         object.addApplication(application);
-        expect(object.applications[application.baseName]).to.deep.eq(application);
+        expect(object.applications[application.config.baseName]).to.deep.eq(application);
       });
     });
   });

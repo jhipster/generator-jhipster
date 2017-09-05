@@ -586,7 +586,7 @@ describe('JDLParser', () => {
         const input = parseFromFiles(['./test/test_files/application.jdl']);
         const content = JDLParser.parse(input, 'sql');
         it('parses it', () => {
-          const application = content.applications.toto;
+          const application = content.applications.toto.config;
           expect(application.baseName).to.eq('toto');
           expect(application.path).to.eq('../../toto');
           expect(application.packageName).to.eq('com.mathieu.sample');
