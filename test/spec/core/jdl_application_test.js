@@ -45,37 +45,39 @@ describe('JDLApplication', () => {
     it('stringifies the application object', () => {
       const jdlApplication = new JDLApplication({});
       expect(jdlApplication.toString()).to.eq(`application {
-  baseName jhipster
-  path jhipster
-  packageName io.github.jhipster
-  packageFolder io/github/jhipster
-  authenticationType session
-  hibernateCache no
-  clusteredHttpSession no
-  websocket false
-  databaseType sql
-  devDatabaseType h2Memory
-  prodDatabaseType mysql
-  useCompass false
-  buildTool maven
-  searchEngine false
-  enableTranslation true
-  applicationType monolith
-  testFrameworks
-  languages en
-  serverPort 8080
-  enableSocialSignIn false
-  useSass false
-  jhiPrefix jhi
-  messageBroker false
-  serviceDiscoveryType false
-  clientPackageManager yarn
-  clientFramework angular1
-  nativeLanguage en
-  frontEndBuilder
-  skipUserManagement false
-  skipClient false
-  skipServer false
+  config {
+    baseName jhipster
+    path jhipster
+    packageName io.github.jhipster
+    packageFolder io/github/jhipster
+    authenticationType session
+    hibernateCache no
+    clusteredHttpSession no
+    websocket false
+    databaseType sql
+    devDatabaseType h2Memory
+    prodDatabaseType mysql
+    useCompass false
+    buildTool maven
+    searchEngine false
+    enableTranslation true
+    applicationType monolith
+    testFrameworks
+    languages en
+    serverPort 8080
+    enableSocialSignIn false
+    useSass false
+    jhiPrefix jhi
+    messageBroker false
+    serviceDiscoveryType false
+    clientPackageManager yarn
+    clientFramework angular1
+    nativeLanguage en
+    frontEndBuilder
+    skipUserManagement false
+    skipClient false
+    skipServer false
+  }
 }`);
     });
   });
