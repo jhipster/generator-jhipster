@@ -134,8 +134,11 @@ prog
 
 // Application Declaration
 applicationDecl
-  = APPLICATION SPACE* '{' SPACE* applicationContent:applicationContentDecl? SPACE* '}' {
+  = APPLICATION SPACE* '{' SPACE* CONFIG SPACE* '{' SPACE* applicationContent:applicationContentDecl? SPACE* '}'SPACE* '}' {
     return applicationContent;
+  }
+  / APPLICATION SPACE* '{' SPACE* '}' {
+    return {};
   }
 
 applicationContentDecl
@@ -532,6 +535,7 @@ notAComment = !commentStop !commentStart char:. { return char; }
 // Constants
 // Application constants
 APPLICATION = 'application'
+CONFIG = 'config'
 BASE_NAME = 'baseName'
 PATH = 'path'
 PACKAGE_NAME = 'packageName'
