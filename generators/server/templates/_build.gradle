@@ -375,6 +375,7 @@ dependencies {
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
     compile "com.github.mongobee:mongobee:${mongobee_version}"
+    compile "com.google.guava:guava:${guava_version}"
     <%_ } _%>
     compile ("io.springfox:springfox-swagger2:${springfox_version}") {
         exclude module: 'mapstruct'
