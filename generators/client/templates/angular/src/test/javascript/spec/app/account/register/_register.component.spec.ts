@@ -87,7 +87,9 @@ describe('Component Tests', () => {
                     });
                     expect(comp.success).toEqual(true);
                     expect(comp.registerAccount.langKey).toEqual('<%= nativeLanguage %>');
-                    <% if(enableTranslation) { %>expect(mockTranslate.getCurrentSpy).toHaveBeenCalled();<% } %>
+                    <%_ if (enableTranslation) { _%>
+                    expect(mockTranslate.getCurrentSpy).toHaveBeenCalled();
+                    <%_ } _%>
                     expect(comp.errorUserExists).toBeNull();
                     expect(comp.errorEmailExists).toBeNull();
                     expect(comp.error).toBeNull();

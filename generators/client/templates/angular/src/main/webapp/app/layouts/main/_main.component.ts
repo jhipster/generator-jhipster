@@ -17,13 +17,12 @@
  limitations under the License.
 -%>
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRouteSnapshot, NavigationEnd, RoutesRecognized } from '@angular/router';
+import { Router, ActivatedRouteSnapshot, NavigationEnd } from '@angular/router';
 
 <%_ if (enableTranslation) { _%>
-import { JhiLanguageHelper, StateStorageService } from '../../shared';
+import { JhiLanguageHelper } from '../../shared';
 <%_ } else { _%>
 import { Title } from '@angular/platform-browser';
-import { StateStorageService } from '../../shared';
 <%_ } _%>
 
 @Component({
@@ -38,8 +37,7 @@ export class <%=jhiPrefixCapitalized%>MainComponent implements OnInit {
         <%_ } else { _%>
         private titleService: Title,
         <%_ } _%>
-        private router: Router,
-        private $storageService: StateStorageService,
+        private router: Router
     ) {}
 
     private getPageTitle(routeSnapshot: ActivatedRouteSnapshot) {

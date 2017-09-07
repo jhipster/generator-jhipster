@@ -56,6 +56,7 @@ function writeFiles() {
         writeDockerFiles() {
             // Create Docker and Docker Compose files
             this.template(`${DOCKER_DIR}_Dockerfile`, `${DOCKER_DIR}Dockerfile`);
+            this.template(`${DOCKER_DIR}.dockerignore`, `${DOCKER_DIR}.dockerignore`);
             this.template(`${DOCKER_DIR}_app.yml`, `${DOCKER_DIR}app.yml`);
             if (this.prodDatabaseType === 'mysql') {
                 this.template(`${DOCKER_DIR}_mysql.yml`, `${DOCKER_DIR}mysql.yml`);
