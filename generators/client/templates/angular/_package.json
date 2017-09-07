@@ -90,7 +90,7 @@
     "karma-sourcemap-loader": "0.3.7",
     "karma-webpack": "2.0.4",
     <%_ if (enableTranslation) { _%>
-    "merge-jsons-webpack-plugin": "1.0.8",
+    "merge-jsons-webpack-plugin": "1.0.11",
     <%_ } _%>
     "ngc-webpack": "3.1.1",
     "phantomjs-prebuilt": "2.1.14",
@@ -144,7 +144,7 @@
     "build": "<%= clientPackageManager %> run webpack:prod",
     "test": "karma start src/test/javascript/karma.conf.js",
     "test:watch": "<%= clientPackageManager %> test -- --watch",
-    "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --progress --inline --hot --profile --port=9060",
+    "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --progress --inline --hot --profile --port=9060 --watch-content-base",
     "webpack:build:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --progress --profile",
     "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:main",
     "webpack:prod:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --progress --profile",
