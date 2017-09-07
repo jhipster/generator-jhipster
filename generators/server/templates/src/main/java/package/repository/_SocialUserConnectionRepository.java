@@ -28,7 +28,7 @@ import java.util.Set;
 /**
  * Spring Data <% if (databaseType === 'sql') { %>JPA<% } else if (databaseType === 'mongodb') { %>MongoDB<% } else if (databaseType === 'couchbase') { %>Couchbase<% } %> repository for the Social User Connection entity.
  */
-public interface SocialUserConnectionRepository extends <% if (databaseType === 'sql') { %>JpaRepository<% } else if (databaseType === 'mongodb') { %>MongoRepository<% } else if (databaseType === 'couchbase') { %><% } %>N1qlCouchbaseRepository<SocialUserConnection, <% if (databaseType === 'sql') { %>Long<% } else if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>String<% } %>> {
+public interface SocialUserConnectionRepository extends <% if (databaseType === 'sql') { %>JpaRepository<% } else if (databaseType === 'mongodb') { %>MongoRepository<% } else if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><SocialUserConnection, <% if (databaseType === 'sql') { %>Long<% } else if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>String<% } %>> {
 
     List<SocialUserConnection> findAllByProviderIdAndProviderUserId(String providerId, String providerUserId);
 
