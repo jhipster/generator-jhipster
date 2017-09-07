@@ -127,8 +127,12 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
     public void configure(HttpSecurity http) throws Exception {
         http
             .csrf()
+		<%_ if (applicationType === 'gateway') { _%>
             .ignoringAntMatchers("/h2-console/**")
             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+		<%_ } else { _%>
+			.disable()
+		<%_ } _%>
         .and()
             .headers()
             .frameOptions()
