@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2017 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see https://jhipster.github.io/
+ * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,6 +47,7 @@ module.exports = HerokuGenerator.extend({
         this.angularAppName = this.getAngularAppName();
         this.buildTool = this.config.get('buildTool');
         this.applicationType = this.config.get('applicationType');
+        this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
         this.herokuAppName = this.config.get('herokuAppName');
         this.dynoSize = 'Free';
     },
@@ -257,7 +258,7 @@ module.exports = HerokuGenerator.extend({
             }
 
             this.log(chalk.bold('\nProvisioning addons'));
-            exec(`heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`, {}, (err, stdout, stderr) => {
+            exec(`heroku addons:create ${dbAddOn} --as DATABASE --app ${this.herokuAppName}`, {}, (err, stdout, stderr) => {
                 if (err) {
                     const verifyAccountUrl = 'https://heroku.com/verify';
                     if (_.includes(err, verifyAccountUrl)) {
@@ -278,7 +279,7 @@ module.exports = HerokuGenerator.extend({
             if (this.abort || this.herokuAppExists) return;
             const done = this.async();
 
-            if (this.applicationType === 'microservice' || this.applicationType === 'gateway') {
+            if (this.serviceDiscoveryType === 'eureka') {
                 const prompts = [
                     {
                         type: 'input',

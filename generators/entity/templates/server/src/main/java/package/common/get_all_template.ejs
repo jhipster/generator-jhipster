@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,21 @@
     const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
     const mapper = entityInstance + 'Mapper';
     const entityListToDtoListReference = mapper + '.' + 'toDto';
-    if (pagination === 'no') { %>
+    if (jpaMetamodelFiltering) {  %>
+    public ResponseEntity<List<<%= instanceType %>>> getAll<%= entityClassPlural %>(<%= entityClass %>Criteria criteria<% if (pagination != 'no') { %>,@ApiParam Pageable pageable<% } %>) {
+        log.debug("REST request to get <%= entityClassPlural %> by criteria: {}", criteria);
+    <%_ if (pagination === 'no') { _%>
+        List<<%= instanceType %>> entityList = <%= entityInstance %>QueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    <%_ } else { _%>
+        Page<<%= instanceType %>> page = <%= entityInstance %>QueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityApiUrl %>");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    <%_ } _%>
+    }
+<%
+    } else {
+        if (pagination === 'no') { %>
     public List<<%= instanceType %>> getAll<%= entityClassPlural %>(<% if (fieldsContainNoOwnerOneToOne) { %>@RequestParam(required = false) String filter<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
         log.debug("REST request to get all <%= entityClassPlural %>");<% if (viaService) { %>
         return <%= entityInstance %>Service.findAll();<% } else if (dto === 'mapstruct') { %>
@@ -35,5 +49,6 @@
         Page<<%= entityClass %>> page = <%= entityInstance %>Repository.findAll(pageable);<% } %>
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityApiUrl %>");
         return new ResponseEntity<>(<% if (!viaService && dto === 'mapstruct') { %><%= entityListToDtoListReference %>(page.getContent())<% } else { %>page.getContent()<% } %>, headers, HttpStatus.OK);
-    <% } -%>
-}
+    <%_ } _%>
+    }
+<%_ } _%>

@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2017 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see https://jhipster.github.io/
+ * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,7 +42,7 @@ module.exports = ModulesGenerator.extend({
 
         this.warning(`${chalk.red('DEPRECATED!')} The JHipster module sub-generator is deprecated.`);
         this.warning(`Please import the ${chalk.yellow('generator-base.js')} using commonJS require or ES2015 import.`);
-        this.warning(`See ${chalk.yellow('https://jhipster.github.io/modules/creating-a-module')} for more details.\n`);
+        this.warning(`See ${chalk.yellow('http://www.jhipster.tech/modules/creating-a-module')} for more details.\n`);
 
         const baseName = this.config.get('baseName');
         const packageName = this.config.get('packageName');
@@ -74,6 +74,7 @@ module.exports = ModulesGenerator.extend({
         jhipsterVar.languages = this.config.get('languages');
         jhipsterVar.enableSocialSignIn = this.config.get('enableSocialSignIn');
         jhipsterVar.testFrameworks = this.config.get('testFrameworks');
+        jhipsterVar.enableSwaggerCodegen = this.config.get('enableSwaggerCodegen');
         jhipsterVar.jhiPrefix = this.config.get('jhiPrefix');
         jhipsterVar.jhiPrefixCapitalized = _.upperFirst(jhipsterVar.jhiPrefix);
         jhipsterVar.jhipsterVersion = this.config.get('jhipsterVersion');

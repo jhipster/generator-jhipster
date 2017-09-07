@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +24,9 @@ import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
 <%_ } _%>
 import <%=packageName%>.domain.User;
+<%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || hibernateCache === 'infinispan' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
+import org.springframework.cache.annotation.Cacheable;
+<%_ } _%>
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -98,6 +101,9 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     User findOneWithAuthoritiesById(<%= pkType %> id);
 
     @EntityGraph(attributePaths = "authorities")
+    <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || hibernateCache === 'infinispan' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
+    @Cacheable(cacheNames="users")
+    <%_ } _%>
     Optional<User> findOneWithAuthoritiesByLogin(String login);
     <%_ } _%>
 

@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-version: '2'
+version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
 services:
 <%_ for(let i = 0; i < appConfigs.length; i++) { _%>
 <%- appsYaml[i] %>
@@ -55,17 +55,37 @@ services:
             service: jhipster-elasticsearch
     jhipster-logstash:
         extends:
-          file: jhipster-console.yml
-          service: jhipster-logstash
+            file: jhipster-console.yml
+            service: jhipster-logstash
+        depends_on:
+            - jhipster-elasticsearch
     jhipster-console:
         extends:
             file: jhipster-console.yml
             service: jhipster-console
-    <%_ if (composeApplicationType === 'microservice') { _%>
+        depends_on:
+            - jhipster-elasticsearch
+    jhipster-import-dashboards:
+        extends:
+            file: jhipster-console.yml
+            service: jhipster-import-dashboards
+        depends_on:
+            - jhipster-elasticsearch
+    <%_ if (consoleOptions.includes('curator')) { _%>
+    jhipster-curator:
+        extends:
+            file: jhipster-console.yml
+            service: jhipster-curator
+        depends_on:
+            - jhipster-elasticsearch
+    <%_ } _%>
+    <%_ if (consoleOptions.includes('zipkin')) { _%>
     jhipster-zipkin:
         extends:
             file: jhipster-console.yml
             service: jhipster-zipkin
+        depends_on:
+            - jhipster-elasticsearch
     <%_ } _%>
 <%_ } _%>
 <%_ if (monitoring === 'prometheus') { _%>

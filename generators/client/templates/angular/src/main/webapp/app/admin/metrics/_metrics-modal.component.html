@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,7 +39,7 @@
             </a>
         </h6>
         <div class="card" [hidden]="!entry.show">
-            <div class="card-block">
+            <div class="card-body">
                 <div *ngFor="let st of entry.value.stackTrace | keys" class="break">
                     <samp>{{st.value.className}}.{{st.value.methodName}}(<code>{{st.value.fileName}}:{{st.value.lineNumber}}</code>)</samp>
                     <span class="mt-1"></span>

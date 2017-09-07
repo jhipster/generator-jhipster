@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2017 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see https://jhipster.github.io/
+ * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -213,6 +213,7 @@ module.exports = EntityGenerator.extend({
                 this.validation = false;
                 this.dto = 'no';
                 this.service = 'no';
+                this.jpaMetamodelFiltering = false;
             } else {
                 // existing entity reading values from file
                 this.log(`\nThe entity ${this.name} is being updated.\n`);
@@ -243,6 +244,7 @@ module.exports = EntityGenerator.extend({
         try {
             this.fileData = this.fs.readJSON(this.fromPath);
         } catch (err) {
+            this.debug('Error:', err);
             this.error(chalk.red('\nThe entity configuration file could not be read!\n'));
         }
         this.relationships = this.fileData.relationships || [];
@@ -255,6 +257,7 @@ module.exports = EntityGenerator.extend({
         this.searchEngine = this.fileData.searchEngine || this.searchEngine;
         this.javadoc = this.fileData.javadoc;
         this.entityTableName = this.fileData.entityTableName;
+        this.copyFilteringFlag(this.fileData, this);
         if (_.isUndefined(this.entityTableName)) {
             this.warning(`entityTableName is missing in .jhipster/${this.name}.json, using entity name as fallback`);
             this.entityTableName = this.getTableName(this.name);
@@ -301,6 +304,7 @@ module.exports = EntityGenerator.extend({
         askForTableName: prompts.askForTableName,
         askForDTO: prompts.askForDTO,
         askForService: prompts.askForService,
+        askForFiltering: prompts.askForFiltering,
         askForPagination: prompts.askForPagination
     },
 
@@ -400,6 +404,10 @@ module.exports = EntityGenerator.extend({
                 this.warning(`service is missing in .jhipster/${this.name}.json, using no as fallback`);
                 this.service = 'no';
             }
+            if (_.isUndefined(this.jpaMetamodelFiltering)) {
+                this.warning(`jpaMetamodelFiltering is missing in .jhipster/${this.name}.json, using 'no' as fallback`);
+                this.jpaMetamodelFiltering = false;
+            }
             if (_.isUndefined(this.pagination)) {
                 if (this.databaseType === 'sql' || this.databaseType === 'mongodb' || this.databaseType === 'couchbase') {
                     this.warning(`pagination is missing in .jhipster/${this.name}.json, using no as fallback`);
@@ -426,6 +434,7 @@ module.exports = EntityGenerator.extend({
             this.data.dto = this.dto;
             this.data.service = this.service;
             this.data.entityTableName = this.entityTableName;
+            this.copyFilteringFlag(this, this.data);
             if (this.databaseType === 'sql' || this.databaseType === 'mongodb' || this.databaseType === 'couchbase') {
                 this.data.pagination = this.pagination;
             } else {
@@ -721,33 +730,9 @@ module.exports = EntityGenerator.extend({
 
     writing: writeFiles(),
 
-    install() {
-        const injectJsFilesToIndex = () => {
-            const done = this.async();
-            this.log(`\n${chalk.bold.green('Running `gulp inject` to add JavaScript to index.html\n')}`);
-            this.spawnCommand('gulp', ['inject:app']).on('close', () => {
-                done();
-            });
-        };
-        // rebuild client for Angular
-        const rebuildClient = () => {
-            const done = this.async();
-            this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app\n')}`);
-            this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build']).on('close', () => {
-                done();
-            });
-        };
-        if (!this.options['skip-install'] && !this.skipClient) {
-            if (this.clientFramework === 'angular1') {
-                injectJsFilesToIndex();
-            } else {
-                rebuildClient();
-            }
-        }
-    },
-
-    end: {
+    install: {
         afterRunHook() {
+            const done = this.async();
             try {
                 const modules = this.getModuleHooks();
                 if (modules.length > 0) {
@@ -768,6 +753,7 @@ module.exports = EntityGenerator.extend({
                         fieldsContainBigDecimal: this.fieldsContainBigDecimal,
                         fieldsContainBlob: this.fieldsContainBlob,
                         fieldsContainImageBlob: this.fieldsContainImageBlob,
+                        jpaMetamodelFiltering: this.jpaMetamodelFiltering,
                         pkType: this.pkType,
                         entityApiUrl: this.entityApiUrl,
                         entityClass: this.entityClass,
@@ -784,11 +770,26 @@ module.exports = EntityGenerator.extend({
                     this.callHooks('entity', 'post', {
                         entityConfig,
                         force: this.options.force
-                    });
+                    }, done);
+                } else {
+                    done();
                 }
             } catch (err) {
                 this.log(`\n${chalk.bold.red('Running post run module hooks failed. No modification done to the generated entity.')}`);
+                this.debug('Error:', err);
+                done();
             }
         }
+    },
+
+    end() {
+        if (!this.options['skip-install'] && !this.skipClient) {
+            if (this.clientFramework === 'angular1') {
+                this.injectJsFilesToIndex();
+            } else {
+                this.rebuildClient();
+            }
+        }
+        this.log(chalk.bold.green('Entity generation completed'));
     }
 });

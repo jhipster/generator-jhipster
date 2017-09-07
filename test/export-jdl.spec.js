@@ -1,4 +1,4 @@
-/* global describe, beforeEach, it*/
+/* global describe, beforeEach, it */
 
 
 const path = require('path');

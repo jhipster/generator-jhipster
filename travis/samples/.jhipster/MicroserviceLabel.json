@@ -23,5 +23,6 @@
     "changelogDate": "20150805124936",
     "dto": "no",
     "pagination": "pagination",
+    "jpaMetamodelFiltering": true,
     "service": "serviceClass"
 }

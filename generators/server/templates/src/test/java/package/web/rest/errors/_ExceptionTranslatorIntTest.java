@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -106,10 +106,24 @@ public class ExceptionTranslatorIntTest <% if (databaseType === 'cassandra') { %
     }
 
     @Test
+    public void testMissingServletRequestPartException() throws Exception {
+        mockMvc.perform(get("/test/missing-servlet-request-part"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("error.http.400"));
+    }
+
+    @Test
+    public void testMissingServletRequestParameterException() throws Exception {
+        mockMvc.perform(get("/test/missing-servlet-request-parameter"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.message").value("error.http.400"));
+    }
+
+    @Test
     public void testAccessDenied() throws Exception {
         mockMvc.perform(get("/test/access-denied"))
             .andExpect(status().isForbidden())
-            .andExpect(jsonPath("$.message").value(ErrorConstants.ERR_ACCESS_DENIED))
+            .andExpect(jsonPath("$.message").value("error.http.403"))
             .andExpect(jsonPath("$.description").value("test access denied!"));
     }
 
@@ -125,7 +139,7 @@ public class ExceptionTranslatorIntTest <% if (databaseType === 'cassandra') { %
     public void testExceptionWithResponseStatus() throws Exception {
         mockMvc.perform(get("/test/response-status"))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.message").value("error.400"))
+            .andExpect(jsonPath("$.message").value("error.http.400"))
             .andExpect(jsonPath("$.description").value("test response status"));
     }
 

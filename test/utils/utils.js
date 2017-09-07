@@ -1,4 +1,4 @@
-/* global describe, beforeEach, it*/
+/* global describe, beforeEach, it */
 const assert = require('yeoman-assert');
 const Generator = require('../../generators/generator-base');
 const constants = require('../../generators/generator-constants');

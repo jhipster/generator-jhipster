@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2017 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see https://jhipster.github.io/
+ * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +25,7 @@ module.exports = {
     askForApps,
     askForClustersMode,
     askForMonitoring,
+    askForConsoleOptions,
     askForServiceDiscovery,
     askForAdminPassword,
     askForDockerRepositoryName,
@@ -215,6 +216,38 @@ function askForMonitoring() {
     });
 }
 
+function askForConsoleOptions() {
+    if (this.regenerate) return;
+
+    if (this.monitoring !== 'elk') return;
+
+    const done = this.async();
+
+    const prompts = [{
+        type: 'checkbox',
+        name: 'consoleOptions',
+        message: 'You have selected the JHipster Console which is based on the ELK stack and additional technologies, which one do you want to use ?',
+        choices: [
+            {
+                value: 'curator',
+                name: 'Curator, to help you curate and manage your Elasticsearch indices'
+            }
+        ],
+        default: this.monitoring
+    }];
+    if (this.composeApplicationType === 'microservice') {
+        prompts[0].choices.push(
+            {
+                value: 'zipkin',
+                name: 'Zipkin, for distributed tracing (only compatible with JHipster >= v4.2.0)'
+            });
+    }
+    this.prompt(prompts).then((props) => {
+        this.consoleOptions = props.consoleOptions;
+        done();
+    });
+}
+
 function askForServiceDiscovery() {
     if (this.regenerate) return;
 
@@ -316,6 +349,7 @@ function getAppFolders(input, composeApplicationType) {
                     }
                 } catch (err) {
                     this.log(chalk.red(`${file}: this .yo-rc.json can't be read`));
+                    this.debug('Error:', err);
                 }
             }
         }

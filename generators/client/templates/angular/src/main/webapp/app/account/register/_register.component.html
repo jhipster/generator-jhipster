@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,8 +17,8 @@
  limitations under the License.
 -%>
 <div>
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
             <h1 jhiTranslate="register.title">Registration</h1>
 
             <div class="alert alert-success" *ngIf="success" jhiTranslate="register.messages.success">
@@ -41,10 +41,12 @@
                 The password and its confirmation do not match!
             </div>
         </div>
+    </div>
+    <div class="row justify-content-center">
         <%_ if (enableSocialSignIn) { _%>
-        <div class="col-md-4 offset-md-2">
+        <div class="col-md-4">
         <%_ } else { _%>
-        <div class="col-md-8 offset-md-2">
+        <div class="col-md-8">
         <%_ } _%>
             <form name="form" role="form" (ngSubmit)="register()" #registerForm="ngForm" *ngIf="!success">
                 <div class="form-group">
@@ -72,7 +74,7 @@
                 <div class="form-group">
                     <label class="form-control-label" for="email" jhiTranslate="global.form.email">Email</label>
                     <input type="email" class="form-control" id="email" name="email" #email="ngModel" placeholder="{{'global.form.email.placeholder' | translate}}"
-                            [(ngModel)]="registerAccount.email" minlength=5 maxlength=100 required>
+                            [(ngModel)]="registerAccount.email" minlength=5 maxlength=100 email required>
                     <div *ngIf="email.dirty && email.invalid">
                         <small class="form-text text-danger" *ngIf="email.errors.required"
                                 jhiTranslate="global.messages.validate.email.required">

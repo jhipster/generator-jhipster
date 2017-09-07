@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,6 +33,10 @@ import <%=packageName%>.service.dto.<%= entityClass %>DTO;
 <%_ if (service === 'no') { _%>
 import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;
 <%_ } } _%>
+<%_ if (jpaMetamodelFiltering) {  _%>
+import <%=packageName%>.service.dto.<%= entityClass %>Criteria;
+import <%=packageName%>.service.<%= entityClass %>QueryService;
+<%_ } _%>
 <%_ if (pagination !== 'no') { _%>
 import io.swagger.annotations.ApiParam;
 <%_ } _%>
@@ -75,7 +79,7 @@ public class <%= entityClass %>Resource {
     <%_
     const instanceType = (dto === 'mapstruct') ? entityClass + 'DTO' : entityClass;
     const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
-    _%><%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource'}); -%>
+    _%><%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource', queryService: jpaMetamodelFiltering}); -%>
 
     /**
      * POST  /<%= entityApiUrl %> : Create a new <%= entityInstance %>.
@@ -120,7 +124,8 @@ public class <%= entityClass %>Resource {
     /**
      * GET  /<%= entityApiUrl %> : get all the <%= entityInstancePlural %>.
      *<% if (pagination !== 'no') { %>
-     * @param pageable the pagination information<% } if (fieldsContainNoOwnerOneToOne) { %>
+     * @param pageable the pagination information<% } if (jpaMetamodelFiltering) { %>
+     * @param criteria the criterias which the requested entities should match<% } else if (fieldsContainNoOwnerOneToOne) { %>
      * @param filter the filter of the request<% } %>
      * @return the ResponseEntity with status 200 (OK) and the list of <%= entityInstancePlural %> in body
      */

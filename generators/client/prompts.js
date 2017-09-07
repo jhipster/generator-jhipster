@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2017 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see https://jhipster.github.io/
+ * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,13 +29,12 @@ function askForModuleName() {
     this.askModuleName(this);
 }
 
-function askForClient() {
-    if (this.existingProject) return;
+function askForClient(meta) {
+    if (!meta && this.existingProject) return;
 
-    const done = this.async();
     const applicationType = this.applicationType;
 
-    this.prompt({
+    const PROMPT = {
         type: 'list',
         name: 'clientFramework',
         when: response => (applicationType !== 'microservice' && applicationType !== 'uaa'),
@@ -52,7 +51,13 @@ function askForClient() {
             }
         ],
         default: 'angularX'
-    }).then((prompt) => {
+    };
+
+    if (meta) return PROMPT; // eslint-disable-line consistent-return
+
+    const done = this.async();
+
+    this.prompt(PROMPT).then((prompt) => {
         this.clientFramework = prompt.clientFramework;
         done();
     });

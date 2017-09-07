@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2017 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see https://jhipster.github.io/
+ * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,9 +48,9 @@ module.exports = class extends Generator {
         this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
     }
 
-    /*= =======================================================================*/
-    /* private methods use within generator (not exposed to modules)*/
-    /*= =======================================================================*/
+    /* ======================================================================== */
+    /* private methods use within generator (not exposed to modules) */
+    /* ======================================================================== */
 
     installI18nClientFilesByLanguage(_this, webappDir, lang) {
         const generator = _this || this;
@@ -96,6 +96,7 @@ module.exports = class extends Generator {
             this.template(`${prefix}/i18n/_entity_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${this.entityInstance}.json`);
             this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClass, language);
         } catch (e) {
+            this.debug('Error:', e);
             // An exception is thrown if the folder doesn't exist
             // do nothing
         }
@@ -105,6 +106,7 @@ module.exports = class extends Generator {
         try {
             this.template(`${prefix}/i18n/_enum.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.enumInstance}.json`, this, {}, enumInfo);
         } catch (e) {
+            this.debug('Error:', e);
             // An exception is thrown if the folder doesn't exist
             // do nothing
         }
@@ -128,6 +130,7 @@ module.exports = class extends Generator {
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
+            this.debug('Error:', e);
         }
     }
 
@@ -149,6 +152,7 @@ module.exports = class extends Generator {
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
+            this.debug('Error:', e);
         }
     }
 
@@ -173,6 +177,7 @@ module.exports = class extends Generator {
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Language pipe not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
+            this.debug('Error:', e);
         }
     }
 
@@ -194,6 +199,7 @@ module.exports = class extends Generator {
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
+            this.debug('Error:', e);
         }
     }
 
@@ -291,7 +297,7 @@ module.exports = class extends Generator {
     }
 
     isGitInstalled(callback) {
-        this.gitExec('--version', (code) => {
+        this.gitExec('--version', { trace: false }, (code) => {
             if (code !== 0) {
                 this.warning('git is not found on your computer.\n',
                     ` Install git: ${chalk.yellow('https://git-scm.com/')}`
@@ -409,8 +415,11 @@ module.exports = class extends Generator {
      *
      * @param {string} value - message to print
      */
-    debug(msg) {
-        this.log(`${chalk.yellow.bold('DEBUG!')} ${msg}`);
+    debug(msg, ...args) {
+        if (this.isDebugEnabled || (this.options && this.options.debug)) {
+            this.log(`${chalk.yellow.bold('DEBUG!')} ${msg}`);
+            args.forEach(arg => this.log(arg));
+        }
     }
 
     checkJava() {
@@ -461,8 +470,8 @@ module.exports = class extends Generator {
         exec('git ls-remote git://github.com/jhipster/generator-jhipster.git HEAD', { timeout: 15000 }, (error) => {
             if (error) {
                 this.warning(`Failed to connect to "git://github.com"
-                     1. Check your Internet connection.
-                     2. If you are using an HTTP proxy, try this command: ${chalk.yellow('git config --global url."https://".insteadOf git://')}`
+1. Check your Internet connection.
+2. If you are using an HTTP proxy, try this command: ${chalk.yellow('git config --global url."https://".insteadOf git://')}`
                 );
             }
             done();
@@ -580,5 +589,73 @@ module.exports = class extends Generator {
     skipLanguageForLocale(language) {
         const out = this.getAllSupportedLanguageOptions().filter(lang => language === lang.value);
         return out && out[0] && !!out[0].skipForLocale;
+    }
+
+    /**
+     * Get UAA app name from path provided.
+     * @param {string} input
+     */
+    getUaaAppName(input) {
+        if (!input) return false;
+
+        input = input.trim();
+        let fromPath = '';
+        if (path.isAbsolute(input)) {
+            fromPath = `${input}/.yo-rc.json`;
+        } else {
+            fromPath = this.destinationPath(`${input}/.yo-rc.json`);
+        }
+
+        if (shelljs.test('-f', fromPath)) {
+            const fileData = this.fs.readJSON(fromPath);
+            if (fileData && fileData['generator-jhipster']) {
+                return fileData['generator-jhipster'];
+            } return false;
+        }
+        return false;
+    }
+
+    /**
+     * Return the method name which converts the filter to specification
+     * @param {string} fieldType
+     */
+    getSpecificationBuilder(fieldType) {
+        if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'LocalDate', 'ZonedDateTime', 'Instant'].includes(fieldType)) {
+            return 'buildRangeSpecification';
+        }
+        if (fieldType === 'String') {
+            return 'buildStringSpecification';
+        }
+        return 'buildSpecification';
+    }
+
+    isFilterableType(fieldType) {
+        return !(['byte[]', 'ByteBuffer'].includes(fieldType));
+    }
+
+    copyFilteringFlag(from, to) {
+        if (this.databaseType === 'sql' && this.service !== 'no') {
+            to.jpaMetamodelFiltering = from.jpaMetamodelFiltering;
+        } else {
+            to.jpaMetamodelFiltering = false;
+        }
+    }
+
+    // rebuild client for Angular1
+    injectJsFilesToIndex() {
+        const done = this.async();
+        this.log(`\n${chalk.bold.green('Running `gulp inject` to add JavaScript to index.html\n')}`);
+        this.spawnCommand('gulp', ['inject:app']).on('close', () => {
+            done();
+        });
+    }
+
+    // rebuild client for Angular
+    rebuildClient() {
+        const done = this.async();
+        this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app\n')}`);
+        this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build']).on('close', () => {
+            done();
+        });
     }
 };

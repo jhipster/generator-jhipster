@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import { browser, element, by } from 'protractor';
+import { NavBarPage } from './../page-objects/jhi-page-objects';
 <%_
 let elementGetter = `getText()`;
 if (enableTranslation) {
@@ -25,31 +26,22 @@ if (enableTranslation) {
 
 describe('administration', () => {
 
-    const username = element(by.id('username'));
-    const password = element(by.id('password'));
-    const accountMenu = element(by.id('account-menu'));
-    const adminMenu = element(by.id('admin-menu'));
-    const login = element(by.id('login'));
-    const logout = element(by.id('logout'));
+    let navBarPage: NavBarPage;
 
     beforeAll(() => {
         browser.get('/');
-
-        accountMenu.click();
-        login.click();
-
-        username.sendKeys('admin');
-        password.sendKeys('admin');
-        element(by.css('button[type=submit]')).click();
+        browser.waitForAngular();
+        navBarPage = new NavBarPage(true);
+        navBarPage.getSignInPage().autoSignInUsing('admin', 'admin');
         browser.waitForAngular();
     });
 
     beforeEach(() => {
-        adminMenu.click();
+        navBarPage.clickOnAdminMenu();
     });
 
     it('should load user management', () => {
-        element(by.css('[routerLink="user-management"]')).click();
+        navBarPage.clickOnAdmin("user-management");
         <%_ if (enableTranslation) { _%>
         const expect1 = /userManagement.home.title/;
         <%_ } else { _%>
@@ -61,7 +53,7 @@ describe('administration', () => {
     });
 
     it('should load metrics', () => {
-        element(by.css('[routerLink="<%=jhiPrefix%>-metrics"]')).click();
+        navBarPage.clickOnAdmin("<%=jhiPrefix%>-metrics");
         <%_ if (enableTranslation) { _%>
         const expect1 = /metrics.title/;
         <%_ } else { _%>
@@ -73,7 +65,7 @@ describe('administration', () => {
     });
 
     it('should load health', () => {
-        element(by.css('[routerLink="<%=jhiPrefix%>-health"]')).click();
+        navBarPage.clickOnAdmin("<%=jhiPrefix%>-health");
         <%_ if (enableTranslation) { _%>
         const expect1 = /health.title/;
         <%_ } else { _%>
@@ -85,7 +77,7 @@ describe('administration', () => {
     });
 
     it('should load configuration', () => {
-        element(by.css('[routerLink="<%=jhiPrefix%>-configuration"]')).click();
+        navBarPage.clickOnAdmin("<%=jhiPrefix%>-configuration");
         <%_ if (enableTranslation) { _%>
         const expect1 = /configuration.title/;
         <%_ } else { _%>
@@ -98,7 +90,7 @@ describe('administration', () => {
 
 <%_ if (devDatabaseType !== 'cassandra') { _%>
     it('should load audits', () => {
-        element(by.css('[routerLink="audits"]')).click();
+        navBarPage.clickOnAdmin("audits");
         <%_ if (enableTranslation) { _%>
         const expect1 = /audits.title/;
         <%_ } else { _%>
@@ -111,7 +103,7 @@ describe('administration', () => {
 
 <%_ } _%>
     it('should load logs', () => {
-        element(by.css('[routerLink="logs"]')).click();
+        navBarPage.clickOnAdmin("logs");
         <%_ if (enableTranslation) { _%>
         const expect1 = /logs.title/;
         <%_ } else { _%>
@@ -123,7 +115,6 @@ describe('administration', () => {
     });
 
     afterAll(() => {
-        accountMenu.click();
-        logout.click();
+        navBarPage.autoSignOut();
     });
 });

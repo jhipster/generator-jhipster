@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,9 @@ $fa-font-path: '~font-awesome/fonts';
 put Sass variables here:
 eg $input-color: red;
 ****************************/
-
+// Override Boostrap variables
+@import "bootstrap-variables";
+// Import Bootstrap source files from node_modules
 @import 'node_modules/bootstrap/scss/bootstrap';
 <%_ if (enableI18nRTL) { _%>
 @import 'src/main/webapp/content/scss/rtl.scss';

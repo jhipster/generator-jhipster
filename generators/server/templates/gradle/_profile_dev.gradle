@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -55,7 +55,11 @@ task webpackBuildDev(type: <%= clientPackageManager.charAt(0).toUpperCase() + cl
     <%_ } _%>
 
 war {
+    <%_ if (clientFramework !== 'angular1') { _%>
+    webAppDirName = '<%= CLIENT_DIST_DIR %>'
+    <%_ } else { _%>
     webAppDirName = '<%= CLIENT_MAIN_SRC_DIR %>'
+    <%_ } _%>
 }
 <%_ } _%>
 
@@ -65,19 +69,23 @@ processResources {
             it.replace('#logback.loglevel#', logbackLoglevel)
         }
     }
-    <%_ if (applicationType === 'monolith') { _%>
     filesMatching('**/application.yml') {
-    <%_ } _%>
-    <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
-    filesMatching('**/bootstrap.yml') {
-    <%_ } _%>
-        filter {
-            it.replace('#spring.profiles.active#', profiles)
-        }
         filter {
             it.replace('#project.version#', version)
         }
+        <%_ if (applicationType === 'monolith') { _%>
+        filter {
+            it.replace('#spring.profiles.active#', profiles)
+        }
+        <%_ } _%>
     }
+    <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
+    filesMatching('**/bootstrap.yml') {
+        filter {
+            it.replace('#spring.profiles.active#', profiles)
+        }
+    }
+    <%_ } _%>
 }
 
 <%_ if (!skipClient) { _%>

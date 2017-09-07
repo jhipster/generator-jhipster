@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2017 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see https://jhipster.github.io/
+ * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -105,6 +105,7 @@ module.exports = class extends PrivateBase {
             }
         } catch (e) {
             this.log(`${chalk.yellow('\nUnable to find ') + navbarPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`);
+            this.debug('Error:', e);
         }
     }
 
@@ -148,6 +149,7 @@ module.exports = class extends PrivateBase {
             }
         } catch (e) {
             this.log(`${chalk.yellow('\nUnable to find ') + navbarAdminPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName} ${chalk.yellow('not added to admin menu.\n')}`);
+            this.debug('Error:', e);
         }
     }
 
@@ -212,6 +214,7 @@ module.exports = class extends PrivateBase {
             }
         } catch (e) {
             this.log(`${chalk.yellow('\nUnable to find ') + entityMenuPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`);
+            this.debug('Error:', e);
         }
     }
 
@@ -254,8 +257,8 @@ module.exports = class extends PrivateBase {
                 ]
             }, this);
         } catch (e) {
-            this.log(e);
             this.log(`${chalk.yellow('\nUnable to find ') + entityModulePath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + entityInstance + entityClass + entityFolderName + entityFileName} ${chalk.yellow(`not added to ${entityModulePath}.\n`)}`);
+            this.debug('Error:', e);
         }
     }
 
@@ -300,8 +303,8 @@ module.exports = class extends PrivateBase {
                 ]
             }, this);
         } catch (e) {
-            this.log(e);
             this.log(`${chalk.yellow('\nUnable to find ') + appName + chalk.yellow(' or missing required jhipster-needle. Reference to ') + adminAngularName + adminFolderName + adminFileName + enableTranslation + clientFramework} ${chalk.yellow(`not added to ${adminModulePath}.\n`)}`);
+            this.debug('Error:', e);
         }
     }
 
@@ -324,6 +327,7 @@ module.exports = class extends PrivateBase {
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new entity in the menu.\n'));
+            this.debug('Error:', e);
         }
     }
 
@@ -346,6 +350,7 @@ module.exports = class extends PrivateBase {
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new entry in the admin menu.\n'));
+            this.debug('Error:', e);
         }
     }
 
@@ -368,6 +373,7 @@ module.exports = class extends PrivateBase {
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new entity in the menu.\n'));
+            this.debug('Error:', e);
         }
     }
 
@@ -386,6 +392,7 @@ module.exports = class extends PrivateBase {
             }, this);
         } catch (e) {
             this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}(key: ${key}, value:${value})${chalk.yellow(' not added to global translations.\n')}`);
+            this.debug('Error:', e);
         }
     }
 
@@ -417,6 +424,7 @@ module.exports = class extends PrivateBase {
                     languages.push(language);
                 }
             } catch (e) {
+                this.debug('Error:', e);
                 // An exception is thrown if the folder doesn't exist
                 // do nothing as the language might not be installed
             }
@@ -486,6 +494,7 @@ module.exports = class extends PrivateBase {
             }, this);
         } catch (e) {
             this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}social configuration ${name}${chalk.yellow(' not added.\n')}`);
+            this.debug('Error:', e);
         }
     }
 
@@ -505,8 +514,8 @@ module.exports = class extends PrivateBase {
                 jsonObj.dependencies[name] = version;
             }, this);
         } catch (e) {
-            this.log(e);
             this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}bower dependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`);
+            this.debug('Error:', e);
         }
     }
 
@@ -540,6 +549,7 @@ module.exports = class extends PrivateBase {
             }, this);
         } catch (e) {
             this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}bower override configuration (bowerPackageName: ${bowerPackageName}, main:${JSON.stringify(main)}, ignore:${isIgnored})${chalk.yellow(' not added.\n')}`);
+            this.debug('Error:', e);
         }
     }
 
@@ -558,6 +568,7 @@ module.exports = class extends PrivateBase {
             }, this);
         } catch (e) {
             this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}bowerrc parameter (key: ${key}, value:${value})${chalk.yellow(' not added.\n')}`);
+            this.debug('Error:', e);
         }
     }
 
@@ -577,8 +588,8 @@ module.exports = class extends PrivateBase {
                 jsonObj.dependencies[name] = version;
             }, this);
         } catch (e) {
-            this.log(e);
             this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}npm dependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`);
+            this.debug('Error:', e);
         }
     }
 
@@ -598,8 +609,8 @@ module.exports = class extends PrivateBase {
                 jsonObj.devDependencies[name] = version;
             }, this);
         } catch (e) {
-            this.log(e);
             this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}npm devDependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`);
+            this.debug('Error:', e);
         }
     }
 
@@ -619,8 +630,8 @@ module.exports = class extends PrivateBase {
                 jsonObj.scripts[name] = data;
             }, this);
         } catch (e) {
-            this.log(e);
             this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}npm script (name: ${name}, data:${data})${chalk.yellow(' not added.\n')}`);
+            this.debug('Error:', e);
         }
     }
 
@@ -642,6 +653,7 @@ module.exports = class extends PrivateBase {
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + moduleName + chalk.yellow(' not added to JHipster app.\n'));
+            this.debug('Error:', e);
         }
     }
 
@@ -686,8 +698,8 @@ module.exports = class extends PrivateBase {
                 ]
             }, this);
         } catch (e) {
-            this.log(e);
             this.log(`${chalk.yellow('\nUnable to find ') + appName + chalk.yellow(' or missing required jhipster-needle. Reference to ') + angularName + folderName + fileName + enableTranslation + clientFramework} ${chalk.yellow(`not added to ${modulePath}.\n`)}`);
+            this.debug('Error:', e);
         }
     }
 
@@ -709,6 +721,7 @@ module.exports = class extends PrivateBase {
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Interceptor not added to JHipster app.\n'));
+            this.debug('Error:', e);
         }
     }
 
@@ -784,6 +797,7 @@ module.exports = class extends PrivateBase {
             }
         } catch (e) {
             this.log(chalk.yellow(`\nUnable to add ${entry} to CacheConfiguration.java file.\n\t${e.message}`));
+            this.debug('Error:', e);
         }
     }
 
@@ -823,6 +837,7 @@ module.exports = class extends PrivateBase {
             }, this);
         } catch (e) {
             this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + changelogName}.xml ${chalk.yellow('not added.\n')}`);
+            this.debug('Error:', e);
         }
     }
 
@@ -843,6 +858,28 @@ module.exports = class extends PrivateBase {
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required jhipster-needle. Column not added.\n') + e);
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
+     * A a new changeset to a Liquibase changelog file for entity.
+     *
+     * @param {string} filePath - The full path of the changelog file.
+     * @param {string} content - The content to be added as changeset
+     */
+    addChangesetToLiquibaseEntityChangelog(filePath, content) {
+        try {
+            jhipsterUtils.rewriteFile({
+                file: filePath,
+                needle: 'jhipster-needle-liquibase-add-changeset',
+                splicable: [
+                    content
+                ]
+            }, this);
+        } catch (e) {
+            this.log(chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required jhipster-needle. Changeset not added.\n') + e);
+            this.debug('Error:', e);
         }
     }
 
@@ -908,6 +945,7 @@ module.exports = class extends PrivateBase {
             this.addMainCSSStyle(isUseSass, buttonStyle, `Add sign in style for ${socialName}`);
         } catch (e) {
             this.log(chalk.yellow(`\nUnable to add social button modification.\n${e}`));
+            this.debug('Error:', e);
         }
     }
 
@@ -959,6 +997,7 @@ module.exports = class extends PrivateBase {
             }, this);
         } catch (e) {
             this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Social connection ') + e} ${chalk.yellow('not added.\n')}`);
+            this.debug('Error:', e);
         }
     }
 
@@ -1004,6 +1043,7 @@ module.exports = class extends PrivateBase {
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Style not added to JHipster app.\n'));
+            this.debug('Error:', e);
         }
     }
 
@@ -1046,6 +1086,7 @@ module.exports = class extends PrivateBase {
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Style not added to JHipster app.\n'));
+            this.debug('Error:', e);
         }
     }
 
@@ -1079,6 +1120,7 @@ module.exports = class extends PrivateBase {
             }, this);
         } catch (e) {
             this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}maven dependency (groupId: ${groupId}, artifactId:${artifactId}, version:${version})${chalk.yellow(' not added.\n')}`);
+            this.debug('Error:', e);
         }
     }
 
@@ -1112,6 +1154,7 @@ module.exports = class extends PrivateBase {
             }, this);
         } catch (e) {
             this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}maven plugin (groupId: ${groupId}, artifactId:${artifactId}, version:${version})${chalk.yellow(' not added.\n')}`);
+            this.debug('Error:', e);
         }
     }
 
@@ -1134,6 +1177,7 @@ module.exports = class extends PrivateBase {
             }, this);
         } catch (e) {
             this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}classpath: ${group}:${name}:${version}${chalk.yellow(' not added.\n')}`);
+            this.debug('Error:', e);
         }
     }
 
@@ -1157,6 +1201,7 @@ module.exports = class extends PrivateBase {
             }, this);
         } catch (e) {
             this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + group}:${name}:${version}${chalk.yellow(' not added.\n')}`);
+            this.debug('Error:', e);
         }
     }
 
@@ -1177,6 +1222,7 @@ module.exports = class extends PrivateBase {
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + name + chalk.yellow(' not added.\n'));
+            this.debug('Error:', e);
         }
     }
 
@@ -1297,6 +1343,7 @@ module.exports = class extends PrivateBase {
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required needle. File rewrite failed.\n'));
+            this.debug('Error:', e);
         }
     }
 
@@ -1318,6 +1365,7 @@ module.exports = class extends PrivateBase {
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required pattern. File rewrite failed.\n') + e);
+            this.debug('Error:', e);
         }
     }
 
@@ -1353,6 +1401,7 @@ module.exports = class extends PrivateBase {
             } catch (err) {
                 error = true;
                 this.log(chalk.red('The JHipster module configuration file could not be read!'));
+                this.debug('Error:', err);
             }
             if (!error && !duplicate) {
                 modules.push(moduleConfig);
@@ -1360,6 +1409,7 @@ module.exports = class extends PrivateBase {
             }
         } catch (err) {
             this.log(`\n${chalk.bold.red('Could not add jhipster module configuration')}`);
+            this.debug('Error:', err);
         }
     }
 
@@ -1377,6 +1427,7 @@ module.exports = class extends PrivateBase {
             this.fs.writeJSON(file, entityJson, null, 4);
         } catch (err) {
             this.log(chalk.red('The JHipster entity configuration file could not be read!') + err);
+            this.debug('Error:', err);
         }
     }
 
@@ -1401,21 +1452,40 @@ module.exports = class extends PrivateBase {
      * @param {string} hookFor : "app" or "entity"
      * @param {string} hookType : "pre" or "post"
      * @param options : the options to pass to the hooks
+     * @param cb : callback to trigger at the end
      */
-    callHooks(hookFor, hookType, options) {
+    callHooks(hookFor, hookType, options, cb) {
         const modules = this.getModuleHooks();
         // run through all module hooks, which matches the hookFor and hookType
         modules.forEach((module) => {
+            this.debug('Composing module with config:', module);
             if (module.hookFor === hookFor && module.hookType === hookType) {
                 // compose with the modules callback generator
+                const hook = module.generatorCallback.split(':')[1];
+                let generatorTocall = path.join(process.cwd(), 'node_modules', module.npmPackageName, 'generators', hook || 'app');
                 try {
-                    this.composeWith(module.generatorCallback, options);
+                    if (!fs.existsSync(generatorTocall)) {
+                        this.debug('using global module as local version could not be found in node_modules');
+                        generatorTocall = path.join(module.npmPackageName, 'generators', hook || 'app');
+                    }
+                    this.debug('Running yeoman compose with options: ', generatorTocall, options);
+                    this.composeWith(require.resolve(generatorTocall), options);
                 } catch (err) {
-                    this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
-                        chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow(`'npm install -g ${module.npmPackageName}'`));
+                    this.debug('ERROR:', err);
+                    try {
+                        // Fallback for legacy modules
+                        this.debug('Running yeoman legacy compose with options: ', module.generatorCallback, options);
+                        this.composeWith(module.generatorCallback, options);
+                    } catch (e) {
+                        this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
+                            chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow(`'npm install -g ${module.npmPackageName}'`));
+                        this.debug('ERROR:', e);
+                    }
                 }
             }
         });
+        this.debug('calling callback');
+        cb && cb();
     }
 
     /**
@@ -1429,6 +1499,7 @@ module.exports = class extends PrivateBase {
             entityJson = this.fs.readJSON(path.join(JHIPSTER_CONFIG_DIR, `${_.upperFirst(file)}.json`));
         } catch (err) {
             this.log(chalk.red(`The JHipster entity configuration file could not be read for file ${file}!`) + err);
+            this.debug('Error:', err);
         }
 
         return entityJson;
@@ -1457,6 +1528,7 @@ module.exports = class extends PrivateBase {
             } catch (error) {
                 // not an entity file / malformed?
                 this.warning(`Unable to parse entity file ${file}`);
+                this.debug('Error:', error);
             }
             return acc;
         }, entities).sort(isBefore);
@@ -1501,13 +1573,17 @@ module.exports = class extends PrivateBase {
         if (arguments.length < 3) {
             options = {};
         }
-        options.async = true;
-        options.silent = true;
+        if (options.async === undefined) options.async = true;
+        if (options.silent === undefined) options.silent = true;
+        if (options.trace === undefined) options.trace = true;
 
         if (!Array.isArray(args)) {
             args = [args];
         }
         const command = `git ${args.join(' ')}`;
+        if (options.trace) {
+            this.info(command);
+        }
         shelljs.exec(command, options, callback);
     }
 
@@ -1620,6 +1696,24 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Print an info message.
+     *
+     * @param {string} value - message to print
+     */
+    info(msg) {
+        this.log.info(msg);
+    }
+
+    /**
+     * Print a success message.
+     *
+     * @param {string} value - message to print
+     */
+    success(msg) {
+        this.log.ok(msg);
+    }
+
+    /**
      * Generate a KeyStore for uaa authorization server.
      */
     generateKeyStore() {
@@ -1655,15 +1749,16 @@ module.exports = class extends PrivateBase {
      * Prints a JHipster logo.
      */
     printJHipsterLogo() {
-        this.log(`${chalk.green('\n        ██╗')}${chalk.red(' ██╗   ██╗ ████████╗ ███████╗   ██████╗ ████████╗ ████████╗ ███████╗')}`);
+        this.log('\n');
+        this.log(`${chalk.green('        ██╗')}${chalk.red(' ██╗   ██╗ ████████╗ ███████╗   ██████╗ ████████╗ ████████╗ ███████╗')}`);
         this.log(`${chalk.green('        ██║')}${chalk.red(' ██║   ██║ ╚══██╔══╝ ██╔═══██╗ ██╔════╝ ╚══██╔══╝ ██╔═════╝ ██╔═══██╗')}`);
         this.log(`${chalk.green('        ██║')}${chalk.red(' ████████║    ██║    ███████╔╝ ╚█████╗     ██║    ██████╗   ███████╔╝')}`);
         this.log(`${chalk.green('  ██╗   ██║')}${chalk.red(' ██╔═══██║    ██║    ██╔════╝   ╚═══██╗    ██║    ██╔═══╝   ██╔══██║')}`);
         this.log(`${chalk.green('  ╚██████╔╝')}${chalk.red(' ██║   ██║ ████████╗ ██║       ██████╔╝    ██║    ████████╗ ██║  ╚██╗')}`);
         this.log(`${chalk.green('   ╚═════╝ ')}${chalk.red(' ╚═╝   ╚═╝ ╚═══════╝ ╚═╝       ╚═════╝     ╚═╝    ╚═══════╝ ╚═╝   ╚═╝')}\n`);
-        this.log(chalk.white.bold('                            https://jhipster.github.io\n'));
+        this.log(chalk.white.bold('                            http://www.jhipster.tech\n'));
         this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow(`v${packagejs.version}`));
-        this.log(chalk.white(`Documentation for creating an application: ${chalk.yellow('https://jhipster.github.io/creating-an-app/')}`));
+        this.log(chalk.white(`Documentation for creating an application: ${chalk.yellow('http://www.jhipster.tech/creating-an-app/')}`));
         this.log(chalk.white(`Application files will be generated in folder: ${chalk.yellow(process.cwd())}`));
     }
 
@@ -1689,6 +1784,7 @@ module.exports = class extends PrivateBase {
                 done();
             });
         } catch (err) {
+            this.debug('Error:', err);
             // fail silently as this function doesn't affect normal generator flow
         }
     }
@@ -1806,12 +1902,13 @@ module.exports = class extends PrivateBase {
             // skip client if app type is server
             const skipClient = type && type === 'server';
             generator.composeWith(require.resolve('./languages'), {
+                configOptions,
                 'skip-install': true,
                 'skip-server': skipServer,
                 'skip-client': skipClient,
-                configOptions,
+                languages: generator.languages,
                 force: generator.options.force,
-                languages: generator.languages
+                debug: generator.options.debug
             });
         }
     }
@@ -1848,7 +1945,7 @@ module.exports = class extends PrivateBase {
         }
         buildCmd += ` -P${profile}`;
         const child = {};
-        child.stdout = exec(buildCmd, { maxBuffer: 1024 * 500 }, cb).stdout;
+        child.stdout = exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout;
         child.buildCmd = buildCmd;
 
         return child;
@@ -1901,9 +1998,7 @@ module.exports = class extends PrivateBase {
                 }
             }
         }
-        if (this.isDebugEnabled) {
-            this.debug(`Time taken to write files: ${new Date() - startTime}ms`);
-        }
+        this.debug(`Time taken to write files: ${new Date() - startTime}ms`);
         return filesOut;
     }
 };

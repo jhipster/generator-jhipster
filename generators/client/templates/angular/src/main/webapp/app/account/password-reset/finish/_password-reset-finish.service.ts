@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,6 +26,6 @@ export class PasswordResetFinishService {
     constructor(private http: Http) {}
 
     save(keyAndPassword: any): Observable<any> {
-        return this.http.post(<% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account/reset_password/finish'<%} else { %>'api/account/reset_password/finish'<% } %>, keyAndPassword);
+        return this.http.post(<% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account/reset-password/finish'<%} else { %>'api/account/reset-password/finish'<% } %>, keyAndPassword);
     }
 }

@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -720,7 +720,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
         user.setEmail("change-password@example.com");
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
 
-        restMvc.perform(post("/api/account/change_password").content("new password"))
+        restMvc.perform(post("/api/account/change-password").content("new password"))
             .andExpect(status().isOk());
 
         User updatedUser = userRepository.findOneByLogin("change-password").orElse(null);
@@ -740,7 +740,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
         user.setEmail("change-password-too-small@example.com");
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
 
-        restMvc.perform(post("/api/account/change_password").content("new"))
+        restMvc.perform(post("/api/account/change-password").content("new"))
             .andExpect(status().isBadRequest());
 
         User updatedUser = userRepository.findOneByLogin("change-password-too-small").orElse(null);
@@ -760,7 +760,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
         user.setEmail("change-password-too-long@example.com");
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
 
-        restMvc.perform(post("/api/account/change_password").content(RandomStringUtils.random(101)))
+        restMvc.perform(post("/api/account/change-password").content(RandomStringUtils.random(101)))
             .andExpect(status().isBadRequest());
 
         User updatedUser = userRepository.findOneByLogin("change-password-too-long").orElse(null);
@@ -780,7 +780,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
         user.setEmail("change-password-empty@example.com");
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
 
-        restMvc.perform(post("/api/account/change_password").content(RandomStringUtils.random(0)))
+        restMvc.perform(post("/api/account/change-password").content(RandomStringUtils.random(0)))
             .andExpect(status().isBadRequest());
 
         User updatedUser = userRepository.findOneByLogin("change-password-empty").orElse(null);
@@ -868,7 +868,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
         user.setEmail("password-reset@example.com");
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
 
-        restMvc.perform(post("/api/account/reset_password/init")
+        restMvc.perform(post("/api/account/reset-password/init")
             .content("password-reset@example.com"))
             .andExpect(status().isOk());
     }
@@ -876,7 +876,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
     @Test
     public void testRequestPasswordResetWrongEmail() throws Exception {
         restMvc.perform(
-            post("/api/account/reset_password/init")
+            post("/api/account/reset-password/init")
                 .content("password-reset-wrong-email@example.com"))
             .andExpect(status().isBadRequest());
     }
@@ -900,7 +900,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
         keyAndPassword.setNewPassword("new password");
 
         restMvc.perform(
-            post("/api/account/reset_password/finish")
+            post("/api/account/reset-password/finish")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(keyAndPassword)))
             .andExpect(status().isOk());
@@ -928,7 +928,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
         keyAndPassword.setNewPassword("foo");
 
         restMvc.perform(
-            post("/api/account/reset_password/finish")
+            post("/api/account/reset-password/finish")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(keyAndPassword)))
             .andExpect(status().isBadRequest());
@@ -946,7 +946,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
         keyAndPassword.setNewPassword("new password");
 
         restMvc.perform(
-            post("/api/account/reset_password/finish")
+            post("/api/account/reset-password/finish")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(keyAndPassword)))
             .andExpect(status().isInternalServerError());

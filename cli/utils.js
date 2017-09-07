@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2017 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see https://jhipster.github.io/
+ * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -74,7 +74,7 @@ const toString = (item) => {
 const initHelp = (program, cliName) => {
     program.on('--help', () => {
         logger.debug('Adding additional help info');
-        logger.info(`  For more info visit ${chalk.blue('https://jhipster.github.io')}`);
+        logger.info(`  For more info visit ${chalk.blue('http://www.jhipster.tech')}`);
         logger.info('');
     });
 

@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,11 +22,11 @@
     </button>
 </div>
 <div class="modal-body">
-    <div class="row">
+    <div class="row justify-content-center">
         <%_ if (enableSocialSignIn) { _%>
         <div class="col-12">
         <%_ } else { _%>
-        <div class="col-md-8 offset-md-2">
+        <div class="col-md-8">
         <%_ } _%>
             <div class="alert alert-danger" *ngIf="authenticationError" jhiTranslate="login.messages.error.authentication">
                 <strong>Failed to sign in!</strong> Please check your credentials and try again.
@@ -35,7 +35,7 @@
         <%_ if (enableSocialSignIn) { _%>
         <div class="col-md-6">
         <%_ } else { _%>
-        <div class="col-md-8 offset-md-2">
+        <div class="col-md-8">
         <%_ } _%>
             <form class="form" role="form" (ngSubmit)="login()">
                 <div class="form-group">

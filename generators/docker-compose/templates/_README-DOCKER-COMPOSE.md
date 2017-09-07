@@ -33,8 +33,9 @@ Launch all your infrastructure by running: `docker-compose up -d`.
 <%_ } _%>
 <%_ if (monitoring === 'elk') { _%>
 - [JHipster Console](http://localhost:5601)
-Once started, it will be necessary to create the index pattern using the UI and start the `jhipster-import-dashboards` container again with: `docker-compose up jhipster-import-dashboards`
-- [Zipkin](http://localhost:9400)
+<%_ if (consoleOptions.includes('zipkin')) { _%>
+- [Zipkin](http://localhost:9411)
+<%_ } _%>
 <%_ } _%>
 <%_ if (monitoring === 'prometheus') { _%>
 - [Prometheus server](http://localhost:9090)

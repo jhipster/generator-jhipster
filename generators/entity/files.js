@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2017 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see https://jhipster.github.io/
+ * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -85,6 +85,20 @@ const serverFiles = {
                     file: 'package/web/rest/_EntityResource.java',
                     renameTo: generator => `${generator.packageFolder}/web/rest/${generator.entityClass}Resource.java`
                 }
+            ]
+        },
+        {
+            condition: generator => generator.jpaMetamodelFiltering,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/service/dto/_EntityCriteria.java',
+                    renameTo: generator => `${generator.packageFolder}/service/dto/${generator.entityClass}Criteria.java`
+                },
+                {
+                    file: 'package/service/_EntityQueryService.java',
+                    renameTo: generator => `${generator.packageFolder}/service/${generator.entityClass}QueryService.java`
+                },
             ]
         },
         {

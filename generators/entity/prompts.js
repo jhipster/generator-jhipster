@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2017 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see https://jhipster.github.io/
+ * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,6 +32,7 @@ module.exports = {
     askForTableName,
     askForDTO,
     askForService,
+    askForFiltering,
     askForPagination
 };
 
@@ -268,10 +269,40 @@ function askForTableName() {
         }
     ];
     this.prompt(prompts).then((props) => {
-        /* overwrite the table name for the entity using name obtained from the user*/
+        /* overwrite the table name for the entity using name obtained from the user */
         if (props.entityTableName !== this.entityTableName) {
             this.entityTableName = _.snakeCase(props.entityTableName).toLowerCase();
         }
+        done();
+    });
+}
+
+function askForFiltering() {
+    // don't prompt if server is skipped, or the backend is not sql, or no service requested
+    if (this.useConfigurationFile || this.skipServer || this.databaseType !== 'sql' || this.service === 'no') {
+        return;
+    }
+    const done = this.async();
+    const prompts = [
+        {
+            type: 'list',
+            name: 'filtering',
+            message: 'Do you want to add filtering?',
+            choices: [
+                {
+                    value: 'no',
+                    name: 'Not needed'
+                },
+                {
+                    name: 'Dynamic filtering for the entities with JPA Static metamodel',
+                    value: 'jpaMetamodel'
+                }
+            ],
+            default: 0
+        }
+    ];
+    this.prompt(prompts).then((props) => {
+        this.jpaMetamodelFiltering = props.filtering === 'jpaMetamodel';
         done();
     });
 }

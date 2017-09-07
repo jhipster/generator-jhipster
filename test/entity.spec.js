@@ -1,4 +1,4 @@
-/* global describe, beforeEach, it*/
+/* global describe, beforeEach, it */
 
 const path = require('path');
 const assert = require('yeoman-assert');
@@ -100,6 +100,34 @@ describe('JHipster generator entity for angular1', () => {
                 `${CLIENT_MAIN_SRC_DIR}i18n/en/foo.json`,
                 `${CLIENT_MAIN_SRC_DIR}i18n/fr/foo.json`
             ]);
+        });
+    });
+
+    describe('JHipster generator entity with all languages', () => {
+        describe('no dto, no service, no pagination', () => {
+            beforeEach((done) => {
+                helpers.run(require.resolve('../generators/entity'))
+                    .inTmpDir((dir) => {
+                        fse.copySync(path.join(__dirname, '../test/templates/all-languages'), dir);
+                    })
+                    .withArguments(['foo'])
+                    .withPrompts({
+                        fieldAdd: false,
+                        relationshipAdd: false,
+                        dto: 'no',
+                        service: 'no',
+                        pagination: 'no'
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected languages files', () => {
+                constants.LANGUAGES.forEach((language) => {
+                    assert.file([
+                        `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/foo.json`
+                    ]);
+                });
+            });
         });
     });
 

@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,6 +31,7 @@ import org.springframework.cloud.netflix.metrics.spectator.SpectatorMetricReader
 <%_ } _%>
 
 import com.codahale.metrics.JmxReporter;
+import com.codahale.metrics.JvmAttributeGaugeSet;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Slf4jReporter;
 import com.codahale.metrics.health.HealthCheckRegistry;
@@ -45,6 +46,8 @@ import com.zaxxer.hikari.HikariDataSource;
 <%_ } _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.beans.factory.annotation.Autowired;
 <%_ } _%>
@@ -63,6 +66,7 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
     private static final String PROP_METRIC_REG_JVM_THREADS = "jvm.threads";
     private static final String PROP_METRIC_REG_JVM_FILES = "jvm.files";
     private static final String PROP_METRIC_REG_JVM_BUFFERS = "jvm.buffers";
+    private static final String PROP_METRIC_REG_JVM_ATTRIBUTE_SET = "jvm.attributes";
 <% if (hibernateCache === 'ehcache' || hibernateCache === 'infinispan') { %>
     private static final String PROP_METRIC_REG_JCACHE_STATISTICS = "jcache.statistics";
 <%_ } _%>
@@ -109,6 +113,7 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
         metricRegistry.register(PROP_METRIC_REG_JVM_THREADS, new ThreadStatesGaugeSet());
         metricRegistry.register(PROP_METRIC_REG_JVM_FILES, new FileDescriptorRatioGauge());
         metricRegistry.register(PROP_METRIC_REG_JVM_BUFFERS, new BufferPoolMetricSet(ManagementFactory.getPlatformMBeanServer()));
+        metricRegistry.register(PROP_METRIC_REG_JVM_ATTRIBUTE_SET, new JvmAttributeGaugeSet());
 <% if (hibernateCache === 'ehcache' || hibernateCache === 'infinispan') { %>
         metricRegistry.register(PROP_METRIC_REG_JCACHE_STATISTICS, new JCacheGaugeSet());
 <%_ } _%>
@@ -125,8 +130,10 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
         }
         if (jHipsterProperties.getMetrics().getLogs().isEnabled()) {
             log.info("Initializing Metrics Log reporting");
+            Marker metricsMarker = MarkerFactory.getMarker("metrics");
             final Slf4jReporter reporter = Slf4jReporter.forRegistry(metricRegistry)
                 .outputTo(LoggerFactory.getLogger("metrics"))
+                .markWith(metricsMarker)
                 .convertRatesTo(TimeUnit.SECONDS)
                 .convertDurationsTo(TimeUnit.MILLISECONDS)
                 .build();
@@ -139,7 +146,7 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
     @Bean
     @ConditionalOnProperty("jhipster.logging.spectator-metrics.enabled")
     @ExportMetricReader
-    public SpectatorMetricReader SpectatorMetricReader(Registry registry) {
+    public SpectatorMetricReader spectatorMetricReader(Registry registry) {
         log.info("Initializing Spectator Metrics Log reporting");
         return new SpectatorMetricReader(registry);
     }

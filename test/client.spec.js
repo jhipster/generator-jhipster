@@ -1,4 +1,4 @@
-/* global describe, context, beforeEach, it*/
+/* global describe, context, beforeEach, it */
 
 const path = require('path');
 const assert = require('yeoman-assert');
