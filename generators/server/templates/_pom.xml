@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -61,7 +61,7 @@
         <%_ if (cucumberTests) { _%>
         <cucumber.version>1.2.4</cucumber.version>
         <%_ } _%>
-        <docker-maven-plugin.version>0.4.13</docker-maven-plugin.version>
+        <dockerfile-maven-plugin.version>1.3.4</dockerfile-maven-plugin.version>
         <!-- Overridden to get metrics-jcache -->
         <dropwizard-metrics.version>3.2.2</dropwizard-metrics.version>
         <%_ if (!skipClient) { _%>
@@ -78,7 +78,7 @@
         <hazelcast-wm.version>3.7</hazelcast-wm.version>
         <%_ } _%>
         <%_ if (hibernateCache === 'infinispan') { _%>
-        <infinispan-hibernate52.version>5.2.8.Final</infinispan-hibernate52.version>
+        <infinispan-hibernate52.version>5.2.10.Final</infinispan-hibernate52.version>
         <%_ } _%>
         <%_ if (hibernateCache === 'infinispan') { _%>
         <infinispan.version>8.2.5.Final</infinispan.version>
@@ -86,7 +86,7 @@
         <infinispan.boot.starter.version>1.0.0.Final</infinispan.boot.starter.version>
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
-        <hibernate.version>5.2.8.Final</hibernate.version>
+        <hibernate.version>5.2.10.Final</hibernate.version>
         <hikaricp.version>2.6.0</hikaricp.version>
         <%_ } _%>
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
@@ -127,6 +127,7 @@
         <%_ } _%>
         <%_ if (databaseType === 'mongodb') { _%>
         <mongobee.version>0.12</mongobee.version>
+        <guava.version>23.0</guava.version>
         <%_ } _%>
         <node.version>v<%= NODE_VERSION %></node.version>
         <%_ if (clientPackageManager === 'npm') { _%>
@@ -542,6 +543,11 @@
         </dependency>
         <%_ } _%>
         <%_ if (databaseType === 'mongodb') { _%>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.github.mongobee</groupId>
             <artifactId>mongobee</artifactId>
@@ -994,6 +1000,25 @@
                             </resources>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>docker-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>target/</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/docker/</directory>
+                                    <filtering>true</filtering>
+                                    <excludes>
+                                        <exclude>**/*.yml</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -1120,25 +1145,31 @@
             </plugin>
             <plugin>
                 <groupId>com.spotify</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>${docker-maven-plugin.version}</version>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>${dockerfile-maven-plugin.version}</version>
+                <!--
+                Uncomment the section below to build the docker image with mvn package and and push it with mvn deploy
+                <executions>
+                    <execution>
+                    <id>default</id>
+                    <goals>
+                        <goal>build</goal>
+                        <goal>push</goal>
+                    </goals>
+                    </execution>
+                </executions>
+                -->
                 <configuration>
-                    <imageName><%= baseName.toLowerCase() %></imageName>
-                    <dockerDirectory>src/main/docker</dockerDirectory>
-                    <resources>
-                        <resource>
-                            <targetPath>/</targetPath>
-                            <directory>${project.build.directory}</directory>
-                            <include>${project.build.finalName}.war</include>
-                        </resource>
-                    </resources>
+                    <repository>${project.artifactId}</repository>
+                    <tag>latest</tag>
+                    <contextDirectory>${project.build.directory}</contextDirectory>
                 </configuration>
             </plugin>
             <%_ if (enableSwaggerCodegen) { _%>
             <plugin>
-                <!-- 
-                    Plugin that provides API-first development using swagger-codegen to 
-                    generate Spring-MVC endpoint stubs at compile time from a swagger definition file 
+                <!--
+                    Plugin that provides API-first development using swagger-codegen to
+                    generate Spring-MVC endpoint stubs at compile time from a swagger definition file
                 -->
                 <groupId>io.swagger</groupId>
                 <artifactId>swagger-codegen-maven-plugin</artifactId>
@@ -1314,6 +1345,14 @@
                         <configuration>
                             <%_ if (!skipClient) { _%>
                             <warSourceDirectory><% if (clientFramework !== 'angular1') { %><%= CLIENT_DIST_DIR %><% } else { %><%= CLIENT_MAIN_SRC_DIR %><% } %></warSourceDirectory>
+                            <webResources>
+                                <resource>
+                                    <directory>src/main/webapp</directory>
+                                    <includes>
+                                        <include>WEB-INF/**</include>
+                                    </includes>
+                                </resource>
+                            </webResources>
                             <%_ } _%>
                         </configuration>
                     </plugin>
@@ -1352,6 +1391,14 @@
                         <configuration>
                             <%_ if (!skipClient) { _%>
                             <warSourceDirectory><%= CLIENT_DIST_DIR %></warSourceDirectory>
+                            <webResources>
+                                <resource>
+                                    <directory>src/main/webapp</directory>
+                                    <includes>
+                                        <include>WEB-INF/**</include>
+                                    </includes>
+                                </resource>
+                            </webResources>
                             <%_ } _%>
                         </configuration>
                     </plugin>

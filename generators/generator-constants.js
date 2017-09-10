@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2017 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see https://jhipster.github.io/
+ * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,6 +43,7 @@ const DOCKER_PROMETHEUS = 'prom/prometheus:v1.6.3';
 const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.6.2';
 const DOCKER_GRAFANA = 'grafana/grafana:4.3.2';
 const DOCKER_JENKINS = 'jenkins:latest';
+const DOCKER_SWAGGER_EDITOR = 'swaggerapi/swagger-editor:latest';
 const DOCKER_COMPOSE_FORMAT_VERSION = '2';
 
 // version of Node, Yarn, NPM
@@ -61,7 +62,7 @@ const CLIENT_DIST_DIR = 'www/';
 const SUPPORTED_VALIDATION_RULES = ['required', 'max', 'min', 'maxlength', 'minlength', 'maxbytes', 'minbytes', 'pattern'];
 
 // documentation constants
-const JHIPSTER_DOCUMENTATION_URL = 'https://jhipster.github.io';
+const JHIPSTER_DOCUMENTATION_URL = 'http://www.jhipster.tech';
 const JHIPSTER_DOCUMENTATION_ARCHIVE_PATH = '/documentation-archive/';
 
 const SQL_DB_OPTIONS = [
@@ -183,6 +184,7 @@ const constants = {
     YARN_VERSION,
     NPM_VERSION,
     DOCKER_JENKINS,
+    DOCKER_SWAGGER_EDITOR,
     SQL_DB_OPTIONS,
     DOCKER_COMPOSE_FORMAT_VERSION
 };

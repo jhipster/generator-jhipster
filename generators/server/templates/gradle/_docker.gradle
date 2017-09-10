@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,6 @@
 buildscript {
     repositories {
         jcenter()
-        mavenLocal()
     }
 
     dependencies {
@@ -32,15 +31,20 @@ apply plugin: com.bmuschko.gradle.docker.DockerRemoteApiPlugin
 import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 
 task copyDockerFiles(type: Copy) {
-    description = "Copy dockerfile and required data to build directory"
+    description = "Copy Dockerfile and required data to build directory"
     from 'src/main/docker'
     from "${project.buildDir}/libs"
     into { "${project.buildDir}/docker" }
+    include "*"
+    exclude "**/*.yml"
+    filter {
+        it.replace('@project.build.finalName@', rootProject.name + '-' + version)
+    }
 }
 
 task buildDocker(type: DockerBuildImage, dependsOn: 'copyDockerFiles') {
-    description = "Package application as docker image"
+    description = "Package application as Docker image"
     inputDir = project.file("${project.buildDir}/docker")
-    tags = ["jhipster:${project.version}".toString()]
+    tags = ["<%= baseName.toLowerCase() %>:latest".toString(), "<%= baseName.toLowerCase() %>:${project.version}".toString()]
 }
 

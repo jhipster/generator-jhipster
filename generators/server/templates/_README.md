@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -163,6 +163,27 @@ will generate few files:
     update src/main/webapp/app/app.module.ts
 <%_ } _%>
 
+<%_ if (enableSwaggerCodegen) { _%>
+### Doing API-First development using swagger-codegen
+
+[Swagger-Codegen]() is configured for this application. You can generate API code from the `src/main/resources/swagger/api.yml` definition file by running:
+    <%_ if (buildTool === 'maven') { _%>
+```bash
+./mvnw generate-sources
+```
+    <%_ } _%>
+    <%_ if (buildTool === 'maven') { _%>
+```bash
+./gradlew swagger
+```
+    <%_ } _%>
+Then implements the generated interfaces with `@RestController` classes.
+
+To edit the `api.yml` definition file, you can use a tool such as [Swagger-Editor](). Start a local instance of the swagger-editor using docker by running: `docker-compose -f src/main/docker/swagger-editor.yml up -d`. The editor will then be reachable at [http://localhost:7742](http://localhost:7742).
+
+Refer to [Doing API-First development][] for more details.
+<%_ } _%>
+
 ## Building for production
 
 To optimize the <%= baseName %> application for production, run:
@@ -222,7 +243,7 @@ To stop it and remove the container, run:
 You can also fully dockerize your application and all the services that it depends on.
 To achieve this, first build a docker image of your app by running:
 
-    <% if (buildTool === 'maven') { %>./mvnw package -Pprod docker:build<% } %><% if (buildTool === 'gradle') { %>./gradlew bootRepackage -Pprod buildDocker<% } %>
+    <% if (buildTool === 'maven') { %>./mvnw package -Pprod dockerfile:build<% } %><% if (buildTool === 'gradle') { %>./gradlew bootRepackage -Pprod buildDocker<% } %>
 
 Then run:
 
@@ -267,4 +288,9 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 [Protractor]: https://angular.github.io/protractor/
 [Leaflet]: http://leafletjs.com/
 [DefinitelyTyped]: http://definitelytyped.org/
+<%_ } _%>
+<%_ if (enableSwaggerCodegen) { _%>
+[Swagger-Codegen]: https://github.com/swagger-api/swagger-codegen
+[Swagger-Editor]: http://editor.swagger.io
+[Doing API-First development]: <%= DOCUMENTATION_ARCHIVE_URL %>/doing-api-first-development/
 <%_ } _%>

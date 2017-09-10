@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 package <%=packageName%>.service;
+
 <%_ const serviceClassName = entityClass + 'QueryService';
     const instanceType = (dto === 'mapstruct') ? entityClass + 'DTO' : entityClass;
     const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
@@ -32,7 +33,6 @@ package <%=packageName%>.service;
 import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime === true) { %>
 import java.time.ZonedDateTime;<% } if (fieldsContainBigDecimal === true) { %>
 import java.math.BigDecimal;<% } %>
-
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -61,7 +61,7 @@ import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;
  * Service for executing complex queries for <%= entityClass %> entities in the database.
  * The main input is a {@link <%= entityClass %>Criteria} which get's converted to {@link Specifications},
  * in a way that all the filters must apply.
- * It returns a {@link List} of {%link <%= instanceType %>} or a {@link Page} of {%link <%= instanceType %>} which fullfills the criterias
+ * It returns a {@link List} of {%link <%= instanceType %>} or a {@link Page} of {%link <%= instanceType %>} which fulfills the criterias
  */
 @Service<% if (databaseType === 'sql') { %>
 @Transactional(readOnly = true)<% } %>

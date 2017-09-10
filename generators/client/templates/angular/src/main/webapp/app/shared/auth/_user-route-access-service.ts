@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,8 +46,15 @@ export class UserRouteAccessService implements CanActivate {
         const principal = this.principal;
         return Promise.resolve(principal.identity().then((account) => {
 
-            if (account && principal.hasAnyAuthorityDirect(authorities)) {
-                return true;
+            if (account) {
+              return principal.hasAnyAuthority(authorities).then(
+                (response) => {
+                  if (response) {
+                    return true;
+                  }
+                  return false;
+                }
+              );
             }
 
             this.stateStorageService.storeUrl(url);

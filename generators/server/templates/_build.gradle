@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -369,6 +369,7 @@ dependencies {
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
     compile "com.github.mongobee:mongobee:${mongobee_version}"
+    compile "com.google.guava:guava:${guava_version}"
     <%_ } _%>
     compile ("io.springfox:springfox-swagger2:${springfox_version}") {
         exclude module: 'mapstruct'
