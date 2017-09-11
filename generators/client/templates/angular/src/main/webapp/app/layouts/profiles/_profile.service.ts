@@ -20,12 +20,15 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
+<%_ if (authenticationType !== 'uaa') { _%>
+import { SERVER_API_URL } from '../../app.constants';
+<%_ } _%>
 import { ProfileInfo } from './profile-info.model';
 
 @Injectable()
 export class ProfileService {
 
-    private profileInfoUrl = 'api/profile-info';
+    private profileInfoUrl = <% if (authenticationType === 'uaa') { %>'<% } else { %>SERVER_API_URL + '<% } %>api/profile-info';
 
     constructor(private http: Http) { }
 
