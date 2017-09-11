@@ -25,10 +25,11 @@ _%>
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
-<%_ if (authenticationType !== 'uaa') { _%>
+<%_ if (!(applicationType === 'gateway' && locals.microserviceName) && authenticationType !== 'uaa') { _%>
 import { SERVER_API_URL } from '../../app.constants';
 <%_ } _%>
 <%_ if (hasDate) { _%>
+
 import { JhiDateUtils } from 'ng-jhipster';
 <%_ } _%>
 
@@ -41,6 +42,11 @@ export class <%= entityAngularName %>Service {
     private resourceUrl = <% if (applicationType === 'gateway' && locals.microserviceName) { %>'<%= microserviceName.toLowerCase() %>/<% } else { %>SERVER_API_URL + '<% } %>api/<%= entityApiUrl %>';
     <%_ if(searchEngine === 'elasticsearch') { _%>
     private resourceSearchUrl = <% if (applicationType === 'gateway' && locals.microserviceName) { %>'<%= microserviceName.toLowerCase() %>/<% } else { %>SERVER_API_URL + '<% } %>api/_search/<%= entityApiUrl %>';
+    <%_ } _%>
+
+    private resourceUrl = <% if (applicationType === 'gateway' && locals.microserviceName) { %>'<%= microserviceName.toLowerCase() %>/<% } else if (authenticationType === 'uaa') { %>'<% } else { %>SERVER_API_URL + '<% } %>api/<%= entityApiUrl %>';
+    <%_ if(searchEngine === 'elasticsearch') { _%>
+    private resourceSearchUrl = <% if (applicationType === 'gateway' && locals.microserviceName) { %>'<%= microserviceName.toLowerCase() %>/<% } else if (authenticationType === 'uaa') { %>'<% } else { %>SERVER_API_URL + '<% } %>api/_search/<%= entityApiUrl %>';
     <%_ } _%>
 
     constructor(private http: Http<% if (hasDate) { %>, private dateUtils: JhiDateUtils<% } %>) { }
