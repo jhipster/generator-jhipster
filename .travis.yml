@@ -69,7 +69,6 @@ before_install:
   - yarn global add yo bower gulp-cli
 install:
   - cd "$TRAVIS_BUILD_DIR"/
-  - yarn cache clean
   - yarn install
   - yarn link
   - if [ "$JHIPSTER" == "app-default-from-scratch" ]; then
