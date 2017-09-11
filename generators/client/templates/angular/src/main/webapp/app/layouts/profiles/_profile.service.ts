@@ -28,7 +28,7 @@ import { ProfileInfo } from './profile-info.model';
 @Injectable()
 export class ProfileService {
 
-    private profileInfoUrl = SERVER_API_URL + 'api/profile-info';
+    private profileInfoUrl = <% if (authenticationType === 'uaa') { %>'<% } else { %>SERVER_API_URL + '<% } %>api/profile-info';
 
     constructor(private http: Http) { }
 
