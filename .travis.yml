@@ -13,12 +13,6 @@ addons:
     - google-chrome
     packages:
     - google-chrome-stable
-cache:
-  yarn: true
-  directories:
-    - $HOME/.m2
-    - $HOME/.gradle
-    - $HOME/.yarn-cache
 env:
   global:
     - PROFILE=dev
