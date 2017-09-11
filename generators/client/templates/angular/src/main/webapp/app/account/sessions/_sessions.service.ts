@@ -21,11 +21,15 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
 import { Session } from './session.model';
+<%_ if (authenticationType !== 'uaa') { _%>
+
+import { SERVER_API_URL } from '../../app.constants';
+<%_ } _%>
 
 @Injectable()
 export class SessionsService {
 
-    private resourceUrl = '<% if (authenticationType === 'uaa') { %><%= uaaBaseName.toLowerCase() %>/<% } %>api/account/sessions/';
+    private resourceUrl = <% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/<% } else { %>SERVER_API_URL + '<% } %>api/account/sessions/';
     constructor(private http: Http) { }
 
     findAll(): Observable<Session[]> {

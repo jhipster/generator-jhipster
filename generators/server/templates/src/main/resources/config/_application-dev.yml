@@ -285,9 +285,11 @@ jhipster:
     # CORS is only enabled by default with the "dev" profile, so BrowserSync can access the API
     cors:
         allowed-origins: "*"
-        allowed-methods: GET, PUT, POST, DELETE, OPTIONS
+        allowed-methods: "*"
         allowed-headers: "*"
-        exposed-headers:
+        <%_ if (authenticationType !== 'session') { _%>
+        exposed-headers: "Authorization"
+        <%_ } _%>
         allow-credentials: true
         max-age: 1800
     <%_ if (authenticationType === 'jwt') { _%>

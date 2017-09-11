@@ -27,6 +27,6 @@ export class GatewayRoutesService {
     constructor(private http: Http) { }
 
     findAll(): Observable<GatewayRoute[]> {
-        return this.http.get('api/gateway/routes/').map((res: Response) => res.json());
+        return this.http.get(SERVER_API_URL + 'api/gateway/routes/').map((res: Response) => res.json());
     }
 }
