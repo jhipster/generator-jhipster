@@ -48,9 +48,6 @@ function cleanupOldServerFiles(generator, javaDir, testDir) {
     if (generator.isJhipsterVersionLessThan('3.6.0')) {
         generator.removeFile(`${javaDir}config/HerokuDatabaseConfiguration.java`);
     }
-    if (generator.isJhipsterVersionLessThan('3.8.1')) {
-        generator.removeFile(`${javaDir}config/JacksonConfiguration.java`);
-    }
     if (generator.isJhipsterVersionLessThan('3.10.0')) {
         generator.removeFile(`${javaDir}config/CloudMongoDbConfiguration.java`);
         generator.removeFile(`${javaDir}security/CustomAccessDeniedHandler.java`);
@@ -94,5 +91,9 @@ function cleanupOldServerFiles(generator, javaDir, testDir) {
     if (generator.isJhipsterVersionLessThan('4.3.0')) {
         generator.removeFile(`${javaDir}gateway/ratelimiting/RateLimitingRepository.java`);
         generator.removeFile(`${javaDir}config/cassandra/CustomZonedDateTimeCodec.java`);
+    }
+    if (generator.isJhipsterVersionLessThan('4.7.1')) {
+        generator.removeFile(`${javaDir}web/rest/errors/ErrorVM.java`);
+        generator.removeFile(`${javaDir}web/rest/errors/ParameterizedErrorVM.java`);
     }
 }

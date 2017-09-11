@@ -53,7 +53,7 @@ public class ExceptionTranslatorTestController {
 
     @GetMapping("/test/parameterized-error2")
     public void parameterizedError2() {
-        Map<String, String> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         params.put("foo", "foo_value");
         params.put("bar", "bar_value");
         throw new CustomParameterizedException("test parameterized error", params);
