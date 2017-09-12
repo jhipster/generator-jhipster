@@ -19,7 +19,6 @@
  */
 const shelljs = require('shelljs');
 const chalk = require('chalk');
-const _ = require('lodash');
 const crypto = require('crypto');
 
 /**
