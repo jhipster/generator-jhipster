@@ -130,10 +130,10 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
 		<%_ if (applicationType === 'gateway') { _%>
             .ignoringAntMatchers("/h2-console/**")
             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-		<%_ } else { _%>
-			.disable()
-		<%_ } _%>
         .and()
+		<%_ } else { _%>
+            .disable()
+		<%_ } _%>
             .headers()
             .frameOptions()
             .disable()
