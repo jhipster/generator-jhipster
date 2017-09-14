@@ -31,6 +31,8 @@ export class AuthInterceptor extends JhiHttpInterceptor {
     }
 
     requestIntercept(options?: RequestOptionsArgs): RequestOptionsArgs {
+        if (!options || !options.url || /^http/.test(options.url)) return options;
+
         const token = this.localStorage.retrieve('authenticationToken') || this.sessionStorage.retrieve('authenticationToken');
         <%_ if (authenticationType === 'oauth2') { _%>
         if (token && token.expires_at && token.expires_at > new Date().getTime()) {
