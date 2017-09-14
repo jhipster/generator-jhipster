@@ -1017,7 +1017,7 @@
                             <resources>
                                 <resource>
                                     <directory>src/main/docker/</directory>
-                                    <filtering>true</filtering>
+                                    <filtering>false</filtering>
                                     <excludes>
                                         <exclude>**/*.yml</exclude>
                                     </excludes>
