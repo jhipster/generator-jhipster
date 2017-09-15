@@ -147,6 +147,7 @@ security:
         resource:
             #userInfoUri: ${oauth2.issuer}/v1/userinfo
             userInfoUri: ${oauth2.issuer}/protocol/openid-connect/userinfo
+            #tokenInfoUri: ${oauth2.issuer}/v1/introspect
             tokenInfoUri: ${oauth2.issuer}/protocol/openid-connect/token/introspect
             preferTokenInfo: false
 <%_ } _%>
