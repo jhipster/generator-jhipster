@@ -177,7 +177,7 @@ jhipster:
             host: localhost
             port: 5000
             queue-size: 512
-<%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
     mail:
         from: test@localhost
         base-url: http://127.0.0.1:8080

@@ -188,7 +188,7 @@ function writeFiles() {
 
             if (this.databaseType === 'mongodb') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/dbmigrations/_package-info.java`, `${javaDir}config/dbmigrations/package-info.java`);
-                if (!this.skipUserManagement) {
+                if (!this.skipUserManagement || this.authenticationType === 'oauth2') {
                     this.template(`${SERVER_MAIN_SRC_DIR}package/config/dbmigrations/_InitialSetupMigration.java`, `${javaDir}config/dbmigrations/InitialSetupMigration.java`);
                 }
             }
