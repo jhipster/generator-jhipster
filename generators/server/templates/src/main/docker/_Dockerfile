@@ -22,7 +22,6 @@ ENV SPRING_OUTPUT_ANSI_ENABLED=ALWAYS \
     JHIPSTER_SLEEP=0 \
     JAVA_OPTS="<%_ if (hibernateCache === 'infinispan') { _%>-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true<%_ } _%>"
 
-# add directly the war
 ADD *.war /app.war
 
 EXPOSE <%= serverPort %><% if (hibernateCache === 'hazelcast') { %> 5701/udp<% } %>
