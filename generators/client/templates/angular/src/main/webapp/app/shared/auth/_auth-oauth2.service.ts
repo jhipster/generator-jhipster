@@ -21,6 +21,9 @@ import { Http, Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { LocalStorageService } from 'ng2-webstorage';
 
+<%_ if (authenticationType !== 'uaa') { _%>
+import { SERVER_API_URL } from '../../app.constants';
+<%_ } _%>
 import { JhiBase64Service } from 'ng-jhipster';
 
 @Injectable()
@@ -62,7 +65,7 @@ export class AuthServerProvider {
 
     logout(): Observable<any> {
         return new Observable((observer) => {
-            this.http.post('api/logout', {});
+            this.http.post(SERVER_API_URL + 'api/logout', {});
             this.$localStorage.clear('authenticationToken');
             observer.complete();
         });

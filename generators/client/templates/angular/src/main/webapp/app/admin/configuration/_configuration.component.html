@@ -35,7 +35,7 @@
                 <div class="row" *ngFor="let key of keys(entry.properties)">
                     <div class="col-md-4">{{key}}</div>
                     <div class="col-md-8">
-                        <span class="float-right badge badge-default break">{{entry.properties[key] | json}}</span>
+                        <span class="float-right break">{{entry.properties[key] | json}}</span>
                     </div>
                 </div>
             </td>
@@ -55,7 +55,7 @@
             <tr *ngFor="let item of allConfiguration[key]">
                 <td class="break">{{item.key}}</td>
                 <td class="break">
-                    <span class="float-right badge badge-default break">{{item.val}}</span>
+                    <span class="float-right break">{{item.val}}</span>
                 </td>
             </tr>
             </tbody>

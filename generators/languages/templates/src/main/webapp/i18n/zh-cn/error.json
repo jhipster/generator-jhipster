@@ -2,12 +2,12 @@
     "error": {
         "title": "错误页面!",
         "http": {
-            "400": "Bad request.",
-            "403": "您没有权限访问此页面."
+            "400": "请求失败.",
+            "403": "您没有权限访问此页面.",
+            "405": "不允许此方法访问页面.",
+            "500": "内部服务器错误."
         },
-        "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",
-        "validation": "Validation error on the server.",
-        "methodNotSupported": "The HTTP verb you used is not supported for this URL.",
-        "internalServerError": "Internal server error."
+        "concurrencyFailure": "出现并发提交. 您的提交被拒绝.",
+        "validation": "服务器校验失败."
     }
 }

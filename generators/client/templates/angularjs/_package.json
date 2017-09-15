@@ -100,7 +100,7 @@
     "yargs": "5.0.0"
   },
   "engines": {
-    "node": "^4.3"
+    "node": ">=6.9.0"
   },
   "scripts": {
     "test": "gulp test"<% if (protractorTests) { %>,

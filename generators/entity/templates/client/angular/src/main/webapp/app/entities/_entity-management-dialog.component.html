@@ -79,10 +79,10 @@ _%>
                     <span class="pull-left">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
                     <%_ } _%>
                     <%_ if (fieldTypeBlobContent === 'image') { _%>
-                    <button type="button" (click)="clearInputImage('<%= fieldName %>', '<%= fieldName %>ContentType', 'fileImage')" class="btn btn-default btn-xs pull-right">
+                    <button type="button" (click)="clearInputImage('<%= fieldName %>', '<%= fieldName %>ContentType', 'fileImage')" class="btn btn-secondary btn-xs pull-right">
                     <%_ } else { _%>
                     <button type="button" (click)="<%= entityInstance %>.<%= fieldName %>=null;<%= entityInstance %>.<%= fieldName %>ContentType=null;"
-                            class="btn btn-default btn-xs pull-right">
+                            class="btn btn-secondary btn-xs pull-right">
                     <%_ } _%>
                         <span class="fa fa-times"></span>
                     </button>
@@ -95,7 +95,7 @@ _%>
                 <input id="field_<%= fieldName %>" type="text" class="form-control" name="<%= fieldName %>" ngbDatepicker  #<%= fieldName %>Dp="ngbDatepicker" [(ngModel)]="<%= entityInstance %>.<%= fieldName %>"
                 <%- include ng_validators %>/>
                 <span class="input-group-btn">
-                    <button type="button" class="btn btn-default" (click)="<%= fieldName %>Dp.toggle()"><i class="fa fa-calendar"></i></button>
+                    <button type="button" class="btn btn-secondary" (click)="<%= fieldName %>Dp.toggle()"><i class="fa fa-calendar"></i></button>
                 </span>
             </div>
             <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
@@ -263,7 +263,7 @@ _%>
     <%_ } _%>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="clear()">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
             <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>
         <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">

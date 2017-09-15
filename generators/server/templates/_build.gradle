@@ -16,32 +16,33 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import groovy.json.JsonSlurper
 import org.gradle.internal.os.OperatingSystem
 
 buildscript {
     repositories {
         mavenLocal()
-        mavenCentral()
         jcenter()
         maven { url "http://repo.spring.io/plugins-release" }
-        maven { url "http://repo.spring.io/milestone" }
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
-        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.5"
-        classpath "net.ltgt.gradle:gradle-apt-plugin:0.9"
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
         classpath "org.springframework.build.gradle:propdeps-plugin:0.0.7"
-        <%_ if (!skipClient) { _%>
-        classpath "com.moowork.gradle:gradle-node-plugin:1.2.0"
-        <%_ } _%>
-        classpath "io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE"
         <%_ if (enableSwaggerCodegen) { _%>
         classpath "gradle.plugin.org.detoeuf:swagger-codegen-plugin:1.7.4"
         <%_ } _%>
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
     }
+}
+
+plugins {
+    id "org.sonarqube" version "2.5"
+    id "net.ltgt.apt" version "0.11"
+    id "io.spring.dependency-management" version "1.0.3.RELEASE"
+     <%_ if (!skipClient) { _%>
+    id "com.moowork.node" version "1.2.0"
+    <%_ } _%>
+    //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
 }
 
 apply plugin: 'java'
@@ -75,6 +76,11 @@ dependencyManagement {
 }
 <%_ } _%>
 defaultTasks 'bootRun'
+
+group = '<%= packageName %>'
+version = '0.0.1-SNAPSHOT'
+
+description = ''
 
 bootRepackage {
    mainClass = '<%= packageName %>.<%= mainClass %>'
@@ -157,6 +163,7 @@ cucumberTest.finalizedBy(testReport)
 apply from: 'gradle/yeoman.gradle'
     <%_ } _%>
 <%_ } _%>
+apply from: 'gradle/docker.gradle'
 apply from: 'gradle/sonar.gradle'
 <%_ if (databaseType === 'sql') { _%>
 apply from: 'gradle/liquibase.gradle'
@@ -165,7 +172,6 @@ apply from: 'gradle/liquibase.gradle'
 apply from: 'gradle/gatling.gradle'
 <%_ } _%>
 apply from: 'gradle/mapstruct.gradle'
-apply from: 'gradle/docker.gradle'
 <%_ if (enableSwaggerCodegen) { _%>
 apply from: 'gradle/swagger.gradle'
 <%_ } _%>
@@ -191,11 +197,6 @@ if (project.hasProperty('zipkin')) {
 }
 <%_ } _%>
 
-group = '<%= packageName %>'
-version = '0.0.1-SNAPSHOT'
-
-description = ''
-
 configurations {
     providedRuntime
     compile.exclude module: "spring-boot-starter-tomcat"
@@ -208,14 +209,7 @@ configurations {
 
 repositories {
     mavenLocal()
-    mavenCentral()
     jcenter()
-    maven { url 'http://repo.spring.io/milestone' }
-    maven { url 'http://repo.spring.io/snapshot' }
-    maven { url 'https://repository.jboss.org/nexus/content/repositories/releases' }
-    maven { url 'https://oss.sonatype.org/content/repositories/releases' }
-    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
-    maven { url 'http://repo.maven.apache.org/maven2' }
     <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
     maven { url "https://maven.oracle.com" }
     <%_ } _%>
@@ -324,6 +318,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-websocket"
     <%_ } _%>
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"
+    compile "org.zalando:problem-spring-web:${problem_spring_web_version}"
     <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
     compile "com.google.guava:guava:18.0"
     compile "com.datastax.cassandra:cassandra-driver-extras:" + dependencyManagement.managedVersions["com.datastax.cassandra:cassandra-driver-core"]
@@ -465,7 +460,7 @@ task cleanResources(type: Delete) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.0'
+    gradleVersion = '4.1'
 }
 
 task stage(dependsOn: 'bootRepackage') {

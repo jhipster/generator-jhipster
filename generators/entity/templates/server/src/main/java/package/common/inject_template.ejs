@@ -30,11 +30,12 @@
 <%_  } else { _%>
 
     private final <%= entityClass %>Service <%= entityInstance %>Service;
-<%_ if (queryService) {  _%>
+    <%_ if (queryService) {  _%>
+
     private final <%= entityClass %>QueryService <%= entityInstance %>QueryService;
+    <%_ } _%>
 <%_ } _%>
 
-<%_ } _%>
     public <%= constructorName %>(<% if (!viaService) { %><%= entityClass %>Repository <%= entityInstance %>Repository<% if (dto === 'mapstruct') { %>, <%= entityClass %>Mapper <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository<% } %><%  } else { %><%= entityClass %>Service <%= entityInstance %>Service<% } %><% if (queryService && viaService) { %>, <%= entityClass %>QueryService <%= entityInstance %>QueryService<% } %>) {
         <%_ if (!viaService) { _%>
         this.<%= entityInstance %>Repository = <%= entityInstance %>Repository;

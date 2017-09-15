@@ -16,28 +16,33 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import org.gradle.internal.os.OperatingSystem
-
-task buildDocker(type: Exec) {
-    doFirst {
-        copy {
-            from "src/main/docker/"
-            into "build/docker/"
-            include "*"
-            exclude "**/*.yml"
-            filter {
-                it.replace('@project.build.finalName@', rootProject.name + '-' + version)
-            }
-        }
-        copy {
-            from "build/libs"
-            into "build/docker/"
-            include "*.war*"
-        }
+buildscript {
+    repositories {
+        jcenter()
     }
-    if (OperatingSystem.current().isWindows()) {
-        commandLine 'cmd', '/c', 'docker', 'image', 'build', '-f', 'build/docker/Dockerfile', '-t', '<%= baseName.toLowerCase() %>', 'build/docker/'
-    } else {
-        commandLine 'docker', 'image', 'build', '-f', 'build/docker/Dockerfile', '-t', '<%= baseName.toLowerCase() %>', 'build/docker/'
+
+    dependencies {
+        classpath 'com.bmuschko:gradle-docker-plugin:3.1.0'
     }
 }
+
+apply plugin: com.bmuschko.gradle.docker.DockerRemoteApiPlugin
+
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+
+task copyDockerFiles(type: Copy) {
+    description = "Copy Dockerfile and required data to build directory"
+    from 'src/main/docker'
+    from "${project.buildDir}/libs"
+    into { "${project.buildDir}/docker" }
+    include "*"
+    exclude "**/*.yml"
+}
+
+task buildDocker(type: DockerBuildImage, dependsOn: 'copyDockerFiles') {
+    description = "Package application as Docker image"
+    group = "Docker"
+    inputDir = project.file("${project.buildDir}/docker")
+    tags = ["<%= baseName.toLowerCase() %>:latest".toString(), "<%= baseName.toLowerCase() %>:${project.version}".toString()]
+}
+

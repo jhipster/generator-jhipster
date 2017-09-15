@@ -19,7 +19,6 @@
  */
 const shelljs = require('shelljs');
 const chalk = require('chalk');
-const _ = require('lodash');
 const crypto = require('crypto');
 
 /**
@@ -68,10 +67,10 @@ function checkImages() {
     this.appsFolders.forEach((appsFolder, index) => {
         const appConfig = this.appConfigs[index];
         if (appConfig.buildTool === 'maven') {
-            imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/target/docker/${_.kebabCase(appConfig.baseName)}-*.war`);
+            imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/target/docker`);
             runCommand = './mvnw package -Pprod dockerfile:build';
         } else {
-            imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/build/docker/${_.kebabCase(appConfig.baseName)}-*.war`);
+            imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/build/docker`);
             runCommand = './gradlew -Pprod bootRepackage buildDocker';
         }
         if (shelljs.ls(imagePath).length === 0) {

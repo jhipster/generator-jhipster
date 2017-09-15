@@ -29,7 +29,11 @@ const utils = require('./utils.js');
 module.exports = (options) => {
     const DATAS = {
         VERSION: `'${utils.parseVersion()}'`,
-        DEBUG_INFO_ENABLED: options.env === 'development'
+        DEBUG_INFO_ENABLED: options.env === 'development'<% if (authenticationType !== 'uaa') { %>,
+        // The root URL for API calls, ending with a '/' - for example: `"http://api.jhipster.tech:8081/"`
+        // In `prod` mode, you will need to enable CORS on your API server
+        // (see the `jhipster.cors` common JHipster property in the `application-*.yml` configurations)
+        SERVER_API_URL: `"/"`<% } %>
     };
     return {
         resolve: {

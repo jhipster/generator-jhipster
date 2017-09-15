@@ -20,13 +20,16 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
+<%_ if (authenticationType !== 'uaa') { _%>
+import { SERVER_API_URL } from '../../app.constants';
+<%_ } _%>
 import { User } from './user.model';
 import { ResponseWrapper } from '../model/response-wrapper.model';
 import { createRequestOption } from '../model/request-util';
 
 @Injectable()
 export class UserService {
-    private resourceUrl = '<% if (authenticationType === 'uaa') { %><%= uaaBaseName.toLowerCase() %>/<% } %>api/users';
+    private resourceUrl = <% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/<% } else { %>SERVER_API_URL + '<% } %>api/users';
 
     constructor(private http: Http) { }
 
@@ -56,7 +59,7 @@ export class UserService {
 
     authorities(): Observable<string[]> {
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-        return this.http.get('<% if (authenticationType === 'uaa') { %><%= uaaBaseName.toLowerCase() %>/<% } %>api/users/authorities').map((res: Response) => {
+        return this.http.get(<% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/<% } else { %>SERVER_API_URL + '<% } %>api/users/authorities').map((res: Response) => {
             const json = res.json();
             return <string[]> json;
         });

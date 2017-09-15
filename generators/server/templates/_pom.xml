@@ -23,7 +23,7 @@
     <parent>
         <artifactId>spring-boot-starter-parent</artifactId>
         <groupId>org.springframework.boot</groupId>
-        <version>1.5.6.RELEASE</version>
+        <version>1.5.7.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -143,6 +143,7 @@
         <%_ if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { _%>
         <postgresql.version>9.4.1212</postgresql.version>
         <%_ } _%>
+        <problem-spring-web.version>0.20.0</problem-spring-web.version>
         <!-- These remain empty unless the corresponding profile is active -->
         <profile.no-liquibase />
         <profile.swagger />
@@ -700,6 +701,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>org.zalando</groupId>
+            <artifactId>problem-spring-web</artifactId>
+            <version>${problem-spring-web.version}</version>
+        </dependency>
         <%_ if (websocket === 'spring-websocket') { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -1030,7 +1036,7 @@
                             <resources>
                                 <resource>
                                     <directory>src/main/docker/</directory>
-                                    <filtering>true</filtering>
+                                    <filtering>false</filtering>
                                     <excludes>
                                         <exclude>**/*.yml</exclude>
                                     </excludes>
