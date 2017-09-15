@@ -17,9 +17,9 @@
  limitations under the License.
 -%>
 package <%=packageName%>.web.rest;
-
+<% if (authenticationType !== 'oauth2') { %>
 import com.codahale.metrics.annotation.Timed;
-
+<%_ } _%>
 <%_ if (authenticationType === 'session') { _%>
 import <%=packageName%>.domain.PersistentToken;
 <%_ } _%>
@@ -57,12 +57,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 <%_ if (authenticationType === 'oauth2') { _%>
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 <%_ } _%>
+<%_ if (authenticationType !== 'oauth2') { _%>
 import javax.servlet.http.HttpServletRequest;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import javax.validation.Valid;
@@ -100,8 +100,7 @@ public class AccountResource {
     <%_ if (authenticationType !== 'oauth2') { _%>
     private static final String CHECK_ERROR_MESSAGE = "Incorrect password";
     <%_ } _%>
-    public AccountResource(UserRepository userRepository, UserService userService,
-            <%_ if (authenticationType !== 'oauth2') { _%>MailService mailService<%_ } _%><% if (authenticationType === 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>) {
+    public AccountResource(UserRepository userRepository, UserService userService<% if (authenticationType !== 'oauth2') { %>, MailService mailService<% } %><% if (authenticationType === 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>) {
 
         this.userRepository = userRepository;
         this.userService = userService;
@@ -113,6 +112,26 @@ public class AccountResource {
         <%_ } _%>
     }
 <% if (authenticationType === 'oauth2') { %>
+    /**
+     * GET  /authenticate : check if the user is authenticated, and return its login.
+     *
+     * @param request the HTTP request
+     * @return the login if the user is authenticated
+     */
+    @GetMapping("/authenticate")
+    @Timed
+    public String isAuthenticated(HttpServletRequest request) {
+        log.debug("REST request to check if the current user is authenticated");
+        return request.getRemoteUser();
+    }
+
+    /**
+     * GET  /account : get the current user.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the current user in body, or status 500 (Internal Server Error) if the user couldn't be returned
+     */
+    @GetMapping("/account")
+    @Timed
     @SuppressWarnings("unchecked")
     public ResponseEntity<UserDTO> getAccount(Principal principal) {
         if (principal != null) {

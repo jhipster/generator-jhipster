@@ -143,7 +143,7 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'oauth2' || generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' || generator.authenticationType === 'uaa',
             path: ANGULAR_DIR,
             templates: [
                 'blocks/interceptor/_auth.interceptor.ts'
@@ -399,7 +399,7 @@ const files = {
         },
         {
             path: ANGULAR_DIR,
-            condition: generator => !generator.authenticationType !== 'oauth2',
+            condition: generator => generator.authenticationType !== 'oauth2',
             templates: [
                 // login
                 'shared/login/_login.component.ts',

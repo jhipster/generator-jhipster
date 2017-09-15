@@ -49,7 +49,7 @@ export class AuthExpiredInterceptor extends JhiHttpInterceptor {
         private loginServiceModal: LoginModalService) {
         super();
     }
-<%_ } else if (authenticationType === 'oauth2') { _%>_%>
+<%_ } else if (authenticationType === 'oauth2') { _%>
     constructor(private injector: Injector,
         private stateStorageService: StateStorageService) {
         super();

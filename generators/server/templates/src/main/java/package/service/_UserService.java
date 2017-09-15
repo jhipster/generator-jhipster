@@ -31,9 +31,13 @@ import <%=packageName%>.repository.PersistentTokenRepository;<% } %><% } %>
 import <%=packageName%>.config.Constants;
 import <%=packageName%>.repository.UserRepository;<% if (searchEngine === 'elasticsearch') { %>
 import <%=packageName%>.repository.search.UserSearchRepository;<% } %>
+<% if (authenticationType !== 'oauth2') { %>
 import <%=packageName%>.security.AuthoritiesConstants;
+<%_ } _%>
 import <%=packageName%>.security.SecurityUtils;
+<% if (authenticationType !== 'oauth2') { %>
 import <%=packageName%>.service.util.RandomUtil;
+<%_ } _%>
 import <%=packageName%>.service.dto.UserDTO;
 
 import org.slf4j.Logger;
@@ -100,7 +104,7 @@ public class UserService {
     private final CacheManager cacheManager;
     <%_ } _%>
 
-    public UserService(UserRepository userRepository, <%_ if (authenticationType !== 'oauth2') { _%>PasswordEncoder passwordEncoder<% } %><% if (enableSocialSignIn) { %>, SocialService socialService<% } %><% if (searchEngine === 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb') { %><% if (authenticationType === 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>, AuthorityRepository authorityRepository<% } %><% if (cacheManagerIsAvailable === true) { %>, CacheManager cacheManager<% } %>) {
+    public UserService(UserRepository userRepository<% if (authenticationType !== 'oauth2') { %>, PasswordEncoder passwordEncoder<% } %><% if (enableSocialSignIn) { %>, SocialService socialService<% } %><% if (searchEngine === 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb') { %><% if (authenticationType === 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>, AuthorityRepository authorityRepository<% } %><% if (cacheManagerIsAvailable === true) { %>, CacheManager cacheManager<% } %>) {
         this.userRepository = userRepository;
         <%_ if (authenticationType !== 'oauth2') { _%>
         this.passwordEncoder = passwordEncoder;
@@ -329,10 +333,6 @@ public class UserService {
     }
 
     public void deleteUser(String login) {
-        <%_ if (databaseType === 'sql' && authenticationType === 'oauth2') { _%>
-        jdbcTokenStore.findTokensByUserName(login).forEach(token ->
-            jdbcTokenStore.removeAccessToken(token));
-        <%_ } _%>
         userRepository.findOneByLogin(login).ifPresent(user -> {
             <%_ if (enableSocialSignIn) { _%>
             socialService.deleteUserSocialConnection(user.getLogin());

@@ -24,7 +24,9 @@ import { Ng2Webstorage } from 'ng2-webstorage';
 import { <%=angularXAppName%>SharedModule, UserRouteAccessService } from './shared';
 import { <%=angularXAppName%>HomeModule } from './home/home.module';
 import { <%=angularXAppName%>AdminModule } from './admin/admin.module';
+<%_ if (authenticationType !== 'oauth2') { _%>
 import { <%=angularXAppName%>AccountModule } from './account/account.module';
+<%_ } _%>
 import { <%=angularXAppName%>EntityModule } from './entities/entity.module';
 
 import { customHttpProvider } from './blocks/interceptor/http.provider';

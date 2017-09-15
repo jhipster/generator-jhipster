@@ -23,7 +23,7 @@ import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.<%= mainClass %>;<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
 import <%=packageName%>.domain.Authority;<% } %><% if (authenticationType === 'session') { %>
 import <%=packageName%>.domain.PersistentToken;<% } %>
-import <%=packageName%>.domain.User;<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+import <%=packageName%>.domain.User;<% if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb')) { %>
 import <%=packageName%>.repository.AuthorityRepository;<% } %>
 <%_ if (authenticationType === 'session') { _%>
 import <%=packageName%>.repository.PersistentTokenRepository;
@@ -98,10 +98,10 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
     @Autowired
     private AuthorityRepository authorityRepository;
 <%_ } _%>
-<%_ if (authenticationType !== 'oauth2') { _%>
+<% if (authenticationType !== 'oauth2') { %>
     @Autowired
     private UserService userService;
-<%_ } _%>
+<% } %>
 <%_ if (authenticationType === 'session') { _%>
 
     @Autowired
@@ -113,7 +113,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
 
     @Autowired
     private HttpMessageConverter[] httpMessageConverters;
-<%_ } _%>
+<% } %>
     <% if (authenticationType === 'oauth2') { %>@MockBean<% } else { %>@Mock<% } %>
     private UserService mockUserService;
 <% if (authenticationType !== 'oauth2') { %>
@@ -123,7 +123,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
     private MockMvc restMvc;
 <%_ } _%>
     private MockMvc restUserMockMvc;
-<%_ if (authenticationType === 'oauth2') { _%>
+<% if (authenticationType === 'oauth2') { %>
     @Autowired
     private WebApplicationContext context;
 <%_ } _%>
@@ -131,14 +131,16 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
+        <%_ if (authenticationType !== 'oauth2') { _%>
         doNothing().when(mockMailService).sendActivationEmail(anyObject());
+        <%_ } _%>
 
         <%_ if (authenticationType !== 'oauth2') { _%>
         AccountResource accountResource =
             new AccountResource(userRepository, userService, mockMailService<% if (authenticationType === 'session') { %>, persistentTokenRepository<% } %>);
         <%_ } _%>
         AccountResource accountUserMockResource =
-            new AccountResource(userRepository, mockUserService, mockMailService<% if (authenticationType === 'session') { %>, persistentTokenRepository<% } %>);
+            new AccountResource(userRepository, mockUserService<% if (authenticationType ==! 'oauth2') { %>, mockMailService<% } %><% if (authenticationType === 'session') { %>, persistentTokenRepository<% } %>);
         <%_ if (authenticationType !== 'oauth2') { _%>
         this.restMvc = MockMvcBuilders.standaloneSetup(accountResource)
             .setMessageConverters(httpMessageConverters)
@@ -1012,5 +1014,5 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
                 .content(TestUtil.convertObjectToJsonBytes(keyAndPassword)))
             .andExpect(status().isInternalServerError());
     }
-<% } %>
+<%_ } _%>
 }
