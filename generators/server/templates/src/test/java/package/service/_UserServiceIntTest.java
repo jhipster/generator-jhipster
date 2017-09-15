@@ -78,7 +78,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         assertThat(persistentTokenRepository.findByUser(admin)).hasSize(existingCount + 2);
         userService.removeOldPersistentTokens();
         assertThat(persistentTokenRepository.findByUser(admin)).hasSize(existingCount + 1);
-    }<% } %><% if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb') { %>
+    }<% } %><% if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb')) { %>
 
     @Test
     public void assertThatUserMustExistToResetPassword() {
@@ -183,7 +183,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
             .noneMatch(user -> Constants.ANONYMOUS_USER.equals(user.getLogin())))
             .isTrue();
     }
-    <%_ if (authenticationType !== 'oauth2') && (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+    <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb')) { _%>
 
     @Test
     public void testRemoveNotActivatedUsers() {
