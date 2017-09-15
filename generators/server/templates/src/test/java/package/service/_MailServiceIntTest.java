@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 package <%=packageName%>.service;
+import <%=packageName%>.config.Constants;
 <% if (databaseType === 'cassandra') { %>
 import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.<%= mainClass %>;
@@ -154,7 +155,7 @@ public class MailServiceIntTest <% if (databaseType === 'cassandra') { %>extends
     @Test
     public void testSendActivationEmail() throws Exception {
         User user = new User();
-        user.setLangKey("<%= nativeLanguage %>");
+        user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
         mailService.sendActivationEmail(user);
@@ -169,7 +170,7 @@ public class MailServiceIntTest <% if (databaseType === 'cassandra') { %>extends
     @Test
     public void testCreationEmail() throws Exception {
         User user = new User();
-        user.setLangKey("<%= nativeLanguage %>");
+        user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
         mailService.sendCreationEmail(user);
@@ -184,7 +185,7 @@ public class MailServiceIntTest <% if (databaseType === 'cassandra') { %>extends
     @Test
     public void testSendPasswordResetMail() throws Exception {
         User user = new User();
-        user.setLangKey("<%= nativeLanguage %>");
+        user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
         mailService.sendPasswordResetMail(user);
