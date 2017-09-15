@@ -293,6 +293,16 @@ jhipster:
         <%_ } _%>
         allow-credentials: true
         max-age: 1800
+    <%_ } else { _%>
+    # CORS is disabled by default on microservices, as you should access them through a gateway.
+    # If you want to enable it, please uncomment the configuration below.
+    # cors:
+        # allowed-origins: "*"
+        # allowed-methods: "*"
+        # allowed-headers: "*"
+        # exposed-headers: "Authorization"
+        # allow-credentials: true
+        # max-age: 1800
     <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>
     security:
