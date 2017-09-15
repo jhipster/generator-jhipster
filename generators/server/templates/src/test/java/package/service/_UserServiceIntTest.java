@@ -35,16 +35,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;<% if (databaseType === 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 import org.springframework.test.context.junit4.SpringRunner;
-<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;<%}%>
-<% if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { %>
-import java.time.LocalDate;<% } %>
+<% if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { _%>
+import java.time.LocalDate;<%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
-import java.time.Instant;<%_ } _%><% if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType !== 'oauth2') { %>
+import java.time.Instant;<%_ } _%><%_ if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType !== 'oauth2') { _%>
 import java.time.temporal.ChronoUnit;
-import java.util.Optional;<% } %>
-import java.util.List;
+import java.util.Optional;<%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>import java.util.List;<%_ } _%>
 
 import static org.assertj.core.api.Assertions.*;

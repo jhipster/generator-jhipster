@@ -200,7 +200,7 @@ function writeFiles() {
                 this.copy(`${SERVER_MAIN_RES_DIR}config/cql/changelog/README.md`, `${SERVER_MAIN_RES_DIR}config/cql/changelog/README.md`);
 
                 /* Skip the code below for --skip-user-management */
-                if (this.skipUserManagement) return;
+                if (this.skipUserManagement && this.authenticationType !== 'oauth2') return;
                 if (this.applicationType !== 'microservice' && this.databaseType === 'cassandra') {
                     this.template(`${SERVER_MAIN_RES_DIR}config/cql/changelog/_create-tables.cql`, `${SERVER_MAIN_RES_DIR}config/cql/changelog/00000000000000_create-tables.cql`);
                     this.template(`${SERVER_MAIN_RES_DIR}config/cql/changelog/_insert_default_users.cql`, `${SERVER_MAIN_RES_DIR}config/cql/changelog/00000000000001_insert_default_users.cql`);
@@ -521,11 +521,13 @@ function writeFiles() {
             }
 
             // Email templates
-            this.copy(`${SERVER_MAIN_RES_DIR}mails/activationEmail.html`, `${SERVER_MAIN_RES_DIR}mails/activationEmail.html`);
-            this.copy(`${SERVER_MAIN_RES_DIR}mails/creationEmail.html`, `${SERVER_MAIN_RES_DIR}mails/creationEmail.html`);
-            this.copy(`${SERVER_MAIN_RES_DIR}mails/passwordResetEmail.html`, `${SERVER_MAIN_RES_DIR}mails/passwordResetEmail.html`);
-            if (this.enableSocialSignIn) {
-                this.copy(`${SERVER_MAIN_RES_DIR}mails/socialRegistrationValidationEmail.html`, `${SERVER_MAIN_RES_DIR}mails/socialRegistrationValidationEmail.html`);
+            if (this.authenticationType !== 'oauth2') {
+                this.copy(`${SERVER_MAIN_RES_DIR}mails/activationEmail.html`, `${SERVER_MAIN_RES_DIR}mails/activationEmail.html`);
+                this.copy(`${SERVER_MAIN_RES_DIR}mails/creationEmail.html`, `${SERVER_MAIN_RES_DIR}mails/creationEmail.html`);
+                this.copy(`${SERVER_MAIN_RES_DIR}mails/passwordResetEmail.html`, `${SERVER_MAIN_RES_DIR}mails/passwordResetEmail.html`);
+                if (this.enableSocialSignIn) {
+                    this.copy(`${SERVER_MAIN_RES_DIR}mails/socialRegistrationValidationEmail.html`, `${SERVER_MAIN_RES_DIR}mails/socialRegistrationValidationEmail.html`);
+                }
             }
 
             /* User management java domain files */
@@ -556,7 +558,6 @@ function writeFiles() {
             /* User management java web files */
             this.template(`${SERVER_MAIN_SRC_DIR}package/service/dto/_package-info.java`, `${javaDir}service/dto/package-info.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/service/dto/_UserDTO.java`, `${javaDir}service/dto/UserDTO.java`);
-
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/vm/_ManagedUserVM.java`, `${javaDir}web/rest/vm/ManagedUserVM.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_UserResource.java`, `${javaDir}web/rest/UserResource.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_AccountResource.java`, `${javaDir}web/rest/AccountResource.java`);
@@ -565,7 +566,6 @@ function writeFiles() {
             }
             this.template(`${SERVER_MAIN_SRC_DIR}package/service/mapper/_package-info.java`, `${javaDir}service/mapper/package-info.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/service/mapper/_UserMapper.java`, `${javaDir}service/mapper/UserMapper.java`);
-
 
             if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_AuditResource.java`, `${javaDir}web/rest/AuditResource.java`);

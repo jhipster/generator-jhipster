@@ -140,7 +140,7 @@ public class CacheConfiguration {
     @Bean
     public JCacheManagerCustomizer cacheManagerCustomizer() {
         return cm -> {
-            <%_ if (!skipUserManagement) { _%>
+            <%_ if (!skipUserManagement && authenticationType !== 'oauth2') { _%>
             cm.createCache("users", jcacheConfiguration);
             cm.createCache(<%=packageName%>.domain.User.class.getName(), jcacheConfiguration);
             cm.createCache(<%=packageName%>.domain.Authority.class.getName(), jcacheConfiguration);
@@ -498,7 +498,7 @@ public class CacheConfiguration {
                                        JHipsterProperties jHipsterProperties) {
             super(uri, cacheManager, provider);
             // register individual caches to make the stats info available.
-            <%_ if (!skipUserManagement) { _%>
+            <%_ if (!skipUserManagement && authenticationType !== 'oauth2') { _%>
             registerPredefinedCache("users", new JCache<Object, Object>(
                 cacheManager.getCache("users").getAdvancedCache(), this,
                 ConfigurationAdapter.create()));

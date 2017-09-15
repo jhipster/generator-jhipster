@@ -56,7 +56,7 @@
         The initial schema has the '00000000000001' id, so that it is over-written if we re-generate it.
     -->
     <changeSet id="00000000000001" author="jhipster">
-<%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
         <createTable tableName="jhi_user">
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>

@@ -196,7 +196,7 @@ security:
             scope: openid profile email
         resource:
             userInfoUri: ${oauth2.issuer}/protocol/openid-connect/userinfo
-            tokenInfoUri: ${oauth2.issuer}/protocol/openid-connect/token/introspectr
+            tokenInfoUri: ${oauth2.issuer}/protocol/openid-connect/token/introspect
             preferTokenInfo: false
     <%_ } _%>
 

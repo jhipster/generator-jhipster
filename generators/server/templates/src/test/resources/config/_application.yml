@@ -124,9 +124,32 @@ spring:
 liquibase:
     contexts: test
 
+<%_ if (authenticationType === 'oauth2') { _%>
+# OpenID Connect Settings. Commented settings are for Okta, defaults are for Keycloak
+#oauth2.issuer: https://{yourOktaDomain}.com/oauth2/default
+oauth2.issuer: http://localhost:8180/auth/realms/master
+<%_ } _%>
+
 security:
     basic:
         enabled: false
+<%_ if (authenticationType === 'oauth2') { _%>
+    oauth2:
+        client:
+            #accessTokenUri: ${oauth2.issuer}/v1/token
+            accessTokenUri: ${oauth2.issuer}/protocol/openid-connect/token
+            #userAuthorizationUri: ${oauth2.issuer}/v1/authorize
+            userAuthorizationUri: ${oauth2.issuer}/protocol/openid-connect/auth
+            clientId: XXXX
+            clientSecret: XXXX
+            clientAuthenticationScheme: form
+            scope: openid profile email
+        resource:
+            #userInfoUri: ${oauth2.issuer}/v1/userinfo
+            userInfoUri: ${oauth2.issuer}/protocol/openid-connect/userinfo
+            tokenInfoUri: ${oauth2.issuer}/protocol/openid-connect/token/introspect
+            preferTokenInfo: false
+<%_ } _%>
 
 server:
     port: 10344

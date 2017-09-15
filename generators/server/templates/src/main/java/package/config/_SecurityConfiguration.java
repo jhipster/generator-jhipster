@@ -29,7 +29,6 @@ import <%=packageName%>.security.jwt.*;
 import io.github.jhipster.config.JHipsterProperties;
 <%_ } _%>
 import io.github.jhipster.security.*;
-
 <%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.beans.factory.BeanInitializationException;
 <%_ } _%>
@@ -38,7 +37,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-<%_ } _%>;
+<%_ } _%>
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
