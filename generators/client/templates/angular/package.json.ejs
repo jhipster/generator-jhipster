@@ -89,7 +89,6 @@
     "karma-jasmine": "1.1.0",
     "karma-junit-reporter": "1.2.0",
     "karma-notify-reporter": "1.0.1",
-    "karma-phantomjs-launcher": "1.0.4",
     "karma-remap-istanbul": "0.6.0",
     "karma-sourcemap-loader": "0.3.7",
     "karma-webpack": "2.0.4",
@@ -97,8 +96,8 @@
     <%_ if (enableTranslation) { _%>
     "merge-jsons-webpack-plugin": "1.0.14",
     <%_ } _%>
-    "phantomjs-prebuilt": "2.1.16",
     "prettier": "1.9.2",
+    "puppeteer": "1.1.1",
     <%_ if (protractorTests) { _%>
     "protractor": "5.1.2",
     "protractor-jasmine2-screenshot-reporter": "0.4.0",
@@ -170,9 +169,7 @@
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js",
     <%_ if (protractorTests) { _%>
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
-    "postinstall": "webdriver-manager update && node node_modules/phantomjs-prebuilt/install.js"
-    <%_ } else { _%>
-    "postinstall": "node node_modules/phantomjs-prebuilt/install.js"
+    "postinstall": "webdriver-manager update"
     <%_ } _%>
   }
 }
