@@ -18,6 +18,11 @@
 -%>
 const webpackConfig = require('../../../webpack/webpack.test.js');
 
+var ChromiumRevision = require('puppeteer/package.json').puppeteer.chromium_revision;
+var Downloader = require('puppeteer/utils/ChromiumDownloader');
+var revisionInfo = Downloader.revisionInfo(Downloader.currentPlatform(), ChromiumRevision);
+process.env.CHROMIUM_BIN = revisionInfo.executablePath;
+
 const WATCH = process.argv.indexOf('--watch') > -1;
 
 module.exports = (config) => {
@@ -85,7 +90,7 @@ module.exports = (config) => {
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['PhantomJS'],
+        browsers: ['ChromiumHeadless'],
 
         // Ensure all browsers can run tests written in .ts files
         mime: {
