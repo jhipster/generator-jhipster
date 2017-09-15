@@ -33,7 +33,7 @@ import {
     <%_ if (websocket === 'spring-websocket') { _%>
     trackerRoute,
     <%_ } _%>
-    <%_ if (!skipUserManagement && !authenticationType === 'oauth2') { _%>
+    <%_ if (!skipUserManagement) { _%>
     userMgmtRoute,
     userDialogRoute
     <%_ } _%>
@@ -55,7 +55,7 @@ const ADMIN_ROUTES = [
     <%_ if (websocket === 'spring-websocket') { _%>
     trackerRoute,
     <%_ } _%>
-    <%_ if (!skipUserManagement && !authenticationType === 'oauth2') { _%>
+    <%_ if (!skipUserManagement) { _%>
     ...userMgmtRoute,
     <%_ } _%>
     metricsRoute
@@ -69,7 +69,7 @@ export const adminState: Routes = [{
     canActivate: [UserRouteAccessService],
     children: ADMIN_ROUTES
 },
-    <%_ if (!skipUserManagement && !authenticationType === 'oauth2') { _%>
+    <%_ if (!skipUserManagement) { _%>
     ...userDialogRoute
     <%_ } _%>
 ];

@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { browser, element, by<%_ if (authenticationType === 'oauth2') { _%>, protractor<%_ } _%> } from 'protractor';
+import { browser, element, by<% if (authenticationType === 'oauth2') { _%>, protractor<%_ } %> } from 'protractor';
 import { NavBarPage, SignInPage<%_ if (authenticationType !== 'oauth2') { _%>, PasswordPage, SettingsPage<%_ } _%> } from './../page-objects/jhi-page-objects';
 <%_
 let elementGetter = `getText()`;

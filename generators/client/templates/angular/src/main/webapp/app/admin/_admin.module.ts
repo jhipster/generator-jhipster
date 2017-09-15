@@ -30,7 +30,7 @@ import {
     <%_ if (devDatabaseType !== 'cassandra') { _%>
     AuditsComponent,
     <%_ } _%>
-    <%_ if (!skipUserManagement && !authenticationType === 'oauth2') { _%>
+    <%_ if (!skipUserManagement) { _%>
     UserMgmtComponent,
     UserDialogComponent,
     UserDeleteDialogComponent,
@@ -59,7 +59,7 @@ import {
     <%=jhiPrefixCapitalized%>TrackerComponent,
     <%_ } _%>
     LogsService,
-    <%_ if (!skipUserManagement && !authenticationType === 'oauth2') { _%>
+    <%_ if (!skipUserManagement) { _%>
     UserResolvePagingParams,
     UserResolve,
     UserModalService
@@ -76,7 +76,7 @@ import {
         <%_ if (devDatabaseType !== 'cassandra') { _%>
         AuditsComponent,
         <%_ } _%>
-        <%_ if (!skipUserManagement && !authenticationType === 'oauth2') { _%>
+        <%_ if (!skipUserManagement) { _%>
         UserMgmtComponent,
         UserDialogComponent,
         UserDeleteDialogComponent,
@@ -99,7 +99,7 @@ import {
         <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent
     ],
     entryComponents: [
-        <%_ if (!skipUserManagement && !authenticationType === 'oauth2') { _%>
+        <%_ if (!skipUserManagement) { _%>
         UserMgmtDialogComponent,
         UserMgmtDeleteDialogComponent,
         <%_ } _%>
@@ -120,7 +120,7 @@ import {
         <%_ if (websocket === 'spring-websocket') { _%>
         <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
-        <%_ if (!skipUserManagement && !authenticationType === 'oauth2') { _%>
+        <%_ if (!skipUserManagement) { _%>
         UserResolvePagingParams,
         UserResolve,
         UserModalService

@@ -23,11 +23,7 @@ import com.github.mongobee.Mongobee;
 
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.domain.util.JSR310DateConverters.*;
-
-<%_ if (authenticationType === 'oauth2') { _%>
-
-import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;
-<%_ } } else { _%>
+<%_ } else { _%>
 
 import io.github.jhipster.config.JHipsterConstants;
 <%_ } _%>
@@ -100,9 +96,6 @@ public class CloudDatabaseConfiguration extends AbstractCloudConfig {
     @Bean
     public CustomConversions customConversions() {
         List<Converter<?, ?>> converterList = new ArrayList<>();
-        <%_ if (authenticationType === 'oauth2') { _%>
-        converterList.add(new OAuth2AuthenticationReadConverter());
-        <%_ } _%>
         converterList.add(DateToZonedDateTimeConverter.INSTANCE);
         converterList.add(ZonedDateTimeToDateConverter.INSTANCE);
         return new CustomConversions(converterList);

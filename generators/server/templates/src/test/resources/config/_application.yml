@@ -159,7 +159,7 @@ jhipster:
         from: test@localhost
         base-url: http://127.0.0.1:8080
 <%_ } _%>
-<%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+<%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
     security:
         authentication:
     <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
@@ -176,13 +176,6 @@ jhipster:
             <%_ } _%>
             client-id: internal
             client-secret: internal
-    <%_ } _%>
-    <%_ if (authenticationType === 'oauth2') { _%>
-            oauth:
-                client-id: <%= baseName %>app
-                client-secret: my-secret-token-to-change-in-production
-                # Token is valid 30 minutes
-                token-validity-in-seconds: 1800
     <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationType === 'session') { _%>

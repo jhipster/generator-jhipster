@@ -25,9 +25,6 @@ import { WindowRef } from './window.service';
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { AuthServerProvider } from '../auth/auth-jwt.service';
 <%_ } _%>
-<%_ if (authenticationType === 'oauth2') { _%>
-import { AuthServerProvider } from '../auth/auth-oauth2.service';
-<%_ } _%>
 
 import * as SockJS from 'sockjs-client';
 import * as Stomp from 'webstomp-client';
@@ -45,7 +42,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
 
     constructor(
         private router: Router,
-        <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa' || authenticationType === 'oauth2') { _%>
+        <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
         private authServerProvider: AuthServerProvider,
         <%_ } _%>
         private $window: WindowRef,
@@ -63,8 +60,8 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         const loc = this.$window.nativeWindow.location;
         let url;
         url = '//' + loc.host + loc.pathname + 'websocket/tracker';
-        <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa' || authenticationType === 'oauth2') { _%>
-        const authToken = this.authServerProvider.getToken()<% if (authenticationType === 'oauth2') { %>.access_token<% } %>;
+        <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+        const authToken = this.authServerProvider.getToken();
         if (authToken) {
             url += '?access_token=' + authToken;
         }

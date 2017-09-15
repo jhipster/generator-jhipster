@@ -19,18 +19,12 @@
 package <%=packageName%>.config.dbmigrations;
 
 import <%=packageName%>.domain.Authority;
-<%_ if (authenticationType === 'oauth2') { _%>
-import <%=packageName%>.domain.OAuth2AuthenticationClientDetails;
-<%_ } _%>
 import <%=packageName%>.domain.User;
 import <%=packageName%>.security.AuthoritiesConstants;
 
 import com.github.mongobee.changeset.ChangeLog;
 import com.github.mongobee.changeset.ChangeSet;
 import org.springframework.data.mongodb.core.MongoTemplate;
-<%_ if (authenticationType === 'oauth2') { _%>
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-<%_ } _%>
 
 import java.time.Instant;
 import java.util.Arrays;
@@ -116,34 +110,4 @@ public class InitialSetupMigration {
         userUser.getAuthorities().add(userAuthority);
         mongoTemplate.save(userUser);
     }
-
-<%_ if (authenticationType === 'oauth2') { _%>
-    @ChangeSet(order = "03", author = "initiator", id = "03-addOAuthClientDetails")
-    public void addOAuthClientDetails(MongoTemplate mongoTemplate) {
-        SimpleGrantedAuthority adminAuthority = new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN);
-        SimpleGrantedAuthority userAuthority = new SimpleGrantedAuthority(AuthoritiesConstants.USER);
-
-        OAuth2AuthenticationClientDetails appDetails = new OAuth2AuthenticationClientDetails();
-        appDetails.setClientId("<%= baseName %>app");
-        appDetails.setClientSecret("my-secret-token-to-change-in-production");
-        appDetails.setResourceIds(Collections.singletonList("res_<%= baseName %>"));
-        appDetails.setScope(Arrays.asList("read", "write"));
-        appDetails.setAuthorizedGrantTypes(Arrays.asList("password", "refresh_token", "authorization_code", "implicit"));
-        appDetails.setAuthorities(Arrays.asList(adminAuthority, userAuthority));
-        appDetails.setAccessTokenValiditySeconds(1800);
-        appDetails.setRefreshTokenValiditySeconds(2000);
-        mongoTemplate.save(appDetails);
-
-        OAuth2AuthenticationClientDetails swaggerUIDetails = new OAuth2AuthenticationClientDetails();
-        swaggerUIDetails.setClientId("your-client-id");
-        swaggerUIDetails.setClientSecret("your-client-secret-if-required");
-        swaggerUIDetails.setResourceIds(Collections.singletonList("res_<%= baseName %>"));
-        swaggerUIDetails.setScope(Collections.singletonList("access"));
-        swaggerUIDetails.setAuthorizedGrantTypes(Arrays.asList("refresh_token", "authorization_code", "implicit"));
-        swaggerUIDetails.setAuthorities(Arrays.asList(adminAuthority, userAuthority));
-        swaggerUIDetails.setAccessTokenValiditySeconds(1800);
-        swaggerUIDetails.setRefreshTokenValiditySeconds(2000);
-        mongoTemplate.save(swaggerUIDetails);
-    }
-<%_ } _%>
 }

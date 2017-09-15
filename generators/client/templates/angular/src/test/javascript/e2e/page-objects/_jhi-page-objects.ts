@@ -1,4 +1,5 @@
-import { element, by, ElementFinder<%_ if (authenticationType === 'oauth2') { _%>, browser<%_ } _%> } from 'protractor';
+import { element, by, ElementFinder<% if (authenticationType === 'oauth2') { _%>, browser<%_ } %> } from 'protractor';
+
 <%_
 let elementGetter = `getText()`;
 if (enableTranslation) {
