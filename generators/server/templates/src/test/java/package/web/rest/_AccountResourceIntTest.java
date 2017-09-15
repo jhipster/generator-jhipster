@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 package <%=packageName%>.web.rest;
+import <%=packageName%>.config.Constants;
 <% if (databaseType === 'cassandra') { %>
 import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.<%= mainClass %>;<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
@@ -202,7 +203,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
             "http://placehold.it/50x50", //imageUrl
             <%_ } _%>
-            "<%= nativeLanguage %>",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
             null,                   // createdBy
             null,                   // createdDate
@@ -235,7 +236,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
             "http://placehold.it/50x50", //imageUrl
             <%_ } _%>
-            "<%= nativeLanguage %>",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
             null,                   // createdBy
             null,                   // createdDate
@@ -268,7 +269,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
             "http://placehold.it/50x50", //imageUrl
             <%_ } _%>
-            "<%= nativeLanguage %>",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
             null,                   // createdBy
             null,                   // createdDate
@@ -301,7 +302,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
             "http://placehold.it/50x50", //imageUrl
             <%_ } _%>
-            "<%= nativeLanguage %>",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
             null,                   // createdBy
             null,                   // createdDate
@@ -334,7 +335,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
             "http://placehold.it/50x50", //imageUrl
             <%_ } _%>
-            "<%= nativeLanguage %>",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
             null,                   // createdBy
             null,                   // createdDate
@@ -368,7 +369,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
             "http://placehold.it/50x50", //imageUrl
             <%_ } _%>
-            "<%= nativeLanguage %>",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
             null,                   // createdBy
             null,                   // createdDate
@@ -414,7 +415,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
             "http://placehold.it/50x50", //imageUrl
             <%_ } _%>
-            "<%= nativeLanguage %>",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
             null,                   // createdBy
             null,                   // createdDate
@@ -459,7 +460,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
             "http://placehold.it/50x50", //imageUrl
             <%_ } _%>
-            "<%= nativeLanguage %>",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
             null,                   // createdBy
             null,                   // createdDate
@@ -535,7 +536,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
             "http://placehold.it/50x50", //imageUrl
             <%_ } _%>
-            "<%= nativeLanguage %>",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
             null,                   // createdBy
             null,                   // createdDate
@@ -587,7 +588,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
             "http://placehold.it/50x50", //imageUrl
             <%_ } _%>
-            "<%= nativeLanguage %>",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
             null,                   // createdBy
             null,                   // createdDate
@@ -642,7 +643,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
             "http://placehold.it/50x50", //imageUrl
             <%_ } _%>
-            "<%= nativeLanguage %>",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
             null,                   // createdBy
             null,                   // createdDate
@@ -687,7 +688,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
             "http://placehold.it/50x50", //imageUrl
             <%_ } _%>
-            "<%= nativeLanguage %>",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
             null,                   // createdBy
             null,                   // createdDate
