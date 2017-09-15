@@ -112,7 +112,7 @@ public class SocialService {
             throw new IllegalArgumentException("Email cannot be null with an existing login");
         }
         if (!StringUtils.isBlank(email)) {
-            Optional<User> user = userRepository.findOneByEmail(email);
+            Optional<User> user = userRepository.findOneByEmailIgnoreCase(email);
             if (user.isPresent()) {
                 log.info("User already exist associate the connection to this account");
                 return user.get();
