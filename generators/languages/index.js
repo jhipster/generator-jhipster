@@ -51,6 +51,7 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
 
+        this.authenticationType = this.config.get('authenticationType');
         this.skipClient = this.options['skip-client'] || this.config.get('skipClient');
         this.skipServer = this.options['skip-server'] || this.config.get('skipServer');
         // Validate languages passed as argument

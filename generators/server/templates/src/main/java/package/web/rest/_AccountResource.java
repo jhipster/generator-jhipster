@@ -17,9 +17,9 @@
  limitations under the License.
 -%>
 package <%=packageName%>.web.rest;
-<% if (authenticationType !== 'oauth2') { %>
+
 import com.codahale.metrics.annotation.Timed;
-<%_ } _%>
+
 <%_ if (authenticationType === 'session') { _%>
 import <%=packageName%>.domain.PersistentToken;
 <%_ } _%>
@@ -62,7 +62,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 <%_ } _%>
-<%_ if (authenticationType !== 'oauth2') { _%>
 import javax.servlet.http.HttpServletRequest;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import javax.validation.Valid;
@@ -97,9 +96,9 @@ public class AccountResource {
 
     private final PersistentTokenRepository persistentTokenRepository;
     <%_ } _%>
-    <%_ if (authenticationType !== 'oauth2') { _%>
+    <% if (authenticationType !== 'oauth2') { %>
     private static final String CHECK_ERROR_MESSAGE = "Incorrect password";
-    <%_ } _%>
+    <% } %>
     public AccountResource(UserRepository userRepository, UserService userService<% if (authenticationType !== 'oauth2') { %>, MailService mailService<% } %><% if (authenticationType === 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>) {
 
         this.userRepository = userRepository;
