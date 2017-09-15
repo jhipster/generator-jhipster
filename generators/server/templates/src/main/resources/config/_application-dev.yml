@@ -282,6 +282,7 @@ jhipster:
                 max-entries: 100 # Number of objects in each cache entry
         <%_ } _%>
     <%_ } _%>
+    <%_ if (applicationType !== 'microservice') { _%>
     # CORS is only enabled by default with the "dev" profile, so BrowserSync can access the API
     cors:
         allowed-origins: "*"
@@ -292,6 +293,7 @@ jhipster:
         <%_ } _%>
         allow-credentials: true
         max-age: 1800
+    <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>
     security:
         authentication:
