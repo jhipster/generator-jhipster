@@ -116,6 +116,10 @@ function writeFiles() {
             }
 
             this.template(`${DOCKER_DIR}_sonar.yml`, `${DOCKER_DIR}sonar.yml`);
+
+            if (this.authenticationType === 'oauth2') {
+                this.template(`${DOCKER_DIR}_keycloak.yml`, `${DOCKER_DIR}keycloak.yml`);
+            }
         },
 
         writeServerBuildFiles() {
