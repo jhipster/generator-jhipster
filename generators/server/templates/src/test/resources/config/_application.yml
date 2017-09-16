@@ -124,33 +124,50 @@ spring:
 liquibase:
     contexts: test
 
-<%_ if (authenticationType === 'oauth2') { _%>
-# OpenID Connect Settings. Commented settings are for Okta, defaults are for Keycloak
-#oauth2.issuer: https://{yourOktaDomain}.com/oauth2/default
-oauth2.issuer: http://localhost:8180/auth/realms/master
-<%_ } _%>
+<% if (authenticationType === 'oauth2') { %>
+# ===================================================================
+# OpenID Connect Settings. Default settings are for Keycloak in Docker.
+# Start Keycloak using `docker-compose -f src/main/docker/keycloak.yml up`.
+#
+# To use Okta, your settings should resemble the following:
+#
+# oauth2.issuer: https://{yourOktaDomain}.com/oauth2/default
+# accessTokenUri: ${oauth2.issuer}/v1/token
+# userAuthorizationUri: ${oauth2.issuer}/v1/authorize
+# clientId: {copy after creating an OIDC app}
+# userInfoUri: ${oauth2.issuer}/v1/userinfo
+# tokenInfoUri: ${oauth2.issuer}/v1/introspect
+#
+# You can also override these properties using environment variables.
+# For example:
+#
+# export SECURITY_OAUTH2_CLIENT_CLIENT_ID="jhipster"
+# export SECURITY_OAUTH2_CLIENT_CLIENT_SECRET="38561a05"
+# ===================================================================
 
+oauth2.issuer: http://localhost:9080/auth/realms/jhipster
+<% } %>
 security:
     basic:
         enabled: false
-<%_ if (authenticationType === 'oauth2') { _%>
+    <%_ if (authenticationType === 'uaa') { _%>
+    oauth2:
+        resource:
+            filter-order: 3
+    <%_ } else if (authenticationType === 'oauth2') { _%>
     oauth2:
         client:
-            #accessTokenUri: ${oauth2.issuer}/v1/token
             accessTokenUri: ${oauth2.issuer}/protocol/openid-connect/token
-            #userAuthorizationUri: ${oauth2.issuer}/v1/authorize
             userAuthorizationUri: ${oauth2.issuer}/protocol/openid-connect/auth
-            clientId: XXXX
-            clientSecret: XXXX
+            clientId: web_app
+            clientSecret: web_app
             clientAuthenticationScheme: form
             scope: openid profile email
         resource:
-            #userInfoUri: ${oauth2.issuer}/v1/userinfo
             userInfoUri: ${oauth2.issuer}/protocol/openid-connect/userinfo
-            #tokenInfoUri: ${oauth2.issuer}/v1/introspect
-            tokenInfoUri: ${oauth2.issuer}/protocol/openid-connect/token/introspect
+            tokenInfoUri: ${oauth2.issuer}/protocol/openid-connect/token/introspectr
             preferTokenInfo: false
-<%_ } _%>
+    <%_ } _%>
 
 server:
     port: 10344

@@ -20,9 +20,6 @@ version: '2'
 services:
     keycloak:
       image: danielpetisme/jhipster-keycloak:latest
-      volumes:
-        - ./import:/opt/jboss/keycloak/import
-        - ./theme:/opt/jboss/keycloak/theme/mytheme
       environment:
         - KEYCLOAK_USER=admin
         - KEYCLOAK_PASSWORD=admin
