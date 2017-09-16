@@ -34,7 +34,7 @@ import {
     LoginService,
     <%_ if (authenticationType !== 'oauth2') { _%>
     LoginModalService,
-    <%=jhiPrefixCapitalized%>LoginModalComponent
+    <%=jhiPrefixCapitalized%>LoginModalComponent,
     <%_ } _%>
     Principal,
     <%_ if (websocket === 'spring-websocket') { _%>
