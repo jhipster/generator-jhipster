@@ -389,6 +389,13 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/services/auth/auth.jwt.service.js`
     ],
 
+    oauth2: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/SecurityConfiguration.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/User.java`,
+        `${SERVER_MAIN_SRC_DIR}com/okta/developer/web/rest/AccountResource.java`,
+        `${DOCKER_DIR}keycloak.yml`
+    ],
+
     messageBroker: [
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/MessagingConfiguration.java`,
         `${DOCKER_DIR}kafka.yml`

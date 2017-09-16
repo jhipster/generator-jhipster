@@ -466,12 +466,7 @@ describe('JHipster generator', () => {
             });
 
             it('creates expected files with authenticationType "oauth2"', () => {
-                assert.file([
-                    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/SecurityConfiguration.java`,
-                    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/User.java`,
-                    `${SERVER_MAIN_SRC_DIR}com/okta/developer/web/rest/AccountResource.java`,
-                    `${DOCKER_DIR}keycloak.yml`
-                ]);
+                assert.file(expectedFiles.oauth2);
             });
         });
 
