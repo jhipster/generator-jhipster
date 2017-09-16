@@ -392,7 +392,7 @@ const expectedFiles = {
     oauth2: [
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/SecurityConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/User.java`,
-        `${SERVER_MAIN_SRC_DIR}com/okta/developer/web/rest/AccountResource.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/AccountResource.java`,
         `${DOCKER_DIR}keycloak.yml`
     ],
 
