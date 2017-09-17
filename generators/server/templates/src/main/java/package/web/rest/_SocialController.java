@@ -18,6 +18,7 @@
 -%>
 package <%=packageName%>.web.rest;
 
+import <%=packageName%>.config.Constants;
 import <%=packageName%>.service.SocialService;
 
 import org.slf4j.Logger;
@@ -46,7 +47,7 @@ public class SocialController {
     }
 
     @GetMapping("/signup")
-    public RedirectView signUp(WebRequest webRequest, @CookieValue(name = "NG_TRANSLATE_LANG_KEY", required = false, defaultValue = "\"<%= nativeLanguage %>\"") String langKey) {
+    public RedirectView signUp(WebRequest webRequest, @CookieValue(name = "NG_TRANSLATE_LANG_KEY", required = false, defaultValue = Constants.DEFAULT_LANGUAGE) String langKey) {
         try {
             Connection<?> connection = providerSignInUtils.getConnectionFromSession(webRequest);
             socialService.createSocialUser(connection, langKey.replace("\"", ""));

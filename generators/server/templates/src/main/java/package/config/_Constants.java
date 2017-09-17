@@ -28,10 +28,10 @@ public final class Constants {
 
     public static final String SYSTEM_ACCOUNT = "system";
     public static final String ANONYMOUS_USER = "anonymoususer";
+    public static final String DEFAULT_LANGUAGE = "<%= nativeLanguage %>";
     <% if (databaseType === 'couchbase') { %>
     public static final String ID_DELIMITER = "::";
     <% } %>
-
     private Constants() {
     }
 }

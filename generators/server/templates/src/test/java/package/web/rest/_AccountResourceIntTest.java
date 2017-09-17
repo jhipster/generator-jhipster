@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 package <%=packageName%>.web.rest;
+import <%=packageName%>.config.Constants;
 <% if (databaseType === 'cassandra') { %>
 import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.<%= mainClass %>;<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
@@ -202,7 +203,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
             "http://placehold.it/50x50", //imageUrl
             <%_ } _%>
-            "<%= nativeLanguage %>",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
             null,                   // createdBy
             null,                   // createdDate
@@ -235,7 +236,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
             "http://placehold.it/50x50", //imageUrl
             <%_ } _%>
-            "<%= nativeLanguage %>",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
             null,                   // createdBy
             null,                   // createdDate
@@ -250,7 +251,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
                 .content(TestUtil.convertObjectToJsonBytes(invalidUser)))
             .andExpect(status().isBadRequest());
 
-        Optional<User> user = userRepository.findOneByEmail("funky@example.com");
+        Optional<User> user = userRepository.findOneByEmailIgnoreCase("funky@example.com");
         assertThat(user.isPresent()).isFalse();
     }
 
@@ -268,7 +269,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
             "http://placehold.it/50x50", //imageUrl
             <%_ } _%>
-            "<%= nativeLanguage %>",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
             null,                   // createdBy
             null,                   // createdDate
@@ -301,7 +302,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
             "http://placehold.it/50x50", //imageUrl
             <%_ } _%>
-            "<%= nativeLanguage %>",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
             null,                   // createdBy
             null,                   // createdDate
@@ -334,7 +335,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
             "http://placehold.it/50x50", //imageUrl
             <%_ } _%>
-            "<%= nativeLanguage %>",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
             null,                   // createdBy
             null,                   // createdDate
@@ -368,7 +369,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
             "http://placehold.it/50x50", //imageUrl
             <%_ } _%>
-            "<%= nativeLanguage %>",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
             null,                   // createdBy
             null,                   // createdDate
@@ -395,7 +396,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
                 .content(TestUtil.convertObjectToJsonBytes(duplicatedUser)))
             .andExpect(status().is4xxClientError());
 
-        Optional<User> userDup = userRepository.findOneByEmail("alicejr@example.com");
+        Optional<User> userDup = userRepository.findOneByEmailIgnoreCase("alicejr@example.com");
         assertThat(userDup.isPresent()).isFalse();
     }
 
@@ -414,7 +415,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
             "http://placehold.it/50x50", //imageUrl
             <%_ } _%>
-            "<%= nativeLanguage %>",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
             null,                   // createdBy
             null,                   // createdDate
@@ -441,6 +442,16 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
                 .content(TestUtil.convertObjectToJsonBytes(duplicatedUser)))
             .andExpect(status().is4xxClientError());
 
+        // Duplicate email - with uppercase email address
+        final ManagedUserVM userWithUpperCaseEmail = new ManagedUserVM(validUser.getId(), "johnjr", validUser.getPassword(), validUser.getLogin(), validUser.getLastName(),
+                validUser.getEmail().toUpperCase(), true<% if (databaseType === 'mongodb' || databaseType === 'sql') { %>, validUser.getImageUrl()<% } %>, validUser.getLangKey()<% if (databaseType === 'mongodb' || databaseType === 'sql') { %>, validUser.getCreatedBy(), validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate()<% } %>, validUser.getAuthorities());
+
+        restMvc.perform(
+            post("/api/register")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(userWithUpperCaseEmail)))
+            .andExpect(status().is4xxClientError());
+
         Optional<User> userDup = userRepository.findOneByLogin("johnjr");
         assertThat(userDup.isPresent()).isFalse();
     }
@@ -459,7 +470,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
             "http://placehold.it/50x50", //imageUrl
             <%_ } _%>
-            "<%= nativeLanguage %>",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
             null,                   // createdBy
             null,                   // createdDate
@@ -535,7 +546,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
             "http://placehold.it/50x50", //imageUrl
             <%_ } _%>
-            "<%= nativeLanguage %>",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
             null,                   // createdBy
             null,                   // createdDate
@@ -587,7 +598,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
             "http://placehold.it/50x50", //imageUrl
             <%_ } _%>
-            "<%= nativeLanguage %>",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
             null,                   // createdBy
             null,                   // createdDate
@@ -603,7 +614,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
                 .content(TestUtil.convertObjectToJsonBytes(userDTO)))
             .andExpect(status().isBadRequest());
 
-        assertThat(userRepository.findOneByEmail("invalid email")).isNotPresent();
+        assertThat(userRepository.findOneByEmailIgnoreCase("invalid email")).isNotPresent();
     }
 
     @Test<% if (databaseType === 'sql') { %>
@@ -642,7 +653,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
             "http://placehold.it/50x50", //imageUrl
             <%_ } _%>
-            "<%= nativeLanguage %>",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
             null,                   // createdBy
             null,                   // createdDate
@@ -687,7 +698,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
             "http://placehold.it/50x50", //imageUrl
             <%_ } _%>
-            "<%= nativeLanguage %>",                   // langKey
+            Constants.DEFAULT_LANGUAGE,// langKey
             <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
             null,                   // createdBy
             null,                   // createdDate
@@ -870,6 +881,24 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
 
         restMvc.perform(post("/api/account/reset-password/init")
             .content("password-reset@example.com"))
+            .andExpect(status().isOk());
+    }
+
+    @Test<% if (databaseType === 'sql') { %>
+    @Transactional<% } %>
+    public void testRequestPasswordResetUpperCaseEmail() throws Exception {
+        User user = new User();
+        <%_ if (databaseType === 'cassandra') { _%>
+        user.setId(UUID.randomUUID().toString());
+        <%_ } _%>
+        user.setPassword(RandomStringUtils.random(60));
+        user.setActivated(true);
+        user.setLogin("password-reset");
+        user.setEmail("password-reset@example.com");
+        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
+
+        restMvc.perform(post("/api/account/reset-password/init")
+            .content("password-reset@EXAMPLE.COM"))
             .andExpect(status().isOk());
     }
 

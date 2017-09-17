@@ -45,9 +45,10 @@ import java.util.Map;
 import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
 <%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;
+import static <%=packageName%>.repository.CustomAuditEventRepository.EVENT_DATA_COLUMN_MAX_LENGTH;
 
 /**
- * Test class for the CustomAuditEventRepository customAuditEventRepository class.
+ * Test class for the CustomAuditEventRepository class.
  *
  * @see CustomAuditEventRepository
  */
@@ -193,7 +194,30 @@ public class CustomAuditEventRepositoryIntTest {
         assertThat(persistentAuditEvent.getAuditEventDate()).isEqualTo(event.getTimestamp().toInstant());
     }
 
+ 
     @Test
+    public void addAuditEventTruncateLargeData() {
+        Map<String, Object> data = new HashMap<>();
+        StringBuilder largeData = new StringBuilder();
+        for (int i = 0; i < EVENT_DATA_COLUMN_MAX_LENGTH + 10; i++) {
+            largeData.append("a");
+        }
+        data.put("test-key", largeData);
+        AuditEvent event = new AuditEvent("test-user", "test-type", data);
+        customAuditEventRepository.add(event);
+        List<PersistentAuditEvent> persistentAuditEvents = persistenceAuditEventRepository.findAll();
+        assertThat(persistentAuditEvents).hasSize(1);
+        PersistentAuditEvent persistentAuditEvent = persistentAuditEvents.get(0);
+        assertThat(persistentAuditEvent.getPrincipal()).isEqualTo(event.getPrincipal());
+        assertThat(persistentAuditEvent.getAuditEventType()).isEqualTo(event.getType());
+        assertThat(persistentAuditEvent.getData()).containsKey("test-key");
+        String actualData = persistentAuditEvent.getData().get("test-key");
+        assertThat(actualData.length()).isEqualTo(EVENT_DATA_COLUMN_MAX_LENGTH);
+        assertThat(actualData).isSubstringOf(largeData);
+        assertThat(persistentAuditEvent.getAuditEventDate()).isEqualTo(event.getTimestamp().toInstant());
+    }
+
+   @Test
     public void testAddEventWithWebAuthenticationDetails() {
         HttpSession session = new MockHttpSession(null, "test-session-id");
         MockHttpServletRequest request = new MockHttpServletRequest();

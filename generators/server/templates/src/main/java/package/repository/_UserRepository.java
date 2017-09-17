@@ -87,7 +87,7 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
 
     Optional<User> findOneByResetKey(String resetKey);
 
-    Optional<User> findOneByEmail(String email);
+    Optional<User> findOneByEmailIgnoreCase(String email);
 
     <%_ if (databaseType === 'couchbase') { _%>
     default Optional<User> findOneByLogin(String login) {
@@ -237,9 +237,9 @@ public class UserRepository {
         return findOneFromIndex(stmt);
     }
 
-    public Optional<User> findOneByEmail(String email) {
+    public Optional<User> findOneByEmailIgnoreCase(String email) {
         BoundStatement stmt = findOneByEmailStmt.bind();
-        stmt.setString("email", email);
+        stmt.setString("email", email.toLowerCase());
         return findOneFromIndex(stmt);
     }
 
@@ -269,8 +269,8 @@ public class UserRepository {
             if (!StringUtils.isEmpty(oldUser.getLogin()) && !oldUser.getLogin().equals(user.getLogin())) {
                 session.execute(deleteByLoginStmt.bind().setString("login", oldUser.getLogin()));
             }
-            if (!StringUtils.isEmpty(oldUser.getEmail()) && !oldUser.getEmail().equals(user.getEmail())) {
-                session.execute(deleteByEmailStmt.bind().setString("email", oldUser.getEmail()));
+            if (!StringUtils.isEmpty(oldUser.getEmail()) && !oldUser.getEmail().equalsIgnoreCase(user.getEmail())) {
+                session.execute(deleteByEmailStmt.bind().setString("email", oldUser.getEmail().toLowerCase()));
             }
         }
         BatchStatement batch = new BatchStatement();
@@ -289,7 +289,7 @@ public class UserRepository {
             .setString("login", user.getLogin())
             .setString("id", user.getId()));
         batch.add(insertByEmailStmt.bind()
-            .setString("email", user.getEmail())
+            .setString("email", user.getEmail().toLowerCase())
             .setString("id", user.getId()));
         session.execute(batch);
         return user;
@@ -305,7 +305,7 @@ public class UserRepository {
             batch.add(deleteByResetKeyStmt.bind().setString("reset_key", user.getResetKey()));
         }
         batch.add(deleteByLoginStmt.bind().setString("login", user.getLogin()));
-        batch.add(deleteByEmailStmt.bind().setString("email", user.getEmail()));
+        batch.add(deleteByEmailStmt.bind().setString("email", user.getEmail().toLowerCase()));
         session.execute(batch);
     }
 
