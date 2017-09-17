@@ -36,7 +36,7 @@ export class AuthInterceptor extends JhiHttpInterceptor {
         if (token && token.expires_at && token.expires_at > new Date().getTime()) {
             options.headers.append('Authorization', 'Bearer ' + token.access_token);
         }
-        <%_ } else if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+        <%_ } else if (authenticationType === 'jwt') { _%>
         if (!!token) {
             options.headers.append('Authorization', 'Bearer ' + token);
         }
