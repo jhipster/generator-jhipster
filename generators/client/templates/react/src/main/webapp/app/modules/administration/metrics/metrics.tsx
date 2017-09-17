@@ -31,7 +31,6 @@ export class MetricsPage extends React.Component<IMetricsPageProps, undefined> {
     const { metrics, isFetching } = this.props;
     const data = metrics || {};
     return (
-      <div className="well">
         <div>
           <h2>Application Metrics</h2>
           <p>
@@ -48,7 +47,6 @@ export class MetricsPage extends React.Component<IMetricsPageProps, undefined> {
             </div>
           </div>
         </div>
-      </div>
     );
   }
 }

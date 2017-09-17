@@ -104,7 +104,7 @@ export class Home extends React.Component<IHomeProp, IHomeState> {
           </p>
         </div>
         <div className="col-md-3 pad">
-          <span className="hipster img-fluid img-rounded" />
+          <span className="hipster img-fluid rounded" />
         </div>
       </div>
     );
