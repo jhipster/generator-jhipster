@@ -72,8 +72,8 @@ class LoginModal extends React.Component<ILoginModalProps, ILoginModalState> {
                   />
                   <AvField
                     name="password" type="password"
-                    label={<Translate content="global.form.password" />}
-                    placeholder={counterpart.translate('global.form.password-placeholder')}
+                    label={<Translate content="login.form.password" />}
+                    placeholder={counterpart.translate('login.form.password-placeholder')}
                     value={this.state.password}
                     required errorMessage="Password cannot be empty!"
                     onChange={this.handlePasswordChange}
