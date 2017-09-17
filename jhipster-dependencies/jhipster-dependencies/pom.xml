@@ -50,7 +50,7 @@
 		<org.assertj_assertj-core.version>3.6.2</org.assertj_assertj-core.version>
 		<org.awaitility_awaitility.version>2.0.0</org.awaitility_awaitility.version>
 		<org.cassandraunit_cassandra-unit-spring.version>3.0.0.1</org.cassandraunit_cassandra-unit-spring.version>
-		<org.hibernate_hibernate.version>5.2.8.Final</org.hibernate_hibernate.version>
+		<org.hibernate_hibernate.version>5.2.10.Final</org.hibernate_hibernate.version>
 		<org.hibernate_hibernate-infinispan.version>${org.hibernate_hibernate.version}</org.hibernate_hibernate-infinispan.version>
 		<org.hibernate_hibernate-jcache.version>${org.hibernate_hibernate.version}</org.hibernate_hibernate-jcache.version>
 		<org.infinispan_infinispan-bom.version>8.2.5.Final</org.infinispan_infinispan-bom.version>
