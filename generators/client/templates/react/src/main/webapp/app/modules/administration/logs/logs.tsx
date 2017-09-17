@@ -38,16 +38,14 @@ export class LogsPage extends React.Component<ILogsPageProps, undefined> {
     const { logs, isFetching } = this.props;
     const loggers = logs ? logs.loggers : {};
     return (
-
-      <div className="well ng-scope">
-        <div className="table-responsive">
+        <div>
           <h2>Logs</h2>
           <p>There are { loggers.length } loggers.</p>
 
           <span>Filter</span>
           <input type="text" className="form-control" disabled={isFetching} />
 
-          <table className="table table-condensed table-striped table-bordered" >
+          <table className="table table-sm table-striped table-bordered" >
             <thead>
               <tr title="click to order">
                 <th><span>Name</span></th>
@@ -60,11 +58,11 @@ export class LogsPage extends React.Component<ILogsPageProps, undefined> {
                 <tr>
                   <td><small>{logger.name}</small></td>
                   <td>
-                    <button disabled={isFetching} onClick={() => this.changeLevel(logger.name, 'TRACE')} className={`btn btn-default btn-xs ${(logger.level === 'TRACE') ? 'btn-danger' : 'btn-default'}`}>TRACE</button>
-                    <button disabled={isFetching} onClick={() => this.changeLevel(logger.name, 'DEBUG')} className={`btn btn-default btn-xs ${(logger.level === 'DEBUG') ? 'btn-warning' : 'btn-default'}`}>DEBUG</button>
-                    <button disabled={isFetching} onClick={() => this.changeLevel(logger.name, 'INFO')} className={`btn btn-default btn-xs ${(logger.level === 'INFO') ? 'btn-info' : 'btn-default'}`}>INFO</button>
-                    <button disabled={isFetching} onClick={() => this.changeLevel(logger.name, 'WARN')} className={`btn btn-default btn-xs ${(logger.level === 'WARN') ? 'btn-success' : 'btn-default'}`}>WARN</button>
-                    <button disabled={isFetching} onClick={() => this.changeLevel(logger.name, 'ERROR')} className={`btn btn-default btn-xs ${(logger.level === 'WARN') ? 'btn-primary' : 'btn-default'}`}>ERROR</button>
+                    <button disabled={isFetching} onClick={() => this.changeLevel(logger.name, 'TRACE')} className={`btn btn-secondary btn-sm ${(logger.level === 'TRACE') ? 'btn-danger' : 'btn-secondary'}`}>TRACE</button>
+                    <button disabled={isFetching} onClick={() => this.changeLevel(logger.name, 'DEBUG')} className={`btn btn-secondary btn-sm ${(logger.level === 'DEBUG') ? 'btn-warning' : 'btn-secondary'}`}>DEBUG</button>
+                    <button disabled={isFetching} onClick={() => this.changeLevel(logger.name, 'INFO')} className={`btn btn-secondary btn-sm ${(logger.level === 'INFO') ? 'btn-info' : 'btn-secondary'}`}>INFO</button>
+                    <button disabled={isFetching} onClick={() => this.changeLevel(logger.name, 'WARN')} className={`btn btn-secondary btn-sm ${(logger.level === 'WARN') ? 'btn-success' : 'btn-secondary'}`}>WARN</button>
+                    <button disabled={isFetching} onClick={() => this.changeLevel(logger.name, 'ERROR')} className={`btn btn-secondary btn-sm ${(logger.level === 'WARN') ? 'btn-primary' : 'btn-secondary'}`}>ERROR</button>
                   </td>
                 </tr>
               )
@@ -72,7 +70,6 @@ export class LogsPage extends React.Component<ILogsPageProps, undefined> {
             </tbody>
           </table>
         </div>
-      </div>
     );
   }
 }
