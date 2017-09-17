@@ -58,22 +58,20 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
   render() {
     const { account } = this.state;
     return (
-      <div className="well">
         <div>
           <h2>Password for [{account.login}]</h2>
+          <form>
+            <div className="form-control">
+              <label className="form-control-label" >New password</label>
+              <input type="password" className="form-control" id="firstName" name="firstName" placeholder="New password"
+                     onChange={this.setFirstAccountPassword}/>
+              <label className="form-control-label" >New password confirmation</label>
+              <input type="password" className="form-control" id="lastName" name="lastName" placeholder="Confirm the new password"
+                     onChange={this.setSecondAccountPassword}/>
+            </div>
+            <button type="submit" className="btn btn-primary" onClick={this.savePassword} >Save</button>
+          </form>
         </div>
-        <form>
-          <div className="form-group">
-            <label className="control-label" >New password</label>
-            <input type="password" className="form-control" id="firstName" name="firstName" placeholder="New password"
-                   onChange={this.setFirstAccountPassword}/>
-            <label className="control-label" >New password confirmation</label>
-            <input type="password" className="form-control" id="lastName" name="lastName" placeholder="Confirm the new password"
-                   onChange={this.setSecondAccountPassword}/>
-          </div>
-          <button type="submit" className="btn btn-primary" onClick={this.savePassword} >Save</button>
-        </form>
-      </div>
     );
   }
 }

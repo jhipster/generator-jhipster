@@ -36,7 +36,6 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
     const configProps = (configuration && configuration.configProps) ? configuration.configProps : {};
     const env = (configuration && configuration.env) ? configuration.env : {};
     return (
-      <div className="well">
         <div>
           <h2>Configuration</h2>
           FIX ME add search function
@@ -104,7 +103,6 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
             </div>
           </div>
         </div>
-      </div>
     );
   }
 }
