@@ -27,7 +27,8 @@
     "reactstrap": "4.8.0",
     "redux": "3.7.1",
     "redux-promise-middleware": "4.3.0",
-    "redux-thunk": "2.2.0"
+    "redux-thunk": "2.2.0",
+    "uuid-v4": "0.1.0"
   },
   "devDependencies": {
     "@types/chai": "4.0.1",
