@@ -99,9 +99,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.loadbalancer.RestTemplateCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -111,6 +108,10 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+<%_ if (applicationType === 'gateway') { _%>
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.web.filter.CorsFilter;
+<%_ } _%>
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
@@ -119,8 +120,15 @@ import org.springframework.web.client.RestTemplate;
 public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerAdapter {
     private final OAuth2Properties oAuth2Properties;
 
-    public MicroserviceSecurityConfiguration(OAuth2Properties oAuth2Properties) {
+    <%_ if (applicationType === 'gateway') { _%>
+    private final CorsFilter corsFilter;
+
+    <%_ } _%>
+    public MicroserviceSecurityConfiguration(OAuth2Properties oAuth2Properties<%_ if (applicationType === 'gateway') { _%>, CorsFilter corsFilter<%_ } _%>) {
         this.oAuth2Properties = oAuth2Properties;
+        <%_ if (applicationType === 'gateway') { _%>
+        this.corsFilter = corsFilter;
+        <%_ } _%>
     }
 
     @Override
@@ -131,6 +139,7 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
             .ignoringAntMatchers("/h2-console/**")
             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
         .and()
+            .addFilterBefore(corsFilter, CsrfFilter.class)
 		<%_ } else { _%>
             .disable()
 		<%_ } _%>
