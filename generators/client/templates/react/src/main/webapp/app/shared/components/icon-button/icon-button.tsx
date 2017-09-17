@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, UncontrolledTooltip } from 'reactstrap';
-import * as uuidV4 from 'uuid/v4';
+import * as uuidV4 from 'uuid-v4';
 
 import FontIcon from '../font-icon/font-icon';
 
