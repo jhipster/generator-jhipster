@@ -30,7 +30,7 @@ import java.util.Set;
  * View Model extending the UserDTO, which is meant to be used in the user management UI.
  */
 public class ManagedUserVM extends UserDTO {
-    <% if (authenticationType === 'oauth2') { %>
+    <% if (authenticationType !== 'oauth2') { %>
     public static final int PASSWORD_MIN_LENGTH = 4;
 
     public static final int PASSWORD_MAX_LENGTH = 100;
@@ -49,11 +49,11 @@ public class ManagedUserVM extends UserDTO {
 
         super(id, login, firstName, lastName, email, activated<% if (databaseType === 'mongodb' || databaseType === 'sql') { %>, imageUrl<% } %>, langKey,
             <% if (databaseType === 'mongodb' || databaseType === 'sql') { %>createdBy, createdDate, lastModifiedBy, lastModifiedDate,  <% } %>authorities);
-        <% if (authenticationType === 'oauth2') { %>
+    <% if (authenticationType !== 'oauth2') { %>
         this.password = password;
-        <%_ } %>
+    <%_ } %>
     }
-    <% if (authenticationType === 'oauth2') { %>
+    <% if (authenticationType !== 'oauth2') { %>
     public String getPassword() {
         return password;
     }
