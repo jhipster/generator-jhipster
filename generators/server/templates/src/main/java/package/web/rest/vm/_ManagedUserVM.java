@@ -37,12 +37,11 @@ public class ManagedUserVM extends UserDTO {
 
     @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
     private String password;
-
+<%_ } %>
     public ManagedUserVM() {
         // Empty constructor needed for Jackson.
     }
-    <%_ } %>
-    public ManagedUserVM(<% if (databaseType === 'mongodb' || databaseType === 'cassandra') { %>String<% } else { %>Long<% } %> id, String login, <% if (authenticationType === 'oauth2') { %>String password, <%_ } %>String firstName, String lastName,
+    public ManagedUserVM(<% if (databaseType === 'mongodb' || databaseType === 'cassandra') { %>String<% } else { %>Long<% } %> id, String login, <% if (authenticationType !== 'oauth2') { %>String password, <% } %>String firstName, String lastName,
                          String email, boolean activated<% if (databaseType === 'mongodb' || databaseType === 'sql') { %>, String imageUrl<% } %>, String langKey,
                          <% if (databaseType === 'mongodb' || databaseType === 'sql') { %>String createdBy, Instant createdDate, String lastModifiedBy, Instant lastModifiedDate,
                         <% } %>Set<String> authorities) {

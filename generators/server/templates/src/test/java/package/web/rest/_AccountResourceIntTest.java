@@ -99,7 +99,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
 <% if (authenticationType !== 'oauth2') { %>
     @Autowired
     private UserService userService;
-<% } %>
+<%_ } _%>
 <%_ if (authenticationType === 'session') { _%>
 
     @Autowired
@@ -138,7 +138,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             new AccountResource(userRepository, userService, mockMailService<% if (authenticationType === 'session') { %>, persistentTokenRepository<% } %>);
         <%_ } _%>
         AccountResource accountUserMockResource =
-            new AccountResource(userRepository, mockUserService<% if (authenticationType ==! 'oauth2') { %>, mockMailService<% } %><% if (authenticationType === 'session') { %>, persistentTokenRepository<% } %>);
+            new AccountResource(userRepository, mockUserService<% if (authenticationType !== 'oauth2') { %>, mockMailService<% } %><% if (authenticationType === 'session') { %>, persistentTokenRepository<% } %>);
         <%_ if (authenticationType !== 'oauth2') { _%>
         this.restMvc = MockMvcBuilders.standaloneSetup(accountResource)
             .setMessageConverters(httpMessageConverters)
