@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_
+let cacheManagerIsAvailable = false;
+if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || hibernateCache === 'infinispan' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') {
+    cacheManagerIsAvailable = true;
+}
+_%>
 package <%=packageName%>.service;
 <% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
 import <%=packageName%>.domain.Authority;<% } %>
@@ -31,10 +37,15 @@ import <%=packageName%>.service.util.RandomUtil;
 import <%=packageName%>.service.dto.UserDTO;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+import org.slf4j.LoggerFactory;
+<%_ if (cacheManagerIsAvailable === true) { _%>
+import org.springframework.cache.CacheManager;
+<%_ } _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;<% } %>
+import org.springframework.scheduling.annotation.Scheduled;
+<%_ } _%>
 import org.springframework.security.crypto.password.PasswordEncoder;
 <%_ if (databaseType === 'sql' && authenticationType === 'oauth2') { _%>
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
@@ -84,8 +95,12 @@ public class UserService {
 
     private final AuthorityRepository authorityRepository;
     <%_ } _%>
+    <%_ if (cacheManagerIsAvailable === true) { _%>
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder<% if (enableSocialSignIn) { %>, SocialService socialService<% } %><% if (databaseType === 'sql' && authenticationType === 'oauth2') { %>, JdbcTokenStore jdbcTokenStore<% } %><% if (searchEngine === 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb') { %><% if (authenticationType === 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>, AuthorityRepository authorityRepository<% } %>) {
+    private final CacheManager cacheManager;
+    <%_ } _%>
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder<% if (enableSocialSignIn) { %>, SocialService socialService<% } %><% if (databaseType === 'sql' && authenticationType === 'oauth2') { %>, JdbcTokenStore jdbcTokenStore<% } %><% if (searchEngine === 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb') { %><% if (authenticationType === 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>, AuthorityRepository authorityRepository<% } %><% if (cacheManagerIsAvailable === true) { %>, CacheManager cacheManager<% } %>) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         <%_ if (enableSocialSignIn) { _%>
@@ -103,6 +118,9 @@ public class UserService {
             <%_ } _%>
         this.authorityRepository = authorityRepository;
         <%_ } _%>
+        <%_ if (cacheManagerIsAvailable === true) { _%>
+        this.cacheManager = cacheManager;
+        <%_ } _%>
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -117,6 +135,9 @@ public class UserService {
                 <%_ } _%>
                 <%_ if (searchEngine === 'elasticsearch') { _%>
                 userSearchRepository.save(user);
+                <%_ } _%>
+                <%_ if (cacheManagerIsAvailable === true) { _%>
+                cacheManager.getCache("users").evict(user.getLogin());
                 <%_ } _%>
                 log.debug("Activated user: {}", user);
                 return user;
@@ -135,18 +156,24 @@ public class UserService {
                 <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
                 userRepository.save(user);
                 <%_ } _%>
+                <%_ if (cacheManagerIsAvailable === true) { _%>
+                cacheManager.getCache("users").evict(user.getLogin());
+                <%_ } _%>
                 return user;
            });
     }
 
     public Optional<User> requestPasswordReset(String mail) {
-        return userRepository.findOneByEmail(mail)
+        return userRepository.findOneByEmailIgnoreCase(mail)
             .filter(User::getActivated)
             .map(user -> {
                 user.setResetKey(RandomUtil.generateResetKey());
                 user.setResetDate(Instant.now());
                 <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
                 userRepository.save(user);
+                <%_ } _%>
+                <%_ if (cacheManagerIsAvailable === true) { _%>
+                cacheManager.getCache("users").evict(user.getLogin());
                 <%_ } _%>
                 return user;
             });
@@ -199,7 +226,7 @@ public class UserService {
         user.setImageUrl(userDTO.getImageUrl());
         <%_ } _%>
         if (userDTO.getLangKey() == null) {
-            user.setLangKey("<%= nativeLanguage %>"); // default language
+            user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
         } else {
             user.setLangKey(userDTO.getLangKey());
         }
@@ -252,6 +279,9 @@ public class UserService {
             <%_ if (searchEngine === 'elasticsearch') { _%>
             userSearchRepository.save(user);
             <%_ } _%>
+            <%_ if (cacheManagerIsAvailable === true) { _%>
+            cacheManager.getCache("users").evict(user.getLogin());
+            <%_ } _%>
             log.debug("Changed Information for User: {}", user);
         });
     }
@@ -290,6 +320,9 @@ public class UserService {
                 <%_ if (searchEngine === 'elasticsearch') { _%>
                 userSearchRepository.save(user);
                 <%_ } _%>
+                <%_ if (cacheManagerIsAvailable === true) { _%>
+                cacheManager.getCache("users").evict(user.getLogin());
+                <%_ } _%>
                 log.debug("Changed Information for User: {}", user);
                 return user;
             })
@@ -309,6 +342,9 @@ public class UserService {
             <%_ if (searchEngine === 'elasticsearch') { _%>
             userSearchRepository.delete(user);
             <%_ } _%>
+            <%_ if (cacheManagerIsAvailable === true) { _%>
+            cacheManager.getCache("users").evict(login);
+            <%_ } _%>
             log.debug("Deleted User: {}", user);
         });
     }
@@ -319,6 +355,9 @@ public class UserService {
             user.setPassword(encryptedPassword);
             <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
             userRepository.save(user);
+            <%_ } _%>
+            <%_ if (cacheManagerIsAvailable === true) { _%>
+            cacheManager.getCache("users").evict(user.getLogin());
             <%_ } _%>
             log.debug("Changed password for User: {}", user);
         });
@@ -387,7 +426,9 @@ public class UserService {
             user.getPersistentTokens().remove(token);<% } %>
             persistentTokenRepository.delete(token);
         });
-    }<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+    }
+    <%_ } _%>
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 
     /**
      * Not activated users should be automatically deleted after 3 days.
@@ -399,8 +440,13 @@ public class UserService {
         List<User> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(Instant.now().minus(3, ChronoUnit.DAYS));
         for (User user : users) {
             log.debug("Deleting not activated user {}", user.getLogin());
-            userRepository.delete(user);<% if (searchEngine === 'elasticsearch') { %>
-            userSearchRepository.delete(user);<% } %>
+            userRepository.delete(user);
+            <%_ if (searchEngine === 'elasticsearch') { _%>
+            userSearchRepository.delete(user);
+            <%_ } _%>
+            <%_ if (cacheManagerIsAvailable === true) { _%>
+            cacheManager.getCache("users").evict(user.getLogin());
+            <%_ } _%>
         }
     }
 

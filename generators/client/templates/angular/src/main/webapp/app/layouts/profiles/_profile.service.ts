@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,12 +20,15 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
+<%_ if (authenticationType !== 'uaa') { _%>
+import { SERVER_API_URL } from '../../app.constants';
+<%_ } _%>
 import { ProfileInfo } from './profile-info.model';
 
 @Injectable()
 export class ProfileService {
 
-    private profileInfoUrl = 'api/profile-info';
+    private profileInfoUrl = <% if (authenticationType === 'uaa') { %>'<% } else { %>SERVER_API_URL + '<% } %>api/profile-info';
 
     constructor(private http: Http) { }
 

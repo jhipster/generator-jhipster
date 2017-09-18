@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +21,9 @@ import { Http, Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { LocalStorageService } from 'ng2-webstorage';
 
+<%_ if (authenticationType !== 'uaa') { _%>
+import { SERVER_API_URL } from '../../app.constants';
+<%_ } _%>
 import { JhiBase64Service } from 'ng-jhipster';
 
 @Injectable()
@@ -62,7 +65,7 @@ export class AuthServerProvider {
 
     logout(): Observable<any> {
         return new Observable((observer) => {
-            this.http.post('api/logout', {});
+            this.http.post(SERVER_API_URL + 'api/logout', {});
             this.$localStorage.clear('authenticationToken');
             observer.complete();
         });

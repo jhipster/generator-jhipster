@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,48 +20,42 @@ import { Injectable } from '@angular/core';
 import { Http, Response, Headers, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { LocalStorageService, SessionStorageService } from 'ng2-webstorage';
+<%_ if (authenticationType !== 'uaa') { _%>
+import { SERVER_API_URL } from '../../app.constants';
+<%_ } _%>
 
 @Injectable()
 export class AuthServerProvider {
     constructor(
-        private http: Http,
+        private http: Http<%_ if (authenticationType !== 'uaa') { _%>,
         private $localStorage: LocalStorageService,
         private $sessionStorage: SessionStorageService
+<%_ } _%>
     ) {}
 
     getToken() {
+<%_ if (authenticationType === 'uaa') { _%>
+        return null;
+<% } else { %>
         return this.$localStorage.retrieve('authenticationToken') || this.$sessionStorage.retrieve('authenticationToken');
+<%_ } _%>
     }
 
     login(credentials): Observable<any> {
 <%_ if (authenticationType === 'uaa') { _%>
-        const data = new URLSearchParams();
-        data.append('grant_type', 'password');
-        data.append('username', credentials.username);
-        data.append('password', credentials.password);
-
-        const headers = new Headers ({
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization' : 'Basic d2ViX2FwcDo='
-        });
-
-        return this.http.post('<%= uaaBaseName.toLowerCase() %>/oauth/token', data, {
-            headers
-        }).map((resp) => {
-            const accessToken = resp.json()['access_token'];
-            if (accessToken) {
-                this.storeAuthenticationToken(accessToken, credentials.rememberMe);
-            }
-
-            return accessToken;
-        });
+        const data = {
+            username: credentials.username,
+            password: credentials.password,
+            rememberMe: credentials.rememberMe
+        };
+        return this.http.post('auth/login', data, {});
 <% } else { %>
         const data = {
             username: credentials.username,
             password: credentials.password,
             rememberMe: credentials.rememberMe
         };
-        return this.http.post('api/authenticate', data).map(authenticateSuccess.bind(this));
+        return this.http.post(SERVER_API_URL + 'api/authenticate', data).map(authenticateSuccess.bind(this));
 
         function authenticateSuccess(resp) {
             const bearerToken = resp.headers.get('Authorization');
@@ -84,18 +78,24 @@ export class AuthServerProvider {
     }
 
     storeAuthenticationToken(jwt, rememberMe) {
+<%_ if (authenticationType !== 'uaa') { _%>
         if (rememberMe) {
             this.$localStorage.store('authenticationToken', jwt);
         } else {
             this.$sessionStorage.store('authenticationToken', jwt);
         }
+<%_ } _%>
     }
 
     logout(): Observable<any> {
+<%_ if (authenticationType === 'uaa') { _%>
+        return this.http.post('/auth/logout', null);
+<% } else { %>
         return new Observable((observer) => {
             this.$localStorage.clear('authenticationToken');
             this.$sessionStorage.clear('authenticationToken');
             observer.complete();
         });
+<%_ } _%>
     }
 }

@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -79,7 +79,7 @@
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="userManagement.email">Email</label>
             <input type="email" class="form-control" name="email" #emailInput="ngModel"
-                   [(ngModel)]="user.email" minlength="5" required maxlength="100">
+                   [(ngModel)]="user.email" minlength="5" required maxlength="100" email>
 
             <div *ngIf="emailInput.dirty && emailInput.invalid">
                 <small class="form-text text-danger"

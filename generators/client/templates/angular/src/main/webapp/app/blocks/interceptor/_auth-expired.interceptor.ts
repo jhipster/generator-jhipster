@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,11 +17,17 @@
  limitations under the License.
 -%>
 import { JhiHttpInterceptor } from 'ng-jhipster';
-import { RequestOptionsArgs, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
 import { Injector } from '@angular/core';
+import { RequestOptionsArgs, Response } from '@angular/http';
+<%_ if (authenticationType === 'session') { _%>
+import { Router } from '@angular/router/router';
+<%_ } _%>
+import { Observable } from 'rxjs/Observable';
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { LoginService } from '../../shared/login/login.service';
+<%_ if (authenticationType === 'uaa') { _%>
+import { Router } from '@angular/router';
+<%_ } _%>
 <%_ } if (authenticationType === 'session') { _%>
 import { AuthServerProvider } from '../../shared/auth/auth-session.service';
 import { StateStorageService } from '../../shared/auth/state-storage.service';
@@ -36,7 +42,8 @@ export class AuthExpiredInterceptor extends JhiHttpInterceptor {
     }
 <%_ } if (authenticationType === 'session') { _%>
     constructor(private injector: Injector,
-        private stateStorageService: StateStorageService) {
+        private stateStorageService: StateStorageService,
+        private router: Router) {
         super();
     }
 <%_ } _%>
@@ -51,6 +58,10 @@ export class AuthExpiredInterceptor extends JhiHttpInterceptor {
             if (error.status === 401) {
                 const loginService: LoginService = this.injector.get(LoginService);
                 loginService.logout();
+<%_ if (authenticationType === 'uaa') { _%>
+                const router = this.injector.get(Router);
+                router.navigate(['/']);
+<%_ } _%>
             }
             return Observable.throw(error);
         });
@@ -62,14 +73,16 @@ export class AuthExpiredInterceptor extends JhiHttpInterceptor {
             if (error.status === 401 && error.text() !== '' && error.json().path && error.json().path.indexOf('/api/account') === -1) {
                 const authServerProvider = this.injector.get(AuthServerProvider);
                 const destination = this.stateStorageService.getDestinationState();
-                const to = destination.destination;
-                const toParams = destination.params;
-                authServerProvider.logout();
-
-                if (to.name === 'accessdenied') {
-                    this.stateStorageService.storePreviousState(to.name, toParams);
+                if (destination !== null) {
+                    const to = destination.destination;
+                    const toParams = destination.params;
+                    if (to.name === 'accessdenied') {
+                        this.stateStorageService.storePreviousState(to.name, toParams);
+                    }
+                } else {
+                    this.stateStorageService.storeUrl('/');
                 }
-
+                authServerProvider.logout();
                 const loginServiceModal = this.injector.get(LoginModalService);
                 loginServiceModal.open();
 

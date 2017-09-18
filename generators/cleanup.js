@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2017 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see https://jhipster.github.io/
+ * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,9 +48,6 @@ function cleanupOldServerFiles(generator, javaDir, testDir) {
     if (generator.isJhipsterVersionLessThan('3.6.0')) {
         generator.removeFile(`${javaDir}config/HerokuDatabaseConfiguration.java`);
     }
-    if (generator.isJhipsterVersionLessThan('3.8.1')) {
-        generator.removeFile(`${javaDir}config/JacksonConfiguration.java`);
-    }
     if (generator.isJhipsterVersionLessThan('3.10.0')) {
         generator.removeFile(`${javaDir}config/CloudMongoDbConfiguration.java`);
         generator.removeFile(`${javaDir}security/CustomAccessDeniedHandler.java`);
@@ -94,5 +91,9 @@ function cleanupOldServerFiles(generator, javaDir, testDir) {
     if (generator.isJhipsterVersionLessThan('4.3.0')) {
         generator.removeFile(`${javaDir}gateway/ratelimiting/RateLimitingRepository.java`);
         generator.removeFile(`${javaDir}config/cassandra/CustomZonedDateTimeCodec.java`);
+    }
+    if (generator.isJhipsterVersionLessThan('4.7.1')) {
+        generator.removeFile(`${javaDir}web/rest/errors/ErrorVM.java`);
+        generator.removeFile(`${javaDir}web/rest/errors/ParameterizedErrorVM.java`);
     }
 }

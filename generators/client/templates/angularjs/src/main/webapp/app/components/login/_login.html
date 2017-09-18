@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,7 +46,7 @@
                     <input type="password" class="form-control" id="password" placeholder="{{'login.form.password.placeholder' | translate}}"
                            ng-model="vm.password">
                 </div>
-                <%_ if (authenticationType === 'session' || authenticationType === 'jwt') { _%>
+                <%_ if (authenticationType == 'session' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
                 <div class="form-group">
                     <label for="rememberMe">
                         <input type="checkbox" id="rememberMe" ng-model="vm.rememberMe" checked>

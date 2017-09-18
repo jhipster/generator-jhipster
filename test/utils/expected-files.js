@@ -394,6 +394,14 @@ const expectedFiles = {
         `${DOCKER_DIR}kafka.yml`
     ],
 
+    swaggerCodegen: [
+        `${SERVER_MAIN_RES_DIR}swagger/api.yml`,
+    ],
+
+    swaggerCodegenGradle: [
+        'gradle/swagger.gradle',
+    ],
+
     uaa: [
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/UaaConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/UaaWebSecurityConfiguration.java`

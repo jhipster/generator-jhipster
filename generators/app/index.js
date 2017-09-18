@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2017 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see https://jhipster.github.io/
+ * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -232,7 +232,8 @@ module.exports = JhipsterGenerator.extend({
             this.composeWith(require.resolve('../server'), {
                 'client-hook': !this.skipClient,
                 configOptions: this.configOptions,
-                force: this.options.force
+                force: this.options.force,
+                debug: this.isDebugEnabled
             });
         },
 
@@ -242,7 +243,8 @@ module.exports = JhipsterGenerator.extend({
             this.composeWith(require.resolve('../client'), {
                 'skip-install': this.options['skip-install'],
                 configOptions: this.configOptions,
-                force: this.options.force
+                force: this.options.force,
+                debug: this.isDebugEnabled
             });
         },
 

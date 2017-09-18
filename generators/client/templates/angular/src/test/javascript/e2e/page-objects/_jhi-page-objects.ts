@@ -1,4 +1,4 @@
-import { element, by, ElementFinder } from "protractor";
+import { element, by, ElementFinder } from 'protractor';
 <%_
 let elementGetter = `getText()`;
 if (enableTranslation) {
@@ -79,7 +79,7 @@ export class NavBarPage {
     }
 
     goToEntity(entityName: string) {
-        this.clickOnEntityMenu()
+        this.clickOnEntityMenu();
         return this.clickOnEntity(entityName);
     }
 

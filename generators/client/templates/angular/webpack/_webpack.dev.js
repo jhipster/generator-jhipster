@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,7 +41,8 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
                 '/management',
                 '/swagger-resources',
                 '/v2/api-docs',
-                '/h2-console'
+                '/h2-console',
+                '/auth'
             ],
             target: 'http://127.0.0.1:<%= serverPort %>',
             secure: false

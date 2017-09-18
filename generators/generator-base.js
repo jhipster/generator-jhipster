@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2017 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see https://jhipster.github.io/
+ * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -1465,8 +1465,9 @@ module.exports = class extends PrivateBase {
      * @param {string} hookFor : "app" or "entity"
      * @param {string} hookType : "pre" or "post"
      * @param options : the options to pass to the hooks
+     * @param cb : callback to trigger at the end
      */
-    callHooks(hookFor, hookType, options) {
+    callHooks(hookFor, hookType, options, cb) {
         const modules = this.getModuleHooks();
         // run through all module hooks, which matches the hookFor and hookType
         modules.forEach((module) => {
@@ -1474,22 +1475,30 @@ module.exports = class extends PrivateBase {
             if (module.hookFor === hookFor && module.hookType === hookType) {
                 // compose with the modules callback generator
                 const hook = module.generatorCallback.split(':')[1];
-                const generatorTocall = `${module.npmPackageName}/generators/${hook || 'app'}`;
+                let generatorTocall = path.join(process.cwd(), 'node_modules', module.npmPackageName, 'generators', hook || 'app');
                 try {
+                    if (!fs.existsSync(generatorTocall)) {
+                        this.debug('using global module as local version could not be found in node_modules');
+                        generatorTocall = path.join(module.npmPackageName, 'generators', hook || 'app');
+                    }
+                    this.debug('Running yeoman compose with options: ', generatorTocall, options);
                     this.composeWith(require.resolve(generatorTocall), options);
                 } catch (err) {
+                    this.debug('ERROR:', err);
                     try {
                         // Fallback for legacy modules
+                        this.debug('Running yeoman legacy compose with options: ', module.generatorCallback, options);
                         this.composeWith(module.generatorCallback, options);
                     } catch (e) {
                         this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
                             chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow(`'npm install -g ${module.npmPackageName}'`));
                         this.debug('ERROR:', e);
                     }
-                    this.debug('ERROR:', err);
                 }
             }
         });
+        this.debug('calling callback');
+        cb && cb();
     }
 
     /**
@@ -1577,13 +1586,17 @@ module.exports = class extends PrivateBase {
         if (arguments.length < 3) {
             options = {};
         }
-        options.async = true;
-        options.silent = true;
+        if (options.async === undefined) options.async = true;
+        if (options.silent === undefined) options.silent = true;
+        if (options.trace === undefined) options.trace = true;
 
         if (!Array.isArray(args)) {
             args = [args];
         }
         const command = `git ${args.join(' ')}`;
+        if (options.trace) {
+            this.info(command);
+        }
         shelljs.exec(command, options, callback);
     }
 
@@ -1696,6 +1709,24 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Print an info message.
+     *
+     * @param {string} value - message to print
+     */
+    info(msg) {
+        this.log.info(msg);
+    }
+
+    /**
+     * Print a success message.
+     *
+     * @param {string} value - message to print
+     */
+    success(msg) {
+        this.log.ok(msg);
+    }
+
+    /**
      * Generate a KeyStore for uaa authorization server.
      */
     generateKeyStore() {
@@ -1738,9 +1769,9 @@ module.exports = class extends PrivateBase {
         this.log(`${chalk.green('  ██╗   ██║')}${chalk.red(' ██╔═══██║    ██║    ██╔════╝   ╚═══██╗    ██║    ██╔═══╝   ██╔══██║')}`);
         this.log(`${chalk.green('  ╚██████╔╝')}${chalk.red(' ██║   ██║ ████████╗ ██║       ██████╔╝    ██║    ████████╗ ██║  ╚██╗')}`);
         this.log(`${chalk.green('   ╚═════╝ ')}${chalk.red(' ╚═╝   ╚═╝ ╚═══════╝ ╚═╝       ╚═════╝     ╚═╝    ╚═══════╝ ╚═╝   ╚═╝')}\n`);
-        this.log(chalk.white.bold('                            https://jhipster.github.io\n'));
+        this.log(chalk.white.bold('                            http://www.jhipster.tech\n'));
         this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow(`v${packagejs.version}`));
-        this.log(chalk.white(`Documentation for creating an application: ${chalk.yellow('https://jhipster.github.io/creating-an-app/')}`));
+        this.log(chalk.white(`Documentation for creating an application: ${chalk.yellow('http://www.jhipster.tech/creating-an-app/')}`));
         this.log(chalk.white(`Application files will be generated in folder: ${chalk.yellow(process.cwd())}`));
     }
 
@@ -1884,12 +1915,13 @@ module.exports = class extends PrivateBase {
             // skip client if app type is server
             const skipClient = type && type === 'server';
             generator.composeWith(require.resolve('./languages'), {
+                configOptions,
                 'skip-install': true,
                 'skip-server': skipServer,
                 'skip-client': skipClient,
-                configOptions,
+                languages: generator.languages,
                 force: generator.options.force,
-                languages: generator.languages
+                debug: generator.options.debug
             });
         }
     }
@@ -1926,7 +1958,7 @@ module.exports = class extends PrivateBase {
         }
         buildCmd += ` -P${profile}`;
         const child = {};
-        child.stdout = exec(buildCmd, { maxBuffer: 1024 * 500 }, cb).stdout;
+        child.stdout = exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout;
         child.buildCmd = buildCmd;
 
         return child;

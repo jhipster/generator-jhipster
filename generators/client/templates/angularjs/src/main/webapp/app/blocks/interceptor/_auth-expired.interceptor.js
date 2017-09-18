@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,8 +35,10 @@
 
         function responseError(response) {
             if (response.status === 401) {
+    <%_ if (authenticationType !== 'uaa') { _%>
                 delete $localStorage.authenticationToken;
                 delete $sessionStorage.authenticationToken;
+    <%_ } _%>
                 var Principal = $injector.get('Principal');
                 if (Principal.isAuthenticated()) {
                     var Auth = $injector.get('Auth');

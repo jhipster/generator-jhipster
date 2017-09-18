@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@
     <parent>
         <artifactId>spring-boot-starter-parent</artifactId>
         <groupId>org.springframework.boot</groupId>
-        <version>1.5.4.RELEASE</version>
+        <version>1.5.7.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -61,7 +61,7 @@
         <%_ if (cucumberTests) { _%>
         <cucumber.version>1.2.4</cucumber.version>
         <%_ } _%>
-        <docker-maven-plugin.version>0.4.13</docker-maven-plugin.version>
+        <dockerfile-maven-plugin.version>1.3.4</dockerfile-maven-plugin.version>
         <!-- Overridden to get metrics-jcache -->
         <dropwizard-metrics.version>3.2.2</dropwizard-metrics.version>
         <%_ if (!skipClient) { _%>
@@ -78,7 +78,7 @@
         <hazelcast-wm.version>3.7</hazelcast-wm.version>
         <%_ } _%>
         <%_ if (hibernateCache === 'infinispan') { _%>
-        <infinispan-hibernate52.version>5.2.8.Final</infinispan-hibernate52.version>
+        <infinispan-hibernate52.version>5.2.10.Final</infinispan-hibernate52.version>
         <%_ } _%>
         <%_ if (hibernateCache === 'infinispan') { _%>
         <infinispan.version>8.2.5.Final</infinispan.version>
@@ -86,7 +86,7 @@
         <infinispan.boot.starter.version>1.0.0.Final</infinispan.boot.starter.version>
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
-        <hibernate.version>5.2.8.Final</hibernate.version>
+        <hibernate.version>5.2.10.Final</hibernate.version>
         <hikaricp.version>2.6.0</hikaricp.version>
         <%_ } _%>
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
@@ -97,7 +97,7 @@
         <%_ if (gatlingTests) { _%>
         <jzlib.version>1.1.3</jzlib.version>
         <%_ } _%>
-        <jhipster.server.version>1.1.8</jhipster.server.version>
+        <jhipster.server.version>1.1.9</jhipster.server.version>
         <%_ if (authenticationType === 'jwt') { _%>
         <jjwt.version>0.7.0</jjwt.version>
         <%_ } _%>
@@ -108,7 +108,7 @@
         <%_ } _%>
         <liquibase-slf4j.version>2.0.0</liquibase-slf4j.version>
         <%_ } _%>
-        <logstash-logback-encoder.version>4.9</logstash-logback-encoder.version>
+        <logstash-logback-encoder.version>4.11</logstash-logback-encoder.version>
         <%_ if (databaseType === 'cassandra') { _%>
         <lz4.version>1.3.0</lz4.version>
         <%_ } _%>
@@ -127,6 +127,7 @@
         <%_ } _%>
         <%_ if (databaseType === 'mongodb') { _%>
         <mongobee.version>0.12</mongobee.version>
+        <guava.version>23.0</guava.version>
         <%_ } _%>
         <node.version>v<%= NODE_VERSION %></node.version>
         <%_ if (clientPackageManager === 'npm') { _%>
@@ -138,6 +139,7 @@
         <%_ if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { _%>
         <postgresql.version>9.4.1212</postgresql.version>
         <%_ } _%>
+        <problem-spring-web.version>0.20.0</problem-spring-web.version>
         <!-- These remain empty unless the corresponding profile is active -->
         <profile.no-liquibase />
         <profile.swagger />
@@ -179,10 +181,10 @@
 
         <!-- Spring properties -->
         <%_ if (messageBroker === 'kafka') { _%>
-        <spring-cloud-stream.version>Chelsea.SR1</spring-cloud-stream.version>
+        <spring-cloud-stream.version>Chelsea.SR2</spring-cloud-stream.version>
         <%_ } _%>
         <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
-        <spring-cloud.version>Dalston.RELEASE</spring-cloud.version>
+        <spring-cloud.version>Dalston.SR2</spring-cloud.version>
         <%_ } _%>
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
         <spring-security-oauth.version>2.0.12.RELEASE</spring-security-oauth.version>
@@ -192,6 +194,9 @@
         <spring-social-google.version>1.0.0.RELEASE</spring-social-google.version>
         <%_ } _%>
         <springfox.version>2.7.0</springfox.version>
+        <%_ if (enableSwaggerCodegen) { _%>
+        <swagger-codegen-maven-plugin.version>2.2.3</swagger-codegen-maven-plugin.version>
+        <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
         <validation-api.version>1.1.0.Final</validation-api.version>
         <%_ } _%>
@@ -540,6 +545,11 @@
         <%_ } _%>
         <%_ if (databaseType === 'mongodb') { _%>
         <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.github.mongobee</groupId>
             <artifactId>mongobee</artifactId>
             <version>${mongobee.version}</version>
@@ -672,6 +682,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>org.zalando</groupId>
+            <artifactId>problem-spring-web</artifactId>
+            <version>${problem-spring-web.version}</version>
+        </dependency>
         <%_ if (websocket === 'spring-websocket') { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -800,20 +815,6 @@
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
             <version>${logstash-logback-encoder.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>ch.qos.logback</groupId>
-                    <artifactId>logback-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>ch.qos.logback</groupId>
-                    <artifactId>logback-classic</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>ch.qos.logback</groupId>
-                    <artifactId>logback-access</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -1005,6 +1006,25 @@
                             </resources>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>docker-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>target/</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/docker/</directory>
+                                    <filtering>false</filtering>
+                                    <excludes>
+                                        <exclude>**/*.yml</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -1131,20 +1151,55 @@
             </plugin>
             <plugin>
                 <groupId>com.spotify</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>${docker-maven-plugin.version}</version>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>${dockerfile-maven-plugin.version}</version>
+                <!--
+                Uncomment the section below to build the docker image with mvn package and and push it with mvn deploy
+                <executions>
+                    <execution>
+                    <id>default</id>
+                    <goals>
+                        <goal>build</goal>
+                        <goal>push</goal>
+                    </goals>
+                    </execution>
+                </executions>
+                -->
                 <configuration>
-                    <imageName><%= baseName.toLowerCase() %></imageName>
-                    <dockerDirectory>src/main/docker</dockerDirectory>
-                    <resources>
-                        <resource>
-                            <targetPath>/</targetPath>
-                            <directory>${project.build.directory}</directory>
-                            <include>${project.build.finalName}.war</include>
-                        </resource>
-                    </resources>
+                    <repository>${project.artifactId}</repository>
+                    <tag>latest</tag>
+                    <contextDirectory>${project.build.directory}</contextDirectory>
                 </configuration>
             </plugin>
+            <%_ if (enableSwaggerCodegen) { _%>
+            <plugin>
+                <!--
+                    Plugin that provides API-first development using swagger-codegen to
+                    generate Spring-MVC endpoint stubs at compile time from a swagger definition file
+                -->
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-codegen-maven-plugin</artifactId>
+                <version>${swagger-codegen-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec><%= SERVER_MAIN_RES_DIR %>swagger/api.yml</inputSpec>
+                            <language>spring</language>
+                            <apiPackage><%= packageName %>.web.api</apiPackage>
+                            <modelPackage><%= packageName %>.web.api.model</modelPackage>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                            <configOptions>
+                                <interfaceOnly>true</interfaceOnly>
+                                <java8>true</java8>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <%_ } _%>
             <!-- jhipster-needle-maven-add-plugin -->
         </plugins>
         <pluginManagement>
@@ -1296,6 +1351,14 @@
                         <configuration>
                             <%_ if (!skipClient) { _%>
                             <warSourceDirectory><% if (clientFramework !== 'angular1') { %><%= CLIENT_DIST_DIR %><% } else { %><%= CLIENT_MAIN_SRC_DIR %><% } %></warSourceDirectory>
+                            <webResources>
+                                <resource>
+                                    <directory>src/main/webapp</directory>
+                                    <includes>
+                                        <include>WEB-INF/**</include>
+                                    </includes>
+                                </resource>
+                            </webResources>
                             <%_ } _%>
                         </configuration>
                     </plugin>
@@ -1334,6 +1397,14 @@
                         <configuration>
                             <%_ if (!skipClient) { _%>
                             <warSourceDirectory><%= CLIENT_DIST_DIR %></warSourceDirectory>
+                            <webResources>
+                                <resource>
+                                    <directory>src/main/webapp</directory>
+                                    <includes>
+                                        <include>WEB-INF/**</include>
+                                    </includes>
+                                </resource>
+                            </webResources>
                             <%_ } _%>
                         </configuration>
                     </plugin>

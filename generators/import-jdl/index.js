@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2017 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see https://jhipster.github.io/
+ * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -111,7 +111,6 @@ module.exports = JDLGenerator.extend({
 
         generateEntities() {
             if (this.updatedKeys.length === 0) return;
-
             if (this.options['json-only']) {
                 this.log('Entity JSON files created. Entitiy generation skipped.');
                 return;
@@ -121,6 +120,8 @@ module.exports = JDLGenerator.extend({
                 this.getExistingEntities().forEach((entity) => {
                     if (this.updatedKeys.includes(entity.name)) {
                         this.composeWith(require.resolve('../entity'), {
+                            force: this.options.force,
+                            debug: this.options.debug,
                             regenerate: true,
                             'skip-install': true,
                             'skip-client': entity.definition.skipClient,
@@ -135,25 +136,17 @@ module.exports = JDLGenerator.extend({
                 this.debug('Error:', e);
                 this.error(`Error while generating entities from parsed JDL\n${e}`);
             }
-        }
+        },
+
     },
 
-    install() {
-        const injectJsFilesToIndex = () => {
-            this.log(`\n${chalk.bold.green('Running gulp Inject to add javascript to index\n')}`);
-            this.spawnCommand('gulp', ['inject:app']);
-        };
-        // rebuild client for Angular
-        const rebuildClient = () => {
-            this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app')}\n`);
-            this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build']);
-        };
-
+    end() {
         if (!this.options['skip-install'] && !this.skipClient && !this.options['json-only']) {
+            this.debug('Building client');
             if (this.clientFramework === 'angular1') {
-                injectJsFilesToIndex();
+                this.injectJsFilesToIndex();
             } else {
-                rebuildClient();
+                this.rebuildClient();
             }
         }
     }

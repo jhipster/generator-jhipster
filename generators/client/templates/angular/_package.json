@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,12 +34,12 @@
     "@angular/platform-browser": "4.3.2",
     "@angular/platform-browser-dynamic": "4.3.2",
     "@angular/router": "4.3.2",
-    "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.29",
-    "bootstrap": "4.0.0-alpha.6",
+    "@ng-bootstrap/ng-bootstrap": "1.0.0-beta.4",
+    "bootstrap": "4.0.0-beta",
     "core-js": "2.4.1",
     "font-awesome": "4.7.0",
     "jquery": "3.2.1",
-    "ng-jhipster": "0.2.9",
+    "ng-jhipster": "0.2.12",
     "ng2-webstorage": "1.8.0",
     "ngx-cookie": "1.0.0",
     "ngx-infinite-scroll": "0.5.1",
@@ -90,7 +90,7 @@
     "karma-sourcemap-loader": "0.3.7",
     "karma-webpack": "2.0.4",
     <%_ if (enableTranslation) { _%>
-    "merge-jsons-webpack-plugin": "1.0.8",
+    "merge-jsons-webpack-plugin": "1.0.11",
     <%_ } _%>
     "ngc-webpack": "3.1.1",
     "phantomjs-prebuilt": "2.1.14",
@@ -122,8 +122,8 @@
     "<%= module.name %>": "<%= module.version %>",
     <%_ }); _%>
     "uglifyjs-webpack-plugin": "1.0.0-beta.2",
-    "webpack": "3.4.1",
-    "webpack-dev-server": "2.6.1",
+    "webpack": "3.5.6",
+    "webpack-dev-server": "2.8.1",
     "webpack-merge": "4.1.0",
     "webpack-notifier": "1.5.0",
     "webpack-visualizer-plugin": "0.1.11",
@@ -144,7 +144,7 @@
     "build": "<%= clientPackageManager %> run webpack:prod",
     "test": "karma start src/test/javascript/karma.conf.js",
     "test:watch": "<%= clientPackageManager %> test -- --watch",
-    "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --progress --inline --hot --profile --port=9060",
+    "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --progress --inline --hot --profile --port=9060 --watch-content-base",
     "webpack:build:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --progress --profile",
     "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:main",
     "webpack:prod:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --progress --profile",

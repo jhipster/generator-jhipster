@@ -2,7 +2,7 @@
 /**
  * Copyright 2013-2017 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see https://jhipster.github.io/
+ * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,10 +17,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 const semver = require('semver');
 const packageJson = require('../package.json');
 const logger = require('./utils').logger;
+const path = require('path');
 
 const currentNodeVersion = process.versions.node;
 const minimumNodeVersion = packageJson.engines.node;
@@ -33,4 +33,39 @@ if (!semver.satisfies(currentNodeVersion, minimumNodeVersion)) {
     /* eslint-enable  */
     process.exit(1);
 }
-require('./cli');
+
+let preferLocal = true;
+
+// Don't use commander for parsing command line to avoid polluting it in cli.js 
+// --prefer-local: Always resolve node modules locally (useful when using linked module)
+if (process.argv.includes('upgrade') && !process.argv.includes('--prefer-local')) {
+    // Prefer global version for `jhipster upgrade` to get most recent code
+    preferLocal = false;
+}
+
+requireCLI(preferLocal);
+
+/*
+ * Require cli.js giving priority to local version over global one if it exists.
+ */
+function requireCLI(preferLocal) {
+    /* eslint-disable global-require */
+    if (preferLocal) {
+        try {
+            const localCLI = require.resolve(path.join(process.cwd(), 'node_modules', 'generator-jhipster', 'cli', 'cli.js'));
+            if (__dirname !== path.dirname(localCLI)) {
+                // load local version
+                /* eslint-disable import/no-dynamic-require */
+                logger.info('Using JHipster version installed locally in current project\'s node_modules');
+                require(localCLI);
+                return;
+            }
+        } catch (e) {
+            // Unable to find local version, so global one will be loaded anyway
+        }
+    }
+    // load global version
+    logger.info('Using JHipster version installed globally');
+    require('./cli');
+    /* eslint-enable  */
+}

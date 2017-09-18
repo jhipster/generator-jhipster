@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2017 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see https://jhipster.github.io/
+ * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -143,7 +143,7 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'oauth2' || generator.authenticationType === 'jwt' || generator.authenticationType === 'uaa',
+            condition: generator => generator.authenticationType === 'oauth2' || generator.authenticationType === 'jwt',
             path: ANGULAR_DIR,
             templates: [
                 'blocks/interceptor/_auth.interceptor.ts'
@@ -506,7 +506,7 @@ const files = {
             templates: [
                 'e2e/account/_account.spec.ts',
                 'e2e/admin/_administration.spec.ts',
-                'e2e/pageObjects/_jhi-page-objects.spec.ts',
+                'e2e/page-objects/_jhi-page-objects.ts',
                 '_protractor.conf.js'
             ]
         }

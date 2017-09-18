@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,15 +17,20 @@
  limitations under the License.
 -%>
 import { browser, element, by, $ } from 'protractor';
-import { NavBarPage } from './../pageObjects/jhi-page-objects.spec';
-<%_ for (let field of fields) { if (field.fieldTypeBlobContent !== 'text') {%>var path = require('path');<% break;}} %>
+import { NavBarPage } from './../page-objects/jhi-page-objects';
+<%_ for (let field of fields) {
+    if (field.fieldTypeBlobContent !== 'text') {
+        %>const path = require('path');<%
+        break;
+    }
+} %>
 <%_
 let elementGetter = `getText()`;
 let openBlockComment = ``;
 let closeBlockComment = ``;
 if (enableTranslation) {
     elementGetter = `getAttribute('jhiTranslate')`;
-}  
+}
 for (let relationship of relationships) {
     if (relationship.relationshipRequired) {
         openBlockComment = `/*`;
@@ -39,9 +44,13 @@ describe('<%= entityClass %> e2e test', () => {
     let navBarPage: NavBarPage;
     let <%= entityInstance %>DialogPage: <%= entityClass %>DialogPage;
     let <%= entityInstance %>ComponentsPage: <%= entityClass %>ComponentsPage;
-    <%_ for (let field of fields) { if (field.fieldTypeBlobContent !== 'text') { _%>
-    var fileToUpload = '../../../../main/webapp/content/images/logo-jhipster.png', absolutePath = path.resolve(__dirname, fileToUpload);
-    <% break;}} %>
+    <%_ for (let field of fields) {
+        if (field.fieldTypeBlobContent !== 'text') { _%>
+    const fileToUpload = '../../../../main/webapp/content/images/logo-jhipster.png';
+    const absolutePath = path.resolve(__dirname, fileToUpload);
+    <%  break;
+        }
+    } %>
 
     beforeAll(() => {
         browser.get('/');
@@ -72,7 +81,7 @@ describe('<%= entityClass %> e2e test', () => {
         <%_ } _%>
         <%= entityInstance %>DialogPage.close();
     });
-    
+
    <%= openBlockComment %> it('should create and save <%= entityClassPlural %>', () => {
         <%= entityInstance %>ComponentsPage.clickOnCreateButton();
         <%_ fields.forEach((field) => {
@@ -108,6 +117,9 @@ describe('<%= entityClass %> e2e test', () => {
         <%= entityInstance %>DialogPage.set<%= fieldNameCapitalized %>Input(absolutePath);
         <%_ } else if(fieldIsEnum) { _%>
         <%= entityInstance %>DialogPage.<%=fieldName %>SelectLastOption();
+        <%_ } else if(fieldType === 'UUID'){ _%>
+        <%= entityInstance %>DialogPage.set<%= fieldNameCapitalized %>Input('64c99148-3908-465d-8c4a-e510e3ade974');
+        expect(<%= entityInstance %>DialogPage.get<%= fieldNameCapitalized %>Input()).toMatch('64c99148-3908-465d-8c4a-e510e3ade974');
         <%_ } else { _%>
         <%= entityInstance %>DialogPage.set<%= fieldNameCapitalized %>Input('<%= fieldName %>');
         expect(<%= entityInstance %>DialogPage.get<%= fieldNameCapitalized %>Input()).toMatch('<%= fieldName %>');
@@ -214,7 +226,7 @@ export class <%= entityClass %>DialogPage {
     get<%= fieldNameCapitalized %>Input = function () {
         return this.<%= fieldName %>Input.getAttribute('value');
     }
-    
+
     <%_ } else { _%>
     set<%= fieldNameCapitalized %>Input = function (<%= fieldName %>) {
         this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);

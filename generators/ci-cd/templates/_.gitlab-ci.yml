@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -186,7 +186,7 @@ gatling-test:
     <%_ if (heroku.includes('gitlab')) { _%>
 maven-deploy:
     stage: deploy
-     script:
+    script:
         - ./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>
     <%_ } else { _%>
 maven-package:
