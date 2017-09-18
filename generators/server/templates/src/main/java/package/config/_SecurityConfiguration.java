@@ -67,6 +67,7 @@ import org.springframework.web.filter.CorsFilter;
 <%_ if (authenticationType === 'jwt') { _%>
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 <%_ } _%>
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 <% if (authenticationType !== 'oauth2') { %>
 import javax.annotation.PostConstruct;
