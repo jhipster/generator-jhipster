@@ -209,7 +209,7 @@ jhipster:
                 # Token is valid 24 hours
                 token-validity-in-seconds: 86400
     <%_ } _%>
-    <%_ if ((applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
+    <%_ if ((applicationType === 'microservice' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
         client-authorization:
             <%_ if (applicationType !== 'uaa') { _%>
             access-token-uri: http://<%= uaaBaseName.toLowerCase() %>/oauth/token
