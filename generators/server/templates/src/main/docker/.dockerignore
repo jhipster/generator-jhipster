@@ -24,3 +24,6 @@
 <%_ if (prodDatabaseType === 'cassandra') { _%>
 !cassandra/
 <%_ } _%>
+<%_ if (prodDatabaseType === 'couchbase') { _%>
+!couchbase/scripts/configure-node.sh
+<%_ } _%>
