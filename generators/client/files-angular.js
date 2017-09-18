@@ -417,7 +417,7 @@ const files = {
             ]
         },
         {
-            condition: generator => !generator.skipUserManagement,
+            condition: generator => !generator.skipUserManagement || generator.authenticationType === 'oauth2',
             path: ANGULAR_DIR,
             templates: [
                 'shared/user/_user.model.ts',

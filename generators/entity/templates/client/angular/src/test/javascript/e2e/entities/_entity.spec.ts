@@ -56,7 +56,11 @@ describe('<%= entityClass %> e2e test', () => {
         browser.get('/');
         browser.waitForAngular();
         navBarPage = new NavBarPage();
+        <%_ if (authenticationType === 'oauth2') { _%>
+        navBarPage.getSignInPage().loginWithOAuth('admin', 'admin');
+        <%_ } else { _%>
         navBarPage.getSignInPage().autoSignInUsing('admin', 'admin');
+        <%_ } _%>
         browser.waitForAngular();
     });
 

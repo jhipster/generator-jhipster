@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<% if (authenticationType === 'uaa' || authenticationType === 'oauth2') { %>import java.nio.charset.StandardCharsets
+<% if (authenticationType === 'uaa') { %>import java.nio.charset.StandardCharsets
 import java.util.Base64
 
 <% } %>import _root_.io.gatling.core.scenario.Simulation
@@ -38,7 +38,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
     // Log failed HTTP requests
     //context.getLogger("io.gatling.http").setLevel(Level.valueOf("DEBUG"))
 
-    val baseURL = Option(System.getProperty("baseURL")) getOrElse """http://127.0.0.1:8080"""
+    val baseURL = Option(System.getProperty("baseURL")) getOrElse """http://localhost:8080"""
 
     val httpConf = http
         .baseURL(baseURL)
@@ -52,14 +52,21 @@ class <%= entityClass %>GatlingTest extends Simulation {
     val headers_http = Map(
         "Accept" -> """application/json"""
     )
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
 
     val headers_http_authenticated = Map(
         "Accept" -> """application/json""",
         "X-XSRF-TOKEN" -> "${xsrf_token}"
     )
 <%_ } _%>
-<%_ if (authenticationType === 'uaa' || authenticationType === 'oauth2') { _%>
+<%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
+
+    val keycloakHeaders = Map(
+        "Accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Upgrade-Insecure-Requests" -> "1"
+    )
+<%_ } _%>
+<%_ if (authenticationType === 'uaa') { _%>
 
     val authorization_header = "Basic " + Base64.getEncoder.encodeToString("<%= baseName%>app:my-secret-token-to-change-in-production".getBytes(StandardCharsets.UTF_8))
 
@@ -91,7 +98,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .exec(http("First unauthenticated request")
         .get("/api/account")
         .headers(headers_http)
-        .check(status.is(401))<% if (authenticationType === 'session') { %>
+        .check(status.is(401))<% if (authenticationType === 'session' || authenticationType === 'oauth2') { %>
         .check(headerRegex("Set-Cookie", "XSRF-TOKEN=(.*);[\\s]").saveAs("xsrf_token"))<% } %>).exitHereIfFailed
         .pause(10)
         .exec(http("Authentication")
@@ -103,7 +110,19 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .formParam("remember-me", "true")
         .formParam("submit", "Login")
         .check(headerRegex("Set-Cookie", "XSRF-TOKEN=(.*);[\\s]").saveAs("xsrf_token"))).exitHereIfFailed
-<%_ } else if (authenticationType === 'uaa' || authenticationType === 'oauth2') { _%>
+<%_ } else if (authenticationType === 'oauth2') { _%>
+        .get("/login")
+        .headers(keycloakHeaders)
+        .check(css("#kc-form-login", "action").saveAs("kc-form-login"))).exitHereIfFailed
+        .pause(10)
+        .exec(http("Authenticate")
+        .post("${kc-form-login}")
+        .headers(keycloakHeaders)
+        .formParam("username", "admin")
+        .formParam("password", "admin")
+        .formParam("submit", "Login")
+        .check(status.is(200))).exitHereIfFailed
+<%_ } else if (authenticationType === 'uaa') { _%>
         .post("/oauth/token")
         .headers(headers_http_authentication)
         .formParam("username", "admin")
