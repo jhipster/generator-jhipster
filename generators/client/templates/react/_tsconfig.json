@@ -10,7 +10,7 @@
     "removeComments": false,
     "noImplicitAny": false,
     "suppressImplicitAnyIndexErrors": true,
-    "outDir": "build/www/app",
+    "outDir": "<%= DIST_DIR %>app",
     "lib": ["es2015", "es2017", "dom"],
     "typeRoots": [
       "node_modules/@types"
@@ -20,7 +20,7 @@
   },
   "include": [
     "src/main/webapp/app/typing.d.ts",
-    "src/main/webapp/app/**/*",
-    "src/test/javascript/**/*"
+    "<%= MAIN_SRC_DIR %>app/**/*",
+    "<%= TEST_SRC_DIR %>**/*"
   ]
 }
