@@ -204,13 +204,13 @@ function writeFiles() {
                 if (!this.skipUserManagement) {
                     this.template(`${SERVER_MAIN_RES_DIR}/config/couchmove/changelog/V0.1__initial_setup/_ROLE_ADMIN.json`, `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/ROLE_ADMIN.json`);
                     this.template(`${SERVER_MAIN_RES_DIR}/config/couchmove/changelog/V0.1__initial_setup/_ROLE_USER.json`, `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/ROLE_USER.json`);
-                    this.template(`${SERVER_MAIN_RES_DIR}/config/couchmove/changelog/V0.1__initial_setup/_user::admin.json`, `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user::admin.json`);
-                    this.template(`${SERVER_MAIN_RES_DIR}/config/couchmove/changelog/V0.1__initial_setup/_user::anonymoususer.json`, `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user::anonymoususer.json`);
-                    this.template(`${SERVER_MAIN_RES_DIR}/config/couchmove/changelog/V0.1__initial_setup/_user::system.json`, `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user::system.json`);
-                    this.template(`${SERVER_MAIN_RES_DIR}/config/couchmove/changelog/V0.1__initial_setup/_user::user.json`, `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user::user.json`);
+                    this.template(`${SERVER_MAIN_RES_DIR}/config/couchmove/changelog/V0.1__initial_setup/_user__admin.json`, `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user__admin.json`);
+                    this.template(`${SERVER_MAIN_RES_DIR}/config/couchmove/changelog/V0.1__initial_setup/_user__anonymoususer.json`, `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user__anonymoususer.json`);
+                    this.template(`${SERVER_MAIN_RES_DIR}/config/couchmove/changelog/V0.1__initial_setup/_user__system.json`, `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user__system.json`);
+                    this.template(`${SERVER_MAIN_RES_DIR}/config/couchmove/changelog/V0.1__initial_setup/_user__user.json`, `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user__user.json`);
                     if (this.authenticationType === 'oauth2') {
-                        this.template(`${SERVER_MAIN_RES_DIR}/config/couchmove/changelog/V0.1__initial_setup/_client_details::jhipsterapp.json`, `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/client_details::jhipsterapp.json`);
-                        this.template(`${SERVER_MAIN_RES_DIR}/config/couchmove/changelog/V0.1__initial_setup/_client_details::swagger_ui.json`, `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/client_details::swagger_ui.json`);
+                        this.template(`${SERVER_MAIN_RES_DIR}/config/couchmove/changelog/V0.1__initial_setup/_client_details__jhipsterapp.json`, `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/client_details__jhipsterapp.json`);
+                        this.template(`${SERVER_MAIN_RES_DIR}/config/couchmove/changelog/V0.1__initial_setup/_client_details__swagger_ui.json`, `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/client_details__swagger_ui.json`);
                     }
                 }
             }
