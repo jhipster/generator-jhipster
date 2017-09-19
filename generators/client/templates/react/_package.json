@@ -118,7 +118,7 @@
     "tslint-loader": "3.5.3",
     "tslint-microsoft-contrib": "5.0.1",
     "tslint-react": "3.0.0",
-    "typescript": "2.4.0",
+    "typescript": "2.5.2",
     "webpack": "3.2.0",
     "webpack-dev-server": "2.5.1",
     "webpack-merge": "4.1.0",
