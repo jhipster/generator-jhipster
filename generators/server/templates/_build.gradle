@@ -150,7 +150,7 @@ task integrationTest(type: Test) {
 check.dependsOn integrationTest
 <%_ if (cucumberTests) { _%>
 task cucumberTest(type: Test) {
-    description = "Execute cucumber behaviour tests."
+    description = "Execute cucumber BDD tests."
     group = "verification"
     include '**/CucumberTest*'
 
