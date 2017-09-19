@@ -19,7 +19,6 @@
     "checkJs": true
   },
   "include": [
-    "src/main/webapp/app/typing.d.ts",
     "<%= MAIN_SRC_DIR %>app/**/*",
     "<%= TEST_SRC_DIR %>**/*"
   ]
