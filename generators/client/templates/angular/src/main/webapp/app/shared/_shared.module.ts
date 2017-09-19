@@ -27,7 +27,7 @@ import {
     AuthServerProvider,
     <%_ } _%>
     AccountService,
-    <%_ if (!skipUserManagement) { _%>
+    <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
     UserService,
     <%_ } _%>
     StateStorageService,

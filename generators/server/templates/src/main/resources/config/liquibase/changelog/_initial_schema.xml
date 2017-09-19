@@ -64,7 +64,9 @@
             <column name="login" type="varchar(<% if (enableSocialSignIn) { %>100<% } else { %>50<% } %>)">
                 <constraints unique="true" nullable="false"/>
             </column>
+            <%_ if (authenticationType !== 'oauth2') { _%>
             <column name="password_hash" type="varchar(60)"/>
+            <%_ } _%>
             <column name="first_name" type="varchar(50)"/>
             <column name="last_name" type="varchar(50)"/>
             <column name="email" type="varchar(100)">
@@ -75,17 +77,21 @@
                 <constraints nullable="false" />
             </column>
             <column name="lang_key" type="varchar(5)"/>
+            <%_ if (authenticationType !== 'oauth2') { _%>
             <column name="activation_key" type="varchar(20)"/>
             <column name="reset_key" type="varchar(20)"/>
+            <%_ } _%>
             <column name="created_by" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
             <column name="created_date" type="timestamp" defaultValueDate="${now}">
                 <constraints nullable="false"/>
             </column>
+            <%_ if (authenticationType !== 'oauth2') { _%>
             <column name="reset_date" type="timestamp">
                 <constraints nullable="true"/>
             </column>
+            <%_ } _%>
             <column name="last_modified_by" type="varchar(50)"/>
             <column name="last_modified_date" type="timestamp"/>
         </createTable>

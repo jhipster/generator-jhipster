@@ -20,15 +20,17 @@ package <%=packageName%>.web.rest;
 
 import <%=packageName%>.config.Constants;
 import com.codahale.metrics.annotation.Timed;
-import <%=packageName%>.domain.User;
+<% if (authenticationType !== 'oauth2') { %>
+import <%=packageName%>.domain.User;<% } %>
 import <%=packageName%>.repository.UserRepository;<% if (searchEngine === 'elasticsearch') { %>
 import <%=packageName%>.repository.search.UserSearchRepository;<% } %>
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.service.MailService;
 import <%=packageName%>.service.UserService;
 import <%=packageName%>.service.dto.UserDTO;
+<% if (authenticationType !== 'oauth2') { %>
 import <%=packageName%>.web.rest.vm.ManagedUserVM;
-import <%=packageName%>.web.rest.util.HeaderUtil;<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+import <%=packageName%>.web.rest.util.HeaderUtil;<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
 import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
 import io.github.jhipster.web.util.ResponseUtil;
 import io.swagger.annotations.ApiParam;
@@ -42,10 +44,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
-
+<% if (authenticationType !== 'oauth2') { %>
 import javax.validation.Valid;
 import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.URISyntaxException;<% } %>
 import java.util.*;<% if (searchEngine === 'elasticsearch') { %>
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -102,7 +104,7 @@ public class UserResource {
         this.userSearchRepository = userSearchRepository;
         <%_ } _%>
     }
-
+<% if (authenticationType !== 'oauth2') { %>
     /**
      * POST  /users  : Creates a new user.
      * <p>
@@ -168,7 +170,7 @@ public class UserResource {
         return ResponseUtil.wrapOrNotFound(updatedUser,
             HeaderUtil.createAlert(<% if(enableTranslation) { %>"userManagement.updated"<% } else { %>"A user is updated with identifier " + managedUserVM.getLogin()<% } %>, managedUserVM.getLogin()));
     }
-
+<% } %>
     /**
      * GET  /users : get all users.
      *<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
@@ -211,7 +213,7 @@ public class UserResource {
             userService.getUserWithAuthoritiesByLogin(login)
                 .map(UserDTO::new));
     }
-
+<% if (authenticationType !== 'oauth2') { %>
     /**
      * DELETE /users/:login : delete the "login" User.
      *
@@ -225,7 +227,7 @@ public class UserResource {
         log.debug("REST request to delete User: {}", login);
         userService.deleteUser(login);
         return ResponseEntity.ok().headers(HeaderUtil.createAlert(<% if(enableTranslation) {%> "userManagement.deleted"<% } else { %> "A user is deleted with identifier " + login<% } %>, login)).build();
-    }<% if (searchEngine === 'elasticsearch') { %>
+    }<%_ } _%><% if (searchEngine === 'elasticsearch') { %>
 
     /**
      * SEARCH  /_search/users/:query : search for the User corresponding
