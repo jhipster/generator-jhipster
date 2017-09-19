@@ -28,7 +28,7 @@ if [ -f "mvnw" ]; then
         -Dlogging.level.io.github.jhipster.sample=ERROR \
         -Dlogging.level.io.github.jhipster.travis=ERROR
 elif [ -f "gradlew" ]; then
-    ./gradlew test \
+    ./gradlew check \
         -Dlogging.level.io.github.jhipster.sample=ERROR \
         -Dlogging.level.io.github.jhipster.travis=ERROR
 fi
