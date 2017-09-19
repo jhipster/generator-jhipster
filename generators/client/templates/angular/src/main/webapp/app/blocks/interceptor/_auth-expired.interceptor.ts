@@ -17,18 +17,18 @@
  limitations under the License.
 -%>
 import { JhiHttpInterceptor } from 'ng-jhipster';
+<%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { Injector } from '@angular/core';
-import { RequestOptionsArgs, Response } from '@angular/http';
-<%_ if (authenticationType === 'session') { _%>
-import { Router } from '@angular/router/router';
 <%_ } _%>
+import { RequestOptionsArgs, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { LoginService } from '../../shared/login/login.service';
-<%_ if (authenticationType === 'uaa') { _%>
+    <%_ if (authenticationType === 'uaa') { _%>
 import { Router } from '@angular/router';
+    <%_ } _%>
 <%_ } _%>
-<%_ } if (authenticationType === 'session') { _%>
+<%_ if (authenticationType === 'session') { _%>
 import { AuthServerProvider } from '../../shared/auth/auth-session.service';
 import { StateStorageService } from '../../shared/auth/state-storage.service';
 import { LoginModalService } from '../../shared/login/login-modal.service';
@@ -40,10 +40,12 @@ export class AuthExpiredInterceptor extends JhiHttpInterceptor {
     constructor(private injector: Injector) {
         super();
     }
-<%_ } if (authenticationType === 'session') { _%>
-    constructor(private injector: Injector,
+<%_ } _%>
+<%_ if (authenticationType === 'session') { _%>
+    constructor(
         private stateStorageService: StateStorageService,
-        private router: Router) {
+        private authServerProvider: AuthServerProvider,
+        private loginServiceModal: LoginModalService) {
         super();
     }
 <%_ } _%>
@@ -71,7 +73,6 @@ export class AuthExpiredInterceptor extends JhiHttpInterceptor {
     responseIntercept(observable: Observable<Response>): Observable<Response> {
         return <Observable<Response>> observable.catch((error) => {
             if (error.status === 401 && error.text() !== '' && error.json().path && error.json().path.indexOf('/api/account') === -1) {
-                const authServerProvider = this.injector.get(AuthServerProvider);
                 const destination = this.stateStorageService.getDestinationState();
                 if (destination !== null) {
                     const to = destination.destination;
@@ -82,10 +83,8 @@ export class AuthExpiredInterceptor extends JhiHttpInterceptor {
                 } else {
                     this.stateStorageService.storeUrl('/');
                 }
-                authServerProvider.logout();
-                const loginServiceModal = this.injector.get(LoginModalService);
-                loginServiceModal.open();
-
+                this.authServerProvider.logout();
+                this.loginServiceModal.open();
             }
             return Observable.throw(error);
         });
