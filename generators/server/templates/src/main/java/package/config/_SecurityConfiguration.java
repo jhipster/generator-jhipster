@@ -105,7 +105,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     public SecurityConfiguration(<%_ if (authenticationType !== 'oauth2') { _%>AuthenticationManagerBuilder authenticationManagerBuilder, UserDetailsService userDetailsService<%_ } _%><%_ if (authenticationType === 'session') { _%>,
         JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices<%_ } if (authenticationType === 'jwt') { _%>,
-            TokenProvider tokenProvider<%_ } _%><%_ if (clusteredHttpSession === 'hazelcast') { _%>, SessionRegistry sessionRegistry, <%_ } if (authenticationType !== 'oauth2') { %>,<%_ } _%>CorsFilter corsFilter) {
+            TokenProvider tokenProvider<%_ } _%><%_ if (clusteredHttpSession === 'hazelcast') { _%>, SessionRegistry sessionRegistry<%_ } if (authenticationType !== 'oauth2') { %>,<%_ } _%>CorsFilter corsFilter) {
         <%_ if (authenticationType !== 'oauth2') { _%>
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.userDetailsService = userDetailsService;
