@@ -18,12 +18,15 @@
 -%>
 version: '2'
 services:
-    keycloak:
-      image: danielpetisme/jhipster-keycloak:latest
-      environment:
-        - KEYCLOAK_USER=admin
-        - KEYCLOAK_PASSWORD=admin
-      ports:
-        - 9080:8080
-        - 8443:8443
-        - 9990:9990
+  keycloak:
+    image: <%= DOCKER_KEYCLOAK %>
+    command: ["-b", "0.0.0.0", "-Dkeycloak.migration.action=import", "-Dkeycloak.migration.provider=dir", "-Dkeycloak.migration.dir=/opt/jboss/keycloak/realm-config", "-Dkeycloak.migration.strategy=OVERWRITE_EXISTING"]
+    volumes:
+      - ./realm-config:/opt/jboss/keycloak/realm-config
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+    ports:
+      - 9080:8080
+      - 8443:8443
+      - 9990:9990

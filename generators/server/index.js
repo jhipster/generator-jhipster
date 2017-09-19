@@ -115,6 +115,7 @@ module.exports = class extends BaseGenerator {
                 this.DOCKER_ORACLE = constants.DOCKER_ORACLE;
                 this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
                 this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
+                this.DOCKER_KEYCLOAK = constants.DOCKER_KEYCLOAK;
                 this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
                 this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
                 this.DOCKER_SONAR = constants.DOCKER_SONAR;
