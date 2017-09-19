@@ -9,14 +9,14 @@ Developement Ribbon
 .ribbon {
     background-color: rgba(170, 0, 0, 0.5);
     left: -3.5em;
-    -moz-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    -o-transform: rotate(45deg);
-    -webkit-transform: rotate(45deg);
-    transform: rotate(45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
     overflow: hidden;
     position: absolute;
-    bottom: 30px;
+    top: 30px;
     white-space: nowrap;
     width: 15em;
     z-index: 99999;
