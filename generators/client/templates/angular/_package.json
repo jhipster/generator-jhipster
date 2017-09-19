@@ -92,7 +92,7 @@
     <%_ if (enableTranslation) { _%>
     "merge-jsons-webpack-plugin": "1.0.11",
     <%_ } _%>
-    "ngc-webpack": "3.1.1",
+    "ngc-webpack": "3.2.2",
     "phantomjs-prebuilt": "2.1.14",
     <%_ if (protractorTests) { _%>
     "protractor": "5.1.2",
@@ -109,7 +109,7 @@
     <%_ } _%>
     "tslint": "5.5.0",
     "tslint-loader": "3.5.3",
-    "typescript": "2.4.2",
+    "typescript": "2.5.2",
     <%_ if (useSass) { _%>
     "sass-loader": "6.0.6",
     "node-sass": "4.5.3",
@@ -122,8 +122,8 @@
     "<%= module.name %>": "<%= module.version %>",
     <%_ }); _%>
     "uglifyjs-webpack-plugin": "1.0.0-beta.2",
-    "webpack": "3.5.6",
-    "webpack-dev-server": "2.8.1",
+    "webpack": "3.6.0",
+    "webpack-dev-server": "2.8.2",
     "webpack-merge": "4.1.0",
     "webpack-notifier": "1.5.0",
     "webpack-visualizer-plugin": "0.1.11",

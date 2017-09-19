@@ -181,11 +181,11 @@ node {
     <%_ if (buildTool === 'maven') { _%>
 <%= gitLabIndent %>        sh "cp -R src/main/docker target/"
 <%= gitLabIndent %>        sh "cp target/*.war target/docker/"
-<%= gitLabIndent %>        dockerImage = docker.build('<%= baseName.toLowerCase() %>', 'target/docker')
+<%= gitLabIndent %>        dockerImage = docker.build('<%= dockerRegistryOrganizationName %>/<%= baseName.toLowerCase() %>', 'target/docker')
     <%_ } else if (buildTool === 'gradle' ) { _%>
 <%= gitLabIndent %>        sh "cp -R src/main/docker build/"
 <%= gitLabIndent %>        sh "cp build/libs/*.war build/docker/"
-<%= gitLabIndent %>        dockerImage = docker.build('<%= baseName.toLowerCase() %>', 'build/docker')
+<%= gitLabIndent %>        dockerImage = docker.build('<%= dockerRegistryOrganizationName %>/<%= baseName.toLowerCase() %>', 'build/docker')
     <%_ } _%>
 <%= gitLabIndent %>    }
 
