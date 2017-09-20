@@ -568,6 +568,10 @@ public class JHipsterProperties {
 
         private String defaultIncludePattern = "/api/.*";
 
+        private String host;
+
+        private String[] protocols;
+
         public String getTitle() {
             return title;
         }
@@ -646,6 +650,22 @@ public class JHipsterProperties {
 
         public void setDefaultIncludePattern(String defaultIncludePattern) {
             this.defaultIncludePattern = defaultIncludePattern;
+        }
+
+        public String getHost() {
+            return host;
+        }
+
+        public void setHost(final String host) {
+            this.host = host;
+        }
+
+        public String[] getProtocols() {
+            return protocols;
+        }
+
+        public void setProtocols(final String[] protocols) {
+            this.protocols = protocols;
         }
     }
 
