@@ -45,7 +45,7 @@ env:
     - JHIPSTER=app-ng2-infinispan
     - JHIPSTER=app-ng2-cassandra
     - JHIPSTER=app-ng2-mongodb
-    - JHIPSTER=app-ng2-oauth2
+    - JHIPSTER=app-ng2-oauth2 PROTRACTOR=1
     - JHIPSTER=app-mysql PROFILE=prod PROTRACTOR=1
     - JHIPSTER=app-gradle PROTRACTOR=1
     - JHIPSTER=app-hazelcast-cucumber
