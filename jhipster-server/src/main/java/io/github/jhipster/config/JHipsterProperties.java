@@ -570,7 +570,7 @@ public class JHipsterProperties {
 
         private String host;
 
-        private String[] protocols;
+        private String[] protocols = {};
 
         public String getTitle() {
             return title;

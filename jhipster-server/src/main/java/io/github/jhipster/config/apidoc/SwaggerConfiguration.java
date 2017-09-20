@@ -58,6 +58,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SwaggerConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(SwaggerConfiguration.class);
+
     private final JHipsterProperties jHipsterProperties;
 
     public SwaggerConfiguration(JHipsterProperties jHipsterProperties) {
@@ -89,12 +90,9 @@ public class SwaggerConfiguration {
             jHipsterProperties.getSwagger().getLicenseUrl(),
             new ArrayList<>());
 
-        String host = jHipsterProperties.getSwagger().getHost();
-        String[] protocols = jHipsterProperties.getSwagger().getProtocols();
-
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
-            .host(host)
-            .protocols(new HashSet<>(Arrays.asList(protocols)))
+            .host(jHipsterProperties.getSwagger().getHost())
+            .protocols(new HashSet<>(Arrays.asList(jHipsterProperties.getSwagger().getProtocols())))
             .apiInfo(apiInfo)
             .forCodeGeneration(true)
             .directModelSubstitute(java.nio.ByteBuffer.class, String.class)
