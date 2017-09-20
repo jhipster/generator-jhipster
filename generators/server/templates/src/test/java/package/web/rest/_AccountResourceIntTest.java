@@ -444,7 +444,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
 
         // Duplicate email - with uppercase email address
         final ManagedUserVM userWithUpperCaseEmail = new ManagedUserVM(validUser.getId(), "johnjr", validUser.getPassword(), validUser.getLogin(), validUser.getLastName(),
-                validUser.getEmail().toUpperCase(), true<% if (databaseType === 'mongodb' || databaseType === 'sql') { %>, validUser.getImageUrl()<% } %>, validUser.getLangKey()<% if (databaseType === 'mongodb' || databaseType === 'sql') { %>, validUser.getCreatedBy(), validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate()<% } %>, validUser.getAuthorities());
+                validUser.getEmail().toUpperCase(), true<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>, validUser.getImageUrl()<% } %>, validUser.getLangKey()<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>, validUser.getCreatedBy(), validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate()<% } %>, validUser.getAuthorities());
 
         restMvc.perform(
             post("/api/register")
