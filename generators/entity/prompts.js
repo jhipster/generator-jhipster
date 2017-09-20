@@ -477,7 +477,7 @@ function askForField(done) {
             message: 'What is the name of your field?'
         },
         {
-            when: response => response.fieldAdd === true && (skipServer || databaseType === 'sql' || databaseType === 'mongodb' || this.databaseType === 'couchbase'),
+            when: response => response.fieldAdd === true && (skipServer || databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase'),
             type: 'list',
             name: 'fieldType',
             message: 'What is the type of your field?',
