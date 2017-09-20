@@ -22,6 +22,8 @@ package io.github.jhipster.config.apidoc;
 import static springfox.documentation.builders.PathSelectors.regex;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,7 +89,12 @@ public class SwaggerConfiguration {
             jHipsterProperties.getSwagger().getLicenseUrl(),
             new ArrayList<>());
 
+        String host = jHipsterProperties.getSwagger().getHost();
+        String[] protocols = jHipsterProperties.getSwagger().getProtocols();
+
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
+            .host(host)
+            .protocols(new HashSet<>(Arrays.asList(protocols)))
             .apiInfo(apiInfo)
             .forCodeGeneration(true)
             .directModelSubstitute(java.nio.ByteBuffer.class, String.class)
@@ -112,10 +119,16 @@ public class SwaggerConfiguration {
     public Docket swaggerSpringfoxManagementDocket(@Value("${spring.application.name}") String appName,
         @Value("${management.context-path}") String managementContextPath,
         @Value("${info.project.version}") String appVersion) {
+
+        String host = jHipsterProperties.getSwagger().getHost();
+        String[] protocols = jHipsterProperties.getSwagger().getProtocols();
+
         return new Docket(DocumentationType.SWAGGER_2)
             .apiInfo(new ApiInfo(appName + " management API", "Management endpoints documentation",
                 appVersion, "", ApiInfo.DEFAULT_CONTACT, "", "", new ArrayList<VendorExtension>()))
             .groupName("management")
+            .host(host)
+            .protocols(new HashSet<>(Arrays.asList(protocols)))
             .forCodeGeneration(true)
             .directModelSubstitute(java.nio.ByteBuffer.class, String.class)
             .genericModelSubstitutes(ResponseEntity.class)
