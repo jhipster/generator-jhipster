@@ -115,7 +115,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
             filename: '../stats.html'
         }),
         new UglifyJSPlugin({
-            parallel: true,
+            parallel: false,
             uglifyOptions: {
                 ie8: false,
                 // sourceMap: true, // Enable source maps. Please note that this will slow down the build
