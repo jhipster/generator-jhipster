@@ -22,7 +22,8 @@
     ],
     "enableSocialSignIn": false,
     "testFrameworks": [
-      "gatling"
+      "gatling",
+      "protractor"
     ],
     "serverPort": "8080",
     "jhiPrefix": "jhi",
