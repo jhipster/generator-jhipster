@@ -48,7 +48,7 @@ currentAccount: any;
     constructor(
         private <%= entityInstance %>Service: <%= entityAngularName %>Service,
         private parseLinks: JhiParseLinks,
-        private alertService: JhiAlertService,
+        private jhiAlertService: JhiAlertService,
         private principal: Principal,
         private activatedRoute: ActivatedRoute,
         <%_ if (fieldsContainBlob) { _%>
