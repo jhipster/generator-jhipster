@@ -16,9 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-// Karma configuration
-// http://karma-runner.github.io/0.13/config/configuration-file.html
-
 var ChromiumRevision = require('puppeteer/package.json').puppeteer.chromium_revision;
 var Downloader = require('puppeteer/utils/ChromiumDownloader');
 var revisionInfo = Downloader.revisionInfo(Downloader.currentPlatform(), ChromiumRevision);

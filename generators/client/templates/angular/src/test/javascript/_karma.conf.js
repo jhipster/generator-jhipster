@@ -18,9 +18,9 @@
 -%>
 const webpackConfig = require('../../../webpack/webpack.test.js');
 
-var ChromiumRevision = require('puppeteer/package.json').puppeteer.chromium_revision;
-var Downloader = require('puppeteer/utils/ChromiumDownloader');
-var revisionInfo = Downloader.revisionInfo(Downloader.currentPlatform(), ChromiumRevision);
+const ChromiumRevision = require('puppeteer/package.json').puppeteer.chromium_revision;
+const Downloader = require('puppeteer/utils/ChromiumDownloader');
+const revisionInfo = Downloader.revisionInfo(Downloader.currentPlatform(), ChromiumRevision);
 process.env.CHROMIUM_BIN = revisionInfo.executablePath;
 
 const WATCH = process.argv.indexOf('--watch') > -1;
