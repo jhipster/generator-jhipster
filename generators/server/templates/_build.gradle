@@ -466,10 +466,6 @@ dependencies {
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 
-clean {
-    delete "target"
-}
-
 task cleanResources(type: Delete) {
     delete 'build/resources'
 }

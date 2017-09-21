@@ -59,10 +59,10 @@ gradle-build:
     stage: build
     script:
         - ./gradlew compileJava -x check -PnodeInstall --no-daemon
-gradle-test:
+gradle-check:
     stage: test
     script:
-        - ./gradlew test -PnodeInstall --no-daemon
+        - ./gradlew check -PnodeInstall --no-daemon
     artifacts:
         paths:
             - build/reports/tests/*
