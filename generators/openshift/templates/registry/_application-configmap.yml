@@ -74,12 +74,6 @@ objects:
                 secret: <%= jwtSecretKey %>
       # app specific configuration
       <%_ if (serviceDiscoveryType === 'eureka') {  _%>
-      <%= app.baseName.toLowerCase() %>.yml: |-
-        eureka:
-          client:
-            service-url:
-              # This must contain a list of all Eureka server replicas for registry HA to work correctly
-              defaultZone: http://admin:${jhipster.registry.password}@jhipster-registry:8761/eureka/
       jhipster-registry.yml: |-
         eureka:
           client:
