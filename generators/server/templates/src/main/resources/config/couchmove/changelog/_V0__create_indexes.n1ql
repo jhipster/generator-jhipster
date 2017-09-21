@@ -1,6 +1,7 @@
 -- create indexes
 CREATE INDEX type ON ${bucket}(`_class`)
     WITH { "defer_build" : true };
+<%_ if (!skipUserManagement) { _%>
 
 CREATE INDEX user_mail ON ${bucket}(email)
     WHERE `_class` = "<%=packageName%>.domain.User"
@@ -45,6 +46,7 @@ CREATE INDEX social_user ON ${bucket}(userId, providerId, providerUserId)
 CREATE INDEX social_provider ON ${bucket}(providerId, providerUserId)
     WHERE `_class` = "<%=packageName%>.domain.SocialUserConnectionRepository"
     WITH { "defer_build" : true };<% } %>
+<%_ } _%>
 
 -- build indexes asynchronously
-BUILD INDEX ON ${bucket}(type, user_mail, audit_event<% if (authenticationType === 'oauth2') { %>, client_details, authentication_approval, access_token_refresh, access_token_id, access_token_user<% } else if (authenticationType === 'session') { %>, token_login, token_date<% } %><% if (enableSocialSignIn) { %>, social_user, social_provider<% } %>);
+BUILD INDEX ON ${bucket}(type<% if (!skipUserManagement) { %>, user_mail, audit_event<% if (authenticationType === 'oauth2') { %>, client_details, authentication_approval, access_token_refresh, access_token_id, access_token_user<% } else if (authenticationType === 'session') { %>, token_login, token_date<% } %><% if (enableSocialSignIn) { %>, social_user, social_provider<% } %><% } %>);
