@@ -248,9 +248,9 @@ module.exports = HerokuGenerator.extend({
             if (this.prodDatabaseType === 'postgresql') {
                 dbAddOn = 'heroku-postgresql --as DATABASE';
             } else if (this.prodDatabaseType === 'mysql') {
-                dbAddOn = 'jawsdb:kitefin --as JAWSDB';
+                dbAddOn = 'jawsdb:kitefin --as DATABASE';
             } else if (this.prodDatabaseType === 'mariadb') {
-                dbAddOn = 'jawsdb-maria:kitefin --as JAWSDB';
+                dbAddOn = 'jawsdb-maria:kitefin --as DATABASE';
             } else if (this.prodDatabaseType === 'mongodb') {
                 dbAddOn = 'mongolab:sandbox --as MONGODB';
             } else {
@@ -258,7 +258,7 @@ module.exports = HerokuGenerator.extend({
             }
 
             this.log(chalk.bold('\nProvisioning addons'));
-            exec(`heroku addons:create ${dbAddOn} --as DATABASE --app ${this.herokuAppName}`, {}, (err, stdout, stderr) => {
+            exec(`heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`, {}, (err, stdout, stderr) => {
                 if (err) {
                     const verifyAccountUrl = 'https://heroku.com/verify';
                     if (_.includes(err, verifyAccountUrl)) {
