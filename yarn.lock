@@ -187,10 +187,6 @@ check-error@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/check-error/-/check-error-1.0.2.tgz#574d312edd88bb5dd8912e9286dd6c0aed4aac82"
 
-chevrotain@^0.32.1:
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/chevrotain/-/chevrotain-0.32.1.tgz#8815f85c3f1c01bbfea225b689a73c1e7cea0b8b"
-
 circular-json@^0.3.1:
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/circular-json/-/circular-json-0.3.3.tgz#815c99ea84f6809529d2f45791bdf82711352d66"
