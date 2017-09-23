@@ -42,7 +42,7 @@
     }
   ],
   "dependencies": {
-    "chevrotain": "^0.32.1",
+    "chevrotain": "0.32.1",
     "lodash": "4.17.4",
     "winston": "2.3.1"
   },
