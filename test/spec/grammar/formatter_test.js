@@ -3,7 +3,6 @@ const expect = require('chai').expect;
 const parse = require('../../../lib/dsl/poc/api').parse;
 const formatJDL = require('../../../lib/dsl/poc/formatter').formatJDL;
 
-
 describe('JDL Formatter poc', () => {
   it('can format a simple entity', () => {
     //                -->ERR<-- too many spaces between "entity" and "person"

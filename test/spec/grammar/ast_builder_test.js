@@ -3,8 +3,7 @@ const expect = require('chai').expect;
 const parse = require('../../../lib/dsl/poc/api').parse;
 const buildAst = require('../../../lib/dsl/poc/ast_builder').buildAst;
 
-
-describe('JDL AST Builder poc', () => {
+describe('ASTBuilder', () => {
   it('can build an ast for a simple entity', () => {
     const input = 'entity Person { name string }';
     const parseResult = parse(input);
