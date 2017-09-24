@@ -113,7 +113,8 @@ module.exports = CloudFoundryGenerator.extend({
                     {},
                     (err, stdout, stderr) => {
                         done();
-                    });
+                    }
+                );
                 child.stdout.on('data', (data) => {
                     this.log(data.toString());
                 });

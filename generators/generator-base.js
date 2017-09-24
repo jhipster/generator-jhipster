@@ -201,14 +201,12 @@ module.exports = class extends PrivateBase {
                     file: entityMenuPath,
                     needle: 'jhipster-needle-add-entity-to-menu',
                     splicable: [
-                        this.stripMargin(
-                            `|<li>
+                        this.stripMargin(`|<li>
                              |                        <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                              |                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                              |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${_.camelCase(routerName)}"` : ''}>${_.startCase(routerName)}</span>
                              |                        </a>
-                             |                    </li>`
-                        )
+                             |                    </li>`)
                     ]
                 }, this);
             }
@@ -251,9 +249,7 @@ module.exports = class extends PrivateBase {
                 file: entityModulePath,
                 needle: 'jhipster-needle-add-entity-module',
                 splicable: [
-                    this.stripMargin(
-                        `|${appName}${entityAngularName}Module,`
-                    )
+                    this.stripMargin(`|${appName}${entityAngularName}Module,`)
                 ]
             }, this);
         } catch (e) {
@@ -297,9 +293,7 @@ module.exports = class extends PrivateBase {
                 file: adminModulePath,
                 needle: 'jhipster-needle-add-admin-module',
                 splicable: [
-                    this.stripMargin(
-                        `|${appName}${adminAngularName}Module,`
-                    )
+                    this.stripMargin(`|${appName}${adminAngularName}Module,`)
                 ]
             }, this);
         } catch (e) {
@@ -692,9 +686,7 @@ module.exports = class extends PrivateBase {
                 file: modulePath,
                 needle: 'jhipster-needle-angular-add-module',
                 splicable: [
-                    this.stripMargin(
-                        `|${appName}${angularName}Module,`
-                    )
+                    this.stripMargin(`|${appName}${angularName}Module,`)
                 ]
             }, this);
         } catch (e) {
@@ -1270,7 +1262,7 @@ module.exports = class extends PrivateBase {
         const _this = generator || this;
         let regex;
         switch (action) {
-        case 'stripHtml' :
+        case 'stripHtml':
             regex = new RegExp([
                 /( (data-t|jhiT)ranslate="([a-zA-Z0-9 +{}'_](\.)?)+")/, // data-translate or jhiTranslate
                 /( translate(-v|V)alues="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|-|'|\s|\.|_)*?\}")/, // translate-values or translateValues
@@ -1280,7 +1272,7 @@ module.exports = class extends PrivateBase {
 
             jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, opt, template);
             break;
-        case 'stripJs' :
+        case 'stripJs':
             regex = new RegExp([
                 /(,[\s]*(resolve):[\s]*[{][\s]*(translatePartialLoader)['a-zA-Z0-9$,(){.<%=\->;\s:[\]]*(;[\s]*\}\][\s]*\}))/, // ng1 resolve block
                 /([\s]import\s\{\s?JhiLanguageService\s?\}\sfrom\s["|']ng-jhipster["|'];)/, // ng2 import jhiLanguageService
@@ -1291,7 +1283,7 @@ module.exports = class extends PrivateBase {
 
             jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, opt, template);
             break;
-        case 'copy' :
+        case 'copy':
             _this.copy(source, dest);
             break;
         default:
@@ -1519,9 +1511,7 @@ module.exports = class extends PrivateBase {
             return entities;
         }
 
-        return shelljs.ls(
-            path.join(JHIPSTER_CONFIG_DIR, '*.json')
-        ).reduce((acc, file) => {
+        return shelljs.ls(path.join(JHIPSTER_CONFIG_DIR, '*.json')).reduce((acc, file) => {
             try {
                 const definition = jhiCore.readEntityJSON(file);
                 acc.push({ name: path.basename(file, '.json'), definition });
@@ -1727,7 +1717,8 @@ module.exports = class extends PrivateBase {
             if (javaHome) {
                 keytoolPath = `${javaHome}/bin/`;
             }
-            shelljs.exec(`"${keytoolPath}keytool" -genkey -noprompt ` +
+            shelljs.exec(
+                `"${keytoolPath}keytool" -genkey -noprompt ` +
                 '-keyalg RSA ' +
                 '-alias selfsigned ' +
                 `-keystore ${keyStoreFile} ` +
@@ -1736,12 +1727,13 @@ module.exports = class extends PrivateBase {
                 '-keysize 2048 ' +
                 `-dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`
                 , (code) => {
-                if (code !== 0) {
-                    this.error('\nFailed to create a KeyStore with \'keytool\'', code);
-                } else {
-                    this.log(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
+                    if (code !== 0) {
+                        this.error('\nFailed to create a KeyStore with \'keytool\'', code);
+                    } else {
+                        this.log(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
+                    }
                 }
-            });
+            );
         }
     }
 
@@ -1770,10 +1762,8 @@ module.exports = class extends PrivateBase {
             const done = this.async();
             shelljs.exec(`npm show ${GENERATOR_JHIPSTER} version`, { silent: true }, (code, stdout, stderr) => {
                 if (!stderr && semver.lt(packagejs.version, stdout)) {
-                    this.log(
-                        `${chalk.yellow(' ______________________________________________________________________________\n\n') +
-                        chalk.yellow('  JHipster update available: ') + chalk.green.bold(stdout.replace('\n', '')) + chalk.gray(` (current: ${packagejs.version})`)}\n`
-                    );
+                    this.log(`${chalk.yellow(' ______________________________________________________________________________\n\n') +
+                        chalk.yellow('  JHipster update available: ') + chalk.green.bold(stdout.replace('\n', '')) + chalk.gray(` (current: ${packagejs.version})`)}\n`);
                     if (this.useYarn) {
                         this.log(chalk.yellow(`  Run ${chalk.magenta(`yarn global upgrade ${GENERATOR_JHIPSTER}`)} to update.\n`));
                     } else {

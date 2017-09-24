@@ -89,7 +89,9 @@ const SQL_DB_OPTIONS = [
 ];
 
 const LANGUAGES = [
-    { name: 'Arabic (Libya)', dispName: 'العربية', value: 'ar-ly', rtl: true, skipForLocale: true },
+    {
+        name: 'Arabic (Libya)', dispName: 'العربية', value: 'ar-ly', rtl: true, skipForLocale: true
+    },
     { name: 'Armenian', dispName: 'Հայերեն', value: 'hy' },
     { name: 'Catalan', dispName: 'Català', value: 'ca' },
     { name: 'Chinese (Simplified)', dispName: '中文（简体）', value: 'zh-cn' },
@@ -99,7 +101,9 @@ const LANGUAGES = [
     { name: 'Dutch', dispName: 'Nederlands', value: 'nl' },
     { name: 'English', dispName: 'English', value: 'en' },
     { name: 'Estonian', dispName: 'Eesti', value: 'et' },
-    { name: 'Farsi', dispName: 'فارسی', value: 'fa', rtl: true },
+    {
+        name: 'Farsi', dispName: 'فارسی', value: 'fa', rtl: true
+    },
     { name: 'French', dispName: 'Français', value: 'fr' },
     { name: 'Galician', dispName: 'Galego', value: 'gl' },
     { name: 'German', dispName: 'Deutsch', value: 'de' },

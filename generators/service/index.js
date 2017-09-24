@@ -74,12 +74,16 @@ module.exports = ServiceGenerator.extend({
         this.serviceClass = _.upperFirst(this.name);
         this.serviceInstance = _.lowerCase(this.name);
 
-        this.template(`${SERVER_MAIN_SRC_DIR}package/service/_Service.java`,
-            `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/${this.serviceClass}Service.java`);
+        this.template(
+            `${SERVER_MAIN_SRC_DIR}package/service/_Service.java`,
+            `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/${this.serviceClass}Service.java`
+        );
 
         if (this.useInterface) {
-            this.template(`${SERVER_MAIN_SRC_DIR}package/service/impl/_ServiceImpl.java`,
-                `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/impl/${this.serviceClass}ServiceImpl.java`);
+            this.template(
+                `${SERVER_MAIN_SRC_DIR}package/service/impl/_ServiceImpl.java`,
+                `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/impl/${this.serviceClass}ServiceImpl.java`
+            );
         }
     }
 

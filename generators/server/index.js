@@ -427,11 +427,9 @@ module.exports = JhipsterServerGenerator.extend({
     end() {
         if (this.prodDatabaseType === 'oracle') {
             this.log('\n\n');
-            this.warning(
-                `${chalk.yellow.bold('You have selected Oracle database.\n')
-                }Please follow our documentation on using Oracle to set up the \n` +
-                'Oracle proprietary JDBC driver.'
-            );
+            this.warning(`${chalk.yellow.bold('You have selected Oracle database.\n')
+            }Please follow our documentation on using Oracle to set up the \n` +
+                'Oracle proprietary JDBC driver.');
         }
         this.log(chalk.green.bold('\nServer application generated successfully.\n'));
 

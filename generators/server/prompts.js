@@ -198,9 +198,7 @@ function askForServerSideOpts(meta) {
             when: response => response.authenticationType === 'oauth2' && !response.databaseType,
             type: 'list',
             name: 'databaseType',
-            message: response => this.getNumberedQuestion(
-                'Which *type* of database would you like to use?', response.authenticationType === 'oauth2' && !response.databaseType
-            ),
+            message: response => this.getNumberedQuestion('Which *type* of database would you like to use?', response.authenticationType === 'oauth2' && !response.databaseType),
             choices: [
                 {
                     value: 'sql',
@@ -270,9 +268,7 @@ function askForServerSideOpts(meta) {
             when: response => (response.databaseType === 'sql' && response.prodDatabaseType === 'mariadb'),
             type: 'list',
             name: 'devDatabaseType',
-            message: response => this.getNumberedQuestion(
-                'Which *development* database would you like to use?', response.databaseType === 'sql' && response.prodDatabaseType === 'mariadb'
-            ),
+            message: response => this.getNumberedQuestion('Which *development* database would you like to use?', response.databaseType === 'sql' && response.prodDatabaseType === 'mariadb'),
             choices: [
                 {
                     value: 'h2Disk',
@@ -476,50 +472,38 @@ function askForOptionalItems(meta) {
     const choices = [];
     const defaultChoice = [];
     if (this.databaseType !== 'cassandra' && applicationType === 'monolith' && (this.authenticationType === 'session' || this.authenticationType === 'jwt')) {
-        choices.push(
-            {
-                name: 'Social login (Google, Facebook, Twitter)',
-                value: 'enableSocialSignIn:true'
-            }
-        );
+        choices.push({
+            name: 'Social login (Google, Facebook, Twitter)',
+            value: 'enableSocialSignIn:true'
+        });
     }
     if (this.databaseType === 'sql') {
-        choices.push(
-            {
-                name: 'Search engine using Elasticsearch',
-                value: 'searchEngine:elasticsearch'
-            }
-        );
+        choices.push({
+            name: 'Search engine using Elasticsearch',
+            value: 'searchEngine:elasticsearch'
+        });
     }
     if ((applicationType === 'monolith' || applicationType === 'gateway') &&
             (this.hibernateCache === 'no' || this.hibernateCache === 'hazelcast')) {
-        choices.push(
-            {
-                name: 'Clustered HTTP sessions using Hazelcast',
-                value: 'clusteredHttpSession:hazelcast'
-            }
-        );
+        choices.push({
+            name: 'Clustered HTTP sessions using Hazelcast',
+            value: 'clusteredHttpSession:hazelcast'
+        });
     }
     if (applicationType === 'monolith' || applicationType === 'gateway') {
-        choices.push(
-            {
-                name: 'WebSockets using Spring Websocket',
-                value: 'websocket:spring-websocket'
-            }
-        );
+        choices.push({
+            name: 'WebSockets using Spring Websocket',
+            value: 'websocket:spring-websocket'
+        });
     }
-    choices.push(
-        {
-            name: 'API first development using swagger-codegen',
-            value: 'enableSwaggerCodegen:true'
-        }
-    );
-    choices.push(
-        {
-            name: '[BETA] Asynchronous messages using Apache Kafka',
-            value: 'messageBroker:kafka'
-        }
-    );
+    choices.push({
+        name: 'API first development using swagger-codegen',
+        value: 'enableSwaggerCodegen:true'
+    });
+    choices.push({
+        name: '[BETA] Asynchronous messages using Apache Kafka',
+        value: 'messageBroker:kafka'
+    });
 
     const PROMPTS = {
         type: 'checkbox',

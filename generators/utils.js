@@ -115,10 +115,10 @@ function copyWebResource(source, dest, regex, type, generator, opt = {}, templat
         renderContent(source, generator, generator, opt, (body) => {
             body = body.replace(regex, '');
             switch (type) {
-            case 'html' :
+            case 'html':
                 body = replacePlaceholders(body, generator);
                 break;
-            case 'js' :
+            case 'js':
                 body = replaceTitle(body, generator);
                 break;
             default:

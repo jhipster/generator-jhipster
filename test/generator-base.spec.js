@@ -57,17 +57,13 @@ describe('Generator Base', () => {
                 };
                 jhiCore.exportToJSON(entities, true);
                 BaseGenerator.getExistingEntities();
-                entities.Region.fields.push(
-                    { fieldName: 'regionDesc', fieldType: 'String' });
+                entities.Region.fields.push({ fieldName: 'regionDesc', fieldType: 'String' });
                 jhiCore.exportToJSON(entities, true);
             });
             it('returns an up-to-date state', () => {
                 expect(BaseGenerator.getExistingEntities()
                     .find(it => it.name === 'Region')
-                    .definition.fields[1]
-                ).to.eql(
-                    { fieldName: 'regionDesc', fieldType: 'String' }
-                );
+                    .definition.fields[1]).to.eql({ fieldName: 'regionDesc', fieldType: 'String' });
             });
         });
     });
