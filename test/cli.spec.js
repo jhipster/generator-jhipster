@@ -48,9 +48,9 @@ describe('jhipster cli test', () => {
         out.stdout.on('data', (data) => {
             expect(data).to.not.be.null;
             expect(data.includes('Using JHipster version installed globally') ||
-                data.inclues('Running default command') ||
+                data.includes('Running default command') ||
                 data.includes('Executing jhipster:app')).to.be.true;
-            if (count === 2) done();
+            if (count > 1) done();
             count++;
         });
         out.stderr.on('data', (data) => {
