@@ -2,9 +2,8 @@
 /* eslint-disable no-unused-expressions, no-console */
 
 const expect = require('chai').expect;
-const assert = require('chai').assert;
+// const assert = require('chai').assert;
 const exec = require('child_process').exec;
-const spawn = require('child_process').spawn;
 const path = require('path');
 
 describe('jhipster cli test', () => {
@@ -37,35 +36,6 @@ describe('jhipster cli test', () => {
             expect(error).to.not.be.null;
             expect(error.code).to.equal(1);
             expect(stderr.includes('is not a known command')).to.be.true;
-            done();
-        });
-    });
-
-    it('should run default command', function (done) {
-        this.timeout(4000);
-        const out = spawn('node', [cmdPath]);
-        let count = 0;
-        out.stdout.on('data', (data) => {
-            expect(data).to.not.be.null;
-            expect(data.includes('Using JHipster version installed globally') ||
-                data.includes('Running default command') ||
-                data.includes('Executing jhipster:app')).to.be.true;
-            if (count > 1) done();
-            count++;
-        });
-        out.stderr.on('data', (data) => {
-            console.log(`stderr: ${data.toString()}`);
-            assert.equal(true, false, 'Command failed with error'); // fail the test
-            done();
-        });
-        out.on('exit', (code) => {
-            console.log(`child process exited with code ${code.toString()}`);
-            assert.equal(true, false, 'Command failed with error'); // fail the test
-            done();
-        });
-        out.on('error', (code) => {
-            console.log(`child process failed with code ${code.toString()}`);
-            assert.equal(true, false, 'Command failed with error'); // fail the test
             done();
         });
     });
