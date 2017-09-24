@@ -17,7 +17,7 @@ const AwsFactory = module.exports = function AwsFactory(generatorRef, cb) {
         if (generator.config.get('clientPackageManager') === 'npm') {
             installCommand = 'npm install aws-sdk progress uuid --prefix node_modules/generator-jhipster';
         }
-        shelljs.exec(installCommand, { silent: true }, (code, msg, err) => {
+        shelljs.exec(installCommand, { silent: false }, (code, msg, err) => {
             if (code !== 0) generator.error(`Something went wrong while installing:\n${err}`);
             Aws = require('aws-sdk'); // eslint-disable-line
             cb();
