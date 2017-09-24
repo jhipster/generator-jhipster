@@ -83,7 +83,9 @@ export class LoginService {
     <%_ } _%>
 
     logout() {
-        this.authServerProvider.logout().subscribe();
+        if (this.principal.isAuthenticated()) {
+            this.authServerProvider.logout().subscribe();
+        }
         this.principal.authenticate(null);
     }
 }

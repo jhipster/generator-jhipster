@@ -18,6 +18,11 @@
 -%>
 const webpackConfig = require('../../../webpack/webpack.test.js');
 
+const ChromiumRevision = require('puppeteer/package.json').puppeteer.chromium_revision;
+const Downloader = require('puppeteer/utils/ChromiumDownloader');
+const revisionInfo = Downloader.revisionInfo(Downloader.currentPlatform(), ChromiumRevision);
+process.env.CHROMIUM_BIN = revisionInfo.executablePath;
+
 const WATCH = process.argv.indexOf('--watch') > -1;
 
 module.exports = (config) => {
@@ -64,6 +69,7 @@ module.exports = (config) => {
 
         remapIstanbulReporter: {
             reports: { // eslint-disable-line
+                'lcovonly': '<%= BUILD_DIR %>test-results/coverage/report-lcov/lcov.info',
                 'html': '<%= BUILD_DIR %>test-results/coverage',
                 'text-summary': null
             }
@@ -84,7 +90,7 @@ module.exports = (config) => {
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['PhantomJS'],
+        browsers: ['ChromiumHeadless'],
 
         // Ensure all browsers can run tests written in .ts files
         mime: {

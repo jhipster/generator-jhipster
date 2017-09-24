@@ -33,7 +33,7 @@ _%>
 
     constructor(
         private <%= entityInstance %>Service: <%= entityAngularName %>Service,
-        private alertService: JhiAlertService,
+        private jhiAlertService: JhiAlertService,
         <%_ if (fieldsContainBlob) { _%>
         private dataUtils: JhiDataUtils,
         <%_ } _%>

@@ -17,9 +17,6 @@
  limitations under the License.
 -%>
 import './vendor.ts';
-<%_ if (authenticationType === 'uaa') { _%>
-import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
-<%_ } %>
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { Ng2Webstorage } from 'ng2-webstorage';

@@ -50,6 +50,9 @@ describe('Service Tests', function () {
             spyOn(spiedAuthServerProvider, 'logout').and.callThrough();
 
             //WHEN
+            <%_ if (authenticationType === 'uaa') { _%>
+            $httpBackend.expectPOST('/auth/logout').respond();
+            <%_ } _%>
             authService.logout();
             //flush the backend to "execute" the request to do the expectedGET assertion.
             $httpBackend.flush();
