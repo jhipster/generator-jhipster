@@ -61,7 +61,7 @@
     "shelljs": "0.7.8",
     "tabtab": "2.2.2",
     "yeoman-environment": "2.0.3",
-    "yeoman-generator": "1.1.1"
+    "yeoman-generator": "2.0.0"
   },
   "devDependencies": {
     "chai": "4.1.2",
