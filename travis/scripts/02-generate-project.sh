@@ -24,6 +24,5 @@ fi
 mkdir -p "$APP_FOLDER"
 cp -f "$JHIPSTER_SAMPLES"/"$JHIPSTER"/.yo-rc.json "$APP_FOLDER"/
 cd "$APP_FOLDER"
-yarn link generator-jhipster
 jhipster --force --no-insight --skip-checks --with-entities
 ls -al "$APP_FOLDER"

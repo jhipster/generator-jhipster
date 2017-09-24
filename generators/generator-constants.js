@@ -47,9 +47,9 @@ const DOCKER_SWAGGER_EDITOR = 'swaggerapi/swagger-editor:latest';
 const DOCKER_COMPOSE_FORMAT_VERSION = '2';
 
 // version of Node, Yarn, NPM
-const NODE_VERSION = '6.11.1';
-const YARN_VERSION = '0.27.5';
-const NPM_VERSION = '5.3.0';
+const NODE_VERSION = '6.11.3';
+const YARN_VERSION = '1.1.0';
+const NPM_VERSION = '5.4.2';
 
 // all constants used throughout all generators
 
