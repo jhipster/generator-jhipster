@@ -16,9 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const util = require('util');
 const os = require('os');
-const generator = require('yeoman-generator');
 const childProcess = require('child_process');
 const chalk = require('chalk');
 const glob = require('glob');
@@ -28,10 +26,6 @@ const BaseGenerator = require('../generator-base');
 const constants = require('../generator-constants');
 
 const exec = childProcess.exec;
-
-const CloudFoundryGenerator = generator.extend({});
-
-util.inherits(CloudFoundryGenerator, BaseGenerator);
 
 module.exports = class extends BaseGenerator {
     initializing() {
