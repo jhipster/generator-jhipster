@@ -91,9 +91,8 @@ public class ExceptionTranslatorIntTest <% if (databaseType === 'cassandra') { %
              .andExpect(status().isBadRequest())
              .andExpect(content().contentType(MediaTypes.PROBLEM))
              .andExpect(jsonPath("$.message").value(ErrorConstants.ERR_VALIDATION))
-             .andExpect(jsonPath("$.fieldErrors.[0].objectName").value("testDTO"))
-             .andExpect(jsonPath("$.fieldErrors.[0].field").value("test"))
-             .andExpect(jsonPath("$.fieldErrors.[0].message").value("NotNull"));
+             .andExpect(jsonPath("$.violations.[0].field").value("test"))
+             .andExpect(jsonPath("$.violations.[0].message").value("may not be null"));
     }
 
     @Test
