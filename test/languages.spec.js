@@ -53,12 +53,18 @@ describe('JHipster generator languages', () => {
                     ]);
                 });
                 it('contains 3 needles in global.json', () => {
-                    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/global.json`,
-                        '"jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)"');
-                    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/global.json`,
-                        '"jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"');
-                    assert.fileContent(`${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/global.json`,
-                        '"jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"');
+                    assert.fileContent(
+                        `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/global.json`,
+                        '"jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)"'
+                    );
+                    assert.fileContent(
+                        `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/global.json`,
+                        '"jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"'
+                    );
+                    assert.fileContent(
+                        `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/global.json`,
+                        '"jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"'
+                    );
                 });
             });
         });

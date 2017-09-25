@@ -236,11 +236,10 @@ function askForConsoleOptions() {
         default: this.monitoring
     }];
     if (this.composeApplicationType === 'microservice') {
-        prompts[0].choices.push(
-            {
-                value: 'zipkin',
-                name: 'Zipkin, for distributed tracing (only compatible with JHipster >= v4.2.0)'
-            });
+        prompts[0].choices.push({
+            value: 'zipkin',
+            name: 'Zipkin, for distributed tracing (only compatible with JHipster >= v4.2.0)'
+        });
     }
     this.prompt(prompts).then((props) => {
         this.consoleOptions = props.consoleOptions;
@@ -324,7 +323,7 @@ function askForAdminPassword() {
 
     this.prompt(prompts).then((props) => {
         this.adminPassword = props.adminPassword;
-        this.adminPasswordBase64 = new Buffer(this.adminPassword).toString('base64');
+        this.adminPasswordBase64 = Buffer.from(this.adminPassword).toString('base64');
         done();
     });
 }

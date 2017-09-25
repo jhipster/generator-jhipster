@@ -156,7 +156,7 @@ function writeFiles() {
                 this.copy('gradle/wrapper/gradle-wrapper.properties', 'gradle/wrapper/gradle-wrapper.properties');
                 break;
             case 'maven':
-            default :
+            default:
                 this.copy('mvnw', 'mvnw');
                 this.copy('mvnw.cmd', 'mvnw.cmd');
                 this.copy('.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.jar');

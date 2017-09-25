@@ -78,7 +78,7 @@ const initHelp = (program, cliName) => {
         logger.info('');
     });
 
-    program.on('*', (name) => {
+    program.on('command:*', (name) => {
         logger.error(`${chalk.yellow(name)} is not a known command. See '${chalk.white(`${cliName} --help`)}'.`);
 
         const d = didYouMean(name.toString(), program.commands, '_name');

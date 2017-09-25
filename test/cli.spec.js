@@ -1,13 +1,19 @@
 /* global describe, it */
-/* eslint-disable no-unused-expressions */
+/* eslint-disable no-unused-expressions, no-console */
 
 const expect = require('chai').expect;
+// const assert = require('chai').assert;
 const exec = require('child_process').exec;
 const path = require('path');
 
 describe('jhipster cli test', () => {
-    const cmd = `node ${path.join(__dirname, '../cli/jhipster')} `;
-    console.log(cmd); // eslint-disable-line
+    const cmdPath = path.join(__dirname, '../cli/jhipster');
+    const cmd = `node ${cmdPath} `;
+    console.log(cmd);
+
+    it('verify correct cmd format', () => {
+        expect(cmd).to.match(/node \/(.*)generator-jhipster\/cli\/jhipster/g);
+    });
 
     it('--help should run without errors', (done) => {
         exec(`${cmd} --help`, (error, stdout, stderr) => {
