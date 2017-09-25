@@ -50,10 +50,13 @@ import org.springframework.security.data.repository.query.SecurityEvaluationCont
 <%_ if (authenticationType === 'session') { _%>
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfFilter;
 <%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
+<%_ } _%>
+<%_ if (authenticationType === 'jwt') { _%>
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 <%_ } _%>
 
 import javax.annotation.PostConstruct;
@@ -178,8 +181,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
         .and()
             <%_ } _%>
-            <%_ if (authenticationType !== 'oauth2') { _%>
+            <%_ if (authenticationType === 'jwt') { _%>
             .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
+            <% } else if (authenticationType === 'session') { %>
+            .addFilterBefore(corsFilter, CsrfFilter.class)
             <%_ } _%>
             .exceptionHandling()
             .authenticationEntryPoint(http401UnauthorizedEntryPoint())<% if (authenticationType === 'session') { %>
