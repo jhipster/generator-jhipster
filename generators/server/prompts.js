@@ -189,7 +189,7 @@ function askForServerSideOpts(meta) {
                 },
                 {
                     value: 'couchbase',
-                    name: 'Couchbase'
+                    name: '[BETA] Couchbase'
                 },
                 {
                     value: 'cassandra',
@@ -214,7 +214,7 @@ function askForServerSideOpts(meta) {
                 },
                 {
                     value: 'couchbase',
-                    name: 'Couchbase'
+                    name: '[BETA] Couchbase'
                 }
             ],
             default: 0
@@ -235,7 +235,7 @@ function askForServerSideOpts(meta) {
                 },
                 {
                     value: 'couchbase',
-                    name: 'Couchbase'
+                    name: '[BETA] Couchbase'
                 },
                 {
                     value: 'cassandra',
