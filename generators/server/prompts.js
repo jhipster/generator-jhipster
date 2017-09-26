@@ -123,7 +123,7 @@ function askForServerSideOpts(meta) {
                 },
                 {
                     value: 'oauth2',
-                    name: 'OAuth2 Authentication (stateless, with an OAuth2 server implementation)'
+                    name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)'
                 }
             ],
             default: 0

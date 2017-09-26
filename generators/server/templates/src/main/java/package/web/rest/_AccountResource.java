@@ -23,33 +23,58 @@ import com.codahale.metrics.annotation.Timed;
 <%_ if (authenticationType === 'session') { _%>
 import <%=packageName%>.domain.PersistentToken;
 <%_ } _%>
+<%_ if (authenticationType === 'oauth2') { _%>
+import <%=packageName%>.domain.Authority;
+<%_ } _%>
 import <%=packageName%>.domain.User;
 <%_ if (authenticationType === 'session') { _%>
 import <%=packageName%>.repository.PersistentTokenRepository;
 <%_ } _%>
 import <%=packageName%>.repository.UserRepository;
+<%_ if (authenticationType !== 'oauth2') { _%>
 import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.MailService;
+<%_ } _%>
 import <%=packageName%>.service.UserService;
 import <%=packageName%>.service.dto.UserDTO;
+<%_ if (authenticationType !== 'oauth2') { _%>
 import <%=packageName%>.web.rest.vm.KeyAndPasswordVM;
 import <%=packageName%>.web.rest.vm.ManagedUserVM;
 import <%=packageName%>.web.rest.util.HeaderUtil;
 
 import org.apache.commons.lang3.StringUtils;
+<%_ } _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+<%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.http.HttpHeaders;
+<%_ } _%>
 import org.springframework.http.HttpStatus;
+<%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.http.MediaType;
+<%_ } _%>
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+<%_ if (authenticationType === 'oauth2') { _%>
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+<%_ } _%>
 import javax.servlet.http.HttpServletRequest;
+<%_ if (authenticationType !== 'oauth2') { _%>
 import javax.validation.Valid;
+<%_ } _%>
 <%_ if (authenticationType === 'session') { _%>
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+<%_ } _%>
+<%_ if (authenticationType === 'oauth2') { _%>
+import java.security.Principal;
+import java.time.Instant;
+import java.util.stream.Collectors;
 <%_ } _%>
 import java.util.*;
 
@@ -65,26 +90,141 @@ public class AccountResource {
     private final UserRepository userRepository;
 
     private final UserService userService;
-
+    <%_ if (authenticationType !== 'oauth2') { _%>
     private final MailService mailService;
+    <%_ } _%>
     <%_ if (authenticationType === 'session') { _%>
 
     private final PersistentTokenRepository persistentTokenRepository;
     <%_ } _%>
-
+    <%_ if (authenticationType !== 'oauth2') { _%>
     private static final String CHECK_ERROR_MESSAGE = "Incorrect password";
-
+    <%_ } _%>
     public AccountResource(UserRepository userRepository, UserService userService,
-            MailService mailService<% if (authenticationType === 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>) {
+            <%_ if (authenticationType !== 'oauth2') { _%>MailService mailService<%_ } _%><% if (authenticationType === 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>) {
 
         this.userRepository = userRepository;
         this.userService = userService;
+        <%_ if (authenticationType !== 'oauth2') { _%>
         this.mailService = mailService;
+        <%_ } _%>
         <%_ if (authenticationType === 'session') { _%>
         this.persistentTokenRepository = persistentTokenRepository;
         <%_ } _%>
     }
+<% if (authenticationType === 'oauth2') { %>
+    @SuppressWarnings("unchecked")
+    public ResponseEntity<UserDTO> getAccount(Principal principal) {
+        if (principal != null) {
+            if (principal instanceof OAuth2Authentication) {
+                OAuth2Authentication authentication = (OAuth2Authentication) principal;
+                LinkedHashMap<String, Object> details = (LinkedHashMap) authentication.getUserAuthentication().getDetails();
 
+                User user = new User();
+                user.setLogin(details.get("preferred_username").toString());
+
+                if (details.get("given_name") != null) {
+                    user.setFirstName((String) details.get("given_name"));
+                }
+                if (details.get("family_name") != null) {
+                    user.setFirstName((String) details.get("family_name"));
+                }
+                if (details.get("email_verified") != null) {
+                    user.setActivated((Boolean) details.get("email_verified"));
+                }
+                if (details.get("email") != null) {
+                    user.setEmail((String) details.get("email"));
+                }
+                if (details.get("locale") != null) {
+                    String locale = (String) details.get("locale");
+                    String langKey = locale.substring(0, locale.indexOf("-"));
+                    user.setLangKey(langKey);
+                }
+
+                Set<Authority> userAuthorities;
+
+                // get roles from details
+                if (details.get("roles") != null) {
+                    List<String> roles = (List) details.get("roles");
+                    userAuthorities = roles.stream()
+                        .filter(role -> role.startsWith("ROLE_"))
+                        .map(role -> {
+                            Authority userAuthority = new Authority();
+                            userAuthority.setName(role);
+                            return userAuthority;
+                        })
+                        .collect(Collectors.toSet());
+                    // if roles don't exist, try groups
+                } else if (details.get("groups") != null) {
+                    List<String> groups = (List) details.get("groups");
+                    userAuthorities = groups.stream()
+                        .filter(group -> group.startsWith("ROLE_"))
+                        .map(group -> {
+                            Authority userAuthority = new Authority();
+                            userAuthority.setName(group);
+                            return userAuthority;
+                        })
+                        .collect(Collectors.toSet());
+                } else {
+                    userAuthorities = authentication.getAuthorities().stream()
+                        .map(role -> {
+                            Authority userAuthority = new Authority();
+                            userAuthority.setName(role.getAuthority());
+                            return userAuthority;
+                        })
+                        .collect(Collectors.toSet());
+                }
+
+                user.setAuthorities(userAuthorities);
+                UserDTO userDTO = new UserDTO(user);
+
+                // convert Authorities to GrantedAuthorities
+                Set<GrantedAuthority> grantedAuthorities = new LinkedHashSet<>();
+                userAuthorities.forEach(authority -> {
+                    grantedAuthorities.add(new SimpleGrantedAuthority(authority.getName()));
+                });
+
+                // Update Spring Security Authorities to match groups claim from IdP
+                UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+                    principal, "N/A", grantedAuthorities);
+                token.setDetails(details);
+                authentication = new OAuth2Authentication(authentication.getOAuth2Request(), token);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                // save account in to sync users between IdP and JHipster's local database
+                Optional<User> existingUser = userRepository.findOneByLogin(userDTO.getLogin());
+                if (existingUser.isPresent()) {
+                    // if IdP sends last updated information, use it to determine if an update should happen
+                    if (details.get("updated_at") != null) {
+                        Instant dbModifiedDate = existingUser.get().getLastModifiedDate();
+                        Instant idpModifiedDate = new Date(Long.valueOf((Integer) details.get("updated_at"))).toInstant();
+                        if (idpModifiedDate.isAfter(dbModifiedDate)) {
+                            log.debug("Updating user '{}' in local database...", userDTO.getLogin());
+                            userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
+                                userDTO.getLangKey(), userDTO.getImageUrl());
+                        }
+                        // no last updated info, blindly update
+                    } else {
+                        log.debug("Updating user '{}' in local database...", userDTO.getLogin());
+                        userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
+                            userDTO.getLangKey(), userDTO.getImageUrl());
+                    }
+                } else {
+                    log.debug("Saving user '{}' in local database...", userDTO.getLogin());
+                    userRepository.save(user);
+                }
+                return new ResponseEntity<>(userDTO, HttpStatus.OK);
+            } else {
+                // Allow Spring Security Test to be used to mock users in the database
+                return Optional.ofNullable(userService.getUserWithAuthorities())
+                    .map(user -> new ResponseEntity<>(new UserDTO(user), HttpStatus.OK))
+                    .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+<%_ } else { _%>
     /**
      * POST  /register : register the user.
      *
@@ -110,12 +250,12 @@ public class AccountResource {
                         .createUser(managedUserVM.getLogin(), managedUserVM.getPassword(),
                             managedUserVM.getFirstName(), managedUserVM.getLastName(),
                             managedUserVM.getEmail().toLowerCase()<% if (databaseType === 'mongodb' || databaseType === 'sql') { %>, managedUserVM.getImageUrl()<% } %>,
-                            managedUserVM.getLangKey());
+                    managedUserVM.getLangKey());
 
                     mailService.sendActivationEmail(user);
                     return new ResponseEntity<>(HttpStatus.CREATED);
                 })
-        );
+            );
     }
 
     /**
@@ -283,4 +423,5 @@ public class AccountResource {
             password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH &&
             password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;
     }
+<%_ } _%>
 }

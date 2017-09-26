@@ -17,10 +17,12 @@
  limitations under the License.
 -%>
 import { Component, OnInit } from '@angular/core';
+<%_ if (authenticationType !== 'oauth2') { _%>
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+<%_ } _%>
 import { JhiEventManager } from 'ng-jhipster';
 
-import { Account, LoginModalService, Principal } from '../shared';
+import { Account, <%_ if (authenticationType !== 'oauth2') { _%>LoginModalService<%_ } else { _%>LoginService<%_ } _%>, Principal } from '../shared';
 
 @Component({
     selector: '<%=jhiPrefix%>-home',
@@ -36,11 +38,17 @@ import { Account, LoginModalService, Principal } from '../shared';
 })
 export class HomeComponent implements OnInit {
     account: Account;
+    <%_ if (authenticationType !== 'oauth2') { _%>
     modalRef: NgbModalRef;
+    <%_ } _%>
 
     constructor(
         private principal: Principal,
+        <%_ if (authenticationType !== 'oauth2') { _%>
         private loginModalService: LoginModalService,
+        <%_ } else { _%>
+        private loginService: LoginService,
+        <%_ } _%>
         private eventManager: JhiEventManager
     ) {
     }
@@ -65,6 +73,10 @@ export class HomeComponent implements OnInit {
     }
 
     login() {
+        <%_ if (authenticationType !== 'oauth2') { _%>
         this.modalRef = this.loginModalService.open();
+        <%_ } else { _%>
+        this.loginService.login();
+        <%_ }_%>
     }
 }
