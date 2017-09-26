@@ -21,6 +21,7 @@ const shelljs = require('shelljs');
 
 module.exports = {
     askForApplicationType,
+    askForGatewayType,
     askForPath,
     askForApps,
     askForClustersMode,
@@ -54,6 +55,34 @@ function askForApplicationType() {
 
     this.prompt(prompts).then((props) => {
         this.composeApplicationType = props.composeApplicationType;
+        done();
+    });
+}
+
+function askForGatewayType() {
+    if (this.regenerate) return;
+    if (this.composeApplicationType !== 'microservice') return;
+    const done = this.async();
+
+    const prompts = [{
+        type: 'list',
+        name: 'gatewayType',
+        message: 'Which *type* of gateway would you like to use?',
+        choices: [
+            {
+                value: 'zuul',
+                name: 'JHipster gateway based on Netflix Zuul'
+            },
+            {
+                value: 'traefik',
+                name: '[BETA] Traefik gateway (only works with Consul)'
+            }
+        ],
+        default: 'zuul'
+    }];
+
+    this.prompt(prompts).then((props) => {
+        this.gatewayType = props.gatewayType;
         done();
     });
 }
