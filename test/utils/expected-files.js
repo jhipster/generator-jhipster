@@ -253,6 +253,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/components/util/truncate-characters.filter.js`,
         `${CLIENT_MAIN_SRC_DIR}app/components/util/truncate-words.filter.js`,
         `${CLIENT_MAIN_SRC_DIR}app/components/util/date-util.service.js`,
+        `${CLIENT_MAIN_SRC_DIR}app/components/util/error.constants.js`,
         `${CLIENT_MAIN_SRC_DIR}app/components/util/sort.directive.js`,
         `${CLIENT_MAIN_SRC_DIR}app/components/util/sort-by.directive.js`,
         `${CLIENT_MAIN_SRC_DIR}app/components/util/capitalize.filter.js`,

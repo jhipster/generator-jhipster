@@ -34,6 +34,9 @@ import <%=packageName%>.security.AuthoritiesConstants;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import <%=packageName%>.service.MailService;
 import <%=packageName%>.service.dto.UserDTO;
+<%_ } _%>
+import <%=packageName%>.web.rest.errors.ExceptionTranslator;
+<%_ if (authenticationType !== 'oauth2') { _%>
 import <%=packageName%>.web.rest.vm.KeyAndPasswordVM;
 import <%=packageName%>.web.rest.vm.ManagedUserVM;
 <%_ } _%>
@@ -117,6 +120,9 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
     private HttpMessageConverter[] httpMessageConverters;
 <%_ } _%>
 
+    @Autowired
+    private ExceptionTranslator exceptionTranslator;
+
     <% if (authenticationType === 'oauth2') { %>@MockBean<% } else { %>@Mock<% } %>
     private UserService mockUserService;
 <%_ if (authenticationType !== 'oauth2') { _%>
@@ -150,9 +156,12 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
         <%_ if (authenticationType !== 'oauth2') { _%>
         this.restMvc = MockMvcBuilders.standaloneSetup(accountResource)
             .setMessageConverters(httpMessageConverters)
+            .setControllerAdvice(exceptionTranslator)
             .build();
         <%_ } _%>
-        this.restUserMockMvc = MockMvcBuilders.standaloneSetup(accountUserMockResource).build();
+        this.restUserMockMvc = MockMvcBuilders.standaloneSetup(accountUserMockResource)
+            .setControllerAdvice(exceptionTranslator)
+            .build();
     }
 
     @Test
