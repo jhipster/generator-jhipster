@@ -1176,7 +1176,7 @@
                 </executions>
                 -->
                 <configuration>
-                    <repository>${project.artifactId}</repository>
+                    <repository><%= baseName.toLowerCase()%></repository>
                     <tag>latest</tag>
                     <contextDirectory>${project.build.directory}</contextDirectory>
                 </configuration>
