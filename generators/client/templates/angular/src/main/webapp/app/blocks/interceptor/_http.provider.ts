@@ -25,6 +25,7 @@ import { Http, XHRBackend, RequestOptions } from '@angular/http';
 import { AuthInterceptor } from './auth.interceptor';
     <%_ } _%>
 import { LocalStorageService, SessionStorageService } from 'ng2-webstorage';
+<%_ } _%>
 <%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
     <%_ if (authenticationType === 'session') { _%>
 import { AuthServerProvider } from '../../shared/auth/auth-session.service';
