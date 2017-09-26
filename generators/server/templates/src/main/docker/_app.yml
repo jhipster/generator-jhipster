@@ -19,7 +19,7 @@
 version: '2'
 services:
     <%= baseName.toLowerCase() %>-app:
-        image: <%= baseName.toLowerCase() %>
+        image: <%= dasherizedBaseName %>
         environment:
             - SPRING_PROFILES_ACTIVE=prod,swagger
             <%_ if (serviceDiscoveryType === 'consul') { _%>
