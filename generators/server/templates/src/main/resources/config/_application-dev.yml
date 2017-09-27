@@ -313,7 +313,7 @@ jhipster:
                 token-validity-in-seconds: 86400
                 token-validity-in-seconds-for-remember-me: 2592000
     <%_ } _%>
-    <%_ if ((applicationType === 'microservice' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
+    <%_ if ((applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
     security:
         client-authorization:
             <%_ if (applicationType !== 'uaa') { _%>
@@ -365,6 +365,38 @@ jhipster:
             enabled: false
             # edit spring.metrics.export.delay-millis to set report frequency
     <%_ } _%>
+
+<%_ if (applicationType === 'uaa') { _%>
+uaa:
+    key-store:
+        name: keystore.jks
+        password: password
+        alias: selfsigned
+    web-client-configuration:
+        # Access Token is valid for 5 mins
+        access-token-validity-in-seconds: 300
+        # Refresh Token is valid for 7 days
+        refresh-token-validity-in-seconds-for-remember-me: 604800
+        client-id: web_app
+        secret: changeit
+<%_ } else if ((applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
+oauth2:
+    signature-verification:
+        public-key-endpoint-uri: http://<%= uaaBaseName.toLowerCase() %>/oauth/token_key
+        #ttl for public keys to verify JWT tokens (in ms)
+        ttl: 3600000
+        #max. rate at which public keys will be fetched (in ms)
+        public-key-refresh-rate-limit: 10000
+    web-client-configuration:
+        #keep in sync with UAA configuration
+        client-id: web_app
+        secret: changeit
+    <%_ if (applicationType === 'gateway') { _%>
+        # Controls session expiration due to inactivity (ignored for remember-me).
+        # Negative values disable session inactivity expiration.
+        session-timeout-in-seconds: 1800
+    <%_ } _%>
+<%_ } _%>
 
 # ===================================================================
 # Application specific properties

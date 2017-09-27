@@ -58,7 +58,9 @@ import {
         <%=angularXAppName%>SharedModule,
         <%=angularXAppName%>HomeModule,
         <%=angularXAppName%>AdminModule,
-        <%_ if (authenticationType !== 'oauth2') { _%><%=angularXAppName%>AccountModule,<%_ } _%>
+        <%_ if (authenticationType !== 'oauth2') { _%>
+        <%=angularXAppName%>AccountModule,
+        <%_ } _%>
         <%=angularXAppName%>EntityModule,
         // jhipster-needle-angular-add-module JHipster will add new module here
     ],
