@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { JhiHttpInterceptor } from 'ng-jhipster';
-<%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+<%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { Injector } from '@angular/core';
 <%_ } _%>
 import { RequestOptionsArgs, Response } from '@angular/http';
