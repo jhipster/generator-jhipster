@@ -51,7 +51,7 @@ export class LoginService {
     login() {
         let port = (location.port ? ':' + location.port : '');
         if (port === ':9000') {
-            port = ':8080';
+            port = ':<%= serverPort %>';
         }
         location.href = '//' + location.hostname + port + '/login';
     }
