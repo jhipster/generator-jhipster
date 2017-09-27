@@ -47,7 +47,6 @@ export function interceptableFactory(
     <%_ } if (authenticationType === 'session') { _%>
     injector: Injector,
     stateStorageService: StateStorageService,
-    authServerProvider: AuthServerProvider,
     loginServiceModal: LoginModalService,
     <%_ } _%>
     eventManager: JhiEventManager
@@ -62,8 +61,8 @@ export function interceptableFactory(
         <%_ } _%>
             new AuthExpiredInterceptor(injector),
         <%_ } if (authenticationType === 'session') { _%>
-            new AuthExpiredInterceptor(stateStorageService,
-                authServerProvider, loginServiceModal),
+            new AuthExpiredInterceptor(injector, stateStorageService,
+                loginServiceModal),
         <%_ } _%>
             // Other interceptors can be added here
             new ErrorHandlerInterceptor(eventManager),
@@ -86,6 +85,7 @@ export function customHttpProvider() {
             <%_ } if (authenticationType === 'session') { _%>
             Injector,
             StateStorageService,
+            LoginModalService,
             <%_ } _%>
             JhiEventManager
         ]
