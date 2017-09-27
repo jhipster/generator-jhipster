@@ -202,9 +202,12 @@ public class AccountResource {
                     grantedAuthorities.add(new SimpleGrantedAuthority(authority.getName()));
                 });
 
-                // Update Spring Security Authorities to match groups claim from IdP
+                // Create UserDetails so #{principal.username} works and
+                // update Spring Security Authorities to match groups claim from IdP
+                UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getLogin(),
+                    "N/A", grantedAuthorities);
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                    principal, "N/A", grantedAuthorities);
+                    userDetails, "N/A", grantedAuthorities);
                 token.setDetails(details);
                 authentication = new OAuth2Authentication(authentication.getOAuth2Request(), token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
