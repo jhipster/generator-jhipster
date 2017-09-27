@@ -197,7 +197,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             <%_ } _%>
             <%_ if (authenticationType === 'jwt') { _%>
             .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
-            <% } else if (authenticationType === 'session' || authenticationType === 'oauth2') { %>
+            <%_ } else if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
             .addFilterBefore(corsFilter, CsrfFilter.class)
             <%_ } _%>
             .exceptionHandling()
