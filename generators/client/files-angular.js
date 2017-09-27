@@ -143,7 +143,7 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'jwt' || generator.authenticationType === 'uaa',
+            condition: generator => generator.authenticationType === 'jwt',
             path: ANGULAR_DIR,
             templates: [
                 'blocks/interceptor/_auth.interceptor.ts'
