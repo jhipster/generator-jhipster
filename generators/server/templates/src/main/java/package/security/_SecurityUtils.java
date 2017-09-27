@@ -39,7 +39,9 @@ public final class SecurityUtils {
      *
      * @return the login of the current user
      */
-    <%_ if (authenticationType === 'oauth2') { _%>@SuppressWarnings("unchecked")<%_ } _%>
+    <%_ if (authenticationType === 'oauth2') { _%>
+    @SuppressWarnings("unchecked")
+    <%_ } _%>
     public static String getCurrentUserLogin() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
