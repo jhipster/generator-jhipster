@@ -60,6 +60,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 <%_ } _%>
 import javax.servlet.http.HttpServletRequest;
@@ -202,10 +203,10 @@ public class AccountResource {
                     grantedAuthorities.add(new SimpleGrantedAuthority(authority.getName()));
                 });
 
-                // Create UserDetails so #{principal.username} works and
-                // update Spring Security Authorities to match groups claim from IdP
+                // create UserDetails so #{principal.username} works
                 UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getLogin(),
                     "N/A", grantedAuthorities);
+                // update Spring Security Authorities to match groups claim from IdP
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                     userDetails, "N/A", grantedAuthorities);
                 token.setDetails(details);
