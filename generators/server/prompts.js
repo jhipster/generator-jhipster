@@ -501,7 +501,7 @@ function askForOptionalItems(meta) {
         value: 'enableSwaggerCodegen:true'
     });
     choices.push({
-        name: '[BETA] Asynchronous messages using Apache Kafka',
+        name: 'Asynchronous messages using Apache Kafka',
         value: 'messageBroker:kafka'
     });
 
