@@ -48,7 +48,7 @@ parameters:
     displayName: Application Name
   -
     name: SECRET_REF
-    value: ds-secret-ref
+    value: <%= app.baseName.toLowerCase() %>-ds-secret-ref
     description: Name of the secret reference
     required: true
     displayName: "*** PLEASE DO NOT CHANGE THIS ***"
