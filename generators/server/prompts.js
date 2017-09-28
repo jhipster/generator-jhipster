@@ -143,7 +143,7 @@ function askForServerSideOpts(meta) {
                 },
                 {
                     value: 'uaa',
-                    name: '[BETA] Authentication with JHipster UAA server (the server must be generated separately)'
+                    name: 'Authentication with JHipster UAA server (the server must be generated separately)'
                 }
             ],
             default: 0
