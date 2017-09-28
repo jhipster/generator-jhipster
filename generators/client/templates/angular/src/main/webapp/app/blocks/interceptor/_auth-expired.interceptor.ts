@@ -93,7 +93,7 @@ export class AuthExpiredInterceptor extends JhiHttpInterceptor {
                 this.authServerProvider.logout();
                 this.loginServiceModal.open();
                 <%_ } else { _%>
-                const loginService = this.injector.get(LoginService);
+                const loginService: LoginService = this.injector.get(LoginService);
                 loginService.login();
                 <%_ } _%>
             }
