@@ -49,7 +49,6 @@ export function interceptableFactory(
     <%_ } else if (authenticationType === 'session') { _%>
     injector: Injector,
     stateStorageService: StateStorageService,
-    authServerProvider: AuthServerProvider,
     loginServiceModal: LoginModalService,
     <%_ } else if (authenticationType === 'oauth2') { _%>
     injector: Injector,
@@ -62,15 +61,15 @@ export function interceptableFactory(
         defaultOptions,
         [
         <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-		<%_ if (authenticationType !== 'uaa') { _%>
+            <%_ if (authenticationType !== 'uaa') { _%>
             new AuthInterceptor(localStorage, sessionStorage),
-        <%_ } _%>
+            <%_ } _%>
             new AuthExpiredInterceptor(injector),
-        <%_ } if (authenticationType === 'session') { _%>
-            new AuthExpiredInterceptor(stateStorageService,
-                authServerProvider, loginServiceModal),
+        <%_ } else if (authenticationType === 'session') { _%>
+            new AuthExpiredInterceptor(injector, stateStorageService,
+                loginServiceModal),
         <%_ } else if (authenticationType === 'oauth2') { _%>
-            new AuthExpiredInterceptor(injector, stateStorageService),
+        new AuthExpiredInterceptor(injector, stateStorageService),
         <%_ } _%>
             // Other interceptors can be added here
             new ErrorHandlerInterceptor(eventManager),
@@ -90,9 +89,12 @@ export function customHttpProvider() {
             LocalStorageService,
             SessionStorageService,
             Injector,
-            <%_ } if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
+            <%_ } else if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
             Injector,
             StateStorageService,
+                <%_ if (authenticationType === 'session') { _%>
+            LoginModalService,
+                <%_ } _%>
             <%_ } _%>
             JhiEventManager
         ]

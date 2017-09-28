@@ -4,7 +4,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - "8.4.0"
+  - "6.11.3"
 jdk:
   - oraclejdk8
 addons:
@@ -14,11 +14,9 @@ addons:
     packages:
     - google-chrome-stable
 cache:
-  yarn: true
   directories:
     - $HOME/.m2
     - $HOME/.gradle
-    - $HOME/.yarn-cache
 env:
   global:
     - PROFILE=dev
@@ -64,13 +62,14 @@ before_install:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
   # Repo for Yarn
-  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 0.27.5
+  - curl -o- -L https://yarnpkg.com/install.sh | bash
   - export PATH=$HOME/.yarn/bin:$PATH
+  - yarn -v
   - yarn global add yo bower gulp-cli
 install:
   - cd "$TRAVIS_BUILD_DIR"/
   - yarn install
-  - yarn link
+  - yarn global add file:"$TRAVIS_BUILD_DIR"
   - if [ "$JHIPSTER" == "app-default-from-scratch" ]; then
         yarn run test;
     fi

@@ -78,6 +78,7 @@ module.exports = class extends BaseGenerator {
                 this.registryReplicas = this.config.get('registryReplicas');
 
                 this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
+                this.DOCKER_TRAEFIK = constants.DOCKER_TRAEFIK;
                 this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
                 this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
                 this.DOCKER_MYSQL = constants.DOCKER_MYSQL;

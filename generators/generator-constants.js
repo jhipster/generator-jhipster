@@ -38,7 +38,8 @@ const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v2.2.1';
 const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v2.2.1';
 const DOCKER_JHIPSTER_IMPORT_DASHBOARDS = 'jhipster/jhipster-import-dashboards:v2.2.1';
 const DOCKER_JHIPSTER_ZIPKIN = 'jhipster/jhipster-zipkin:v2.2.1';
-const DOCKER_CONSUL = 'consul:0.8.3';
+const DOCKER_TRAEFIK = 'traefik:1.4';
+const DOCKER_CONSUL = 'consul:0.9.3';
 const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.2.2';
 const DOCKER_PROMETHEUS = 'prom/prometheus:v1.6.3';
 const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.6.2';
@@ -48,9 +49,9 @@ const DOCKER_SWAGGER_EDITOR = 'swaggerapi/swagger-editor:latest';
 const DOCKER_COMPOSE_FORMAT_VERSION = '2';
 
 // version of Node, Yarn, NPM
-const NODE_VERSION = '6.11.1';
-const YARN_VERSION = '0.27.5';
-const NPM_VERSION = '5.3.0';
+const NODE_VERSION = '6.11.3';
+const YARN_VERSION = '1.1.0';
+const NPM_VERSION = '5.4.2';
 
 // all constants used throughout all generators
 
@@ -181,6 +182,7 @@ const constants = {
     DOCKER_JHIPSTER_LOGSTASH,
     DOCKER_JHIPSTER_IMPORT_DASHBOARDS,
     DOCKER_JHIPSTER_ZIPKIN,
+    DOCKER_TRAEFIK,
     DOCKER_CONSUL,
     DOCKER_CONSUL_CONFIG_LOADER,
     DOCKER_PROMETHEUS,

@@ -65,7 +65,7 @@
         <!-- Overridden to get metrics-jcache -->
         <dropwizard-metrics.version>3.2.2</dropwizard-metrics.version>
         <%_ if (!skipClient) { _%>
-        <frontend-maven-plugin.version>1.4</frontend-maven-plugin.version>
+        <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
         <%_ } _%>
         <%_ if (gatlingTests) { _%>
         <gatling.version>2.2.5</gatling.version>
