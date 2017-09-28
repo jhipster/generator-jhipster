@@ -94,7 +94,7 @@ const LANGUAGES = [
     },
     { name: 'Armenian', dispName: 'Հայերեն', value: 'hy' },
     { name: 'Catalan', dispName: 'Català', value: 'ca' },
-    { name: 'Chinese (Simplified)', dispName: '中文（简体）', value: 'zh-CN' },
+    { name: 'Chinese (Simplified)', dispName: '中文（简体）', value: 'zh-cn' },
     { name: 'Chinese (Traditional)', dispName: '繁體中文', value: 'zh-tw' },
     { name: 'Czech', dispName: 'Český', value: 'cs' },
     { name: 'Danish', dispName: 'Dansk', value: 'da' },
