@@ -47,6 +47,12 @@ services:
             file: consul.yml
             service: consul-config-loader
 <%_ } _%>
+<%_ if (gatewayType === 'traefik') { _%>
+    traefik:
+        extends:
+            file: traefik.yml
+            service: traefik
+<%_ } _%>
 <%_ if (monitoring === 'elk') { _%>
 
     jhipster-elasticsearch:
