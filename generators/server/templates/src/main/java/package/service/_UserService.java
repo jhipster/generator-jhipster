@@ -39,6 +39,7 @@ import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.util.RandomUtil;
 <%_ } _%>
 import <%=packageName%>.service.dto.UserDTO;
+import <%=packageName%>.web.rest.vm.ManagedUserVM;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -184,25 +185,24 @@ public class UserService {
             });
     }
 
-    public User createUser(String login, String password, String firstName, String lastName, String email<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>,
-        String imageUrl<% } %>, String langKey) {
+    public User registerUser(ManagedUserVM userDTO) {
 
         User newUser = new User();<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
         Authority authority = authorityRepository.findOne(AuthoritiesConstants.USER);
         Set<Authority> authorities = new HashSet<>();<% } %><% if (databaseType === 'cassandra') { %>
         newUser.setId(UUID.randomUUID().toString());
         Set<String> authorities = new HashSet<>();<% } %>
-        String encryptedPassword = passwordEncoder.encode(password);
-        newUser.setLogin(login);
+        String encryptedPassword = passwordEncoder.encode(userDTO.getPassword());
+        newUser.setLogin(userDTO.getLogin());
         // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
-        newUser.setFirstName(firstName);
-        newUser.setLastName(lastName);
-        newUser.setEmail(email);
+        newUser.setFirstName(userDTO.getFirstName());
+        newUser.setLastName(userDTO.getLastName());
+        newUser.setEmail(userDTO.getEmail());
         <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
-        newUser.setImageUrl(imageUrl);
+        newUser.setImageUrl(userDTO.getImageUrl());
         <%_ } _%>
-        newUser.setLangKey(langKey);
+        newUser.setLangKey(userDTO.getLangKey());
         // new user is not active
         newUser.setActivated(false);
         // new user gets registration key
