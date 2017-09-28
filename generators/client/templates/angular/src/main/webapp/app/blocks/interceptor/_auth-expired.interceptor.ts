@@ -17,9 +17,7 @@
  limitations under the License.
 -%>
 import { JhiHttpInterceptor } from 'ng-jhipster';
-<%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { Injector } from '@angular/core';
-<%_ } _%>
 import { RequestOptionsArgs, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
@@ -43,8 +41,8 @@ export class AuthExpiredInterceptor extends JhiHttpInterceptor {
 <%_ } _%>
 <%_ if (authenticationType === 'session') { _%>
     constructor(
+        private injector: Injector,
         private stateStorageService: StateStorageService,
-        private authServerProvider: AuthServerProvider,
         private loginServiceModal: LoginModalService) {
         super();
     }
@@ -83,7 +81,8 @@ export class AuthExpiredInterceptor extends JhiHttpInterceptor {
                 } else {
                     this.stateStorageService.storeUrl('/');
                 }
-                this.authServerProvider.logout();
+                const authServer: AuthServerProvider = this.injector.get(AuthServerProvider);
+                authServer.logout();
                 this.loginServiceModal.open();
             }
             return Observable.throw(error);
