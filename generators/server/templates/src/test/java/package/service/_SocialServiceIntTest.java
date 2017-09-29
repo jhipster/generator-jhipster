@@ -23,6 +23,7 @@ import <%=packageName%>.domain.Authority;
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.AuthorityRepository;
 import <%=packageName%>.repository.UserRepository;
+import <%=packageName%>.security.AuthoritiesConstants;
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import <%=packageName%>.repository.search.UserSearchRepository;
 <%_ } _%>
@@ -215,7 +216,7 @@ public class SocialServiceIntTest {
         User user = userRepository.findOneByEmailIgnoreCase("mail@mail.com").get();
         assertThat(user.getActivated()).isEqualTo(true);
         assertThat(user.getPassword()).isNotEmpty();
-        Authority userAuthority = authorityRepository.findOne("ROLE_USER");
+        Authority userAuthority = authorityRepository.findOne(AuthoritiesConstants.USER);
         assertThat(user.getAuthorities().toArray()).containsExactly(userAuthority);
 
         // Teardown
