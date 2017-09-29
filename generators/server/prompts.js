@@ -68,21 +68,21 @@ function askForServerSideOpts(meta) {
             type: 'list',
             name: 'serviceDiscoveryType',
             message: response => this.getNumberedQuestion(
-                'Do you want to use the JHipster Registry to configure, monitor and scale your microservices and gateways?',
+                'Which service discovery server do you want to use?',
                 applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa'
             ),
             choices: [
                 {
-                    value: 'eureka',
+                    value: 'JHipster Registry (uses Eureka, provides Spring Cloud Config support and monitoring dashboards)',
                     name: 'Yes'
                 },
                 {
                     value: 'consul',
-                    name: '[BETA] No, use Consul as an alternative solution (uses Spring Cloud Consul)'
+                    name: 'Consul'
                 },
                 {
                     value: false,
-                    name: 'No'
+                    name: 'No service discovery'
                 }
             ],
             default: 'eureka'
