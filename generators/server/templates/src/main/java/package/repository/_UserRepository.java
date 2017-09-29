@@ -73,13 +73,13 @@ import java.time.Instant;
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 @Repository
 public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRepository<User, Long><% } %><% if (databaseType === 'mongodb') { %>MongoRepository<User, String><% } %> {
-
+<% if (authenticationType !== 'oauth2') { %>
     Optional<User> findOneByActivationKey(String activationKey);
-
+<%_ } _%>
     List<User> findAllByActivatedIsFalseAndCreatedDateBefore(Instant dateTime);
-
+<% if (authenticationType !== 'oauth2') { %>
     Optional<User> findOneByResetKey(String resetKey);
-
+<%_ } _%>
     Optional<User> findOneByEmailIgnoreCase(String email);
 
     Optional<User> findOneByLogin(String login);

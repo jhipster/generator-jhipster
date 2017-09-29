@@ -115,6 +115,7 @@ module.exports = class extends BaseGenerator {
                 this.DOCKER_ORACLE = constants.DOCKER_ORACLE;
                 this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
                 this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
+                this.DOCKER_KEYCLOAK = constants.DOCKER_KEYCLOAK;
                 this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
                 this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
                 this.DOCKER_SONAR = constants.DOCKER_SONAR;
@@ -264,8 +265,8 @@ module.exports = class extends BaseGenerator {
                     if (this.languages === undefined) {
                         this.languages = ['en', 'fr'];
                     }
-                    // user-management will be handled by UAA app
-                    if (this.applicationType === 'gateway' && this.authenticationType === 'uaa') {
+                    // user-management will be handled by UAA app, oauth expects users to be managed in IpP
+                    if ((this.applicationType === 'gateway' && this.authenticationType === 'uaa') || this.authenticationType === 'oauth2') {
                         this.skipUserManagement = true;
                     }
 

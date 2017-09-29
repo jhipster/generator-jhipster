@@ -178,7 +178,9 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         user.setId(UUID.randomUUID().toString());
         <%_ } _%>
         user.setLogin(DEFAULT_LOGIN);
+        <%_ if (authenticationType !== 'oauth2') { _%>
         user.setPassword(RandomStringUtils.random(60));
+        <%_ } _%>
         user.setActivated(true);
         user.setEmail(DEFAULT_EMAIL);
         user.setFirstName(DEFAULT_FIRSTNAME);
@@ -197,7 +199,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         <%_ } _%>
         user = createEntity(<% if (databaseType === 'sql') { %>em<% } %>);
     }
-
+<%_ if (authenticationType !== 'oauth2') { _%>
     @Test
     <%_ if (databaseType === 'sql') { _%>
     @Transactional
@@ -382,7 +384,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         List<User> userList = userRepository.findAll();
         assertThat(userList).hasSize(databaseSizeBeforeCreate);
     }
-
+<%_ } _%>
     @Test
     <%_ if (databaseType === 'sql') { _%>
     @Transactional
@@ -442,7 +444,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         restUserMockMvc.perform(get("/api/users/unknown"))
             .andExpect(status().isNotFound());
     }
-
+<% if (authenticationType !== 'oauth2') { %>
     @Test
     <%_ if (databaseType === 'sql') { _%>
     @Transactional
@@ -696,7 +698,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         // Validate the database is empty
         List<User> userList = userRepository.findAll();
         assertThat(userList).hasSize(databaseSizeBeforeDelete - 1);
-    }
+    }<%_ } _%>
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 
     @Test
@@ -841,5 +843,4 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         assertThat(authorityA.hashCode()).isEqualTo(authorityB.hashCode());
     }
     <%_ } _%>
-
 }

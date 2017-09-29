@@ -21,11 +21,13 @@ package <%=packageName%>.service;
 import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.<%= mainClass %>;<% if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { %>
 import <%=packageName%>.domain.PersistentToken;<% } %>
-import <%=packageName%>.domain.User;<% if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { %>
+<%_ if (authenticationType !== 'oauth2') { _%>
+import <%=packageName%>.domain.User;<%_ } _%>
+<%_ if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { _%>
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
 import <%=packageName%>.config.Constants;
 import <%=packageName%>.repository.UserRepository;
-import <%=packageName%>.service.dto.UserDTO;<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+import <%=packageName%>.service.dto.UserDTO;<% if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType !== 'oauth2') { %>
 import <%=packageName%>.service.util.RandomUtil;<% } %>
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,15 +35,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;<% if (databaseType === 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 import org.springframework.test.context.junit4.SpringRunner;
-<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;<%}%>
-<% if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { %>
-import java.time.LocalDate;<% } %>
-import java.time.Instant;<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+<% if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { _%>
+import java.time.LocalDate;<%_ } _%>
+<%_ if (authenticationType !== 'oauth2') { _%>
+import java.time.Instant;<%_ } _%><%_ if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType !== 'oauth2') { _%>
 import java.time.temporal.ChronoUnit;
-import java.util.Optional;<% } %>
-import java.util.List;
+import java.util.Optional;<%_ } _%>
+<%_ if (authenticationType !== 'oauth2') { _%>import java.util.List;<%_ } _%>
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -74,7 +77,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         assertThat(persistentTokenRepository.findByUser(admin)).hasSize(existingCount + 2);
         userService.removeOldPersistentTokens();
         assertThat(persistentTokenRepository.findByUser(admin)).hasSize(existingCount + 1);
-    }<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+    }<% } %><% if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb')) { %>
 
     @Test
     public void assertThatUserMustExistToResetPassword() {
@@ -179,7 +182,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
             .noneMatch(user -> Constants.ANONYMOUS_USER.equals(user.getLogin())))
             .isTrue();
     }
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+    <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb')) { _%>
 
     @Test
     public void testRemoveNotActivatedUsers() {

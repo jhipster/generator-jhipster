@@ -88,13 +88,13 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb') { 
     @Column(length = <%=columnMax %>, unique = true, nullable = false)<% } %><% if (databaseType === 'mongodb') { %>
     @Indexed<% } %>
     private String login;
-
+<% if (authenticationType !== 'oauth2') { %>
     @JsonIgnore
     @NotNull
     @Size(min = 60, max = 60)<% if (databaseType === 'sql') { %>
     @Column(name = "password_hash",length = 60)<% } %>
     private String password;
-
+<%_ } _%>
     @Size(max = 50)<% if (databaseType === 'sql') { %>
     @Column(name = "first_name", length = 50)<% } %><% if (databaseType === 'mongodb') { %>
     @Field("first_name")<% } %>
@@ -127,7 +127,7 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb') { 
     @Field("image_url")<% } %>
     private String imageUrl;
     <%_ } _%>
-
+<% if (authenticationType !== 'oauth2') { %>
     @Size(max = 20)<% if (databaseType === 'sql') { %>
     @Column(name = "activation_key", length = 20)<% } %><% if (databaseType === 'mongodb') { %>
     @Field("activation_key")<% } %><% if (databaseType === 'cassandra') { %>
@@ -148,7 +148,7 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb') { 
     @Field("reset_date")
     <%_ } _%>
     private Instant resetDate = null;
-
+<%_ } _%>
     @JsonIgnore<% if (databaseType === 'sql') { %>
     @ManyToMany
     @JoinTable(
@@ -187,7 +187,7 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb') { 
     public void setLogin(String login) {
         this.login = StringUtils.lowerCase(login, Locale.ENGLISH);
     }
-
+<% if (authenticationType !== 'oauth2') { %>
     public String getPassword() {
         return password;
     }
@@ -195,7 +195,7 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb') { 
     public void setPassword(String password) {
         this.password = password;
     }
-
+<%_ } _%>
     public String getFirstName() {
         return firstName;
     }
@@ -237,7 +237,7 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb') { 
     public void setActivated(boolean activated) {
         this.activated = activated;
     }
-
+<% if (authenticationType !== 'oauth2') { %>
     public String getActivationKey() {
         return activationKey;
     }
@@ -261,6 +261,7 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb') { 
     public void setResetDate(Instant resetDate) {
        this.resetDate = resetDate;
     }
+<%_ } _%>
     public String getLangKey() {
         return langKey;
     }
@@ -313,7 +314,8 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb') { 
             ", imageUrl='" + imageUrl + '\'' +<% } %>
             ", activated='" + activated + '\'' +
             ", langKey='" + langKey + '\'' +
-            ", activationKey='" + activationKey + '\'' +
+            <%_ if (authenticationType !== 'oauth2') { _%>
+            ", activationKey='" + activationKey + '\'' +<%_ } _%>
             "}";
     }
 }

@@ -32,14 +32,18 @@ describe('administration', () => {
         browser.get('/');
         browser.waitForAngular();
         navBarPage = new NavBarPage(true);
+        <%_ if (authenticationType !== 'oauth2') { _%>
         navBarPage.getSignInPage().autoSignInUsing('admin', 'admin');
+        <%_ } else { _%>
+        navBarPage.getSignInPage().loginWithOAuth('admin', 'admin');
+        <%_ } _%>
         browser.waitForAngular();
     });
 
     beforeEach(() => {
         navBarPage.clickOnAdminMenu();
     });
-
+    <%_ if (authenticationType !== 'oauth2') { _%>
     it('should load user management', () => {
         navBarPage.clickOnAdmin("user-management");
         <%_ if (enableTranslation) { _%>
@@ -51,6 +55,7 @@ describe('administration', () => {
             expect(value).toMatch(expect1);
         });
     });
+    <%_ } _%>
 
     it('should load metrics', () => {
         navBarPage.clickOnAdmin("<%=jhiPrefix%>-metrics");

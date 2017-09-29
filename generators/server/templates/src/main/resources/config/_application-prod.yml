@@ -286,15 +286,6 @@ jhipster:
                 # Refresh Token is valid for 7 days
                 token-validity-in-seconds-for-remember-me: 252000
     <%_ } _%>
-    <%_ if (authenticationType == 'oauth2' && databaseType != 'sql') { _%>
-    security:
-        authentication:
-            oauth:
-                client-id: <%= baseName %>app
-                client-secret: my-secret-token-to-change-in-production
-                # Token is valid 30 minutes
-                token-validity-in-seconds: 1800
-    <%_ } _%>
 <%_ if (authenticationType === 'session') { _%>
     security:
         remember-me:

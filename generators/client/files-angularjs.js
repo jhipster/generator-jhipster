@@ -130,7 +130,7 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'oauth2' || generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'oauth2' || generator.authenticationType === 'jwt' || generator.authenticationType === 'uaa',
             path: ANGULAR_DIR,
             templates: [
                 'blocks/interceptor/_auth.interceptor.js'
@@ -349,13 +349,6 @@ const files = {
                 'services/auth/_password-reset-finish.service.js',
                 'services/auth/_register.service.js',
                 'services/user/_user.service.js'
-            ]
-        },
-        {
-            condition: generator => generator.authenticationType === 'oauth2',
-            path: ANGULAR_DIR,
-            templates: [
-                'services/auth/_auth.oauth2.service.js'
             ]
         },
         {

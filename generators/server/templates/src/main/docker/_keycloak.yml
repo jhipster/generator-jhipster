@@ -16,12 +16,17 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.repository;
-
-import <%=packageName%>.domain.OAuth2AuthenticationCode;
-import org.springframework.data.mongodb.repository.MongoRepository;
-
-public interface OAuth2CodeRepository extends MongoRepository<OAuth2AuthenticationCode, String> {
-
-    OAuth2AuthenticationCode findOneByCode(String code);
-}
+version: '2'
+services:
+  keycloak:
+    image: <%= DOCKER_KEYCLOAK %>
+    command: ["-b", "0.0.0.0", "-Dkeycloak.migration.action=import", "-Dkeycloak.migration.provider=dir", "-Dkeycloak.migration.dir=/opt/jboss/keycloak/realm-config", "-Dkeycloak.migration.strategy=OVERWRITE_EXISTING"]
+    volumes:
+      - ./realm-config:/opt/jboss/keycloak/realm-config
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+    ports:
+      - 9080:8080
+      - 8443:8443
+      - 9990:9990
