@@ -185,19 +185,30 @@ security:
     oauth2:
         resource:
             filter-order: 3
-    <%_ } else if (authenticationType === 'oauth2') { _%>
+    <%_ } _%>
+    <%_ if (authenticationType === 'oauth2') {  _%>
     oauth2:
         client:
             accessTokenUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token
             userAuthorizationUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/auth
             clientId: web_app
             clientSecret: web_app
+            tokenName: access_token
             clientAuthenticationScheme: form
             scope: openid profile email
+            <%_ } _%>
+            <%_ if (applicationType === 'microservice') { _%>
+            clientId: internal
+            clientSecret: internal
+            authenticationScheme: header
+            clientAuthenticationScheme: header
+            <%_ } _%>
         resource:
             userInfoUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
             tokenInfoUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token/introspect
             preferTokenInfo: false
+            jwt:
+                keyUri: ${oauth2.issuer}
     <%_ } _%>
 
 server:
