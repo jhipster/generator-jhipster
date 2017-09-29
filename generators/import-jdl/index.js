@@ -102,6 +102,9 @@ module.exports = class extends BaseGenerator {
                     }
                 } catch (e) {
                     this.debug('Error:', e);
+                    if (e && e.message) {
+                        this.log(chalk.red(`${e.name || ''}: ${e.message}`));
+                    }
                     this.error('\nError while parsing entities from JDL\n');
                 }
             },
