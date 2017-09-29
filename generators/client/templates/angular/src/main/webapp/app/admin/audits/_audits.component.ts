@@ -23,7 +23,6 @@ import { JhiParseLinks } from 'ng-jhipster';
 import { Audit } from './audit.model';
 import { AuditsService } from './audits.service';
 import { ITEMS_PER_PAGE } from '../../shared';
-import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
 @Component({
   selector: '<%=jhiPrefix%>-audit',
@@ -43,7 +42,6 @@ export class AuditsComponent implements OnInit {
     constructor(
         private auditsService: AuditsService,
         private parseLinks: JhiParseLinks,
-        private paginationConfig: PaginationConfig,
         private datePipe: DatePipe
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
