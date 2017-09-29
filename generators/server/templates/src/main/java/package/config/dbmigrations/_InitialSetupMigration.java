@@ -56,7 +56,9 @@ public class InitialSetupMigration {
         User systemUser = new User();
         systemUser.setId("user-0");
         systemUser.setLogin("system");
+        <%_ if (authenticationType !== 'oauth2') { _%>
         systemUser.setPassword("$2a$10$mE.qmcV0mFU5NcKh73TZx.z4ueI/.bDWbj0T1BYyqP481kGGarKLG");
+        <%_ } _%>
         systemUser.setFirstName("");
         systemUser.setLastName("System");
         systemUser.setEmail("system@localhost");
@@ -71,7 +73,9 @@ public class InitialSetupMigration {
         User anonymousUser = new User();
         anonymousUser.setId("user-1");
         anonymousUser.setLogin("anonymoususer");
+        <%_ if (authenticationType !== 'oauth2') { _%>
         anonymousUser.setPassword("$2a$10$j8S5d7Sr7.8VTOYNviDPOeWX8KcYILUVJBsYV83Y5NtECayypx9lO");
+        <%_ } _%>
         anonymousUser.setFirstName("Anonymous");
         anonymousUser.setLastName("User");
         anonymousUser.setEmail("anonymous@localhost");
@@ -84,7 +88,9 @@ public class InitialSetupMigration {
         User adminUser = new User();
         adminUser.setId("user-2");
         adminUser.setLogin("admin");
+        <%_ if (authenticationType !== 'oauth2') { _%>
         adminUser.setPassword("$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC");
+        <%_ } _%>
         adminUser.setFirstName("admin");
         adminUser.setLastName("Administrator");
         adminUser.setEmail("admin@localhost");
@@ -99,7 +105,9 @@ public class InitialSetupMigration {
         User userUser = new User();
         userUser.setId("user-3");
         userUser.setLogin("user");
+        <%_ if (authenticationType !== 'oauth2') { _%>
         userUser.setPassword("$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K");
+        <%_ } _%>
         userUser.setFirstName("");
         userUser.setLastName("User");
         userUser.setEmail("user@localhost");
