@@ -88,7 +88,7 @@ spring:
     <%_ if (databaseType === 'mongodb') { _%>
         mongodb:
             host: localhost
-            port: 27117
+            port: 0
             database: <%= baseName %>
     <%_ } _%>
     <%_ if (databaseType === 'cassandra') { _%>
