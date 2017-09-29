@@ -236,7 +236,7 @@ function writeFiles() {
             }
 
             /* Skip the code below for --skip-user-management */
-            if (this.skipUserManagement && this.authenticationType !== 'oauth2') return;
+            if (this.skipUserManagement && (this.applicationType !== 'monolith' || this.authenticationType !== 'oauth2')) return;
 
             if (this.applicationType === 'uaa') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/_UaaWebSecurityConfiguration.java`, `${javaDir}config/UaaWebSecurityConfiguration.java`);
@@ -314,7 +314,7 @@ function writeFiles() {
         },
 
         writeServerMicroserviceFiles() {
-            if (this.applicationType !== 'microservice' && !(this.applicationType === 'gateway' && this.authenticationType === 'uaa')) return;
+            if (this.applicationType !== 'microservice' && !(this.applicationType === 'gateway' && (this.authenticationType === 'uaa' || this.authenticationType === 'oauth2'))) return;
 
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_MicroserviceSecurityConfiguration.java`, `${javaDir}config/MicroserviceSecurityConfiguration.java`);
             if (this.authenticationType === 'uaa') {
@@ -327,6 +327,19 @@ function writeFiles() {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/_FeignConfiguration.java`, `${javaDir}config/FeignConfiguration.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/client/_AuthorizedFeignClient.java`, `${javaDir}client/AuthorizedFeignClient.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/client/_OAuth2InterceptedFeignConfiguration.java`, `${javaDir}client/OAuth2InterceptedFeignConfiguration.java`);
+            }
+            if (this.authenticationType === 'oauth2') {
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_SimplePrincipalExtractor.java`, `${javaDir}/security/oauth2/SimplePrincipalExtractor.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_SimpleAuthoritiesExtractor.java`, `${javaDir}/security/oauth2/SimpleAuthoritiesExtractor.java`);
+            }
+            if (this.authenticationType === 'oauth2' && this.applicationType === 'microservice') {
+                this.template(`${SERVER_MAIN_SRC_DIR}package/config/_FeignConfiguration.java`, `${javaDir}config/FeignConfiguration.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/client/_AuthorizedFeignClient.java`, `${javaDir}client/AuthorizedFeignClient.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/client/_OAuth2InterceptedFeignConfiguration.java`, `${javaDir}client/OAuth2InterceptedFeignConfiguration.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/client/_TokenRelayRequestInterceptor.java`, `${javaDir}client/TokenRelayRequestInterceptor.java`);
+            }
+            if (this.authenticationType === 'oauth2' && this.applicationType === 'gateway') {
+                this.template(`${SERVER_MAIN_SRC_DIR}package/config/_OAuth2SsoConfiguration.java`, `${javaDir}config/OAuth2SsoConfiguration.java`);
             }
             this.copy(`${SERVER_MAIN_RES_DIR}static/microservices_index.html`, `${SERVER_MAIN_RES_DIR}static/index.html`);
         },
@@ -524,7 +537,7 @@ function writeFiles() {
         },
 
         writeJavaUserManagementFiles() {
-            if (this.skipUserManagement && this.authenticationType !== 'oauth2') return;
+            if (this.skipUserManagement && (this.applicationType !== 'monolith' || this.authenticationType !== 'oauth2')) return;
             // user management related files
 
             /* User management resources files */
@@ -546,6 +559,7 @@ function writeFiles() {
 
             /* User management java domain files */
             this.template(`${SERVER_MAIN_SRC_DIR}package/domain/_User.java`, `${javaDir}domain/User.java`);
+
 
             if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/domain/_Authority.java`, `${javaDir}domain/Authority.java`);

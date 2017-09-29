@@ -177,7 +177,10 @@ spring:
 # export SECURITY_OAUTH2_CLIENT_CLIENT_SECRET="38561a05"
 # ===================================================================
 
-oauth2.issuer: http://localhost:9080/auth/realms/jhipster
+oauth2:
+    issuer: http://localhost:9080/auth/realms/jhipster
+    principal-attribute: preferred_username
+    authorities-attribute: roles
 <% } %>
 security:
     basic:
@@ -186,19 +189,31 @@ security:
     oauth2:
         resource:
             filter-order: 3
-    <%_ } else if (authenticationType === 'oauth2') { _%>
+    <%_ } _%>
+    <%_ if (authenticationType === 'oauth2') {  _%>
     oauth2:
         client:
             accessTokenUri: ${oauth2.issuer}/protocol/openid-connect/token
             userAuthorizationUri: ${oauth2.issuer}/protocol/openid-connect/auth
+            <%_ if (applicationType === 'gateway') { _%>
             clientId: web_app
             clientSecret: web_app
+            tokenName: access_token
             clientAuthenticationScheme: form
             scope: openid profile email
+            <%_ } _%>
+            <%_ if (applicationType === 'microservice') { _%>
+            clientId: internal
+            clientSecret: internal
+            authenticationScheme: header
+            clientAuthenticationScheme: header
+            <%_ } _%>
         resource:
             userInfoUri: ${oauth2.issuer}/protocol/openid-connect/userinfo
             tokenInfoUri: ${oauth2.issuer}/protocol/openid-connect/token/introspectr
             preferTokenInfo: false
+            jwt:
+                keyUri: ${oauth2.issuer}
     <%_ } _%>
 
 server:
