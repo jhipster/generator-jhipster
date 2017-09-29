@@ -32,7 +32,8 @@ export class UserService {
     private resourceUrl = <% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/<% } else { %>SERVER_API_URL + '<% } %>api/users';
 
     constructor(private http: Http) { }
-<% if (authenticationType !== 'oauth2') { %>
+<%_ if (authenticationType !== 'oauth2') { _%>
+
     create(user: User): Observable<ResponseWrapper> {
         return this.http.post(this.resourceUrl, user)
             .map((res: Response) => this.convertResponse(res));
@@ -52,7 +53,8 @@ export class UserService {
         return this.http.get(this.resourceUrl, options)
             .map((res: Response) => this.convertResponse(res));
     }
-<% if (authenticationType !== 'oauth2') { %>
+<%_ if (authenticationType !== 'oauth2') { _%>
+
     delete(login: string): Observable<Response> {
         return this.http.delete(`${this.resourceUrl}/${login}`);
     }

@@ -85,7 +85,8 @@ specifying a newer version in [package.json](package.json). You can also run `<%
 Add the `help` flag on any command to see how you can use it. For example, `<%= clientPackageManager %> help update`.
 
 The `<%= clientPackageManager %> run` command will list all of the scripts available to run for this project.
-<% if (authenticationType === 'oauth2') { %>
+<%_ if (authenticationType === 'oauth2') { _%>
+
 ## OAuth 2.0 / OpenID Connect
 
 Congratulations! You've selected an excellent way to secure your JHipster application. If you're not sure what OAuth and OpenID Connect (OIDC) are, please see [What the Heck is OAuth?](https://developer.okta.com/blog/2017/06/21/what-the-heck-is-oauth)
@@ -118,9 +119,9 @@ security:
             preferTokenInfo: false
 ```
 
-### Okta 
+### Okta
 
-If you'd like to use Okta instead of Keycloak, you'll need to change a few things. First, you'll need to create a free developer account at <https://developer.okta.com/signup/>. After doing so, you'll get your own Okta instance, that has a name like `https://dev-123456.oktapreview.com`. 
+If you'd like to use Okta instead of Keycloak, you'll need to change a few things. First, you'll need to create a free developer account at <https://developer.okta.com/signup/>. After doing so, you'll get your own Okta instance, that has a name like `https://dev-123456.oktapreview.com`.
 
 Modify `src/main/resources/application.yml` to use your Okta settings.
 

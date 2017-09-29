@@ -29,6 +29,7 @@ import <%=packageName%>.security.jwt.*;
 import io.github.jhipster.config.JHipsterProperties;
 <%_ } _%>
 import io.github.jhipster.security.*;
+
 <%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.beans.factory.BeanInitializationException;
 <%_ } _%>
@@ -69,7 +70,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 <%_ } _%>
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
-<% if (authenticationType !== 'oauth2') { %>
+<%_ if (authenticationType !== 'oauth2') { _%>
+
 import javax.annotation.PostConstruct;
 <% } %>
 @Configuration
@@ -122,7 +124,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         <%_ } _%>
         this.corsFilter = corsFilter;
     }
-    <% if (authenticationType !== 'oauth2') { %>
+    <%_ if (authenticationType !== 'oauth2') { _%>
+
     @PostConstruct
     public void init() {
         try {
@@ -220,8 +223,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .logoutUrl("/api/logout")
             .logoutSuccessHandler(ajaxLogoutSuccessHandler())<% if (clusteredHttpSession === 'hazelcast') { %>
             .deleteCookies("hazelcast.sessionId")<% } %>
-            .permitAll()<% } %>
-        <% if (authenticationType === 'oauth2') { %>.and()
+            .permitAll()<% } %><% if (authenticationType === 'oauth2') { %>
+        .and()
             .logout()
             .logoutUrl("/api/logout")
             .logoutSuccessHandler(ajaxLogoutSuccessHandler())<% if (clusteredHttpSession === 'hazelcast') { %>

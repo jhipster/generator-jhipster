@@ -63,6 +63,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 <%_ } _%>
+
 import javax.servlet.http.HttpServletRequest;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import javax.validation.Valid;
@@ -91,15 +92,18 @@ public class AccountResource {
 
     private final UserService userService;
     <%_ if (authenticationType !== 'oauth2') { _%>
+
     private final MailService mailService;
     <%_ } _%>
     <%_ if (authenticationType === 'session') { _%>
 
     private final PersistentTokenRepository persistentTokenRepository;
     <%_ } _%>
-    <% if (authenticationType !== 'oauth2') { %>
+    <%_ if (authenticationType !== 'oauth2') { _%>
+
     private static final String CHECK_ERROR_MESSAGE = "Incorrect password";
-    <% } %>
+    <%_ } _%>
+
     public AccountResource(UserRepository userRepository, UserService userService<% if (authenticationType !== 'oauth2') { %>, MailService mailService<% } %><% if (authenticationType === 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>) {
 
         this.userRepository = userRepository;
@@ -111,7 +115,8 @@ public class AccountResource {
         this.persistentTokenRepository = persistentTokenRepository;
         <%_ } _%>
     }
-<% if (authenticationType === 'oauth2') { %>
+<%_ if (authenticationType === 'oauth2') { _%>
+
     /**
      * GET  /authenticate : check if the user is authenticated, and return its login.
      *
@@ -247,6 +252,7 @@ public class AccountResource {
         }
     }
 <%_ } else { _%>
+
     /**
      * POST  /register : register the user.
      *

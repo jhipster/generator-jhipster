@@ -20,7 +20,7 @@ package <%=packageName%>.web.rest;
 
 import <%=packageName%>.config.Constants;
 import com.codahale.metrics.annotation.Timed;
-<% if (authenticationType !== 'oauth2') { %>
+<%_ if (authenticationType !== 'oauth2') { _%>
 import <%=packageName%>.domain.User;<% } %>
 import <%=packageName%>.repository.UserRepository;<% if (searchEngine === 'elasticsearch') { %>
 import <%=packageName%>.repository.search.UserSearchRepository;<% } %>
@@ -28,7 +28,7 @@ import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.service.MailService;
 import <%=packageName%>.service.UserService;
 import <%=packageName%>.service.dto.UserDTO;
-<% if (authenticationType !== 'oauth2') { %>
+<%_ if (authenticationType !== 'oauth2') { _%>
 import <%=packageName%>.web.rest.vm.ManagedUserVM;
 import <%=packageName%>.web.rest.util.HeaderUtil;<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
 import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
@@ -44,15 +44,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
-<% if (authenticationType !== 'oauth2') { %>
+
+<%_ if (authenticationType !== 'oauth2') { _%>
 import javax.validation.Valid;
 import java.net.URI;
-import java.net.URISyntaxException;<% } %>
-import java.util.*;<% if (searchEngine === 'elasticsearch') { %>
+import java.net.URISyntaxException;
+<%_ } _%>
+import java.util.*;
+<%_ if (searchEngine === 'elasticsearch') { _%>
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
+import static org.elasticsearch.index.query.QueryBuilders.*;
+<%_ } _%>
 
 /**
  * REST controller for managing users.
@@ -104,7 +108,8 @@ public class UserResource {
         this.userSearchRepository = userSearchRepository;
         <%_ } _%>
     }
-<% if (authenticationType !== 'oauth2') { %>
+<%_ if (authenticationType !== 'oauth2') { _%>
+
     /**
      * POST  /users  : Creates a new user.
      * <p>
@@ -213,7 +218,8 @@ public class UserResource {
             userService.getUserWithAuthoritiesByLogin(login)
                 .map(UserDTO::new));
     }
-<% if (authenticationType !== 'oauth2') { %>
+<%_ if (authenticationType !== 'oauth2') { _%>
+
     /**
      * DELETE /users/:login : delete the "login" User.
      *

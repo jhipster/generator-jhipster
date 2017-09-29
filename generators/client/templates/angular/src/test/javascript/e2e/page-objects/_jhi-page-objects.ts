@@ -135,13 +135,15 @@ export class SignInPage {
     clearPassword() {
         this.password.clear();
     }
-    <% if (authenticationType !== 'oauth2') { %>
+    <%_ if (authenticationType !== 'oauth2') { _%>
+
     autoSignInUsing(username: string, password: string) {
         this.setUserName(username);
         this.setPassword(password);
         return this.login();
     }
-    <% } else { %>
+    <%_ } else { _%>
+
     loginWithOAuth(username: string, password: string) {
 
         // Entering non angular site, tell webdriver to switch to synchronous mode.

@@ -31,11 +31,11 @@ import <%=packageName%>.repository.PersistentTokenRepository;<% } %><% } %>
 import <%=packageName%>.config.Constants;
 import <%=packageName%>.repository.UserRepository;<% if (searchEngine === 'elasticsearch') { %>
 import <%=packageName%>.repository.search.UserSearchRepository;<% } %>
-<% if (authenticationType !== 'oauth2') { %>
+<%_ if (authenticationType !== 'oauth2') { _%>
 import <%=packageName%>.security.AuthoritiesConstants;
 <%_ } _%>
 import <%=packageName%>.security.SecurityUtils;
-<% if (authenticationType !== 'oauth2') { %>
+<%_ if (authenticationType !== 'oauth2') { _%>
 import <%=packageName%>.service.util.RandomUtil;
 <%_ } _%>
 import <%=packageName%>.service.dto.UserDTO;
@@ -48,11 +48,11 @@ import org.springframework.cache.CacheManager;
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-    <% if (authenticationType !== 'oauth2') { %>
+    <%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.scheduling.annotation.Scheduled;
     <%_ } _%>
 <%_ } _%>
-<% if (authenticationType !== 'oauth2') { %>
+<%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.security.crypto.password.PasswordEncoder;
 <%_ } _%>
 import org.springframework.stereotype.Service;<% if (databaseType === 'sql') { %>
@@ -61,7 +61,7 @@ import org.springframework.transaction.annotation.Transactional;<% } %>
 <%_ if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { _%>
 import java.time.LocalDate;
 <%_ } _%>
-<% if (authenticationType !== 'oauth2') { %>
+<%_ if (authenticationType !== 'oauth2') { _%>
 import java.time.Instant;
 <%_ } _%>
 <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb')) { _%>
@@ -81,6 +81,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 <%_ if (authenticationType !== 'oauth2') { _%>
+
     private final PasswordEncoder passwordEncoder;
 <%_ } _%>
     <%_ if (enableSocialSignIn) { _%>
@@ -125,7 +126,8 @@ public class UserService {
         this.cacheManager = cacheManager;
         <%_ } _%>
     }
-<% if (authenticationType !== 'oauth2') { %>
+<%_ if (authenticationType !== 'oauth2') { _%>
+
     public Optional<User> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
         return userRepository.findOneByActivationKey(key)
@@ -256,6 +258,7 @@ public class UserService {
         return user;
     }
 <%_ } _%>
+
     /**
      * Update basic information (first name, last name, email, language) for the current user.
      *
@@ -348,6 +351,7 @@ public class UserService {
         });
     }
 <%_ if (authenticationType !== 'oauth2') { _%>
+
     public void changePassword(String password) {
         userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(user -> {
             String encryptedPassword = passwordEncoder.encode(password);
@@ -362,6 +366,7 @@ public class UserService {
         });
     }
 <%_ } _%>
+
     <%_ if (databaseType === 'sql') { _%>
     @Transactional(readOnly = true)
     <%_ } _%>
@@ -448,11 +453,13 @@ public class UserService {
             <%_ } _%>
         }
     }
-    <% } if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+    <%_ } if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+
     /**
      * @return a list of all the authorities
      */
     public List<String> getAuthorities() {
         return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
-    }<% } %>
+    }
+    <%_ } _%>
 }

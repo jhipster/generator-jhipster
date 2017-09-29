@@ -18,8 +18,9 @@
 -%>
 package <%=packageName%>.web.rest;
 import <%=packageName%>.config.Constants;
-<% if (databaseType === 'cassandra') { %>
-import <%=packageName%>.AbstractCassandraTest;<% } %>
+<%_ if (databaseType === 'cassandra') { _%>
+import <%=packageName%>.AbstractCassandraTest;
+<%_ } _%>
 import <%=packageName%>.<%= mainClass %>;<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
 import <%=packageName%>.domain.Authority;<% } %><% if (authenticationType === 'session') { %>
 import <%=packageName%>.domain.PersistentToken;<% } %>
@@ -71,7 +72,7 @@ import java.time.Instant;<% if (databaseType === 'sql' || databaseType === 'mong
 import java.time.LocalDate;<% } %>
 <%_ } _%>
 import java.util.*;
-<% if (authenticationType !== 'oauth2') { %>
+<%_ if (authenticationType !== 'oauth2') { _%>
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Matchers.anyObject;
@@ -97,7 +98,8 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
     @Autowired
     private AuthorityRepository authorityRepository;
 <%_ } _%>
-<% if (authenticationType !== 'oauth2') { %>
+<%_ if (authenticationType !== 'oauth2') { _%>
+
     @Autowired
     private UserService userService;
 <%_ } _%>
@@ -106,23 +108,28 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
     @Autowired
     private PersistentTokenRepository persistentTokenRepository;
 <%_ } _%>
-<% if (authenticationType !== 'oauth2') { %>
+<%_ if (authenticationType !== 'oauth2') { _%>
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     private HttpMessageConverter[] httpMessageConverters;
-<% } %>
+<%_ } _%>
+
     <% if (authenticationType === 'oauth2') { %>@MockBean<% } else { %>@Mock<% } %>
     private UserService mockUserService;
-<% if (authenticationType !== 'oauth2') { %>
+<%_ if (authenticationType !== 'oauth2') { _%>
+
     @Mock
     private MailService mockMailService;
 
     private MockMvc restMvc;
 <%_ } _%>
+
     private MockMvc restUserMockMvc;
-<% if (authenticationType === 'oauth2') { %>
+<%_ if (authenticationType === 'oauth2') { _%>
+
     @Autowired
     private WebApplicationContext context;
 <%_ } _%>
@@ -188,8 +195,8 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
         user.setLangKey("en");
         user.setAuthorities(authorities);
         when(mockUserService.getUserWithAuthorities()).thenReturn(user);
-
         <%_ if (authenticationType === 'oauth2') { _%>
+
         // create security-aware mockMvc
         restUserMockMvc = MockMvcBuilders
             .webAppContextSetup(context)
@@ -221,7 +228,8 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isInternalServerError());
     }
-<% if (authenticationType !== 'oauth2') { %>
+<%_ if (authenticationType !== 'oauth2') { _%>
+
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void testRegisterValid() throws Exception {
