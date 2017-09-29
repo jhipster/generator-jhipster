@@ -73,8 +73,8 @@ function askForServerSideOpts(meta) {
             ),
             choices: [
                 {
-                    value: 'JHipster Registry (uses Eureka, provides Spring Cloud Config support and monitoring dashboards)',
-                    name: 'Yes'
+                    value: 'eureka',
+                    name: 'JHipster Registry (uses Eureka, provides Spring Cloud Config support and monitoring dashboards)'
                 },
                 {
                     value: 'consul',
