@@ -64,11 +64,9 @@ import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
 <%_ } _%>
-import org.springframework.web.filter.CorsFilter;
 <%_ if (authenticationType === 'jwt') { _%>
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 <%_ } _%>
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 <%_ if (authenticationType !== 'oauth2') { _%>
 
