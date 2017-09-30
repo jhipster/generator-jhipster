@@ -57,6 +57,8 @@ function writeFiles() {
             this.template('_keycloak.yml', 'keycloak.yml');
             this.template('realm-config/_jhipster-realm.json', 'realm-config/jhipster-realm.json');
             this.template('realm-config/_jhipster-users-0.json', 'realm-config/jhipster-users-0.json');
+            this.template('_realm-config/_jhipster-realm.yml', 'realm-config/jhipster-realm.yml');
+            this.template('_realm-config/_jhipster-users-0.yml', 'realm-config/_jhipster-users-0.yml');
         },
 
         writeElkFiles() {
