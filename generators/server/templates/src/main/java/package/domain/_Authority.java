@@ -34,7 +34,7 @@ import java.io.Serializable;
  * An authority (a security role) used by Spring Security.
  */<% if (databaseType === 'sql') { %>
 @Entity
-@Table(name = "jhi_authority")
+@Table(name = "<%= jhiPrefix %>_authority")
 <%_ if (hibernateCache !== 'no') { if (hibernateCache === 'infinispan') { _%>
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <%_ } else { _%>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<%_ } } _%><% } %><% if (databaseType === 'mongodb') { %>

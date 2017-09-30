@@ -219,13 +219,14 @@ module.exports = class extends BaseGenerator {
             validateTableName() {
                 const prodDatabaseType = this.prodDatabaseType;
                 const entityTableName = this.entityTableName;
+                const jhiPrefix = this.jhiPrefix;
                 if (!(/^([a-zA-Z0-9_]*)$/.test(entityTableName))) {
                     this.error(chalk.red('The table name cannot contain special characters'));
                 } else if (entityTableName === '') {
                     this.error(chalk.red('The table name cannot be empty'));
                 } else if (jhiCore.isReservedTableName(entityTableName, prodDatabaseType)) {
-                    this.warning(chalk.red(`The table name cannot contain the '${entityTableName.toUpperCase()}' reserved keyword, so it will be prefixed with 'jhi_'`));
-                    this.entityTableName = `jhi_${entityTableName}`;
+                    this.warning(chalk.red(`The table name cannot contain the '${entityTableName.toUpperCase()}' reserved keyword, so it will be prefixed with '${jhiPrefix}_'`));
+                    this.entityTableName = `${jhiPrefix}_${entityTableName}`;
                 } else if (prodDatabaseType === 'oracle' && entityTableName.length > 26) {
                     this.error(chalk.red('The table name is too long for Oracle, try a shorter name'));
                 } else if (prodDatabaseType === 'oracle' && entityTableName.length > 14) {
@@ -253,6 +254,7 @@ module.exports = class extends BaseGenerator {
         this.searchEngine = this.fileData.searchEngine || this.searchEngine;
         this.javadoc = this.fileData.javadoc;
         this.entityTableName = this.fileData.entityTableName;
+        this.jhiPrefix = this.fileData.jhiPrefix || this.jhiPrefix;
         this.copyFilteringFlag(this.fileData, this);
         if (_.isUndefined(this.entityTableName)) {
             this.warning(`entityTableName is missing in .jhipster/${this.name}.json, using entity name as fallback`);
@@ -260,7 +262,8 @@ module.exports = class extends BaseGenerator {
         }
         if (jhiCore.isReservedTableName(this.entityTableName, this.prodDatabaseType)) {
             const entityTableName = this.entityTableName;
-            this.entityTableName = `jhi_${entityTableName}`;
+            const jhiPrefix = this.jhiPrefix;
+            this.entityTableName = `${jhiPrefix}_${entityTableName}`;
         }
         this.fields.forEach((field) => {
             this.fieldNamesUnderscored.push(_.snakeCase(field.fieldName));
@@ -519,8 +522,9 @@ module.exports = class extends BaseGenerator {
 
                     if (_.isUndefined(field.fieldNameAsDatabaseColumn)) {
                         const fieldNameUnderscored = _.snakeCase(field.fieldName);
+                        const jhiPrefix = this.jhiPrefix;
                         if (jhiCore.isReservedTableName(fieldNameUnderscored, this.databaseType)) {
-                            field.fieldNameAsDatabaseColumn = `jhi_${fieldNameUnderscored}`;
+                            field.fieldNameAsDatabaseColumn = `${jhiPrefix}_${fieldNameUnderscored}`;
                         } else {
                             field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
                         }
@@ -622,6 +626,7 @@ module.exports = class extends BaseGenerator {
 
                     const otherEntityName = relationship.otherEntityName;
                     const otherEntityData = this.getEntityJson(otherEntityName);
+                    const jhiPrefix = this.jhiPrefix;
 
                     if (this.dto && this.dto === 'mapstruct') {
                         if (otherEntityData && (!otherEntityData.dto || otherEntityData.dto !== 'mapstruct')) {
@@ -630,7 +635,7 @@ module.exports = class extends BaseGenerator {
                     }
 
                     if (otherEntityName === 'user') {
-                        relationship.otherEntityTableName = 'jhi_user';
+                        relationship.otherEntityTableName = `${jhiPrefix}_user`;
                     } else {
                         relationship.otherEntityTableName = otherEntityData ? otherEntityData.entityTableName : null;
                         if (!relationship.otherEntityTableName) {
@@ -638,7 +643,7 @@ module.exports = class extends BaseGenerator {
                         }
                         if (jhiCore.isReservedTableName(relationship.otherEntityTableName, this.prodDatabaseType)) {
                             const otherEntityTableName = relationship.otherEntityTableName;
-                            relationship.otherEntityTableName = `jhi_${otherEntityTableName}`;
+                            relationship.otherEntityTableName = `${jhiPrefix}_${otherEntityTableName}`;
                         }
                     }
 

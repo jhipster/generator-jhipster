@@ -54,7 +54,7 @@ import java.time.Instant;
  * A user.
  */<% if (databaseType === 'sql') { %>
 @Entity
-@Table(name = "jhi_user")<% } %>
+@Table(name = "<%= jhiPrefix %>_user")<% } %>
 <%_ if (hibernateCache !== 'no' && databaseType === 'sql') { if (hibernateCache === 'infinispan') { _%>
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <%_ } else { _%>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE) <%_ } } _%><% if (databaseType === 'mongodb') { %>
@@ -158,7 +158,7 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb') { 
     @JsonIgnore<% if (databaseType === 'sql') { %>
     @ManyToMany
     @JoinTable(
-        name = "jhi_user_authority",
+        name = "<%= jhiPrefix %>_user_authority",
         joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
     <%_ if (hibernateCache !== 'no') { if (hibernateCache === 'infinispan') { _%>
