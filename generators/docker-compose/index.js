@@ -46,6 +46,7 @@ module.exports = class extends BaseGenerator {
                 this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
                 this.DOCKER_JHIPSTER_IMPORT_DASHBOARDS = constants.DOCKER_JHIPSTER_IMPORT_DASHBOARDS;
                 this.DOCKER_JHIPSTER_ZIPKIN = constants.DOCKER_JHIPSTER_ZIPKIN;
+                this.DOCKER_KEYCLOAK = constants.DOCKER_KEYCLOAK;
                 this.DOCKER_TRAEFIK = constants.DOCKER_TRAEFIK;
                 this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
                 this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
@@ -79,6 +80,7 @@ module.exports = class extends BaseGenerator {
             },
 
             loadConfig() {
+                this.authenticationType = this.config.get('authenticationType');
                 this.defaultAppsFolders = this.config.get('appsFolders');
                 this.directoryPath = this.config.get('directoryPath');
                 this.gatewayType = this.config.get('gatewayType');
