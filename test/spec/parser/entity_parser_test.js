@@ -7,6 +7,8 @@ const fail = expect.fail;
 const JDLParser = require('../../../lib/parser/jdl_parser');
 const EntityParser = require('../../../lib/parser/entity_parser');
 const parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
+const ApplicationTypes = require('../../../lib/core/jhipster/application_types').APPLICATION_TYPES;
+const DatabaseTypes = require('../../../lib/core/jhipster/database_types').Types;
 
 describe('::convert', () => {
   describe('when passing invalid parameters', () => {
@@ -258,6 +260,21 @@ describe('::convert', () => {
       it('converts it', () => {
         expect(content.A.jpaMetamodelFiltering).to.be.true;
         expect(content.B.jpaMetamodelFiltering).to.be.false;
+      });
+    });
+    describe('when converting a JDL inside a microservice app', () => {
+      describe('without the microservice option in the JDL', () => {
+        const input = parseFromFiles(['./test/test_files/no_microservice.jdl']);
+        const content = EntityParser.parse({
+          jdlObject: JDLParser.parse(input, DatabaseTypes.sql, ApplicationTypes.MICROSERVICE, 'toto'),
+          databaseType: DatabaseTypes.sql
+        });
+
+        it('adds it to every entity', () => {
+          Object.keys(content).forEach((entityName) => {
+            expect(content[entityName].microserviceName).to.equal('toto');
+          });
+        });
       });
     });
   });

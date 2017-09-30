@@ -12,6 +12,8 @@ const JDLField = require('../../../lib/core/jdl_field');
 const JDLValidation = require('../../../lib/core/jdl_validation');
 const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
 const JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
+const ApplicationTypes = require('../../../lib/core/jhipster/application_types').APPLICATION_TYPES;
+const DatabaseTypes = require('../../../lib/core/jhipster/database_types').Types;
 const FieldTypes = require('../../../lib/core/jhipster/field_types').SQL_TYPES;
 const Validations = require('../../../lib/core/jhipster/validations').VALIDATIONS;
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options').UNARY_OPTIONS;
@@ -590,6 +592,22 @@ describe('JDLParser', () => {
         it('works', () => {
           expect(content.options.options.filter.entityNames.has('*')).to.be.true;
           expect(content.options.options.filter.excludedNames.has('B')).to.be.true;
+        });
+      });
+      describe('when parsing a JDL inside a microservice app', () => {
+        describe('without the microservice option in the JDL', () => {
+          let input = null;
+          let content = null;
+
+          beforeEach(() => {
+            input = parseFromFiles(['./test/test_files/no_microservice.jdl']);
+            content = JDLParser.parse(input, DatabaseTypes.sql, ApplicationTypes.MICROSERVICE, 'toto');
+          });
+
+          it('adds it to every entity', () => {
+            expect(Object.keys(content.options.options).length).to.equal(1);
+            expect(content.options.options.microservice_toto.entityNames.toString()).to.deep.equal('[*]');
+          });
         });
       });
     });
