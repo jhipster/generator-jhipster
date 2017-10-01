@@ -225,6 +225,9 @@ module.exports = class extends BaseGenerator {
                     if (messageBroker === 'kafka') {
                         this.useKafka = true;
                     }
+                    // Expose authenticationType
+                    this.authenticationType = appConfig.authenticationType;
+
                     // Dump the file
                     let yamlString = jsyaml.dump(parentConfiguration, { indent: 4 });
 
