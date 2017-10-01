@@ -32,7 +32,7 @@ describe('JDLObject', () => {
     describe('when adding a valid application', () => {
       it('works', () => {
         const object = new JDLObject();
-        const application = new JDLApplication({});
+        const application = new JDLApplication({ config: { jhipsterVersion: '4.9.0' } });
         object.addApplication(application);
         expect(object.applications[application.config.baseName]).to.deep.eq(application);
       });
@@ -238,7 +238,7 @@ describe('JDLObject', () => {
   describe('#toString', () => {
     it('stringifies the JDL object', () => {
       const object = new JDLObject();
-      const application = new JDLApplication({});
+      const application = new JDLApplication({ config: { jhipsterVersion: '4.9.0' } });
       object.addApplication(application);
       const entityA = new JDLEntity({ name: 'EntityA', tableName: 't_entity_a' });
       const field = new JDLField({ name: 'myField', type: 'String' });

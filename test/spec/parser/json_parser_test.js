@@ -172,11 +172,11 @@ describe('::parse', () => {
     it('parses server options', () => {
       expect(content.getOptions().filter(
         option => option.name === UnaryOptions.SKIP_CLIENT && option.entityNames.has('*')).length
-      ).to.eq(1);
+      ).to.eq(0);
       expect(
         content.getOptions().filter(
           option => option.name === UnaryOptions.SKIP_SERVER && option.entityNames.has('*')).length
-      ).to.eq(1);
+      ).to.eq(0);
     });
   });
 

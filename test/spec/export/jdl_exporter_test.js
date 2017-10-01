@@ -29,7 +29,10 @@ describe('::exportToJDL', () => {
       Exporter.exportToJDL(jdl);
       const input = JDLReader.parseFromFiles(['./jhipster-jdl.jh']);
       const newEntities = EntityParser.parse({
-        jdlObject: JDLParser.parse(input, 'sql'),
+        jdlObject: JDLParser.parse({
+          document: input,
+          databaseType: 'sql'
+        }),
         databaseType: 'sql'
       });
       const previousEntities = {};

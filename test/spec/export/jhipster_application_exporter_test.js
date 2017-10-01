@@ -23,14 +23,20 @@ describe('::exportApplications', () => {
     describe('when exporting an application to JSON', () => {
       before(() => {
         Exporter.exportApplications(
-          JDLParser.parse(
-            parseFromFiles(['./test/test_files/application.jdl']), 'sql', 'monolith').applications);
+          JDLParser.parse({
+            document: parseFromFiles(['./test/test_files/application.jdl']),
+            databaseType: 'sql',
+            applicationType: 'monolith',
+            applicationName: 'toto',
+            generatorVersion: '4.9.0'
+          }).applications
+        );
       });
       after(() => {
-        fs.unlinkSync('./test.json');
+        fs.unlinkSync('.yo-rc.json');
       });
       it('exports it', () => {
-        fs.readFileSync('./test.json');
+        fs.readFileSync('.yo-rc.json', { encoding: 'utf8' });
       });
     });
   });

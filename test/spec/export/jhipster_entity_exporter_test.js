@@ -25,7 +25,10 @@ describe('::exportEntities', () => {
     describe('when exporting JDL to entity json for SQL type', () => {
       const input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
       const content = EntityParser.parse({
-        jdlObject: JDLParser.parse(input, 'sql'),
+        jdlObject: JDLParser.parse({
+          document: input,
+          databaseType: 'sql'
+        }),
         databaseType: 'sql'
       });
       Exporter.exportEntities(content);
@@ -131,7 +134,10 @@ describe('::exportEntities', () => {
     describe('when exporting JDL to entity json for an existing entity', () => {
       let input = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
       let content = EntityParser.parse({
-        jdlObject: JDLParser.parse(input, 'sql'),
+        jdlObject: JDLParser.parse({
+          document: input,
+          databaseType: 'sql'
+        }),
         databaseType: 'sql'
       });
       it('exports it with same changeLogDate', (done) => {
@@ -141,7 +147,10 @@ describe('::exportEntities', () => {
         setTimeout(() => {
           input = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
           content = EntityParser.parse({
-            jdlObject: JDLParser.parse(input, 'sql'),
+            jdlObject: JDLParser.parse({
+              document: input,
+              databaseType: 'sql'
+            }),
             databaseType: 'sql'
           });
           Exporter.exportEntities(content, true);

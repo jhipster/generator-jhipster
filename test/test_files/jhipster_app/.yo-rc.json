@@ -1,32 +1,33 @@
 {
   "generator-jhipster": {
-    "jhipsterVersion": "3.7.1",
-    "baseName": "standard",
+    "promptValues": {
+      "packageName": "com.mycompany.myapp"
+    },
+    "jhipsterVersion": "4.9.0",
+    "baseName": "test",
     "packageName": "com.mycompany.myapp",
     "packageFolder": "com/mycompany/myapp",
     "serverPort": "8080",
-    "authenticationType": "session",
+    "authenticationType": "jwt",
     "hibernateCache": "ehcache",
     "clusteredHttpSession": false,
-    "websocket": false,
+    "websocket": "spring-websocket",
     "databaseType": "sql",
-    "devDatabaseType": "h2Memory",
-    "prodDatabaseType": "postgresql",
-    "searchEngine": false,
-    "buildTool": "gradle",
-    "enableSocialSignIn": false,
-    "rememberMeKey": "5f1100e7eae25e2abe32d7b2031ac1f2acc778d8",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "mysql",
+    "searchEngine": "elasticsearch",
+    "messageBroker": "kafka",
+    "serviceDiscoveryType": "eureka",
+    "buildTool": "maven",
+    "enableSocialSignIn": true,
+    "enableSwaggerCodegen": true,
+    "jwtSecretKey": "a87d8d5e819a90159925d7306f5a362840935344",
+    "clientFramework": "angularX",
     "useSass": false,
+    "clientPackageManager": "yarn",
     "applicationType": "monolith",
     "testFrameworks": [],
     "jhiPrefix": "jhi",
-    "enableTranslation": true,
-    "nativeLanguage": "en",
-    "languages": [
-      "en"
-    ],
-    "skipUserManagement": false,
-    "skipClient": true,
-    "skipServer": true
+    "enableTranslation": false
   }
 }

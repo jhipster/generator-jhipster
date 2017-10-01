@@ -6,12 +6,13 @@ describe('JDLApplication', () => {
   describe('::new', () => {
     describe('without specifying special options', () => {
       it('uses default values', () => {
-        const jdlApplication = new JDLApplication({});
+        const jdlApplication = new JDLApplication({ config: { jhipsterVersion: '4.9.0' } });
         const jdlApplicationConfig = jdlApplication.config;
+        expect(jdlApplicationConfig.jhipsterVersion).to.eq('4.9.0');
         expect(jdlApplicationConfig.baseName).to.eq('jhipster');
         expect(jdlApplicationConfig.path).to.eq('jhipster');
-        expect(jdlApplicationConfig.packageName).to.eq('io.github.jhipster');
-        expect(jdlApplicationConfig.packageFolder).to.eq('io/github/jhipster');
+        expect(jdlApplicationConfig.packageName).to.eq('com.mycompany.myapp');
+        expect(jdlApplicationConfig.packageFolder).to.eq('com/mycompany/myapp');
         expect(jdlApplicationConfig.authenticationType).to.eq('session');
         expect(jdlApplicationConfig.hibernateCache).to.eq('no');
         expect(jdlApplicationConfig.clusteredHttpSession).to.eq('no');
@@ -44,13 +45,13 @@ describe('JDLApplication', () => {
   });
   describe('#toString', () => {
     it('stringifies the application object', () => {
-      const jdlApplication = new JDLApplication({});
+      const jdlApplication = new JDLApplication({ config: { jhipsterVersion: '4.9.0' } });
       expect(jdlApplication.toString()).to.eq(`application {
   config {
     baseName jhipster
     path jhipster
-    packageName io.github.jhipster
-    packageFolder io/github/jhipster
+    packageName com.mycompany.myapp
+    packageFolder com/mycompany/myapp
     authenticationType session
     hibernateCache no
     clusteredHttpSession no
@@ -78,6 +79,7 @@ describe('JDLApplication', () => {
     skipUserManagement false
     skipClient false
     skipServer false
+    jhipsterVersion 4.9.0
   }
 }`);
     });

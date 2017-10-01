@@ -24,7 +24,10 @@ describe('JDLParser', () => {
       describe('because there is no document', () => {
         it('fails', () => {
           try {
-            JDLParser.parse(null, 'sql');
+            JDLParser.parse({
+              document: null,
+              databaseType: 'sql'
+            });
             fail();
           } catch (error) {
             expect(error.name).to.eq('NullPointerException');
@@ -35,8 +38,8 @@ describe('JDLParser', () => {
         it('fails', () => {
           try {
             JDLParser.parse({
-              notNull: 42
-            }, null);
+              document: { notNull: 42 }
+            });
             fail();
           } catch (error) {
             expect(error.name).to.eq('NullPointerException');
@@ -47,8 +50,9 @@ describe('JDLParser', () => {
         it('fails', () => {
           try {
             JDLParser.parse({
-              notNull: 42
-            }, 'WRONG');
+              document: { notNull: 42 },
+              databaseType: 'WRONG'
+            });
             fail();
           } catch (error) {
             expect(error.name).to.eq('IllegalArgumentException');
@@ -59,7 +63,10 @@ describe('JDLParser', () => {
     describe('when passing valid args', () => {
       describe('with no error', () => {
         const input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
-        const content = JDLParser.parse(input, 'mysql');
+        const content = JDLParser.parse({
+          document: input,
+          databaseType: 'sql'
+        });
         it('builds a JDLObject', () => {
           expect(content).not.to.be.null;
           expect(content.entities.Department).to.deep.eq(new JDLEntity({
@@ -168,12 +175,19 @@ describe('JDLParser', () => {
       describe('with an application type', () => {
         const input = parseFromFiles(['./test/test_files/invalid_field_type.jdl']);
         it('doesn\'t check for field types', () => {
-          JDLParser.parse(input, 'sql', 'gateway');
+          JDLParser.parse({
+            document: input,
+            databaseType: 'sql',
+            applicationType: 'gateway'
+          });
         });
       });
       describe('with a required relationship', () => {
         const input = parseFromFiles(['./test/test_files/required_relationships.jdl']);
-        const content = JDLParser.parse(input, 'sql');
+        const content = JDLParser.parse({
+          document: input,
+          databaseType: 'sql'
+        });
         it('adds it', () => {
           expect(content.relationships.relationships.OneToOne['OneToOne_A{b}_B{a}'].isInjectedFieldInFromRequired).to.be.true;
           expect(content.relationships.relationships.OneToOne['OneToOne_A{b}_B{a}'].isInjectedFieldInToRequired).to.be.false;
@@ -181,7 +195,10 @@ describe('JDLParser', () => {
       });
       describe('with a field name \'id\'', () => {
         const input = parseFromFiles(['./test/test_files/id_field.jdl']);
-        const content = JDLParser.parse(input, 'sql');
+        const content = JDLParser.parse({
+          document: input,
+          databaseType: 'sql'
+        });
         it('doesn\'t add it', () => {
           expect(content.entities.A).to.deep.eq(new JDLEntity({
             name: 'A',
@@ -196,7 +213,10 @@ describe('JDLParser', () => {
         const input = parseFromFiles(['./test/test_files/invalid_field_type.jdl']);
         it('fails', () => {
           try {
-            JDLParser.parse(input, 'sql');
+            JDLParser.parse({
+              document: input,
+              databaseType: 'sql'
+            });
             fail();
           } catch (error) {
             expect(error.name).to.eq('WrongTypeException');
@@ -207,7 +227,10 @@ describe('JDLParser', () => {
         const input = parseFromFiles(['./test/test_files/non_existent_validation.jdl']);
         it('fails', () => {
           try {
-            JDLParser.parse(input, 'sql');
+            JDLParser.parse({
+              document: input,
+              databaseType: 'sql'
+            });
             fail();
           } catch (error) {
             expect(error.name).to.eq('WrongValidationException');
@@ -218,7 +241,10 @@ describe('JDLParser', () => {
         const input = parseFromFiles(['./test/test_files/unexistent_entities_for_relationship.jdl']);
         it('fails', () => {
           try {
-            JDLParser.parse(input, 'sql');
+            JDLParser.parse({
+              document: input,
+              databaseType: 'sql'
+            });
             fail();
           } catch (error) {
             expect(error.name).to.eq('UndeclaredEntityException');
@@ -229,7 +255,10 @@ describe('JDLParser', () => {
         const input = parseFromFiles(['./test/test_files/user_entity_from_relationship.jdl']);
         it('fails', () => {
           try {
-            JDLParser.parse(input, 'sql');
+            JDLParser.parse({
+              document: input,
+              databaseType: 'sql'
+            });
             fail();
           } catch (error) {
             expect(error.name).to.eq('IllegalAssociationException');
@@ -238,7 +267,10 @@ describe('JDLParser', () => {
       });
       describe('with User entity as to for a relationship', () => {
         const input = parseFromFiles(['./test/test_files/user_entity_to_relationship.jdl']);
-        const content = JDLParser.parse(input, 'sql');
+        const content = JDLParser.parse({
+          document: input,
+          databaseType: 'sql'
+        });
         it('is processed', () => {
           expect(content.relationships.relationships.ManyToOne['ManyToOne_A{user}_User{a}'].to.name).to.eq('User');
           expect(content.relationships.relationships.OneToOne['OneToOne_B{user}_User'].to.name).to.eq('User');
@@ -248,7 +280,10 @@ describe('JDLParser', () => {
         const input = parseFromFiles(['./test/test_files/invalid_option.jdl']);
         it('fails', () => {
           try {
-            JDLParser.parse(input, 'sql');
+            JDLParser.parse({
+              document: input,
+              databaseType: 'sql'
+            });
             fail();
           } catch (error) {
             expect(error.name).to.eq('IllegalArgumentException');
@@ -257,7 +292,10 @@ describe('JDLParser', () => {
       });
       describe('with a required enum', () => {
         const input = parseFromFiles(['./test/test_files/enum.jdl']);
-        const content = JDLParser.parse(input, 'sql');
+        const content = JDLParser.parse({
+          document: input,
+          databaseType: 'sql'
+        });
         const enumField = new JDLField({
           name: 'sourceType',
           type: 'MyEnum'
@@ -275,7 +313,10 @@ describe('JDLParser', () => {
       });
       describe('when using the noFluentMethods option', () => {
         let input = parseFromFiles(['./test/test_files/fluent_methods.jdl']);
-        let content = JDLParser.parse(input, 'sql');
+        let content = JDLParser.parse({
+          document: input,
+          databaseType: 'sql'
+        });
         it('adds it correctly', () => {
           expect(content.getOptions()).to.deep.eq([
             new JDLUnaryOption({
@@ -284,7 +325,10 @@ describe('JDLParser', () => {
             })
           ]);
           input = parseFromFiles(['./test/test_files/fluent_methods2.jdl']);
-          content = JDLParser.parse(input, 'sql');
+          content = JDLParser.parse({
+            document: input,
+            databaseType: 'sql'
+          });
           expect(content.getOptions()).to.deep.eq([
             new JDLUnaryOption({
               name: UnaryOptions.NO_FLUENT_METHOD,
@@ -296,7 +340,10 @@ describe('JDLParser', () => {
       });
       describe('when having following comments', () => {
         const input = parseFromFiles(['./test/test_files/following_comments.jdl']);
-        const content = JDLParser.parse(input, 'sql');
+        const content = JDLParser.parse({
+          document: input,
+          databaseType: 'sql'
+        });
         it('accepts them', () => {
           expect(content.entities.A.fields.name.comment).to.eq('abc');
           expect(content.entities.A.fields.thing.comment).to.eq('def');
@@ -316,7 +363,10 @@ describe('JDLParser', () => {
       });
       describe('when parsing another complex JDL file', () => {
         const input = parseFromFiles(['./test/test_files/complex_jdl_2.jdl']);
-        const content = JDLParser.parse(input, 'sql');
+        const content = JDLParser.parse({
+          document: input,
+          databaseType: 'sql'
+        });
         it('parses it', () => {
           expect(content.entities.A).to.deep.eq({
             name: 'A',
@@ -472,7 +522,10 @@ describe('JDLParser', () => {
       });
       describe('when having two consecutive comments for fields', () => {
         const input = parseFromFiles(['./test/test_files/field_comments.jdl']);
-        const content = JDLParser.parse(input, 'sql');
+        const content = JDLParser.parse({
+          document: input,
+          databaseType: 'sql'
+        });
         it('assigns them correctly', () => {
           expect(content.entities.TestEntity.fields).to.deep.eq({
             first: {
@@ -523,7 +576,10 @@ describe('JDLParser', () => {
       });
       describe('when having constants', () => {
         const input = parseFromFiles(['./test/test_files/constants.jdl']);
-        const content = JDLParser.parse(input, 'sql');
+        const content = JDLParser.parse({
+          document: input,
+          databaseType: 'sql'
+        });
         it('assigns the constants\' value when needed', () => {
           expect(content.entities.A.fields).to.deep.eq({
             name: {
@@ -578,7 +634,10 @@ describe('JDLParser', () => {
         const input = parseFromFiles(['./test/test_files/cassandra_jdl.jdl']);
         it('fails', () => {
           try {
-            JDLParser.parse(input, 'cassandra');
+            JDLParser.parse({
+              document: input,
+              databaseType: 'cassandra'
+            });
           } catch (error) {
             expect(error.name).to.eq('IllegalOptionException');
           }
@@ -586,7 +645,10 @@ describe('JDLParser', () => {
       });
       describe('when parsing application', () => {
         const input = parseFromFiles(['./test/test_files/application.jdl']);
-        const content = JDLParser.parse(input, 'sql');
+        const content = JDLParser.parse({
+          document: input,
+          databaseType: 'sql'
+        });
         it('parses it', () => {
           const application = content.applications.toto.config;
           expect(application.baseName).to.eq('toto');
@@ -626,7 +688,10 @@ describe('JDLParser', () => {
       });
       describe('when parsing filtered entities', () => {
         const input = parseFromFiles(['./test/test_files/filtering.jdl']);
-        const content = JDLParser.parse(input, 'sql');
+        const content = JDLParser.parse({
+          document: input,
+          databaseType: 'sql'
+        });
         it('works', () => {
           expect(content.options.options.filter.entityNames.has('*')).to.be.true;
           expect(content.options.options.filter.excludedNames.has('B')).to.be.true;
@@ -639,7 +704,13 @@ describe('JDLParser', () => {
 
           beforeEach(() => {
             input = parseFromFiles(['./test/test_files/no_microservice.jdl']);
-            content = JDLParser.parse(input, DatabaseTypes.sql, ApplicationTypes.MICROSERVICE, 'toto');
+            content = JDLParser.parse({
+              document: input,
+              databaseType: DatabaseTypes.sql,
+              applicationType: ApplicationTypes.MICROSERVICE,
+              applicationName: 'toto',
+              generatorVersion: '4.9.0'
+            });
           });
 
           it('adds it to every entity', () => {

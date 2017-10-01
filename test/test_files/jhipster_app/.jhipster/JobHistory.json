@@ -46,7 +46,5 @@
   "dto": "no",
   "pagination": "infinite-scroll",
   "service": "no",
-  "jpaMetamodelFiltering": false,
-  "skipClient": true,
-  "skipServer": true
+  "jpaMetamodelFiltering": false
 }

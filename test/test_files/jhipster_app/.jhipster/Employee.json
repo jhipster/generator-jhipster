@@ -71,7 +71,5 @@
   "fluentMethods": false,
   "searchEngine": "elasticsearch",
   "angularJSSuffix": "myentities",
-  "microserviceName": "mymicroservice",
-  "skipClient": true,
-  "skipServer": true
+  "microserviceName": "mymicroservice"
 }
