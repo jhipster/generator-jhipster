@@ -20,7 +20,7 @@
     <h2 data-translate="configuration.title">Configuration</h2>
 
     <span data-translate="configuration.filter">Filter (by prefix)</span> <input type="text" ng-model="filter" class="form-control">
-    <label ng-hide="filteredConfig.length === 0">Spring configuration</label>
+    <h3 ng-hide="filteredConfig.length === 0">Spring configuration</h3>
     <table class="table table-condensed table-striped table-bordered table-responsive"
         style="table-layout:fixed" ng-hide="filteredConfig.length === 0">
         <thead>
@@ -36,14 +36,14 @@
                 <div class="row" ng-repeat="(key, value) in entry.properties">
                     <div class="col-md-4">{{key}}</div>
                     <div class="col-md-8">
-                        <span class="pull-right label label-default break">{{value}}</span>
+                        <span class="pull-right label label-success break">{{value}}</span>
                     </div>
                 </div>
             </td>
         </tr>
     </table>
     <div ng-repeat="(key, value) in vm.allConfiguration">
-        <label ng-hide="filtered.length === 0"><span>{{key}}</span></label>
+        <h4 ng-hide="filtered.length === 0"><span>{{key}}</span></h4>
         <table class="table table-condensed table-striped table-bordered table-responsive"
                style="table-layout:fixed" ng-hide="filtered.length === 0">
             <thead>
@@ -56,7 +56,7 @@
             <tr ng-repeat="item in filtered = (value | filter:filter)">
                 <td class="break">{{item.key}}</td>
                 <td class="break">
-                    <span class="pull-right label label-default break">{{item.val}}</span>
+                    <span class="pull-right label label-success break">{{item.val}}</span>
                 </td>
             </tr>
             </tbody>

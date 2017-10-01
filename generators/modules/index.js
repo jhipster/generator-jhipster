@@ -16,21 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const util = require('util');
-const generator = require('yeoman-generator');
 const _ = require('lodash');
 const chalk = require('chalk');
 const BaseGenerator = require('../generator-base');
 
 const constants = require('../generator-constants');
 
-const ModulesGenerator = generator.extend({});
-
-util.inherits(ModulesGenerator, BaseGenerator);
-
-module.exports = ModulesGenerator.extend({
-    constructor: function (...args) { // eslint-disable-line object-shorthand
-        generator.apply(this, args);
+module.exports = class extends BaseGenerator {
+    constructor(args, opts) {
+        super(args, opts);
 
         const jhipsterVar = this.options.jhipsterVar;
         const jhipsterFunc = this.options.jhipsterFunc;
@@ -169,7 +163,7 @@ module.exports = ModulesGenerator.extend({
         jhipsterFunc.buildApplication = this.buildApplication;
         jhipsterFunc.writeFilesToDisk = this.writeFilesToDisk;
         jhipsterFunc.getEntityJson = this.getEntityJson;
-    },
+    }
 
     initializing() {
         const insight = this.insight();
@@ -177,4 +171,4 @@ module.exports = ModulesGenerator.extend({
 
         this.log('Reading the JHipster project configuration for your module');
     }
-});
+};

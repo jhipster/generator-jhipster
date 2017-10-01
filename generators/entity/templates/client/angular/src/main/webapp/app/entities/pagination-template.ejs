@@ -48,17 +48,14 @@ currentAccount: any;
     constructor(
         private <%= entityInstance %>Service: <%= entityAngularName %>Service,
         private parseLinks: JhiParseLinks,
-        private alertService: JhiAlertService,
+        private jhiAlertService: JhiAlertService,
         private principal: Principal,
         private activatedRoute: ActivatedRoute,
         <%_ if (fieldsContainBlob) { _%>
         private dataUtils: JhiDataUtils,
         <%_ } _%>
         private router: Router,
-        private eventManager: JhiEventManager<%_ if (databaseType !== 'cassandra') { _%>,
-        private paginationUtil: JhiPaginationUtil,
-        private paginationConfig: PaginationConfig
-        <%_ } _%>
+        private eventManager: JhiEventManager
     ) {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.itemsPerPage = ITEMS_PER_PAGE;

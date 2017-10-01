@@ -90,18 +90,15 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
 }
 <%_ } _%>
 <%_ if(authenticationType === 'uaa') { _%>
+import <%=packageName%>.config.oauth2.OAuth2JwtAccessTokenConverter;
+import <%=packageName%>.config.oauth2.OAuth2Properties;
+import <%=packageName%>.security.oauth2.OAuth2SignatureVerifierClient;
 import <%=packageName%>.security.AuthoritiesConstants;
 
-import io.github.jhipster.config.JHipsterProperties;
-
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.RestTemplateCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -110,31 +107,42 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+<%_ if (applicationType === 'gateway') { _%>
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.web.filter.CorsFilter;
+<%_ } _%>
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Map;
 
 @Configuration
 @EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerAdapter {
+    private final OAuth2Properties oAuth2Properties;
 
-    private final JHipsterProperties jHipsterProperties;
+    <%_ if (applicationType === 'gateway') { _%>
+    private final CorsFilter corsFilter;
 
-    private final DiscoveryClient discoveryClient;
-
-    public MicroserviceSecurityConfiguration(JHipsterProperties jHipsterProperties,
-            DiscoveryClient discoveryClient) {
-
-        this.jHipsterProperties = jHipsterProperties;
-        this.discoveryClient = discoveryClient;
+    <%_ } _%>
+    public MicroserviceSecurityConfiguration(OAuth2Properties oAuth2Properties<%_ if (applicationType === 'gateway') { _%>, CorsFilter corsFilter<%_ } _%>) {
+        this.oAuth2Properties = oAuth2Properties;
+        <%_ if (applicationType === 'gateway') { _%>
+        this.corsFilter = corsFilter;
+        <%_ } _%>
     }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
             .csrf()
+		<%_ if (applicationType === 'gateway') { _%>
+            .ignoringAntMatchers("/h2-console/**")
+            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+        .and()
+            .addFilterBefore(corsFilter, CsrfFilter.class)
+		<%_ } else { _%>
             .disable()
+		<%_ } _%>
             .headers()
             .frameOptions()
             .disable()
@@ -156,29 +164,22 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
     }
 
     @Bean
-    public JwtAccessTokenConverter jwtAccessTokenConverter(
-            @Qualifier("loadBalancedRestTemplate") RestTemplate keyUriRestTemplate) {
-
-        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setVerifierKey(getKeyFromAuthorizationServer(keyUriRestTemplate));
-        return converter;
+    public JwtAccessTokenConverter jwtAccessTokenConverter(OAuth2SignatureVerifierClient signatureVerifierClient) {
+        return new OAuth2JwtAccessTokenConverter(oAuth2Properties, signatureVerifierClient);
     }
 
     @Bean
+	@Qualifier("loadBalancedRestTemplate")
     public RestTemplate loadBalancedRestTemplate(RestTemplateCustomizer customizer) {
         RestTemplate restTemplate = new RestTemplate();
         customizer.customize(restTemplate);
         return restTemplate;
     }
 
-    private String getKeyFromAuthorizationServer(RestTemplate keyUriRestTemplate) {
-        // Load available UAA servers
-        discoveryClient.getServices();
-        HttpEntity<Void> request = new HttpEntity<Void>(new HttpHeaders());
-        return (String) keyUriRestTemplate
-            .exchange("http://<%= uaaBaseName %>/oauth/token_key", HttpMethod.GET, request, Map.class).getBody()
-            .get("value");
-
+    @Bean
+    @Qualifier("vanillaRestTemplate")
+    public RestTemplate vanillaRestTemplate() {
+        return new RestTemplate();
     }
 }
 <%_ } _%>

@@ -352,13 +352,6 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'oauth2',
-            path: ANGULAR_DIR,
-            templates: [
-                'services/auth/_auth.oauth2.service.js'
-            ]
-        },
-        {
             condition: generator => generator.authenticationType === 'jwt' || generator.authenticationType === 'uaa',
             path: ANGULAR_DIR,
             templates: [

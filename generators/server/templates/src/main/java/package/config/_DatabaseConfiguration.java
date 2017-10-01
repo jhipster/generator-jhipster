@@ -24,10 +24,6 @@ import io.github.jhipster.config.liquibase.AsyncSpringLiquibase;
 
 import liquibase.integration.spring.SpringLiquibase;
 <%_ } _%>
-<%_ if (databaseType === 'mongodb' && authenticationType === 'oauth2') { _%>
-
-import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;
-<%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 
 import com.github.mongobee.Mongobee;
@@ -139,8 +135,7 @@ public class DatabaseConfiguration {
 
     @Bean
     public CustomConversions customConversions() {
-        List<Converter<?, ?>> converters = new ArrayList<>();<% if (authenticationType === 'oauth2') { %>
-        converters.add(new OAuth2AuthenticationReadConverter());<% } %>
+        List<Converter<?, ?>> converters = new ArrayList<>();
         converters.add(DateToZonedDateTimeConverter.INSTANCE);
         converters.add(ZonedDateTimeToDateConverter.INSTANCE);
         return new CustomConversions(converters);

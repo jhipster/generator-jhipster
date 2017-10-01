@@ -22,6 +22,7 @@ import <%=packageName%>.domain.Authority;
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.AuthorityRepository;
 import <%=packageName%>.repository.UserRepository;
+import <%=packageName%>.security.AuthoritiesConstants;
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import <%=packageName%>.repository.search.UserSearchRepository;
 <%_ } _%>
@@ -112,7 +113,7 @@ public class SocialService {
             throw new IllegalArgumentException("Email cannot be null with an existing login");
         }
         if (!StringUtils.isBlank(email)) {
-            Optional<User> user = userRepository.findOneByEmail(email);
+            Optional<User> user = userRepository.findOneByEmailIgnoreCase(email);
             if (user.isPresent()) {
                 log.info("User already exist associate the connection to this account");
                 return user.get();
@@ -122,7 +123,7 @@ public class SocialService {
         String login = getLoginDependingOnProviderId(userProfile, providerId);
         String encryptedPassword = passwordEncoder.encode(RandomStringUtils.random(10));
         Set<Authority> authorities = new HashSet<>(1);
-        authorities.add(authorityRepository.findOne("ROLE_USER"));
+        authorities.add(authorityRepository.findOne(AuthoritiesConstants.USER));
 
         User newUser = new User();
         newUser.setLogin(login);

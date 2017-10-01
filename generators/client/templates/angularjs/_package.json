@@ -58,7 +58,7 @@
     "gulp-rename": "1.2.2",
     "gulp-replace": "0.5.4",
     <%_ if (protractorTests) { _%>
-    "gulp-protractor": "3.0.0",
+    "gulp-protractor": "4.1.0",
     "gulp-util": "3.0.7",
     <%_ } _%>
     "gulp-rev": "7.1.2",
@@ -73,23 +73,22 @@
     <%_ if (protractorTests) { _%>
     "jasmine-reporters": "2.2.0",
     <%_ } _%>
-    "karma": "1.2.0",
-    "karma-chrome-launcher": "2.0.0",
+    "karma": "1.7.1",
+    "karma-chrome-launcher": "2.2.0",
     "karma-coverage": "1.1.1",
-    "karma-jasmine": "1.0.2",
-    "karma-junit-reporter": "1.1.0",
-    "karma-phantomjs-launcher": "1.0.2",
+    "karma-jasmine": "1.1.0",
+    "karma-junit-reporter": "1.2.0",
     "karma-script-launcher": "1.0.0",
     "lazypipe": "1.0.1",
     "lodash": "4.15.0",
     "main-bower-files": "2.13.1",
     "map-stream": "0.0.6",
-    "phantomjs-prebuilt": "2.1.12",
     <%_ if (protractorTests) { _%>
-    "protractor": "4.0.4",
-    "protractor-jasmine2-screenshot-reporter": "0.3.2",
+    "protractor": "5.1.2",
+    "protractor-jasmine2-screenshot-reporter": "0.4.1",
     <%_ } _%>
     "proxy-middleware": "0.15.0",
+    "puppeteer": "0.10.2",    
     "run-sequence": "1.2.2",
     <%_ if (buildTool === 'maven') { _%>
     "xml2js": "0.4.17",

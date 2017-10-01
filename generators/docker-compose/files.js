@@ -40,6 +40,12 @@ function writeFiles() {
             }
         },
 
+        writeTraefikFiles() {
+            if (this.gatewayType !== 'traefik') return;
+            this.template('_traefik.yml', 'traefik.yml');
+            this.template('traefik/_traefik.toml', 'traefik/traefik.toml');
+        },
+
         writeKafkaFiles() {
             if (!this.useKafka) return;
 

@@ -32,6 +32,7 @@ export class UserService {
     private resourceUrl = <% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/<% } else { %>SERVER_API_URL + '<% } %>api/users';
 
     constructor(private http: Http) { }
+<%_ if (authenticationType !== 'oauth2') { _%>
 
     create(user: User): Observable<ResponseWrapper> {
         return this.http.post(this.resourceUrl, user)
@@ -46,12 +47,13 @@ export class UserService {
     find(login: string): Observable<User> {
         return this.http.get(`${this.resourceUrl}/${login}`).map((res: Response) => res.json());
     }
-
+<% } %>
     query(req?: any): Observable<ResponseWrapper> {
         const options = createRequestOption(req);
         return this.http.get(this.resourceUrl, options)
             .map((res: Response) => this.convertResponse(res));
     }
+<%_ if (authenticationType !== 'oauth2') { _%>
 
     delete(login: string): Observable<Response> {
         return this.http.delete(`${this.resourceUrl}/${login}`);
@@ -67,7 +69,7 @@ export class UserService {
         return Observable.of(['ROLE_USER', 'ROLE_ADMIN']);
 <%_ } _%>
     }
-
+<% } %>
     private convertResponse(res: Response): ResponseWrapper {
         const jsonResponse = res.json();
         return new ResponseWrapper(res.headers, jsonResponse, res.status);

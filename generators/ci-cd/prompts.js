@@ -100,6 +100,13 @@ function askIntegrations() {
             default: 'docker-login'
         },
         {
+            when: response => this.pipelines.includes('jenkins') && response.jenkinsIntegrations.includes('publishDocker'),
+            type: 'input',
+            name: 'dockerRegistryOrganizationName',
+            message: 'What is the Organization Name for the Docker registry?',
+            default: 'docker-login'
+        },
+        {
             when: this.pipelines.includes('gitlab'),
             type: 'confirm',
             name: 'gitlabUseDocker',
@@ -120,6 +127,7 @@ function askIntegrations() {
         this.jenkinsSonarName = props.jenkinsSonarName;
         this.dockerRegistryURL = props.dockerRegistryURL;
         this.dockerRegistryCredentialsId = props.dockerRegistryCredentialsId;
+        this.dockerRegistryOrganizationName = props.dockerRegistryOrganizationName;
         this.gitlabUseDocker = props.gitlabUseDocker;
         this.heroku = props.heroku;
         done();

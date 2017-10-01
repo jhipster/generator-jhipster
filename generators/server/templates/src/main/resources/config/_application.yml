@@ -155,14 +155,50 @@ spring:
 
         # jhipster-needle-add-social-configuration
 <%_ } _%>
+<%_ if (authenticationType === 'oauth2') { _%>
 
+# ===================================================================
+# OpenID Connect Settings. Default settings are for Keycloak in Docker.
+# Start Keycloak using `docker-compose -f src/main/docker/keycloak.yml up`.
+#
+# To use Okta, your settings should resemble the following:
+#
+# oauth2.issuer: https://{yourOktaDomain}.com/oauth2/default
+# accessTokenUri: ${oauth2.issuer}/v1/token
+# userAuthorizationUri: ${oauth2.issuer}/v1/authorize
+# clientId: {copy after creating an OIDC app}
+# userInfoUri: ${oauth2.issuer}/v1/userinfo
+# tokenInfoUri: ${oauth2.issuer}/v1/introspect
+#
+# You can also override these properties using environment variables.
+# For example:
+#
+# export SECURITY_OAUTH2_CLIENT_CLIENT_ID="jhipster"
+# export SECURITY_OAUTH2_CLIENT_CLIENT_SECRET="38561a05"
+# ===================================================================
+
+oauth2.issuer: http://localhost:9080/auth/realms/jhipster
+<% } %>
 security:
     basic:
         enabled: false
-    <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
+    <%_ if (authenticationType === 'uaa') { _%>
     oauth2:
         resource:
             filter-order: 3
+    <%_ } else if (authenticationType === 'oauth2') { _%>
+    oauth2:
+        client:
+            accessTokenUri: ${oauth2.issuer}/protocol/openid-connect/token
+            userAuthorizationUri: ${oauth2.issuer}/protocol/openid-connect/auth
+            clientId: web_app
+            clientSecret: web_app
+            clientAuthenticationScheme: form
+            scope: openid profile email
+        resource:
+            userInfoUri: ${oauth2.issuer}/protocol/openid-connect/userinfo
+            tokenInfoUri: ${oauth2.issuer}/protocol/openid-connect/token/introspectr
+            preferTokenInfo: false
     <%_ } _%>
 
 server:

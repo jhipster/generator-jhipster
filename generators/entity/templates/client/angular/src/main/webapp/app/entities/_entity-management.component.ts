@@ -19,12 +19,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
-import { JhiEventManager, JhiParseLinks, JhiPaginationUtil<% if (enableTranslation) { %>, JhiLanguageService<% } %>, JhiAlertService<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
+import { JhiEventManager, JhiParseLinks, JhiAlertService<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
 
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
-import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
 @Component({
     selector: '<%= jhiPrefix %>-<%= entityFileName %>',
@@ -104,6 +103,6 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
 
     <%_ }} _%>
     private onError(error) {
-        this.alertService.error(error.message, null, null);
+        this.jhiAlertService.error(error.message, null, null);
     }
 }

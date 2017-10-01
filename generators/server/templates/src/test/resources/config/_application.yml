@@ -88,7 +88,7 @@ spring:
     <%_ if (databaseType === 'mongodb') { _%>
         mongodb:
             host: localhost
-            port: 27117
+            port: 0
             database: <%= baseName %>
     <%_ } _%>
     <%_ if (databaseType === 'cassandra') { _%>
@@ -124,9 +124,51 @@ spring:
 liquibase:
     contexts: test
 
+<%_ if (authenticationType === 'oauth2') { _%>
+
+# ===================================================================
+# OpenID Connect Settings. Default settings are for Keycloak in Docker.
+# Start Keycloak using `docker-compose -f src/main/docker/keycloak.yml up`.
+#
+# To use Okta, your settings should resemble the following:
+#
+# oauth2.issuer: https://{yourOktaDomain}.com/oauth2/default
+# accessTokenUri: ${oauth2.issuer}/v1/token
+# userAuthorizationUri: ${oauth2.issuer}/v1/authorize
+# clientId: {copy after creating an OIDC app}
+# userInfoUri: ${oauth2.issuer}/v1/userinfo
+# tokenInfoUri: ${oauth2.issuer}/v1/introspect
+#
+# You can also override these properties using environment variables.
+# For example:
+#
+# export SECURITY_OAUTH2_CLIENT_CLIENT_ID="jhipster"
+# export SECURITY_OAUTH2_CLIENT_CLIENT_SECRET="38561a05"
+# ===================================================================
+
+oauth2.issuer: http://localhost:9080/auth/realms/jhipster
+<% } %>
 security:
     basic:
         enabled: false
+    <%_ if (authenticationType === 'uaa') { _%>
+    oauth2:
+        resource:
+            filter-order: 3
+    <%_ } else if (authenticationType === 'oauth2') { _%>
+    oauth2:
+        client:
+            accessTokenUri: ${oauth2.issuer}/protocol/openid-connect/token
+            userAuthorizationUri: ${oauth2.issuer}/protocol/openid-connect/auth
+            clientId: web_app
+            clientSecret: web_app
+            clientAuthenticationScheme: form
+            scope: openid profile email
+        resource:
+            userInfoUri: ${oauth2.issuer}/protocol/openid-connect/userinfo
+            tokenInfoUri: ${oauth2.issuer}/protocol/openid-connect/token/introspectr
+            preferTokenInfo: false
+    <%_ } _%>
 
 server:
     port: 10344
@@ -154,12 +196,12 @@ jhipster:
             host: localhost
             port: 5000
             queue-size: 512
-<%_ if (!skipUserManagement) { _%>
+<%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
     mail:
         from: test@localhost
         base-url: http://127.0.0.1:8080
 <%_ } _%>
-<%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+<%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
     security:
         authentication:
     <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
@@ -176,13 +218,6 @@ jhipster:
             <%_ } _%>
             client-id: internal
             client-secret: internal
-    <%_ } _%>
-    <%_ if (authenticationType === 'oauth2') { _%>
-            oauth:
-                client-id: <%= baseName %>app
-                client-secret: my-secret-token-to-change-in-production
-                # Token is valid 30 minutes
-                token-validity-in-seconds: 1800
     <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationType === 'session') { _%>
