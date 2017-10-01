@@ -252,7 +252,10 @@ function writeFiles() {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/repository/_PersistentTokenRepository.java`, `${javaDir}repository/PersistentTokenRepository.java`);
             }
 
-            if (this.authenticationType !== 'oauth2') {
+            if (this.authenticationType === 'oauth2') {
+                this.template(`${SERVER_MAIN_SRC_DIR}package/config/_OAuth2Configuration.java`, `${javaDir}config/OAuth2Configuration.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/_OAuth2AuthenticationSuccessHandler.java`, `${javaDir}security/OAuth2AuthenticationSuccessHandler.java`);
+            } else {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/_DomainUserDetailsService.java`, `${javaDir}security/DomainUserDetailsService.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/_UserNotActivatedException.java`, `${javaDir}security/UserNotActivatedException.java`);
             }

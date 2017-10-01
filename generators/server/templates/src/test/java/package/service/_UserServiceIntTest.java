@@ -29,6 +29,7 @@ import <%=packageName%>.config.Constants;
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.service.dto.UserDTO;<% if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType !== 'oauth2') { %>
 import <%=packageName%>.service.util.RandomUtil;<% } %>
+import <%=packageName%>.web.rest.vm.ManagedUserVM;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,7 +102,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
 
     @Test
     public void assertThatOnlyActivatedUserCanRequestPasswordReset() {
-        User user = userService.createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
+        User user = createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
         Optional<User> maybeUser = userService.requestPasswordReset("john.doe@localhost");
         assertThat(maybeUser.isPresent()).isFalse();
         userRepository.delete(user);
@@ -109,7 +110,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
 
     @Test
     public void assertThatResetKeyMustNotBeOlderThan24Hours() {
-        User user = userService.createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
+        User user = createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
 
         Instant daysAgo = Instant.now().minus(25, ChronoUnit.HOURS);
         String resetKey = RandomUtil.generateResetKey();
@@ -128,7 +129,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
 
     @Test
     public void assertThatResetKeyMustBeValid() {
-        User user = userService.createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
+        User user = createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
 
         Instant daysAgo = Instant.now().minus(25, ChronoUnit.HOURS);
         user.setActivated(true);
@@ -142,7 +143,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
 
     @Test
     public void assertThatUserCanResetPassword() {
-        User user = userService.createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
+        User user = createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
         String oldPassword = user.getPassword();
         Instant daysAgo = Instant.now().minus(2, ChronoUnit.HOURS);
         String resetKey = RandomUtil.generateResetKey();
@@ -193,7 +194,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
 
     @Test
     public void testRemoveNotActivatedUsers() {
-        User user = userService.createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
+        User user = createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
         user.setActivated(false);
         user.setCreatedDate(Instant.now().minus(30, ChronoUnit.DAYS));
         userRepository.save(user);
@@ -201,5 +202,10 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         userService.removeNotActivatedUsers();
         assertThat(userRepository.findOneByLogin("johndoe")).isNotPresent();
     }
+
+    private User createUser(String login, String password, String firstName, String lastName, String email, String imageUrl, String langKey) {
+        return userService.registerUser(new ManagedUserVM(null, login, password, firstName, lastName, email, true, imageUrl, langKey, null, null, null, null, null));
+    }
     <%_ } _%>
+
 }
