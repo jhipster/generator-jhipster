@@ -119,8 +119,8 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb') { 
 <%_ } _%>
     private boolean activated = false;
 
-    @Size(min = 2, max = 5)<% if (databaseType === 'sql') { %>
-    @Column(name = "lang_key", length = 5)<% } %><% if (databaseType === 'mongodb') { %>
+    @Size(min = 2, max = 6)<% if (databaseType === 'sql') { %>
+    @Column(name = "lang_key", length = 6)<% } %><% if (databaseType === 'mongodb') { %>
     @Field("lang_key")<% } %><% if (databaseType === 'cassandra') { %>
     @Column(name = "lang_key")<% } %>
     private String langKey;
