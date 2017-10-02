@@ -18,7 +18,6 @@
 -%>
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -42,7 +41,6 @@ import { CookieModule } from 'ngx-cookie';
     ],
     exports: [
         FormsModule,
-        HttpModule,
         HttpClientModule,
         CommonModule,
         NgbModule,

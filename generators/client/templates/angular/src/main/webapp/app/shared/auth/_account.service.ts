@@ -17,18 +17,18 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 
 @Injectable()
 export class AccountService  {
-    constructor(private http: Http) { }
+    constructor(private http: HttpClient) { }
 
     get(): Observable<any> {
-        return this.http.get(<% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account'<%} else { %>'api/account'<% } %>).map((res: Response) => res.json());
+        return this.http.get(<% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account'<%} else { %>'api/account'<% } %>);
     }
 
-    save(account: any): Observable<Response> {
+    save(account: any): Observable<any> {
         return this.http.post(<% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account'<%} else { %>'api/account'<% } %>, account);
     }
 }

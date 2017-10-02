@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Response } from '@angular/http';
+import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JhiEventManager, JhiPaginationUtil, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
@@ -109,8 +109,8 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
             page: this.page - 1,
             size: this.itemsPerPage,
             sort: this.sort()}<% } %>).subscribe(
-            (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
-            (res: ResponseWrapper) => this.onError(res.json)
+                (res: HttpResponse<User[]>) => this.onSuccess(res.body, res.headers),
+                (res: HttpResponse<any>) => this.onError(res.body)
         );
     }
 

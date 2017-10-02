@@ -27,7 +27,7 @@ export class <%=jhiPrefixCapitalized%>ConfigurationService {
     }
 
     get(): Observable<any> {
-        return this.http.get('management/configprops').map((res: HttpResponse<any>) => {
+        return this.http.get('management/configprops', { observe: 'response' }).map((res: HttpResponse<any>) => {
             const properties: any[] = [];
 
             const propertiesObject = res.body;
@@ -46,7 +46,7 @@ export class <%=jhiPrefixCapitalized%>ConfigurationService {
     }
 
     getEnv(): Observable<any> {
-        return this.http.get('management/env').map((res: HttpResponse<any>) => {
+        return this.http.get('management/env', { observe: 'response' }).map((res: HttpResponse<any>) => {
             const properties: any = {};
 
             const propertiesObject = res.body;

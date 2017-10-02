@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 
 import { ProfileInfo } from './profile-info.model';
@@ -27,12 +27,12 @@ export class ProfileService {
 
     private profileInfoUrl = 'api/profile-info';
 
-    constructor(private http: Http) { }
+    constructor(private http: HttpClient) { }
 
     getProfileInfo(): Observable<ProfileInfo> {
-        return this.http.get(this.profileInfoUrl)
-            .map((res: Response) => {
-                const data = res.json();
+        return this.http.get<ProfileInfo>(this.profileInfoUrl, { observe: 'response' })
+            .map((res: HttpResponse<ProfileInfo>) => {
+                const data = res.body;
                 const pi = new ProfileInfo();
                 pi.activeProfiles = data.activeProfiles;
                 pi.ribbonEnv = data.ribbonEnv;
@@ -40,5 +40,5 @@ export class ProfileService {
                 pi.swaggerEnabled = data.activeProfiles.indexOf('swagger') !== -1;
                 return pi;
             });
-    }
+        }
 }

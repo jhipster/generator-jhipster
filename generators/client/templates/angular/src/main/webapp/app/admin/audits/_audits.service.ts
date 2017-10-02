@@ -27,13 +27,14 @@ export class AuditsService  {
     constructor(private http: HttpClient) { }
 
     query(req: any): Observable<HttpResponse<Audit[]>> {
-        return this.http.get<HttpResponse<Audit[]>>('<% if (authenticationType === 'uaa') { %><%= uaaBaseName.toLowerCase() %>/<% } %>management/audits', {
+        return this.http.get<Audit[]>('<% if (authenticationType === 'uaa') { %><%= uaaBaseName.toLowerCase() %>/<% } %>management/audits', {
             params: new HttpParams()
                 .set('fromDate', req.fromDate)
                 .set('toDate', req.toDate)
                 .set('page', req.page)
                 .set('size', req.size)
-                .set('sort', req.sort)
+                .set('sort', req.sort),
+            observe: 'response'
         });
     }
 }

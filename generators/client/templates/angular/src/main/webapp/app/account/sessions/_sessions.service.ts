@@ -33,6 +33,6 @@ export class SessionsService {
     }
 
     delete(series: string): Observable<HttpResponse<any>> {
-        return this.http.delete<HttpResponse<any>>(`${this.resourceUrl}${series}`);
+        return this.http.delete(`${this.resourceUrl}${series}`, { observe: 'response' });
     }
 }
