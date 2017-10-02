@@ -1565,7 +1565,7 @@
                 To use it, run in 3 terminals:
                 - './mvnw -Pcc scala:cc' for continuous compilation of your classes
                 - './mvnw -Pcc' for hot reload of Spring boot
-                - 'gulp' for hot reload of the HTML/JavaScript assets
+                - 'npm start/yarn start' for hot reload of the HTML/JavaScript asset
                 Everything should hot reload automatically!
             -->
             <id>cc</id>
