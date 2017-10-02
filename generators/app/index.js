@@ -21,7 +21,6 @@ const BaseGenerator = require('../generator-base');
 const cleanup = require('../cleanup');
 const prompts = require('./prompts');
 const packagejs = require('../../package.json');
-const shelljs = require('shelljs');
 const constants = require('../generator-constants');
 
 module.exports = class extends BaseGenerator {
@@ -357,7 +356,7 @@ module.exports = class extends BaseGenerator {
                     this.isGitInstalled((code) => {
                         if (code === 0) {
                             this.gitExec('rev-parse --is-inside-work-tree', (err, gitDir) => {
-                                if(!gitDir) {
+                                if (!gitDir) {
                                     this.gitExec('init', () => {
                                         this.log('git init successful');
                                         this.gitExec(['add -A'], () => {
@@ -366,8 +365,7 @@ module.exports = class extends BaseGenerator {
                                         });
                                     });
                                 }
-                            })
-                            
+                            });
                         } else {
                             this.warning('The generated application could not be added to Git, as Git is not installed on your system');
                         }
