@@ -1480,6 +1480,7 @@
                                 </goals>
                                 <configuration>
                                     <arguments>install</arguments>
+									<npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
                                 </configuration>
                             </execution>
                                 <%_ if (useSass) { _%>
