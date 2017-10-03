@@ -118,28 +118,8 @@ public class ExceptionTranslator implements ProblemHandling {
             .build();
         return create(ex, problem, request);
     }
-
-    /**
-     * Override default handler to take ResponseStatus annotation into account
-     */
-    @Override
-    public ResponseEntity<Problem> handleThrowable(
-        @Nonnull final Throwable throwable,
-        @Nonnull final NativeWebRequest request) {
-        ResponseStatus responseStatus = AnnotationUtils.findAnnotation(throwable.getClass(), ResponseStatus.class);
-        if (responseStatus != null) {
-            Problem problem = Problem.builder()
-                .withStatus(new HttpStatusAdapter(responseStatus.value()))
-                .withTitle(responseStatus.reason().isEmpty() ? responseStatus.value().getReasonPhrase() : responseStatus.reason() )
-                .withDetail(throwable.getMessage())
-                .build();
-            return create(throwable, problem, request);
-        } else {
-            return create(Status.INTERNAL_SERVER_ERROR, throwable, request);
-        }
-    }
-
     <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+
     @ExceptionHandler(ConcurrencyFailureException.class)
     public ResponseEntity<Problem> handleConcurrencyFailure(ConcurrencyFailureException ex, NativeWebRequest request) {
         Problem problem = Problem.builder()
