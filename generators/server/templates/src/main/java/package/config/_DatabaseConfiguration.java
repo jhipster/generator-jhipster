@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,10 +23,6 @@ import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.config.liquibase.AsyncSpringLiquibase;
 
 import liquibase.integration.spring.SpringLiquibase;
-<%_ } _%>
-<%_ if (databaseType === 'mongodb' && authenticationType === 'oauth2') { _%>
-
-import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 
@@ -139,8 +135,7 @@ public class DatabaseConfiguration {
 
     @Bean
     public CustomConversions customConversions() {
-        List<Converter<?, ?>> converters = new ArrayList<>();<% if (authenticationType === 'oauth2') { %>
-        converters.add(new OAuth2AuthenticationReadConverter());<% } %>
+        List<Converter<?, ?>> converters = new ArrayList<>();
         converters.add(DateToZonedDateTimeConverter.INSTANCE);
         converters.add(ZonedDateTimeToDateConverter.INSTANCE);
         return new CustomConversions(converters);

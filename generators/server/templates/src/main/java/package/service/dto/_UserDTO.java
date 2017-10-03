@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -66,7 +66,7 @@ public class UserDTO {
 
     private boolean activated = false;
 
-    @Size(min = 2, max = 5)
+    @Size(min = 2, max = 6)
     private String langKey;
     <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
 

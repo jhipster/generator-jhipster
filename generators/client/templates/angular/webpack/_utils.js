@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,6 +32,9 @@ function parseVersion() {
     let version = null;
     const pomXml = fs.readFileSync('pom.xml', 'utf8');
     parseString(pomXml, (err, result) => {
+        if (err) {
+            throw new Error('Failed to parse pom.xml: ' + err);
+        }
         if (result.project.version && result.project.version[0]) {
             version = result.project.version[0];
         } else if (result.project.parent && result.project.parent[0] && result.project.parent[0].version && result.project.parent[0].version[0]) {

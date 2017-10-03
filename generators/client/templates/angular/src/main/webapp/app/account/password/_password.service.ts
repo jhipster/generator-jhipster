@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +19,9 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
+<%_ if (authenticationType !== 'uaa') { _%>
+import { SERVER_API_URL } from '../../app.constants';
+<%_ } _%>
 
 @Injectable()
 export class PasswordService {
@@ -26,6 +29,6 @@ export class PasswordService {
     constructor(private http: Http) {}
 
     save(newPassword: string): Observable<any> {
-        return this.http.post(<% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account/change_password'<%} else { %>'api/account/change_password'<% } %>, newPassword);
+        return this.http.post(<% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/<% } else { %>SERVER_API_URL + '<% } %>api/account/change-password', newPassword);
     }
 }

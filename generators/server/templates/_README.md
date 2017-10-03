@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -85,6 +85,73 @@ specifying a newer version in [package.json](package.json). You can also run `<%
 Add the `help` flag on any command to see how you can use it. For example, `<%= clientPackageManager %> help update`.
 
 The `<%= clientPackageManager %> run` command will list all of the scripts available to run for this project.
+<%_ if (authenticationType === 'oauth2') { _%>
+
+## OAuth 2.0 / OpenID Connect
+
+Congratulations! You've selected an excellent way to secure your JHipster application. If you're not sure what OAuth and OpenID Connect (OIDC) are, please see [What the Heck is OAuth?](https://developer.okta.com/blog/2017/06/21/what-the-heck-is-oauth)
+
+To log in to your app, you'll need to have [Keycloak](https://keycloak.org) up and running. The JHipster Team has created a Docker container for you that has the default users and roles. You can see [the settings for Keycloak on GitHub](https://github.com/danielpetisme/jhipster-keycloak). Start Keycloak using the following command.
+
+```
+docker-compose -f src/main/docker/keycloak.yml up
+```
+
+The security settings in `src/main/resources/application.yml` are configured for this image.
+
+```yaml
+oauth2.issuer: http://localhost:9080/auth/realms/jhipster
+
+security:
+    basic:
+        enabled: false
+    oauth2:
+        client:
+            accessTokenUri: ${oauth2.issuer}/protocol/openid-connect/token
+            userAuthorizationUri: ${oauth2.issuer}/protocol/openid-connect/auth
+            clientId: web_app
+            clientSecret: web_app
+            clientAuthenticationScheme: form
+            scope: openid profile email
+        resource:
+            userInfoUri: ${oauth2.issuer}/protocol/openid-connect/userinfo
+            tokenInfoUri: ${oauth2.issuer}/protocol/openid-connect/token/introspectr
+            preferTokenInfo: false
+```
+
+### Okta
+
+If you'd like to use Okta instead of Keycloak, you'll need to change a few things. First, you'll need to create a free developer account at <https://developer.okta.com/signup/>. After doing so, you'll get your own Okta instance, that has a name like `https://dev-123456.oktapreview.com`.
+
+Modify `src/main/resources/application.yml` to use your Okta settings.
+
+```yaml
+oauth2.issuer: https://dev-123456.oktapreview.com/oauth2/default
+
+security:
+    basic:
+        enabled: false
+    oauth2:
+        client:
+            accessTokenUri: ${oauth2.issuer}/v1/token
+            userAuthorizationUri: ${oauth2.issuer}/v1/authorize
+            clientId: {clientId}
+            clientSecret: {clientSecret}
+            clientAuthenticationScheme: form
+            scope: openid profile email
+        resource:
+            userInfoUri: ${oauth2.issuer}/v1/userinfo
+            tokenInfoUri: ${oauth2.issuer}/v1/introspect
+            preferTokenInfo: false
+```
+
+Create an OIDC App in Okta to get a `{clientId}` and `{clientSecret}`. To do this, log in to your Okta Developer account and navigate to **Applications** > **Add Application**. Click **Web** and click the Next button. Give the app a name you’ll remember, and specify "http://localhost:8080" as a Base URI and Login Redirect URI. Click **Done** and copy the client ID and secret into your `application.yml` file.
+
+Create a `ROLE_ADMIN` and `ROLE_USER` group and add users into them. Create a user with username "admin@jhipster.org" and password "Java is hip in 2017!". Modify e2e tests to use this account when running integration tests. You'll need to change credentials in `src/test/javascript/e2e/account/account.spec.ts` and `src/test/javascript/e2e/admin/administration.spec.ts`.
+
+Navigate to **API** > **Authorization Servers**, click the **Authorization Servers** tab and edit the default one. Click the **Claims** tab and **Add Claim**. Name it "groups" or "roles", and include it in the ID Token. Set the value type to "Groups" and set the filter to be a Regex of `.*`.
+
+After making these changes, you should be good to go! If you have any issues, please post them to [Stack Overflow](https://stackoverflow.com/questions/tagged/jhipster). Make sure to tag your question with "jhipster" and "okta".<%_ } _%>
 
 ### Service workers
 
@@ -163,6 +230,27 @@ will generate few files:
     update src/main/webapp/app/app.module.ts
 <%_ } _%>
 
+<%_ if (enableSwaggerCodegen) { _%>
+### Doing API-First development using swagger-codegen
+
+[Swagger-Codegen]() is configured for this application. You can generate API code from the `src/main/resources/swagger/api.yml` definition file by running:
+    <%_ if (buildTool === 'maven') { _%>
+```bash
+./mvnw generate-sources
+```
+    <%_ } _%>
+    <%_ if (buildTool === 'maven') { _%>
+```bash
+./gradlew swagger
+```
+    <%_ } _%>
+Then implements the generated interfaces with `@RestController` classes.
+
+To edit the `api.yml` definition file, you can use a tool such as [Swagger-Editor](). Start a local instance of the swagger-editor using docker by running: `docker-compose -f src/main/docker/swagger-editor.yml up -d`. The editor will then be reachable at [http://localhost:7742](http://localhost:7742).
+
+Refer to [Doing API-First development][] for more details.
+<%_ } _%>
+
 ## Building for production
 
 To optimize the <%= baseName %> application for production, run:
@@ -222,7 +310,7 @@ To stop it and remove the container, run:
 You can also fully dockerize your application and all the services that it depends on.
 To achieve this, first build a docker image of your app by running:
 
-    <% if (buildTool === 'maven') { %>./mvnw package -Pprod docker:build<% } %><% if (buildTool === 'gradle') { %>./gradlew bootRepackage -Pprod buildDocker<% } %>
+    <% if (buildTool === 'maven') { %>./mvnw package -Pprod dockerfile:build<% } %><% if (buildTool === 'gradle') { %>./gradlew bootRepackage -Pprod buildDocker<% } %>
 
 Then run:
 
@@ -267,4 +355,9 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 [Protractor]: https://angular.github.io/protractor/
 [Leaflet]: http://leafletjs.com/
 [DefinitelyTyped]: http://definitelytyped.org/
+<%_ } _%>
+<%_ if (enableSwaggerCodegen) { _%>
+[Swagger-Codegen]: https://github.com/swagger-api/swagger-codegen
+[Swagger-Editor]: http://editor.swagger.io
+[Doing API-First development]: <%= DOCUMENTATION_ARCHIVE_URL %>/doing-api-first-development/
 <%_ } _%>

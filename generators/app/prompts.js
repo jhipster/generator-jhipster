@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2017 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see https://jhipster.github.io/
+ * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -70,7 +70,7 @@ function askForApplicationType(meta) {
             },
             {
                 value: 'uaa',
-                name: '[BETA] JHipster UAA server (for microservice OAuth2 authentication)'
+                name: 'JHipster UAA server (for microservice OAuth2 authentication)'
             }
         ],
         default: DEFAULT_APPTYPE
@@ -118,9 +118,7 @@ function askForTestOpts(meta) {
     }
     if (meta || !this.skipClient) {
         // all client side test frameworks should be added here
-        choices.push(
-            { name: 'Protractor', value: 'protractor' }
-        );
+        choices.push({ name: 'Protractor', value: 'protractor' });
     }
     const PROMPT = {
         type: 'checkbox',

@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2017 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see https://jhipster.github.io/
+ * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +21,7 @@ const shelljs = require('shelljs');
 
 module.exports = {
     askForApplicationType,
+    askForGatewayType,
     askForPath,
     askForApps,
     askForClustersMode,
@@ -54,6 +55,34 @@ function askForApplicationType() {
 
     this.prompt(prompts).then((props) => {
         this.composeApplicationType = props.composeApplicationType;
+        done();
+    });
+}
+
+function askForGatewayType() {
+    if (this.regenerate) return;
+    if (this.composeApplicationType !== 'microservice') return;
+    const done = this.async();
+
+    const prompts = [{
+        type: 'list',
+        name: 'gatewayType',
+        message: 'Which *type* of gateway would you like to use?',
+        choices: [
+            {
+                value: 'zuul',
+                name: 'JHipster gateway based on Netflix Zuul'
+            },
+            {
+                value: 'traefik',
+                name: '[BETA] Traefik gateway (only works with Consul)'
+            }
+        ],
+        default: 'zuul'
+    }];
+
+    this.prompt(prompts).then((props) => {
+        this.gatewayType = props.gatewayType;
         done();
     });
 }
@@ -236,11 +265,10 @@ function askForConsoleOptions() {
         default: this.monitoring
     }];
     if (this.composeApplicationType === 'microservice') {
-        prompts[0].choices.push(
-            {
-                value: 'zipkin',
-                name: 'Zipkin, for distributed tracing (only compatible with JHipster >= v4.2.0)'
-            });
+        prompts[0].choices.push({
+            value: 'zipkin',
+            name: 'Zipkin, for distributed tracing (only compatible with JHipster >= v4.2.0)'
+        });
     }
     this.prompt(prompts).then((props) => {
         this.consoleOptions = props.consoleOptions;
@@ -324,7 +352,7 @@ function askForAdminPassword() {
 
     this.prompt(prompts).then((props) => {
         this.adminPassword = props.adminPassword;
-        this.adminPasswordBase64 = new Buffer(this.adminPassword).toString('base64');
+        this.adminPasswordBase64 = Buffer.from(this.adminPassword).toString('base64');
         done();
     });
 }

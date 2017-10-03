@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,11 +23,7 @@ import com.github.mongobee.Mongobee;
 
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.domain.util.JSR310DateConverters.*;
-
-<%_ if (authenticationType === 'oauth2') { _%>
-
-import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;
-<%_ } } else { _%>
+<%_ } else { _%>
 
 import io.github.jhipster.config.JHipsterConstants;
 <%_ } _%>
@@ -100,9 +96,6 @@ public class CloudDatabaseConfiguration extends AbstractCloudConfig {
     @Bean
     public CustomConversions customConversions() {
         List<Converter<?, ?>> converterList = new ArrayList<>();
-        <%_ if (authenticationType === 'oauth2') { _%>
-        converterList.add(new OAuth2AuthenticationReadConverter());
-        <%_ } _%>
         converterList.add(DateToZonedDateTimeConverter.INSTANCE);
         converterList.add(ZonedDateTimeToDateConverter.INSTANCE);
         return new CustomConversions(converterList);

@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -181,11 +181,11 @@ node {
     <%_ if (buildTool === 'maven') { _%>
 <%= gitLabIndent %>        sh "cp -R src/main/docker target/"
 <%= gitLabIndent %>        sh "cp target/*.war target/docker/"
-<%= gitLabIndent %>        dockerImage = docker.build('<%= baseName.toLowerCase() %>', 'target/docker')
+<%= gitLabIndent %>        dockerImage = docker.build('<%= dockerRegistryOrganizationName %>/<%= baseName.toLowerCase() %>', 'target/docker')
     <%_ } else if (buildTool === 'gradle' ) { _%>
 <%= gitLabIndent %>        sh "cp -R src/main/docker build/"
 <%= gitLabIndent %>        sh "cp build/libs/*.war build/docker/"
-<%= gitLabIndent %>        dockerImage = docker.build('<%= baseName.toLowerCase() %>', 'build/docker')
+<%= gitLabIndent %>        dockerImage = docker.build('<%= dockerRegistryOrganizationName %>/<%= baseName.toLowerCase() %>', 'build/docker')
     <%_ } _%>
 <%= gitLabIndent %>    }
 

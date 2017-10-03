@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2017 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see https://jhipster.github.io/
+ * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,34 +17,26 @@
  * limitations under the License.
  */
 
-const util = require('util');
-const generator = require('yeoman-generator');
 const _ = require('lodash');
 const BaseGenerator = require('../generator-base');
 const constants = require('../generator-constants');
 
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
-const ServiceGenerator = generator.extend({});
-
-util.inherits(ServiceGenerator, BaseGenerator);
-
-module.exports = ServiceGenerator.extend({
-    constructor: function (...args) { // eslint-disable-line object-shorthand
-        generator.apply(this, args);
+module.exports = class extends BaseGenerator {
+    constructor(args, opts) {
+        super(args, opts);
         this.argument('name', { type: String, required: true });
         this.name = this.options.name;
-    },
+    }
 
-    initializing: {
-        getConfig() {
-            this.log(`The service ${this.name} is being created.`);
-            this.baseName = this.config.get('baseName');
-            this.packageName = this.config.get('packageName');
-            this.packageFolder = this.config.get('packageFolder');
-            this.databaseType = this.config.get('databaseType');
-        }
-    },
+    initializing() {
+        this.log(`The service ${this.name} is being created.`);
+        this.baseName = this.config.get('baseName');
+        this.packageName = this.config.get('packageName');
+        this.packageFolder = this.config.get('packageFolder');
+        this.databaseType = this.config.get('databaseType');
+    }
 
     prompting() {
         const done = this.async();
@@ -61,26 +53,32 @@ module.exports = ServiceGenerator.extend({
             this.useInterface = props.useInterface;
             done();
         });
-    },
-    default: {
-        insight() {
-            const insight = this.insight();
-            insight.trackWithEvent('generator', 'service');
-            insight.track('service/interface', this.useInterface);
-        }
-    },
+    }
+
+    get default() {
+        return {
+            insight() {
+                const insight = this.insight();
+                insight.trackWithEvent('generator', 'service');
+                insight.track('service/interface', this.useInterface);
+            }
+        };
+    }
 
     writing() {
         this.serviceClass = _.upperFirst(this.name);
         this.serviceInstance = _.lowerCase(this.name);
 
-        this.template(`${SERVER_MAIN_SRC_DIR}package/service/_Service.java`,
-            `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/${this.serviceClass}Service.java`);
+        this.template(
+            `${SERVER_MAIN_SRC_DIR}package/service/_Service.java`,
+            `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/${this.serviceClass}Service.java`
+        );
 
         if (this.useInterface) {
-            this.template(`${SERVER_MAIN_SRC_DIR}package/service/impl/_ServiceImpl.java`,
-                `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/impl/${this.serviceClass}ServiceImpl.java`);
+            this.template(
+                `${SERVER_MAIN_SRC_DIR}package/service/impl/_ServiceImpl.java`,
+                `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/impl/${this.serviceClass}ServiceImpl.java`
+            );
         }
     }
-
-});
+};

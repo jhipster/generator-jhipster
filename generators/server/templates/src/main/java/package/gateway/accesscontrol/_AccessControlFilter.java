@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -109,9 +109,7 @@ public class AccessControlFilter extends ZuulFilter {
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
         ctx.setResponseStatusCode(HttpStatus.FORBIDDEN.value());
-        if (ctx.getResponseBody() == null && !ctx.getResponseGZipped()) {
-            ctx.setSendZuulResponse(false);
-        }
+        ctx.setSendZuulResponse(false);
         log.debug("Access Control: filtered unauthorized access on endpoint {}", ctx.getRequest().getRequestURI());
         return null;
     }

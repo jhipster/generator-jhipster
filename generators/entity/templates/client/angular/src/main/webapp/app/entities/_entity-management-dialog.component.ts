@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 
 import { Observable } from 'rxjs/Rx';
-import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager, JhiAlertService<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
 
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
@@ -86,7 +86,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         <%_ if (fieldsContainBlob) { _%>
         private dataUtils: JhiDataUtils,
         <%_ } _%>
-        private alertService: JhiAlertService,
+        private jhiAlertService: JhiAlertService,
         private <%= entityInstance %>Service: <%= entityAngularName %>Service,
         <%_ Object.keys(differentRelationships).forEach(key => {
             if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
@@ -148,7 +148,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
 
     private subscribeToSaveResponse(result: Observable<<%= entityAngularName %>>) {
         result.subscribe((res: <%= entityAngularName %>) =>
-            this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
+            this.onSaveSuccess(res), (res: Response) => this.onSaveError());
     }
 
     private onSaveSuccess(result: <%= entityAngularName %>) {
@@ -157,18 +157,12 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         this.activeModal.dismiss(result);
     }
 
-    private onSaveError(error) {
-        try {
-            error.json();
-        } catch (exception) {
-            error.message = error.text();
-        }
+    private onSaveError() {
         this.isSaving = false;
-        this.onError(error);
     }
 
-    private onError(error) {
-        this.alertService.error(error.message, null, null);
+    private onError(error: any) {
+        this.jhiAlertService.error(error.message, null, null);
     }
     <%_
     const entitiesSeen = [];

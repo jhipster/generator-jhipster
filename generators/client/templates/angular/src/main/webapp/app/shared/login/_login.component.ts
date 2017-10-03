@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,9 +23,6 @@ import { JhiEventManager } from 'ng-jhipster';
 
 import { LoginService } from './login.service';
 import { StateStorageService } from '../auth/state-storage.service';
-<%_ if (enableSocialSignIn) { _%>
-import { SocialService } from '../social/social.service';
-<%_ } _%>
 
 @Component({
     selector: '<%=jhiPrefix%>-login-modal',
@@ -44,9 +41,6 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements AfterViewIn
         private stateStorageService: StateStorageService,
         private elementRef: ElementRef,
         private renderer: Renderer,
-        <%_ if (enableSocialSignIn) { _%>
-        private socialService: SocialService,
-        <%_ } _%>
         private router: Router,
         public activeModal: NgbActiveModal
     ) {

@@ -4,7 +4,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - "6.11.1"
+  - "6.11.3"
 jdk:
   - oraclejdk8
 addons:
@@ -14,11 +14,9 @@ addons:
     packages:
     - google-chrome-stable
 cache:
-  yarn: true
   directories:
     - $HOME/.m2
     - $HOME/.gradle
-    - $HOME/.yarn-cache
 env:
   global:
     - PROFILE=dev
@@ -45,7 +43,7 @@ env:
     - JHIPSTER=app-ng2-infinispan
     - JHIPSTER=app-ng2-cassandra
     - JHIPSTER=app-ng2-mongodb
-    - JHIPSTER=app-ng2-oauth2
+    - JHIPSTER=app-ng2-oauth2 PROTRACTOR=1
     - JHIPSTER=app-mysql PROFILE=prod PROTRACTOR=1
     - JHIPSTER=app-gradle PROTRACTOR=1
     - JHIPSTER=app-hazelcast-cucumber
@@ -66,11 +64,12 @@ before_install:
   # Repo for Yarn
   - curl -o- -L https://yarnpkg.com/install.sh | bash
   - export PATH=$HOME/.yarn/bin:$PATH
+  - yarn -v
   - yarn global add yo bower gulp-cli
 install:
   - cd "$TRAVIS_BUILD_DIR"/
   - yarn install
-  - yarn link
+  - yarn global add file:"$TRAVIS_BUILD_DIR"
   - if [ "$JHIPSTER" == "app-default-from-scratch" ]; then
         yarn run test;
     fi

@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,7 +41,7 @@
                 config.headers.Authorization = 'Bearer ' + token.access_token;
             }
             <%_ } _%>
-            <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+            <%_ if (authenticationType === 'jwt') { _%>
             if (token) {
                 config.headers.Authorization = 'Bearer ' + token;
             }

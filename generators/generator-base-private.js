@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2017 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see https://jhipster.github.io/
+ * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -266,21 +266,21 @@ module.exports = class extends Generator {
     }
 
     isNumber(input) {
-        if (isNaN(this.filterNumber(input))) {
+        if (isNaN(this.filterNumber(input))) { // eslint-disable-line
             return false;
         }
         return true;
     }
 
     isSignedNumber(input) {
-        if (isNaN(this.filterNumber(input, true))) {
+        if (isNaN(this.filterNumber(input, true))) { // eslint-disable-line
             return false;
         }
         return true;
     }
 
     isSignedDecimalNumber(input) {
-        if (isNaN(this.filterNumber(input, true, true))) {
+        if (isNaN(this.filterNumber(input, true, true))) { // eslint-disable-line
             return false;
         }
         return true;
@@ -297,9 +297,10 @@ module.exports = class extends Generator {
     }
 
     isGitInstalled(callback) {
-        this.gitExec('--version', (code) => {
+        this.gitExec('--version', { trace: false }, (code) => {
             if (code !== 0) {
-                this.warning('git is not found on your computer.\n',
+                this.warning(
+                    'git is not found on your computer.\n',
                     ` Install git: ${chalk.yellow('https://git-scm.com/')}`
                 );
             }
@@ -470,9 +471,8 @@ module.exports = class extends Generator {
         exec('git ls-remote git://github.com/jhipster/generator-jhipster.git HEAD', { timeout: 15000 }, (error) => {
             if (error) {
                 this.warning(`Failed to connect to "git://github.com"
-                     1. Check your Internet connection.
-                     2. If you are using an HTTP proxy, try this command: ${chalk.yellow('git config --global url."https://".insteadOf git://')}`
-                );
+1. Check your Internet connection.
+2. If you are using an HTTP proxy, try this command: ${chalk.yellow('git config --global url."https://".insteadOf git://')}`);
             }
             done();
         });
@@ -483,8 +483,10 @@ module.exports = class extends Generator {
         const done = this.async();
         exec('yarn --version', (err) => {
             if (err) {
-                this.warning('yarn is not found on your computer.\n',
-                    ' Using npm instead');
+                this.warning(
+                    'yarn is not found on your computer.\n',
+                    ' Using npm instead'
+                );
                 this.useYarn = false;
             } else {
                 this.useYarn = true;
@@ -577,9 +579,7 @@ module.exports = class extends Generator {
      */
     generateLanguageOptions(languages) {
         const selectedLangs = this.getAllSupportedLanguageOptions().filter(lang => languages.includes(lang.value));
-        return selectedLangs.map(
-            lang => `'${lang.value}': { name: '${lang.dispName}'${lang.rtl ? ', rtl: true' : ''} }`
-        );
+        return selectedLangs.map(lang => `'${lang.value}': { name: '${lang.dispName}'${lang.rtl ? ', rtl: true' : ''} }`);
     }
 
     /**
@@ -630,8 +630,7 @@ module.exports = class extends Generator {
     }
 
     isFilterableType(fieldType) {
-        // Float, Double, BigDecimal and Boolean should work - new server library release needed
-        return !(['byte[]', 'ByteBuffer', 'Float', 'Double', 'BigDecimal', 'Boolean'].includes(fieldType));
+        return !(['byte[]', 'ByteBuffer'].includes(fieldType));
     }
 
     copyFilteringFlag(from, to) {

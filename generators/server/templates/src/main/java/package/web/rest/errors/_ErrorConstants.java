@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,13 +18,17 @@
 -%>
 package <%=packageName%>.web.rest.errors;
 
+import java.net.URI;
+
 public final class ErrorConstants {
 
     public static final String ERR_CONCURRENCY_FAILURE = "error.concurrencyFailure";
-    public static final String ERR_ACCESS_DENIED = "error.accessDenied";
     public static final String ERR_VALIDATION = "error.validation";
-    public static final String ERR_METHOD_NOT_SUPPORTED = "error.methodNotSupported";
-    public static final String ERR_INTERNAL_SERVER_ERROR = "error.internalServerError";
+    public static final String PROBLEM_BASE_URL = "http://www.jhipster.tech/problem";
+    public static final URI DEFAULT_TYPE = URI.create(PROBLEM_BASE_URL + "/problem-with-message");
+    public static final URI CONSTRAINT_VIOLATION_TYPE = URI.create(PROBLEM_BASE_URL + "/contraint-violation");
+    public static final URI PARAMETERIZED_TYPE = URI.create(PROBLEM_BASE_URL + "/parameterized");
+    public static final URI UNAUTHORIZED_TYPE = URI.create(PROBLEM_BASE_URL + "/unauthorized");
 
     private ErrorConstants() {
     }

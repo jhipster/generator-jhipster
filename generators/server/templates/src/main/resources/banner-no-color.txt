@@ -7,4 +7,4 @@
    ╚═════╝  ╚═╝   ╚═╝ ╚═══════╝ ╚═╝       ╚═════╝     ╚═╝    ╚═══════╝ ╚═╝   ╚═╝
 
 :: JHipster :: Running Spring Boot ::
-:: https://jhipster.github.io ::
+:: http://www.jhipster.tech ::

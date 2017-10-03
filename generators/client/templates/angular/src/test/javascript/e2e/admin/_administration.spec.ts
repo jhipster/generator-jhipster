@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,14 +32,18 @@ describe('administration', () => {
         browser.get('/');
         browser.waitForAngular();
         navBarPage = new NavBarPage(true);
+        <%_ if (authenticationType !== 'oauth2') { _%>
         navBarPage.getSignInPage().autoSignInUsing('admin', 'admin');
+        <%_ } else { _%>
+        navBarPage.getSignInPage().loginWithOAuth('admin', 'admin');
+        <%_ } _%>
         browser.waitForAngular();
     });
 
     beforeEach(() => {
         navBarPage.clickOnAdminMenu();
     });
-
+    <%_ if (authenticationType !== 'oauth2') { _%>
     it('should load user management', () => {
         navBarPage.clickOnAdmin("user-management");
         <%_ if (enableTranslation) { _%>
@@ -51,6 +55,7 @@ describe('administration', () => {
             expect(value).toMatch(expect1);
         });
     });
+    <%_ } _%>
 
     it('should load metrics', () => {
         navBarPage.clickOnAdmin("<%=jhiPrefix%>-metrics");

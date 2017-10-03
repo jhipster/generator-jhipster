@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +26,7 @@ import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.springframework.http.MediaType;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
 
@@ -40,7 +40,7 @@ public class TestUtil {
     /** MediaType for JSON UTF8 */
     public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(
             MediaType.APPLICATION_JSON.getType(),
-            MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
+            MediaType.APPLICATION_JSON.getSubtype(), StandardCharsets.UTF_8);
 
     /**
      * Convert an object to JSON byte array.

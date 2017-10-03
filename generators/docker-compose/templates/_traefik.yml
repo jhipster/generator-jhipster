@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,15 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.repository;
-
-import <%=packageName%>.domain.OAuth2AuthenticationRefreshToken;
-import org.springframework.data.mongodb.repository.MongoRepository;
-
-/**
- * Spring Data MongoDB repository for the OAuth2AuthenticationRefreshToken entity.
- */
-public interface OAuth2RefreshTokenRepository extends MongoRepository<OAuth2AuthenticationRefreshToken, String> {
-
-    OAuth2AuthenticationRefreshToken findByTokenId(String tokenId);
-}
+version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
+services:
+    traefik:
+        image: <%= DOCKER_TRAEFIK %>
+        command: --web 
+        ports:
+          - 80:80
+          - 8080:8080
+        volumes:
+          - ./traefik/traefik.toml:/etc/traefik/traefik.toml

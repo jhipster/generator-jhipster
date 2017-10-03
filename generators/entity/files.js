@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2017 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see https://jhipster.github.io/
+ * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -155,7 +155,11 @@ const serverFiles = {
             path: SERVER_TEST_SRC_DIR,
             templates: [{
                 file: 'package/web/rest/_EntityResourceIntTest.java',
-                options: { context: { randexp, _, chalkRed: chalk.red, fs, SERVER_TEST_SRC_DIR } },
+                options: {
+                    context: {
+                        randexp, _, chalkRed: chalk.red, fs, SERVER_TEST_SRC_DIR
+                    }
+                },
                 renameTo: generator => `${generator.packageFolder}/web/rest/${generator.entityClass}ResourceIntTest.java`
             }]
         },

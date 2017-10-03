@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -53,7 +53,7 @@ export class PasswordResetInitComponent implements OnInit, AfterViewInit {
             this.success = 'OK';
         }, (response) => {
             this.success = null;
-            if (response.status === 400 && response.data === 'email address not registered') {
+            if (response.status === 400 && response._body === 'email address not registered') {
                 this.errorEmailNotExists = 'ERROR';
             } else {
                 this.error = 'ERROR';

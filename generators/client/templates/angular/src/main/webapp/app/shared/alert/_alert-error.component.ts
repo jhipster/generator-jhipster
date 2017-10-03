@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,7 +38,7 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
 
     alerts: any[];
     cleanHttpErrorListener: Subscription;
-
+    // tslint:disable-next-line: no-unused-variable
     constructor(private alertService: JhiAlertService, private eventManager: JhiEventManager<% if (enableTranslation) { %>, private translateService: TranslateService<% } %>) {
         this.alerts = [];
 

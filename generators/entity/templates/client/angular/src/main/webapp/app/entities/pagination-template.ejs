@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,17 +48,14 @@ currentAccount: any;
     constructor(
         private <%= entityInstance %>Service: <%= entityAngularName %>Service,
         private parseLinks: JhiParseLinks,
-        private alertService: JhiAlertService,
+        private jhiAlertService: JhiAlertService,
         private principal: Principal,
         private activatedRoute: ActivatedRoute,
         <%_ if (fieldsContainBlob) { _%>
         private dataUtils: JhiDataUtils,
         <%_ } _%>
         private router: Router,
-        private eventManager: JhiEventManager<%_ if (databaseType !== 'cassandra') { _%>,
-        private paginationUtil: JhiPaginationUtil,
-        private paginationConfig: PaginationConfig
-        <%_ } _%>
+        private eventManager: JhiEventManager
     ) {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.itemsPerPage = ITEMS_PER_PAGE;

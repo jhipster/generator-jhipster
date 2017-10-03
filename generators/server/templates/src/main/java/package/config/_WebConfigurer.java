@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -246,9 +246,6 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
             log.debug("Registering CORS filter");
             source.registerCorsConfiguration("/api/**", config);
             source.registerCorsConfiguration("/v2/api-docs", config);
-            <%_ if (authenticationType === 'oauth2') { _%>
-            source.registerCorsConfiguration("/oauth/**", config);
-            <%_ } _%>
             <%_ if (applicationType === 'gateway') { _%>
             source.registerCorsConfiguration("/*/api/**", config);
             <%_ if (authenticationType === 'uaa') { _%>

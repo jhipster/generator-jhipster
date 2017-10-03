@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,11 +20,11 @@
  * Plugin that provides API-first development using swagger-codegen to
  * generate Spring-MVC endpoint stubs at compile time from a swagger definition file
  */
- 
+
 apply plugin: "org.detoeuf.swagger-codegen"
 
 swagger {
-    inputSpec = '<%= SERVER_MAIN_RES_DIR %>swagger/api.yml'
+    inputSpec = file('<%= SERVER_MAIN_RES_DIR %>swagger/api.yml').absolutePath
     outputDir = file('build/swagger')
     lang = 'spring'
 

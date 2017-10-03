@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,27 +21,38 @@ package <%=packageName%>.service;
 import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.<%= mainClass %>;<% if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { %>
 import <%=packageName%>.domain.PersistentToken;<% } %>
-import <%=packageName%>.domain.User;<% if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { %>
+<%_ if (authenticationType !== 'oauth2') { _%>
+import <%=packageName%>.domain.User;<%_ } _%>
+<%_ if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { _%>
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
 import <%=packageName%>.config.Constants;
 import <%=packageName%>.repository.UserRepository;
-import <%=packageName%>.service.dto.UserDTO;<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+import <%=packageName%>.service.dto.UserDTO;<% if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType !== 'oauth2') { %>
 import <%=packageName%>.service.util.RandomUtil;<% } %>
+import <%=packageName%>.web.rest.vm.ManagedUserVM;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;<% if (databaseType === 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 import org.springframework.test.context.junit4.SpringRunner;
-<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;<%}%>
-<% if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { %>
-import java.time.LocalDate;<% } %>
-import java.time.Instant;<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+import org.springframework.data.domain.PageRequest;
+<%_ } _%>
+<%_ if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { _%>
+import java.time.LocalDate;
+<%_ } _%>
+<%_ if (authenticationType !== 'oauth2') { _%>
+import java.time.Instant;
+<%_ } _%>
+<%_ if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType !== 'oauth2') { _%>
 import java.time.temporal.ChronoUnit;
-import java.util.Optional;<% } %>
+import java.util.Optional;
+<%_ } _%>
+<%_ if (authenticationType !== 'oauth2') { _%>
 import java.util.List;
+<%_ } _%>
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -74,7 +85,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         assertThat(persistentTokenRepository.findByUser(admin)).hasSize(existingCount + 2);
         userService.removeOldPersistentTokens();
         assertThat(persistentTokenRepository.findByUser(admin)).hasSize(existingCount + 1);
-    }<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+    }<% } %><% if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb')) { %>
 
     @Test
     public void assertThatUserMustExistToResetPassword() {
@@ -91,7 +102,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
 
     @Test
     public void assertThatOnlyActivatedUserCanRequestPasswordReset() {
-        User user = userService.createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
+        User user = createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
         Optional<User> maybeUser = userService.requestPasswordReset("john.doe@localhost");
         assertThat(maybeUser.isPresent()).isFalse();
         userRepository.delete(user);
@@ -99,7 +110,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
 
     @Test
     public void assertThatResetKeyMustNotBeOlderThan24Hours() {
-        User user = userService.createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
+        User user = createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
 
         Instant daysAgo = Instant.now().minus(25, ChronoUnit.HOURS);
         String resetKey = RandomUtil.generateResetKey();
@@ -118,7 +129,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
 
     @Test
     public void assertThatResetKeyMustBeValid() {
-        User user = userService.createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
+        User user = createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
 
         Instant daysAgo = Instant.now().minus(25, ChronoUnit.HOURS);
         user.setActivated(true);
@@ -132,7 +143,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
 
     @Test
     public void assertThatUserCanResetPassword() {
-        User user = userService.createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
+        User user = createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
         String oldPassword = user.getPassword();
         Instant daysAgo = Instant.now().minus(2, ChronoUnit.HOURS);
         String resetKey = RandomUtil.generateResetKey();
@@ -179,11 +190,11 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
             .noneMatch(user -> Constants.ANONYMOUS_USER.equals(user.getLogin())))
             .isTrue();
     }
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+    <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb')) { _%>
 
     @Test
     public void testRemoveNotActivatedUsers() {
-        User user = userService.createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
+        User user = createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
         user.setActivated(false);
         user.setCreatedDate(Instant.now().minus(30, ChronoUnit.DAYS));
         userRepository.save(user);
@@ -191,5 +202,10 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         userService.removeNotActivatedUsers();
         assertThat(userRepository.findOneByLogin("johndoe")).isNotPresent();
     }
+
+    private User createUser(String login, String password, String firstName, String lastName, String email, String imageUrl, String langKey) {
+        return userService.registerUser(new ManagedUserVM(null, login, password, firstName, lastName, email, true, imageUrl, langKey, null, null, null, null, null));
+    }
     <%_ } _%>
+
 }

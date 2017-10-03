@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,4 +28,4 @@ When running the consul.yml or app.yml docker-compose files, files located in `c
 will get automatically loaded in Consul's K/V store. Adding or editing files will trigger a reloading.
 <%_ } _%>
 
-For more info, refer to https://jhipster.github.io/microservices-architecture/#registry_app_configuration
+For more info, refer to http://www.jhipster.tech/microservices-architecture/#registry_app_configuration

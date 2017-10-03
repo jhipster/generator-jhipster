@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -95,7 +95,7 @@ describe('Component Tests', () => {
             inject([PasswordResetInitService], (service: PasswordResetInitService) => {
                 spyOn(service, 'save').and.returnValue(Observable.throw({
                     status: 400,
-                    data: 'email address not registered'
+                    _body: 'email address not registered'
                 }));
                 comp.resetAccount.email = 'user@domain.com';
 

@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -140,7 +140,8 @@ public class CacheConfiguration {
     @Bean
     public JCacheManagerCustomizer cacheManagerCustomizer() {
         return cm -> {
-            <%_ if (!skipUserManagement) { _%>
+            <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
+            cm.createCache("users", jcacheConfiguration);
             cm.createCache(<%=packageName%>.domain.User.class.getName(), jcacheConfiguration);
             cm.createCache(<%=packageName%>.domain.Authority.class.getName(), jcacheConfiguration);
             cm.createCache(<%=packageName%>.domain.User.class.getName() + ".authorities", jcacheConfiguration);
@@ -497,7 +498,10 @@ public class CacheConfiguration {
                                        JHipsterProperties jHipsterProperties) {
             super(uri, cacheManager, provider);
             // register individual caches to make the stats info available.
-            <%_ if (!skipUserManagement) { _%>
+            <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
+            registerPredefinedCache("users", new JCache<Object, Object>(
+                cacheManager.getCache("users").getAdvancedCache(), this,
+                ConfigurationAdapter.create()));
             registerPredefinedCache(<%=packageName%>.domain.User.class.getName(), new JCache<Object, Object>(
                 cacheManager.getCache(<%=packageName%>.domain.User.class.getName()).getAdvancedCache(), this,
                 ConfigurationAdapter.create()));

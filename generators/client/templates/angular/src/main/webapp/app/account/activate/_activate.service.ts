@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +19,9 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
+<%_ if (authenticationType !== 'uaa') { _%>
+import { SERVER_API_URL } from '../../app.constants';
+<%_ } _%>
 
 @Injectable()
 export class ActivateService {
@@ -29,7 +32,7 @@ export class ActivateService {
         const params: URLSearchParams = new URLSearchParams();
         params.set('key', key);
 
-        return this.http.get(<% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/activate'<%} else { %>'api/activate'<% } %>, {
+        return this.http.get(<% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/<% } else { %>SERVER_API_URL + '<% } %>api/activate', {
             search: params
         }).map((res: Response) => res);
     }

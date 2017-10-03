@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_
+let cacheManagerIsAvailable = false;
+if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || hibernateCache === 'infinispan' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') {
+    cacheManagerIsAvailable = true;
+}
+_%>
 package <%=packageName%>.service;
 <% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
 import <%=packageName%>.domain.Authority;<% } %>
@@ -25,19 +31,30 @@ import <%=packageName%>.repository.PersistentTokenRepository;<% } %><% } %>
 import <%=packageName%>.config.Constants;
 import <%=packageName%>.repository.UserRepository;<% if (searchEngine === 'elasticsearch') { %>
 import <%=packageName%>.repository.search.UserSearchRepository;<% } %>
+<%_ if (authenticationType !== 'oauth2') { _%>
 import <%=packageName%>.security.AuthoritiesConstants;
+<%_ } _%>
 import <%=packageName%>.security.SecurityUtils;
+<%_ if (authenticationType !== 'oauth2') { _%>
 import <%=packageName%>.service.util.RandomUtil;
+<%_ } _%>
 import <%=packageName%>.service.dto.UserDTO;
+import <%=packageName%>.web.rest.vm.ManagedUserVM;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+import org.slf4j.LoggerFactory;
+<%_ if (cacheManagerIsAvailable === true) { _%>
+import org.springframework.cache.CacheManager;
+<%_ } _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;<% } %>
+    <%_ if (authenticationType !== 'oauth2') { _%>
+import org.springframework.scheduling.annotation.Scheduled;
+    <%_ } _%>
+<%_ } _%>
+<%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.security.crypto.password.PasswordEncoder;
-<%_ if (databaseType === 'sql' && authenticationType === 'oauth2') { _%>
-import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 <%_ } _%>
 import org.springframework.stereotype.Service;<% if (databaseType === 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
@@ -45,8 +62,10 @@ import org.springframework.transaction.annotation.Transactional;<% } %>
 <%_ if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { _%>
 import java.time.LocalDate;
 <%_ } _%>
+<%_ if (authenticationType !== 'oauth2') { _%>
 import java.time.Instant;
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+<%_ } _%>
+<%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb')) { _%>
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
 import java.util.*;
@@ -62,15 +81,13 @@ public class UserService {
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
+<%_ if (authenticationType !== 'oauth2') { _%>
 
     private final PasswordEncoder passwordEncoder;
+<%_ } _%>
     <%_ if (enableSocialSignIn) { _%>
 
     private final SocialService socialService;
-    <%_ } _%>
-    <%_ if (databaseType === 'sql' && authenticationType === 'oauth2') { _%>
-
-    public final JdbcTokenStore jdbcTokenStore;
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
@@ -84,15 +101,18 @@ public class UserService {
 
     private final AuthorityRepository authorityRepository;
     <%_ } _%>
+    <%_ if (cacheManagerIsAvailable === true) { _%>
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder<% if (enableSocialSignIn) { %>, SocialService socialService<% } %><% if (databaseType === 'sql' && authenticationType === 'oauth2') { %>, JdbcTokenStore jdbcTokenStore<% } %><% if (searchEngine === 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb') { %><% if (authenticationType === 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>, AuthorityRepository authorityRepository<% } %>) {
+    private final CacheManager cacheManager;
+    <%_ } _%>
+
+    public UserService(UserRepository userRepository<% if (authenticationType !== 'oauth2') { %>, PasswordEncoder passwordEncoder<% } %><% if (enableSocialSignIn) { %>, SocialService socialService<% } %><% if (searchEngine === 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb') { %><% if (authenticationType === 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>, AuthorityRepository authorityRepository<% } %><% if (cacheManagerIsAvailable === true) { %>, CacheManager cacheManager<% } %>) {
         this.userRepository = userRepository;
+        <%_ if (authenticationType !== 'oauth2') { _%>
         this.passwordEncoder = passwordEncoder;
+        <%_ } _%>
         <%_ if (enableSocialSignIn) { _%>
         this.socialService = socialService;
-        <%_ } _%>
-        <%_ if (databaseType === 'sql' && authenticationType === 'oauth2') { _%>
-        this.jdbcTokenStore = jdbcTokenStore;
         <%_ } _%>
         <%_ if (searchEngine === 'elasticsearch') { _%>
         this.userSearchRepository = userSearchRepository;
@@ -103,7 +123,11 @@ public class UserService {
             <%_ } _%>
         this.authorityRepository = authorityRepository;
         <%_ } _%>
+        <%_ if (cacheManagerIsAvailable === true) { _%>
+        this.cacheManager = cacheManager;
+        <%_ } _%>
     }
+<%_ if (authenticationType !== 'oauth2') { _%>
 
     public Optional<User> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
@@ -117,6 +141,9 @@ public class UserService {
                 <%_ } _%>
                 <%_ if (searchEngine === 'elasticsearch') { _%>
                 userSearchRepository.save(user);
+                <%_ } _%>
+                <%_ if (cacheManagerIsAvailable === true) { _%>
+                cacheManager.getCache("users").evict(user.getLogin());
                 <%_ } _%>
                 log.debug("Activated user: {}", user);
                 return user;
@@ -135,12 +162,15 @@ public class UserService {
                 <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
                 userRepository.save(user);
                 <%_ } _%>
+                <%_ if (cacheManagerIsAvailable === true) { _%>
+                cacheManager.getCache("users").evict(user.getLogin());
+                <%_ } _%>
                 return user;
            });
     }
 
     public Optional<User> requestPasswordReset(String mail) {
-        return userRepository.findOneByEmail(mail)
+        return userRepository.findOneByEmailIgnoreCase(mail)
             .filter(User::getActivated)
             .map(user -> {
                 user.setResetKey(RandomUtil.generateResetKey());
@@ -148,29 +178,31 @@ public class UserService {
                 <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
                 userRepository.save(user);
                 <%_ } _%>
+                <%_ if (cacheManagerIsAvailable === true) { _%>
+                cacheManager.getCache("users").evict(user.getLogin());
+                <%_ } _%>
                 return user;
             });
     }
 
-    public User createUser(String login, String password, String firstName, String lastName, String email<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>,
-        String imageUrl<% } %>, String langKey) {
+    public User registerUser(ManagedUserVM userDTO) {
 
         User newUser = new User();<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
         Authority authority = authorityRepository.findOne(AuthoritiesConstants.USER);
         Set<Authority> authorities = new HashSet<>();<% } %><% if (databaseType === 'cassandra') { %>
         newUser.setId(UUID.randomUUID().toString());
         Set<String> authorities = new HashSet<>();<% } %>
-        String encryptedPassword = passwordEncoder.encode(password);
-        newUser.setLogin(login);
+        String encryptedPassword = passwordEncoder.encode(userDTO.getPassword());
+        newUser.setLogin(userDTO.getLogin());
         // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
-        newUser.setFirstName(firstName);
-        newUser.setLastName(lastName);
-        newUser.setEmail(email);
+        newUser.setFirstName(userDTO.getFirstName());
+        newUser.setLastName(userDTO.getLastName());
+        newUser.setEmail(userDTO.getEmail());
         <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
-        newUser.setImageUrl(imageUrl);
+        newUser.setImageUrl(userDTO.getImageUrl());
         <%_ } _%>
-        newUser.setLangKey(langKey);
+        newUser.setLangKey(userDTO.getLangKey());
         // new user is not active
         newUser.setActivated(false);
         // new user gets registration key
@@ -199,7 +231,7 @@ public class UserService {
         user.setImageUrl(userDTO.getImageUrl());
         <%_ } _%>
         if (userDTO.getLangKey() == null) {
-            user.setLangKey("<%= nativeLanguage %>"); // default language
+            user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
         } else {
             user.setLangKey(userDTO.getLangKey());
         }
@@ -225,6 +257,7 @@ public class UserService {
         log.debug("Created Information for User: {}", user);
         return user;
     }
+<%_ } _%>
 
     /**
      * Update basic information (first name, last name, email, language) for the current user.
@@ -251,6 +284,9 @@ public class UserService {
             <%_ } _%>
             <%_ if (searchEngine === 'elasticsearch') { _%>
             userSearchRepository.save(user);
+            <%_ } _%>
+            <%_ if (cacheManagerIsAvailable === true) { _%>
+            cacheManager.getCache("users").evict(user.getLogin());
             <%_ } _%>
             log.debug("Changed Information for User: {}", user);
         });
@@ -290,6 +326,9 @@ public class UserService {
                 <%_ if (searchEngine === 'elasticsearch') { _%>
                 userSearchRepository.save(user);
                 <%_ } _%>
+                <%_ if (cacheManagerIsAvailable === true) { _%>
+                cacheManager.getCache("users").evict(user.getLogin());
+                <%_ } _%>
                 log.debug("Changed Information for User: {}", user);
                 return user;
             })
@@ -297,10 +336,6 @@ public class UserService {
     }
 
     public void deleteUser(String login) {
-        <%_ if (databaseType === 'sql' && authenticationType === 'oauth2') { _%>
-        jdbcTokenStore.findTokensByUserName(login).forEach(token ->
-            jdbcTokenStore.removeAccessToken(token));
-        <%_ } _%>
         userRepository.findOneByLogin(login).ifPresent(user -> {
             <%_ if (enableSocialSignIn) { _%>
             socialService.deleteUserSocialConnection(user.getLogin());
@@ -309,9 +344,13 @@ public class UserService {
             <%_ if (searchEngine === 'elasticsearch') { _%>
             userSearchRepository.delete(user);
             <%_ } _%>
+            <%_ if (cacheManagerIsAvailable === true) { _%>
+            cacheManager.getCache("users").evict(login);
+            <%_ } _%>
             log.debug("Deleted User: {}", user);
         });
     }
+<%_ if (authenticationType !== 'oauth2') { _%>
 
     public void changePassword(String password) {
         userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(user -> {
@@ -320,9 +359,13 @@ public class UserService {
             <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
             userRepository.save(user);
             <%_ } _%>
+            <%_ if (cacheManagerIsAvailable === true) { _%>
+            cacheManager.getCache("users").evict(user.getLogin());
+            <%_ } _%>
             log.debug("Changed password for User: {}", user);
         });
     }
+<%_ } _%>
 
     <%_ if (databaseType === 'sql') { _%>
     @Transactional(readOnly = true)
@@ -387,7 +430,9 @@ public class UserService {
             user.getPersistentTokens().remove(token);<% } %>
             persistentTokenRepository.delete(token);
         });
-    }<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+    }
+    <%_ } _%>
+    <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb')) { _%>
 
     /**
      * Not activated users should be automatically deleted after 3 days.
@@ -399,15 +444,22 @@ public class UserService {
         List<User> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(Instant.now().minus(3, ChronoUnit.DAYS));
         for (User user : users) {
             log.debug("Deleting not activated user {}", user.getLogin());
-            userRepository.delete(user);<% if (searchEngine === 'elasticsearch') { %>
-            userSearchRepository.delete(user);<% } %>
+            userRepository.delete(user);
+            <%_ if (searchEngine === 'elasticsearch') { _%>
+            userSearchRepository.delete(user);
+            <%_ } _%>
+            <%_ if (cacheManagerIsAvailable === true) { _%>
+            cacheManager.getCache("users").evict(user.getLogin());
+            <%_ } _%>
         }
     }
+    <%_ } if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 
     /**
      * @return a list of all the authorities
      */
     public List<String> getAuthorities() {
         return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
-    }<% } %>
+    }
+    <%_ } _%>
 }

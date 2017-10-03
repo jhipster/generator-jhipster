@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,7 +34,9 @@ export class ErrorHandlerInterceptor extends JhiHttpInterceptor {
         return <Observable<Response>> observable.catch((error) => {
             if (!(error.status === 401 && (error.text() === '' ||
                 (error.json().path && error.json().path.indexOf('/api/account') === 0 )))) {
-                this.eventManager.broadcast( {name: '<%=angularAppName%>.httpError', content: error});
+                if (this.eventManager !== undefined) {
+                    this.eventManager.broadcast( {name: '<%=angularAppName%>.httpError', content: error});
+                }
             }
             return Observable.throw(error);
         });

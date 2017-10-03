@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://jhipster.github.io/
+ This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -83,7 +83,7 @@ import { BaseEntity<% if (hasUserRelationship) { %>, User<% } %> } from './../..
 fields.forEach(field => {
     if (field.fieldIsEnum && enumsAlreadyDeclared.indexOf(field.fieldType) === -1) {
         enumsAlreadyDeclared.push(field.fieldType); _%>
-const enum <%= field.fieldType %> {<%
+export const enum <%= field.fieldType %> {<%
         const enums = field.fieldValues.split(',');
         for (let i = 0; i < enums.length; i++) { %>
     '<%= enums[i] %>'<%if (i < enums.length - 1) { %>,<% }
