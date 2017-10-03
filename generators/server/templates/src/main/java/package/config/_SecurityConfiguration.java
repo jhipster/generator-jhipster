@@ -28,13 +28,16 @@ import <%=packageName%>.security.jwt.*;
 <%_ if (authenticationType === 'session') { _%>
 import io.github.jhipster.config.JHipsterProperties;
 <%_ } _%>
+<%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
 import io.github.jhipster.security.*;
+<%_ } _%>
 
 <%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.beans.factory.BeanInitializationException;
 <%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -68,10 +71,12 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 <%_ } _%>
 import org.springframework.web.filter.CorsFilter;
+import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 <%_ if (authenticationType !== 'oauth2') { _%>
 
 import javax.annotation.PostConstruct;
 <% } %>
+@Import(SecurityProblemSupport.class)
 @Configuration
 <%_ if (authenticationType === 'oauth2') { _%>
 @EnableOAuth2Sso
@@ -103,9 +108,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final CorsFilter corsFilter;
 
+    private final SecurityProblemSupport problemSupport;
+
     public SecurityConfiguration(<%_ if (authenticationType !== 'oauth2') { _%>AuthenticationManagerBuilder authenticationManagerBuilder, UserDetailsService userDetailsService<%_ } _%><%_ if (authenticationType === 'session') { _%>,
         JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices<%_ } if (authenticationType === 'jwt') { _%>,
-            TokenProvider tokenProvider<%_ } _%><%_ if (clusteredHttpSession === 'hazelcast') { _%>, SessionRegistry sessionRegistry<%_ } if (authenticationType !== 'oauth2') { %>,<%_ } _%>CorsFilter corsFilter) {
+            TokenProvider tokenProvider<%_ } _%><%_ if (clusteredHttpSession === 'hazelcast') { _%>, SessionRegistry sessionRegistry<%_ } if (authenticationType !== 'oauth2') { %>,<%_ } _%>CorsFilter corsFilter, SecurityProblemSupport problemSupport) {
         <%_ if (authenticationType !== 'oauth2') { _%>
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.userDetailsService = userDetailsService;
@@ -121,6 +128,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         this.sessionRegistry = sessionRegistry;
         <%_ } _%>
         this.corsFilter = corsFilter;
+        this.problemSupport = problemSupport;
     }
     <%_ if (authenticationType !== 'oauth2') { _%>
 
@@ -154,11 +162,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new AjaxLogoutSuccessHandler();
     }
     <%_ } _%>
-
-    @Bean
-    public Http401UnauthorizedEntryPoint http401UnauthorizedEntryPoint() {
-        return new Http401UnauthorizedEntryPoint();
-    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -202,7 +205,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .addFilterBefore(corsFilter, CsrfFilter.class)
             <%_ } _%>
             .exceptionHandling()
-            .authenticationEntryPoint(http401UnauthorizedEntryPoint())<% if (authenticationType === 'session') { %>
+            .authenticationEntryPoint(problemSupport)
+            .accessDeniedHandler(problemSupport)<% if (authenticationType === 'session') { %>
         .and()
             .rememberMe()
             .rememberMeServices(rememberMeServices)
