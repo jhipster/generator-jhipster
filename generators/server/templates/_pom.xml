@@ -54,7 +54,7 @@
         <assertj.version>3.6.2</assertj.version>
         <awaitility.version>2.0.0</awaitility.version>
         <%_ if (applicationType === 'gateway') { _%>
-        <bucket4j.version>2.0.1</bucket4j.version>
+        <bucket4j.version>3.0.1</bucket4j.version>
         <%_ } _%>
         <commons-io.version>2.5</commons-io.version>
         <commons-lang.version>3.5</commons-lang.version>
@@ -65,7 +65,7 @@
         <!-- Overridden to get metrics-jcache -->
         <dropwizard-metrics.version>3.2.2</dropwizard-metrics.version>
         <%_ if (!skipClient) { _%>
-        <frontend-maven-plugin.version>1.4</frontend-maven-plugin.version>
+        <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
         <%_ } _%>
         <%_ if (gatlingTests) { _%>
         <gatling.version>2.2.5</gatling.version>
@@ -97,7 +97,7 @@
         <%_ if (gatlingTests) { _%>
         <jzlib.version>1.1.3</jzlib.version>
         <%_ } _%>
-        <jhipster.server.version>1.1.9</jhipster.server.version>
+        <jhipster.server.version>1.1.11</jhipster.server.version>
         <%_ if (authenticationType === 'jwt') { _%>
         <jjwt.version>0.7.0</jjwt.version>
         <%_ } _%>
@@ -114,8 +114,8 @@
         <%_ } _%>
         <m2e.apt.activation>jdt_apt</m2e.apt.activation>
         <mapstruct.version>1.1.0.Final</mapstruct.version>
-        <maven-compiler-plugin.version>3.6.0</maven-compiler-plugin.version>
-        <maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
+        <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
+        <maven-enforcer-plugin.version>3.0.0-M1</maven-enforcer-plugin.version>
         <maven-resources-plugin.version>3.0.1</maven-resources-plugin.version>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -139,7 +139,7 @@
         <%_ if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { _%>
         <postgresql.version>9.4.1212</postgresql.version>
         <%_ } _%>
-        <problem-spring-web.version>0.20.0</problem-spring-web.version>
+        <problem-spring-web.version>0.20.1</problem-spring-web.version>
         <!-- These remain empty unless the corresponding profile is active -->
         <profile.no-liquibase />
         <profile.swagger />
@@ -151,7 +151,11 @@
         <scala.version>2.12.1</scala.version>
         <sonar-maven-plugin.version>3.2</sonar-maven-plugin.version>
 
+        <%_ if (clientFramework === 'angular1') { _%>
         <sonar.exclusions><%= CLIENT_MAIN_SRC_DIR %>content/**/*.*, <%= CLIENT_MAIN_SRC_DIR %>bower_components/**/*.*, <%= CLIENT_MAIN_SRC_DIR %>i18n/*.js, <%= CLIENT_DIST_DIR %>**/*.*</sonar.exclusions>
+        <%_ } else { _%>
+        <sonar.exclusions><%= CLIENT_MAIN_SRC_DIR %>content/**/*.*, <%= CLIENT_MAIN_SRC_DIR %>i18n/*.js, <%= CLIENT_DIST_DIR %>**/*.*, <%= CLIENT_MAIN_SRC_DIR %>app/app.main-aot.ts</sonar.exclusions>
+        <%_ } _%>
 
         <sonar.issue.ignore.multicriteria>S3437,UndocumentedApi,BoldAndItalicTagsCheck</sonar.issue.ignore.multicriteria>
 
@@ -170,11 +174,17 @@
         <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
 
         <sonar.javascript.jstestdriver.reportsPath>${project.testresult.directory}/karma</sonar.javascript.jstestdriver.reportsPath>
+
+        <%_ if (clientFramework === 'angular1') { _%>
         <!-- For Sonar < 6.2 -->
         <sonar.javascript.lcov.reportPath>${project.testresult.directory}/coverage/report-lcov/lcov.info</sonar.javascript.lcov.reportPath>
         <!-- For Sonar >= 6.2 -->
         <sonar.javascript.lcov.reportPaths>${project.testresult.directory}/coverage/report-lcov/lcov.info</sonar.javascript.lcov.reportPaths>
 
+        <%_ } else { _%>
+        <sonar.typescript.lcov.reportPaths>${project.testresult.directory}/coverage/report-lcov/lcov.info</sonar.typescript.lcov.reportPaths>
+
+        <%_ } _%>
         <sonar.sources>${project.basedir}/<%= MAIN_DIR %></sonar.sources>
         <sonar.surefire.reportsPath>${project.testresult.directory}/surefire-reports</sonar.surefire.reportsPath>
         <sonar.tests>${project.basedir}/<%= TEST_DIR %></sonar.tests>
@@ -1166,7 +1176,7 @@
                 </executions>
                 -->
                 <configuration>
-                    <repository>${project.artifactId}</repository>
+                    <repository><%= baseName.toLowerCase()%></repository>
                     <tag>latest</tag>
                     <contextDirectory>${project.build.directory}</contextDirectory>
                 </configuration>
@@ -1555,7 +1565,7 @@
                 To use it, run in 3 terminals:
                 - './mvnw -Pcc scala:cc' for continuous compilation of your classes
                 - './mvnw -Pcc' for hot reload of Spring boot
-                - 'gulp' for hot reload of the HTML/JavaScript assets
+                - 'npm start/yarn start' for hot reload of the HTML/JavaScript asset
                 Everything should hot reload automatically!
             -->
             <id>cc</id>

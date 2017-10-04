@@ -1,21 +1,34 @@
-const generator = require('yeoman-generator');
+/**
+ * Copyright 2013-2017 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 const chalk = require('chalk');
 const shelljs = require('shelljs');
-const util = require('util');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
 const BaseGenerator = require('../generator-base');
 const docker = require('../docker-base');
 
-const OpenShiftGenerator = generator.extend({});
-util.inherits(OpenShiftGenerator, BaseGenerator);
-
 /* Constants used throughout */
 const constants = require('../generator-constants');
 
-module.exports = OpenShiftGenerator.extend({
-    constructor: function (...args) { // eslint-disable-line object-shorthand
-        generator.apply(this, args);
+module.exports = class extends BaseGenerator {
+    constructor(args, opts) {
+        super(args, opts);
 
         // This adds support for a `--skip-checks` flag
         this.option('skip-checks', {
@@ -25,69 +38,72 @@ module.exports = OpenShiftGenerator.extend({
         });
 
         this.skipChecks = this.options['skip-checks'];
-    },
+    }
 
-    initializing: {
-        sayHello() {
-            this.log(chalk.white(`${chalk.bold('⭕')} [*BETA*] Welcome to the JHipster OpenShift Generator ${chalk.bold('⭕')}`));
-            this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())} or in the root directory path that you select in the subsequent step`));
-        },
+    get initializing() {
+        return {
+            sayHello() {
+                this.log(chalk.white(`${chalk.bold('⭕')} [*BETA*] Welcome to the JHipster OpenShift Generator ${chalk.bold('⭕')}`));
+                this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())} or in the root directory path that you select in the subsequent step`));
+            },
 
-        checkDocker: docker.checkDocker,
+            checkDocker: docker.checkDocker,
 
-        checkOpenShift() {
-            if (this.skipChecks) return;
-            const done = this.async();
+            checkOpenShift() {
+                if (this.skipChecks) return;
+                const done = this.async();
 
-            shelljs.exec('oc version', { silent: true }, (code, stdout, stderr) => {
-                if (stderr) {
-                    this.log(`${chalk.yellow.bold('WARNING!')} oc 1.3 or later is not installed on your computer.\n` +
-                      'Make sure you have OpenShift Origin / OpenShift Container Platform and CLI installed. Read' +
-                        ' https://github.com/openshift/origin/\n');
+                shelljs.exec('oc version', { silent: true }, (code, stdout, stderr) => {
+                    if (stderr) {
+                        this.log(`${chalk.yellow.bold('WARNING!')} oc 1.3 or later is not installed on your computer.\n` +
+                          'Make sure you have OpenShift Origin / OpenShift Container Platform and CLI installed. Read' +
+                            ' https://github.com/openshift/origin/\n');
+                    }
+                    done();
+                });
+            },
+
+            loadConfig() {
+                this.defaultAppsFolders = this.config.get('appsFolders');
+                this.directoryPath = this.config.get('directoryPath');
+                this.clusteredDbApps = this.config.get('clusteredDbApps');
+                this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
+                this.monitoring = this.config.get('monitoring');
+                this.adminPassword = this.config.get('adminPassword');
+                this.jwtSecretKey = this.config.get('jwtSecretKey');
+                this.dockerRepositoryName = this.config.get('dockerRepositoryName');
+                this.dockerPushCommand = this.config.get('dockerPushCommand');
+                this.openshiftNamespace = this.config.get('openshiftNamespace');
+                this.storageType = this.config.get('storageType');
+                this.registryReplicas = this.config.get('registryReplicas');
+
+                this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
+                this.DOCKER_TRAEFIK = constants.DOCKER_TRAEFIK;
+                this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
+                this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
+                this.DOCKER_MYSQL = constants.DOCKER_MYSQL;
+                this.DOCKER_MARIADB = constants.DOCKER_MARIADB;
+                this.DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL;
+                this.DOCKER_ORACLE = constants.DOCKER_ORACLE;
+                this.DOCKER_MONGODB = constants.DOCKER_MONGODB;
+                this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
+                this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
+                this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
+                this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
+                this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
+                this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
+                this.DOCKER_JHIPSTER_ZIPKIN = constants.DOCKER_JHIPSTER_ZIPKIN;
+                this.DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE;
+                this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
+                this.DOCKER_PROMETHEUS_ALERTMANAGER = constants.DOCKER_PROMETHEUS_ALERTMANAGER;
+                this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
+
+                if (this.defaultAppsFolders !== undefined) {
+                    this.log('\nFound .yo-rc.json config file...');
                 }
-                done();
-            });
-        },
-
-        loadConfig() {
-            this.defaultAppsFolders = this.config.get('appsFolders');
-            this.directoryPath = this.config.get('directoryPath');
-            this.clusteredDbApps = this.config.get('clusteredDbApps');
-            this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
-            this.monitoring = this.config.get('monitoring');
-            this.adminPassword = this.config.get('adminPassword');
-            this.jwtSecretKey = this.config.get('jwtSecretKey');
-            this.dockerRepositoryName = this.config.get('dockerRepositoryName');
-            this.dockerPushCommand = this.config.get('dockerPushCommand');
-            this.openshiftNamespace = this.config.get('openshiftNamespace');
-            this.storageType = this.config.get('storageType');
-            this.registryReplicas = this.config.get('registryReplicas');
-
-            this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
-            this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
-            this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
-            this.DOCKER_MYSQL = constants.DOCKER_MYSQL;
-            this.DOCKER_MARIADB = constants.DOCKER_MARIADB;
-            this.DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL;
-            this.DOCKER_ORACLE = constants.DOCKER_ORACLE;
-            this.DOCKER_MONGODB = constants.DOCKER_MONGODB;
-            this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
-            this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
-            this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
-            this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
-            this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
-            this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
-            this.DOCKER_JHIPSTER_ZIPKIN = constants.DOCKER_JHIPSTER_ZIPKIN;
-            this.DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE;
-            this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
-            this.DOCKER_PROMETHEUS_ALERTMANAGER = constants.DOCKER_PROMETHEUS_ALERTMANAGER;
-            this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
-
-            if (this.defaultAppsFolders !== undefined) {
-                this.log('\nFound .yo-rc.json config file...');
             }
-        }
-    },
+        };
+    }
 
     _getAppFolders(input) {
         const files = shelljs.ls('-l', this.destinationPath(input));
@@ -110,53 +126,59 @@ module.exports = OpenShiftGenerator.extend({
         });
 
         return appsFolders;
-    },
+    }
 
-    prompting: {
-        askForApplicationType: prompts.askForApplicationType,
-        askForPath: prompts.askForPath,
-        askForApps: prompts.askForApps,
-        askForMonitoring: prompts.askForMonitoring,
-        askForServiceDiscovery: prompts.askForServiceDiscovery,
-        askForAdminPassword: prompts.askForAdminPassword,
-        askForOpenShiftNamespace: prompts.askForOpenShiftNamespace,
-        askForStorageType: prompts.askForStorageType,
-        askForDockerRepositoryName: prompts.askForDockerRepositoryName,
-        askForDockerPushCommand: prompts.askForDockerPushCommand
-    },
+    get prompting() {
+        return {
+            askForApplicationType: prompts.askForApplicationType,
+            askForPath: prompts.askForPath,
+            askForApps: prompts.askForApps,
+            askForMonitoring: prompts.askForMonitoring,
+            askForServiceDiscovery: prompts.askForServiceDiscovery,
+            askForAdminPassword: prompts.askForAdminPassword,
+            askForOpenShiftNamespace: prompts.askForOpenShiftNamespace,
+            askForStorageType: prompts.askForStorageType,
+            askForDockerRepositoryName: prompts.askForDockerRepositoryName,
+            askForDockerPushCommand: prompts.askForDockerPushCommand
+        };
+    }
 
-    configuring: {
-        insight() {
-            const insight = this.insight();
-            insight.trackWithEvent('generator', 'openshift');
-        },
+    get configuring() {
+        return {
+            insight() {
+                const insight = this.insight();
+                insight.trackWithEvent('generator', 'openshift');
+            },
 
-        checkImages: docker.checkImages,
-        generateJwtSecret: docker.generateJwtSecret,
-        configureImageNames: docker.configureImageNames,
-        setAppsFolderPaths: docker.setAppsFolderPaths,
+            checkImages: docker.checkImages,
+            generateJwtSecret: docker.generateJwtSecret,
+            configureImageNames: docker.configureImageNames,
+            setAppsFolderPaths: docker.setAppsFolderPaths,
 
-        // place holder for future changes (may be prompt or something else)
-        setRegistryReplicas() {
-            this.registryReplicas = 2;
-        },
+            // place holder for future changes (may be prompt or something else)
+            setRegistryReplicas() {
+                this.registryReplicas = 2;
+            },
 
-        saveConfig() {
-            this.config.set('appsFolders', this.appsFolders);
-            this.config.set('directoryPath', this.directoryPath);
-            this.config.set('clusteredDbApps', this.clusteredDbApps);
-            this.config.set('serviceDiscoveryType', this.serviceDiscoveryType);
-            this.config.set('monitoring', this.monitoring);
-            this.config.set('jwtSecretKey', this.jwtSecretKey);
-            this.config.set('dockerRepositoryName', this.dockerRepositoryName);
-            this.config.set('dockerPushCommand', this.dockerPushCommand);
-            this.config.set('openshiftNamespace', this.openshiftNamespace);
-            this.config.set('storageType', this.storageType);
-            this.config.set('registryReplicas', this.registryReplicas);
-        }
-    },
+            saveConfig() {
+                this.config.set('appsFolders', this.appsFolders);
+                this.config.set('directoryPath', this.directoryPath);
+                this.config.set('clusteredDbApps', this.clusteredDbApps);
+                this.config.set('serviceDiscoveryType', this.serviceDiscoveryType);
+                this.config.set('monitoring', this.monitoring);
+                this.config.set('jwtSecretKey', this.jwtSecretKey);
+                this.config.set('dockerRepositoryName', this.dockerRepositoryName);
+                this.config.set('dockerPushCommand', this.dockerPushCommand);
+                this.config.set('openshiftNamespace', this.openshiftNamespace);
+                this.config.set('storageType', this.storageType);
+                this.config.set('registryReplicas', this.registryReplicas);
+            }
+        };
+    }
 
-    writing: writeFiles(),
+    get writing() {
+        return writeFiles();
+    }
 
     end() {
         if (this.warning) {
@@ -200,4 +222,4 @@ module.exports = OpenShiftGenerator.extend({
             this.log();
         }
     }
-});
+};

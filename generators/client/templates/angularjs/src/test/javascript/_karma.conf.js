@@ -16,8 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-// Karma configuration
-// http://karma-runner.github.io/0.13/config/configuration-file.html
+var ChromiumRevision = require('puppeteer/package.json').puppeteer.chromium_revision;
+var Downloader = require('puppeteer/utils/ChromiumDownloader');
+var revisionInfo = Downloader.revisionInfo(Downloader.currentPlatform(), ChromiumRevision);
+process.env.CHROMIUM_BIN = revisionInfo.executablePath;
 
 var sourcePreprocessors = ['coverage'];
 
@@ -88,9 +90,8 @@ module.exports = function (config) {
         // - Firefox
         // - Opera
         // - Safari (only Mac)
-        // - PhantomJS
         // - IE (only Windows)
-        browsers: ['PhantomJS'],
+        browsers: ['ChromiumHeadless'],
 
         // Continuous Integration mode
         // if true, it capture browsers, run tests and exit

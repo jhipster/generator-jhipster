@@ -29,7 +29,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 
 import { Observable } from 'rxjs/Rx';
-import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager, JhiAlertService<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
 
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
@@ -86,7 +86,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         <%_ if (fieldsContainBlob) { _%>
         private dataUtils: JhiDataUtils,
         <%_ } _%>
-        private alertService: JhiAlertService,
+        private jhiAlertService: JhiAlertService,
         private <%= entityInstance %>Service: <%= entityAngularName %>Service,
         <%_ Object.keys(differentRelationships).forEach(key => {
             if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
@@ -162,7 +162,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     }
 
     private onError(error: any) {
-        this.alertService.error(error.message, null, null);
+        this.jhiAlertService.error(error.message, null, null);
     }
     <%_
     const entitiesSeen = [];

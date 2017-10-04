@@ -34,22 +34,29 @@ function askForClient(meta) {
 
     const applicationType = this.applicationType;
 
+    const choices = [
+        {
+            value: 'angularX',
+            name: 'Angular 4'
+        }
+    ];
+
+    if (this.authenticationType !== 'oauth2') {
+        choices.push({
+            value: 'angular1',
+            name: 'AngularJS 1.x'
+        });
+    }
+
     const PROMPT = {
         type: 'list',
         name: 'clientFramework',
         when: response => (applicationType !== 'microservice' && applicationType !== 'uaa'),
-        message: response => this.getNumberedQuestion('Which *Framework* would you like to use for the client?',
-            applicationType !== 'microservice' && applicationType !== 'uaa'),
-        choices: [
-            {
-                value: 'angularX',
-                name: 'Angular 4'
-            },
-            {
-                value: 'angular1',
-                name: 'AngularJS 1.x'
-            }
-        ],
+        message: response => this.getNumberedQuestion(
+            'Which *Framework* would you like to use for the client?',
+            applicationType !== 'microservice' && applicationType !== 'uaa'
+        ),
+        choices,
         default: 'angularX'
     };
 

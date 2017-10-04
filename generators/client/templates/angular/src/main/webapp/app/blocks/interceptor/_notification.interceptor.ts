@@ -25,6 +25,7 @@ export class NotificationInterceptor extends JhiHttpInterceptor {
 
     private alertService: JhiAlertService;
 
+    // tslint:disable-next-line: no-unused-variable
     constructor(private injector: Injector) {
         super();
         setTimeout(() => this.alertService = injector.get(JhiAlertService));

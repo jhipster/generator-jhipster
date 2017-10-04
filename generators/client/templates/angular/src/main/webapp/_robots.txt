@@ -20,8 +20,10 @@
 
 User-agent: *
 Disallow: /api/account
+<%_ if (authenticationType !== 'oauth2') { _%>
 Disallow: /api/account/change-password
 Disallow: /api/account/sessions
+<%_ } _%>
 Disallow: /api/audits/
 Disallow: /api/logs/
 Disallow: /api/users/

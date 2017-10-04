@@ -18,7 +18,7 @@
 -%>
 package <%=packageName%>.config;
 
-<%_ if (authenticationType === 'session' || authenticationType === 'jwt') { _%>
+<%_ if (authenticationType === 'session' || authenticationType === 'jwt' || authenticationType === 'oauth2') { _%>
 import <%=packageName%>.security.*;
 <%_ } _%>
 <%_ if (authenticationType === 'jwt') { _%>
@@ -28,44 +28,69 @@ import <%=packageName%>.security.jwt.*;
 <%_ if (authenticationType === 'session') { _%>
 import io.github.jhipster.config.JHipsterProperties;
 <%_ } _%>
+<%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
 import io.github.jhipster.security.*;
+<%_ } _%>
 
+<%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.beans.factory.BeanInitializationException;
+<%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;<% if (authenticationType === 'oauth2') { %>
-import org.springframework.security.authentication.AuthenticationManager;<% } %>
+import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpMethod;
+<%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+<%_ } _%>
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+<%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;<% if (authenticationType === 'jwt' || authenticationType === 'oauth2') { %>
+<%_ } _%>
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;<% if (authenticationType === 'jwt') { %>
 import org.springframework.security.config.http.SessionCreationPolicy;<% } %><% if (clusteredHttpSession === 'hazelcast') { %>
 import org.springframework.security.core.session.SessionRegistry;<% } %>
+<%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.security.core.userdetails.UserDetailsService;
+<%_ } _%>
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 <%_ if (authenticationType === 'session') { _%>
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfFilter;
 <%_ } _%>
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (authenticationType === 'oauth2') { _%>
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfFilter;
+<%_ } _%>
+<%_ if (authenticationType === 'jwt') { _%>
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.filter.CorsFilter;
 <%_ } _%>
+import org.springframework.web.filter.CorsFilter;
+import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
+<%_ if (authenticationType !== 'oauth2') { _%>
 
 import javax.annotation.PostConstruct;
-
+<% } %>
+@Import(SecurityProblemSupport.class)
 @Configuration
+<%_ if (authenticationType === 'oauth2') { _%>
+@EnableOAuth2Sso
+<%_ } else { _%>
 @EnableWebSecurity
+<%_ } _%>
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    <%_ if (authenticationType !== 'oauth2') { _%>
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     private final UserDetailsService userDetailsService;
+    <%_ } _%>
     <%_ if (authenticationType === 'session') { _%>
 
     private final JHipsterProperties jHipsterProperties;
@@ -80,18 +105,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final SessionRegistry sessionRegistry;
     <%_ } _%>
-    <%_ if (authenticationType !== 'oauth2') { _%>
 
     private final CorsFilter corsFilter;
-    <%_ } _%>
 
-    public SecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder, UserDetailsService userDetailsService<% if (authenticationType === 'session') { %>,
-        JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices<% } if (authenticationType === 'jwt') { %>,
-            TokenProvider tokenProvider<% } %><% if (clusteredHttpSession === 'hazelcast') { %>, SessionRegistry sessionRegistry<% } if (authenticationType !== 'oauth2') { %>,
-        CorsFilter corsFilter<% } %>) {
+    private final SecurityProblemSupport problemSupport;
 
+    public SecurityConfiguration(<%_ if (authenticationType !== 'oauth2') { _%>AuthenticationManagerBuilder authenticationManagerBuilder, UserDetailsService userDetailsService<%_ } _%><%_ if (authenticationType === 'session') { _%>,
+        JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices<%_ } if (authenticationType === 'jwt') { _%>,
+            TokenProvider tokenProvider<%_ } _%><%_ if (clusteredHttpSession === 'hazelcast') { _%>, SessionRegistry sessionRegistry<%_ } if (authenticationType !== 'oauth2') { %>,<%_ } _%>CorsFilter corsFilter, SecurityProblemSupport problemSupport) {
+        <%_ if (authenticationType !== 'oauth2') { _%>
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.userDetailsService = userDetailsService;
+        <%_ } _%>
         <%_ if (authenticationType === 'session') { _%>
         this.jHipsterProperties = jHipsterProperties;
         this.rememberMeServices = rememberMeServices;
@@ -102,10 +127,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         <%_ if (clusteredHttpSession === 'hazelcast') { _%>
         this.sessionRegistry = sessionRegistry;
         <%_ } _%>
-        <%_ if (authenticationType !== 'oauth2') { _%>
         this.corsFilter = corsFilter;
-        <%_ } _%>
+        this.problemSupport = problemSupport;
     }
+    <%_ if (authenticationType !== 'oauth2') { _%>
 
     @PostConstruct
     public void init() {
@@ -117,6 +142,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             throw new BeanInitializationException("Security configuration failed", e);
         }
     }
+    <%_ } _%>
     <%_ if (authenticationType === 'session') { _%>
 
     @Bean
@@ -138,11 +164,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     <%_ } _%>
 
     @Bean
-    public Http401UnauthorizedEntryPoint http401UnauthorizedEntryPoint() {
-        return new Http401UnauthorizedEntryPoint();
-    }
-
-    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
@@ -157,14 +178,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             <%_ } _%>
             .antMatchers("/i18n/**")
             .antMatchers("/content/**")
-            .antMatchers("/swagger-ui/index.html")<% if (authenticationType === 'oauth2') { %>
+            .antMatchers("/swagger-ui/index.html")<% if (authenticationType !== 'oauth2') { %>
             .antMatchers("/api/register")
             .antMatchers("/api/activate")
             .antMatchers("/api/account/reset-password/init")
             .antMatchers("/api/account/reset-password/finish")<% } %>
             .antMatchers("/test/**")<% if (devDatabaseType !== 'h2Disk' && devDatabaseType !== 'h2Memory') { %>;<% } else { %>
             .antMatchers("/h2-console/**");<% } %>
-    }<% if (authenticationType === 'session' || authenticationType === 'jwt') { %>
+    }<% if (authenticationType === 'session' || authenticationType === 'jwt' || authenticationType === 'oauth2') { %>
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -173,16 +194,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .maximumSessions(32) // maximum number of concurrent sessions for one user
             .sessionRegistry(sessionRegistry)
             .and().and()<% } %>
-            <%_ if (authenticationType === 'session') { _%>
+            <%_ if (authenticationType === 'session' || authenticationType == 'oauth2') { _%>
             .csrf()
             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
         .and()
             <%_ } _%>
-            <%_ if (authenticationType !== 'oauth2') { _%>
+            <%_ if (authenticationType === 'jwt') { _%>
             .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
+            <%_ } else if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
+            .addFilterBefore(corsFilter, CsrfFilter.class)
             <%_ } _%>
             .exceptionHandling()
-            .authenticationEntryPoint(http401UnauthorizedEntryPoint())<% if (authenticationType === 'session') { %>
+            .authenticationEntryPoint(problemSupport)
+            .accessDeniedHandler(problemSupport)<% if (authenticationType === 'session') { %>
         .and()
             .rememberMe()
             .rememberMeServices(rememberMeServices)
@@ -201,6 +225,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .logoutUrl("/api/logout")
             .logoutSuccessHandler(ajaxLogoutSuccessHandler())<% if (clusteredHttpSession === 'hazelcast') { %>
             .deleteCookies("hazelcast.sessionId")<% } %>
+            .permitAll()<% } %><% if (authenticationType === 'oauth2') { %>
+        .and()
+            .logout()
+            .logoutUrl("/api/logout")
+            .logoutSuccessHandler(ajaxLogoutSuccessHandler())<% if (clusteredHttpSession === 'hazelcast') { %>
+            .deleteCookies("hazelcast.sessionId")<% } %>
             .permitAll()<% } %>
         .and()<% if (authenticationType === 'jwt') { %>
             .csrf()
@@ -213,11 +243,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()<% } %>
             .authorizeRequests()
+            <%_ if (authenticationType !== 'oauth2') { _%>
             .antMatchers("/api/register").permitAll()
             .antMatchers("/api/activate").permitAll()
             .antMatchers("/api/authenticate").permitAll()
             .antMatchers("/api/account/reset-password/init").permitAll()
             .antMatchers("/api/account/reset-password/finish").permitAll()
+            <%_ } _%>
             .antMatchers("/api/profile-info").permitAll()
             .antMatchers("/api/**").authenticated()<% if (websocket === 'spring-websocket') { %>
             .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
@@ -230,26 +262,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
             .apply(securityConfigurerAdapter());<% } %>
 
-    }<% } %><% if (authenticationType === 'oauth2') { %>
-
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http
-            .httpBasic().realmName("<%= baseName %>")
-            .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-                .requestMatchers().antMatchers("/oauth/authorize")
-            .and()
-                .authorizeRequests()
-                .antMatchers("/oauth/authorize").authenticated();
-    }
-
-    @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
     }<% } %><% if (authenticationType === 'jwt') { %>
 
     private JWTConfigurer securityConfigurerAdapter() {

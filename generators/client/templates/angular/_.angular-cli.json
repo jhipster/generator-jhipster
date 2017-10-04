@@ -22,7 +22,7 @@
         "name": "<%= dasherizedBaseName %>"
     },
     "apps": [{
-        "root": "<%= MAIN_SRC_DIR %>",
+        "root": "<%= MAIN_SRC_DIR.replace(/\/$/, "") %>",
         "outDir": "<%= DIST_DIR %>app",
         "assets": [
             "content",
@@ -34,7 +34,7 @@
         "index": "index.html",
         "main": "app/app.main.ts",
         "polyfills": "app/polyfills.ts",
-        "test": "",
+        "test": "<%= TEST_SRC_DIR %>spec/entry.ts",
         "tsconfig": "../../../tsconfig.json",
         "prefix": "<%= jhiPrefix %>",
         "mobile": false,
@@ -77,13 +77,20 @@
         "prefixInterfaces": false,
         "component" : {
             "inlineStyle" : true,
-            "inlineTemplate": false
+            "inlineTemplate": false,
+            "spec": false
         },
-        "spec": {
-            "component": false,
-            "directive": false,
-            "pipe": false,
-            "service": false
+        "directive" : {
+            "spec": false
+        },
+        "guard" : {
+            "spec": false
+        },
+        "pipe" : {
+            "spec": false
+        },
+        "service" : {
+            "spec": false
         }
     },
     "packageManager": "yarn"

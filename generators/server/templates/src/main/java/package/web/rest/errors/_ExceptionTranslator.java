@@ -23,6 +23,7 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.dao.ConcurrencyFailureException;
 <%_ } _%>
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -39,6 +40,7 @@ import org.zalando.problem.spring.web.advice.validation.ConstraintViolationProbl
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -103,26 +105,21 @@ public class ExceptionTranslator implements ProblemHandling {
     }
 
     /**
-     * Override default handler to take ResponseStatus annotation into account
+     * Override AuthenticationException handler to add the "path" field.
      */
     @Override
-    public ResponseEntity<Problem> handleThrowable(
-        @Nonnull final Throwable throwable,
-        @Nonnull final NativeWebRequest request) {
-        ResponseStatus responseStatus = AnnotationUtils.findAnnotation(throwable.getClass(), ResponseStatus.class);
-        if (responseStatus != null) {
-            Problem problem = Problem.builder()
-                .withStatus(new HttpStatusAdapter(responseStatus.value()))
-                .withTitle(responseStatus.reason().isEmpty() ? responseStatus.value().getReasonPhrase() : responseStatus.reason() )
-                .withDetail(throwable.getMessage())
-                .build();
-            return create(throwable, problem, request);
-        } else {
-            return create(Status.INTERNAL_SERVER_ERROR, throwable, request);
-        }
+    public ResponseEntity<Problem> handleAuthentication(AuthenticationException ex, NativeWebRequest request) {
+        Problem problem = Problem.builder()
+            .withType(ErrorConstants.UNAUTHORIZED_TYPE)
+            .withTitle(Status.UNAUTHORIZED.getReasonPhrase())
+            .withStatus(Status.UNAUTHORIZED)
+            .withDetail(ex.getMessage())
+            .with("path", request.getNativeRequest(HttpServletRequest.class).getRequestURI())
+            .build();
+        return create(ex, problem, request);
     }
-
     <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+
     @ExceptionHandler(ConcurrencyFailureException.class)
     public ResponseEntity<Problem> handleConcurrencyFailure(ConcurrencyFailureException ex, NativeWebRequest request) {
         Problem problem = Problem.builder()
