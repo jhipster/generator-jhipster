@@ -45,7 +45,7 @@ module.exports = class extends BaseGenerator {
     get prompting() {
         return {
             askForControllerActions: prompts.askForControllerActions
-        }
+        };
     }
 
     get default() {
@@ -63,7 +63,7 @@ module.exports = class extends BaseGenerator {
         this.apiPrefix = _.kebabCase(this.name);
 
         if (this.controllerActions.length === 0) {
-            this.log(chalk.green(`No controller actions found, addin a default action`));
+            this.log(chalk.green('No controller actions found, addin a default action'));
             this.controllerActions.push({
                 actionName: 'defaultAction',
                 actionMethod: 'Get'
@@ -78,8 +78,7 @@ module.exports = class extends BaseGenerator {
         this.mockRequestImports = this.usedMethods.map(method => `static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.${method.toLowerCase()}`);
 
         // IntelliJ optimizes imports after a certain count
-        this.mockRequestImports = this.mockRequestImports.length > 3 ? [`static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*`] : this.mockRequestImports;
-        
+        this.mockRequestImports = this.mockRequestImports.length > 3 ? ['static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*'] : this.mockRequestImports;
 
         this.mainClass = this.getMainClassName();
 

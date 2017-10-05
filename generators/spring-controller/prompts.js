@@ -49,8 +49,8 @@ function askForControllerAction(done) {
                     return 'Your action name cannot start with an upper case letter';
                 } else if (jhiCore.isReservedFieldName(input)) {
                     return 'Your action name cannot contain a Java or Angular reserved keyword';
-                }                 
-                
+                }
+
                 return true;
             },
             message: 'What is the name of your action?'
