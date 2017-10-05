@@ -69,10 +69,10 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
                     if (errorHeader) {
                         const entityName = <% if (enableTranslation) { %>translateService.instant('global.menu.entities.' + entityKey)<% }else{ %>entityKey<% } %>;
                         this.addErrorAlert(errorHeader, errorHeader, { entityName });
-                    } else if (httpResponse.text() !== '' && httpResponse.json() && httpResponse.json().fieldErrors) {
-                        const fieldErrors = httpResponse.json().fieldErrors;
-                        for (i = 0; i < fieldErrors.length; i++) {
-                            const fieldError = fieldErrors[i];
+                    } else if (httpResponse.text() !== '' && httpResponse.json() && httpResponse.json().violations) {
+                        const violations = httpResponse.json().violations;
+                        for (i = 0; i < violations.length; i++) {
+                            const fieldError = violations[i];
                             // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
                             const convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');
                             const fieldName = <% if (enableTranslation) { %>translateService.instant('<%=angularAppName%>.' +
