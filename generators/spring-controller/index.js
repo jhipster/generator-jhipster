@@ -24,6 +24,7 @@ const constants = require('../generator-constants');
 const prompts = require('./prompts');
 
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
+const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -58,6 +59,7 @@ module.exports = class extends BaseGenerator {
 
     writing() {
         this.controllerClass = _.upperFirst(this.name);
+        this.controllerInstance = _.lowerFirst(this.name);
         this.apiPrefix = _.kebabCase(this.name);
 
         if (this.controllerActions.length === 0) {
@@ -69,20 +71,32 @@ module.exports = class extends BaseGenerator {
         }
 
         // helper for Java imports
-        this.usedMethods = _.uniq(this.controllerActions.map(action => `org.springframework.web.bind.annotation.${action.actionMethod}Mapping`));
+        this.usedMethods = _.uniq(this.controllerActions.map(action => action.actionMethod));
         this.usedMethods = this.usedMethods.sort();
+
+        this.mappingImports = this.usedMethods.map(method => `org.springframework.web.bind.annotation.${method}Mapping`);
+        this.mockRequestImports = this.usedMethods.map(method => `static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.${method.toLowerCase()}`);
+
+        // IntelliJ optimizes imports after a certain count
+        this.mockRequestImports = this.mockRequestImports.length > 3 ? [`static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*`] : this.mockRequestImports;
         
 
-        this.log(this.usedMethods);
+        this.mainClass = this.getMainClassName();
 
         this.controllerActions.forEach((action) => {
             action.actionPath = _.kebabCase(action.actionName);
+            action.actionNameUF = _.upperFirst(action.actionName);
             this.log(chalk.green(`adding ${action.actionMethod} action '${action.actionName}' for /api/${this.apiPrefix}/${action.actionPath}`));
         });
 
         this.template(
             `${SERVER_MAIN_SRC_DIR}package/web/rest/_Controller.java`,
             `${SERVER_MAIN_SRC_DIR + this.packageFolder}/web/rest/${this.controllerClass}Controller.java`
+        );
+
+        this.template(
+            `${SERVER_TEST_SRC_DIR}package/web/rest/_ControllerIntTest.java`,
+            `${SERVER_TEST_SRC_DIR + this.packageFolder}/web/rest/${this.controllerClass}ControllerIntTest.java`
         );
     }
 };

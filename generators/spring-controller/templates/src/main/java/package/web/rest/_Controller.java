@@ -20,11 +20,11 @@ package <%=packageName%>.web.rest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-<%_ if (usedMethods.length > 2) { _%>
+<%_ if (mappingImports.length > 2) { _%>
 import org.springframework.web.bind.annotation.*;
 <%_ } else { _%>
-<%_ for(let idx in usedMethods) { _%>
-import <%= usedMethods[idx] %>;
+<%_ for(let idx in mappingImports) { _%>
+import <%= mappingImports[idx] %>;
 <%_ } _%>
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
