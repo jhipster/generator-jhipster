@@ -308,6 +308,7 @@ const files = {
                 'components/form/_pagination.constants.js',
                 'components/util/_base64.service.js',
                 'components/util/_capitalize.filter.js',
+                'components/util/_error.constants.js',
                 'components/util/_parse-links.service.js',
                 'components/util/_truncate-characters.filter.js',
                 'components/util/_truncate-words.filter.js',

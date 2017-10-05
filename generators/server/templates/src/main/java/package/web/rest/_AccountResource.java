@@ -38,22 +38,15 @@ import <%=packageName%>.service.MailService;
 import <%=packageName%>.service.UserService;
 import <%=packageName%>.service.dto.UserDTO;
 <%_ if (authenticationType !== 'oauth2') { _%>
+import <%=packageName%>.web.rest.errors.*;
 import <%=packageName%>.web.rest.vm.KeyAndPasswordVM;
 import <%=packageName%>.web.rest.vm.ManagedUserVM;
-import <%=packageName%>.web.rest.util.HeaderUtil;
 
 import org.apache.commons.lang3.StringUtils;
 <%_ } _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-<%_ if (authenticationType !== 'oauth2') { _%>
-import org.springframework.http.HttpHeaders;
-<%_ } _%>
 import org.springframework.http.HttpStatus;
-<%_ if (authenticationType !== 'oauth2') { _%>
-import org.springframework.http.MediaType;
-<%_ } _%>
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 <%_ if (authenticationType === 'oauth2') { _%>
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -99,10 +92,6 @@ public class AccountResource {
 
     private final PersistentTokenRepository persistentTokenRepository;
     <%_ } _%>
-    <%_ if (authenticationType !== 'oauth2') { _%>
-
-    private static final String CHECK_ERROR_MESSAGE = "Incorrect password";
-    <%_ } _%>
 
     public AccountResource(UserRepository userRepository, UserService userService<% if (authenticationType !== 'oauth2') { %>, MailService mailService<% } %><% if (authenticationType === 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>) {
 
@@ -133,12 +122,13 @@ public class AccountResource {
     /**
      * GET  /account : get the current user.
      *
-     * @return the ResponseEntity with status 200 (OK) and the current user in body, or status 500 (Internal Server Error) if the user couldn't be returned
+     * @return the current user
+     * @throws RuntimeException 500 (Internal Server Error) if the user couldn't be returned
      */
     @GetMapping("/account")
     @Timed
     @SuppressWarnings("unchecked")
-    public ResponseEntity<UserDTO> getAccount(Principal principal) {
+    public UserDTO getAccount(Principal principal) {
         if (principal != null) {
             if (principal instanceof OAuth2Authentication) {
                 OAuth2Authentication authentication = (OAuth2Authentication) principal;
@@ -240,15 +230,15 @@ public class AccountResource {
                     log.debug("Saving user '{}' in local database...", userDTO.getLogin());
                     userRepository.save(user);
                 }
-                return new ResponseEntity<>(userDTO, HttpStatus.OK);
+                return userDTO;
             } else {
                 // Allow Spring Security Test to be used to mock users in the database
                 return Optional.ofNullable(userService.getUserWithAuthorities())
-                    .map(user -> new ResponseEntity<>(new UserDTO(user), HttpStatus.OK))
-                    .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+                    .map(UserDTO::new)
+                    .orElseThrow(RuntimeException::new);
             }
         } else {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new RuntimeException();
         }
     }
 <%_ } else { _%>
@@ -257,43 +247,33 @@ public class AccountResource {
      * POST  /register : register the user.
      *
      * @param managedUserVM the managed user View Model
-     * @return the ResponseEntity with status 201 (Created) if the user is registered or 400 (Bad Request) if the login or email is already in use
+     * @throws InvalidPasswordException 400 (Bad Request) if the password is incorrect
+     * @throws EmailAlreadyUsedException 400 (Bad Request) if the email is already used
+     * @throws LoginAlreadyUsedException 400 (Bad Request) if the login is already used
      */
-    @PostMapping(path = "/register",
-        produces={MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_PLAIN_VALUE})
+    @PostMapping("/register")
     @Timed
-    public ResponseEntity registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
-
-        HttpHeaders textPlainHeaders = new HttpHeaders();
-        textPlainHeaders.setContentType(MediaType.TEXT_PLAIN);
+    @ResponseStatus(HttpStatus.CREATED)
+    public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
         if (!checkPasswordLength(managedUserVM.getPassword())) {
-            return new ResponseEntity<>(CHECK_ERROR_MESSAGE, HttpStatus.BAD_REQUEST);
+            throw new InvalidPasswordException();
         }
-        return userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase())
-            .map(user -> new ResponseEntity<>("login already in use", textPlainHeaders, HttpStatus.BAD_REQUEST))
-            .orElseGet(() -> userRepository.findOneByEmailIgnoreCase(managedUserVM.getEmail())
-                .map(user -> new ResponseEntity<>("email address already in use", textPlainHeaders, HttpStatus.BAD_REQUEST))
-                .orElseGet(() -> {
-                    User user = userService.registerUser(managedUserVM);
-
-                    mailService.sendActivationEmail(user);
-                    return new ResponseEntity<>(HttpStatus.CREATED);
-                })
-        );
+        userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase()).ifPresent(u -> {throw new LoginAlreadyUsedException();});
+        userRepository.findOneByEmailIgnoreCase(managedUserVM.getEmail()).ifPresent(u -> {throw new EmailAlreadyUsedException();});
+        User user = userService.registerUser(managedUserVM);
+        mailService.sendActivationEmail(user);
     }
 
     /**
      * GET  /activate : activate the registered user.
      *
      * @param key the activation key
-     * @return the ResponseEntity with status 200 (OK) and the activated user in body, or status 500 (Internal Server Error) if the user couldn't be activated
+     * @throws RuntimeException 500 (Internal Server Error) if the user couldn't be activated
      */
     @GetMapping("/activate")
     @Timed
-    public ResponseEntity<String> activateAccount(@RequestParam(value = "key") String key) {
-        return userService.activateRegistration(key)
-            .map(user -> new ResponseEntity<String>(HttpStatus.OK))
-            .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+    public void activateAccount(@RequestParam(value = "key") String key) {
+        userService.activateRegistration(key).orElseThrow(RuntimeException::new);
     }
 
     /**
@@ -312,71 +292,65 @@ public class AccountResource {
     /**
      * GET  /account : get the current user.
      *
-     * @return the ResponseEntity with status 200 (OK) and the current user in body, or status 500 (Internal Server Error) if the user couldn't be returned
+     * @return the current user
+     * @throws RuntimeException 500 (Internal Server Error) if the user couldn't be returned
      */
     @GetMapping("/account")
     @Timed
-    public ResponseEntity<UserDTO> getAccount() {
+    public UserDTO getAccount() {
         return Optional.ofNullable(userService.getUserWithAuthorities())
-            .map(user -> new ResponseEntity<>(new UserDTO(user), HttpStatus.OK))
-            .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+            .map(UserDTO::new)
+            .orElseThrow(RuntimeException::new);
     }
 
     /**
      * POST  /account : update the current user information.
      *
      * @param userDTO the current user information
-     * @return the ResponseEntity with status 200 (OK), or status 400 (Bad Request) or 500 (Internal Server Error) if the user couldn't be updated
+     * @throws EmailAlreadyUsedException 400 (Bad Request) if the email is already used
+     * @throws RuntimeException 500 (Internal Server Error) if the user login wasn't found
      */
     @PostMapping("/account")
     @Timed
-    public ResponseEntity saveAccount(@Valid @RequestBody UserDTO userDTO) {
+    public void saveAccount(@Valid @RequestBody UserDTO userDTO) {
         final String userLogin = SecurityUtils.getCurrentUserLogin();
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
-            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("user-management", "emailexists", "Email already in use")).body(null);
+            throw new EmailAlreadyUsedException();
         }
-        return userRepository
-            .findOneByLogin(userLogin)
-            .map(u -> {
-                userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
+        userRepository.findOneByLogin(userLogin).orElseThrow(RuntimeException::new);
+        userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
                     userDTO.getLangKey()<% if (databaseType === 'mongodb' || databaseType === 'sql') { %>, userDTO.getImageUrl()<% } %>);
-                return new ResponseEntity(HttpStatus.OK);
-            })
-            .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
     /**
      * POST  /account/change-password : changes the current user's password
      *
      * @param password the new password
-     * @return the ResponseEntity with status 200 (OK), or status 400 (Bad Request) if the new password is not strong enough
+     * @throws InvalidPasswordException 400 (Bad Request) if the new password is incorrect
      */
-    @PostMapping(path = "/account/change-password",
-        produces = MediaType.TEXT_PLAIN_VALUE)
+    @PostMapping(path = "/account/change-password")
     @Timed
-    public ResponseEntity changePassword(@RequestBody String password) {
+    public void changePassword(@RequestBody String password) {
         if (!checkPasswordLength(password)) {
-            return new ResponseEntity<>(CHECK_ERROR_MESSAGE, HttpStatus.BAD_REQUEST);
+            throw new InvalidPasswordException();
         }
         userService.changePassword(password);
-        return new ResponseEntity<>(HttpStatus.OK);
     }<% if (authenticationType === 'session') { %>
 
     /**
      * GET  /account/sessions : get the current open sessions.
      *
-     * @return the ResponseEntity with status 200 (OK) and the current open sessions in body,
-     *  or status 500 (Internal Server Error) if the current open sessions couldn't be retrieved
+     * @return the current open sessions
+     * @throws RuntimeException 500 (Internal Server Error) if the current open sessions couldn't be retrieved
      */
     @GetMapping("/account/sessions")
     @Timed
-    public ResponseEntity<List<PersistentToken>> getCurrentSessions() {
-        return userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin())
-            .map(user -> new ResponseEntity<>(
-                persistentTokenRepository.findByUser(user),
-                HttpStatus.OK))
-            .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+    public List<PersistentToken> getCurrentSessions() {
+        return persistentTokenRepository.findByUser(
+            userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin())
+                .orElseThrow(RuntimeException::new)
+        );
     }
 
     /**
@@ -410,39 +384,35 @@ public class AccountResource {
      * POST   /account/reset-password/init : Send an email to reset the password of the user
      *
      * @param mail the mail of the user
-     * @return the ResponseEntity with status 200 (OK) if the email was sent, or status 400 (Bad Request) if the email address is not registered
+     * @throws EmailNotFoundException 400 (Bad Request) if the email address is not registered
      */
-    @PostMapping(path = "/account/reset-password/init",
-        produces = MediaType.TEXT_PLAIN_VALUE)
+    @PostMapping(path = "/account/reset-password/init")
     @Timed
-    public ResponseEntity requestPasswordReset(@RequestBody String mail) {
-        return userService.requestPasswordReset(mail)
-            .map(user -> {
-                mailService.sendPasswordResetMail(user);
-                return new ResponseEntity<>("email was sent", HttpStatus.OK);
-            }).orElse(new ResponseEntity<>("email address not registered", HttpStatus.BAD_REQUEST));
+    public void requestPasswordReset(@RequestBody String mail) {
+        mailService.sendPasswordResetMail(
+            userService.requestPasswordReset(mail)
+                .orElseThrow(EmailNotFoundException::new)
+        );
     }
 
     /**
      * POST   /account/reset-password/finish : Finish to reset the password of the user
      *
      * @param keyAndPassword the generated key and the new password
-     * @return the ResponseEntity with status 200 (OK) if the password has been reset,
-     * or status 400 (Bad Request) or 500 (Internal Server Error) if the password could not be reset
+     * @throws InvalidPasswordException 400 (Bad Request) if the password is incorrect
+     * @throws RuntimeException 500 (Internal Server Error) if the password could not be reset
      */
-    @PostMapping(path = "/account/reset-password/finish",
-        produces = MediaType.TEXT_PLAIN_VALUE)
+    @PostMapping(path = "/account/reset-password/finish")
     @Timed
-    public ResponseEntity<String> finishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {
+    public void finishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {
         if (!checkPasswordLength(keyAndPassword.getNewPassword())) {
-            return new ResponseEntity<>(CHECK_ERROR_MESSAGE, HttpStatus.BAD_REQUEST);
+            throw new InvalidPasswordException();
         }
-        return userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey())
-              .map(user -> new ResponseEntity<String>(HttpStatus.OK))
-              .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+        userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey())
+            .orElseThrow(RuntimeException::new);
     }
 
-    private boolean checkPasswordLength(String password) {
+    private static boolean checkPasswordLength(String password) {
         return !StringUtils.isEmpty(password) &&
             password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH &&
             password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;

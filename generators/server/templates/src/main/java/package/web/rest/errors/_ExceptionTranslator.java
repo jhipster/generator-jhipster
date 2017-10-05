@@ -18,6 +18,8 @@
 -%>
 package <%=packageName%>.web.rest.errors;
 
+import <%=packageName%>.web.rest.util.HeaderUtil;
+
 import org.springframework.core.annotation.AnnotationUtils;
 <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
 import org.springframework.dao.ConcurrencyFailureException;
@@ -42,7 +44,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -117,6 +118,11 @@ public class ExceptionTranslator implements ProblemHandling {
             .with("path", request.getNativeRequest(HttpServletRequest.class).getRequestURI())
             .build();
         return create(ex, problem, request);
+    }
+
+    @ExceptionHandler(BadRequestAlertException.class)
+    public ResponseEntity<Problem> handleBadRequestAlertException(BadRequestAlertException ex, NativeWebRequest request) {
+        return create(ex, request, HeaderUtil.createFailureAlert(ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));
     }
     <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
 

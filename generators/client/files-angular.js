@@ -384,6 +384,7 @@ const files = {
                 'shared/_shared.module.ts',
                 'shared/_shared-libs.module.ts',
                 'shared/_shared-common.module.ts',
+                'shared/constants/_error.constants.ts',
                 'shared/constants/_pagination.constants.ts',
                 // models
                 'shared/model/_response-wrapper.model.ts',
