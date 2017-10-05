@@ -25,13 +25,13 @@ const prefix = '<%= TEST_SRC_DIR %>'.replace(/[^/]+/g,'..');
 
 var webbrowserDriver= '';
 if (os.platform() === 'win32') {
-    webbrowserDriver = prefix + 'node_modules/webdriver-manager/selenium/chromedriver_2.32.exe';
+    webbrowserDriver = prefix + 'node_modules/webdriver-manager/selenium/chromedriver_2.33.exe';
 } else {
-    webbrowserDriver = prefix + 'node_modules/webdriver-manager/selenium/chromedriver_2.32';
+    webbrowserDriver = prefix + 'node_modules/webdriver-manager/selenium/chromedriver_2.33';
 }
 
 exports.config = {
-    seleniumServerJar: prefix + 'node_modules/webdriver-manager/selenium/selenium-server-standalone-3.5.3.jar',
+    seleniumServerJar: prefix + 'node_modules/webdriver-manager/selenium/selenium-server-standalone-3.6.0.jar',
     chromeDriver: webbrowserDriver,
     allScriptsTimeout: 20000,
 
