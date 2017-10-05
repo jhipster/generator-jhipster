@@ -20,8 +20,15 @@ package <%=packageName%>.web.rest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+<%_ if (usedMethods.length > 2) { _%>
+import org.springframework.web.bind.annotation.*;
+<%_ } else { _%>
+<%_ for(let idx in usedMethods) { _%>
+import <%= usedMethods[idx] %>;
+<%_ } _%>
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+<%_ } _%>
 
 /**
  * <%= controllerClass %> controller
@@ -32,4 +39,14 @@ public class <%= controllerClass %>Controller {
 
     private final Logger log = LoggerFactory.getLogger(<%= controllerClass %>Controller.class);
 
+    <%_ for(let idx in controllerActions) { _%>
+    /**
+    * <%= controllerActions[idx].actionMethod.toUpperCase() %> <%= controllerActions[idx].actionName %>
+    */
+    @<%= controllerActions[idx].actionMethod %>Mapping("/<%= (controllerActions[idx].actionPath) %>")
+    public String <%= controllerActions[idx].actionName %>() {
+        return "<%= controllerActions[idx].actionName %>";
+    }
+
+    <%_ } _%>
 }

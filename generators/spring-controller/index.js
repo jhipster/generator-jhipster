@@ -18,8 +18,10 @@
  */
 
 const _ = require('lodash');
+const chalk = require('chalk');
 const BaseGenerator = require('../generator-base');
 const constants = require('../generator-constants');
+const prompts = require('./prompts');
 
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
@@ -36,8 +38,14 @@ module.exports = class extends BaseGenerator {
         this.packageName = this.config.get('packageName');
         this.packageFolder = this.config.get('packageFolder');
         this.databaseType = this.config.get('databaseType');
+        this.controllerActions = [];
     }
 
+    get prompting() {
+        return {
+            askForControllerActions: prompts.askForControllerActions
+        }
+    }
 
     get default() {
         return {
@@ -51,6 +59,26 @@ module.exports = class extends BaseGenerator {
     writing() {
         this.controllerClass = _.upperFirst(this.name);
         this.apiPrefix = _.kebabCase(this.name);
+
+        if (this.controllerActions.length === 0) {
+            this.log(chalk.green(`No controller actions found, addin a default action`));
+            this.controllerActions.push({
+                actionName: 'defaultAction',
+                actionMethod: 'Get'
+            });
+        }
+
+        // helper for Java imports
+        this.usedMethods = _.uniq(this.controllerActions.map(action => `org.springframework.web.bind.annotation.${action.actionMethod}Mapping`));
+        this.usedMethods = this.usedMethods.sort();
+        
+
+        this.log(this.usedMethods);
+
+        this.controllerActions.forEach((action) => {
+            action.actionPath = _.kebabCase(action.actionName);
+            this.log(chalk.green(`adding ${action.actionMethod} action '${action.actionName}' for /api/${this.apiPrefix}/${action.actionPath}`));
+        });
 
         this.template(
             `${SERVER_MAIN_SRC_DIR}package/web/rest/_Controller.java`,
