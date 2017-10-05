@@ -62,7 +62,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="login" type="varchar(<% if (enableSocialSignIn) { %>100<% } else { %>50<% } %>)">
-                <constraints unique="true" nullable="false" uniqueConstraintName="ux_user_login"/>
+                <constraints unique="true" nullable="false"/>
             </column>
             <%_ if (authenticationType !== 'oauth2') { _%>
             <column name="password_hash" type="varchar(60)"/>
@@ -70,7 +70,7 @@
             <column name="first_name" type="varchar(50)"/>
             <column name="last_name" type="varchar(50)"/>
             <column name="email" type="varchar(100)">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_user_email"/>
+                <constraints unique="true" nullable="true"/>
             </column>
             <column name="image_url" type="varchar(256)"/>
             <column name="activated" type="boolean" valueBoolean="false">
