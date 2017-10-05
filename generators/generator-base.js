@@ -219,7 +219,11 @@ module.exports = class extends PrivateBase {
     /**
      * Add a new entity in the TS modules file.
      *
-     * @param {string} routerName - The name of the AngularJS router (which by default is the name of the entity).
+     * @param {string} entityInstance - Entity Instance
+     * @param {string} entityClass - Entity Class
+     * @param {string} entityAngularName - Entity Angular Name
+     * @param {string} entityFolderName - Entity Folder Name
+     * @param {string} entityFileName - Entity File Name
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
      */
@@ -303,7 +307,7 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * A a new element in the "global.json" translations.
+     * Add a new element in the "global.json" translations.
      *
      * @param {string} key - Key for the menu entry
      * @param {string} value - Default translated value
@@ -326,7 +330,7 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * A a new element in the admin section of "global.json" translations.
+     * Add a new element in the admin section of "global.json" translations.
      *
      * @param {string} key - Key for the menu entry
      * @param {string} value - Default translated value
@@ -349,7 +353,7 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * A a new entity in the "global.json" translations.
+     * Add a new entity in the "global.json" translations.
      *
      * @param {string} key - Key for the entity name
      * @param {string} value - Default translated value
@@ -372,7 +376,7 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * A a new entry as a root param in "global.json" translations.
+     * Add a new entry as a root param in "global.json" translations.
      *
      * @param {string} key - Key for the entry
      * @param {string} value - Default translated value or object with multiple key and translated value
@@ -551,7 +555,7 @@ module.exports = class extends PrivateBase {
      * Add a new parameter in the ".bowerrc".
      *
      * @param {string} key - name of the parameter
-     * @param {string, obj, bool, etc.} value - value of the parameter
+     * @param {string | boolean | any} value - value of the parameter
      */
     addBowerrcParameter(key, value) {
         const fullPath = '.bowerrc';
@@ -655,9 +659,9 @@ module.exports = class extends PrivateBase {
      * Add a new module in the TS modules file.
      *
      * @param {string} appName - Angular2 application name.
-     * @param {string} adminAngularName - The name of the new admin item.
-     * @param {string} adminFolderName - The name of the folder.
-     * @param {string} adminFileName - The name of the file.
+     * @param {string} angularName - The name of the new admin item.
+     * @param {string} folderName - The name of the folder.
+     * @param {string} fileName - The name of the file.
      * @param {boolean} enableTranslation - If translations are enabled or not.
      * @param {string} clientFramework - The name of the client framework.
      */
@@ -834,7 +838,7 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * A a new column to a Liquibase changelog file for entity.
+     * Add a new column to a Liquibase changelog file for entity.
      *
      * @param {string} filePath - The full path of the changelog file.
      * @param {string} content - The content to be added as column, can have multiple columns as well
@@ -855,7 +859,7 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * A a new changeset to a Liquibase changelog file for entity.
+     * Add a new changeset to a Liquibase changelog file for entity.
      *
      * @param {string} filePath - The full path of the changelog file.
      * @param {string} content - The content to be added as changeset
@@ -878,6 +882,7 @@ module.exports = class extends PrivateBase {
     /**
      * Add a new social button in the login and register modules
      *
+     * @param {boolean} isUseSass - flag indicating if sass should be used
      * @param {string} socialName - name of the social module. ex: 'facebook'
      * @param {string} socialParameter - parameter to send to social connection ex: 'public_profile,email'
      * @param {string} buttonColor - color of the social button. ex: '#3b5998'
@@ -996,6 +1001,7 @@ module.exports = class extends PrivateBase {
     /**
      * Add new css style to the angular application in "main.css".
      *
+     * @param {boolean} isUseSass - flag indicating if sass should be used
      * @param {string} style - css to add in the file
      * @param {string} comment - comment to add before css code
      *
@@ -1320,7 +1326,7 @@ module.exports = class extends PrivateBase {
     /**
      * Rewrite the specified file with provided content at the needle location
      *
-     * @param {string} fullPath - path of the source file to rewrite
+     * @param {string} filePath - path of the source file to rewrite
      * @param {string} needle - needle to look for where content will be inserted
      * @param {string} content - content to be written
      */
@@ -1342,7 +1348,7 @@ module.exports = class extends PrivateBase {
     /**
      * Replace the pattern/regex with provided content
      *
-     * @param {string} fullPath - path of the source file to rewrite
+     * @param {string} filePath - path of the source file to rewrite
      * @param {string} pattern - pattern to look for where content will be replaced
      * @param {string} content - content to be written
      * @param {string} regex - true if pattern is regex
@@ -1679,7 +1685,7 @@ module.exports = class extends PrivateBase {
     /**
      * Print a warning message.
      *
-     * @param {string} value - message to print
+     * @param {string} msg - message to print
      */
     warning(msg) {
         this.log(`${chalk.yellow.bold('WARNING!')} ${msg}`);

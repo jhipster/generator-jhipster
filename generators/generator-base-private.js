@@ -414,7 +414,8 @@ module.exports = class extends Generator {
     /**
      * Print a debug message.
      *
-     * @param {string} value - message to print
+     * @param {string} msg - message to print
+     * @param {string} args - arguments to print
      */
     debug(msg, ...args) {
         if (this.isDebugEnabled || (this.options && this.options.debug)) {
