@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { CSSTransitionGroup } from 'react-transition-group';
+import * as uuidV4 from 'uuid/v4';
 
 import './loader.scss';
 
@@ -74,8 +75,9 @@ const loader = (type, noText) => {
 
 const renderLoader = (loading, type, noText, children) => loading ? loader(type, noText) : children;
 
-const Loader = ({ loading, type = DEFAULT_LOADER, noText = false, children }) => (
+const Loader = ({ loading, id = `loader-${uuidV4()}`, type = DEFAULT_LOADER, noText = false, children }) => (
   <CSSTransitionGroup
+    id={id}
     className="loader-container-stage"
     transitionName="crossfade"
     transitionAppear

@@ -40,7 +40,7 @@ export class App extends React.Component<IAppProps, {}> {
           />
           <div className="container-fluid view-container" id="app-view-container">
             <Card>
-            <AppRoutes/>
+              <AppRoutes/>
             </Card>
           </div>
         </div>

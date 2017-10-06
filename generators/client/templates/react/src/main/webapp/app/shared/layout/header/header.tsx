@@ -55,7 +55,7 @@ export class Header extends React.Component<IHeaderProps, { menuOpen: boolean }>
 
   render() {
     return (
-      <div>
+      <div id="app-header">
         {this.renderDevRibbon()}
         <LoadingBar className="loading-bar"/>
         <Navbar inverse toggleable fixed="top" className="jh-navbar">
