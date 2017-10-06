@@ -70,5 +70,5 @@ export const savePassword: ICrudPutAction = password => ({
     successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
     errorMessage: messages.DATA_UPDATE_ERROR_ALERT
   },
-  payload: axios.post(`${apiUrl}/change_password`, password)
+  payload: axios.post(`${apiUrl}/change-password`, password)
 });

@@ -5,15 +5,6 @@
 * Make sure not to add !default to values here
 */
 
-// Colors:
-// Grayscale and brand colors for use across Bootstrap.
-
-$brand-primary:             #3E8ACC;
-$brand-success:             #28a745;
-$brand-info:                #17a2b8;
-$brand-warning:             #ffc107;
-$brand-danger:              #dc3545;
-
 // Options:
 // Quickly modify global styling by enabling or disabling optional features.
 $enable-rounded:            true;
@@ -35,8 +26,3 @@ $border-radius-sm:       .1rem;
 // Settings for the `<body>` element.
 
 $body-bg:                   #e4e5e6;
-
-// Typography:
-// Font, line-height, and color for body text, headings, and more.
-
-$font-size-base:            1rem;

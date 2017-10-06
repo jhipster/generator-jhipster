@@ -48,9 +48,9 @@ class LoginModal extends React.Component<ILoginModalProps, ILoginModalState> {
     const { loginError, handleClose } = this.props;
 
     return (
-      <Modal isOpen={this.props.showModal} toggle={handleClose} backdrop="static">
+      <Modal isOpen={this.props.showModal} toggle={handleClose} backdrop="static" id="login-page">
         <AvForm onSubmit={this.handleSubmit}>
-          <ModalHeader toggle={handleClose}><Translate content="login.title" /></ModalHeader>
+          <ModalHeader toggle={handleClose} id="login-title"><Translate content="login.title" /></ModalHeader>
           <ModalBody>
             <div className="row">
               <div className="col-md-12">

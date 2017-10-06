@@ -14,6 +14,7 @@ const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }: IPriva
       : (
         <Redirect to={{
           pathname: '/login',
+          search: props.location.search,
           state: { from: props.location }
         }} />
       )
