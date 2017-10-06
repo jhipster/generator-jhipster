@@ -1,5 +1,5 @@
 Description:
-    Creates a new simplpe spring REST MVC controller.
+    Creates a new simple spring REST MVC controller.
 
 Example:
     jhipster spring-controller Foo
