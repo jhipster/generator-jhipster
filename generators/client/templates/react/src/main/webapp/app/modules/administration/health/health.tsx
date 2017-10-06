@@ -1,7 +1,7 @@
 /* eslint-disable */ // TODO Fix when page is completed
 import * as React from 'react';
 import { connect } from 'react-redux';
-import Translate from 'react-translate-component';
+import * as Translate from 'react-translate-component';
 
 import { systemHealth } from '../../../reducers/administration';
 
