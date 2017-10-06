@@ -20,23 +20,19 @@ package <%=packageName%>.web.rest.errors;
 
 import <%=packageName%>.web.rest.util.HeaderUtil;
 
-import org.springframework.core.annotation.AnnotationUtils;
 <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
 import org.springframework.dao.ConcurrencyFailureException;
 <%_ } _%>
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.DefaultProblem;
 import org.zalando.problem.Problem;
 import org.zalando.problem.ProblemBuilder;
 import org.zalando.problem.Status;
-import org.zalando.problem.spring.web.advice.HttpStatusAdapter;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
 import org.zalando.problem.spring.web.advice.validation.ConstraintViolationProblem;
 
@@ -57,7 +53,7 @@ public class ExceptionTranslator implements ProblemHandling {
      * Post-process Problem payload to add the message key for front-end if needed
      */
     @Override
-    public ResponseEntity<Problem> process(@Nullable ResponseEntity<Problem> entity) {
+    public ResponseEntity<Problem> process(@Nullable ResponseEntity<Problem> entity, NativeWebRequest request) {
         if (entity == null || entity.getBody() == null) {
             return entity;
         }
@@ -68,7 +64,8 @@ public class ExceptionTranslator implements ProblemHandling {
         ProblemBuilder builder = Problem.builder()
             .withType(Problem.DEFAULT_TYPE.equals(problem.getType()) ? ErrorConstants.DEFAULT_TYPE : problem.getType())
             .withStatus(problem.getStatus())
-            .withTitle(problem.getTitle());
+            .withTitle(problem.getTitle())
+            .with("path", request.getNativeRequest(HttpServletRequest.class).getRequestURI());
 
         if (problem instanceof ConstraintViolationProblem) {
             builder
@@ -101,21 +98,6 @@ public class ExceptionTranslator implements ProblemHandling {
             .withStatus(defaultConstraintViolationStatus())
             .with("message", ErrorConstants.ERR_VALIDATION)
             .with("fieldErrors", fieldErrors)
-            .build();
-        return create(ex, problem, request);
-    }
-
-    /**
-     * Override AuthenticationException handler to add the "path" field.
-     */
-    @Override
-    public ResponseEntity<Problem> handleAuthentication(AuthenticationException ex, NativeWebRequest request) {
-        Problem problem = Problem.builder()
-            .withType(ErrorConstants.UNAUTHORIZED_TYPE)
-            .withTitle(Status.UNAUTHORIZED.getReasonPhrase())
-            .withStatus(Status.UNAUTHORIZED)
-            .withDetail(ex.getMessage())
-            .with("path", request.getNativeRequest(HttpServletRequest.class).getRequestURI())
             .build();
         return create(ex, problem, request);
     }
