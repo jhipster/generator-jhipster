@@ -49,6 +49,7 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
  * The method signatures in public API should not be changed without a major version change
  */
 module.exports = class extends PrivateBase {
+
     /**
      * Get the JHipster configuration from the .yo-rc.json file.
      *
@@ -1447,10 +1448,10 @@ module.exports = class extends PrivateBase {
 
     /**
      * Call all the module hooks with the given options.
-     * @param {string} hookFor : "app" or "entity"
-     * @param {string} hookType : "pre" or "post"
-     * @param options : the options to pass to the hooks
-     * @param cb : callback to trigger at the end
+     * @param {string} hookFor - "app" or "entity"
+     * @param {string} hookType - "pre" or "post"
+     * @param {any} options - the options to pass to the hooks
+     * @param {function} cb - callback to trigger at the end
      */
     callHooks(hookFor, hookType, options, cb) {
         const modules = this.getModuleHooks();
@@ -1694,7 +1695,7 @@ module.exports = class extends PrivateBase {
     /**
      * Print an info message.
      *
-     * @param {string} value - message to print
+     * @param {string} msg - message to print
      */
     info(msg) {
         this.log.info(msg);
@@ -1703,7 +1704,7 @@ module.exports = class extends PrivateBase {
     /**
      * Print a success message.
      *
-     * @param {string} value - message to print
+     * @param {string} msg - message to print
      */
     success(msg) {
         this.log.ok(msg);
@@ -1799,6 +1800,9 @@ module.exports = class extends PrivateBase {
         return this.getAngularXAppName();
     }
 
+    /**
+     * get the Angular 2+ application name.
+     */
     getAngularXAppName() {
         return _.upperFirst(_.camelCase(this.baseName, true));
     }
