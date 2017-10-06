@@ -1,0 +1,222 @@
+
+prog
+  = SPACE* constantDecl SPACE* prog
+  / SPACE* applicationDecl SPACE* prog
+  / SPACE* entityDecl SPACE* prog
+  / SPACE* relationDecl SPACE* prog
+  / SPACE* enumDecl SPACE* prog
+  / SPACE* dtoDecl SPACE* prog
+  / SPACE* pagiDecl SPACE* prog
+  / SPACE* serviceDecl SPACE* prog
+  / SPACE* comment SPACE* prog
+  / SPACE* microserviceDecl1 SPACE* prog
+  / SPACE* searchEngineDecl SPACE* prog
+  / SPACE* noClientDecl SPACE* prog
+  / SPACE* noServerDecl SPACE* prog
+  / SPACE* angularSuffixDecl SPACE* prog
+  / SPACE* noFluentMethod SPACE* prog
+  / SPACE* filterDecl SPACE* prog
+  / ''
+
+// Application Declaration
+applicationDecl
+  = APPLICATION SPACE* '{' SPACE* applicationSubDecl SPACE* '}'
+
+applicationSubDecl
+  = SPACE* CONFIG SPACE* '{' SPACE* applicationConfigDecl? SPACE* '}' SPACE* applicationSubDecl
+  / SPACE* 'entities' SPACE* simpleEntityList SPACE* exclusion? SPACE* applicationSubDecl
+  / ''
+
+applicationConfigDecl
+  = BASE_NAME SPACE* [A-z]+ SPACE* applicationConfigDecl
+  / PATH SPACE* [^\n]+ SPACE* applicationConfigDecl
+  / PACKAGE_NAME SPACE* (([a-z]+'.')*[a-z]+) SPACE* applicationConfigDecl
+  / AUTHENTICATION_TYPE SPACE* [A-z]+ SPACE* applicationConfigDecl
+  / HIBERNATE_CACHE SPACE* [A-z]+ SPACE* applicationConfigDecl
+  / CLUSTERED_HTTP_SESSION SPACE* [A-z]+ SPACE* applicationConfigDecl
+  / WEBSOCKET SPACE* [A-z]+ SPACE* applicationConfigDecl
+  / DATABASE_TYPE SPACE* [a-z]+ SPACE* applicationConfigDecl
+  / DEV_DATABASE_TYPE SPACE* [A-z0-9]+ SPACE* applicationConfigDecl
+  / PROD_DATABASE_TYPE SPACE* [A-z0-9]+ SPACE* applicationConfigDecl
+  / USE_COMPASS SPACE* booleanChoice SPACE* applicationConfigDecl
+  / BUILD_TOOL SPACE* [A-z]+ SPACE* applicationConfigDecl
+  / SEARCH_ENGINE SPACE* booleanChoice SPACE* applicationConfigDecl
+  / ENABLE_TRANSLATION SPACE* booleanChoice SPACE* applicationConfigDecl
+  / APPLICATION_TYPE SPACE* [a-z]+ SPACE* applicationConfigDecl
+  / TEST_FRAMEWORK SPACE* [a-z, ]+ SPACE* applicationConfigDecl
+  / LANGUAGES SPACE* [a-z, ]+ SPACE* applicationConfigDecl
+  / SERVER_PORT SPACE* [0-9]+ SPACE* applicationConfigDecl
+  / ENABLE_SOCIAL_SIGN_IN SPACE* booleanChoice SPACE* applicationConfigDecl
+  / USE_SASS SPACE* booleanChoice SPACE* applicationConfigDecl
+  / JHI_PREFIX SPACE* [A-z0-9_-]+ SPACE* applicationConfigDecl
+  / MESSAGE_BROKER SPACE* booleanChoice SPACE* applicationConfigDecl
+  / SERVICE_DISCOVERY_TYPE SPACE* [A-z]+ SPACE* applicationConfigDecl
+  / CLIENT_PACKAGE_MANAGER SPACE* [A-z]+ SPACE* applicationConfigDecl
+  / CLIENT_FRAMEWORK SPACE* [A-z0-9]+ SPACE* applicationConfigDecl
+  / NATIVE_LANGUAGE SPACE* [a-z]+ applicationConfigDecl
+  / FRONT_END_BUILDER SPACE* [A-z]+ applicationConfigDecl
+  / SKIP_USER_MANAGEMENT SPACE* booleanChoice SPACE* applicationConfigDecl
+  / SKIP_CLIENT SPACE* booleanChoice SPACE* applicationConfigDecl
+  / SKIP_SERVER SPACE* booleanChoice SPACE* applicationConfigDecl
+  / comment SPACE* applicationConfigDecl
+  / ''
+
+booleanChoice
+  = TRUE
+  / FALSE
+
+constantDecl
+  = CONSTANT_NAME SPACE* '=' SPACE* INTEGER
+
+//Entities
+entityDecl
+  = comment? SPACE* ENTITY SPACE* ENTITY_NAME SPACE* entityTableNameDecl? SPACE* entityBody? SPACE*
+  / ENTITY SPACE* ENTITY_NAME SPACE* entityBody?
+
+entityTableNameDecl
+  = '(' SPACE* [A-z0-9_-]+ SPACE* ')'
+
+entityBody
+  = '{' SPACE* fieldDeclList SPACE* '}'
+  / ''
+
+fieldDeclList
+  = SPACE* comment? SPACE* FIELD_NAME SPACE_WITHOUT_NEWLINE* type SPACE_WITHOUT_NEWLINE* validationList? SPACE_WITHOUT_NEWLINE* comment? SPACE_WITHOUT_NEWLINE* ','? SPACE* fieldDeclList
+  / ''
+
+validationList
+  = validation SPACE_WITHOUT_NEWLINE* validationList
+  / ''
+
+//Relationship
+relationDecl
+  = RELATIONSHIP SPACE relationshipType SPACE* '{' SPACE* relationshipBodies SPACE* '}'
+
+relationshipBodies
+  = relationshipBody SPACE* ','? SPACE* relationshipBodies
+  / relationshipBody
+
+relationshipBody
+  = relationshipSide SPACE* 'to' SPACE* relationshipSide SPACE*
+
+relationshipSide
+  = comment? SPACE* ENTITY_NAME SPACE* '{' SPACE* INJECTED_FIELD_NAME SPACE* 'required'? '}' SPACE*
+  / comment? SPACE* ENTITY_NAME SPACE* ('{' SPACE* '}')? SPACE*
+  / ENTITY_NAME SPACE
+
+
+//Enum
+enumDecl
+  = ENUM SPACE ENUMNAME SPACE* '{' SPACE* enumPropList SPACE* '}'
+
+enumPropList
+  = ENUMPROP SPACE* ',' SPACE* enumPropList
+  / ENUMPROP
+
+exclusion
+  = EXCEPT SPACE+ exclusionSub
+
+exclusionSub
+  = ENTITY_NAME SPACE* ',' SPACE* exclusionSub
+  / ENTITY_NAME
+
+// noFluentMethod
+noFluentMethod
+  = NO_FLUENT_METHOD SPACE FOR SPACE+ subNoFluentMethod SPACE* exclusion? SPACE*
+
+subNoFluentMethod
+  = ENTITY_NAME SPACE* ',' SPACE* subNoFluentMethod
+  / STAR
+  / ALL
+  / ENTITY_NAME
+
+// DTO
+dtoDecl
+  = DTO SPACE+ entityList SPACE* exclusion? SPACE*
+
+// Pagination
+pagiDecl
+  = PAGINATE SPACE+ entityList SPACE* exclusion? SPACE*
+
+// Service
+serviceDecl
+  = SERVICE SPACE+ entityList SPACE* exclusion? SPACE*
+
+// first way of declaring microservices
+microserviceDecl1
+  = MICROSERVICE SPACE+ entityList SPACE* exclusion? SPACE*
+
+// searchEngine
+searchEngineDecl
+  = SEARCH SPACE+ entityList SPACE* exclusion? SPACE*
+
+// skipClient option
+noClientDecl
+  = SKIP_CLIENT SPACE FOR SPACE* subNoClientDecl SPACE* exclusion? SPACE*
+
+subNoClientDecl
+  = ENTITY_NAME SPACE* ',' SPACE* subNoClientDecl
+  / STAR { return ['*']; }
+  / ALL { return ['*']; }
+  / ENTITY_NAME { return [e]; }
+
+
+// skipServer option
+noServerDecl
+  = SKIP_SERVER SPACE FOR SPACE* subNoServerDecl SPACE* exclusion? SPACE*
+
+subNoServerDecl
+  = ENTITY_NAME SPACE* ',' SPACE* subNoServerDecl
+  / STAR
+  / ALL
+  / ENTITY_NAME
+
+// JPA Metamodel filter option
+filterDecl
+  = FILTER SPACE subFilterDecl SPACE* exclusion? SPACE*
+
+subFilterDecl
+  = ENTITY_NAME SPACE* ',' SPACE* subFilterDecl
+  / STAR
+  / ALL
+  / ENTITY_NAME
+
+
+// angularSuffix option
+angularSuffixDecl
+  = ANGULAR_SUFFIX SPACE* entityList SPACE* exclusion? SPACE*
+
+// common way to declare an entity list
+entityList
+  = ENTITY_NAME SPACE* ',' SPACE* entityList
+  / STAR SPACE* WITH SPACE* ([A-z0-9-]+)
+  / ALL SPACE* WITH SPACE* ([A-z0-9-]+)
+  / ENTITY_NAME SPACE* WITH SPACE* ([A-z0-9-]+)
+
+simpleEntityList
+  = ENTITY_NAME SPACE* ',' SPACE* simpleEntityList
+  / STAR SPACE*
+  / ALL SPACE*
+  / ENTITY_NAME SPACE*
+
+relationshipType
+= ONE_TO_ONE
+/ ONE_TO_MANY
+/ MANY_TO_ONE
+/ MANY_TO_MANY
+
+validation
+  = REQUIRED
+  / MINLENGTH SPACE* '(' SPACE* INTEGER SPACE* ')'
+  / MINLENGTH SPACE* '(' SPACE* CONSTANT_NAME SPACE* ')'
+  / MAXLENGTH SPACE* '(' SPACE* INTEGER SPACE* ')'
+  / MAXLENGTH SPACE* '(' SPACE* CONSTANT_NAME SPACE* ')'
+  / MINBYTES SPACE* '(' SPACE* INTEGER SPACE* ')'
+  / MINBYTES SPACE* '(' SPACE* CONSTANT_NAME SPACE* ')'
+  / MAXBYTES SPACE* '(' SPACE* INTEGER SPACE* ')'
+  / MAXBYTES SPACE* '(' SPACE* CONSTANT_NAME SPACE* ')'
+  / MIN SPACE* '(' SPACE* INTEGER SPACE* ')'
+  / MIN SPACE* '(' SPACE* CONSTANT_NAME SPACE* ')'
+  / MAX SPACE* '(' SPACE* INTEGER SPACE* ')'
+  / MAX SPACE* '(' SPACE* CONSTANT_NAME SPACE* ')'
+  / PATTERN SPACE* '(' SPACE* FORWARD_SLASH REGEX FORWARD_SLASH SPACE* ')'
