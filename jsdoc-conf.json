@@ -3,18 +3,28 @@
         "allowUnknownTags": true
     },
     "source": {
-        "include": ["cli", "generators"],
-        "exclude": ["myProject/lib/ignore.js"],
-        "includePattern": ".+\\.js(doc|x)?$",
-        "excludePattern": "(^|\\/|\\\\)_"
+        "include": [
+            "generators/cleanup.js",
+            "generators/docker-base.js",
+            "generators/docker-prompts.js",
+            "generators/generator-base.js",
+            "generators/generator-base-private.js",
+            "generators/generator-constants.js",
+            "generators/utils.js"
+        ]
     },
-    "plugins": [],
+    "plugins": [
+    ],
     "templates": {
-        "cleverLinks": false,
-        "monospaceLinks": false,
+        "cleverLinks": true,
+        "monospaceLinks": true,
         "default": {
             "outputSourceFiles": true
         }
     },
-    "recurseDepth": 10
+    "opts": {
+        "recurse": true,
+        "destination": "./docs/",
+        "readme": "README.md"
+    }
 }
