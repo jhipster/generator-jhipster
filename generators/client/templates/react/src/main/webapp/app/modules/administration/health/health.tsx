@@ -51,7 +51,12 @@ export class HealthPage extends React.Component<IHealthPageProps, undefined> {
   }
 }
 
-export default connect(
-  ({ administration }) => ({ health: administration.health, isFetching: administration.isFetching }),
-  { systemHealth }
-)(HealthPage);
+const mapStateToProps = storeState => ({
+  health: storeState.administration.health,
+  isFetching: storeState.administration.isFetching
+});
+
+const mapDispatchToProps = { systemHealth };
+
+export default connect(mapStateToProps, mapDispatchToProps)(HealthPage);
+
