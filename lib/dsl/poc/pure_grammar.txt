@@ -1,8 +1,8 @@
 
 prog
-  =  constantDecl  prog
+  =  constantDecl  prog     // DONE
   /  applicationDecl  prog
-  /  entityDecl  prog
+  /  entityDecl  prog   // DONE
   /  relationDecl  prog
   /  enumDecl  prog
   /  dtoDecl  prog
