@@ -42,7 +42,7 @@ export class Login extends React.Component<ILoginProps, ILoginState> {
   }
 
   render() {
-    const { from } = this.props.location.state || { from: { pathname: '/' } };
+    const { from } = this.props.location.state || { from: { pathname: '/', search: this.props.location.search } };
     const { showModal, redirectToReferrer } = this.state;
     if (redirectToReferrer) {
       return <Redirect to={from} />;

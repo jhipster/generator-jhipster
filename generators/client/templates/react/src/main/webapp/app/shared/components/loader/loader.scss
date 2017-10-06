@@ -1,4 +1,4 @@
-@import '../../../bootstrap-variables';
+@import '../../../shared-variables';
 // the spinner item color
 $primary-color: $brand-primary;
 
@@ -8,6 +8,7 @@ $primary-color: $brand-primary;
 
 .loader-container-stage {
   height: 100%;
+  position: relative;
   .loader-container {
     height: 100%;
     .loading-icon {
@@ -27,7 +28,7 @@ $primary-color: $brand-primary;
         .loader-inner {
           width: 100%;
           > div {
-            background-color: $brand-primary;
+            background-color: $primary-color;
 
           }
         }

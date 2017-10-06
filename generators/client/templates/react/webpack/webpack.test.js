@@ -7,7 +7,6 @@ const ENV = 'development';
 
 module.exports = {
   entry: ['./src/test/javascript/spec/entry'],
-  devtool: 'inline-source-map',
   module: {
     rules: [
       {
@@ -55,6 +54,10 @@ module.exports = {
     modules: ['node_modules']
   },
   plugins: [
+    new webpack.SourceMapDevToolPlugin({
+      filename: null, // if no value is provided the sourcemap is inlined
+      test: /\.(ts|js)x?($|\?)/i // process .js and .ts files only
+    }),
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify(ENV)

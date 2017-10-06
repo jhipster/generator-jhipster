@@ -188,6 +188,7 @@
       "severity": "error"
     },
     "ban-types": [true, ["Object", "Use {} instead."]],
+    "no-submodule-imports": [true, "uuid/v4"],
 
     "ter-arrow-body-style": [true],
     "ter-no-irregular-whitespace": [true],
