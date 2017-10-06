@@ -23,9 +23,9 @@
         .module('<%=angularAppName%>')
         .controller('RequestResetController', RequestResetController);
 
-    RequestResetController.$inject = ['$timeout', 'Auth'];
+    RequestResetController.$inject = ['$timeout', 'Auth', 'errorConstants'];
 
-    function RequestResetController ($timeout, Auth) {
+    function RequestResetController ($timeout, Auth, errorConstants) {
         var vm = this;
 
         vm.error = null;
@@ -45,7 +45,7 @@
                 vm.success = 'OK';
             }).catch(function (response) {
                 vm.success = null;
-                if (response.status === 400 && response.data === 'email address not registered') {
+                if (response.status === 400 && angular.fromJson(response.data).type === errorConstants.EMAIL_NOT_FOUND_TYPE) {
                     vm.errorEmailNotExists = 'ERROR';
                 } else {
                     vm.error = 'ERROR';

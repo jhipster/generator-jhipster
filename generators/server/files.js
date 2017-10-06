@@ -425,10 +425,15 @@ function writeFiles() {
 
         writeServerJavaWebErrorFiles() {
             // error handler code - server side
-            this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/errors/_ErrorConstants.java`, `${javaDir}web/rest/errors/ErrorConstants.java`);
+            this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/errors/_BadRequestAlertException.java`, `${javaDir}web/rest/errors/BadRequestAlertException.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/errors/_CustomParameterizedException.java`, `${javaDir}web/rest/errors/CustomParameterizedException.java`);
+            this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/errors/_EmailAlreadyUsedException.java`, `${javaDir}web/rest/errors/EmailAlreadyUsedException.java`);
+            this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/errors/_EmailNotFoundException.java`, `${javaDir}web/rest/errors/EmailNotFoundException.java`);
+            this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/errors/_ErrorConstants.java`, `${javaDir}web/rest/errors/ErrorConstants.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/errors/_ExceptionTranslator.java`, `${javaDir}web/rest/errors/ExceptionTranslator.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/errors/_FieldErrorVM.java`, `${javaDir}web/rest/errors/FieldErrorVM.java`);
+            this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/errors/_InvalidPasswordException.java`, `${javaDir}web/rest/errors/InvalidPasswordException.java`);
+            this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/errors/_LoginAlreadyUsedException.java`, `${javaDir}web/rest/errors/LoginAlreadyUsedException.java`);
         },
 
         writeServerJavaWebFiles() {
