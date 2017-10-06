@@ -79,7 +79,7 @@ describe('ChevrotainParser', () => {
           const input = `
         myConst1 = 1
         myConst2 = 3, /* <-- comma should not be here */
-        myConst3 /* forgot the equals sign */ 9
+        myConst3  9
       `;
 
           const result = parse(input);
@@ -136,8 +136,8 @@ describe('ChevrotainParser', () => {
         it('provides suggestions', () => {
           const input = '';
           const result = getSyntacticAutoCompleteSuggestions(input);
-          expect(result).to.have.lengthOf(2);
-          expect(result).to.have.members([tokens.NAME, tokens.ENTITY]);
+          expect(result).to.have.lengthOf(3);
+          expect(result).to.have.members([tokens.NAME, tokens.ENTITY, tokens.RELATIONSHIP]);
         });
       });
       describe('with a custom start rule', () => {
