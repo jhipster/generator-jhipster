@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import * as Translate from 'react-translate-component';
+import { Table } from 'reactstrap';
 
 import { systemHealth } from '../../../reducers/administration';
 
@@ -31,7 +32,7 @@ export class HealthPage extends React.Component<IHealthPageProps, undefined> {
     const { health, isFetching } = this.props;
     const data = health || {};
     return (
-        <div>
+      <div>
           <h2>Health Checks</h2>
           <p>
             <button type="button" onClick={this.getSystemHealth} className={isFetching ? 'btn btn-danger' : 'btn btn-primary'} disabled={isFetching}>
@@ -39,11 +40,32 @@ export class HealthPage extends React.Component<IHealthPageProps, undefined> {
               <Translate component="span" content="health.refresh.button" />
             </button>
           </p>
-          FIX ME datatable
-          <hr />
           <div className="row">
-            <div className="col-10">
-              {JSON.stringify(data)}
+            <div className="col-12">
+            <Table bordered>
+               <thead>
+                 <tr>
+                   <th>Service Name</th>
+                   <th>Status</th>
+                   <th>Details</th>
+                 </tr>
+               </thead>
+               <tbody>
+                 {Object.keys(data).map((configPropKey, configPropIndex) =>
+                   (configPropKey !== 'status') ?
+                     (<tr key={configPropIndex}>
+                       <td>{configPropKey}</td>
+                       <td>{data[configPropKey].status}</td>
+                       <td>
+                        <button type="button" className={data[configPropKey].status !== 'UP' ? 'btn btn-danger' : 'btn btn-success'}>
+                          <span className="glyphicon glyphicon-eye" />
+                        </button>
+                       </td>
+                     </tr>)
+                     : ''
+                 )}
+               </tbody>
+             </Table>
             </div>
           </div>
         </div>
