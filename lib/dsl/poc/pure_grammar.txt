@@ -81,16 +81,16 @@ entityBody
   / ''
 
 fieldDeclList
-  =  comment?  FIELD_NAME SPACE_WITHOUT_NEWLINE* type SPACE_WITHOUT_NEWLINE* validationList? SPACE_WITHOUT_NEWLINE* comment? SPACE_WITHOUT_NEWLINE* ','?  fieldDeclList
+  =  comment?  FIELD_NAME  type  validationList?  comment?  ','?  fieldDeclList
   / ''
 
 validationList
-  = validation SPACE_WITHOUT_NEWLINE* validationList
+  = validation  validationList
   / ''
 
 //Relationship
 relationDecl
-  = RELATIONSHIP SPACE relationshipType  '{'  relationshipBodies  '}'
+  = RELATIONSHIP  relationshipType  '{'  relationshipBodies  '}'
 
 relationshipBodies
   = relationshipBody  ','?  relationshipBodies
@@ -102,12 +102,12 @@ relationshipBody
 relationshipSide
   = comment?  ENTITY_NAME  '{'  INJECTED_FIELD_NAME  'required'? '}'
   / comment?  ENTITY_NAME  ('{'  '}')?
-  / ENTITY_NAME SPACE
+  / ENTITY_NAME
 
 
 //Enum
 enumDecl
-  = ENUM SPACE ENUMNAME  '{'  enumPropList  '}'
+  = ENUM  ENUMNAME  '{'  enumPropList  '}'
 
 enumPropList
   = ENUMPROP  ','  enumPropList
@@ -122,7 +122,7 @@ exclusionSub
 
 // noFluentMethod
 noFluentMethod
-  = NO_FLUENT_METHOD SPACE FOR  subNoFluentMethod  exclusion?
+  = NO_FLUENT_METHOD  FOR  subNoFluentMethod  exclusion?
 
 subNoFluentMethod
   = ENTITY_NAME  ','  subNoFluentMethod
@@ -152,7 +152,7 @@ searchEngineDecl
 
 // skipClient option
 noClientDecl
-  = SKIP_CLIENT SPACE FOR  subNoClientDecl  exclusion?
+  = SKIP_CLIENT  FOR  subNoClientDecl  exclusion?
 
 subNoClientDecl
   = ENTITY_NAME  ','  subNoClientDecl
@@ -163,7 +163,7 @@ subNoClientDecl
 
 // skipServer option
 noServerDecl
-  = SKIP_SERVER SPACE FOR  subNoServerDecl  exclusion?
+  = SKIP_SERVER  FOR  subNoServerDecl  exclusion?
 
 subNoServerDecl
   = ENTITY_NAME  ','  subNoServerDecl
@@ -173,7 +173,7 @@ subNoServerDecl
 
 // JPA Metamodel filter option
 filterDecl
-  = FILTER SPACE subFilterDecl  exclusion?
+  = FILTER  subFilterDecl  exclusion?
 
 subFilterDecl
   = ENTITY_NAME  ','  subFilterDecl
