@@ -83,4 +83,3 @@ const mapStateToProps = storeState => ({
 const mapDispatchToProps = { systemHealth };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HealthPage);
-

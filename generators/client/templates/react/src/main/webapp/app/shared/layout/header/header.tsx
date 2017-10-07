@@ -3,9 +3,8 @@ import './header.<%= styleSheetExt %>';
 import * as React from 'react';
 import { Translate } from 'react-jhipster';
 import {
-  Navbar, NavDropdown,
-  Nav, NavItem, NavLink, NavbarToggler, NavbarBrand, Collapse, UncontrolledNavDropdown,
-  DropdownToggle, DropdownMenu, DropdownItem
+  Navbar, Nav, NavItem, NavLink, NavbarToggler, NavbarBrand, Collapse,
+  UncontrolledNavDropdown, DropdownToggle, DropdownMenu, DropdownItem
 } from 'reactstrap';
 import { NavLink as Link } from 'react-router-dom';
 import LoadingBar from 'react-redux-loading-bar';

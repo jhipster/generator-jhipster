@@ -3,8 +3,6 @@ import './footer.<%= styleSheetExt %>';
 import * as React from 'react';
 import { Translate } from 'react-jhipster';
 
-import appConfig from '../../../config/constants';
-
 const Footer = props => (
   <div className="footer page-content">
     <div className="row">
