@@ -84,7 +84,7 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
                        onChange={this.setEmail}/>
                 <label>Language</label>
                 <select id="langKey" name="langKey" className="form-control">
-                  {locales.map(lang => <option value="lang" key="lang">{lang}</option>)}
+                  {locales.map(lang => <option value={lang} key={lang}>{lang}</option>)}
                 </select>
               </div>
               <button type="submit" className="btn btn-primary" onClick={this.saveSettings} >Save</button>

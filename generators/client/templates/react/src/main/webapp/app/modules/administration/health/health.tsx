@@ -1,7 +1,6 @@
-/* eslint-disable */ // TODO Fix when page is completed
 import * as React from 'react';
 import { connect } from 'react-redux';
-import Translate from 'react-translate-component';
+import { Translate } from 'react-jhipster';
 
 import { systemHealth } from '../../../reducers/administration';
 
@@ -36,7 +35,7 @@ export class HealthPage extends React.Component<IHealthPageProps, undefined> {
           <p>
             <button type="button" onClick={this.getSystemHealth} className={isFetching ? 'btn btn-danger' : 'btn btn-primary'} disabled={isFetching}>
               <span className="glyphicon glyphicon-refresh" />&nbsp;
-              <Translate component="span" content="health.refresh.button" />
+              <Translate component="span" contentKey="health.refresh.button" />
             </button>
           </p>
           FIX ME datatable

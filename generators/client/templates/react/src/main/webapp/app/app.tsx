@@ -8,6 +8,7 @@ import { HashRouter as Router } from 'react-router-dom';
 import { getSession, logout } from './reducers/authentication';
 import { setLocale } from './reducers/locale';
 import Header from './shared/layout/header/header';
+import Footer from './shared/layout/footer/footer';
 import AppRoutes from './routes';
 export interface IAppProps {
   location: any;
@@ -42,6 +43,7 @@ export class App extends React.Component<IAppProps, {}> {
             <Card>
               <AppRoutes/>
             </Card>
+            <Footer/>
           </div>
         </div>
       </Router>
