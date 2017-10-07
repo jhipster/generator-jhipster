@@ -3,8 +3,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import * as Translate from 'react-translate-component';
 import { Table } from 'reactstrap';
-import * as FaEye from 'react-icons/lib/fa/eye';
-import * as FaRefresh from 'react-icons/lib/fa/refresh';
+import { FaEye, FaRefresh } from 'react-icons/lib/fa';
 
 import { systemHealth } from '../../../reducers/administration';
 
@@ -62,7 +61,7 @@ export class HealthPage extends React.Component<IHealthPageProps, undefined> {
                         {data[configPropKey].status}
                         </button>
                        </td>
-                       <td>                        
+                       <td>
                           <FaEye />
                        </td>
                      </tr>)

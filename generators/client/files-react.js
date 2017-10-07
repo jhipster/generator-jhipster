@@ -295,8 +295,6 @@ const files = {
                 'shared/util/url-util.ts',
                 'shared/util/storage-util.ts',
                 // components
-                'shared/components/icon-button/icon-button.tsx',
-                'shared/components/font-icon/font-icon.tsx',
                 // model
                 'shared/model/redux-action.type.ts'
             ]
@@ -378,8 +376,6 @@ const files = {
                 'spec/entry.ts',
                 'spec/app/utils.ts',
                 'spec/app/config/notification-middleware.spec.ts',
-                'spec/app/shared/components/font-icon.spec.tsx',
-                'spec/app/shared/components/icon-button.spec.tsx',
                 'spec/app/shared/layout/header.spec.tsx',
                 'spec/app/shared/util/storage-util.spec.ts',
                 // 'spec/app/account/activate/_activate.component.spec.js',
