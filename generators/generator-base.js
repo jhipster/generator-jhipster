@@ -1713,6 +1713,7 @@ module.exports = class extends PrivateBase {
      * Generate a KeyStore for uaa authorization server.
      */
     generateKeyStore() {
+        const done = this.async();
         const keyStoreFile = `${SERVER_MAIN_RES_DIR}keystore.jks`;
         if (this.fs.exists(keyStoreFile)) {
             this.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
@@ -1738,6 +1739,7 @@ module.exports = class extends PrivateBase {
                     } else {
                         this.log(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
                     }
+                    done();
                 }
             );
         }
