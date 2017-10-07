@@ -7,26 +7,14 @@ const JDLLexer = lexerModule.JDLLexer;
 describe('Chevrotain Lexer POC', () => {
   it('Can lex a simple valid JDL text', () => {
     const input = `
-   /**
-   * outer comment.
-   */
    entity JobHistory {
      startDate ZonedDateTime,
-     /* inner comment */
      endDate ZonedDateTime,
      language Language
    }`;
 
     const lexResult = JDLLexer.tokenize(input);
     expect(lexResult.errors).to.be.empty;
-
-    const comments = lexResult.groups.comments;
-    expect(comments[0].image).to.include('outer comment.');
-    expect(comments[0].startLine).to.equal(2);
-    expect(comments[0].endLine).to.equal(4);
-    expect(comments[1].image).to.include('inner comment');
-    expect(comments[1].startLine).to.equal(7);
-    expect(comments[1].endLine).to.equal(7);
 
     const tokens = lexResult.tokens;
     expect(tokens.length).to.equal(12);
@@ -45,10 +33,11 @@ describe('Chevrotain Lexer POC', () => {
   });
 
   it('Can lex a simple IN-valid JDL text', () => {
+    // invalid token but the lexing should continue
     const input = `
    entity JobHistory {
      startDate ZonedDateTime,
-     @@@ /* invalid token but the lexing should continue */
+     @@@ 
      endDate ZonedDateTime
    }`;
     const lexResult = JDLLexer.tokenize(input);

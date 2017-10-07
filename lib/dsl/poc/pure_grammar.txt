@@ -1,0 +1,222 @@
+
+prog
+  =  constantDecl  prog     // DONE
+  /  applicationDecl  prog
+  /  entityDecl  prog   // DONE
+  /  relationDecl  prog
+  /  enumDecl  prog
+  /  dtoDecl  prog
+  /  pagiDecl  prog
+  /  serviceDecl  prog
+  /  comment  prog
+  /  microserviceDecl1  prog
+  /  searchEngineDecl  prog
+  /  noClientDecl  prog
+  /  noServerDecl  prog
+  /  angularSuffixDecl  prog
+  /  noFluentMethod  prog
+  /  filterDecl  prog
+  / ''
+
+// Application Declaration
+applicationDecl
+  = APPLICATION  '{'  applicationSubDecl  '}'
+
+applicationSubDecl
+  =  CONFIG  '{'  applicationConfigDecl?  '}'  applicationSubDecl
+  /  'entities'  simpleEntityList  exclusion?  applicationSubDecl
+  / ''
+
+applicationConfigDecl
+  = BASE_NAME  [A-z]+  applicationConfigDecl
+  / PATH  [^\n]+  applicationConfigDecl
+  / PACKAGE_NAME  (([a-z]+'.')*[a-z]+)  applicationConfigDecl
+  / AUTHENTICATION_TYPE  [A-z]+  applicationConfigDecl
+  / HIBERNATE_CACHE  [A-z]+  applicationConfigDecl
+  / CLUSTERED_HTTP_SESSION  [A-z]+  applicationConfigDecl
+  / WEBSOCKET  [A-z]+  applicationConfigDecl
+  / DATABASE_TYPE  [a-z]+  applicationConfigDecl
+  / DEV_DATABASE_TYPE  [A-z0-9]+  applicationConfigDecl
+  / PROD_DATABASE_TYPE  [A-z0-9]+  applicationConfigDecl
+  / USE_COMPASS  booleanChoice  applicationConfigDecl
+  / BUILD_TOOL  [A-z]+  applicationConfigDecl
+  / SEARCH_ENGINE  booleanChoice  applicationConfigDecl
+  / ENABLE_TRANSLATION  booleanChoice  applicationConfigDecl
+  / APPLICATION_TYPE  [a-z]+  applicationConfigDecl
+  / TEST_FRAMEWORK  [a-z, ]+  applicationConfigDecl
+  / LANGUAGES  [a-z, ]+  applicationConfigDecl
+  / SERVER_PORT  [0-9]+  applicationConfigDecl
+  / ENABLE_SOCIAL_SIGN_IN  booleanChoice  applicationConfigDecl
+  / USE_SASS  booleanChoice  applicationConfigDecl
+  / JHI_PREFIX  [A-z0-9_-]+  applicationConfigDecl
+  / MESSAGE_BROKER  booleanChoice  applicationConfigDecl
+  / SERVICE_DISCOVERY_TYPE  [A-z]+  applicationConfigDecl
+  / CLIENT_PACKAGE_MANAGER  [A-z]+  applicationConfigDecl
+  / CLIENT_FRAMEWORK  [A-z0-9]+  applicationConfigDecl
+  / NATIVE_LANGUAGE  [a-z]+ applicationConfigDecl
+  / FRONT_END_BUILDER  [A-z]+ applicationConfigDecl
+  / SKIP_USER_MANAGEMENT  booleanChoice  applicationConfigDecl
+  / SKIP_CLIENT  booleanChoice  applicationConfigDecl
+  / SKIP_SERVER  booleanChoice  applicationConfigDecl
+  / comment  applicationConfigDecl
+  / ''
+
+booleanChoice
+  = TRUE
+  / FALSE
+
+constantDecl
+  = CONSTANT_NAME  '='  INTEGER
+
+//Entities
+entityDecl
+  = comment?  ENTITY  ENTITY_NAME  entityTableNameDecl?  entityBody?
+  / ENTITY  ENTITY_NAME  entityBody?
+
+entityTableNameDecl
+  = '('  [A-z0-9_-]+  ')'
+
+entityBody
+  = '{'  fieldDeclList  '}'
+  / ''
+
+fieldDeclList
+  =  comment?  FIELD_NAME  type  validationList?  comment?  ','?  fieldDeclList
+  / ''
+
+validationList
+  = validation  validationList
+  / ''
+
+//Relationship
+relationDecl
+  = RELATIONSHIP  relationshipType  '{'  relationshipBodies  '}'
+
+relationshipBodies
+  = relationshipBody  ','?  relationshipBodies
+  / relationshipBody
+
+relationshipBody
+  = relationshipSide  'to'  relationshipSide
+
+relationshipSide
+  = comment?  ENTITY_NAME  '{'  INJECTED_FIELD_NAME  'required'? '}'
+  / comment?  ENTITY_NAME  ('{'  '}')?
+  / ENTITY_NAME
+
+
+//Enum
+enumDecl
+  = ENUM  ENUMNAME  '{'  enumPropList  '}'
+
+enumPropList
+  = ENUMPROP  ','  enumPropList
+  / ENUMPROP
+
+exclusion
+  = EXCEPT  exclusionSub
+
+exclusionSub
+  = ENTITY_NAME  ','  exclusionSub
+  / ENTITY_NAME
+
+// noFluentMethod
+noFluentMethod
+  = NO_FLUENT_METHOD  FOR  subNoFluentMethod  exclusion?
+
+subNoFluentMethod
+  = ENTITY_NAME  ','  subNoFluentMethod
+  / STAR
+  / ALL
+  / ENTITY_NAME
+
+// DTO
+dtoDecl
+  = DTO  entityList  exclusion?
+
+// Pagination
+pagiDecl
+  = PAGINATE  entityList  exclusion?
+
+// Service
+serviceDecl
+  = SERVICE  entityList  exclusion?
+
+// first way of declaring microservices
+microserviceDecl1
+  = MICROSERVICE  entityList  exclusion?
+
+// searchEngine
+searchEngineDecl
+  = SEARCH  entityList  exclusion?
+
+// skipClient option
+noClientDecl
+  = SKIP_CLIENT  FOR  subNoClientDecl  exclusion?
+
+subNoClientDecl
+  = ENTITY_NAME  ','  subNoClientDecl
+  / STAR
+  / ALL
+  / ENTITY_NAME
+
+
+// skipServer option
+noServerDecl
+  = SKIP_SERVER  FOR  subNoServerDecl  exclusion?
+
+subNoServerDecl
+  = ENTITY_NAME  ','  subNoServerDecl
+  / STAR
+  / ALL
+  / ENTITY_NAME
+
+// JPA Metamodel filter option
+filterDecl
+  = FILTER  subFilterDecl  exclusion?
+
+subFilterDecl
+  = ENTITY_NAME  ','  subFilterDecl
+  / STAR
+  / ALL
+  / ENTITY_NAME
+
+
+// angularSuffix option
+angularSuffixDecl
+  = ANGULAR_SUFFIX  entityList  exclusion?
+
+// common way to declare an entity list
+entityList
+  = ENTITY_NAME  ','  entityList
+  / STAR  WITH  ([A-z0-9-]+)
+  / ALL  WITH  ([A-z0-9-]+)
+  / ENTITY_NAME  WITH  ([A-z0-9-]+)
+
+simpleEntityList
+  = ENTITY_NAME  ','  simpleEntityList
+  / STAR
+  / ALL
+  / ENTITY_NAME
+
+relationshipType
+= ONE_TO_ONE
+/ ONE_TO_MANY
+/ MANY_TO_ONE
+/ MANY_TO_MANY
+
+validation
+  = REQUIRED
+  / MINLENGTH  '('  INTEGER  ')'
+  / MINLENGTH  '('  CONSTANT_NAME  ')'
+  / MAXLENGTH  '('  INTEGER  ')'
+  / MAXLENGTH  '('  CONSTANT_NAME  ')'
+  / MINBYTES  '('  INTEGER  ')'
+  / MINBYTES  '('  CONSTANT_NAME  ')'
+  / MAXBYTES  '('  INTEGER  ')'
+  / MAXBYTES  '('  CONSTANT_NAME  ')'
+  / MIN  '('  INTEGER  ')'
+  / MIN  '('  CONSTANT_NAME  ')'
+  / MAX  '('  INTEGER  ')'
+  / MAX  '('  CONSTANT_NAME  ')'
+  / PATTERN  '('  FORWARD_SLASH REGEX FORWARD_SLASH  ')'
