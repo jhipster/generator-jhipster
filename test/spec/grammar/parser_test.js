@@ -136,7 +136,7 @@ describe('ChevrotainParser', () => {
         it('provides suggestions', () => {
           const input = '';
           const result = getSyntacticAutoCompleteSuggestions(input);
-          expect(result).to.have.lengthOf(14);
+          expect(result).to.have.lengthOf(15);
           expect(result).to.have.members(
             [
               tokens.NAME,
@@ -152,7 +152,8 @@ describe('ChevrotainParser', () => {
               tokens.SKIP_CLIENT,
               tokens.SKIP_SERVER,
               tokens.NO_FLUENT_METHOD,
-              tokens.ANGULAR_SUFFIX
+              tokens.ANGULAR_SUFFIX,
+              tokens.FILTER,
             ]
           );
         });
