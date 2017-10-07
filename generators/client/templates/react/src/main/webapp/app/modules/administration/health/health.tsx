@@ -1,6 +1,9 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-jhipster';
+import { Table } from 'reactstrap';
+import * as FaEye from 'react-icons/lib/fa/eye';
+import * as FaRefresh from 'react-icons/lib/fa/refresh';
 
 import { systemHealth } from '../../../reducers/administration';
 
@@ -30,19 +33,42 @@ export class HealthPage extends React.Component<IHealthPageProps, undefined> {
     const { health, isFetching } = this.props;
     const data = health || {};
     return (
-        <div>
+      <div>
           <h2>Health Checks</h2>
           <p>
             <button type="button" onClick={this.getSystemHealth} className={isFetching ? 'btn btn-danger' : 'btn btn-primary'} disabled={isFetching}>
-              <span className="glyphicon glyphicon-refresh" />&nbsp;
+              <FaRefresh />&nbsp;
               <Translate component="span" contentKey="health.refresh.button" />
             </button>
           </p>
-          FIX ME datatable
-          <hr />
           <div className="row">
-            <div className="col-10">
-              {JSON.stringify(data)}
+            <div className="col-12">
+            <Table bordered>
+               <thead>
+                 <tr>
+                   <th>Service Name</th>
+                   <th>Status</th>
+                   <th>Details</th>
+                 </tr>
+               </thead>
+               <tbody>
+                 {Object.keys(data).map((configPropKey, configPropIndex) =>
+                   (configPropKey !== 'status') ?
+                     (<tr key={configPropIndex}>
+                       <td>{configPropKey}</td>
+                       <td>
+                        <button type="button" className={data[configPropKey].status !== 'UP' ? 'btn btn-danger' : 'btn btn-success'}>
+                        {data[configPropKey].status}
+                        </button>
+                       </td>
+                       <td>                        
+                          <FaEye />
+                       </td>
+                     </tr>)
+                     : ''
+                 )}
+               </tbody>
+             </Table>
             </div>
           </div>
         </div>
@@ -50,7 +76,12 @@ export class HealthPage extends React.Component<IHealthPageProps, undefined> {
   }
 }
 
-export default connect(
-  ({ administration }) => ({ health: administration.health, isFetching: administration.isFetching }),
-  { systemHealth }
-)(HealthPage);
+const mapStateToProps = storeState => ({
+  health: storeState.administration.health,
+  isFetching: storeState.administration.isFetching
+});
+
+const mapDispatchToProps = { systemHealth };
+
+export default connect(mapStateToProps, mapDispatchToProps)(HealthPage);
+
