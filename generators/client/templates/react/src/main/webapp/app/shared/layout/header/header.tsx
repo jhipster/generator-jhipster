@@ -1,7 +1,7 @@
 import './header.scss';
 
 import * as React from 'react';
-import * as Translate from 'react-translate-component';
+import { Translate } from 'react-jhipster';
 import {
   Navbar, NavDropdown,
   Nav, NavItem, NavLink, NavbarToggler, NavbarBrand, Collapse, UncontrolledNavDropdown,
@@ -38,14 +38,14 @@ export class Header extends React.Component<IHeaderProps, { menuOpen: boolean }>
   }
 
   <%_ if (enableTranslation) { _%>
-  handleChange = (event, index, language) => {
-    this.props.onLocaleChange(language);
+  handleLocaleChange = event => {
+    this.props.onLocaleChange(event.target.value);
   }
 
   <%_ } _%>
   renderDevRibbon = () => (
     process.env.NODE_ENV === 'development' ?
-      <div className="ribbon dev"><a href=""><Translate content="global.ribbon.dev" /></a></div> :
+      <div className="ribbon dev"><a href=""><Translate contentKey="global.ribbon.dev" /></a></div> :
       null
   )
 
@@ -58,11 +58,11 @@ export class Header extends React.Component<IHeaderProps, { menuOpen: boolean }>
       <div id="app-header">
         {this.renderDevRibbon()}
         <LoadingBar className="loading-bar"/>
-        <Navbar inverse toggleable fixed="top" className="jh-navbar">
-          <NavbarToggler right onClick={this.toggleMenu} />
+        <Navbar dark expand="sm" fixed="top" className="jh-navbar">
+          <NavbarToggler onClick={this.toggleMenu} />
           <NavbarBrand tag={Link} to="/" className="brand-logo">
             <BrandIcon />
-            <span className="brand-title"><Translate with={appConfig} content="global.title">AppName</Translate></span>
+            <span className="brand-title"><Translate contentKey="global.title">AppName</Translate></span>
             <span className="navbar-version">{appConfig.version}</span>
           </NavbarBrand>
           <Collapse isOpen={this.state.menuOpen} navbar>
@@ -78,7 +78,7 @@ export class Header extends React.Component<IHeaderProps, { menuOpen: boolean }>
                   Entities
                 </DropdownToggle>
                 <DropdownMenu right>
-                  {/* Nothing yet  */}
+                  <DropdownItem divider/>
                 </DropdownMenu>
               </UncontrolledNavDropdown>
               {devEnv ?
@@ -107,14 +107,14 @@ export class Header extends React.Component<IHeaderProps, { menuOpen: boolean }>
               </UncontrolledNavDropdown>
             <%_ if (enableTranslation) { _%>
               { locales.length > 1 ?
-                <NavDropdown toggle={this.handleChange}>
-                  <DropdownToggle caret>
-                    {this.props.currentLocale}
+                <UncontrolledNavDropdown>
+                  <DropdownToggle nav caret>
+                    {this.props.currentLocale.toUpperCase()}
                   </DropdownToggle>
                   <DropdownMenu right>
-                    {locales.map(lang => <DropdownItem key={lang} value={lang}>{lang.toUpperCase()}</DropdownItem>)}
+                    {locales.map(lang => <DropdownItem key={lang} value={lang} onClick={this.handleLocaleChange}>{lang.toUpperCase()}</DropdownItem>)}
                   </DropdownMenu>
-                </NavDropdown> : null
+                </UncontrolledNavDropdown> : null
               }
             <%_ } _%>
             </Nav>
@@ -126,15 +126,6 @@ export class Header extends React.Component<IHeaderProps, { menuOpen: boolean }>
 }
 
 export default Header;
-// import React, { Component, PropTypes } from 'react';
-// import Translate from 'react-translate-component';
-
-// import { Link } from 'react-router';
-
-// import { locales } from '../../../config/translation';
-// import appConfig from '../../../config/constants';
-
-// import './header.scss';
 
 // export default class Header extends Component {
 //   static propTypes = {
@@ -168,7 +159,7 @@ export default Header;
 //       <Link to="/login">
 //         <ListItem
 //           key={2.1} innerDivStyle={menuListStyle}
-//           primaryText={<Translate content="global.menu.account.login" />}
+//           primaryText={<Translate contentKey="global.menu.account.login" />}
 //           leftIcon={<ActionLock />}
 //         />
 //       </Link>
@@ -177,7 +168,7 @@ export default Header;
 //       <Link to="/register">
 //         <ListItem
 //           key={2.2} innerDivStyle={menuListStyle}
-//           primaryText={<Translate content="global.menu.account.register" />}
+//           primaryText={<Translate contentKey="global.menu.account.register" />}
 //           leftIcon={<ActionNoteAdd />}
 //         />
 //       </Link>
@@ -193,7 +184,7 @@ export default Header;
 //     if (isAuthenticated) {
 //       menuItemEntities = (
 //         <ListItem
-//           primaryText={<Translate content="global.menu.entities.main" />}
+//           primaryText={<Translate contentKey="global.menu.entities.main" />}
 //           leftIcon={<ActionList />}
 //           initiallyOpen={false}
 //           primaryTogglesNestedList
@@ -208,7 +199,7 @@ export default Header;
 //         <Link to="/account/settings">
 //           <ListItem
 //             key={2.3} innerDivStyle={menuListStyle}
-//             primaryText={<Translate content="global.menu.account.settings" />}
+//             primaryText={<Translate contentKey="global.menu.account.settings" />}
 //             leftIcon={<ActionSettings />}
 //           />
 //         </Link>
@@ -217,7 +208,7 @@ export default Header;
 //         <Link to="/account/password">
 //           <ListItem
 //             key={2.4} innerDivStyle={menuListStyle}
-//             primaryText={<Translate content="global.menu.account.password" />}
+//             primaryText={<Translate contentKey="global.menu.account.password" />}
 //             leftIcon={<CommunicationVpnKey />}
 //           />
 //         </Link>
@@ -225,7 +216,7 @@ export default Header;
 //       menuItemAccountSignOut = (
 //         <ListItem
 //           key={2.5} onClick={() => handleLogout()} innerDivStyle={menuListStyle}
-//           primaryText={<Translate content="global.menu.account.logout" />}
+//           primaryText={<Translate contentKey="global.menu.account.logout" />}
 //           leftIcon={<ActionExitToApp />}
 //         />
 //       );
@@ -233,7 +224,7 @@ export default Header;
 //       menuItemAdministration = (
 //         <ListItem
 //           key={4}
-//           primaryText={<Translate content="global.menu.admin.main" />}
+//           primaryText={<Translate contentKey="global.menu.admin.main" />}
 //           leftIcon={<SocialPersonAdd />}
 //           initiallyOpen={false}
 //           primaryTogglesNestedList
@@ -242,56 +233,56 @@ export default Header;
 //               <ListItem
 //                 key={4.2} innerDivStyle={menuListStyle}
 //                 leftIcon={<SocialGroup />}
-//                 primaryText={<Translate content="global.menu.admin.userManagement" />}
+//                 primaryText={<Translate contentKey="global.menu.admin.userManagement" />}
 //               />
 //             </Link>,
 //             <Link to="/admin/metrics">
 //               <ListItem
 //                 key={4.3} innerDivStyle={menuListStyle}
 //                 leftIcon={<ActionAssessment />}
-//                 primaryText={<Translate content="global.menu.admin.metrics" />}
+//                 primaryText={<Translate contentKey="global.menu.admin.metrics" />}
 //               />
 //             </Link>,
 //             <Link to="/admin/health">
 //               <ListItem
 //                 key={4.4} innerDivStyle={menuListStyle}
 //                 leftIcon={<ActionFavorite />}
-//                 primaryText={<Translate content="global.menu.admin.health" />}
+//                 primaryText={<Translate contentKey="global.menu.admin.health" />}
 //               />
 //             </Link>,
 ////             <Link to="/admin/configuration">
 //               <ListItem
 //                 key={4.5} innerDivStyle={menuListStyle}
 //                 leftIcon={<ActionBuild />}
-//                 primaryText={<Translate content="global.menu.admin.configuration" />}
+//                 primaryText={<Translate contentKey="global.menu.admin.configuration" />}
 //               />
 //             </Link>,
 //             <Link to="/admin/audits">
 //               <ListItem
 //                 key={4.6} innerDivStyle={menuListStyle}
 //                 leftIcon={<AlertAddAlert />}
-//                 primaryText={<Translate content="global.menu.admin.audits" />}
+//                 primaryText={<Translate contentKey="global.menu.admin.audits" />}
 //               />
 //             </Link>,
 //             <Link to="/admin/logs">
 //               <ListItem
 //                 key={4.7} innerDivStyle={menuListStyle}
 //                 leftIcon={<ActionAssignment />}
-//                 primaryText={<Translate content="global.menu.admin.logs" />}
+//                 primaryText={<Translate contentKey="global.menu.admin.logs" />}
 //               />
 //             </Link>,
 //             <Link to="/admin/docs">
 //               <ListItem
 //                 key={4.8} innerDivStyle={menuListStyle}
 //                 leftIcon={<AvLibraryBooks />}
-//                 primaryText={<Translate content="global.menu.admin.apidocs" />}
+//                 primaryText={<Translate contentKey="global.menu.admin.apidocs" />}
 //               />
 //             </Link>,
 //             <a href="/h2-console">
 //               <ListItem
 //                 key={4.9} innerDivStyle={menuListStyle}
 //                 leftIcon={<AvLibraryBooks />}
-//                 primaryText={<Translate content="global.menu.admin.database" />}
+//                 primaryText={<Translate contentKey="global.menu.admin.database" />}
 //               />
 //             </a>
 ////           ]}
@@ -301,12 +292,12 @@ export default Header;
 
 //     return (
 //       <div>
-//         <div className="ribbon dev"><a href=""><Translate content="global.ribbon.dev" /></a></div>
+//         <div className="ribbon dev"><a href=""><Translate contentKey="global.ribbon.dev" /></a></div>
 //         <AppBar
 //           title={
 //             <div>
 //               <Link to="/" className="brand-logo">
-//                 <span className="brand-title"><Translate content="global.title">Jhipster</Translate></span>
+//                 <span className="brand-title"><Translate contentKey="global.title">Jhipster</Translate></span>
 //                 <span className="navbar-version">{appConfig.version}</span>
 //               </Link>
 //             </div>
@@ -321,11 +312,11 @@ export default Header;
 //         <Drawer open={this.state.sidebarOpen} docked={false} onRequestChange={sidebarOpen => this.setState({ sidebarOpen })}>
 //           <List>
 //             <Subheader>Application Menu</Subheader>
-//             <Link to="/"><ListItem primaryText={<Translate content="global.menu.home" />} leftIcon={<ActionHome />} /></Link>
+//             <Link to="/"><ListItem primaryText={<Translate contentKey="global.menu.home" />} leftIcon={<ActionHome />} /></Link>
 //             {menuItemEntities}
 //             {menuItemAdministration}
 //             <ListItem
-//               primaryText={<Translate content="global.menu.account.main" />}
+//               primaryText={<Translate contentKey="global.menu.account.main" />}
 //               leftIcon={<ActionLock />}
 //               initiallyOpen={false}
 //               primaryTogglesNestedList key={2}

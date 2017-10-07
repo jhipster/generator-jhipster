@@ -2,11 +2,15 @@ export const ACTION_TYPES = {
   SET_LOCALE: 'locale/SET_LOCALE'
 };
 
-export default (state = { currentLocale: 'en' }, action) => {
+const initialState = {
+  currentLocale: 'en'
+};
+
+export default (state = initialState, action) => {
   switch (action.type) {
     case ACTION_TYPES.SET_LOCALE:
       return {
-        currentLocale: action.locale
+        currentLocale: action.locale || initialState.currentLocale
       };
     default:
       return state;

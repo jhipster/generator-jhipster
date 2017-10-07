@@ -1,6 +1,5 @@
 import * as React from 'react';
-import * as Translate from 'react-translate-component';
-import * as counterpart from 'counterpart';
+import { Translate, translate } from 'react-jhipster';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
 
@@ -50,13 +49,13 @@ class LoginModal extends React.Component<ILoginModalProps, ILoginModalState> {
     return (
       <Modal isOpen={this.props.showModal} toggle={handleClose} backdrop="static" id="login-page">
         <AvForm onSubmit={this.handleSubmit}>
-          <ModalHeader toggle={handleClose} id="login-title"><Translate content="login.title" /></ModalHeader>
+          <ModalHeader toggle={handleClose} id="login-title"><Translate contentKey="login.title" /></ModalHeader>
           <ModalBody>
             <div className="row">
               <div className="col-md-12">
                 { loginError ?
                   <div className="alert alert-danger">
-                    <Translate content="login.messages.error.authentication" />
+                    <Translate contentKey="login.messages.error.authentication" />
                   </div>
                   : null
                 }
@@ -64,16 +63,16 @@ class LoginModal extends React.Component<ILoginModalProps, ILoginModalState> {
               <div className="col-md-12">
                   <AvField
                     name="username"
-                    label={<Translate content="global.form.username" />}
-                    placeholder={counterpart.translate('global.form.username-placeholder')}
+                    label={<Translate contentKey="global.form.username" />}
+                    placeholder={translate('global.form.username.placeholder')}
                     value={this.state.username}
                     required errorMessage="Username cannot be empty!"
                     onChange={this.handleUsernameChange}
                   />
                   <AvField
                     name="password" type="password"
-                    label={<Translate content="login.form.password" />}
-                    placeholder={counterpart.translate('login.form.password-placeholder')}
+                    label={<Translate contentKey="login.form.password" />}
+                    placeholder={translate('login.form.password.placeholder')}
                     value={this.state.password}
                     required errorMessage="Password cannot be empty!"
                     onChange={this.handlePasswordChange}
@@ -82,8 +81,8 @@ class LoginModal extends React.Component<ILoginModalProps, ILoginModalState> {
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button color="secondary" onClick={handleClose} tabIndex="1"><Translate content="entity.action.cancel" /></Button>{' '}
-            <Button color="primary" type="submit"><Translate content="login.form.button" /></Button>
+            <Button color="secondary" onClick={handleClose} tabIndex="1"><Translate contentKey="entity.action.cancel" /></Button>{' '}
+            <Button color="primary" type="submit"><Translate contentKey="login.form.button" /></Button>
           </ModalFooter>
         </AvForm>
       </Modal>

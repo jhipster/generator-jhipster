@@ -1,8 +1,8 @@
 /* eslint-disable */ // TODO Fix when page is completed
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { Translate } from 'react-jhipster';
 
-import Translate from 'react-translate-component';
 import { systemMetrics } from '../../../reducers/administration';
 
 export interface IMetricsPageProps {
@@ -36,7 +36,7 @@ export class MetricsPage extends React.Component<IMetricsPageProps, undefined> {
           <p>
             <button type="button" onClick={this.getMetrics} className={isFetching ? 'btn btn-danger' : 'btn btn-primary'} disabled={isFetching}>
               <span className="glyphicon glyphicon-refresh" />&nbsp;
-              <Translate component="span" content="health.refresh.button" />
+              <Translate component="span" contentKey="health.refresh.button" />
             </button>
           </p>
           FIX ME
