@@ -89,11 +89,27 @@ const deepFindDirty = (obj, path, placeholder) => {
   return current;
 };
 
-export const translate = (key, interpolate) => {
+const doTranslate = (key, interpolate, children) => {
   const translationData = TranslatorContext.context.translations;
   const currentLocale = TranslatorContext.context.locale || TranslatorContext.context.defaultLocale;
   const data = translationData[currentLocale];
-  return data ? get(data, key) || deepFindDirty(data, key, true) : null;
+  const preRender = data ? get(data, key) || deepFindDirty(data, key, true) : null;
+  const preSanitize = render(preRender, interpolate) || children || '';
+  if (/<[a-z][\s\S]*>/i.test(preSanitize)) {
+    // String contains HTML tags. Allow only a super restricted set of tags and attributes
+    const content = sanitizeHtml(preSanitize, {
+      allowedTags: [ 'b', 'i', 'em', 'strong', 'a', 'br', 'hr' ],
+      allowedAttributes: {
+        a: [ 'href', 'target' ]
+      }
+    });
+    return {
+      content, html: true
+    };
+  }
+  return {
+    content: preSanitize, html: false
+  };
 };
 
 class Translate extends React.Component<ITranslateProps> {
@@ -109,19 +125,14 @@ class Translate extends React.Component<ITranslateProps> {
 
   render() {
     const { contentKey, interpolate, component, children } = this.props;
-    const dirty = render(translate(contentKey, interpolate), interpolate) || children;
-    if (/<[a-z][\s\S]*>/i.test(dirty)) {
-      // String contains HTML tags. Allow only a super restricted set of tags and attributes
-      const content = sanitizeHtml(dirty, {
-        allowedTags: [ 'b', 'i', 'em', 'strong', 'a', 'br', 'hr' ],
-        allowedAttributes: {
-          a: [ 'href', 'target' ]
-        }
-      });
-      return React.createElement(component, { dangerouslySetInnerHTML: { __html: content } });
+    const processed = doTranslate(contentKey, interpolate, children);
+    if (processed.html) {
+      return React.createElement(component, { dangerouslySetInnerHTML: { __html: processed.content } });
     }
-    return React.createElement(component, null, dirty);
+    return React.createElement(component, null, processed.content);
   }
 }
+
+export const translate = (contentKey: string, interpolate?: any, children?: string) => doTranslate(contentKey, interpolate, children).content;
 
 export default Translate;
