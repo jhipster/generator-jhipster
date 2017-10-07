@@ -49,7 +49,6 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
  * The method signatures in public API should not be changed without a major version change
  */
 module.exports = class extends PrivateBase {
-
     /**
      * Get the JHipster configuration from the .yo-rc.json file.
      *
