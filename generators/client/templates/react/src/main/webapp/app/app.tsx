@@ -1,4 +1,4 @@
-import './app.scss';
+import './app.<%= styleSheetExt %>';
 
 import * as React from 'react';
 import { connect } from 'react-redux';
@@ -40,7 +40,7 @@ export class App extends React.Component<IAppProps, {}> {
             onLocaleChange={this.props.setLocale}
           />
           <div className="container-fluid view-container" id="app-view-container">
-            <Card>
+            <Card className="jh-card">
               <AppRoutes/>
             </Card>
             <Footer/>

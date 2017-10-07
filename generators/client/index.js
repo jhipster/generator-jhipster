@@ -323,6 +323,9 @@ module.exports = class extends BaseGenerator {
                 } else {
                     this.BUILD_DIR = 'build/';
                 }
+
+                this.styleSheetExt = this.useSass ? 'scss' : 'css';
+
                 this.DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
             },
 

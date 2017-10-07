@@ -1,4 +1,4 @@
-import './home.scss';
+import './home.<%= styleSheetExt %>';
 
 import * as React from 'react';
 import { Link } from 'react-router-dom';
