@@ -136,8 +136,16 @@ describe('ChevrotainParser', () => {
         it('provides suggestions', () => {
           const input = '';
           const result = getSyntacticAutoCompleteSuggestions(input);
-          expect(result).to.have.lengthOf(4);
-          expect(result).to.have.members([tokens.NAME, tokens.ENTITY, tokens.RELATIONSHIP, tokens.ENUM]);
+          expect(result).to.have.lengthOf(5);
+          expect(result).to.have.members(
+            [
+              tokens.NAME,
+              tokens.ENTITY,
+              tokens.RELATIONSHIP,
+              tokens.ENUM,
+              tokens.DTO
+            ]
+          );
         });
       });
       describe('with a custom start rule', () => {
