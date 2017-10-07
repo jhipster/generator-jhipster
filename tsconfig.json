@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "module": "commonjs",
+    "target": "es5",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "declaration": true,
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": ["es2015", "es2017", "dom"],
+    "allowJs": true,
+    "checkJs": true,
+    "outDir": "target"
+  },
+  "exclude": [
+    "node_modules",
+    "bundles",
+    "coverage",
+    "build"
+  ]
+}

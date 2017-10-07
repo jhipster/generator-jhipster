@@ -1,0 +1,48 @@
+#################
+## Misc
+#################
+nbproject
+manifest.mf
+build.xml
+node_modules
+node_modules/*
+npm-debug.log
+src/**/*.{js,jsx}
+tests/**/*.{js,jsx}
+/index.js
+/react-jhipster.{js,jsx}
+config/testing-utils.js
+*.map
+*.d.ts
+!make.js
+!examples/**/*.{js,jsx}
+coverage
+**/*.metadata.json
+*.metadata.json
+/bundles
+
+#################
+## IDE
+#################
+.idea
+.project
+.settings
+.vscode
+
+############
+## Windows
+############
+
+# Windows image file caches
+Thumbs.db
+
+# Folder config file
+Desktop.ini
+
+############
+## Mac
+############
+
+# Mac crap
+.DS_Store
+**/.DS_Store
