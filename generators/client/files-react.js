@@ -109,7 +109,15 @@ const files = {
             condition: generator => generator.useSass,
             path: REACT_DIR,
             templates: [
-                { file: 'app.scss', method: 'copy' }
+                'app.scss',
+                '__bootstrap-variables.scss',
+            ]
+        },
+        {
+            condition: generator => !generator.useSass,
+            path: REACT_DIR,
+            templates: [
+                'app.css'
             ]
         },
     // {
@@ -145,6 +153,13 @@ const files = {
             templates: [
                 'modules/home/home.scss',
             ]
+        },
+        {
+            condition: generator => !generator.useSass,
+            path: REACT_DIR,
+            templates: [
+                'modules/home/home.css',
+            ]
         }
     ],
     reducers: [
@@ -173,17 +188,11 @@ const files = {
         {
             path: REACT_DIR,
             templates: [
-                // 'account/_index.js',
-                // { file: 'account/_account.route.js', method: 'processJsx' },
-                // { file: 'account/activate/_activate.route.js', method: 'processJsx' },
+                { file: 'modules/account/index.tsx', method: 'processJsx' },
                 // { file: 'account/activate/_activate.component.js', method: 'processJsx' },
-                // { file: 'account/password/_password.route.js', method: 'processJsx' },
                 { file: 'modules/account/password/password.tsx', method: 'processJsx' },
-                // { file: 'account/register/_register.route.js', method: 'processJsx' },
                 // { file: 'account/register/_register.component.js', method: 'processJsx' },
-                // { file: 'account/password-reset/init/_password-reset-init.route.js', method: 'processJsx' },
                 // { file: 'account/password-reset/init/_password-reset-init.component.js', method: 'processJsx' },
-                // { file: 'account/password-reset/finish/_password-reset-finish.route.js', method: 'processJsx' },
                 // { file: 'account/password-reset/finish/_password-reset-finish.component.js', method: 'processJsx' },
                 { file: 'modules/account/settings/settings.tsx', method: 'processJsx' }
                 // { file: 'account/settings/_settings.component.js', method: 'processJsx' }
@@ -193,7 +202,6 @@ const files = {
     //   condition: generator => generator.authenticationType === 'session',
     //   path: REACT_DIR,
     //   templates: [
-    //     { file: 'account/sessions/_sessions.route.js', method: 'processJsx' },
     //     'account/sessions/_session.model.js',
     //     { file: 'account/sessions/_sessions.component.js', method: 'processJsx' }
     //   ]
@@ -202,11 +210,8 @@ const files = {
     //   condition: generator => generator.enableSocialSignIn,
     //   path: REACT_DIR,
     //   templates: [
-    //             { file: 'account/social/_social.route.js', method: 'processJsx' },
     //             { file: 'account/social/_social-register.component.js', method: 'processJsx' },
-    //             { file: 'account/social/_social-register.component.html', method: 'processHtml' },
     //             { file: 'shared/social/_social.component.js', method: 'processJsx' },
-    //             { file: 'shared/social/_social.component.html', method: 'processHtml' },
     //     'shared/social/_social.service.js'
     //   ]
     // },
@@ -244,12 +249,10 @@ const files = {
                 { file: 'modules/administration/health/health.tsx', method: 'processJsx' },
                 // { file: 'modules/administration/health/health-detail/health-detail.tsx', method: 'processJsx' },
                 // { file: 'modules/administration/health/health-detail/health-modal.tsx', method: 'processJsx' },
-                // { file: 'modules/administration/health/health-detail/index.js', method: 'processJsx' },
                 { file: 'modules/administration/logs/logs.tsx', method: 'processJsx' },
                 { file: 'modules/administration/metrics/metrics.tsx', method: 'processJsx' },
                 // { file: 'modules/administration/metrics/metrics-detail/metrics-detail.tsx', method: 'processJsx' },
                 // { file: 'modules/administration/metrics/metrics-detail/metrics-modal.tsx', method: 'processJsx' },
-                // { file: 'modules/administration/metrics/metrics-detail/index.tsx', method: 'processJsx' },
             ]
         },
         // {
@@ -294,7 +297,6 @@ const files = {
                 // components
                 'shared/components/icon-button/icon-button.tsx',
                 'shared/components/font-icon/font-icon.tsx',
-                'shared/components/loader/loader.tsx',
                 // model
                 'shared/model/redux-action.type.ts'
             ]
@@ -304,10 +306,15 @@ const files = {
             path: REACT_DIR,
             templates: [
                 'shared/layout/header/header.scss',
-                'shared/layout/footer/footer.scss',
-                'shared/components/loader/loader.scss',
-                '__bootstrap-variables.scss',
-                'app.scss'
+                'shared/layout/footer/footer.scss'
+            ]
+        },
+        {
+            condition: generator => !generator.useSass,
+            path: REACT_DIR,
+            templates: [
+                'shared/layout/header/header.css',
+                'shared/layout/footer/footer.css'
             ]
         },
     // {
@@ -373,7 +380,6 @@ const files = {
                 'spec/app/config/notification-middleware.spec.ts',
                 'spec/app/shared/components/font-icon.spec.tsx',
                 'spec/app/shared/components/icon-button.spec.tsx',
-                'spec/app/shared/components/loader.spec.tsx',
                 'spec/app/shared/layout/header.spec.tsx',
                 'spec/app/shared/util/storage-util.spec.ts',
                 // 'spec/app/account/activate/_activate.component.spec.js',

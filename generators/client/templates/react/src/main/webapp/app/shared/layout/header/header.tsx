@@ -1,4 +1,4 @@
-import './header.scss';
+import './header.<%= styleSheetExt %>';
 
 import * as React from 'react';
 import { Translate } from 'react-jhipster';

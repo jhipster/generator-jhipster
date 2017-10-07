@@ -1,7 +1,7 @@
+import './footer.<%= styleSheetExt %>';
+
 import * as React from 'react';
 import { Translate } from 'react-jhipster';
-
-import './footer.scss';
 
 import appConfig from '../../../config/constants';
 
