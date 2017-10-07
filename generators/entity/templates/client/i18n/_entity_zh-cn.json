@@ -21,15 +21,15 @@
         "<%= entityTranslationKey %>" : {
             "home": {
                 "title": "<%= entityClassPluralHumanized  %>",
-                "createLabel": "Create a new <%= entityClassHumanized %>",
-                "createOrEditLabel": "Create or edit a <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
-                "search": "Search for <%= entityClassHumanized %>"<% } %>
+                "createLabel": "创建新 <%= entityClassHumanized %>",
+                "createOrEditLabel": "创建或编辑 <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
+                "search": "查找 <%= entityClassHumanized %>"<% } %>
             },<% if (!microserviceAppName) { %>
-            "created": "A new <%= entityClassHumanized %> is created with identifier {{ param }}",
-            "updated": "A <%= entityClassHumanized %> is updated with identifier {{ param }}",
-            "deleted": "A <%= entityClassHumanized %> is deleted with identifier {{ param }}",<% } %>
+            "created": "<%= entityClassHumanized %> {{ param }} 创建成功",
+            "updated": "<%= entityClassHumanized %> {{ param }} 更新成功",
+            "deleted": "<%= entityClassHumanized %> {{ param }} 删除成功",<% } %>
             "delete": {
-                "question": "Are you sure you want to delete <%= entityClassHumanized %> {{ id }}?"
+                "question": "你确定要删除 <%= entityClassHumanized %> {{ id }} 吗？"
             },
             "detail": {
                 "title": "<%= entityClassHumanized %>"
@@ -40,9 +40,9 @@
     }<% if (microserviceAppName) { %>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
-            "created": "A new <%= entityClassHumanized %> is created with identifier {{ param }}",
-            "updated": "A <%= entityClassHumanized %> is updated with identifier {{ param }}",
-            "deleted": "A <%= entityClassHumanized %> is deleted with identifier {{ param }}"
+            "created": "<%= entityClassHumanized %> {{ param }} 创建成功",
+            "updated": "<%= entityClassHumanized %> {{ param }} 更新成功",
+            "deleted": "<%= entityClassHumanized %> {{ param }} 删除成功"
         }
     }<% } %>
 }

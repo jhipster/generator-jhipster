@@ -21,6 +21,7 @@ const shelljs = require('shelljs');
 
 module.exports = {
     askForApplicationType,
+    askForGatewayType,
     askForPath,
     askForApps,
     askForClustersMode,
@@ -32,6 +33,9 @@ module.exports = {
     askForDockerPushCommand
 };
 
+/**
+ * Ask For Application Type
+ */
 function askForApplicationType() {
     const done = this.async();
 
@@ -58,6 +62,40 @@ function askForApplicationType() {
     });
 }
 
+/**
+ * Ask For Gateway Type
+ */
+function askForGatewayType() {
+    if (this.regenerate) return;
+    if (this.composeApplicationType !== 'microservice') return;
+    const done = this.async();
+
+    const prompts = [{
+        type: 'list',
+        name: 'gatewayType',
+        message: 'Which *type* of gateway would you like to use?',
+        choices: [
+            {
+                value: 'zuul',
+                name: 'JHipster gateway based on Netflix Zuul'
+            },
+            {
+                value: 'traefik',
+                name: '[BETA] Traefik gateway (only works with Consul)'
+            }
+        ],
+        default: 'zuul'
+    }];
+
+    this.prompt(prompts).then((props) => {
+        this.gatewayType = props.gatewayType;
+        done();
+    });
+}
+
+/**
+ * Ask For Path
+ */
 function askForPath() {
     if (this.regenerate) return;
 
@@ -106,6 +144,9 @@ function askForPath() {
     });
 }
 
+/**
+ * Ask For Apps
+ */
 function askForApps() {
     if (this.regenerate) return;
 
@@ -151,6 +192,9 @@ function askForApps() {
     });
 }
 
+/**
+ * Ask For Clusters Mode
+ */
 function askForClustersMode() {
     if (this.regenerate) return;
 
@@ -184,6 +228,9 @@ function askForClustersMode() {
     });
 }
 
+/**
+ * Ask For Monitoring
+ */
 function askForMonitoring() {
     if (this.regenerate) return;
 
@@ -216,6 +263,9 @@ function askForMonitoring() {
     });
 }
 
+/**
+ * Ask For Console Options
+ */
 function askForConsoleOptions() {
     if (this.regenerate) return;
 
@@ -236,11 +286,10 @@ function askForConsoleOptions() {
         default: this.monitoring
     }];
     if (this.composeApplicationType === 'microservice') {
-        prompts[0].choices.push(
-            {
-                value: 'zipkin',
-                name: 'Zipkin, for distributed tracing (only compatible with JHipster >= v4.2.0)'
-            });
+        prompts[0].choices.push({
+            value: 'zipkin',
+            name: 'Zipkin, for distributed tracing (only compatible with JHipster >= v4.2.0)'
+        });
     }
     this.prompt(prompts).then((props) => {
         this.consoleOptions = props.consoleOptions;
@@ -248,6 +297,9 @@ function askForConsoleOptions() {
     });
 }
 
+/**
+ * Ask For Service Discovery
+ */
 function askForServiceDiscovery() {
     if (this.regenerate) return;
 
@@ -309,6 +361,9 @@ function askForServiceDiscovery() {
     }
 }
 
+/**
+ * Ask For Admin Password
+ */
 function askForAdminPassword() {
     if (this.regenerate || this.serviceDiscoveryType !== 'eureka') return;
 
@@ -324,11 +379,17 @@ function askForAdminPassword() {
 
     this.prompt(prompts).then((props) => {
         this.adminPassword = props.adminPassword;
-        this.adminPasswordBase64 = new Buffer(this.adminPassword).toString('base64');
+        this.adminPasswordBase64 = Buffer.from(this.adminPassword).toString('base64');
         done();
     });
 }
 
+/**
+ * Get App Folders
+ * @param input path to join to destination path
+ * @param composeApplicationType type of application being composed
+ * @returns {Array} array of string representing app folders
+ */
 function getAppFolders(input, composeApplicationType) {
     const destinationPath = this.destinationPath(input);
     const files = shelljs.ls('-l', destinationPath);
@@ -358,6 +419,9 @@ function getAppFolders(input, composeApplicationType) {
     return appsFolders;
 }
 
+/**
+ * Ask For Docker Repository Name
+ */
 function askForDockerRepositoryName() {
     const done = this.async();
 
@@ -374,6 +438,9 @@ function askForDockerRepositoryName() {
     });
 }
 
+/**
+ * Ask For Docker Push Command
+ */
 function askForDockerPushCommand() {
     const done = this.async();
 

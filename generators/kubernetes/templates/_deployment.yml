@@ -43,6 +43,8 @@ spec:
             secretKeyRef:
               name: registry-secret
               key: registry-admin-password
+        - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+          value: http://admin:${jhipster.registry.password}@jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/
         <%_ } _%>
         <%_ if (app.serviceDiscoveryType === 'consul') { _%>
         - name: SPRING_CLOUD_CONSUL_HOST

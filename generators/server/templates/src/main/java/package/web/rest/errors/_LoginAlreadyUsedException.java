@@ -16,12 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.repository;
+package <%=packageName%>.web.rest.errors;
 
-import <%=packageName%>.domain.OAuth2AuthenticationCode;
-import org.springframework.data.mongodb.repository.MongoRepository;
-
-public interface OAuth2CodeRepository extends MongoRepository<OAuth2AuthenticationCode, String> {
-
-    OAuth2AuthenticationCode findOneByCode(String code);
+public class LoginAlreadyUsedException extends BadRequestAlertException {
+    public LoginAlreadyUsedException() {
+        super(ErrorConstants.LOGIN_ALREADY_USED_TYPE, "Login already in use", "userManagement", "userexists");
+    }
 }

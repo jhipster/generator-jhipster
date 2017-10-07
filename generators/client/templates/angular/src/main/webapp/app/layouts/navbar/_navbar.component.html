@@ -66,12 +66,14 @@
                         </a>
                     </li>
                     <%_ } _%>
+                    <%_ if (!skipUserManagement) { _%>
                     <li>
                         <a class="dropdown-item" routerLink="user-management" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-user" aria-hidden="true"></i>
                             <span jhiTranslate="global.menu.admin.userManagement">User management</span>
                         </a>
                     </li>
+                    <%_ } _%>
                     <%_ if (websocket === 'spring-websocket') { _%>
                     <li>
                         <a class="dropdown-item" routerLink="<%=jhiPrefix%>-tracker" routerLinkActive="active" (click)="collapseNavbar()">
@@ -157,6 +159,7 @@
                   </span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+                    <%_ if (authenticationType !== 'oauth2') { _%>
                     <li *ngSwitchCase="true">
                         <a class="dropdown-item" routerLink="settings" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-wrench" aria-hidden="true"></i>
@@ -169,6 +172,7 @@
                             <span jhiTranslate="global.menu.account.password">Password</span>
                         </a>
                     </li>
+                    <%_ } _%>
                     <%_ if (authenticationType === 'session') { _%>
                     <li *ngSwitchCase="true">
                         <a class="dropdown-item" routerLink="sessions" routerLinkActive="active" (click)="collapseNavbar()">
@@ -189,12 +193,14 @@
                             <span jhiTranslate="global.menu.account.login">Sign in</span>
                         </a>
                     </li>
+                    <%_ if (authenticationType !== 'oauth2') { _%>
                     <li *ngSwitchCase="false">
                         <a class="dropdown-item" routerLink="register" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-user-plus" aria-hidden="true"></i>
                             <span jhiTranslate="global.menu.account.register">Register</span>
                         </a>
                     </li>
+                    <%_ } _%>
                 </ul>
             </li>
         </ul>

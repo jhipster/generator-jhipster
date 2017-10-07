@@ -55,10 +55,7 @@ currentAccount: any;
         private dataUtils: JhiDataUtils,
         <%_ } _%>
         private router: Router,
-        private eventManager: JhiEventManager<%_ if (databaseType !== 'cassandra') { _%>,
-        private paginationUtil: JhiPaginationUtil,
-        private paginationConfig: PaginationConfig
-        <%_ } _%>
+        private eventManager: JhiEventManager
     ) {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.itemsPerPage = ITEMS_PER_PAGE;

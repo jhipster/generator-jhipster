@@ -1,8 +1,8 @@
 /* tslint:disable */ // TODO Fix when page is completed
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { Translate } from 'react-jhipster';
 
-import Translate from 'react-translate-component';
 import { getUsers } from '../../../reducers/administration';
 
 export interface IUserManagementProps {
@@ -40,7 +40,7 @@ export class UserManagement extends React.Component<IUserManagementProps, undefi
               <p>
                 <button type="button" onClick={() => this.getUserList()} className={isFetching ? 'btn btn-danger' : 'btn btn-primary'} disabled={isFetching}>
                   <span className="glyphicon glyphicon-refresh glyphicon-" />&nbsp;
-                  <Translate component="span" content="gateway.refresh.button" />
+                  <Translate component="span" contentKey="gateway.refresh.button" />
                 </button>
               </p>
             </div>
@@ -102,21 +102,21 @@ export class UserManagement extends React.Component<IUserManagementProps, undefi
                           className="btn btn-info btn-sm"
                         >
                           <span className="glyphicon glyphicon-eye-open" />
-                          <span className="d-none d-md-inline" ><Translate content="entity.action.view" /></span>
+                          <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view" /></span>
                         </button>
                         <button
                           type="submit"
                           className="btn btn-primary btn-sm"
                         >
                           <span className="glyphicon glyphicon-pencil" />
-                          <span className="d-none d-md-inline"><Translate content="entity.action.edit" /></span>
+                          <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit" /></span>
                         </button>
                         <button
                           type="submit"
                           className="btn btn-danger btn-sm" disabled={this.props.account.login === user.login}
                         >
                           <span className="glyphicon glyphicon-remove-circle" />
-                          <span className="d-none d-md-inline"><Translate content="entity.action.delete" /></span>
+                          <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete" /></span>
                         </button>
                       </div>
                     </td>

@@ -155,7 +155,11 @@ const serverFiles = {
             path: SERVER_TEST_SRC_DIR,
             templates: [{
                 file: 'package/web/rest/_EntityResourceIntTest.java',
-                options: { context: { randexp, _, chalkRed: chalk.red, fs, SERVER_TEST_SRC_DIR } },
+                options: {
+                    context: {
+                        randexp, _, chalkRed: chalk.red, fs, SERVER_TEST_SRC_DIR
+                    }
+                },
                 renameTo: generator => `${generator.packageFolder}/web/rest/${generator.entityClass}ResourceIntTest.java`
             }]
         },

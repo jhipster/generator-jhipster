@@ -32,6 +32,7 @@ export class JhiLanguageHelper {
 
     constructor(
         private translateService: TranslateService,
+        // tslint:disable-next-line: no-unused-variable
         private rootRenderer: RendererFactory2,
         <%_ if (enableI18nRTL) { _%>
         private findLanguageFromKeyPipe: FindLanguageFromKeyPipe,

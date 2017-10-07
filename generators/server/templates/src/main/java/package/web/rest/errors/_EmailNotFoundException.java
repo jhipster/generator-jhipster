@@ -16,15 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.repository;
+package <%=packageName%>.web.rest.errors;
 
+import org.zalando.problem.AbstractThrowableProblem;
+import org.zalando.problem.Status;
 
-import <%=packageName%>.domain.OAuth2AuthenticationClientDetails;
-import org.springframework.data.mongodb.repository.MongoRepository;
-
-import java.util.List;
-
-public interface OAuth2ClientDetailsRepository extends MongoRepository<OAuth2AuthenticationClientDetails, String> {
-
-    OAuth2AuthenticationClientDetails findOneByClientId(String clientId);
+public class EmailNotFoundException extends AbstractThrowableProblem {
+    public EmailNotFoundException() {
+        super(ErrorConstants.EMAIL_NOT_FOUND_TYPE, "Email address not registered", Status.BAD_REQUEST);
+    }
 }

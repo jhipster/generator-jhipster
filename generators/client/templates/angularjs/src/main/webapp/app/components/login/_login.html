@@ -46,7 +46,7 @@
                     <input type="password" class="form-control" id="password" placeholder="{{'login.form.password.placeholder' | translate}}"
                            ng-model="vm.password">
                 </div>
-                <%_ if (authenticationType == 'session' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
+                <%_ if (authenticationType === 'session' || authenticationType === 'jwt') { _%>
                 <div class="form-group">
                     <label for="rememberMe">
                         <input type="checkbox" id="rememberMe" ng-model="vm.rememberMe" checked>

@@ -19,18 +19,12 @@
 package <%=packageName%>.config.dbmigrations;
 
 import <%=packageName%>.domain.Authority;
-<%_ if (authenticationType === 'oauth2') { _%>
-import <%=packageName%>.domain.OAuth2AuthenticationClientDetails;
-<%_ } _%>
 import <%=packageName%>.domain.User;
 import <%=packageName%>.security.AuthoritiesConstants;
 
 import com.github.mongobee.changeset.ChangeLog;
 import com.github.mongobee.changeset.ChangeSet;
 import org.springframework.data.mongodb.core.MongoTemplate;
-<%_ if (authenticationType === 'oauth2') { _%>
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-<%_ } _%>
 
 import java.time.Instant;
 import java.util.Arrays;
@@ -62,7 +56,9 @@ public class InitialSetupMigration {
         User systemUser = new User();
         systemUser.setId("user-0");
         systemUser.setLogin("system");
+        <%_ if (authenticationType !== 'oauth2') { _%>
         systemUser.setPassword("$2a$10$mE.qmcV0mFU5NcKh73TZx.z4ueI/.bDWbj0T1BYyqP481kGGarKLG");
+        <%_ } _%>
         systemUser.setFirstName("");
         systemUser.setLastName("System");
         systemUser.setEmail("system@localhost");
@@ -77,7 +73,9 @@ public class InitialSetupMigration {
         User anonymousUser = new User();
         anonymousUser.setId("user-1");
         anonymousUser.setLogin("anonymoususer");
+        <%_ if (authenticationType !== 'oauth2') { _%>
         anonymousUser.setPassword("$2a$10$j8S5d7Sr7.8VTOYNviDPOeWX8KcYILUVJBsYV83Y5NtECayypx9lO");
+        <%_ } _%>
         anonymousUser.setFirstName("Anonymous");
         anonymousUser.setLastName("User");
         anonymousUser.setEmail("anonymous@localhost");
@@ -90,7 +88,9 @@ public class InitialSetupMigration {
         User adminUser = new User();
         adminUser.setId("user-2");
         adminUser.setLogin("admin");
+        <%_ if (authenticationType !== 'oauth2') { _%>
         adminUser.setPassword("$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC");
+        <%_ } _%>
         adminUser.setFirstName("admin");
         adminUser.setLastName("Administrator");
         adminUser.setEmail("admin@localhost");
@@ -105,7 +105,9 @@ public class InitialSetupMigration {
         User userUser = new User();
         userUser.setId("user-3");
         userUser.setLogin("user");
+        <%_ if (authenticationType !== 'oauth2') { _%>
         userUser.setPassword("$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K");
+        <%_ } _%>
         userUser.setFirstName("");
         userUser.setLastName("User");
         userUser.setEmail("user@localhost");
@@ -116,34 +118,4 @@ public class InitialSetupMigration {
         userUser.getAuthorities().add(userAuthority);
         mongoTemplate.save(userUser);
     }
-
-<%_ if (authenticationType === 'oauth2') { _%>
-    @ChangeSet(order = "03", author = "initiator", id = "03-addOAuthClientDetails")
-    public void addOAuthClientDetails(MongoTemplate mongoTemplate) {
-        SimpleGrantedAuthority adminAuthority = new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN);
-        SimpleGrantedAuthority userAuthority = new SimpleGrantedAuthority(AuthoritiesConstants.USER);
-
-        OAuth2AuthenticationClientDetails appDetails = new OAuth2AuthenticationClientDetails();
-        appDetails.setClientId("<%= baseName %>app");
-        appDetails.setClientSecret("my-secret-token-to-change-in-production");
-        appDetails.setResourceIds(Collections.singletonList("res_<%= baseName %>"));
-        appDetails.setScope(Arrays.asList("read", "write"));
-        appDetails.setAuthorizedGrantTypes(Arrays.asList("password", "refresh_token", "authorization_code", "implicit"));
-        appDetails.setAuthorities(Arrays.asList(adminAuthority, userAuthority));
-        appDetails.setAccessTokenValiditySeconds(1800);
-        appDetails.setRefreshTokenValiditySeconds(2000);
-        mongoTemplate.save(appDetails);
-
-        OAuth2AuthenticationClientDetails swaggerUIDetails = new OAuth2AuthenticationClientDetails();
-        swaggerUIDetails.setClientId("your-client-id");
-        swaggerUIDetails.setClientSecret("your-client-secret-if-required");
-        swaggerUIDetails.setResourceIds(Collections.singletonList("res_<%= baseName %>"));
-        swaggerUIDetails.setScope(Collections.singletonList("access"));
-        swaggerUIDetails.setAuthorizedGrantTypes(Arrays.asList("refresh_token", "authorization_code", "implicit"));
-        swaggerUIDetails.setAuthorities(Arrays.asList(adminAuthority, userAuthority));
-        swaggerUIDetails.setAccessTokenValiditySeconds(1800);
-        swaggerUIDetails.setRefreshTokenValiditySeconds(2000);
-        mongoTemplate.save(swaggerUIDetails);
-    }
-<%_ } _%>
 }
