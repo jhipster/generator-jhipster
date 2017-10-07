@@ -44,7 +44,7 @@ const normalizeValue = (value, key) => {
  * licenced under The MIT License (MIT) Copyright (c) 2014 Matthias Le Brun
  */
 const render = (string, values) => {
-  if (!values) return string;
+  if (!values || !string) return string;
   const [ parts, ...expressions ] = toTemplate(string);
   return flatten(parts.reduce(
     (acc, item, index, array) => {
@@ -94,7 +94,7 @@ const doTranslate = (key, interpolate, children) => {
   const currentLocale = TranslatorContext.context.locale || TranslatorContext.context.defaultLocale;
   const data = translationData[currentLocale];
   const preRender = data ? get(data, key) || deepFindDirty(data, key, true) : null;
-  const preSanitize = render(preRender, interpolate) || children || '';
+  const preSanitize = render(preRender, interpolate) || `${TranslatorContext.context.missingTranslationMsg}[${key}]`;
   if (/<[a-z][\s\S]*>/i.test(preSanitize)) {
     // String contains HTML tags. Allow only a super restricted set of tags and attributes
     const content = sanitizeHtml(preSanitize, {

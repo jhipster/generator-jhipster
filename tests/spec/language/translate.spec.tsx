@@ -25,22 +25,31 @@ describe('Translate', () => {
     TranslatorContext.setLocale('en');
   });
   // All tests will go here
-  it('renders empty when child content is null & key is invalid', () => {
+  it('renders key-missing message when child content is null & key is invalid', () => {
     const mountedWrapper = mount(
       <Translate contentKey="foo.baz"/>
     );
     const span = mountedWrapper.find('span');
     expect(span.length).to.equal(1);
-    expect(span.html()).to.equal('<span></span>');
+    expect(span.html()).to.equal('<span>translation-not-found[foo.baz]</span>');
   });
-  it('renders child content when key is invalid', () => {
+  it('renders key-missing message when key is invalid', () => {
     const mountedWrapper = mount(
       <Translate contentKey="foo.baz">def text</Translate>
     );
     const span = mountedWrapper.find('span');
     expect(span.length).to.equal(1);
-    expect(span.html()).to.equal('<span>def text</span>');
-    expect(span.text()).to.equal('def text');
+    expect(span.html()).to.equal('<span>translation-not-found[foo.baz]</span>');
+    expect(span.text()).to.equal('translation-not-found[foo.baz]');
+  });
+  it('renders key-missing message when key is invalid & interpolate argument given', () => {
+    const mountedWrapper = mount(
+      <Translate contentKey="foo.baz" interpolate={{ foo: 'FOO', bar: 'BAR' }}>def text</Translate>
+    );
+    const span = mountedWrapper.find('span');
+    expect(span.length).to.equal(1);
+    expect(span.html()).to.equal('<span>translation-not-found[foo.baz]</span>');
+    expect(span.text()).to.equal('translation-not-found[foo.baz]');
   });
   it('renders a default span with translated content', () => {
     const mountedWrapper = mount(

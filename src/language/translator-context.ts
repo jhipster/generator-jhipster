@@ -6,7 +6,8 @@ class TranslatorContext {
     previousLocale: null,
     defaultLocale: null,
     locale: null,
-    translations: {}
+    translations: {},
+    missingTranslationMsg: 'translation-not-found'
   };
   static registerTranslations(locale: string, translation: any) {
     this.context.translations = {
@@ -16,6 +17,10 @@ class TranslatorContext {
   }
   static setDefaultLocale(locale: string): any {
     this.context.defaultLocale = locale;
+  }
+
+  static setMissingTranslationMsg(msg: string): any {
+    this.context.missingTranslationMsg = msg;
   }
   static setLocale(locale: string): any {
     this.context.previousLocale = this.context.locale;
