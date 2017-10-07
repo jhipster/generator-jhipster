@@ -1,2 +1,3 @@
 generators/**/templates
 travis
+docs

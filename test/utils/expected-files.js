@@ -253,6 +253,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/components/util/truncate-characters.filter.js`,
         `${CLIENT_MAIN_SRC_DIR}app/components/util/truncate-words.filter.js`,
         `${CLIENT_MAIN_SRC_DIR}app/components/util/date-util.service.js`,
+        `${CLIENT_MAIN_SRC_DIR}app/components/util/error.constants.js`,
         `${CLIENT_MAIN_SRC_DIR}app/components/util/sort.directive.js`,
         `${CLIENT_MAIN_SRC_DIR}app/components/util/sort-by.directive.js`,
         `${CLIENT_MAIN_SRC_DIR}app/components/util/capitalize.filter.js`,
@@ -387,6 +388,13 @@ const expectedFiles = {
     jwtClient: [
         `${CLIENT_MAIN_SRC_DIR}app/blocks/interceptor/auth.interceptor.js`,
         `${CLIENT_MAIN_SRC_DIR}app/services/auth/auth.jwt.service.js`
+    ],
+
+    oauth2: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/SecurityConfiguration.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/User.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/AccountResource.java`,
+        `${DOCKER_DIR}keycloak.yml`
     ],
 
     messageBroker: [

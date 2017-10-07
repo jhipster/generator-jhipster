@@ -34,7 +34,7 @@
         "index": "index.html",
         "main": "app/app.main.ts",
         "polyfills": "app/polyfills.ts",
-        "test": "<= CLIENT_TEST_SRC_DIR %>spec/entry.ts",
+        "test": "<%= TEST_SRC_DIR %>spec/entry.ts",
         "tsconfig": "../../../tsconfig.json",
         "prefix": "<%= jhiPrefix %>",
         "mobile": false,

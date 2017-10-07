@@ -16,15 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.repository;
+package <%=packageName%>.web.rest.errors;
 
-import <%=packageName%>.domain.OAuth2AuthenticationRefreshToken;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.zalando.problem.AbstractThrowableProblem;
+import org.zalando.problem.Status;
 
-/**
- * Spring Data MongoDB repository for the OAuth2AuthenticationRefreshToken entity.
- */
-public interface OAuth2RefreshTokenRepository extends MongoRepository<OAuth2AuthenticationRefreshToken, String> {
-
-    OAuth2AuthenticationRefreshToken findByTokenId(String tokenId);
+public class InvalidPasswordException extends AbstractThrowableProblem {
+    public InvalidPasswordException() {
+        super(ErrorConstants.INVALID_PASSWORD_TYPE, "Incorrect password", Status.BAD_REQUEST);
+    }
 }

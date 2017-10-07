@@ -201,14 +201,12 @@ module.exports = class extends PrivateBase {
                     file: entityMenuPath,
                     needle: 'jhipster-needle-add-entity-to-menu',
                     splicable: [
-                        this.stripMargin(
-                            `|<li>
+                        this.stripMargin(`|<li>
                              |                        <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                              |                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                              |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${_.camelCase(routerName)}"` : ''}>${_.startCase(routerName)}</span>
                              |                        </a>
-                             |                    </li>`
-                        )
+                             |                    </li>`)
                     ]
                 }, this);
             }
@@ -221,7 +219,11 @@ module.exports = class extends PrivateBase {
     /**
      * Add a new entity in the TS modules file.
      *
-     * @param {string} routerName - The name of the AngularJS router (which by default is the name of the entity).
+     * @param {string} entityInstance - Entity Instance
+     * @param {string} entityClass - Entity Class
+     * @param {string} entityAngularName - Entity Angular Name
+     * @param {string} entityFolderName - Entity Folder Name
+     * @param {string} entityFileName - Entity File Name
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
      */
@@ -251,9 +253,7 @@ module.exports = class extends PrivateBase {
                 file: entityModulePath,
                 needle: 'jhipster-needle-add-entity-module',
                 splicable: [
-                    this.stripMargin(
-                        `|${appName}${entityAngularName}Module,`
-                    )
+                    this.stripMargin(`|${appName}${entityAngularName}Module,`)
                 ]
             }, this);
         } catch (e) {
@@ -297,9 +297,7 @@ module.exports = class extends PrivateBase {
                 file: adminModulePath,
                 needle: 'jhipster-needle-add-admin-module',
                 splicable: [
-                    this.stripMargin(
-                        `|${appName}${adminAngularName}Module,`
-                    )
+                    this.stripMargin(`|${appName}${adminAngularName}Module,`)
                 ]
             }, this);
         } catch (e) {
@@ -309,7 +307,7 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * A a new element in the "global.json" translations.
+     * Add a new element in the "global.json" translations.
      *
      * @param {string} key - Key for the menu entry
      * @param {string} value - Default translated value
@@ -332,7 +330,7 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * A a new element in the admin section of "global.json" translations.
+     * Add a new element in the admin section of "global.json" translations.
      *
      * @param {string} key - Key for the menu entry
      * @param {string} value - Default translated value
@@ -355,7 +353,7 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * A a new entity in the "global.json" translations.
+     * Add a new entity in the "global.json" translations.
      *
      * @param {string} key - Key for the entity name
      * @param {string} value - Default translated value
@@ -378,7 +376,7 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * A a new entry as a root param in "global.json" translations.
+     * Add a new entry as a root param in "global.json" translations.
      *
      * @param {string} key - Key for the entry
      * @param {string} value - Default translated value or object with multiple key and translated value
@@ -557,7 +555,7 @@ module.exports = class extends PrivateBase {
      * Add a new parameter in the ".bowerrc".
      *
      * @param {string} key - name of the parameter
-     * @param {string, obj, bool, etc.} value - value of the parameter
+     * @param {string | boolean | any} value - value of the parameter
      */
     addBowerrcParameter(key, value) {
         const fullPath = '.bowerrc';
@@ -661,9 +659,9 @@ module.exports = class extends PrivateBase {
      * Add a new module in the TS modules file.
      *
      * @param {string} appName - Angular2 application name.
-     * @param {string} adminAngularName - The name of the new admin item.
-     * @param {string} adminFolderName - The name of the folder.
-     * @param {string} adminFileName - The name of the file.
+     * @param {string} angularName - The name of the new admin item.
+     * @param {string} folderName - The name of the folder.
+     * @param {string} fileName - The name of the file.
      * @param {boolean} enableTranslation - If translations are enabled or not.
      * @param {string} clientFramework - The name of the client framework.
      */
@@ -692,9 +690,7 @@ module.exports = class extends PrivateBase {
                 file: modulePath,
                 needle: 'jhipster-needle-angular-add-module',
                 splicable: [
-                    this.stripMargin(
-                        `|${appName}${angularName}Module,`
-                    )
+                    this.stripMargin(`|${appName}${angularName}Module,`)
                 ]
             }, this);
         } catch (e) {
@@ -842,7 +838,7 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * A a new column to a Liquibase changelog file for entity.
+     * Add a new column to a Liquibase changelog file for entity.
      *
      * @param {string} filePath - The full path of the changelog file.
      * @param {string} content - The content to be added as column, can have multiple columns as well
@@ -863,7 +859,7 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * A a new changeset to a Liquibase changelog file for entity.
+     * Add a new changeset to a Liquibase changelog file for entity.
      *
      * @param {string} filePath - The full path of the changelog file.
      * @param {string} content - The content to be added as changeset
@@ -886,6 +882,7 @@ module.exports = class extends PrivateBase {
     /**
      * Add a new social button in the login and register modules
      *
+     * @param {boolean} isUseSass - flag indicating if sass should be used
      * @param {string} socialName - name of the social module. ex: 'facebook'
      * @param {string} socialParameter - parameter to send to social connection ex: 'public_profile,email'
      * @param {string} buttonColor - color of the social button. ex: '#3b5998'
@@ -1004,6 +1001,7 @@ module.exports = class extends PrivateBase {
     /**
      * Add new css style to the angular application in "main.css".
      *
+     * @param {boolean} isUseSass - flag indicating if sass should be used
      * @param {string} style - css to add in the file
      * @param {string} comment - comment to add before css code
      *
@@ -1270,7 +1268,7 @@ module.exports = class extends PrivateBase {
         const _this = generator || this;
         let regex;
         switch (action) {
-        case 'stripHtml' :
+        case 'stripHtml':
             regex = new RegExp([
                 /( (data-t|jhiT)ranslate="([a-zA-Z0-9 +{}'_](\.)?)+")/, // data-translate or jhiTranslate
                 /( translate(-v|V)alues="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|-|'|\s|\.|_)*?\}")/, // translate-values or translateValues
@@ -1280,7 +1278,7 @@ module.exports = class extends PrivateBase {
 
             jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, opt, template);
             break;
-        case 'stripJs' :
+        case 'stripJs':
             regex = new RegExp([
                 /(,[\s]*(resolve):[\s]*[{][\s]*(translatePartialLoader)['a-zA-Z0-9$,(){.<%=\->;\s:[\]]*(;[\s]*\}\][\s]*\}))/, // ng1 resolve block
                 /([\s]import\s\{\s?JhiLanguageService\s?\}\sfrom\s["|']ng-jhipster["|'];)/, // ng2 import jhiLanguageService
@@ -1291,7 +1289,7 @@ module.exports = class extends PrivateBase {
 
             jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, opt, template);
             break;
-        case 'copy' :
+        case 'copy':
             _this.copy(source, dest);
             break;
         default:
@@ -1341,7 +1339,7 @@ module.exports = class extends PrivateBase {
     /**
      * Rewrite the specified file with provided content at the needle location
      *
-     * @param {string} fullPath - path of the source file to rewrite
+     * @param {string} filePath - path of the source file to rewrite
      * @param {string} needle - needle to look for where content will be inserted
      * @param {string} content - content to be written
      */
@@ -1363,7 +1361,7 @@ module.exports = class extends PrivateBase {
     /**
      * Replace the pattern/regex with provided content
      *
-     * @param {string} fullPath - path of the source file to rewrite
+     * @param {string} filePath - path of the source file to rewrite
      * @param {string} pattern - pattern to look for where content will be replaced
      * @param {string} content - content to be written
      * @param {string} regex - true if pattern is regex
@@ -1462,10 +1460,10 @@ module.exports = class extends PrivateBase {
 
     /**
      * Call all the module hooks with the given options.
-     * @param {string} hookFor : "app" or "entity"
-     * @param {string} hookType : "pre" or "post"
-     * @param options : the options to pass to the hooks
-     * @param cb : callback to trigger at the end
+     * @param {string} hookFor - "app" or "entity"
+     * @param {string} hookType - "pre" or "post"
+     * @param {any} options - the options to pass to the hooks
+     * @param {function} cb - callback to trigger at the end
      */
     callHooks(hookFor, hookType, options, cb) {
         const modules = this.getModuleHooks();
@@ -1532,9 +1530,7 @@ module.exports = class extends PrivateBase {
             return entities;
         }
 
-        return shelljs.ls(
-            path.join(JHIPSTER_CONFIG_DIR, '*.json')
-        ).reduce((acc, file) => {
+        return shelljs.ls(path.join(JHIPSTER_CONFIG_DIR, '*.json')).reduce((acc, file) => {
             try {
                 const definition = jhiCore.readEntityJSON(file);
                 acc.push({ name: path.basename(file, '.json'), definition });
@@ -1702,7 +1698,7 @@ module.exports = class extends PrivateBase {
     /**
      * Print a warning message.
      *
-     * @param {string} value - message to print
+     * @param {string} msg - message to print
      */
     warning(msg) {
         this.log(`${chalk.yellow.bold('WARNING!')} ${msg}`);
@@ -1711,7 +1707,7 @@ module.exports = class extends PrivateBase {
     /**
      * Print an info message.
      *
-     * @param {string} value - message to print
+     * @param {string} msg - message to print
      */
     info(msg) {
         this.log.info(msg);
@@ -1720,7 +1716,7 @@ module.exports = class extends PrivateBase {
     /**
      * Print a success message.
      *
-     * @param {string} value - message to print
+     * @param {string} msg - message to print
      */
     success(msg) {
         this.log.ok(msg);
@@ -1740,7 +1736,8 @@ module.exports = class extends PrivateBase {
             if (javaHome) {
                 keytoolPath = `${javaHome}/bin/`;
             }
-            shelljs.exec(`"${keytoolPath}keytool" -genkey -noprompt ` +
+            shelljs.exec(
+                `"${keytoolPath}keytool" -genkey -noprompt ` +
                 '-keyalg RSA ' +
                 '-alias selfsigned ' +
                 `-keystore ${keyStoreFile} ` +
@@ -1749,12 +1746,13 @@ module.exports = class extends PrivateBase {
                 '-keysize 2048 ' +
                 `-dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`
                 , (code) => {
-                if (code !== 0) {
-                    this.error('\nFailed to create a KeyStore with \'keytool\'', code);
-                } else {
-                    this.log(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
+                    if (code !== 0) {
+                        this.error('\nFailed to create a KeyStore with \'keytool\'', code);
+                    } else {
+                        this.log(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
+                    }
                 }
-            });
+            );
         }
     }
 
@@ -1783,10 +1781,8 @@ module.exports = class extends PrivateBase {
             const done = this.async();
             shelljs.exec(`npm show ${GENERATOR_JHIPSTER} version`, { silent: true }, (code, stdout, stderr) => {
                 if (!stderr && semver.lt(packagejs.version, stdout)) {
-                    this.log(
-                        `${chalk.yellow(' ______________________________________________________________________________\n\n') +
-                        chalk.yellow('  JHipster update available: ') + chalk.green.bold(stdout.replace('\n', '')) + chalk.gray(` (current: ${packagejs.version})`)}\n`
-                    );
+                    this.log(`${chalk.yellow(' ______________________________________________________________________________\n\n') +
+                        chalk.yellow('  JHipster update available: ') + chalk.green.bold(stdout.replace('\n', '')) + chalk.gray(` (current: ${packagejs.version})`)}\n`);
                     if (this.useYarn) {
                         this.log(chalk.yellow(`  Run ${chalk.magenta(`yarn global upgrade ${GENERATOR_JHIPSTER}`)} to update.\n`));
                     } else {
@@ -1816,6 +1812,9 @@ module.exports = class extends PrivateBase {
         return this.getAngularXAppName();
     }
 
+    /**
+     * get the Angular 2+ application name.
+     */
     getAngularXAppName() {
         return _.upperFirst(_.camelCase(this.baseName, true));
     }

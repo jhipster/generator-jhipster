@@ -47,7 +47,7 @@ parameters:
     displayName: Application Name
   -
     name: SECRET_REF
-    value: ds-secret-ref
+    value: <%= app.baseName.toLowerCase() %>-ds-secret-ref
     description: Name of the DataSource Secret Reference
     required: true
     displayName: "*** PLEASE DO NOT CHANGE THIS ***"
@@ -140,7 +140,9 @@ objects:
               value: prod,swagger
             <%_ if (app.serviceDiscoveryType === 'eureka') { _%>
             - name: SPRING_CLOUD_CONFIG_URI
-              value: http://admin:${jhipster.registry.password}@jhipster-registry/config
+              value: http://admin:${jhipster.registry.password}@jhipster-registry:8761/config
+            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+              value: http://admin:${jhipster.registry.password}@jhipster-registry:8761/eureka/
             - name: JHIPSTER_REGISTRY_PASSWORD
               valueFrom:
                 secretKeyRef:

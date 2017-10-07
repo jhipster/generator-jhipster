@@ -18,7 +18,8 @@
 -%>
 package <%=packageName%>.web.rest.errors;
 
-import org.springframework.core.annotation.AnnotationUtils;
+import <%=packageName%>.web.rest.util.HeaderUtil;
+
 <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
 import org.springframework.dao.ConcurrencyFailureException;
 <%_ } _%>
@@ -27,20 +28,18 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.DefaultProblem;
 import org.zalando.problem.Problem;
 import org.zalando.problem.ProblemBuilder;
 import org.zalando.problem.Status;
-import org.zalando.problem.spring.web.advice.HttpStatusAdapter;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
 import org.zalando.problem.spring.web.advice.validation.ConstraintViolationProblem;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -54,7 +53,7 @@ public class ExceptionTranslator implements ProblemHandling {
      * Post-process Problem payload to add the message key for front-end if needed
      */
     @Override
-    public ResponseEntity<Problem> process(@Nullable ResponseEntity<Problem> entity) {
+    public ResponseEntity<Problem> process(@Nullable ResponseEntity<Problem> entity, NativeWebRequest request) {
         if (entity == null || entity.getBody() == null) {
             return entity;
         }
@@ -65,7 +64,8 @@ public class ExceptionTranslator implements ProblemHandling {
         ProblemBuilder builder = Problem.builder()
             .withType(Problem.DEFAULT_TYPE.equals(problem.getType()) ? ErrorConstants.DEFAULT_TYPE : problem.getType())
             .withStatus(problem.getStatus())
-            .withTitle(problem.getTitle());
+            .withTitle(problem.getTitle())
+            .with("path", request.getNativeRequest(HttpServletRequest.class).getRequestURI());
 
         if (problem instanceof ConstraintViolationProblem) {
             builder
@@ -102,27 +102,12 @@ public class ExceptionTranslator implements ProblemHandling {
         return create(ex, problem, request);
     }
 
-    /**
-     * Override default handler to take ResponseStatus annotation into account
-     */
-    @Override
-    public ResponseEntity<Problem> handleThrowable(
-        @Nonnull final Throwable throwable,
-        @Nonnull final NativeWebRequest request) {
-        ResponseStatus responseStatus = AnnotationUtils.findAnnotation(throwable.getClass(), ResponseStatus.class);
-        if (responseStatus != null) {
-            Problem problem = Problem.builder()
-                .withStatus(new HttpStatusAdapter(responseStatus.value()))
-                .withTitle(responseStatus.reason().isEmpty() ? responseStatus.value().getReasonPhrase() : responseStatus.reason() )
-                .withDetail(throwable.getMessage())
-                .build();
-            return create(throwable, problem, request);
-        } else {
-            return create(Status.INTERNAL_SERVER_ERROR, throwable, request);
-        }
+    @ExceptionHandler(BadRequestAlertException.class)
+    public ResponseEntity<Problem> handleBadRequestAlertException(BadRequestAlertException ex, NativeWebRequest request) {
+        return create(ex, request, HeaderUtil.createFailureAlert(ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));
     }
-
     <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+
     @ExceptionHandler(ConcurrencyFailureException.class)
     public ResponseEntity<Problem> handleConcurrencyFailure(ConcurrencyFailureException ex, NativeWebRequest request) {
         Problem problem = Problem.builder()
