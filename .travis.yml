@@ -25,9 +25,8 @@ install:
 before_script:
   - npm prune
 script:
-  - yarn run lint
   - yarn test
   - yarn build
 
 notifications:
-  email: false
+  email: true
