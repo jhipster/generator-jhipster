@@ -36,6 +36,9 @@ module.exports = {
     setAppsFolderPaths,
 };
 
+/**
+ * Check Docker
+ */
 function checkDocker() {
     const done = this.async();
 
@@ -57,6 +60,9 @@ function checkDocker() {
     });
 }
 
+/**
+ * Check Images
+ */
 function checkImages() {
     this.log('\nChecking Docker images in applications\' directories...');
 
@@ -80,12 +86,18 @@ function checkImages() {
     });
 }
 
+/**
+ * Generate Jwt Secret
+ */
 function generateJwtSecret() {
     if (this.jwtSecretKey === undefined) {
         this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
     }
 }
 
+/**
+ * Configure Image Names
+ */
 function configureImageNames() {
     for (let i = 0; i < this.appsFolders.length; i++) {
         const originalImageName = this.appConfigs[i].baseName.toLowerCase();
@@ -94,6 +106,9 @@ function configureImageNames() {
     }
 }
 
+/**
+ * Set Apps Folder Paths
+ */
 function setAppsFolderPaths() {
     if (this.applicationType) return;
     this.appsFolderPaths = [];
