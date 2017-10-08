@@ -1099,7 +1099,7 @@ module.exports = class extends PrivateBase {
         const to = `content/${targetFolder}/`;
         const webpackDevPath = `${CLIENT_WEBPACK_DIR}/webpack.common.js`;
         let assetBlock = '';
-        if(from || to) {
+        if (sourceFolder && targetFolder) {
             assetBlock = `{ from: './${from}', to: '${to}' },`;
         }
 
