@@ -1089,6 +1089,35 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Copy third-party library resources path.
+     *
+     * @param {string} from - third-party library resources source path
+     * @param {string} to - third-party library resources destination path
+     */
+    copyExternalAssetsInWebpack(sourceFolder, targetFolder) {
+        const from = `${CLIENT_MAIN_SRC_DIR}content/${sourceFolder}/`;
+        const to = `content/${targetFolder}/`;
+        const webpackDevPath = `${CLIENT_WEBPACK_DIR}/webpack.common.js`;
+        let assetBlock = '';
+        if(from || to) {
+            assetBlock = `{ from: './${from}', to: '${to}' }`;
+        }
+
+        try {
+            jhipsterUtils.rewriteFile({
+                file: webpackDevPath,
+                needle: 'jhipster-needle-add-assets-to-webpack',
+                splicable: [
+                    assetBlock
+                ]
+            }, this);
+        } catch (e) {
+            this.log(chalk.yellow('\nUnable to find ') + webpackDevPath + chalk.yellow(' or missing required jhipster-needle. Resource path not added to JHipster app.\n'));
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
      * Add a new Maven dependency.
      *
      * @param {string} groupId - dependency groupId

@@ -32,7 +32,7 @@ module.exports = (options) => {
         DEBUG_INFO_ENABLED: options.env === 'development'<% if (authenticationType !== 'uaa') { %>,
         // The root URL for API calls, ending with a '/' - for example: `"http://www.jhipster.tech:8081/myservice/"`.
         // If this URL is left empty (""), then it will be relative to the current context.
-        // If you use an API server, in `prod` mode, you will need to enable CORS  
+        // If you use an API server, in `prod` mode, you will need to enable CORS
         // (see the `jhipster.cors` common JHipster property in the `application-*.yml` configurations)
         SERVER_API_URL: `""`<% } %>
     };
@@ -115,7 +115,8 @@ module.exports = (options) => {
                 { from: './<%= MAIN_SRC_DIR %>favicon.ico', to: 'favicon.ico' },
                 { from: './<%= MAIN_SRC_DIR %>manifest.webapp', to: 'manifest.webapp' },
                 // { from: './<%= MAIN_SRC_DIR %>sw.js', to: 'sw.js' },
-                { from: './<%= MAIN_SRC_DIR %>robots.txt', to: 'robots.txt' }
+                { from: './<%= MAIN_SRC_DIR %>robots.txt', to: 'robots.txt' },
+                // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
             ]),
             new webpack.ProvidePlugin({
                 $: "jquery",
