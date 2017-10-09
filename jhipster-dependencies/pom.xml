@@ -28,11 +28,13 @@
         <cucumber.version>1.2.4</cucumber.version>
         <dropwizard-metrics.version>3.2.2</dropwizard-metrics.version>
         <gatling.version>2.2.5</gatling.version>
+        <guava.version>23.0</guava.version>
         <hazelcast-hibernate52.version>1.2</hazelcast-hibernate52.version>
         <hazelcast-wm.version>3.7</hazelcast-wm.version>
         <hibernate.version>5.2.10.Final</hibernate.version>
         <infinispan-cloud.version>9.0.0.Final</infinispan-cloud.version>
         <infinispan-spring-boot-starter.version>1.0.0.Final</infinispan-spring-boot-starter.version>
+        <jhipster-server.version>1.1.11</jhipster-server.version>
         <jjwt.version>0.7.0</jjwt.version>
         <jzlib.version>1.1.3</jzlib.version>
         <liquibase-mssql.version>1.5</liquibase-mssql.version>
@@ -44,10 +46,15 @@
         <mongobee.version>0.12</mongobee.version>
         <mssql-jdbc.version>6.1.0.jre8</mssql-jdbc.version>
         <oracle-jdbc.version>12.1.0.2</oracle-jdbc.version>
+        <problem-spring-web.version>0.20.1</problem-spring-web.version>
         <prometheus-simpleclient.version>0.0.20</prometheus-simpleclient.version>
         <springfox.version>2.7.0</springfox.version>
         <validation-api.version>1.1.0.Final</validation-api.version>
         <spring-cloud.version>Dalston.SR2</spring-cloud.version>
+        <!-- The netflix version should match the one in
+        https://github.com/spring-cloud/spring-cloud-release/blob/v${spring-cloud.version}/spring-cloud-dependencies/pom.xml -->
+        <spring-cloud-netflix.version>1.3.2.RELEASE</spring-cloud-netflix.version>
+        <spring-cloud-stream.version>Chelsea.SR2</spring-cloud-stream.version>
         <spring-social-google.version>1.0.0.RELEASE</spring-social-google.version>
     </properties>
 
@@ -77,6 +84,16 @@
                 <groupId>org.cassandraunit</groupId>
                 <artifactId>cassandra-unit-spring</artifactId>
                 <version>${cassandra-unit-spring.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>jcl-over-slf4j</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>commons-io</groupId>
@@ -101,7 +118,12 @@
             <dependency>
                 <groupId>io.gatling.highcharts</groupId>
                 <artifactId>gatling-charts-highcharts</artifactId>
-                <version>${gatling-charts-highcharts.version}</version>
+                <version>${gatling.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.hazelcast</groupId>
@@ -134,11 +156,22 @@
                 <groupId>org.infinispan</groupId>
                 <artifactId>infinispan-cloud</artifactId>
                 <version>${infinispan-cloud.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>io.undertow</groupId>
+                        <artifactId>undertow-core</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.infinispan</groupId>
                 <artifactId>infinispan-spring-boot-starter</artifactId>
                 <version>${infinispan-spring-boot-starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.jhipster</groupId>
+                <artifactId>jhipster</artifactId>
+                <version>${jhipster-server.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
@@ -176,6 +209,11 @@
                 <version>${mapstruct.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-processor</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>io.dropwizard.metrics</groupId>
                 <artifactId>metrics-annotation</artifactId>
                 <version>${dropwizard-metrics.version}</version>
@@ -193,6 +231,11 @@
             <dependency>
                 <groupId>io.dropwizard.metrics</groupId>
                 <artifactId>metrics-jvm</artifactId>
+                <version>${dropwizard-metrics.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.dropwizard.metrics</groupId>
+                <artifactId>metrics-servlet</artifactId>
                 <version>${dropwizard-metrics.version}</version>
             </dependency>
             <dependency>
@@ -217,6 +260,11 @@
                 <!-- More information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc -->
             </dependency>
             <dependency>
+                <groupId>org.zalando</groupId>
+                <artifactId>problem-spring-web</artifactId>
+                <version>${problem-spring-web.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>io.prometheus</groupId>
                 <artifactId>simpleclient</artifactId>
                 <version>${prometheus-simpleclient.version}</version>
@@ -232,6 +280,75 @@
                 <version>${prometheus-simpleclient.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-configuration-processor</artifactId>
+                <version>${project.parent.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.vaadin.external.google</groupId>
+                        <artifactId>android-json</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${project.parent.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.vaadin.external.google</groupId>
+                        <artifactId>android-json</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${project.parent.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-tomcat</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-ribbon</artifactId>
+                <version>${spring-cloud-netflix.version}</version>
+                <!-- netty's native is pulled, but is useless unless you explicitly add the native binary dependency.
+                     Having it in the classpath without the binary can cause warnings -->
+                <exclusions>
+                    <exclusion>
+                        <groupId>io.netty</groupId>
+                        <artifactId>netty-transport-native-epoll</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-stream-dependencies</artifactId>
+                <version>${spring-cloud-stream.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.social</groupId>
+                <artifactId>spring-social-google</artifactId>
+                <version>${spring-social-google.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-bean-validators</artifactId>
                 <version>${springfox.version}</version>
@@ -240,6 +357,12 @@
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger2</artifactId>
                 <version>${springfox.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.mapstruct</groupId>
+                        <artifactId>mapstruct</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
         </dependencies>
     </dependencyManagement>
