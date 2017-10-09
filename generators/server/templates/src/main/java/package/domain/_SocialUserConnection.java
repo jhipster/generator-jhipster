@@ -44,11 +44,11 @@ import java.util.Objects;
  * A Social user.
  */<% if (databaseType === 'sql') { %>
 @Entity
-@Table(name = "jhi_social_user_connection")
+@Table(name = "<%= jhiTablePrefix %>_social_user_connection")
 <%_ if (hibernateCache !== 'no') { if (hibernateCache === 'infinispan') { _%>
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <%_ } else { _%>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<%_ } } _%><% } %><% if (databaseType === 'mongodb') { %>
-@Document(collection = "jhi_social_user_connection")
+@Document(collection = "<%= jhiTablePrefix %>_social_user_connection")
 @CompoundIndexes(
     @CompoundIndex(name = "user2-prov-provusr-idx", unique = true, def = "{'user_id': 1, 'provider_id': 1, 'provider_user_id': 1}")
 )<% } %>
