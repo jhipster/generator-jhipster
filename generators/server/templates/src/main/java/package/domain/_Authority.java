@@ -34,11 +34,11 @@ import java.io.Serializable;
  * An authority (a security role) used by Spring Security.
  */<% if (databaseType === 'sql') { %>
 @Entity
-@Table(name = "<%= jhiPrefix %>_authority")
+@Table(name = "<%= jhiTablePrefix %>_authority")
 <%_ if (hibernateCache !== 'no') { if (hibernateCache === 'infinispan') { _%>
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <%_ } else { _%>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<%_ } } _%><% } %><% if (databaseType === 'mongodb') { %>
-@Document(collection = "jhi_authority")<% } %>
+@Document(collection = "<%= jhiTablePrefix %>_authority")<% } %>
 public class Authority implements Serializable {
 
     private static final long serialVersionUID = 1L;
