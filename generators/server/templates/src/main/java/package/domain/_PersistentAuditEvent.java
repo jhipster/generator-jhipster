@@ -37,7 +37,7 @@ import java.util.Map;
  * @see org.springframework.boot.actuate.audit.AuditEvent
  */<% if (databaseType === 'sql') { %>
 @Entity
-@Table(name = "jhi_persistent_audit_event")<% } %><% if (databaseType === 'mongodb') { %>
+@Table(name = "<%= jhiPrefix %>_persistent_audit_event")<% } %><% if (databaseType === 'mongodb') { %>
 @Document(collection = "jhi_persistent_audit_event")<% } %>
 public class PersistentAuditEvent implements Serializable {
 
@@ -66,7 +66,7 @@ public class PersistentAuditEvent implements Serializable {
     @ElementCollection
     @MapKeyColumn(name = "name")
     @Column(name = "value")
-    @CollectionTable(name = "jhi_persistent_audit_evt_data", joinColumns=@JoinColumn(name="event_id"))<% } %>
+    @CollectionTable(name = "<%= jhiPrefix %>_persistent_audit_evt_data", joinColumns=@JoinColumn(name="event_id"))<% } %>
     private Map<String, String> data = new HashMap<>();
 <% if (databaseType === 'sql') { %>
     public Long getId() {

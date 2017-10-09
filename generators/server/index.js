@@ -148,6 +148,7 @@ module.exports = class extends BaseGenerator {
                 if (this.searchEngine === undefined) {
                     this.searchEngine = false;
                 }
+                this.jhiPrefix = this.configOptions.jhiPrefix || this.config.get('jhiPrefix');
                 this.messageBroker = this.config.get('messageBroker') === 'no' ? false : this.config.get('messageBroker');
                 if (this.messageBroker === undefined) {
                     this.messageBroker = false;

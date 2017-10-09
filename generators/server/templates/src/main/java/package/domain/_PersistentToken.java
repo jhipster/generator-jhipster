@@ -39,7 +39,7 @@ import java.util.Date;<% } %>
  * @see <%=packageName%>.security.PersistentTokenRememberMeServices
  */<% if (databaseType === 'sql') { %>
 @Entity
-@Table(name = "jhi_persistent_token")<% } %>
+@Table(name = "<%= jhiPrefix %>_persistent_token")<% } %>
 <%_ if (hibernateCache !== 'no' && databaseType === 'sql') { if (hibernateCache === 'infinispan') { _%>
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <%_ } else { _%>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<%_ } } _%><% if (databaseType === 'mongodb') { %>
