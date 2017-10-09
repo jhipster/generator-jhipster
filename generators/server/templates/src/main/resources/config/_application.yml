@@ -193,7 +193,6 @@ security:
             userAuthorizationUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/auth
             clientId: web_app
             clientSecret: web_app
-            tokenName: access_token
             clientAuthenticationScheme: form
             scope: openid profile email
             <%_ } _%>
@@ -207,8 +206,10 @@ security:
             userInfoUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
             tokenInfoUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token/introspect
             preferTokenInfo: false
+            <%_ if (applicationType === 'gateway' || applicationType === 'microservice') {  _%>
             jwt:
                 keyUri: ${oauth2.issuer}
+            <%_ } _%>
     <%_ } _%>
 
 server:
