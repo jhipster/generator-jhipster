@@ -1,1 +1,1 @@
-This pom contains maven dependency management for all jhipster generated projects
+This pom contains Maven dependency management for all JHipster generated projects
