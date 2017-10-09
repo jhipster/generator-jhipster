@@ -147,13 +147,6 @@
             </dependency>
             <dependency>
                 <groupId>org.infinispan</groupId>
-                <artifactId>infinispan-bom</artifactId>
-                <version>${infinispan.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.infinispan</groupId>
                 <artifactId>infinispan-cloud</artifactId>
                 <version>${infinispan-cloud.version}</version>
                 <exclusions>
@@ -330,20 +323,6 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-stream-dependencies</artifactId>
-                <version>${spring-cloud-stream.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
                 <groupId>org.springframework.social</groupId>
                 <artifactId>spring-social-google</artifactId>
                 <version>${spring-social-google.version}</version>
@@ -364,6 +343,30 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+
+            <!-- BOM imports last so we (could) selectively override deps above -->
+            <dependency>
+                <groupId>org.infinispan</groupId>
+                <artifactId>infinispan-bom</artifactId>
+                <version>${infinispan.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-stream-dependencies</artifactId>
+                <version>${spring-cloud-stream.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
