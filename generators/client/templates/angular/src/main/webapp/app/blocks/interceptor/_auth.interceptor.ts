@@ -31,16 +31,14 @@ export class AuthInterceptor extends JhiHttpInterceptor {
     }
 
     requestIntercept(options?: RequestOptionsArgs): RequestOptionsArgs {
-        const token = this.localStorage.retrieve('authenticationToken') || this.sessionStorage.retrieve('authenticationToken');
-        <%_ if (authenticationType === 'oauth2') { _%>
-        if (token && token.expires_at && token.expires_at > new Date().getTime()) {
-            options.headers.append('Authorization', 'Bearer ' + token.access_token);
+        if (!options || !options.url || /^http/.test(options.url)) {
+            return options;
         }
-        <%_ } else if (authenticationType === 'jwt') { _%>
+
+        const token = this.localStorage.retrieve('authenticationToken') || this.sessionStorage.retrieve('authenticationToken');
         if (!!token) {
             options.headers.append('Authorization', 'Bearer ' + token);
         }
-        <%_ } _%>
         return options;
     }
 

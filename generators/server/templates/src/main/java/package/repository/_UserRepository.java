@@ -80,12 +80,16 @@ import static <%=packageName%>.config.Constants.ID_DELIMITER;
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 @Repository
 public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRepository<User, Long><% } %><% if (databaseType === 'mongodb') { %>MongoRepository<User, String><% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<User, String><% } %> {
+<%_ if (authenticationType !== 'oauth2') { _%>
 
     Optional<User> findOneByActivationKey(String activationKey);
+<%_ } _%>
 
     List<User> findAllByActivatedIsFalseAndCreatedDateBefore(Instant dateTime);
+<%_ if (authenticationType !== 'oauth2') { _%>
 
     Optional<User> findOneByResetKey(String resetKey);
+<%_ } _%>
 
     Optional<User> findOneByEmailIgnoreCase(String email);
 
@@ -95,7 +99,7 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     }
     <%_ } else { _%>
     Optional<User> findOneByLogin(String login);
-    <%_ } _%><%_ if (databaseType === 'sql') { _%>
+<%_ } _%><%_ if (databaseType === 'sql') { _%>
 
     @EntityGraph(attributePaths = "authorities")
     User findOneWithAuthoritiesById(<%= pkType %> id);
@@ -105,7 +109,7 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     @Cacheable(cacheNames="users")
     <%_ } _%>
     Optional<User> findOneWithAuthoritiesByLogin(String login);
-    <%_ } _%>
+<%_ } _%>
 
     Page<User> findAllByLoginNot(Pageable pageable, String login);
 }

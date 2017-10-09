@@ -86,7 +86,12 @@ module.exports = class extends BaseGenerator {
             parseJDL() {
                 this.log('The jdl is being parsed.');
                 try {
-                    const jdlObject = jhiCore.convertToJDL(jhiCore.parseFromFiles(this.jdlFiles), this.prodDatabaseType, this.applicationType);
+                    const jdlObject = jhiCore.convertToJDL(
+                        jhiCore.parseFromFiles(this.jdlFiles),
+                        this.prodDatabaseType,
+                        this.applicationType,
+                        this.baseName
+                    );
                     const entities = jhiCore.convertToJHipsterJSON({
                         jdlObject,
                         databaseType: this.prodDatabaseType,
@@ -102,6 +107,9 @@ module.exports = class extends BaseGenerator {
                     }
                 } catch (e) {
                     this.debug('Error:', e);
+                    if (e && e.message) {
+                        this.log(chalk.red(`${e.name || ''}: ${e.message}`));
+                    }
                     this.error('\nError while parsing entities from JDL\n');
                 }
             },

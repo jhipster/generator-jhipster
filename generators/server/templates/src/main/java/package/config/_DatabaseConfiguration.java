@@ -24,10 +24,6 @@ import io.github.jhipster.config.liquibase.AsyncSpringLiquibase;
 
 import liquibase.integration.spring.SpringLiquibase;
 <%_ } _%>
-<%_ if ((databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'oauth2') { _%>
-
-import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;
-<%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 
 import com.github.mongobee.Mongobee;
@@ -173,8 +169,7 @@ public class DatabaseConfiguration {
 
     @Bean<% if (databaseType === 'couchbase') { %>(name = BeanNames.COUCHBASE_CUSTOM_CONVERSIONS)<% } %>
     public CustomConversions customConversions() {
-        List<Converter<?, ?>> converters = new ArrayList<>();<% if (authenticationType === 'oauth2') { %>
-        converters.add(new OAuth2AuthenticationReadConverter());<% } %><% if (databaseType === 'couchbase') { %>
+        List<Converter<?, ?>> converters = new ArrayList<>();<% if (databaseType === 'couchbase') { %>
         converters.add(ZonedDateTimeToLongConverter.INSTANCE);
         converters.add(NumberToLocalDateTimeConverter.INSTANCE);
         converters.add(BigIntegerToStringConverter.INSTANCE);

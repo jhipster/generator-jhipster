@@ -68,21 +68,21 @@ function askForServerSideOpts(meta) {
             type: 'list',
             name: 'serviceDiscoveryType',
             message: response => this.getNumberedQuestion(
-                'Do you want to use the JHipster Registry to configure, monitor and scale your microservices and gateways?',
+                'Which service discovery server do you want to use?',
                 applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa'
             ),
             choices: [
                 {
                     value: 'eureka',
-                    name: 'Yes'
+                    name: 'JHipster Registry (uses Eureka, provides Spring Cloud Config support and monitoring dashboards)'
                 },
                 {
                     value: 'consul',
-                    name: '[BETA] No, use Consul as an alternative solution (uses Spring Cloud Consul)'
+                    name: 'Consul'
                 },
                 {
                     value: false,
-                    name: 'No'
+                    name: 'No service discovery'
                 }
             ],
             default: 'eureka'
@@ -123,7 +123,7 @@ function askForServerSideOpts(meta) {
                 },
                 {
                     value: 'oauth2',
-                    name: 'OAuth2 Authentication (stateless, with an OAuth2 server implementation)'
+                    name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)'
                 }
             ],
             default: 0
@@ -143,7 +143,7 @@ function askForServerSideOpts(meta) {
                 },
                 {
                     value: 'uaa',
-                    name: '[BETA] Authentication with JHipster UAA server (the server must be generated separately)'
+                    name: 'Authentication with JHipster UAA server (the server must be generated separately)'
                 }
             ],
             default: 0
@@ -517,7 +517,7 @@ function askForOptionalItems(meta) {
         value: 'enableSwaggerCodegen:true'
     });
     choices.push({
-        name: '[BETA] Asynchronous messages using Apache Kafka',
+        name: 'Asynchronous messages using Apache Kafka',
         value: 'messageBroker:kafka'
     });
 

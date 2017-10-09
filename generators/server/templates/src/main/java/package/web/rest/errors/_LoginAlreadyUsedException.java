@@ -16,19 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.repository;
+package <%=packageName%>.web.rest.errors;
 
-
-import <%=packageName%>.domain.OAuth2AuthenticationApproval;
-<%_ if (databaseType === 'mongodb') { _%>
-import org.springframework.data.mongodb.repository.MongoRepository;
-<%_ } _%>
-
-import java.util.List;
-
-public interface OAuth2ApprovalRepository extends <% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } else { %>MongoRepository<% } %><OAuth2AuthenticationApproval, String> {
-
-    List<OAuth2AuthenticationApproval> findByUserIdAndClientId(String userId, String clientId);
-
-    List<OAuth2AuthenticationApproval> findByUserIdAndClientIdAndScope(String userId, String clientId, String scope);
+public class LoginAlreadyUsedException extends BadRequestAlertException {
+    public LoginAlreadyUsedException() {
+        super(ErrorConstants.LOGIN_ALREADY_USED_TYPE, "Login already in use", "userManagement", "userexists");
+    }
 }

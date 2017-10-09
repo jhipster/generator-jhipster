@@ -114,6 +114,9 @@ module.exports = class extends BaseGenerator {
         this.skipServer = this.configOptions.skipServer || this.config.get('skipServer');
         this.skipUserManagement = this.configOptions.skipUserManagement || this.options['skip-user-management'] || this.config.get('skipUserManagement');
         this.authenticationType = this.options.auth || this.configOptions.authenticationType || this.config.get('authenticationType');
+        if (this.authenticationType === 'oauth2') {
+            this.skipUserManagement = true;
+        }
         const uaaBaseName = this.options.uaaBaseName || this.configOptions.uaaBaseName || this.options['uaa-base-name'] || this.config.get('uaaBaseName');
         if (this.options.auth === 'uaa' && _.isNil(uaaBaseName)) {
             this.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');

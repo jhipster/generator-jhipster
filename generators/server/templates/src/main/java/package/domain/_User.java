@@ -109,12 +109,14 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || 
     @Indexed<% } %><% if (databaseType === 'couchbase') { %>
     @IdAttribute<% } %>
     private String login;
+<%_ if (authenticationType !== 'oauth2') { _%>
 
     @JsonIgnore
     @NotNull
     @Size(min = 60, max = 60)<% if (databaseType === 'sql') { %>
     @Column(name = "password_hash",length = 60)<% } %>
     private String password;
+<%_ } _%>
 
     @Size(max = 50)<% if (databaseType === 'sql') { %>
     @Column(name = "first_name", length = 50)<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
@@ -131,13 +133,15 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || 
     @Column(length = 100, unique = true)<% } %><% if (databaseType === 'mongodb') { %>
     @Indexed<% } %>
     private String email;
-<% if (databaseType === 'sql') { %>
+
+<%_ if (databaseType === 'sql') { _%>
     @NotNull
-    @Column(nullable = false)<% } %>
+    @Column(nullable = false)
+<%_ } _%>
     private boolean activated = false;
 
-    @Size(min = 2, max = 5)<% if (databaseType === 'sql') { %>
-    @Column(name = "lang_key", length = 5)<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
+    @Size(min = 2, max = 6)<% if (databaseType === 'sql') { %>
+    @Column(name = "lang_key", length = 6)<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
     @Field("lang_key")<% } %><% if (databaseType === 'cassandra') { %>
     @Column(name = "lang_key")<% } %>
     private String langKey;
@@ -148,6 +152,7 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || 
     @Field("image_url")<% } %>
     private String imageUrl;
     <%_ } _%>
+<%_ if (authenticationType !== 'oauth2') { _%>
 
     @Size(max = 20)<% if (databaseType === 'sql') { %>
     @Column(name = "activation_key", length = 20)<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
@@ -169,6 +174,7 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || 
     @Field("reset_date")
     <%_ } _%>
     private Instant resetDate = null;
+<%_ } _%>
 
     @JsonIgnore<% if (databaseType === 'sql') { %>
     @ManyToMany
@@ -208,6 +214,7 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || 
     public void setLogin(String login) {
         this.login = StringUtils.lowerCase(login, Locale.ENGLISH);
     }
+<%_ if (authenticationType !== 'oauth2') { _%>
 
     public String getPassword() {
         return password;
@@ -216,6 +223,7 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || 
     public void setPassword(String password) {
         this.password = password;
     }
+<%_ } _%>
 
     public String getFirstName() {
         return firstName;
@@ -258,6 +266,7 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || 
     public void setActivated(boolean activated) {
         this.activated = activated;
     }
+<%_ if (authenticationType !== 'oauth2') { _%>
 
     public String getActivationKey() {
         return activationKey;
@@ -282,6 +291,7 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || 
     public void setResetDate(Instant resetDate) {
        this.resetDate = resetDate;
     }
+<%_ } _%>
 
     public String getLangKey() {
         return langKey;
@@ -335,7 +345,9 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || 
             ", imageUrl='" + imageUrl + '\'' +<% } %>
             ", activated='" + activated + '\'' +
             ", langKey='" + langKey + '\'' +
+            <%_ if (authenticationType !== 'oauth2') { _%>
             ", activationKey='" + activationKey + '\'' +
+            <%_ } _%>
             "}";
     }
 }

@@ -500,9 +500,7 @@ describe('JHipster generator', () => {
             });
 
             it('creates expected files with authenticationType "oauth2"', () => {
-                assert.file([
-                    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/OAuth2ServerConfiguration.java`
-                ]);
+                assert.file(expectedFiles.oauth2);
             });
         });
 

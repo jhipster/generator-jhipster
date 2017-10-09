@@ -22,6 +22,7 @@ import <%=packageName%>.domain.Authority;
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.AuthorityRepository;
 import <%=packageName%>.repository.UserRepository;
+import <%=packageName%>.security.AuthoritiesConstants;
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import <%=packageName%>.repository.search.UserSearchRepository;
 <%_ } _%>
@@ -122,7 +123,7 @@ public class SocialService {
         String login = getLoginDependingOnProviderId(userProfile, providerId);
         String encryptedPassword = passwordEncoder.encode(RandomStringUtils.random(10));
         Set<<% if (databaseType === 'couchbase') { %>String<% } else { %>Authority<% } %>> authorities = new HashSet<>(1);
-        authorities.add(authorityRepository.findOne("ROLE_USER")<%if (databaseType === 'couchbase') { %>.getName()<% } %>);
+        authorities.add(authorityRepository.findOne(AuthoritiesConstants.USER)<%if (databaseType === 'couchbase') { %>.getName()<% } %>);
 
         User newUser = new User();
         newUser.setLogin(login);

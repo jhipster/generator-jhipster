@@ -1,4 +1,5 @@
-import { element, by, ElementFinder } from 'protractor';
+import { element, by, ElementFinder<% if (authenticationType === 'oauth2') { _%>, browser<%_ } %> } from 'protractor';
+
 <%_
 let elementGetter = `getText()`;
 if (enableTranslation) {
@@ -65,7 +66,7 @@ export class NavBarPage {
         this.clickOnSignIn();
         return new SignInPage();
     }
-
+    <%_ if (authenticationType !== 'oauth2') { _%>
     getPasswordPage() {
         this.clickOnAccountMenu();
         this.clickOnPasswordMenu();
@@ -77,6 +78,7 @@ export class NavBarPage {
         this.clickOnSettingsMenu();
         return new SettingsPage();
     }
+    <%_ } _%>
 
     goToEntity(entityName: string) {
         this.clickOnEntityMenu();
@@ -100,9 +102,15 @@ export class NavBarPage {
 }
 
 export class SignInPage {
+    <%_ if (authenticationType !== 'oauth2') { _%>
     username = element(by.id('username'));
     password = element(by.id('password'));
     loginButton = element(by.css('button[type=submit]'));
+    <%_ } else { _%>
+    username = element(by.name('username'));
+    password = element(by.name('password'));
+    loginButton = element(by.css('input[type=submit]'));
+    <%_ } _%>
 
     setUserName(username) {
         this.username.sendKeys(username);
@@ -127,18 +135,35 @@ export class SignInPage {
     clearPassword() {
         this.password.clear();
     }
+    <%_ if (authenticationType !== 'oauth2') { _%>
 
     autoSignInUsing(username: string, password: string) {
         this.setUserName(username);
         this.setPassword(password);
         return this.login();
     }
+    <%_ } else { _%>
+
+    loginWithOAuth(username: string, password: string) {
+
+        // Entering non angular site, tell webdriver to switch to synchronous mode.
+        browser.waitForAngularEnabled(false);
+
+        this.username.isPresent().then(() => {
+            this.username.sendKeys(username);
+            this.password.sendKeys(password);
+            this.loginButton.click();
+        }).catch(error => {
+            browser.waitForAngularEnabled(true);
+        });
+    }
+    <%_ } _%>
 
     login() {
         return this.loginButton.click();
     }
 }
-
+<%_ if (authenticationType !== 'oauth2') { _%>
 export class PasswordPage {
     password = element(by.id('password'));
     confirmPassword = element(by.id('confirmPassword'));
@@ -229,3 +254,4 @@ export class SettingsPage {
         return this.saveButton.click();
     }
 }
+<%_ } _%>

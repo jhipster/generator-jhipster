@@ -183,7 +183,9 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         user.setId(UUID.randomUUID().toString());
         <%_ } _%>
         user.setLogin(DEFAULT_LOGIN);
+        <%_ if (authenticationType !== 'oauth2') { _%>
         user.setPassword(RandomStringUtils.random(60));
+        <%_ } _%>
         user.setActivated(true);
         user.setEmail(DEFAULT_EMAIL);
         user.setFirstName(DEFAULT_FIRSTNAME);
@@ -205,6 +207,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         <%_ } _%>
         user = createEntity(<% if (databaseType === 'sql') { %>em<% } %>);
     }
+<%_ if (authenticationType !== 'oauth2') { _%>
 
     @Test
     <%_ if (databaseType === 'sql') { _%>
@@ -215,7 +218,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
 
         // Create the User
         Set<String> authorities = new HashSet<>();
-        authorities.add("ROLE_USER");
+        authorities.add(AuthoritiesConstants.USER);
         ManagedUserVM managedUserVM = new ManagedUserVM(
             null,
             DEFAULT_LOGIN,
@@ -263,7 +266,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         Set<String> authorities = new HashSet<>();
-        authorities.add("ROLE_USER");
+        authorities.add(AuthoritiesConstants.USER);
         ManagedUserVM managedUserVM = new ManagedUserVM(
             <%_ if (databaseType === 'cassandra') { _%>
             UUID.randomUUID().toString(),
@@ -314,7 +317,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         Set<String> authorities = new HashSet<>();
-        authorities.add("ROLE_USER");
+        authorities.add(AuthoritiesConstants.USER);
         ManagedUserVM managedUserVM = new ManagedUserVM(
             null,
             DEFAULT_LOGIN, // this login should already be used
@@ -359,7 +362,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         Set<String> authorities = new HashSet<>();
-        authorities.add("ROLE_USER");
+        authorities.add(AuthoritiesConstants.USER);
         ManagedUserVM managedUserVM = new ManagedUserVM(
             null,
             "anotherlogin",
@@ -390,6 +393,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         List<User> userList = userRepository.findAll();
         assertThat(userList).hasSize(databaseSizeBeforeCreate);
     }
+<%_ } _%>
 
     @Test
     <%_ if (databaseType === 'sql') { _%>
@@ -450,6 +454,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         restUserMockMvc.perform(get("/api/users/unknown"))
             .andExpect(status().isNotFound());
     }
+<%_ if (authenticationType !== 'oauth2') { _%>
 
     @Test
     <%_ if (databaseType === 'sql') { _%>
@@ -467,7 +472,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         User updatedUser = userRepository.findOne(user.getId());
 
         Set<String> authorities = new HashSet<>();
-        authorities.add("ROLE_USER");
+        authorities.add(AuthoritiesConstants.USER);
         ManagedUserVM managedUserVM = new ManagedUserVM(
             updatedUser.getId(),
             updatedUser.getLogin(),
@@ -522,7 +527,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         User updatedUser = userRepository.findOne(user.getId());
 
         Set<String> authorities = new HashSet<>();
-        authorities.add("ROLE_USER");
+        authorities.add(AuthoritiesConstants.USER);
         ManagedUserVM managedUserVM = new ManagedUserVM(
             updatedUser.getId(),
             UPDATED_LOGIN,
@@ -596,7 +601,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         User updatedUser = userRepository.findOne(user.getId());
 
         Set<String> authorities = new HashSet<>();
-        authorities.add("ROLE_USER");
+        authorities.add(AuthoritiesConstants.USER);
         ManagedUserVM managedUserVM = new ManagedUserVM(
             updatedUser.getId(),
             updatedUser.getLogin(),
@@ -657,7 +662,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         User updatedUser = userRepository.findOne(user.getId());
 
         Set<String> authorities = new HashSet<>();
-        authorities.add("ROLE_USER");
+        authorities.add(AuthoritiesConstants.USER);
         ManagedUserVM managedUserVM = new ManagedUserVM(
             updatedUser.getId(),
             "jhipster", // this login should already be used by anotherUser
@@ -705,6 +710,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         List<User> userList = userRepository.findAll();
         assertThat(userList).hasSize(databaseSizeBeforeDelete - 1);
     }
+    <%_ } _%>
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 
     @Test
@@ -718,7 +724,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$").isArray())
-            .andExpect(jsonPath("$").value(containsInAnyOrder("ROLE_USER", "ROLE_ADMIN")));
+            .andExpect(jsonPath("$").value(containsInAnyOrder(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)));
     }
     <%_ } _%>
 
@@ -849,5 +855,4 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         assertThat(authorityA.hashCode()).isEqualTo(authorityB.hashCode());
     }
     <%_ } _%>
-
 }

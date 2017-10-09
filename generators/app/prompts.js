@@ -70,7 +70,7 @@ function askForApplicationType(meta) {
             },
             {
                 value: 'uaa',
-                name: '[BETA] JHipster UAA server (for microservice OAuth2 authentication)'
+                name: 'JHipster UAA server (for microservice OAuth2 authentication)'
             }
         ],
         default: DEFAULT_APPTYPE

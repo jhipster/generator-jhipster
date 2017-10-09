@@ -16,15 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.repository;
-
-
-import <%=packageName%>.domain.OAuth2AuthenticationClientDetails;
-<%_ if (databaseType === 'mongodb') { _%>
-import org.springframework.data.mongodb.repository.MongoRepository;
-<%_ } _%>
-
-public interface OAuth2ClientDetailsRepository extends <% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } else { %>MongoRepository<% } %><OAuth2AuthenticationClientDetails, String> {
-
-    OAuth2AuthenticationClientDetails findOneByClientId(String clientId);
-}
+version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
+services:
+    traefik:
+        image: <%= DOCKER_TRAEFIK %>
+        command: --web 
+        ports:
+          - 80:80
+          - 8080:8080
+        volumes:
+          - ./traefik/traefik.toml:/etc/traefik/traefik.toml

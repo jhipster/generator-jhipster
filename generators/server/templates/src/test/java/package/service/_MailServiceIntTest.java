@@ -151,6 +151,7 @@ public class MailServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         assertThat(message.getContent().toString()).isEqualTo("<html>test title, http://127.0.0.1:8080, john</html>\n");
         assertThat(message.getDataHandler().getContentType()).isEqualTo("text/html;charset=UTF-8");
     }
+    <%_ if (authenticationType !== 'oauth2') { _%>
 
     @Test
     public void testSendActivationEmail() throws Exception {
@@ -196,6 +197,7 @@ public class MailServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         assertThat(message.getContent().toString()).isNotEmpty();
         assertThat(message.getDataHandler().getContentType()).isEqualTo("text/html;charset=UTF-8");
     }
+    <%_ } _%>
 
     @Test
     public void testSendEmailWithException() throws Exception {

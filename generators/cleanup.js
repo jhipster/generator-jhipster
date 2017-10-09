@@ -26,8 +26,13 @@ module.exports = {
     cleanupOldFiles,
     cleanupOldServerFiles
 };
+
 /**
  * Removes files that where generated in previous JHipster versions and therefore need to be removed
+ *
+ * @param {any} generator - reference to generator
+ * @param {string} javaDir - Java Dir
+ * @param {string} testDir - Test Dir
  */
 function cleanupOldFiles(generator, javaDir, testDir) {
     if (generator.isJhipsterVersionLessThan('3.2.0')) {
@@ -39,6 +44,10 @@ function cleanupOldFiles(generator, javaDir, testDir) {
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore need to be removed
+ *
+ * @param {any} generator - reference to generator
+ * @param {string} javaDir - Java Dir
+ * @param {string} testDir - Test Dir
  */
 function cleanupOldServerFiles(generator, javaDir, testDir) {
     if (generator.isJhipsterVersionLessThan('3.5.0')) {

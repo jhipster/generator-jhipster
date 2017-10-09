@@ -116,12 +116,14 @@ module.exports = class extends BaseGenerator {
                 this.DOCKER_ORACLE = constants.DOCKER_ORACLE;
                 this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
                 this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
+                this.DOCKER_KEYCLOAK = constants.DOCKER_KEYCLOAK;
                 this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
                 this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
                 this.DOCKER_SONAR = constants.DOCKER_SONAR;
                 this.DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE;
                 this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
                 this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
+                this.DOCKER_TRAEFIK = constants.DOCKER_TRAEFIK;
                 this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
                 this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
                 this.DOCKER_SWAGGER_EDITOR = constants.DOCKER_SWAGGER_EDITOR;
@@ -268,8 +270,8 @@ module.exports = class extends BaseGenerator {
                     if (this.languages === undefined) {
                         this.languages = ['en', 'fr'];
                     }
-                    // user-management will be handled by UAA app
-                    if (this.applicationType === 'gateway' && this.authenticationType === 'uaa') {
+                    // user-management will be handled by UAA app, oauth expects users to be managed in IpP
+                    if ((this.applicationType === 'gateway' && this.authenticationType === 'uaa') || this.authenticationType === 'oauth2') {
                         this.skipUserManagement = true;
                     }
 

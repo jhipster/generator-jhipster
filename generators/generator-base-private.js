@@ -52,6 +52,13 @@ module.exports = class extends Generator {
     /* private methods use within generator (not exposed to modules) */
     /* ======================================================================== */
 
+    /**
+     * Install I18N Client Files By Language
+     *
+     * @param {any} _this reference to generator
+     * @param {string} webappDir web app directory
+     * @param {string} lang language code
+     */
     installI18nClientFilesByLanguage(_this, webappDir, lang) {
         const generator = _this || this;
         generator.copyI18nFilesByName(generator, webappDir, 'audits.json', lang);
@@ -84,6 +91,13 @@ module.exports = class extends Generator {
         generator.template(`${webappDir}i18n/${lang}/_reset.json`, `${webappDir}i18n/${lang}/reset.json`);
     }
 
+    /**
+     * Install I18N Server Files By Language
+     *
+     * @param {any} _this - reference to generator
+     * @param {string} resourceDir - resource directory
+     * @param {string} lang - language code
+     */
     installI18nServerFilesByLanguage(_this, resourceDir, lang) {
         const generator = _this || this;
         // Template the message server side properties
@@ -91,6 +105,12 @@ module.exports = class extends Generator {
         generator.template(`${resourceDir}i18n/_messages_${langProp}.properties`, `${resourceDir}i18n/messages_${langProp}.properties`);
     }
 
+    /**
+     * Copy I18N
+     *
+     * @param language
+     * @param prefix
+     */
     copyI18n(language, prefix) {
         try {
             this.template(`${prefix}/i18n/_entity_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${this.entityInstance}.json`);
@@ -102,6 +122,13 @@ module.exports = class extends Generator {
         }
     }
 
+    /**
+     * Copy Enum I18N
+     *
+     * @param language
+     * @param enumInfo
+     * @param prefix
+     */
     copyEnumI18n(language, enumInfo, prefix) {
         try {
             this.template(`${prefix}/i18n/_enum.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.enumInstance}.json`, this, {}, enumInfo);
@@ -112,6 +139,11 @@ module.exports = class extends Generator {
         }
     }
 
+    /**
+     * Update Languages In Language Constant
+     *
+     * @param languages
+     */
     updateLanguagesInLanguageConstant(languages) {
         const fullPath = `${CLIENT_MAIN_SRC_DIR}app/components/language/language.constants.js`;
         try {
@@ -134,6 +166,11 @@ module.exports = class extends Generator {
         }
     }
 
+    /**
+     * Update Languages In Language Constant NG2
+     *
+     * @param languages
+     */
     updateLanguagesInLanguageConstantNG2(languages) {
         const fullPath = `${CLIENT_MAIN_SRC_DIR}app/shared/language/language.constants.ts`;
         try {
@@ -156,6 +193,11 @@ module.exports = class extends Generator {
         }
     }
 
+    /**
+     * Update Languages In Language Pipe
+     *
+     * @param languages
+     */
     updateLanguagesInLanguagePipe(languages) {
         let fullPath = `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`;
         if (this.clientFramework === 'angular1') {
@@ -181,6 +223,11 @@ module.exports = class extends Generator {
         }
     }
 
+    /**
+     * Update Languages In Webpack
+     *
+     * @param languages
+     */
     updateLanguagesInWebpack(languages) {
         const fullPath = 'webpack/webpack.common.js';
         try {
@@ -203,6 +250,14 @@ module.exports = class extends Generator {
         }
     }
 
+    /**
+     * insight
+     *
+     * @param trackingCode
+     * @param packageName
+     * @param packageVersion
+     * @returns {Insight}
+     */
     insight(trackingCode = 'UA-46075199-2', packageName = packagejs.name, packageVersion = packagejs.version) {
         const insight = new Insight({
             trackingCode,
@@ -223,6 +278,11 @@ module.exports = class extends Generator {
         return insight;
     }
 
+    /**
+     * Remove File
+     *
+     * @param file
+     */
     removeFile(file) {
         if (shelljs.test('-f', file)) {
             this.log(`Removing the file - ${file}`);
@@ -230,6 +290,11 @@ module.exports = class extends Generator {
         }
     }
 
+    /**
+     * Remove Folder
+     *
+     * @param folder
+     */
     removeFolder(folder) {
         if (shelljs.test('-d', folder)) {
             this.log(`Removing the folder - ${folder}`);
@@ -237,18 +302,39 @@ module.exports = class extends Generator {
         }
     }
 
+    /**
+     * @returns default app name
+     */
     getDefaultAppName() {
         return (/^[a-zA-Z0-9_]+$/.test(path.basename(process.cwd()))) ? path.basename(process.cwd()) : 'jhipster';
     }
 
+    /**
+     * Format As Class Javadoc
+     *
+     * @param {string} text - text to format
+     * @returns class javadoc
+     */
     formatAsClassJavadoc(text) {
         return jhipsterUtils.getJavadoc(text, 0);
     }
 
+    /**
+     * Format As Field Javadoc
+     *
+     * @param {string} text - text to format
+     * @returns field javadoc
+     */
     formatAsFieldJavadoc(text) {
         return jhipsterUtils.getJavadoc(text, 4);
     }
 
+    /**
+     * Format As Api Description
+     *
+     * @param {string} text - text to format
+     * @returns formatted api description
+     */
     formatAsApiDescription(text) {
         const rows = text.split('\n');
         let description = rows[0];
@@ -265,6 +351,10 @@ module.exports = class extends Generator {
         return description;
     }
 
+    /**
+     * @param {any} input input
+     * @returns {boolean} true if input is number; false otherwise
+     */
     isNumber(input) {
         if (isNaN(this.filterNumber(input))) { // eslint-disable-line
             return false;
@@ -272,6 +362,10 @@ module.exports = class extends Generator {
         return true;
     }
 
+    /**
+     * @param {any} input input
+     * @returns {boolean} true if input is a signed number; false otherwise
+     */
     isSignedNumber(input) {
         if (isNaN(this.filterNumber(input, true))) { // eslint-disable-line
             return false;
@@ -279,6 +373,10 @@ module.exports = class extends Generator {
         return true;
     }
 
+    /**
+     * @param {any} input input
+     * @returns {boolean} true if input is a signed decimal number; false otherwise
+     */
     isSignedDecimalNumber(input) {
         if (isNaN(this.filterNumber(input, true, true))) { // eslint-disable-line
             return false;
@@ -286,6 +384,14 @@ module.exports = class extends Generator {
         return true;
     }
 
+    /**
+     * Filter Number
+     *
+     * @param {string} input - input to filter
+     * @param isSigned - flag indicating whether to check for signed number or not
+     * @param isDecimal - flag indicating whether to check for decimal number or not
+     * @returns {number} parsed number if valid input; <code>NaN</code> otherwise
+     */
     filterNumber(input, isSigned, isDecimal) {
         const signed = isSigned ? '(\\-|\\+)?' : '';
         const decimal = isDecimal ? '(\\.[0-9]+)?' : '';
@@ -296,6 +402,11 @@ module.exports = class extends Generator {
         return NaN;
     }
 
+    /**
+     * Execute callback if git is installed
+     *
+     * @param {function} callback - function to be called if git is installed
+     */
     isGitInstalled(callback) {
         this.gitExec('--version', { trace: false }, (code) => {
             if (code !== 0) {
@@ -308,6 +419,13 @@ module.exports = class extends Generator {
         });
     }
 
+    /**
+     * Get Option From Array
+     *
+     * @param {Array} array - array
+     * @param {any} option - options
+     * @returns {boolean} true if option is in array and is set to 'true'
+     */
     getOptionFromArray(array, option) {
         let optionValue = false;
         array.forEach((value) => {
@@ -324,6 +442,7 @@ module.exports = class extends Generator {
      *
      * @param {string} value - table column name or table name string
      * @see org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
+     * @returns hibernate SnakeCase in JHipster preferred style
      */
     hibernateSnakeCase(value) {
         let res = '';
@@ -346,6 +465,11 @@ module.exports = class extends Generator {
         return res;
     }
 
+    /**
+     * @param {Array} array - array to search in
+     * @param {any} item - item to search for
+     * @return {boolean} true if array contains item; false otherwise
+     */
     contains(array, item) {
         return _.includes(array, item);
     }
@@ -353,8 +477,8 @@ module.exports = class extends Generator {
      * Function to issue a https get request, and process the result
      *
      *  @param {string} url - the url to fetch
-     *  @param onSuccess - function, which gets called when the request succeeds, with the body of the response
-     *  @param onFail - callback when the get failed.
+     *  @param {function} onSuccess - function, which gets called when the request succeeds, with the body of the response
+     *  @param {function} onFail - callback when the get failed.
      */
     httpsGet(url, onSuccess, onFail) {
         https.get(url, (res) => {
@@ -379,6 +503,8 @@ module.exports = class extends Generator {
 
     /**
      * Strip margin indicated by pipe `|` from a string literal
+     *
+     *  @param {string} content - the string to process
      */
     stripMargin(content) {
         return content.replace(/^[ ]*\|/gm, '');
@@ -387,11 +513,11 @@ module.exports = class extends Generator {
     /**
      * Utility function to copy and process templates.
      *
-     * @param {string} source
-     * @param {string} destination
-     * @param {*} generator
-     * @param {*} options
-     * @param {*} context
+     * @param {string} source - source
+     * @param {string} destination - destination
+     * @param {*} generator - reference to the generator
+     * @param {*} options - options object
+     * @param {*} context - context
      */
     template(source, destination, generator, options = {}, context) {
         const _this = generator || this;
@@ -414,7 +540,8 @@ module.exports = class extends Generator {
     /**
      * Print a debug message.
      *
-     * @param {string} value - message to print
+     * @param {string} msg - message to print
+     * @param {string[]} args - arguments to print
      */
     debug(msg, ...args) {
         if (this.isDebugEnabled || (this.options && this.options.debug)) {
@@ -423,6 +550,9 @@ module.exports = class extends Generator {
         }
     }
 
+    /**
+     * Check if Java is installed
+     */
     checkJava() {
         if (this.skipChecks || this.skipServer) return;
         const done = this.async();
@@ -439,6 +569,9 @@ module.exports = class extends Generator {
         });
     }
 
+    /**
+     * Check if Node is installed
+     */
     checkNode() {
         if (this.skipChecks || this.skipServer) return;
         const done = this.async();
@@ -456,6 +589,9 @@ module.exports = class extends Generator {
         });
     }
 
+    /**
+     * Check if Git is installed
+     */
     checkGit() {
         if (this.skipChecks || this.skipClient) return;
         const done = this.async();
@@ -465,6 +601,9 @@ module.exports = class extends Generator {
         });
     }
 
+    /**
+     * Check if git connection can be established
+     */
     checkGitConnection() {
         if (!this.gitInstalled) return;
         const done = this.async();
@@ -478,6 +617,9 @@ module.exports = class extends Generator {
         });
     }
 
+    /**
+     * Check if Yarn is installed
+     */
     checkYarn() {
         if (this.skipChecks || !this.useYarn) return;
         const done = this.async();
@@ -495,6 +637,14 @@ module.exports = class extends Generator {
         });
     }
 
+    /**
+     * Generate Entity Queries
+     *
+     * @param {Array|Object} relationships - array of relationships
+     * @param {string} entityInstance - entity instance
+     * @param {string} dto - dto
+     * @returns {{queries: Array, variables: Array, hasManyToMany: boolean}}
+     */
     generateEntityQueries(relationships, entityInstance, dto) {
         const queries = [];
         const variables = [];
@@ -550,7 +700,7 @@ module.exports = class extends Generator {
 
     /**
      * Get DB type from DB value
-     * @param {string} db
+     * @param {string} db - db
      */
     getDBTypeFromDBValue(db) {
         if (constants.SQL_DB_OPTIONS.map(db => db.value).includes(db)) {
@@ -559,6 +709,9 @@ module.exports = class extends Generator {
         return db;
     }
 
+    /**
+     * @returns generated JDL from entities
+     */
     generateJDLFromEntities() {
         const jdl = new jhiCore.JDLObject();
         try {
@@ -576,6 +729,7 @@ module.exports = class extends Generator {
     /**
      * Generate language objects in array of "'en': { name: 'English' }" format
      * @param {string[]} languages
+     * @returns generated language options
      */
     generateLanguageOptions(languages) {
         const selectedLangs = this.getAllSupportedLanguageOptions().filter(lang => languages.includes(lang.value));
@@ -593,7 +747,7 @@ module.exports = class extends Generator {
 
     /**
      * Get UAA app name from path provided.
-     * @param {string} input
+     * @param {string} input - path
      */
     getUaaAppName(input) {
         if (!input) return false;
@@ -629,10 +783,20 @@ module.exports = class extends Generator {
         return 'buildSpecification';
     }
 
+    /**
+     * @param {string} fieldType
+     * @returns {boolean} true if type is filterable; false otherwise.
+     */
     isFilterableType(fieldType) {
         return !(['byte[]', 'ByteBuffer'].includes(fieldType));
     }
 
+    /**
+     * Copy Filtering Flag
+     *
+     * @param {any} from - from
+     * @param {any} to - to
+     */
     copyFilteringFlag(from, to) {
         if (this.databaseType === 'sql' && this.service !== 'no') {
             to.jpaMetamodelFiltering = from.jpaMetamodelFiltering;
@@ -641,7 +805,9 @@ module.exports = class extends Generator {
         }
     }
 
-    // rebuild client for Angular1
+    /**
+     * Rebuild client for Angular1
+     */
     injectJsFilesToIndex() {
         const done = this.async();
         this.log(`\n${chalk.bold.green('Running `gulp inject` to add JavaScript to index.html\n')}`);
@@ -650,7 +816,9 @@ module.exports = class extends Generator {
         });
     }
 
-    // rebuild client for Angular
+    /**
+     * Rebuild client for Angular
+     */
     rebuildClient() {
         const done = this.async();
         this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app\n')}`);

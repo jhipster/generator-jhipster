@@ -20,11 +20,11 @@
  * Plugin that provides API-first development using swagger-codegen to
  * generate Spring-MVC endpoint stubs at compile time from a swagger definition file
  */
- 
+
 apply plugin: "org.detoeuf.swagger-codegen"
 
 swagger {
-    inputSpec = '<%= SERVER_MAIN_RES_DIR %>swagger/api.yml'
+    inputSpec = file('<%= SERVER_MAIN_RES_DIR %>swagger/api.yml').absolutePath
     outputDir = file('build/swagger')
     lang = 'spring'
 

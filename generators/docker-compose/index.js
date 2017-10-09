@@ -46,6 +46,7 @@ module.exports = class extends BaseGenerator {
                 this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
                 this.DOCKER_JHIPSTER_IMPORT_DASHBOARDS = constants.DOCKER_JHIPSTER_IMPORT_DASHBOARDS;
                 this.DOCKER_JHIPSTER_ZIPKIN = constants.DOCKER_JHIPSTER_ZIPKIN;
+                this.DOCKER_TRAEFIK = constants.DOCKER_TRAEFIK;
                 this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
                 this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
                 this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
@@ -80,6 +81,7 @@ module.exports = class extends BaseGenerator {
             loadConfig() {
                 this.defaultAppsFolders = this.config.get('appsFolders');
                 this.directoryPath = this.config.get('directoryPath');
+                this.gatewayType = this.config.get('gatewayType');
                 this.clusteredDbApps = this.config.get('clusteredDbApps');
                 this.monitoring = this.config.get('monitoring');
                 this.consoleOptions = this.config.get('consoleOptions');
@@ -101,6 +103,7 @@ module.exports = class extends BaseGenerator {
     get prompting() {
         return {
             askForApplicationType: prompts.askForApplicationType,
+            askForGatewayType: prompts.askForGatewayType,
             askForPath: prompts.askForPath,
             askForApps: prompts.askForApps,
             askForClustersMode: prompts.askForClustersMode,
@@ -135,8 +138,9 @@ module.exports = class extends BaseGenerator {
                     // Add application configuration
                     const yaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/app.yml`));
                     const yamlConfig = yaml.services[`${lowercaseBaseName}-app`];
-
-                    if (appConfig.applicationType === 'gateway' || appConfig.applicationType === 'monolith') {
+                    if (this.gatewayType === 'traefik' && appConfig.applicationType === 'gateway') {
+                        delete yamlConfig.ports; // Do not export the ports as Traefik is the gateway
+                    } else if (appConfig.applicationType === 'gateway' || appConfig.applicationType === 'monolith') {
                         const ports = yamlConfig.ports[0].split(':');
                         ports[0] = portIndex;
                         yamlConfig.ports[0] = ports.join(':');
@@ -243,6 +247,7 @@ module.exports = class extends BaseGenerator {
             saveConfig() {
                 this.config.set('appsFolders', this.appsFolders);
                 this.config.set('directoryPath', this.directoryPath);
+                this.config.set('gatewayType', this.gatewayType);
                 this.config.set('clusteredDbApps', this.clusteredDbApps);
                 this.config.set('monitoring', this.monitoring);
                 this.config.set('consoleOptions', this.consoleOptions);

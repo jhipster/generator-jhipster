@@ -21,7 +21,7 @@
 *.properties    text
 *.sass          text
 *.scss          text
-*.sh            text
+*.sh            text eol=lf
 *.sql           text
 *.txt           text
 *.ts            text
