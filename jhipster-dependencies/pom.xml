@@ -3,6 +3,13 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <groupId>org.springframework.boot</groupId>
+        <version>1.5.7.RELEASE</version>
+        <relativePath/>
+    </parent>
+
     <groupId>io.github.jhipster</groupId>
     <artifactId>jhipster-dependencies</artifactId>
     <version>1.1.11</version>
@@ -11,7 +18,7 @@
     <description>JHipster dependency management</description>
 
     <properties>
-        <assertj-core.version>3.6.2</assertj-core.version>
+        <assertj.version>3.6.2</assertj.version>
         <awaitility.version>2.0.0</awaitility.version>
         <bucket4j.version>2.0.1</bucket4j.version>
         <cassandra-driver-extras.version>3.3.0</cassandra-driver-extras.version>
@@ -25,7 +32,6 @@
         <hazelcast-hibernate52.version>1.2</hazelcast-hibernate52.version>
         <hazelcast-wm.version>3.7</hazelcast-wm.version>
         <hibernate.version>5.2.10.Final</hibernate.version>
-        <infinispan-bom.version>8.2.5.Final</infinispan-bom.version>
         <infinispan-cloud.version>9.0.0.Final</infinispan-cloud.version>
         <infinispan-spring-boot-starter.version>1.0.0.Final</infinispan-spring-boot-starter.version>
         <jjwt.version>0.7.0</jjwt.version>
@@ -47,11 +53,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.assertj</groupId>
-                <artifactId>assertj-core</artifactId>
-                <scope>${assertj-core.version}</scope>
-            </dependency>
             <dependency>
                 <groupId>org.awaitility</groupId>
                 <artifactId>awaitility</artifactId>
@@ -125,7 +126,7 @@
             <dependency>
                 <groupId>org.infinispan</groupId>
                 <artifactId>infinispan-bom</artifactId>
-                <version>${infinispan-bom.version}</version>
+                <version>${infinispan.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -192,11 +193,6 @@
             <dependency>
                 <groupId>io.dropwizard.metrics</groupId>
                 <artifactId>metrics-jvm</artifactId>
-                <version>${dropwizard-metrics.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.dropwizard.metrics</groupId>
-                <artifactId>metrics-servlets</artifactId>
                 <version>${dropwizard-metrics.version}</version>
             </dependency>
             <dependency>
