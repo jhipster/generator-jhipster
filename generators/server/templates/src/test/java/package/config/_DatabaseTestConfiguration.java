@@ -24,8 +24,10 @@ import com.couchbase.client.java.cluster.DefaultBucketSettings;
 import com.couchbase.client.java.env.CouchbaseEnvironment;
 import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
+import org.springframework.data.couchbase.config.BeanNames;
 import org.springframework.data.couchbase.config.CouchbaseConfigurer;
 import org.testcontainers.couchbase.CouchbaseContainer;
 
@@ -43,6 +45,7 @@ public class DatabaseTestConfiguration extends AbstractCouchbaseConfiguration {
     }
 
     @Override
+    @Bean(destroyMethod = "", name = BeanNames.COUCHBASE_ENV)
     public CouchbaseEnvironment couchbaseEnvironment() {
         return getCouchbaseContainer().getCouchbaseEnvironment();
     }
