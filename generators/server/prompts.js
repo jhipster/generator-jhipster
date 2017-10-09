@@ -435,7 +435,6 @@ function askForServerSideOpts(meta) {
             this.authenticationType = 'uaa';
         }
 
-
         this.packageName = props.packageName;
         this.serverPort = props.serverPort;
         if (this.serverPort === undefined) {

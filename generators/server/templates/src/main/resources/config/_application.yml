@@ -179,8 +179,10 @@ spring:
 
 oauth2:
     issuer: http://localhost:9080/auth/realms/jhipster
+    <%_ if (applicationType === 'gateway' || applicationType === 'microservice') {  _%>
     principal-attribute: preferred_username
     authorities-attribute: roles
+    <% } %>
 <% } %>
 security:
     basic:
@@ -195,10 +197,9 @@ security:
         client:
             accessTokenUri: ${oauth2.issuer}/protocol/openid-connect/token
             userAuthorizationUri: ${oauth2.issuer}/protocol/openid-connect/auth
-            <%_ if (applicationType === 'gateway') { _%>
+            <%_ if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
             clientId: web_app
             clientSecret: web_app
-            tokenName: access_token
             clientAuthenticationScheme: form
             scope: openid profile email
             <%_ } _%>
@@ -210,10 +211,12 @@ security:
             <%_ } _%>
         resource:
             userInfoUri: ${oauth2.issuer}/protocol/openid-connect/userinfo
-            tokenInfoUri: ${oauth2.issuer}/protocol/openid-connect/token/introspectr
+            tokenInfoUri: ${oauth2.issuer}/protocol/openid-connect/token/introspect
             preferTokenInfo: false
+            <%_ if (applicationType === 'gateway' || applicationType === 'microservice') {  _%>
             jwt:
                 keyUri: ${oauth2.issuer}
+            <%_ } _%>
     <%_ } _%>
 
 server:

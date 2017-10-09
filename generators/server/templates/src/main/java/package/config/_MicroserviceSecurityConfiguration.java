@@ -222,7 +222,6 @@ import java.util.Optional;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerAdapter {
 
-
     private final ResourceServerProperties resourceServerProperties;
 
     public MicroserviceSecurityConfiguration(ResourceServerProperties resourceServerProperties) {
@@ -256,7 +255,6 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
     }
 <%_ } _%>
 
-
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
@@ -265,10 +263,10 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
             .headers()
             .frameOptions()
             .disable()
-            .and()
+        .and()
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
+        .and()
 <%_ if(applicationType === 'gateway') { _%>
             .requestMatcher(authorizationHeaderRequestMatcher())
 <%_ } _%>
