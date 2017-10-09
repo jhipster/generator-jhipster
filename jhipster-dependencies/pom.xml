@@ -10,20 +10,15 @@
     <description>JHipster dependency management</description>
 
     <properties>
-        <cassandra-driver-extras.version>3.3.0</cassandra-driver-extras.version>
-        <mongobee.version>0.12</mongobee.version>
-        <liquibase-mssql.version>1.5</liquibase-mssql.version>
+        <assertj-core.version>3.6.2</assertj-core.version>
+        <awaitility.version>2.0.0</awaitility.version>
         <bucket4j.version>2.0.1</bucket4j.version>
         <bucket4j-core.version>${bucket4j.version}</bucket4j-core.version>
         <bucket4j-jcache.version>${bucket4j.version}</bucket4j-jcache.version>
-        <hazelcast-hibernate52.version>1.2</hazelcast-hibernate52.version>
-        <hazelcast-wm.version>3.7</hazelcast-wm.version>
-        <jzlib.version>1.1.3</jzlib.version>
-        <liquibase-slf4j.version>2.0.0</liquibase-slf4j.version>
-        <mssql-jdbc.version>6.1.0.jre8</mssql-jdbc.version>
-        <ojdbc7.version>12.1.0.2</ojdbc7.version>
-        <metrics-spring.version>3.1.3</metrics-spring.version>
+        <cassandra-driver-extras.version>3.3.0</cassandra-driver-extras.version>
+        <cassandra-unit-spring.version>3.0.0.1</cassandra-unit-spring.version>
         <commons-io.version>2.5</commons-io.version>
+        <commons-lang3.version>3.5</commons-lang3.version>
         <cucumber.version>1.2.4</cucumber.version>
         <cucumber-junit.version>${cucumber.version}</cucumber-junit.version>
         <cucumber-spring.version>${cucumber.version}</cucumber-spring.version>
@@ -33,28 +28,33 @@
         <dropwizard-metrics-json.version>${dropwizard-metrics.version}</dropwizard-metrics-json.version>
         <dropwizard-metrics-jvm.version>${dropwizard-metrics.version}</dropwizard-metrics-jvm.version>
         <dropwizard-metrics-servlets.version>${dropwizard-metrics.version}</dropwizard-metrics-servlets.version>
+        <dropwizard-metrics-spring.version>3.1.3</dropwizard-metrics-spring.version>
         <gatling-charts-highcharts.version>2.2.5</gatling-charts-highcharts.version>
-        <jjwt.version>0.7.0</jjwt.version>
-        <springfox.version>2.7.0</springfox.version>
-        <springfox-bean-validators.version>${springfox.version}</springfox-bean-validators.version>
-        <springfox-swagger2.version>${springfox.version}</springfox-swagger2.version>
-        <prometheus-simpleclient.version>0.0.20</prometheus-simpleclient.version>
-        <prometheus-simpleclient_dropwizard.version>${prometheus-simpleclient.version}</prometheus-simpleclient_dropwizard.version>
-        <prometheus-simpleclient_servlet.version>${prometheus-simpleclient.version}</prometheus-simpleclient_servlet.version>
-        <validation-api.version>1.1.0.Final</validation-api.version>
-        <lz4.version>1.3.0</lz4.version>
-        <logstash-logback-encoder.version>4.9</logstash-logback-encoder.version>
-        <commons-lang3.version>3.5</commons-lang3.version>
-        <assertj-core.version>3.6.2</assertj-core.version>
-        <awaitility.version>2.0.0</awaitility.version>
-        <cassandra-unit-spring.version>3.0.0.1</cassandra-unit-spring.version>
+        <hazelcast-hibernate52.version>1.2</hazelcast-hibernate52.version>
+        <hazelcast-wm.version>3.7</hazelcast-wm.version>
         <hibernate.version>5.2.10.Final</hibernate.version>
         <hibernate-infinispan.version>${hibernate.version}</hibernate-infinispan.version>
         <hibernate-jcache.version>${hibernate.version}</hibernate-jcache.version>
         <infinispan-bom.version>8.2.5.Final</infinispan-bom.version>
         <infinispan-cloud.version>9.0.0.Final</infinispan-cloud.version>
         <infinispan-spring-boot-starter.version>1.0.0.Final</infinispan-spring-boot-starter.version>
+        <jjwt.version>0.7.0</jjwt.version>
+        <jzlib.version>1.1.3</jzlib.version>
+        <liquibase-mssql.version>1.5</liquibase-mssql.version>
+        <liquibase-slf4j.version>2.0.0</liquibase-slf4j.version>
+        <logstash-logback-encoder.version>4.9</logstash-logback-encoder.version>
+        <lz4.version>1.3.0</lz4.version>
         <mapstruct-jdk8.version>1.1.0.Final</mapstruct-jdk8.version>
+        <mongobee.version>0.12</mongobee.version>
+        <mssql-jdbc.version>6.1.0.jre8</mssql-jdbc.version>
+        <ojdbc7.version>12.1.0.2</ojdbc7.version>
+        <prometheus-simpleclient.version>0.0.20</prometheus-simpleclient.version>
+        <prometheus-simpleclient_dropwizard.version>${prometheus-simpleclient.version}</prometheus-simpleclient_dropwizard.version>
+        <prometheus-simpleclient_servlet.version>${prometheus-simpleclient.version}</prometheus-simpleclient_servlet.version>
+        <springfox.version>2.7.0</springfox.version>
+        <springfox-bean-validators.version>${springfox.version}</springfox-bean-validators.version>
+        <springfox-swagger2.version>${springfox.version}</springfox-swagger2.version>
+        <validation-api.version>1.1.0.Final</validation-api.version>
         <spring-cloud-starter-ribbon.version>${spring-cloud-dependencies.version}</spring-cloud-starter-ribbon.version>
         <spring-social-google.version>1.0.0.RELEASE</spring-social-google.version>
     </properties>
