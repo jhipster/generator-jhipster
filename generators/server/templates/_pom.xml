@@ -708,10 +708,12 @@
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
         </dependency>
+            <%_ if (applicationType === 'gateway' || applicationType === 'microservice') { _%>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-jwt</artifactId>
         </dependency>
+            <%_ } _%>
         <%_ } _%>
         <%_ if (authenticationType === 'jwt') { _%>
         <dependency>
