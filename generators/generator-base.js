@@ -110,6 +110,32 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Add external resources to root file(index.html).
+     *
+     * @param {string} resources - Resources added to root file.
+     * @param {string} comment - comment to add before resources content.
+     */
+    addExternalResourcesToRoot(resources, comment) {
+        const indexFilePath = `${CLIENT_MAIN_SRC_DIR}index.html`;
+        let resourcesBlock = '';
+        if (comment) {
+            resourcesBlock += `<!-- ${comment} -->\n`;
+        }
+        resourcesBlock += `${resources}\n`;
+        try {
+            jhipsterUtils.rewriteFile({
+                file: indexFilePath,
+                needle: 'jhipster-needle-add-resources-to-root',
+                splicable: resourcesBlock
+            }, this);
+        } catch (e) {
+            this.log(`${chalk.yellow('\nUnable to find ') + indexFilePath + chalk.yellow(' or missing required jhipster-needle. Resources are not added to JHipster app.\n')}`);
+            this.debug('Error:', e);
+        }
+    }
+
+
+    /**
      * Add a new menu element to the admin menu.
      *
      * @param {string} routerName - The name of the AngularJS router that is added to the admin menu.

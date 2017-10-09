@@ -109,6 +109,7 @@ module.exports = class extends BaseGenerator {
         jhipsterFunc.addMainSCSSStyle = this.addMainSCSSStyle;
         jhipsterFunc.addVendorSCSSStyle = this.addVendorSCSSStyle;
         jhipsterFunc.copyExternalAssetsInWebpack = this.copyExternalAssetsInWebpack;
+        jhipsterFunc.addExternalResourcesToRoot = this.addExternalResourcesToRoot;
         jhipsterFunc.addAngularJsModule = this.addAngularJsModule;
         jhipsterFunc.addAngularJsInterceptor = this.addAngularJsInterceptor;
         jhipsterFunc.addElementToMenu = this.addElementToMenu;
