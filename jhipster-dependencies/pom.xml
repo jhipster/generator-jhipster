@@ -13,28 +13,17 @@
         <assertj-core.version>3.6.2</assertj-core.version>
         <awaitility.version>2.0.0</awaitility.version>
         <bucket4j.version>2.0.1</bucket4j.version>
-        <bucket4j-core.version>${bucket4j.version}</bucket4j-core.version>
-        <bucket4j-jcache.version>${bucket4j.version}</bucket4j-jcache.version>
         <cassandra-driver-extras.version>3.3.0</cassandra-driver-extras.version>
         <cassandra-unit-spring.version>3.0.0.1</cassandra-unit-spring.version>
         <commons-io.version>2.5</commons-io.version>
         <commons-lang3.version>3.5</commons-lang3.version>
         <cucumber.version>1.2.4</cucumber.version>
-        <cucumber-junit.version>${cucumber.version}</cucumber-junit.version>
-        <cucumber-spring.version>${cucumber.version}</cucumber-spring.version>
         <dropwizard-metrics.version>3.2.2</dropwizard-metrics.version>
-        <dropwizard-metrics-annotation.version>${dropwizard-metrics.version}</dropwizard-metrics-annotation.version>
-        <dropwizard-metrics-jcache.version>${dropwizard-metrics.version}</dropwizard-metrics-jcache.version>
-        <dropwizard-metrics-json.version>${dropwizard-metrics.version}</dropwizard-metrics-json.version>
-        <dropwizard-metrics-jvm.version>${dropwizard-metrics.version}</dropwizard-metrics-jvm.version>
-        <dropwizard-metrics-servlets.version>${dropwizard-metrics.version}</dropwizard-metrics-servlets.version>
         <dropwizard-metrics-spring.version>3.1.3</dropwizard-metrics-spring.version>
         <gatling-charts-highcharts.version>2.2.5</gatling-charts-highcharts.version>
         <hazelcast-hibernate52.version>1.2</hazelcast-hibernate52.version>
         <hazelcast-wm.version>3.7</hazelcast-wm.version>
         <hibernate.version>5.2.10.Final</hibernate.version>
-        <hibernate-infinispan.version>${hibernate.version}</hibernate-infinispan.version>
-        <hibernate-jcache.version>${hibernate.version}</hibernate-jcache.version>
         <infinispan-bom.version>8.2.5.Final</infinispan-bom.version>
         <infinispan-cloud.version>9.0.0.Final</infinispan-cloud.version>
         <infinispan-spring-boot-starter.version>1.0.0.Final</infinispan-spring-boot-starter.version>
@@ -49,11 +38,7 @@
         <mssql-jdbc.version>6.1.0.jre8</mssql-jdbc.version>
         <ojdbc7.version>12.1.0.2</ojdbc7.version>
         <prometheus-simpleclient.version>0.0.20</prometheus-simpleclient.version>
-        <prometheus-simpleclient_dropwizard.version>${prometheus-simpleclient.version}</prometheus-simpleclient_dropwizard.version>
-        <prometheus-simpleclient_servlet.version>${prometheus-simpleclient.version}</prometheus-simpleclient_servlet.version>
         <springfox.version>2.7.0</springfox.version>
-        <springfox-bean-validators.version>${springfox.version}</springfox-bean-validators.version>
-        <springfox-swagger2.version>${springfox.version}</springfox-swagger2.version>
         <validation-api.version>1.1.0.Final</validation-api.version>
         <spring-cloud-starter-ribbon.version>${spring-cloud-dependencies.version}</spring-cloud-starter-ribbon.version>
         <spring-social-google.version>1.0.0.RELEASE</spring-social-google.version>
@@ -79,12 +64,12 @@
             <dependency>
                 <groupId>com.github.vladimir-bukhtoyarov</groupId>
                 <artifactId>bucket4j-core</artifactId>
-                <version>${bucket4j-core.version}</version>
+                <version>${bucket4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.vladimir-bukhtoyarov</groupId>
                 <artifactId>bucket4j-jcache</artifactId>
-                <version>${bucket4j-jcache.version}</version>
+                <version>${bucket4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.hazelcast</groupId>
@@ -129,37 +114,37 @@
             <dependency>
                 <groupId>info.cukes</groupId>
                 <artifactId>cucumber-junit</artifactId>
-                <version>${cucumber-junit.version}</version>
+                <version>${cucumber.version}</version>
             </dependency>
             <dependency>
                 <groupId>info.cukes</groupId>
                 <artifactId>cucumber-spring</artifactId>
-                <version>${cucumber-spring.version}</version>
+                <version>${cucumber.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.dropwizard.metrics</groupId>
                 <artifactId>metrics-annotation</artifactId>
-                <version>${dropwizard-metrics-annotation.version}</version>
+                <version>${dropwizard-metrics.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.dropwizard.metrics</groupId>
                 <artifactId>metrics-jcache</artifactId>
-                <version>${dropwizard-metrics-jcache.version}</version>
+                <version>${dropwizard-metrics.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.dropwizard.metrics</groupId>
                 <artifactId>metrics-json</artifactId>
-                <version>${dropwizard-metrics-json.version}</version>
+                <version>${dropwizard-metrics.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.dropwizard.metrics</groupId>
                 <artifactId>metrics-jvm</artifactId>
-                <version>${dropwizard-metrics-jvm.version}</version>
+                <version>${dropwizard-metrics.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.dropwizard.metrics</groupId>
                 <artifactId>metrics-servlets</artifactId>
-                <version>${dropwizard-metrics-servlets.version}</version>
+                <version>${dropwizard-metrics.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.gatling.highcharts</groupId>
@@ -174,7 +159,7 @@
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger2</artifactId>
-                <version>${springfox-swagger2.version}</version>
+                <version>${springfox.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.prometheus</groupId>
@@ -184,17 +169,17 @@
             <dependency>
                 <groupId>io.prometheus</groupId>
                 <artifactId>simpleclient_servlet</artifactId>
-                <version>${prometheus-simpleclient_servlet.version}</version>
+                <version>${prometheus-simpleclient.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.prometheus</groupId>
                 <artifactId>simpleclient_dropwizard</artifactId>
-                <version>${prometheus-simpleclient_dropwizard.version}</version>
+                <version>${prometheus-simpleclient.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-bean-validators</artifactId>
-                <version>${springfox-bean-validators.version}</version>
+                <version>${springfox.version}</version>
             </dependency>
             <dependency>
                 <groupId>net.jpountz.lz4</groupId>
@@ -229,12 +214,12 @@
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-infinispan</artifactId>
-                <version>${hibernate-infinispan.version}</version>
+                <version>${hibernate.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-jcache</artifactId>
-                <version>${hibernate-jcache.version}</version>
+                <version>${hibernate.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.infinispan</groupId>
