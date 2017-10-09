@@ -1,260 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <groupId>org.springframework.boot</groupId>
+        <version>1.5.7.RELEASE</version>
+        <relativePath/>
+    </parent>
+
     <groupId>io.github.jhipster</groupId>
     <artifactId>jhipster-dependencies</artifactId>
-    <version>1.1.9-SNAPSHOT</version>
+    <version>1.1.11</version>
     <packaging>pom</packaging>
-    <name>jhipster-dependencies</name>
-    <description>Jhipster dependency management</description>
+    <name>JHipster dependencies</name>
+    <description>JHipster dependency management</description>
+
     <properties>
-        <com.datastax.cassandra_cassandra-driver-extras.version>3.3.0</com.datastax.cassandra_cassandra-driver-extras.version>
-        <com.github.mongobee_mongobee.version>0.12</com.github.mongobee_mongobee.version>
-        <com.github.sabomichal_liquibase-mssql.version>1.5</com.github.sabomichal_liquibase-mssql.version>
-        <com.github.vladimir-bukhtoyarov_bucket4j.version>2.0.1</com.github.vladimir-bukhtoyarov_bucket4j.version>
-        <com.github.vladimir-bukhtoyarov_bucket4j-core.version>${com.github.vladimir-bukhtoyarov_bucket4j.version}</com.github.vladimir-bukhtoyarov_bucket4j-core.version>
-        <com.github.vladimir-bukhtoyarov_bucket4j-jcache.version>${com.github.vladimir-bukhtoyarov_bucket4j.version}</com.github.vladimir-bukhtoyarov_bucket4j-jcache.version>
-        <com.hazelcast_hazelcast-hibernate52.version>1.2</com.hazelcast_hazelcast-hibernate52.version>
-        <com.hazelcast_hazelcast-wm.version>3.7</com.hazelcast_hazelcast-wm.version>
-        <com.jcraft_jzlib.version>1.1.3</com.jcraft_jzlib.version>
-        <com.mattbertolini_liquibase-slf4j.version>2.0.0</com.mattbertolini_liquibase-slf4j.version>
-        <com.microsoft.sqlserver_mssql-jdbc.version>6.1.0.jre8</com.microsoft.sqlserver_mssql-jdbc.version>
-        <com.oracle.jdbc_ojdbc7.version>12.1.0.2</com.oracle.jdbc_ojdbc7.version>
-        <com.ryantenney.metrics_metrics-spring.version>3.1.3</com.ryantenney.metrics_metrics-spring.version>
-        <commons-io_commons-io.version>2.5</commons-io_commons-io.version>
-        <info.cukes_cucumber.version>1.2.4</info.cukes_cucumber.version>
-        <info.cukes_cucumber-junit.version>${info.cukes_cucumber.version}</info.cukes_cucumber-junit.version>
-        <info.cukes_cucumber-spring.version>${info.cukes_cucumber.version}</info.cukes_cucumber-spring.version>
-        <io.dropwizard.metrics_metrics.version>3.2.2</io.dropwizard.metrics_metrics.version>
-        <io.dropwizard.metrics_metrics-annotation.version>${io.dropwizard.metrics_metrics.version}</io.dropwizard.metrics_metrics-annotation.version>
-        <io.dropwizard.metrics_metrics-jcache.version>${io.dropwizard.metrics_metrics.version}</io.dropwizard.metrics_metrics-jcache.version>
-        <io.dropwizard.metrics_metrics-json.version>${io.dropwizard.metrics_metrics.version}</io.dropwizard.metrics_metrics-json.version>
-        <io.dropwizard.metrics_metrics-jvm.version>${io.dropwizard.metrics_metrics.version}</io.dropwizard.metrics_metrics-jvm.version>
-        <io.dropwizard.metrics_metrics-servlets.version>${io.dropwizard.metrics_metrics.version}</io.dropwizard.metrics_metrics-servlets.version>
-        <io.gatling.highcharts_gatling-charts-highcharts.version>2.2.5</io.gatling.highcharts_gatling-charts-highcharts.version>
-        <io.jsonwebtoken_jjwt.version>0.7.0</io.jsonwebtoken_jjwt.version>
-        <io.springfox.version>2.7.0</io.springfox.version>
-        <io.springfox_springfox-bean-validators.version>${io.springfox.version}</io.springfox_springfox-bean-validators.version>
-        <io.springfox_springfox-swagger2.version>${io.springfox.version}</io.springfox_springfox-swagger2.version>
-        <io.prometheus_simpleclient.version>0.0.20</io.prometheus_simpleclient.version>
-        <io.prometheus_simpleclient_dropwizard.version>${io.prometheus_simpleclient.version}</io.prometheus_simpleclient_dropwizard.version>
-        <io.prometheus_simpleclient_servlet.version>${io.prometheus_simpleclient.version}</io.prometheus_simpleclient_servlet.version>
-        <javax.validation_validation-api.version>1.1.0.Final</javax.validation_validation-api.version>
-        <net.jpountz.lz4_lz4.version>1.3.0</net.jpountz.lz4_lz4.version>
-        <net.logstash.logback_logstash-logback-encoder.version>4.9</net.logstash.logback_logstash-logback-encoder.version>
-        <org.apache.commons_commons-lang3.version>3.5</org.apache.commons_commons-lang3.version>
-        <org.assertj_assertj-core.version>3.6.2</org.assertj_assertj-core.version>
-        <org.awaitility_awaitility.version>2.0.0</org.awaitility_awaitility.version>
-        <org.cassandraunit_cassandra-unit-spring.version>3.0.0.1</org.cassandraunit_cassandra-unit-spring.version>
-        <org.hibernate_hibernate.version>5.2.10.Final</org.hibernate_hibernate.version>
-        <org.hibernate_hibernate-infinispan.version>${org.hibernate_hibernate.version}</org.hibernate_hibernate-infinispan.version>
-        <org.hibernate_hibernate-jcache.version>${org.hibernate_hibernate.version}</org.hibernate_hibernate-jcache.version>
-        <org.infinispan_infinispan-bom.version>8.2.5.Final</org.infinispan_infinispan-bom.version>
-        <org.infinispan_infinispan-cloud.version>9.0.0.Final</org.infinispan_infinispan-cloud.version>
-        <org.infinispan_infinispan-spring-boot-starter.version>1.0.0.Final</org.infinispan_infinispan-spring-boot-starter.version>
-        <org.mapstruct_mapstruct-jdk8.version>1.1.0.Final</org.mapstruct_mapstruct-jdk8.version>
-        <org.springframework.cloud_spring-cloud-starter-ribbon.version>${org.springframework.cloud_spring-cloud-dependencies.version}</org.springframework.cloud_spring-cloud-starter-ribbon.version>
-        <org.springframework.social_spring-social-google.version>1.0.0.RELEASE</org.springframework.social_spring-social-google.version>
+        <assertj.version>3.6.2</assertj.version>
+        <awaitility.version>2.0.0</awaitility.version>
+        <bucket4j.version>3.0.1</bucket4j.version>
+        <cassandra-driver-extras.version>3.3.0</cassandra-driver-extras.version>
+        <cassandra-unit-spring.version>3.0.0.1</cassandra-unit-spring.version>
+        <commons-io.version>2.5</commons-io.version>
+        <commons-lang3.version>3.5</commons-lang3.version>
+        <cucumber.version>1.2.4</cucumber.version>
+        <dropwizard-metrics.version>3.2.2</dropwizard-metrics.version>
+        <gatling.version>2.2.5</gatling.version>
+        <guava.version>23.0</guava.version>
+        <hazelcast-hibernate52.version>1.2</hazelcast-hibernate52.version>
+        <hazelcast-wm.version>3.7</hazelcast-wm.version>
+        <hibernate.version>5.2.10.Final</hibernate.version>
+        <infinispan-cloud.version>9.0.0.Final</infinispan-cloud.version>
+        <infinispan-spring-boot-starter.version>1.0.0.Final</infinispan-spring-boot-starter.version>
+        <jhipster-server.version>1.1.11</jhipster-server.version>
+        <jjwt.version>0.7.0</jjwt.version>
+        <jzlib.version>1.1.3</jzlib.version>
+        <liquibase-mssql.version>1.5</liquibase-mssql.version>
+        <liquibase-slf4j.version>2.0.0</liquibase-slf4j.version>
+        <logstash-logback-encoder.version>4.11</logstash-logback-encoder.version>
+        <lz4.version>1.3.0</lz4.version>
+        <mapstruct.version>1.1.0.Final</mapstruct.version>
+        <metrics-spring.version>3.1.3</metrics-spring.version>
+        <mongobee.version>0.12</mongobee.version>
+        <mssql-jdbc.version>6.1.0.jre8</mssql-jdbc.version>
+        <oracle-jdbc.version>12.1.0.2</oracle-jdbc.version>
+        <problem-spring-web.version>0.20.1</problem-spring-web.version>
+        <prometheus-simpleclient.version>0.0.20</prometheus-simpleclient.version>
+        <springfox.version>2.7.0</springfox.version>
+        <validation-api.version>1.1.0.Final</validation-api.version>
+        <spring-cloud.version>Dalston.SR2</spring-cloud.version>
+        <!-- The netflix version should match the one in
+        https://github.com/spring-cloud/spring-cloud-release/blob/v${spring-cloud.version}/spring-cloud-dependencies/pom.xml -->
+        <spring-cloud-netflix.version>1.3.2.RELEASE</spring-cloud-netflix.version>
+        <spring-cloud-stream.version>Chelsea.SR2</spring-cloud-stream.version>
+        <spring-social-google.version>1.0.0.RELEASE</spring-social-google.version>
     </properties>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.datastax.cassandra</groupId>
-                <artifactId>cassandra-driver-extras</artifactId>
-                <version>${com.datastax.cassandra_cassandra-driver-extras.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.mongobee</groupId>
-                <artifactId>mongobee</artifactId>
-                <version>${com.github.mongobee_mongobee.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.sabomichal</groupId>
-                <artifactId>liquibase-mssql</artifactId>
-                <version>${com.github.sabomichal_liquibase-mssql.version}</version>
+                <groupId>org.awaitility</groupId>
+                <artifactId>awaitility</artifactId>
+                <version>${awaitility.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.vladimir-bukhtoyarov</groupId>
                 <artifactId>bucket4j-core</artifactId>
-                <version>${com.github.vladimir-bukhtoyarov_bucket4j-core.version}</version>
+                <version>${bucket4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.vladimir-bukhtoyarov</groupId>
                 <artifactId>bucket4j-jcache</artifactId>
-                <version>${com.github.vladimir-bukhtoyarov_bucket4j-jcache.version}</version>
+                <version>${bucket4j.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.hazelcast</groupId>
-                <artifactId>hazelcast-hibernate52</artifactId>
-                <version>${com.hazelcast_hazelcast-hibernate52.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.hazelcast</groupId>
-                <artifactId>hazelcast-wm</artifactId>
-                <version>${com.hazelcast_hazelcast-wm.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.jcraft</groupId>
-                <artifactId>jzlib</artifactId>
-                <version>${com.jcraft_jzlib.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.mattbertolini</groupId>
-                <artifactId>liquibase-slf4j</artifactId>
-                <version>${com.mattbertolini_liquibase-slf4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.sqlserver</groupId>
-                <artifactId>mssql-jdbc</artifactId>
-                <version>${com.microsoft.sqlserver_mssql-jdbc.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.oracle.jdbc</groupId>
-                <artifactId>ojdbc7</artifactId>
-                <version>${com.oracle.jdbc_ojdbc7.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.ryantenney.metrics</groupId>
-                <artifactId>metrics-spring</artifactId>
-                <version>${com.ryantenney.metrics_metrics-spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>${commons-io_commons-io.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>info.cukes</groupId>
-                <artifactId>cucumber-junit</artifactId>
-                <version>${info.cukes_cucumber-junit.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>info.cukes</groupId>
-                <artifactId>cucumber-spring</artifactId>
-                <version>${info.cukes_cucumber-spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.dropwizard.metrics</groupId>
-                <artifactId>metrics-annotation</artifactId>
-                <version>${io.dropwizard.metrics_metrics-annotation.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.dropwizard.metrics</groupId>
-                <artifactId>metrics-jcache</artifactId>
-                <version>${io.dropwizard.metrics_metrics-jcache.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.dropwizard.metrics</groupId>
-                <artifactId>metrics-json</artifactId>
-                <version>${io.dropwizard.metrics_metrics-json.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.dropwizard.metrics</groupId>
-                <artifactId>metrics-jvm</artifactId>
-                <version>${io.dropwizard.metrics_metrics-jvm.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.dropwizard.metrics</groupId>
-                <artifactId>metrics-servlets</artifactId>
-                <version>${io.dropwizard.metrics_metrics-servlets.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.gatling.highcharts</groupId>
-                <artifactId>gatling-charts-highcharts</artifactId>
-                <version>${io.gatling.highcharts_gatling-charts-highcharts.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.jsonwebtoken</groupId>
-                <artifactId>jjwt</artifactId>
-                <version>${io.jsonwebtoken_jjwt.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger2</artifactId>
-                <version>${io.springfox_springfox-swagger2.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.prometheus</groupId>
-                <artifactId>simpleclient</artifactId>
-                <version>${io.prometheus_simpleclient.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.prometheus</groupId>
-                <artifactId>simpleclient_servlet</artifactId>
-                <version>${io.prometheus_simpleclient_servlet.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.prometheus</groupId>
-                <artifactId>simpleclient_dropwizard</artifactId>
-                <version>${io.prometheus_simpleclient_dropwizard.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-bean-validators</artifactId>
-                <version>${io.springfox_springfox-bean-validators.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.jpountz.lz4</groupId>
-                <artifactId>lz4</artifactId>
-                <version>${net.jpountz.lz4_lz4.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.logstash.logback</groupId>
-                <artifactId>logstash-logback-encoder</artifactId>
-                <version>${net.logstash.logback_logstash-logback-encoder.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${org.apache.commons_commons-lang3.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.assertj</groupId>
-                <artifactId>assertj-core</artifactId>
-                <scope>${org.assertj_assertj-core.version}</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.awaitility</groupId>
-                <artifactId>awaitility</artifactId>
-                <version>${org.awaitility_awaitility.version}</version>
+                <groupId>com.datastax.cassandra</groupId>
+                <artifactId>cassandra-driver-extras</artifactId>
+                <version>${cassandra-driver-extras.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.cassandraunit</groupId>
                 <artifactId>cassandra-unit-spring</artifactId>
-                <version>${org.cassandraunit_cassandra-unit-spring.version}</version>
+                <version>${cassandra-unit-spring.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>jcl-over-slf4j</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>info.cukes</groupId>
+                <artifactId>cucumber-junit</artifactId>
+                <version>${cucumber.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>info.cukes</groupId>
+                <artifactId>cucumber-spring</artifactId>
+                <version>${cucumber.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.gatling.highcharts</groupId>
+                <artifactId>gatling-charts-highcharts</artifactId>
+                <version>${gatling.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hazelcast</groupId>
+                <artifactId>hazelcast-hibernate52</artifactId>
+                <version>${hazelcast-hibernate52.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hazelcast</groupId>
+                <artifactId>hazelcast-wm</artifactId>
+                <version>${hazelcast-wm.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-infinispan</artifactId>
-                <version>${org.hibernate_hibernate-infinispan.version}</version>
+                <version>${hibernate.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-jcache</artifactId>
-                <version>${org.hibernate_hibernate-jcache.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.infinispan</groupId>
-                <artifactId>infinispan-bom</artifactId>
-                <version>${org.infinispan_infinispan-bom.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
+                <version>${hibernate.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.infinispan</groupId>
                 <artifactId>infinispan-cloud</artifactId>
-                <version>${org.infinispan_infinispan-cloud.version}</version>
+                <version>${infinispan-cloud.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>io.undertow</groupId>
+                        <artifactId>undertow-core</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.infinispan</groupId>
                 <artifactId>infinispan-spring-boot-starter</artifactId>
-                <version>${org.infinispan_infinispan-spring-boot-starter.version}</version>
+                <version>${infinispan-spring-boot-starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.jhipster</groupId>
+                <artifactId>jhipster</artifactId>
+                <version>${jhipster-server.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jcraft</groupId>
+                <artifactId>jzlib</artifactId>
+                <version>${jzlib.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sabomichal</groupId>
+                <artifactId>liquibase-mssql</artifactId>
+                <version>${liquibase-mssql.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mattbertolini</groupId>
+                <artifactId>liquibase-slf4j</artifactId>
+                <version>${liquibase-slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.logstash.logback</groupId>
+                <artifactId>logstash-logback-encoder</artifactId>
+                <version>${logstash-logback-encoder.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.jpountz.lz4</groupId>
+                <artifactId>lz4</artifactId>
+                <version>${lz4.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct-jdk8</artifactId>
-                <version>${org.mapstruct_mapstruct-jdk8.version}</version>
+                <version>${mapstruct.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-processor</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.dropwizard.metrics</groupId>
+                <artifactId>metrics-annotation</artifactId>
+                <version>${dropwizard-metrics.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.dropwizard.metrics</groupId>
+                <artifactId>metrics-jcache</artifactId>
+                <version>${dropwizard-metrics.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.dropwizard.metrics</groupId>
+                <artifactId>metrics-json</artifactId>
+                <version>${dropwizard-metrics.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.dropwizard.metrics</groupId>
+                <artifactId>metrics-jvm</artifactId>
+                <version>${dropwizard-metrics.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.dropwizard.metrics</groupId>
+                <artifactId>metrics-servlet</artifactId>
+                <version>${dropwizard-metrics.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ryantenney.metrics</groupId>
+                <artifactId>metrics-spring</artifactId>
+                <version>${metrics-spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.mongobee</groupId>
+                <artifactId>mongobee</artifactId>
+                <version>${mongobee.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.sqlserver</groupId>
+                <artifactId>mssql-jdbc</artifactId>
+                <version>${mssql-jdbc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.jdbc</groupId>
+                <artifactId>ojdbc7</artifactId>
+                <version>${oracle-jdbc.version}</version>
+                <!-- More information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc -->
+            </dependency>
+            <dependency>
+                <groupId>org.zalando</groupId>
+                <artifactId>problem-spring-web</artifactId>
+                <version>${problem-spring-web.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.prometheus</groupId>
+                <artifactId>simpleclient</artifactId>
+                <version>${prometheus-simpleclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.prometheus</groupId>
+                <artifactId>simpleclient_dropwizard</artifactId>
+                <version>${prometheus-simpleclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.prometheus</groupId>
+                <artifactId>simpleclient_servlet</artifactId>
+                <version>${prometheus-simpleclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-configuration-processor</artifactId>
+                <version>${project.parent.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.vaadin.external.google</groupId>
+                        <artifactId>android-json</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${project.parent.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.vaadin.external.google</groupId>
+                        <artifactId>android-json</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${project.parent.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-tomcat</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-ribbon</artifactId>
+                <version>${spring-cloud-netflix.version}</version>
+                <!-- netty's native is pulled, but is useless unless you explicitly add the native binary dependency.
+                     Having it in the classpath without the binary can cause warnings -->
+                <exclusions>
+                    <exclusion>
+                        <groupId>io.netty</groupId>
+                        <artifactId>netty-transport-native-epoll</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.social</groupId>
+                <artifactId>spring-social-google</artifactId>
+                <version>${spring-social-google.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-bean-validators</artifactId>
+                <version>${springfox.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${springfox.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.mapstruct</groupId>
+                        <artifactId>mapstruct</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- BOM imports last so we (could) selectively override deps above -->
+            <dependency>
+                <groupId>org.infinispan</groupId>
+                <artifactId>infinispan-bom</artifactId>
+                <version>${infinispan.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-stream-dependencies</artifactId>
+                <version>${spring-cloud-stream.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
+
 </project>
