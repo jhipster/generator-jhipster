@@ -20,15 +20,14 @@
     <properties>
         <assertj.version>3.6.2</assertj.version>
         <awaitility.version>2.0.0</awaitility.version>
-        <bucket4j.version>2.0.1</bucket4j.version>
+        <bucket4j.version>3.0.1</bucket4j.version>
         <cassandra-driver-extras.version>3.3.0</cassandra-driver-extras.version>
         <cassandra-unit-spring.version>3.0.0.1</cassandra-unit-spring.version>
         <commons-io.version>2.5</commons-io.version>
         <commons-lang3.version>3.5</commons-lang3.version>
         <cucumber.version>1.2.4</cucumber.version>
         <dropwizard-metrics.version>3.2.2</dropwizard-metrics.version>
-        <dropwizard-metrics-spring.version>3.1.3</dropwizard-metrics-spring.version>
-        <gatling-charts-highcharts.version>2.2.5</gatling-charts-highcharts.version>
+        <gatling.version>2.2.5</gatling.version>
         <hazelcast-hibernate52.version>1.2</hazelcast-hibernate52.version>
         <hazelcast-wm.version>3.7</hazelcast-wm.version>
         <hibernate.version>5.2.10.Final</hibernate.version>
@@ -38,16 +37,17 @@
         <jzlib.version>1.1.3</jzlib.version>
         <liquibase-mssql.version>1.5</liquibase-mssql.version>
         <liquibase-slf4j.version>2.0.0</liquibase-slf4j.version>
-        <logstash-logback-encoder.version>4.9</logstash-logback-encoder.version>
+        <logstash-logback-encoder.version>4.11</logstash-logback-encoder.version>
         <lz4.version>1.3.0</lz4.version>
-        <mapstruct-jdk8.version>1.1.0.Final</mapstruct-jdk8.version>
+        <mapstruct.version>1.1.0.Final</mapstruct.version>
+        <metrics-spring.version>3.1.3</metrics-spring.version>
         <mongobee.version>0.12</mongobee.version>
         <mssql-jdbc.version>6.1.0.jre8</mssql-jdbc.version>
-        <ojdbc7.version>12.1.0.2</ojdbc7.version>
+        <oracle-jdbc.version>12.1.0.2</oracle-jdbc.version>
         <prometheus-simpleclient.version>0.0.20</prometheus-simpleclient.version>
         <springfox.version>2.7.0</springfox.version>
         <validation-api.version>1.1.0.Final</validation-api.version>
-        <spring-cloud-starter-ribbon.version>${spring-cloud-dependencies.version}</spring-cloud-starter-ribbon.version>
+        <spring-cloud.version>Dalston.SR2</spring-cloud.version>
         <spring-social-google.version>1.0.0.RELEASE</spring-social-google.version>
     </properties>
 
@@ -173,7 +173,7 @@
             <dependency>
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct-jdk8</artifactId>
-                <version>${mapstruct-jdk8.version}</version>
+                <version>${mapstruct.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.dropwizard.metrics</groupId>
@@ -213,7 +213,8 @@
             <dependency>
                 <groupId>com.oracle.jdbc</groupId>
                 <artifactId>ojdbc7</artifactId>
-                <version>${ojdbc7.version}</version>
+                <version>${oracle-jdbc.version}</version>
+                <!-- More information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc -->
             </dependency>
             <dependency>
                 <groupId>io.prometheus</groupId>
