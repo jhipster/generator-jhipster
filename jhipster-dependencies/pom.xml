@@ -4,8 +4,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>spring-boot-dependencies</artifactId>
         <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
         <version>1.5.7.RELEASE</version>
         <relativePath/>
     </parent>
@@ -271,6 +271,17 @@
                 <groupId>io.prometheus</groupId>
                 <artifactId>simpleclient_servlet</artifactId>
                 <version>${prometheus-simpleclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
+                <version>${spring.version}</version>
+                <exclusions>
+                  <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                  </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
