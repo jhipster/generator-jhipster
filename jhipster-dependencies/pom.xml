@@ -1,12 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>io.github.jhipster</groupId>
     <artifactId>jhipster-dependencies</artifactId>
-    <version>1.1.9-SNAPSHOT</version>
+    <version>1.1.11</version>
     <packaging>pom</packaging>
-    <name>jhipster-dependencies</name>
-    <description>Jhipster dependency management</description>
+    <name>JHipster dependencies</name>
+    <description>JHipster dependency management</description>
+
     <properties>
         <com.datastax.cassandra_cassandra-driver-extras.version>3.3.0</com.datastax.cassandra_cassandra-driver-extras.version>
         <com.github.mongobee_mongobee.version>0.12</com.github.mongobee_mongobee.version>
@@ -56,6 +58,7 @@
         <org.springframework.cloud_spring-cloud-starter-ribbon.version>${org.springframework.cloud_spring-cloud-dependencies.version}</org.springframework.cloud_spring-cloud-starter-ribbon.version>
         <org.springframework.social_spring-social-google.version>1.0.0.RELEASE</org.springframework.social_spring-social-google.version>
     </properties>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -257,4 +260,5 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
 </project>
