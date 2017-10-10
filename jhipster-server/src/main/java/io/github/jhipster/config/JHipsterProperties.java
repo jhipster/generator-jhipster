@@ -452,48 +452,48 @@ public class JHipsterProperties {
 
         public static class Authentication {
 
-            private final Oauth oauth = new Oauth();
+            private final Oauth2 oauth2 = new Oauth2();
 
             private final Jwt jwt = new Jwt();
 
-            public Oauth getOauth() {
-                return oauth;
+            public Oauth2 getOauth2() {
+                return oauth2;
             }
 
             public Jwt getJwt() {
                 return jwt;
             }
 
-            public static class Oauth {
+            public static class Oauth2 {
 
-                private String clientId;
+                private String issuer = "http://localhost:9080/auth/realms/jhipster";
 
-                private String clientSecret;
+                private String principalAttribute = "preferred_username";
 
-                private int tokenValidityInSeconds = 1800;
+                private String authoritiesAttribute = "roles";
 
-                public String getClientId() {
-                    return clientId;
+                public String getIssuer() {
+                    return issuer;
                 }
 
-                public void setClientId(String clientId) {
-                    this.clientId = clientId;
+                public void setIssuer(String issuer) {
+                    this.issuer = issuer;
                 }
 
-                public String getClientSecret() {
-                    return clientSecret;
+                public String getPrincipalAttribute() {
+                    return principalAttribute;
                 }
 
-                public void setClientSecret(String clientSecret) {
-                    this.clientSecret = clientSecret;
+                public void setPrincipalAttribute(String principalAttribute) {
+                    this.principalAttribute = principalAttribute;
                 }
 
-                public int getTokenValidityInSeconds() {
-                    return tokenValidityInSeconds;
+                public String getAuthoritiesAttribute() {
+                    return authoritiesAttribute;
                 }
 
-                public void setTokenValidityInSeconds(int tokenValidityInSeconds) {
-                    this.tokenValidityInSeconds = tokenValidityInSeconds;
+                public void setAuthoritiesAttribute(String authoritiesAttribute) {
+                    this.authoritiesAttribute = authoritiesAttribute;
                 }
             }
 
