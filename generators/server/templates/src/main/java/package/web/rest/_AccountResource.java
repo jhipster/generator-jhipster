@@ -155,37 +155,45 @@ public class AccountResource {
                     user.setLangKey(langKey);
                 }
 
-                Set<Authority> userAuthorities;
+                Set<<% if (databaseType === 'couchbase') { %>String<% } else { %>Authority<% } %>> userAuthorities;
 
                 // get roles from details
                 if (details.get("roles") != null) {
                     List<String> roles = (List) details.get("roles");
                     userAuthorities = roles.stream()
                         .filter(role -> role.startsWith("ROLE_"))
+                    <%_ if (databaseType !== 'couchbase') { _%>
                         .map(role -> {
                             Authority userAuthority = new Authority();
                             userAuthority.setName(role);
                             return userAuthority;
                         })
+                    <%_ } _%>
                         .collect(Collectors.toSet());
                     // if roles don't exist, try groups
                 } else if (details.get("groups") != null) {
                     List<String> groups = (List) details.get("groups");
                     userAuthorities = groups.stream()
                         .filter(group -> group.startsWith("ROLE_"))
+                    <%_ if (databaseType !== 'couchbase') { _%>
                         .map(group -> {
                             Authority userAuthority = new Authority();
                             userAuthority.setName(group);
                             return userAuthority;
                         })
+                    <%_ } _%>
                         .collect(Collectors.toSet());
                 } else {
                     userAuthorities = authentication.getAuthorities().stream()
+                    <%_ if (databaseType === 'couchbase') { _%>
+                        .map(GrantedAuthority::getAuthority)
+                    <%_ } else { _%>
                         .map(role -> {
                             Authority userAuthority = new Authority();
                             userAuthority.setName(role.getAuthority());
                             return userAuthority;
                         })
+                    <%_ } _%>
                         .collect(Collectors.toSet());
                 }
 
@@ -195,7 +203,7 @@ public class AccountResource {
                 // convert Authorities to GrantedAuthorities
                 Set<GrantedAuthority> grantedAuthorities = new LinkedHashSet<>();
                 userAuthorities.forEach(authority -> {
-                    grantedAuthorities.add(new SimpleGrantedAuthority(authority.getName()));
+                    grantedAuthorities.add(new SimpleGrantedAuthority(authority<% if (databaseType !== 'couchbase') { %>.getName()<% } %>));
                 });
 
                 // create UserDetails so #{principal.username} works

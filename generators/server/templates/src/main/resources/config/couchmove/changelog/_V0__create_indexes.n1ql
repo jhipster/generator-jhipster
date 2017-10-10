@@ -9,27 +9,7 @@ CREATE INDEX user_mail ON ${bucket}(email)
 
 CREATE INDEX audit_event ON ${bucket}(principal, event_date, event_type)
     WHERE `_class` = "<%=packageName%>.domain.PersistentAuditEvent"
-    WITH { "defer_build" : true };<% if (authenticationType === 'oauth2') { %>
-
-CREATE INDEX client_details ON ${bucket}(clientId)
-    WHERE `_class` = "<%=packageName%>.domain.OAuth2AuthenticationClientDetails"
-    WITH { "defer_build" : true };
-
-CREATE INDEX authentication_approval ON ${bucket}(clientId, userId, scope)
-    WHERE `_class` = "<%=packageName%>.domain.OAuth2AuthenticationApproval"
-    WITH { "defer_build" : true };
-
-CREATE INDEX access_token_refresh ON ${bucket}(refreshToken)
-    WHERE `_class` = "<%=packageName%>.domain.OAuth2AuthenticationAccessToken"
-    WITH { "defer_build" : true };
-
-CREATE INDEX access_token_id ON ${bucket}(authenticationId)
-    WHERE `_class` = "<%=packageName%>.domain.OAuth2AuthenticationAccessToken"
-    WITH { "defer_build" : true };
-
-CREATE INDEX access_token_user ON ${bucket}(clientId, userName)
-    WHERE `_class` = "<%=packageName%>.domain.OAuth2AuthenticationAccessToken"
-    WITH { "defer_build" : true };<% } else if (authenticationType === 'session') { %>
+    WITH { "defer_build" : true };<% if (authenticationType === 'session') { %>
 
 CREATE INDEX token_login ON ${bucket}(login)
     WHERE `_class` = "<%=packageName%>.domain.PersistentToken"
@@ -49,4 +29,4 @@ CREATE INDEX social_provider ON ${bucket}(providerId, providerUserId)
 <%_ } _%>
 
 -- build indexes asynchronously
-BUILD INDEX ON ${bucket}(type<% if (!skipUserManagement) { %>, user_mail, audit_event<% if (authenticationType === 'oauth2') { %>, client_details, authentication_approval, access_token_refresh, access_token_id, access_token_user<% } else if (authenticationType === 'session') { %>, token_login, token_date<% } %><% if (enableSocialSignIn) { %>, social_user, social_provider<% } %><% } %>);
+BUILD INDEX ON ${bucket}(type<% if (!skipUserManagement) { %>, user_mail, audit_event<% if (authenticationType === 'session') { %>, token_login, token_date<% } %><% if (enableSocialSignIn) { %>, social_user, social_provider<% } %><% } %>);
