@@ -18,6 +18,14 @@
     <description>JHipster dependency management</description>
 
     <properties>
+        <!-- Build properties -->
+        <java.version>1.8</java.version>
+        <maven.version>3.0.0</maven.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+
         <!-- Plugin versions -->
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
@@ -372,6 +380,30 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>enforce-versions</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <rules>
+                        <requireMavenVersion>
+                            <message>You are running an older version of Maven. JHipster requires at least Maven ${maven.version}</message>
+                            <version>[${maven.version},)</version>
+                        </requireMavenVersion>
+                        <requireJavaVersion>
+                            <message>You are running an older version of Java. JHipster requires at least JDK ${java.version}</message>
+                            <version>[${java.version}.0,)</version>
+                        </requireJavaVersion>
+                    </rules>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
