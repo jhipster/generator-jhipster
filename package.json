@@ -42,17 +42,17 @@
     }
   ],
   "dependencies": {
-    "chevrotain": "0.32.1",
+    "chevrotain": "0.33.0",
     "lodash": "4.17.4",
-    "winston": "2.3.1"
+    "winston": "2.4.0"
   },
   "devDependencies": {
-    "chai": "4.1.1",
-    "eslint": "4.4.1",
-    "eslint-config-airbnb-base": "11.3.1",
+    "chai": "4.1.2",
+    "eslint": "4.8.0",
+    "eslint-config-airbnb-base": "12.0.2",
     "eslint-plugin-import": "2.7.0",
     "istanbul": "0.4.5",
-    "mocha": "3.5.0",
+    "mocha": "4.0.1",
     "mocha-clean": "1.0.0",
     "pegjs": "0.10.0"
   },

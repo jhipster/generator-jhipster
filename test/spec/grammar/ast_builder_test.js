@@ -67,7 +67,9 @@ describe('ASTBuilder', () => {
                 {
                   limit:          'max_age',
                   validationType: 'max'
-                }] }] },
+                }]
+            }]
+        },
         {
           name:   'Job',
           tableName: undefined,
@@ -78,7 +80,9 @@ describe('ASTBuilder', () => {
               validations: [
                 {
                   validationType: 'required'
-                }] }] }
+                }]
+            }]
+        }
       ],
       constants: [
         {
