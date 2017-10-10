@@ -16,20 +16,17 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-/* after changing this file run '<%= clientPackageManager %> run '<%= clientPackageManager %> run webpack:build' */
-$fa-font-path: '~font-awesome/fonts';
-
-/***************************
-put Sass variables here:
-eg $input-color: red;
-****************************/
-// Override Boostrap variables
-@import "bootstrap-variables";
-// Import Bootstrap source files from node_modules
-@import 'node_modules/bootstrap/scss/bootstrap';
-<%_ if (enableI18nRTL) { _%>
-@import 'src/main/webapp/content/scss/rtl.scss';
-<%_ } _%>
-@import 'node_modules/font-awesome/scss/font-awesome';
-
-/* jhipster-needle-scss-add-vendor JHipster will add new css style */
+version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
+services:
+  keycloak:
+    image: <%= DOCKER_KEYCLOAK %>
+    command: ["-b", "0.0.0.0", "-Dkeycloak.migration.action=import", "-Dkeycloak.migration.provider=dir", "-Dkeycloak.migration.dir=/opt/jboss/keycloak/realm-config", "-Dkeycloak.migration.strategy=OVERWRITE_EXISTING", "-Djboss.socket.binding.port-offset=1000"]
+    volumes:
+      - ./realm-config:/opt/jboss/keycloak/realm-config
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+    ports:
+      - 9080:9080
+      - 9443:9443
+      - 10990:10990

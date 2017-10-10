@@ -1089,6 +1089,79 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Add new scss style to the angular application in "vendor.scss".
+     *
+     * @param {string} style - scss to add in the file
+     * @param {string} comment - comment to add before css code
+     *
+     * example:
+     *
+     * style = '.success {\n     @extend .message;\n    border-color: green;\n}'
+     * comment = 'Message'
+     *
+     * * ==========================================================================
+     * Message
+     * ========================================================================== *
+     * .success {
+     *     @extend .message;
+     *     border-color: green;
+     * }
+     *
+     */
+    addVendorSCSSStyle(style, comment) {
+        const fullPath = `${CLIENT_MAIN_SRC_DIR}content/scss/vendor.scss`;
+        let styleBlock = '';
+        if (comment) {
+            styleBlock += '/* ==========================================================================\n';
+            styleBlock += `${comment}\n`;
+            styleBlock += '========================================================================== */\n';
+        }
+        styleBlock += `${style}\n`;
+        try {
+            jhipsterUtils.rewriteFile({
+                file: fullPath,
+                needle: 'jhipster-needle-scss-add-vendor',
+                splicable: [
+                    styleBlock
+                ]
+            }, this);
+        } catch (e) {
+            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Style not added to JHipster app.\n'));
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
+     * Copy third-party library resources path.
+     *
+     * @param {string} sourceFolder - third-party library resources source path
+     * @param {string} targetFolder - third-party library resources destination path
+     */
+    copyExternalAssetsInWebpack(sourceFolder, targetFolder) {
+        const from = `${CLIENT_MAIN_SRC_DIR}content/${sourceFolder}/`;
+        const to = `content/${targetFolder}/`;
+        const webpackDevPath = `${CLIENT_WEBPACK_DIR}/webpack.common.js`;
+        let assetBlock = '';
+        if (sourceFolder && targetFolder) {
+            assetBlock = `{ from: './${from}', to: '${to}' },`;
+        }
+
+        try {
+            jhipsterUtils.rewriteFile({
+                file: webpackDevPath,
+                needle: 'jhipster-needle-add-assets-to-webpack',
+                splicable: [
+                    assetBlock
+                ]
+            }, this);
+        } catch (e) {
+            this.log(chalk.yellow('\nUnable to find ') + webpackDevPath + chalk.yellow(' or missing required jhipster-needle. Resource path not added to JHipster app.\n'));
+            this.debug('Error:', e);
+        }
+    }
+
+
+    /**
      * Add a new Maven dependency.
      *
      * @param {string} groupId - dependency groupId

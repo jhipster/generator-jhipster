@@ -46,11 +46,11 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
  * @see <%=packageName%>.security.PersistentTokenRememberMeServices
  */<% if (databaseType === 'sql') { %>
 @Entity
-@Table(name = "jhi_persistent_token")<% } %>
+@Table(name = "<%= jhiTablePrefix %>_persistent_token")<% } %>
 <%_ if (hibernateCache !== 'no' && databaseType === 'sql') { if (hibernateCache === 'infinispan') { _%>
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <%_ } else { _%>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<%_ } } _%><% if (databaseType === 'mongodb') { %>
-@Document(collection = "jhi_persistent_token")<% } %><% if (databaseType === 'couchbase') { %>
+@Document(collection = "<%= jhiTablePrefix %>_persistent_token")<% } %><% if (databaseType === 'couchbase') { %>
 @Document<% } %><% if (databaseType === 'cassandra') { %>
 @Table(name = "persistent_token")<% } %>
 public class PersistentToken implements Serializable {

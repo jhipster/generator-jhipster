@@ -53,6 +53,9 @@ services:
             - SPRING_COUCHBASE_BOOTSTRAP_HOSTS=<%= baseName.toLowerCase() %>-couchbase
             - SPRING_COUCHBASE_BUCKET_NAME=<%= baseName %>
             <%_ } _%>
+            <%_ if (authenticationType === 'oauth2') { _%>
+            - OAUTH2_ISSUER=http://keycloak:9080/auth/realms/jhipster # You'll need to add '127.0.0.1 keycloak' to your hosts file
+            <%_ } _%>
             <%_ if (prodDatabaseType === 'cassandra') { _%>
             - SPRING_DATA_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra
                 <%_ if (authenticationType === 'uaa') { _%>
@@ -180,4 +183,10 @@ services:
         # as configured in central-server-config/git2consul.json
         # Also set SPRING_CLOUD_CONSUL_CONFIG_FORMAT=files on your apps
         #    - CONFIG_MODE=git
+    <%_ } _%>
+    <%_ if (authenticationType === 'oauth2') { _%>
+    keycloak:
+        extends:
+            file: keycloak.yml
+            service: keycloak
     <%_ } _%>
