@@ -90,12 +90,12 @@ module.exports = class extends BaseGenerator {
 
         this.template(
             `${SERVER_MAIN_SRC_DIR}package/web/rest/_Controller.java`,
-            `${SERVER_MAIN_SRC_DIR + this.packageFolder}/web/rest/${this.controllerClass}Controller.java`
+            `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}Controller.java`
         );
 
         this.template(
             `${SERVER_TEST_SRC_DIR}package/web/rest/_ControllerIntTest.java`,
-            `${SERVER_TEST_SRC_DIR + this.packageFolder}/web/rest/${this.controllerClass}ControllerIntTest.java`
+            `${SERVER_TEST_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}ControllerIntTest.java`
         );
     }
 };
