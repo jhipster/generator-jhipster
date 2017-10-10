@@ -10,11 +10,11 @@ describe('ChevrotainParser', () => {
       describe('with a default start rule', () => {
         it('parses a valid JDL text', () => {
           const input = `
-       entity JobHistory {
-         startDate ZonedDateTime,
-         endDate ZonedDateTime,
-         language Language
-       }`;
+           entity JobHistory {
+              startDate ZonedDateTime,
+              endDate ZonedDateTime,
+              language Language
+           }`;
 
           // debug and step into this to experience debugging the parser's code directly without
           // the abstraction of a 10,000 lines of generated source code in the way.
@@ -30,14 +30,26 @@ describe('ChevrotainParser', () => {
           expect(cst.children.entityDeclaration[0].children.NAME[0].image).to.equal('JobHistory');
           // ...
         });
+
+        it.only('parses a valid JDL text where keywords are used as an identifier', () => {
+          const input = `
+            entity entity {
+              startDate application,
+              enum filter
+            }`;
+
+          const result = parse(input);
+          expect(result.parseErrors).to.be.empty;
+        });
       });
       describe('with a custom start rule', () => {
         it('parses a valid JDL text using a custom startRule', () => {
-          const input = `{
-        startDate ZonedDateTime,
-        endDate ZonedDateTime,
-        language Language
-      }`;
+          const input = `
+            {
+              startDate ZonedDateTime,
+              endDate ZonedDateTime,
+              language Language
+            }`;
 
           const result = parse(input, 'entityBody');
           expect(result.parseErrors).to.be.empty;
@@ -54,10 +66,9 @@ describe('ChevrotainParser', () => {
       describe('with a single syntax error', () => {
         it('reports it', () => {
           const input = `
-        myConst1 = 1
-        myConst2 = 3, /* comma should not be here */
-        myConst3 = 9
-      `;
+            myConst1 = 1
+            myConst2 = 3, /* comma should not be here */
+            myConst3 = 9`;
           const result = parse(input);
           expect(result.parseErrors).to.have.lengthOf(1);
           expect(result.parseErrors[0].message).to.equal('Expecting token of type --> EOF <-- but found --> \',\' <--');
@@ -77,10 +88,9 @@ describe('ChevrotainParser', () => {
       describe('with multiple syntax errors', () => {
         it('reports them', () => {
           const input = `
-        myConst1 = 1
-        myConst2 = 3, /* <-- comma should not be here */
-        myConst3  9
-      `;
+            myConst1 = 1
+            myConst2 = 3, /* <-- comma should not be here */
+            myConst3  9`;
 
           const result = parse(input);
           expect(result.parseErrors).to.have.lengthOf(2);
@@ -105,10 +115,10 @@ describe('ChevrotainParser', () => {
         it('partially recovers from them', () => {
           it('Can report and PARTIALLY recover from syntax errors', () => {
             const input = `
-        myConst1 = 1
-        myConst2 = = = = = /* <- too many equal signs*/ 3, 
-        myConst3 /= 9
-      `;
+              myConst1 = 1
+              myConst2 = = = = = /* <- too many equal signs*/ 3, 
+              myConst3 /= 9
+            `;
 
             const result = parse(input);
             expect(result.parseErrors).to.have.lengthOf(1);
@@ -171,8 +181,8 @@ describe('ChevrotainParser', () => {
       describe('with a default start rule', () => {
         it('provides suggestions', () => {
           const input = `
-      entity person {
-        lastName string `;
+            entity person {
+            lastName string `;
 
           const result = getSyntacticAutoCompleteSuggestions(input);
           expect(result).to.have.lengthOf(5);
