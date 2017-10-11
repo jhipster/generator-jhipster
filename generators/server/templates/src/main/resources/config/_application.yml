@@ -176,7 +176,10 @@ spring:
 # export SECURITY_OAUTH2_CLIENT_CLIENT_ID="jhipster"
 # export SECURITY_OAUTH2_CLIENT_CLIENT_SECRET="38561a05"
 # ===================================================================
+<<<<<<< 7e58360f75e4bb2168822c0eb5eceab049c85b82
 
+=======
+>>>>>>> Use new release of Jhipster
 <% } %>
 security:
     basic:
@@ -191,6 +194,10 @@ security:
         client:
             accessTokenUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token
             userAuthorizationUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/auth
+<<<<<<< 7e58360f75e4bb2168822c0eb5eceab049c85b82
+=======
+            <%_ if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
+>>>>>>> Use new release of Jhipster
             clientId: web_app
             clientSecret: web_app
             clientAuthenticationScheme: form
@@ -208,7 +215,7 @@ security:
             preferTokenInfo: false
             <%_ if (applicationType === 'gateway' || applicationType === 'microservice') {  _%>
             jwt:
-                keyUri: ${oauth2.issuer}
+                keyUri: http://localhost:9080/auth/realms/jhipster
             <%_ } _%>
     <%_ } _%>
 
@@ -240,6 +247,13 @@ jhipster:
         #exposed-headers:
         #allow-credentials: true
         #max-age: 1800
+<%_ if (authenticationType === 'oauth2' && applicationType !== 'monolith' ) { _%>
+    security:
+        authentication:
+            oauth2:
+                principal-attribute: preferred_username
+                authorities-attribute: roles
+<%_ } _%>
     mail:
         from: <%= baseName %>@localhost
     swagger:
