@@ -41,7 +41,6 @@ public class OAuth2SsoConfiguration extends WebSecurityConfigurerAdapter {
         http
             .requestMatcher(new NegatedRequestMatcher(authorizationHeaderRequestMatcher))
             .authorizeRequests()
-            .antMatchers("/swagger-resources/configuration/ui").permitAll()
             .anyRequest().permitAll();
     }
 }

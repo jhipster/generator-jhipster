@@ -537,7 +537,13 @@ function writeFiles() {
         },
 
         writeJavaUserManagementFiles() {
-            if (this.skipUserManagement && (this.applicationType !== 'monolith' || this.authenticationType !== 'oauth2')) return;
+            if (this.skipUserManagement && this.authenticationType !== 'oauth2') return;
+
+            if( this.authenticationType === 'oauth2' && this.applicationType === 'gateway') {
+            this.template(`${SERVER_MAIN_SRC_DIR}package/domain/_User.java`, `${javaDir}/domain/User.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_AccountResource.java`, `${javaDir}web/rest/AccountResource.java`);
+                return
+            }
             // user management related files
 
             /* User management resources files */
