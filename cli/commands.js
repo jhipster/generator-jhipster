@@ -52,7 +52,7 @@ module.exports = {
     server: {
         desc: 'Create a new JHipster server-side application'
     },
-    service: {
+    'spring-service': {
         argument: ['name'],
         desc: 'Create a new Spring service bean'
     },
