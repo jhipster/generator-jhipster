@@ -43,6 +43,7 @@
         <hazelcast-hibernate52.version>1.2</hazelcast-hibernate52.version>
         <hazelcast-wm.version>3.7</hazelcast-wm.version>
         <hibernate.version>5.2.10.Final</hibernate.version>
+        <hikaricp.version>2.6.0</hikaricp.version>
         <infinispan-cloud.version>9.0.0.Final</infinispan-cloud.version>
         <infinispan-spring-boot-starter.version>1.0.0.Final</infinispan-spring-boot-starter.version>
         <jhipster-server.version>1.1.11</jhipster-server.version>
@@ -56,19 +57,18 @@
         <mongobee.version>0.12</mongobee.version>
         <mssql-jdbc.version>6.1.0.jre8</mssql-jdbc.version>
         <oracle-jdbc.version>12.1.0.2</oracle-jdbc.version>
-        <problem-spring-web.version>0.20.1</problem-spring-web.version>
+        <problem-spring-web.version>0.21.0</problem-spring-web.version>
         <prometheus-simpleclient.version>0.0.20</prometheus-simpleclient.version>
         <!-- The spring-boot version should match the one in
         https://github.com/spring-io/platform/blob/v${project.parent.version}/platform-bom/pom.xml -->
         <spring-boot.version>1.5.7.RELEASE</spring-boot.version>
-        <spring-cloud.version>Dalston.SR2</spring-cloud.version>
+        <spring-cloud.version>Dalston.SR4</spring-cloud.version>
         <!-- The netflix version should match the one in
         https://github.com/spring-cloud/spring-cloud-release/blob/v${spring-cloud.version}/spring-cloud-dependencies/pom.xml -->
-        <spring-cloud-netflix.version>1.3.2.RELEASE</spring-cloud-netflix.version>
+        <spring-cloud-netflix.version>1.3.5.RELEASE</spring-cloud-netflix.version>
         <spring-cloud-stream.version>Chelsea.SR2</spring-cloud-stream.version>
         <spring-social-google.version>1.0.0.RELEASE</spring-social-google.version>
         <springfox.version>2.7.0</springfox.version>
-        <validation-api.version>1.1.0.Final</validation-api.version>
     </properties>
 
     <dependencyManagement>
