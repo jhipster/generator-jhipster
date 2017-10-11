@@ -86,7 +86,7 @@ function askForControllerActions() {
 
                 this.controllerActions.push(controllerAction);
 
-                askForControllerAction.call(this, done);
+                askForControllerAction(done);
             } else {
                 done();
             }
