@@ -18,6 +18,80 @@
 -%>
 package <%=packageName%>.web.rest;
 
+<%_ if (authenticationType === 'oauth2' && applicationType === 'gateway') { _%>
+
+import com.codahale.metrics.annotation.Timed;
+import com.mycompany.myapp.domain.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+/**
+ * REST controller for managing the current user's account.
+ */
+@RestController
+@RequestMapping("/api")
+public class AccountResource {
+
+    private final Logger log = LoggerFactory.getLogger(AccountResource.class);
+
+    /**
+     * GET  /authenticate : check if the user is authenticated, and return its login.
+     *
+     * @param request the HTTP request
+     * @return the login if the user is authenticated
+     */
+    @GetMapping("/authenticate")
+    @Timed
+    public String isAuthenticated(HttpServletRequest request) {
+        log.debug("REST request to check if the current user is authenticated");
+        return request.getRemoteUser();
+    }
+
+    /**
+     * GET  /account : get the current user.
+     *
+     * @return the current user
+     * @throws RuntimeException 500 (Internal Server Error) if the user couldn't be returned
+     */
+    @GetMapping("/account")
+    @Timed
+    @SuppressWarnings("unchecked")
+    public ResponseEntity<User> getAccount(Principal principal) {
+        return Optional.ofNullable(principal)
+            .filter(it -> it instanceof OAuth2Authentication)
+            .map(it -> ((OAuth2Authentication) it).getUserAuthentication())
+            .map(authentication -> {
+                    Map<String, Object> details = (Map<String, Object>) authentication.getDetails();
+                    return new User(
+                        authentication.getName(),
+                        (String) details.get("given_name"),
+                        (String) details.get("family_name"),
+                        (String) details.get("email"),
+                        (String) details.get("langKey"),
+                        (String) details.get("imageUrl"),
+                        (Boolean) details.get("email_verified"),
+                        authentication.getAuthorities().stream().map(it -> it.getAuthority()).collect(Collectors.toSet())
+                    );
+                }
+            )
+            .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+    }
+
+}
+<%_ } else { _%>
 import com.codahale.metrics.annotation.Timed;
 
 <%_ if (authenticationType === 'session') { _%>
@@ -419,3 +493,4 @@ public class AccountResource {
     }
 <%_ } _%>
 }
+<%_ } _%>
