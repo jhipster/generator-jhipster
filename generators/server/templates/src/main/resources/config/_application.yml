@@ -176,13 +176,6 @@ spring:
 # export SECURITY_OAUTH2_CLIENT_CLIENT_ID="jhipster"
 # export SECURITY_OAUTH2_CLIENT_CLIENT_SECRET="38561a05"
 # ===================================================================
-
-oauth2:
-    issuer: http://localhost:9080/auth/realms/jhipster
-    <%_ if (applicationType === 'gateway' || applicationType === 'microservice') {  _%>
-    principal-attribute: preferred_username
-    authorities-attribute: roles
-    <% } %>
 <% } %>
 security:
     basic:
@@ -195,8 +188,8 @@ security:
     <%_ if (authenticationType === 'oauth2') {  _%>
     oauth2:
         client:
-            accessTokenUri: ${oauth2.issuer}/protocol/openid-connect/token
-            userAuthorizationUri: ${oauth2.issuer}/protocol/openid-connect/auth
+            accessTokenUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token
+            userAuthorizationUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/auth
             <%_ if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
             clientId: web_app
             clientSecret: web_app
@@ -210,12 +203,12 @@ security:
             clientAuthenticationScheme: header
             <%_ } _%>
         resource:
-            userInfoUri: ${oauth2.issuer}/protocol/openid-connect/userinfo
-            tokenInfoUri: ${oauth2.issuer}/protocol/openid-connect/token/introspect
+            userInfoUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
+            tokenInfoUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token/introspect
             preferTokenInfo: false
             <%_ if (applicationType === 'gateway' || applicationType === 'microservice') {  _%>
             jwt:
-                keyUri: ${oauth2.issuer}
+                keyUri: http://localhost:9080/auth/realms/jhipster
             <%_ } _%>
     <%_ } _%>
 
@@ -247,6 +240,13 @@ jhipster:
         #exposed-headers:
         #allow-credentials: true
         #max-age: 1800
+<%_ if (authenticationType === 'oauth2' && applicationType !== 'monolith' ) { _%>
+    security:
+        authentication:
+            oauth2:
+                principal-attribute: preferred_username
+                authorities-attribute: roles
+<%_ } _%>
     mail:
         from: <%= baseName %>@localhost
     swagger:

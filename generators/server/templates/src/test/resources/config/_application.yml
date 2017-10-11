@@ -145,8 +145,6 @@ liquibase:
 # export SECURITY_OAUTH2_CLIENT_CLIENT_ID="jhipster"
 # export SECURITY_OAUTH2_CLIENT_CLIENT_SECRET="38561a05"
 # ===================================================================
-
-oauth2.issuer: http://localhost:9080/auth/realms/jhipster
 <% } %>
 security:
     basic:
@@ -158,15 +156,15 @@ security:
     <%_ } else if (authenticationType === 'oauth2') { _%>
     oauth2:
         client:
-            accessTokenUri: ${oauth2.issuer}/protocol/openid-connect/token
-            userAuthorizationUri: ${oauth2.issuer}/protocol/openid-connect/auth
+            accessTokenUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token
+            userAuthorizationUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/auth
             clientId: web_app
             clientSecret: web_app
             clientAuthenticationScheme: form
             scope: openid profile email
         resource:
-            userInfoUri: ${oauth2.issuer}/protocol/openid-connect/userinfo
-            tokenInfoUri: ${oauth2.issuer}/protocol/openid-connect/token/introspectr
+            userInfoUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
+            tokenInfoUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token/introspectr
             preferTokenInfo: false
     <%_ } _%>
 
@@ -209,6 +207,11 @@ jhipster:
                 secret: <%= jwtSecretKey %>
                 # Token is valid 24 hours
                 token-validity-in-seconds: 86400
+    <%_ } _%>
+    <%_ if (authenticationType === 'oauth2' && applicationType !== 'monolith' ) { _%>
+            oauth2:
+                principal-attribute: preferred_username
+                authorities-attribute: roles
     <%_ } _%>
     <%_ if ((applicationType === 'microservice' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
         client-authorization:
