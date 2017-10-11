@@ -31,7 +31,7 @@ describe('ChevrotainParser', () => {
           // ...
         });
 
-        it.only('parses a valid JDL text where keywords are used as an identifier', () => {
+        it('parses a valid JDL text where keywords are used as an identifier', () => {
           const input = `
             entity entity {
               startDate application,
