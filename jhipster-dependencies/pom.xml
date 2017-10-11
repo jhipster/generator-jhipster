@@ -69,7 +69,6 @@
         <spring-cloud-stream.version>Chelsea.SR2</spring-cloud-stream.version>
         <spring-social-google.version>1.0.0.RELEASE</spring-social-google.version>
         <springfox.version>2.7.0</springfox.version>
-        <validation-api.version>1.1.0.Final</validation-api.version>
     </properties>
 
     <dependencyManagement>
