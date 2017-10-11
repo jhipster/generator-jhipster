@@ -452,49 +452,10 @@ public class JHipsterProperties {
 
         public static class Authentication {
 
-            private final Oauth2 oauth2 = new Oauth2();
-
             private final Jwt jwt = new Jwt();
-
-            public Oauth2 getOauth2() {
-                return oauth2;
-            }
 
             public Jwt getJwt() {
                 return jwt;
-            }
-
-            public static class Oauth2 {
-
-                private String issuer = "http://localhost:9080/auth/realms/jhipster";
-
-                private String principalAttribute = "preferred_username";
-
-                private String authoritiesAttribute = "roles";
-
-                public String getIssuer() {
-                    return issuer;
-                }
-
-                public void setIssuer(String issuer) {
-                    this.issuer = issuer;
-                }
-
-                public String getPrincipalAttribute() {
-                    return principalAttribute;
-                }
-
-                public void setPrincipalAttribute(String principalAttribute) {
-                    this.principalAttribute = principalAttribute;
-                }
-
-                public String getAuthoritiesAttribute() {
-                    return authoritiesAttribute;
-                }
-
-                public void setAuthoritiesAttribute(String authoritiesAttribute) {
-                    this.authoritiesAttribute = authoritiesAttribute;
-                }
             }
 
             public static class Jwt {
