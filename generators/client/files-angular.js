@@ -150,7 +150,7 @@ const files = {
             ]
         },
         {
-            condition: generator => !generator.skipServer,
+            condition: generator => generator.skipServer,
             path: ANGULAR_DIR,
             templates: [
                 'blocks/interceptor/_auth-expired.interceptor.ts'
