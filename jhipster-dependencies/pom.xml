@@ -62,10 +62,10 @@
         <!-- The spring-boot version should match the one in
         https://github.com/spring-io/platform/blob/v${project.parent.version}/platform-bom/pom.xml -->
         <spring-boot.version>1.5.7.RELEASE</spring-boot.version>
-        <spring-cloud.version>Dalston.SR2</spring-cloud.version>
+        <spring-cloud.version>Dalston.SR4</spring-cloud.version>
         <!-- The netflix version should match the one in
         https://github.com/spring-cloud/spring-cloud-release/blob/v${spring-cloud.version}/spring-cloud-dependencies/pom.xml -->
-        <spring-cloud-netflix.version>1.3.2.RELEASE</spring-cloud-netflix.version>
+        <spring-cloud-netflix.version>1.3.5.RELEASE</spring-cloud-netflix.version>
         <spring-cloud-stream.version>Chelsea.SR2</spring-cloud-stream.version>
         <spring-social-google.version>1.0.0.RELEASE</spring-social-google.version>
         <springfox.version>2.7.0</springfox.version>
