@@ -8,9 +8,9 @@ const _ = require('lodash');
 describe('Chevrotain Migration compatibility harness', () => {
   describe('Can Parse all the existing JDL samples in the test folder', () => {
     const samplesDir = path.resolve(__dirname, '../../test_files/');
-    const jdlSamples = _.filter(fs.readdirSync(samplesDir), file => _.endsWith(file, '.jdl'));
+    const jdlSamples = fs.readdirSync(samplesDir).filter(file => _.endsWith(file, '.jdl'));
 
-    _.forEach(jdlSamples, (currSample) => {
+    jdlSamples.forEach((currSample) => {
       // uncomment the "skip" to run the compatibility tests locally.
       it.skip(`Sample: '${currSample}'`, () => {
         const sampleText = fs.readFileSync(path.resolve(__dirname, `../../test_files/${currSample}`), 'utf8');
