@@ -5,6 +5,9 @@
     "mocha": true
   },
   "extends": ["airbnb-base"],
+  "plugins": [
+    "mocha"
+  ],
   "rules": {
     "indent": [2, 2],
     "linebreak-style": ["error", "unix"],
@@ -27,6 +30,7 @@
     "no-multi-assign": "off",
     "no-param-reassign": "off",
     "no-shadow": "off",
-    "function-paren-newline": "off"
+    "function-paren-newline": "off",
+    "mocha/no-exclusive-tests": "error"
   }
 }
