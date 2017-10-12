@@ -68,7 +68,7 @@
         <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
         <%_ } _%>
         <%_ if (gatlingTests) { _%>
-        <gatling.version>2.2.5</gatling.version>
+        <gatling.version>2.3.0</gatling.version>
         <gatling-maven-plugin.version>2.2.4</gatling-maven-plugin.version>
         <%_ } _%>
         <%_ if (hibernateCache === 'hazelcast') { _%>
