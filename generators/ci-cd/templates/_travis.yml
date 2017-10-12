@@ -82,7 +82,7 @@ script:
   - ./mvnw clean test
 <%_ } else if (buildTool === 'gradle') { _%>
   - chmod +x gradlew
-  - ./gradlew clean check
+  - ./gradlew clean test
 <%_ } _%>
 <%_ if (applicationType !== 'microservice') { _%>
     <%_ if (clientFramework === 'angular1') { _%>
@@ -102,7 +102,7 @@ script:
   - ./mvnw package -Pprod -DskipTests
   <%_ } _%>
 <%_ } else if (buildTool === 'gradle') { _%>
-  - ./gradlew bootRepackage -Pprod -x check
+  - ./gradlew bootRepackage -Pprod -x test
   <%_ if (heroku.includes('travis')) { _%>
   - ./gradlew deployHeroku
   <%_ } _%>

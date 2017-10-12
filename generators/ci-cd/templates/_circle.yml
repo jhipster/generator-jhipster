@@ -66,7 +66,7 @@ test:
         - ./mvnw clean test
 <%_ } else if (buildTool === 'gradle') { _%>
         - chmod +x gradlew
-        - ./gradlew clean check --no-daemon
+        - ./gradlew clean test --no-daemon
 <%_ } _%>
 <%_ if (applicationType !== 'microservice') { _%>
     <%_ if (clientFramework === 'angular1') { _%>
@@ -86,7 +86,7 @@ test:
         - ./mvnw package -Pprod -DskipTests
     <%_ } _%>
 <%_ } else if (buildTool === 'gradle') { _%>
-        - ./gradlew bootRepackage -Pprod -x check --no-daemon
+        - ./gradlew bootRepackage -Pprod -x test --no-daemon
     <%_ if (heroku.includes('circle')) { _%>
         - ./gradlew deployHeroku --no-daemon
     <%_ } _%>

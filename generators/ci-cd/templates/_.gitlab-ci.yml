@@ -58,11 +58,11 @@ before_script:
 gradle-build:
     stage: build
     script:
-        - ./gradlew compileJava -x check -PnodeInstall --no-daemon
+        - ./gradlew compileJava -x test -PnodeInstall --no-daemon
 gradle-check:
     stage: test
     script:
-        - ./gradlew check -PnodeInstall --no-daemon
+        - ./gradlew test -PnodeInstall --no-daemon
     artifacts:
         paths:
             - build/reports/tests/*
@@ -107,7 +107,7 @@ gatling-test:
 gradle-repackage:
     stage: package
     script:
-        - ./gradlew bootRepackage -Pprod -x check -PnodeInstall --no-daemon
+        - ./gradlew bootRepackage -Pprod -x test -PnodeInstall --no-daemon
     artifacts:
         paths:
             - build/libs/*.war

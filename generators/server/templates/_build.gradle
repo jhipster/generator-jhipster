@@ -124,8 +124,7 @@ if (OperatingSystem.current().isWindows()) {
 }
 
 test {
-    include '**/*UnitTest*'
-    exclude '**/*IntTest*'
+    exclude '**/CucumberTest*'
 
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
@@ -133,21 +132,6 @@ test {
     reports.html.enabled = false
 }
 
-task integrationTest(type: Test) {
-    description = "Execute spring boot integration tests."
-    group = "verification"
-    exclude '**/*UnitTest*'
-    include '**/*IntTest*'
-
-    mustRunAfter test
-
-    // uncomment if the tests reports are not generated
-    // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
-    // ignoreFailures true
-    reports.html.enabled = false
-}
-
-check.dependsOn integrationTest
 <%_ if (cucumberTests) { _%>
 task cucumberTest(type: Test) {
     description = "Execute cucumber BDD tests."
@@ -168,10 +152,7 @@ task testReport(type: TestReport) {
     destinationDir = file("$buildDir/reports/tests")
     reportOn test
 }
-task integrationTestReport(type: TestReport) {
-    destinationDir = file("$buildDir/reports/tests")
-    reportOn integrationTest
-}
+
 <%_ if (cucumberTests) { _%>
 task cucumberTestReport(type: TestReport) {
     destinationDir = file("$buildDir/reports/tests")

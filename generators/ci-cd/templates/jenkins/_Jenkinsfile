@@ -120,7 +120,7 @@ node {
 
 <%= indent %>    stage('backend tests') {
 <%= indent %>        try {
-<%= indent %>            sh "./gradlew check -PnodeInstall --no-daemon"
+<%= indent %>            sh "./gradlew test -PnodeInstall --no-daemon"
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
 <%= indent %>        } finally {
@@ -149,7 +149,7 @@ node {
 
     <%_ } _%>
 <%= indent %>    stage('packaging') {
-<%= indent %>        sh "./gradlew bootRepackage -x check -Pprod -PnodeInstall --no-daemon"
+<%= indent %>        sh "./gradlew bootRepackage -x test -Pprod -PnodeInstall --no-daemon"
 <%= indent %>        archiveArtifacts artifacts: '**/build/libs/*.war', fingerprint: true
 <%= indent %>    }
 
