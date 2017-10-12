@@ -139,7 +139,8 @@ const files = {
                 // interceptors
                 'blocks/interceptor/_errorhandler.interceptor.ts',
                 'blocks/interceptor/_notification.interceptor.ts',
-                'blocks/interceptor/_http.provider.ts'
+                'blocks/interceptor/_http.provider.ts',
+                'blocks/interceptor/_auth-expired.interceptor.ts'
             ]
         },
         {
@@ -147,13 +148,6 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 'blocks/interceptor/_auth.interceptor.ts'
-            ]
-        },
-        {
-            condition: generator => generator.skipServer,
-            path: ANGULAR_DIR,
-            templates: [
-                'blocks/interceptor/_auth-expired.interceptor.ts'
             ]
         }
     ],
