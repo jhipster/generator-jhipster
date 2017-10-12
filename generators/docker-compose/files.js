@@ -52,6 +52,13 @@ function writeFiles() {
             this.template('_kafka.yml', 'kafka.yml');
         },
 
+        writeKeycloakFiles() {
+            if (this.authenticationType !== 'oauth2') return;
+            this.template('_keycloak.yml', 'keycloak.yml');
+            this.template('realm-config/_jhipster-realm.json', 'realm-config/jhipster-realm.json');
+            this.template('realm-config/_jhipster-users-0.json', 'realm-config/jhipster-users-0.json');
+        },
+
         writeElkFiles() {
             if (this.monitoring !== 'elk') return;
 

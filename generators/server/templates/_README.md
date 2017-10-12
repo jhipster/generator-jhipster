@@ -91,7 +91,7 @@ The `<%= clientPackageManager %> run` command will list all of the scripts avail
 
 Congratulations! You've selected an excellent way to secure your JHipster application. If you're not sure what OAuth and OpenID Connect (OIDC) are, please see [What the Heck is OAuth?](https://developer.okta.com/blog/2017/06/21/what-the-heck-is-oauth)
 
-To log in to your app, you'll need to have [Keycloak](https://keycloak.org) up and running. The JHipster Team has created a Docker container for you that has the default users and roles. You can see [the settings for Keycloak on GitHub](https://github.com/danielpetisme/jhipster-keycloak). Start Keycloak using the following command.
+To log in to your app, you'll need to have [Keycloak](https://keycloak.org) up and running. The JHipster Team has created a Docker container for you that has the default users and roles. Start Keycloak using the following command.
 
 ```
 docker-compose -f src/main/docker/keycloak.yml up
@@ -100,58 +100,55 @@ docker-compose -f src/main/docker/keycloak.yml up
 The security settings in `src/main/resources/application.yml` are configured for this image.
 
 ```yaml
-oauth2.issuer: http://localhost:9080/auth/realms/jhipster
-
 security:
     basic:
         enabled: false
     oauth2:
         client:
-            accessTokenUri: ${oauth2.issuer}/protocol/openid-connect/token
-            userAuthorizationUri: ${oauth2.issuer}/protocol/openid-connect/auth
+            accessTokenUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token
+            userAuthorizationUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/auth
             clientId: web_app
             clientSecret: web_app
             clientAuthenticationScheme: form
             scope: openid profile email
         resource:
-            userInfoUri: ${oauth2.issuer}/protocol/openid-connect/userinfo
-            tokenInfoUri: ${oauth2.issuer}/protocol/openid-connect/token/introspectr
+            userInfoUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
+            tokenInfoUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token/introspect
             preferTokenInfo: false
 ```
 
 ### Okta
 
-If you'd like to use Okta instead of Keycloak, you'll need to change a few things. First, you'll need to create a free developer account at <https://developer.okta.com/signup/>. After doing so, you'll get your own Okta instance, that has a name like `https://dev-123456.oktapreview.com`.
+If you'd like to use Okta instead of Keycloak, you'll need to change a few things. First, you'll need to create a free developer account at <https://developer.okta.com/signup/>. After doing so, you'll get your own Okta domain, that has a name like `https://dev-123456.oktapreview.com`.
 
 Modify `src/main/resources/application.yml` to use your Okta settings.
 
 ```yaml
-oauth2.issuer: https://dev-123456.oktapreview.com/oauth2/default
-
 security:
     basic:
         enabled: false
     oauth2:
         client:
-            accessTokenUri: ${oauth2.issuer}/v1/token
-            userAuthorizationUri: ${oauth2.issuer}/v1/authorize
+            accessTokenUri: https://{yourOktaDomain}.com/oauth2/default/v1/token
+            userAuthorizationUri: https://{yourOktaDomain}.com/oauth2/default/v1/authorize
             clientId: {clientId}
             clientSecret: {clientSecret}
             clientAuthenticationScheme: form
             scope: openid profile email
         resource:
-            userInfoUri: ${oauth2.issuer}/v1/userinfo
-            tokenInfoUri: ${oauth2.issuer}/v1/introspect
+            userInfoUri: https://{yourOktaDomain}.com/oauth2/default/v1/userinfo
+            tokenInfoUri: https://{yourOktaDomain}.com/oauth2/default/v1/introspect
             preferTokenInfo: false
 ```
 
-Create an OIDC App in Okta to get a `{clientId}` and `{clientSecret}`. To do this, log in to your Okta Developer account and navigate to **Applications** > **Add Application**. Click **Web** and click the Next button. Give the app a name you’ll remember, and specify "http://localhost:8080" as a Base URI and Login Redirect URI. Click **Done** and copy the client ID and secret into your `application.yml` file.
+Create an OIDC App in Okta to get a `{clientId}` and `{clientSecret}`. To do this, log in to your Okta Developer account and navigate to **Applications** > **Add Application**. Click **Web** and click the **Next** button. Give the app a name you’ll remember, and specify "http://localhost:8080" as a Base URI and Login Redirect URI. Click **Done** and copy the client ID and secret into your `application.yml` file.
 
-Create a `ROLE_ADMIN` and `ROLE_USER` group and add users into them. Create a user with username "admin@jhipster.org" and password "Java is hip in 2017!". Modify e2e tests to use this account when running integration tests. You'll need to change credentials in `src/test/javascript/e2e/account/account.spec.ts` and `src/test/javascript/e2e/admin/administration.spec.ts`.
+Create a `ROLE_ADMIN` and `ROLE_USER` group and add users into them. Create a user (e.g., "admin@jhipster.org" with password "Java is hip in 2017!"). Modify e2e tests to use this account when running integration tests. You'll need to change credentials in `src/test/javascript/e2e/account/account.spec.ts` and `src/test/javascript/e2e/admin/administration.spec.ts`.
 
 Navigate to **API** > **Authorization Servers**, click the **Authorization Servers** tab and edit the default one. Click the **Claims** tab and **Add Claim**. Name it "groups" or "roles", and include it in the ID Token. Set the value type to "Groups" and set the filter to be a Regex of `.*`.
 
-After making these changes, you should be good to go! If you have any issues, please post them to [Stack Overflow](https://stackoverflow.com/questions/tagged/jhipster). Make sure to tag your question with "jhipster" and "okta".<%_ } _%>
+After making these changes, you should be good to go! If you have any issues, please post them to [Stack Overflow](https://stackoverflow.com/questions/tagged/jhipster). Make sure to tag your question with "jhipster" and "okta".
+<%_ } _%>
 
 ### Service workers
 

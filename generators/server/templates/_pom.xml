@@ -139,7 +139,7 @@
         <%_ if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { _%>
         <postgresql.version>9.4.1212</postgresql.version>
         <%_ } _%>
-        <problem-spring-web.version>0.20.1</problem-spring-web.version>
+        <problem-spring-web.version>0.21.0</problem-spring-web.version>
         <!-- These remain empty unless the corresponding profile is active -->
         <profile.no-liquibase />
         <profile.swagger />
@@ -194,7 +194,7 @@
         <spring-cloud-stream.version>Chelsea.SR2</spring-cloud-stream.version>
         <%_ } _%>
         <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
-        <spring-cloud.version>Dalston.SR2</spring-cloud.version>
+        <spring-cloud.version>Dalston.SR4</spring-cloud.version>
         <%_ } _%>
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
         <spring-security-oauth.version>2.0.12.RELEASE</spring-security-oauth.version>
