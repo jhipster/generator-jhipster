@@ -96,7 +96,7 @@ describe('Component Tests', () => {
             inject([PasswordResetInitService], (service: PasswordResetInitService) => {
                 spyOn(service, 'save').and.returnValue(Observable.throw({
                     status: 400,
-                    json: function() {
+                    json() {
                         return {type : EMAIL_NOT_FOUND_TYPE}
                     }
                 }));
