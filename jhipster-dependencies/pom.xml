@@ -34,8 +34,8 @@
         <assertj.version>3.6.2</assertj.version>
         <awaitility.version>2.0.0</awaitility.version>
         <bucket4j.version>3.0.1</bucket4j.version>
-        <cassandra-driver-extras.version>3.3.0</cassandra-driver-extras.version>
-        <cassandra-unit-spring.version>3.0.0.1</cassandra-unit-spring.version>
+        <cassandra-driver.version>3.3.0</cassandra-driver.version>
+        <cassandra-unit-spring.version>3.3.0.2</cassandra-unit-spring.version>
         <cucumber.version>1.2.4</cucumber.version>
         <dropwizard-metrics.version>3.2.2</dropwizard-metrics.version>
         <gatling.version>2.2.5</gatling.version>
@@ -91,7 +91,7 @@
             <dependency>
                 <groupId>com.datastax.cassandra</groupId>
                 <artifactId>cassandra-driver-extras</artifactId>
-                <version>${cassandra-driver-extras.version}</version>
+                <version>${cassandra-driver.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.cassandraunit</groupId>
