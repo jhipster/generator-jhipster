@@ -138,8 +138,6 @@ task cucumberTest(type: Test) {
     group = "verification"
     include '**/CucumberTest*'
 
-    mustRunAfter integrationTest
-
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
