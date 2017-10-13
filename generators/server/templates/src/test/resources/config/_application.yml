@@ -145,7 +145,11 @@ liquibase:
 # export SECURITY_OAUTH2_CLIENT_CLIENT_ID="jhipster"
 # export SECURITY_OAUTH2_CLIENT_CLIENT_SECRET="38561a05"
 # ===================================================================
+<<<<<<< HEAD
 <% } %>
+=======
+<%_ } _%>
+>>>>>>> 4ce55512a7d92cb1d161ffce32c7fb9271488107
 security:
     basic:
         enabled: false
@@ -207,6 +211,11 @@ jhipster:
                 secret: <%= jwtSecretKey %>
                 # Token is valid 24 hours
                 token-validity-in-seconds: 86400
+    <%_ } _%>
+    <%_ if (authenticationType === 'oauth2' && applicationType !== 'monolith' ) { _%>
+            oauth2:
+                principal-attribute: preferred_username
+                authorities-attribute: roles
     <%_ } _%>
     <%_ if ((applicationType === 'microservice' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
         client-authorization:

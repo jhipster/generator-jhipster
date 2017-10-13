@@ -539,6 +539,14 @@ function writeFiles() {
         writeJavaUserManagementFiles() {
             if (this.skipUserManagement && this.authenticationType !== 'oauth2') return;
 
+<<<<<<< HEAD
+=======
+            if( this.authenticationType === 'oauth2' && this.applicationType === 'gateway') {
+            this.template(`${SERVER_MAIN_SRC_DIR}package/domain/_User.java`, `${javaDir}/domain/User.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_AccountResource.java`, `${javaDir}web/rest/AccountResource.java`);
+                return
+            }
+>>>>>>> 4ce55512a7d92cb1d161ffce32c7fb9271488107
             // user management related files
 
             /* User management resources files */
