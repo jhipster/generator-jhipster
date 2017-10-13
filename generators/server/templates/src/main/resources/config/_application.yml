@@ -176,7 +176,7 @@ spring:
 # export SECURITY_OAUTH2_CLIENT_CLIENT_ID="jhipster"
 # export SECURITY_OAUTH2_CLIENT_CLIENT_SECRET="38561a05"
 # ===================================================================
-<% } %>
+<%_ } _%>
 security:
     basic:
         enabled: false
