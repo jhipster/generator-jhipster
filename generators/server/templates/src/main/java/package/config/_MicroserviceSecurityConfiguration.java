@@ -222,11 +222,8 @@ import java.util.Optional;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerAdapter {
 
-<<<<<<< HEAD
     private final String oauth2PrincipalAttribute = "preferred_username";
     private final String oauth2AuthoritiesAttribute = "roles";
-=======
->>>>>>> 4ce55512a7d92cb1d161ffce32c7fb9271488107
     private final ResourceServerProperties resourceServerProperties;
 
     public MicroserviceSecurityConfiguration(ResourceServerProperties resourceServerProperties) {
@@ -243,20 +240,12 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
     }
 
     @Bean
-<<<<<<< HEAD
     public PrincipalExtractor principalExtractor() {
-=======
-    public PrincipalExtractor principalExtractor(@Value("${oauth2.principal-attribute}") String oauth2PrincipalAttribute) {
->>>>>>> 4ce55512a7d92cb1d161ffce32c7fb9271488107
         return new SimplePrincipalExtractor(oauth2PrincipalAttribute);
     }
 
     @Bean
-<<<<<<< HEAD
     public AuthoritiesExtractor authoritiesExtractor() {
-=======
-    public AuthoritiesExtractor authoritiesExtractor(@Value("${oauth2.authorities-attribute}") String oauth2AuthoritiesAttribute) {
->>>>>>> 4ce55512a7d92cb1d161ffce32c7fb9271488107
         return new SimpleAuthoritiesExtractor(oauth2AuthoritiesAttribute);
     }
 
