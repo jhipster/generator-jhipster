@@ -240,13 +240,6 @@ jhipster:
         #exposed-headers:
         #allow-credentials: true
         #max-age: 1800
-<%_ if (authenticationType === 'oauth2' && applicationType !== 'monolith' ) { _%>
-    security:
-        authentication:
-            oauth2:
-                principal-attribute: preferred_username
-                authorities-attribute: roles
-<%_ } _%>
     mail:
         from: <%= baseName %>@localhost
     swagger:

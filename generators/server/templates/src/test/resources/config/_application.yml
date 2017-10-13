@@ -208,11 +208,6 @@ jhipster:
                 # Token is valid 24 hours
                 token-validity-in-seconds: 86400
     <%_ } _%>
-    <%_ if (authenticationType === 'oauth2' && applicationType !== 'monolith' ) { _%>
-            oauth2:
-                principal-attribute: preferred_username
-                authorities-attribute: roles
-    <%_ } _%>
     <%_ if ((applicationType === 'microservice' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
         client-authorization:
             <%_ if (applicationType !== 'uaa') { _%>
