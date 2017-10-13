@@ -39,7 +39,10 @@ plugins {
     id "org.sonarqube" version "2.5"
     id "net.ltgt.apt" version "0.11"
     id "io.spring.dependency-management" version "1.0.3.RELEASE"
-     <%_ if (!skipClient) { _%>
+    <%_ if (gatlingTests) { _%>
+    id "com.github.lkishalmi.gatling" version "0.7.1"
+    <%_ } _%>
+    <%_ if (!skipClient) { _%>
     id "com.moowork.node" version "1.2.0"
     <%_ } _%>
     //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
@@ -429,9 +432,6 @@ dependencies {
     testCompile "de.flapdoodle.embed:de.flapdoodle.embed.mongo"
     <%_ } _%>
     testCompile "org.hamcrest:hamcrest-library"
-    <%_ if (gatlingTests) { _%>
-    testCompile "io.gatling.highcharts:gatling-charts-highcharts:${gatling_version}"
-    <%_ } _%>
     <%_ if (devDatabaseType !== 'h2Disk' && devDatabaseType !== 'h2Memory') { _%>
     testCompile "com.h2database:h2"
     <%_ } _%>
