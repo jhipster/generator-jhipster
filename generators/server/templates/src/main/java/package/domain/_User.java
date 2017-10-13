@@ -39,7 +39,9 @@ public class User {
 
     private final Set<String> authorities;
 
-    public User(String login, String firstName, String lastName, String email, String langKey, String imageUrl, boolean activated, Set<String> authorities) {
+    public User(String login, String firstName, String lastName, String email, String langKey,
+        String imageUrl, boolean activated, Set<String> authorities) {
+
         this.login = login;
         this.firstName = firstName;
         this.lastName = lastName;
