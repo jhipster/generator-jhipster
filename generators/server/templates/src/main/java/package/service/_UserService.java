@@ -257,7 +257,6 @@ public class UserService {
         log.debug("Created Information for User: {}", user);
         return user;
     }
-<%_ } _%>
 
     /**
      * Update basic information (first name, last name, email, language) for the current user.
@@ -334,6 +333,7 @@ public class UserService {
             })
             .map(UserDTO::new);
     }
+<%_ } _%>
 
     public void deleteUser(String login) {
         userRepository.findOneByLogin(login).ifPresent(user -> {
