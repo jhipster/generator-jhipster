@@ -203,9 +203,6 @@ module.exports = class extends BaseGenerator {
                 // JWT authentication is mandatory with Eureka, so the JHipster Registry
                 // can control the applications
                 if (this.serviceDiscoveryType === 'eureka' && (this.authenticationType !== 'uaa' && this.authenticationType !== 'oauth2')) {
-                    console.log("+++++++++++++++++++");
-                    console.log(">> " + this.serviceDiscoveryType);
-                    console.log(">> " + this.authenticationType);
                     this.authenticationType = 'jwt';
                 }
                 if (this.authenticationType === 'session') {
