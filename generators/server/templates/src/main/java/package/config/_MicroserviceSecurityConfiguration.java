@@ -190,7 +190,7 @@ import <%=packageName%>.security.oauth2.SimplePrincipalExtractor;
 <%_ if(applicationType === 'gateway') { _%>
 import org.springframework.beans.factory.annotation.Qualifier;
 <%_ } _%>
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.PrincipalExtractor;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
@@ -203,15 +203,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+<%_ if(applicationType === 'gateway') { _%>
 import org.springframework.security.web.util.matcher.RequestHeaderRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+<%_ } _%>
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
@@ -282,11 +283,13 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
     }
 
     @Bean
+    @ConditionalOnProperty("security.oauth2.resource.jwt.key-uri")
     public TokenStore tokenStore(JwtAccessTokenConverter jwtAccessTokenConverter) {
         return new JwtTokenStore(jwtAccessTokenConverter);
     }
 
     @Bean
+    @ConditionalOnProperty("security.oauth2.resource.jwt.key-uri")
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
         converter.setVerifierKey(getKeyFromAuthorizationServer());
