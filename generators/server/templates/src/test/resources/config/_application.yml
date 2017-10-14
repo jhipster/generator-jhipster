@@ -122,7 +122,6 @@ liquibase:
     contexts: test
 
 <%_ if (authenticationType === 'oauth2') { _%>
-
 # ===================================================================
 # OpenID Connect Settings. Default settings are for Keycloak in Docker.
 # Start Keycloak using `docker-compose -f src/main/docker/keycloak.yml up`.
