@@ -26,6 +26,8 @@ const writeAngularJsFiles = require('./files-angularjs').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 
+let useBlueprint;
+
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
@@ -142,20 +144,11 @@ module.exports = class extends BaseGenerator {
         this.clientPackageManager = this.configOptions.clientPackageManager;
         this.isDebugEnabled = this.configOptions.isDebugEnabled || this.options.debug;
         const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
-        if (blueprint) {
-            try {
-                this.useBlueprint = true;
-                this.composeExternalModule(blueprint, 'client', {
-                    jhipsterContext: this
-                });
-            } catch (e) {
-                this.useBlueprint = false;
-            }
-        }
+        useBlueprint = this.composeBlueprint(blueprint, 'client'); // use global variable since getters dont have access to instance property
     }
 
     get initializing() {
-        if (this.useBlueprint) return;
+        if (useBlueprint) return;
         return {
             displayLogo() {
                 if (this.logo) {
@@ -227,7 +220,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get prompting() {
-        if (this.useBlueprint) return;
+        if (useBlueprint) return;
         return {
             askForModuleName: prompts.askForModuleName,
             askForClient: prompts.askForClient,
@@ -242,7 +235,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get configuring() {
-        if (this.useBlueprint) return;
+        if (useBlueprint) return;
         return {
             insight() {
                 const insight = this.insight();
@@ -295,7 +288,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get default() {
-        if (this.useBlueprint) return;
+        if (useBlueprint) return;
         return {
             getSharedConfigOptions() {
                 if (this.configOptions.hibernateCache) {
@@ -372,7 +365,7 @@ module.exports = class extends BaseGenerator {
     }
 
     writing() {
-        if (this.useBlueprint) return;
+        if (useBlueprint) return;
         if (this.clientFramework === 'angular1') {
             return writeAngularJsFiles.call(this);
         }
@@ -380,7 +373,7 @@ module.exports = class extends BaseGenerator {
     }
 
     install() {
-        if (this.useBlueprint) return;
+        if (useBlueprint) return;
         let logMsg =
             `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install`)}`;
 
@@ -415,7 +408,7 @@ module.exports = class extends BaseGenerator {
     }
 
     end() {
-        if (this.useBlueprint) return;
+        if (useBlueprint) return;
         this.log(chalk.green.bold('\nClient application generated successfully.\n'));
 
         let logMsg =

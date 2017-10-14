@@ -1574,9 +1574,9 @@ module.exports = class extends PrivateBase {
 
     /**
      * Compose an external generator with Yeoman.
-     * @param {string} npmPackageName package name
-     * @param {string} subGen sub generator name
-     * @param {any} options options to pass
+     * @param {string} npmPackageName - package name
+     * @param {string} subGen - sub generator name
+     * @param {any} options - options to pass
      */
     composeExternalModule(npmPackageName, subGen, options) {
         let generatorTocall = path.join(process.cwd(), 'node_modules', npmPackageName, 'generators', subGen);

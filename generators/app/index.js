@@ -125,33 +125,33 @@ module.exports = class extends BaseGenerator {
                 this.printJHipsterLogo();
             },
 
-            checkBlueprint() {
+            validateBlueprint() {
                 if (this.blueprint) {
                     this.checkBlueprint(this.blueprint);
                 }
             },
 
-            checkJava() {
+            validateJava() {
                 this.checkJava();
             },
 
-            checkNode() {
+            validateNode() {
                 this.checkNode();
             },
 
-            checkGit() {
+            validateGit() {
                 this.checkGit();
             },
 
-            checkGitConnection() {
+            validateGitConnection() {
                 this.checkGitConnection();
             },
 
-            checkYarn() {
+            validateYarn() {
                 this.checkYarn();
             },
 
-            checkForNewVersion() {
+            checkForNewJHVersion() {
                 if (!this.skipChecks) {
                     this.checkForNewVersion();
                 }

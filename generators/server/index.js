@@ -27,7 +27,7 @@ const crypto = require('crypto');
 const os = require('os');
 const constants = require('../generator-constants');
 
-/* Constants used throughout */
+let useBlueprint;
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -83,20 +83,11 @@ module.exports = class extends BaseGenerator {
         this.clientPackageManager = this.configOptions.clientPackageManager;
         this.isDebugEnabled = this.configOptions.isDebugEnabled || this.options.debug;
         const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
-        if (blueprint) {
-            try {
-                this.useBlueprint = true;
-                this.composeExternalModule(blueprint, 'server', {
-                    jhipsterContext: this
-                });
-            } catch (e) {
-                this.useBlueprint = false;
-            }
-        }
+        useBlueprint = this.composeBlueprint(blueprint, 'server'); // use global variable since getters dont have access to instance property
     }
 
     get initializing() {
-        if (this.useBlueprint) return;
+        if (useBlueprint) return;
         return {
             displayLogo() {
                 if (this.logo) {
@@ -287,7 +278,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get prompting() {
-        if (this.useBlueprint) return;
+        if (useBlueprint) return;
         return {
             askForModuleName: prompts.askForModuleName,
             askForServerSideOpts: prompts.askForServerSideOpts,
@@ -327,7 +318,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get configuring() {
-        if (this.useBlueprint) return;
+        if (useBlueprint) return;
         return {
             insight() {
                 const insight = this.insight();
@@ -402,7 +393,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get default() {
-        if (this.useBlueprint) return;
+        if (useBlueprint) return;
         return {
             getSharedConfigOptions() {
                 this.useSass = this.configOptions.useSass ? this.configOptions.useSass : false;
@@ -435,12 +426,12 @@ module.exports = class extends BaseGenerator {
     }
 
     get writing() {
-        if (this.useBlueprint) return;
+        if (useBlueprint) return;
         return writeFiles();
     }
 
     end() {
-        if (this.useBlueprint) return;
+        if (useBlueprint) return;
         if (this.prodDatabaseType === 'oracle') {
             this.log('\n\n');
             this.warning(`${chalk.yellow.bold('You have selected Oracle database.\n')

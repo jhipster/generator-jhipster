@@ -29,6 +29,7 @@ const constants = require('../generator-constants');
 
 /* constants used throughout */
 const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
+let useBlueprint;
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -113,20 +114,11 @@ module.exports = class extends BaseGenerator {
         this.fieldNameChoices = [];
         this.relNameChoices = [];
         const blueprint = this.config.get('blueprint');
-        if (blueprint) {
-            try {
-                this.useBlueprint = true;
-                this.composeExternalModule(blueprint, 'entity', {
-                    jhipsterContext: this
-                });
-            } catch (e) {
-                this.useBlueprint = false;
-            }
-        }
+        useBlueprint = this.composeBlueprint(blueprint, 'entity'); // use global variable since getters dont have access to instance property
     }
 
     get initializing() {
-        if (this.useBlueprint) return;
+        if (useBlueprint) return;
         return {
             getConfig() {
                 this.useConfigurationFile = false;
@@ -251,7 +243,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get prompting() {
-        if (this.useBlueprint) return;
+        if (useBlueprint) return;
         return {
             /* pre entity hook needs to be written here */
             askForMicroserviceJson: prompts.askForMicroserviceJson,
@@ -270,7 +262,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get configuring() {
-        if (this.useBlueprint) return;
+        if (useBlueprint) return;
         return {
             validateFile() {
                 if (!this.useConfigurationFile) {
@@ -696,12 +688,12 @@ module.exports = class extends BaseGenerator {
     }
 
     get writing() {
-        if (this.useBlueprint) return;
+        if (useBlueprint) return;
         return writeFiles();
     }
 
     get install() {
-        if (this.useBlueprint) return;
+        if (useBlueprint) return;
         return {
             afterRunHook() {
                 const done = this.async();
@@ -756,7 +748,7 @@ module.exports = class extends BaseGenerator {
     }
 
     end() {
-        if (this.useBlueprint) return;
+        if (useBlueprint) return;
         if (!this.options['skip-install'] && !this.skipClient) {
             if (this.clientFramework === 'angular1') {
                 this.injectJsFilesToIndex();
