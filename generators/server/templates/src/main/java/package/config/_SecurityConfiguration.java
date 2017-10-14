@@ -85,8 +85,8 @@ import javax.annotation.PostConstruct;
 <%_ } _%>
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
     <%_ if (authenticationType !== 'oauth2') { _%>
+
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     private final UserDetailsService userDetailsService;
