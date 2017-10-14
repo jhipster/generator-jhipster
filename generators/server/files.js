@@ -538,7 +538,7 @@ function writeFiles() {
 
         writeJavaUserManagementFiles() {
             if (this.skipUserManagement) {
-                if (this.authenticationType === 'oauth2') { 
+                if (this.authenticationType === 'oauth2') {
                     this.copy(`${SERVER_MAIN_RES_DIR}config/liquibase/authorities.csv`, `${SERVER_MAIN_RES_DIR}config/liquibase/authorities.csv`);
                     this.copy(`${SERVER_MAIN_RES_DIR}config/liquibase/users_authorities.csv`, `${SERVER_MAIN_RES_DIR}config/liquibase/users_authorities.csv`);
 
