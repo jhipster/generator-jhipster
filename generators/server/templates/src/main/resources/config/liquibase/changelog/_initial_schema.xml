@@ -57,6 +57,7 @@
     -->
     <changeSet id="00000000000001" author="jhipster">
 <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
+    <%_ if (authenticationType !== 'oauth2') { _%>
         <createTable tableName="<%= jhiTablePrefix %>_user">
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
@@ -108,6 +109,7 @@
             <column name="email" type="varchar(100)"/>
         </createIndex>
     <%_ } _%>
+    <%_ } _%>
         <createTable tableName="<%= jhiTablePrefix %>_authority">
             <column name="name" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
@@ -145,12 +147,13 @@
                                  constraintName="fk_authority_name"
                                  referencedColumnNames="name"
                                  referencedTableName="<%= jhiTablePrefix %>_authority"/>
-
+        <%_ if (authenticationType !== 'oauth2') { _%>
         <addForeignKeyConstraint baseColumnNames="user_id"
                                  baseTableName="<%= jhiTablePrefix %>_user_authority"
                                  constraintName="fk_user_id"
                                  referencedColumnNames="id"
                                  referencedTableName="<%= jhiTablePrefix %>_user"/>
+        <%_ } _%>
     <%_ if (authenticationType === 'session') { _%>
 
         <addForeignKeyConstraint baseColumnNames="user_id"
@@ -159,6 +162,7 @@
                                  referencedColumnNames="id"
                                  referencedTableName="<%= jhiTablePrefix %>_user"/>
     <%_ } _%>
+    <%_ if (authenticationType !== 'oauth2') { _%>
         <<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData encoding="UTF-8"
                   file="config/liquibase/users.csv"
                   separator=";"
@@ -170,7 +174,7 @@
             <column name="created_date" type="timestamp"/>
         </<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData>
         <dropDefaultValue tableName="<%= jhiTablePrefix %>_user" columnName="created_date" columnDataType="datetime"/>
-
+    <%_ } _%>
         <<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData encoding="UTF-8"
                   file="config/liquibase/authorities.csv"
                   separator=";"
