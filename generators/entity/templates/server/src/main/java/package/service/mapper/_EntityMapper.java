@@ -33,19 +33,18 @@ import org.mapstruct.*;
       if (existingMappings.indexOf(relationships[idx].otherEntityNameCapitalized) === -1 && relationships[idx].otherEntityNameCapitalized !== entityClass) {
           existingMappings.push(relationships[idx].otherEntityNameCapitalized);
       %><%= relationships[idx].otherEntityNameCapitalized %>Mapper.class, <% } } } %>})
-public interface <%= entityClass %>Mapper extends EntityMapper <<%= entityClass %>DTO, <%= entityClass %>> {<%
-// entity -> DTO mapping
+public interface <%= entityClass %>Mapper extends EntityMapper <<%= entityClass %>DTO, <%= entityClass %>> {
+<%// entity -> DTO mapping
 var renMapAnotEnt = false; //Render Mapping Annotation during Entity to DTO conversion?
 for (idx in relationships) {
     const relationshipType = relationships[idx].relationshipType;
     const relationshipName = relationships[idx].relationshipName;
     const ownerSide = relationships[idx].ownerSide;
     if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {renMapAnotEnt = true;%>
-
     @Mapping(source = "<%= relationshipName %>.id", target = "<%= relationships[idx].relationshipFieldName %>Id")<% if (relationships[idx].otherEntityFieldCapitalized !='Id' && relationships[idx].otherEntityFieldCapitalized !== '') { %>
     @Mapping(source = "<%= relationshipName %>.<%= relationships[idx].otherEntityField %>", target = "<%= relationships[idx].relationshipFieldName %><%= relationships[idx].otherEntityFieldCapitalized %>")<% } } } %>
-    <% if(renMapAnotEnt === true) { %><%= entityClass %>DTO toDto(<%= entityClass %> <%= entityInstance %>); <% } %><%
-// DTO -> entity mapping
+    <% if(renMapAnotEnt === true) { %><%= entityClass %>DTO toDto(<%= entityClass %> <%= entityInstance %>); <% } %>
+<%// DTO -> entity mapping
 var renMapAnotDto = false;  //Render Mapping Annotation during DTO to Entity conversion?
 for (idx in relationships) {
     const relationshipType = relationships[idx].relationshipType;
@@ -53,13 +52,12 @@ for (idx in relationships) {
     const relationshipNamePlural = relationships[idx].relationshipNamePlural;
     const ownerSide = relationships[idx].ownerSide;
     if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {renMapAnotDto = true; %>
-
     @Mapping(source = "<%= relationshipName %>Id", target = "<%= relationshipName %>")<% } else if (relationshipType === 'many-to-many' && ownerSide === false) {renMapAnotDto = true; %>
     @Mapping(target = "<%= relationshipNamePlural %>", ignore = true)<% } else if (relationshipType === 'one-to-many') {renMapAnotDto = true; %>
     @Mapping(target = "<%= relationshipNamePlural %>", ignore = true)<% } else if (relationshipType === 'one-to-one' && ownerSide === false) {renMapAnotDto = true; %>
     @Mapping(target = "<%= relationshipName %>", ignore = true)<% } } %>
     <% if(renMapAnotDto === true) { %><%= entityClass %> toEntity(<%= entityClass%>DTO <%= entityInstance %>DTO); <% } %>
-    <%_ if(databaseType === 'sql') { _%>
+    <% if(databaseType === 'sql') { %>
     default <%= entityClass %> fromId(Long id) {
         if (id == null) {
             return null;
