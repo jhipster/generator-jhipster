@@ -140,7 +140,7 @@ public class CacheConfiguration {
     @Bean
     public JCacheManagerCustomizer cacheManagerCustomizer() {
         return cm -> {
-            <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
+            <%_ if (!skipUserManagement) { _%>
             cm.createCache("users", jcacheConfiguration);
             cm.createCache(<%=packageName%>.domain.User.class.getName(), jcacheConfiguration);
             cm.createCache(<%=packageName%>.domain.Authority.class.getName(), jcacheConfiguration);

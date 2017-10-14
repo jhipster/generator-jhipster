@@ -537,7 +537,16 @@ function writeFiles() {
         },
 
         writeJavaUserManagementFiles() {
-            if (this.skipUserManagement && this.authenticationType !== 'oauth2' && this.applicationType !== 'gateway') return;
+            if (this.skipUserManagement) {
+                if (this.authenticationType === 'oauth2') {
+                    this.copy(`${SERVER_MAIN_RES_DIR}config/liquibase/authorities.csv`, `${SERVER_MAIN_RES_DIR}config/liquibase/authorities.csv`);
+                    this.copy(`${SERVER_MAIN_RES_DIR}config/liquibase/users_authorities.csv`, `${SERVER_MAIN_RES_DIR}config/liquibase/users_authorities.csv`);
+
+                    this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_AccountResource.java`, `${javaDir}web/rest/AccountResource.java`);
+                    this.template(`${SERVER_MAIN_SRC_DIR}package/domain/_User.java`, `${javaDir}domain/User.java`);
+                }
+                return;
+            }
 
             /* User management resources files */
             if (this.databaseType === 'sql') {

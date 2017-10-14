@@ -18,8 +18,7 @@ limitations under the License.
 -%>
 package <%=packageName%>.web.rest;
 
-<%_ if (authenticationType === 'oauth2' && applicationType === 'gateway') { _%>
-import <%=packageName%>.domain.User;
+<%_ if (authenticationType === 'oauth2' ) { _%>
 
 import com.codahale.metrics.annotation.Timed;
 import org.slf4j.Logger;
