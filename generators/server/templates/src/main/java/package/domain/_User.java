@@ -18,7 +18,7 @@
 -%>
 package <%=packageName%>.domain;
 
-<%_ if (authenticationType === 'oauth2' && applicationType === 'gateway') { _%>
+<%_ if (authenticationType === 'oauth2') { _%>
 import java.util.Set;
 
 public class User {
