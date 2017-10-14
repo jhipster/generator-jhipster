@@ -1559,30 +1559,42 @@ module.exports = class extends PrivateBase {
             if (module.hookFor === hookFor && module.hookType === hookType) {
                 // compose with the modules callback generator
                 const hook = module.generatorCallback.split(':')[1];
-                let generatorTocall = path.join(process.cwd(), 'node_modules', module.npmPackageName, 'generators', hook || 'app');
                 try {
-                    if (!fs.existsSync(generatorTocall)) {
-                        this.debug('using global module as local version could not be found in node_modules');
-                        generatorTocall = path.join(module.npmPackageName, 'generators', hook || 'app');
-                    }
-                    this.debug('Running yeoman compose with options: ', generatorTocall, options);
-                    this.composeWith(require.resolve(generatorTocall), options);
-                } catch (err) {
-                    this.debug('ERROR:', err);
-                    try {
-                        // Fallback for legacy modules
-                        this.debug('Running yeoman legacy compose with options: ', module.generatorCallback, options);
-                        this.composeWith(module.generatorCallback, options);
-                    } catch (e) {
-                        this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
-                            chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow(`'npm install -g ${module.npmPackageName}'`));
-                        this.debug('ERROR:', e);
-                    }
+                    this.composeExternalModule(module.npmPackageName, hook || 'app', options);
+                } catch (e) {
+                    this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
+                        chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow(`'npm install -g ${module.npmPackageName}'`));
+                    this.debug('ERROR:', e);
                 }
             }
         });
         this.debug('calling callback');
         cb && cb();
+    }
+
+    /**
+     * Compose an external generator with Yeoman.
+     * @param {string} npmPackageName package name
+     * @param {string} subGen sub generator name
+     * @param {any} options options to pass
+     */
+    composeExternalModule(npmPackageName, subGen, options) {
+        let generatorTocall = path.join(process.cwd(), 'node_modules', npmPackageName, 'generators', subGen);
+        try {
+            if (!fs.existsSync(generatorTocall)) {
+                this.debug('using global module as local version could not be found in node_modules');
+                generatorTocall = path.join(npmPackageName, 'generators', subGen);
+            }
+            this.debug('Running yeoman compose with options: ', generatorTocall, options);
+            this.composeWith(require.resolve(generatorTocall), options);
+        } catch (err) {
+            this.debug('ERROR:', err);
+            const generatorName = npmPackageName.replace('generator-', '');
+            const generatorCallback = `${generatorName}:${subGen}`;
+            // Fallback for legacy modules
+            this.debug('Running yeoman legacy compose with options: ', generatorCallback, options);
+            this.composeWith(generatorCallback, options);
+        }
     }
 
     /**

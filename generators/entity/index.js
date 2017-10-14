@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
 const shelljs = require('shelljs');
@@ -111,9 +112,21 @@ module.exports = class extends BaseGenerator {
         // these constiable will hold field and relationship names for question options during update
         this.fieldNameChoices = [];
         this.relNameChoices = [];
+        const blueprint = this.config.get('blueprint');
+        if (blueprint) {
+            try {
+                this.useBlueprint = true;
+                this.composeExternalModule(blueprint, 'entity', {
+                    jhipsterContext: this
+                });
+            } catch (e) {
+                this.useBlueprint = false;
+            }
+        }
     }
 
     get initializing() {
+        if (this.useBlueprint) return;
         return {
             getConfig() {
                 this.useConfigurationFile = false;
@@ -238,6 +251,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get prompting() {
+        if (this.useBlueprint) return;
         return {
             /* pre entity hook needs to be written here */
             askForMicroserviceJson: prompts.askForMicroserviceJson,
@@ -256,6 +270,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get configuring() {
+        if (this.useBlueprint) return;
         return {
             validateFile() {
                 if (!this.useConfigurationFile) {
@@ -681,10 +696,12 @@ module.exports = class extends BaseGenerator {
     }
 
     get writing() {
+        if (this.useBlueprint) return;
         return writeFiles();
     }
 
     get install() {
+        if (this.useBlueprint) return;
         return {
             afterRunHook() {
                 const done = this.async();
@@ -739,6 +756,7 @@ module.exports = class extends BaseGenerator {
     }
 
     end() {
+        if (this.useBlueprint) return;
         if (!this.options['skip-install'] && !this.skipClient) {
             if (this.clientFramework === 'angular1') {
                 this.injectJsFilesToIndex();

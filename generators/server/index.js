@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
 const prompts = require('./prompts');
@@ -81,9 +82,21 @@ module.exports = class extends BaseGenerator {
         this.baseName = this.configOptions.baseName;
         this.clientPackageManager = this.configOptions.clientPackageManager;
         this.isDebugEnabled = this.configOptions.isDebugEnabled || this.options.debug;
+        const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
+        if (blueprint) {
+            try {
+                this.useBlueprint = true;
+                this.composeExternalModule(blueprint, 'server', {
+                    jhipsterContext: this
+                });
+            } catch (e) {
+                this.useBlueprint = false;
+            }
+        }
     }
 
     get initializing() {
+        if (this.useBlueprint) return;
         return {
             displayLogo() {
                 if (this.logo) {
@@ -274,6 +287,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get prompting() {
+        if (this.useBlueprint) return;
         return {
             askForModuleName: prompts.askForModuleName,
             askForServerSideOpts: prompts.askForServerSideOpts,
@@ -313,6 +327,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get configuring() {
+        if (this.useBlueprint) return;
         return {
             insight() {
                 const insight = this.insight();
@@ -387,6 +402,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get default() {
+        if (this.useBlueprint) return;
         return {
             getSharedConfigOptions() {
                 this.useSass = this.configOptions.useSass ? this.configOptions.useSass : false;
@@ -419,10 +435,12 @@ module.exports = class extends BaseGenerator {
     }
 
     get writing() {
+        if (this.useBlueprint) return;
         return writeFiles();
     }
 
     end() {
+        if (this.useBlueprint) return;
         if (this.prodDatabaseType === 'oracle') {
             this.log('\n\n');
             this.warning(`${chalk.yellow.bold('You have selected Oracle database.\n')
