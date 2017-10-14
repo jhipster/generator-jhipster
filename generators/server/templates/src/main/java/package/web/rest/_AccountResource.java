@@ -21,7 +21,6 @@ package <%=packageName%>.web.rest;
 <%_ if (authenticationType === 'oauth2' ) { _%>
 
 import com.codahale.metrics.annotation.Timed;
-import com.mycompany.myapp.domain.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
