@@ -1586,6 +1586,65 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Get a name suitable for microservice
+     * @param {string} microserviceName
+     */
+    getMicroserviceAppName(microserviceName) {
+        return _.camelCase(microserviceName, true) + (microserviceName.endsWith('App') ? '' : 'App');
+    }
+
+    /**
+     * Load an entity configuration file into context.
+     */
+    loadEntityJson() {
+        try {
+            this.fileData = this.fs.readJSON(this.fromPath);
+        } catch (err) {
+            this.debug('Error:', err);
+            this.error(chalk.red('\nThe entity configuration file could not be read!\n'));
+        }
+        this.relationships = this.fileData.relationships || [];
+        this.fields = this.fileData.fields || [];
+        this.changelogDate = this.fileData.changelogDate;
+        this.dto = this.fileData.dto;
+        this.service = this.fileData.service;
+        this.fluentMethods = this.fileData.fluentMethods;
+        this.pagination = this.fileData.pagination;
+        this.searchEngine = this.fileData.searchEngine || this.searchEngine;
+        this.javadoc = this.fileData.javadoc;
+        this.entityTableName = this.fileData.entityTableName;
+        this.jhiPrefix = this.fileData.jhiPrefix || this.jhiPrefix;
+        this.jhiTablePrefix = this.getTableName(this.jhiPrefix);
+        this.copyFilteringFlag(this.fileData, this);
+        if (_.isUndefined(this.entityTableName)) {
+            this.warning(`entityTableName is missing in .jhipster/${this.name}.json, using entity name as fallback`);
+            this.entityTableName = this.getTableName(this.name);
+        }
+        if (jhiCore.isReservedTableName(this.entityTableName, this.prodDatabaseType)) {
+            this.entityTableName = `${this.jhiTablePrefix}_${this.entityTableName}`;
+        }
+        this.fields.forEach((field) => {
+            this.fieldNamesUnderscored.push(_.snakeCase(field.fieldName));
+            this.fieldNameChoices.push({ name: field.fieldName, value: field.fieldName });
+        });
+        this.relationships.forEach((rel) => {
+            this.relNameChoices.push({ name: `${rel.relationshipName}:${rel.relationshipType}`, value: `${rel.relationshipName}:${rel.relationshipType}` });
+        });
+        if (this.fileData.angularJSSuffix !== undefined) {
+            this.entityAngularJSSuffix = this.fileData.angularJSSuffix;
+        }
+        this.useMicroserviceJson = this.useMicroserviceJson || !_.isUndefined(this.fileData.microserviceName);
+        if (this.applicationType === 'gateway' && this.useMicroserviceJson) {
+            this.microserviceName = this.fileData.microserviceName;
+            if (!this.microserviceName) {
+                this.error(chalk.red('Microservice name for the entity is not found. Entity cannot be generated!'));
+            }
+            this.microserviceAppName = this.getMicroserviceAppName(this.microserviceName);
+            this.skipServer = true;
+        }
+    }
+
+    /**
      * get an entity from the configuration file
      * @param {string} file - configuration file name for the entity
      */
