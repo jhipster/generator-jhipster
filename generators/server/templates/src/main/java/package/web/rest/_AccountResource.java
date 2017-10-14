@@ -18,7 +18,7 @@ limitations under the License.
 -%>
 package <%=packageName%>.web.rest;
 
-<%_ if (authenticationType === 'oauth2' && applicationType === 'gateway') { _%>
+<%_ if (authenticationType === 'oauth2') { _%>
 import <%=packageName%>.domain.User;
 
 import com.codahale.metrics.annotation.Timed;
