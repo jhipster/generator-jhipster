@@ -52,7 +52,7 @@ public class Authority implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @NotNull
-    @Size(min = 0, max = 50)
+    @Size(max = 50)
     @Id<% if (databaseType === 'sql') { %>
     @Column(length = 50)<% } %>
     private String name;
