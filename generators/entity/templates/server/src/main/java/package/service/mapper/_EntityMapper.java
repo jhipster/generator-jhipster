@@ -32,8 +32,8 @@ import org.mapstruct.*;
       // if the entity is mapped twice, we should implement the mapping once
       if (existingMappings.indexOf(relationships[idx].otherEntityNameCapitalized) === -1 && relationships[idx].otherEntityNameCapitalized !== entityClass) {
           existingMappings.push(relationships[idx].otherEntityNameCapitalized);
-      %><%= relationships[idx].otherEntityNameCapitalized %>Mapper.class, <% } } } %>})
-public interface <%= entityClass %>Mapper extends EntityMapper <<%= entityClass %>DTO, <%= entityClass %>> {
+      } } } %><%= existingMappings.map(otherEntityNameCapitalized => otherEntityNameCapitalized + 'Mapper.class').join(', ') %>})
+public interface <%= entityClass %>Mapper extends EntityMapper<<%= entityClass %>DTO, <%= entityClass %>> {
 <%_
 // entity -> DTO mapping
 var renMapAnotEnt = false; //Render Mapping Annotation during Entity to DTO conversion?
