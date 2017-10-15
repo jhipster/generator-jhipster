@@ -111,38 +111,7 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
 
-        this.skipServer = this.configOptions.skipServer || this.config.get('skipServer');
-        this.skipUserManagement = this.configOptions.skipUserManagement || this.options['skip-user-management'] || this.config.get('skipUserManagement');
-        this.authenticationType = this.options.auth || this.configOptions.authenticationType || this.config.get('authenticationType');
-        if (this.authenticationType === 'oauth2') {
-            this.skipUserManagement = true;
-        }
-        const uaaBaseName = this.options.uaaBaseName || this.configOptions.uaaBaseName || this.options['uaa-base-name'] || this.config.get('uaaBaseName');
-        if (this.options.auth === 'uaa' && _.isNil(uaaBaseName)) {
-            this.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
-        }
-        this.uaaBaseName = uaaBaseName;
-
-        this.buildTool = this.options.build;
-        this.websocket = this.options.websocket;
-        this.devDatabaseType = this.options.db || this.configOptions.devDatabaseType || this.config.get('devDatabaseType');
-        this.prodDatabaseType = this.options.db || this.configOptions.prodDatabaseType || this.config.get('prodDatabaseType');
-        this.databaseType = this.getDBTypeFromDBValue(this.options.db) || this.configOptions.databaseType || this.config.get('databaseType');
-        this.enableSocialSignIn = this.options.social || this.config.get('enableSocialSignIn');
-        this.searchEngine = this.options['search-engine'] || this.config.get('searchEngine');
-        this.hibernateCache = this.options['hb-cache'] || this.config.get('hibernateCache');
-        this.otherModules = this.configOptions.otherModules || [];
-        this.jhiPrefix = this.configOptions.jhiPrefix || this.config.get('jhiPrefix') || this.options['jhi-prefix'];
-        this.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
-        this.testFrameworks = [];
-
-        if (this.options.protractor) this.testFrameworks.push('protractor');
-
-        this.baseName = this.configOptions.baseName;
-        this.logo = this.configOptions.logo;
-        this.useYarn = this.configOptions.useYarn = !this.options.npm;
-        this.clientPackageManager = this.configOptions.clientPackageManager;
-        this.isDebugEnabled = this.configOptions.isDebugEnabled || this.options.debug;
+        this.setupClientOptions(this);
         const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
         useBlueprint = this.composeBlueprint(blueprint, 'client'); // use global variable since getters dont have access to instance property
     }

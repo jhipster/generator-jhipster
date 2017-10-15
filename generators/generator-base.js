@@ -2170,4 +2170,101 @@ module.exports = class extends PrivateBase {
         this.debug(`Time taken to write files: ${new Date() - startTime}ms`);
         return filesOut;
     }
+
+    /**
+     * Setup client instance level options from context.
+     * @param {any} generator - generator instance
+     * @param {any} context - context to use default is generator instance
+     */
+    setupClientOptions(generator, context = generator) {
+        generator.skipServer = context.configOptions.skipServer || context.config.get('skipServer');
+        generator.skipUserManagement = context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
+        generator.authenticationType = context.options.auth || context.configOptions.authenticationType || context.config.get('authenticationType');
+        if (generator.authenticationType === 'oauth2') {
+            generator.skipUserManagement = true;
+        }
+        const uaaBaseName = context.options.uaaBaseName || context.configOptions.uaaBaseName || context.options['uaa-base-name'] || context.config.get('uaaBaseName');
+        if (context.options.auth === 'uaa' && _.isNil(uaaBaseName)) {
+            generator.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
+        }
+        generator.uaaBaseName = uaaBaseName;
+
+        generator.buildTool = context.options.build;
+        generator.websocket = context.options.websocket;
+        generator.devDatabaseType = context.options.db || context.configOptions.devDatabaseType || context.config.get('devDatabaseType');
+        generator.prodDatabaseType = context.options.db || context.configOptions.prodDatabaseType || context.config.get('prodDatabaseType');
+        generator.databaseType = generator.getDBTypeFromDBValue(context.options.db) || context.configOptions.databaseType || context.config.get('databaseType');
+        generator.enableSocialSignIn = context.options.social || context.config.get('enableSocialSignIn');
+        generator.searchEngine = context.options['search-engine'] || context.config.get('searchEngine');
+        generator.hibernateCache = context.options['hb-cache'] || context.config.get('hibernateCache');
+        generator.otherModules = context.configOptions.otherModules || [];
+        generator.jhiPrefix = context.configOptions.jhiPrefix || context.config.get('jhiPrefix') || context.options['jhi-prefix'];
+        generator.jhiPrefixCapitalized = _.upperFirst(generator.jhiPrefix);
+        generator.testFrameworks = [];
+
+        if (context.options.protractor) generator.testFrameworks.push('protractor');
+
+        generator.currentQuestion = context.configOptions.lastQuestion ? context.configOptions.lastQuestion : 0;
+        generator.totalQuestions = context.configOptions.totalQuestions ? context.configOptions.totalQuestions : constants.CLIENT_QUESTIONS;
+        generator.baseName = context.configOptions.baseName;
+        generator.logo = context.configOptions.logo;
+        generator.useYarn = context.configOptions.useYarn = !context.options.npm;
+        generator.clientPackageManager = context.configOptions.clientPackageManager;
+        generator.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
+    }
+
+    /**
+     * Setup Server instance level options from context.
+     * @param {any} generator - generator instance
+     * @param {any} context - context to use default is generator instance
+     */
+    setupServerOptions(generator, context = generator) {
+        generator.skipClient = !context.options['client-hook'] || context.configOptions.skipClient || context.config.get('skipClient');
+        generator.skipUserManagement = context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
+        generator.enableTranslation = context.options.i18n || context.configOptions.enableTranslation || context.config.get('enableTranslation');
+        generator.testFrameworks = [];
+
+        if (context.options.gatling) generator.testFrameworks.push('gatling');
+        if (context.options.cucumber) generator.testFrameworks.push('cucumber');
+
+        generator.currentQuestion = context.configOptions.lastQuestion ? context.configOptions.lastQuestion : 0;
+        generator.totalQuestions = context.configOptions.totalQuestions ? context.configOptions.totalQuestions : constants.SERVER_QUESTIONS;
+        generator.logo = context.configOptions.logo;
+        generator.baseName = context.configOptions.baseName;
+        generator.clientPackageManager = context.configOptions.clientPackageManager;
+        generator.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
+    }
+
+    /**
+     * Setup Entity instance level options from context.
+     * @param {any} generator - generator instance
+     * @param {any} context - context to use default is generator instance
+     */
+    setupEntityOptions(generator, context = generator) {
+        generator.name = context.options.name;
+        // remove extension if feeding json files
+        if (generator.name !== undefined) {
+            generator.name = generator.name.replace('.json', '');
+        }
+
+        generator.regenerate = context.options.regenerate;
+        generator.fluentMethods = context.options['fluent-methods'];
+        generator.entityTableName = generator.getTableName(context.options['table-name'] || generator.name);
+        generator.entityNameCapitalized = _.upperFirst(generator.name);
+        generator.entityAngularJSSuffix = context.options['angular-suffix'];
+        generator.isDebugEnabled = context.options.debug;
+        if (generator.entityAngularJSSuffix && !generator.entityAngularJSSuffix.startsWith('-')) {
+            generator.entityAngularJSSuffix = `-${generator.entityAngularJSSuffix}`;
+        }
+        generator.rootDir = generator.destinationRoot();
+        // enum-specific consts
+        generator.enums = [];
+
+        generator.existingEnum = false;
+
+        generator.fieldNamesUnderscored = ['id'];
+        // these variable hold field and relationship names for question options during update
+        generator.fieldNameChoices = [];
+        generator.relNameChoices = [];
+    }
 };

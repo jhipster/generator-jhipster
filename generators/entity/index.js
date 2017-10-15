@@ -88,31 +88,7 @@ module.exports = class extends BaseGenerator {
             type: String
         });
 
-        this.name = this.options.name;
-        // remove extension if feeding json files
-        if (this.name !== undefined) {
-            this.name = this.name.replace('.json', '');
-        }
-
-        this.regenerate = this.options.regenerate;
-        this.fluentMethods = this.options['fluent-methods'];
-        this.entityTableName = this.getTableName(this.options['table-name'] || this.name);
-        this.entityNameCapitalized = _.upperFirst(this.name);
-        this.entityAngularJSSuffix = this.options['angular-suffix'];
-        this.isDebugEnabled = this.options.debug;
-        if (this.entityAngularJSSuffix && !this.entityAngularJSSuffix.startsWith('-')) {
-            this.entityAngularJSSuffix = `-${this.entityAngularJSSuffix}`;
-        }
-        this.rootDir = this.destinationRoot();
-        // enum-specific consts
-        this.enums = [];
-
-        this.existingEnum = false;
-
-        this.fieldNamesUnderscored = ['id'];
-        // these constiable will hold field and relationship names for question options during update
-        this.fieldNameChoices = [];
-        this.relNameChoices = [];
+        this.setupEntityOptions(this);
         const blueprint = this.config.get('blueprint');
         useBlueprint = this.composeBlueprint(blueprint, 'entity'); // use global variable since getters dont have access to instance property
     }

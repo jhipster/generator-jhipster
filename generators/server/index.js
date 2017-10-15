@@ -70,18 +70,7 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
 
-        this.skipClient = !this.options['client-hook'] || this.configOptions.skipClient || this.config.get('skipClient');
-        this.skipUserManagement = this.configOptions.skipUserManagement || this.options['skip-user-management'] || this.config.get('skipUserManagement');
-        this.enableTranslation = this.options.i18n || this.configOptions.enableTranslation || this.config.get('enableTranslation');
-        this.testFrameworks = [];
-
-        if (this.options.gatling) this.testFrameworks.push('gatling');
-        if (this.options.cucumber) this.testFrameworks.push('cucumber');
-
-        this.logo = this.configOptions.logo;
-        this.baseName = this.configOptions.baseName;
-        this.clientPackageManager = this.configOptions.clientPackageManager;
-        this.isDebugEnabled = this.configOptions.isDebugEnabled || this.options.debug;
+        this.setupServerOptions(this);
         const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
         useBlueprint = this.composeBlueprint(blueprint, 'server'); // use global variable since getters dont have access to instance property
     }
