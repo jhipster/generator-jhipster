@@ -18,6 +18,7 @@
 -%>
 package <%=packageName%>.client;
 
+<%_ if(authenticationType === 'uaa') { _%>
 import io.github.jhipster.security.uaa.LoadBalancedResourceDetails;
 
 import feign.RequestInterceptor;
@@ -44,3 +45,20 @@ public class OAuth2InterceptedFeignConfiguration {
         return new OAuth2FeignRequestInterceptor(new DefaultOAuth2ClientContext(), loadBalancedResourceDetails);
     }
 }
+<%_ } _%>
+<%_ if(authenticationType === 'oauth2') { _%>
+import feign.RequestInterceptor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.io.IOException;
+
+@Configuration
+public class OAuth2InterceptedFeignConfiguration {
+
+    @Bean(name = "oauth2RequestInterceptor")
+    public RequestInterceptor getOAuth2RequestInterceptor() throws IOException {
+        return new TokenRelayRequestInterceptor();
+    }
+}
+<%_ } _%>

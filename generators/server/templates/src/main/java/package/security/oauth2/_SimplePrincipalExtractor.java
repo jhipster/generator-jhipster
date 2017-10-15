@@ -16,24 +16,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+package <%=packageName%>.security.oauth2;
 
-project.sourceSets {
-    gatling {
-        scala.srcDirs = ['<%= TEST_DIR %>/gatling']
-        resources.srcDirs = ['<%= TEST_DIR %>/gatling/user-files/simulations',
-                '<%= TEST_DIR %>/gatling/user-files/data', '<%= TEST_DIR %>/gatling/user-files/body', '<%= TEST_DIR %>/gatling/conf']
+import org.springframework.boot.autoconfigure.security.oauth2.resource.PrincipalExtractor;
+
+import java.util.Map;
+
+public class SimplePrincipalExtractor implements PrincipalExtractor {
+
+    private final String oauth2PrincipalAttribute;
+
+    public SimplePrincipalExtractor(String oauth2PrincipalAttribute) {
+        this.oauth2PrincipalAttribute = oauth2PrincipalAttribute;
     }
-}
 
-gatling {
-    toolVersion = '2.2.5'
-    scalaVersion = '2.11.8'
-    sourceRoot = '<%= TEST_DIR %>/gatling'
-    simulationsDir = 'user-files/simulations'
-    dataDir = 'user-files/data'
-    bodiesDir = 'user-files/bodies'
-    confDir = 'conf'
-    simulations = {
-        include "**/*GatlingTest.scala"
+    @Override
+    public Object extractPrincipal(Map<String, Object> map) {
+        return map.getOrDefault(oauth2PrincipalAttribute, "unknown");
     }
 }

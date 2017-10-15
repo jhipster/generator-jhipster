@@ -102,7 +102,7 @@ describe('Component Tests', () => {
                 fakeAsync((service: Register) => {
                     spyOn(service, 'save').and.returnValue(Observable.throw({
                         status: 400,
-                        json: function() {
+                        json() {
                             return {type : LOGIN_ALREADY_USED_TYPE}
                         }
                     }));
@@ -123,7 +123,7 @@ describe('Component Tests', () => {
                 fakeAsync((service: Register) => {
                     spyOn(service, 'save').and.returnValue(Observable.throw({
                         status: 400,
-                        json: function() {
+                        json() {
                             return {type : EMAIL_ALREADY_USED_TYPE}
                         }
                     }));

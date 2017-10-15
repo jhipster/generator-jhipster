@@ -56,7 +56,7 @@ function writeFiles() {
             if (this.authenticationType !== 'oauth2') return;
             this.template('_keycloak.yml', 'keycloak.yml');
             this.template('realm-config/_jhipster-realm.json', 'realm-config/jhipster-realm.json');
-            this.template('realm-config/_jhipster-users-0.json', 'realm-config/jhipster-users-0.json');
+            this.template('realm-config/_jhipster-users-0.json', 'realm-config/_jhipster-users-0.json');
         },
 
         writeElkFiles() {

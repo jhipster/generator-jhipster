@@ -144,6 +144,10 @@ function askForServerSideOpts(meta) {
                 {
                     value: 'uaa',
                     name: 'Authentication with JHipster UAA server (the server must be generated separately)'
+                },
+                {
+                    value: 'oauth2',
+                    name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)'
                 }
             ],
             default: 0
@@ -422,7 +426,7 @@ function askForServerSideOpts(meta) {
 
         // JWT authentication is mandatory with Eureka, so the JHipster Registry
         // can control the applications
-        if (this.serviceDiscoveryType === 'eureka' && this.authenticationType !== 'uaa') {
+        if (this.serviceDiscoveryType === 'eureka' && this.authenticationType !== 'uaa' && this.authenticationType !== 'oauth2') {
             this.authenticationType = 'jwt';
         }
 
@@ -434,8 +438,8 @@ function askForServerSideOpts(meta) {
             this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
         }
 
-        // this will be handled by the UAA app
-        if (this.applicationType === 'gateway' && this.authenticationType === 'uaa') {
+        // user-management will be handled by UAA app, oauth expects users to be managed in IpP
+        if ((this.applicationType === 'gateway' && this.authenticationType === 'uaa') || this.authenticationType === 'oauth2') {
             this.skipUserManagement = true;
         }
 

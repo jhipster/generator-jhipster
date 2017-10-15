@@ -39,7 +39,10 @@ plugins {
     id "org.sonarqube" version "2.5"
     id "net.ltgt.apt" version "0.11"
     id "io.spring.dependency-management" version "1.0.3.RELEASE"
-     <%_ if (!skipClient) { _%>
+    <%_ if (gatlingTests) { _%>
+    id "com.github.lkishalmi.gatling" version "0.7.1"
+    <%_ } _%>
+    <%_ if (!skipClient) { _%>
     id "com.moowork.node" version "1.2.0"
     <%_ } _%>
     //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
@@ -319,7 +322,7 @@ dependencies {
     <%_ } _%>
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"
     compile "org.zalando:problem-spring-web:${problem_spring_web_version}"
-    <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
+    <%_ if (databaseType === 'cassandra') { _%>
     compile "com.google.guava:guava:18.0"
     compile "com.datastax.cassandra:cassandra-driver-extras:" + dependencyManagement.managedVersions["com.datastax.cassandra:cassandra-driver-core"]
     compile "com.datastax.cassandra:cassandra-driver-mapping"
@@ -360,6 +363,9 @@ dependencies {
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
     compile "org.springframework.security.oauth:spring-security-oauth2:${spring_security_oauth2_version}"
+        <%_ if (applicationType === 'gateway' || applicationType === 'microservice') { _%>
+    compile "org.springframework.security:spring-security-jwt"
+        <%_ } _%>
     <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>
     compile "io.jsonwebtoken:jjwt:${jjwt_version}"
@@ -432,9 +438,6 @@ dependencies {
     testCompile "com.github.differentway:couchbase-testcontainer:${couchbase_testcontainer_version}"
     <%_ } _%>
     testCompile "org.hamcrest:hamcrest-library"
-    <%_ if (gatlingTests) { _%>
-    testCompile "io.gatling.highcharts:gatling-charts-highcharts:${gatling_version}"
-    <%_ } _%>
     <%_ if (devDatabaseType !== 'h2Disk' && devDatabaseType !== 'h2Memory') { _%>
     testCompile "com.h2database:h2"
     <%_ } _%>

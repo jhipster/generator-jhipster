@@ -183,6 +183,7 @@ function askForApps() {
             } else if (config.applicationType === 'microservice') {
                 this.microserviceNb++;
             }
+
             this.portsToBind = this.monolithicNb + this.gatewayNb;
             this.appConfigs.push(config);
         });

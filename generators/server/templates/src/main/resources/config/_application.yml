@@ -163,12 +163,12 @@ spring:
 #
 # To use Okta, your settings should resemble the following:
 #
-# oauth2.issuer: https://{yourOktaDomain}.com/oauth2/default
-# accessTokenUri: ${oauth2.issuer}/v1/token
-# userAuthorizationUri: ${oauth2.issuer}/v1/authorize
+# accessTokenUri: https://{yourOktaDomain}.com/oauth2/default/v1/token
+# userAuthorizationUri: https://{yourOktaDomain}.com/oauth2/default/v1/authorize
 # clientId: {copy after creating an OIDC app}
-# userInfoUri: ${oauth2.issuer}/v1/userinfo
-# tokenInfoUri: ${oauth2.issuer}/v1/introspect
+# clientSecret: {copy after creating an OIDC app}
+# userInfoUri: https://{yourOktaDomain}.com/oauth2/default/v1/userinfo
+# tokenInfoUri: https://{yourOktaDomain}.com/oauth2/default/v1/introspect
 #
 # You can also override these properties using environment variables.
 # For example:
@@ -176,9 +176,7 @@ spring:
 # export SECURITY_OAUTH2_CLIENT_CLIENT_ID="jhipster"
 # export SECURITY_OAUTH2_CLIENT_CLIENT_SECRET="38561a05"
 # ===================================================================
-
-oauth2.issuer: http://localhost:9080/auth/realms/jhipster
-<% } %>
+<%_ } _%>
 security:
     basic:
         enabled: false
@@ -186,19 +184,32 @@ security:
     oauth2:
         resource:
             filter-order: 3
-    <%_ } else if (authenticationType === 'oauth2') { _%>
+    <%_ } _%>
+    <%_ if (authenticationType === 'oauth2') {  _%>
     oauth2:
         client:
-            accessTokenUri: ${oauth2.issuer}/protocol/openid-connect/token
-            userAuthorizationUri: ${oauth2.issuer}/protocol/openid-connect/auth
-            clientId: web_app
-            clientSecret: web_app
-            clientAuthenticationScheme: form
+            access-token-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token
+            user-authorization-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/auth
+            <%_ if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
+            client-id: web_app
+            client-secret: web_app
+            client-authentication-scheme: form
             scope: openid profile email
+            <%_ } _%>
+            <%_ if (applicationType === 'microservice') { _%>
+            client-id: internal
+            client-secret: internal
+            authentication-scheme: header
+            client-authentication-scheme: header
+            <%_ } _%>
         resource:
-            userInfoUri: ${oauth2.issuer}/protocol/openid-connect/userinfo
-            tokenInfoUri: ${oauth2.issuer}/protocol/openid-connect/token/introspectr
-            preferTokenInfo: false
+            user-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
+            token-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token/introspect
+            prefer-token-info: false
+            <%_ if (applicationType === 'gateway' || applicationType === 'microservice') {  _%>
+            jwt:
+                key-uri: http://localhost:9080/auth/realms/jhipster
+            <%_ } _%>
     <%_ } _%>
 
 server:
