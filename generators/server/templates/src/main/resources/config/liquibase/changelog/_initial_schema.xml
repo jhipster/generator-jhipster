@@ -57,7 +57,7 @@
     -->
     <changeSet id="00000000000001" author="jhipster">
 <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
-    <%_ if (authenticationType !== 'oauth2') { _%>
+    <%_ if (authenticationType !== 'oauth2' || (authenticationType === 'oauth2' && applicationType === 'monolith')) { _%>
         <createTable tableName="<%= jhiTablePrefix %>_user">
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
@@ -162,7 +162,7 @@
                                  referencedColumnNames="id"
                                  referencedTableName="<%= jhiTablePrefix %>_user"/>
     <%_ } _%>
-    <%_ if (authenticationType !== 'oauth2') { _%>
+    <%_ if (authenticationType !== 'oauth2' || (authenticationType === 'oauth2' && applicationType === 'monolith')) { _%>
         <<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData encoding="UTF-8"
                   file="config/liquibase/users.csv"
                   separator=";"
