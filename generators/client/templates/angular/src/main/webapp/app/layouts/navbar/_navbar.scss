@@ -57,6 +57,9 @@ Navbar
             color: #fff;
         }
     }
+	.dropdown-menu-right {
+        left: auto !important;
+    }
 }
 
 @media screen and (min-width: 768px) {
