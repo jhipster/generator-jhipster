@@ -62,8 +62,9 @@ _%>
     @Mapping(target = "<%= relationshipNamePlural %>", ignore = true)<% } else if (relationshipType === 'one-to-many') {renMapAnotDto = true; %>
     @Mapping(target = "<%= relationshipNamePlural %>", ignore = true)<% } else if (relationshipType === 'one-to-one' && ownerSide === false) {renMapAnotDto = true; %>
     @Mapping(target = "<%= relationshipName %>", ignore = true)<% } } %>
-    <% if(renMapAnotDto === true) { %><%= entityClass %> toEntity(<%= entityClass%>DTO <%= entityInstance %>DTO); <% } %>
-    <%_ if(databaseType === 'sql') { _%>
+    <% if(renMapAnotDto === true) { %><%= entityClass %> toEntity(<%= entityClass%>DTO <%= entityInstance %>DTO);<% } %>
+<%_ if(databaseType === 'sql') { _%>
+
     default <%= entityClass %> fromId(Long id) {
         if (id == null) {
             return null;
@@ -71,5 +72,6 @@ _%>
         <%= entityClass %> <%= entityInstance %> = new <%= entityClass %>();
         <%= entityInstance %>.setId(id);
         return <%= entityInstance %>;
-    }<%}%>
+    }
+<%_ } _%>
 }
