@@ -214,7 +214,8 @@ public class AccountResource {
                         (String) details.get("langKey"),
                         (String) details.get("imageUrl"),
                         (Boolean) details.get("email_verified"),
-                        authentication.getAuthorities().stream().map(it -> it.getAuthority()).collect(Collectors.toSet())
+                        authentication.getAuthorities().stream().map(it ->
+                            it.getAuthority()).collect(Collectors.toSet())
                     );
                 }
             )
