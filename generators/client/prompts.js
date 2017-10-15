@@ -52,8 +52,10 @@ function askForClient(meta) {
         type: 'list',
         name: 'clientFramework',
         when: response => (applicationType !== 'microservice' && applicationType !== 'uaa'),
-        message: response => this.getNumberedQuestion('Which *Framework* would you like to use for the client?',
-            applicationType !== 'microservice' && applicationType !== 'uaa'),
+        message: response => this.getNumberedQuestion(
+            'Which *Framework* would you like to use for the client?',
+            applicationType !== 'microservice' && applicationType !== 'uaa'
+        ),
         choices: [
             {
                 value: 'angularX',
