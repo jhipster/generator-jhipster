@@ -215,6 +215,10 @@ public class AccountResource {
             .map(it -> ((OAuth2Authentication) it).getUserAuthentication())
             .map(authentication -> {
                     Map<String, Object> details = (Map<String, Object>) authentication.getDetails();
+                    Boolean activated = false;
+                    if (details.get("email_verified") != null) {
+                        activated = (Boolean) details.get("email_verified");
+                    }
                     return new User(
                         authentication.getName(),
                         (String) details.get("given_name"),
@@ -222,7 +226,7 @@ public class AccountResource {
                         (String) details.get("email"),
                         (String) details.get("langKey"),
                         (String) details.get("imageUrl"),
-                        (Boolean) details.get("email_verified"),
+                        activated,
                         authentication.getAuthorities().stream().map(it ->
                             it.getAuthority()).collect(Collectors.toSet())
                     );
