@@ -21,7 +21,6 @@ package <%=packageName%>.web.rest;
 <%_ if (authenticationType === 'oauth2') { _%>
 import <%=packageName%>.domain.User;
     <%_ if (applicationType === 'monolith') { _%>
-import <%=packageName%>.config.Constants;
 import <%=packageName%>.domain.Authority;
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.service.UserService;
@@ -96,7 +95,7 @@ public class AccountResource {
         if (principal != null) {
             if (principal instanceof OAuth2Authentication) {
                 OAuth2Authentication authentication = (OAuth2Authentication) principal;
-                Map<String, Object> details = (Map<String, Object>) authentication.getDetails();
+                Map<String, Object> details = (Map<String, Object>) authentication.getUserAuthentication().getDetails();
                 Set<Authority> userAuthorities;
 
                 // get roles from details
@@ -132,14 +131,22 @@ public class AccountResource {
                 }
 
                 User user = new User();
-                user.setLogin(authentication.getName());
-                user.setFirstName((String) details.get("given_name"));
-                user.setFirstName((String) details.get("family_name"));
-                user.setActivated((Boolean) details.get("email_verified"));
-                user.setEmail((String) details.get("email"));
-                user.setLangKey((String) details.get("langKey"));
-
-                if (details.get("locale") != null) {
+                user.setLogin((String) details.get("preferred_username"));
+                if (details.get("given_name") != null) {
+                    user.setFirstName((String) details.get("given_name"));
+                }
+                if (details.get("family_name") != null) {
+                    user.setFirstName((String) details.get("family_name"));
+                }
+                if (details.get("email_verified") != null) {
+                    user.setActivated((Boolean) details.get("email_verified"));
+                }
+                if (details.get("email") != null) {
+                    user.setEmail((String) details.get("email"));
+                }
+                if (details.get("langKey") != null) {
+                    user.setLangKey((String) details.get("langKey"));
+                } else if (details.get("locale") != null) {
                     String locale = (String) details.get("locale");
                     String langKey = locale.substring(0, locale.indexOf("-"));
                     user.setLangKey(langKey);
