@@ -196,6 +196,7 @@ public class AccountResource {
    /**
     * GET  /account : get the current user.
     *
+    * @param principal the current authenticated user
     * @return the current user
     * @throws RuntimeException 500 (Internal Server Error) if the user couldn't be returned
     */
