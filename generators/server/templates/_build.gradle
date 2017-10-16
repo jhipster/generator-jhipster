@@ -49,8 +49,8 @@ plugins {
 }
 
 apply plugin: 'java'
-sourceCompatibility=1.<%= javaVersion %>
-targetCompatibility=1.<%= javaVersion %>
+sourceCompatibility=<%= JAVA_VERSION %>
+targetCompatibility=<%= JAVA_VERSION %>
 apply plugin: 'maven'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'war'
