@@ -438,6 +438,8 @@ function writeFiles() {
 
         writeServerJavaWebErrorFiles() {
             // error handler code - server side
+            this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/errors/_package-info.java`, `${javaDir}web/rest/errors/package-info.java`);
+            this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/errors/_DefaultException.java`, `${javaDir}web/rest/errors/DefaultException.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/errors/_BadRequestAlertException.java`, `${javaDir}web/rest/errors/BadRequestAlertException.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/errors/_CustomParameterizedException.java`, `${javaDir}web/rest/errors/CustomParameterizedException.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/errors/_EmailAlreadyUsedException.java`, `${javaDir}web/rest/errors/EmailAlreadyUsedException.java`);
