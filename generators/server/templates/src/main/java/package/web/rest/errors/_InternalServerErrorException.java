@@ -22,11 +22,11 @@ import org.zalando.problem.AbstractThrowableProblem;
 import org.zalando.problem.Status;
 
 /**
- * Generic exception with a message, that returns an Internal Server Error code.
+ * Simple exception with a message, that returns an Internal Server Error code.
  */
-public class DefaultException extends AbstractThrowableProblem {
+public class InternalServerErrorException extends AbstractThrowableProblem {
 
-    public DefaultException(String defaultMessage) {
-        super(ErrorConstants.DEFAULT_TYPE, defaultMessage, Status.INTERNAL_SERVER_ERROR);
+    public InternalServerErrorException(String message) {
+        super(ErrorConstants.DEFAULT_TYPE, message, Status.INTERNAL_SERVER_ERROR);
     }
 }

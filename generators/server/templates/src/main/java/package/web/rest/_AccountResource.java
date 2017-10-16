@@ -26,7 +26,7 @@ import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.service.UserService;
 import <%=packageName%>.service.dto.UserDTO;
     <%_ } _%>
-import <%=packageName%>.web.rest.errors.DefaultException;
+import <%=packageName%>.web.rest.errors.InternalServerErrorException
 
 import com.codahale.metrics.annotation.Timed;
 import org.slf4j.Logger;
@@ -88,7 +88,7 @@ public class AccountResource {
      *
      * @param principal the current user; resolves to null if not authenticated
      * @return the current user
-     * @throws DefaultException 500 (Internal Server Error) if the user couldn't be returned
+     * @throws InternalServerErrorException 500 (Internal Server Error) if the user couldn't be returned
      */
     @GetMapping("/account")
     @Timed
@@ -201,20 +201,17 @@ public class AccountResource {
                 return userDTO;
             } else {
                 // Allow Spring Security Test to be used to mock users in the database
-                Optional<User> user = Optional.ofNullable(userService.getUserWithAuthorities());
-                if (user.isPresent()) {
-                    return new UserDTO(user.get());
-                } else {
-                    throw new DefaultException("User could not be found");
-                }
+                return Optional.ofNullable(userService.getUserWithAuthorities())
+                    .map(UserDTO::new)
+                    .orElseThrow(() -> new InternalServerErrorException("User could not be found"));
             }
         } else {
-            throw new DefaultException("User could not be found");
+            throw new InternalServerErrorException("User could not be found");
         }
     }
     <%_ } else { _%>
     public User getAccount(Principal principal) {
-        Optional<User> user = Optional.ofNullable(principal)
+        return Optional.ofNullable(principal)
             .filter(it -> it instanceof OAuth2Authentication)
             .map(it -> ((OAuth2Authentication) it).getUserAuthentication())
             .map(authentication -> {
@@ -235,12 +232,8 @@ public class AccountResource {
                             it.getAuthority()).collect(Collectors.toSet())
                     );
                 }
-            );
-        if (user.isPresent()) {
-            return user.get();
-        } else {
-            throw new DefaultException("User could not be found");
-        }
+            )
+            .orElseThrow(() -> new InternalServerErrorException("User could not be found"));
     }
     <%_ } _%>
 }
@@ -289,7 +282,6 @@ public class AccountResource {
     private final UserService userService;
 
     private final MailService mailService;
-
     <%_ if (authenticationType === 'session') { _%>
 
     private final PersistentTokenRepository persistentTokenRepository;
@@ -337,7 +329,7 @@ public class AccountResource {
     public void activateAccount(@RequestParam(value = "key") String key) {
         Optional<User> user = userService.activateRegistration(key);
         if (!user.isPresent()) {
-            throw new DefaultException("No user was found for this reset key.");
+            throw new InternalServerErrorException("No user was found for this reset key");
         };
     }
 
@@ -363,11 +355,9 @@ public class AccountResource {
     @GetMapping("/account")
     @Timed
     public UserDTO getAccount() {
-        Optional<User> user = Optional.ofNullable(userService.getUserWithAuthorities());
-        if (!user.isPresent()) {
-            throw new DefaultException("The current logged in user could not be found");
-        }
-        return new UserDTO(user.get());
+        return Optional.ofNullable(userService.getUserWithAuthorities())
+            .map(UserDTO::new)
+            .orElseThrow(() -> new InternalServerErrorException("User could not be found"));
     }
 
     /**
@@ -387,7 +377,7 @@ public class AccountResource {
         }
         Optional<User> user = userRepository.findOneByLogin(userLogin);
         if (!user.isPresent()) {
-            throw new DefaultException("The user could not be found.");
+            throw new InternalServerErrorException("User could not be found");
         }
         userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
             userDTO.getLangKey()<% if (databaseType === 'mongodb' || databaseType === 'sql') { %>, userDTO.getImageUrl()<% } %>);
@@ -417,11 +407,10 @@ public class AccountResource {
     @GetMapping("/account/sessions")
     @Timed
     public List<PersistentToken> getCurrentSessions() {
-        Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
-        if (!user.isPresent()) {
-            throw new DefaultException("The user could not be found.");
-        }
-        return persistentTokenRepository.findByUser(user.get());
+        return persistentTokenRepository.findByUser(
+            userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin())
+                .orElseThrow(() -> new InternalServerErrorException("User could not be found"))
+        );
     }
 
     /**
@@ -460,11 +449,10 @@ public class AccountResource {
     @PostMapping(path = "/account/reset-password/init")
     @Timed
     public void requestPasswordReset(@RequestBody String mail) {
-        Optional<User> user = userService.requestPasswordReset(mail);
-        if (!user.isPresent()) {
-            throw new EmailNotFoundException();
-        }
-        mailService.sendPasswordResetMail(user.get());
+       mailService.sendPasswordResetMail(
+           userService.requestPasswordReset(mail)
+               .orElseThrow(EmailNotFoundException::new)
+       );
     }
 
     /**
@@ -484,7 +472,7 @@ public class AccountResource {
             userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
 
         if (!user.isPresent()) {
-            throw new DefaultException("No user was found for this reset key.");
+            throw new InternalServerErrorException("No user was found for this reset key");
         }
     }
 
