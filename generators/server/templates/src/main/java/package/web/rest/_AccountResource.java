@@ -282,30 +282,30 @@ import java.util.*;
 @RequestMapping("/api")
 public class AccountResource {
 
-   private final Logger log = LoggerFactory.getLogger(AccountResource.class);
+    private final Logger log = LoggerFactory.getLogger(AccountResource.class);
 
-   private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-   private final UserService userService;
+    private final UserService userService;
 
-   private final MailService mailService;
+    private final MailService mailService;
 
-   <%_ if (authenticationType === 'session') { _%>
+    <%_ if (authenticationType === 'session') { _%>
 
-   private final PersistentTokenRepository persistentTokenRepository;
-   <%_ } _%>
+    private final PersistentTokenRepository persistentTokenRepository;
+    <%_ } _%>
 
-   public AccountResource(UserRepository userRepository, UserService userService, MailService mailService<% if (authenticationType === 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>) {
+    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService<% if (authenticationType === 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>) {
 
-       this.userRepository = userRepository;
-       this.userService = userService;
-       this.mailService = mailService;
-       <%_ if (authenticationType === 'session') { _%>
-       this.persistentTokenRepository = persistentTokenRepository;
-       <%_ } _%>
-   }
+        this.userRepository = userRepository;
+        this.userService = userService;
+        this.mailService = mailService;
+        <%_ if (authenticationType === 'session') { _%>
+        this.persistentTokenRepository = persistentTokenRepository;
+        <%_ } _%>
+    }
 
-   /**
+    /**
     * POST  /register : register the user.
     *
     * @param managedUserVM the managed user View Model
@@ -313,56 +313,56 @@ public class AccountResource {
     * @throws EmailAlreadyUsedException 400 (Bad Request) if the email is already used
     * @throws LoginAlreadyUsedException 400 (Bad Request) if the login is already used
     */
-   @PostMapping("/register")
-   @Timed
-   @ResponseStatus(HttpStatus.CREATED)
-   public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
-       if (!checkPasswordLength(managedUserVM.getPassword())) {
-           throw new InvalidPasswordException();
-       }
-       userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase()).ifPresent(u -> {throw new LoginAlreadyUsedException();});
-       userRepository.findOneByEmailIgnoreCase(managedUserVM.getEmail()).ifPresent(u -> {throw new EmailAlreadyUsedException();});
-       User user = userService.registerUser(managedUserVM);
-       mailService.sendActivationEmail(user);
-   }
+    @PostMapping("/register")
+    @Timed
+    @ResponseStatus(HttpStatus.CREATED)
+    public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
+        if (!checkPasswordLength(managedUserVM.getPassword())) {
+            throw new InvalidPasswordException();
+        }
+        userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase()).ifPresent(u -> {throw new LoginAlreadyUsedException();});
+        userRepository.findOneByEmailIgnoreCase(managedUserVM.getEmail()).ifPresent(u -> {throw new EmailAlreadyUsedException();});
+        User user = userService.registerUser(managedUserVM);
+        mailService.sendActivationEmail(user);
+    }
 
-   /**
+    /**
     * GET  /activate : activate the registered user.
     *
     * @param key the activation key
     * @throws RuntimeException 500 (Internal Server Error) if the user couldn't be activated
     */
-   @GetMapping("/activate")
-   @Timed
-   public void activateAccount(@RequestParam(value = "key") String key) {
+    @GetMapping("/activate")
+    @Timed
+    public void activateAccount(@RequestParam(value = "key") String key) {
         Optional<User> user = userService.activateRegistration(key);
         if (!user.isPresent()) {
             throw new DefaultException("No user was found for this reset key.");
         };
     }
 
-   /**
+    /**
     * GET  /authenticate : check if the user is authenticated, and return its login.
     *
     * @param request the HTTP request
     * @return the login if the user is authenticated
     */
-   @GetMapping("/authenticate")
-   @Timed
-   public String isAuthenticated(HttpServletRequest request) {
-       log.debug("REST request to check if the current user is authenticated");
-       return request.getRemoteUser();
-   }
+    @GetMapping("/authenticate")
+    @Timed
+    public String isAuthenticated(HttpServletRequest request) {
+        log.debug("REST request to check if the current user is authenticated");
+        return request.getRemoteUser();
+    }
 
-   /**
+    /**
     * GET  /account : get the current user.
     *
     * @return the current user
     * @throws RuntimeException 500 (Internal Server Error) if the user couldn't be returned
     */
-   @GetMapping("/account")
-   @Timed
-   public UserDTO getAccount() {
+    @GetMapping("/account")
+    @Timed
+    public UserDTO getAccount() {
         Optional<User> user = Optional.ofNullable(userService.getUserWithAuthorities());
         if (!user.isPresent()) {
             throw new DefaultException("The current logged in user could not be found");
@@ -370,61 +370,61 @@ public class AccountResource {
         return new UserDTO(user.get());
     }
 
-   /**
+    /**
     * POST  /account : update the current user information.
     *
     * @param userDTO the current user information
     * @throws EmailAlreadyUsedException 400 (Bad Request) if the email is already used
     * @throws RuntimeException 500 (Internal Server Error) if the user login wasn't found
     */
-   @PostMapping("/account")
-   @Timed
-   public void saveAccount(@Valid @RequestBody UserDTO userDTO) {
-       final String userLogin = SecurityUtils.getCurrentUserLogin();
-       Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
-       if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
-           throw new EmailAlreadyUsedException();
-       }
-       Optional<User> user = userRepository.findOneByLogin(userLogin);
-       if (!user.isPresent()) {
-           throw new DefaultException("The user could not be found.");
-       }
-       userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
-                   userDTO.getLangKey()<% if (databaseType === 'mongodb' || databaseType === 'sql') { %>, userDTO.getImageUrl()<% } %>);
+    @PostMapping("/account")
+    @Timed
+    public void saveAccount(@Valid @RequestBody UserDTO userDTO) {
+        final String userLogin = SecurityUtils.getCurrentUserLogin();
+        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
+        if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
+            throw new EmailAlreadyUsedException();
+        }
+        Optional<User> user = userRepository.findOneByLogin(userLogin);
+        if (!user.isPresent()) {
+            throw new DefaultException("The user could not be found.");
+        }
+        userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
+            userDTO.getLangKey()<% if (databaseType === 'mongodb' || databaseType === 'sql') { %>, userDTO.getImageUrl()<% } %>);
    }
 
-   /**
+    /**
     * POST  /account/change-password : changes the current user's password
     *
     * @param password the new password
     * @throws InvalidPasswordException 400 (Bad Request) if the new password is incorrect
     */
-   @PostMapping(path = "/account/change-password")
-   @Timed
-   public void changePassword(@RequestBody String password) {
-       if (!checkPasswordLength(password)) {
-           throw new InvalidPasswordException();
-       }
-       userService.changePassword(password);
+    @PostMapping(path = "/account/change-password")
+    @Timed
+    public void changePassword(@RequestBody String password) {
+        if (!checkPasswordLength(password)) {
+            throw new InvalidPasswordException();
+        }
+        userService.changePassword(password);
    }<% if (authenticationType === 'session') { %>
 
-   /**
+    /**
     * GET  /account/sessions : get the current open sessions.
     *
     * @return the current open sessions
     * @throws RuntimeException 500 (Internal Server Error) if the current open sessions couldn't be retrieved
     */
-   @GetMapping("/account/sessions")
-   @Timed
-   public List<PersistentToken> getCurrentSessions() {
+    @GetMapping("/account/sessions")
+    @Timed
+    public List<PersistentToken> getCurrentSessions() {
         Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
         if (!user.isPresent()) {
             throw new DefaultException("The user could not be found.");
         }
         return persistentTokenRepository.findByUser(user.get());
-   }
+    }
 
-   /**
+    /**
     * DELETE  /account/sessions?series={series} : invalidate an existing session.
     *
     * - You can only delete your own sessions, not any other user's session
@@ -440,58 +440,58 @@ public class AccountResource {
     * @param series the series of an existing session
     * @throws UnsupportedEncodingException if the series couldnt be URL decoded
     */
-   @DeleteMapping("/account/sessions/{series}")
-   @Timed
-   public void invalidateSession(@PathVariable String series) throws UnsupportedEncodingException {
-       String decodedSeries = URLDecoder.decode(series, "UTF-8");
-       userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(u ->
-           persistentTokenRepository.findByUser(u).stream()
-               .filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries))<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
-               .findAny().ifPresent(t -> persistentTokenRepository.delete(decodedSeries)));<% } else { %>
-               .findAny().ifPresent(persistentTokenRepository::delete));<% } %>
-   }<% } %>
+    @DeleteMapping("/account/sessions/{series}")
+    @Timed
+    public void invalidateSession(@PathVariable String series) throws UnsupportedEncodingException {
+        String decodedSeries = URLDecoder.decode(series, "UTF-8");
+        userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(u ->
+            persistentTokenRepository.findByUser(u).stream()
+                .filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries))<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+                .findAny().ifPresent(t -> persistentTokenRepository.delete(decodedSeries)));<% } else { %>
+                .findAny().ifPresent(persistentTokenRepository::delete));<% } %>
+    }<% } %>
 
-   /**
+    /**
     * POST   /account/reset-password/init : Send an email to reset the password of the user
     *
     * @param mail the mail of the user
     * @throws EmailNotFoundException 400 (Bad Request) if the email address is not registered
     */
-   @PostMapping(path = "/account/reset-password/init")
-   @Timed
-   public void requestPasswordReset(@RequestBody String mail) {
-       Optional<User> user = userService.requestPasswordReset(mail);
-       if (!user.isPresent()) {
-           throw new EmailNotFoundException();
-       }
-       mailService.sendPasswordResetMail(user.get());
-   }
+    @PostMapping(path = "/account/reset-password/init")
+    @Timed
+    public void requestPasswordReset(@RequestBody String mail) {
+        Optional<User> user = userService.requestPasswordReset(mail);
+        if (!user.isPresent()) {
+            throw new EmailNotFoundException();
+        }
+        mailService.sendPasswordResetMail(user.get());
+    }
 
-   /**
+    /**
     * POST   /account/reset-password/finish : Finish to reset the password of the user
     *
     * @param keyAndPassword the generated key and the new password
     * @throws InvalidPasswordException 400 (Bad Request) if the password is incorrect
     * @throws RuntimeException 500 (Internal Server Error) if the password could not be reset
     */
-   @PostMapping(path = "/account/reset-password/finish")
-   @Timed
-   public void finishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {
-       if (!checkPasswordLength(keyAndPassword.getNewPassword())) {
-           throw new InvalidPasswordException();
-       }
-       Optional<User> user =
-           userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
+    @PostMapping(path = "/account/reset-password/finish")
+    @Timed
+    public void finishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {
+        if (!checkPasswordLength(keyAndPassword.getNewPassword())) {
+            throw new InvalidPasswordException();
+        }
+        Optional<User> user =
+            userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
 
-       if (!user.isPresent()) {
-           throw new DefaultException("No user was found for this reset key.");
-       }
-   }
+        if (!user.isPresent()) {
+            throw new DefaultException("No user was found for this reset key.");
+        }
+    }
 
-   private static boolean checkPasswordLength(String password) {
-       return !StringUtils.isEmpty(password) &&
-           password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH &&
-           password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;
-   }
+    private static boolean checkPasswordLength(String password) {
+        return !StringUtils.isEmpty(password) &&
+            password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH &&
+            password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;
+    }
 }
 <%_ } _%>
