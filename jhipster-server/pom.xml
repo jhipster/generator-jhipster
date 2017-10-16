@@ -33,7 +33,7 @@
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>0.0.2</jhipster-dependencies.version>
+        <jhipster-dependencies.version>0.0.5</jhipster-dependencies.version>
     </properties>
 
     <dependencyManagement>
