@@ -27,7 +27,7 @@ buildscript {
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
-        classpath "org.springframework.build.gradle:propdeps-plugin:0.0.7"
+        classpath "io.spring.gradle:propdeps-plugin:0.0.9.RELEASE"
         <%_ if (enableSwaggerCodegen) { _%>
         classpath "gradle.plugin.org.detoeuf:swagger-codegen-plugin:1.7.4"
         <%_ } _%>
@@ -63,21 +63,13 @@ apply plugin: 'com.moowork.gulp'
 <%_ } _%>
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'idea'
-<%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa' || messageBroker === 'kafka' || hibernateCache === 'infinispan') { _%>
+
 dependencyManagement {
   imports {
-    <%_ if (messageBroker === 'kafka') { _%>
-    mavenBom 'org.springframework.cloud:spring-cloud-stream-dependencies:' + spring_cloud_stream_version
-    <%_ } _%>
-    <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
-    mavenBom 'org.springframework.cloud:spring-cloud-dependencies:' + spring_cloud_version
-    <%_ } _%>
-    <%_ if (hibernateCache === 'infinispan') { _%>
-    mavenBom 'org.infinispan:infinispan-bom:' + infinispan_version
-    <%_ } _%>
+    mavenBom 'io.github.jhipster:jhipster-dependencies:' + jhipster_dependencies_version
   }
 }
-<%_ } _%>
+
 defaultTasks 'bootRun'
 
 group = '<%= packageName %>'
@@ -203,32 +195,28 @@ if (project.hasProperty('zipkin')) {
 configurations {
     providedRuntime
     compile.exclude module: "spring-boot-starter-tomcat"
-    <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
-    // netty's native is pulled by spring-cloud-starter-ribbon, but is useless unless you explicitly add the native binary dependency.
-    // Having it in the classpath without the binary can cause warnings
-    all*.exclude group: 'io.netty', module: 'netty-transport-native-epoll'
-    <%_ } _%>
 }
 
 repositories {
     mavenLocal()
     jcenter()
     <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
+    // more information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc
     maven { url "https://maven.oracle.com" }
     <%_ } _%>
 }
 
 dependencies {
-    compile "io.github.jhipster:jhipster:${jhipster_server_version}"
-    compile "io.dropwizard.metrics:metrics-core:${dropwizard_metrics_version}"
+    compile "io.github.jhipster:jhipster"
+    compile "io.dropwizard.metrics:metrics-core"
     <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'infinispan') { _%>
-    compile "io.dropwizard.metrics:metrics-jcache:${dropwizard_metrics_version}"
+    compile "io.dropwizard.metrics:metrics-jcache"
     <%_ } _%>
-    compile "io.dropwizard.metrics:metrics-jvm:${dropwizard_metrics_version}"
-    compile "io.dropwizard.metrics:metrics-servlet:${dropwizard_metrics_version}"
-    compile "io.dropwizard.metrics:metrics-json:${dropwizard_metrics_version}"
-    compile "io.dropwizard.metrics:metrics-servlets:${dropwizard_metrics_version}"
-    compile "net.logstash.logback:logstash-logback-encoder:${logstash_logback_encoder_version}"
+    compile "io.dropwizard.metrics:metrics-json"
+    compile "io.dropwizard.metrics:metrics-jvm"
+    compile "io.dropwizard.metrics:metrics-servlet"
+    compile "io.dropwizard.metrics:metrics-servlets"
+    compile "net.logstash.logback:logstash-logback-encoder"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-json-org"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
@@ -238,10 +226,10 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-annotations"
     compile "com.fasterxml.jackson.core:jackson-databind"
     compile "com.fasterxml.jackson.module:jackson-module-afterburner"
-    compile "com.ryantenney.metrics:metrics-spring:${metrics_spring_version}"
+    compile ("com.ryantenney.metrics:metrics-spring")
     <%_ if (hibernateCache === 'hazelcast') { _%>
     compile "com.hazelcast:hazelcast"
-    compile "com.hazelcast:hazelcast-hibernate52:${hazelcast_hibernate52_version}"
+    compile "com.hazelcast:hazelcast-hibernate52"
     compile "com.hazelcast:hazelcast-spring"
     <%_ } _%>
     <%_ if ((clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') && hibernateCache !== 'hazelcast') { _%>
@@ -249,16 +237,16 @@ dependencies {
     compile "com.hazelcast:hazelcast-spring"
     <%_ } _%>
     <%_ if (clusteredHttpSession === 'hazelcast') { _%>
-    compile "com.hazelcast:hazelcast-wm:${hazelcast_wm_version}"
+    compile "com.hazelcast:hazelcast-wm"
     <%_ } _%>
     <%_ if (hibernateCache === 'infinispan') { _%>
-    compile "org.hibernate:hibernate-infinispan:${infinispan_hibernate52_version}"
+    compile "org.hibernate:hibernate-infinispan"
     <%_ } _%>
     <%_ if (hibernateCache === 'infinispan') {_%>
-    compile "org.infinispan:infinispan-spring-boot-starter:${infinispan_boot_starter_version}"
+    compile "org.infinispan:infinispan-spring-boot-starter"
     compile "org.infinispan:infinispan-core"
     compile "org.infinispan:infinispan-jcache"
-    compile ("org.infinispan:infinispan-cloud:${infinispan_cloud_version}") {
+    compile ("org.infinispan:infinispan-cloud") {
         exclude module: 'undertow-core'
     }
     <%_ } _%>
@@ -266,28 +254,29 @@ dependencies {
     compile "javax.cache:cache-api"
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
-    compile "org.hibernate:hibernate-core:${hibernate_version}"
-    compile "com.zaxxer:HikariCP:${hikaricp_version}"
+    compile "org.hibernate:hibernate-core"
+    compile ("com.zaxxer:HikariCP")
     <%_ } _%>
     <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
     compile "commons-codec:commons-codec"
     <%_ } _%>
-    compile "org.apache.commons:commons-lang3:${commons_lang_version}"
-    compile "commons-io:commons-io:${commons_io_version}"
+    compile "org.apache.commons:commons-lang3"
+    compile "commons-io:commons-io"
     compile "javax.transaction:javax.transaction-api"
     <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
-    compile "net.jpountz.lz4:lz4:${lz4_version}"
+    compile "net.jpountz.lz4:lz4"
     <%_ } _%>
     <%_ if (hibernateCache === 'ehcache' && databaseType === 'sql') { _%>
     compile "org.ehcache:ehcache"
-    compile "org.hibernate:hibernate-jcache:${hibernate_version}"
+    compile "org.hibernate:hibernate-jcache"
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
-    compile "org.hibernate:hibernate-envers:${hibernate_version}"
+    compile "org.hibernate:hibernate-entitymanager"
+    compile "org.hibernate:hibernate-envers"
     compile "org.hibernate:hibernate-validator"
-    compile "org.hibernate:hibernate-entitymanager:${hibernate_version}"
+    compile "org.hibernate:hibernate-entitymanager"
     compile "org.liquibase:liquibase-core"
-    compile "com.mattbertolini:liquibase-slf4j:${liquibase_slf4j_version}"
+    compile "com.mattbertolini:liquibase-slf4j"
     <%_ } _%>
     compile "org.springframework.boot:spring-boot-actuator"
     compile "org.springframework.boot:spring-boot-autoconfigure"
@@ -310,7 +299,7 @@ dependencies {
     <%_ if (messageBroker === 'kafka') { _%>
     compile "org.springframework.cloud:spring-cloud-stream"
     compile "org.springframework.cloud:spring-cloud-stream-binder-kafka"
-    compile "org.springframework.kafka:spring-kafka:${spring_kafka_version}"
+    compile "org.springframework.kafka:spring-kafka"
     <%_ } _%>
     compile "org.springframework.boot:spring-boot-starter-security"
     compile ("org.springframework.boot:spring-boot-starter-web") {
@@ -320,19 +309,17 @@ dependencies {
     <%_ if (websocket === 'spring-websocket') { _%>
     compile "org.springframework.boot:spring-boot-starter-websocket"
     <%_ } _%>
-    compile ("org.springframework.boot:spring-boot-starter-thymeleaf") {
-        exclude module: 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
-    }
-    compile "org.zalando:problem-spring-web:${problem_spring_web_version}"
+    compile "org.springframework.boot:spring-boot-starter-thymeleaf"
+    compile "org.zalando:problem-spring-web"
     <%_ if (databaseType === 'cassandra') { _%>
     compile "com.google.guava:guava:18.0"
-    compile "com.datastax.cassandra:cassandra-driver-extras:" + dependencyManagement.managedVersions["com.datastax.cassandra:cassandra-driver-core"]
+    compile "com.datastax.cassandra:cassandra-driver-extras"
     compile "com.datastax.cassandra:cassandra-driver-mapping"
     <%_ } _%>
     <%_ if (applicationType === 'gateway') { _%>
     compile "org.springframework.cloud:spring-cloud-starter-zuul"
-    compile "com.github.vladimir-bukhtoyarov:bucket4j-core:${bucket4j_version}"
-    compile "com.github.vladimir-bukhtoyarov:bucket4j-jcache:${bucket4j_version}"
+    compile "com.github.vladimir-bukhtoyarov:bucket4j-core"
+    compile "com.github.vladimir-bukhtoyarov:bucket4j-jcache"
     <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
     compile "org.springframework.cloud:spring-cloud-starter"
@@ -364,26 +351,26 @@ dependencies {
     compile "org.springframework.security:spring-security-messaging"
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
-    compile "org.springframework.security.oauth:spring-security-oauth2:${spring_security_oauth2_version}"
+    compile "org.springframework.security.oauth:spring-security-oauth2"
         <%_ if (applicationType === 'gateway' || applicationType === 'microservice') { _%>
     compile "org.springframework.security:spring-security-jwt"
         <%_ } _%>
     <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>
-    compile "io.jsonwebtoken:jjwt:${jjwt_version}"
+    compile "io.jsonwebtoken:jjwt"
     <%_ } _%>
     <%_ if (authenticationType === 'uaa') { _%>
-    compile "org.springframework.security.oauth:spring-security-oauth2:${spring_security_oauth2_version}"
+    compile "org.springframework.security.oauth:spring-security-oauth2"
     compile "org.springframework.security:spring-security-jwt"
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
-    compile "com.github.mongobee:mongobee:${mongobee_version}"
-    compile "com.google.guava:guava:${guava_version}"
+    compile "com.github.mongobee:mongobee"
+    compile "com.google.guava:guava"
     <%_ } _%>
-    compile ("io.springfox:springfox-swagger2:${springfox_version}") {
+    compile ("io.springfox:springfox-swagger2") {
         exclude module: 'mapstruct'
     }
-    compile "io.springfox:springfox-bean-validators:${springfox_version}"
+    compile "io.springfox:springfox-bean-validators"
     <%_ if (devDatabaseType === 'mysql' || prodDatabaseType === 'mysql') { _%>
     compile "mysql:mysql-connector-java"
     <%_ } _%>
@@ -397,37 +384,38 @@ dependencies {
     compile "com.h2database:h2"
     <%_ } _%>
     <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
-    compile "com.microsoft.sqlserver:mssql-jdbc:${mssql_jdbc_version}"
-    compile "com.github.sabomichal:liquibase-mssql:${liquibase_mssql_version}"
+    compile "com.microsoft.sqlserver:mssql-jdbc"
+    compile "com.github.sabomichal:liquibase-mssql"
     <%_ } _%>
     compile "org.mapstruct:mapstruct-jdk8:${mapstruct_version}"
     <%_ if (enableSocialSignIn) { _%>
     compile "org.apache.httpcomponents:httpclient"
     compile "org.springframework.social:spring-social-security"
-    compile "org.springframework.social:spring-social-google:${spring_social_google_version}"
+    compile "org.springframework.social:spring-social-google"
     compile "org.springframework.social:spring-social-facebook"
     compile "org.springframework.social:spring-social-twitter"
     <%_ } _%>
+    testCompile "org.awaitility:awaitility"
     testCompile "com.jayway.jsonpath:json-path"
     <%_ if (databaseType === 'cassandra') { _%>
-    testCompile ("org.cassandraunit:cassandra-unit-spring:${cassandra_unit_spring_version}") {
+    testCompile ("org.cassandraunit:cassandra-unit-spring") {
         exclude(group: 'org.slf4j')
     }
     <%_ } _%>
     <%_ if (cucumberTests) { _%>
-    testCompile "info.cukes:cucumber-junit:${cucumber_version}"
-    testCompile "info.cukes:cucumber-spring:${cucumber_version}"
+    testCompile "info.cukes:cucumber-junit"
+    testCompile "info.cukes:cucumber-spring"
     <%_ } _%>
     testCompile ("org.springframework.boot:spring-boot-starter-test") {
         exclude group: 'com.vaadin.external.google', module: 'android-json'
     }
     testCompile "org.springframework.security:spring-security-test"
     testCompile "org.springframework.boot:spring-boot-test"
-    testCompile "org.assertj:assertj-core:${assertj_version}"
+    testCompile "org.assertj:assertj-core"
     testCompile "junit:junit"
     testCompile "org.mockito:mockito-core"
     <%_ if (databaseType === 'sql') { _%>
-    testCompile "com.mattbertolini:liquibase-slf4j:${liquibase_slf4j_version}"
+    testCompile "com.mattbertolini:liquibase-slf4j"
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
     testCompile "de.flapdoodle.embed:de.flapdoodle.embed.mongo"
@@ -437,13 +425,12 @@ dependencies {
     testCompile "com.h2database:h2"
     <%_ } _%>
     <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
-    // more information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc
-    compile "com.oracle.jdbc:ojdbc7:${oracle_version}"
+    compile "com.oracle.jdbc:ojdbc7"
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
     testCompile "org.springframework.cloud:spring-cloud-stream-test-support"
     <%_ } _%>
-    optional ("org.springframework.boot:spring-boot-configuration-processor:${spring_boot_version}") {
+    optional ("org.springframework.boot:spring-boot-configuration-processor") {
         exclude group: 'com.vaadin.external.google', module: 'android-json'
     }
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
