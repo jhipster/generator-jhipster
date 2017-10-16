@@ -21,4 +21,4 @@
  *
  * More information on https://github.com/zalando/problem-spring-web
  */
-package <%=packageName%>.web.rest.vm;
+package <%=packageName%>.web.rest.errors;
