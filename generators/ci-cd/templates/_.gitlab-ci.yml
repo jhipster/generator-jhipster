@@ -59,7 +59,7 @@ gradle-build:
     stage: build
     script:
         - ./gradlew compileJava -x test -PnodeInstall --no-daemon
-gradle-check:
+gradle-test:
     stage: test
     script:
         - ./gradlew test -PnodeInstall --no-daemon
