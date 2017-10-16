@@ -23,7 +23,7 @@ configurations {
 }
 
 dependencies {
-    liquibase "org.liquibase.ext:liquibase-hibernate5:${liquibase_hibernate5_version}"
+    liquibase "org.liquibase.ext:liquibase-hibernate5"
 }
 
 if (OperatingSystem.current().isWindows()) {
