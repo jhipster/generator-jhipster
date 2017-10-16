@@ -72,6 +72,7 @@ public class SwaggerBasePathRewritingFilter extends SendResponseFilter {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     private String rewriteBasePath(RequestContext context) {
         InputStream responseDataStream = context.getResponseDataStream();
         String requestUri = RequestContext.getCurrentContext().getRequest().getRequestURI();

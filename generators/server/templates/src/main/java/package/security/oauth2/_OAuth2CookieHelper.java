@@ -59,7 +59,7 @@ public class OAuth2CookieHelper {
      * The names of the Cookies we set.
      */
     private static final List<String> COOKIE_NAMES = Arrays.asList(ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE,
-                                                                   SESSION_TOKEN_COOKIE);
+        SESSION_TOKEN_COOKIE);
     /**
      * Number of seconds to expire refresh token cookies before the enclosed token expires.
      * This makes sure we don't run into race conditions where the cookie is still there but
@@ -86,10 +86,10 @@ public class OAuth2CookieHelper {
 
     public static Cookie getRefreshTokenCookie(HttpServletRequest request) {
         Cookie cookie = getCookie(request, REFRESH_TOKEN_COOKIE);
-        if(cookie==null) {
+        if (cookie == null) {
             cookie = getCookie(request, SESSION_TOKEN_COOKIE);
         }
-        return  cookie;
+        return cookie;
     }
 
 
@@ -148,13 +148,13 @@ public class OAuth2CookieHelper {
      */
     private Cookie createRefreshTokenCookie(OAuth2RefreshToken refreshToken, boolean rememberMe) {
         int maxAge = -1;
-        String name=SESSION_TOKEN_COOKIE;
+        String name = SESSION_TOKEN_COOKIE;
         String value = refreshToken.getValue();
         if (rememberMe) {
-            name=REFRESH_TOKEN_COOKIE;
+            name = REFRESH_TOKEN_COOKIE;
             //get expiration in seconds from the token's "exp" claim
             Integer exp = getClaim(refreshToken.getValue(), AccessTokenConverter.EXP, Integer.class);
-            if(exp!=null) {
+            if (exp != null) {
                 int now = (int) (System.currentTimeMillis() / 1000L);
                 maxAge = exp - now;
                 log.debug("refresh token valid for another {} secs", maxAge);
@@ -205,7 +205,7 @@ public class OAuth2CookieHelper {
      * @return true, if the session is expired.
      */
     public boolean isSessionExpired(Cookie refreshCookie) {
-        if(isRememberMe(refreshCookie)) {       //no session expiration for "remember me"
+        if (isRememberMe(refreshCookie)) {       //no session expiration for "remember me"
             return false;
         }
         //read non-remember-me session length in secs
@@ -217,7 +217,7 @@ public class OAuth2CookieHelper {
         if (iat == null) {           //token creating timestamp in secs is missing, session does not expire
             return false;
         }
-        int now=(int)(System.currentTimeMillis()/1000L);
+        int now = (int) (System.currentTimeMillis() / 1000L);
         int sessionDuration = now - iat;
         log.debug("session duration {} secs, will timeout at {}", sessionDuration, validity);
         return sessionDuration > validity;            //session has expired
@@ -227,21 +227,22 @@ public class OAuth2CookieHelper {
      * Retrieve the given claim from the given token.
      *
      * @param refreshToken the JWT token to examine.
-     * @param claimName name of the claim to get.
-     * @param clazz the Class we expect to find there.
+     * @param claimName    name of the claim to get.
+     * @param clazz        the Class we expect to find there.
      * @return the desired claim.
      * @throws InvalidTokenException if we cannot find the claim in the token or it is of wrong type.
      */
+    @SuppressWarnings("unchecked")
     private <T> T getClaim(String refreshToken, String claimName, Class<T> clazz) {
         Jwt jwt = JwtHelper.decode(refreshToken);
         String claims = jwt.getClaims();
         Map<String, Object> claimsMap = jsonParser.parseMap(claims);
         Object claimValue = claimsMap.get(claimName);
-        if(claimValue==null) {
+        if (claimValue == null) {
             return null;
         }
         if (!clazz.isAssignableFrom(claimValue.getClass())) {
-            throw new InvalidTokenException("claim is not of expected type: "+claimName);
+            throw new InvalidTokenException("claim is not of expected type: " + claimName);
         }
         return (T) claimValue;
     }
@@ -270,7 +271,7 @@ public class OAuth2CookieHelper {
      */
     public void clearCookies(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
         String domain = getCookieDomain(httpServletRequest);
-        for(String cookieName : COOKIE_NAMES) {
+        for (String cookieName : COOKIE_NAMES) {
             clearCookie(httpServletRequest, httpServletResponse, domain, cookieName);
         }
     }
@@ -300,7 +301,7 @@ public class OAuth2CookieHelper {
      */
     private String getCookieDomain(HttpServletRequest request) {
         String domain = oAuth2Properties.getWebClientConfiguration().getCookieDomain();
-        if(domain!=null) {
+        if (domain != null) {
             return domain;
         }
         //if not explicitly defined, use top-level domain
@@ -325,7 +326,7 @@ public class OAuth2CookieHelper {
      * @param cookies the cookies we receive as input.
      * @return the new cookie array without our tokens.
      */
-    public Cookie[] stripCookies(Cookie[] cookies) {
+    Cookie[] stripCookies(Cookie[] cookies) {
         CookieCollection cc = new CookieCollection(cookies);
         if (cc.removeAll(COOKIE_NAMES)) {
             return cc.toArray();
