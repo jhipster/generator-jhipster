@@ -76,6 +76,8 @@ public class LoggingConfiguration {
     <%_ if (serviceDiscoveryType === "consul") { _%>
 
     private final ConsulRegistration consulRegistration;
+    <%_ } _%>
+    <%_ if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { _%>
 
     private final String version;
     <%_ } _%>
@@ -83,7 +85,7 @@ public class LoggingConfiguration {
     private final JHipsterProperties jHipsterProperties;
 
     public LoggingConfiguration(@Value("${spring.application.name}") String appName, @Value("${server.port}") String serverPort,
-        <% if (serviceDiscoveryType === "eureka") { %>EurekaInstanceConfigBean eurekaInstanceConfigBean,<% } %><% if (serviceDiscoveryType === "consul") { %> ConsulRegistration consulRegistration, @Value("${info.project.version}") String version,<% } %> JHipsterProperties jHipsterProperties) {
+        <% if (serviceDiscoveryType === "eureka") { %>EurekaInstanceConfigBean eurekaInstanceConfigBean,<% } %><% if (serviceDiscoveryType === "consul") { %> ConsulRegistration consulRegistration,<% } %><% if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { %> @Value("${info.project.version}") String version,<% } %> JHipsterProperties jHipsterProperties) {
         this.appName = appName;
         this.serverPort = serverPort;
         <%_ if (serviceDiscoveryType === 'eureka') { _%>
@@ -91,6 +93,8 @@ public class LoggingConfiguration {
         <%_ } _%>
         <%_ if (serviceDiscoveryType === 'consul') { _%>
         this.consulRegistration = consulRegistration;
+        <%_ } _%>
+        <%_ if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { _%>
         this.version = version;
         <%_ } _%>
         this.jHipsterProperties = jHipsterProperties;
