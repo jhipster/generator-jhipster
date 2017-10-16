@@ -26,6 +26,7 @@ import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.service.UserService;
 import <%=packageName%>.service.dto.UserDTO;
     <%_ } _%>
+import <%=packageName%>.web.rest.errors.DefaultException;
 
 import com.codahale.metrics.annotation.Timed;
 import org.slf4j.Logger;
@@ -87,7 +88,7 @@ public class AccountResource {
      *
      * @param principal the current user; resolves to null if not authenticated
      * @return the current user
-     * @throws RuntimeException 500 (Internal Server Error) if the user couldn't be returned
+     * @throws DefaultException 500 (Internal Server Error) if the user couldn't be returned
      */
     @GetMapping("/account")
     @Timed
@@ -200,17 +201,20 @@ public class AccountResource {
                 return userDTO;
             } else {
                 // Allow Spring Security Test to be used to mock users in the database
-                return Optional.ofNullable(userService.getUserWithAuthorities())
-                    .map(UserDTO::new)
-                    .orElseThrow(RuntimeException::new);
+                Optional<User> user = Optional.ofNullable(userService.getUserWithAuthorities());
+                if (user.isPresent()) {
+                    return new UserDTO(user.get());
+                } else {
+                    throw new DefaultException("User could not be found");
+                }
             }
         } else {
-            throw new RuntimeException();
+            throw new DefaultException("User could not be found");
         }
     }
     <%_ } else { _%>
     public User getAccount(Principal principal) {
-        return Optional.ofNullable(principal)
+        Optional<User> user = Optional.ofNullable(principal)
             .filter(it -> it instanceof OAuth2Authentication)
             .map(it -> ((OAuth2Authentication) it).getUserAuthentication())
             .map(authentication -> {
@@ -231,8 +235,12 @@ public class AccountResource {
                             it.getAuthority()).collect(Collectors.toSet())
                     );
                 }
-            )
-            .orElseThrow(RuntimeException::new);
+            );
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            throw new DefaultException("User could not be found");
+        }
     }
     <%_ } _%>
 }
@@ -327,8 +335,11 @@ public class AccountResource {
    @GetMapping("/activate")
    @Timed
    public void activateAccount(@RequestParam(value = "key") String key) {
-       userService.activateRegistration(key).orElseThrow(RuntimeException::new);
-   }
+        Optional<User> user = userService.activateRegistration(key);
+        if (!user.isPresent()) {
+            throw new DefaultException("No user was found for this reset key.");
+        };
+    }
 
    /**
     * GET  /authenticate : check if the user is authenticated, and return its login.
@@ -352,10 +363,12 @@ public class AccountResource {
    @GetMapping("/account")
    @Timed
    public UserDTO getAccount() {
-       return Optional.ofNullable(userService.getUserWithAuthorities())
-           .map(UserDTO::new)
-           .orElseThrow(RuntimeException::new);
-   }
+        Optional<User> user = Optional.ofNullable(userService.getUserWithAuthorities());
+        if (!user.isPresent()) {
+            throw new DefaultException("The current logged in user could not be found");
+        }
+        return new UserDTO(user.get());
+    }
 
    /**
     * POST  /account : update the current user information.
@@ -372,7 +385,10 @@ public class AccountResource {
        if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
            throw new EmailAlreadyUsedException();
        }
-       userRepository.findOneByLogin(userLogin).orElseThrow(RuntimeException::new);
+       Optional<User> user = userRepository.findOneByLogin(userLogin);
+       if (!user.isPresent()) {
+           throw new DefaultException("The user could not be found.");
+       }
        userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
                    userDTO.getLangKey()<% if (databaseType === 'mongodb' || databaseType === 'sql') { %>, userDTO.getImageUrl()<% } %>);
    }
@@ -401,10 +417,11 @@ public class AccountResource {
    @GetMapping("/account/sessions")
    @Timed
    public List<PersistentToken> getCurrentSessions() {
-       return persistentTokenRepository.findByUser(
-           userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin())
-               .orElseThrow(RuntimeException::new)
-       );
+        Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
+        if (!user.isPresent()) {
+            throw new DefaultException("The user could not be found.");
+        }
+        return persistentTokenRepository.findByUser(user.get());
    }
 
    /**
@@ -443,10 +460,11 @@ public class AccountResource {
    @PostMapping(path = "/account/reset-password/init")
    @Timed
    public void requestPasswordReset(@RequestBody String mail) {
-       mailService.sendPasswordResetMail(
-           userService.requestPasswordReset(mail)
-               .orElseThrow(EmailNotFoundException::new)
-       );
+       Optional<User> user = userService.requestPasswordReset(mail);
+       if (!user.isPresent()) {
+           throw new EmailNotFoundException();
+       }
+       mailService.sendPasswordResetMail(user.get());
    }
 
    /**
@@ -462,8 +480,12 @@ public class AccountResource {
        if (!checkPasswordLength(keyAndPassword.getNewPassword())) {
            throw new InvalidPasswordException();
        }
-       userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey())
-           .orElseThrow(RuntimeException::new);
+       Optional<User> user =
+           userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
+
+       if (!user.isPresent()) {
+           throw new DefaultException("No user was found for this reset key.");
+       }
    }
 
    private static boolean checkPasswordLength(String password) {
