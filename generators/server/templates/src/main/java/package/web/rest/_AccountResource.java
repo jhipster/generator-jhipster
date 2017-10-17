@@ -26,7 +26,7 @@ import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.service.UserService;
 import <%=packageName%>.service.dto.UserDTO;
     <%_ } _%>
-import <%=packageName%>.web.rest.errors.InternalServerErrorException
+import <%=packageName%>.web.rest.errors.InternalServerErrorException;
 
 import com.codahale.metrics.annotation.Timed;
 import org.slf4j.Logger;
