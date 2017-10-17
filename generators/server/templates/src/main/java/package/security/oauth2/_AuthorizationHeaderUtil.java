@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see http://www.jhipster.tech/
+ This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,21 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.client;
+package <%=packageName%>.security.oauth2;
 
-import <%=packageName%>.security.oauth2.AuthorizationHeaderUtil;
-
-import feign.RequestInterceptor;
-import feign.RequestTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 
-public class TokenRelayRequestInterceptor implements RequestInterceptor {
+public class AuthorizationHeaderUtil {
 
     public static final String AUTHORIZATION = "Authorization";
 
-    @Override
-    public void apply(RequestTemplate template) {
-        template.header(AUTHORIZATION, AuthorizationHeaderUtil.getAuthorizationHeader());
+    public static String getAuthorizationHeader() {
+        OAuth2AuthenticationDetails details =
+            (OAuth2AuthenticationDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
+
+        return String.format("%s %s", details.getTokenType(), details.getTokenValue());
     }
 }

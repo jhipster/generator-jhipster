@@ -17,6 +17,10 @@
  limitations under the License.
 -%>
 package <%=packageName%>.gateway;
+<%_ if (authenticationType === 'oauth2') { _%>
+
+import <%=packageName%>.security.oauth2.AuthorizationHeaderUtil;
+<%_ } _%>
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
@@ -26,14 +30,23 @@ import java.util.Set;
 
 @Component
 public class TokenRelayFilter extends ZuulFilter {
+<%_ if (authenticationType === 'oauth2') { _%>
+
+    public static final String AUTHORIZATION_HEADER = "Authorization";
+<%_ } _%>
+
     @Override
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
-
         Set<String> headers = (Set<String>) ctx.get("ignoredHeaders");
-        // We need our JWT tokens relayed to resource servers
+        // JWT tokens should be relayed to the resource servers
         headers.remove("authorization");
+        <%_ if (authenticationType === 'oauth2') { _%>
+        // Add specific authorization headers for OAuth2
+        ctx.addZuulRequestHeader(AUTHORIZATION_HEADER,
+            AuthorizationHeaderUtil.getAuthorizationHeader());
 
+        <%_ } _%>
         return null;
     }
 
