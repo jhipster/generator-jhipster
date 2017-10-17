@@ -127,17 +127,18 @@ if (OperatingSystem.current().isWindows()) {
 }
 
 test {
-    include '**/*UnitTest*'
-    include '**/*IntTest*'
+    exclude '**/CucumberTest*'
 
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
     reports.html.enabled = false
 }
-<%_ if (cucumberTests) { _%>
 
+<%_ if (cucumberTests) { _%>
 task cucumberTest(type: Test) {
+    description = "Execute cucumber BDD tests."
+    group = "verification"
     include '**/CucumberTest*'
 
     // uncomment if the tests reports are not generated
@@ -146,19 +147,18 @@ task cucumberTest(type: Test) {
     reports.html.enabled = false
 }
 
-test.finalizedBy(cucumberTest)
+check.dependsOn cucumberTest
 <%_ } _%>
-
 task testReport(type: TestReport) {
     destinationDir = file("$buildDir/reports/tests")
     reportOn test
-    <%_ if (cucumberTests) { _%>
-    reportOn cucumberTest
-    <%_ } _%>
 }
-<%_ if (cucumberTests) { _%>
 
-cucumberTest.finalizedBy(testReport)
+<%_ if (cucumberTests) { _%>
+task cucumberTestReport(type: TestReport) {
+    destinationDir = file("$buildDir/reports/tests")
+    reportOn cucumberTest
+}
 <%_ } _%>
 
 <%_ if (!skipClient) { _%>
@@ -446,10 +446,6 @@ dependencies {
         exclude group: 'com.vaadin.external.google', module: 'android-json'
     }
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
-}
-
-clean {
-    delete "target"
 }
 
 task cleanResources(type: Delete) {
