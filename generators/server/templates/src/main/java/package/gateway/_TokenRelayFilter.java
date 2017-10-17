@@ -25,8 +25,10 @@ import <%=packageName%>.security.oauth2.AuthorizationHeaderUtil;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import org.springframework.stereotype.Component;
+<%_ if (authenticationType === 'jwt') { _%>
 
 import java.util.Set;
+<%_ } _%>
 
 @Component
 public class TokenRelayFilter extends ZuulFilter {
@@ -38,9 +40,11 @@ public class TokenRelayFilter extends ZuulFilter {
     @Override
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
+        <%_ if (authenticationType === 'jwt') { _%>
         Set<String> headers = (Set<String>) ctx.get("ignoredHeaders");
         // JWT tokens should be relayed to the resource servers
         headers.remove("authorization");
+        <%_ } _%>
         <%_ if (authenticationType === 'oauth2') { _%>
         // Add specific authorization headers for OAuth2
         ctx.addZuulRequestHeader(AUTHORIZATION_HEADER,
