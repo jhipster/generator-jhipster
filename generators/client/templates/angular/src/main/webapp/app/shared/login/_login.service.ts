@@ -91,7 +91,15 @@ export class LoginService {
     <%_ } _%>
 
     logout() {
+        <%_ if (authenticationType === 'uaa') { _%>
+        if (this.principal.isAuthenticated()) {
+            this.authServerProvider.logout().subscribe(() => this.principal.authenticate(null));
+        } else {
+            this.principal.authenticate(null);
+        }
+        <%_ } else { _%>
         this.authServerProvider.logout().subscribe();
         this.principal.authenticate(null);
+        <%_ } _%>
     }
 }
