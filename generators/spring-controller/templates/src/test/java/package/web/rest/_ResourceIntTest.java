@@ -36,11 +36,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Test class for the <%= controllerClass %> REST controller.
  *
- * @see <%= controllerClass %>Controller
+ * @see <%= controllerClass %>Resource
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)
-public class <%= controllerClass %>ControllerIntTest {
+public class <%= controllerClass %>ResourceIntTest {
 
     private MockMvc restMockMvc;
 
@@ -48,9 +48,9 @@ public class <%= controllerClass %>ControllerIntTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        <%= controllerClass %>Controller <%= controllerInstance %>Controller = new <%= controllerClass %>Controller();
+        <%= controllerClass %>Resource <%= controllerInstance %>Resource = new <%= controllerClass %>Resource();
         restMockMvc = MockMvcBuilders
-            .standaloneSetup(<%= controllerInstance %>Controller)
+            .standaloneSetup(<%= controllerInstance %>Resource)
             .build();
     }
 
