@@ -126,7 +126,7 @@ module.exports = class extends PrivateBase {
             jhipsterUtils.rewriteFile({
                 file: indexFilePath,
                 needle: 'jhipster-needle-add-resources-to-root',
-                splicable: resourcesBlock
+                splicable: [resourcesBlock]
             }, this);
         } catch (e) {
             this.log(`${chalk.yellow('\nUnable to find ') + indexFilePath + chalk.yellow(' or missing required jhipster-needle. Resources are not added to JHipster app.\n')}`);
