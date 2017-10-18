@@ -31,7 +31,8 @@ import <%= packageName %>.repository.UserRepository;
 import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
 import <%= packageName %>.security.AuthoritiesConstants;
-import <%= packageName %>.service.MailService;
+<%_ if (authenticationType !== 'oauth2') { _%>
+import <%= packageName %>.service.MailService;<% } %>
 import <%= packageName %>.service.UserService;
 import <%= packageName %>.service.dto.UserDTO;
 import <%= packageName %>.service.mapper.UserMapper;
@@ -63,10 +64,7 @@ import javax.persistence.EntityManager;
 <%_ if (databaseType !== 'cassandra') { _%>
 import java.time.Instant;
 <%_ } _%>
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 <%_ if (databaseType !== 'sql') { _%>
@@ -128,9 +126,11 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
     private UserSearchRepository userSearchRepository;
 
     <%_ } _%>
+    <%_ if (authenticationType !== 'oauth2') { _%>
     @Autowired
     private MailService mailService;
 
+    <%_ } _%>
     @Autowired
     private UserService userService;
 
@@ -158,7 +158,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        UserResource userResource = new UserResource(userRepository, mailService, userService<% if (searchEngine === 'elasticsearch') { %>, userSearchRepository<% } %>);
+        UserResource userResource = new UserResource(userRepository, <% if (authenticationType !== 'oauth2') { %>mailService, <% } %>userService<% if (searchEngine === 'elasticsearch') { %>, userSearchRepository<% } %>);
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
