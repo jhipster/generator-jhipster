@@ -93,13 +93,9 @@ function askForModuleName() {
     if (this.existingProject) return;
 
     this.askModuleName(this);
-    this.configOptions.lastQuestion = this.currentQuestion;
-    this.configOptions.totalQuestions = this.totalQuestions;
 }
 
 function askFori18n() {
-    this.currentQuestion = this.configOptions.lastQuestion;
-    this.totalQuestions = this.configOptions.totalQuestions;
     if (this.skipI18n || this.existingProject) return;
     this.aski18n(this);
 }
