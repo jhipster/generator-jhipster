@@ -25,7 +25,7 @@ import <%=packageName%>.security.oauth2.AuthorizationHeaderUtil;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import org.springframework.stereotype.Component;
-<%_ if (authenticationType === 'jwt') { _%>
+<%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 
 import java.util.Set;
 <%_ } _%>
