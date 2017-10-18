@@ -54,7 +54,7 @@ function askForClient(meta) {
         type: 'list',
         name: 'clientFramework',
         when: response => (applicationType !== 'microservice' && applicationType !== 'uaa'),
-        message: `Which ${chalk.cyan('*Framework*')} would you like to use for the client?`,
+        message: `Which ${chalk.yellow('*Framework*')} would you like to use for the client?`,
         choices,
         default: 'angularX'
     };
@@ -77,7 +77,7 @@ function askForClientSideOpts() {
         {
             type: 'confirm',
             name: 'useSass',
-            message: `Would you like to enable ${chalk.cyan('*SASS*')} support using the LibSass stylesheet preprocessor?`,
+            message: `Would you like to enable ${chalk.yellow('*SASS*')} support using the LibSass stylesheet preprocessor?`,
             default: false
         }
     ];

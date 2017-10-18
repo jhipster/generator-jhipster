@@ -103,7 +103,7 @@ function askForServerSideOpts(meta) {
             when: response => applicationType === 'monolith' && response.serviceDiscoveryType !== 'eureka',
             type: 'list',
             name: 'authenticationType',
-            message: `Which ${chalk.cyan('*type*')} of authentication would you like to use?`,
+            message: `Which ${chalk.yellow('*type*')} of authentication would you like to use?`,
             choices: [
                 {
                     value: 'jwt',
@@ -124,7 +124,7 @@ function askForServerSideOpts(meta) {
             when: response => applicationType === 'gateway' || applicationType === 'microservice',
             type: 'list',
             name: 'authenticationType',
-            message: `Which ${chalk.cyan('*type*')} of authentication would you like to use?`,
+            message: `Which ${chalk.yellow('*type*')} of authentication would you like to use?`,
             choices: [
                 {
                     value: 'jwt',
@@ -160,7 +160,7 @@ function askForServerSideOpts(meta) {
             when: response => applicationType === 'microservice' || (response.authenticationType === 'uaa' && applicationType === 'gateway'),
             type: 'list',
             name: 'databaseType',
-            message: `Which ${chalk.cyan('*type*')} of database would you like to use?`,
+            message: `Which ${chalk.yellow('*type*')} of database would you like to use?`,
             choices: [
                 {
                     value: 'no',
@@ -185,7 +185,7 @@ function askForServerSideOpts(meta) {
             when: response => response.authenticationType === 'oauth2' && !response.databaseType,
             type: 'list',
             name: 'databaseType',
-            message: `Which ${chalk.cyan('*type*')} of database would you like to use?`,
+            message: `Which ${chalk.yellow('*type*')} of database would you like to use?`,
             choices: [
                 {
                     value: 'sql',
@@ -202,7 +202,7 @@ function askForServerSideOpts(meta) {
             when: response => !response.databaseType,
             type: 'list',
             name: 'databaseType',
-            message: `Which ${chalk.cyan('*type*')} of database would you like to use?`,
+            message: `Which ${chalk.yellow('*type*')} of database would you like to use?`,
             choices: [
                 {
                     value: 'sql',
@@ -223,7 +223,7 @@ function askForServerSideOpts(meta) {
             when: response => response.databaseType === 'sql',
             type: 'list',
             name: 'prodDatabaseType',
-            message: `Which ${chalk.cyan('*production*')} database would you like to use?`,
+            message: `Which ${chalk.yellow('*production*')} database would you like to use?`,
             choices: constants.SQL_DB_OPTIONS,
             default: 0
         },
@@ -231,7 +231,7 @@ function askForServerSideOpts(meta) {
             when: response => (response.databaseType === 'sql' && response.prodDatabaseType === 'mysql'),
             type: 'list',
             name: 'devDatabaseType',
-            message: `Which ${chalk.cyan('*development*')} database would you like to use?`,
+            message: `Which ${chalk.yellow('*development*')} database would you like to use?`,
             choices: [
                 {
                     value: 'h2Disk',
@@ -252,7 +252,7 @@ function askForServerSideOpts(meta) {
             when: response => (response.databaseType === 'sql' && response.prodDatabaseType === 'mariadb'),
             type: 'list',
             name: 'devDatabaseType',
-            message: `Which ${chalk.cyan('*development*')} database would you like to use?`,
+            message: `Which ${chalk.yellow('*development*')} database would you like to use?`,
             choices: [
                 {
                     value: 'h2Disk',
@@ -273,7 +273,7 @@ function askForServerSideOpts(meta) {
             when: response => (response.databaseType === 'sql' && response.prodDatabaseType === 'postgresql'),
             type: 'list',
             name: 'devDatabaseType',
-            message: `Which ${chalk.cyan('*development*')} database would you like to use?`,
+            message: `Which ${chalk.yellow('*development*')} database would you like to use?`,
             choices: [
                 {
                     value: 'h2Disk',
@@ -294,7 +294,7 @@ function askForServerSideOpts(meta) {
             when: response => (response.databaseType === 'sql' && response.prodDatabaseType === 'oracle'),
             type: 'list',
             name: 'devDatabaseType',
-            message: `Which ${chalk.cyan('*development*')} database would you like to use?`,
+            message: `Which ${chalk.yellow('*development*')} database would you like to use?`,
             choices: [
                 {
                     value: 'h2Disk',
@@ -315,7 +315,7 @@ function askForServerSideOpts(meta) {
             when: response => (response.databaseType === 'sql' && response.prodDatabaseType === 'mssql'),
             type: 'list',
             name: 'devDatabaseType',
-            message: `Which ${chalk.cyan('*development*')} database would you like to use?`,
+            message: `Which ${chalk.yellow('*development*')} database would you like to use?`,
             choices: [
                 {
                     value: 'h2Disk',
