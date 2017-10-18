@@ -40,7 +40,7 @@ public class TokenRelayFilter extends ZuulFilter {
     @Override
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
-        <%_ if (authenticationType === 'jwt') { _%>
+        <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
         Set<String> headers = (Set<String>) ctx.get("ignoredHeaders");
         // JWT tokens should be relayed to the resource servers
         headers.remove("authorization");
