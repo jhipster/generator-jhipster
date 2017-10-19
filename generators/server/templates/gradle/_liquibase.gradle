@@ -77,7 +77,7 @@ task liquibase(dependsOn: compileJava, type: JavaExec) {
 }
 
 // for compatibility to former task
-task liquibaseClearChecksums() {
+task liquibaseDiffChangelog() {
 	liquibaseCommand = "diffChangeLog"
 	liquibase.execute()
 }
