@@ -21,6 +21,7 @@ package io.github.jhipster.config.apidoc;
 
 import static springfox.documentation.builders.PathSelectors.regex;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -35,7 +36,6 @@ import org.springframework.util.StopWatch;
 
 import com.fasterxml.classmate.TypeResolver;
 
-import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.config.JHipsterProperties;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.schema.TypeNameExtractor;
@@ -43,6 +43,8 @@ import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import static io.github.jhipster.config.JHipsterConstants.SPRING_PROFILE_SWAGGER;
 
 /**
  * Springfox Swagger configuration.
@@ -54,15 +56,21 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @ConditionalOnClass({ ApiInfo.class, BeanValidatorPluginsConfiguration.class })
 @EnableSwagger2
 @Import(BeanValidatorPluginsConfiguration.class)
-@Profile(JHipsterConstants.SPRING_PROFILE_SWAGGER)
+@Profile(SPRING_PROFILE_SWAGGER)
 public class SwaggerConfiguration {
+
+    public static final String STARTING_MESSAGE = "Starting Swagger";
+    public static final String STARTED_MESSAGE = "Started Swagger in {} ms";
+    public static final String MANAGEMENT_TITLE_SUFFIX = "management API";
+    public static final String MANAGEMENT_GROUP_NAME = "management";
+    public static final String MANAGEMENT_DESCRIPTION = "Management endpoints documentation";
 
     private final Logger log = LoggerFactory.getLogger(SwaggerConfiguration.class);
 
-    private final JHipsterProperties jHipsterProperties;
+    private final JHipsterProperties.Swagger properties;
 
     public SwaggerConfiguration(JHipsterProperties jHipsterProperties) {
-        this.jHipsterProperties = jHipsterProperties;
+        this.properties = jHipsterProperties.getSwagger();
     }
 
     /**
@@ -72,36 +80,36 @@ public class SwaggerConfiguration {
      */
     @Bean
     public Docket swaggerSpringfoxApiDocket() {
-        log.debug("Starting Swagger");
+        log.debug(STARTING_MESSAGE);
         StopWatch watch = new StopWatch();
         watch.start();
         Contact contact = new Contact(
-            jHipsterProperties.getSwagger().getContactName(),
-            jHipsterProperties.getSwagger().getContactUrl(),
-            jHipsterProperties.getSwagger().getContactEmail());
+            properties.getContactName(),
+            properties.getContactUrl(),
+            properties.getContactEmail());
 
         ApiInfo apiInfo = new ApiInfo(
-            jHipsterProperties.getSwagger().getTitle(),
-            jHipsterProperties.getSwagger().getDescription(),
-            jHipsterProperties.getSwagger().getVersion(),
-            jHipsterProperties.getSwagger().getTermsOfServiceUrl(),
+            properties.getTitle(),
+            properties.getDescription(),
+            properties.getVersion(),
+            properties.getTermsOfServiceUrl(),
             contact,
-            jHipsterProperties.getSwagger().getLicense(),
-            jHipsterProperties.getSwagger().getLicenseUrl(),
+            properties.getLicense(),
+            properties.getLicenseUrl(),
             new ArrayList<>());
 
-        Docket docket = new Docket(DocumentationType.SWAGGER_2)
-            .host(jHipsterProperties.getSwagger().getHost())
-            .protocols(new HashSet<>(Arrays.asList(jHipsterProperties.getSwagger().getProtocols())))
+        Docket docket = createDocket()
+            .host(properties.getHost())
+            .protocols(new HashSet<>(Arrays.asList(properties.getProtocols())))
             .apiInfo(apiInfo)
             .forCodeGeneration(true)
-            .directModelSubstitute(java.nio.ByteBuffer.class, String.class)
+            .directModelSubstitute(ByteBuffer.class, String.class)
             .genericModelSubstitutes(ResponseEntity.class)
             .select()
-            .paths(regex(jHipsterProperties.getSwagger().getDefaultIncludePattern()))
+            .paths(regex(properties.getDefaultIncludePattern()))
             .build();
         watch.stop();
-        log.debug("Started Swagger in {} ms", watch.getTotalTimeMillis());
+        log.debug(STARTED_MESSAGE, watch.getTotalTimeMillis());
         return docket;
     }
 
@@ -118,15 +126,12 @@ public class SwaggerConfiguration {
         @Value("${management.context-path}") String managementContextPath,
         @Value("${info.project.version}") String appVersion) {
 
-        String host = jHipsterProperties.getSwagger().getHost();
-        String[] protocols = jHipsterProperties.getSwagger().getProtocols();
-
-        return new Docket(DocumentationType.SWAGGER_2)
-            .apiInfo(new ApiInfo(appName + " management API", "Management endpoints documentation",
-                appVersion, "", ApiInfo.DEFAULT_CONTACT, "", "", new ArrayList<VendorExtension>()))
-            .groupName("management")
-            .host(host)
-            .protocols(new HashSet<>(Arrays.asList(protocols)))
+        return createDocket()
+            .apiInfo(new ApiInfo(appName + " " + MANAGEMENT_TITLE_SUFFIX, MANAGEMENT_DESCRIPTION,
+                    appVersion, "", ApiInfo.DEFAULT_CONTACT, "", "", new ArrayList<>()))
+            .groupName(MANAGEMENT_GROUP_NAME)
+            .host(properties.getHost())
+            .protocols(new HashSet<>(Arrays.asList(properties.getProtocols())))
             .forCodeGeneration(true)
             .directModelSubstitute(java.nio.ByteBuffer.class, String.class)
             .genericModelSubstitutes(ResponseEntity.class)
@@ -141,4 +146,9 @@ public class SwaggerConfiguration {
 
         return new PageableParameterBuilderPlugin(nameExtractor, resolver);
     }
+
+    protected Docket createDocket() {
+        return new Docket(DocumentationType.SWAGGER_2);
+    }
+
 }
