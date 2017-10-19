@@ -60,23 +60,18 @@ public class UserJWTController {
 
     @PostMapping("/authenticate")
     @Timed
-    public ResponseEntity authorize(@Valid @RequestBody LoginVM loginVM, HttpServletResponse response) {
+    public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM, HttpServletResponse response) {
 
         UsernamePasswordAuthenticationToken authenticationToken =
             new UsernamePasswordAuthenticationToken(loginVM.getUsername(), loginVM.getPassword());
 
-        try {
-            Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            boolean rememberMe = (loginVM.isRememberMe() == null) ? false : loginVM.isRememberMe();
-            String jwt = tokenProvider.createToken(authentication, rememberMe);
-            response.addHeader(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + jwt);
-            return ResponseEntity.ok(new JWTToken(jwt));
-        } catch (AuthenticationException ae) {
-            log.trace("Authentication exception trace: {}", ae);
-            return new ResponseEntity<>(Collections.singletonMap("AuthenticationException",
-                ae.getLocalizedMessage()), HttpStatus.UNAUTHORIZED);
-        }
+        Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        boolean rememberMe = (loginVM.isRememberMe() == null) ? false : loginVM.isRememberMe();
+        String jwt = tokenProvider.createToken(authentication, rememberMe);
+        response.addHeader(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + jwt);
+        return ResponseEntity.ok(new JWTToken(jwt));
+
     }
 
     /**
