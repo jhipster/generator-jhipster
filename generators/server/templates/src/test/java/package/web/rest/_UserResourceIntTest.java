@@ -167,22 +167,37 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
     }
 
     /**
+     * Search for the last inserted user id.
+     */
+    public static String getLastInsertedId(EntityManager em){
+        String lastInsertedIdAsString = "";
+        List<User> userList = em.createQuery("select u from User u").getResultList();
+        if(userList.size() > 0){
+            lastInsertedIdAsString = userList.get(userList.size() - 1 ).getId().toString();
+        }
+        return lastInsertedIdAsString;
+    }
+
+    /**
      * Create a User.
      *
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which has a required relationship to the User entity.
      */
     public static User createEntity(<% if (databaseType === 'sql') { %>EntityManager em<% } %>) {
+        <%_ if (databaseType === 'sql') { _%>
+        String lastId = getLastInsertedId(em);
+        <%_ } _%>
         User user = new User();
         <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
         <%_ } _%>
-        user.setLogin(DEFAULT_LOGIN);
+        user.setLogin(DEFAULT_LOGIN<% if (databaseType === 'sql') { %> + lastId<% } %>);
         <%_ if (authenticationType !== 'oauth2') { _%>
         user.setPassword(RandomStringUtils.random(60));
         <%_ } _%>
         user.setActivated(true);
-        user.setEmail(DEFAULT_EMAIL);
+        user.setEmail(DEFAULT_EMAIL<% if (databaseType === 'sql') { %> + lastId<% } %>);
         user.setFirstName(DEFAULT_FIRSTNAME);
         user.setLastName(DEFAULT_LASTNAME);
         <%_ if (databaseType !== 'cassandra') { _%>
@@ -192,12 +207,26 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         return user;
     }
 
+    <%_ if (databaseType === 'sql') { _%>
+    /**
+     * When createEntity is called from other classes is mandatory to create different
+     * login and mail since those have a unique constraint.
+     */
+    private static User createEntityWithDefaults(EntityManager em){
+        User user = createEntity(em);
+        user.setLogin(DEFAULT_LOGIN);
+        user.setEmail(DEFAULT_EMAIL);
+        return user;
+    }
+    <%_ } _%>
+
     @Before
     public void initTest() {
         <%_ if (databaseType !== 'sql') { _%>
         userRepository.deleteAll();
         <%_ } _%>
-        user = createEntity(<% if (databaseType === 'sql') { %>em<% } %>);
+        <% if (databaseType === 'sql') { %>user = createEntityWithDefaults(em);<% } %>
+        <% if (databaseType !== 'sql') { %>user = createEntity(em);<% } %>
     }
 <%_ if (authenticationType !== 'oauth2') { _%>
 
