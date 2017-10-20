@@ -113,6 +113,22 @@ describe('::convert', () => {
         expect(content.Employee.pagination).to.eq('infinite-scroll');
       });
     });
+    describe('when converting JDL to entity json for Couchbase type', () => {
+      const input = parseFromFiles(['./test/test_files/couchbase_jdl.jdl']);
+      const content = EntityParser.parse({
+        jdlObject: JDLParser.parse(input, 'couchbase'),
+        databaseType: 'couchbase'
+      });
+      it('converts it', () => {
+        expect(content).not.to.be.null;
+        expect(Object.keys(content).length).to.eq(8);
+        expect(content.Department.relationships.length).to.eq(0);
+        expect(content.Department.fields.length).to.eq(2);
+        expect(content.Department.entityTableName).to.eq('department');
+        expect(content.Employee.javadoc).to.eq('The Employee entity.');
+        expect(content.Employee.pagination).to.eq('infinite-scroll');
+      });
+    });
     describe('when converting JDL to entity json for Cassandra type', () => {
       const input = parseFromFiles(['./test/test_files/cassandra_jdl.jdl']);
       const content = EntityParser.parse({
