@@ -9,23 +9,23 @@ const Validations = require('../../../../lib/core/jhipster/validations').VALIDAT
 const JDLEnum = require('../../../../lib/core/jdl_enum');
 
 describe('FieldTypes', () => {
-  describe('::isSQLType', () => {
+  describe('::isCommonDBType', () => {
     describe('when passing an invalid argument', () => {
       it('fails', () => {
         try {
-          FieldTypes.isSQLType(null);
+          FieldTypes.isCommonDBType(null);
           fail();
         } catch (error) {
           expect(error.name).to.eq('NullPointerException');
         }
         try {
-          FieldTypes.isSQLType(undefined);
+          FieldTypes.isCommonDBType(undefined);
           fail();
         } catch (error) {
           expect(error.name).to.eq('NullPointerException');
         }
         try {
-          FieldTypes.isSQLType('');
+          FieldTypes.isCommonDBType('');
           fail();
         } catch (error) {
           expect(error.name).to.eq('NullPointerException');
@@ -34,37 +34,37 @@ describe('FieldTypes', () => {
     });
     describe('when passing a false type', () => {
       it('returns false', () => {
-        expect(FieldTypes.isSQLType(FieldTypes.CASSANDRA_TYPES.UUID)).to.be.false;
+        expect(FieldTypes.isCommonDBType(FieldTypes.CASSANDRA_TYPES.UUID)).to.be.false;
       });
     });
     describe('when passing a valid type', () => {
       it('returns true', () => {
-        expect(FieldTypes.isSQLType(FieldTypes.SQL_TYPES.BIG_DECIMAL)).to.be.true;
+        expect(FieldTypes.isCommonDBType(FieldTypes.COMMON_DB_TYPES.BIG_DECIMAL)).to.be.true;
       });
     });
     describe('when passing an enum', () => {
       it('returns true', () => {
-        expect(FieldTypes.isSQLType(new JDLEnum({ name: 'MyEnum' }))).to.be.true;
+        expect(FieldTypes.isCommonDBType(new JDLEnum({ name: 'MyEnum' }))).to.be.true;
       });
     });
   });
-  describe('::isMongoDBType', () => {
+  describe('::isCommonDBType', () => {
     describe('when passing an invalid argument', () => {
       it('fails', () => {
         try {
-          FieldTypes.isMongoDBType(null);
+          FieldTypes.isCommonDBType(null);
           fail();
         } catch (error) {
           expect(error.name).to.eq('NullPointerException');
         }
         try {
-          FieldTypes.isMongoDBType(undefined);
+          FieldTypes.isCommonDBType(undefined);
           fail();
         } catch (error) {
           expect(error.name).to.eq('NullPointerException');
         }
         try {
-          FieldTypes.isMongoDBType('');
+          FieldTypes.isCommonDBType('');
           fail();
         } catch (error) {
           expect(error.name).to.eq('NullPointerException');
@@ -73,17 +73,17 @@ describe('FieldTypes', () => {
     });
     describe('when passing a false type', () => {
       it('returns false', () => {
-        expect(FieldTypes.isMongoDBType(FieldTypes.CASSANDRA_TYPES.UUID)).to.be.false;
+        expect(FieldTypes.isCommonDBType(FieldTypes.CASSANDRA_TYPES.UUID)).to.be.false;
       });
     });
     describe('when passing a valid type', () => {
       it('returns true', () => {
-        expect(FieldTypes.isMongoDBType(FieldTypes.MONGODB_TYPES.BIG_DECIMAL)).to.be.true;
+        expect(FieldTypes.isCommonDBType(FieldTypes.COMMON_DB_TYPES.BIG_DECIMAL)).to.be.true;
       });
     });
     describe('when passing an enum', () => {
       it('returns true', () => {
-        expect(FieldTypes.isMongoDBType(new JDLEnum({ name: 'MyEnum' }))).to.be.true;
+        expect(FieldTypes.isCommonDBType(new JDLEnum({ name: 'MyEnum' }))).to.be.true;
       });
     });
   });
@@ -112,7 +112,7 @@ describe('FieldTypes', () => {
     });
     describe('when passing a false type', () => {
       it('returns false', () => {
-        expect(FieldTypes.isCassandraType(FieldTypes.SQL_TYPES.LOCAL_DATE)).to.be.false;
+        expect(FieldTypes.isCassandraType(FieldTypes.COMMON_DB_TYPES.LOCAL_DATE)).to.be.false;
       });
     });
     describe('when passing a valid type', () => {
@@ -147,14 +147,14 @@ describe('FieldTypes', () => {
     });
     describe('when passing a valid argument without callback', () => {
       it('returns isType', () => {
-        expect(FieldTypes.getIsType('mysql')).to.eq(FieldTypes.isSQLType);
+        expect(FieldTypes.getIsType('mysql')).to.eq(FieldTypes.isCommonDBType);
       });
     });
     describe('when passing a valid argument and callback', () => {
       it('returns true', () => {
         expect(FieldTypes.getIsType('sql', () => {
           // do nothing
-        })).to.eq(FieldTypes.isSQLType);
+        })).to.eq(FieldTypes.isCommonDBType);
       });
     });
   });
