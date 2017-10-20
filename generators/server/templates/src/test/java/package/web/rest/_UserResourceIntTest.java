@@ -222,11 +222,9 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
 
     @Before
     public void initTest() {
-        <%_ if (databaseType !== 'sql') { _%>
-        userRepository.deleteAll();
-        <%_ } _%>
-        <% if (databaseType === 'sql') { %>user = createEntityWithDefaults(em);<% } %>
-        <% if (databaseType !== 'sql') { %>user = createEntity(em);<% } %>
+        <%_ if (databaseType !== 'sql') { _%>userRepository.deleteAll();<%_ } _%>
+        <%_ if (databaseType !== 'sql') { %>user = createEntity();<% } _%>
+        <%_ if (databaseType === 'sql') { %>user = createEntityWithDefaults(em);<% } _%>
     }
 <%_ if (authenticationType !== 'oauth2') { _%>
 
