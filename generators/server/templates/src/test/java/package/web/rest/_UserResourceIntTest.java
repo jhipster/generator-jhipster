@@ -201,11 +201,8 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
      */
     public static String getLastInsertedId(EntityManager em){
         String lastInsertedIdAsString = "";
-        List<User> userList = em.createQuery("select u from User u").getResultList();
-        if(userList.size() > 0){
-        lastInsertedIdAsString = userList.get(userList.size() - 1 ).getId().toString();
-        }
-        return lastInsertedIdAsString;
+        Long maxId = (Long) em.createQuery("select max(u.id) from User u").getSingleResult();
+        return maxId.toString();
         }
 
     /**
