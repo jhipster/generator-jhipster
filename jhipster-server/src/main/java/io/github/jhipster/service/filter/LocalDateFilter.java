@@ -34,38 +34,44 @@ public class LocalDateFilter extends RangeFilter<LocalDate> {
 
     @Override
     @DateTimeFormat(iso = ISO.DATE)
-    public void setEquals(LocalDate equals) {
+    public LocalDateFilter setEquals(LocalDate equals) {
         super.setEquals(equals);
+        return this;
     }
 
     @Override
     @DateTimeFormat(iso = ISO.DATE)
-    public void setGreaterThan(LocalDate equals) {
+    public LocalDateFilter setGreaterThan(LocalDate equals) {
         super.setGreaterThan(equals);
+        return this;
     }
 
     @Override
     @DateTimeFormat(iso = ISO.DATE)
-    public void setGreaterOrEqualThan(LocalDate equals) {
+    public LocalDateFilter setGreaterOrEqualThan(LocalDate equals) {
         super.setGreaterOrEqualThan(equals);
+        return this;
     }
 
     @Override
     @DateTimeFormat(iso = ISO.DATE)
-    public void setLessThan(LocalDate equals) {
+    public LocalDateFilter setLessThan(LocalDate equals) {
         super.setLessThan(equals);
+        return this;
     }
 
     @Override
     @DateTimeFormat(iso = ISO.DATE)
-    public void setLessOrEqualThan(LocalDate equals) {
+    public LocalDateFilter setLessOrEqualThan(LocalDate equals) {
         super.setLessOrEqualThan(equals);
+        return this;
     }
 
     @Override
     @DateTimeFormat(iso = ISO.DATE)
-    public void setIn(List<LocalDate> in) {
+    public LocalDateFilter setIn(List<LocalDate> in) {
         super.setIn(in);
+        return this;
     }
 
 }

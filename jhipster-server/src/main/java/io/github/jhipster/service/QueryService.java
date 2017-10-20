@@ -141,6 +141,8 @@ public abstract class QueryService<ENTITY> {
         SingularAttribute<OTHER, X> valueField) {
         if (filter.getEquals() != null) {
             return equalsSpecification(reference, valueField, filter.getEquals());
+        } else if (filter.getIn() != null) {
+            return valueIn(reference, valueField, filter.getIn());
         } else if (filter.getSpecified() != null) {
             return byFieldSpecified(reference, filter.getSpecified());
         }
@@ -212,6 +214,17 @@ public abstract class QueryService<ENTITY> {
         values) {
         return (root, query, builder) -> {
             In<X> in = builder.in(root.get(field));
+            for (X value : values) {
+                in = in.value(value);
+            }
+            return in;
+        };
+    }
+
+    protected <OTHER, X> Specification<ENTITY> valueIn(SingularAttribute<? super ENTITY, OTHER> reference,
+            SingularAttribute<OTHER, X> valueField, final Collection<X> values) {
+        return (root, query, builder) -> {
+            In<X> in = builder.in(root.get(reference).get(valueField));
             for (X value : values) {
                 in = in.value(value);
             }

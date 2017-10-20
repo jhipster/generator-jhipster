@@ -38,8 +38,9 @@ public class StringFilter extends Filter<String> {
         return contains;
     }
 
-    public void setContains(String contains) {
+    public StringFilter setContains(String contains) {
         this.contains = contains;
+        return this;
     }
 
     @Override

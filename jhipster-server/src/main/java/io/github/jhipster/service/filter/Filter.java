@@ -41,24 +41,27 @@ public class Filter<FIELD_TYPE> {
         return equals;
     }
 
-    public void setEquals(FIELD_TYPE equals) {
+    public Filter<FIELD_TYPE> setEquals(FIELD_TYPE equals) {
         this.equals = equals;
+        return this;
     }
 
     public Boolean getSpecified() {
         return specified;
     }
 
-    public void setSpecified(Boolean specified) {
+    public Filter<FIELD_TYPE> setSpecified(Boolean specified) {
         this.specified = specified;
+        return this;
     }
 
     public List<FIELD_TYPE> getIn() {
         return in;
     }
 
-    public void setIn(List<FIELD_TYPE> in) {
+    public Filter<FIELD_TYPE> setIn(List<FIELD_TYPE> in) {
         this.in = in;
+        return this;
     }
 
     @Override

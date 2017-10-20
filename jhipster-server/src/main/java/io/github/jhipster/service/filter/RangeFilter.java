@@ -54,32 +54,36 @@ public class RangeFilter<FIELD_TYPE extends Comparable<? super FIELD_TYPE>> exte
         return greaterThan;
     }
 
-    public void setGreaterThan(FIELD_TYPE greaterThan) {
+    public RangeFilter<FIELD_TYPE> setGreaterThan(FIELD_TYPE greaterThan) {
         this.greaterThan = greaterThan;
+        return this;
     }
 
     public FIELD_TYPE getGreaterOrEqualThan() {
         return greaterOrEqualThan;
     }
 
-    public void setGreaterOrEqualThan(FIELD_TYPE greaterOrEqualThan) {
+    public RangeFilter<FIELD_TYPE> setGreaterOrEqualThan(FIELD_TYPE greaterOrEqualThan) {
         this.greaterOrEqualThan = greaterOrEqualThan;
+        return this;
     }
 
     public FIELD_TYPE getLessThan() {
         return lessThan;
     }
 
-    public void setLessThan(FIELD_TYPE lessThan) {
+    public RangeFilter<FIELD_TYPE> setLessThan(FIELD_TYPE lessThan) {
         this.lessThan = lessThan;
+        return this;
     }
 
     public FIELD_TYPE getLessOrEqualThan() {
         return lessOrEqualThan;
     }
 
-    public void setLessOrEqualThan(FIELD_TYPE lessOrEqualThan) {
+    public RangeFilter<FIELD_TYPE> setLessOrEqualThan(FIELD_TYPE lessOrEqualThan) {
         this.lessOrEqualThan = lessOrEqualThan;
+        return this;
     }
 
     @Override

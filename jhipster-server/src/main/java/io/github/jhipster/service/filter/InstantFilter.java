@@ -33,32 +33,37 @@ public class InstantFilter extends RangeFilter<Instant> {
 
     @Override
     @DateTimeFormat(iso = ISO.DATE_TIME)
-    public void setEquals(Instant equals) {
+    public InstantFilter setEquals(Instant equals) {
         super.setEquals(equals);
+        return this;
     }
 
     @Override
     @DateTimeFormat(iso = ISO.DATE_TIME)
-    public void setGreaterThan(Instant equals) {
+    public InstantFilter setGreaterThan(Instant equals) {
         super.setGreaterThan(equals);
+        return this;
     }
 
     @Override
     @DateTimeFormat(iso = ISO.DATE_TIME)
-    public void setGreaterOrEqualThan(Instant equals) {
+    public InstantFilter setGreaterOrEqualThan(Instant equals) {
         super.setGreaterOrEqualThan(equals);
+        return this;
     }
 
     @Override
     @DateTimeFormat(iso = ISO.DATE_TIME)
-    public void setLessThan(Instant equals) {
+    public InstantFilter setLessThan(Instant equals) {
         super.setLessThan(equals);
+        return this;
     }
 
     @Override
     @DateTimeFormat(iso = ISO.DATE_TIME)
-    public void setLessOrEqualThan(Instant equals) {
+    public InstantFilter setLessOrEqualThan(Instant equals) {
         super.setLessOrEqualThan(equals);
+        return this;
     }
 
 }
