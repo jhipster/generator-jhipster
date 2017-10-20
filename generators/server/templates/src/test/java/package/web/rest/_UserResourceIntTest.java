@@ -167,18 +167,6 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
     }
 
     /**
-     * Search for the last inserted user id.
-     */
-    public static String getLastInsertedId(EntityManager em){
-        String lastInsertedIdAsString = "";
-        List<User> userList = em.createQuery("select u from User u").getResultList();
-        if(userList.size() > 0){
-            lastInsertedIdAsString = userList.get(userList.size() - 1 ).getId().toString();
-        }
-        return lastInsertedIdAsString;
-    }
-
-    /**
      * Create a User.
      *
      * This is a static method, as tests for other entities might also need it,
@@ -208,6 +196,18 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
     }
 
     <%_ if (databaseType === 'sql') { _%>
+    /**
+     * Search for the last inserted user id.
+     */
+    public static String getLastInsertedId(EntityManager em){
+        String lastInsertedIdAsString = "";
+        List<User> userList = em.createQuery("select u from User u").getResultList();
+        if(userList.size() > 0){
+        lastInsertedIdAsString = userList.get(userList.size() - 1 ).getId().toString();
+        }
+        return lastInsertedIdAsString;
+        }
+
     /**
      * When createEntity is called from other classes is mandatory to create different
      * login and mail since those have a unique constraint.
