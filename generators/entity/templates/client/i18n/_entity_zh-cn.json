@@ -20,29 +20,29 @@
     "<%= angularAppName %>": {
         "<%= entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityClassPluralHumanized  %>",
-                "createLabel": "创建新 <%= entityClassHumanized %>",
-                "createOrEditLabel": "创建或编辑 <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
-                "search": "查找 <%= entityClassHumanized %>"<% } %>
+                "title": "<%- formatAsApiDescription(javadoc) %>",
+                "createLabel": "创建新<%- formatAsApiDescription(javadoc) %>",
+                "createOrEditLabel": "创建或编辑<%- formatAsApiDescription(javadoc) %>"<% if (searchEngine === 'elasticsearch') { %>,
+                "search": "查找<%- formatAsApiDescription(javadoc) %>"<% } %>
             },<% if (!microserviceAppName) { %>
-            "created": "<%= entityClassHumanized %> {{ param }} 创建成功",
-            "updated": "<%= entityClassHumanized %> {{ param }} 更新成功",
-            "deleted": "<%= entityClassHumanized %> {{ param }} 删除成功",<% } %>
+            "created": "<%- formatAsApiDescription(javadoc) %> {{ param }} 创建成功",
+            "updated": "<%- formatAsApiDescription(javadoc) %> {{ param }} 更新成功",
+            "deleted": "<%- formatAsApiDescription(javadoc) %> {{ param }} 删除成功",<% } %>
             "delete": {
-                "question": "你确定要删除 <%= entityClassHumanized %> {{ id }} 吗？"
+                "question": "你确定要删除<%- formatAsApiDescription(javadoc) %> {{ id }} 吗？"
             },
             "detail": {
-                "title": "<%= entityClassHumanized %>"
+                "title": "<%- formatAsApiDescription(javadoc) %>"
             }<% for (idx in fields) { %>,
-            "<%=fields[idx].fieldName%>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
-            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameHumanized %>"<% } %>
+            "<%=fields[idx].fieldName%>": "<%= formatAsApiDescription(fields[idx].javadoc) %>"<% } %><% for (idx in relationships) { %>,
+            "<%=relationships[idx].relationshipName%>": "<%= formatAsApiDescription(relationships[idx].javadoc) %>"<% } %>
         }
     }<% if (microserviceAppName) { %>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
-            "created": "<%= entityClassHumanized %> {{ param }} 创建成功",
-            "updated": "<%= entityClassHumanized %> {{ param }} 更新成功",
-            "deleted": "<%= entityClassHumanized %> {{ param }} 删除成功"
+            "created": "<%- formatAsApiDescription(javadoc) %> {{ param }} 创建成功",
+            "updated": "<%- formatAsApiDescription(javadoc) %> {{ param }} 更新成功",
+            "deleted": "<%- formatAsApiDescription(javadoc) %> {{ param }} 删除成功"
         }
     }<% } %>
 }
