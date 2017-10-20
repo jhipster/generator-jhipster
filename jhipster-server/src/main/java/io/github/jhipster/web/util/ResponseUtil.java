@@ -26,10 +26,7 @@ import org.springframework.http.*;
 /**
  * Utility class for ResponseEntity creation.
  */
-public final class ResponseUtil {
-
-    private ResponseUtil() {
-    }
+public interface ResponseUtil {
 
     /**
      * Wrap the optional into a {@link ResponseEntity} with an {@link HttpStatus#OK} status, or if it's empty, it
