@@ -1,5 +1,6 @@
 /* eslint-disable */ // TODO Fix when page is completed
 import * as React from 'react';
+import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 import { connect } from 'react-redux';
 import { locales } from '../../../config/translation';
 
@@ -71,24 +72,30 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
     return (
         <div>
             <h2>User settings for [{account.login}]</h2>
-            <form>
-              <div className="form-control">
-                <label className="form-control-label" >First Name</label>
-                <input type="text" className="form-control" value={account.firstName} id="firstName" name="firstName" placeholder="First Name"
+            <Form>
+              <FormGroup>
+                <Label for="firstName">First Name</Label>
+                <Input  type="text" className="form-control" value={account.firstName} id="firstName" name="firstName" placeholder="First Name"
                 onChange={this.setFirstName}/>
-                <label className="form-control-label" >Last Name</label>
-                <input type="text" className="form-control" value={account.lastName} id="lastName" name="lastName" placeholder="Last Name"
+              </FormGroup>
+              <FormGroup>
+                <Label for="lastName">Last Name</Label>
+                <Input type="text" className="form-control" value={account.lastName} id="lastName" name="lastName" placeholder="Last Name"
                 onChange={this.setLastName}/>
-                <label className="form-control-label" >Email</label>
-                <input type="text" className="form-control" value={account.email} id="email" name="email" placeholder="Email"
-                       onChange={this.setEmail}/>
-                <label>Language</label>
-                <select id="langKey" name="langKey" className="form-control">
-                  {locales.map(lang => <option value={lang} key={lang}>{lang}</option>)}
-                </select>
-              </div>
-              <button type="submit" className="btn btn-primary" onClick={this.saveSettings} >Save</button>
-            </form>
+              </FormGroup>
+              <FormGroup>
+                <Label for="email">Email</Label>
+                <Input type="text" className="form-control" value={account.email} id="email" name="email" placeholder="Email"
+                onChange={this.setEmail}/>
+              </FormGroup>
+              <FormGroup>
+                <Label for="langKey">Language</Label>
+                <Input type="select" id="langKey" name="langKey" className="form-control">
+                      {locales.map(lang => <option value="lang" key="lang">{lang}</option>)}
+                </Input>
+              </FormGroup>
+               <Button type="submit" color="success" onClick={this.saveSettings}>Save</Button>
+            </Form>
       </div>
     );
   }
