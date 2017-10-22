@@ -69,6 +69,7 @@ import java.util.List;<% if (databaseType === 'cassandra') { %>
 import java.util.UUID;<% } %>
 <% if (fieldsContainZonedDateTime === true) { %>
 import static <%=packageName%>.web.rest.TestUtil.sameInstant;<% } %>
+import static <%=packageName%>.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -291,6 +292,7 @@ _%>
         this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter).build();
     }
 
