@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Table, Progress, Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
-import * as Translate from 'react-translate-component';
+import { Translate } from 'react-jhipster';
 import * as FaRefresh from 'react-icons/lib/fa/refresh';
 import * as FaEye from 'react-icons/lib/fa/eye';
 import MetricsModal from './metrics-modal';
@@ -175,7 +175,7 @@ export class MetricsPage extends React.Component<any, any> {
           <p>
             <button type="button" onClick={this.getMetrics} className={isFetching ? 'btn btn-danger' : 'btn btn-primary'} disabled={isFetching}>
               <FaRefresh/>&nbsp;
-              <Translate component="span" content="health.refresh.button" />
+              <Translate component="span" contentKey="health.refresh.button" />
             </button>
           </p>
           <hr />

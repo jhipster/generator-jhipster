@@ -8,6 +8,7 @@ export const ACTION_TYPES = {
   FETCH_LOGS_CHANGE_LEVEL: 'administration/FETCH_LOGS_CHANGE_LEVEL',
   FETCH_HEALTH: 'administration/FETCH_HEALTH',
   FETCH_METRICS: 'administration/FETCH_METRICS',
+  FETCH_THREAD_DUMP: 'administration/FETCH_THREAD_DUMP',
   FETCH_USERS: 'administration/FETCH_USERS',
   FETCH_CONFIGURATIONS: 'administration/FETCH_CONFIGURATIONS',
   FETCH_ENV: 'administration/FETCH_ENV',
@@ -41,6 +42,17 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.FETCH_GATEWAY_ROUTE):
     case REQUEST(ACTION_TYPES.FETCH_METRICS):
+      return {
+        ...state,
+        errorMessage: null,
+        loading: true
+      };
+    case REQUEST(ACTION_TYPES.FETCH_THREAD_DUMP):
+      return {
+        ...state,
+        errorMessage: null,
+        loading: true
+      };
     case REQUEST(ACTION_TYPES.FETCH_LOGS):
     case REQUEST(ACTION_TYPES.FETCH_USERS):
     case REQUEST(ACTION_TYPES.FETCH_CONFIGURATIONS):
@@ -54,6 +66,7 @@ export default (state = initialState, action) => {
       };
     case FAILURE(ACTION_TYPES.FETCH_GATEWAY_ROUTE):
     case FAILURE(ACTION_TYPES.FETCH_METRICS):
+    case FAILURE(ACTION_TYPES.FETCH_THREAD_DUMP):
     case FAILURE(ACTION_TYPES.FETCH_LOGS):
     case FAILURE(ACTION_TYPES.FETCH_USERS):
     case FAILURE(ACTION_TYPES.FETCH_CONFIGURATIONS):
@@ -148,7 +161,12 @@ export const systemHealth = () => ({
 
 export const systemMetrics = () => ({
   type: ACTION_TYPES.FETCH_METRICS,
-  payload: axios.get('/management/jhipster/metrics')
+  payload: axios.get('/management/metrics')
+});
+
+export const systemThreadDump = () => ({
+  type: ACTION_TYPES.FETCH_THREAD_DUMP,
+  payload: axios.get('/management/dump')
 });
 
 export const changeLogLevel = (name, level) => {
