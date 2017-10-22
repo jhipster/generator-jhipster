@@ -119,7 +119,7 @@ function writeFiles() {
 
             if (this.authenticationType === 'oauth2') {
                 this.template(`${DOCKER_DIR}_keycloak.yml`, `${DOCKER_DIR}keycloak.yml`);
-                this.copy(`${DOCKER_DIR}config/realm-config/jhipster-realm.json`, `${DOCKER_DIR}realm-config/jhipster-realm.json`);
+                this.template(`${DOCKER_DIR}config/realm-config/_jhipster-realm.json`, `${DOCKER_DIR}realm-config/jhipster-realm.json`);
                 this.copy(`${DOCKER_DIR}config/realm-config/jhipster-users-0.json`, `${DOCKER_DIR}realm-config/jhipster-users-0.json`);
             }
         },
