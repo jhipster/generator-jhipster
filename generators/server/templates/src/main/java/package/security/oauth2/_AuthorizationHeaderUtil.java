@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see http://www.jhipster.tech/
+ This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,14 +16,17 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.web.rest.errors;
+package <%=packageName%>.security.oauth2;
 
-import org.zalando.problem.AbstractThrowableProblem;
-import org.zalando.problem.Status;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 
-public class InvalidPasswordException extends AbstractThrowableProblem {
+public class AuthorizationHeaderUtil {
 
-    public InvalidPasswordException() {
-        super(ErrorConstants.INVALID_PASSWORD_TYPE, "Incorrect password", Status.BAD_REQUEST);
+    public static String getAuthorizationHeader() {
+        OAuth2AuthenticationDetails details =
+            (OAuth2AuthenticationDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
+
+        return String.format("%s %s", details.getTokenType(), details.getTokenValue());
     }
 }

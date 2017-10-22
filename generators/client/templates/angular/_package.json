@@ -150,10 +150,8 @@
     "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:prod:main && <%= clientPackageManager %> run clean-www",
     "webpack:test": "<%= clientPackageManager %> run test",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
-    "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"
-    <%_ if (protractorTests) { _%>,
+    "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"<% if (protractorTests) { %>,
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
-    "postinstall": "webdriver-manager update"
-    <%_ } _%>
+    "postinstall": "webdriver-manager update"<% } %>
   }
 }

@@ -251,8 +251,8 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
     public AuthoritiesExtractor authoritiesExtractor() {
         return new SimpleAuthoritiesExtractor(OAUTH2_AUTHORITIES_ATTRIBUTE);
     }
-
 <%_ if(applicationType === 'gateway') { _%>
+
     @Bean
     @Qualifier("authorizationHeaderRequestMatcher")
     public RequestMatcher authorizationHeaderRequestMatcher() {

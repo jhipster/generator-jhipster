@@ -25,7 +25,8 @@ import <%=packageName%>.domain.User;<% } %>
 import <%=packageName%>.repository.UserRepository;<% if (searchEngine === 'elasticsearch') { %>
 import <%=packageName%>.repository.search.UserSearchRepository;<% } %>
 import <%=packageName%>.security.AuthoritiesConstants;
-import <%=packageName%>.service.MailService;
+<%_ if (authenticationType !== 'oauth2') { _%>
+import <%=packageName%>.service.MailService;<% } %>
 import <%=packageName%>.service.UserService;
 import <%=packageName%>.service.dto.UserDTO;
 <%_ if (authenticationType !== 'oauth2') { _%>
@@ -94,18 +95,20 @@ public class UserResource {
     private static final String ENTITY_NAME = "userManagement";
 
     private final UserRepository userRepository;
-
+<%_ if (authenticationType !== 'oauth2') { _%>
     private final MailService mailService;
-
+<%_ } _%>
     private final UserService userService;<% if (searchEngine === 'elasticsearch') { %>
 
     private final UserSearchRepository userSearchRepository;<% } %>
 
-    public UserResource(UserRepository userRepository, MailService mailService,
+    public UserResource(UserRepository userRepository, <%_ if (authenticationType !== 'oauth2') { _%>MailService mailService,<%_ } _%>
             UserService userService<% if (searchEngine === 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %>) {
 
         this.userRepository = userRepository;
+        <%_ if (authenticationType !== 'oauth2') { _%>
         this.mailService = mailService;
+        <%_ } _%>
         this.userService = userService;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         this.userSearchRepository = userSearchRepository;

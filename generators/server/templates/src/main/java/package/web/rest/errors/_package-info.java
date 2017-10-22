@@ -16,14 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+/**
+ * Specific errors used with Zalando's "problem-spring-web" library.
+ *
+ * More information on https://github.com/zalando/problem-spring-web
+ */
 package <%=packageName%>.web.rest.errors;
-
-import org.zalando.problem.AbstractThrowableProblem;
-import org.zalando.problem.Status;
-
-public class InvalidPasswordException extends AbstractThrowableProblem {
-
-    public InvalidPasswordException() {
-        super(ErrorConstants.INVALID_PASSWORD_TYPE, "Incorrect password", Status.BAD_REQUEST);
-    }
-}

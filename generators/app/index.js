@@ -21,7 +21,6 @@ const BaseGenerator = require('../generator-base');
 const cleanup = require('../cleanup');
 const prompts = require('./prompts');
 const packagejs = require('../../package.json');
-const constants = require('../generator-constants');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -103,12 +102,10 @@ module.exports = class extends BaseGenerator {
             type: String
         });
 
-        this.currentQuestion = 0;
-        this.totalQuestions = constants.QUESTIONS;
         this.skipClient = this.configOptions.skipClient = this.options['skip-client'] || this.config.get('skipClient');
         this.skipServer = this.configOptions.skipServer = this.options['skip-server'] || this.config.get('skipServer');
         this.skipUserManagement = this.configOptions.skipUserManagement = this.options['skip-user-management'] || this.config.get('skipUserManagement');
-        this.jhiPrefix = this.configOptions.jhiPrefix || this.config.get('jhiPrefix') || this.options['jhi-prefix'];
+        this.jhiPrefix = this.configOptions.jhiPrefix = this.config.get('jhiPrefix') || this.options['jhi-prefix'];
         this.withEntities = this.options['with-entities'];
         this.skipChecks = this.options['skip-checks'];
         this.useYarn = this.configOptions.useYarn = !this.options.npm;
@@ -203,7 +200,6 @@ module.exports = class extends BaseGenerator {
                 this.configOptions.baseName = this.baseName;
                 this.configOptions.logo = false;
                 this.configOptions.otherModules = this.otherModules;
-                this.configOptions.lastQuestion = this.currentQuestion;
                 this.generatorType = 'app';
                 if (this.applicationType === 'microservice') {
                     this.skipClient = true;
@@ -265,8 +261,6 @@ module.exports = class extends BaseGenerator {
             askForMoreModules: prompts.askForMoreModules,
 
             setSharedConfigOptions() {
-                this.configOptions.lastQuestion = this.currentQuestion;
-                this.configOptions.totalQuestions = this.totalQuestions;
                 this.configOptions.testFrameworks = this.testFrameworks;
                 this.configOptions.enableTranslation = this.enableTranslation;
                 this.configOptions.nativeLanguage = this.nativeLanguage;

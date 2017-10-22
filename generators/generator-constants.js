@@ -28,11 +28,11 @@ const DOCKER_COUCHBASE = 'couchbase/server:4.6.2';
 const DOCKER_CASSANDRA = 'cassandra:3.9';
 const DOCKER_MSSQL = 'microsoft/mssql-server-linux:latest';
 const DOCKER_ORACLE = 'sath89/oracle-12c:latest';
-const DOCKER_KEYCLOAK = 'jboss/keycloak:3.3.0.CR1';
+const DOCKER_KEYCLOAK = 'jboss/keycloak:3.3.0.CR2-3';
 const DOCKER_ELASTICSEARCH = 'elasticsearch:2.4.1';
 const DOCKER_KAFKA = 'wurstmeister/kafka:0.10.1.1';
 const DOCKER_ZOOKEEPER = 'wurstmeister/zookeeper:3.4.6';
-const DOCKER_SONAR = 'sonarqube:6.4-alpine';
+const DOCKER_SONAR = 'sonarqube:6.5-alpine';
 const DOCKER_JHIPSTER_CONSOLE = 'jhipster/jhipster-console:v2.2.1';
 const DOCKER_JHIPSTER_CURATOR = 'jhipster/jhipster-curator:v2.2.1';
 const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v2.2.1';
@@ -50,9 +50,9 @@ const DOCKER_SWAGGER_EDITOR = 'swaggerapi/swagger-editor:latest';
 const DOCKER_COMPOSE_FORMAT_VERSION = '2';
 
 // version of Node, Yarn, NPM
-const NODE_VERSION = '6.11.3';
-const YARN_VERSION = '1.1.0';
-const NPM_VERSION = '5.4.2';
+const NODE_VERSION = '6.11.4';
+const YARN_VERSION = '1.2.1';
+const NPM_VERSION = '5.5.1';
 
 // all constants used throughout all generators
 
@@ -135,9 +135,6 @@ const LANGUAGES = [
 ];
 
 const constants = {
-    QUESTIONS: 16, // maximum possible number of questions
-    CLIENT_QUESTIONS: 4,
-    SERVER_QUESTIONS: 16,
     INTERPOLATE_REGEX: /<%:([\s\S]+?)%>/g, // so that tags in templates do not get mistreated as _ templates
     DOCKER_DIR: `${MAIN_DIR}docker/`,
     LINE_LENGTH: 180,

@@ -80,7 +80,7 @@ describe('JHipster generator', () => {
         describe('AngularX', () => {
             beforeEach((done) => {
                 helpers.run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ skipInstall: true, skipChecks: true, jhiPrefix: 'test' })
                     .withPrompts({
                         baseName: 'jhipster',
                         clientFramework: 'angularX',
@@ -121,6 +121,9 @@ describe('JHipster generator', () => {
             });
             it('contains clientFramework with angularX value', () => {
                 assert.fileContent('.yo-rc.json', /"clientFramework": "angularX"/);
+            });
+            it('contains correct custom prefix when specified', () => {
+                assert.fileContent('.angular-cli.json', /"prefix": "test"/);
             });
         });
 

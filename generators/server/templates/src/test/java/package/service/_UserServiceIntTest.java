@@ -16,47 +16,62 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.service;
-<% if (databaseType === 'cassandra') { %>
-import <%=packageName%>.AbstractCassandraTest;<% } %>
-import <%=packageName%>.<%= mainClass %>;<% if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { %>
-import <%=packageName%>.domain.PersistentToken;<% } %>
-<%_ if (authenticationType !== 'oauth2') { _%>
-import <%=packageName%>.domain.User;<%_ } _%>
+package <%= packageName %>.service;
+
+<%_ if (databaseType === 'cassandra') { _%>
+import <%= packageName %>.AbstractCassandraTest;
+<%_ } _%>
+import <%= packageName %>.<%= mainClass %>;
+import <%= packageName %>.config.Constants;
 <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
-import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
-import <%=packageName%>.config.Constants;
-import <%=packageName%>.repository.UserRepository;
-import <%=packageName%>.service.dto.UserDTO;<% if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType !== 'oauth2') { %>
-import <%=packageName%>.service.util.RandomUtil;<% } %>
-import <%=packageName%>.web.rest.vm.ManagedUserVM;
+import <%= packageName %>.domain.PersistentToken;
+<%_ } _%>
+import <%= packageName %>.domain.User;
+<%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
+import <%= packageName %>.repository.PersistentTokenRepository;
+<%_ } _%>
+import <%= packageName %>.repository.UserRepository;
+import <%= packageName %>.service.dto.UserDTO;
+<%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
+import <%= packageName %>.service.util.RandomUtil;
+<%_ } _%>
+
+<%_ if (authenticationType !== 'oauth2') { _%>
+import org.apache.commons.lang3.RandomStringUtils;
+<%_ } _%>
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;<% if (databaseType === 'sql') { %>
-import org.springframework.transaction.annotation.Transactional;<% } %>
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.boot.test.context.SpringBootTest;
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 <%_ } _%><%_ if (databaseType === 'couchbase') { _%>
 import org.springframework.security.test.context.support.WithAnonymousUser;
 <%_ } _%>
+import org.springframework.test.context.junit4.SpringRunner;
+<%_ if (databaseType === 'sql') { _%>
+import org.springframework.transaction.annotation.Transactional;
+<%_ } _%>
+
+<%_ if (authenticationType !== 'oauth2') { _%>
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+<%_ } _%>
 <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
 import java.time.LocalDate;
 <%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
-import java.time.Instant;
-<%_ } _%>
-<%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType !== 'oauth2') { _%>
-import java.time.temporal.ChronoUnit;
-import java.util.Optional;
-<%_ } _%>
-<%_ if (authenticationType !== 'oauth2') { _%>
 import java.util.List;
 <%_ } _%>
+<%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
+import java.util.Optional;
+<%_ } _%><%_ if (databaseType === 'cassandra') { _%>
+import java.util.UUID;
+<%_ } _%>
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Test class for the UserResource REST controller.
@@ -66,109 +81,167 @@ import static org.assertj.core.api.Assertions.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)<% if (databaseType === 'sql') { %>
 @Transactional<% } %>
-public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{<% if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { %>
+public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
+    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
     @Autowired
-    private PersistentTokenRepository persistentTokenRepository;<% } %>
+    private PersistentTokenRepository persistentTokenRepository;
 
+    <%_ } _%>
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    private UserService userService;<% if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { %>
+    private UserService userService;
+
+    private User user;
+
+    @Before
+    public void init() {
+        <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
+        persistentTokenRepository.deleteAll();
+        <%_ } _%>
+        <%_ if (databaseType !== 'sql') { _%>
+        userRepository.deleteAll();
+        <%_ } _%>
+        user = new User();
+        <%_ if (databaseType === 'cassandra') { _%>
+        user.setId(UUID.randomUUID().toString());
+        <%_ } _%>
+        user.setLogin("johndoe");
+        <%_ if (authenticationType !== 'oauth2') { _%>
+        user.setPassword(RandomStringUtils.random(60));
+        <%_ } _%>
+        user.setActivated(true);
+        user.setEmail("johndoe@localhost");
+        user.setFirstName("john");
+        user.setLastName("doe");
+        <%_ if (databaseType !== 'cassandra') { _%>
+        user.setImageUrl("http://placehold.it/50x50");
+        <%_ } _%>
+        user.setLangKey("en");
+    }
+    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
 
     @Test
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+    <%_ } _%>
     public void testRemoveOldPersistentTokens() {
-        User admin = userRepository.findOneByLogin("admin").get();
-        int existingCount = persistentTokenRepository.findByUser(admin).size();
-        generateUserToken(admin, "1111-1111", LocalDate.now());
-        LocalDate now = LocalDate.now();
-        generateUserToken(admin, "2222-2222", now.minusDays(32));
-        assertThat(persistentTokenRepository.findByUser(admin)).hasSize(existingCount + 2);
+        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
+        int existingCount = persistentTokenRepository.findByUser(user).size();
+        LocalDate today = LocalDate.now();
+        generateUserToken(user, "1111-1111", today);
+        generateUserToken(user, "2222-2222", today.minusDays(32));
+        assertThat(persistentTokenRepository.findByUser(user)).hasSize(existingCount + 2);
         userService.removeOldPersistentTokens();
-        assertThat(persistentTokenRepository.findByUser(admin)).hasSize(existingCount + 1);
-    }<% } %><% if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { %>
+        assertThat(persistentTokenRepository.findByUser(user)).hasSize(existingCount + 1);
+    }
+    <%_ } _%>
+    <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 
     @Test
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+    <%_ } _%>
     public void assertThatUserMustExistToResetPassword() {
-        Optional<User> maybeUser = userService.requestPasswordReset("john.doe@localhost");
-        assertThat(maybeUser.isPresent()).isFalse();
+        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
+        Optional<User> maybeUser = userService.requestPasswordReset("invalid.login@localhost");
+        assertThat(maybeUser).isNotPresent();
 
-        maybeUser = userService.requestPasswordReset("admin@localhost");
-        assertThat(maybeUser.isPresent()).isTrue();
-
-        assertThat(maybeUser.get().getEmail()).isEqualTo("admin@localhost");
-        assertThat(maybeUser.get().getResetDate()).isNotNull();
-        assertThat(maybeUser.get().getResetKey()).isNotNull();
+        maybeUser = userService.requestPasswordReset(user.getEmail());
+        assertThat(maybeUser).isPresent();
+        assertThat(maybeUser.orElse(null).getEmail()).isEqualTo(user.getEmail());
+        assertThat(maybeUser.orElse(null).getResetDate()).isNotNull();
+        assertThat(maybeUser.orElse(null).getResetKey()).isNotNull();
     }
 
     @Test
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+    <%_ } _%>
     public void assertThatOnlyActivatedUserCanRequestPasswordReset() {
-        User user = createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
-        Optional<User> maybeUser = userService.requestPasswordReset("john.doe@localhost");
-        assertThat(maybeUser.isPresent()).isFalse();
+        user.setActivated(false);
+        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
+
+        Optional<User> maybeUser = userService.requestPasswordReset(user.getLogin());
+        assertThat(maybeUser).isNotPresent();
         userRepository.delete(user);
     }
 
     @Test
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+    <%_ } _%>
     public void assertThatResetKeyMustNotBeOlderThan24Hours() {
-        User user = createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
-
         Instant daysAgo = Instant.now().minus(25, ChronoUnit.HOURS);
         String resetKey = RandomUtil.generateResetKey();
         user.setActivated(true);
         user.setResetDate(daysAgo);
         user.setResetKey(resetKey);
-
-        userRepository.save(user);
+        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
 
         Optional<User> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
-
-        assertThat(maybeUser.isPresent()).isFalse();
-
+        assertThat(maybeUser).isNotPresent();
         userRepository.delete(user);
     }
 
     @Test
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+    <%_ } _%>
     public void assertThatResetKeyMustBeValid() {
-        User user = createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
-
         Instant daysAgo = Instant.now().minus(25, ChronoUnit.HOURS);
         user.setActivated(true);
         user.setResetDate(daysAgo);
         user.setResetKey("1234");
-        userRepository.save(user);
+        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
+
         Optional<User> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
-        assertThat(maybeUser.isPresent()).isFalse();
+        assertThat(maybeUser).isNotPresent();
         userRepository.delete(user);
     }
 
     @Test
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+    <%_ } _%>
     public void assertThatUserCanResetPassword() {
-        User user = createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
         String oldPassword = user.getPassword();
         Instant daysAgo = Instant.now().minus(2, ChronoUnit.HOURS);
         String resetKey = RandomUtil.generateResetKey();
         user.setActivated(true);
         user.setResetDate(daysAgo);
         user.setResetKey(resetKey);
-        userRepository.save(user);
+        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
+
         Optional<User> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
-        assertThat(maybeUser.isPresent()).isTrue();
-        assertThat(maybeUser.get().getResetDate()).isNull();
-        assertThat(maybeUser.get().getResetKey()).isNull();
-        assertThat(maybeUser.get().getPassword()).isNotEqualTo(oldPassword);
+        assertThat(maybeUser).isPresent();
+        assertThat(maybeUser.orElse(null).getResetDate()).isNull();
+        assertThat(maybeUser.orElse(null).getResetKey()).isNull();
+        assertThat(maybeUser.orElse(null).getPassword()).isNotEqualTo(oldPassword);
 
         userRepository.delete(user);
     }
 
     @Test
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+    <%_ } _%>
     public void testFindNotActivatedUsersByCreationDateBefore() {
-        userService.removeNotActivatedUsers();
         Instant now = Instant.now();
+        user.setActivated(false);
+        User dbUser = userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
+        dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
+        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
         List<User> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS));
+        assertThat(users).isNotEmpty();
+        userService.removeNotActivatedUsers();
+        users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS));
         assertThat(users).isEmpty();
-    }<% } %><% if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { %>
+    }
+    <%_ } _%>
+    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
 
     private void generateUserToken(User user, String tokenSeries, LocalDate localDate) {
         PersistentToken token = new PersistentToken();
@@ -178,14 +251,22 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         token.setTokenValue(tokenSeries + "-data");
         token.setTokenDate(localDate);
         token.setIpAddress("127.0.0.1");
-        token.setUserAgent("Test agent");<% if (databaseType === 'sql') { %>
-        persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-        persistentTokenRepository.save(token);<% } %>
-    }<% } %>
+        token.setUserAgent("Test agent");
+        persistentTokenRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(token);
+    }
+    <%_ } _%>
 
     @Test
-    <% if (databaseType === 'couchbase') { %>@WithAnonymousUser<% } %>
-    public void assertThatAnonymousUserIsNotGet() {<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+    <%_ } else if (databaseType === 'couchbase') { _%>
+    @WithAnonymousUser
+    <%_ } _%>
+    public void assertThatAnonymousUserIsNotGet() {
+        user.setLogin(Constants.ANONYMOUS_USER);
+        if (!userRepository.findOneByLogin(Constants.ANONYMOUS_USER).isPresent()) {
+            userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
+        }<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
         final PageRequest pageable = new PageRequest(0, (int) userRepository.count());
         final Page<UserDTO> allManagedUsers = userService.getAllManagedUsers(pageable);
         assertThat(allManagedUsers.getContent().stream()<% } %><% if (databaseType === 'cassandra') { %>
@@ -197,18 +278,19 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
     <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 
     @Test
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+    <%_ } _%>
     public void testRemoveNotActivatedUsers() {
-        User user = createUser("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "http://placehold.it/50x50", "en-US");
         user.setActivated(false);
+        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
+        // Let the audit first set the creation date but then update it
         user.setCreatedDate(Instant.now().minus(30, ChronoUnit.DAYS));
-        userRepository.save(user);
+        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
+
         assertThat(userRepository.findOneByLogin("johndoe")).isPresent();
         userService.removeNotActivatedUsers();
         assertThat(userRepository.findOneByLogin("johndoe")).isNotPresent();
-    }
-
-    private User createUser(String login, String password, String firstName, String lastName, String email, String imageUrl, String langKey) {
-        return userService.registerUser(new ManagedUserVM(null, login, password, firstName, lastName, email, true, imageUrl, langKey, null, null, null, null, null));
     }
     <%_ } _%>
 

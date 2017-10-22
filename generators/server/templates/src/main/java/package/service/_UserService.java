@@ -79,12 +79,16 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final Logger log = LoggerFactory.getLogger(UserService.class);
+    <%_ if (cacheManagerIsAvailable === true) { _%>
+
+    private static final String USERS_CACHE = "users";
+    <%_ } _%>
 
     private final UserRepository userRepository;
-<%_ if (authenticationType !== 'oauth2') { _%>
+    <%_ if (authenticationType !== 'oauth2') { _%>
 
     private final PasswordEncoder passwordEncoder;
-<%_ } _%>
+    <%_ } _%>
     <%_ if (enableSocialSignIn) { _%>
 
     private final SocialService socialService;
@@ -143,7 +147,7 @@ public class UserService {
                 userSearchRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache("users").evict(user.getLogin());
+                cacheManager.getCache(USERS_CACHE).evict(user.getLogin());
                 <%_ } _%>
                 log.debug("Activated user: {}", user);
                 return user;
@@ -163,7 +167,7 @@ public class UserService {
                 userRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache("users").evict(user.getLogin());
+                cacheManager.getCache(USERS_CACHE).evict(user.getLogin());
                 <%_ } _%>
                 return user;
            });
@@ -179,7 +183,7 @@ public class UserService {
                 userRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache("users").evict(user.getLogin());
+                cacheManager.getCache(USERS_CACHE).evict(user.getLogin());
                 <%_ } _%>
                 return user;
             });
@@ -237,10 +241,9 @@ public class UserService {
         }
         <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
         if (userDTO.getAuthorities() != null) {
-            Set<Authority> authorities = new HashSet<>();
-            userDTO.getAuthorities().forEach(
-                authority -> authorities.add(authorityRepository.findOne(authority))
-            );
+            Set<Authority> authorities = userDTO.getAuthorities().stream()
+                .map(authorityRepository::findOne)
+                .collect(Collectors.toSet());
             user.setAuthorities(authorities);
         }
         <%_ } _%>
@@ -257,6 +260,7 @@ public class UserService {
         log.debug("Created Information for User: {}", user);
         return user;
     }
+<%_ } _%>
 
     /**
      * Update basic information (first name, last name, email, language) for the current user.
@@ -285,7 +289,7 @@ public class UserService {
             userSearchRepository.save(user);
             <%_ } _%>
             <%_ if (cacheManagerIsAvailable === true) { _%>
-            cacheManager.getCache("users").evict(user.getLogin());
+            cacheManager.getCache(USERS_CACHE).evict(user.getLogin());
             <%_ } _%>
             log.debug("Changed Information for User: {}", user);
         });
@@ -331,14 +335,13 @@ public class UserService {
                 userSearchRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache("users").evict(user.getLogin());
+                cacheManager.getCache(USERS_CACHE).evict(user.getLogin());
                 <%_ } _%>
                 log.debug("Changed Information for User: {}", user);
                 return user;
             })
             .map(UserDTO::new);
     }
-<%_ } _%>
 
     public void deleteUser(String login) {
         userRepository.findOneByLogin(login).ifPresent(user -> {
@@ -350,7 +353,7 @@ public class UserService {
             userSearchRepository.delete(user);
             <%_ } _%>
             <%_ if (cacheManagerIsAvailable === true) { _%>
-            cacheManager.getCache("users").evict(login);
+            cacheManager.getCache(USERS_CACHE).evict(login);
             <%_ } _%>
             log.debug("Deleted User: {}", user);
         });
@@ -365,7 +368,7 @@ public class UserService {
             userRepository.save(user);
             <%_ } _%>
             <%_ if (cacheManagerIsAvailable === true) { _%>
-            cacheManager.getCache("users").evict(user.getLogin());
+            cacheManager.getCache(USERS_CACHE).evict(user.getLogin());
             <%_ } _%>
             log.debug("Changed password for User: {}", user);
         });
@@ -454,7 +457,7 @@ public class UserService {
             userSearchRepository.delete(user);
             <%_ } _%>
             <%_ if (cacheManagerIsAvailable === true) { _%>
-            cacheManager.getCache("users").evict(user.getLogin());
+            cacheManager.getCache(USERS_CACHE).evict(user.getLogin());
             <%_ } _%>
         }
     }

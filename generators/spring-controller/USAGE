@@ -5,4 +5,4 @@ Example:
     jhipster spring-controller Foo
 
     This will create:
-        src/main/java/package/web/rest/FooController.java with API on "api/foo"
+        src/main/java/package/web/rest/FooResource.java with API on "api/foo"

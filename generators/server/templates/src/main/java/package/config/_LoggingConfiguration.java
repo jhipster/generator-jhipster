@@ -57,7 +57,9 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnConsulEnabled
 <%_ } _%>
 public class LoggingConfiguration {
+
     private static final String LOGSTASH_APPENDER_NAME = "LOGSTASH";
+
     private static final String ASYNC_LOGSTASH_APPENDER_NAME = "ASYNC_LOGSTASH";
 
     private final Logger log = LoggerFactory.getLogger(LoggingConfiguration.class);
@@ -75,13 +77,15 @@ public class LoggingConfiguration {
 
     private final ConsulRegistration consulRegistration;
     <%_ } _%>
+    <%_ if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { _%>
 
     private final String version;
+    <%_ } _%>
 
     private final JHipsterProperties jHipsterProperties;
 
     public LoggingConfiguration(@Value("${spring.application.name}") String appName, @Value("${server.port}") String serverPort,
-        <% if (serviceDiscoveryType === "eureka") { %>EurekaInstanceConfigBean eurekaInstanceConfigBean,<% } %><% if (serviceDiscoveryType === "consul") { %> ConsulRegistration consulRegistration,<% } %> JHipsterProperties jHipsterProperties, @Value("${info.project.version}") String version) {
+        <% if (serviceDiscoveryType === "eureka") { %>EurekaInstanceConfigBean eurekaInstanceConfigBean,<% } %><% if (serviceDiscoveryType === "consul") { %> ConsulRegistration consulRegistration,<% } %><% if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { %> @Value("${info.project.version}") String version,<% } %> JHipsterProperties jHipsterProperties) {
         this.appName = appName;
         this.serverPort = serverPort;
         <%_ if (serviceDiscoveryType === 'eureka') { _%>
@@ -90,8 +94,10 @@ public class LoggingConfiguration {
         <%_ if (serviceDiscoveryType === 'consul') { _%>
         this.consulRegistration = consulRegistration;
         <%_ } _%>
-        this.jHipsterProperties = jHipsterProperties;
+        <%_ if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { _%>
         this.version = version;
+        <%_ } _%>
+        this.jHipsterProperties = jHipsterProperties;
         if (jHipsterProperties.getLogging().getLogstash().isEnabled()) {
             addLogstashAppender(context);
             addContextListener(context);

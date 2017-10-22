@@ -126,7 +126,7 @@ module.exports = class extends PrivateBase {
             jhipsterUtils.rewriteFile({
                 file: indexFilePath,
                 needle: 'jhipster-needle-add-resources-to-root',
-                splicable: resourcesBlock
+                splicable: [resourcesBlock]
             }, this);
         } catch (e) {
             this.log(`${chalk.yellow('\nUnable to find ') + indexFilePath + chalk.yellow(' or missing required jhipster-needle. Resources are not added to JHipster app.\n')}`);
@@ -1938,7 +1938,7 @@ module.exports = class extends PrivateBase {
                 }
                 return true;
             },
-            message: response => this.getNumberedQuestion('What is the base name of your application?', true),
+            message: 'What is the base name of your application?',
             default: defaultAppBaseName
         }).then((prompt) => {
             generator.baseName = prompt.baseName;
@@ -1959,7 +1959,7 @@ module.exports = class extends PrivateBase {
             {
                 type: 'confirm',
                 name: 'enableTranslation',
-                message: response => this.getNumberedQuestion('Would you like to enable internationalization support?', true),
+                message: 'Would you like to enable internationalization support?',
                 default: true
             },
             {
@@ -2014,16 +2014,14 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * @Deprecated
      * Add numbering to a question
      *
      * @param {String} msg - question text
      * @param {boolean} cond - increment question
      */
     getNumberedQuestion(msg, cond) {
-        if (cond) {
-            ++this.currentQuestion;
-        }
-        return `(${this.currentQuestion}/${this.totalQuestions}) ${msg}`;
+        return msg;
     }
 
     /**

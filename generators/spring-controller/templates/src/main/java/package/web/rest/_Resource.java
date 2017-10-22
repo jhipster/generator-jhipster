@@ -35,9 +35,9 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/<%= apiPrefix %>")
-public class <%= controllerClass %>Controller {
+public class <%= controllerClass %>Resource {
 
-    private final Logger log = LoggerFactory.getLogger(<%= controllerClass %>Controller.class);
+    private final Logger log = LoggerFactory.getLogger(<%= controllerClass %>Resource.class);
 
     <%_ for(let idx in controllerActions) { _%>
     /**

@@ -18,6 +18,8 @@
 -%>
 package <%=packageName%>.client;
 
+import <%=packageName%>.security.oauth2.AuthorizationHeaderUtil;
+
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,12 +31,6 @@ public class TokenRelayRequestInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate template) {
-        OAuth2AuthenticationDetails details = getDetails();
-        String headerValue = String.format("%s %s", details.getTokenType(), details.getTokenValue());
-        template.header(AUTHORIZATION, headerValue);
-    }
-
-    protected OAuth2AuthenticationDetails getDetails() {
-        return (OAuth2AuthenticationDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        template.header(AUTHORIZATION, AuthorizationHeaderUtil.getAuthorizationHeader());
     }
 }

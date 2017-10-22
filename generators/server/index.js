@@ -27,7 +27,6 @@ const os = require('os');
 const constants = require('../generator-constants');
 
 /* Constants used throughout */
-const QUESTIONS = constants.SERVER_QUESTIONS;
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -78,8 +77,6 @@ module.exports = class extends BaseGenerator {
         if (this.options.gatling) this.testFrameworks.push('gatling');
         if (this.options.cucumber) this.testFrameworks.push('cucumber');
 
-        this.currentQuestion = this.configOptions.lastQuestion ? this.configOptions.lastQuestion : 0;
-        this.totalQuestions = this.configOptions.totalQuestions ? this.configOptions.totalQuestions : QUESTIONS;
         this.logo = this.configOptions.logo;
         this.baseName = this.configOptions.baseName;
         this.clientPackageManager = this.configOptions.clientPackageManager;
@@ -205,11 +202,6 @@ module.exports = class extends BaseGenerator {
                     this.jhipsterVersion = this.config.get('jhipsterVersion');
                 }
                 this.authenticationType = this.config.get('authenticationType');
-                // JWT authentication is mandatory with Eureka, so the JHipster Registry
-                // can control the applications
-                if (this.serviceDiscoveryType === 'eureka' && (this.authenticationType !== 'uaa' && this.authenticationType !== 'oauth2')) {
-                    this.authenticationType = 'jwt';
-                }
                 if (this.authenticationType === 'session') {
                     this.rememberMeKey = this.config.get('rememberMeKey');
                 }
@@ -294,8 +286,6 @@ module.exports = class extends BaseGenerator {
             askFori18n: prompts.askFori18n,
 
             setSharedConfigOptions() {
-                this.configOptions.lastQuestion = this.currentQuestion;
-                this.configOptions.totalQuestions = this.totalQuestions;
                 this.configOptions.packageName = this.packageName;
                 this.configOptions.hibernateCache = this.hibernateCache;
                 this.configOptions.clusteredHttpSession = this.clusteredHttpSession;

@@ -277,14 +277,14 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.useSass,
+            condition: generator => generator.useSass && generator.authenticationType !== 'oauth2',
             path: ANGULAR_DIR,
             templates: [
                 'account/password/_password-strength-bar.scss'
             ]
         },
         {
-            condition: generator => !generator.useSass,
+            condition: generator => !generator.useSass && generator.authenticationType !== 'oauth2',
             path: ANGULAR_DIR,
             templates: [
                 'account/password/_password-strength-bar.css'

@@ -25,9 +25,6 @@ const writeAngularJsFiles = require('./files-angularjs').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 
-/* Constants used throughout */
-const QUESTIONS = constants.CLIENT_QUESTIONS;
-
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
@@ -138,8 +135,6 @@ module.exports = class extends BaseGenerator {
 
         if (this.options.protractor) this.testFrameworks.push('protractor');
 
-        this.currentQuestion = this.configOptions.lastQuestion ? this.configOptions.lastQuestion : 0;
-        this.totalQuestions = this.configOptions.totalQuestions ? this.configOptions.totalQuestions : QUESTIONS;
         this.baseName = this.configOptions.baseName;
         this.logo = this.configOptions.logo;
         this.useYarn = this.configOptions.useYarn = !this.options.npm;
@@ -226,8 +221,6 @@ module.exports = class extends BaseGenerator {
             askFori18n: prompts.askFori18n,
 
             setSharedConfigOptions() {
-                this.configOptions.lastQuestion = this.currentQuestion;
-                this.configOptions.totalQuestions = this.totalQuestions;
                 this.configOptions.clientFramework = this.clientFramework;
                 this.configOptions.useSass = this.useSass;
             }
