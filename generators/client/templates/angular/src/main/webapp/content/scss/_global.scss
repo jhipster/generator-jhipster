@@ -228,6 +228,13 @@ ui bootstrap tweaks
     outline: none;
 }
 
+.thread-dump__modal--lock {
+    max-width: 450px;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     white-space: nowrap;
+ }
+
 <%_ if (enableSocialSignIn) { _%>
 /* ==========================================================================
 Social button
