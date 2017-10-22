@@ -1,6 +1,7 @@
 /* eslint-disable */ // TODO Fix when page is completed
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 
 import { getSession } from '../../../reducers/authentication';
 import { savePassword } from '../../../reducers/account';
@@ -60,17 +61,19 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
     return (
         <div>
           <h2>Password for [{account.login}]</h2>
-          <form>
-            <div className="form-control">
-              <label className="form-control-label" >New password</label>
-              <input type="password" className="form-control" id="firstName" name="firstName" placeholder="New password"
-                     onChange={this.setFirstAccountPassword}/>
-              <label className="form-control-label" >New password confirmation</label>
-              <input type="password" className="form-control" id="lastName" name="lastName" placeholder="Confirm the new password"
+          <Form>
+            <FormGroup>
+              <Label>New password</Label>
+              <Input type="password" className="form-control" id="firstName" name="firstName" placeholder="New password"
+                     onChange={this.setFirstAccountPassword} />
+            </FormGroup>
+            <FormGroup>
+              <Label>New password confirmation</Label>
+              <Input  type="password" className="form-control" id="lastName" name="lastName" placeholder="Confirm the new password"
                      onChange={this.setSecondAccountPassword}/>
-            </div>
-            <button type="submit" className="btn btn-primary" onClick={this.savePassword} >Save</button>
-          </form>
+            </FormGroup>
+             <Button type="submit" color="success"  onClick={this.savePassword}>Save</Button>
+          </Form>
         </div>
     );
   }
