@@ -247,12 +247,10 @@ const files = {
                 { file: 'modules/administration/configuration/configuration.tsx', method: 'processJsx' },
                 { file: 'modules/administration/docs/docs.tsx', method: 'processJsx' },
                 { file: 'modules/administration/health/health.tsx', method: 'processJsx' },
-                // { file: 'modules/administration/health/health-detail/health-detail.tsx', method: 'processJsx' },
-                // { file: 'modules/administration/health/health-detail/health-modal.tsx', method: 'processJsx' },
+                { file: 'modules/administration/health/health-modal.tsx', method: 'processJsx' },
                 { file: 'modules/administration/logs/logs.tsx', method: 'processJsx' },
                 { file: 'modules/administration/metrics/metrics.tsx', method: 'processJsx' },
-                // { file: 'modules/administration/metrics/metrics-detail/metrics-detail.tsx', method: 'processJsx' },
-                // { file: 'modules/administration/metrics/metrics-detail/metrics-modal.tsx', method: 'processJsx' },
+                { file: 'modules/administration/metrics/metrics-modal.tsx', method: 'processJsx' },
             ]
         },
         // {

@@ -69,10 +69,9 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
             </FormGroup>
             <FormGroup>
               <Label>New password confirmation</Label>
-              <Input  type="password" className="form-control" id="lastName" name="lastName" placeholder="Confirm the new password"
-                     onChange={this.setSecondAccountPassword}/>
+              <Input type="password" className="form-control" id="lastName" name="lastName" placeholder="Confirm the new password" onChange={this.setSecondAccountPassword}/>
             </FormGroup>
-             <Button type="submit" color="success"  onClick={this.savePassword}>Save</Button>
+             <Button type="submit" color="success" onClick={this.savePassword}>Save</Button>
           </Form>
         </div>
     );

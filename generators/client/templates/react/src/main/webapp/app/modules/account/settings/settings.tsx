@@ -75,7 +75,7 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
             <Form>
               <FormGroup>
                 <Label for="firstName">First Name</Label>
-                <Input  type="text" className="form-control" value={account.firstName} id="firstName" name="firstName" placeholder="First Name"
+                <Input type="text" className="form-control" value={account.firstName} id="firstName" name="firstName" placeholder="First Name"
                 onChange={this.setFirstName}/>
               </FormGroup>
               <FormGroup>
@@ -91,7 +91,7 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
               <FormGroup>
                 <Label for="langKey">Language</Label>
                 <Input type="select" id="langKey" name="langKey" className="form-control">
-                      {locales.map(lang => <option value="lang" key="lang">{lang}</option>)}
+                  {locales.map(lang => <option value={lang} key={lang}>{lang}</option>)}
                 </Input>
               </FormGroup>
                <Button type="submit" color="success" onClick={this.saveSettings}>Save</Button>
