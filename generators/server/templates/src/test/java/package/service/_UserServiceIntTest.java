@@ -71,6 +71,9 @@ import java.util.Optional;
 import java.util.UUID;
 <%_ } _%>
 
+<%_ if (databaseType === 'couchbase') { _%>
+import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
+<%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -98,6 +101,9 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
 
     @Before
     public void init() {
+        <%_ if (databaseType === 'couchbase') { _%>
+        mockAuthentication();
+        <%_ } _%>
         <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
         persistentTokenRepository.deleteAll();
         <%_ } _%>

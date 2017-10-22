@@ -123,13 +123,18 @@ public class AccountResourceIntTest {
     }
     <%_ if (applicationType === 'monolith') { _%>
 
-    @Test
-    @Transactional
+    @Test<% if (databaseType === 'sql') { %>
+    @Transactional<% } %>
     public void testGetExistingAccount() throws Exception {
+        <%_ if (databaseType !== 'couchbase') { _%>
         Set<Authority> authorities = new HashSet<>();
         Authority authority = new Authority();
         authority.setName(AuthoritiesConstants.ADMIN);
         authorities.add(authority);
+        <%_ } else { _%>
+        Set<String> authorities = new HashSet<>();
+        authorities.add(AuthoritiesConstants.ADMIN);
+        <%_ } _%>
 
         User user = new User();
         user.setLogin("test");
