@@ -2204,8 +2204,6 @@ module.exports = class extends PrivateBase {
 
         if (context.options.protractor) generator.testFrameworks.push('protractor');
 
-        generator.currentQuestion = context.configOptions.lastQuestion ? context.configOptions.lastQuestion : 0;
-        generator.totalQuestions = context.configOptions.totalQuestions ? context.configOptions.totalQuestions : constants.CLIENT_QUESTIONS;
         generator.baseName = context.configOptions.baseName;
         generator.logo = context.configOptions.logo;
         generator.useYarn = context.configOptions.useYarn = !context.options.npm;
@@ -2227,8 +2225,6 @@ module.exports = class extends PrivateBase {
         if (context.options.gatling) generator.testFrameworks.push('gatling');
         if (context.options.cucumber) generator.testFrameworks.push('cucumber');
 
-        generator.currentQuestion = context.configOptions.lastQuestion ? context.configOptions.lastQuestion : 0;
-        generator.totalQuestions = context.configOptions.totalQuestions ? context.configOptions.totalQuestions : constants.SERVER_QUESTIONS;
         generator.logo = context.configOptions.logo;
         generator.baseName = context.configOptions.baseName;
         generator.clientPackageManager = context.configOptions.clientPackageManager;
