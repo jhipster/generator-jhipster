@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
 const shelljs = require('shelljs');
@@ -28,6 +29,7 @@ const constants = require('../generator-constants');
 
 /* constants used throughout */
 const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
+let useBlueprint;
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -86,34 +88,13 @@ module.exports = class extends BaseGenerator {
             type: String
         });
 
-        this.name = this.options.name;
-        // remove extension if feeding json files
-        if (this.name !== undefined) {
-            this.name = this.name.replace('.json', '');
-        }
-
-        this.regenerate = this.options.regenerate;
-        this.fluentMethods = this.options['fluent-methods'];
-        this.entityTableName = this.getTableName(this.options['table-name'] || this.name);
-        this.entityNameCapitalized = _.upperFirst(this.name);
-        this.entityAngularJSSuffix = this.options['angular-suffix'];
-        this.isDebugEnabled = this.options.debug;
-        if (this.entityAngularJSSuffix && !this.entityAngularJSSuffix.startsWith('-')) {
-            this.entityAngularJSSuffix = `-${this.entityAngularJSSuffix}`;
-        }
-        this.rootDir = this.destinationRoot();
-        // enum-specific consts
-        this.enums = [];
-
-        this.existingEnum = false;
-
-        this.fieldNamesUnderscored = ['id'];
-        // these constiable will hold field and relationship names for question options during update
-        this.fieldNameChoices = [];
-        this.relNameChoices = [];
+        this.setupEntityOptions(this);
+        const blueprint = this.config.get('blueprint');
+        useBlueprint = this.composeBlueprint(blueprint, 'entity'); // use global variable since getters dont have access to instance property
     }
 
     get initializing() {
+        if (useBlueprint) return;
         return {
             getConfig() {
                 this.useConfigurationFile = false;
@@ -213,7 +194,7 @@ module.exports = class extends BaseGenerator {
                 } else {
                     // existing entity reading values from file
                     this.log(`\nThe entity ${this.name} is being updated.\n`);
-                    this._loadJson();
+                    this.loadEntityJson();
                 }
             },
 
@@ -237,61 +218,8 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    /* private Helper methods */
-    _loadJson() {
-        try {
-            this.fileData = this.fs.readJSON(this.fromPath);
-        } catch (err) {
-            this.debug('Error:', err);
-            this.error(chalk.red('\nThe entity configuration file could not be read!\n'));
-        }
-        this.relationships = this.fileData.relationships || [];
-        this.fields = this.fileData.fields || [];
-        this.changelogDate = this.fileData.changelogDate;
-        this.dto = this.fileData.dto;
-        this.service = this.fileData.service;
-        this.fluentMethods = this.fileData.fluentMethods;
-        this.pagination = this.fileData.pagination;
-        this.searchEngine = this.fileData.searchEngine || this.searchEngine;
-        this.javadoc = this.fileData.javadoc;
-        this.entityTableName = this.fileData.entityTableName;
-        this.jhiPrefix = this.fileData.jhiPrefix || this.jhiPrefix;
-        this.jhiTablePrefix = this.getTableName(this.jhiPrefix);
-        this.copyFilteringFlag(this.fileData, this);
-        if (_.isUndefined(this.entityTableName)) {
-            this.warning(`entityTableName is missing in .jhipster/${this.name}.json, using entity name as fallback`);
-            this.entityTableName = this.getTableName(this.name);
-        }
-        if (jhiCore.isReservedTableName(this.entityTableName, this.prodDatabaseType)) {
-            this.entityTableName = `${this.jhiTablePrefix}_${this.entityTableName}`;
-        }
-        this.fields.forEach((field) => {
-            this.fieldNamesUnderscored.push(_.snakeCase(field.fieldName));
-            this.fieldNameChoices.push({ name: field.fieldName, value: field.fieldName });
-        });
-        this.relationships.forEach((rel) => {
-            this.relNameChoices.push({ name: `${rel.relationshipName}:${rel.relationshipType}`, value: `${rel.relationshipName}:${rel.relationshipType}` });
-        });
-        if (this.fileData.angularJSSuffix !== undefined) {
-            this.entityAngularJSSuffix = this.fileData.angularJSSuffix;
-        }
-        this.useMicroserviceJson = this.useMicroserviceJson || !_.isUndefined(this.fileData.microserviceName);
-        if (this.applicationType === 'gateway' && this.useMicroserviceJson) {
-            this.microserviceName = this.fileData.microserviceName;
-            if (!this.microserviceName) {
-                this.error(chalk.red('Microservice name for the entity is not found. Entity cannot be generated!'));
-            }
-            this.microserviceAppName = this._getMicroserviceAppName();
-            this.skipServer = true;
-        }
-    }
-
-    _getMicroserviceAppName() {
-        return _.camelCase(this.microserviceName, true) + (this.microserviceName.endsWith('App') ? '' : 'App');
-    }
-    /* end of Helper methods */
-
     get prompting() {
+        if (useBlueprint) return;
         return {
             /* pre entity hook needs to be written here */
             askForMicroserviceJson: prompts.askForMicroserviceJson,
@@ -310,6 +238,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get configuring() {
+        if (useBlueprint) return;
         return {
             validateFile() {
                 if (!this.useConfigurationFile) {
@@ -735,10 +664,12 @@ module.exports = class extends BaseGenerator {
     }
 
     get writing() {
+        if (useBlueprint) return;
         return writeFiles();
     }
 
     get install() {
+        if (useBlueprint) return;
         return {
             afterRunHook() {
                 const done = this.async();
@@ -793,6 +724,7 @@ module.exports = class extends BaseGenerator {
     }
 
     end() {
+        if (useBlueprint) return;
         if (!this.options['skip-install'] && !this.skipClient) {
             if (this.clientFramework === 'angular1') {
                 this.injectJsFilesToIndex();

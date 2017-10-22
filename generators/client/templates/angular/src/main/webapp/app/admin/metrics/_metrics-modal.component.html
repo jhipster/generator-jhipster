@@ -49,10 +49,10 @@
         <table class="table table-sm table-responsive">
             <thead>
                 <tr>
-                    <th class="text-right" jhiTranslate="metrics.jvm.threads.dump.blockedtime">Blocked Time</th>
-                    <th class="text-right" jhiTranslate="metrics.jvm.threads.dump.blockedcount">Blocked Count</th>
-                    <th class="text-right" jhiTranslate="metrics.jvm.threads.dump.waitedtime">Waited Time</th>
-                    <th class="text-right" jhiTranslate="metrics.jvm.threads.dump.waitedcount">Waited Count</th>
+                    <th jhiTranslate="metrics.jvm.threads.dump.blockedtime">Blocked Time</th>
+                    <th jhiTranslate="metrics.jvm.threads.dump.blockedcount">Blocked Count</th>
+                    <th jhiTranslate="metrics.jvm.threads.dump.waitedtime">Waited Time</th>
+                    <th jhiTranslate="metrics.jvm.threads.dump.waitedcount">Waited Count</th>
                     <th jhiTranslate="metrics.jvm.threads.dump.lockname">Lock Name</th>
                 </tr>
             </thead>
@@ -62,7 +62,7 @@
                     <td>{{entry.value.blockedCount}}</td>
                     <td>{{entry.value.waitedTime}}</td>
                     <td>{{entry.value.waitedCount}}</td>
-                    <td><code>{{entry.value.lockName}}</code></td>
+                    <td class="thread-dump-modal-lock" title="{{entry.value.lockName}}"><code>{{entry.value.lockName}}</code></td>
                 </tr>
             </tbody>
         </table>
