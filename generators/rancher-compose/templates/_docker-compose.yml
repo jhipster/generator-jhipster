@@ -49,7 +49,7 @@ services:
         image: <%= DOCKER_JHIPSTER_REGISTRY %>
         #volumes:
         #    - ./central-server-config:/central-config
-        # By default the JHipster Registry runs with the "prod" and "native"
+        # By default the JHipster Registry runs with the "dev" and "native"
         # Spring profiles.
         # "native" profile means the filesystem is used to store data, see
         # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
