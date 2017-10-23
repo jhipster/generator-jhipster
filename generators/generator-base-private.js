@@ -115,7 +115,11 @@ module.exports = class extends Generator {
     copyI18n(language, prefix) {
         try {
             this.template(`${prefix}/i18n/_entity_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${this.entityInstance}.json`);
-            this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClass, language);
+            if (typeof this.javadoc != 'undefined') {
+                this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.javadoc, language);
+            }else{
+                this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClass, language);
+            }
         } catch (e) {
             this.debug('Error:', e);
             // An exception is thrown if the folder doesn't exist
