@@ -46,45 +46,6 @@ describe('FieldTypes', () => {
       });
     });
   });
-  describe('::isCommonDBType', () => {
-    describe('when passing an invalid argument', () => {
-      it('fails', () => {
-        try {
-          FieldTypes.isCommonDBType(null);
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
-        try {
-          FieldTypes.isCommonDBType(undefined);
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
-        try {
-          FieldTypes.isCommonDBType('');
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
-      });
-    });
-    describe('when passing a false type', () => {
-      it('returns false', () => {
-        expect(FieldTypes.isCommonDBType(FieldTypes.CASSANDRA_TYPES.UUID)).to.be.false;
-      });
-    });
-    describe('when passing a valid type', () => {
-      it('returns true', () => {
-        expect(FieldTypes.isCommonDBType(FieldTypes.COMMON_DB_TYPES.BIG_DECIMAL)).to.be.true;
-      });
-    });
-    describe('when passing an enum', () => {
-      it('returns true', () => {
-        expect(FieldTypes.isCommonDBType(new JDLEnum({ name: 'MyEnum' }))).to.be.true;
-      });
-    });
-  });
   describe('::isCassandraType', () => {
     describe('when passing an invalid argument', () => {
       it('fails', () => {
