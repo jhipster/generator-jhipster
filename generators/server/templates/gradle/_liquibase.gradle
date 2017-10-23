@@ -73,12 +73,16 @@ def liquibaseCommand(command) {
     }
 }
 
-task liquibaseDiffChangeLog(dependsOn: initPaths) << {
-	liquibaseCommand("diffChangeLog")
+task liquibaseDiffChangeLog(dependsOn: initPaths) {
+    doLast {
+	    liquibaseCommand("diffChangeLog")
+    }
 }
 
-task liquibaseClearChecksums(dependsOn: initPaths) << {
-	liquibaseCommand("clearChecksums")
+task liquibaseClearChecksums(dependsOn: initPaths) {
+    doLast {
+        liquibaseCommand("clearChecksums")
+    }
 }
 
 def buildTimestamp() {
