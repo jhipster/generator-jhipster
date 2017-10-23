@@ -31,6 +31,8 @@ import org.springframework.core.task.AsyncTaskExecutor;
 public class ExceptionHandlingAsyncTaskExecutor implements AsyncTaskExecutor,
     InitializingBean, DisposableBean {
 
+    static final String EXCEPTION_MESSAGE = "Caught async exception";
+
     private final Logger log = LoggerFactory.getLogger(ExceptionHandlingAsyncTaskExecutor.class);
 
     private final AsyncTaskExecutor executor;
@@ -71,7 +73,7 @@ public class ExceptionHandlingAsyncTaskExecutor implements AsyncTaskExecutor,
     }
 
     protected void handle(Exception e) {
-        log.error("Caught async exception", e);
+        log.error(EXCEPTION_MESSAGE, e);
     }
 
     @Override
