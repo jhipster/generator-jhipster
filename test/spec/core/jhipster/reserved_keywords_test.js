@@ -38,7 +38,7 @@ describe('ReservedKeywords', () => {
         expect(isReserved('ADD', 'CASSANDRA')).to.be.true;
         expect(isReserved('ACTIVATE', 'ORACLE')).to.be.true;
         expect(isReserved('DOCUMENT', 'MONGODB')).to.be.true;
-        expect(isReserved('DOCUMENT', 'COUCHBASE')).to.be.false;
+        expect(isReserved('ALL', 'COUCHBASE')).to.be.true;
       });
     });
   });
