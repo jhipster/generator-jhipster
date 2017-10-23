@@ -19,6 +19,9 @@
 package <%=packageName%>.web.rest;
 <%_ if (authenticationType === 'oauth2') { _%>
 
+<%_ if (databaseType === 'cassandra') { _%>
+import <%=packageName%>.AbstractCassandraTest;
+<%_ } _%>
 import <%=packageName%>.<%= mainClass %>;
     <%_ if (applicationType === 'monolith') { _%>
 import <%=packageName%>.domain.Authority;
@@ -67,7 +70,7 @@ import org.springframework.web.context.WebApplicationContext;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)
-public class AccountResourceIntTest {
+public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
     <%_ if (applicationType === 'monolith') { _%>
 
     @Autowired
