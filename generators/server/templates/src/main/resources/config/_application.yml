@@ -203,6 +203,7 @@ security:
             client-authentication-scheme: header
             <%_ } _%>
         resource:
+            filter-order: 3
             user-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
             token-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token/introspect
             prefer-token-info: false
