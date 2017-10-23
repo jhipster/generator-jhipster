@@ -1241,7 +1241,7 @@
         "useTemplateConfig" : false,
         "useTemplateScope" : false,
         "useTemplateMappers" : false
-    }, <% if (serviceDiscoveryType === 'eureka') { %> {
+    }<% if (serviceDiscoveryType === 'eureka') { %>, {
         "id" : "9080f291-17ef-4022-8afe-8822595006c6",
         "clientId" : "jhipster-registry",
         "rootUrl" : "http://localhost:8761",
