@@ -17,11 +17,7 @@
  limitations under the License.
 -%>
 const webpackConfig = require('../../../webpack/webpack.test.js');
-
-const ChromiumRevision = require('puppeteer/package.json').puppeteer.chromium_revision;
-const Downloader = require('puppeteer/utils/ChromiumDownloader');
-const revisionInfo = Downloader.revisionInfo(Downloader.currentPlatform(), ChromiumRevision);
-process.env.CHROMIUM_BIN = revisionInfo.executablePath;
+process.env.CHROMIUM_BIN = require('puppeteer').executablePath()
 
 const WATCH = process.argv.indexOf('--watch') > -1;
 

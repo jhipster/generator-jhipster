@@ -16,10 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-var ChromiumRevision = require('puppeteer/package.json').puppeteer.chromium_revision;
-var Downloader = require('puppeteer/utils/ChromiumDownloader');
-var revisionInfo = Downloader.revisionInfo(Downloader.currentPlatform(), ChromiumRevision);
-process.env.CHROMIUM_BIN = revisionInfo.executablePath;
+process.env.CHROMIUM_BIN = require('puppeteer').executablePath()
 
 var sourcePreprocessors = ['coverage'];
 
