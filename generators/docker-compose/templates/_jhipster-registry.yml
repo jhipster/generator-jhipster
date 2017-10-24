@@ -42,5 +42,13 @@ services:
             <%_ } _%>
             # - GIT_URI=https://github.com/jhipster/jhipster-registry/
             # - GIT_SEARCH_PATHS=central-config
+            <%_ if (authenticationType === 'oauth2') { _%>
+            # For keycloak to work, you need to add '127.0.0.1 keycloak' to your hosts file
+            - SECURITY_OAUTH2_CLIENT_ACCESS_TOKEN_URI=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/token
+            - SECURITY_OAUTH2_CLIENT_USER_AUTHORIZATION_URI=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/auth
+            - SECURITY_OAUTH2_RESOURCE_USER_INFO_URI=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
+            - SECURITY_OAUTH2_RESOURCE_TOKEN_INFO_URI=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/token/introspect
+            - SECURITY_OAUTH2_RESOURCE_JWT_KEY_URI=http://keycloak:9080/auth/realms/jhipster
+            <%_ } _%>
         ports:
             - 8761:8761
