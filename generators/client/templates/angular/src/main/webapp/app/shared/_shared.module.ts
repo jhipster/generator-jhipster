@@ -73,9 +73,7 @@ import {
         <%_ if (websocket === 'spring-websocket') { _%>
         <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
-        <%_ if (!skipServer) { _%>
         AuthServerProvider,
-        <%_ } _%>
         <%_ if (enableSocialSignIn) { _%>
         SocialService,
         <%_ } _%>
