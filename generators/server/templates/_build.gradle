@@ -406,7 +406,6 @@ dependencies {
     compile "org.springframework.social:spring-social-facebook"
     compile "org.springframework.social:spring-social-twitter"
     <%_ } _%>
-    testCompile "org.awaitility:awaitility:${awaitility_version}"
     testCompile "com.jayway.jsonpath:json-path"
     <%_ if (databaseType === 'cassandra') { _%>
     testCompile ("org.cassandraunit:cassandra-unit-spring:${cassandra_unit_spring_version}") {
