@@ -35,7 +35,6 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 <%_ } if (databaseType === 'mongodb') { _%>
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 <%_ } else if (databaseType === 'couchbase') { _%>
 import org.springframework.data.annotation.Id;
@@ -99,13 +98,13 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <%_         }
         }
 } if (databaseType === 'mongodb') { _%>
-@Document(collection = "<%= entityTableName %>")
+@org.springframework.data.mongodb.core.mapping.Document(collection = "<%= entityTableName %>")
 <%_ } if (databaseType === 'couchbase') { _%>
 @Document
 <%_ } if (databaseType === 'cassandra') { _%>
 @Table(name = "<%= entityInstance %>")
 <%_ } if (searchEngine === 'elasticsearch') { _%>
-@Document(indexName = "<%= entityInstance.toLowerCase() %>")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "<%= entityInstance.toLowerCase() %>")
 <%_ } _%>
 public class <%= entityClass %> implements Serializable {
 

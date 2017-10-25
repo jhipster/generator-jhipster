@@ -468,7 +468,7 @@ function askForOptionalItems(meta) {
             value: 'enableSocialSignIn:true'
         });
     }
-    if (this.databaseType === 'sql') {
+    if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
         choices.push({
             name: 'Search engine using Elasticsearch',
             value: 'searchEngine:elasticsearch'
