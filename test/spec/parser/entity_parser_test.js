@@ -116,7 +116,7 @@ describe('::convert', () => {
     describe('when converting JDL to entity json for Couchbase type', () => {
       const input = parseFromFiles(['./test/test_files/couchbase_jdl.jdl']);
       const content = EntityParser.parse({
-        jdlObject: JDLParser.parse(input, 'couchbase'),
+        jdlObject: JDLParser.parse({ document: input, databaseType: 'couchbase' }),
         databaseType: 'couchbase'
       });
       it('converts it', () => {
