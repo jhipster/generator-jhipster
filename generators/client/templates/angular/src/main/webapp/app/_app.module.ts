@@ -23,6 +23,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { Ng2Webstorage } from 'ng2-webstorage';
 
 import { <%=angularXAppName%>SharedModule, UserRouteAccessService } from './shared';
+import { <%=angularXAppName%>AppRoutingModule} from './app-routing.module';
 import { <%=angularXAppName%>HomeModule } from './home/home.module';
 import { <%=angularXAppName%>AdminModule } from './admin/admin.module';
 <%_ if (authenticationType !== 'oauth2') { _%>
@@ -37,7 +38,6 @@ import { PaginationConfig } from './blocks/config/uib-pagination.config';
 
 import {
     <%=jhiPrefixCapitalized%>MainComponent,
-    LayoutRoutingModule,
     NavbarComponent,
     FooterComponent,
     ProfileService,
@@ -51,7 +51,7 @@ import {
 @NgModule({
     imports: [
         BrowserModule,
-        LayoutRoutingModule,
+        <%=angularXAppName%>AppRoutingModule,
         Ng2Webstorage.forRoot({ prefix: 'jhi', separator: '-'}),
         <%=angularXAppName%>SharedModule,
         <%=angularXAppName%>HomeModule,
