@@ -234,9 +234,6 @@ function writeFiles() {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/jwt/_JWTConfigurer.java`, `${javaDir}security/jwt/JWTConfigurer.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/jwt/_JWTFilter.java`, `${javaDir}security/jwt/JWTFilter.java`);
             }
-            if (this.authenticationType === 'oauth2') {
-                this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_AuthResource.java`, `${javaDir}web/rest/AuthResource.java`);
-            }
 
             /* Skip the code below for --skip-user-management */
             if (this.skipUserManagement && (this.applicationType !== 'monolith' || this.authenticationType !== 'oauth2')) return;
