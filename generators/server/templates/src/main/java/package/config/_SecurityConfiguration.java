@@ -76,8 +76,8 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 import javax.annotation.PostConstruct;
 <% } %>
-@Import(SecurityProblemSupport.class)
 @Configuration
+@Import(SecurityProblemSupport.class)
 <%_ if (authenticationType === 'oauth2') { _%>
 @EnableOAuth2Sso
 <%_ } else { _%>
