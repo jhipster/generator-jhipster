@@ -173,19 +173,16 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
      * if they test an entity which has a required relationship to the User entity.
      */
     public static User createEntity(<% if (databaseType === 'sql') { %>EntityManager em<% } %>) {
-        <%_ if (databaseType === 'sql') { _%>
-        String lastId = getLastInsertedId(em);
-        <%_ } _%>
         User user = new User();
         <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
         <%_ } _%>
-        user.setLogin(DEFAULT_LOGIN<% if (databaseType === 'sql') { %> + lastId<% } %>);
+        user.setLogin(DEFAULT_LOGIN<% if (databaseType === 'sql') { %> + RandomStringUtils.randomAlphabetic(5)<% } %>);
         <%_ if (authenticationType !== 'oauth2') { _%>
         user.setPassword(RandomStringUtils.random(60));
         <%_ } _%>
         user.setActivated(true);
-        user.setEmail(DEFAULT_EMAIL<% if (databaseType === 'sql') { %> + lastId<% } %>);
+        user.setEmail(<% if (databaseType === 'sql') { %>RandomStringUtils.randomAlphabetic(5) + <% } %>DEFAULT_EMAIL);
         user.setFirstName(DEFAULT_FIRSTNAME);
         user.setLastName(DEFAULT_LASTNAME);
         <%_ if (databaseType !== 'cassandra') { _%>
@@ -196,15 +193,6 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
     }
 
     <%_ if (databaseType === 'sql') { _%>
-    /**
-     * Search for the last inserted user id.
-     */
-    public static String getLastInsertedId(EntityManager em){
-        String lastInsertedIdAsString = "";
-        Long maxId = (Long) em.createQuery("select max(u.id) from User u").getSingleResult();
-        return maxId.toString();
-        }
-
     /**
      * When createEntity is called from other classes is mandatory to create different
      * login and mail since those have a unique constraint.
