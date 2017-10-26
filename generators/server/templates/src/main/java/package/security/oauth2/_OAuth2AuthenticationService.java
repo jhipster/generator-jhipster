@@ -37,7 +37,9 @@ import java.util.concurrent.TimeUnit;
  * It can authenticate users, refresh the token cookies should they expire and log users out.
  */
 public class OAuth2AuthenticationService {
+
     private final Logger log = LoggerFactory.getLogger(OAuth2AuthenticationService.class);
+
     /**
      * Number of seconds to cache refresh token grants so we don't have to repeat them in case of parallel requests.
      */
