@@ -140,6 +140,9 @@ public class CacheConfiguration {
     @Bean
     public JCacheManagerCustomizer cacheManagerCustomizer() {
         return cm -> {
+            <%_ if (authenticationType === 'oauth2' && applicationType === 'microservice') { _%>
+            cm.createCache("oAuth2Authentication", jcacheConfiguration);
+            <%_ } _%>
             <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && applicationType === 'monolith')) { _%>
             cm.createCache("users", jcacheConfiguration);
             cm.createCache(<%=packageName%>.domain.User.class.getName(), jcacheConfiguration);
@@ -453,7 +456,7 @@ public class CacheConfiguration {
                 .eviction().type(EvictionType.COUNT).size(cacheInfo.getReplicated()
                 .getMaxEntries()).expiration().lifespan(cacheInfo.getReplicated().getTimeToLiveSeconds(), TimeUnit.MINUTES).build());
 
-            // initilaize Hiberante L2 cache
+            // initilaize Hibernate L2 cache
             manager.defineConfiguration("entity", new ConfigurationBuilder().clustering().cacheMode(CacheMode.INVALIDATION_SYNC)
                 .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
                 .locking().concurrencyLevel(1000).lockAcquisitionTimeout(15000).build());
@@ -498,6 +501,11 @@ public class CacheConfiguration {
                                        JHipsterProperties jHipsterProperties) {
             super(uri, cacheManager, provider);
             // register individual caches to make the stats info available.
+            <%_ if (authenticationType === 'oauth2' && applicationType === 'microservice') { _%>
+            registerPredefinedCache("oAuth2Authentication", new JCache<Object, Object>(
+                cacheManager.getCache("oAuth2Authentication").getAdvancedCache(), this,
+                ConfigurationAdapter.create()));
+            <%_ } _%>
             <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
             registerPredefinedCache("users", new JCache<Object, Object>(
                 cacheManager.getCache("users").getAdvancedCache(), this,

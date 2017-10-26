@@ -329,9 +329,10 @@ function writeFiles() {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/client/_OAuth2InterceptedFeignConfiguration.java`, `${javaDir}client/OAuth2InterceptedFeignConfiguration.java`);
             }
             if (this.authenticationType === 'oauth2') {
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_AuthorizationHeaderUtil.java`, `${javaDir}/security/oauth2/AuthorizationHeaderUtil.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_CachedUserInfoTokenServices.java`, `${javaDir}/security/oauth2/CachedUserInfoTokenServices.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_SimplePrincipalExtractor.java`, `${javaDir}/security/oauth2/SimplePrincipalExtractor.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_SimpleAuthoritiesExtractor.java`, `${javaDir}/security/oauth2/SimpleAuthoritiesExtractor.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_AuthorizationHeaderUtil.java`, `${javaDir}/security/oauth2/AuthorizationHeaderUtil.java`);
             }
             if (this.authenticationType === 'oauth2' && (this.applicationType === 'microservice' || this.applicationType === 'gateway')) {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/_FeignConfiguration.java`, `${javaDir}config/FeignConfiguration.java`);

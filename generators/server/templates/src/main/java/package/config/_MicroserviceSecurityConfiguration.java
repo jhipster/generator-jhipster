@@ -193,8 +193,7 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
 <%_ } _%>
 <%_ if(authenticationType === 'oauth2') { _%>
 import <%=packageName%>.security.AuthoritiesConstants;
-import <%=packageName%>.security.oauth2.SimpleAuthoritiesExtractor;
-import <%=packageName%>.security.oauth2.SimplePrincipalExtractor;
+import <%=packageName%>.security.oauth2.*;
 <%_ if(applicationType === 'gateway') { _%>
 import org.springframework.beans.factory.annotation.Qualifier;
 <%_ } _%>
@@ -202,7 +201,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.PrincipalExtractor;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
 import org.springframework.context.annotation.*;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -248,7 +246,9 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
     @Bean
     @Primary
     public UserInfoTokenServices userInfoTokenServices(PrincipalExtractor principalExtractor, AuthoritiesExtractor authoritiesExtractor) {
-        UserInfoTokenServices userInfoTokenServices = new UserInfoTokenServices(resourceServerProperties.getUserInfoUri(), resourceServerProperties.getClientId());
+        UserInfoTokenServices userInfoTokenServices =
+            new CachedUserInfoTokenServices(resourceServerProperties.getUserInfoUri(), resourceServerProperties.getClientId());
+
         userInfoTokenServices.setPrincipalExtractor(principalExtractor);
         userInfoTokenServices.setAuthoritiesExtractor(authoritiesExtractor);
         return userInfoTokenServices;
