@@ -23,8 +23,7 @@ import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.security.jwt.JWTConfigurer;
 import <%=packageName%>.security.jwt.TokenProvider;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.*;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -45,9 +44,8 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
 
     private final SecurityProblemSupport problemSupport;
 
-    public MicroserviceSecurityConfiguration(ResourceServerProperties resourceServerProperties,
-        SecurityProblemSupport problemSupport) {
-        this.resourceServerProperties = resourceServerProperties;
+    public MicroserviceSecurityConfiguration(TokenProvider tokenProvider, SecurityProblemSupport problemSupport) {
+        this.tokenProvider = tokenProvider;
         this.problemSupport = problemSupport;
     }
 
@@ -205,9 +203,7 @@ import org.springframework.boot.autoconfigure.security.oauth2.resource.Authoriti
 import org.springframework.boot.autoconfigure.security.oauth2.resource.PrincipalExtractor;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.*;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -224,11 +220,13 @@ import org.springframework.security.web.util.matcher.RequestHeaderRequestMatcher
 import org.springframework.security.web.util.matcher.RequestMatcher;
 <%_ } _%>
 import org.springframework.web.client.RestTemplate;
+import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 import java.util.Map;
 import java.util.Optional;
 
 @Configuration
+@Import(SecurityProblemSupport.class)
 @EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerAdapter {
@@ -237,10 +235,14 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
 
     private static final String OAUTH2_AUTHORITIES_ATTRIBUTE = "roles";
 
-    private ResourceServerProperties resourceServerProperties;
+    private final ResourceServerProperties resourceServerProperties;
 
-    public MicroserviceSecurityConfiguration(ResourceServerProperties resourceServerProperties) {
+    private final SecurityProblemSupport problemSupport;
+
+    public MicroserviceSecurityConfiguration(ResourceServerProperties resourceServerProperties,
+        SecurityProblemSupport problemSupport) {
         this.resourceServerProperties = resourceServerProperties;
+        this.problemSupport = problemSupport;
     }
 
     @Bean
@@ -275,6 +277,10 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
         http
             .csrf()
             .disable()
+            .exceptionHandling()
+            .authenticationEntryPoint(problemSupport)
+            .accessDeniedHandler(problemSupport)
+        .and()
             .headers()
             .frameOptions()
             .disable()
