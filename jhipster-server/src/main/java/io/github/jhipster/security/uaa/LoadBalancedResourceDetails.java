@@ -31,7 +31,9 @@ import org.springframework.security.oauth2.client.token.grant.client.ClientCrede
 @ConditionalOnMissingBean
 public class LoadBalancedResourceDetails extends ClientCredentialsResourceDetails {
 
-    Logger log = LoggerFactory.getLogger(LoadBalancedResourceDetails.class);
+    public static final String EXCEPTION_MESSAGE = "Returning an invalid URI: {}";
+
+    private final Logger log = LoggerFactory.getLogger(LoadBalancedResourceDetails.class);
 
     private String tokenServiceId;
 
@@ -50,7 +52,7 @@ public class LoadBalancedResourceDetails extends ClientCredentialsResourceDetail
                     new URI(super.getAccessTokenUri())
                 ).toString();
             } catch (URISyntaxException e) {
-                log.error("{}: {}", e.getClass().toString(), e.getMessage());
+                log.error(EXCEPTION_MESSAGE, e.getMessage());
 
                 return super.getAccessTokenUri();
             }
