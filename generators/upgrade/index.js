@@ -126,9 +126,8 @@ module.exports = class extends BaseGenerator {
 
             assertJHipsterProject() {
                 const done = this.async();
-                if (!(shelljs.test('-f', '.yo-rc.json'))
-                    && !(shelljs.test('-d', '.jhipster'))) {
-                    this.error('Current directory is not a JHipster project.');
+                if (!this.getJhipsterAppConfig()) {
+                    this.error('Current directory does not contain a JHipster project.');
                 }
                 done();
             },
