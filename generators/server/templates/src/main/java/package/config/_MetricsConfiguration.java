@@ -70,6 +70,7 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
 <% if (hibernateCache === 'ehcache' || hibernateCache === 'infinispan') { %>
     private static final String PROP_METRIC_REG_JCACHE_STATISTICS = "jcache.statistics";
 <%_ } _%>
+
     private final Logger log = LoggerFactory.getLogger(MetricsConfiguration.class);
 
     private MetricRegistry metricRegistry = new MetricRegistry();
@@ -114,9 +115,9 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
         metricRegistry.register(PROP_METRIC_REG_JVM_FILES, new FileDescriptorRatioGauge());
         metricRegistry.register(PROP_METRIC_REG_JVM_BUFFERS, new BufferPoolMetricSet(ManagementFactory.getPlatformMBeanServer()));
         metricRegistry.register(PROP_METRIC_REG_JVM_ATTRIBUTE_SET, new JvmAttributeGaugeSet());
-<% if (hibernateCache === 'ehcache' || hibernateCache === 'infinispan') { %>
+        <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'infinispan') { _%>
         metricRegistry.register(PROP_METRIC_REG_JCACHE_STATISTICS, new JCacheGaugeSet());
-<%_ } _%>
+        <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
         if (hikariDataSource != null) {
             log.debug("Monitoring the datasource");
