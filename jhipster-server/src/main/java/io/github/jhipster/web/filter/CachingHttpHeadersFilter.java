@@ -19,22 +19,31 @@
 
 package io.github.jhipster.web.filter;
 
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-import javax.servlet.*;
-import javax.servlet.http.HttpServletResponse;
-
 import io.github.jhipster.config.JHipsterProperties;
 
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
+
 /**
- * This filter is used in production, to put HTTP cache headers with a long (1 month) expiration time.
+ * This filter is used in production, to put HTTP cache headers with a long (4 years) expiration time.
  */
 public class CachingHttpHeadersFilter implements Filter {
 
-    // We consider the last modified date is the start up time of the server
-    private final static long LAST_MODIFIED = System.currentTimeMillis();
+    public static final int DEFAULT_DAYS_TO_LIVE = 1461; // 4 years
+    public static final long DEFAULT_SECONDS_TO_LIVE = TimeUnit.DAYS.toMillis(DEFAULT_DAYS_TO_LIVE);
 
-    private long cacheTimeToLive = TimeUnit.DAYS.toMillis(1461L);
+    // We consider the last modified date is the start up time of the server
+    public final static long LAST_MODIFIED = System.currentTimeMillis();
+
+    private long cacheTimeToLive = DEFAULT_SECONDS_TO_LIVE;
 
     private JHipsterProperties jHipsterProperties;
 
