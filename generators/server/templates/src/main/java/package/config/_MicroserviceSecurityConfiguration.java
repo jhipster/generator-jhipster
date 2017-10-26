@@ -33,16 +33,22 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
+import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 @Configuration
+@Import(SecurityProblemSupport.class)
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final TokenProvider tokenProvider;
 
-    public MicroserviceSecurityConfiguration(TokenProvider tokenProvider) {
-        this.tokenProvider = tokenProvider;
+    private final SecurityProblemSupport problemSupport;
+
+    public MicroserviceSecurityConfiguration(ResourceServerProperties resourceServerProperties,
+        SecurityProblemSupport problemSupport) {
+        this.resourceServerProperties = resourceServerProperties;
+        this.problemSupport = problemSupport;
     }
 
     @Override
@@ -63,6 +69,10 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
         http
             .csrf()
             .disable()
+            .exceptionHandling()
+            .authenticationEntryPoint(problemSupport)
+            .accessDeniedHandler(problemSupport)
+        .and()
             .headers()
             .frameOptions()
             .disable()
