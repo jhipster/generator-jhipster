@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
+const _ = require('lodash');
 const BaseGenerator = require('../generator-base');
 const cleanup = require('../cleanup');
 const prompts = require('./prompts');
@@ -347,6 +348,7 @@ module.exports = class extends BaseGenerator {
                     }
                     // Generate a package.json file containing the current version
                     // of the generator as dependency
+                    this.dasherizedBaseName = _.kebabCase(this.baseName);
                     this.template('_skipClientApp.package.json', 'package.json');
 
                     if (!this.options['skip-install']) {
