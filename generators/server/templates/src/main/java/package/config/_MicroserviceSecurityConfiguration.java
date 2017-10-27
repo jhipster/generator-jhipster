@@ -198,9 +198,7 @@ import <%=packageName%>.security.oauth2.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 <%_ } _%>
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.PrincipalExtractor;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.*;
 import org.springframework.context.annotation.*;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -247,7 +245,11 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
     @Primary
     public UserInfoTokenServices userInfoTokenServices(PrincipalExtractor principalExtractor, AuthoritiesExtractor authoritiesExtractor) {
         UserInfoTokenServices userInfoTokenServices =
+        <%_ if (hibernateCache !== 'no') { _%>
             new CachedUserInfoTokenServices(resourceServerProperties.getUserInfoUri(), resourceServerProperties.getClientId());
+        <%_ } else { _%>
+            new UserInfoTokenServices(resourceServerProperties.getUserInfoUri(), resourceServerProperties.getClientId());
+        <%_ } _%>
 
         userInfoTokenServices.setPrincipalExtractor(principalExtractor);
         userInfoTokenServices.setAuthoritiesExtractor(authoritiesExtractor);

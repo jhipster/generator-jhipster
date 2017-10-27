@@ -330,7 +330,9 @@ function writeFiles() {
             }
             if (this.authenticationType === 'oauth2') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_AuthorizationHeaderUtil.java`, `${javaDir}/security/oauth2/AuthorizationHeaderUtil.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_CachedUserInfoTokenServices.java`, `${javaDir}/security/oauth2/CachedUserInfoTokenServices.java`);
+                if (this.hibernateCache !== 'no') {
+                    this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_CachedUserInfoTokenServices.java`, `${javaDir}/security/oauth2/CachedUserInfoTokenServices.java`);
+                }
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_SimplePrincipalExtractor.java`, `${javaDir}/security/oauth2/SimplePrincipalExtractor.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_SimpleAuthoritiesExtractor.java`, `${javaDir}/security/oauth2/SimpleAuthoritiesExtractor.java`);
             }
