@@ -163,7 +163,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        UserResource userResource = new UserResource(userRepository, <% if (authenticationType !== 'oauth2') { %>mailService, <% } %>userService<% if (searchEngine === 'elasticsearch') { %>, userSearchRepository<% } %>);
+        UserResource userResource = new UserResource(userRepository, userService<% if (authenticationType !== 'oauth2') { %>, mailService<% } %><% if (searchEngine === 'elasticsearch') { %>, userSearchRepository<% } %>);
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -182,12 +182,12 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
         <%_ } _%>
-        user.setLogin(DEFAULT_LOGIN);
+        user.setLogin(DEFAULT_LOGIN<% if (databaseType === 'sql') { %> + RandomStringUtils.randomAlphabetic(5)<% } %>);
         <%_ if (authenticationType !== 'oauth2') { _%>
         user.setPassword(RandomStringUtils.random(60));
         <%_ } _%>
         user.setActivated(true);
-        user.setEmail(DEFAULT_EMAIL);
+        user.setEmail(<% if (databaseType === 'sql') { %>RandomStringUtils.randomAlphabetic(5) + <% } %>DEFAULT_EMAIL);
         user.setFirstName(DEFAULT_FIRSTNAME);
         user.setLastName(DEFAULT_LASTNAME);
         <%_ if (databaseType !== 'cassandra') { _%>
@@ -204,8 +204,13 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         <%_ } _%>
         <%_ if (databaseType !== 'sql') { _%>
         userRepository.deleteAll();
+        user = createEntity();
         <%_ } _%>
-        user = createEntity(<% if (databaseType === 'sql') { %>em<% } %>);
+        <%_ if (databaseType === 'sql') { _%>
+        user = createEntity(em);
+        user.setLogin(DEFAULT_LOGIN);
+        user.setEmail(DEFAULT_EMAIL);
+        <%_ } _%>
     }
 <%_ if (authenticationType !== 'oauth2') { _%>
 

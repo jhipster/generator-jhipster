@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
 const prompts = require('./prompts');
@@ -26,7 +27,7 @@ const crypto = require('crypto');
 const os = require('os');
 const constants = require('../generator-constants');
 
-/* Constants used throughout */
+let useBlueprint;
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -69,21 +70,13 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
 
-        this.skipClient = !this.options['client-hook'] || this.configOptions.skipClient || this.config.get('skipClient');
-        this.skipUserManagement = this.configOptions.skipUserManagement || this.options['skip-user-management'] || this.config.get('skipUserManagement');
-        this.enableTranslation = this.options.i18n || this.configOptions.enableTranslation || this.config.get('enableTranslation');
-        this.testFrameworks = [];
-
-        if (this.options.gatling) this.testFrameworks.push('gatling');
-        if (this.options.cucumber) this.testFrameworks.push('cucumber');
-
-        this.logo = this.configOptions.logo;
-        this.baseName = this.configOptions.baseName;
-        this.clientPackageManager = this.configOptions.clientPackageManager;
-        this.isDebugEnabled = this.configOptions.isDebugEnabled || this.options.debug;
+        this.setupServerOptions(this);
+        const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
+        useBlueprint = this.composeBlueprint(blueprint, 'server'); // use global variable since getters dont have access to instance property
     }
 
     get initializing() {
+        if (useBlueprint) return;
         return {
             displayLogo() {
                 if (this.logo) {
@@ -279,6 +272,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get prompting() {
+        if (useBlueprint) return;
         return {
             askForModuleName: prompts.askForModuleName,
             askForServerSideOpts: prompts.askForServerSideOpts,
@@ -318,6 +312,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get configuring() {
+        if (useBlueprint) return;
         return {
             insight() {
                 const insight = this.insight();
@@ -392,6 +387,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get default() {
+        if (useBlueprint) return;
         return {
             getSharedConfigOptions() {
                 this.useSass = this.configOptions.useSass ? this.configOptions.useSass : false;
@@ -424,10 +420,12 @@ module.exports = class extends BaseGenerator {
     }
 
     get writing() {
+        if (useBlueprint) return;
         return writeFiles();
     }
 
     end() {
+        if (useBlueprint) return;
         if (this.prodDatabaseType === 'oracle') {
             this.log('\n\n');
             this.warning(`${chalk.yellow.bold('You have selected Oracle database.\n')

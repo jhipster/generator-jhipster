@@ -19,6 +19,7 @@
 
 const path = require('path');
 const _ = require('lodash');
+const fs = require('fs');
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const Insight = require('insight');
@@ -547,6 +548,49 @@ module.exports = class extends Generator {
         if (this.isDebugEnabled || (this.options && this.options.debug)) {
             this.log(`${chalk.yellow.bold('DEBUG!')} ${msg}`);
             args.forEach(arg => this.log(arg));
+        }
+    }
+
+    /**
+     * Compose external blueprint module
+     * @param {string} blueprint - name of the blueprint
+     * @param {string} subGen - sub generator
+     */
+    composeBlueprint(blueprint, subGen) {
+        if (blueprint) {
+            this.checkBlueprint(blueprint);
+            try {
+                this.useBlueprint = true;
+                this.composeExternalModule(blueprint, subGen, {
+                    jhipsterContext: this
+                });
+                return true;
+            } catch (e) {
+                this.debug('Error', e);
+                this.warning(`No blueprint found for ${subGen} falling back to default generator`);
+                return false;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check if the generator specified as blueprint is installed.
+     * @param {string} blueprint - generator name
+     */
+    checkBlueprint(blueprint) {
+        if (blueprint === 'generator-jhipster') {
+            this.error(`You cannot use ${chalk.yellow(blueprint)} as the blueprint.`);
+        }
+        const done = this.async();
+        const localModule = path.join(process.cwd(), 'node_modules', blueprint);
+        if (!fs.existsSync(localModule)) {
+            shelljs.exec('yo --generators', { silent: true }, (err, stdout, stderr) => {
+                if (!stdout.includes(` ${blueprint}\n`) && !stdout.includes(` ${blueprint.replace('generator-', '')}\n`)) {
+                    this.error(`The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(`npm i -g ${blueprint}`)}.`);
+                }
+                done();
+            });
         }
     }
 

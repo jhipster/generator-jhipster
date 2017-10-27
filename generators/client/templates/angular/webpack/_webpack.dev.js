@@ -51,7 +51,10 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
             ],
             target: 'ws://127.0.0.1:<%= serverPort %>',
             ws: true
-        }<% } %>]
+        }<% } %>],
+        watchOptions: {
+            ignored: /node_modules/
+        }
     },
     entry: {
         polyfills: './<%= MAIN_SRC_DIR %>app/polyfills',

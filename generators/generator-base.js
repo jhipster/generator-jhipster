@@ -1559,30 +1559,101 @@ module.exports = class extends PrivateBase {
             if (module.hookFor === hookFor && module.hookType === hookType) {
                 // compose with the modules callback generator
                 const hook = module.generatorCallback.split(':')[1];
-                let generatorTocall = path.join(process.cwd(), 'node_modules', module.npmPackageName, 'generators', hook || 'app');
                 try {
-                    if (!fs.existsSync(generatorTocall)) {
-                        this.debug('using global module as local version could not be found in node_modules');
-                        generatorTocall = path.join(module.npmPackageName, 'generators', hook || 'app');
-                    }
-                    this.debug('Running yeoman compose with options: ', generatorTocall, options);
-                    this.composeWith(require.resolve(generatorTocall), options);
-                } catch (err) {
-                    this.debug('ERROR:', err);
-                    try {
-                        // Fallback for legacy modules
-                        this.debug('Running yeoman legacy compose with options: ', module.generatorCallback, options);
-                        this.composeWith(module.generatorCallback, options);
-                    } catch (e) {
-                        this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
-                            chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow(`'npm install -g ${module.npmPackageName}'`));
-                        this.debug('ERROR:', e);
-                    }
+                    this.composeExternalModule(module.npmPackageName, hook || 'app', options);
+                } catch (e) {
+                    this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
+                        chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow(`'npm install -g ${module.npmPackageName}'`));
+                    this.debug('ERROR:', e);
                 }
             }
         });
         this.debug('calling callback');
         cb && cb();
+    }
+
+    /**
+     * Compose an external generator with Yeoman.
+     * @param {string} npmPackageName - package name
+     * @param {string} subGen - sub generator name
+     * @param {any} options - options to pass
+     */
+    composeExternalModule(npmPackageName, subGen, options) {
+        let generatorTocall = path.join(process.cwd(), 'node_modules', npmPackageName, 'generators', subGen);
+        try {
+            if (!fs.existsSync(generatorTocall)) {
+                this.debug('using global module as local version could not be found in node_modules');
+                generatorTocall = path.join(npmPackageName, 'generators', subGen);
+            }
+            this.debug('Running yeoman compose with options: ', generatorTocall, options);
+            this.composeWith(require.resolve(generatorTocall), options);
+        } catch (err) {
+            this.debug('ERROR:', err);
+            const generatorName = npmPackageName.replace('generator-', '');
+            const generatorCallback = `${generatorName}:${subGen}`;
+            // Fallback for legacy modules
+            this.debug('Running yeoman legacy compose with options: ', generatorCallback, options);
+            this.composeWith(generatorCallback, options);
+        }
+    }
+
+    /**
+     * Get a name suitable for microservice
+     * @param {string} microserviceName
+     */
+    getMicroserviceAppName(microserviceName) {
+        return _.camelCase(microserviceName, true) + (microserviceName.endsWith('App') ? '' : 'App');
+    }
+
+    /**
+     * Load an entity configuration file into context.
+     */
+    loadEntityJson() {
+        try {
+            this.fileData = this.fs.readJSON(this.fromPath);
+        } catch (err) {
+            this.debug('Error:', err);
+            this.error(chalk.red('\nThe entity configuration file could not be read!\n'));
+        }
+        this.relationships = this.fileData.relationships || [];
+        this.fields = this.fileData.fields || [];
+        this.changelogDate = this.fileData.changelogDate;
+        this.dto = this.fileData.dto;
+        this.service = this.fileData.service;
+        this.fluentMethods = this.fileData.fluentMethods;
+        this.pagination = this.fileData.pagination;
+        this.searchEngine = this.fileData.searchEngine || this.searchEngine;
+        this.javadoc = this.fileData.javadoc;
+        this.entityTableName = this.fileData.entityTableName;
+        this.jhiPrefix = this.fileData.jhiPrefix || this.jhiPrefix;
+        this.jhiTablePrefix = this.getTableName(this.jhiPrefix);
+        this.copyFilteringFlag(this.fileData, this);
+        if (_.isUndefined(this.entityTableName)) {
+            this.warning(`entityTableName is missing in .jhipster/${this.name}.json, using entity name as fallback`);
+            this.entityTableName = this.getTableName(this.name);
+        }
+        if (jhiCore.isReservedTableName(this.entityTableName, this.prodDatabaseType)) {
+            this.entityTableName = `${this.jhiTablePrefix}_${this.entityTableName}`;
+        }
+        this.fields.forEach((field) => {
+            this.fieldNamesUnderscored.push(_.snakeCase(field.fieldName));
+            this.fieldNameChoices.push({ name: field.fieldName, value: field.fieldName });
+        });
+        this.relationships.forEach((rel) => {
+            this.relNameChoices.push({ name: `${rel.relationshipName}:${rel.relationshipType}`, value: `${rel.relationshipName}:${rel.relationshipType}` });
+        });
+        if (this.fileData.angularJSSuffix !== undefined) {
+            this.entityAngularJSSuffix = this.fileData.angularJSSuffix;
+        }
+        this.useMicroserviceJson = this.useMicroserviceJson || !_.isUndefined(this.fileData.microserviceName);
+        if (this.applicationType === 'gateway' && this.useMicroserviceJson) {
+            this.microserviceName = this.fileData.microserviceName;
+            if (!this.microserviceName) {
+                this.error(chalk.red('Microservice name for the entity is not found. Entity cannot be generated!'));
+            }
+            this.microserviceAppName = this.getMicroserviceAppName(this.microserviceName);
+            this.skipServer = true;
+        }
     }
 
     /**
@@ -2098,5 +2169,98 @@ module.exports = class extends PrivateBase {
         }
         this.debug(`Time taken to write files: ${new Date() - startTime}ms`);
         return filesOut;
+    }
+
+    /**
+     * Setup client instance level options from context.
+     * @param {any} generator - generator instance
+     * @param {any} context - context to use default is generator instance
+     */
+    setupClientOptions(generator, context = generator) {
+        generator.skipServer = context.configOptions.skipServer || context.config.get('skipServer');
+        generator.skipUserManagement = context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
+        generator.authenticationType = context.options.auth || context.configOptions.authenticationType || context.config.get('authenticationType');
+        if (generator.authenticationType === 'oauth2') {
+            generator.skipUserManagement = true;
+        }
+        const uaaBaseName = context.options.uaaBaseName || context.configOptions.uaaBaseName || context.options['uaa-base-name'] || context.config.get('uaaBaseName');
+        if (context.options.auth === 'uaa' && _.isNil(uaaBaseName)) {
+            generator.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
+        }
+        generator.uaaBaseName = uaaBaseName;
+
+        generator.buildTool = context.options.build;
+        generator.websocket = context.options.websocket;
+        generator.devDatabaseType = context.options.db || context.configOptions.devDatabaseType || context.config.get('devDatabaseType');
+        generator.prodDatabaseType = context.options.db || context.configOptions.prodDatabaseType || context.config.get('prodDatabaseType');
+        generator.databaseType = generator.getDBTypeFromDBValue(context.options.db) || context.configOptions.databaseType || context.config.get('databaseType');
+        generator.enableSocialSignIn = context.options.social || context.config.get('enableSocialSignIn');
+        generator.searchEngine = context.options['search-engine'] || context.config.get('searchEngine');
+        generator.hibernateCache = context.options['hb-cache'] || context.config.get('hibernateCache');
+        generator.otherModules = context.configOptions.otherModules || [];
+        generator.jhiPrefix = context.configOptions.jhiPrefix || context.config.get('jhiPrefix') || context.options['jhi-prefix'];
+        generator.jhiPrefixCapitalized = _.upperFirst(generator.jhiPrefix);
+        generator.testFrameworks = [];
+
+        if (context.options.protractor) generator.testFrameworks.push('protractor');
+
+        generator.baseName = context.configOptions.baseName;
+        generator.logo = context.configOptions.logo;
+        generator.useYarn = context.configOptions.useYarn = !context.options.npm;
+        generator.clientPackageManager = context.configOptions.clientPackageManager;
+        generator.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
+    }
+
+    /**
+     * Setup Server instance level options from context.
+     * @param {any} generator - generator instance
+     * @param {any} context - context to use default is generator instance
+     */
+    setupServerOptions(generator, context = generator) {
+        generator.skipClient = !context.options['client-hook'] || context.configOptions.skipClient || context.config.get('skipClient');
+        generator.skipUserManagement = context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
+        generator.enableTranslation = context.options.i18n || context.configOptions.enableTranslation || context.config.get('enableTranslation');
+        generator.testFrameworks = [];
+
+        if (context.options.gatling) generator.testFrameworks.push('gatling');
+        if (context.options.cucumber) generator.testFrameworks.push('cucumber');
+
+        generator.logo = context.configOptions.logo;
+        generator.baseName = context.configOptions.baseName;
+        generator.clientPackageManager = context.configOptions.clientPackageManager;
+        generator.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
+    }
+
+    /**
+     * Setup Entity instance level options from context.
+     * @param {any} generator - generator instance
+     * @param {any} context - context to use default is generator instance
+     */
+    setupEntityOptions(generator, context = generator) {
+        generator.name = context.options.name;
+        // remove extension if feeding json files
+        if (generator.name !== undefined) {
+            generator.name = generator.name.replace('.json', '');
+        }
+
+        generator.regenerate = context.options.regenerate;
+        generator.fluentMethods = context.options['fluent-methods'];
+        generator.entityTableName = generator.getTableName(context.options['table-name'] || generator.name);
+        generator.entityNameCapitalized = _.upperFirst(generator.name);
+        generator.entityAngularJSSuffix = context.options['angular-suffix'];
+        generator.isDebugEnabled = context.options.debug;
+        if (generator.entityAngularJSSuffix && !generator.entityAngularJSSuffix.startsWith('-')) {
+            generator.entityAngularJSSuffix = `-${generator.entityAngularJSSuffix}`;
+        }
+        generator.rootDir = generator.destinationRoot();
+        // enum-specific consts
+        generator.enums = [];
+
+        generator.existingEnum = false;
+
+        generator.fieldNamesUnderscored = ['id'];
+        // these variable hold field and relationship names for question options during update
+        generator.fieldNameChoices = [];
+        generator.relNameChoices = [];
     }
 };

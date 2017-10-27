@@ -17,10 +17,21 @@
  limitations under the License.
 -%>
 {
+  "name": "<%= dasherizedBaseName %>",
+  "version": "0.0.0",
+  "description": "Description for <%= baseName %>",
+  "private": true,
+  "license": "UNLICENSED",
+  "cacheDirectories": [
+    "node_modules"
+  ],
   "devDependencies": {
     <%_ otherModules.forEach(function(module) { _%>
     "<%= module.name %>": "<%= module.version %>",
     <%_ }); _%>
     "generator-jhipster": "<%= jhipsterVersion %>"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }

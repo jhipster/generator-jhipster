@@ -18,9 +18,9 @@
  */
 
 // version of docker images
-const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v3.1.2';
+const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v3.2.3';
 const DOCKER_JAVA_JRE = 'openjdk:8-jre-alpine';
-const DOCKER_MYSQL = 'mysql:5.7.19';
+const DOCKER_MYSQL = 'mysql:5.7.20';
 const DOCKER_MARIADB = 'mariadb:10.1.17';
 const DOCKER_POSTGRESQL = 'postgres:9.6.5';
 const DOCKER_MONGODB = 'mongo:3.4.8';
@@ -28,7 +28,7 @@ const DOCKER_COUCHBASE = 'couchbase/server:4.6.2';
 const DOCKER_CASSANDRA = 'cassandra:3.9';
 const DOCKER_MSSQL = 'microsoft/mssql-server-linux:latest';
 const DOCKER_ORACLE = 'sath89/oracle-12c:latest';
-const DOCKER_KEYCLOAK = 'jboss/keycloak:3.3.0.CR2-3';
+const DOCKER_KEYCLOAK = 'jboss/keycloak:3.3.0.Final';
 const DOCKER_ELASTICSEARCH = 'elasticsearch:2.4.1';
 const DOCKER_KAFKA = 'wurstmeister/kafka:0.10.1.1';
 const DOCKER_ZOOKEEPER = 'wurstmeister/zookeeper:3.4.6';

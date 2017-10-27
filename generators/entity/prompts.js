@@ -85,7 +85,7 @@ function askForMicroserviceJson() {
             this.fromPath = `${this.microservicePath}/${this.jhipsterConfigDirectory}/${this.entityNameCapitalized}.json`;
             this.useConfigurationFile = true;
             this.useMicroserviceJson = true;
-            this._loadJson();
+            this.loadEntityJson();
         }
         done();
     });

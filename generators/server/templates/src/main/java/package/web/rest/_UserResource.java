@@ -20,10 +20,13 @@ package <%=packageName%>.web.rest;
 
 import <%=packageName%>.config.Constants;
 import com.codahale.metrics.annotation.Timed;
-<%_ if (authenticationType !== 'oauth2') { _%>
-import <%=packageName%>.domain.User;<% } %>
-import <%=packageName%>.repository.UserRepository;<% if (searchEngine === 'elasticsearch') { %>
-import <%=packageName%>.repository.search.UserSearchRepository;<% } %>
+<%_ if (authenticationType !== 'oauth2' || searchEngine === 'elasticsearch') { _%>
+import <%=packageName%>.domain.User;
+<%_ } _%>
+import <%=packageName%>.repository.UserRepository;
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import <%=packageName%>.repository.search.UserSearchRepository;
+<%_ } _%>
 import <%=packageName%>.security.AuthoritiesConstants;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import <%=packageName%>.service.MailService;<% } %>
@@ -92,24 +95,25 @@ public class UserResource {
 
     private final Logger log = LoggerFactory.getLogger(UserResource.class);
 
-    private static final String ENTITY_NAME = "userManagement";
-
     private final UserRepository userRepository;
+
+    private final UserService userService;
 <%_ if (authenticationType !== 'oauth2') { _%>
+
     private final MailService mailService;
 <%_ } _%>
-    private final UserService userService;<% if (searchEngine === 'elasticsearch') { %>
+<%_ if (searchEngine === 'elasticsearch') { _%>
 
-    private final UserSearchRepository userSearchRepository;<% } %>
+    private final UserSearchRepository userSearchRepository;
+<%_ } _%>
 
-    public UserResource(UserRepository userRepository, <%_ if (authenticationType !== 'oauth2') { _%>MailService mailService,<%_ } _%>
-            UserService userService<% if (searchEngine === 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %>) {
+    public UserResource(UserRepository userRepository, UserService userService<% if (authenticationType !== 'oauth2') { %>, MailService mailService<% } %><% if (searchEngine === 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %>) {
 
         this.userRepository = userRepository;
+        this.userService = userService;
         <%_ if (authenticationType !== 'oauth2') { _%>
         this.mailService = mailService;
         <%_ } _%>
-        this.userService = userService;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         this.userSearchRepository = userSearchRepository;
         <%_ } _%>
@@ -131,11 +135,11 @@ public class UserResource {
     @PostMapping("/users")
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
-    public ResponseEntity createUser(@Valid @RequestBody ManagedUserVM managedUserVM) throws URISyntaxException {
+    public ResponseEntity<User> createUser(@Valid @RequestBody ManagedUserVM managedUserVM) throws URISyntaxException {
         log.debug("REST request to save User : {}", managedUserVM);
 
         if (managedUserVM.getId() != null) {
-            throw new BadRequestAlertException("A new user cannot already have an ID", ENTITY_NAME, "idexists");
+            throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists");
         // Lowercase the user login before comparing with database
         } else if (userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase()).isPresent()) {
             throw new LoginAlreadyUsedException();
