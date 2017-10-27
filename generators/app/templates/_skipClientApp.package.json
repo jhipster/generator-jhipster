@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 {
+  "private": true,
   "devDependencies": {
     <%_ otherModules.forEach(function(module) { _%>
     "<%= module.name %>": "<%= module.version %>",
