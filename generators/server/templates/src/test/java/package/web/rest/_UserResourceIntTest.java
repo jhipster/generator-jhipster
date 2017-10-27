@@ -192,24 +192,17 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         return user;
     }
 
-    <%_ if (databaseType === 'sql') { _%>
-    /**
-     * When createEntity is called from other classes is mandatory to create different
-     * login and mail since those have a unique constraint.
-     */
-    private static User createEntityWithDefaults(EntityManager em){
-        User user = createEntity(em);
-        user.setLogin(DEFAULT_LOGIN);
-        user.setEmail(DEFAULT_EMAIL);
-        return user;
-    }
-    <%_ } _%>
-
     @Before
     public void initTest() {
-        <%_ if (databaseType !== 'sql') { _%>userRepository.deleteAll();<%_ } _%>
-        <%_ if (databaseType !== 'sql') { %>user = createEntity();<% } _%>
-        <%_ if (databaseType === 'sql') { %>user = createEntityWithDefaults(em);<% } _%>
+        <%_ if (databaseType !== 'sql') { _%>
+        userRepository.deleteAll();
+        user = createEntity();
+        <%_ } _%>
+        <%_ if (databaseType === 'sql') { _%>
+        user = createEntity(em);
+        user.setLogin(DEFAULT_LOGIN);
+        user.setEmail(DEFAULT_EMAIL);
+        <%_ } _%>
     }
 <%_ if (authenticationType !== 'oauth2') { _%>
 
