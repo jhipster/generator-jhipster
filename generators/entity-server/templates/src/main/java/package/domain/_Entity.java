@@ -36,19 +36,22 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 <%_ } if (databaseType === 'mongodb') { _%>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.Document;
 <%_ } else if (databaseType === 'couchbase') { _%>
 import org.springframework.data.annotation.Id;
 import com.couchbase.client.java.repository.annotation.Field;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.id.IdPrefix;
-<%_ } if (searchEngine === 'elasticsearch') { _%>
-import org.springframework.data.elasticsearch.annotations.Document;
 <%_ } if (databaseType === 'sql') { _%>
 
 import javax.persistence.*;
 <%_ } if (validation) { _%>
 import javax.validation.constraints.*;
+<%_ } _%>
+
+<%_ if (searchEngine === 'elasticsearch' && databaseType !== 'mongodb') { _%>
+import org.springframework.data.elasticsearch.annotations.Document;
 <%_ } _%>
 import java.io.Serializable;
 <%_ if (fieldsContainBigDecimal === true) { _%>
@@ -98,13 +101,15 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <%_         }
         }
 } if (databaseType === 'mongodb') { _%>
-@org.springframework.data.mongodb.core.mapping.Document(collection = "<%= entityTableName %>")
+@Document(collection = "<%= entityTableName %>")
 <%_ } if (databaseType === 'couchbase') { _%>
 @Document
 <%_ } if (databaseType === 'cassandra') { _%>
 @Table(name = "<%= entityInstance %>")
-<%_ } if (searchEngine === 'elasticsearch') { _%>
+<%_ } if (searchEngine === 'elasticsearch' && databaseType === 'mongodb') { _%>
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "<%= entityInstance.toLowerCase() %>")
+<%_ } if (searchEngine === 'elasticsearch' && databaseType !== 'mongodb') { _%>
+@Document(indexName = "<%= entityInstance.toLowerCase() %>")
 <%_ } _%>
 public class <%= entityClass %> implements Serializable {
 
