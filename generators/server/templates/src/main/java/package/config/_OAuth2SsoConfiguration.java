@@ -18,6 +18,8 @@
 -%>
 package <%=packageName%>.config;
 
+import <%=packageName%>.security.AuthoritiesConstants;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +29,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
-import io.github.jhipster.demo.cms.security.AuthoritiesConstants;
 import io.github.jhipster.security.AjaxLogoutSuccessHandler;
 
 @EnableOAuth2Sso
