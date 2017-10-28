@@ -387,8 +387,7 @@ module.exports = class extends BaseGenerator {
             },
 
             loadInMemoryData() {
-                const entityNameSpinalCased = _.kebabCase(_.lowerFirst(this.name));
-                const entityNamePluralizedAndSpinalCased = _.kebabCase(_.lowerFirst(pluralize(this.name)));
+                const entityNamePluralizedAndSpinalCased = _.kebabCase(pluralize(this.name));
 
                 this.entityClass = this.entityNameCapitalized;
                 this.entityClassHumanized = _.startCase(this.entityNameCapitalized);
@@ -397,8 +396,8 @@ module.exports = class extends BaseGenerator {
                 this.entityInstance = _.lowerFirst(this.name);
                 this.entityInstancePlural = pluralize(this.entityInstance);
                 this.entityApiUrl = entityNamePluralizedAndSpinalCased;
-                this.entityFolderName = entityNameSpinalCased;
                 this.entityFileName = _.kebabCase(this.entityNameCapitalized + _.upperFirst(this.entityAngularJSSuffix));
+                this.entityFolderName = this.entityFileName;
                 this.entityPluralFileName = entityNamePluralizedAndSpinalCased + this.entityAngularJSSuffix;
                 this.entityServiceFileName = this.entityFileName;
                 this.entityAngularName = this.entityClass + _.upperFirst(_.camelCase(this.entityAngularJSSuffix));
