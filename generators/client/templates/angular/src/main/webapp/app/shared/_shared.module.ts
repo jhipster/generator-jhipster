@@ -23,9 +23,7 @@ import {
     <%=angularXAppName%>SharedLibsModule,
     <%=angularXAppName%>SharedCommonModule,
     CSRFService,
-    <%_ if (!skipServer) { _%>
     AuthServerProvider,
-    <%_ } _%>
     AccountService,
     <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
     UserService,
