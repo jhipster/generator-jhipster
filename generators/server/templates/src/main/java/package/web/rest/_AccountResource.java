@@ -330,7 +330,7 @@ public class AccountResource {
         Optional<User> user = userService.activateRegistration(key);
         if (!user.isPresent()) {
             throw new InternalServerErrorException("No user was found for this reset key");
-        };
+        }
     }
 
     /**
