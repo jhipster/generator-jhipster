@@ -42,9 +42,7 @@ export class LoginService {
         <%_ if (websocket === 'spring-websocket') { _%>
         private trackerService: <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
-        <%_ if (!skipServer) { _%>
         private authServerProvider: AuthServerProvider
-        <%_ } _%>
     ) {}
 
     <%_ if (authenticationType === 'oauth2') { _%>

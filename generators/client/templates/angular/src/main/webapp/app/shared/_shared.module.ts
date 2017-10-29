@@ -23,9 +23,7 @@ import {
     <%=angularXAppName%>SharedLibsModule,
     <%=angularXAppName%>SharedCommonModule,
     CSRFService,
-    <%_ if (!skipServer) { _%>
     AuthServerProvider,
-    <%_ } _%>
     AccountService,
     <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
     UserService,
@@ -73,9 +71,7 @@ import {
         <%_ if (websocket === 'spring-websocket') { _%>
         <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
-        <%_ if (!skipServer) { _%>
         AuthServerProvider,
-        <%_ } _%>
         <%_ if (enableSocialSignIn) { _%>
         SocialService,
         <%_ } _%>
