@@ -522,6 +522,10 @@ module.exports = class extends BaseGenerator {
                         context.fieldsIsReactAvField = true;
                     }
 
+                    if (fieldType === 'String' && !context.autocompleteField) {
+                        // mark the first String as autocomplete field
+                        context.autocompleteField = field.fieldName;
+                    }
                     const nonEnumType = [
                         'String', 'Integer', 'Long', 'Float', 'Double', 'BigDecimal',
                         'LocalDate', 'Instant', 'ZonedDateTime', 'Boolean', 'byte[]', 'ByteBuffer'
@@ -608,6 +612,12 @@ module.exports = class extends BaseGenerator {
                     }
                 });
                 context.hasUserField = context.saveUserSnapshot = false;
+
+                if (!context.autocompleteField) {
+                    // if no string field found for autocompletion, use the id
+                    context.autocompleteField = 'id';
+                }
+
                 // Load in-memory data for relationships
                 context.relationships.forEach((relationship) => {
                     if (_.isUndefined(relationship.relationshipNameCapitalized)) {
@@ -725,7 +735,7 @@ module.exports = class extends BaseGenerator {
                     }
                     if (_.isUndefined(relationship.otherEntityModuleName)) {
                         if (relationship.otherEntityNameCapitalized !== 'User') {
-                            relationship.otherEntityModuleName = `${context.angularXAppName + relationship.otherEntityNameCapitalized}Module`;
+                            relationship.otherEntityModuleName = `${context.angularXAppName + relationship.otherEntityAngularName}Module`;
                             relationship.otherEntityFileName = _.kebabCase(relationship.otherEntityAngularName);
                             if (context.skipUiGrouping || otherEntityData === undefined || otherEntityData.clientRootFolder === undefined) {
                                 relationship.otherEntityClientRootFolder = '';
@@ -750,6 +760,8 @@ module.exports = class extends BaseGenerator {
                             relationship.otherEntityModulePath = 'app/core';
                         }
                     }
+                    relationship.uiFieldType = `${_.kebabCase(jhiTablePrefix)}-${_.kebabCase(relationship.otherEntityAngularName)}`;
+
                     // Load in-memory data for root
                     if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) {
                         context.fieldsContainOwnerManyToMany = true;
