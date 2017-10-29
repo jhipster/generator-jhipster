@@ -86,36 +86,27 @@ public class UserDTO {
     }
 
     public UserDTO(User user) {
-        this(user.getId(), user.getLogin(), user.getFirstName(), user.getLastName(),
-            user.getEmail(), user.getActivated(),<% if (databaseType === 'sql' || databaseType === 'mongodb') { %> user.getImageUrl(), <% } %>user.getLangKey(),<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
-            user.getCreatedBy(), user.getCreatedDate(), user.getLastModifiedBy(), user.getLastModifiedDate(),
-            user.getAuthorities().stream().map(Authority::getName)
-                .collect(Collectors.toSet()));<% } else { %>
-            user.getAuthorities());<% } %>
-    }
-
-    public UserDTO(<% if (databaseType === 'mongodb' || databaseType === 'cassandra') { %>String<% } else { %>Long<% } %> id, String login, String firstName, String lastName,
-        String email, boolean activated,<% if (databaseType === 'sql' || databaseType === 'mongodb') { %> String imageUrl, <% } %>String langKey,<% if (databaseType === 'mongodb' || databaseType === 'sql') { %>
-        String createdBy, Instant createdDate, String lastModifiedBy, Instant lastModifiedDate,
-        <% } %>Set<String> authorities) {
-
-        this.id = id;
-        this.login = login;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.activated = activated;
+        this.id = user.getId();
+        this.login = user.getLogin();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.email = user.getEmail();
+        this.activated = user.getActivated();
         <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
-        this.imageUrl = imageUrl;
+        this.imageUrl = user.getImageUrl();
         <%_ } _%>
-        this.langKey = langKey;
+        this.langKey = user.getLangKey();
         <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
-        this.createdBy = createdBy;
-        this.createdDate = createdDate;
-        this.lastModifiedBy = lastModifiedBy;
-        this.lastModifiedDate = lastModifiedDate;
+        this.createdBy = user.getCreatedBy();
+        this.createdDate = user.getCreatedDate();
+        this.lastModifiedBy = user.getLastModifiedBy();
+        this.lastModifiedDate = user.getLastModifiedDate();
+        this.authorities = user.getAuthorities().stream()
+            .map(Authority::getName)
+            .collect(Collectors.toSet());
+        <%_ } else { _%>
+        this.authorities = user.getAuthorities();
         <%_ } _%>
-        this.authorities = authorities;
     }
 
     public <% if (databaseType === 'mongodb' || databaseType === 'cassandra') { %>String<% } else { %>Long<% } %> getId() {
@@ -138,17 +129,33 @@ public class UserDTO {
         return firstName;
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
     public String getLastName() {
         return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
         return email;
     }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
     <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
     <%_ } _%>
 
@@ -156,8 +163,16 @@ public class UserDTO {
         return activated;
     }
 
+    public void setActivated(boolean activated) {
+        this.activated = activated;
+    }
+
     public String getLangKey() {
         return langKey;
+    }
+
+    public void setLangKey(String langKey) {
+        this.langKey = langKey;
     }
     <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
 
@@ -165,12 +180,24 @@ public class UserDTO {
         return createdBy;
     }
 
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
     public Instant getCreatedDate() {
         return createdDate;
     }
 
+    public void setCreatedDate(Instant createdDate) {
+        this.createdDate = createdDate;
+    }
+
     public String getLastModifiedBy() {
         return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(String lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
     }
 
     public Instant getLastModifiedDate() {
@@ -184,6 +211,10 @@ public class UserDTO {
 
     public Set<String> getAuthorities() {
         return authorities;
+    }
+
+    public void setAuthorities(Set<String> authorities) {
+        this.authorities = authorities;
     }
 
     @Override
