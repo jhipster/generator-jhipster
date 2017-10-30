@@ -226,17 +226,17 @@ describe('JDLUnaryOption', () => {
   describe('#toString', () => {
     it('stringifies the option', () => {
       const option = new JDLUnaryOption({ name: UNARY_OPTIONS.SKIP_CLIENT });
-      expect(option.toString()).to.eq(`${UNARY_OPTIONS.SKIP_CLIENT} for *`);
+      expect(option.toString()).to.eq(`${UNARY_OPTIONS.SKIP_CLIENT} *`);
       option.addEntity(new JDLEntity({ name: 'D' }));
-      expect(option.toString()).to.eq(`${UNARY_OPTIONS.SKIP_CLIENT} for D`);
+      expect(option.toString()).to.eq(`${UNARY_OPTIONS.SKIP_CLIENT} D`);
       option.addEntity(new JDLEntity({ name: 'E' }));
       option.addEntity(new JDLEntity({ name: 'F' }));
-      expect(option.toString()).to.eq(`${UNARY_OPTIONS.SKIP_CLIENT} for D, E, F`);
+      expect(option.toString()).to.eq(`${UNARY_OPTIONS.SKIP_CLIENT} D, E, F`);
       option.excludeEntity(new JDLEntity({ name: 'A' }));
-      expect(option.toString()).to.eq(`${UNARY_OPTIONS.SKIP_CLIENT} for D, E, F except A`);
+      expect(option.toString()).to.eq(`${UNARY_OPTIONS.SKIP_CLIENT} D, E, F except A`);
       option.excludeEntity(new JDLEntity({ name: 'B' }));
       option.excludeEntity(new JDLEntity({ name: 'C' }));
-      expect(option.toString()).to.eq(`${UNARY_OPTIONS.SKIP_CLIENT} for D, E, F except A, B, C`);
+      expect(option.toString()).to.eq(`${UNARY_OPTIONS.SKIP_CLIENT} D, E, F except A, B, C`);
     });
   });
 });

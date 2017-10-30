@@ -2,4 +2,4 @@ entity A
 entity B
 entity C
 
-noFluentMethod for * except A
+noFluentMethod * except A
