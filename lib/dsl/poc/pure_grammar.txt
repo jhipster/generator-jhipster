@@ -122,7 +122,7 @@ exclusionSub
 
 // noFluentMethod
 noFluentMethod
-  = NO_FLUENT_METHOD  FOR  subNoFluentMethod  exclusion?
+  = NO_FLUENT_METHOD  subNoFluentMethod  exclusion?
 
 subNoFluentMethod
   = ENTITY_NAME  ','  subNoFluentMethod
@@ -152,7 +152,7 @@ searchEngineDecl
 
 // skipClient option
 noClientDecl
-  = SKIP_CLIENT  FOR  subNoClientDecl  exclusion?
+  = SKIP_CLIENT  subNoClientDecl  exclusion?
 
 subNoClientDecl
   = ENTITY_NAME  ','  subNoClientDecl
@@ -163,7 +163,7 @@ subNoClientDecl
 
 // skipServer option
 noServerDecl
-  = SKIP_SERVER  FOR  subNoServerDecl  exclusion?
+  = SKIP_SERVER  subNoServerDecl  exclusion?
 
 subNoServerDecl
   = ENTITY_NAME  ','  subNoServerDecl
