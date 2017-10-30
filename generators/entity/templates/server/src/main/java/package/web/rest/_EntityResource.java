@@ -38,9 +38,6 @@ import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;
 import <%=packageName%>.service.dto.<%= entityClass %>Criteria;
 import <%=packageName%>.service.<%= entityClass %>QueryService;
 <%_ } _%>
-<%_ if (pagination !== 'no') { _%>
-import io.swagger.annotations.ApiParam;
-<%_ } _%>
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
