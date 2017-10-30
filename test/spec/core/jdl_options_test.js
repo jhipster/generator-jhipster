@@ -90,7 +90,7 @@ describe('JDLOptions', () => {
       }));
     });
     it('stringifies the options', () => {
-      expect(options.toString()).to.eq('skipClient for A, B, C, J except M, N, O\nskipServer for D');
+      expect(options.toString()).to.eq('skipClient A, B, C, J except M, N, O\nskipServer D');
     });
   });
 });

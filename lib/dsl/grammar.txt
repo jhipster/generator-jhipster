@@ -191,7 +191,7 @@ exclusionSub
 
 // noFluentMethod
 noFluentMethod
-  = NO_FLUENT_METHOD SPACE FOR SPACE+ decl:subNoFluentMethod SPACE* ex:exclusion? SPACE*  {
+  = NO_FLUENT_METHOD SPACE+ decl:subNoFluentMethod SPACE* ex:exclusion? SPACE*  {
     addUniqueElements(parsed.noFluentMethod.list, decl);
     if (ex) {
       addUniqueElements(parsed.noFluentMethod.excluded, ex);
@@ -266,7 +266,7 @@ searchEngineDecl
 
 // skipClient option
 noClientDecl
-  = SKIP_CLIENT SPACE FOR SPACE* decl:subNoClientDecl SPACE* ex:exclusion? SPACE*  {
+  = SKIP_CLIENT SPACE+ decl:subNoClientDecl SPACE* ex:exclusion? SPACE*  {
     addUniqueElements(parsed.noClient.list, decl);
     if (ex) {
       addUniqueElements(parsed.noClient.excluded, ex);
@@ -283,7 +283,7 @@ subNoClientDecl
 
 // skipServer option
 noServerDecl
-  = SKIP_SERVER SPACE FOR SPACE* decl:subNoServerDecl SPACE* ex:exclusion? SPACE*  {
+  = SKIP_SERVER SPACE+ decl:subNoServerDecl SPACE* ex:exclusion? SPACE*  {
     addUniqueElements(parsed.noServer.list, decl);
     if (ex) {
       addUniqueElements(parsed.noServer.excluded, ex);
@@ -377,7 +377,6 @@ MANY_TO_MANY = 'ManyToMany'
 // Options
 ALL = 'all'
 STAR = '*'
-FOR = 'for'
 WITH = 'with'
 EXCEPT = 'except'
 NO_FLUENT_METHOD = 'noFluentMethod'
