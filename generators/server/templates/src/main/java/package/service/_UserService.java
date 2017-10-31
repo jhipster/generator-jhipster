@@ -189,14 +189,14 @@ public class UserService {
             });
     }
 
-    public User registerUser(ManagedUserVM userDTO) {
+    public User registerUser(UserDTO userDTO, String password) {
 
         User newUser = new User();<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
         Authority authority = authorityRepository.findOne(AuthoritiesConstants.USER);
         Set<Authority> authorities = new HashSet<>();<% } %><% if (databaseType === 'cassandra') { %>
         newUser.setId(UUID.randomUUID().toString());
         Set<String> authorities = new HashSet<>();<% } %>
-        String encryptedPassword = passwordEncoder.encode(userDTO.getPassword());
+        String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(userDTO.getLogin());
         // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
