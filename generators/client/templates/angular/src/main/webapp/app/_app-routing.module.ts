@@ -27,7 +27,8 @@ const LAYOUT_ROUTES = [
 
 @NgModule({
     imports: [
-        RouterModule.forRoot(LAYOUT_ROUTES, { useHash: true })
+        RouterModule.forRoot(LAYOUT_ROUTES, { useHash: true <%_ if (authenticationType === 'oauth2') { _%>, initialNavigation: false<%_ } _%> })
+
     ],
     exports: [
         RouterModule

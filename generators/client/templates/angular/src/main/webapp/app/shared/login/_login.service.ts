@@ -17,6 +17,9 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
+<%_ if (authenticationType === 'oauth2') { _%>
+import { OAuthService } from 'angular-oauth2-oidc';
+<%_ } _%>
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
 <%_ } _%>
@@ -42,16 +45,16 @@ export class LoginService {
         <%_ if (websocket === 'spring-websocket') { _%>
         private trackerService: <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
+        <%_ if (authenticationType === 'oauth2') { _%>
+        private oauthService: OAuthService,
+        <%_ } else { _%>
         private authServerProvider: AuthServerProvider
+        <%_ } _%>
     ) {}
 
     <%_ if (authenticationType === 'oauth2') { _%>
     login() {
-        let port = (location.port ? ':' + location.port : '');
-        if (port === ':9000') {
-            port = ':<%= serverPort %>';
-        }
-        location.href = '//' + location.hostname + port + '/login';
+        this.oauthService.initImplicitFlow();
     }
     <%_ } else { _%>
     login(credentials, callback?) {
@@ -89,15 +92,17 @@ export class LoginService {
     <%_ } _%>
 
     logout() {
-        <%_ if (authenticationType === 'uaa') { _%>
+        <%_ if (authenticationType === 'oauth2') { _%>
+        if (this.oauthService.hasValidAccessToken()) {
+            this.oauthService.logOut();
+        }
+        this.principal.authenticate(null);
+        <%_ } else { _%>
         if (this.principal.isAuthenticated()) {
             this.authServerProvider.logout().subscribe(() => this.principal.authenticate(null));
         } else {
             this.principal.authenticate(null);
         }
-        <%_ } else { _%>
-        this.authServerProvider.logout().subscribe();
-        this.principal.authenticate(null);
         <%_ } _%>
     }
 }

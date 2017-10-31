@@ -19,6 +19,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, NavigationEnd } from '@angular/router';
 
+<%_ if (authenticationType === 'oauth2') { _%>
+import { OAuthService } from 'angular-oauth2-oidc';
+import { JwksValidationHandler } from 'angular-oauth2-oidc';
+import { authConfig } from '../../blocks/config/auth.config';
+<%_ } _%>
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageHelper } from '../../shared';
 <%_ } else { _%>
@@ -32,13 +37,30 @@ import { Title } from '@angular/platform-browser';
 export class <%=jhiPrefixCapitalized%>MainComponent implements OnInit {
 
     constructor(
+        <%_ if (authenticationType === 'oauth2') { _%>
+        private oauthService: OAuthService,
+        <%_ } _%>
         <%_ if (enableTranslation) { _%>
         private jhiLanguageHelper: JhiLanguageHelper,
         <%_ } else { _%>
         private titleService: Title,
         <%_ } _%>
         private router: Router
-    ) {}
+    ) {
+        <%_ if (authenticationType === 'oauth2') { _%>
+        this.oauthService.configure(authConfig);
+        this.oauthService.tokenValidationHandler = new JwksValidationHandler();
+        this.oauthService.loadDiscoveryDocument().then((discoveryDocument) => {
+            this.oauthService.tryLogin().then(() => {
+                this.router.navigate(['/']);
+            });
+        });
+
+        this.oauthService.events.filter(e => e.type == 'token_expires').subscribe(e => {
+          this.oauthService.silentRefresh();
+        });
+        <%_ } _%>
+    }
 
     private getPageTitle(routeSnapshot: ActivatedRouteSnapshot) {
         let title: string = (routeSnapshot.data && routeSnapshot.data['pageTitle']) ? routeSnapshot.data['pageTitle'] : '<%= angularAppName %>';

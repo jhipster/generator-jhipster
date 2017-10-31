@@ -26,7 +26,7 @@ import { LoginService } from '../../shared/login/login.service';
 import { Router } from '@angular/router';
     <%_ } _%>
 <%_ } _%>
-<%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
+<%_ if (authenticationType === 'session') { _%>
 import { AuthServerProvider } from '../../shared/auth/auth-session.service';
 import { StateStorageService } from '../../shared/auth/state-storage.service';
     <%_ if (authenticationType === 'session') { _%>
@@ -48,8 +48,7 @@ export class AuthExpiredInterceptor extends JhiHttpInterceptor {
         super();
     }
 <%_ } else if (authenticationType === 'oauth2') { _%>
-    constructor(private injector: Injector,
-        private stateStorageService: StateStorageService) {
+    constructor(private injector: Injector) {
         super();
     }
 <%_ } _%>
@@ -72,7 +71,7 @@ export class AuthExpiredInterceptor extends JhiHttpInterceptor {
             return Observable.throw(error);
         });
     }
-<%_ } else if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
+<%_ } else if (authenticationType === 'session') { _%>
 
     responseIntercept(observable: Observable<Response>): Observable<Response> {
         return <Observable<Response>> observable.catch((error) => {
@@ -99,5 +98,17 @@ export class AuthExpiredInterceptor extends JhiHttpInterceptor {
             return Observable.throw(error);
         });
     }
+<%_ } else if (authenticationType === 'oauth2') { _%>
+
+    responseIntercept(observable: Observable<Response>): Observable<Response> {
+        return <Observable<Response>> observable.catch((error) => {
+            if (error.status === 401) {
+                const loginService: LoginService = this.injector.get(LoginService);
+                loginService.logout();
+            }
+            return Observable.throw(error);
+        });
+    }
 <%_ } _%>
+
 }

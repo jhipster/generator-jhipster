@@ -150,6 +150,14 @@ const files = {
             templates: [
                 'blocks/interceptor/_auth.interceptor.ts'
             ]
+        },
+        {
+            condition: generator => generator.authenticationType === 'oauth2',
+            path: ANGULAR_DIR,
+            templates: [
+                'blocks/interceptor/_auth.interceptor.ts',
+                'blocks/config/_auth.config.ts'
+            ]
         }
     ],
     angularMain: [
