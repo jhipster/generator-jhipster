@@ -115,3 +115,9 @@ volumes:
     prometheus_data: {}
     grafana_data: {}
 <%_ } _%>
+<%_ if (authenticationType === 'oauth2') { _%>
+    keycloak:
+        extends:
+            file: keycloak.yml
+            service: keycloak
+<%_ } _%>

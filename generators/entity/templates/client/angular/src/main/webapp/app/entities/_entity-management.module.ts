@@ -52,7 +52,7 @@ const ENTITY_STATES = [
               if (key === 'User') { _%>
         <%= angularXAppName %>AdminModule,
         <%_ }}); _%>
-        RouterModule.forRoot(ENTITY_STATES, { useHash: true })
+        RouterModule.forChild(ENTITY_STATES)
     ],
     declarations: [
         <%= entityAngularName %>Component,

@@ -45,7 +45,7 @@ Object.keys(SUB_GENERATORS).forEach((generator) => {
 });
 
 const done = () => {
-    logger.info('Execution complete');
+    logger.info(chalk.green.bold('Congratulations, JHipster execution is complete!'));
 };
 
 /**

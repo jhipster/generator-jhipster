@@ -39,7 +39,10 @@ plugins {
     id "org.sonarqube" version "2.5"
     id "net.ltgt.apt" version "0.11"
     id "io.spring.dependency-management" version "1.0.3.RELEASE"
-     <%_ if (!skipClient) { _%>
+    <%_ if (gatlingTests) { _%>
+    id "com.github.lkishalmi.gatling" version "0.7.1"
+    <%_ } _%>
+    <%_ if (!skipClient) { _%>
     id "com.moowork.node" version "1.2.0"
     <%_ } _%>
     //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
@@ -124,17 +127,18 @@ if (OperatingSystem.current().isWindows()) {
 }
 
 test {
-    include '**/*UnitTest*'
-    include '**/*IntTest*'
+    exclude '**/CucumberTest*'
 
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
     reports.html.enabled = false
 }
-<%_ if (cucumberTests) { _%>
 
+<%_ if (cucumberTests) { _%>
 task cucumberTest(type: Test) {
+    description = "Execute cucumber BDD tests."
+    group = "verification"
     include '**/CucumberTest*'
 
     // uncomment if the tests reports are not generated
@@ -143,19 +147,18 @@ task cucumberTest(type: Test) {
     reports.html.enabled = false
 }
 
-test.finalizedBy(cucumberTest)
+check.dependsOn cucumberTest
 <%_ } _%>
-
 task testReport(type: TestReport) {
     destinationDir = file("$buildDir/reports/tests")
     reportOn test
-    <%_ if (cucumberTests) { _%>
-    reportOn cucumberTest
-    <%_ } _%>
 }
-<%_ if (cucumberTests) { _%>
 
-cucumberTest.finalizedBy(testReport)
+<%_ if (cucumberTests) { _%>
+task cucumberTestReport(type: TestReport) {
+    destinationDir = file("$buildDir/reports/tests")
+    reportOn cucumberTest
+}
 <%_ } _%>
 
 <%_ if (!skipClient) { _%>
@@ -319,7 +322,7 @@ dependencies {
     <%_ } _%>
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"
     compile "org.zalando:problem-spring-web:${problem_spring_web_version}"
-    <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
+    <%_ if (databaseType === 'cassandra') { _%>
     compile "com.google.guava:guava:18.0"
     compile "com.datastax.cassandra:cassandra-driver-extras:" + dependencyManagement.managedVersions["com.datastax.cassandra:cassandra-driver-core"]
     compile "com.datastax.cassandra:cassandra-driver-mapping"
@@ -360,6 +363,9 @@ dependencies {
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
     compile "org.springframework.security.oauth:spring-security-oauth2:${spring_security_oauth2_version}"
+        <%_ if (applicationType === 'gateway' || applicationType === 'microservice') { _%>
+    compile "org.springframework.security:spring-security-jwt"
+        <%_ } _%>
     <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>
     compile "io.jsonwebtoken:jjwt:${jjwt_version}"
@@ -426,9 +432,6 @@ dependencies {
     testCompile "de.flapdoodle.embed:de.flapdoodle.embed.mongo"
     <%_ } _%>
     testCompile "org.hamcrest:hamcrest-library"
-    <%_ if (gatlingTests) { _%>
-    testCompile "io.gatling.highcharts:gatling-charts-highcharts:${gatling_version}"
-    <%_ } _%>
     <%_ if (devDatabaseType !== 'h2Disk' && devDatabaseType !== 'h2Memory') { _%>
     testCompile "com.h2database:h2"
     <%_ } _%>
@@ -443,10 +446,6 @@ dependencies {
         exclude group: 'com.vaadin.external.google', module: 'android-json'
     }
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
-}
-
-clean {
-    delete "target"
 }
 
 task cleanResources(type: Delete) {

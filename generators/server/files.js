@@ -119,7 +119,7 @@ function writeFiles() {
 
             if (this.authenticationType === 'oauth2') {
                 this.template(`${DOCKER_DIR}_keycloak.yml`, `${DOCKER_DIR}keycloak.yml`);
-                this.copy(`${DOCKER_DIR}config/realm-config/jhipster-realm.json`, `${DOCKER_DIR}realm-config/jhipster-realm.json`);
+                this.template(`${DOCKER_DIR}config/realm-config/_jhipster-realm.json`, `${DOCKER_DIR}realm-config/jhipster-realm.json`);
                 this.copy(`${DOCKER_DIR}config/realm-config/jhipster-users-0.json`, `${DOCKER_DIR}realm-config/jhipster-users-0.json`);
             }
         },
@@ -194,7 +194,7 @@ function writeFiles() {
 
             if (this.databaseType === 'mongodb') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/dbmigrations/_package-info.java`, `${javaDir}config/dbmigrations/package-info.java`);
-                if (!this.skipUserManagement || this.authenticationType === 'oauth2') {
+                if (!this.skipUserManagement) {
                     this.template(`${SERVER_MAIN_SRC_DIR}package/config/dbmigrations/_InitialSetupMigration.java`, `${javaDir}config/dbmigrations/InitialSetupMigration.java`);
                 }
             }
@@ -236,7 +236,7 @@ function writeFiles() {
             }
 
             /* Skip the code below for --skip-user-management */
-            if (this.skipUserManagement && this.authenticationType !== 'oauth2') return;
+            if (this.skipUserManagement && (this.applicationType !== 'monolith' || this.authenticationType !== 'oauth2')) return;
 
             if (this.applicationType === 'uaa') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/_UaaWebSecurityConfiguration.java`, `${javaDir}config/UaaWebSecurityConfiguration.java`);
@@ -314,7 +314,7 @@ function writeFiles() {
         },
 
         writeServerMicroserviceFiles() {
-            if (this.applicationType !== 'microservice' && !(this.applicationType === 'gateway' && this.authenticationType === 'uaa')) return;
+            if (this.applicationType !== 'microservice' && !(this.applicationType === 'gateway' && (this.authenticationType === 'uaa' || this.authenticationType === 'oauth2'))) return;
 
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_MicroserviceSecurityConfiguration.java`, `${javaDir}config/MicroserviceSecurityConfiguration.java`);
             if (this.authenticationType === 'uaa') {
@@ -327,6 +327,23 @@ function writeFiles() {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/_FeignConfiguration.java`, `${javaDir}config/FeignConfiguration.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/client/_AuthorizedFeignClient.java`, `${javaDir}client/AuthorizedFeignClient.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/client/_OAuth2InterceptedFeignConfiguration.java`, `${javaDir}client/OAuth2InterceptedFeignConfiguration.java`);
+            }
+            if (this.authenticationType === 'oauth2') {
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_AuthorizationHeaderUtil.java`, `${javaDir}/security/oauth2/AuthorizationHeaderUtil.java`);
+                if (this.hibernateCache !== 'no') {
+                    this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_CachedUserInfoTokenServices.java`, `${javaDir}/security/oauth2/CachedUserInfoTokenServices.java`);
+                }
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_SimplePrincipalExtractor.java`, `${javaDir}/security/oauth2/SimplePrincipalExtractor.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_SimpleAuthoritiesExtractor.java`, `${javaDir}/security/oauth2/SimpleAuthoritiesExtractor.java`);
+            }
+            if (this.authenticationType === 'oauth2' && (this.applicationType === 'microservice' || this.applicationType === 'gateway')) {
+                this.template(`${SERVER_MAIN_SRC_DIR}package/config/_FeignConfiguration.java`, `${javaDir}config/FeignConfiguration.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/client/_AuthorizedFeignClient.java`, `${javaDir}client/AuthorizedFeignClient.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/client/_OAuth2InterceptedFeignConfiguration.java`, `${javaDir}client/OAuth2InterceptedFeignConfiguration.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/client/_TokenRelayRequestInterceptor.java`, `${javaDir}client/TokenRelayRequestInterceptor.java`);
+            }
+            if (this.authenticationType === 'oauth2' && this.applicationType === 'gateway') {
+                this.template(`${SERVER_MAIN_SRC_DIR}package/config/_OAuth2SsoConfiguration.java`, `${javaDir}config/OAuth2SsoConfiguration.java`);
             }
             this.copy(`${SERVER_MAIN_RES_DIR}static/microservices_index.html`, `${SERVER_MAIN_RES_DIR}static/index.html`);
         },
@@ -425,6 +442,8 @@ function writeFiles() {
 
         writeServerJavaWebErrorFiles() {
             // error handler code - server side
+            this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/errors/_package-info.java`, `${javaDir}web/rest/errors/package-info.java`);
+            this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/errors/_InternalServerErrorException.java`, `${javaDir}web/rest/errors/InternalServerErrorException.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/errors/_BadRequestAlertException.java`, `${javaDir}web/rest/errors/BadRequestAlertException.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/errors/_CustomParameterizedException.java`, `${javaDir}web/rest/errors/CustomParameterizedException.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/errors/_EmailAlreadyUsedException.java`, `${javaDir}web/rest/errors/EmailAlreadyUsedException.java`);
@@ -524,8 +543,48 @@ function writeFiles() {
         },
 
         writeJavaUserManagementFiles() {
-            if (this.skipUserManagement && this.authenticationType !== 'oauth2') return;
-            // user management related files
+            const testDir = this.testDir;
+
+            if (this.skipUserManagement) {
+                if (this.authenticationType === 'oauth2') {
+                    this.copy(`${SERVER_MAIN_RES_DIR}config/liquibase/authorities.csv`, `${SERVER_MAIN_RES_DIR}config/liquibase/authorities.csv`);
+                    this.copy(`${SERVER_MAIN_RES_DIR}config/liquibase/users_authorities.csv`, `${SERVER_MAIN_RES_DIR}config/liquibase/users_authorities.csv`);
+                    this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_AccountResource.java`, `${javaDir}web/rest/AccountResource.java`);
+                    this.template(`${SERVER_MAIN_SRC_DIR}package/domain/_User.java`, `${javaDir}domain/User.java`);
+                    this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_AccountResourceIntTest.java`, `${testDir}web/rest/AccountResourceIntTest.java`);
+                    this.template(`${SERVER_TEST_SRC_DIR}package/security/_SecurityUtilsUnitTest.java`, `${testDir}security/SecurityUtilsUnitTest.java`);
+
+                    if (this.applicationType === 'monolith') {
+                        this.template(`${SERVER_MAIN_RES_DIR}config/liquibase/users.csv`, `${SERVER_MAIN_RES_DIR}config/liquibase/users.csv`);
+                        this.template(`${SERVER_MAIN_SRC_DIR}package/domain/_Authority.java`, `${javaDir}domain/Authority.java`);
+                        this.template(`${SERVER_MAIN_SRC_DIR}package/service/_UserService.java`, `${javaDir}service/UserService.java`);
+                        this.template(`${SERVER_MAIN_SRC_DIR}package/service/dto/_package-info.java`, `${javaDir}service/dto/package-info.java`);
+                        this.template(`${SERVER_MAIN_SRC_DIR}package/service/dto/_UserDTO.java`, `${javaDir}service/dto/UserDTO.java`);
+                        this.template(`${SERVER_MAIN_SRC_DIR}package/service/mapper/_package-info.java`, `${javaDir}service/mapper/package-info.java`);
+                        this.template(`${SERVER_MAIN_SRC_DIR}package/service/mapper/_UserMapper.java`, `${javaDir}service/mapper/UserMapper.java`);
+                        this.template(`${SERVER_MAIN_SRC_DIR}package/repository/_UserRepository.java`, `${javaDir}repository/UserRepository.java`);
+                        this.template(`${SERVER_MAIN_SRC_DIR}package/repository/_AuthorityRepository.java`, `${javaDir}repository/AuthorityRepository.java`);
+                        this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_UserResource.java`, `${javaDir}web/rest/UserResource.java`);
+                        if (this.searchEngine === 'elasticsearch') {
+                            this.template(`${SERVER_MAIN_SRC_DIR}package/repository/search/_UserSearchRepository.java`, `${javaDir}repository/search/UserSearchRepository.java`);
+                        }
+                        this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/vm/_ManagedUserVM.java`, `${javaDir}web/rest/vm/ManagedUserVM.java`);
+                        this.template(`${SERVER_TEST_SRC_DIR}package/service/_UserServiceIntTest.java`, `${testDir}service/UserServiceIntTest.java`);
+                        this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_UserResourceIntTest.java`, `${testDir}web/rest/UserResourceIntTest.java`);
+
+                        if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
+                            this.template(`${SERVER_MAIN_SRC_DIR}package/repository/_CustomAuditEventRepository.java`, `${javaDir}repository/CustomAuditEventRepository.java`);
+                            this.template(`${SERVER_MAIN_SRC_DIR}package/repository/_AuthorityRepository.java`, `${javaDir}repository/AuthorityRepository.java`);
+                            this.template(`${SERVER_MAIN_SRC_DIR}package/repository/_PersistenceAuditEventRepository.java`, `${javaDir}repository/PersistenceAuditEventRepository.java`);
+                            this.template(`${SERVER_MAIN_SRC_DIR}package/service/_AuditEventService.java`, `${javaDir}service/AuditEventService.java`);
+                            this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_AuditResource.java`, `${javaDir}web/rest/AuditResource.java`);
+                            this.template(`${SERVER_TEST_SRC_DIR}package/repository/_CustomAuditEventRepositoryIntTest.java`, `${testDir}repository/CustomAuditEventRepositoryIntTest.java`);
+                            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_AuditResourceIntTest.java`, `${testDir}web/rest/AuditResourceIntTest.java`);
+                        }
+                    }
+                }
+                return;
+            }
 
             /* User management resources files */
             if (this.databaseType === 'sql') {
@@ -535,13 +594,11 @@ function writeFiles() {
             }
 
             // Email templates
-            if (this.authenticationType !== 'oauth2') {
-                this.copy(`${SERVER_MAIN_RES_DIR}mails/activationEmail.html`, `${SERVER_MAIN_RES_DIR}mails/activationEmail.html`);
-                this.copy(`${SERVER_MAIN_RES_DIR}mails/creationEmail.html`, `${SERVER_MAIN_RES_DIR}mails/creationEmail.html`);
-                this.copy(`${SERVER_MAIN_RES_DIR}mails/passwordResetEmail.html`, `${SERVER_MAIN_RES_DIR}mails/passwordResetEmail.html`);
-                if (this.enableSocialSignIn) {
-                    this.copy(`${SERVER_MAIN_RES_DIR}mails/socialRegistrationValidationEmail.html`, `${SERVER_MAIN_RES_DIR}mails/socialRegistrationValidationEmail.html`);
-                }
+            this.copy(`${SERVER_MAIN_RES_DIR}mails/activationEmail.html`, `${SERVER_MAIN_RES_DIR}mails/activationEmail.html`);
+            this.copy(`${SERVER_MAIN_RES_DIR}mails/creationEmail.html`, `${SERVER_MAIN_RES_DIR}mails/creationEmail.html`);
+            this.copy(`${SERVER_MAIN_RES_DIR}mails/passwordResetEmail.html`, `${SERVER_MAIN_RES_DIR}mails/passwordResetEmail.html`);
+            if (this.enableSocialSignIn) {
+                this.copy(`${SERVER_MAIN_RES_DIR}mails/socialRegistrationValidationEmail.html`, `${SERVER_MAIN_RES_DIR}mails/socialRegistrationValidationEmail.html`);
             }
 
             /* User management java domain files */
@@ -552,9 +609,6 @@ function writeFiles() {
             }
 
             /* User management java repo files */
-            if (this.searchEngine === 'elasticsearch') {
-                this.template(`${SERVER_MAIN_SRC_DIR}package/repository/search/_UserSearchRepository.java`, `${javaDir}repository/search/UserSearchRepository.java`);
-            }
             if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/repository/_CustomAuditEventRepository.java`, `${javaDir}repository/CustomAuditEventRepository.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/repository/_AuthorityRepository.java`, `${javaDir}repository/AuthorityRepository.java`);
@@ -573,12 +627,12 @@ function writeFiles() {
             this.template(`${SERVER_MAIN_SRC_DIR}package/service/dto/_package-info.java`, `${javaDir}service/dto/package-info.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/service/dto/_UserDTO.java`, `${javaDir}service/dto/UserDTO.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/vm/_ManagedUserVM.java`, `${javaDir}web/rest/vm/ManagedUserVM.java`);
-            this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_UserResource.java`, `${javaDir}web/rest/UserResource.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_AccountResource.java`, `${javaDir}web/rest/AccountResource.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_UserResource.java`, `${javaDir}web/rest/UserResource.java`);
-            if (this.authenticationType !== 'oauth2') {
-                this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/vm/_KeyAndPasswordVM.java`, `${javaDir}web/rest/vm/KeyAndPasswordVM.java`);
+            if (this.searchEngine === 'elasticsearch') {
+                this.template(`${SERVER_MAIN_SRC_DIR}package/repository/search/_UserSearchRepository.java`, `${javaDir}repository/search/UserSearchRepository.java`);
             }
+            this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/vm/_KeyAndPasswordVM.java`, `${javaDir}web/rest/vm/KeyAndPasswordVM.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/service/mapper/_package-info.java`, `${javaDir}service/mapper/package-info.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/service/mapper/_UserMapper.java`, `${javaDir}service/mapper/UserMapper.java`);
 
@@ -587,8 +641,6 @@ function writeFiles() {
             }
 
             /* User management java test files */
-            const testDir = this.testDir;
-
             this.copy(`${SERVER_TEST_RES_DIR}mails/_testEmail.html`, `${SERVER_TEST_RES_DIR}mails/testEmail.html`);
             this.copy(`${SERVER_TEST_RES_DIR}i18n/_messages_en.properties`, `${SERVER_TEST_RES_DIR}i18n/messages_en.properties`);
 
@@ -614,7 +666,7 @@ function writeFiles() {
                 this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_AuditResourceIntTest.java`, `${testDir}web/rest/AuditResourceIntTest.java`);
             }
             // Cucumber user management tests
-            if (this.cucumberTests && this.authenticationType !== 'oauth2') {
+            if (this.cucumberTests) {
                 this.template(`${SERVER_TEST_SRC_DIR}package/cucumber/stepdefs/_UserStepDefs.java`, `${testDir}cucumber/stepdefs/UserStepDefs.java`);
                 this.copy('src/test/features/user/user.feature', 'src/test/features/user/user.feature');
             }

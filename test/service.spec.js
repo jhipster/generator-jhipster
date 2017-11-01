@@ -11,7 +11,7 @@ const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 describe('JHipster generator service', () => {
     describe('creates service without interface', () => {
         beforeEach((done) => {
-            helpers.run(require.resolve('../generators/service'))
+            helpers.run(require.resolve('../generators/spring-service'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                 })
@@ -37,7 +37,7 @@ describe('JHipster generator service', () => {
 
     describe('creates service with interface', () => {
         beforeEach((done) => {
-            helpers.run(require.resolve('../generators/service'))
+            helpers.run(require.resolve('../generators/spring-service'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                 })

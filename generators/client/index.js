@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
 const BaseGenerator = require('../generator-base');
@@ -26,8 +27,7 @@ const writeReactFiles = require('./files-react').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 
-/* Constants used throughout */
-const QUESTIONS = constants.CLIENT_QUESTIONS;
+let useBlueprint;
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -112,43 +112,13 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
 
-        this.skipServer = this.configOptions.skipServer || this.config.get('skipServer');
-        this.skipUserManagement = this.configOptions.skipUserManagement || this.options['skip-user-management'] || this.config.get('skipUserManagement');
-        this.authenticationType = this.options.auth || this.configOptions.authenticationType || this.config.get('authenticationType');
-        if (this.authenticationType === 'oauth2') {
-            this.skipUserManagement = true;
-        }
-        const uaaBaseName = this.options.uaaBaseName || this.configOptions.uaaBaseName || this.options['uaa-base-name'] || this.config.get('uaaBaseName');
-        if (this.options.auth === 'uaa' && _.isNil(uaaBaseName)) {
-            this.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
-        }
-        this.uaaBaseName = uaaBaseName;
-
-        this.buildTool = this.options.build;
-        this.websocket = this.options.websocket;
-        this.devDatabaseType = this.options.db || this.configOptions.devDatabaseType || this.config.get('devDatabaseType');
-        this.prodDatabaseType = this.options.db || this.configOptions.prodDatabaseType || this.config.get('prodDatabaseType');
-        this.databaseType = this.getDBTypeFromDBValue(this.options.db) || this.configOptions.databaseType || this.config.get('databaseType');
-        this.enableSocialSignIn = this.options.social || this.config.get('enableSocialSignIn');
-        this.searchEngine = this.options['search-engine'] || this.config.get('searchEngine');
-        this.hibernateCache = this.options['hb-cache'] || this.config.get('hibernateCache');
-        this.otherModules = this.configOptions.otherModules || [];
-        this.jhiPrefix = this.configOptions.jhiPrefix || this.config.get('jhiPrefix') || this.options['jhi-prefix'];
-        this.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
-        this.testFrameworks = [];
-
-        if (this.options.protractor) this.testFrameworks.push('protractor');
-
-        this.currentQuestion = this.configOptions.lastQuestion ? this.configOptions.lastQuestion : 0;
-        this.totalQuestions = this.configOptions.totalQuestions ? this.configOptions.totalQuestions : QUESTIONS;
-        this.baseName = this.configOptions.baseName;
-        this.logo = this.configOptions.logo;
-        this.useYarn = this.configOptions.useYarn = !this.options.npm;
-        this.clientPackageManager = this.configOptions.clientPackageManager;
-        this.isDebugEnabled = this.configOptions.isDebugEnabled || this.options.debug;
+        this.setupClientOptions(this);
+        const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
+        useBlueprint = this.composeBlueprint(blueprint, 'client'); // use global variable since getters dont have access to instance property
     }
 
     get initializing() {
+        if (useBlueprint) return;
         return {
             displayLogo() {
                 if (this.logo) {
@@ -220,6 +190,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get prompting() {
+        if (useBlueprint) return;
         return {
             askForModuleName: prompts.askForModuleName,
             askForClient: prompts.askForClient,
@@ -227,8 +198,6 @@ module.exports = class extends BaseGenerator {
             askFori18n: prompts.askFori18n,
 
             setSharedConfigOptions() {
-                this.configOptions.lastQuestion = this.currentQuestion;
-                this.configOptions.totalQuestions = this.totalQuestions;
                 this.configOptions.clientFramework = this.clientFramework;
                 this.configOptions.useSass = this.useSass;
             }
@@ -236,6 +205,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get configuring() {
+        if (useBlueprint) return;
         return {
             insight() {
                 const insight = this.insight();
@@ -288,6 +258,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get default() {
+        if (useBlueprint) return;
         return {
             getSharedConfigOptions() {
                 if (this.configOptions.hibernateCache) {
@@ -352,9 +323,6 @@ module.exports = class extends BaseGenerator {
                 } else {
                     this.BUILD_DIR = 'build/';
                 }
-
-                this.styleSheetExt = this.useSass ? 'scss' : 'css';
-
                 this.DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
             },
 
@@ -367,17 +335,19 @@ module.exports = class extends BaseGenerator {
     }
 
     writing() {
+        if (useBlueprint) return;
         switch (this.clientFramework) {
-        case 'angular1':
-            return writeAngularJsFiles.call(this);
-        case 'react':
-            return writeReactFiles.call(this);
-        default:
-            return writeAngularFiles.call(this);
+            case 'angular1':
+                return writeAngularJsFiles.call(this);
+            case 'react':
+                return writeReactFiles.call(this);
+            default:
+                return writeAngularFiles.call(this);
         }
     }
 
     install() {
+        if (useBlueprint) return;
         let logMsg =
             `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install`)}`;
 
@@ -412,6 +382,7 @@ module.exports = class extends BaseGenerator {
     }
 
     end() {
+        if (useBlueprint) return;
         this.log(chalk.green.bold('\nClient application generated successfully.\n'));
 
         let logMsg =

@@ -16,23 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Route } from '@angular/router';
 
-import { navbarRoute } from '../app.route';
-import { errorRoute } from './';
+import { NavbarComponent } from './navbar.component';
 
-const LAYOUT_ROUTES = [
-    navbarRoute,
-    ...errorRoute
-];
-
-@NgModule({
-    imports: [
-        RouterModule.forRoot(LAYOUT_ROUTES, { useHash: true })
-    ],
-    exports: [
-        RouterModule
-    ]
-})
-export class LayoutRoutingModule {}
+export const navbarRoute: Route = {
+    path: '',
+    component: NavbarComponent,
+    outlet: 'navbar'
+};

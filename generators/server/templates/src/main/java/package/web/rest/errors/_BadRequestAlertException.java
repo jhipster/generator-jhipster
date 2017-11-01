@@ -26,8 +26,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BadRequestAlertException extends AbstractThrowableProblem {
-    private String entityName;
-    private String errorKey;
+
+    private final String entityName;
+
+    private final String errorKey;
 
     public BadRequestAlertException(String defaultMessage, String entityName, String errorKey) {
         this(ErrorConstants.DEFAULT_TYPE, defaultMessage, entityName, errorKey);
@@ -53,5 +55,4 @@ public class BadRequestAlertException extends AbstractThrowableProblem {
         parameters.put("params", entityName);
         return parameters;
     }
-
 }

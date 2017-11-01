@@ -18,6 +18,73 @@
 -%>
 package <%=packageName%>.domain;
 
+<%_ if (authenticationType === 'oauth2' && applicationType !== 'monolith') { _%>
+import java.util.Set;
+
+public class User {
+
+    private final String login;
+
+    private final String firstName;
+
+    private final String lastName;
+
+    private final String email;
+
+    private final String langKey;
+
+    private final String imageUrl;
+
+    private final boolean activated;
+
+    private final Set<String> authorities;
+
+    public User(String login, String firstName, String lastName, String email, String langKey,
+        String imageUrl, boolean activated, Set<String> authorities) {
+
+        this.login = login;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.langKey = langKey;
+        this.imageUrl = imageUrl;
+        this.activated = activated;
+        this.authorities = authorities;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getLangKey() {
+        return langKey;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public boolean isActivated() {
+        return activated;
+    }
+
+    public Set<String> getAuthorities() {
+        return authorities;
+    }
+}
+<%_ } else { _%>
 import <%=packageName%>.config.Constants;
 <% if (databaseType === 'cassandra') { %>
 import com.datastax.driver.mapping.annotations.*;<% } %>
@@ -54,11 +121,11 @@ import java.time.Instant;
  * A user.
  */<% if (databaseType === 'sql') { %>
 @Entity
-@Table(name = "jhi_user")<% } %>
+@Table(name = "<%= jhiTablePrefix %>_user")<% } %>
 <%_ if (hibernateCache !== 'no' && databaseType === 'sql') { if (hibernateCache === 'infinispan') { _%>
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <%_ } else { _%>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE) <%_ } } _%><% if (databaseType === 'mongodb') { %>
-@Document(collection = "jhi_user")<% } %><% if (databaseType === 'cassandra') { %>
+@Document(collection = "<%= jhiTablePrefix %>_user")<% } %><% if (databaseType === 'cassandra') { %>
 @Table(name = "user")<% } %><% if (searchEngine === 'elasticsearch') { %>
 @Document(indexName = "user")<% } %>
 public class User<% if (databaseType === 'sql' || databaseType === 'mongodb') { %> extends AbstractAuditingEntity<% } %> implements Serializable {
@@ -158,7 +225,7 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb') { 
     @JsonIgnore<% if (databaseType === 'sql') { %>
     @ManyToMany
     @JoinTable(
-        name = "jhi_user_authority",
+        name = "<%= jhiTablePrefix %>_user_authority",
         joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
     <%_ if (hibernateCache !== 'no') { if (hibernateCache === 'infinispan') { _%>
@@ -330,3 +397,4 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb') { 
             "}";
     }
 }
+<%_ } _%>

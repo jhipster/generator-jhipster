@@ -26,6 +26,7 @@ import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.jwt.TokenProvider;
 import <%=packageName%>.web.rest.vm.LoginVM;
+import <%=packageName%>.web.rest.errors.ExceptionTranslator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,6 +48,10 @@ import java.util.UUID;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
 
 /**
  * Test class for the UserJWTController REST controller.
@@ -69,12 +74,16 @@ public class UserJWTControllerIntTest <% if (databaseType === 'cassandra') { %>e
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private ExceptionTranslator exceptionTranslator;
+
     private MockMvc mockMvc;
 
     @Before
     public void setup() {
         UserJWTController userJWTController = new UserJWTController(tokenProvider, authenticationManager);
         this.mockMvc = MockMvcBuilders.standaloneSetup(userJWTController)
+            .setControllerAdvice(exceptionTranslator)
             .build();
     }
 
@@ -106,7 +115,9 @@ public class UserJWTControllerIntTest <% if (databaseType === 'cassandra') { %>e
             .content(TestUtil.convertObjectToJsonBytes(login)))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id_token").isString())
-            .andExpect(jsonPath("$.id_token").isNotEmpty());
+            .andExpect(jsonPath("$.id_token").isNotEmpty())
+            .andExpect(header().string("Authorization", not(nullValue())))
+            .andExpect(header().string("Authorization", not(isEmptyString())));
     }
 
     @Test
@@ -138,7 +149,9 @@ public class UserJWTControllerIntTest <% if (databaseType === 'cassandra') { %>e
             .content(TestUtil.convertObjectToJsonBytes(login)))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id_token").isString())
-            .andExpect(jsonPath("$.id_token").isNotEmpty());
+            .andExpect(jsonPath("$.id_token").isNotEmpty())
+            .andExpect(header().string("Authorization", not(nullValue())))
+            .andExpect(header().string("Authorization", not(isEmptyString())));
     }
 
     @Test
@@ -153,6 +166,7 @@ public class UserJWTControllerIntTest <% if (databaseType === 'cassandra') { %>e
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(login)))
             .andExpect(status().isUnauthorized())
-            .andExpect(jsonPath("$.id_token").doesNotExist());
+            .andExpect(jsonPath("$.id_token").doesNotExist())
+            .andExpect(header().doesNotExist("Authorization"));
     }
 }

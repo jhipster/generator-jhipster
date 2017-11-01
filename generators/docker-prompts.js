@@ -187,7 +187,6 @@ function askForApps() {
             this.portsToBind = this.monolithicNb + this.gatewayNb;
             this.appConfigs.push(config);
         });
-
         done();
     });
 }

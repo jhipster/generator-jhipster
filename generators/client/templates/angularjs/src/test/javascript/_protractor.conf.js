@@ -22,16 +22,21 @@ const HtmlScreenshotReporter = require("protractor-jasmine2-screenshot-reporter"
 const JasmineReporters = require('jasmine-reporters');
 
 const prefix = '<%= TEST_SRC_DIR %>'.replace(/[^/]+/g,'..');
+<%_ if (clientPackageManager === 'npm') { _%>
+const seleniumFolder = 'node_modules/protractor/node_modules/webdriver-manager/selenium/';
+<%_ } else { _%>
+const seleniumFolder = 'node_modules/webdriver-manager/selenium/';
+<%_ } _%>
 
 var webbrowserDriver= '';
 if (os.platform() === 'win32') {
-    webbrowserDriver = prefix + 'node_modules/webdriver-manager/selenium/chromedriver_2.33.exe';
+    webbrowserDriver = prefix + seleniumFolder + 'chromedriver_2.33.exe';
 } else {
-    webbrowserDriver = prefix + 'node_modules/webdriver-manager/selenium/chromedriver_2.33';
+    webbrowserDriver = prefix + seleniumFolder + 'chromedriver_2.33';
 }
 
 exports.config = {
-    seleniumServerJar: prefix + 'node_modules/webdriver-manager/selenium/selenium-server-standalone-3.6.0.jar',
+    seleniumServerJar: prefix + seleniumFolder + 'selenium-server-standalone-3.6.0.jar',
     chromeDriver: webbrowserDriver,
     allScriptsTimeout: 20000,
 

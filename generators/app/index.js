@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
+const _ = require('lodash');
 const BaseGenerator = require('../generator-base');
 const cleanup = require('../cleanup');
 const prompts = require('./prompts');
 const packagejs = require('../../package.json');
-const constants = require('../generator-constants');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -103,14 +103,19 @@ module.exports = class extends BaseGenerator {
             type: String
         });
 
-        this.currentQuestion = 0;
-        this.totalQuestions = constants.QUESTIONS;
+        // This adds support for a `--blueprint` flag which can be used to specify a blueprint to use for generation
+        this.option('blueprint', {
+            desc: '[BETA] Specify a generator blueprint to use for the sub generators',
+            type: String
+        });
+
         this.skipClient = this.configOptions.skipClient = this.options['skip-client'] || this.config.get('skipClient');
         this.skipServer = this.configOptions.skipServer = this.options['skip-server'] || this.config.get('skipServer');
         this.skipUserManagement = this.configOptions.skipUserManagement = this.options['skip-user-management'] || this.config.get('skipUserManagement');
-        this.jhiPrefix = this.configOptions.jhiPrefix || this.config.get('jhiPrefix') || this.options['jhi-prefix'];
+        this.jhiPrefix = this.configOptions.jhiPrefix = this.config.get('jhiPrefix') || this.options['jhi-prefix'];
         this.withEntities = this.options['with-entities'];
         this.skipChecks = this.options['skip-checks'];
+        this.blueprint = this.configOptions.blueprint = this.options.blueprint || this.config.get('blueprint');
         this.useYarn = this.configOptions.useYarn = !this.options.npm;
         this.isDebugEnabled = this.configOptions.isDebugEnabled = this.options.debug;
     }
@@ -121,27 +126,33 @@ module.exports = class extends BaseGenerator {
                 this.printJHipsterLogo();
             },
 
-            checkJava() {
+            validateBlueprint() {
+                if (this.blueprint) {
+                    this.checkBlueprint(this.blueprint);
+                }
+            },
+
+            validateJava() {
                 this.checkJava();
             },
 
-            checkNode() {
+            validateNode() {
                 this.checkNode();
             },
 
-            checkGit() {
+            validateGit() {
                 this.checkGit();
             },
 
-            checkGitConnection() {
+            validateGitConnection() {
                 this.checkGitConnection();
             },
 
-            checkYarn() {
+            validateYarn() {
                 this.checkYarn();
             },
 
-            checkForNewVersion() {
+            checkForNewJHVersion() {
                 if (!this.skipChecks) {
                     this.checkForNewVersion();
                 }
@@ -203,7 +214,6 @@ module.exports = class extends BaseGenerator {
                 this.configOptions.baseName = this.baseName;
                 this.configOptions.logo = false;
                 this.configOptions.otherModules = this.otherModules;
-                this.configOptions.lastQuestion = this.currentQuestion;
                 this.generatorType = 'app';
                 if (this.applicationType === 'microservice') {
                     this.skipClient = true;
@@ -265,8 +275,6 @@ module.exports = class extends BaseGenerator {
             askForMoreModules: prompts.askForMoreModules,
 
             setSharedConfigOptions() {
-                this.configOptions.lastQuestion = this.currentQuestion;
-                this.configOptions.totalQuestions = this.totalQuestions;
                 this.configOptions.testFrameworks = this.testFrameworks;
                 this.configOptions.enableTranslation = this.enableTranslation;
                 this.configOptions.nativeLanguage = this.nativeLanguage;
@@ -295,15 +303,16 @@ module.exports = class extends BaseGenerator {
                 this.config.set('testFrameworks', this.testFrameworks);
                 this.config.set('jhiPrefix', this.jhiPrefix);
                 this.config.set('otherModules', this.otherModules);
-                if (this.skipClient) this.config.set('skipClient', true);
-                if (this.skipServer) this.config.set('skipServer', true);
-                if (this.skipUserManagement) this.config.set('skipUserManagement', true);
                 this.config.set('enableTranslation', this.enableTranslation);
                 if (this.enableTranslation) {
                     this.config.set('nativeLanguage', this.nativeLanguage);
                     this.config.set('languages', this.languages);
                 }
                 this.config.set('clientPackageManager', this.clientPackageManager);
+                this.blueprint && this.config.set('blueprint', this.blueprint);
+                this.skipClient && this.config.set('skipClient', true);
+                this.skipServer && this.config.set('skipServer', true);
+                this.skipUserManagement && this.config.set('skipUserManagement', true);
             }
         };
     }
@@ -339,6 +348,7 @@ module.exports = class extends BaseGenerator {
                     }
                     // Generate a package.json file containing the current version
                     // of the generator as dependency
+                    this.dasherizedBaseName = _.kebabCase(this.baseName);
                     this.template('_skipClientApp.package.json', 'package.json');
 
                     if (!this.options['skip-install']) {
@@ -355,13 +365,11 @@ module.exports = class extends BaseGenerator {
                 if (!this.options['skip-git']) {
                     this.isGitInstalled((code) => {
                         if (code === 0) {
-                            this.gitExec('rev-parse --is-inside-work-tree', (err, gitDir) => {
+                            this.gitExec('rev-parse --is-inside-work-tree', { trace: false }, (err, gitDir) => {
                                 if (!gitDir) {
-                                    this.gitExec('init', () => {
-                                        this.log('git init successful');
-                                        this.gitExec('add -A', () => {
-                                            this.log('git add successful');
-                                            this.gitExec(`commit -am "Initial application generated by JHipster-${this.jhipsterVersion}"`, () => this.log('git commit successful'));
+                                    this.gitExec('init', { trace: false }, () => {
+                                        this.gitExec('add -A', { trace: false }, () => {
+                                            this.gitExec(`commit -am "Initial application generated by JHipster-${this.jhipsterVersion}"`, { trace: false }, () => this.log(chalk.green.bold('Application successfully committed to Git.')));
                                         });
                                     });
                                 }

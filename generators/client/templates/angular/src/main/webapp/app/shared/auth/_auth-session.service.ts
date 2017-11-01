@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { Http, Response, Headers } from '@angular/http';
+import { Http, Response<% if (authenticationType !== 'oauth2') { %>, Headers<% } %> } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 <%_ if (authenticationType !== 'uaa') { _%>
 import { SERVER_API_URL } from '../../app.constants';
@@ -29,6 +29,7 @@ export class AuthServerProvider {
     constructor(
         private http: Http
     ) {}
+<%_ if (authenticationType !== 'oauth2') { _%>
 
     login(credentials): Observable<any> {
         const data = 'j_username=' + encodeURIComponent(credentials.username) +
@@ -40,6 +41,7 @@ export class AuthServerProvider {
 
         return this.http.post(SERVER_API_URL + 'api/authentication', data, { headers });
     }
+<%_ } _%>
 
     logout(): Observable<any> {
         // logout from the server
