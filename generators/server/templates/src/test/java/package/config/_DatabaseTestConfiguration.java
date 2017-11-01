@@ -79,7 +79,7 @@ public class DatabaseTestConfiguration extends AbstractCouchbaseConfiguration {
         if (couchbaseContainer != null) {
             return couchbaseContainer;
         }
-        couchbaseContainer = new CouchbaseContainer()
+        couchbaseContainer = new CouchbaseContainer("<%= DOCKER_COUCHBASE %>")
             .withNewBucket(DefaultBucketSettings.builder()
                 .name(name)
                 .type(BucketType.COUCHBASE)
