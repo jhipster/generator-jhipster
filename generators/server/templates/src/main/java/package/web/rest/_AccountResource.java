@@ -92,7 +92,7 @@ public class AccountResource {
                 return userService.getUserFromAuthentication((OAuth2Authentication) principal);
             } else {
                 // Allow Spring Security Test to be used to mock users in the database
-                return Optional.ofNullable(userService.getUserWithAuthorities())
+                return userService.getUserWithAuthorities()
                     .map(UserDTO::new)
                     .orElseThrow(() -> new InternalServerErrorException("User could not be found"));
             }
@@ -247,7 +247,7 @@ public class AccountResource {
     @GetMapping("/account")
     @Timed
     public UserDTO getAccount() {
-        return Optional.ofNullable(userService.getUserWithAuthorities())
+        return userService.getUserWithAuthorities()
             .map(UserDTO::new)
             .orElseThrow(() -> new InternalServerErrorException("User could not be found"));
     }
@@ -262,7 +262,7 @@ public class AccountResource {
     @PostMapping("/account")
     @Timed
     public void saveAccount(@Valid @RequestBody UserDTO userDTO) {
-        final String userLogin = SecurityUtils.getCurrentUserLogin();
+        final String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new InternalServerErrorException("Current user login not found"));
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
             throw new EmailAlreadyUsedException();
@@ -300,8 +300,9 @@ public class AccountResource {
     @Timed
     public List<PersistentToken> getCurrentSessions() {
         return persistentTokenRepository.findByUser(
-            userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin())
-                .orElseThrow(() -> new InternalServerErrorException("User could not be found"))
+            userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()
+                .orElseThrow(() -> new InternalServerErrorException("Current user login not found")))
+                    .orElseThrow(() -> new InternalServerErrorException("User could not be found"))
         );
     }
 
@@ -325,11 +326,14 @@ public class AccountResource {
     @Timed
     public void invalidateSession(@PathVariable String series) throws UnsupportedEncodingException {
         String decodedSeries = URLDecoder.decode(series, "UTF-8");
-        userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(u ->
-            persistentTokenRepository.findByUser(u).stream()
-                .filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries))<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
-                .findAny().ifPresent(t -> persistentTokenRepository.delete(decodedSeries)));<% } else { %>
-                .findAny().ifPresent(persistentTokenRepository::delete));<% } %>
+        SecurityUtils.getCurrentUserLogin()
+            .flatMap(userRepository::findOneByLogin)
+            .ifPresent(u ->
+                persistentTokenRepository.findByUser(u).stream()
+                    .filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries))<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+                    .findAny().ifPresent(t -> persistentTokenRepository.delete(decodedSeries)));<% } else { %>
+                    .findAny().ifPresent(persistentTokenRepository::delete)
+            );<% } %>
     }<% } %>
 
     /**
