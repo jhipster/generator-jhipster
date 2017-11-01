@@ -340,12 +340,12 @@ module.exports = class extends BaseGenerator {
     writing() {
         if (useBlueprint) return;
         switch (this.clientFramework) {
-            case 'angular1':
-                return writeAngularJsFiles.call(this);
-            case 'react':
-                return writeReactFiles.call(this);
-            default:
-                return writeAngularFiles.call(this);
+        case 'angular1':
+            return writeAngularJsFiles.call(this);
+        case 'react':
+            return writeReactFiles.call(this);
+        default:
+            return writeAngularFiles.call(this);
         }
     }
 
