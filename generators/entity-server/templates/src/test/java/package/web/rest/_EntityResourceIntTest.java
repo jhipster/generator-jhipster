@@ -676,7 +676,10 @@ _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
         <%= entityClass %> <%= entityInstance %>Es = <%= entityInstance %>SearchRepository.findOne(test<%= entityClass %>.getId());
-        assertThat(<%= entityInstance %>Es).isEqualToComparingFieldByField(test<%= entityClass %>);
+        <%_ for (idx in fields) { if (fields[idx].fieldType === 'ZonedDateTime') { _%>
+        assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>());
+        <%_ }} _%>
+        assertThat(<%= entityInstance %>Es).isEqualToIgnoringGivenFields(test<%= entityClass %> <%_ for (idx in fields) { if (fields[idx].fieldType === 'ZonedDateTime') { _%>, "<%= fields[idx].fieldName %>"  <%_ }} _%>);
         <%_ } _%>
     }
 
