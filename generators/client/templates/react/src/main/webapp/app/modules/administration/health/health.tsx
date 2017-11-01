@@ -24,21 +24,6 @@ export class HealthPage extends React.Component<IHealthPageProps, any> {
       healthObject: {},
       showModal: false
     };
-    this.handleClose = this.handleClose.bind(this);
-  }
-
-  getSystemHealthInfo(name, healthObject) {
-    healthObject.name = name;
-    this.setState({
-      showModal: true,
-      healthObject
-    });
-  }
-
-  handleClose() {
-    this.setState({
-        showModal: false
-    });
   }
 
   componentDidMount() {
@@ -49,6 +34,20 @@ export class HealthPage extends React.Component<IHealthPageProps, any> {
     if (!this.props.isFetching) {
       this.props.systemHealth();
     }
+  }
+
+  getSystemHealthInfo = (name, healthObject) => () => {
+    healthObject.name = name;
+    this.setState({
+      showModal: true,
+      healthObject
+    });
+  }
+
+  handleClose = () => {
+    this.setState({
+        showModal: false
+    });
   }
 
   renderModal = () => {
@@ -86,7 +85,7 @@ export class HealthPage extends React.Component<IHealthPageProps, any> {
                   <tr key={configPropIndex}>
                     <td>{configPropKey}</td>
                     <td><button type="button" className={data[configPropKey].status !== 'UP' ? 'btn btn-danger' : 'btn btn-success'}>{data[configPropKey].status}</button></td>
-                    <td><a onClick={() => this.getSystemHealthInfo(configPropKey, data[configPropKey])}><FaEye /></a></td>
+                    <td><a onClick={this.getSystemHealthInfo(configPropKey, data[configPropKey])}><FaEye /></a></td>
                   </tr>
                 : null
                 )}
