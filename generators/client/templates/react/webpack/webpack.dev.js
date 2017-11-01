@@ -1,3 +1,21 @@
+<%#
+ Copyright 2013-2017 the original author or authors from the JHipster project.
+
+    This file is part of the JHipster project, see http://www.jhipster.tech/
+    for more information.
+
+        Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+limitations under the License.
+-%>
 const webpack = require('webpack');
 const writeFilePlugin = require('write-file-webpack-plugin');
 const webpackMerge = require('webpack-merge');
@@ -53,27 +71,37 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     },
     hot: true,
     contentBase: './<%= BUILD_DIR %>www',
-    proxy: [
-      {
-        context: [
-          '/api', '/management', '/swagger-resources', '/v2/api-docs', '/h2-console'
-        ],
-        target: 'http://127.0.0.1:8080',
-        secure: false
-      }, {
-        context: ['/websocket'],
-        target: 'ws://127.0.0.1:8080',
-        ws: true
-      }
-    ]
+    proxy: [{
+      context: [<% if (authenticationType === 'uaa') { %>
+        '/<%= uaaBaseName.toLowerCase() %>',<% } %>
+        /* jhipster-needle-add-entity-to-webpack - JHipster will add entity api paths here */
+        '/api',
+        '/management',
+        '/swagger-resources',
+        '/v2/api-docs',
+        '/h2-console',
+        '/auth'
+      ],
+      target: 'http://127.0.0.1:<%= serverPort %>',
+      secure: false
+    }<% if (websocket === 'spring-websocket') { %>,{
+      context: [
+        '/websocket'
+      ],
+      target: 'ws://127.0.0.1:<%= serverPort %>',
+      ws: true
+    }<% } %>],
+    watchOptions: {
+      ignored: /node_modules/
+    }
   },
   plugins: [
     new BrowserSyncPlugin({
       host: 'localhost',
-      port: 8000,
+      port: 9000,
       proxy: {
-        target: 'http://localhost:9060',
-        ws: true
+        target: 'http://localhost:9060'<% if (websocket === 'spring-websocket') { %>,
+        ws: true<% } %>
       }
     }, {
         reload: false
