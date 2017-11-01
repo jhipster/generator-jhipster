@@ -24,21 +24,6 @@ export class MetricsPage extends React.Component<any, any> {
       healthObject: {},
       showModal: false
     };
-
-    this.getStats = this.getStats.bind(this);
-    this.handleClose = this.handleClose.bind(this);
-  }
-
-  getThreadDump() {
-    this.setState({
-      showModal: true
-    });
-  }
-
-  handleClose() {
-    this.setState({
-        showModal: false
-    });
   }
 
   componentDidMount() {
@@ -50,6 +35,18 @@ export class MetricsPage extends React.Component<any, any> {
     if (!this.props.isFetching) {
       this.props.systemMetrics();
     }
+  }
+
+  getThreadDump = () => {
+    this.setState({
+      showModal: true
+    });
+  }
+
+  handleClose = () => {
+    this.setState({
+        showModal: false
+    });
   }
 
   getStats = metrics => {
@@ -124,7 +121,7 @@ export class MetricsPage extends React.Component<any, any> {
             </Progress>
           </div>
           <div className="col-md-4">
-            <b>Threads</b> (Total: {metrics.gauges['jvm.threads.count'].value}) <FaEye onClick={() => this.getThreadDump()}/>
+            <b>Threads</b> (Total: {metrics.gauges['jvm.threads.count'].value}) <FaEye onClick={this.getThreadDump}/>
             <p><span>Runnable</span> {metrics.gauges['jvm.threads.runnable.count'].value}</p>
             <Progress animated min="0" value={metrics.gauges['jvm.threads.runnable.count'].value} max={metrics.gauges['jvm.threads.count'].value} color="success">
             {Math.round((metrics.gauges['jvm.threads.runnable.count'].value * 100) / metrics.gauges['jvm.threads.count'].value) || 0}%</Progress>
