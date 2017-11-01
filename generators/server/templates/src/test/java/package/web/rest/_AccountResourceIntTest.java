@@ -95,7 +95,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
         MockitoAnnotations.initMocks(this);
         AccountResource accountUserMockResource =
         <%_ if (applicationType === 'monolith') { _%>
-            new AccountResource(userRepository, userService);
+            new AccountResource(userService);
         <%_ } else { _%>
             new AccountResource();
         <%_ } _%>
