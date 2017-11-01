@@ -40,6 +40,10 @@ function askForClient(meta) {
         {
             value: 'angularX',
             name: 'Angular 4'
+        },
+        {
+            value: 'react',
+            name: '[BETA] React'
         }
     ];
 
@@ -47,11 +51,6 @@ function askForClient(meta) {
         choices.push({
             value: 'angular1',
             name: 'AngularJS 1.x'
-        });
-    } else {
-        choices.push({
-            value: 'react',
-            name: '[BETA] React'
         });
     }
 
