@@ -19,7 +19,9 @@
 
 package io.github.jhipster.config.metrics;
 
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MarkerFactory;
 import org.springframework.boot.actuate.metrics.Metric;
 import org.springframework.boot.actuate.metrics.writer.Delta;
 import org.springframework.boot.actuate.metrics.writer.MetricWriter;
@@ -30,6 +32,10 @@ import org.springframework.boot.actuate.metrics.writer.MetricWriter;
  * Output Spring Boot metrics to logs, using the same format as Dropwizard's Sfl4jReporter.
  */
 public class SpectatorLogMetricWriter implements MetricWriter {
+
+    public static final String SET_MESSAGE = "type=GAUGE, hystrix_type={}, service={}, method={}, name={}, value={}";
+
+    public static final String INCREMENT_MESSAGE = "type=COUNTER, name={}, count={}";
 
     private final Logger log = LoggerFactory.getLogger("metrics");
 
@@ -64,14 +70,13 @@ public class SpectatorLogMetricWriter implements MetricWriter {
             }
         }
 
-        log.info(MarkerFactory.getMarker("metrics"), "type=GAUGE, hystrix_type={}, service={}, method={}, name={}, " +
-                "value={}", hystrixType, serviceName,
+        log.info(MarkerFactory.getMarker("metrics"), SET_MESSAGE, hystrixType, serviceName,
             methodName, metricName, metric.getValue());
     }
 
     @Override
     public void increment(Delta<?> metric) {
-        log.info(MarkerFactory.getMarker("metrics"), "type=COUNTER, name={}, count={}", metric.getName(), metric
+        log.info(MarkerFactory.getMarker("metrics"), INCREMENT_MESSAGE, metric.getName(), metric
             .getValue());
     }
 
