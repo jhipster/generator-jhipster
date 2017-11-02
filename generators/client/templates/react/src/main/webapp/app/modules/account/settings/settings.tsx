@@ -2,7 +2,9 @@
 import * as React from 'react';
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 import { connect } from 'react-redux';
+<%_ if (enableTranslation) { _%>
 import { locales } from '../../../config/translation';
+<%_ } _%>
 
 import { getSession } from '../../../reducers/authentication';
 import { saveAccountSettings } from '../../../reducers/account';
@@ -88,13 +90,15 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
                 <Input type="text" className="form-control" value={account.email} id="email" name="email" placeholder="Email"
                 onChange={this.setEmail}/>
               </FormGroup>
+              <%_ if (enableTranslation) { _%>
               <FormGroup>
                 <Label for="langKey">Language</Label>
                 <Input type="select" id="langKey" name="langKey" className="form-control">
                   {locales.map(lang => <option value={lang} key={lang}>{lang}</option>)}
                 </Input>
               </FormGroup>
-               <Button type="submit" color="success" onClick={this.saveSettings}>Save</Button>
+              <%_ } _%>
+              <Button type="submit" color="success" onClick={this.saveSettings}>Save</Button>
             </Form>
       </div>
     );

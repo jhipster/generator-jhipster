@@ -6,16 +6,22 @@ import { Card } from 'reactstrap';
 import { HashRouter as Router } from 'react-router-dom';
 
 import { getSession, logout } from './reducers/authentication';
+<%_ if (enableTranslation) { _%>
 import { setLocale } from './reducers/locale';
+<%_ } _%>
 import Header from './shared/layout/header/header';
 import Footer from './shared/layout/footer/footer';
 import AppRoutes from './routes';
 export interface IAppProps {
   location: any;
   isAuthenticated?: boolean;
+  <%_ if (enableTranslation) { _%>
   currentLocale: string;
+  <%_ } _%>
   getSession: Function;
+  <%_ if (enableTranslation) { _%>
   setLocale: Function;
+  <%_ } _%>
   logout: Function;
   getSystemProperties: Function;
   routes: any;
@@ -35,10 +41,10 @@ export class App extends React.Component<IAppProps, {}> {
     return (
       <Router>
         <div className="app-container" style={{ paddingTop }}>
-          <Header
+          <Header <%_ if (enableTranslation) { _%>
             currentLocale={this.props.currentLocale}
             onLocaleChange={this.props.setLocale}
-          />
+          <%_ } _%>/>
           <div className="container-fluid view-container" id="app-view-container">
             <Card className="jh-card">
               <AppRoutes/>
@@ -53,10 +59,12 @@ export class App extends React.Component<IAppProps, {}> {
 
 const mapStateToProps = storeState => ({
   isAuthenticated: storeState.authentication.isAuthenticated,
+  <%_ if (enableTranslation) { _%>
   currentLocale: storeState.locale.currentLocale,
+  <%_ } _%>
   embedded: storeState.layout.embedded
 });
 
-const mapDispatchToProps = { getSession, setLocale, logout };
+const mapDispatchToProps = { getSession, <% if (enableTranslation) { %>setLocale, <% } %>logout };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
