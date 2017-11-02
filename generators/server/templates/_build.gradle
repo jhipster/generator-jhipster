@@ -320,7 +320,9 @@ dependencies {
     <%_ if (websocket === 'spring-websocket') { _%>
     compile "org.springframework.boot:spring-boot-starter-websocket"
     <%_ } _%>
-    compile "org.springframework.boot:spring-boot-starter-thymeleaf"
+    compile ("org.springframework.boot:spring-boot-starter-thymeleaf") {
+        exclude module: 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+    }
     compile "org.zalando:problem-spring-web:${problem_spring_web_version}"
     <%_ if (databaseType === 'cassandra') { _%>
     compile "com.google.guava:guava:18.0"
@@ -406,7 +408,6 @@ dependencies {
     compile "org.springframework.social:spring-social-facebook"
     compile "org.springframework.social:spring-social-twitter"
     <%_ } _%>
-    testCompile "org.awaitility:awaitility:${awaitility_version}"
     testCompile "com.jayway.jsonpath:json-path"
     <%_ if (databaseType === 'cassandra') { _%>
     testCompile ("org.cassandraunit:cassandra-unit-spring:${cassandra_unit_spring_version}") {
