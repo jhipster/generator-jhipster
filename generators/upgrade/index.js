@@ -123,6 +123,15 @@ module.exports = class extends BaseGenerator {
 
     get configuring() {
         return {
+
+            assertJHipsterProject() {
+                const done = this.async();
+                if (!this.getJhipsterAppConfig()) {
+                    this.error('Current directory does not contain a JHipster project.');
+                }
+                done();
+            },
+
             assertGitPresent() {
                 const done = this.async();
                 this.isGitInstalled((code) => {

@@ -124,13 +124,11 @@ public class <%= serviceClassName %> extends QueryService<<%= entityClass %>> {
             });
 
             relationships.forEach((relationship) => {
-                const relationshipType = relationship.relationshipType;
-                if (relationshipType == 'many-to-one' || relationshipType == 'one-to-one') { _%>
+                const metamodelFieldName = (relationship.relationshipType === 'many-to-many' || relationship.relationshipType === 'one-to-many') ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName; _%>
             if (criteria.get<%= relationship.relationshipNameCapitalized %>Id() != null) {
-                specification = specification.and(buildReferringEntitySpecification(criteria.get<%= relationship.relationshipNameCapitalized %>Id(), <%= entityClass %>_.<%= relationship.relationshipFieldName %>, <%= relationship.otherEntityNameCapitalized %>_.id));
+                specification = specification.and(buildReferringEntitySpecification(criteria.get<%= relationship.relationshipNameCapitalized %>Id(), <%= entityClass %>_.<%= metamodelFieldName %>, <%= relationship.otherEntityNameCapitalized %>_.id));
             }
-            <%_    } // if relationshipType=...
-            }); // forEach
+            <%_ }); // forEach
         _%>
         }
         return specification;

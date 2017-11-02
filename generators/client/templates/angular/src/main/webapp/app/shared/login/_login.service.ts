@@ -42,9 +42,7 @@ export class LoginService {
         <%_ if (websocket === 'spring-websocket') { _%>
         private trackerService: <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
-        <%_ if (!skipServer) { _%>
         private authServerProvider: AuthServerProvider
-        <%_ } _%>
     ) {}
 
     <%_ if (authenticationType === 'oauth2') { _%>
@@ -91,7 +89,15 @@ export class LoginService {
     <%_ } _%>
 
     logout() {
+        <%_ if (authenticationType === 'uaa') { _%>
+        if (this.principal.isAuthenticated()) {
+            this.authServerProvider.logout().subscribe(() => this.principal.authenticate(null));
+        } else {
+            this.principal.authenticate(null);
+        }
+        <%_ } else { _%>
         this.authServerProvider.logout().subscribe();
         this.principal.authenticate(null);
+        <%_ } _%>
     }
 }

@@ -54,7 +54,7 @@ function askForApplicationType(meta) {
     const PROMPT = {
         type: 'list',
         name: 'applicationType',
-        message: response => this.getNumberedQuestion('Which *type* of application would you like to create?', true),
+        message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
         choices: [
             {
                 value: DEFAULT_APPTYPE,
@@ -93,13 +93,9 @@ function askForModuleName() {
     if (this.existingProject) return;
 
     this.askModuleName(this);
-    this.configOptions.lastQuestion = this.currentQuestion;
-    this.configOptions.totalQuestions = this.totalQuestions;
 }
 
 function askFori18n() {
-    this.currentQuestion = this.configOptions.lastQuestion;
-    this.totalQuestions = this.configOptions.totalQuestions;
     if (this.skipI18n || this.existingProject) return;
     this.aski18n(this);
 }
@@ -123,7 +119,7 @@ function askForTestOpts(meta) {
     const PROMPT = {
         type: 'checkbox',
         name: 'testFrameworks',
-        message: response => this.getNumberedQuestion('Besides JUnit and Karma, which testing frameworks would you like to use?', true),
+        message: 'Besides JUnit and Karma, which testing frameworks would you like to use?',
         choices,
         default: defaultChoice
     };
@@ -147,7 +143,7 @@ function askForMoreModules() {
     this.prompt({
         type: 'confirm',
         name: 'installModules',
-        message: response => this.getNumberedQuestion('Would you like to install other generators from the JHipster Marketplace?', true),
+        message: 'Would you like to install other generators from the JHipster Marketplace?',
         default: false
     }).then((prompt) => {
         if (prompt.installModules) {

@@ -44,12 +44,10 @@ import io.github.jhipster.service.filter.ZonedDateTimeFilter;<% } %>
   });
   relationships.forEach((relationship) => {
     const relationshipType = relationship.relationshipType;
-    if (relationshipType === 'many-to-one' || relationshipType === 'one-to-one') {
-      filterVariables.push({ filterType : referenceFilterType,
-            name: relationship.relationshipFieldName + 'Id',
-            type: relationshipType,
-            fieldInJavaBeanMethod: relationship.relationshipNameCapitalized + 'Id' });
-    }
+    filterVariables.push({ filterType : referenceFilterType,
+        name: relationship.relationshipFieldName + 'Id',
+        type: relationshipType,
+        fieldInJavaBeanMethod: relationship.relationshipNameCapitalized + 'Id' });
   });
 _%>
 

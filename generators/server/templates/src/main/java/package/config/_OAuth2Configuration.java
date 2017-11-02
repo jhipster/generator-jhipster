@@ -19,6 +19,7 @@
 package <%=packageName%>.config;
 
 import <%=packageName%>.security.OAuth2AuthenticationSuccessHandler;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

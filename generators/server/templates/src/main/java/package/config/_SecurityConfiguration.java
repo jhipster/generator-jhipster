@@ -76,8 +76,8 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 import javax.annotation.PostConstruct;
 <% } %>
-@Import(SecurityProblemSupport.class)
 @Configuration
+@Import(SecurityProblemSupport.class)
 <%_ if (authenticationType === 'oauth2') { _%>
 @EnableOAuth2Sso
 <%_ } else { _%>
@@ -85,8 +85,8 @@ import javax.annotation.PostConstruct;
 <%_ } _%>
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
     <%_ if (authenticationType !== 'oauth2') { _%>
+
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     private final UserDetailsService userDetailsService;
@@ -178,11 +178,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             <%_ } _%>
             .antMatchers("/i18n/**")
             .antMatchers("/content/**")
-            .antMatchers("/swagger-ui/index.html")<% if (authenticationType !== 'oauth2') { %>
-            .antMatchers("/api/register")
-            .antMatchers("/api/activate")
-            .antMatchers("/api/account/reset-password/init")
-            .antMatchers("/api/account/reset-password/finish")<% } %>
+            .antMatchers("/swagger-ui/index.html")
             .antMatchers("/test/**")<% if (devDatabaseType !== 'h2Disk' && devDatabaseType !== 'h2Memory') { %>;<% } else { %>
             .antMatchers("/h2-console/**");<% } %>
     }<% if (authenticationType === 'session' || authenticationType === 'jwt' || authenticationType === 'oauth2') { %>

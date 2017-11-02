@@ -27,7 +27,7 @@ import <%=packageName%>.domain.<%= entityClass %>;
 <%_ for (idx in relationships) { // import entities in required relationships
         const relationshipValidate = relationships[idx].relationshipValidate;
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
-        if (relationshipValidate !== null && relationshipValidate === true) { _%>
+        if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering) { _%>
 import <%=packageName%>.domain.<%= otherEntityNameCapitalized %>;
 <%_ } } _%>
 import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (service !== 'no') { %>
@@ -69,6 +69,7 @@ import java.util.List;<% if (databaseType === 'cassandra') { %>
 import java.util.UUID;<% } %>
 <% if (fieldsContainZonedDateTime === true) { %>
 import static <%=packageName%>.web.rest.TestUtil.sameInstant;<% } %>
+import static <%=packageName%>.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -291,6 +292,7 @@ _%>
         this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter).build();
     }
 
@@ -547,7 +549,34 @@ _%>
 
 <%_         } _%>
 <%_     }); _%>
+<%_ relationships.forEach((relationship) => { _%>
 
+    @Test<% if (databaseType === 'sql') { %>
+    @Transactional<% } %>
+    public void getAll<%= entityClassPlural %>By<%= relationship.relationshipNameCapitalized %>IsEqualToSomething() throws Exception {
+        // Initialize the database
+        <%= relationship.otherEntityNameCapitalized %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntityNameCapitalized %>ResourceIntTest.createEntity(em);
+        em.persist(<%= relationship.relationshipFieldName %>);
+        em.flush();
+<%_ if (relationship.relationshipType === 'many-to-many' || relationship.relationshipType === 'one-to-many') { _%>
+        <%= entityInstance %>.add<%= relationship.relationshipNameCapitalized %>(<%= relationship.relationshipFieldName %>);
+<%_ } else { _%>
+        <%= entityInstance %>.set<%= relationship.relationshipNameCapitalized %>(<%= relationship.relationshipFieldName %>);
+<%_     if (relationship.ownerSide === false) { _%>
+        <%= relationship.relationshipFieldName %>.set<%= relationship.otherEntityRelationshipNameCapitalized %>(<%= entityInstance %>);
+<%_     } _%>
+<%_ } _%>
+        <%= entityInstance %>Repository.saveAndFlush(<%= entityInstance %>);
+        Long <%= relationship.relationshipFieldName %>Id = <%= relationship.relationshipFieldName %>.getId();
+
+        // Get all the <%= entityInstance %>List where <%= relationship.relationshipFieldName %> equals to <%= relationship.relationshipFieldName %>Id
+        default<%= entityClass %>ShouldBeFound("<%= relationship.relationshipFieldName %>Id.equals=" + <%= relationship.relationshipFieldName %>Id);
+
+        // Get all the <%= entityInstance %>List where <%= relationship.relationshipFieldName %> equals to <%= relationship.relationshipFieldName %>Id + 1
+        default<%= entityClass %>ShouldNotBeFound("<%= relationship.relationshipFieldName %>Id.equals=" + (<%= relationship.relationshipFieldName %>Id + 1));
+    }
+
+<%_ }); _%>
     /**
      * Executes the search, and checks that the default entity is returned
      */

@@ -20,13 +20,13 @@ version: '2'
 services:
   keycloak:
     image: <%= DOCKER_KEYCLOAK %>
-    command: ["-b", "0.0.0.0", "-Dkeycloak.migration.action=import", "-Dkeycloak.migration.provider=dir", "-Dkeycloak.migration.dir=/opt/jboss/keycloak/realm-config", "-Dkeycloak.migration.strategy=OVERWRITE_EXISTING"]
+    command: ["-b", "0.0.0.0", "-Dkeycloak.migration.action=import", "-Dkeycloak.migration.provider=dir", "-Dkeycloak.migration.dir=/opt/jboss/keycloak/realm-config", "-Dkeycloak.migration.strategy=OVERWRITE_EXISTING", "-Djboss.socket.binding.port-offset=1000"]
     volumes:
       - ./realm-config:/opt/jboss/keycloak/realm-config
     environment:
       - KEYCLOAK_USER=admin
       - KEYCLOAK_PASSWORD=admin
     ports:
-      - 9080:8080
-      - 8443:8443
-      - 9990:9990
+      - 9080:9080
+      - 9443:9443
+      - 10990:10990
