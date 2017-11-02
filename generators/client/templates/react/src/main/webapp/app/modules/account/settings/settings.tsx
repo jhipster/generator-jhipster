@@ -1,6 +1,6 @@
 /* eslint-disable */ // TODO Fix when page is completed
 import * as React from 'react';
-import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { connect } from 'react-redux';
 import { locales } from '../../../config/translation';
 
