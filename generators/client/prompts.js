@@ -48,10 +48,16 @@ function askForClient(meta) {
     ];
 
     if (this.authenticationType !== 'oauth2') {
-        choices.splice(1, 0, {
-            value: 'angular1',
-            name: 'AngularJS 1.x'
-        });
+        choices.push(
+            {
+                value: 'angular1',
+                name: 'AngularJS 1.x'
+            },
+            {
+                value: 'react',
+                name: '[BETA] React'
+            }
+        );
     }
 
     const PROMPT = {
