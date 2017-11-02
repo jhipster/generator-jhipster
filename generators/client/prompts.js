@@ -40,6 +40,10 @@ function askForClient(meta) {
         {
             value: 'angularX',
             name: 'Angular 4'
+        },
+        {
+            value: 'react',
+            name: '[BETA] React'
         }
     ];
 

@@ -50,6 +50,7 @@ import java.time.Instant;
     <%_ } _%>
 import java.util.*;
 import java.util.stream.Collectors;
+
 /**
  * REST controller for managing the current user's account.
  */
