@@ -61,6 +61,9 @@ Navbar styles
     }
     a.nav-link {
         font-weight: 400;
+        > span {
+            margin-left: 5px;
+        }
     }
     .jh-navbar-toggler {
         color: #ccc;

@@ -57,6 +57,9 @@
   .jh-navbar a.nav-link {
     font-weight: 400;
   }
+  .jh-navbar a.nav-link > span {
+    margin-left: 5px;
+  }
   .jh-navbar .jh-navbar-toggler {
     color: #ccc;
     font-size: 1.5em;

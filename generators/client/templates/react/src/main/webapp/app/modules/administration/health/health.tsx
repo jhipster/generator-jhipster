@@ -3,8 +3,8 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-jhipster';
 import { Table } from 'reactstrap';
-import * as FaEye from 'react-icons/lib/fa/eye';
-import * as FaRefresh from 'react-icons/lib/fa/refresh';
+import { FaEye, FaRefresh } from 'react-icons/lib/fa';
+
 import HealthModal from './health-modal';
 import { systemHealth } from '../../../reducers/administration';
 

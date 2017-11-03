@@ -99,8 +99,8 @@ export class Home extends React.Component<IHomeProp, IHomeState> {
           </ul>
 
           <p>
-            <span>If you like JHipster React, do not forget to give us a star on </span>
-            <a href="https://github.com/jhipster/generator-jhipster-react" target="_blank" rel="noopener noreferrer">Github</a>!
+            <Translate contentKey="home.like">If you like JHipster, do not forget to give us a star on</Translate>
+            <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">Github</a>!
           </p>
         </div>
         <div className="col-md-3 pad">
