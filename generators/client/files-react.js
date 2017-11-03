@@ -172,7 +172,7 @@ const files = {
                 'reducers/administration.ts',
                 'reducers/authentication.ts',
                 'reducers/layout.ts',
-                'reducers/system-property.ts',
+                'reducers/user-management.ts',
                 'reducers/account.ts'
             ]
         },

@@ -9,7 +9,6 @@ export const ACTION_TYPES = {
   FETCH_HEALTH: 'administration/FETCH_HEALTH',
   FETCH_METRICS: 'administration/FETCH_METRICS',
   FETCH_THREAD_DUMP: 'administration/FETCH_THREAD_DUMP',
-  FETCH_USERS: 'administration/FETCH_USERS',
   FETCH_CONFIGURATIONS: 'administration/FETCH_CONFIGURATIONS',
   FETCH_ENV: 'administration/FETCH_ENV',
   FETCH_AUDITS: 'administration/FETCH_AUDITS'
@@ -26,9 +25,6 @@ const initialState = {
   },
   health: {},
   metrics: {},
-  userManagement: {
-    users: []
-  },
   configuration: {
     configProps: {},
     env: {}
@@ -54,7 +50,6 @@ export default (state = initialState, action) => {
         loading: true
       };
     case REQUEST(ACTION_TYPES.FETCH_LOGS):
-    case REQUEST(ACTION_TYPES.FETCH_USERS):
     case REQUEST(ACTION_TYPES.FETCH_CONFIGURATIONS):
     case REQUEST(ACTION_TYPES.FETCH_ENV):
     case REQUEST(ACTION_TYPES.FETCH_AUDITS):
@@ -68,7 +63,6 @@ export default (state = initialState, action) => {
     case FAILURE(ACTION_TYPES.FETCH_METRICS):
     case FAILURE(ACTION_TYPES.FETCH_THREAD_DUMP):
     case FAILURE(ACTION_TYPES.FETCH_LOGS):
-    case FAILURE(ACTION_TYPES.FETCH_USERS):
     case FAILURE(ACTION_TYPES.FETCH_CONFIGURATIONS):
     case FAILURE(ACTION_TYPES.FETCH_ENV):
     case FAILURE(ACTION_TYPES.FETCH_AUDITS):
@@ -98,14 +92,6 @@ export default (state = initialState, action) => {
         loading: false,
         logs: {
           loggers: action.payload.data
-        }
-      };
-    case SUCCESS(ACTION_TYPES.FETCH_USERS):
-      return {
-        ...state,
-        loading: false,
-        userManagement: {
-          users: action.payload.data
         }
       };
     case SUCCESS(ACTION_TYPES.FETCH_CONFIGURATIONS):
@@ -182,11 +168,6 @@ export const changeLogLevel = (name, level) => {
     dispatch(getLoggers());
   };
 };
-
-export const getUsers = (page = 0, size = 10, sort = 'id, asc') => ({
-  type: ACTION_TYPES.FETCH_USERS,
-  payload: axios.get(`/api/users?cacheBuster=${new Date().getTime()}&page=${page}&size=${size}&sort=${sort}`)
-});
 
 export const getConfigurations = () => ({
   type: ACTION_TYPES.FETCH_CONFIGURATIONS,
