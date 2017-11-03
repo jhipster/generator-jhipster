@@ -27,9 +27,6 @@ if [ "$JHIPSTER" == "app-ng2-mongodb" ]; then
     moveEntity FieldTestPagerEntity
     moveEntity FieldTestPaginationEntity
 
-elif [ "$JHIPSTER" == "app-react-default" ]; then
-    # do nothing
-
 elif [ "$JHIPSTER" == "app-ng2-cassandra" ]; then
     moveEntity CassBankAccount
 
@@ -100,7 +97,7 @@ elif [ "$JHIPSTER" == "app-ng2-gateway-uaa" ]; then
     moveEntity FieldTestPagerEntity
     moveEntity FieldTestPaginationEntity
 
-else
+elif [  "$JHIPSTER" != "app-react-default" ]; then
     moveEntity BankAccount
     moveEntity Label
     moveEntity Operation
