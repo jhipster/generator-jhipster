@@ -568,7 +568,7 @@ public class UserService {
             user.setFirstName((String) details.get("given_name"));
         }
         if (details.get("family_name") != null) {
-            user.setFirstName((String) details.get("family_name"));
+            user.setLastName((String) details.get("family_name"));
         }
         if (details.get("email_verified") != null) {
             user.setActivated((Boolean) details.get("email_verified"));
