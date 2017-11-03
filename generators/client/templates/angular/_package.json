@@ -97,7 +97,7 @@
     "protractor-jasmine2-screenshot-reporter": "0.4.0",
     <%_ } _%>
     "proxy-middleware": "0.15.0",
-    "puppeteer": "0.10.2",
+    "puppeteer": "0.12.0",
     "rimraf": "2.6.1",
     "sourcemap-istanbul-instrumenter-loader": "0.2.0",
     "string-replace-webpack-plugin": "0.1.3",
