@@ -56,7 +56,7 @@ module.exports = {
           loader: 'awesome-typescript-loader',
           options: {
             useCache: true,
-            ignoreDiagnostics: [2307] // due to a weird false error fro json files
+            ignoreDiagnostics: [2307] // due to a weird false error from json files
           }
         }],
         include: [path.resolve('./src/main/webapp/app'), path.resolve('./src/test/javascript')],

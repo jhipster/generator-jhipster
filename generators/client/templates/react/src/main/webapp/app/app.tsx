@@ -41,10 +41,10 @@ export class App extends React.Component<IAppProps, {}> {
     return (
       <Router>
         <div className="app-container" style={{ paddingTop }}>
-          <Header <%_ if (enableTranslation) { _%>
+          <Header <% if (enableTranslation) { %>
             currentLocale={this.props.currentLocale}
             onLocaleChange={this.props.setLocale}
-          <%_ } _%>/>
+          <% } %>/>
           <div className="container-fluid view-container" id="app-view-container">
             <Card className="jh-card">
               <AppRoutes/>

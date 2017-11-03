@@ -41,6 +41,7 @@
     "no-unused-expression": [true, "allow-fast-null-checks"],
     "no-use-before-declare": true,
     "no-var-keyword": true,
+    "no-implicit-dependencies": [true, "dev"],
     "object-literal-sort-keys": false,
     "one-line": [
       true,
@@ -133,6 +134,7 @@
     "no-unused-expression": [true, "allow-fast-null-checks"],
     "no-use-before-declare": true,
     "no-var-keyword": true,
+    "no-implicit-dependencies": [true, "dev"],
     "object-literal-sort-keys": false,
     "one-line": [
       true,

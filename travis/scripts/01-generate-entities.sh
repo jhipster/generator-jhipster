@@ -97,7 +97,7 @@ elif [ "$JHIPSTER" == "app-ng2-gateway-uaa" ]; then
     moveEntity FieldTestPagerEntity
     moveEntity FieldTestPaginationEntity
 
-else
+elif [  "$JHIPSTER" != "app-react-default" ]; then
     moveEntity BankAccount
     moveEntity Label
     moveEntity Operation

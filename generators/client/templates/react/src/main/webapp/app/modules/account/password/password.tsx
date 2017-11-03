@@ -1,7 +1,7 @@
 /* eslint-disable */ // TODO Fix when page is completed
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
 import { getSession } from '../../../reducers/authentication';
 import { savePassword } from '../../../reducers/account';

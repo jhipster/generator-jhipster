@@ -30,7 +30,7 @@ const BrandIcon = props => (
     />
   </div>
 );
-export class Header extends React.Component<<%_if (enableTranslation) { %>IHeaderProps<% } else { %>{}<% } %>, { menuOpen: boolean }> {
+export class Header extends React.Component<<%if (enableTranslation) { %>IHeaderProps<% } else { %>{}<% } %>, { menuOpen: boolean }> {
 
   constructor(props) {
     super(props);
