@@ -55,7 +55,7 @@ export class LogsPage extends React.Component<ILogsPageProps, undefined> {
             <tbody>
               {
               loggers.map((logger, i) =>
-                <tr>
+                <tr key={`log-row-${i}`}>
                   <td><small>{logger.name}</small></td>
                   <td>
                     <button disabled={isFetching} onClick={() => this.changeLevel(logger.name, 'TRACE')} className={`btn btn-secondary btn-sm ${(logger.level === 'TRACE') ? 'btn-danger' : 'btn-secondary'}`}>TRACE</button>
