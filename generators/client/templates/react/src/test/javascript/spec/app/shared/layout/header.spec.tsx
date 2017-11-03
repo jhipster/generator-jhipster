@@ -16,7 +16,7 @@ describe('Header', () => {
   const wrapper = () => {
     if (!mountedWrapper) {
       mountedWrapper = shallow(
-        <Header<% if (enableTranslation) { %> currentLocale="en" onLocaleChange={localeSpy}<% } %>/>
+        <Header isAuthenticated<% if (enableTranslation) { %> currentLocale="en" onLocaleChange={localeSpy}<% } %>/>
       );
     }
     return mountedWrapper;
