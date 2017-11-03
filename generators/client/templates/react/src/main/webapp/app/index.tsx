@@ -6,7 +6,9 @@ import { AppContainer } from 'react-hot-loader';
 
 import DevTools from './config/devtools';
 import initStore from './config/store';
+<%_ if (enableTranslation) { _%>
 import { registerLocales } from './config/translation';
+<%_ } _%>
 import setupAxiosInterceptors from './config/axios-interceptor';
 import { clearAuthentication, clearAuthToken } from './reducers/authentication';
 import AppComponent from './app';
@@ -14,7 +16,9 @@ import AppComponent from './app';
 const devTools = process.env.NODE_ENV === 'development' ? <DevTools /> : null;
 
 const store = initStore();
+<%_ if (enableTranslation) { _%>
 registerLocales(store);
+<%_ } _%>
 
 const actions = bindActionCreators({ clearAuthentication }, store.dispatch);
 setupAxiosInterceptors(() => actions.clearAuthentication('login.error.unauthorized'), clearAuthToken);

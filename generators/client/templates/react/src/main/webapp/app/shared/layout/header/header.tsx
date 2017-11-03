@@ -9,16 +9,19 @@ import {
 import { NavLink as Link } from 'react-router-dom';
 import LoadingBar from 'react-redux-loading-bar';
 
+<%_ if (enableTranslation) { _%>
 import { locales } from '../../../config/translation';
+<%_ } _%>
 import appConfig from '../../../config/constants';
 
 const devEnv = process.env.NODE_ENV === 'development';
 
+<%_ if (enableTranslation) { _%>
 export interface IHeaderProps {
   currentLocale: string;
   onLocaleChange: Function;
 }
-
+<%_ } _%>
 const BrandIcon = props => (
   <div {...props} className="brand-icon">
     <img
@@ -27,7 +30,7 @@ const BrandIcon = props => (
     />
   </div>
 );
-export class Header extends React.Component<IHeaderProps, { menuOpen: boolean }> {
+export class Header extends React.Component<<%if (enableTranslation) { %>IHeaderProps<% } else { %>{}<% } %>, { menuOpen: boolean }> {
 
   constructor(props) {
     super(props);
