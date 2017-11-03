@@ -133,7 +133,7 @@
     "node": ">=6.9.0"
   },
   "scripts": {
-    "lint": "tslint --type-check --project './tsconfig.json' -e 'node_modules/**'",
+    "lint": "tslint --project './tsconfig.json' -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "ngc": "ngc -p tsconfig-aot.json",
     "cleanup": "rimraf <%= BUILD_DIR %>{aot,www}",
