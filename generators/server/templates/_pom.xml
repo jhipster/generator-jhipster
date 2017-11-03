@@ -546,6 +546,11 @@
             <artifactId>liquibase-core</artifactId>
         </dependency>
         <%_ } _%>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>${logstash-logback-encoder.version}</version>
+        </dependency>
         <%_ if (databaseType === 'mongodb') { _%>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -827,13 +832,8 @@
         </dependency>
         <%_ } _%>
         <dependency>
-            <groupId>net.logstash.logback</groupId>
-            <artifactId>logstash-logback-encoder</artifactId>
-            <version>${logstash-logback-encoder.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cloud-connectors</artifactId>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-spring-service-connector</artifactId>
         </dependency>
         <!-- security -->
         <dependency>
