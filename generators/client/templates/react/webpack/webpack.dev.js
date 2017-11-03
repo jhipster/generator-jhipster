@@ -29,7 +29,7 @@ const commonConfig = require('./webpack.common.js');
 const ENV = 'development';
 
 module.exports = webpackMerge(commonConfig({ env: ENV }), {
-  devtool: 'eval-source-map',
+  devtool: 'cheap-module-source-map', // https://reactjs.org/docs/cross-origin-errors.html
   entry: [
     'react-hot-loader/patch',
     './src/main/webapp/app/index'
