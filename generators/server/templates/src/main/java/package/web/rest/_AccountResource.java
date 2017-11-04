@@ -117,7 +117,7 @@ public class AccountResource {
                         (String) details.get("family_name"),
                         (String) details.get("email"),
                         (String) details.get("langKey"),
-                        (String) details.get("imageUrl"),
+                        (String) details.get("picture"),
                         activated,
                         authentication.getAuthorities().stream()
                             .map(GrantedAuthority::getAuthority)

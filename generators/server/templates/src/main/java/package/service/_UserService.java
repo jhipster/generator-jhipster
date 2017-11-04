@@ -583,6 +583,9 @@ public class UserService {
             String langKey = locale.substring(0, locale.indexOf("-"));
             user.setLangKey(langKey);
         }
+        if (details.get("picture") != null) {
+            user.setImageUrl((String) details.get("picture"));
+        }
         return user;
     }
 
