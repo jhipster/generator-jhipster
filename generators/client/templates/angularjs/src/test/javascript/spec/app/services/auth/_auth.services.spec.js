@@ -51,7 +51,7 @@ describe('Service Tests', function () {
 
             //WHEN
             <%_ if (authenticationType === 'uaa') { _%>
-            $httpBackend.expectPOST('/auth/logout').respond();
+            $httpBackend.expectPOST('auth/logout').respond();
             <%_ } _%>
             authService.logout();
             //flush the backend to "execute" the request to do the expectedGET assertion.
