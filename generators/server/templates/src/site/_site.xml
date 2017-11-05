@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- #%L JHipster core library %% Copyright (C) 2013 - 2017 jhipster %% Licensed 
+    under the Apache License, Version 2.0 (the "License"); you may not use this 
+    file except in compliance with the License. You may obtain a copy of the 
+    License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by 
+    applicable law or agreed to in writing, software distributed under the License 
+    is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY 
+    KIND, either express or implied. See the License for the specific language 
+    governing permissions and limitations under the License. #L% -->
+
+
+<project name="Jhipster" xmlns="http://maven.apache.org/DECORATION/1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
+
+    <bannerLeft>
+        <name>Github</name>
+        <!-- this should not be the right adress-->
+        <href>https://github.com/<%= dasherizedBaseName %>/<%= dasherizedBaseName %></href>
+    </bannerLeft>
+
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.5</version>
+    </skin>
+    <custom>
+        <fluidoSkin>
+            <sideBarEnabled>true</sideBarEnabled>
+            <topBarEnabled>true</topBarEnabled>
+
+            <googleSearch>
+                <sitesearch />
+            </googleSearch>
+            <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
+            <gitHub>
+                <!-- this should not be the right adress-->
+                <projectId><%= dasherizedBaseName %>/<%= dasherizedBaseName %></projectId>
+                <ribbonOrientation>right</ribbonOrientation>
+                <ribbonColor>green</ribbonColor>
+            </gitHub>
+            <googlePlusOne />
+            <twitter>
+                <user>java_hipster</user>
+                <showUser>true</showUser>
+                <showFollowers>true</showFollowers>
+            </twitter>
+            <facebookLike />
+        </fluidoSkin>
+        <!-- this should not be the right adress-->
+        <custom.fluidoSkin.googleSearch.sitesearch>http://<%= dasherizedBaseName %>.github.io/<%= dasherizedBaseName %>/</custom.fluidoSkin.googleSearch.sitesearch>
+    </custom>
+
+
+    <body>
+        <links>
+            <item name="Jhipster generator repo" href="https://github.com/jhipster/generator-jhipster" />
+        </links>
+
+        <menu name="Documentation">
+            <item href="readme.html" name="readme" />
+        </menu>
+        <menu ref="reports" inherit="bottom" />
+    </body>
+</project>
