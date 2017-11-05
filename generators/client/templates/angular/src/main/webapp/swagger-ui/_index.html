@@ -104,7 +104,18 @@
                 <%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("X-XSRF-TOKEN", getCSRF(), "header");
                     window.swaggerUi.api.clientAuthorizations.add("key", apiKeyAuth);
-                <%_ } else if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+                <%_ } else if (authenticationType === 'uaa') { _%>
+                    var interceptor = {
+                        requestInterceptor: {
+                            apply: function (requestObj) {
+                                var headers = requestObj.headers || {};
+                                headers['X-XSRF-TOKEN'] = getCSRF();
+                                return requestObj;
+                            }
+                        }
+                    };
+                    window.swaggerUi.options.requestInterceptor = interceptor.requestInterceptor
+                <%_ } else if (authenticationType === 'jwt') { _%>
                     var authToken = JSON.parse(localStorage.getItem("jhi-authenticationtoken") || sessionStorage.getItem("jhi-authenticationtoken"));
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization", "Bearer " + authToken, "header");
                     window.swaggerUi.api.clientAuthorizations.add("bearer", apiKeyAuth);
