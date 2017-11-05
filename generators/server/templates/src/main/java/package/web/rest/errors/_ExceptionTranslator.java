@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.DefaultProblem;
 import org.zalando.problem.Problem;
+import org.zalando.problem.ThrowableProblem;
 import org.zalando.problem.ProblemBuilder;
 import org.zalando.problem.Status;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
@@ -42,12 +43,16 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Controller advice to translate the server side exceptions to client-friendly json structures.
  * The error response follows RFC7807 - Problem Details for HTTP APIs (https://tools.ietf.org/html/rfc7807)
  */
 @ControllerAdvice
 public class ExceptionTranslator implements ProblemHandling {
+  private final Logger log = LoggerFactory.getLogger(ExceptionTranslator.class);
 
     /**
      * Post-process Problem payload to add the message key for front-end if needed
@@ -58,6 +63,11 @@ public class ExceptionTranslator implements ProblemHandling {
             return entity;
         }
         Problem problem = entity.getBody();
+
+        if(problem instanceof ThrowableProblem) {
+          log.warn("An exception has occurred", ((ThrowableProblem)problem).getCause());
+        }
+
         if (!(problem instanceof ConstraintViolationProblem || problem instanceof DefaultProblem)) {
             return entity;
         }
@@ -87,6 +97,8 @@ public class ExceptionTranslator implements ProblemHandling {
 
     @Override
     public ResponseEntity<Problem> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, @Nonnull NativeWebRequest request) {
+        log.warn("An exception has occurred", ex);
+
         BindingResult result = ex.getBindingResult();
         List<FieldErrorVM> fieldErrors = result.getFieldErrors().stream()
             .map(f -> new FieldErrorVM(f.getObjectName(), f.getField(), f.getCode()))
@@ -104,12 +116,16 @@ public class ExceptionTranslator implements ProblemHandling {
 
     @ExceptionHandler(BadRequestAlertException.class)
     public ResponseEntity<Problem> handleBadRequestAlertException(BadRequestAlertException ex, NativeWebRequest request) {
+        log.warn("An exception has occurred", ex);
+
         return create(ex, request, HeaderUtil.createFailureAlert(ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));
     }
     <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
 
     @ExceptionHandler(ConcurrencyFailureException.class)
     public ResponseEntity<Problem> handleConcurrencyFailure(ConcurrencyFailureException ex, NativeWebRequest request) {
+        log.warn("An exception has occurred", ex);
+
         Problem problem = Problem.builder()
             .withStatus(Status.CONFLICT)
             .with("message", ErrorConstants.ERR_CONCURRENCY_FAILURE)
