@@ -35,6 +35,9 @@
     "@angular/platform-browser-dynamic": "4.3.2",
     "@angular/router": "4.3.2",
     "@ng-bootstrap/ng-bootstrap": "1.0.0-beta.5",
+    <%_ if (authenticationType === 'oauth2') { _%>
+    "angular-oauth2-oidc": "^2.1.8",
+    <%_ } _%>
     "bootstrap": "4.0.0-beta",
     "core-js": "2.4.1",
     "font-awesome": "4.7.0",

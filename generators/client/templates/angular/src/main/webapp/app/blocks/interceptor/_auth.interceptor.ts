@@ -18,24 +18,40 @@
 -%>
 import { Observable } from 'rxjs/Observable';
 import { RequestOptionsArgs, Response } from '@angular/http';
+<%_ if (authenticationType === 'oauth2') { _%>
+import { OAuthService } from 'angular-oauth2-oidc';
+import { Injector } from '@angular/core';
+<%_ } else { _%>
 import { LocalStorageService, SessionStorageService } from 'ng2-webstorage';
+<%_ } _%>
 import { JhiHttpInterceptor } from 'ng-jhipster';
 
 export class AuthInterceptor extends JhiHttpInterceptor {
 
+    <%_ if (authenticationType === 'oauth2') { _%>
+    constructor(private injector: Injector) {
+        super();
+    }
+    <%_ } else { _%>
     constructor(
         private localStorage: LocalStorageService,
         private sessionStorage: SessionStorageService
     ) {
         super();
     }
+    <%_ } _%>
 
     requestIntercept(options?: RequestOptionsArgs): RequestOptionsArgs {
         if (!options || !options.url || /^http/.test(options.url)) {
             return options;
         }
 
+        <%_ if (authenticationType === 'oauth2') { _%>
+        const oauthService: OAuthService = this.injector.get(OAuthService);
+        const token = oauthService.getAccessToken();
+        <%_ } else { _%>
         const token = this.localStorage.retrieve('authenticationToken') || this.sessionStorage.retrieve('authenticationToken');
+        <%_ } _%>
         if (!!token) {
             options.headers.append('Authorization', 'Bearer ' + token);
         }

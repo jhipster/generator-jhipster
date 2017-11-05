@@ -21,6 +21,9 @@ import './vendor.ts';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { Ng2Webstorage } from 'ng2-webstorage';
+<%_ if (authenticationType === 'oauth2') { _%>
+import { OAuthModule } from 'angular-oauth2-oidc';
+<%_ } _%>
 
 import { <%=angularXAppName%>SharedModule, UserRouteAccessService } from './shared';
 import { <%=angularXAppName%>AppRoutingModule} from './app-routing.module';
@@ -50,6 +53,9 @@ import {
 @NgModule({
     imports: [
         BrowserModule,
+        <%_ if (authenticationType === 'oauth2') { _%>
+        OAuthModule.forRoot(),
+        <%_ } _%>
         <%=angularXAppName%>AppRoutingModule,
         Ng2Webstorage.forRoot({ prefix: 'jhi', separator: '-'}),
         <%=angularXAppName%>SharedModule,
