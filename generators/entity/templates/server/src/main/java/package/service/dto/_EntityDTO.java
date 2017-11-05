@@ -213,7 +213,7 @@ public class <%= entityClass %>DTO implements Serializable {
                 const fieldName = fields[idx].fieldName;
                 const fieldType = fields[idx].fieldType;
                 const fieldNameCapitalized = fieldName.charAt(0).toUpperCase() + fieldName.slice(1) %>
-            ", <%= fieldName %>='" + <% if (fieldType.toLowerCase() === 'boolean') { %>is<% } else { %>get<%_ } _%><%= fieldNameCapitalized %>() + "'" +<% } %>
+            ", <%= fieldName %>=<% if (fieldType.toLowerCase() !== 'integer' && fieldType.toLowerCase() !== 'long' && fieldType.toLowerCase() !== 'float' && fieldType.toLowerCase() !== 'double' && fieldType.toLowerCase() !== 'bigdecimal') {%>'<%}%>" + <% if (fieldType.toLowerCase() === 'boolean') { %>is<% } else { %>get<%_ } _%><%= fieldNameCapitalized %>() <% if (fieldType.toLowerCase() !== 'integer' && fieldType.toLowerCase() !== 'long' && fieldType.toLowerCase() !== 'float' && fieldType.toLowerCase() !== 'double' && fieldType.toLowerCase() !== 'bigdecimal') {%>+ "'" <%}%>+<% } %>
             "}";
     }
 }

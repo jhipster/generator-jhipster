@@ -406,7 +406,7 @@ public class <%= entityClass %> implements Serializable {
                 const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
                 const fieldName = fields[idx].fieldName;
                 const fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod; _%>
-            ", <%= fieldName %>='" + <% if (fieldType.toLowerCase() === 'boolean') { %>is<% } else { %>get<%_ } _%><%= fieldInJavaBeanMethod %>() + "'" +
+            ", <%= fieldName %>=<% if (fieldType.toLowerCase() !== 'integer' && fieldType.toLowerCase() !== 'long' && fieldType.toLowerCase() !== 'float' && fieldType.toLowerCase() !== 'double' && fieldType.toLowerCase() !== 'bigdecimal') {%>'<%}%>" + <% if (fieldType.toLowerCase() === 'boolean') { %>is<% } else { %>get<%_ } _%><%= fieldInJavaBeanMethod %>() <% if (fieldType.toLowerCase() !== 'integer' && fieldType.toLowerCase() !== 'long' && fieldType.toLowerCase() !== 'float' && fieldType.toLowerCase() !== 'double' && fieldType.toLowerCase() !== 'bigdecimal') {%>+ "'" <%}%>+
                 <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { _%>
             ", <%= fieldName %>ContentType='" + <%= fieldName %>ContentType + "'" +
                 <%_ } _%>
