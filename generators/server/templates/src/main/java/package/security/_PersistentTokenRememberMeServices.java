@@ -26,8 +26,6 @@ import <%=packageName%>.service.util.RandomUtil;
 <%_ if (databaseType === 'cassandra') { _%>
 import com.datastax.driver.core.exceptions.DriverException;
 <%_ } _%>
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 
 import io.github.jhipster.config.JHipsterProperties;
 
@@ -50,9 +48,11 @@ import java.time.LocalDate;
 <%_ if (databaseType === 'cassandra') { _%>
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
-import java.util.concurrent.TimeUnit;
 import java.util.Arrays;
+<%_ if (databaseType === 'cassandra') { _%>
 import java.util.Date;
+<%_ } _%>
+
 
 /**
  * Custom implementation of Spring Security's RememberMeServices.
@@ -92,11 +92,11 @@ public class PersistentTokenRememberMeServices extends
 
     private static final int TOKEN_VALIDITY_SECONDS = 60 * 60 * 24 * TOKEN_VALIDITY_DAYS;
 
-    private static final int UPGRADED_TOKEN_VALIDITY_SECONDS = 5;
+    private static final long UPGRADED_TOKEN_VALIDITY_MILLIS = 5_000l;
+    
+    private static final long UPGRADED_TOKEN_PURGE_MILLIS = 3l * UPGRADED_TOKEN_VALIDITY_MILLIS;
 
-    private Cache<String, UpgradedRememberMeToken> upgradedTokenCache = CacheBuilder.newBuilder()
-            .expireAfterWrite(UPGRADED_TOKEN_VALIDITY_SECONDS, TimeUnit.SECONDS)
-            .build();
+    private final TokenCache<UpgradedRememberMeToken> upgradedTokenCache;
 
     private final PersistentTokenRepository persistentTokenRepository;
 
@@ -109,6 +109,7 @@ public class PersistentTokenRememberMeServices extends
         super(jHipsterProperties.getSecurity().getRememberMe().getKey(), userDetailsService);
         this.persistentTokenRepository = persistentTokenRepository;
         this.userRepository = userRepository;
+        upgradedTokenCache = new TokenCache<>(UPGRADED_TOKEN_VALIDITY_MILLIS, UPGRADED_TOKEN_PURGE_MILLIS);
     }
 
     @Override
@@ -117,12 +118,11 @@ public class PersistentTokenRememberMeServices extends
 
         synchronized (this) { // prevent 2 authentication requests from the same user in parallel
             String login = null;
-            UpgradedRememberMeToken upgradedToken = upgradedTokenCache.getIfPresent(cookieTokens[0]);
+            UpgradedRememberMeToken upgradedToken = upgradedTokenCache.get(cookieTokens[0]);
             if (upgradedToken != null) {
-                login = upgradedToken.getUserLoginIfValidAndRecentUpgrade(cookieTokens);
+                login = upgradedToken.getUserLoginIfValid(cookieTokens);
                 log.debug("Detected previously upgraded login token for user '{}'", login);
             }
-
             if (login == null) {
                 PersistentToken token = getPersistentToken(cookieTokens);<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
                 login = token.getUser().getLogin();<%}%><% if (databaseType === 'cassandra') { %>
@@ -250,22 +250,18 @@ public class PersistentTokenRememberMeServices extends
 
         private static final long serialVersionUID = 1L;
 
-        private String[] upgradedToken;
+        private final String[] upgradedToken;
 
-        private Date upgradeTime;
-
-        private String userLogin;
+        private final String userLogin;
 
         UpgradedRememberMeToken(String[] upgradedToken, String userLogin) {
             this.upgradedToken = upgradedToken;
             this.userLogin = userLogin;
-            this.upgradeTime = new Date();
         }
 
-        String getUserLoginIfValidAndRecentUpgrade(String[] currentToken) {
+        String getUserLoginIfValid(String[] currentToken) {
             if (currentToken[0].equals(this.upgradedToken[0]) &&
-                    currentToken[1].equals(this.upgradedToken[1]) &&
-                    (upgradeTime.getTime() + UPGRADED_TOKEN_VALIDITY_SECONDS * 1000) > new Date().getTime()) {
+                    currentToken[1].equals(this.upgradedToken[1])) {
                 return this.userLogin;
             }
             return null;

@@ -18,8 +18,7 @@
 -%>
 package <%=packageName%>.security.oauth2;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
+import <%=packageName%>.security.TokenCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -41,14 +40,20 @@ public class OAuth2AuthenticationService {
     private final Logger log = LoggerFactory.getLogger(OAuth2AuthenticationService.class);
 
     /**
-     * Number of seconds to cache refresh token grants so we don't have to repeat them in case of parallel requests.
+     * Number of milliseconds to cache refresh token grants so we don't have to repeat them in case of parallel requests.
      */
-    private static final long REFRESH_TOKEN_CACHE_SECS = 10l;
+    private static final long REFRESH_TOKEN_VALIDITY_MILLIS = 10_000l;
+
+    /**
+     * Period of refreshed token cache purger thread, in millis.
+     */
+    private static final long REFRESH_TOKEN_PURGE_MILLIS = 3l * REFRESH_TOKEN_VALIDITY_MILLIS;
 
     /**
      * Used to contact the OAuth2 token endpoint.
      */
     private final OAuth2TokenEndpointClient authorizationClient;
+
     /**
      * Helps us with cookie handling.
      */
@@ -58,14 +63,12 @@ public class OAuth2AuthenticationService {
      * Caches Refresh grant results for a refresh token value so we can reuse them.
      * This avoids hammering UAA in case of several multi-threaded requests arriving in parallel.
      */
-    private final Cache<String, OAuth2Cookies> recentlyRefreshed;
+    private final TokenCache<OAuth2Cookies> refreshedTokenCache;
 
     public OAuth2AuthenticationService(OAuth2TokenEndpointClient authorizationClient, OAuth2CookieHelper cookieHelper) {
         this.authorizationClient = authorizationClient;
         this.cookieHelper = cookieHelper;
-        recentlyRefreshed = CacheBuilder.newBuilder()
-            .expireAfterWrite(REFRESH_TOKEN_CACHE_SECS, TimeUnit.SECONDS)
-            .build();
+        refreshedTokenCache = new TokenCache<>(REFRESH_TOKEN_VALIDITY_MILLIS, REFRESH_TOKEN_PURGE_MILLIS);
     }
 
     /**
@@ -148,11 +151,11 @@ public class OAuth2AuthenticationService {
      * or contain some results already, if another thread already handled the grant for us.
      */
     private OAuth2Cookies getCachedCookies(String refreshTokenValue) {
-        synchronized (recentlyRefreshed) {
-            OAuth2Cookies ctx = recentlyRefreshed.getIfPresent(refreshTokenValue);
+        synchronized (refreshedTokenCache) {
+            OAuth2Cookies ctx = refreshedTokenCache.get(refreshTokenValue);
             if (ctx == null) {
                 ctx = new OAuth2Cookies();
-                recentlyRefreshed.put(refreshTokenValue, ctx);
+                refreshedTokenCache.put(refreshTokenValue, ctx);
             }
             return ctx;
         }
