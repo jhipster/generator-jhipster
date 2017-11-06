@@ -32,7 +32,6 @@
 
         <!-- Dependency versions -->
         <assertj.version>3.6.2</assertj.version>
-        <awaitility.version>2.0.0</awaitility.version>
         <bucket4j.version>3.0.1</bucket4j.version>
         <cassandra-driver.version>3.3.0</cassandra-driver.version>
         <cassandra-unit-spring.version>3.3.0.2</cassandra-unit-spring.version>
@@ -73,11 +72,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.awaitility</groupId>
-                <artifactId>awaitility</artifactId>
-                <version>${awaitility.version}</version>
-            </dependency>
             <dependency>
                 <groupId>com.github.vladimir-bukhtoyarov</groupId>
                 <artifactId>bucket4j-core</artifactId>
