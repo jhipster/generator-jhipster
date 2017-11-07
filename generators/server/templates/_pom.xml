@@ -710,6 +710,7 @@
         <%_ } _%>
         <!-- jhipster-needle-maven-add-dependency -->
     </dependencies>
+
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>
         <%_ if (cucumberTests) { _%>
