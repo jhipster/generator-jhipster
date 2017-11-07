@@ -119,6 +119,8 @@ data_file_directories:
 # commit log
 commitlog_directory: <%= BUILD_DIR %>embeddedCassandra/commitlog
 
+cdc_raw_directory: <%= BUILD_DIR %>embeddedCassandra/cdc
+
 # policy for data disk failures:
 # stop: shut down gossip and Thrift, leaving the node effectively dead, but
 #       can still be inspected via JMX.
