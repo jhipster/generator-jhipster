@@ -12,7 +12,7 @@
 
     <groupId>io.github.jhipster</groupId>
     <artifactId>jhipster-dependencies</artifactId>
-    <version>0.0.5</version>
+    <version>0.0.6</version>
     <packaging>pom</packaging>
     <name>JHipster dependencies</name>
     <description>JHipster dependency management</description>
@@ -31,7 +31,7 @@
         <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
 
         <!-- Dependency versions -->
-        <assertj.version>3.6.2</assertj.version>
+        <assertj.version>3.8.0</assertj.version>
         <bucket4j.version>3.0.1</bucket4j.version>
         <cassandra-driver.version>3.3.0</cassandra-driver.version>
         <cassandra-unit-spring.version>3.3.0.2</cassandra-unit-spring.version>
@@ -328,6 +328,17 @@
                     <exclusion>
                         <groupId>io.netty</groupId>
                         <artifactId>netty-transport-native-epoll</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-thymeleaf</artifactId>
+                <version>${spring-boot.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>nz.net.ultraq.thymeleaf</groupId>
+                        <artifactId>thymeleaf-layout-dialect</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
