@@ -81,7 +81,7 @@ const apiUrl = '/api/users';
 // Actions
 export const getUsers: ICrudGetAction = (page, size, sort) => ({
   type: ACTION_TYPES.FETCH_USERS,
-  payload: axios.get(`${apiUrl}?page=${page}&size=${size}&sort=${sort}&cacheBuster=${new Date().getTime()}`)
+  payload: axios.get(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
 });
 
 export const getUser: ICrudGetAction = id => {
@@ -92,27 +92,35 @@ export const getUser: ICrudGetAction = id => {
   };
 };
 
-export const createUser: ICrudPutAction = project => dispatch => dispatch({
-  type: ACTION_TYPES.CREATE_USER,
-  meta: {
-    successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
-    errorMessage: messages.DATA_UPDATE_ERROR_ALERT
-  },
-  payload: axios.post(apiUrl, project)
-});
+export const createUser: ICrudPutAction = user => async dispatch => {
+  const result = await dispatch({
+    type: ACTION_TYPES.CREATE_USER,
+    meta: {
+      successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
+      errorMessage: messages.DATA_UPDATE_ERROR_ALERT
+    },
+    payload: axios.post(apiUrl, user)
+  });
+  dispatch(getUsers());
+  return result;
+};
 
-export const updateUser: ICrudPutAction = project => dispatch => dispatch({
-  type: ACTION_TYPES.UPDATE_USER,
-  meta: {
-    successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
-    errorMessage: messages.DATA_UPDATE_ERROR_ALERT
-  },
-  payload: axios.put(apiUrl, project)
-});
+export const updateUser: ICrudPutAction = user => async dispatch => {
+  const result = await dispatch({
+    type: ACTION_TYPES.UPDATE_USER,
+    meta: {
+      successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
+      errorMessage: messages.DATA_UPDATE_ERROR_ALERT
+    },
+    payload: axios.put(apiUrl, user)
+  });
+  dispatch(getUsers());
+  return result;
+};
 
-export const deleteUser: ICrudDeleteAction = id => dispatch => {
+export const deleteUser: ICrudDeleteAction = id => async dispatch => {
   const requestUrl = `${apiUrl}/${id}`;
-  return dispatch({
+  const result = await dispatch({
     type: ACTION_TYPES.DELETE_USER,
     meta: {
       successMessage: messages.DATA_DELETE_SUCCESS_ALERT,
@@ -120,4 +128,6 @@ export const deleteUser: ICrudDeleteAction = id => dispatch => {
     },
     payload: axios.delete(requestUrl)
   });
+  dispatch(getUsers());
+  return result;
 };

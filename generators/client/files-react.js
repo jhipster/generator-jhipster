@@ -265,9 +265,9 @@ const files = {
             path: REACT_DIR,
             templates: [
                 { file: 'modules/administration/user-management/user-management.tsx', method: 'processJsx' },
-                // { file: 'modules/administration/user-management/UserManagementDetail.js', method: 'processJsx' },
-                // { file: 'modules/administration/user-management/UserManagementDialog.js', method: 'processJsx' },
-                // { file: 'modules/administration/user-management/UserManagementDeleteDialog.js', method: 'processJsx' }
+                { file: 'modules/administration/user-management/user-management-model.tsx', method: 'processJsx' },
+                { file: 'modules/administration/user-management/user-management-detail.tsx', method: 'processJsx' },
+                { file: 'modules/administration/user-management/user-management-delete-model.tsx', method: 'processJsx' }
             ]
         },
         {
@@ -278,7 +278,7 @@ const files = {
             ]
         }
     ],
-    angularShared: [
+    reactShared: [
         {
             path: REACT_DIR,
             templates: [

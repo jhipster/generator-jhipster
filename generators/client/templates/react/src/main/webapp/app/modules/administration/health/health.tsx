@@ -1,4 +1,3 @@
-/* eslint-disable */ // TODO Fix when page is completed
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-jhipster';
@@ -12,7 +11,6 @@ export interface IHealthPageProps {
   isFetching?: boolean;
   systemHealth: Function;
   health: any;
-  history: any;
   systemHealthInfo: any;
 }
 
@@ -37,10 +35,12 @@ export class HealthPage extends React.Component<IHealthPageProps, any> {
   }
 
   getSystemHealthInfo = (name, healthObject) => () => {
-    healthObject.name = name;
     this.setState({
       showModal: true,
-      healthObject
+      healthObject: {
+        ...healthObject,
+        name
+      }
     });
   }
 

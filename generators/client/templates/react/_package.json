@@ -38,7 +38,7 @@ limitations under the License.
     "react-dom": "16.0.0",
     "react-hot-loader": "3.1.1",
     "react-icons": "2.2.7",
-    "react-jhipster": "0.1.1",
+    "react-jhipster": "0.1.2",
     "react-redux": "5.0.6",
     "react-redux-loading-bar": "2.9.3",
     "react-router-dom": "4.2.2",

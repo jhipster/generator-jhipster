@@ -12,8 +12,7 @@ export const ACTION_TYPES = {
 const initialState = {
   loading: false,
   errorMessage: null,
-  systemPropertiesByKey: {},
-  systemProperty: {},
+  account: {},
   updateSuccess: false
 };
 
@@ -40,7 +39,7 @@ export default (state = initialState, action) => {
         ...state,
         loading: false,
         updateSuccess: true,
-        systemProperty: action.payload.data
+        account: action.payload.data
       };
     case SUCCESS(ACTION_TYPES.UPDATE_PASSWORD):
       return {

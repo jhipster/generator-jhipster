@@ -20,6 +20,7 @@ const translations = {
 let currentLocale;
 const savedLocale = Storage.local.get('locale', 'en');
 TranslatorContext.setDefaultLocale('en');
+TranslatorContext.setRenderInnerTextForMissingKeys(false);
 
 export const locales = Object.keys(translations);
 

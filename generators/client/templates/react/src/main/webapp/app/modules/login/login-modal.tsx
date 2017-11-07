@@ -23,7 +23,7 @@ class LoginModal extends React.Component<ILoginModalProps, ILoginModalState> {
 
   constructor(props, context) {
     super(props, context);
-    this.state = {// eslint-disable-line immutable/no-mutation
+    this.state = {
       username: null,
       password: null
     };

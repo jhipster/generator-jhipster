@@ -1,4 +1,3 @@
-/* eslint-disable */ // TODO Fix when page is completed
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Table, Progress } from 'reactstrap';
@@ -21,14 +20,12 @@ export class MetricsPage extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      healthObject: {},
       showModal: false
     };
   }
 
   componentDidMount() {
     this.props.systemMetrics();
-    this.props.systemThreadDump();
   }
 
   getMetrics = () => {
@@ -38,6 +35,7 @@ export class MetricsPage extends React.Component<any, any> {
   }
 
   getThreadDump = () => {
+    this.props.systemThreadDump();
     this.setState({
       showModal: true
     });
@@ -75,8 +73,7 @@ export class MetricsPage extends React.Component<any, any> {
     return stat;
   }
 
-  renderModal = () =>
-      <MetricsModal handleClose={this.handleClose} showModal={this.state.showModal} threadDump={this.props.threadDump}/>
+  renderModal = () => <MetricsModal handleClose={this.handleClose} showModal={this.state.showModal} threadDump={this.props.threadDump}/>;
 
   renderGauges = metrics => (
     <div className="row">
@@ -94,7 +91,9 @@ export class MetricsPage extends React.Component<any, any> {
               min="0"
               max={metrics.gauges['jvm.memory.total.max'].value}
               color="success"
-            >{Math.round((metrics.gauges['jvm.memory.total.used'].value * 100) / metrics.gauges['jvm.memory.total.max'].value) || 0}%</Progress>
+            >
+              {Math.round((metrics.gauges['jvm.memory.total.used'].value * 100) / metrics.gauges['jvm.memory.total.max'].value) || 0}%
+            </Progress>
             <p>
               <span>Heap Memory</span>
               ({metrics.gauges['jvm.memory.heap.used'].value / 1000000 || 0}M / {metrics.gauges['jvm.memory.heap.max'].value / 1000000 || 0}M)
@@ -104,8 +103,9 @@ export class MetricsPage extends React.Component<any, any> {
               max={metrics.gauges['jvm.memory.heap.max'].value}
               value={metrics.gauges['jvm.memory.heap.used'].value}
               color="success"
-              >{Math.round((metrics.gauges['jvm.memory.heap.used'].value * 100) / metrics.gauges['jvm.memory.heap.max'].value) || 0}%
-              </Progress>
+            >
+              {Math.round((metrics.gauges['jvm.memory.heap.used'].value * 100) / metrics.gauges['jvm.memory.heap.max'].value) || 0}%
+            </Progress>
 
             <p>
               <span>Non-Heap Memory</span>
@@ -117,26 +117,30 @@ export class MetricsPage extends React.Component<any, any> {
               value={metrics.gauges['jvm.memory.non-heap.used'].value}
               color="success"
             >
-            {Math.round((metrics.gauges['jvm.memory.non-heap.used'].value * 100) / metrics.gauges['jvm.memory.non-heap.committed'].value) || 0}%
+              {Math.round((metrics.gauges['jvm.memory.non-heap.used'].value * 100) / metrics.gauges['jvm.memory.non-heap.committed'].value) || 0}%
             </Progress>
           </div>
           <div className="col-md-4">
             <b>Threads</b> (Total: {metrics.gauges['jvm.threads.count'].value}) <FaEye onClick={this.getThreadDump}/>
             <p><span>Runnable</span> {metrics.gauges['jvm.threads.runnable.count'].value}</p>
             <Progress animated min="0" value={metrics.gauges['jvm.threads.runnable.count'].value} max={metrics.gauges['jvm.threads.count'].value} color="success">
-            {Math.round((metrics.gauges['jvm.threads.runnable.count'].value * 100) / metrics.gauges['jvm.threads.count'].value) || 0}%</Progress>
+              {Math.round((metrics.gauges['jvm.threads.runnable.count'].value * 100) / metrics.gauges['jvm.threads.count'].value) || 0}%
+            </Progress>
 
             <p><span>Timed Waiting</span> ({metrics.gauges['jvm.threads.timed_waiting.count'].value})</p>
             <Progress animated min="0" value={metrics.gauges['jvm.threads.timed_waiting.count'].value} max={metrics.gauges['jvm.threads.count'].value} color="warning">
-            {Math.round((metrics.gauges['jvm.threads.timed_waiting.count'].value * 100) / metrics.gauges['jvm.threads.count'].value) || 0}%</Progress>
+              {Math.round((metrics.gauges['jvm.threads.timed_waiting.count'].value * 100) / metrics.gauges['jvm.threads.count'].value) || 0}%
+            </Progress>
 
             <p><span>Waiting</span> ({metrics.gauges['jvm.threads.waiting.count'].value})</p>
             <Progress animated min="0" value={metrics.gauges['jvm.threads.waiting.count'].value} max={metrics.gauges['jvm.threads.count'].value} color="warning">
-            {Math.round((metrics.gauges['jvm.threads.waiting.count'].value * 100) / metrics.gauges['jvm.threads.count'].value) || 0}%</Progress>
+              {Math.round((metrics.gauges['jvm.threads.waiting.count'].value * 100) / metrics.gauges['jvm.threads.count'].value) || 0}%
+            </Progress>
 
             <p><span>Blocked</span> ({metrics.gauges['jvm.threads.blocked.count'].value})</p>
             <Progress animated min="0" value={metrics.gauges['jvm.threads.blocked.count'].value} max={metrics.gauges['jvm.threads.count'].value} color="success">
-            {Math.round((metrics.gauges['jvm.threads.blocked.count'].value * 100) / metrics.gauges['jvm.threads.count'].value) || 0}%</Progress>
+              {Math.round((metrics.gauges['jvm.threads.blocked.count'].value * 100) / metrics.gauges['jvm.threads.count'].value) || 0}%
+            </Progress>
           </div>
           <div className="col-md-4">
             <b>Garbage collections</b>
@@ -188,6 +192,7 @@ export class MetricsPage extends React.Component<any, any> {
                   <span>Total requests</span> <b>{metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count || 0}</b>
                 </p>
                 <Table>
+                  <thead>
                     <tr>
                       <th>Code</th>
                       <th>Count</th>
@@ -196,6 +201,8 @@ export class MetricsPage extends React.Component<any, any> {
                       <th><span>Average</span> (5 min)</th>
                       <th><span>Average</span> (15 min)</th>
                     </tr>
+                  </thead>
+                  <tbody>
                     <tr key={0}>
                       <td>OK</td>
                       <td>
@@ -268,6 +275,7 @@ export class MetricsPage extends React.Component<any, any> {
                         {metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m15_rate || 2}
                       </td>
                     </tr>
+                  </tbody>
                 </Table>
               </div>
             </div>
@@ -279,6 +287,7 @@ export class MetricsPage extends React.Component<any, any> {
               <span> table </span>
             </div>
             <Table>
+              <thead>
                 <tr>
                   <th>Name</th>
                   <th>Count</th>
@@ -290,6 +299,8 @@ export class MetricsPage extends React.Component<any, any> {
                   <th>p99</th>
                   <th>Max</th>
                 </tr>
+              </thead>
+              <tbody>
                 {Object.keys(servicesStats).map((key, index) => (
                   <tr key={key}>
                     <td>{key}</td>
@@ -303,6 +314,7 @@ export class MetricsPage extends React.Component<any, any> {
                     <td>{servicesStats[key].max * 1000 || 0}</td>
                   </tr>
                 ))}
+              </tbody>
             </Table>
           </div>
           : ''}
@@ -312,12 +324,15 @@ export class MetricsPage extends React.Component<any, any> {
               <div className="col-sm-12">
                 <h3>Ehcache statistics</h3>
                 <Table>
+                  <thead>
                     <tr>
                       <th>Cache Name</th>
                       <th>Object</th>
                       <th>Misses</th>
                       <th>Eviction Count</th>
                     </tr>
+                  </thead>
+                  <tbody>
                     {Object.keys(cachesStats).map((k, v) => (
                       <tr key={k}>
                         <td>{k}</td>
@@ -327,6 +342,7 @@ export class MetricsPage extends React.Component<any, any> {
                         <td>{metrics.gauges[`${k}.eviction-count`].value}</td>
                       </tr>
                     ))}
+                  </tbody>
                 </Table>
 
               </div>
@@ -338,6 +354,7 @@ export class MetricsPage extends React.Component<any, any> {
               <div className="col-sm-12">
                 <h3>DataSource statistics (time in millisecond)</h3>
                 <Table>
+                  <thead>
                     <tr>
                       <th>
                         <span>Usage</span>
@@ -352,7 +369,8 @@ export class MetricsPage extends React.Component<any, any> {
                       <th>p99</th>
                       <th>Max</th>
                     </tr>
-
+                  </thead>
+                  <tbody>
                     <tr key="DB">
                       <td>
                         <Progress
@@ -371,6 +389,7 @@ export class MetricsPage extends React.Component<any, any> {
                       <td>{metrics.histograms['HikariPool-1.pool.Usage'].p99 * 1000 || 0}</td>
                       <td>{metrics.histograms['HikariPool-1.pool.Usage'].max * 1000 || 0}</td>
                     </tr>
+                  </tbody>
                 </Table>
               </div>
             </div>

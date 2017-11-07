@@ -25,6 +25,7 @@ const initialState = {
   },
   health: {},
   metrics: {},
+  threadDump: [],
   configuration: {
     configProps: {},
     env: {}
@@ -85,6 +86,12 @@ export default (state = initialState, action) => {
         ...state,
         loading: false,
         metrics: action.payload.data
+      };
+    case SUCCESS(ACTION_TYPES.FETCH_THREAD_DUMP):
+      return {
+        ...state,
+        loading: false,
+        threadDump: action.payload.data
       };
     case SUCCESS(ACTION_TYPES.FETCH_LOGS):
       return {
