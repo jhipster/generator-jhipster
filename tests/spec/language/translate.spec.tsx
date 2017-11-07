@@ -7,9 +7,9 @@ import { Translate, translate, TranslatorContext } from '../../../src/language';
 TranslatorContext.registerTranslations('en', {
   foo: {
     'bar': 'i18n text',
-    'fooz': 'text {{foo}} this {{bar}}',
-    'foofoo': 'text {{foo}} this {{bar}} <b>test</b>',
-    'foodirty': 'text {{foo}} this {{bar}} <script>execute</script><br/><hr><div>test</div> <a href="test">link</a>',
+    'fooz': 'text {{foo }} this {{bar}}',
+    'foofoo': 'text {{ foo}} this {{bar}} <b>test</b>',
+    'foodirty': 'text {{ foo }} this {{bar}} <script>execute</script><br/><hr><div>test</div> <a href="test">link</a>',
     'baz.foo': 'dirty key'
   }
 });
@@ -25,6 +25,14 @@ describe('Translate', () => {
     TranslatorContext.setLocale('en');
   });
   // All tests will go here
+  it('renders child content when key is invalid and renderInnerTextForMissingKeys is true', () => {
+    const mountedWrapper = mount(
+      <Translate contentKey="foo.baz">def text</Translate>
+    );
+    const span = mountedWrapper.find('span');
+    expect(span.length).to.equal(1);
+    expect(span.html()).to.equal('<span>def text</span>');
+  });
   it('renders key-missing message when child content is null & key is invalid', () => {
     const mountedWrapper = mount(
       <Translate contentKey="foo.baz"/>
@@ -33,7 +41,8 @@ describe('Translate', () => {
     expect(span.length).to.equal(1);
     expect(span.html()).to.equal('<span>translation-not-found[foo.baz]</span>');
   });
-  it('renders key-missing message when key is invalid', () => {
+  it('renders key-missing message when key is invalid & renderInnerTextForMissingKeys is false', () => {
+    TranslatorContext.setRenderInnerTextForMissingKeys(false);
     const mountedWrapper = mount(
       <Translate contentKey="foo.baz">def text</Translate>
     );

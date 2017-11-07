@@ -25,13 +25,13 @@ const flatten = array => {
 };
 
 const toTemplate = string => {
-  const expressionRE = /{{\w+}}/g;
-  const match = string.match(expressionRE) || [];
-  return [ string.split(expressionRE), ...match ];
+  const expressionRe = /{{\s?\w+\s?}}/g;
+  const match = string.match(expressionRe) || [];
+  return [ string.split(expressionRe), ...match ];
 };
 
 const normalizeValue = (value, key) => {
-  if (value == null || typeof value === 'boolean' || typeof value === 'string' || typeof value === 'number') {
+  if (value == null || [ 'boolean', 'string', 'number' ].includes(typeof value)) {
     return value;
   }
   if (value.$$typeof === REACT_ELEMENT) {
@@ -54,7 +54,7 @@ const render = (string, values) => {
           item
         ];
       }
-      const match = expressions[index] && expressions[index].match(/{{(\w+)}}/);
+      const match = expressions[index] && expressions[index].match(/{{\s?(\w+)\s?}}/);
       const value = match != null ? values[match[1]] : null;
       return [
         ...acc,
@@ -89,12 +89,20 @@ const deepFindDirty = (obj, path, placeholder) => {
   return current;
 };
 
+const showMissingOrDefault = (key, children) => {
+  const renderInnerTextForMissingKeys = TranslatorContext.context.renderInnerTextForMissingKeys;
+  if (renderInnerTextForMissingKeys && children && typeof children === 'string') {
+    return children;
+  }
+  return `${TranslatorContext.context.missingTranslationMsg}[${key}]`;
+};
+
 const doTranslate = (key, interpolate, children) => {
   const translationData = TranslatorContext.context.translations;
   const currentLocale = TranslatorContext.context.locale || TranslatorContext.context.defaultLocale;
   const data = translationData[currentLocale];
   const preRender = data ? get(data, key) || deepFindDirty(data, key, true) : null;
-  const preSanitize = render(preRender, interpolate) || `${TranslatorContext.context.missingTranslationMsg}[${key}]`;
+  const preSanitize = render(preRender, interpolate) || showMissingOrDefault(key, children);
   if (/<[a-z][\s\S]*>/i.test(preSanitize)) {
     // String contains HTML tags. Allow only a super restricted set of tags and attributes
     const content = sanitizeHtml(preSanitize, {
