@@ -44,7 +44,7 @@
         <hazelcast-hibernate52.version>1.2.2</hazelcast-hibernate52.version>
         <hazelcast-wm.version>3.7.1</hazelcast-wm.version>
         <hibernate.version>5.2.12.Final</hibernate.version>
-        <hikaricp.version>2.6.0</hikaricp.version>
+        <hikaricp.version>2.6.3</hikaricp.version>
         <infinispan-cloud.version>9.0.0.Final</infinispan-cloud.version>
         <infinispan-spring-boot-starter.version>1.0.0.Final</infinispan-spring-boot-starter.version>
         <jhipster-server.version>1.1.13</jhipster-server.version>
