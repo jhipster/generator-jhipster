@@ -1186,7 +1186,7 @@ module.exports = class extends PrivateBase {
         }
     }
 
-      /**
+    /**
      * Add a Maven dependency Management.
      *
      * @param {string} groupId - dependency groupId
@@ -1238,7 +1238,7 @@ module.exports = class extends PrivateBase {
     addMavenProperty(name, value) {
         const fullPath = 'pom.xml';
         try {
-            let property = `<${name}>${value}</${name}>`;
+            const property = `<${name}>${value}</${name}>`;
 
             jhipsterUtils.rewriteFile({
                 file: fullPath,
@@ -1371,7 +1371,7 @@ module.exports = class extends PrivateBase {
             this.debug('Error:', e);
         }
     }
-    
+
     /**
      * A new dependency to build.gradle file.
      *
