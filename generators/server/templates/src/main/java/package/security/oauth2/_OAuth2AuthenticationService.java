@@ -28,7 +28,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Manages authentication cases for OAuth2 updating the cookies holding access and refresh tokens accordingly.

@@ -87,6 +87,11 @@
         <%_ } _%>
         <mapstruct.version>1.1.0.Final</mapstruct.version>
 
+        <!-- TODO put this in jhipster-dependencies if adopted -->
+        <%_ if (applicationType === 'gateway' && authenticationType === 'uaa') { _%>
+        <public-suffix-list.version>2.2.0</public-suffix-list.version>
+        <%_ } _%>
+
         <!-- Plugin versions -->
         <maven-clean-plugin.version>2.6.1</maven-clean-plugin.version>
         <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
@@ -431,6 +436,13 @@
             <artifactId>mapstruct-jdk8</artifactId>
             <version>${mapstruct.version}</version>
         </dependency>
+        <%_ if (applicationType === 'gateway' && authenticationType === 'uaa') { _%>
+        <dependency>
+            <groupId>de.malkusch.whois-server-list</groupId>
+            <artifactId>public-suffix-list</artifactId>
+            <version>${public-suffix-list.version}</version>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>

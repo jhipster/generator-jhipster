@@ -19,7 +19,10 @@
 package <%=packageName%>.security.oauth2;
 
 import <%=packageName%>.config.oauth2.OAuth2Properties;
-import com.google.common.net.InternetDomainName;
+
+import de.malkusch.whoisServerList.publicSuffixList.PublicSuffixList;
+import de.malkusch.whoisServerList.publicSuffixList.PublicSuffixListFactory;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.json.JsonParser;
@@ -71,6 +74,8 @@ public class OAuth2CookieHelper {
 
     private OAuth2Properties oAuth2Properties;
 
+    private PublicSuffixList publicSuffixList;
+
     /**
      * Used to parse JWT claims.
      */
@@ -78,6 +83,7 @@ public class OAuth2CookieHelper {
 
     public OAuth2CookieHelper(OAuth2Properties oAuth2Properties) {
         this.oAuth2Properties = oAuth2Properties;
+        publicSuffixList = new PublicSuffixListFactory().build();
     }
 
     public static Cookie getAccessTokenCookie(HttpServletRequest request) {
@@ -304,19 +310,19 @@ public class OAuth2CookieHelper {
         if (domain != null) {
             return domain;
         }
-        //if not explicitly defined, use top-level domain
+        // if not explicitly defined, use top-level domain
         domain = request.getServerName().toLowerCase();
-        //strip off leading www.
+        // strip off leading www.
         if (domain.startsWith("www.")) {
             domain = domain.substring(4);
         }
-        //strip off subdomains, leaving the top level domain only
-        InternetDomainName domainName = InternetDomainName.from(domain);
-        if (domainName.isUnderPublicSuffix() && !domainName.isTopPrivateDomain()) {
-            //preserve leading dot
-            return "." + domainName.topPrivateDomain().toString();
+        // strip off subdomains, leaving the top level domain only
+        String suffix = publicSuffixList.getRegistrableDomain(domain);
+        if (suffix != null && !suffix.equals(domain)) {
+            // preserve leading dot
+            return "." + suffix;
         }
-        //no top-level domain, stick with default domain
+        // no top-level domain, stick with default domain
         return null;
     }
 
