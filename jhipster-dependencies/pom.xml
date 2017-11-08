@@ -85,7 +85,7 @@
         <metrics-spring.version>3.1.3</metrics-spring.version>
         <mongobee.version>0.12</mongobee.version>
         <mssql-jdbc.version>6.2.2.jre8</mssql-jdbc.version>
-        <oracle-jdbc.version>12.1.0.2</oracle-jdbc.version>
+        <oracle-jdbc.version>12.2.0.1</oracle-jdbc.version>
         <problem-spring-web.version>0.22.0</problem-spring-web.version>
         <prometheus-simpleclient.version>0.0.26</prometheus-simpleclient.version>
         <!-- The spring-boot version should match the one in
