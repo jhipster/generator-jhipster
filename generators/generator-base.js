@@ -1185,6 +1185,7 @@ module.exports = class extends PrivateBase {
             this.debug('Error:', e);
         }
     }
+
       /**
      * Add a Maven dependency Management.
      *
@@ -1227,6 +1228,7 @@ module.exports = class extends PrivateBase {
             this.debug('Error:', e);
         }
     }
+
     /**
      * Add a new Maven property.
      *
@@ -1250,6 +1252,7 @@ module.exports = class extends PrivateBase {
             this.debug('Error:', e);
         }
     }
+
     /**
      * Add a new Maven dependency.
      *
@@ -1283,6 +1286,7 @@ module.exports = class extends PrivateBase {
             this.debug('Error:', e);
         }
     }
+    
     /**
      * Add a new Maven plugin.
      *
