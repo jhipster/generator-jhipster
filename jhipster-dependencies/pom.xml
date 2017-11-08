@@ -41,7 +41,7 @@
         <dropwizard-metrics.version>3.2.5</dropwizard-metrics.version>
         <gatling.version>2.2.5</gatling.version>
         <guava.version>23.0</guava.version>
-        <hazelcast-hibernate52.version>1.2</hazelcast-hibernate52.version>
+        <hazelcast-hibernate52.version>1.2.2</hazelcast-hibernate52.version>
         <hazelcast-wm.version>3.7</hazelcast-wm.version>
         <hibernate.version>5.2.10.Final</hibernate.version>
         <hikaricp.version>2.6.0</hikaricp.version>
