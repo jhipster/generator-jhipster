@@ -169,4 +169,7 @@ limitations under the License.
     "postinstall": "node node_modules/phantomjs-prebuilt/install.js"
     <%_ } _%>
   }
+  "resolutions": {
+    "@types/react": "16.0.19"
+  }
 }
