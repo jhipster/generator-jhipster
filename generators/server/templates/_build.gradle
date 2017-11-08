@@ -381,9 +381,6 @@ dependencies {
     <%_ if (devDatabaseType === 'mariadb' || prodDatabaseType === 'mariadb') { _%>
     compile "org.mariadb.jdbc:mariadb-java-client"
     <%_ } _%>
-    <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
-    compile "com.h2database:h2"
-    <%_ } _%>
     <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
     compile "com.microsoft.sqlserver:mssql-jdbc"
     compile "com.github.sabomichal:liquibase-mssql"
