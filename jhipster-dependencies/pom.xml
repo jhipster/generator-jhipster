@@ -81,7 +81,7 @@
         <liquibase-mssql.version>1.6.2</liquibase-mssql.version>
         <liquibase-slf4j.version>2.0.0</liquibase-slf4j.version>
         <logstash-logback-encoder.version>4.11</logstash-logback-encoder.version>
-        <lz4.version>1.3.0</lz4.version>
+        <lz4-java.version>1.4.0</lz4-java.version>
         <metrics-spring.version>3.1.3</metrics-spring.version>
         <mongobee.version>0.12</mongobee.version>
         <mssql-jdbc.version>6.1.0.jre8</mssql-jdbc.version>
@@ -233,9 +233,9 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>net.jpountz.lz4</groupId>
-                <artifactId>lz4</artifactId>
-                <version>${lz4.version}</version>
+                <groupId>org.lz4</groupId>
+                <artifactId>lz4-java</artifactId>
+                <version>${lz4-java.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.dropwizard.metrics</groupId>
