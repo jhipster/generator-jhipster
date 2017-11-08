@@ -264,6 +264,7 @@ const files = {
             condition: generator => !generator.skipUserManagement,
             path: REACT_DIR,
             templates: [
+                { file: 'modules/administration/user-management/index.tsx', method: 'processJsx' },
                 { file: 'modules/administration/user-management/user-management.tsx', method: 'processJsx' },
                 { file: 'modules/administration/user-management/user-management-model.tsx', method: 'processJsx' },
                 { file: 'modules/administration/user-management/user-management-detail.tsx', method: 'processJsx' },
