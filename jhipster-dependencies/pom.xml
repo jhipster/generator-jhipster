@@ -37,7 +37,7 @@
         <cassandra-unit-spring.version>3.3.0.2</cassandra-unit-spring.version>
         <couchmove.version>1.0.1</couchmove.version>
         <couchbase-testcontainer.version>1.0</couchbase-testcontainer.version>
-        <cucumber.version>1.2.4</cucumber.version>
+        <cucumber.version>1.2.5</cucumber.version>
         <dropwizard-metrics.version>3.2.2</dropwizard-metrics.version>
         <gatling.version>2.2.5</gatling.version>
         <guava.version>23.0</guava.version>
