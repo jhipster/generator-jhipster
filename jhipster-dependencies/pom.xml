@@ -35,6 +35,8 @@
         <bucket4j.version>3.0.1</bucket4j.version>
         <cassandra-driver.version>3.3.0</cassandra-driver.version>
         <cassandra-unit-spring.version>3.3.0.2</cassandra-unit-spring.version>
+        <couchmove.version>1.0.1</couchmove.version>
+        <couchbase-testcontainer.version>1.0</couchbase-testcontainer.version>
         <cucumber.version>1.2.4</cucumber.version>
         <dropwizard-metrics.version>3.2.2</dropwizard-metrics.version>
         <gatling.version>2.2.5</gatling.version>
@@ -236,6 +238,17 @@
                 <groupId>com.github.mongobee</groupId>
                 <artifactId>mongobee</artifactId>
                 <version>${mongobee.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.differentway</groupId>
+                <artifactId>couchbase-testcontainer</artifactId>
+                <version>${couchbase-testcontainer.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.github.differentway</groupId>
+                <artifactId>couchmove</artifactId>
+                <version>${couchmove.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.sqlserver</groupId>
