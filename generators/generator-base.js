@@ -1286,7 +1286,7 @@ module.exports = class extends PrivateBase {
             this.debug('Error:', e);
         }
     }
-    
+
     /**
      * Add a new Maven plugin.
      *
@@ -1371,6 +1371,7 @@ module.exports = class extends PrivateBase {
             this.debug('Error:', e);
         }
     }
+    
     /**
      * A new dependency to build.gradle file.
      *
