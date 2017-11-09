@@ -33,9 +33,7 @@ import { LoginModalService } from '../../shared/login/login-modal.service';
     <%_ } _%>
 import { StateStorageService } from '../../shared/auth/state-storage.service';
 <%_ } _%>
-<%_ if (!skipServer) { _%>
 import { AuthExpiredInterceptor } from './auth-expired.interceptor';
-<%_ } _%>
 import { ErrorHandlerInterceptor } from './errorhandler.interceptor';
 import { NotificationInterceptor } from './notification.interceptor';
 

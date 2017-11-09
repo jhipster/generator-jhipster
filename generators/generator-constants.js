@@ -49,8 +49,12 @@ const DOCKER_JENKINS = 'jenkins:latest';
 const DOCKER_SWAGGER_EDITOR = 'swaggerapi/swagger-editor:latest';
 const DOCKER_COMPOSE_FORMAT_VERSION = '2';
 
+// Version of Java, Scala
+const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
+const SCALA_VERSION = '2.12.1';
+
 // version of Node, Yarn, NPM
-const NODE_VERSION = '6.11.4';
+const NODE_VERSION = '8.9.0';
 const YARN_VERSION = '1.2.1';
 const NPM_VERSION = '5.5.1';
 
@@ -187,6 +191,8 @@ const constants = {
     DOCKER_PROMETHEUS,
     DOCKER_PROMETHEUS_ALERTMANAGER,
     DOCKER_GRAFANA,
+    JAVA_VERSION,
+    SCALA_VERSION,
     NODE_VERSION,
     YARN_VERSION,
     NPM_VERSION,

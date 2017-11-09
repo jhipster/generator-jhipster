@@ -102,7 +102,7 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
 <%_ } _%><%_ if (databaseType === 'sql') { _%>
 
     @EntityGraph(attributePaths = "authorities")
-    User findOneWithAuthoritiesById(<%= pkType %> id);
+    Optional<User> findOneWithAuthoritiesById(<%= pkType %> id);
 
     @EntityGraph(attributePaths = "authorities")
     <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || hibernateCache === 'infinispan' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>

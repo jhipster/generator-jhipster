@@ -29,24 +29,28 @@ import <%=packageName%>.repository.search.UserSearchRepository;
 <%_ } _%>
 import <%=packageName%>.security.AuthoritiesConstants;
 <%_ if (authenticationType !== 'oauth2') { _%>
-import <%=packageName%>.service.MailService;<% } %>
+import <%=packageName%>.service.MailService;
+<%_ } _%>
 import <%=packageName%>.service.UserService;
 import <%=packageName%>.service.dto.UserDTO;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import <%=packageName%>.web.rest.errors.BadRequestAlertException;
 import <%=packageName%>.web.rest.errors.EmailAlreadyUsedException;
 import <%=packageName%>.web.rest.errors.LoginAlreadyUsedException;
-import <%=packageName%>.web.rest.vm.ManagedUserVM;
-import <%=packageName%>.web.rest.util.HeaderUtil;<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
+import <%=packageName%>.web.rest.util.HeaderUtil;
+<%_ } _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+import <%=packageName%>.web.rest.util.PaginationUtil;
+<%_ } _%>
 import io.github.jhipster.web.util.ResponseUtil;
-import io.swagger.annotations.ApiParam;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
+import org.slf4j.LoggerFactory;
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;<% } %>
+import org.springframework.http.HttpHeaders;
+<%_ } _%>
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -118,8 +122,8 @@ public class UserResource {
         this.userSearchRepository = userSearchRepository;
         <%_ } _%>
     }
-<%_ if (authenticationType !== 'oauth2') { _%>
 
+<%_ if (authenticationType !== 'oauth2') { _%>
     /**
      * POST  /users  : Creates a new user.
      * <p>
@@ -127,7 +131,7 @@ public class UserResource {
      * mail with an activation link.
      * The user needs to be activated on creation.
      *
-     * @param managedUserVM the user to create
+     * @param userDTO the user to create
      * @return the ResponseEntity with status 201 (Created) and with body the new user, or with status 400 (Bad Request) if the login or email is already in use
      * @throws URISyntaxException if the Location URI syntax is incorrect
      * @throws BadRequestAlertException 400 (Bad Request) if the login or email is already in use
@@ -135,18 +139,18 @@ public class UserResource {
     @PostMapping("/users")
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
-    public ResponseEntity<User> createUser(@Valid @RequestBody ManagedUserVM managedUserVM) throws URISyntaxException {
-        log.debug("REST request to save User : {}", managedUserVM);
+    public ResponseEntity<User> createUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException {
+        log.debug("REST request to save User : {}", userDTO);
 
-        if (managedUserVM.getId() != null) {
+        if (userDTO.getId() != null) {
             throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists");
         // Lowercase the user login before comparing with database
-        } else if (userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase()).isPresent()) {
+        } else if (userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).isPresent()) {
             throw new LoginAlreadyUsedException();
-        } else if (userRepository.findOneByEmailIgnoreCase(managedUserVM.getEmail()).isPresent()) {
+        } else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
             throw new EmailAlreadyUsedException();
         } else {
-            User newUser = userService.createUser(managedUserVM);
+            User newUser = userService.createUser(userDTO);
             mailService.sendCreationEmail(newUser);
             return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
                 .headers(HeaderUtil.createAlert(<% if(enableTranslation) {%> "userManagement.created"<% } else { %> "A user is created with identifier " + newUser.getLogin()<% } %>, newUser.getLogin()))
@@ -157,7 +161,7 @@ public class UserResource {
     /**
      * PUT  /users : Updates an existing User.
      *
-     * @param managedUserVM the user to update
+     * @param userDTO the user to update
      * @return the ResponseEntity with status 200 (OK) and with body the updated user
      * @throws EmailAlreadyUsedException 400 (Bad Request) if the email is already in use
      * @throws LoginAlreadyUsedException 400 (Bad Request) if the login is already in use
@@ -165,22 +169,23 @@ public class UserResource {
     @PutMapping("/users")
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
-    public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody ManagedUserVM managedUserVM) {
-        log.debug("REST request to update User : {}", managedUserVM);
-        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(managedUserVM.getEmail());
-        if (existingUser.isPresent() && (!existingUser.get().getId().equals(managedUserVM.getId()))) {
+    public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) {
+        log.debug("REST request to update User : {}", userDTO);
+        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
+        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
             throw new EmailAlreadyUsedException();
         }
-        existingUser = userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase());
-        if (existingUser.isPresent() && (!existingUser.get().getId().equals(managedUserVM.getId()))) {
+        existingUser = userRepository.findOneByLogin(userDTO.getLogin().toLowerCase());
+        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
             throw new LoginAlreadyUsedException();
         }
-        Optional<UserDTO> updatedUser = userService.updateUser(managedUserVM);
+        Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
 
         return ResponseUtil.wrapOrNotFound(updatedUser,
-            HeaderUtil.createAlert(<% if(enableTranslation) { %>"userManagement.updated"<% } else { %>"A user is updated with identifier " + managedUserVM.getLogin()<% } %>, managedUserVM.getLogin()));
+            HeaderUtil.createAlert(<% if(enableTranslation) { %>"userManagement.updated"<% } else { %>"A user is updated with identifier " + userDTO.getLogin()<% } %>, userDTO.getLogin()));
     }
-<% } %>
+
+<%_ } _%>
     /**
      * GET  /users : get all users.
      *<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
@@ -188,8 +193,9 @@ public class UserResource {
      * @return the ResponseEntity with status 200 (OK) and with body all users
      */
     @GetMapping("/users")
-    @Timed<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-    public ResponseEntity<List<UserDTO>> getAllUsers(@ApiParam Pageable pageable) {
+    @Timed
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
         final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
@@ -203,11 +209,13 @@ public class UserResource {
     @Secured(AuthoritiesConstants.ADMIN)
     public List<String> getAuthorities() {
         return userService.getAuthorities();
-    }<% } else { // Cassandra %>
+    }
+    <%_ } else { // Cassandra _%>
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         final List<UserDTO> userDTOs = userService.getAllManagedUsers();
         return new ResponseEntity<>(userDTOs, HttpStatus.OK);
-    }<% } %>
+    }
+    <%_ } _%>
 
     /**
      * GET  /users/:login : get the "login" user.
@@ -238,7 +246,9 @@ public class UserResource {
         log.debug("REST request to delete User: {}", login);
         userService.deleteUser(login);
         return ResponseEntity.ok().headers(HeaderUtil.createAlert(<% if(enableTranslation) {%> "userManagement.deleted"<% } else { %> "A user is deleted with identifier " + login<% } %>, login)).build();
-    }<%_ } _%><% if (searchEngine === 'elasticsearch') { %>
+    }
+<%_ } _%>
+<%_ if (searchEngine === 'elasticsearch') { _%>
 
     /**
      * SEARCH  /_search/users/:query : search for the User corresponding
@@ -253,5 +263,6 @@ public class UserResource {
         return StreamSupport
             .stream(userSearchRepository.search(queryStringQuery(query)).spliterator(), false)
             .collect(Collectors.toList());
-    }<% } %>
+    }
+<%_ } _%>
 }

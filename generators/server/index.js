@@ -118,11 +118,13 @@ module.exports = class extends BaseGenerator {
                 this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
                 this.DOCKER_SWAGGER_EDITOR = constants.DOCKER_SWAGGER_EDITOR;
 
+                this.JAVA_VERSION = constants.JAVA_VERSION;
+                this.SCALA_VERSION = constants.SCALA_VERSION;
+
                 this.NODE_VERSION = constants.NODE_VERSION;
                 this.YARN_VERSION = constants.YARN_VERSION;
                 this.NPM_VERSION = constants.NPM_VERSION;
 
-                this.javaVersion = '8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
                 this.packagejs = packagejs;
                 this.applicationType = this.config.get('applicationType') || this.configOptions.applicationType;
                 if (!this.applicationType) {

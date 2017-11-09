@@ -1192,8 +1192,8 @@ module.exports = class extends PrivateBase {
      *
      * @param {string} groupId - dependency groupId
      * @param {string} artifactId - dependency artifactId
-     * @param {string} version - explicit dependency version number
-     * @param {string} other - explicit other thing: scope, exclusions...
+     * @param {string} version - (optional) explicit dependency version number
+     * @param {string} other - (optional) explicit other thing: scope, exclusions...
      */
     addMavenDependency(groupId, artifactId, version, other) {
         const fullPath = 'pom.xml';
@@ -1284,16 +1284,20 @@ module.exports = class extends PrivateBase {
      * @param {string} scope - scope of the new dependency, e.g. compile
      * @param {string} group - maven GroupId
      * @param {string} name - maven ArtifactId
-     * @param {string} version - explicit version number
+     * @param {string} version - (optional) explicit dependency version number
      */
     addGradleDependency(scope, group, name, version) {
         const fullPath = 'build.gradle';
+        let dependency = `${group}:${name}`;
+        if (version) {
+            dependency += `:${version}`;
+        }
         try {
             jhipsterUtils.rewriteFile({
                 file: fullPath,
                 needle: 'jhipster-needle-gradle-dependency',
                 splicable: [
-                    `${scope} '${group}:${name}:${version}'`
+                    `${scope} "${dependency}"`
                 ]
             }, this);
         } catch (e) {

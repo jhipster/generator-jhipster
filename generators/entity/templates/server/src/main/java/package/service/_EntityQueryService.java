@@ -61,7 +61,7 @@ import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;
  * Service for executing complex queries for <%= entityClass %> entities in the database.
  * The main input is a {@link <%= entityClass %>Criteria} which get's converted to {@link Specifications},
  * in a way that all the filters must apply.
- * It returns a {@link List} of {%link <%= instanceType %>} or a {@link Page} of {%link <%= instanceType %>} which fulfills the criterias
+ * It returns a {@link List} of {@link <%= instanceType %>} or a {@link Page} of {@link <%= instanceType %>} which fulfills the criteria.
  */
 @Service<% if (databaseType === 'sql') { %>
 @Transactional(readOnly = true)<% } %>
@@ -72,7 +72,7 @@ public class <%= serviceClassName %> extends QueryService<<%= entityClass %>> {
 <%- include('../common/inject_template', {viaService: false, constructorName: serviceClassName, queryService: false}); -%>
 
     /**
-     * Return a {@link List} of {%link <%= instanceType %>} which matches the criteria from the database
+     * Return a {@link List} of {@link <%= instanceType %>} which matches the criteria from the database
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching entities.
      */
@@ -88,7 +88,7 @@ public class <%= serviceClassName %> extends QueryService<<%= entityClass %>> {
     }
 
     /**
-     * Return a {@link Page} of {%link <%= instanceType %>} which matches the criteria from the database
+     * Return a {@link Page} of {@link <%= instanceType %>} which matches the criteria from the database
      * @param criteria The object which holds all the filters, which the entities should match.
      * @param page The page, which should be returned.
      * @return the matching entities.

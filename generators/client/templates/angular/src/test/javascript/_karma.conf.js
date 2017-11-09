@@ -17,11 +17,7 @@
  limitations under the License.
 -%>
 const webpackConfig = require('../../../webpack/webpack.test.js');
-
-const ChromiumRevision = require('puppeteer/package.json').puppeteer.chromium_revision;
-const Downloader = require('puppeteer/utils/ChromiumDownloader');
-const revisionInfo = Downloader.revisionInfo(Downloader.currentPlatform(), ChromiumRevision);
-process.env.CHROMIUM_BIN = revisionInfo.executablePath;
+process.env.CHROMIUM_BIN = require('puppeteer').executablePath()
 
 const WATCH = process.argv.indexOf('--watch') > -1;
 
@@ -95,7 +91,15 @@ module.exports = (config) => {
         customLaunchers: {
             ChromiumHeadlessNoSandbox: {
                 base: 'ChromiumHeadless',
-                    flags: ['--no-sandbox']
+                    // the chrome setup is voluntarily permissive to accomodate various environments (different OSes, running inside docker, etc)
+                    // feel free to enable the sandbox if it doesn't cause problems for you
+                    // see http://www.jhipster.tech/running-tests for informations on how to troubleshoot your karma chrome configuration
+                    flags: [
+                        '--no-sandbox',
+                        '--disable-gpu',
+                        '--remote-debugging-port=9222'
+                    ],
+                    debug: true
             }
         },
 

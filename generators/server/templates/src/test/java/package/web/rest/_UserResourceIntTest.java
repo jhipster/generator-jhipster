@@ -222,27 +222,18 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         // Create the User
-        Set<String> authorities = new HashSet<>();
-        authorities.add(AuthoritiesConstants.USER);
-        ManagedUserVM managedUserVM = new ManagedUserVM(
-            null,
-            DEFAULT_LOGIN,
-            DEFAULT_PASSWORD,
-            DEFAULT_FIRSTNAME,
-            DEFAULT_LASTNAME,
-            DEFAULT_EMAIL,
-            true,
-            <%_ if (databaseType !== 'cassandra') { _%>
-            DEFAULT_IMAGEURL,
-            <%_ } _%>
-            DEFAULT_LANGKEY,
-            <%_ if (databaseType !== 'cassandra') { _%>
-            null,
-            null,
-            null,
-            null,
-            <%_ } _%>
-            authorities);
+        ManagedUserVM managedUserVM = new ManagedUserVM();
+        managedUserVM.setLogin(DEFAULT_LOGIN);
+        managedUserVM.setPassword(DEFAULT_PASSWORD);
+        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
+        managedUserVM.setLastName(DEFAULT_LASTNAME);
+        managedUserVM.setEmail(DEFAULT_EMAIL);
+        managedUserVM.setActivated(true);
+        <%_ if (databaseType !== 'cassandra') { _%>
+        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
+        <%_ } _%>
+        managedUserVM.setLangKey(DEFAULT_LANGKEY);
+        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         restUserMockMvc.perform(post("/api/users")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -270,33 +261,25 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
     public void createUserWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
-        Set<String> authorities = new HashSet<>();
-        authorities.add(AuthoritiesConstants.USER);
-        ManagedUserVM managedUserVM = new ManagedUserVM(
-            <%_ if (databaseType === 'cassandra') { _%>
-            UUID.randomUUID().toString(),
-            <%_ } else if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-            "1L",
-            <%_ } else { _%>
-            1L,
-            <%_ } _%>
-            DEFAULT_LOGIN,
-            DEFAULT_PASSWORD,
-            DEFAULT_FIRSTNAME,
-            DEFAULT_LASTNAME,
-            DEFAULT_EMAIL,
-            true,
-            <%_ if (databaseType !== 'cassandra') { _%>
-            DEFAULT_IMAGEURL,
-            <%_ } _%>
-            DEFAULT_LANGKEY,
-            <%_ if (databaseType !== 'cassandra') { _%>
-            null,
-            null,
-            null,
-            null,
-            <%_ } _%>
-            authorities);
+        ManagedUserVM managedUserVM = new ManagedUserVM();
+        <%_ if (databaseType === 'cassandra') { _%>
+        managedUserVM.setId(UUID.randomUUID().toString());
+        <%_ } else if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+        managedUserVM.setId("1L");
+        <%_ } else { _%>
+        managedUserVM.setId(1L);
+        <%_ } _%>
+        managedUserVM.setLogin(DEFAULT_LOGIN);
+        managedUserVM.setPassword(DEFAULT_PASSWORD);
+        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
+        managedUserVM.setLastName(DEFAULT_LASTNAME);
+        managedUserVM.setEmail(DEFAULT_EMAIL);
+        managedUserVM.setActivated(true);
+        <%_ if (databaseType !== 'cassandra') { _%>
+        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
+        <%_ } _%>
+        managedUserVM.setLangKey(DEFAULT_LANGKEY);
+        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restUserMockMvc.perform(post("/api/users")
@@ -321,27 +304,18 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         <%_ } _%>
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
-        Set<String> authorities = new HashSet<>();
-        authorities.add(AuthoritiesConstants.USER);
-        ManagedUserVM managedUserVM = new ManagedUserVM(
-            null,
-            DEFAULT_LOGIN, // this login should already be used
-            DEFAULT_PASSWORD,
-            DEFAULT_FIRSTNAME,
-            DEFAULT_LASTNAME,
-            "anothermail@localhost",
-            true,
-            <%_ if (databaseType !== 'cassandra') { _%>
-            DEFAULT_IMAGEURL,
-            <%_ } _%>
-            DEFAULT_LANGKEY,
-            <%_ if (databaseType !== 'cassandra') { _%>
-            null,
-            null,
-            null,
-            null,
-            <%_ } _%>
-            authorities);
+        ManagedUserVM managedUserVM = new ManagedUserVM();
+        managedUserVM.setLogin(DEFAULT_LOGIN);// this login should already be used
+        managedUserVM.setPassword(DEFAULT_PASSWORD);
+        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
+        managedUserVM.setLastName(DEFAULT_LASTNAME);
+        managedUserVM.setEmail("anothermail@localhost");
+        managedUserVM.setActivated(true);
+        <%_ if (databaseType !== 'cassandra') { _%>
+        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
+        <%_ } _%>
+        managedUserVM.setLangKey(DEFAULT_LANGKEY);
+        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         // Create the User
         restUserMockMvc.perform(post("/api/users")
@@ -366,27 +340,18 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         <%_ } _%>
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
-        Set<String> authorities = new HashSet<>();
-        authorities.add(AuthoritiesConstants.USER);
-        ManagedUserVM managedUserVM = new ManagedUserVM(
-            null,
-            "anotherlogin",
-            DEFAULT_PASSWORD,
-            DEFAULT_FIRSTNAME,
-            DEFAULT_LASTNAME,
-            DEFAULT_EMAIL, // this email should already be used
-            true,
-            <%_ if (databaseType !== 'cassandra') { _%>
-            DEFAULT_IMAGEURL,
-            <%_ } _%>
-            DEFAULT_LANGKEY,
-            <%_ if (databaseType !== 'cassandra') { _%>
-            null,
-            null,
-            null,
-            null,
-            <%_ } _%>
-            authorities);
+        ManagedUserVM managedUserVM = new ManagedUserVM();
+        managedUserVM.setLogin("anotherlogin");
+        managedUserVM.setPassword(DEFAULT_PASSWORD);
+        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
+        managedUserVM.setLastName(DEFAULT_LASTNAME);
+        managedUserVM.setEmail(DEFAULT_EMAIL);// this email should already be used
+        managedUserVM.setActivated(true);
+        <%_ if (databaseType !== 'cassandra') { _%>
+        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
+        <%_ } _%>
+        managedUserVM.setLangKey(DEFAULT_LANGKEY);
+        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         // Create the User
         restUserMockMvc.perform(post("/api/users")
@@ -476,27 +441,25 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         // Update the user
         User updatedUser = userRepository.findOne(user.getId());
 
-        Set<String> authorities = new HashSet<>();
-        authorities.add(AuthoritiesConstants.USER);
-        ManagedUserVM managedUserVM = new ManagedUserVM(
-            updatedUser.getId(),
-            updatedUser.getLogin(),
-            UPDATED_PASSWORD,
-            UPDATED_FIRSTNAME,
-            UPDATED_LASTNAME,
-            UPDATED_EMAIL,
-            updatedUser.getActivated(),
-            <%_ if (databaseType !== 'cassandra') { _%>
-            UPDATED_IMAGEURL,
-            <%_ } _%>
-            UPDATED_LANGKEY,
-            <%_ if (databaseType !== 'cassandra') { _%>
-            updatedUser.getCreatedBy(),
-            updatedUser.getCreatedDate(),
-            updatedUser.getLastModifiedBy(),
-            updatedUser.getLastModifiedDate(),
-            <%_ } _%>
-            authorities);
+        ManagedUserVM managedUserVM = new ManagedUserVM();
+        managedUserVM.setId(updatedUser.getId());
+        managedUserVM.setLogin(updatedUser.getLogin());
+        managedUserVM.setPassword(UPDATED_PASSWORD);
+        managedUserVM.setFirstName(UPDATED_FIRSTNAME);
+        managedUserVM.setLastName(UPDATED_LASTNAME);
+        managedUserVM.setEmail(UPDATED_EMAIL);
+        managedUserVM.setActivated(updatedUser.getActivated());
+        <%_ if (databaseType !== 'cassandra') { _%>
+        managedUserVM.setImageUrl(UPDATED_IMAGEURL);
+        <%_ } _%>
+        managedUserVM.setLangKey(UPDATED_LANGKEY);
+        <%_ if (databaseType !== 'cassandra') { _%>
+        managedUserVM.setCreatedBy(updatedUser.getCreatedBy());
+        managedUserVM.setCreatedDate(updatedUser.getCreatedDate());
+        managedUserVM.setLastModifiedBy(updatedUser.getLastModifiedBy());
+        managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
+        <%_ } _%>
+        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         restUserMockMvc.perform(put("/api/users")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -531,27 +494,25 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         // Update the user
         User updatedUser = userRepository.findOne(user.getId());
 
-        Set<String> authorities = new HashSet<>();
-        authorities.add(AuthoritiesConstants.USER);
-        ManagedUserVM managedUserVM = new ManagedUserVM(
-            updatedUser.getId(),
-            UPDATED_LOGIN,
-            UPDATED_PASSWORD,
-            UPDATED_FIRSTNAME,
-            UPDATED_LASTNAME,
-            UPDATED_EMAIL,
-            updatedUser.getActivated(),
-            <%_ if (databaseType !== 'cassandra') { _%>
-            UPDATED_IMAGEURL,
-            <%_ } _%>
-            UPDATED_LANGKEY,
-            <%_ if (databaseType !== 'cassandra') { _%>
-            updatedUser.getCreatedBy(),
-            updatedUser.getCreatedDate(),
-            updatedUser.getLastModifiedBy(),
-            updatedUser.getLastModifiedDate(),
-            <%_ } _%>
-            authorities);
+        ManagedUserVM managedUserVM = new ManagedUserVM();
+        managedUserVM.setId(updatedUser.getId());
+        managedUserVM.setLogin(UPDATED_LOGIN);
+        managedUserVM.setPassword(UPDATED_PASSWORD);
+        managedUserVM.setFirstName(UPDATED_FIRSTNAME);
+        managedUserVM.setLastName(UPDATED_LASTNAME);
+        managedUserVM.setEmail(UPDATED_EMAIL);
+        managedUserVM.setActivated(updatedUser.getActivated());
+        <%_ if (databaseType !== 'cassandra') { _%>
+        managedUserVM.setImageUrl(UPDATED_IMAGEURL);
+        <%_ } _%>
+        managedUserVM.setLangKey(UPDATED_LANGKEY);
+        <%_ if (databaseType !== 'cassandra') { _%>
+        managedUserVM.setCreatedBy(updatedUser.getCreatedBy());
+        managedUserVM.setCreatedDate(updatedUser.getCreatedDate());
+        managedUserVM.setLastModifiedBy(updatedUser.getLastModifiedBy());
+        managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
+        <%_ } _%>
+        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         restUserMockMvc.perform(put("/api/users")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -605,27 +566,25 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         // Update the user
         User updatedUser = userRepository.findOne(user.getId());
 
-        Set<String> authorities = new HashSet<>();
-        authorities.add(AuthoritiesConstants.USER);
-        ManagedUserVM managedUserVM = new ManagedUserVM(
-            updatedUser.getId(),
-            updatedUser.getLogin(),
-            updatedUser.getPassword(),
-            updatedUser.getFirstName(),
-            updatedUser.getLastName(),
-            "jhipster@localhost",  // this email should already be used by anotherUser
-            updatedUser.getActivated(),
-            <%_ if (databaseType !== 'cassandra') { _%>
-            updatedUser.getImageUrl(),
-            <%_ } _%>
-            updatedUser.getLangKey(),
-            <%_ if (databaseType !== 'cassandra') { _%>
-            updatedUser.getCreatedBy(),
-            updatedUser.getCreatedDate(),
-            updatedUser.getLastModifiedBy(),
-            updatedUser.getLastModifiedDate(),
-            <%_ } _%>
-            authorities);
+        ManagedUserVM managedUserVM = new ManagedUserVM();
+        managedUserVM.setId(updatedUser.getId());
+        managedUserVM.setLogin(updatedUser.getLogin());
+        managedUserVM.setPassword(updatedUser.getPassword());
+        managedUserVM.setFirstName(updatedUser.getFirstName());
+        managedUserVM.setLastName(updatedUser.getLastName());
+        managedUserVM.setEmail("jhipster@localhost");// this email should already be used by anotherUser
+        managedUserVM.setActivated(updatedUser.getActivated());
+        <%_ if (databaseType !== 'cassandra') { _%>
+        managedUserVM.setImageUrl(updatedUser.getImageUrl());
+        <%_ } _%>
+        managedUserVM.setLangKey(updatedUser.getLangKey());
+        <%_ if (databaseType !== 'cassandra') { _%>
+        managedUserVM.setCreatedBy(updatedUser.getCreatedBy());
+        managedUserVM.setCreatedDate(updatedUser.getCreatedDate());
+        managedUserVM.setLastModifiedBy(updatedUser.getLastModifiedBy());
+        managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
+        <%_ } _%>
+        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         restUserMockMvc.perform(put("/api/users")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -666,27 +625,25 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         // Update the user
         User updatedUser = userRepository.findOne(user.getId());
 
-        Set<String> authorities = new HashSet<>();
-        authorities.add(AuthoritiesConstants.USER);
-        ManagedUserVM managedUserVM = new ManagedUserVM(
-            updatedUser.getId(),
-            "jhipster", // this login should already be used by anotherUser
-            updatedUser.getPassword(),
-            updatedUser.getFirstName(),
-            updatedUser.getLastName(),
-            updatedUser.getEmail(),
-            updatedUser.getActivated(),
-            <%_ if (databaseType !== 'cassandra') { _%>
-            updatedUser.getImageUrl(),
-            <%_ } _%>
-            updatedUser.getLangKey(),
-            <%_ if (databaseType !== 'cassandra') { _%>
-            updatedUser.getCreatedBy(),
-            updatedUser.getCreatedDate(),
-            updatedUser.getLastModifiedBy(),
-            updatedUser.getLastModifiedDate(),
-            <%_ } _%>
-            authorities);
+        ManagedUserVM managedUserVM = new ManagedUserVM();
+        managedUserVM.setId(updatedUser.getId());
+        managedUserVM.setLogin("jhipster");// this login should already be used by anotherUser
+        managedUserVM.setPassword(updatedUser.getPassword());
+        managedUserVM.setFirstName(updatedUser.getFirstName());
+        managedUserVM.setLastName(updatedUser.getLastName());
+        managedUserVM.setEmail(updatedUser.getEmail());
+        managedUserVM.setActivated(updatedUser.getActivated());
+        <%_ if (databaseType !== 'cassandra') { _%>
+        managedUserVM.setImageUrl(updatedUser.getImageUrl());
+        <%_ } _%>
+        managedUserVM.setLangKey(updatedUser.getLangKey());
+        <%_ if (databaseType !== 'cassandra') { _%>
+        managedUserVM.setCreatedBy(updatedUser.getCreatedBy());
+        managedUserVM.setCreatedDate(updatedUser.getCreatedDate());
+        managedUserVM.setLastModifiedBy(updatedUser.getLastModifiedBy());
+        managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
+        <%_ } _%>
+        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         restUserMockMvc.perform(put("/api/users")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -758,24 +715,23 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
 
     @Test
     public void testUserDTOtoUser() {
-        UserDTO userDTO = new UserDTO(
-            DEFAULT_ID,
-            DEFAULT_LOGIN,
-            DEFAULT_FIRSTNAME,
-            DEFAULT_LASTNAME,
-            DEFAULT_EMAIL,
-            true,
-            <%_ if (databaseType !== 'cassandra') { _%>
-            DEFAULT_IMAGEURL,
-            <%_ } _%>
-            DEFAULT_LANGKEY,
-            <%_ if (databaseType !== 'cassandra') { _%>
-            DEFAULT_LOGIN,
-            null,
-            DEFAULT_LOGIN,
-            null,
-            <%_ } _%>
-            Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(DEFAULT_ID);
+        userDTO.setLogin(DEFAULT_LOGIN);
+        userDTO.setFirstName(DEFAULT_FIRSTNAME);
+        userDTO.setLastName(DEFAULT_LASTNAME);
+        userDTO.setEmail(DEFAULT_EMAIL);
+        userDTO.setActivated(true);
+        <%_ if (databaseType !== 'cassandra') { _%>
+        userDTO.setImageUrl(DEFAULT_IMAGEURL);
+        <%_ } _%>
+        userDTO.setLangKey(DEFAULT_LANGKEY);
+        <%_ if (databaseType !== 'cassandra') { _%>
+        userDTO.setCreatedBy(DEFAULT_LOGIN);
+        userDTO.setLastModifiedBy(DEFAULT_LOGIN);
+        <%_ } _%>
+        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+
         User user = userMapper.userDTOToUser(userDTO);
         assertThat(user.getId()).isEqualTo(DEFAULT_ID);
         assertThat(user.getLogin()).isEqualTo(DEFAULT_LOGIN);

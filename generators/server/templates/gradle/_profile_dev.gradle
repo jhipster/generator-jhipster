@@ -32,6 +32,9 @@ ext {
 
 dependencies {
     compile "org.springframework.boot:spring-boot-devtools"
+    <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+    compile "com.h2database:h2"
+    <%_ } _%>
 }
 
 def profiles = 'dev'

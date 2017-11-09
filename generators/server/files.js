@@ -345,6 +345,9 @@ function writeFiles() {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/_FeignConfiguration.java`, `${javaDir}config/FeignConfiguration.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/client/_AuthorizedFeignClient.java`, `${javaDir}client/AuthorizedFeignClient.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/client/_OAuth2InterceptedFeignConfiguration.java`, `${javaDir}client/OAuth2InterceptedFeignConfiguration.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/client/_AuthorizedUserFeignClient.java`, `${javaDir}client/AuthorizedUserFeignClient.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/client/_UserFeignClientInterceptor.java`, `${javaDir}client/UserFeignClientInterceptor.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/client/_OAuth2UserClientFeignConfiguration.java`, `${javaDir}client/OAuth2UserClientFeignConfiguration.java`);
             }
             if (this.authenticationType === 'oauth2') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_AuthorizationHeaderUtil.java`, `${javaDir}/security/oauth2/AuthorizationHeaderUtil.java`);

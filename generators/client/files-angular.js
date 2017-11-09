@@ -131,6 +131,7 @@ const files = {
                 '_app.main-aot.ts',
                 '_app.route.ts',
                 '_app.module.ts',
+                '_app-routing.module.ts',
                 '_app.constants.ts',
                 '_polyfills.ts',
                 '_vendor.ts',
@@ -139,7 +140,8 @@ const files = {
                 // interceptors
                 'blocks/interceptor/_errorhandler.interceptor.ts',
                 'blocks/interceptor/_notification.interceptor.ts',
-                'blocks/interceptor/_http.provider.ts'
+                'blocks/interceptor/_http.provider.ts',
+                'blocks/interceptor/_auth-expired.interceptor.ts'
             ]
         },
         {
@@ -147,13 +149,6 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 'blocks/interceptor/_auth.interceptor.ts'
-            ]
-        },
-        {
-            condition: generator => !generator.skipServer,
-            path: ANGULAR_DIR,
-            templates: [
-                'blocks/interceptor/_auth-expired.interceptor.ts'
             ]
         }
     ],
@@ -171,7 +166,6 @@ const files = {
                 { file: 'home/_home.component.html', method: 'processHtml' },
                 // layouts
                 'layouts/_index.ts',
-                'layouts/_layout-routing.module.ts',
                 'layouts/profiles/_page-ribbon.component.ts',
                 'layouts/profiles/_profile.service.ts',
                 'layouts/profiles/_profile-info.model.ts',
@@ -179,6 +173,7 @@ const files = {
                 'layouts/main/_main.component.html',
                 { file: 'layouts/navbar/_navbar.component.ts', method: 'processJs' },
                 { file: 'layouts/navbar/_navbar.component.html', method: 'processHtml' },
+                'layouts/navbar/_navbar.route.ts',
                 'layouts/footer/_footer.component.ts',
                 { file: 'layouts/footer/_footer.component.html', method: 'processHtml' },
                 { file: 'layouts/error/_error.route.ts', method: 'processJs' },

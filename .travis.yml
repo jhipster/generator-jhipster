@@ -4,15 +4,15 @@ services:
   - docker
 language: node_js
 node_js:
-  - "6.11.4"
+  - "8.9.0"
 jdk:
   - oraclejdk8
 addons:
   apt:
     sources:
-    - google-chrome
+      - google-chrome
     packages:
-    - google-chrome-stable
+      - google-chrome-stable
 cache:
   directories:
     - $HOME/.m2

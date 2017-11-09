@@ -21,11 +21,6 @@ package <%=packageName%>.web.rest.vm;
 import <%=packageName%>.service.dto.UserDTO;
 import javax.validation.constraints.Size;
 
-<%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
-import java.time.Instant;
-<%_ } _%>
-import java.util.Set;
-
 /**
  * View Model extending the UserDTO, which is meant to be used in the user management UI.
  */
@@ -43,22 +38,14 @@ public class ManagedUserVM extends UserDTO {
     public ManagedUserVM() {
         // Empty constructor needed for Jackson.
     }
-
-    public ManagedUserVM(<% if (databaseType === 'sql') { %>Long<% } else { %>String<% } %> id, String login, <% if (authenticationType !== 'oauth2') { %>String password, <% } %>String firstName, String lastName,
-                         String email, boolean activated<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>, String imageUrl<% } %>, String langKey,
-                         <% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>String createdBy, Instant createdDate, String lastModifiedBy, Instant lastModifiedDate,
-                        <% } %>Set<String> authorities) {
-
-        super(id, login, firstName, lastName, email, activated<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>, imageUrl<% } %>, langKey,
-            <% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>createdBy, createdDate, lastModifiedBy, lastModifiedDate,  <% } %>authorities);
-    <%_ if (authenticationType !== 'oauth2') { _%>
-        this.password = password;
-    <%_ } _%>
-    }
     <%_ if (authenticationType !== 'oauth2') { _%>
 
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
     <%_ } _%>
 

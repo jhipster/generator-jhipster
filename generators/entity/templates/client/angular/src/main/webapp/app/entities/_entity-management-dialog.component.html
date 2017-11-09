@@ -101,14 +101,14 @@ _%>
             <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
             <div class="d-flex">
                 <input id="field_<%= fieldName %>" type="datetime-local" class="form-control" name="<%= fieldName %>" [(ngModel)]="<%= entityInstance %>.<%= fieldName %>"
-                <%- include ng_validators %>  />
+                <%- include ng_validators %>/>
             </div>
             <%_ } else if(fieldTypeBlobContent === 'text') { _%>
             <textarea class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>"
-                [(ngModel)]="<%= entityInstance %>.<%= fieldName %>" <%- include ng_validators %> ></textarea>
+                [(ngModel)]="<%= entityInstance %>.<%= fieldName %>" <%- include ng_validators %>></textarea>
             <%_ } else { _%>
             <input type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>"
-                [(ngModel)]="<%= entityInstance %>.<%= fieldName %>" <%- include ng_validators %> />
+                [(ngModel)]="<%= entityInstance %>.<%= fieldName %>" <%- include ng_validators %>/>
                 <%_ if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent !== 'text') { _%>
             <input type="hidden" class="form-control" name="<%= fieldName %>ContentType" id="field_<%= fieldName %>ContentType"
                 [(ngModel)]="<%= entityInstance %>.<%= fieldName %>ContentType" />

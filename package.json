@@ -1,6 +1,6 @@
 {
   "name": "generator-jhipster",
-  "version": "4.10.1",
+  "version": "4.10.2",
   "description": "Spring Boot + Angular in one handy generator",
   "files": [
     "cli",
@@ -43,7 +43,7 @@
     "jsdoc": "jsdoc --configure jsdoc-conf.json"
   },
   "dependencies": {
-    "chalk": "2.1.0",
+    "chalk": "2.3.0",
     "cheerio": "0.22.0",
     "commander": "2.11.0",
     "didyoumean": "1.2.1",
@@ -61,18 +61,18 @@
     "semver": "5.4.1",
     "shelljs": "0.7.8",
     "tabtab": "2.2.2",
-    "yeoman-environment": "2.0.3",
-    "yeoman-generator": "2.0.0"
+    "yeoman-environment": "2.0.5",
+    "yeoman-generator": "2.0.1"
   },
   "devDependencies": {
     "chai": "4.1.2",
-    "eslint": "4.7.2",
-    "eslint-config-airbnb-base": "12.0.0",
-    "eslint-plugin-import": "2.7.0",
+    "eslint": "4.10.0",
+    "eslint-config-airbnb-base": "12.1.0",
+    "eslint-plugin-import": "2.8.0",
     "fs-extra": "4.0.2",
     "jsdoc": "3.5.5",
-    "mocha": "3.5.3",
-    "yeoman-assert": "3.0.0",
+    "mocha": "4.0.1",
+    "yeoman-assert": "3.1.0",
     "yeoman-test": "1.7.0"
   },
   "engines": {

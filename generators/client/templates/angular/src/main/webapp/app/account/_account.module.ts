@@ -50,7 +50,7 @@ import {
 @NgModule({
     imports: [
         <%=angularXAppName%>SharedModule,
-        RouterModule.forRoot(accountState, { useHash: true })
+        RouterModule.forChild(accountState)
     ],
     declarations: [
         <%_ if (enableSocialSignIn) { _%>

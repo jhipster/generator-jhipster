@@ -16,25 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Route } from '@angular/router';
 
-import { <%=angularXAppName%>SharedModule } from '../shared';
+import { NavbarComponent } from './navbar.component';
 
-import { HOME_ROUTE, HomeComponent } from './';
-
-@NgModule({
-    imports: [
-        <%=angularXAppName%>SharedModule,
-        RouterModule.forChild([ HOME_ROUTE ])
-    ],
-    declarations: [
-        HomeComponent,
-    ],
-    entryComponents: [
-    ],
-    providers: [
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
-})
-export class <%=angularXAppName%>HomeModule {}
+export const navbarRoute: Route = {
+    path: '',
+    component: NavbarComponent,
+    outlet: 'navbar'
+};
