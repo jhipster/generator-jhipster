@@ -68,28 +68,16 @@ module.exports = options => ({
       minChunks: Infinity
     }),
     new CopyWebpackPlugin([
-      {
-        from: './src/main/webapp/swagger-ui/',
-        to: 'swagger-ui'
-      }, {
-        from: './node_modules/swagger-ui/dist/css',
-        to: 'swagger-ui/dist/css'
-      }, {
-        from: './node_modules/swagger-ui/dist/lib',
-        to: 'swagger-ui/dist/lib'
-      }, {
-        from: './node_modules/swagger-ui/dist/swagger-ui.min.js',
-        to: 'swagger-ui/dist/swagger-ui.min.js'
-      }, {
-        from: './src/main/webapp/static/',
-        to: 'static'
-      }, {
-        from: './src/main/webapp/favicon.ico',
-        to: 'favicon.ico'
-      }, {
-        from: './src/main/webapp/robots.txt',
-        to: 'robots.txt'
-      }
+      { from: './node_modules/swagger-ui/dist/css', to: 'swagger-ui/dist/css' },
+      { from: './node_modules/swagger-ui/dist/lib', to: 'swagger-ui/dist/lib' },
+      { from: './node_modules/swagger-ui/dist/swagger-ui.min.js', to: 'swagger-ui/dist/swagger-ui.min.js' },
+      { from: './<%= MAIN_SRC_DIR %>/swagger-ui/', to: 'swagger-ui' },
+      { from: './<%= MAIN_SRC_DIR %>static/', to: 'static' },
+      { from: './<%= MAIN_SRC_DIR %>favicon.ico', to: 'favicon.ico' },
+      { from: './<%= MAIN_SRC_DIR %>manifest.webapp', to: 'manifest.webapp' },
+      // { from: './<%= MAIN_SRC_DIR %>sw.js', to: 'sw.js' },
+      // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
+      { from: './<%= MAIN_SRC_DIR %>robots.txt', to: 'robots.txt' }
     ]),
     new HtmlWebpackPlugin({
       template: './src/main/webapp/index.html',
