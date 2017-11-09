@@ -5,6 +5,7 @@ import { messages } from '../config/constants';
 import { ICrudGetAction, ICrudPutAction, ICrudDeleteAction } from '../shared/model/redux-action.type';
 
 export const ACTION_TYPES = {
+  FETCH_ROLES: 'userManagement/FETCH_ROLES',
   FETCH_USERS: 'userManagement/FETCH_USERS',
   FETCH_USER:  'userManagement/FETCH_USER',
   CREATE_USER: 'userManagement/CREATE_USER',
@@ -16,15 +17,27 @@ const initialState = {
   loading: false,
   errorMessage: null,
   users: [],
+  authorities: [],
   user: {},
+  updating: false,
   updateSuccess: false
 };
 
 // Reducer
 export default (state = initialState, action) => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_ROLES):
+      return {
+        ...state
+      };
     case REQUEST(ACTION_TYPES.FETCH_USERS):
     case REQUEST(ACTION_TYPES.FETCH_USER):
+      return {
+        ...state,
+        errorMessage: null,
+        updateSuccess: false,
+        loading: true
+      };
     case REQUEST(ACTION_TYPES.CREATE_USER):
     case REQUEST(ACTION_TYPES.UPDATE_USER):
     case REQUEST(ACTION_TYPES.DELETE_USER):
@@ -32,18 +45,26 @@ export default (state = initialState, action) => {
         ...state,
         errorMessage: null,
         updateSuccess: false,
-        loading: true
+        updating: true
       };
     case FAILURE(ACTION_TYPES.FETCH_USERS):
     case FAILURE(ACTION_TYPES.FETCH_USER):
+    case FAILURE(ACTION_TYPES.FETCH_ROLES):
     case FAILURE(ACTION_TYPES.CREATE_USER):
     case FAILURE(ACTION_TYPES.UPDATE_USER):
     case FAILURE(ACTION_TYPES.DELETE_USER):
       return {
         ...state,
         loading: false,
+        updating: false,
         updateSuccess: false,
         errorMessage: action.payload
+      };
+    case SUCCESS(ACTION_TYPES.FETCH_ROLES):
+      return {
+        ...state,
+        loading: false,
+        authorities: action.payload.data
       };
     case SUCCESS(ACTION_TYPES.FETCH_USERS):
       return {
@@ -61,14 +82,14 @@ export default (state = initialState, action) => {
     case SUCCESS(ACTION_TYPES.UPDATE_USER):
       return {
         ...state,
-        loading: false,
+        updating: false,
         updateSuccess: true,
         user: action.payload.data
       };
     case SUCCESS(ACTION_TYPES.DELETE_USER):
       return {
         ...state,
-        loading: false,
+        updating: false,
         updateSuccess: true,
         user: {}
       };
@@ -82,6 +103,11 @@ const apiUrl = '/api/users';
 export const getUsers: ICrudGetAction = (page, size, sort) => ({
   type: ACTION_TYPES.FETCH_USERS,
   payload: axios.get(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
+});
+
+export const getRoles: ICrudGetAction = () => ({
+  type: ACTION_TYPES.FETCH_ROLES,
+  payload: axios.get(`${apiUrl}/authorities`)
 });
 
 export const getUser: ICrudGetAction = id => {

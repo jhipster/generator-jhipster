@@ -73,33 +73,34 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
     const { account } = this.state;
     return (
         <div>
-            <h2>User settings for [{account.login}]</h2>
-            <Form>
-              <FormGroup>
-                <Label for="firstName">First Name</Label>
-                <Input type="text" className="form-control" value={account.firstName} id="firstName" name="firstName" placeholder="First Name"
-                onChange={this.setFirstName}/>
-              </FormGroup>
-              <FormGroup>
-                <Label for="lastName">Last Name</Label>
-                <Input type="text" className="form-control" value={account.lastName} id="lastName" name="lastName" placeholder="Last Name"
-                onChange={this.setLastName}/>
-              </FormGroup>
-              <FormGroup>
-                <Label for="email">Email</Label>
-                <Input type="text" className="form-control" value={account.email} id="email" name="email" placeholder="Email"
-                onChange={this.setEmail}/>
-              </FormGroup>
-              <%_ if (enableTranslation) { _%>
-              <FormGroup>
-                <Label for="langKey">Language</Label>
-                <Input type="select" id="langKey" name="langKey" className="form-control">
-                  {locales.map(lang => <option value={lang} key={lang}>{lang}</option>)}
-                </Input>
-              </FormGroup>
-              <%_ } _%>
-              <Button type="submit" color="success" onClick={this.saveSettings}>Save</Button>
-            </Form>
+          <h2>User settings for [{account.login}]</h2>
+          <Form>
+            {/* TODO: change to Availity form components */}
+            <FormGroup>
+              <Label for="firstName">First Name</Label>
+              <Input type="text" className="form-control" value={account.firstName} id="firstName" name="firstName" placeholder="First Name"
+              onChange={this.setFirstName}/>
+            </FormGroup>
+            <FormGroup>
+              <Label for="lastName">Last Name</Label>
+              <Input type="text" className="form-control" value={account.lastName} id="lastName" name="lastName" placeholder="Last Name"
+              onChange={this.setLastName}/>
+            </FormGroup>
+            <FormGroup>
+              <Label for="email">Email</Label>
+              <Input type="text" className="form-control" value={account.email} id="email" name="email" placeholder="Email"
+              onChange={this.setEmail}/>
+            </FormGroup>
+            <%_ if (enableTranslation) { _%>
+            <FormGroup>
+              <Label for="langKey">Language</Label>
+              <Input type="select" id="langKey" name="langKey" className="form-control">
+                {locales.map(lang => <option value={lang} key={lang}>{lang}</option>)}
+              </Input>
+            </FormGroup>
+            <%_ } _%>
+            <Button type="submit" color="success" onClick={this.saveSettings}>Save</Button>
+          </Form>
       </div>
     );
   }

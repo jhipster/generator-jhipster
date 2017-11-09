@@ -4,6 +4,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Card } from 'reactstrap';
 import { HashRouter as Router } from 'react-router-dom';
+import { ModalContainer } from 'react-router-modal';
 
 import { getSession, logout } from './reducers/authentication';
 <%_ if (enableTranslation) { _%>
@@ -52,6 +53,7 @@ export class App extends React.Component<IAppProps, {}> {
             </Card>
             <Footer/>
           </div>
+          <ModalContainer />
         </div>
       </Router>
     );

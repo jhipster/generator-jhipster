@@ -42,6 +42,7 @@ limitations under the License.
     "react-redux": "5.0.6",
     "react-redux-loading-bar": "2.9.3",
     "react-router-dom": "4.2.2",
+    "react-router-modal": "1.2.0",
     "react-transition-group": "2.2.1",
     "reactstrap": "5.0.0-alpha.3",
     "redux": "3.7.2",
@@ -144,6 +145,9 @@ limitations under the License.
   },
   "engines": {
     "node": ">=6.9.0"
+  },
+  "resolutions": {
+    "@types/react": "16.0.19"
   },
   "scripts": {
     "lint": "tslint --project './tsconfig.json' -e 'node_modules/**'",
