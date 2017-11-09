@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2017 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see http://www.jhipster.tech/
+ This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,8 +16,20 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-dependencies {
-    compile "io.prometheus:simpleclient"
-    compile "io.prometheus:simpleclient_servlet"
-    compile "io.prometheus:simpleclient_dropwizard"
+package <%=packageName%>.client;
+
+import java.io.IOException;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import feign.RequestInterceptor;
+
+@Configuration
+public class OAuth2UserClientFeignConfiguration {
+
+    @Bean(name = "userFeignClientInterceptor")
+    public RequestInterceptor getUserFeignClientInterceptor() throws IOException {
+        return new UserFeignClientInterceptor();
+    }
 }

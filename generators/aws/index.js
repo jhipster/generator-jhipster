@@ -54,6 +54,9 @@ module.exports = class extends BaseGenerator {
                 const prodDatabaseType = this.config.get('prodDatabaseType');
 
                 switch (prodDatabaseType.toLowerCase()) {
+                case 'mariadb':
+                    this.dbEngine = 'mariadb';
+                    break;
                 case 'mysql':
                     this.dbEngine = 'mysql';
                     break;

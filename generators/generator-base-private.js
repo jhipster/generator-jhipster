@@ -605,8 +605,8 @@ module.exports = class extends Generator {
                 this.warning('Java 8 is not found on your computer.');
             } else {
                 const javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
-                if (!javaVersion.match(/1\.8/)) {
-                    this.warning(`Java 8 is not found on your computer. Your Java version is: ${chalk.yellow(javaVersion)}`);
+                if (!javaVersion.match(new RegExp(constants.JAVA_VERSION.replace('.', '\\.')))) {
+                    this.warning(`Java ${constants.JAVA_VERSION} is not found on your computer. Your Java version is: ${chalk.yellow(javaVersion)}`);
                 }
             }
             done();

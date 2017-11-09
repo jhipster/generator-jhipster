@@ -19,17 +19,15 @@
 package <%=packageName%>.client;
 
 <%_ if(authenticationType === 'uaa') { _%>
-import io.github.jhipster.security.uaa.LoadBalancedResourceDetails;
+import java.io.IOException;
 
-import feign.RequestInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.cloud.security.oauth2.client.feign.OAuth2FeignRequestInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 
-import java.io.IOException;
+import feign.RequestInterceptor;
+import io.github.jhipster.security.uaa.LoadBalancedResourceDetails;
 
 @Configuration
 public class OAuth2InterceptedFeignConfiguration {
@@ -47,11 +45,12 @@ public class OAuth2InterceptedFeignConfiguration {
 }
 <%_ } _%>
 <%_ if(authenticationType === 'oauth2') { _%>
-import feign.RequestInterceptor;
+import java.io.IOException;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.io.IOException;
+import feign.RequestInterceptor;
 
 @Configuration
 public class OAuth2InterceptedFeignConfiguration {

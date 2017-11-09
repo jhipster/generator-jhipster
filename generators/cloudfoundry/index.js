@@ -60,6 +60,16 @@ module.exports = class extends BaseGenerator {
                 this.template('_application-cloudfoundry.yml', `${constants.SERVER_MAIN_RES_DIR}config/application-cloudfoundry.yml`);
             },
 
+            addCloudFoundryDependencies() {
+                if (this.buildTool === 'maven') {
+                    this.addMavenDependency('org.springframework.cloud', 'spring-cloud-localconfig-connector');
+                    this.addMavenDependency('org.springframework.cloud', 'spring-cloud-cloudfoundry-connector');
+                } else if (this.buildTool === 'gradle') {
+                    this.addGradleDependency('compile', 'org.springframework.cloud', 'spring-cloud-localconfig-connector');
+                    this.addGradleDependency('compile', 'org.springframework.cloud', 'spring-cloud-cloudfoundry-connector');
+                }
+            },
+
             checkInstallation() {
                 if (this.abort) return;
                 const done = this.async();
