@@ -32,20 +32,20 @@
 
         <!-- Dependency versions -->
         <assertj.version>3.8.0</assertj.version>
-        <bucket4j.version>3.0.1</bucket4j.version>
-        <cassandra-driver.version>3.3.0</cassandra-driver.version>
+        <bucket4j.version>3.0.2</bucket4j.version>
+        <cassandra-driver.version>3.3.1</cassandra-driver.version>
         <cassandra-unit-spring.version>3.3.0.2</cassandra-unit-spring.version>
         <couchmove.version>1.0.1</couchmove.version>
         <couchbase-testcontainer.version>1.0</couchbase-testcontainer.version>
-        <cucumber.version>1.2.4</cucumber.version>
-        <dropwizard-metrics.version>3.2.2</dropwizard-metrics.version>
+        <cucumber.version>1.2.5</cucumber.version>
+        <dropwizard-metrics.version>3.2.5</dropwizard-metrics.version>
         <gatling.version>2.2.5</gatling.version>
         <guava.version>23.0</guava.version>
-        <hazelcast-hibernate52.version>1.2</hazelcast-hibernate52.version>
-        <hazelcast-wm.version>3.7</hazelcast-wm.version>
-        <hibernate.version>5.2.10.Final</hibernate.version>
-        <hikaricp.version>2.6.0</hikaricp.version>
-        <infinispan-cloud.version>9.0.0.Final</infinispan-cloud.version>
+        <hazelcast-hibernate52.version>1.2.2</hazelcast-hibernate52.version>
+        <hazelcast-wm.version>3.7.1</hazelcast-wm.version>
+        <hibernate.version>5.2.12.Final</hibernate.version>
+        <hikaricp.version>2.6.3</hikaricp.version>
+        <infinispan-cloud.version>9.0.3.Final</infinispan-cloud.version>
         <infinispan-spring-boot-starter.version>1.0.0.Final</infinispan-spring-boot-starter.version>
         <jhipster-server.version>1.1.13</jhipster-server.version>
         <jjwt.version>0.7.0</jjwt.version>
@@ -58,8 +58,8 @@
         <mongobee.version>0.12</mongobee.version>
         <mssql-jdbc.version>6.1.0.jre8</mssql-jdbc.version>
         <oracle-jdbc.version>12.1.0.2</oracle-jdbc.version>
-        <problem-spring-web.version>0.21.0</problem-spring-web.version>
-        <prometheus-simpleclient.version>0.0.20</prometheus-simpleclient.version>
+        <problem-spring-web.version>0.22.0</problem-spring-web.version>
+        <prometheus-simpleclient.version>0.0.26</prometheus-simpleclient.version>
         <!-- The spring-boot version should match the one in
         https://github.com/spring-io/platform/blob/v${project.parent.version}/platform-bom/pom.xml -->
         <spring-boot.version>1.5.7.RELEASE</spring-boot.version>
