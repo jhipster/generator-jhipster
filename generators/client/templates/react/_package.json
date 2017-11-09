@@ -143,11 +143,11 @@ limitations under the License.
     "xml2js": "0.4.19"
     <%_ } _%>
   },
-  "engines": {
-    "node": ">=6.9.0"
-  },
   "resolutions": {
     "@types/react": "16.0.19"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   },
   "scripts": {
     "lint": "tslint --project './tsconfig.json' -e 'node_modules/**'",
@@ -172,8 +172,5 @@ limitations under the License.
     <%_ } else { _%>
     "postinstall": "node node_modules/phantomjs-prebuilt/install.js"
     <%_ } _%>
-  },
-  "resolutions": {
-    "@types/react": "16.0.19"
   }
 }
