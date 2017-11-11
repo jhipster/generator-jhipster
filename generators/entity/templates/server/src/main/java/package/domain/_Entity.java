@@ -405,10 +405,11 @@ public class <%= entityClass %> implements Serializable {
                 const fieldType = fields[idx].fieldType;
                 const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
                 const fieldName = fields[idx].fieldName;
-                const fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod; _%>
-            ", <%= fieldName %>=<% if (fieldType.toLowerCase() !== 'integer' && fieldType.toLowerCase() !== 'long' && fieldType.toLowerCase() !== 'float' && fieldType.toLowerCase() !== 'double' && fieldType.toLowerCase() !== 'bigdecimal') {%>'<%}%>" + <% if (fieldType.toLowerCase() === 'boolean') { %>is<% } else { %>get<%_ } _%><%= fieldInJavaBeanMethod %>() <% if (fieldType.toLowerCase() !== 'integer' && fieldType.toLowerCase() !== 'long' && fieldType.toLowerCase() !== 'float' && fieldType.toLowerCase() !== 'double' && fieldType.toLowerCase() !== 'bigdecimal') {%>+ "'" <%}%>+
+                const fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod;
+                const isNumeric = ['integer', 'long', 'float', 'double', 'bigdecimal'].includes(fieldType.toLowerCase()); _%>
+            ", <%= fieldName %>=<% if (! isNumeric) {%>'<% } %>" + <% if (fieldType.toLowerCase() === 'boolean') { %>is<% } else { %>get<% } %><%= fieldInJavaBeanMethod %>() <% if (! isNumeric) { %>+ "'" <% } %>+
                 <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { _%>
-            ", <%= fieldName %>ContentType='" + <%= fieldName %>ContentType + "'" +
+            ", <%= fieldName %>ContentType='" + get<%= fieldInJavaBeanMethod %>ContentType() + "'" +
                 <%_ } _%>
             <%_ } _%>
             "}";
