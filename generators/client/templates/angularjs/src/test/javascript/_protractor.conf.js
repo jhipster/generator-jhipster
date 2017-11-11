@@ -48,9 +48,8 @@ exports.config = {
 
     capabilities: {
         'browserName': 'chrome',
-        chromeOptions: {
-            args: ["--headless", "--disable-gpu"]
-        }
+        'phantomjs.binary.path': require('phantomjs-prebuilt').path,
+        'phantomjs.ghostdriver.cli.args': ['--loglevel=DEBUG']
     },
 
     directConnect: true,
