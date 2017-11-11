@@ -35,7 +35,6 @@
     "@angular/platform-browser-dynamic": "5.0.0",
     "@angular/router": "5.0.0",
     "@ng-bootstrap/ng-bootstrap": "1.0.0-beta.5",
-    "bootstrap": "4.0.0-beta",
     "core-js": "2.5.1",
     "font-awesome": "4.7.0",
     "jquery": "3.2.1",
@@ -85,6 +84,7 @@
     "karma-jasmine": "1.1.0",
     "karma-junit-reporter": "1.2.0",
     "karma-notify-reporter": "1.0.1",
+    "karma-phantomjs-launcher": "1.0.4",
     "karma-remap-istanbul": "0.6.0",
     "karma-sourcemap-loader": "0.3.7",
     "karma-webpack": "2.0.4",
@@ -92,12 +92,12 @@
     "merge-jsons-webpack-plugin": "1.0.11",
     <%_ } _%>
     "ngc-webpack": "4.0.2",
+    "phantomjs-prebuilt": "2.1.16",
     <%_ if (protractorTests) { _%>
     "protractor": "5.1.2",
     "protractor-jasmine2-screenshot-reporter": "0.4.0",
     <%_ } _%>
     "proxy-middleware": "0.15.0",
-    "puppeteer": "0.13.0",
     "rimraf": "2.6.1",
     "sourcemap-istanbul-instrumenter-loader": "0.2.0",
     "string-replace-webpack-plugin": "0.1.3",
@@ -150,8 +150,12 @@
     "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:prod:main && <%= clientPackageManager %> run clean-www",
     "webpack:test": "<%= clientPackageManager %> run test",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
-    "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"<% if (protractorTests) { %>,
+    "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js",
+    <%_ if (protractorTests) { _%>
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
-    "postinstall": "webdriver-manager update"<% } %>
+    "postinstall": "webdriver-manager update && node node_modules/phantomjs-prebuilt/install.js"
+    <%_ } else { _%>
+    "postinstall": "node node_modules/phantomjs-prebuilt/install.js"
+    <%_ } _%>
   }
 }

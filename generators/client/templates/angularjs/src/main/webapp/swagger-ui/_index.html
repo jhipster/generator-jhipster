@@ -105,6 +105,18 @@
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("X-XSRF-TOKEN", getCSRF(), "header");
                     window.swaggerUi.api.clientAuthorizations.add("key", apiKeyAuth);
                 <%_ } _%>
+                <%_ if (authenticationType === 'uaa') { _%>
+                    var interceptor = {
+                        requestInterceptor: {
+                            apply: function (requestObj) {
+                                var headers = requestObj.headers || {};
+                                headers['X-XSRF-TOKEN'] = getCSRF();
+                                return requestObj;
+                            }
+                        }
+                    };
+                    window.swaggerUi.options.requestInterceptor = interceptor.requestInterceptor
+                <%_ } _%>
                 <%_ if (authenticationType === 'oauth2') { _%>
                     var authToken = JSON.parse(localStorage.getItem("jhi-authenticationToken")).access_token;
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization",
@@ -116,7 +128,7 @@
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("X-Auth-Token", authToken, "header");
                     window.swaggerUi.api.clientAuthorizations.add("key", apiKeyAuth);
                 <%_ } _%>
-                <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+                <%_ if (authenticationType === 'jwt') { _%>
                     var authToken = JSON.parse(localStorage.getItem("jhi-authenticationToken") || sessionStorage.getItem("jhi-authenticationToken"));
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization", "Bearer " + authToken, "header");
                     window.swaggerUi.api.clientAuthorizations.add("bearer", apiKeyAuth);
