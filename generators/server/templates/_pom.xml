@@ -141,6 +141,7 @@
         <sonar.surefire.reportsPath>${project.testresult.directory}/surefire-reports</sonar.surefire.reportsPath>
         <sonar.tests>${project.basedir}/<%= TEST_DIR %></sonar.tests>
 
+        <!-- jhipster-needle-maven-property -->
     </properties>
 
     <dependencyManagement>
@@ -152,6 +153,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!-- jhipster-needle-maven-add-dependency-management -->
         </dependencies>
     </dependencyManagement>
 
