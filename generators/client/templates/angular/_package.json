@@ -40,7 +40,7 @@
     "font-awesome": "4.7.0",
     "jquery": "3.2.1",
     "ng-jhipster": "0.2.12",
-    "ngx-webstorage-fix": "1.8.1",
+    "ngx-webstorage": "2.0.0",
     "ngx-cookie": "1.0.0",
     "ngx-infinite-scroll": "0.5.1",
     "reflect-metadata": "0.1.10",
