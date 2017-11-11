@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { SessionStorageService } from 'ngx-webstorage-fix';
+import { SessionStorageService } from 'ngx-webstorage';
 
 @Injectable()
 export class StateStorageService {
