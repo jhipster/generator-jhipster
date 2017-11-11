@@ -63,7 +63,7 @@
         <profile.swagger />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>0.0.5</jhipster-dependencies.version>
+        <jhipster-dependencies.version>0.0.7</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
         <spring-boot.version>1.5.7.RELEASE</spring-boot.version>
@@ -85,8 +85,8 @@
         <!-- Plugin versions -->
         <maven-clean-plugin.version>2.6.1</maven-clean-plugin.version>
         <maven-war-plugin.version>2.6</maven-war-plugin.version>
-    </properties>
 
+    </properties>
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -96,6 +96,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!-- jhipster-needle-maven-add-dependency-management -->
         </dependencies>
     </dependencyManagement>
 
@@ -159,9 +160,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <%_ if (devDatabaseType !== 'h2Disk' && devDatabaseType !== 'h2Memory') { _%>
             <scope>test</scope>
-            <%_ } _%>
         </dependency>
         <%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
         <dependency>
@@ -245,7 +244,7 @@
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
         </dependency>
-        <%_ } %>
+        <%_ } _%>
         <%_ if (databaseType === 'cassandra') { _%>
         <dependency>
             <groupId>commons-codec</groupId>
@@ -610,11 +609,7 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-spring-service-connector</artifactId>
         </dependency>
-        <dependency>
-            <groupId>net.logstash.logback</groupId>
-            <artifactId>logstash-logback-encoder</artifactId>
-        </dependency>
-        <!-- security -->
+        <!-- Security -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-data</artifactId>
@@ -626,7 +621,7 @@
         </dependency>
         <%_ } _%>
         <%_ if (enableSocialSignIn) { _%>
-        <!-- social -->
+        <!-- Social -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
@@ -649,7 +644,7 @@
         </dependency>
         <%_ } _%>
         <%_ if (cucumberTests) { _%>
-        <!-- cucumber -->
+        <!-- Cucumber -->
         <dependency>
             <groupId>info.cukes</groupId>
             <artifactId>cucumber-junit</artifactId>
@@ -663,6 +658,7 @@
         <%_ } _%>
         <!-- jhipster-needle-maven-add-dependency -->
     </dependencies>
+
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>
         <%_ if (cucumberTests) { _%>
@@ -877,14 +873,22 @@
                     <artifactId>spring-boot-devtools</artifactId>
                     <optional>true</optional>
                 </dependency>
+                <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+                <dependency>
+                    <groupId>com.h2database</groupId>
+                    <artifactId>h2</artifactId>
+                </dependency>
+                <%_ } _%>
             </dependencies>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
+                        <version>${maven-war-plugin.version}</version>
                         <configuration>
                             <%_ if (!skipClient) { _%>
+                            <failOnMissingWebXml>false</failOnMissingWebXml>
                             <warSourceDirectory><% if (clientFramework !== 'angular1') { %><%= CLIENT_DIST_DIR %><% } else { %><%= CLIENT_MAIN_SRC_DIR %><% } %></warSourceDirectory>
                             <webResources>
                                 <resource>
@@ -918,6 +922,7 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-clean-plugin</artifactId>
+                        <version>${maven-clean-plugin.version}</version>
                         <configuration>
                             <filesets>
                                 <fileset>

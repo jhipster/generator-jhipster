@@ -67,6 +67,7 @@ apply plugin: 'idea'
 dependencyManagement {
   imports {
     mavenBom 'io.github.jhipster:jhipster-dependencies:' + jhipster_dependencies_version
+    //jhipster-needle-gradle-dependency-management - JHipster will add additional dependencies management here
   }
 }
 
@@ -226,7 +227,7 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-annotations"
     compile "com.fasterxml.jackson.core:jackson-databind"
     compile "com.fasterxml.jackson.module:jackson-module-afterburner"
-    compile ("com.ryantenney.metrics:metrics-spring")
+    compile "com.ryantenney.metrics:metrics-spring"
     <%_ if (hibernateCache === 'hazelcast') { _%>
     compile "com.hazelcast:hazelcast"
     compile "com.hazelcast:hazelcast-hibernate52"
@@ -255,7 +256,7 @@ dependencies {
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     compile "org.hibernate:hibernate-core"
-    compile ("com.zaxxer:HikariCP")
+    compile "com.zaxxer:HikariCP"
     <%_ } _%>
     <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
     compile "commons-codec:commons-codec"
@@ -274,7 +275,6 @@ dependencies {
     compile "org.hibernate:hibernate-entitymanager"
     compile "org.hibernate:hibernate-envers"
     compile "org.hibernate:hibernate-validator"
-    compile "org.hibernate:hibernate-entitymanager"
     compile "org.liquibase:liquibase-core"
     compile "com.mattbertolini:liquibase-slf4j"
     <%_ } _%>
@@ -309,7 +309,9 @@ dependencies {
     <%_ if (websocket === 'spring-websocket') { _%>
     compile "org.springframework.boot:spring-boot-starter-websocket"
     <%_ } _%>
-    compile "org.springframework.boot:spring-boot-starter-thymeleaf"
+    compile ("org.springframework.boot:spring-boot-starter-thymeleaf") {
+        exclude module: 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+    }
     compile "org.zalando:problem-spring-web"
     <%_ if (databaseType === 'cassandra') { _%>
     compile "com.google.guava:guava:18.0"
@@ -379,9 +381,6 @@ dependencies {
     <%_ } _%>
     <%_ if (devDatabaseType === 'mariadb' || prodDatabaseType === 'mariadb') { _%>
     compile "org.mariadb.jdbc:mariadb-java-client"
-    <%_ } _%>
-    <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
-    compile "com.h2database:h2"
     <%_ } _%>
     <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
     compile "com.microsoft.sqlserver:mssql-jdbc"
