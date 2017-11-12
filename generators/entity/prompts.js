@@ -712,6 +712,10 @@ function askForField(done) {
                     value: 'required'
                 },
                 {
+                    name: 'Unique',
+                    value: 'unique'
+                },
+                {
                     name: 'Minimum length',
                     value: 'minlength'
                 },
@@ -743,6 +747,10 @@ function askForField(done) {
                     value: 'required'
                 },
                 {
+                    name: 'Unique',
+                    value: 'unique'
+                },
+                {
                     name: 'Minimum',
                     value: 'min'
                 },
@@ -765,6 +773,10 @@ function askForField(done) {
                 {
                     name: 'Required',
                     value: 'required'
+                },
+                {
+                    name: 'Unique',
+                    value: 'unique'
                 },
                 {
                     name: 'Minimum byte size',
@@ -794,6 +806,10 @@ function askForField(done) {
                 {
                     name: 'Required',
                     value: 'required'
+                },
+                {
+                    name: 'Unique',
+                    value: 'unique'
                 }
             ],
             default: 0
@@ -1129,6 +1145,9 @@ function logFieldsAndRelationships() {
             if (fieldValidate === true) {
                 if (field.fieldValidateRules.indexOf('required') !== -1) {
                     validationDetails = 'required ';
+                }
+                if (field.fieldValidateRules.indexOf('unique') !== -1) {
+                    validationDetails += 'unique ';
                 }
                 if (field.fieldValidateRules.indexOf('minlength') !== -1) {
                     validationDetails += `minlength='${field.fieldValidateRulesMinlength}' `;
