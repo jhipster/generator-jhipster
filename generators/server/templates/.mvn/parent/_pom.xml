@@ -77,6 +77,8 @@
         <apache-rat-plugin.version>0.11</apache-rat-plugin.version>
         <pgp-maven-plugin.version>1.1</pgp-maven-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
+        <site.deploy.dir>/tmp/deploy</site.deploy.dir>
+
         <!-- generic versions -->
         <org.apache.maven.scm.version>1.9.1</org.apache.maven.scm.version>
     </properties>

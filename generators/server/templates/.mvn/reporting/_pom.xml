@@ -37,13 +37,33 @@
         <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
         <findbugs-maven-plugin.version>3.0.1</findbugs-maven-plugin.version>
         <versions-maven-plugin.version>2.1</versions-maven-plugin.version>
-        <site.deploy.dir>/tmp/deploy</site.deploy.dir>
+        <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
+        <sonar.jacoco.reportFolder>${project.testresult.directory}/coverage/jacoco</sonar.jacoco.reportFolder>
+        <sonar.jacoco.itReportPath>${sonar.jacoco.reportFolder}/jacoco-it.exec</sonar.jacoco.itReportPath>
+        <sonar.jacoco.reportPath>${sonar.jacoco.reportFolder}/jacoco.exec</sonar.jacoco.reportPath>
     </properties>
     <reporting>
         <plugins>
             <!-- not working in the build pipeline <plugin> <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-changelog-plugin</artifactId> <version>${maven-changelog-plugin.version}</version>
                 </plugin> -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco-maven-plugin.version}</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <!-- select non-aggregate reports -->
+                            <report>report</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+                <configuration>
+                    <dataFile>${sonar.jacoco.reportPath}</dataFile>
+                    <outputDirectory>${sonar.jacoco.reportFolder}</outputDirectory>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>

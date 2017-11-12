@@ -33,12 +33,12 @@
         <module>../..</module>
     </modules>
     <properties>
+        <!-- Plugin versions -->
         <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
         <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
         <%_ if (gatlingTests) { _%>
         <gatling-maven-plugin.version>2.2.4</gatling-maven-plugin.version>
         <%_ } _%>
-        <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
         <maven-resources-plugin.version>3.0.1</maven-resources-plugin.version>
         <liquibase.version>3.5.3</liquibase.version>
         <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
@@ -47,6 +47,8 @@
         <javassist.version>3.21.0-GA</javassist.version>
         <validation-api.version>1.1.0.Final</validation-api.version>
         <dockerfile-maven-plugin.version>1.3.4</dockerfile-maven-plugin.version>
+        <maven-war-plugin.version>2.6</maven-war-plugin.version>
+        <maven-clean-plugin.version>2.6.1</maven-clean-plugin.version>
         <%_ if (enableSwaggerCodegen) { _%>
         <swagger-codegen-maven-plugin.version>2.2.3</swagger-codegen-maven-plugin.version>
         <%_ } _%>
@@ -96,9 +98,6 @@
         <!-- Rule http://sonarqube.com/coding_rules#rule_key=squid%3AUndocumentedApi is ignored, as we want to follow "clean code" guidelines and classes, methods and arguments names should be self-explanatory -->
         <sonar.issue.ignore.multicriteria.UndocumentedApi.resourceKey><%= MAIN_DIR %>java/**/*</sonar.issue.ignore.multicriteria.UndocumentedApi.resourceKey>
         <sonar.issue.ignore.multicriteria.UndocumentedApi.ruleKey>squid:UndocumentedApi</sonar.issue.ignore.multicriteria.UndocumentedApi.ruleKey>
-        <sonar.jacoco.reportFolder>${project.testresult.directory}/coverage/jacoco</sonar.jacoco.reportFolder>
-        <sonar.jacoco.itReportPath>${sonar.jacoco.reportFolder}/jacoco-it.exec</sonar.jacoco.itReportPath>
-        <sonar.jacoco.reportPath>${sonar.jacoco.reportFolder}/jacoco.exec</sonar.jacoco.reportPath>
         <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
         <sonar.javascript.jstestdriver.reportsPath>${project.testresult.directory}/karma</sonar.javascript.jstestdriver.reportsPath>
         <%_ if (clientFramework === 'angular1') { _%>
@@ -118,44 +117,13 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>${maven-clean-plugin.version}</version>
+                </plugin>
+                <plugin>
                     <groupId>com.github.eirslett</groupId>
                     <artifactId>frontend-maven-plugin</artifactId>
                     <version>${frontend-maven-plugin.version}</version>
-                    <executions>
-                        <%_ if (clientPackageManager === 'yarn') { _%>
-                        <execution>
-                            <id>install node and yarn</id>
-                            <goals>
-                                <goal>install-node-and-yarn</goal>
-                            </goals>
-                            <configuration>
-                                <nodeVersion>${node.version}</nodeVersion>
-                                <yarnVersion>${yarn.version}</yarnVersion>
-                            </configuration>
-                        </execution>
-                        <%_ } else if (clientPackageManager === 'npm') { _%>
-                        <execution>
-                            <id>install node and npm</id>
-                            <goals>
-                                <goal>install-node-and-npm</goal>
-                            </goals>
-                            <configuration>
-                                <nodeVersion>${node.version}</nodeVersion>
-                                <npmVersion>${npm.version}</npmVersion>
-                            </configuration>
-                        </execution>
-                        <%_ } _%>
-                        <execution>
-                            <id>webpack build dev</id>
-                            <goals>
-                                <goal><%= clientPackageManager %></goal>
-                            </goals>
-                            <phase>generate-resources</phase>
-                            <configuration>
-                                <arguments>run webpack:build</arguments>
-                            </configuration>
-                        </execution>
-                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>com.spotify</groupId>
@@ -240,23 +208,6 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${maven-compiler-plugin.version}</version>
-                    <configuration>
-                        <annotationProcessorPaths>
-                            <path>
-                                <groupId>org.mapstruct</groupId>
-                                <artifactId>mapstruct-processor</artifactId>
-                                <version>${mapstruct.version}</version>
-                            </path>
-                            <%_ if (databaseType === 'sql') { _%>
-                            <!-- For JPA static metamodel generation -->
-                            <path>
-                                <groupId>org.hibernate</groupId>
-                                <artifactId>hibernate-jpamodelgen</artifactId>
-                                <version>${hibernate.version}</version>
-                            </path>
-                            <% } %>
-                        </annotationProcessorPaths>
-                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -549,22 +500,6 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot.version}</version>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>repackage</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <mainClass>${start-class}</mainClass>
-                        <executable>true</executable>
-                        <fork>true</fork>
-                        <!--
-                        Enable the line below to have remote debugging of your application on port 5005
-                        <jvmArguments>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005</jvmArguments>
-                        -->
-                    </configuration>
                 </plugin>
                 <%_ if (enableSwaggerCodegen) { _%>
                 <plugin>
@@ -595,6 +530,11 @@
                     </executions>
                 </plugin>
                 <%_ } _%>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>${maven-war-plugin.version}</version>
+                </plugin>
                 <!-- jhipster-needle-maven-add-plugin -->
             </plugins>
         </pluginManagement>
