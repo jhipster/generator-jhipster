@@ -50,6 +50,11 @@
         <%_ if (enableSwaggerCodegen) { _%>
         <swagger-codegen-maven-plugin.version>2.2.3</swagger-codegen-maven-plugin.version>
         <%_ } _%>
+        <%_ if (databaseType === 'sql') { _%>
+        <!-- The hibernate version should match the one managed by
+        https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
+        <hibernate.version>5.2.10.Final</hibernate.version>
+        <%_ } _%>
         <m2e.apt.activation>jdt_apt</m2e.apt.activation>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -58,7 +63,6 @@
         <%_ } _%>
         <scala-maven-plugin.version>3.2.2</scala-maven-plugin.version>
         <scala.version>2.12.1</scala.version>
-        <java.version><%= JAVA_VERSION %></java.version>
         <scala.version><%= SCALA_VERSION %></scala.version>
         <node.version>v<%= NODE_VERSION %></node.version>
         <%_ if (clientPackageManager === 'npm') { _%>

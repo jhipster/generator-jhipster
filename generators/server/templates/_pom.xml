@@ -67,24 +67,13 @@
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
         <spring-boot.version>1.5.7.RELEASE</spring-boot.version>
-        <%_ if (databaseType === 'sql') { _%>
-        <!-- The hibernate version should match the one managed by
-        https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-        <hibernate.version>5.2.10.Final</hibernate.version>
-        <!-- The javassist version should match the one managed by
-        https://mvnrepository.com/artifact/org.hibernate/hibernate-core/${hibernate.version} -->
-        <javassist.version>3.20.0-GA</javassist.version>
-        <!-- The liquibase version should match the one managed by
-        https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-        <liquibase.version>3.5.3</liquibase.version>
-        <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
-        <validation-api.version>1.1.0.Final</validation-api.version>
-        <%_ } _%>
         <mapstruct.version>1.1.0.Final</mapstruct.version>
 
         <!-- Plugin versions -->
         <maven-clean-plugin.version>2.6.1</maven-clean-plugin.version>
         <maven-war-plugin.version>2.6</maven-war-plugin.version>
+
+        <assertj.version>3.8.0</assertj.version> <!-- see https://github.com/jhipster/jhipster-dependencies/pull/15 -->
 
     </properties>
     <dependencyManagement>
@@ -211,11 +200,6 @@
         </dependency>
         <%_ } _%>
         <dependency>
-            <groupId>org.awaitility</groupId>
-            <artifactId>awaitility</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
             <scope>test</scope>
@@ -321,7 +305,7 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <scope>test</scope>
+            <version>${assertj.version}</version> <!-- see https://github.com/jhipster/jhipster-dependencies/pull/15 -->
         </dependency>
         <%_ if (databaseType === 'cassandra') { _%>
         <dependency>
