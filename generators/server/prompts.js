@@ -175,12 +175,12 @@ function askForServerSideOpts(meta) {
                     name: 'MongoDB'
                 },
                 {
-                    value: 'couchbase',
-                    name: '[BETA] Couchbase'
-                },
-                {
                     value: 'cassandra',
                     name: 'Cassandra'
+                },
+                {
+                    value: 'couchbase',
+                    name: '[BETA] Couchbase'
                 }
             ],
             default: 1
@@ -221,12 +221,12 @@ function askForServerSideOpts(meta) {
                     name: 'MongoDB'
                 },
                 {
-                    value: 'couchbase',
-                    name: '[BETA] Couchbase'
-                },
-                {
                     value: 'cassandra',
                     name: 'Cassandra'
+                },
+                {
+                    value: 'couchbase',
+                    name: '[BETA] Couchbase'
                 }
             ],
             default: 0
