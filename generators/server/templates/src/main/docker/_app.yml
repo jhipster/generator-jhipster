@@ -49,6 +49,10 @@ services:
             - SPRING_DATA_MONGODB_URI=mongodb://<%= baseName.toLowerCase() %>-mongodb:27017
             - SPRING_DATA_MONGODB_DATABASE=<%= baseName %>
             <%_ } _%>
+            <%_ if (prodDatabaseType === 'couchbase') { _%>
+            - SPRING_COUCHBASE_BOOTSTRAP_HOSTS=<%= baseName.toLowerCase() %>-couchbase
+            - SPRING_COUCHBASE_BUCKET_NAME=<%= baseName %>
+            <%_ } _%>
             <%_ if (authenticationType === 'oauth2') { _%>
             # For keycloak to work, you need to add '127.0.0.1 keycloak' to your hosts file
             - SECURITY_OAUTH2_CLIENT_ACCESS_TOKEN_URI=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/token
@@ -110,6 +114,12 @@ services:
         extends:
             file: mongodb.yml
             service: <%= baseName.toLowerCase() %>-mongodb
+    <%_ } _%>
+    <%_ if (prodDatabaseType === 'couchbase') { _%>
+    <%= baseName.toLowerCase() %>-couchbase:
+        extends:
+            file: couchbase.yml
+            service: <%= baseName.toLowerCase() %>-couchbase
     <%_ } _%>
     <%_ if (prodDatabaseType === 'mssql') { _%>
     <%= baseName.toLowerCase() %>-mssql:

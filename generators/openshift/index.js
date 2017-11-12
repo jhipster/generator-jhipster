@@ -86,6 +86,7 @@ module.exports = class extends BaseGenerator {
                 this.DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL;
                 this.DOCKER_ORACLE = constants.DOCKER_ORACLE;
                 this.DOCKER_MONGODB = constants.DOCKER_MONGODB;
+                this.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
                 this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
                 this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
                 this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;

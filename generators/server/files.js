@@ -73,6 +73,12 @@ function writeFiles() {
                 this.template(`${DOCKER_DIR}mongodb/MongoDB.Dockerfile`, `${DOCKER_DIR}mongodb/MongoDB.Dockerfile`);
                 this.template(`${DOCKER_DIR}mongodb/scripts/init_replicaset.js`, `${DOCKER_DIR}mongodb/scripts/init_replicaset.js`);
             }
+            if (this.prodDatabaseType === 'couchbase') {
+                this.template(`${DOCKER_DIR}_couchbase.yml`, `${DOCKER_DIR}couchbase.yml`);
+                this.template(`${DOCKER_DIR}_couchbase-cluster.yml`, `${DOCKER_DIR}couchbase-cluster.yml`);
+                this.template(`${DOCKER_DIR}couchbase/Couchbase.Dockerfile`, `${DOCKER_DIR}couchbase/Couchbase.Dockerfile`);
+                this.template(`${DOCKER_DIR}couchbase/scripts/configure-node.sh`, `${DOCKER_DIR}couchbase/scripts/configure-node.sh`);
+            }
             if (this.prodDatabaseType === 'mssql') {
                 this.template(`${DOCKER_DIR}_mssql.yml`, `${DOCKER_DIR}mssql.yml`);
             }
@@ -199,6 +205,18 @@ function writeFiles() {
                 }
             }
 
+            if (this.databaseType === 'couchbase') {
+                this.template(`${SERVER_MAIN_RES_DIR}/config/couchmove/changelog/_V0__create_indexes.n1ql`, `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0__create_indexes.n1ql`);
+                if (!this.skipUserManagement || this.authenticationType === 'oauth2') {
+                    this.template(`${SERVER_MAIN_RES_DIR}/config/couchmove/changelog/V0.1__initial_setup/_ROLE_ADMIN.json`, `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/ROLE_ADMIN.json`);
+                    this.template(`${SERVER_MAIN_RES_DIR}/config/couchmove/changelog/V0.1__initial_setup/_ROLE_USER.json`, `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/ROLE_USER.json`);
+                    this.template(`${SERVER_MAIN_RES_DIR}/config/couchmove/changelog/V0.1__initial_setup/_user__admin.json`, `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user__admin.json`);
+                    this.template(`${SERVER_MAIN_RES_DIR}/config/couchmove/changelog/V0.1__initial_setup/_user__anonymoususer.json`, `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user__anonymoususer.json`);
+                    this.template(`${SERVER_MAIN_RES_DIR}/config/couchmove/changelog/V0.1__initial_setup/_user__system.json`, `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user__system.json`);
+                    this.template(`${SERVER_MAIN_RES_DIR}/config/couchmove/changelog/V0.1__initial_setup/_user__user.json`, `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/user__user.json`);
+                }
+            }
+
             if (this.databaseType === 'cassandra') {
                 this.template(`${SERVER_MAIN_RES_DIR}config/cql/_create-keyspace-prod.cql`, `${SERVER_MAIN_RES_DIR}config/cql/create-keyspace-prod.cql`);
                 this.template(`${SERVER_MAIN_RES_DIR}config/cql/_create-keyspace.cql`, `${SERVER_MAIN_RES_DIR}config/cql/create-keyspace.cql`);
@@ -223,7 +241,7 @@ function writeFiles() {
         },
 
         writeServerJavaAuthConfigFiles() {
-            if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
+            if (this.databaseType === 'sql' || this.databaseType === 'mongodb' || this.databaseType === 'couchbase') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/_SpringSecurityAuditorAware.java`, `${javaDir}security/SpringSecurityAuditorAware.java`);
             }
             this.template(`${SERVER_MAIN_SRC_DIR}package/security/_SecurityUtils.java`, `${javaDir}security/SecurityUtils.java`);
@@ -381,11 +399,16 @@ function writeFiles() {
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_DateTimeFormatConfiguration.java`, `${javaDir}config/DateTimeFormatConfiguration.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_LoggingConfiguration.java`, `${javaDir}config/LoggingConfiguration.java`);
 
-            if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
+            if (this.databaseType === 'sql' || this.databaseType === 'mongodb' || this.databaseType === 'couchbase') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/_CloudDatabaseConfiguration.java`, `${javaDir}config/CloudDatabaseConfiguration.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/_DatabaseConfiguration.java`, `${javaDir}config/DatabaseConfiguration.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/audit/_package-info.java`, `${javaDir}config/audit/package-info.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/audit/_AuditEventConverter.java`, `${javaDir}config/audit/AuditEventConverter.java`);
+            }
+
+            if (this.databaseType === 'couchbase') {
+                this.template(`${SERVER_MAIN_SRC_DIR}package/repository/_N1qlCouchbaseRepository.java`, `${javaDir}repository/N1qlCouchbaseRepository.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/repository/_CustomN1qlCouchbaseRepository.java`, `${javaDir}repository/CustomN1qlCouchbaseRepository.java`);
             }
 
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_ApplicationProperties.java`, `${javaDir}config/ApplicationProperties.java`);
@@ -421,7 +444,7 @@ function writeFiles() {
         writeServerJavaDomainFiles() {
             this.template(`${SERVER_MAIN_SRC_DIR}package/domain/_package-info.java`, `${javaDir}domain/package-info.java`);
 
-            if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
+            if (this.databaseType === 'sql' || this.databaseType === 'mongodb' || this.databaseType === 'couchbase') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/domain/_AbstractAuditingEntity.java`, `${javaDir}domain/AbstractAuditingEntity.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/domain/_PersistentAuditEvent.java`, `${javaDir}domain/PersistentAuditEvent.java`);
             }
@@ -490,6 +513,10 @@ function writeFiles() {
                 this.template(`${SERVER_TEST_SRC_DIR}package/_AbstractCassandraTest.java`, `${testDir}AbstractCassandraTest.java`);
                 this.template(`${SERVER_TEST_SRC_DIR}package/config/_CassandraTestConfiguration.java`, `${testDir}config/CassandraTestConfiguration.java`);
                 this.template(`${SERVER_TEST_RES_DIR}_cassandra-random-port.yml`, `${SERVER_TEST_RES_DIR}cassandra-random-port.yml`);
+            }
+
+            if (this.databaseType === 'couchbase') {
+                this.template(`${SERVER_TEST_SRC_DIR}package/config/_DatabaseTestConfiguration.java`, `${testDir}config/DatabaseTestConfiguration.java`);
             }
 
             this.template(`${SERVER_TEST_SRC_DIR}package/config/_WebConfigurerTest.java`, `${testDir}config/WebConfigurerTest.java`);
@@ -607,12 +634,12 @@ function writeFiles() {
             /* User management java domain files */
             this.template(`${SERVER_MAIN_SRC_DIR}package/domain/_User.java`, `${javaDir}domain/User.java`);
 
-            if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
+            if (this.databaseType === 'sql' || this.databaseType === 'mongodb' || this.databaseType === 'couchbase') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/domain/_Authority.java`, `${javaDir}domain/Authority.java`);
             }
 
             /* User management java repo files */
-            if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
+            if (this.databaseType === 'sql' || this.databaseType === 'mongodb' || this.databaseType === 'couchbase') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/repository/_CustomAuditEventRepository.java`, `${javaDir}repository/CustomAuditEventRepository.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/repository/_AuthorityRepository.java`, `${javaDir}repository/AuthorityRepository.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/repository/_PersistenceAuditEventRepository.java`, `${javaDir}repository/PersistenceAuditEventRepository.java`);
@@ -622,7 +649,7 @@ function writeFiles() {
             /* User management java service files */
             this.template(`${SERVER_MAIN_SRC_DIR}package/service/_UserService.java`, `${javaDir}service/UserService.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/service/_MailService.java`, `${javaDir}service/MailService.java`);
-            if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
+            if (this.databaseType === 'sql' || this.databaseType === 'mongodb' || this.databaseType === 'couchbase') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/service/_AuditEventService.java`, `${javaDir}service/AuditEventService.java`);
             }
 
@@ -639,7 +666,7 @@ function writeFiles() {
             this.template(`${SERVER_MAIN_SRC_DIR}package/service/mapper/_package-info.java`, `${javaDir}service/mapper/package-info.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/service/mapper/_UserMapper.java`, `${javaDir}service/mapper/UserMapper.java`);
 
-            if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
+            if (this.databaseType === 'sql' || this.databaseType === 'mongodb' || this.databaseType === 'couchbase') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_AuditResource.java`, `${javaDir}web/rest/AuditResource.java`);
             }
 
@@ -664,7 +691,7 @@ function writeFiles() {
                 this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_UserJWTControllerIntTest.java`, `${testDir}web/rest/UserJWTControllerIntTest.java`);
             }
 
-            if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
+            if (this.databaseType === 'sql' || this.databaseType === 'mongodb' || this.databaseType === 'couchbase') {
                 this.template(`${SERVER_TEST_SRC_DIR}package/repository/_CustomAuditEventRepositoryIntTest.java`, `${testDir}repository/CustomAuditEventRepositoryIntTest.java`);
                 this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_AuditResourceIntTest.java`, `${testDir}web/rest/AuditResourceIntTest.java`);
             }

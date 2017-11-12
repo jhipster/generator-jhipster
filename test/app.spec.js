@@ -300,6 +300,40 @@ describe('JHipster generator', () => {
             shouldBeV3DockerfileCompatible('mongodb');
         });
 
+        describe('couchbase', () => {
+            beforeEach((done) => {
+                helpers.run(path.join(__dirname, '../generators/app'))
+                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withPrompts({
+                        baseName: 'jhipster',
+                        packageName: 'com.mycompany.myapp',
+                        packageFolder: 'com/mycompany/myapp',
+                        clientFramework: 'angularX',
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        hibernateCache: 'no',
+                        databaseType: 'couchbase',
+                        devDatabaseType: 'couchbase',
+                        prodDatabaseType: 'couchbase',
+                        useSass: false,
+                        enableTranslation: true,
+                        nativeLanguage: 'en',
+                        languages: ['fr'],
+                        buildTool: 'maven',
+                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                        skipClient: false,
+                        skipUserManagement: false,
+                        serverSideOptions: []
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected files with "Couchbase"', () => {
+                assert.file(expectedFiles.couchbase);
+            });
+            shouldBeV3DockerfileCompatible('couchbase');
+        });
+
         describe('mssql', () => {
             beforeEach((done) => {
                 helpers.run(path.join(__dirname, '../generators/app'))

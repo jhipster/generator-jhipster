@@ -57,14 +57,18 @@ import java.util.UUID;<% } %>
 /**
  * Spring Data MongoDB repository for the <%= entityClass %> entity.
  */
+<%_ } if (databaseType === 'couchbase') { _%>
+/**
+ * Spring Data Couchbase repository for the <%= entityClass %> entity.
+ */
 <%_ } if (databaseType === 'cassandra') { _%>
 /**
  * Cassandra repository for the <%= entityClass %> entity.
  */
-<%_ } if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+<%_ } if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 @SuppressWarnings("unused")
 @Repository
-public interface <%=entityClass%>Repository extends <% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><<%=entityClass%>, <%= pkType %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%=entityClass%>><% } %> {
+public interface <%=entityClass%>Repository extends <% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><<%=entityClass%>, <%= pkType %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%=entityClass%>><% } %> {
     <%_ for (idx in relationships) {
         if (relationships[idx].relationshipType === 'many-to-one' && relationships[idx].otherEntityName === 'user') { _%>
 

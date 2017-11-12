@@ -41,6 +41,9 @@ import org.springframework.transaction.annotation.Transactional;<% } %>
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 
+<%_ if (databaseType === 'couchbase') { _%>
+import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
+<%_ } _%>
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -93,6 +96,9 @@ public class AuditResourceIntTest {
 
     @Before
     public void initTest() {
+        <%_ if (databaseType === 'couchbase') { _%>
+        mockAuthentication();
+        <%_ } _%>
         auditEventRepository.deleteAll();
         auditEvent = new PersistentAuditEvent();
         auditEvent.setAuditEventType(SAMPLE_TYPE);

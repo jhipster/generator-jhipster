@@ -37,6 +37,12 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+<%_ } else if (databaseType === 'couchbase') { _%>
+import org.springframework.data.annotation.Id;
+import com.couchbase.client.java.repository.annotation.Field;
+import org.springframework.data.couchbase.core.mapping.Document;
+import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
+import org.springframework.data.couchbase.core.mapping.id.IdPrefix;
 <%_ } if (searchEngine === 'elasticsearch') { _%>
 import org.springframework.data.elasticsearch.annotations.Document;
 <%_ } if (databaseType === 'sql') { _%>
@@ -69,6 +75,11 @@ Object.keys(uniqueEnums).forEach(function(element) { _%>
 import <%=packageName%>.domain.enumeration.<%= element %>;
 <%_ }); _%>
 
+<%_ if (databaseType === 'couchbase') { _%>
+import static <%=packageName%>.config.Constants.ID_DELIMITER;
+import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
+<%_ } _%>
+
 <%_ if (typeof javadoc == 'undefined') { _%>
 /**
  * A <%= entityClass %>.
@@ -89,6 +100,8 @@ import <%=packageName%>.domain.enumeration.<%= element %>;
         }
 } if (databaseType === 'mongodb') { _%>
 @Document(collection = "<%= entityTableName %>")
+<%_ } if (databaseType === 'couchbase') { _%>
+@Document
 <%_ } if (databaseType === 'cassandra') { _%>
 @Table(name = "<%= entityInstance %>")
 <%_ } if (searchEngine === 'elasticsearch') { _%>
@@ -106,10 +119,17 @@ public class <%= entityClass %> implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     <%_ } _%>
     private Long id;
-<%_ } if (databaseType === 'mongodb') { _%>
-    @Id
+<% } if (databaseType === 'couchbase') { %>
+    public static final String PREFIX = "<%= entityInstance.toLowerCase() %>";
+
+    @SuppressWarnings("unused")
+    @IdPrefix
+    private String prefix = PREFIX;
+<%_ } if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
+    @Id<% if (databaseType === 'couchbase') { %>
+    @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)<% } %>
     private String id;
-<%_ } if (databaseType === 'cassandra') { _%>
+<%_ } if (databaseType === 'cassandra') { %>
     @PartitionKey
     private UUID id;
 <%_ } _%>
@@ -151,7 +171,7 @@ public class <%= entityClass %> implements Serializable {
     @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (fieldValidate === true) { %><% if (fieldValidateRules.indexOf('maxlength') !== -1) { %>, length = <%= fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% } %>)
         <%_ }
     } _%>
-    <%_ if (databaseType === 'mongodb') { _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
     @Field("<%=fieldNameUnderscored %>")
     <%_ } _%>
     <%_ if (fieldTypeBlobContent !== 'text') { _%>
@@ -167,7 +187,7 @@ public class <%= entityClass %> implements Serializable {
     @NotNull
         <%_ } _%>
       <%_ } _%>
-      <%_ if (databaseType === 'mongodb') { _%>
+      <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
     @Field("<%=fieldNameUnderscored %>_content_type")
       <%_ } _%>
     private String <%= fieldName %>ContentType;
@@ -249,11 +269,11 @@ public class <%= entityClass %> implements Serializable {
     <%_ }
     } _%>
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
-    public <% if (databaseType === 'sql') { %>Long<% } %><% if (databaseType === 'mongodb') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> getId() {
+    public <% if (databaseType === 'sql') { %>Long<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> getId() {
         return id;
     }
 
-    public void setId(<% if (databaseType === 'sql') { %>Long<% } %><% if (databaseType === 'mongodb') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> id) {
+    public void setId(<% if (databaseType === 'sql') { %>Long<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> id) {
         this.id = id;
     }
 <%_ for (idx in fields) {

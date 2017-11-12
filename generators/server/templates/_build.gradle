@@ -293,8 +293,8 @@ dependencies {
     // https://github.com/elastic/elasticsearch/issues/13245
     compile "net.java.dev.jna:jna"
     <%_ } _%>
-    <%_ if (databaseType === 'mongodb') { _%>
-    compile "org.springframework.boot:spring-boot-starter-data-mongodb"
+    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    compile "org.springframework.boot:spring-boot-starter-data-<%=databaseType%>"
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
     compile "org.springframework.cloud:spring-cloud-stream"
@@ -369,6 +369,9 @@ dependencies {
     compile "com.github.mongobee:mongobee"
     compile "com.google.guava:guava"
     <%_ } _%>
+    <%_ if (databaseType === 'couchbase') { _%>
+        compile "com.github.differentway:couchmove"
+    <%_ } _%>
     compile ("io.springfox:springfox-swagger2") {
         exclude module: 'mapstruct'
     }
@@ -417,6 +420,9 @@ dependencies {
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
     testCompile "de.flapdoodle.embed:de.flapdoodle.embed.mongo"
+    <%_ } _%>
+    <%_ if (databaseType === 'couchbase') { _%>
+    testCompile "com.github.differentway:couchbase-testcontainer"
     <%_ } _%>
     testCompile "org.hamcrest:hamcrest-library"
     <%_ if (devDatabaseType !== 'h2Disk' && devDatabaseType !== 'h2Memory') { _%>

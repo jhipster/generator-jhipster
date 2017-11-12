@@ -24,6 +24,7 @@ const DOCKER_MYSQL = 'mysql:5.7.20';
 const DOCKER_MARIADB = 'mariadb:10.1.17';
 const DOCKER_POSTGRESQL = 'postgres:9.6.5';
 const DOCKER_MONGODB = 'mongo:3.4.8';
+const DOCKER_COUCHBASE = 'couchbase/server:4.6.2';
 const DOCKER_CASSANDRA = 'cassandra:3.9';
 const DOCKER_MSSQL = 'microsoft/mssql-server-linux:latest';
 const DOCKER_ORACLE = 'sath89/oracle-12c:latest';
@@ -169,6 +170,7 @@ const constants = {
     DOCKER_MARIADB,
     DOCKER_POSTGRESQL,
     DOCKER_MONGODB,
+    DOCKER_COUCHBASE,
     DOCKER_CASSANDRA,
     DOCKER_MSSQL,
     DOCKER_ORACLE,

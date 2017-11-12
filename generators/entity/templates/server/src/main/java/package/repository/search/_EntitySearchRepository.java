@@ -26,5 +26,5 @@ import java.util.UUID;<% } %>
 /**
  * Spring Data Elasticsearch repository for the <%=entityClass%> entity.
  */
-public interface <%=entityClass%>SearchRepository extends ElasticsearchRepository<<%=entityClass%>, <% if (databaseType === 'sql' || databaseType === 'mongodb') { %>Long<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %>> {
+public interface <%=entityClass%>SearchRepository extends ElasticsearchRepository<<%=entityClass%>, <% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>Long<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %>> {
 }

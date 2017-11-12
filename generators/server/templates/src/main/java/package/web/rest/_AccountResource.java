@@ -272,7 +272,7 @@ public class AccountResource {
             throw new InternalServerErrorException("User could not be found");
         }
         userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
-            userDTO.getLangKey()<% if (databaseType === 'mongodb' || databaseType === 'sql') { %>, userDTO.getImageUrl()<% } %>);
+            userDTO.getLangKey()<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>, userDTO.getImageUrl()<% } %>);
    }
 
     /**
@@ -331,7 +331,8 @@ public class AccountResource {
             .ifPresent(u ->
                 persistentTokenRepository.findByUser(u).stream()
                     .filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries))<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
-                    .findAny().ifPresent(t -> persistentTokenRepository.delete(decodedSeries)));<% } else { %>
+                    .findAny().ifPresent(t -> persistentTokenRepository.delete(decodedSeries)));<% } else if (databaseType === 'couchbase'){ %>
+                .findAny().ifPresent(t -> persistentTokenRepository.deleteBySeries(decodedSeries)));<% } else { %>
                     .findAny().ifPresent(persistentTokenRepository::delete)
             );<% } %>
     }<% } %>

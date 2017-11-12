@@ -44,6 +44,10 @@
 
     <logger name="io.github.jhipster" level="#logback.loglevel#"/>
 
+    <%_ if (databaseType === 'couchbase') { _%>
+    <logger name="com.github.couchmove" level="#logback.loglevel#"/>
+    <%_ } _%>
+
     <%_ if (databaseType === 'cassandra') { _%>
     <logger name="io.netty" level="WARN"/>
     <%_ } _%>
@@ -75,6 +79,10 @@
     <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
     <%_ } else if (databaseType === 'mongodb') { _%>
     <logger name="org.mongodb.driver" level="WARN"/>
+    <%_ } else if (databaseType === 'couchbase') { _%>
+    <logger name="com.couchbase.client" level="WARN"/>
+    <%_ } _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
     <logger name="org.reflections" level="WARN"/>
     <%_ } _%>
     <%_ if (hibernateCache === 'infinispan') { _%>

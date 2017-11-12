@@ -101,6 +101,7 @@ module.exports = class extends BaseGenerator {
                 this.DOCKER_MARIADB = constants.DOCKER_MARIADB;
                 this.DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL;
                 this.DOCKER_MONGODB = constants.DOCKER_MONGODB;
+                this.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
                 this.DOCKER_MSSQL = constants.DOCKER_MSSQL;
                 this.DOCKER_ORACLE = constants.DOCKER_ORACLE;
                 this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
@@ -158,6 +159,10 @@ module.exports = class extends BaseGenerator {
                 if (this.databaseType === 'mongodb') {
                     this.devDatabaseType = 'mongodb';
                     this.prodDatabaseType = 'mongodb';
+                    this.hibernateCache = 'no';
+                } else if (this.databaseType === 'couchbase') {
+                    this.devDatabaseType = 'couchbase';
+                    this.prodDatabaseType = 'couchbase';
                     this.hibernateCache = 'no';
                 } else if (this.databaseType === 'cassandra') {
                     this.devDatabaseType = 'cassandra';
@@ -338,7 +343,7 @@ module.exports = class extends BaseGenerator {
                 this.humanizedBaseName = _.startCase(this.baseName);
                 this.mainClass = this.getMainClassName();
 
-                if (this.databaseType === 'cassandra' || this.databaseType === 'mongodb') {
+                if (this.databaseType === 'cassandra' || this.databaseType === 'mongodb' || this.databaseType === 'couchbase') {
                     this.pkType = 'String';
                 } else {
                     this.pkType = 'Long';

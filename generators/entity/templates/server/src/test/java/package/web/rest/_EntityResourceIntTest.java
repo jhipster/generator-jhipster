@@ -67,6 +67,9 @@ import java.time.ZoneId;<% } %><% if (fieldsContainInstant === true) { %>
 import java.time.temporal.ChronoUnit;<% } %>
 import java.util.List;<% if (databaseType === 'cassandra') { %>
 import java.util.UUID;<% } %>
+<%_ if (databaseType === 'couchbase') { _%>
+    import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
+<%_ } _%>
 <% if (fieldsContainZonedDateTime === true) { %>
 import static <%=packageName%>.web.rest.TestUtil.sameInstant;<% } %>
 import static <%=packageName%>.web.rest.TestUtil.createFormattingConversionService;
@@ -339,7 +342,10 @@ _%>
 
     @Before
     public void initTest() {
-        <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
+        <%_ if (databaseType === 'couchbase') { _%>
+        mockAuthentication();
+        <%_ } _%>
+        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { _%>
         <%= entityInstance %>Repository.deleteAll();
         <%_ } if (searchEngine === 'elasticsearch') { _%>
         <%= entityInstance %>SearchRepository.deleteAll();
@@ -388,7 +394,7 @@ _%>
         int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll().size();
 
         // Create the <%= entityClass %> with an existing ID
-        <%= entityInstance %>.setId(<% if (databaseType === 'sql') { %>1L<% } else if (databaseType === 'mongodb') { %>"existing_id"<% } else if (databaseType === 'cassandra') { %>UUID.randomUUID()<% } %>);
+        <%= entityInstance %>.setId(<% if (databaseType === 'sql') { %>1L<% } else if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>"existing_id"<% } else if (databaseType === 'cassandra') { %>UUID.randomUUID()<% } %>);
         <%_ if (dto === 'mapstruct') { _%>
         <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.toDto(<%= entityInstance %>);
         <%_ } _%>
@@ -438,7 +444,7 @@ _%>
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %><% if (databaseType !== 'cassandra') { %>?sort=id,desc<% } %>"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))<% if (databaseType === 'sql') { %>
-            .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().intValue())))<% } %><% if (databaseType === 'mongodb') { %>
+            .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().intValue())))<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
             .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId())))<% } %><% if (databaseType === 'cassandra') { %>
             .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().toString())))<% } %><% for (idx in fields) {%>
             <%_ if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
@@ -457,7 +463,7 @@ _%>
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>/{id}", <%= entityInstance %>.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))<% if (databaseType === 'sql') { %>
-            .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId().intValue()))<% } %><% if (databaseType === 'mongodb') { %>
+            .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId().intValue()))<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId()))<% } %><% if (databaseType === 'cassandra') { %>
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId().toString()))<% } %><% for (idx in fields) {%>
             <%_ if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
@@ -608,7 +614,7 @@ _%>
     @Transactional<% } %>
     public void getNonExisting<%= entityClass %>() throws Exception {
         // Get the <%= entityInstance %>
-        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>/{id}", <% if (databaseType === 'sql' || databaseType === 'mongodb') { %>Long.MAX_VALUE<% } %><% if (databaseType === 'cassandra') { %>UUID.randomUUID().toString()<% } %>))
+        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>/{id}", <% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>Long.MAX_VALUE<% } %><% if (databaseType === 'cassandra') { %>UUID.randomUUID().toString()<% } %>))
             .andExpect(status().isNotFound());
     }
 
@@ -730,7 +736,7 @@ _%>
         rest<%= entityClass %>MockMvc.perform(get("/api/_search/<%= entityApiUrl %>?query=id:" + <%= entityInstance %>.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))<% if (databaseType === 'sql') { %>
-            .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().intValue())))<% } %><% if (databaseType === 'mongodb') { %>
+            .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().intValue())))<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
             .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId())))<% } %><% if (databaseType === 'cassandra') { %>
             .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().toString())))<% } %><% for (idx in fields) {%>
             <%_ if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
@@ -744,11 +750,11 @@ _%>
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(<%= entityClass %>.class);
         <%= entityClass %> <%= entityInstance %>1 = new <%= entityClass %>();
-        <%= entityInstance %>1.setId(<% if (databaseType === 'sql') { %>1L<% } else if (databaseType === 'mongodb') { %>"id1"<% } else if (databaseType === 'cassandra') { %>UUID.randomUUID()<% } %>);
+        <%= entityInstance %>1.setId(<% if (databaseType === 'sql') { %>1L<% } else if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>"id1"<% } else if (databaseType === 'cassandra') { %>UUID.randomUUID()<% } %>);
         <%= entityClass %> <%= entityInstance %>2 = new <%= entityClass %>();
         <%= entityInstance %>2.setId(<%= entityInstance %>1.getId());
         assertThat(<%= entityInstance %>1).isEqualTo(<%= entityInstance %>2);
-        <%= entityInstance %>2.setId(<% if (databaseType === 'sql') { %>2L<% } else if (databaseType === 'mongodb') { %>"id2"<% } else if (databaseType === 'cassandra') { %>UUID.randomUUID()<% } %>);
+        <%= entityInstance %>2.setId(<% if (databaseType === 'sql') { %>2L<% } else if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>"id2"<% } else if (databaseType === 'cassandra') { %>UUID.randomUUID()<% } %>);
         assertThat(<%= entityInstance %>1).isNotEqualTo(<%= entityInstance %>2);
         <%= entityInstance %>1.setId(null);
         assertThat(<%= entityInstance %>1).isNotEqualTo(<%= entityInstance %>2);
@@ -760,12 +766,12 @@ _%>
     public void dtoEqualsVerifier() throws Exception {
         TestUtil.equalsVerifier(<%= entityClass %>DTO.class);
         <%= entityClass %>DTO <%= entityInstance %>DTO1 = new <%= entityClass %>DTO();
-        <%= entityInstance %>DTO1.setId(<% if (databaseType === 'sql') { %>1L<% } else if (databaseType === 'mongodb') { %>"id1"<% } else if (databaseType === 'cassandra') { %>UUID.randomUUID()<% } %>);
+        <%= entityInstance %>DTO1.setId(<% if (databaseType === 'sql') { %>1L<% } else if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>"id1"<% } else if (databaseType === 'cassandra') { %>UUID.randomUUID()<% } %>);
         <%= entityClass %>DTO <%= entityInstance %>DTO2 = new <%= entityClass %>DTO();
         assertThat(<%= entityInstance %>DTO1).isNotEqualTo(<%= entityInstance %>DTO2);
         <%= entityInstance %>DTO2.setId(<%= entityInstance %>DTO1.getId());
         assertThat(<%= entityInstance %>DTO1).isEqualTo(<%= entityInstance %>DTO2);
-        <%= entityInstance %>DTO2.setId(<% if (databaseType === 'sql') { %>2L<% } else if (databaseType === 'mongodb') { %>"id2"<% } else if (databaseType === 'cassandra') { %>UUID.randomUUID()<% } %>);
+        <%= entityInstance %>DTO2.setId(<% if (databaseType === 'sql') { %>2L<% } else if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>"id2"<% } else if (databaseType === 'cassandra') { %>UUID.randomUUID()<% } %>);
         assertThat(<%= entityInstance %>DTO1).isNotEqualTo(<%= entityInstance %>DTO2);
         <%= entityInstance %>DTO1.setId(null);
         assertThat(<%= entityInstance %>DTO1).isNotEqualTo(<%= entityInstance %>DTO2);

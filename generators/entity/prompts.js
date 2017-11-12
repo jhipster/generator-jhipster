@@ -190,7 +190,7 @@ function askForRelationships() {
     if (this.useConfigurationFile && this.updateEntity !== 'add') {
         return;
     }
-    if (this.databaseType === 'mongodb' || this.databaseType === 'cassandra') {
+    if (this.databaseType === 'mongodb' || this.databaseType === 'couchbase' || this.databaseType === 'cassandra') {
         return;
     }
 
@@ -204,7 +204,7 @@ function askForRelationsToRemove() {
     if (!this.useConfigurationFile || this.updateEntity !== 'remove' || this.relNameChoices.length === 0) {
         return;
     }
-    if (this.databaseType === 'mongodb' || this.databaseType === 'cassandra') {
+    if (this.databaseType === 'mongodb' || this.databaseType === 'couchbase' || this.databaseType === 'cassandra') {
         return;
     }
 
@@ -477,7 +477,7 @@ function askForField(done) {
             message: 'What is the name of your field?'
         },
         {
-            when: response => response.fieldAdd === true && (skipServer || databaseType === 'sql' || databaseType === 'mongodb'),
+            when: response => response.fieldAdd === true && (skipServer || databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase'),
             type: 'list',
             name: 'fieldType',
             message: 'What is the type of your field?',

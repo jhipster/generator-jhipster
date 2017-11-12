@@ -190,6 +190,12 @@ spring:
                     logs: <%= BUILD_DIR %>elasticsearch/log
                     data: <%= BUILD_DIR %>elasticsearch/data
     <%_ } _%>
+    <%_ if (databaseType === 'couchbase') { _%>
+    couchbase:
+        bootstrap-hosts: localhost
+        bucket:
+            name: <%= baseName %>
+    <%_ } _%>
     mail:
         host: localhost
         port: 25

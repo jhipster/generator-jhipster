@@ -108,6 +108,11 @@ spring:
                     logs: <%= BUILD_DIR %>elasticsearch/log
                     data: <%= BUILD_DIR %>elasticsearch/data
     <%_ } _%>
+    <%_ if (databaseType === 'couchbase') { _%>
+    couchbase:
+        bucket:
+            name: jhipster
+    <%_ } _%>
     mail:
         host: localhost
     messages:

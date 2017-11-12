@@ -70,7 +70,7 @@ public class UserMapper {
                 user.setAuthorities(authorities);
             }
             <%_ } _%>
-            <%_ if (databaseType === 'cassandra') { _%>
+            <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
             user.setAuthorities(userDTO.getAuthorities());
             <%_ } _%>
             return user;
@@ -84,7 +84,7 @@ public class UserMapper {
             .collect(Collectors.toList());
     }
 
-    public User userFromId(<% if (databaseType === 'mongodb' || databaseType === 'cassandra') { %>String<% } else { %>Long<% } %> id) {
+    public User userFromId(<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { %>String<% } else { %>Long<% } %> id) {
         if (id == null) {
             return null;
         }

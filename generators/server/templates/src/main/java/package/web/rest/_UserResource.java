@@ -39,14 +39,14 @@ import <%=packageName%>.web.rest.errors.EmailAlreadyUsedException;
 import <%=packageName%>.web.rest.errors.LoginAlreadyUsedException;
 import <%=packageName%>.web.rest.util.HeaderUtil;
 <%_ } _%>
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import <%=packageName%>.web.rest.util.PaginationUtil;
 <%_ } _%>
 import io.github.jhipster.web.util.ResponseUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -188,13 +188,13 @@ public class UserResource {
 <%_ } _%>
     /**
      * GET  /users : get all users.
-     *<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+     *<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
      * @param pageable the pagination information<% } %>
      * @return the ResponseEntity with status 200 (OK) and with body all users
      */
     @GetMapping("/users")
     @Timed
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
     public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
         final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");

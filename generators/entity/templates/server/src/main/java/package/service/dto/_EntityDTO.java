@@ -40,7 +40,7 @@ import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;
  */
 public class <%= entityClass %>DTO implements Serializable {
 <% if (databaseType === 'sql') { %>
-    private Long id;<% } %><% if (databaseType === 'mongodb') { %>
+    private Long id;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
     private String id;<% } %><% if (databaseType === 'cassandra') { %>
     private UUID id;<% } %>
     <%_ for (idx in fields) {
@@ -95,11 +95,11 @@ public class <%= entityClass %>DTO implements Serializable {
     private String <%= relationshipFieldName %><%= otherEntityFieldCapitalized %>;
     <%_ } } } _%>
 
-    public <% if (databaseType === 'sql') { %>Long<% } %><% if (databaseType === 'mongodb') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> getId() {
+    public <% if (databaseType === 'sql') { %>Long<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> getId() {
         return id;
     }
 
-    public void setId(<% if (databaseType === 'sql') { %>Long<% } %><% if (databaseType === 'mongodb') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> id) {
+    public void setId(<% if (databaseType === 'sql') { %>Long<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> id) {
         this.id = id;
     }
     <%_ for (idx in fields) {
