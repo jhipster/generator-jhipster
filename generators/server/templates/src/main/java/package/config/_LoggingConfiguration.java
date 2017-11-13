@@ -48,6 +48,7 @@ import org.springframework.cloud.consul.ConditionalOnConsulEnabled;
 import org.springframework.cloud.consul.serviceregistry.ConsulRegistration;
 <%_ } _%>
 import org.springframework.context.annotation.Configuration;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 @Configuration
 <%_ if (serviceDiscoveryType === "eureka") { _%>
@@ -56,6 +57,7 @@ import org.springframework.context.annotation.Configuration;
 <%_ if (serviceDiscoveryType === "consul") { _%>
 @ConditionalOnConsulEnabled
 <%_ } _%>
+@RefreshScope
 public class LoggingConfiguration {
 
     private static final String LOGSTASH_APPENDER_NAME = "LOGSTASH";
