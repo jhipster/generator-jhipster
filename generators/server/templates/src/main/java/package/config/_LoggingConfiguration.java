@@ -53,11 +53,12 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @Configuration
 <%_ if (serviceDiscoveryType === "eureka") { _%>
 @ConditionalOnProperty("eureka.client.enabled")
+@RefreshScope
 <%_ } _%>
 <%_ if (serviceDiscoveryType === "consul") { _%>
 @ConditionalOnConsulEnabled
-<%_ } _%>
 @RefreshScope
+<%_ } _%>
 public class LoggingConfiguration {
 
     private static final String LOGSTASH_APPENDER_NAME = "LOGSTASH";
