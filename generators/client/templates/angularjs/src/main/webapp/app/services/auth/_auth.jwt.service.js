@@ -101,7 +101,7 @@
 
         function logout () {
 <%_ if(authenticationType === 'uaa') { _%>
-            return $http.post('/auth/logout');
+            return $http.post('auth/logout');
 <% } else { %>
             delete $localStorage.authenticationToken;
             delete $sessionStorage.authenticationToken;
