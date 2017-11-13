@@ -42,13 +42,15 @@ import org.springframework.beans.factory.annotation.Value;
 <%_ if (serviceDiscoveryType === "eureka") { _%>
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.netflix.eureka.EurekaInstanceConfigBean;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 <%_ } _%>
 <%_ if (serviceDiscoveryType === "consul") { _%>
 import org.springframework.cloud.consul.ConditionalOnConsulEnabled;
 import org.springframework.cloud.consul.serviceregistry.ConsulRegistration;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 <%_ } _%>
 import org.springframework.context.annotation.Configuration;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
+
 
 @Configuration
 <%_ if (serviceDiscoveryType === "eureka") { _%>
