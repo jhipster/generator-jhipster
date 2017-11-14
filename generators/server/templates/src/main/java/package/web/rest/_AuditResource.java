@@ -48,7 +48,7 @@ public class AuditResource {
     }
 
     /**
-     * GET  /audits : get a page of AuditEvents.
+     * GET /audits : get a page of AuditEvents.
      *
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of AuditEvents in body

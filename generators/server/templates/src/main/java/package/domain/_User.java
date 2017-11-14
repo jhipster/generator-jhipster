@@ -181,7 +181,7 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || 
     @JsonIgnore
     @NotNull
     @Size(min = 60, max = 60)<% if (databaseType === 'sql') { %>
-    @Column(name = "password_hash",length = 60)<% } %>
+    @Column(name = "password_hash", length = 60)<% } %>
     private String password;
 <%_ } _%>
 
@@ -277,7 +277,7 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || 
         return login;
     }
 
-    //Lowercase the login before saving it in database
+    // Lowercase the login before saving it in database
     public void setLogin(String login) {
         this.login = StringUtils.lowerCase(login, Locale.ENGLISH);
     }
@@ -352,11 +352,11 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || 
     }
 
     public Instant getResetDate() {
-       return resetDate;
+        return resetDate;
     }
 
     public void setResetDate(Instant resetDate) {
-       this.resetDate = resetDate;
+        this.resetDate = resetDate;
     }
 <%_ } _%>
 

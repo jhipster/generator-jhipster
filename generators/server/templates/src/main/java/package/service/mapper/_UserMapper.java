@@ -66,7 +66,7 @@ public class UserMapper {
             user.setLangKey(userDTO.getLangKey());
             <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
             Set<Authority> authorities = this.authoritiesFromStrings(userDTO.getAuthorities());
-            if(authorities != null) {
+            if (authorities != null) {
                 user.setAuthorities(authorities);
             }
             <%_ } _%>

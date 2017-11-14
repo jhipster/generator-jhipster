@@ -106,7 +106,7 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
 
     @EntityGraph(attributePaths = "authorities")
     <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || hibernateCache === 'infinispan' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
-    @Cacheable(cacheNames="users")
+    @Cacheable(cacheNames = "users")
     <%_ } _%>
     Optional<User> findOneWithAuthoritiesByLogin(String login);
 <%_ } _%>

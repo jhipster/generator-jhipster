@@ -144,7 +144,7 @@ public class UserResource {
 
         if (userDTO.getId() != null) {
             throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists");
-        // Lowercase the user login before comparing with database
+            // Lowercase the user login before comparing with database
         } else if (userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).isPresent()) {
             throw new LoginAlreadyUsedException();
         } else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
@@ -159,7 +159,7 @@ public class UserResource {
     }
 
     /**
-     * PUT  /users : Updates an existing User.
+     * PUT /users : Updates an existing User.
      *
      * @param userDTO the user to update
      * @return the ResponseEntity with status 200 (OK) and with body the updated user
@@ -187,7 +187,7 @@ public class UserResource {
 
 <%_ } _%>
     /**
-     * GET  /users : get all users.
+     * GET /users : get all users.
      *<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
      * @param pageable the pagination information<% } %>
      * @return the ResponseEntity with status 200 (OK) and with body all users
@@ -218,7 +218,7 @@ public class UserResource {
     <%_ } _%>
 
     /**
-     * GET  /users/:login : get the "login" user.
+     * GET /users/:login : get the "login" user.
      *
      * @param login the login of the user to find
      * @return the ResponseEntity with status 200 (OK) and with body the "login" user, or with status 404 (Not Found)
@@ -251,7 +251,7 @@ public class UserResource {
 <%_ if (searchEngine === 'elasticsearch') { _%>
 
     /**
-     * SEARCH  /_search/users/:query : search for the User corresponding
+     * SEARCH /_search/users/:query : search for the User corresponding
      * to the query.
      *
      * @param query the query to search

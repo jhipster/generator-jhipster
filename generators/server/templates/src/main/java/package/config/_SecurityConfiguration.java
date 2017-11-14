@@ -24,11 +24,13 @@ import <%=packageName%>.security.*;
 <%_ if (authenticationType === 'jwt') { _%>
 import <%=packageName%>.security.jwt.*;
 <%_ } _%>
-
 <%_ if (authenticationType === 'session') { _%>
+
 import io.github.jhipster.config.JHipsterProperties;
+import io.github.jhipster.security.*;
 <%_ } _%>
-<%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
+<%_ if (authenticationType === 'oauth2') { _%>
+
 import io.github.jhipster.security.*;
 <%_ } _%>
 

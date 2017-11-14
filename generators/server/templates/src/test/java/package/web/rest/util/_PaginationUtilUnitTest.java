@@ -42,7 +42,7 @@ public class PaginationUtilUnitTest {
     public void generatePaginationHttpHeadersTest() {
         String baseUrl = "/api/_search/example";
         List<String> content = new ArrayList<>();
-        Page<String> page = new PageImpl<>(content,new PageRequest(6, 50),400L);
+        Page<String> page = new PageImpl<>(content, new PageRequest(6, 50), 400L);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, baseUrl);
         List<String> strHeaders = headers.get(HttpHeaders.LINK);
         assertNotNull(strHeaders);
@@ -86,7 +86,7 @@ public class PaginationUtilUnitTest {
         List<String> content = new ArrayList<>();
 
         // Page 0
-        Page<String> page = new PageImpl<>(content,new PageRequest(0, 50),400L);
+        Page<String> page = new PageImpl<>(content, new PageRequest(0, 50),400L);
         String query = "Test1, test2";
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, baseUrl);
         List<String> strHeaders = headers.get(HttpHeaders.LINK);
@@ -121,7 +121,7 @@ public class PaginationUtilUnitTest {
         assertTrue(Long.valueOf(xTotalCountHeaders.get(0)).equals(400L));
 
         // Page 6
-        page = new PageImpl<>(content,new PageRequest(6, 50),400L);
+        page = new PageImpl<>(content,new PageRequest(6, 50), 400L);
         headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, baseUrl);
         strHeaders = headers.get(HttpHeaders.LINK);
         assertNotNull(strHeaders);

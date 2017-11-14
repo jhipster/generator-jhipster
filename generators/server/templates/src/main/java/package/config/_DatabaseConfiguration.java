@@ -133,7 +133,7 @@ public class DatabaseConfiguration {
             ClassLoader loader = Thread.currentThread().getContextClassLoader();
             Class<?> serverClass = Class.forName("org.h2.tools.Server", true, loader);
             Method createServer = serverClass.getMethod("createTcpServer", String[].class);
-            return createServer.invoke(null, new Object[] { new String[] { "-tcp","-tcpAllowOthers" } });
+            return createServer.invoke(null, new Object[] { new String[] { "-tcp", "-tcpAllowOthers" } });
 
         } catch (ClassNotFoundException | LinkageError  e) {
             throw new RuntimeException("Failed to load and initialize org.h2.tools.Server", e);
