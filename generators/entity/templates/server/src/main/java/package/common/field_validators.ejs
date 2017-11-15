@@ -29,19 +29,19 @@ if (field.fieldValidate === true) {
     if (rules.includes('required')) {
         validators.push('@NotNull');
     }
-    if (rules.includes('minlength') && rules.includes('maxlength')) {
+    if (rules.includes('minlength') && !rules.includes('maxlength')) {
         validators.push('@Size(min = ' + field.fieldValidateRulesMinlength + ')');
     }
-    if (rules.includes('maxlength') && rules.includes('minlength')) {
+    if (rules.includes('maxlength') && !rules.includes('minlength')) {
         validators.push('@Size(max = ' + field.fieldValidateRulesMaxlength + ')');
     }
     if (rules.includes('minlength') && rules.includes('maxlength')) {
         validators.push('@Size(min = ' + field.fieldValidateRulesMinlength + ', max = ' + field.fieldValidateRulesMaxlength + ')');
     }
-    if (rules.includes('minbytes') && rules.includes('maxbytes')) {
+    if (rules.includes('minbytes') && !rules.includes('maxbytes')) {
         validators.push('@Size(min = ' + field.fieldValidateRulesMinbytes + ')');
     }
-    if (rules.includes('maxbytes') && rules.includes('minbytes')) {
+    if (rules.includes('maxbytes') && !rules.includes('minbytes')) {
         validators.push('@Size(max = ' + field.fieldValidateRulesMaxbytes + ')');
     }
     if (rules.includes('minbytes') && rules.includes('maxbytes')) {
