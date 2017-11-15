@@ -30,7 +30,7 @@ import org.mapstruct.*;
   for (idx in relationships) {
     if ((relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true)|| relationships[idx].relationshipType === 'many-to-one' ||(relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide === true)){
       // if the entity is mapped twice, we should implement the mapping once
-      if (existingMappings.indexOf(relationships[idx].otherEntityNameCapitalized) === -1 && relationships[idx].otherEntityNameCapitalized !== entityClass) {
+      if (!existingMappings.includes(relationships[idx].otherEntityNameCapitalized) && relationships[idx].otherEntityNameCapitalized !== entityClass) {
           existingMappings.push(relationships[idx].otherEntityNameCapitalized);
       } } } %><%= existingMappings.map(otherEntityNameCapitalized => otherEntityNameCapitalized + 'Mapper.class').join(', ') %>})
 public interface <%= entityClass %>Mapper extends EntityMapper<<%= entityClass %>DTO, <%= entityClass %>> {

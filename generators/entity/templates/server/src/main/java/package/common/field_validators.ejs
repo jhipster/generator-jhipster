@@ -26,28 +26,28 @@ if (field.fieldValidate === true) {
     const validators = [];
     const MAX_VALUE = 2147483647;
 
-    if (rules.indexOf('required') !== -1) {
+    if (rules.includes('required')) {
         validators.push('@NotNull');
     }
-    if (rules.indexOf('minlength') !== -1 && rules.indexOf('maxlength') === -1) {
+    if (rules.includes('minlength') && rules.includes('maxlength')) {
         validators.push('@Size(min = ' + field.fieldValidateRulesMinlength + ')');
     }
-    if (rules.indexOf('maxlength') !== -1 && rules.indexOf('minlength') === -1) {
+    if (rules.includes('maxlength') && rules.includes('minlength')) {
         validators.push('@Size(max = ' + field.fieldValidateRulesMaxlength + ')');
     }
-    if (rules.indexOf('minlength') !== -1 && rules.indexOf('maxlength') !== -1) {
+    if (rules.includes('minlength') && rules.includes('maxlength')) {
         validators.push('@Size(min = ' + field.fieldValidateRulesMinlength + ', max = ' + field.fieldValidateRulesMaxlength + ')');
     }
-    if (rules.indexOf('minbytes') !== -1 && rules.indexOf('maxbytes') === -1) {
+    if (rules.includes('minbytes') && rules.includes('maxbytes')) {
         validators.push('@Size(min = ' + field.fieldValidateRulesMinbytes + ')');
     }
-    if (rules.indexOf('maxbytes') !== -1 && rules.indexOf('minbytes') === -1) {
+    if (rules.includes('maxbytes') && rules.includes('minbytes')) {
         validators.push('@Size(max = ' + field.fieldValidateRulesMaxbytes + ')');
     }
-    if (rules.indexOf('minbytes') !== -1 && rules.indexOf('maxbytes') !== -1) {
+    if (rules.includes('minbytes') && rules.includes('maxbytes')) {
         validators.push('@Size(min = ' + field.fieldValidateRulesMinbytes + ', max = ' + field.fieldValidateRulesMaxbytes + ')');
     }
-    if (rules.indexOf('min') !== -1) {
+    if (rules.includes('min')) {
         if (field.fieldType === 'Float' || field.fieldType === 'Double' || field.fieldType === 'BigDecimal') {
             validators.push('@DecimalMin(value = "' + field.fieldValidateRulesMin + '")');
         } else {
@@ -55,7 +55,7 @@ if (field.fieldValidate === true) {
             validators.push('@Min(value = ' + field.fieldValidateRulesMin + isLong + ')');
         }
     }
-    if (rules.indexOf('max') !== -1) {
+    if (rules.includes('max')) {
         if (field.fieldType === 'Float' || field.fieldType === 'Double' || field.fieldType === 'BigDecimal') {
             validators.push('@DecimalMax(value = "' + field.fieldValidateRulesMax + '")');
         } else {
@@ -63,7 +63,7 @@ if (field.fieldValidate === true) {
             validators.push('@Max(value = ' + field.fieldValidateRulesMax + isLong + ')');
         }
     }
-    if (rules.indexOf('pattern') !== -1) {
+    if (rules.includes('pattern')) {
         validators.push('@Pattern(regexp = "' + field.fieldValidateRulesPatternJava  + '")');
     }
     result =  validators.join('\n    ');

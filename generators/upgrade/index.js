@@ -65,7 +65,7 @@ module.exports = class extends BaseGenerator {
     _cleanUp() {
         const filesToKeep = ['.yo-rc.json', '.jhipster', 'node_modules', '.git', '.idea', '.mvn'];
         shelljs.ls('-A').forEach((file) => {
-            if (filesToKeep.indexOf(file) === -1) {
+            if (!filesToKeep.includes(file)) {
                 this.info(`Removing ${file}`);
                 shelljs.rm('-rf', file);
             }

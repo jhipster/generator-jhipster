@@ -53,12 +53,12 @@ export class <%=jhiPrefixCapitalized%>MetricsMonitoringComponent implements OnIn
             this.cachesStats = {};
             Object.keys(metrics.timers).forEach((key) => {
                 const value = metrics.timers[key];
-                if (key.indexOf('web.rest') !== -1 || key.indexOf('service') !== -1) {
+                if (key.includes('web.rest') || key.includes('service')) {
                     this.servicesStats[key] = value;
                 }
             });
             Object.keys(metrics.gauges).forEach((key) => {
-                if (key.indexOf('jcache.statistics') !== -1) {
+                if (key.includes('jcache.statistics')) {
                     const value = metrics.gauges[key].value;
                     // remove gets or puts
                     const index = key.lastIndexOf('.');

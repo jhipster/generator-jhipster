@@ -465,7 +465,7 @@ function askForField(done) {
                     return 'Your field name cannot be empty';
                 } else if (input.charAt(0) === input.charAt(0).toUpperCase()) {
                     return 'Your field name cannot start with an upper case letter';
-                } else if (input === 'id' || fieldNamesUnderscored.indexOf(_.snakeCase(input)) !== -1) {
+                } else if (input === 'id' || fieldNamesUnderscored.includes(_.snakeCase(input))) {
                     return 'Your field name cannot use an already existing field name';
                 } else if (!skipServer && jhiCore.isReservedFieldName(input)) {
                     return 'Your field name cannot contain a Java or Angular reserved keyword';
@@ -550,7 +550,7 @@ function askForField(done) {
                 } else if (jhiCore.isReservedKeyword(input, 'JAVA')) {
                     return 'Your enum name cannot contain a Java reserved keyword';
                 }
-                if (this.enums.indexOf(input) !== -1) {
+                if (this.enums.includes(input)) {
                     this.existingEnum = true;
                 } else {
                     this.enums.push(input);
@@ -801,7 +801,7 @@ function askForField(done) {
         {
             when: response => response.fieldAdd === true &&
                     response.fieldValidate === true &&
-                    response.fieldValidateRules.indexOf('minlength') !== -1,
+                    response.fieldValidateRules.includes('minlength'),
             type: 'input',
             name: 'fieldValidateRulesMinlength',
             validate: input => (this.isNumber(input) ? true : 'Minimum length must be a positive number'),
@@ -811,7 +811,7 @@ function askForField(done) {
         {
             when: response => response.fieldAdd === true &&
                     response.fieldValidate === true &&
-                    response.fieldValidateRules.indexOf('maxlength') !== -1,
+                    response.fieldValidateRules.includes('maxlength'),
             type: 'input',
             name: 'fieldValidateRulesMaxlength',
             validate: input => (this.isNumber(input) ? true : 'Maximum length must be a positive number'),
@@ -821,7 +821,7 @@ function askForField(done) {
         {
             when: response => response.fieldAdd === true &&
                     response.fieldValidate === true &&
-                    response.fieldValidateRules.indexOf('min') !== -1 &&
+                    response.fieldValidateRules.includes('min') &&
                     (response.fieldType === 'Integer' ||
                     response.fieldType === 'Long'),
             type: 'input',
@@ -833,7 +833,7 @@ function askForField(done) {
         {
             when: response => response.fieldAdd === true &&
                     response.fieldValidate === true &&
-                    response.fieldValidateRules.indexOf('max') !== -1 &&
+                    response.fieldValidateRules.includes('max') &&
                     (response.fieldType === 'Integer' ||
                     response.fieldType === 'Long'),
             type: 'input',
@@ -845,7 +845,7 @@ function askForField(done) {
         {
             when: response => response.fieldAdd === true &&
                     response.fieldValidate === true &&
-                    response.fieldValidateRules.indexOf('min') !== -1 &&
+                    response.fieldValidateRules.includes('min') &&
                     (response.fieldType === 'Float' ||
                     response.fieldType === 'Double' ||
                     response.fieldType === 'BigDecimal'),
@@ -858,7 +858,7 @@ function askForField(done) {
         {
             when: response => response.fieldAdd === true &&
                     response.fieldValidate === true &&
-                    response.fieldValidateRules.indexOf('max') !== -1 &&
+                    response.fieldValidateRules.includes('max') &&
                     (response.fieldType === 'Float' ||
                     response.fieldType === 'Double' ||
                     response.fieldType === 'BigDecimal'),
@@ -871,7 +871,7 @@ function askForField(done) {
         {
             when: response => response.fieldAdd === true &&
                     response.fieldValidate === true &&
-                    response.fieldValidateRules.indexOf('minbytes') !== -1 &&
+                    response.fieldValidateRules.includes('minbytes') &&
                     response.fieldType === 'byte[]' &&
                     response.fieldTypeBlobContent !== 'text',
             type: 'input',
@@ -883,7 +883,7 @@ function askForField(done) {
         {
             when: response => response.fieldAdd === true &&
                     response.fieldValidate === true &&
-                    response.fieldValidateRules.indexOf('maxbytes') !== -1 &&
+                    response.fieldValidateRules.includes('maxbytes') &&
                     response.fieldType === 'byte[]' &&
                     response.fieldTypeBlobContent !== 'text',
             type: 'input',
@@ -895,7 +895,7 @@ function askForField(done) {
         {
             when: response => response.fieldAdd === true &&
                     response.fieldValidate === true &&
-                    response.fieldValidateRules.indexOf('pattern') !== -1,
+                    response.fieldValidateRules.includes('pattern'),
             type: 'input',
             name: 'fieldValidateRulesPattern',
             message: 'What is the regular expression pattern you want to apply on your field?',
@@ -978,7 +978,7 @@ function askForRelationship(done) {
                     return 'Your relationship cannot be empty';
                 } else if (input.charAt(0) === input.charAt(0).toUpperCase()) {
                     return 'Your relationship cannot start with an upper case letter';
-                } else if (input === 'id' || fieldNamesUnderscored.indexOf(_.snakeCase(input)) !== -1) {
+                } else if (input === 'id' || fieldNamesUnderscored.includes(_.snakeCase(input))) {
                     return 'Your relationship cannot use an already existing field name';
                 } else if (jhiCore.isReservedKeyword(input, 'JAVA')) {
                     return 'Your relationship cannot contain a Java reserved keyword';
@@ -1124,46 +1124,46 @@ function logFieldsAndRelationships() {
     if (this.fields.length > 0) {
         this.log(chalk.white('Fields'));
         this.fields.forEach((field) => {
-            let validationDetails = '';
+            const validationDetails = [];
             const fieldValidate = _.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
             if (fieldValidate === true) {
-                if (field.fieldValidateRules.indexOf('required') !== -1) {
-                    validationDetails = 'required ';
+                if (field.fieldValidateRules.includes('required')) {
+                    validationDetails.push('required');
                 }
-                if (field.fieldValidateRules.indexOf('minlength') !== -1) {
-                    validationDetails += `minlength='${field.fieldValidateRulesMinlength}' `;
+                if (field.fieldValidateRules.includes('minlength')) {
+                    validationDetails.push(`minlength='${field.fieldValidateRulesMinlength}'`);
                 }
-                if (field.fieldValidateRules.indexOf('maxlength') !== -1) {
-                    validationDetails += `maxlength='${field.fieldValidateRulesMaxlength}' `;
+                if (field.fieldValidateRules.includes('maxlength')) {
+                    validationDetails.push(`maxlength='${field.fieldValidateRulesMaxlength}'`);
                 }
-                if (field.fieldValidateRules.indexOf('pattern') !== -1) {
-                    validationDetails += `pattern='${field.fieldValidateRulesPattern}' `;
+                if (field.fieldValidateRules.includes('pattern')) {
+                    validationDetails.push(`pattern='${field.fieldValidateRulesPattern}'`);
                 }
-                if (field.fieldValidateRules.indexOf('min') !== -1) {
-                    validationDetails += `min='${field.fieldValidateRulesMin}' `;
+                if (field.fieldValidateRules.includes('min')) {
+                    validationDetails.push(`min='${field.fieldValidateRulesMin}'`);
                 }
-                if (field.fieldValidateRules.indexOf('max') !== -1) {
-                    validationDetails += `max='${field.fieldValidateRulesMax}' `;
+                if (field.fieldValidateRules.includes('max')) {
+                    validationDetails.push(`max='${field.fieldValidateRulesMax}'`);
                 }
-                if (field.fieldValidateRules.indexOf('minbytes') !== -1) {
-                    validationDetails += `minbytes='${field.fieldValidateRulesMinbytes}' `;
+                if (field.fieldValidateRules.includes('minbytes')) {
+                    validationDetails.push(`minbytes='${field.fieldValidateRulesMinbytes}'`);
                 }
-                if (field.fieldValidateRules.indexOf('maxbytes') !== -1) {
-                    validationDetails += `maxbytes='${field.fieldValidateRulesMaxbytes}' `;
+                if (field.fieldValidateRules.includes('maxbytes')) {
+                    validationDetails.push(`maxbytes='${field.fieldValidateRulesMaxbytes}'`);
                 }
             }
-            this.log(chalk.red(field.fieldName) + chalk.white(` (${field.fieldType}${field.fieldTypeBlobContent ? ` ${field.fieldTypeBlobContent}` : ''}) `) + chalk.cyan(validationDetails));
+            this.log(chalk.red(field.fieldName) + chalk.white(` (${field.fieldType}${field.fieldTypeBlobContent ? ` ${field.fieldTypeBlobContent}` : ''}) `) + chalk.cyan(validationDetails.join(' ')));
         });
         this.log();
     }
     if (this.relationships.length > 0) {
         this.log(chalk.white('Relationships'));
         this.relationships.forEach((relationship) => {
-            let validationDetails = '';
-            if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.indexOf('required') !== -1) {
-                validationDetails = 'required ';
+            const validationDetails = [];
+            if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes('required')) {
+                validationDetails.push('required');
             }
-            this.log(`${chalk.red(relationship.relationshipName)} ${chalk.white(`(${_.upperFirst(relationship.otherEntityName)})`)} ${chalk.cyan(relationship.relationshipType)} ${chalk.cyan(validationDetails)}`);
+            this.log(`${chalk.red(relationship.relationshipName)} ${chalk.white(`(${_.upperFirst(relationship.otherEntityName)})`)} ${chalk.cyan(relationship.relationshipType)} ${chalk.cyan(validationDetails.join(' '))}`);
         });
         this.log();
     }

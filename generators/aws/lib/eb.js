@@ -195,7 +195,7 @@ function getLatestSolutionStackName(callback) {
     }
 
     function filterCriteria(element) {
-        return element.indexOf('Tomcat 8') > -1;
+        return element.includes('Tomcat 8');
     }
 }
 

@@ -121,9 +121,9 @@ module.exports = class extends BaseGenerator {
                 if (this.testFrameworks === undefined) {
                     this.testFrameworks = ['gatling'];
                 }
-                this.protractorTests = this.testFrameworks.indexOf('protractor') !== -1;
-                this.gatlingTests = this.testFrameworks.indexOf('gatling') !== -1;
-                this.cucumberTests = this.testFrameworks.indexOf('cucumber') !== -1;
+                this.protractorTests = this.testFrameworks.includes('protractor');
+                this.gatlingTests = this.testFrameworks.includes('gatling');
+                this.cucumberTests = this.testFrameworks.includes('cucumber');
 
                 this.clientFramework = this.config.get('clientFramework');
                 if (!this.clientFramework) {
@@ -626,12 +626,12 @@ module.exports = class extends BaseGenerator {
                         this.fieldsContainManyToOne = true;
                     }
 
-                    if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.indexOf('required') !== -1) {
+                    if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes('required')) {
                         relationship.relationshipValidate = relationship.relationshipRequired = this.validation = true;
                     }
 
                     const entityType = relationship.otherEntityNameCapitalized;
-                    if (this.differentTypes.indexOf(entityType) === -1) {
+                    if (!this.differentTypes.includes(entityType)) {
                         this.differentTypes.push(entityType);
                     }
                     if (!this.differentRelationships[entityType]) {
