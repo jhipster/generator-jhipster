@@ -1124,46 +1124,46 @@ function logFieldsAndRelationships() {
     if (this.fields.length > 0) {
         this.log(chalk.white('Fields'));
         this.fields.forEach((field) => {
-            let validationDetails = '';
+            const validationDetails = [];
             const fieldValidate = _.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
             if (fieldValidate === true) {
-                if (field.fieldValidateRules.indexOf('required') !== -1) {
-                    validationDetails = 'required ';
+                if (field.fieldValidateRules.includes('required')) {
+                    validationDetails.push('required');
                 }
-                if (field.fieldValidateRules.indexOf('minlength') !== -1) {
-                    validationDetails += `minlength='${field.fieldValidateRulesMinlength}' `;
+                if (field.fieldValidateRules.includes('minlength')) {
+                    validationDetails.push(`minlength='${field.fieldValidateRulesMinlength}'`);
                 }
-                if (field.fieldValidateRules.indexOf('maxlength') !== -1) {
-                    validationDetails += `maxlength='${field.fieldValidateRulesMaxlength}' `;
+                if (field.fieldValidateRules.includes('maxlength')) {
+                    validationDetails.push(`maxlength='${field.fieldValidateRulesMaxlength}'`);
                 }
-                if (field.fieldValidateRules.indexOf('pattern') !== -1) {
-                    validationDetails += `pattern='${field.fieldValidateRulesPattern}' `;
+                if (field.fieldValidateRules.includes('pattern')) {
+                    validationDetails.push(`pattern='${field.fieldValidateRulesPattern}'`);
                 }
-                if (field.fieldValidateRules.indexOf('min') !== -1) {
-                    validationDetails += `min='${field.fieldValidateRulesMin}' `;
+                if (field.fieldValidateRules.includes('min')) {
+                    validationDetails.push(`min='${field.fieldValidateRulesMin}'`);
                 }
-                if (field.fieldValidateRules.indexOf('max') !== -1) {
-                    validationDetails += `max='${field.fieldValidateRulesMax}' `;
+                if (field.fieldValidateRules.includes('max')) {
+                    validationDetails.push(`max='${field.fieldValidateRulesMax}'`);
                 }
-                if (field.fieldValidateRules.indexOf('minbytes') !== -1) {
-                    validationDetails += `minbytes='${field.fieldValidateRulesMinbytes}' `;
+                if (field.fieldValidateRules.includes('minbytes')) {
+                    validationDetails.push(`minbytes='${field.fieldValidateRulesMinbytes}'`);
                 }
-                if (field.fieldValidateRules.indexOf('maxbytes') !== -1) {
-                    validationDetails += `maxbytes='${field.fieldValidateRulesMaxbytes}' `;
+                if (field.fieldValidateRules.includes('maxbytes')) {
+                    validationDetails.push(`maxbytes='${field.fieldValidateRulesMaxbytes}'`);
                 }
             }
-            this.log(chalk.red(field.fieldName) + chalk.white(` (${field.fieldType}${field.fieldTypeBlobContent ? ` ${field.fieldTypeBlobContent}` : ''}) `) + chalk.cyan(validationDetails));
+            this.log(chalk.red(field.fieldName) + chalk.white(` (${field.fieldType}${field.fieldTypeBlobContent ? ` ${field.fieldTypeBlobContent}` : ''}) `) + chalk.cyan(validationDetails.join(' ')));
         });
         this.log();
     }
     if (this.relationships.length > 0) {
         this.log(chalk.white('Relationships'));
         this.relationships.forEach((relationship) => {
-            let validationDetails = '';
-            if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.indexOf('required') !== -1) {
-                validationDetails = 'required ';
+            const validationDetails = [];
+            if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes('required')) {
+                validationDetails.push('required');
             }
-            this.log(`${chalk.red(relationship.relationshipName)} ${chalk.white(`(${_.upperFirst(relationship.otherEntityName)})`)} ${chalk.cyan(relationship.relationshipType)} ${chalk.cyan(validationDetails)}`);
+            this.log(`${chalk.red(relationship.relationshipName)} ${chalk.white(`(${_.upperFirst(relationship.otherEntityName)})`)} ${chalk.cyan(relationship.relationshipType)} ${chalk.cyan(validationDetails.join(' '))}`);
         });
         this.log();
     }
