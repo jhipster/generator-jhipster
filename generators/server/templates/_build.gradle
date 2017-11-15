@@ -309,9 +309,7 @@ dependencies {
     <%_ if (websocket === 'spring-websocket') { _%>
     compile "org.springframework.boot:spring-boot-starter-websocket"
     <%_ } _%>
-    compile ("org.springframework.boot:spring-boot-starter-thymeleaf") {
-        exclude module: 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
-    }
+    compile "org.springframework.boot:spring-boot-starter-thymeleaf"
     compile "org.zalando:problem-spring-web"
     <%_ if (databaseType === 'cassandra') { _%>
     compile "com.google.guava:guava:18.0"
