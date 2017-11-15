@@ -108,11 +108,11 @@ _%>
     if (fields[idx].fieldValidate === true) {
         if (fields[idx].fieldValidateRules.includes('max')) {
             defaultValue = fields[idx].fieldValidateRulesMax;
-            updatedValue = parseInt(fields[idx].fieldValidateRulesM;
+            updatedValue = parseInt(fields[idx].fieldValidateRules);
         }
         if (fields[idx].fieldValidateRules.includes('min')) {
             defaultValue = fields[idx].fieldValidateRulesMin;
-            updatedValue = parseInt(fields[idx].fieldValidateRulesM;
+            updatedValue = parseInt(fields[idx].fieldValidateRules);
         }
         if (fields[idx].fieldValidateRules.includes('minbytes')) {
             defaultValue = fields[idx].fieldValidateRulesMinbytes;
