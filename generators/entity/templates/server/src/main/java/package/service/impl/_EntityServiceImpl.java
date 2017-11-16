@@ -117,7 +117,7 @@ public class <%= serviceClassName %> <% if (service === 'serviceImpl') { %>imple
     }
 
     /**
-     *  Delete the  <%= entityInstance %> by id.
+     *  Delete the <%= entityInstance %> by id.
      *
      *  @param id the id of the entity
      */
