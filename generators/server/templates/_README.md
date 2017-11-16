@@ -335,7 +335,7 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 [Running tests page]: <%= DOCUMENTATION_ARCHIVE_URL %>/running-tests/
 [Setting up Continuous Integration]: <%= DOCUMENTATION_ARCHIVE_URL %>/setting-up-ci/
 
-<% if (testFrameworks.indexOf("gatling") > -1) { %>[Gatling]: http://gatling.io/<% } %>
+<% if (testFrameworks.includes("gatling")) { %>[Gatling]: http://gatling.io/<% } %>
 <%_ if(!skipClient) {_%>
 [Node.js]: https://nodejs.org/
 [Yarn]: https://yarnpkg.org/

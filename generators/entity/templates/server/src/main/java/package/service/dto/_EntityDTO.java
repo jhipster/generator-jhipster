@@ -59,7 +59,7 @@ public class <%= entityClass %>DTO implements Serializable {
 
     <%_ if (fieldValidate === true) {
             let required = false;
-            if (fieldValidate === true && fieldValidateRules.indexOf('required') !== -1) {
+            if (fieldValidate === true && fieldValidateRules.includes('required')) {
                 required = true;
             } _%>
     <%- include ../../common/field_validators -%>

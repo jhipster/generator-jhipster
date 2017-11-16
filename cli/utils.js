@@ -44,7 +44,7 @@ const init = function (program) {
     program.option('-d, --debug', 'enable debugger');
 
     const argv = program.normalize(process.argv);
-    this.debugEnabled = program.debug = argv.indexOf('-d') > -1 || argv.indexOf('--debug') > -1; // Need this early
+    this.debugEnabled = program.debug = argv.includes('-d') || argv.includes('--debug'); // Need this early
 
     if (this.debugEnabled) {
         debug('Debug logging is on');

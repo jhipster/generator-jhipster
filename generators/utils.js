@@ -95,7 +95,7 @@ function rewrite(args) {
 
     let otherwiseLineIndex = -1;
     lines.forEach((line, i) => {
-        if (line.indexOf(args.needle) !== -1) {
+        if (line.includes(args.needle)) {
             otherwiseLineIndex = i;
         }
     });
@@ -302,7 +302,7 @@ function getJavadoc(text, indentSize) {
     if (!text) {
         text = '';
     }
-    if (text.indexOf('"') !== -1) {
+    if (text.includes('"')) {
         text = text.replace(/"/g, '\\"');
     }
     let javadoc = `${_.repeat(' ', indentSize)}/**`;

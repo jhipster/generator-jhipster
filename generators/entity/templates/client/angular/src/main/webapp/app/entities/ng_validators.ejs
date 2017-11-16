@@ -25,28 +25,28 @@ if (field.fieldValidate === true) {
 	const rules = field.fieldValidateRules;
 	const validators = [];
 
-    if (rules.indexOf('required') !== -1 && field.fieldType !== 'Boolean') {
+    if (rules.includes('required') && field.fieldType !== 'Boolean') {
         validators.push('required');
     }
-    if (rules.indexOf('minlength') !== -1) {
+    if (rules.includes('minlength')) {
         validators.push('minlength="' + field.fieldValidateRulesMinlength + '"');
     }
-    if (rules.indexOf('maxlength') !== -1) {
+    if (rules.includes('maxlength')) {
         validators.push('maxlength="' + field.fieldValidateRulesMaxlength + '"');
     }
-    if (rules.indexOf('min') !== -1) {
+    if (rules.includes('min')) {
         validators.push('min="' + field.fieldValidateRulesMin + '"');
     }
-    if (rules.indexOf('max') !== -1) {
+    if (rules.includes('max')) {
         validators.push('max="' + field.fieldValidateRulesMax + '"');
     }
-    if (rules.indexOf('minbytes') !== -1) {
+    if (rules.includes('minbytes')) {
         validators.push('minbytes="' + field.fieldValidateRulesMinbytes +'"');
     }
-    if (rules.indexOf('maxbytes') !== -1) {
+    if (rules.includes('maxbytes')) {
         validators.push('maxbytes="' + field.fieldValidateRulesMaxbytes +'"');
     }
-    if (rules.indexOf('pattern') !== -1) {
+    if (rules.includes('pattern')) {
         validators.push('pattern="' + field.fieldValidateRulesPattern.replace(/"/g, '&#34;') + '"');
     }
 

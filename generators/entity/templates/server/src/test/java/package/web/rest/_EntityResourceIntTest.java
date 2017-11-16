@@ -106,19 +106,19 @@ _%>
     let updatedValue = 2;
 
     if (fields[idx].fieldValidate === true) {
-        if (fields[idx].fieldValidateRules.indexOf('max') !== -1) {
+        if (fields[idx].fieldValidateRules.includes('max')) {
             defaultValue = fields[idx].fieldValidateRulesMax;
             updatedValue = parseInt(fields[idx].fieldValidateRulesMax) - 1;
         }
-        if (fields[idx].fieldValidateRules.indexOf('min') !== -1) {
+        if (fields[idx].fieldValidateRules.includes('min')) {
             defaultValue = fields[idx].fieldValidateRulesMin;
             updatedValue = parseInt(fields[idx].fieldValidateRulesMin) + 1;
         }
-        if (fields[idx].fieldValidateRules.indexOf('minbytes') !== -1) {
+        if (fields[idx].fieldValidateRules.includes('minbytes')) {
             defaultValue = fields[idx].fieldValidateRulesMinbytes;
             updatedValue = fields[idx].fieldValidateRulesMinbytes;
         }
-        if (fields[idx].fieldValidateRules.indexOf('maxbytes') !== -1) {
+        if (fields[idx].fieldValidateRules.includes('maxbytes')) {
             updatedValue = fields[idx].fieldValidateRulesMaxbytes;
         }
     }
@@ -411,7 +411,7 @@ _%>
     }
 <% for (idx in fields) { %><% if (fields[idx].fieldValidate === true) {
     let required = false;
-    if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.indexOf('required') !== -1) {
+    if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('required')) {
         required = true;
     }
     if (required) { %>
@@ -518,7 +518,7 @@ _%>
 <%_
             }
             // the range criterias
-            if (['Byte', 'Short', 'Integer', 'Long', 'LocalDate', 'ZonedDateTime'].includes(searchBy.fieldType)) { 
+            if (['Byte', 'Short', 'Integer', 'Long', 'LocalDate', 'ZonedDateTime'].includes(searchBy.fieldType)) {
               var defaultValue = 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase();
               var biggerValue = 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase();
               if (searchBy.fieldValidate === true && searchBy.fieldValidateRules.includes('max')) {

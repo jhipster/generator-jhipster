@@ -148,7 +148,7 @@ public class <%= entityClass %> implements Serializable {
     const fieldNameUnderscored = fields[idx].fieldNameUnderscored;
     const fieldNameAsDatabaseColumn = fields[idx].fieldNameAsDatabaseColumn;
     if (fieldValidate === true) {
-        if (fieldValidate === true && fieldValidateRules.indexOf('required') !== -1) {
+        if (fieldValidate === true && fieldValidateRules.includes('required')) {
             required = true;
         } _%>
     <%- include ../common/field_validators -%>
@@ -168,7 +168,7 @@ public class <%= entityClass %> implements Serializable {
         <%_ } else if (fieldType === 'BigDecimal') { _%>
     @Column(name = "<%-fieldNameAsDatabaseColumn %>", precision=10, scale=2<% if (required) { %>, nullable = false<% } %>)
         <%_ } else { _%>
-    @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (fieldValidate === true) { %><% if (fieldValidateRules.indexOf('maxlength') !== -1) { %>, length = <%= fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% } %>)
+    @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (fieldValidate === true) { %><% if (fieldValidateRules.includes('maxlength')) { %>, length = <%= fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% } %>)
         <%_ }
     } _%>
     <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>

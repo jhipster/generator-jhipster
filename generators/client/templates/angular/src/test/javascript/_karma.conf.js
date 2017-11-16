@@ -18,7 +18,7 @@
 -%>
 const webpackConfig = require('../../../webpack/webpack.test.js');
 
-const WATCH = process.argv.indexOf('--watch') > -1;
+const WATCH = process.argv.includes('--watch');
 
 module.exports = (config) => {
     config.set({

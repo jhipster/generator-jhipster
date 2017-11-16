@@ -408,9 +408,9 @@ module.exports = class extends BaseGenerator {
                 if (this.configOptions.clientFramework) {
                     this.clientFramework = this.configOptions.clientFramework;
                 }
-                this.protractorTests = this.testFrameworks.indexOf('protractor') !== -1;
-                this.gatlingTests = this.testFrameworks.indexOf('gatling') !== -1;
-                this.cucumberTests = this.testFrameworks.indexOf('cucumber') !== -1;
+                this.protractorTests = this.testFrameworks.includes('protractor');
+                this.gatlingTests = this.testFrameworks.includes('gatling');
+                this.cucumberTests = this.testFrameworks.includes('cucumber');
             },
 
             composeLanguages() {

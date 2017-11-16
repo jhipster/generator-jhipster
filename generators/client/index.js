@@ -299,7 +299,7 @@ module.exports = class extends BaseGenerator {
                 if (this.configOptions.testFrameworks) {
                     this.testFrameworks = this.configOptions.testFrameworks;
                 }
-                this.protractorTests = this.testFrameworks.indexOf('protractor') !== -1;
+                this.protractorTests = this.testFrameworks.includes('protractor');
 
                 if (this.configOptions.enableTranslation !== undefined) {
                     this.enableTranslation = this.configOptions.enableTranslation;
