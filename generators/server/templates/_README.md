@@ -211,7 +211,7 @@ Add the `-h` flag on any command to see how you can use it. For example, `bower 
 
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
 
-<%_ if (clientFramework !== 'angular1') { _%>
+<%_ if (clientFramework !== 'angular1' && applicationType !== 'microservice') { _%>
 ### Using angular-cli
 
 You can also use [Angular CLI][] to generate some custom client code.
