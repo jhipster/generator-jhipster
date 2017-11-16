@@ -47,6 +47,15 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
+        <!-- Sonar properties -->
+        <sonar.jacoco.itReportPath>${project.testresult.directory}/coverage/jacoco/jacoco-it.exec</sonar.jacoco.itReportPath>
+        <sonar.jacoco.reportPath>${project.testresult.directory}/coverage/jacoco/jacoco.exec</sonar.jacoco.reportPath>
+        <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
+        <sonar.typescript.lcov.reportPaths>${project.testresult.directory}/coverage/report-lcov/lcov.info</sonar.typescript.lcov.reportPaths>
+        <sonar.sources>${project.basedir}/src/main/</sonar.sources>
+        <sonar.surefire.reportsPath>${project.testresult.directory}/surefire-reports</sonar.surefire.reportsPath>
+        <sonar.tests>${project.basedir}/src/test/</sonar.tests>
+
         <!-- Plugin versions -->
         <maven-compiler-plugin.version>3.6.0</maven-compiler-plugin.version>
         <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
@@ -56,7 +65,7 @@
         <maven-source-plugin.version>2.4</maven-source-plugin.version>
         <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
-        <sonar-maven-plugin.version>3.2</sonar-maven-plugin.version>
+        <sonar-maven-plugin.version>3.3.0.603</sonar-maven-plugin.version>
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
 
         <!-- Dependency versions -->
