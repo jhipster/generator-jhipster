@@ -77,10 +77,10 @@ public class <%= serviceClassName %> <% if (service === 'serviceImpl') { %>imple
     }
 
     /**
-     *  Get all the <%= entityInstancePlural %>.
+     * Get all the <%= entityInstancePlural %>.
      *<% if (pagination !== 'no') { %>
-     *  @param pageable the pagination information<% } %>
-     *  @return the list of entities
+     * @param pageable the pagination information<% } %>
+     * @return the list of entities
      */
     <%_ if (service === 'serviceImpl') { _%>
     @Override
@@ -101,10 +101,10 @@ public class <%= serviceClassName %> <% if (service === 'serviceImpl') { %>imple
     }
 <%- include('../../common/get_filtered_template'); -%>
     /**
-     *  Get one <%= entityInstance %> by id.
+     * Get one <%= entityInstance %> by id.
      *
-     *  @param id the id of the entity
-     *  @return the entity
+     * @param id the id of the entity
+     * @return the entity
      */
     <%_ if (service === 'serviceImpl') { _%>
     @Override
@@ -117,9 +117,9 @@ public class <%= serviceClassName %> <% if (service === 'serviceImpl') { %>imple
     }
 
     /**
-     *  Delete the <%= entityInstance %> by id.
+     * Delete the <%= entityInstance %> by id.
      *
-     *  @param id the id of the entity
+     * @param id the id of the entity
      */
     <%_ if (service === 'serviceImpl') { _%>
     @Override
@@ -132,9 +132,9 @@ public class <%= serviceClassName %> <% if (service === 'serviceImpl') { %>imple
     /**
      * Search for the <%= entityInstance %> corresponding to the query.
      *
-     *  @param query the query of the search<% if (pagination !== 'no') { %>
-     *  @param pageable the pagination information<% } %>
-     *  @return the list of entities
+     * @param query the query of the search<% if (pagination !== 'no') { %>
+     * @param pageable the pagination information<% } %>
+     * @return the list of entities
      */
     <%_ if (service === 'serviceImpl') { _%>
     @Override
