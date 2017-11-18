@@ -1,4 +1,0 @@
-instrumentation:
-  excludes: [
-    'lib/dsl/pegjs_parser.js'
-  ]
