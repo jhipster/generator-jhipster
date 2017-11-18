@@ -29,5 +29,5 @@ paginate * with pager except G
 paginate G with pagination
 service G with serviceImpl
 service A, C, D, C with serviceClass
-skipServer for B, D except D
-skipClient for G
+skipServer B, D except D
+skipClient G
