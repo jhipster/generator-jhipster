@@ -8,3 +8,4 @@ jhipster-jdl.jh
 .sonar
 coverage/*
 sonar-project.properties
+.nyc_output/*
