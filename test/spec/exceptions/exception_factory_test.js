@@ -14,7 +14,7 @@ describe('ExceptionFactory', () => {
       try {
         throw new BuildException('Working', null);
       } catch (error) {
-        expect(error.name).to.be.defined;
+        expect(error.name).not.to.be.undefined;
       }
     });
     describe('when only passing a name', () => {

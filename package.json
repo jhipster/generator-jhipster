@@ -44,12 +44,13 @@
     "lodash": "4.17.4"
   },
   "devDependencies": {
-    "chai": "3.5.0",
-    "eslint": "3.19.0",
-    "eslint-config-airbnb-base": "11.2.0",
-    "eslint-plugin-import": "2.6.0",
+    "chai": "4.1.2",
+    "eslint": "4.11.0",
+    "eslint-config-airbnb-base": "12.1.0",
+    "eslint-plugin-mocha": "4.11.0",
+    "eslint-plugin-import": "2.8.0",
     "istanbul": "0.4.5",
-    "mocha": "3.3.0",
+    "mocha": "4.0.1",
     "mocha-clean": "1.0.0",
     "pegjs": "0.10.0"
   },

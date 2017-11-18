@@ -1,22 +1,22 @@
 {
   "env": {
-    "es6": true,
     "node": true,
+    "es6": true,
     "mocha": true
   },
   "extends": ["airbnb-base"],
+  "plugins": [
+    "mocha"
+  ],
   "rules": {
-    "indent": ["error", 2],
+    "indent": [2, 2],
     "linebreak-style": ["error", "unix"],
     "eol-last": 2,
     "quotes": [2, "single"],
     "semi": [2, "always"],
     "eqeqeq": [2, "smart"],
     "no-use-before-define": [2, "nofunc"],
-    "no-unused-vars": [2, {
-      "vars": "local",
-      "args": "none"
-    }],
+    "no-unused-vars": [2, {"vars": "local", "args": "none"}],
     "no-multi-str": 2,
     "no-irregular-whitespace": 2,
     "comma-dangle": "off",
@@ -25,13 +25,12 @@
     "class-methods-use-this": "off",
     "no-underscore-dangle": "off",
     "no-plusplus": "off",
-    "no-unused-expressions": [2, {
-      "allowShortCircuit": true,
-      "allowTernary": true
-    }],
-
+    "no-unused-expressions": [2, { "allowShortCircuit": true, "allowTernary": true } ],
+    "prefer-destructuring": "off",
     "no-multi-assign": "off",
     "no-param-reassign": "off",
-    "no-shadow": "off"
+    "no-shadow": "off",
+    "function-paren-newline": "off",
+    "mocha/no-exclusive-tests": "error"
   }
 }
