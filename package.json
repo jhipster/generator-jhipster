@@ -11,7 +11,6 @@
   "scripts": {
     "lint": "eslint .",
     "lint-fix": "yarn lint -- --fix",
-    "check-dependencies": "node ./scripts/check_dependencies.js",
     "test": "yarn lint && mocha test",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha test --",
     "peg-parse": "pegjs -o lib/dsl/pegjs_parser.js lib/dsl/grammar.txt",
