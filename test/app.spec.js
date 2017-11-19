@@ -1270,6 +1270,43 @@ describe('JHipster generator', () => {
         });
     });
 
+    context('App with skip client and skip user management', () => {
+        describe('Maven', () => {
+            beforeEach((done) => {
+                helpers.run(path.join(__dirname, '../generators/app'))
+                    .withOptions({
+                        skipInstall: true,
+                        skipClient: true,
+                        skipUserManagement: true,
+                        skipChecks: true
+                    })
+                    .withPrompts({
+                        baseName: 'jhipster',
+                        applicationType: 'monolith',
+                        packageName: 'com.mycompany.myapp',
+                        packageFolder: 'com/mycompany/myapp',
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        hibernateCache: 'ehcache',
+                        databaseType: 'sql',
+                        devDatabaseType: 'h2Memory',
+                        prodDatabaseType: 'mysql',
+                        buildTool: 'maven',
+                        enableTranslation: true,
+                        nativeLanguage: 'en',
+                        languages: ['fr'],
+                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                        serverSideOptions: []
+                    })
+                    .on('end', done);
+            });
+
+            it('creates SecurityConfiguration for default configuration with skip client and skip user management option enabled', () => {
+                assert.file(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/SecurityConfiguration.java`);
+            });
+        });
+    });
+
     context('Eureka', () => {
         describe('gateway with eureka', () => {
             beforeEach((done) => {
