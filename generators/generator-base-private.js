@@ -112,7 +112,7 @@ module.exports = class extends Generator {
      * @param language
      * @param prefix
      */
-    copyI18n(language, prefix) {
+    copyI18n(language, prefix = '') {
         try {
             this.template(`${prefix}/i18n/_entity_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${this.entityInstance}.json`);
             this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClass, language);
@@ -130,7 +130,7 @@ module.exports = class extends Generator {
      * @param enumInfo
      * @param prefix
      */
-    copyEnumI18n(language, enumInfo, prefix) {
+    copyEnumI18n(language, enumInfo, prefix = '') {
         try {
             this.template(`${prefix}/i18n/_enum.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.enumInstance}.json`, this, {}, enumInfo);
         } catch (e) {
@@ -840,9 +840,10 @@ module.exports = class extends Generator {
      *
      * @param {any} from - from
      * @param {any} to - to
+     * @param {any} context - generator context
      */
-    copyFilteringFlag(from, to) {
-        if (this.databaseType === 'sql' && this.service !== 'no') {
+    copyFilteringFlag(from, to, context = this) {
+        if (context.databaseType === 'sql' && context.service !== 'no') {
             to.jpaMetamodelFiltering = from.jpaMetamodelFiltering;
         } else {
             to.jpaMetamodelFiltering = false;

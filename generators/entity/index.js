@@ -374,7 +374,7 @@ module.exports = class extends BaseGenerator {
                 this.data.dto = context.dto;
                 this.data.service = context.service;
                 this.data.entityTableName = context.entityTableName;
-                this.copyFilteringFlag(context, this.data);
+                this.copyFilteringFlag(context, this.data, context);
                 if (['sql', 'mongodb', 'couchbase'].includes(context.databaseType)) {
                     this.data.pagination = context.pagination;
                 } else {
@@ -694,6 +694,18 @@ module.exports = class extends BaseGenerator {
                 if (context.skipClient) return;
 
                 this.composeWith(require.resolve('../entity-client'), {
+                    context,
+                    'skip-install': context.options['skip-install'],
+                    force: context.options.force,
+                    debug: context.isDebugEnabled
+                });
+            },
+
+            composeI18n() {
+                const context = this.context;
+                if (context.skipClient) return;
+
+                this.composeWith(require.resolve('../entity-i18n'), {
                     context,
                     'skip-install': context.options['skip-install'],
                     force: context.options.force,

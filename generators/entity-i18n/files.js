@@ -18,9 +18,6 @@
  */
 const utils = require('../utils');
 
-/* Constants use throughout */
-const CLIENT_I18N_TEMPLATES_DIR = '';
-
 /**
 * The default is to use a file path string. It implies use of the template method.
 * For any other config an object { file:.., method:.., template:.. } can be used
@@ -41,7 +38,7 @@ function writeFiles() {
                     if (!this.skipClient && this.enableTranslation) {
                         const languages = this.languages || this.getAllInstalledLanguages();
                         languages.forEach((language) => {
-                            this.copyEnumI18n(language, enumInfo, CLIENT_I18N_TEMPLATES_DIR);
+                            this.copyEnumI18n(language, enumInfo);
                         });
                     }
                 }
@@ -55,7 +52,7 @@ function writeFiles() {
             if (this.enableTranslation) {
                 const languages = this.languages || this.getAllInstalledLanguages();
                 languages.forEach((language) => {
-                    this.copyI18n(language, CLIENT_I18N_TEMPLATES_DIR);
+                    this.copyI18n(language);
                 });
             }
         }

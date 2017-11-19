@@ -18,6 +18,7 @@
  */
 /* eslint-disable consistent-return */
 const writeFiles = require('./files').writeFiles;
+const utils = require('../utils');
 const BaseGenerator = require('../generator-base');
 
 /* constants used throughout */
@@ -26,13 +27,13 @@ let useBlueprint;
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
-
+        utils.copyObjectProps(this, this.options.context);
         const blueprint = this.config.get('blueprint');
         useBlueprint = this.composeBlueprint(blueprint, 'entity'); // use global variable since getters dont have access to instance property
     }
 
     get writing() {
         if (useBlueprint) return;
-        return writeFiles.call(this.options.context);
+        return writeFiles();
     }
 };

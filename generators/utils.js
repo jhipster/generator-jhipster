@@ -329,9 +329,9 @@ function buildEnumInfo(field, angularAppName, packageName) {
         enumName: fieldType,
         enumValues: field.fieldValues.split(',').join(', '),
         enumInstance: field.enumInstance,
-        angularAppName: this.angularAppName,
         enums: field.fieldValues.replace(/\s/g, '').split(','),
-        packageName: this.packageName
+        angularAppName,
+        packageName
     };
     return enumInfo;
 }

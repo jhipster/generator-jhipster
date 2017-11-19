@@ -30,8 +30,6 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const TEST_DIR = constants.TEST_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
-const SERVER_TEMPLATES_DIR = '';
-
 /**
 * The default is to use a file path string. It implies use of the template method.
 * For any other config an object { file:.., method:.., template:.. } can be used
@@ -182,14 +180,17 @@ function writeFiles() {
             if (_.isUndefined(this.microservicePath)) {
                 return;
             }
-            this.copy(`${this.microservicePath}/${this.jhipsterConfigDirectory}/${this.entityNameCapitalized}.json`, this.destinationPath(`${this.jhipsterConfigDirectory}/${this.entityNameCapitalized}.json`));
+            this.copy(
+                `${this.microservicePath}/${this.jhipsterConfigDirectory}/${this.entityNameCapitalized}.json`,
+                this.destinationPath(`${this.jhipsterConfigDirectory}/${this.entityNameCapitalized}.json`)
+            );
         },
 
         writeServerFiles() {
             if (this.skipServer) return;
 
             // write server side files
-            this.writeFilesToDisk(serverFiles, this, false, SERVER_TEMPLATES_DIR);
+            this.writeFilesToDisk(serverFiles, this, false);
 
             if (this.databaseType === 'sql') {
                 if (this.fieldsContainOwnerManyToMany || this.fieldsContainOwnerOneToOne || this.fieldsContainManyToOne) {
@@ -210,7 +211,7 @@ function writeFiles() {
                     const enumInfo = utils.buildEnumInfo(field, this.angularAppName, this.packageName);
                     if (!this.skipServer) {
                         this.template(
-                            `${SERVER_TEMPLATES_DIR}/${SERVER_MAIN_SRC_DIR}package/domain/enumeration/_Enum.java`,
+                            `${SERVER_MAIN_SRC_DIR}package/domain/enumeration/_Enum.java`,
                             `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/domain/enumeration/${fieldType}.java`,
                             this, {}, enumInfo
                         );

@@ -1726,7 +1726,7 @@ module.exports = class extends PrivateBase {
         context.entityTableName = context.fileData.entityTableName;
         context.jhiPrefix = context.fileData.jhiPrefix || context.jhiPrefix;
         context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
-        this.copyFilteringFlag(context.fileData, context);
+        this.copyFilteringFlag(context.fileData, context, context);
         if (_.isUndefined(context.entityTableName)) {
             this.warning(`entityTableName is missing in .jhipster/${context.name}.json, using entity name as fallback`);
             context.entityTableName = this.getTableName(context.name);
@@ -2349,7 +2349,7 @@ module.exports = class extends PrivateBase {
         dest.regenerate = context.options.regenerate;
         dest.fluentMethods = context.options['fluent-methods'];
         dest.entityTableName = generator.getTableName(context.options['table-name'] || dest.name);
-        dest.entityNameCapitalized = _.upperFirst(generator.name);
+        dest.entityNameCapitalized = _.upperFirst(dest.name);
         dest.entityAngularJSSuffix = context.options['angular-suffix'];
         dest.isDebugEnabled = context.options.debug;
         if (dest.entityAngularJSSuffix && !dest.entityAngularJSSuffix.startsWith('-')) {
