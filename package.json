@@ -35,8 +35,11 @@
   },
   "scripts": {
     "completion": "tabtab install --name jhipster --auto",
-    "lint": "eslint .",
-    "lint-fix": "npm run lint -- --fix",
+    "lint": "npm run eslint && npm run ejs-lint",
+    "lint-fix": "npm run eslint -- --fix",
+    "eslint": "eslint .",
+    "ejs-lint": "npm run test:unit -- test/ejslint.js",
+    "ejslint": "ejslint",
     "pretest": "npm run lint",
     "test": "npm run test:unit -- test/*.spec.js",
     "test:unit": "mocha --timeout 20000 --slow 0 --reporter spec",
@@ -66,6 +69,7 @@
   },
   "devDependencies": {
     "chai": "4.1.2",
+    "ejs-lint": "0.3.0",
     "eslint": "4.10.0",
     "eslint-config-airbnb-base": "12.1.0",
     "eslint-plugin-import": "2.8.0",
