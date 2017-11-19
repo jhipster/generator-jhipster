@@ -1707,50 +1707,51 @@ module.exports = class extends PrivateBase {
      * Load an entity configuration file into context.
      */
     loadEntityJson() {
+        const context = this.context;
         try {
-            this.fileData = this.fs.readJSON(this.fromPath);
+            context.fileData = this.fs.readJSON(context.fromPath);
         } catch (err) {
             this.debug('Error:', err);
             this.error(chalk.red('\nThe entity configuration file could not be read!\n'));
         }
-        this.relationships = this.fileData.relationships || [];
-        this.fields = this.fileData.fields || [];
-        this.changelogDate = this.fileData.changelogDate;
-        this.dto = this.fileData.dto;
-        this.service = this.fileData.service;
-        this.fluentMethods = this.fileData.fluentMethods;
-        this.pagination = this.fileData.pagination;
-        this.searchEngine = this.fileData.searchEngine || this.searchEngine;
-        this.javadoc = this.fileData.javadoc;
-        this.entityTableName = this.fileData.entityTableName;
-        this.jhiPrefix = this.fileData.jhiPrefix || this.jhiPrefix;
-        this.jhiTablePrefix = this.getTableName(this.jhiPrefix);
-        this.copyFilteringFlag(this.fileData, this);
-        if (_.isUndefined(this.entityTableName)) {
-            this.warning(`entityTableName is missing in .jhipster/${this.name}.json, using entity name as fallback`);
-            this.entityTableName = this.getTableName(this.name);
+        context.relationships = context.fileData.relationships || [];
+        context.fields = context.fileData.fields || [];
+        context.changelogDate = context.fileData.changelogDate;
+        context.dto = context.fileData.dto;
+        context.service = context.fileData.service;
+        context.fluentMethods = context.fileData.fluentMethods;
+        context.pagination = context.fileData.pagination;
+        context.searchEngine = context.fileData.searchEngine || context.searchEngine;
+        context.javadoc = context.fileData.javadoc;
+        context.entityTableName = context.fileData.entityTableName;
+        context.jhiPrefix = context.fileData.jhiPrefix || context.jhiPrefix;
+        context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
+        this.copyFilteringFlag(context.fileData, context);
+        if (_.isUndefined(context.entityTableName)) {
+            this.warning(`entityTableName is missing in .jhipster/${context.name}.json, using entity name as fallback`);
+            context.entityTableName = this.getTableName(context.name);
         }
-        if (jhiCore.isReservedTableName(this.entityTableName, this.prodDatabaseType)) {
-            this.entityTableName = `${this.jhiTablePrefix}_${this.entityTableName}`;
+        if (jhiCore.isReservedTableName(context.entityTableName, context.prodDatabaseType)) {
+            context.entityTableName = `${context.jhiTablePrefix}_${context.entityTableName}`;
         }
-        this.fields.forEach((field) => {
-            this.fieldNamesUnderscored.push(_.snakeCase(field.fieldName));
-            this.fieldNameChoices.push({ name: field.fieldName, value: field.fieldName });
+        context.fields.forEach((field) => {
+            context.fieldNamesUnderscored.push(_.snakeCase(field.fieldName));
+            context.fieldNameChoices.push({ name: field.fieldName, value: field.fieldName });
         });
-        this.relationships.forEach((rel) => {
-            this.relNameChoices.push({ name: `${rel.relationshipName}:${rel.relationshipType}`, value: `${rel.relationshipName}:${rel.relationshipType}` });
+        context.relationships.forEach((rel) => {
+            context.relNameChoices.push({ name: `${rel.relationshipName}:${rel.relationshipType}`, value: `${rel.relationshipName}:${rel.relationshipType}` });
         });
-        if (this.fileData.angularJSSuffix !== undefined) {
-            this.entityAngularJSSuffix = this.fileData.angularJSSuffix;
+        if (context.fileData.angularJSSuffix !== undefined) {
+            context.entityAngularJSSuffix = context.fileData.angularJSSuffix;
         }
-        this.useMicroserviceJson = this.useMicroserviceJson || !_.isUndefined(this.fileData.microserviceName);
-        if (this.applicationType === 'gateway' && this.useMicroserviceJson) {
-            this.microserviceName = this.fileData.microserviceName;
-            if (!this.microserviceName) {
+        context.useMicroserviceJson = context.useMicroserviceJson || !_.isUndefined(context.fileData.microserviceName);
+        if (context.applicationType === 'gateway' && context.useMicroserviceJson) {
+            context.microserviceName = context.fileData.microserviceName;
+            if (!context.microserviceName) {
                 this.error(chalk.red('Microservice name for the entity is not found. Entity cannot be generated!'));
             }
-            this.microserviceAppName = this.getMicroserviceAppName(this.microserviceName);
-            this.skipServer = true;
+            context.microserviceAppName = this.getMicroserviceAppName(context.microserviceName);
+            context.skipServer = true;
         }
     }
 
@@ -2057,9 +2058,10 @@ module.exports = class extends PrivateBase {
 
     /**
      * get the Angular application name.
+     * @param {string} baseName of application
      */
-    getAngularAppName() {
-        return _.camelCase(this.baseName, true) + (this.baseName.endsWith('App') ? '' : 'App');
+    getAngularAppName(baseName = this.baseName) {
+        return _.camelCase(baseName, true) + (baseName.endsWith('App') ? '' : 'App');
     }
 
     /**
@@ -2071,16 +2073,18 @@ module.exports = class extends PrivateBase {
 
     /**
      * get the Angular 2+ application name.
+     * @param {string} baseName of application
      */
-    getAngularXAppName() {
-        return _.upperFirst(_.camelCase(this.baseName, true));
+    getAngularXAppName(baseName = this.baseName) {
+        return _.upperFirst(_.camelCase(baseName, true));
     }
 
     /**
      * get the java main class name.
+     * @param {string} baseName of application
      */
-    getMainClassName() {
-        const main = _.upperFirst(this.getAngularAppName());
+    getMainClassName(baseName = this.baseName) {
+        const main = _.upperFirst(this.getAngularAppName(baseName));
         const acceptableForJava = new RegExp('^[A-Z][a-zA-Z0-9_]*$');
 
         return acceptableForJava.test(main) ? main : 'Application';
@@ -2333,32 +2337,33 @@ module.exports = class extends PrivateBase {
      * Setup Entity instance level options from context.
      * @param {any} generator - generator instance
      * @param {any} context - context to use default is generator instance
+     * @param {any} dest - destination context to use default is generator instance
      */
-    setupEntityOptions(generator, context = generator) {
-        generator.name = context.options.name;
+    setupEntityOptions(generator, context = generator, dest = generator) {
+        dest.name = context.options.name;
         // remove extension if feeding json files
-        if (generator.name !== undefined) {
-            generator.name = generator.name.replace('.json', '');
+        if (dest.name !== undefined) {
+            dest.name = dest.name.replace('.json', '');
         }
 
-        generator.regenerate = context.options.regenerate;
-        generator.fluentMethods = context.options['fluent-methods'];
-        generator.entityTableName = generator.getTableName(context.options['table-name'] || generator.name);
-        generator.entityNameCapitalized = _.upperFirst(generator.name);
-        generator.entityAngularJSSuffix = context.options['angular-suffix'];
-        generator.isDebugEnabled = context.options.debug;
-        if (generator.entityAngularJSSuffix && !generator.entityAngularJSSuffix.startsWith('-')) {
-            generator.entityAngularJSSuffix = `-${generator.entityAngularJSSuffix}`;
+        dest.regenerate = context.options.regenerate;
+        dest.fluentMethods = context.options['fluent-methods'];
+        dest.entityTableName = generator.getTableName(context.options['table-name'] || dest.name);
+        dest.entityNameCapitalized = _.upperFirst(generator.name);
+        dest.entityAngularJSSuffix = context.options['angular-suffix'];
+        dest.isDebugEnabled = context.options.debug;
+        if (dest.entityAngularJSSuffix && !dest.entityAngularJSSuffix.startsWith('-')) {
+            dest.entityAngularJSSuffix = `-${dest.entityAngularJSSuffix}`;
         }
-        generator.rootDir = generator.destinationRoot();
+        dest.rootDir = generator.destinationRoot();
         // enum-specific consts
-        generator.enums = [];
+        dest.enums = [];
 
-        generator.existingEnum = false;
+        dest.existingEnum = false;
 
-        generator.fieldNamesUnderscored = ['id'];
+        dest.fieldNamesUnderscored = ['id'];
         // these variable hold field and relationship names for question options during update
-        generator.fieldNameChoices = [];
-        generator.relNameChoices = [];
+        dest.fieldNameChoices = [];
+        dest.relNameChoices = [];
     }
 };
