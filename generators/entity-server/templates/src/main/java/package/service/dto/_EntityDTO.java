@@ -209,11 +209,14 @@ public class <%= entityClass %>DTO implements Serializable {
     @Override
     public String toString() {
         return "<%= entityClass %>DTO{" +
-            "id=" + getId() +<% for (idx in fields) {
+            "id=" + getId() +
+            <%_ for (idx in fields) {
                 const fieldName = fields[idx].fieldName;
                 const fieldType = fields[idx].fieldType;
-                const fieldNameCapitalized = fieldName.charAt(0).toUpperCase() + fieldName.slice(1) %>
-            ", <%= fieldName %>='" + <% if (fieldType.toLowerCase() === 'boolean') { %>is<% } else { %>get<%_ } _%><%= fieldNameCapitalized %>() + "'" +<% } %>
+                const fieldNameCapitalized = fieldName.charAt(0).toUpperCase() + fieldName.slice(1)
+                const isNumeric = ['integer', 'long', 'float', 'double', 'bigdecimal'].includes(fieldType.toLowerCase()); _%>
+            ", <%= fieldName %>=<% if (! isNumeric) { %>'<% } %>" + <% if (fieldType.toLowerCase() === 'boolean') { %>is<% } else { %>get<% } %><%= fieldNameCapitalized %>() <% if (! isNumeric) { %>+ "'" <% } %>+
+            <%_ } _%>
             "}";
     }
 }
