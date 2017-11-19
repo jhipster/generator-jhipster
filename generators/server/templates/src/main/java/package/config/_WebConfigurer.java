@@ -42,6 +42,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.http.MediaType;
 <% if (!skipClient) { %>
 import java.io.File;
 import java.nio.file.Paths;<% } %>
@@ -140,9 +141,9 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     public void customize(ConfigurableEmbeddedServletContainer container) {
         MimeMappings mappings = new MimeMappings(MimeMappings.DEFAULT);
         // IE issue, see https://github.com/jhipster/generator-jhipster/pull/711
-        mappings.add("html", "text/html;charset=utf-8");
+        mappings.add("html", MediaType.TEXT_HTML_VALUE + ";charset=utf-8");
         // CloudFoundry issue, see https://github.com/cloudfoundry/gorouter/issues/64
-        mappings.add("json", "text/html;charset=utf-8");
+        mappings.add("json", MediaType.TEXT_HTML_VALUE + ";charset=utf-8");
         container.setMimeMappings(mappings);
         <%_ if (!skipClient) { _%>
         // When running in an IDE or with <% if (buildTool === 'gradle') { %>./gradlew bootRun<% } else { %>./mvnw spring-boot:run<% } %>, set location of the static web assets.
