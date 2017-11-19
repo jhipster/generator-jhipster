@@ -114,7 +114,7 @@ module.exports = class extends Generator {
      */
     copyI18n(language, prefix = '') {
         try {
-            this.template(`${prefix}/i18n/_entity_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${this.entityInstance}.json`);
+            this.template(`${prefix ? `${prefix}/` : ''}i18n/_entity_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${this.entityInstance}.json`);
             this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClass, language);
         } catch (e) {
             this.debug('Error:', e);
@@ -132,7 +132,7 @@ module.exports = class extends Generator {
      */
     copyEnumI18n(language, enumInfo, prefix = '') {
         try {
-            this.template(`${prefix}/i18n/_enum.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.enumInstance}.json`, this, {}, enumInfo);
+            this.template(`${prefix ? `${prefix}/` : ''}i18n/_enum.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.enumInstance}.json`, this, {}, enumInfo);
         } catch (e) {
             this.debug('Error:', e);
             // An exception is thrown if the folder doesn't exist
