@@ -32,6 +32,8 @@ package io.github.jhipster.service.filter;
  */
 public class StringFilter extends Filter<String> {
 
+    private static final long serialVersionUID = 1L;
+
     private String contains;
 
     public String getContains() {

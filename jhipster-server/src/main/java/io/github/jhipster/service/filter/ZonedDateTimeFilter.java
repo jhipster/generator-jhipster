@@ -32,6 +32,8 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
  */
 public class ZonedDateTimeFilter extends RangeFilter<ZonedDateTime> {
 
+    private static final long serialVersionUID = 1L;
+
     @Override
     @DateTimeFormat(iso = ISO.DATE_TIME)
     public ZonedDateTimeFilter setEquals(ZonedDateTime equals) {

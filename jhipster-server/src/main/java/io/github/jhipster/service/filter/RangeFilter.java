@@ -45,6 +45,8 @@ package io.github.jhipster.service.filter;
  */
 public class RangeFilter<FIELD_TYPE extends Comparable<? super FIELD_TYPE>> extends Filter<FIELD_TYPE> {
 
+    private static final long serialVersionUID = 1L;
+
     private FIELD_TYPE greaterThan;
     private FIELD_TYPE lessThan;
     private FIELD_TYPE greaterOrEqualThan;

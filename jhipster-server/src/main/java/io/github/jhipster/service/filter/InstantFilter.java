@@ -31,6 +31,8 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
  */
 public class InstantFilter extends RangeFilter<Instant> {
 
+    private static final long serialVersionUID = 1L;
+
     @Override
     @DateTimeFormat(iso = ISO.DATE_TIME)
     public InstantFilter setEquals(Instant equals) {

@@ -32,6 +32,8 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
  */
 public class LocalDateFilter extends RangeFilter<LocalDate> {
 
+    private static final long serialVersionUID = 1L;
+
     @Override
     @DateTimeFormat(iso = ISO.DATE)
     public LocalDateFilter setEquals(LocalDate equals) {

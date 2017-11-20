@@ -19,6 +19,7 @@
 
 package io.github.jhipster.service.filter;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -31,8 +32,9 @@ import java.util.List;
  *      fieldName.in='something','other'
  * </pre>
  */
-public class Filter<FIELD_TYPE> {
+public class Filter<FIELD_TYPE> implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private FIELD_TYPE equals;
     private Boolean specified;
     private List<FIELD_TYPE> in;
