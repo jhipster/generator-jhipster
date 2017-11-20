@@ -2324,6 +2324,7 @@ module.exports = class extends PrivateBase {
         generator.useYarn = context.configOptions.useYarn = !context.options.npm;
         generator.clientPackageManager = context.configOptions.clientPackageManager;
         generator.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
+        generator.experimental = context.configOptions.experimental || context.options.experimental;
     }
 
     /**
@@ -2344,6 +2345,7 @@ module.exports = class extends PrivateBase {
         generator.baseName = context.configOptions.baseName;
         generator.clientPackageManager = context.configOptions.clientPackageManager;
         generator.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
+        generator.experimental = context.configOptions.experimental || context.options.experimental;
     }
 
     /**
@@ -2365,6 +2367,7 @@ module.exports = class extends PrivateBase {
         dest.entityNameCapitalized = _.upperFirst(dest.name);
         dest.entityAngularJSSuffix = context.options['angular-suffix'];
         dest.isDebugEnabled = context.options.debug;
+        generator.experimental = context.options.experimental;
         if (dest.entityAngularJSSuffix && !dest.entityAngularJSSuffix.startsWith('-')) {
             dest.entityAngularJSSuffix = `-${dest.entityAngularJSSuffix}`;
         }

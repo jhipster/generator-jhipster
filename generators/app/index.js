@@ -109,6 +109,13 @@ module.exports = class extends BaseGenerator {
             type: String
         });
 
+        // This adds support for a `--experimental` flag which can be used to enable experimental features
+        this.option('experimental', {
+            desc: 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
+            type: Boolean,
+            defaults: false
+        });
+
         this.skipClient = this.configOptions.skipClient = this.options['skip-client'] || this.config.get('skipClient');
         this.skipServer = this.configOptions.skipServer = this.options['skip-server'] || this.config.get('skipServer');
         this.skipUserManagement = this.configOptions.skipUserManagement = this.options['skip-user-management'] || this.config.get('skipUserManagement');
@@ -118,6 +125,7 @@ module.exports = class extends BaseGenerator {
         this.blueprint = this.configOptions.blueprint = this.options.blueprint || this.config.get('blueprint');
         this.useYarn = this.configOptions.useYarn = !this.options.npm;
         this.isDebugEnabled = this.configOptions.isDebugEnabled = this.options.debug;
+        this.experimental = this.configOptions.experimental = this.options.experimental;
     }
 
     get initializing() {

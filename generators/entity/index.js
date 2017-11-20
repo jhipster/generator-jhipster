@@ -86,6 +86,14 @@ module.exports = class extends BaseGenerator {
             desc: 'Provide DB option for the application when using skip-server flag',
             type: String
         });
+
+        // This adds support for a `--experimental` flag which can be used to enable experimental features
+        this.option('experimental', {
+            desc: 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
+            type: Boolean,
+            defaults: false
+        });
+
         this.context = {};
         this.setupEntityOptions(this, this, this.context);
         const blueprint = this.config.get('blueprint');

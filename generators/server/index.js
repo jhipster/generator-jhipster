@@ -70,6 +70,13 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
 
+        // This adds support for a `--experimental` flag which can be used to enable experimental features
+        this.option('experimental', {
+            desc: 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
+            type: Boolean,
+            defaults: false
+        });
+
         this.setupServerOptions(this);
         const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
         useBlueprint = this.composeBlueprint(blueprint, 'server'); // use global variable since getters dont have access to instance property
