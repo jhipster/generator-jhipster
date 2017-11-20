@@ -122,7 +122,7 @@ public class LoggingConfiguration {
         log.info("Initializing Logstash logging");
 
         LogstashTcpSocketAppender logstashAppender = new LogstashTcpSocketAppender();
-        logstashAppender.setName("LOGSTASH");
+        logstashAppender.setName(LOGSTASH_APPENDER_NAME);
         logstashAppender.setContext(context);
         <%_ if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { _%>
         String customFields = "{\"app_name\":\"" + appName + "\",\"app_port\":\"" + serverPort + "\"," +
@@ -149,7 +149,7 @@ public class LoggingConfiguration {
         // Wrap the appender in an Async appender for performance
         AsyncAppender asyncLogstashAppender = new AsyncAppender();
         asyncLogstashAppender.setContext(context);
-        asyncLogstashAppender.setName("ASYNC_LOGSTASH");
+        asyncLogstashAppender.setName(ASYNC_LOGSTASH_APPENDER_NAME);
         asyncLogstashAppender.setQueueSize(jHipsterProperties.getLogging().getLogstash().getQueueSize());
         asyncLogstashAppender.addAppender(logstashAppender);
         asyncLogstashAppender.start();
