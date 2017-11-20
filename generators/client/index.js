@@ -23,6 +23,7 @@ const BaseGenerator = require('../generator-base');
 const prompts = require('./prompts');
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeAngularJsFiles = require('./files-angularjs').writeFiles;
+const writeReactFiles = require('./files-react').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 
@@ -322,6 +323,9 @@ module.exports = class extends BaseGenerator {
                 } else {
                     this.BUILD_DIR = 'build/';
                 }
+
+                this.styleSheetExt = this.useSass ? 'scss' : 'css';
+
                 this.DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
             },
 
@@ -335,10 +339,14 @@ module.exports = class extends BaseGenerator {
 
     writing() {
         if (useBlueprint) return;
-        if (this.clientFramework === 'angular1') {
+        switch (this.clientFramework) {
+        case 'angular1':
             return writeAngularJsFiles.call(this);
+        case 'react':
+            return writeReactFiles.call(this);
+        default:
+            return writeAngularFiles.call(this);
         }
-        return writeAngularFiles.call(this);
     }
 
     install() {

@@ -1,0 +1,101 @@
+/* ==========================================================================
+ Developement Ribbon
+ ========================================================================== */
+ .ribbon {
+    background-color: rgba(170, 0, 0, 0.5);
+    left: -3.5em;
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    overflow: hidden;
+    position: absolute;
+    top: 30px;
+    white-space: nowrap;
+    width: 15em;
+    z-index: 99999;
+    pointer-events: none;
+    opacity: 0.75;
+  }
+  .ribbon a {
+    color: #fff;
+    display: block;
+    font-weight: 400;
+    margin: 1px 0;
+    padding: 10px 50px;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 0 0 5px #444;
+    pointer-events: none;
+  }
+  /* ==========================================================================
+   Navbar styles
+   ========================================================================== */
+  .jh-navbar {
+    background-color: #353d47;
+    padding: 0.2em 1em;
+  }
+  .jh-navbar .profile-image {
+    margin: -10px 0px;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+  }
+  .jh-navbar .dropdown-item.active, .jh-navbar .dropdown-item.active:focus, .jh-navbar .dropdown-item.active:hover {
+    background-color: #353d47;
+  }
+  .jh-navbar .dropdown-toggle::after {
+    margin-left: 0.15em;
+  }
+  .jh-navbar ul.navbar-nav {
+    padding: 0.5em;
+  }
+  .jh-navbar ul.navbar-nav .nav-item {
+    margin-left: 1.5rem;
+  }
+  .jh-navbar a.nav-link {
+    font-weight: 400;
+  }
+  .jh-navbar a.nav-link > span {
+    margin-left: 5px;
+  }
+  .jh-navbar .jh-navbar-toggler {
+    color: #ccc;
+    font-size: 1.5em;
+    padding: 10px;
+  }
+  .jh-navbar .jh-navbar-toggler:hover {
+    color: #fff;
+  }
+  .navbar-version {
+    font-size: 10px;
+    color: #bbb;
+    padding: 0 0 0 10px;
+  }
+  .brand-logo:hover {
+    text-decoration: none;
+  }
+  .brand-logo .brand-icon {
+    height: 35px;
+    width: auto;
+    display: inline-block;
+  }
+  .brand-logo .brand-icon img {
+    height: 45px;
+  }
+  .brand-title {
+    font-size: 24px;
+    color: #fff;
+  }
+  .brand-title:hover {
+    color: #ccc;
+    text-decoration: none;
+  }
+  .loading-bar {
+    height: 3px;
+    background-color: #009cd8;
+    position: absolute;
+    top: 0px;
+    z-index: 1031;
+  }
