@@ -74,7 +74,7 @@ Before you submit your pull request consider the following guidelines:
 * Generate a new JHipster project, and ensure that all tests pass
 
      ```shell
-     mvn package -Pprod
+     mvn verify -Pprod
      ```
 
 * Test that the new project runs correctly:

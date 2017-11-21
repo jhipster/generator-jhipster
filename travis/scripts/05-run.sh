@@ -51,7 +51,7 @@ launchCurlOrProtractor() {
 #-------------------------------------------------------------------------------
 if [ "$JHIPSTER" == "app-ng2-gateway-uaa" ]; then
     cd "$HOME"/uaa
-    ./mvnw package -DskipTests -P"$PROFILE"
+    ./mvnw verify -DskipTests -P"$PROFILE"
 fi
 
 #-------------------------------------------------------------------------------
@@ -60,7 +60,7 @@ fi
 cd "$APP_FOLDER"
 
 if [ -f "mvnw" ]; then
-    ./mvnw package -DskipTests -P"$PROFILE"
+    ./mvnw verify -DskipTests -P"$PROFILE"
     mv target/*.war app.war
 elif [ -f "gradlew" ]; then
     ./gradlew bootRepackage -P"$PROFILE" -x test

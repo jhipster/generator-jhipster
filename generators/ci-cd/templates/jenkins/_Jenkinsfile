@@ -95,7 +95,7 @@ node {
 <%= indent %>        sh "./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>"
     <%_ } else { _%>
 <%= indent %>    stage('packaging') {
-<%= indent %>        sh "./mvnw package -Pprod -DskipTests"
+<%= indent %>        sh "./mvnw verify -Pprod -DskipTests"
     <%_ } _%>
 <%= indent %>        archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
 <%= indent %>    }
