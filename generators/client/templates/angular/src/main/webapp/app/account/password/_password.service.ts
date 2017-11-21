@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 <%_ if (authenticationType !== 'uaa') { _%>
 import { SERVER_API_URL } from '../../app.constants';
@@ -26,7 +26,7 @@ import { SERVER_API_URL } from '../../app.constants';
 @Injectable()
 export class PasswordService {
 
-    constructor(private http: Http) {}
+    constructor(private http: HttpClient) {}
 
     save(newPassword: string): Observable<any> {
         return this.http.post(<% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/<% } else { %>SERVER_API_URL + '<% } %>api/account/change-password', newPassword);

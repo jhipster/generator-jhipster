@@ -24,7 +24,7 @@ import { Http, XHRBackend, RequestOptions } from '@angular/http';
     <%_ if (authenticationType !== 'uaa') { _%>
 import { AuthInterceptor } from './auth.interceptor';
     <%_ } _%>
-import { LocalStorageService, SessionStorageService } from 'ng2-webstorage';
+import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 <%_ } _%>
 <%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
     <%_ if (authenticationType === 'session') { _%>
