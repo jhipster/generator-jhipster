@@ -192,7 +192,7 @@ maven-deploy:
 maven-package:
     stage: package
     script:
-        - ./mvnw package -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw verify -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
     <%_ } _%>
     artifacts:
         paths:

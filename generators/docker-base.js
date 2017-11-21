@@ -74,7 +74,7 @@ function checkImages() {
         const appConfig = this.appConfigs[index];
         if (appConfig.buildTool === 'maven') {
             imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/target/docker`);
-            runCommand = './mvnw package -Pprod dockerfile:build';
+            runCommand = './mvnw verify -Pprod dockerfile:build';
         } else {
             imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/build/docker`);
             runCommand = './gradlew -Pprod bootRepackage buildDocker';
