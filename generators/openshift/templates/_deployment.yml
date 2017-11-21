@@ -92,6 +92,7 @@ objects:
           timeoutSeconds: 600
           maxUnavailable: 25%
           maxSurge: 25%
+          <%_ if (app.prodDatabaseType !== 'mssql') { _%>
           pre:
             failurePolicy: ignore
             execNewPod:
@@ -124,6 +125,7 @@ objects:
                       sleep 10
                     done
               containerName: ${APPLICATION_NAME}
+          <%_ } _%>
         resources:
       replicas: "1"
       template:
@@ -168,6 +170,14 @@ objects:
                 secretKeyRef:
                   name: ${SECRET_REF}
                   key: database-password
+            <%_ } _%>
+            <%_ if (app.prodDatabaseType === 'mssql') { _%>
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:sqlserver://<%= mssqlURL %>;databaseName=<%= mssqlDb %>
+            - name: SPRING_DATASOURCE_USERNAME
+              value: <%= mssqlUser %>
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: <%= mssqlPass %>
             <%_ } _%>
             <%_ if (app.prodDatabaseType === 'mariadb') { _%>
             - name: SPRING_DATASOURCE_URL
@@ -252,6 +262,7 @@ objects:
             ports:
             - name: http
               containerPort: "${APP_PORT}"
+<%_ if (app.prodDatabaseType != 'mssql') { _%>
   -
     apiVersion: v1
     kind: Service
@@ -286,3 +297,4 @@ objects:
       port:
         targetPort: "http"
       wildcardPolicy: None
+<%_ } _%>
