@@ -302,3 +302,41 @@ Fix #1234
 ```
 
 [feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?body=*%20**Overview%20of%20the%20request**%0A%0A%3C!--%20what%20is%20the%20query%20or%20request%20--%3E%0A%0A*%20**Motivation%20for%20or%20Use%20Case**%20%0A%0A%3C!--%20explain%20why%20this%20is%20a%20required%20for%20you%20--%3E%0A%0A%0A*%20**Browsers%20and%20Operating%20System**%20%0A%0A%3C!--%20is%20this%20a%20problem%20with%20all%20browsers%20or%20only%20IE8%3F%20--%3E%0A%0A%0A*%20**Related%20issues**%20%0A%0A%3C!--%20has%20a%20similar%20issue%20been%20reported%20before%3F%20--%3E%0A%0A*%20**Suggest%20a%20Fix**%20%0A%0A%3C!--%20if%20you%20can%27t%20fix%20this%20yourself%2C%20perhaps%20you%20can%20point%20to%20what%20might%20be%0A%20%20causing%20the%20problem%20(line%20of%20code%20or%20commit)%20--%3E
+
+
+## Financial contributions
+
+We also welcome financial contributions in full transparency on our [open collective](https://opencollective.com/generator-jhipster).
+Anyone can file an expense. If the expense makes sense for the development of the community, it will be "merged" in the ledger of our open collective by the core contributors and the person who filed the expense will be reimbursed.
+
+
+## Credits
+
+
+### Contributors
+
+Thank you to all the people who have already contributed to generator-jhipster!
+<a href="graphs/contributors"><img src="https://opencollective.com/generator-jhipster/contributors.svg?width=890" /></a>
+
+
+### Backers
+
+Thank you to all our backers! [[Become a backer](https://opencollective.com/generator-jhipster#backer)]
+
+<a href="https://opencollective.com/generator-jhipster#backers" target="_blank"><img src="https://opencollective.com/generator-jhipster/backers.svg?width=890"></a>
+
+
+### Sponsors
+
+Thank you to all our sponsors! (please ask your company to also support this open source project by [becoming a sponsor](https://opencollective.com/generator-jhipster#sponsor))
+
+<a href="https://opencollective.com/generator-jhipster/sponsor/0/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/1/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/2/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/3/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/4/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/5/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/6/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/7/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/8/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/9/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/9/avatar.svg"></a>
