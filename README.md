@@ -8,6 +8,8 @@ Greetings, Java Hipster!
 [![NPM version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url-main]
 [![Dependency Status][daviddm-image]][daviddm-url]
+[![Backers on Open Collective](https://opencollective.com/colly/backers/badge.svg)](#backers) 
+[![Sponsors on Open Collective](https://opencollective.com/colly/sponsors/badge.svg)](#sponsors)
 
 
 ## Travis Builds
@@ -58,3 +60,33 @@ Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submit
 [daviddm-image]: https://david-dm.org/jhipster/generator-jhipster.svg?theme=shields.io
 [daviddm-url]: https://david-dm.org/jhipster/generator-jhipster
 [feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?body=*%20**Overview%20of%20the%20request**%0A%0A%3C!--%20what%20is%20the%20query%20or%20request%20--%3E%0A%0A*%20**Motivation%20for%20or%20Use%20Case**%20%0A%0A%3C!--%20explain%20why%20this%20is%20a%20required%20for%20you%20--%3E%0A%0A%0A*%20**Browsers%20and%20Operating%20System**%20%0A%0A%3C!--%20is%20this%20a%20problem%20with%20all%20browsers%20or%20only%20IE8%3F%20--%3E%0A%0A%0A*%20**Related%20issues**%20%0A%0A%3C!--%20has%20a%20similar%20issue%20been%20reported%20before%3F%20--%3E%0A%0A*%20**Suggest%20a%20Fix**%20%0A%0A%3C!--%20if%20you%20can%27t%20fix%20this%20yourself%2C%20perhaps%20you%20can%20point%20to%20what%20might%20be%0A%20%20causing%20the%20problem%20(line%20of%20code%20or%20commit)%20--%3E
+
+## Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute]](CONTRIBUTING.md).
+<a href="graphs/contributors"><img src="https://opencollective.com/generator-jhipster/contributors.svg?width=890" /></a>
+
+
+## Backers
+
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/generator-jhipster#backer)]
+
+<a href="https://opencollective.com/generator-jhipster#backers" target="_blank"><img src="https://opencollective.com/generator-jhipster/backers.svg?width=890"></a>
+
+
+## Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/generator-jhipster#sponsor)]
+
+<a href="https://opencollective.com/generator-jhipster/sponsor/0/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/1/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/2/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/3/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/4/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/5/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/6/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/7/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/8/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/9/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/9/avatar.svg"></a>
+
+
