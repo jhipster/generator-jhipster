@@ -80,6 +80,11 @@ import static <%=packageName%>.config.Constants.ID_DELIMITER;
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 @Repository
 public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRepository<User, Long><% } %><% if (databaseType === 'mongodb') { %>MongoRepository<User, String><% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<User, String><% } %> {
+    <%_ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
+
+    public static final String USERS_BY_LOGIN_CACHE = "usersByLogin";
+    public static final String USERS_BY_EMAIL_CACHE = "usersByEmain";
+    <%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
 
     Optional<User> findOneByActivationKey(String activationKey);
@@ -106,9 +111,15 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
 
     @EntityGraph(attributePaths = "authorities")
     <%_ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
-    @Cacheable(cacheNames = "users")
+    @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
     <%_ } _%>
     Optional<User> findOneWithAuthoritiesByLogin(String login);
+
+    @EntityGraph(attributePaths = "authorities")
+    <%_ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
+    @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
+    <%_ } _%>
+    Optional<User> findOneWithAuthoritiesByEmailIgnoreCase(String email);
 <%_ } _%>
 
     Page<User> findAllByLoginNot(Pageable pageable, String login);

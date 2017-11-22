@@ -53,22 +53,35 @@ public class DomainUserDetailsService implements UserDetailsService {
         log.debug("Authenticating {}", login);
         String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
         <%_ if (databaseType === 'sql') { _%>
-        Optional<User> userFromDatabase = userRepository.findOneWithAuthoritiesByLogin(lowercaseLogin);
+        Optional<User> userByEmailFromDatabase = userRepository.findOneWithAuthoritiesByEmailIgnoreCase(lowercaseLogin);
         <%_ } else { // MongoDB and Cassandra _%>
-        Optional<User> userFromDatabase = userRepository.findOneByLogin(lowercaseLogin);
+        Optional<User> userByEmailFromDatabase = userRepository.findOneByEmailIgnoreCase(lowercaseLogin);
         <%_ } _%>
-        return userFromDatabase.map(user -> {
-            if (!user.getActivated()) {
-                throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
-            }
-            List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
-                .map(authority -> new SimpleGrantedAuthority(authority.getName()))<% } %><% if (databaseType === 'cassandra' || databaseType === 'couchbase') { %>
-                .map(authority -> new SimpleGrantedAuthority(authority))<% } %>
-                .collect(Collectors.toList());
-            return new org.springframework.security.core.userdetails.User(lowercaseLogin,
-                user.getPassword(),
-                grantedAuthorities);
-        }).orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the " +
-        "database"));
+        return userByEmailFromDatabase.map(user -> {
+            return createSpringSecurityUser(lowercaseLogin, user);
+        }).orElseGet(() -> {
+            <%_ if (databaseType === 'sql') { _%>
+            Optional<User> userByLoginFromDatabase = userRepository.findOneWithAuthoritiesByLogin(lowercaseLogin);
+            <%_ } else { // MongoDB and Cassandra _%>
+            Optional<User> userByLoginFromDatabase = userRepository.findOneByLogin(lowercaseLogin);
+            <%_ } _%>
+            return userByLoginFromDatabase.map(user -> {
+                return createSpringSecurityUser(lowercaseLogin, user);
+            }).orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the " +
+                    "database"));
+        });
+    }
+
+    private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {
+        if (!user.getActivated()) {
+            throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
+        }
+        List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+            .map(authority -> new SimpleGrantedAuthority(authority.getName()))<% } %><% if (databaseType === 'cassandra' || databaseType === 'couchbase') { %>
+            .map(authority -> new SimpleGrantedAuthority(authority))<% } %>
+            .collect(Collectors.toList());
+        return new org.springframework.security.core.userdetails.User(user.getLogin(),
+            user.getPassword(),
+            grantedAuthorities);
     }
 }

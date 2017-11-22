@@ -160,7 +160,8 @@ public class UserService {
                 userSearchRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache(USERS_CACHE).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
                 <%_ } _%>
                 log.debug("Activated user: {}", user);
                 return user;
@@ -180,7 +181,8 @@ public class UserService {
                 userRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache(USERS_CACHE).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
                 <%_ } _%>
                 return user;
            });
@@ -196,7 +198,8 @@ public class UserService {
                 userRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache(USERS_CACHE).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
                 <%_ } _%>
                 return user;
             });
@@ -304,7 +307,8 @@ public class UserService {
                 userSearchRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache(USERS_CACHE).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
                 <%_ } _%>
                 log.debug("Changed Information for User: {}", user);
             });
@@ -350,7 +354,8 @@ public class UserService {
                 userSearchRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache(USERS_CACHE).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
                 <%_ } _%>
                 log.debug("Changed Information for User: {}", user);
                 return user;
@@ -385,7 +390,8 @@ public class UserService {
                 userRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache(USERS_CACHE).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
                 <%_ } _%>
                 log.debug("Changed password for User: {}", user);
             });
@@ -470,7 +476,8 @@ public class UserService {
             userSearchRepository.delete(user);
             <%_ } _%>
             <%_ if (cacheManagerIsAvailable === true) { _%>
-            cacheManager.getCache(USERS_CACHE).evict(user.getLogin());
+            cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
+            cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
             <%_ } _%>
         }
     }
