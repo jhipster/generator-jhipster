@@ -20,6 +20,7 @@ const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const WorkboxPlugin = require('workbox-webpack-plugin');
+const path = require('path');
 
 const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
