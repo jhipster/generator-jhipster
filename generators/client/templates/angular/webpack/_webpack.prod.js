@@ -155,8 +155,8 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
           globDirectory: utils.root('target/www'),
           // find these files and cache them
           globPatterns: ['**/*.{html,bundle.js,css,png,svg,jpg,gif,json}'],
-          // create service worker at the target/www
-          swDest: path.resolve(utils.root('target/www'), 'sw.js'),
+          // create service worker at the <%= BUILD_DIR %>www
+          swDest: path.resolve(utils.root('<%= BUILD_DIR %>www'), 'sw.js'),
           clientsClaim: true,
           skipWaiting: true,
         }),
