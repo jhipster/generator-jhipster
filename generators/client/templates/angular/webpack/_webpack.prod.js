@@ -159,6 +159,6 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
           swDest: path.resolve(utils.root('<%= BUILD_DIR %>www'), 'sw.js'),
           clientsClaim: true,
           skipWaiting: true,
-        }),
+        })
     ]
 });
