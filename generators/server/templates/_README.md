@@ -163,19 +163,8 @@ Service workers are commented by default, to enable them please uncomment the fo
         .then(function() { console.log('Service Worker Registered'); });
     }
 </script>
-```
-<%_ if (clientFramework !== 'angular1') { _%>
-* The copy file option in webpack-common.js
-```js
-{ from: './src/main/webapp/sw.js', to: 'sw.js' },
-```
-<%_ } else { _%>
-* The copy file option in gulp/copy.js
-```js
-config.app + 'sw.js',
-```
-<%_ } _%>
-Note: Add the respective scripts/assets in `sw.js` that is needed to be cached.
+
+Note: workbox creates the respective service worker and dynamically generate the `sw.js`
 
 ### Managing dependencies
 
