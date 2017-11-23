@@ -40,7 +40,8 @@ var gulp = require('gulp'),<% if(useSass) { %>
     KarmaServer = require('karma').Server,
     plumber = require('gulp-plumber'),
     changed = require('gulp-changed'),
-    gulpIf = require('gulp-if');
+    gulpIf = require('gulp-if'),
+    wbBuild = require('workbox-build');
 
 var handleErrors = require('./gulp/handle-errors'),
     serve = require('./gulp/serve'),
@@ -120,7 +121,7 @@ gulp.task('inject:test', inject.test);
 
 gulp.task('inject:troubleshoot', inject.troubleshoot);
 
-gulp.task('assets:prod', ['images', 'styles', 'html', 'copy:swagger', 'copy:images'], build);
+gulp.task('assets:prod', ['images', 'styles', 'html', 'copy:swagger', 'copy:images', 'bundle-sw'], build);
 
 gulp.task('html', function () {
     return gulp.src(config.app + 'app/**/*.html')
@@ -231,3 +232,17 @@ gulp.task('build', ['clean'], function (cb) {
 });
 
 gulp.task('default', ['serve']);
+
+gulp.task('bundle-sw', () => {
+  return wbBuild.generateSW({
+    globDirectory: config.dist,
+    swDest: `./${config.dist}/sw.js`,
+    globPatterns: ['**\/*.{html,js,css,png,svg,jpg,gif,json}'],
+  })
+  .then(() => {
+    console.log('Service worker generated.');
+  })
+  .catch((err) => {
+    console.log('[ERROR] This happened: ' + err);
+  });
+})
