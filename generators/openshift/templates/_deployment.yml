@@ -261,7 +261,15 @@ objects:
             <%_ } _%>
             ports:
             - name: http
-              containerPort: "${APP_PORT}"
+              containerPort: 8080
+            readinessProbe:
+               failureThreshold: 6
+               initialDelaySeconds: 30
+               periodSeconds: 10
+               successThreshold: 1
+               tcpSocket:
+                 port: 8080
+               timeoutSeconds: 1            
 <%_ if (app.prodDatabaseType != 'mssql') { _%>
   -
     apiVersion: v1
