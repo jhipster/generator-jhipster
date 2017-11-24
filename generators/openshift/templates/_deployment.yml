@@ -40,12 +40,6 @@ labels:
   createdBy: JHipster-Team
 parameters:
   -
-    name: APPLICATION_NAME
-    value: <%= app.baseName.toLowerCase() %>
-    description: Name of the application
-    required: true
-    displayName: Application Name
-  -
     name: SECRET_REF
     value: <%= app.baseName.toLowerCase() %>-ds-secret-ref
     description: Name of the DataSource Secret Reference
@@ -63,6 +57,12 @@ parameters:
     description: Port of the application
     required: true
     displayName: Application Port
+  -
+    name: NAMESPACE
+    value: "<%= openshiftNamespace %>"
+    description: Openshift Namespace
+    required: true
+    displayName: OpenShift namespace
 <%_ if (app.monitoring === 'elk') { _%>
   -
     name: JHIPSTER_LOGSTASH
@@ -127,6 +127,16 @@ objects:
               containerName: ${APPLICATION_NAME}
           <%_ } _%>
         resources:
+      triggers:
+        - type: "ImageChange"
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - ${APPLICATION_NAME}
+            from:
+              kind: ImageStreamTag
+              name: ${IMAGE_NAME}
+              namespace: ${NAMESPACE}
       replicas: "1"
       template:
         metadata:

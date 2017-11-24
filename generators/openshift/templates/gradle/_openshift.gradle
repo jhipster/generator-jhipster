@@ -9,7 +9,7 @@ buildscript {
         maven { url "https://s3-eu-west-1.amazonaws.com/com-henderson-group-dist/gradle"}
     }
     dependencies {
-        classpath 'io.gitlab.openshifttasks:openshifttasks:0.2.0'
+        classpath 'io.gitlab.openshifttasks:openshifttasks:0.2.1'
     }
 }
 
