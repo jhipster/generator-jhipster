@@ -12,7 +12,7 @@
 
     <groupId>io.github.jhipster</groupId>
     <artifactId>jhipster-dependencies</artifactId>
-    <version>0.0.8</version>
+    <version>0.1.0</version>
     <packaging>pom</packaging>
     <name>JHipster dependencies</name>
     <description>JHipster bill of materials, see http://www.jhipster.tech/ for more information on JHipster</description>
