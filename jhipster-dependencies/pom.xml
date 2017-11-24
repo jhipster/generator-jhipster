@@ -15,7 +15,34 @@
     <version>0.0.8</version>
     <packaging>pom</packaging>
     <name>JHipster dependencies</name>
-    <description>JHipster dependency management</description>
+    <description>JHipster bill of materials, see http://www.jhipster.tech/ for more information on JHipster</description>
+    <url>https://github.com/jhipster/jhipster-dependencies</url>
+    <licenses>
+        <license>
+            <name>Apache License, version 2.0</name>
+            <url>https://github.com/jhipster/jhipster-dependencies/blob/master/LICENSE.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <organization>
+        <name>JHipster</name>
+        <url>http://www.jhipster.tech</url>
+    </organization>
+    <developers>
+        <developer>
+            <id>jdubois</id>
+            <name>Julien Dubois</name>
+            <url>http://www.julien-dubois.com/</url>
+            <organization>JHipster</organization>
+            <organizationUrl>http://www.jhipster.tech</organizationUrl>
+        </developer>
+        <!-- The JHipster core team is listed at http://www.jhipster.tech/team/ -->
+    </developers>
+    <scm>
+        <connection>scm:git:https://github.com/jhipster/jhipster-dependencies.git</connection>
+        <tag>master</tag>
+        <url>https://github.com/jhipster/jhipster-dependencies</url>
+    </scm>
 
     <properties>
         <!-- Build properties -->
