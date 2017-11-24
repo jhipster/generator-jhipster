@@ -97,6 +97,15 @@ hystrix:
     share-security-context: true
 
 <%_ } _%>
+logging:
+    level:
+        ROOT: #logback.loglevel#
+        <%=packageName%>: #logback.loglevel#
+        io.github.jhipster: #logback.loglevel#
+        <%_ if (databaseType === 'couchbase') { _%>
+        com.github.couchmove: #logback.loglevel#
+        <%_ } _%>
+
 management:
     security:
         roles: ADMIN
