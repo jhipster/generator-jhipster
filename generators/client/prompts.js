@@ -51,7 +51,7 @@ function askForClient(meta) {
         if (this.experimental) {
             choices.push({
                 value: 'react',
-                name: '[BETA] React'
+                name: '[EXPERIMENTAL] React'
             });
         }
     }
