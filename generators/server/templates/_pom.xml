@@ -20,6 +20,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId><%= packageName %></groupId>
+        <artifactId><%= dasherizedBaseName %>-plugins</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>.mvn/plugins/pom.xml</relativePath>
+    </parent>
+
     <groupId><%= packageName %></groupId>
     <artifactId><%= dasherizedBaseName %></artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -44,18 +51,6 @@
 
     <properties>
         <!-- Build properties -->
-        <maven.version>3.0.0</maven.version>
-        <java.version><%= JAVA_VERSION %></java.version>
-        <scala.version><%= SCALA_VERSION %></scala.version>
-        <node.version>v<%= NODE_VERSION %></node.version>
-        <%_ if (clientPackageManager === 'npm') { _%>
-        <npm.version><%= NPM_VERSION %></npm.version>
-        <%_ } _%>
-        <%_ if (clientPackageManager === 'yarn') { _%>
-        <yarn.version>v<%= YARN_VERSION %></yarn.version>
-        <%_ } _%>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -72,78 +67,10 @@
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
         <spring-boot.version>1.5.7.RELEASE</spring-boot.version>
-        <%_ if (databaseType === 'sql') { _%>
-        <!-- The hibernate version should match the one managed by
-        https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-        <hibernate.version>5.2.10.Final</hibernate.version>
-        <!-- The javassist version should match the one managed by
-        https://mvnrepository.com/artifact/org.hibernate/hibernate-core/${hibernate.version} -->
-        <javassist.version>3.20.0-GA</javassist.version>
-        <!-- The liquibase version should match the one managed by
-        https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-        <liquibase.version>3.5.3</liquibase.version>
-        <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
-        <validation-api.version>1.1.0.Final</validation-api.version>
-        <%_ } _%>
         <mapstruct.version>1.1.0.Final</mapstruct.version>
+        <assertj.version>3.8.0</assertj.version> <!-- see https://github.com/jhipster/jhipster-dependencies/pull/15 -->
 
-        <!-- Plugin versions -->
-        <maven-clean-plugin.version>2.6.1</maven-clean-plugin.version>
-        <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
-        <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
-        <maven-enforcer-plugin.version>3.0.0-M1</maven-enforcer-plugin.version>
-        <maven-resources-plugin.version>3.0.1</maven-resources-plugin.version>
-        <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
-        <maven-war-plugin.version>2.6</maven-war-plugin.version>
-        <dockerfile-maven-plugin.version>1.3.4</dockerfile-maven-plugin.version>
-        <%_ if (!skipClient) { _%>
-        <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
-        <%_ } _%>
-        <%_ if (gatlingTests) { _%>
-        <gatling-maven-plugin.version>2.2.4</gatling-maven-plugin.version>
-        <%_ } _%>
-        <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
-        <scala-maven-plugin.version>3.2.2</scala-maven-plugin.version>
-        <sonar-maven-plugin.version>3.2</sonar-maven-plugin.version>
-        <%_ if (enableSwaggerCodegen) { _%>
-        <swagger-codegen-maven-plugin.version>2.2.3</swagger-codegen-maven-plugin.version>
-        <%_ } _%>
-
-        <!-- Sonar properties -->
-        <%_ if (clientFramework === 'angular1') { _%>
-        <sonar.exclusions><%= CLIENT_MAIN_SRC_DIR %>content/**/*.*, <%= CLIENT_MAIN_SRC_DIR %>bower_components/**/*.*, <%= CLIENT_MAIN_SRC_DIR %>i18n/*.js, <%= CLIENT_DIST_DIR %>**/*.*</sonar.exclusions>
-        <%_ } else { _%>
-        <sonar.exclusions><%= CLIENT_MAIN_SRC_DIR %>content/**/*.*, <%= CLIENT_MAIN_SRC_DIR %>i18n/*.js, <%= CLIENT_DIST_DIR %>**/*.*, <%= CLIENT_MAIN_SRC_DIR %>app/app.main-aot.ts</sonar.exclusions>
-        <%_ } _%>
-        <sonar.issue.ignore.multicriteria>S3437,UndocumentedApi,BoldAndItalicTagsCheck</sonar.issue.ignore.multicriteria>
-        <!-- Rule https://sonarqube.com/coding_rules#rule_key=Web%3ABoldAndItalicTagsCheck is ignored. Even if we agree that using the "i" tag is an awful practice, this is what is recommended by http://fontawesome.io/examples/ -->
-        <sonar.issue.ignore.multicriteria.BoldAndItalicTagsCheck.resourceKey><%= CLIENT_MAIN_SRC_DIR %>app/**/*.*</sonar.issue.ignore.multicriteria.BoldAndItalicTagsCheck.resourceKey>
-        <sonar.issue.ignore.multicriteria.BoldAndItalicTagsCheck.ruleKey>Web:BoldAndItalicTagsCheck</sonar.issue.ignore.multicriteria.BoldAndItalicTagsCheck.ruleKey>
-        <!-- Rule https://sonarqube.com/coding_rules#rule_key=squid%3AS3437 is ignored, as a JPA-managed field cannot be transient -->
-        <sonar.issue.ignore.multicriteria.S3437.resourceKey><%= MAIN_DIR %>java/**/*</sonar.issue.ignore.multicriteria.S3437.resourceKey>
-        <sonar.issue.ignore.multicriteria.S3437.ruleKey>squid:S3437</sonar.issue.ignore.multicriteria.S3437.ruleKey>
-        <!-- Rule http://sonarqube.com/coding_rules#rule_key=squid%3AUndocumentedApi is ignored, as we want to follow "clean code" guidelines and classes, methods and arguments names should be self-explanatory -->
-        <sonar.issue.ignore.multicriteria.UndocumentedApi.resourceKey><%= MAIN_DIR %>java/**/*</sonar.issue.ignore.multicriteria.UndocumentedApi.resourceKey>
-        <sonar.issue.ignore.multicriteria.UndocumentedApi.ruleKey>squid:UndocumentedApi</sonar.issue.ignore.multicriteria.UndocumentedApi.ruleKey>
-        <sonar.jacoco.itReportPath>${project.testresult.directory}/coverage/jacoco/jacoco-it.exec</sonar.jacoco.itReportPath>
-        <sonar.jacoco.reportPath>${project.testresult.directory}/coverage/jacoco/jacoco.exec</sonar.jacoco.reportPath>
-        <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
-        <sonar.javascript.jstestdriver.reportsPath>${project.testresult.directory}/karma</sonar.javascript.jstestdriver.reportsPath>
-        <%_ if (clientFramework === 'angular1') { _%>
-        <!-- For Sonar < 6.2 -->
-        <sonar.javascript.lcov.reportPath>${project.testresult.directory}/coverage/report-lcov/lcov.info</sonar.javascript.lcov.reportPath>
-        <!-- For Sonar >= 6.2 -->
-        <sonar.javascript.lcov.reportPaths>${project.testresult.directory}/coverage/report-lcov/lcov.info</sonar.javascript.lcov.reportPaths>
-        <%_ } else { _%>
-        <sonar.typescript.lcov.reportPaths>${project.testresult.directory}/coverage/report-lcov/lcov.info</sonar.typescript.lcov.reportPaths>
-        <%_ } _%>
-        <sonar.sources>${project.basedir}/<%= MAIN_DIR %></sonar.sources>
-        <sonar.surefire.reportsPath>${project.testresult.directory}/surefire-reports</sonar.surefire.reportsPath>
-        <sonar.tests>${project.basedir}/<%= TEST_DIR %></sonar.tests>
-
-        <!-- jhipster-needle-maven-property -->
     </properties>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -380,7 +307,7 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <scope>test</scope>
+            <version>${assertj.version}</version> <!-- see https://github.com/jhipster/jhipster-dependencies/pull/15 -->
         </dependency>
         <%_ if (databaseType === 'cassandra') { _%>
         <dependency>
@@ -735,35 +662,11 @@
             <plugin>
                 <groupId>io.gatling</groupId>
                 <artifactId>gatling-maven-plugin</artifactId>
-                <version>${gatling-maven-plugin.version}</version>
-                <configuration>
-                    <configFolder><%= TEST_DIR %>gatling/conf</configFolder>
-                    <dataFolder><%= TEST_DIR %>gatling/user-files/data</dataFolder>
-                    <resultsFolder>target/gatling/results/${maven.build.timestamp}/</resultsFolder>
-                    <bodiesFolder><%= TEST_DIR %>gatling/user-files/bodies</bodiesFolder>
-                    <simulationsFolder><%= TEST_DIR %>gatling/user-files/simulations</simulationsFolder>
-                    <!-- If uncommented, these arguments below will be applied to all your gatling tests -->
-                    <!--<jvmArgs>
-                        <jvmArg>-Dusers=100</jvmArg>
-                        <jvmArg>-Dramp=1</jvmArg>
-                    </jvmArgs>-->
-                    <!--
-                    This will run multiple simulations one by one. Useful when doing Gatling
-                    tests in CI.
-                    -->
-                    <runMultipleSimulations>true</runMultipleSimulations>
-                    <!--
-                    To run only one simulation, you need to disable the "runMultipleSimulations"
-                    above, and write the name of your simulation below.
-                    -->
-                    <!--<simulationClass>WriteTheNameOfYourGatlingSimulation</simulationClass>-->
-                </configuration>
             </plugin>
             <%_ } _%>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <annotationProcessorPaths>
                         <path>
@@ -771,224 +674,50 @@
                             <artifactId>mapstruct-processor</artifactId>
                             <version>${mapstruct.version}</version>
                         </path>
-<%_ if (databaseType === 'sql') { _%>
+                        <%_ if (databaseType === 'sql') { _%>
                         <!-- For JPA static metamodel generation -->
                         <path>
                             <groupId>org.hibernate</groupId>
                             <artifactId>hibernate-jpamodelgen</artifactId>
                             <version>${hibernate.version}</version>
                         </path>
-<% } %>
+                        <% } %>
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>
-                <version>${maven-eclipse-plugin.version}</version>
-                <configuration>
-                    <downloadSources>true</downloadSources>
-                    <downloadJavadocs>true</downloadJavadocs>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>${maven-enforcer-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>enforce-versions</id>
-                        <goals>
-                            <goal>enforce</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <rules>
-                        <requireMavenVersion>
-                            <message>You are running an older version of Maven. JHipster requires at least Maven ${maven.version}</message>
-                            <version>[${maven.version},)</version>
-                        </requireMavenVersion>
-                        <requireJavaVersion>
-                            <message>You are running an older version of Java. JHipster requires at least JDK ${java.version}</message>
-                            <version>[${java.version}.0,)</version>
-                        </requireJavaVersion>
-                    </rules>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>${maven-resources-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>default-resources</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>target/classes</outputDirectory>
-                            <useDefaultDelimiters>false</useDefaultDelimiters>
-                            <delimiters>
-                                <delimiter>#</delimiter>
-                            </delimiters>
-                            <resources>
-                                <resource>
-                                    <directory><%= SERVER_MAIN_RES_DIR %></directory>
-                                    <filtering>true</filtering>
-                                    <includes>
-                                        <include>**/*.xml</include>
-                                        <include>**/*.yml</include>
-                                    </includes>
-                                </resource>
-                                <resource>
-                                    <directory><%= SERVER_MAIN_RES_DIR %></directory>
-                                    <filtering>false</filtering>
-                                    <excludes>
-                                        <exclude>**/*.xml</exclude>
-                                        <exclude>**/*.yml</exclude>
-                                    </excludes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>docker-resources</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>target/</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/docker/</directory>
-                                    <filtering>false</filtering>
-                                    <excludes>
-                                        <exclude>**/*.yml</exclude>
-                                    </excludes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
-                <%_ if (cucumberTests) { _%>
-                <executions>
-                    <execution>
-                        <id>default-test</id>
-                        <configuration>
-                            <excludes>
-                                <exclude>**/Abstract*.java</exclude>
-                                <exclude>**/*Cucumber*.java</exclude>
-                            </excludes>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>without-cucumber</id>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                        <configuration>
-                            <includes>
-                                <include>**/*Cucumber*.java</include>
-                            </includes>
-                        </configuration>
-                    </execution>
-                </executions>
-                <%_ } _%>
-                <configuration>
-                    <!-- Force alphabetical order to have a reproducible build -->
-                    <runOrder>alphabetical</runOrder>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco-maven-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>pre-unit-tests</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                        <configuration>
-                            <!-- Sets the path to the file which contains the execution data. -->
-                            <destFile>${project.testresult.directory}/coverage/jacoco/jacoco.exec</destFile>
-                        </configuration>
-                    </execution>
-                    <!-- Ensures that the code coverage report for unit tests is created after unit tests have been run -->
-                    <execution>
-                        <id>post-unit-test</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                        <configuration>
-                            <dataFile>${project.testresult.directory}/coverage/jacoco/jacoco.exec</dataFile>
-                            <outputDirectory>${project.testresult.directory}/coverage/jacoco</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
-                <version>${sonar-maven-plugin.version}</version>
             </plugin>
             <%_ if (databaseType === 'sql') { _%>
             <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
-                <version>${liquibase.version}</version>
-                <configuration>
-                    <changeLogFile><%= SERVER_MAIN_RES_DIR %>config/liquibase/master.xml</changeLogFile>
-                    <diffChangeLogFile><%= SERVER_MAIN_RES_DIR %>config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
-                    <driver><% if (devDatabaseType === 'mysql') { %>com.mysql.jdbc.Driver<% } else if (devDatabaseType === 'mariadb') { %>org.mariadb.jdbc.Driver<% } else if (devDatabaseType === 'postgresql') { %>org.postgresql.Driver<% } else if (devDatabaseType === 'h2Disk') { %>org.h2.Driver<% } else if (devDatabaseType === 'oracle') { %>oracle.jdbc.OracleDriver<% } %></driver>
-                    <url><% if (devDatabaseType === 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'mariadb') { %>jdbc:mariadb://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'postgresql') { %>jdbc:postgresql://localhost:5432/<%= baseName %><% } else if (devDatabaseType === 'h2Disk') { %>jdbc:h2:file:./target/h2db/db/<%= lowercaseBaseName %><% } else if (devDatabaseType === 'oracle') { %>jdbc:oracle:thin:@localhost:1521:<%= baseName %><% } else if (devDatabaseType === 'mssql') { %>jdbc:sqlserver://localhost:1433;database=<%= baseName %><% } %></url>
-                    <defaultSchemaName><% if (devDatabaseType === 'mysql') { %><%= baseName %><% } else if (devDatabaseType === 'postgresql') { %><% } %></defaultSchemaName>
-                    <username><% if (devDatabaseType === 'mysql') { %>root<% } else if (devDatabaseType === 'postgresql' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %><%= baseName %><% } else if (devDatabaseType === 'mssql') { %>SA<% } %></username>
-                    <password><% if (devDatabaseType === 'mssql') { %>yourStrong(!)Password<% } %></password>
-                    <referenceUrl>hibernate:spring:<%=packageName%>.domain?dialect=<% if (devDatabaseType === 'mysql') { %>org.hibernate.dialect.MySQL5InnoDBDialect<% } else if (devDatabaseType === 'mariadb') { %>org.hibernate.dialect.MySQL5InnoDBDialect<% } else if (devDatabaseType === 'postgresql') { %>org.hibernate.dialect.PostgreSQL82Dialect<% } else if (devDatabaseType === 'h2Disk') { %>org.hibernate.dialect.H2Dialect<% } else if (devDatabaseType === 'oracle') { %>org.hibernate.dialect.Oracle12cDialect<% } else if (devDatabaseType === 'mssql') { %>org.hibernate.dialect.SQLServerDialect<% } %>&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
-                    <verbose>true</verbose>
-                    <logging>debug</logging>
-                    <%_ if (authenticationType === 'oauth2') { _%>
-                    <diffExcludeObjects>oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token</diffExcludeObjects>
-                    <%_ } _%>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.javassist</groupId>
-                        <artifactId>javassist</artifactId>
-                        <version>${javassist.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.liquibase.ext</groupId>
-                        <artifactId>liquibase-hibernate5</artifactId>
-                        <version>${liquibase-hibernate5.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-starter-data-jpa</artifactId>
-                        <version>${spring-boot.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>javax.validation</groupId>
-                        <artifactId>validation-api</artifactId>
-                        <version>${validation-api.version}</version>
-                    </dependency>
-                </dependencies>
             </plugin>
             <%_ } _%>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot.version}</version>
                 <executions>
                     <execution>
                         <goals>
@@ -1009,24 +738,6 @@
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>
-                <version>${dockerfile-maven-plugin.version}</version>
-                <!--
-                Uncomment the section below to build the docker image with mvn package and and push it with mvn deploy
-                <executions>
-                    <execution>
-                    <id>default</id>
-                    <goals>
-                        <goal>build</goal>
-                        <goal>push</goal>
-                    </goals>
-                    </execution>
-                </executions>
-                -->
-                <configuration>
-                    <repository><%= baseName.toLowerCase()%></repository>
-                    <tag>latest</tag>
-                    <contextDirectory>${project.build.directory}</contextDirectory>
-                </configuration>
             </plugin>
             <%_ if (enableSwaggerCodegen) { _%>
             <plugin>
@@ -1036,91 +747,10 @@
                 -->
                 <groupId>io.swagger</groupId>
                 <artifactId>swagger-codegen-maven-plugin</artifactId>
-                <version>${swagger-codegen-maven-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <inputSpec><%= SERVER_MAIN_RES_DIR %>swagger/api.yml</inputSpec>
-                            <language>spring</language>
-                            <apiPackage><%= packageName %>.web.api</apiPackage>
-                            <modelPackage><%= packageName %>.web.api.model</modelPackage>
-                            <generateSupportingFiles>false</generateSupportingFiles>
-                            <configOptions>
-                                <interfaceOnly>true</interfaceOnly>
-                                <java8>true</java8>
-                            </configOptions>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
             <%_ } _%>
             <!-- jhipster-needle-maven-add-plugin -->
         </plugins>
-        <pluginManagement>
-            <plugins>
-                <!--
-                    This plugin's configuration is used to store Eclipse m2e settings only.
-                    It has no influence on the Maven build itself.
-                    Remove when the m2e plugin can correctly bind to Maven lifecycle
-                -->
-                <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
-                    <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.jacoco</groupId>
-                                        <artifactId>
-                                            jacoco-maven-plugin
-                                        </artifactId>
-                                        <versionRange>
-                                            ${jacoco-maven-plugin.version}
-                                        </versionRange>
-                                        <goals>
-                                            <goal>prepare-agent</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore/>
-                                    </action>
-                                </pluginExecution>
-                                <%_ if(!skipClient) { _%>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>com.github.eirslett</groupId>
-                                        <artifactId>frontend-maven-plugin</artifactId>
-                                        <versionRange>${frontend-maven-plugin.version}</versionRange>
-                                        <goals>
-                                            <%_ if (clientPackageManager === 'yarn') { _%>
-                                            <goal>install-node-and-yarn</goal>
-                                            <goal>yarn</goal>
-                                            <%_ } else if (clientPackageManager === 'npm') { _%>
-                                            <goal>install-node-and-npm</goal>
-                                            <goal>npm</goal>
-                                            <%_ } _%>
-                                            <%_ if (clientFramework === 'angular1') { _%>
-                                            <goal>bower</goal>
-                                            <goal>gulp</goal>
-                                            <%_ } _%>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore/>
-                                    </action>
-                                </pluginExecution>
-                                <%_ } _%>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
     </build>
     <profiles>
         <profile>
@@ -1143,7 +773,6 @@
                     <plugin>
                         <groupId>com.github.eirslett</groupId>
                         <artifactId>frontend-maven-plugin</artifactId>
-                        <version>${frontend-maven-plugin.version}</version>
                         <executions>
                             <%_ if (clientPackageManager === 'yarn') { _%>
                             <execution>
@@ -1211,7 +840,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
-                        <version>${maven-war-plugin.version}</version>
                         <configuration>
                             <%_ if (!skipClient) { _%>
                             <failOnMissingWebXml>false</failOnMissingWebXml>
@@ -1248,7 +876,6 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-clean-plugin</artifactId>
-                        <version>${maven-clean-plugin.version}</version>
                         <configuration>
                             <filesets>
                                 <fileset>
@@ -1260,7 +887,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
-                        <version>${maven-war-plugin.version}</version>
                         <configuration>
                             <%_ if (!skipClient) { _%>
                             <failOnMissingWebXml>false</failOnMissingWebXml>
@@ -1279,7 +905,6 @@
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
-                        <version>${spring-boot.version}</version>
                         <configuration>
                             <mainClass>${start-class}</mainClass>
                             <executable>true</executable>
@@ -1296,7 +921,6 @@
                     <plugin>
                         <groupId>com.github.eirslett</groupId>
                         <artifactId>frontend-maven-plugin</artifactId>
-                        <version>${frontend-maven-plugin.version}</version>
                         <executions>
                             <%_ if (clientPackageManager === 'yarn') { _%>
                             <execution>
@@ -1342,7 +966,7 @@
                                     <arguments>install</arguments>
                                 </configuration>
                             </execution>
-                                <%_ if (useSass) { _%>
+                            <%_ if (useSass) { _%>
                             <execution>
                                 <id>npm rebuild node-sass</id>
                                 <goals>
@@ -1352,7 +976,7 @@
                                     <arguments>rebuild node-sass</arguments>
                                 </configuration>
                             </execution>
-                                <%_ } _%>
+                            <%_ } _%>
                             <%_ } _%>
                             <%_ if (clientFramework === 'angular1') { _%>
                             <execution>
@@ -1445,7 +1069,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
-                        <version>${maven-war-plugin.version}</version>
                         <configuration>
                             <failOnMissingWebXml>false</failOnMissingWebXml>
                             <warSourceDirectory>src/main/webapp/</warSourceDirectory>
@@ -1469,7 +1092,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
-                        <version>${maven-compiler-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>default-compile</id>
@@ -1484,30 +1106,6 @@
                     <plugin>
                         <groupId>net.alchim31.maven</groupId>
                         <artifactId>scala-maven-plugin</artifactId>
-                        <version>${scala-maven-plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <id>compile</id>
-                                <phase>compile</phase>
-                                <goals>
-                                    <goal>add-source</goal>
-                                    <goal>compile</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>test-compile</id>
-                                <phase>test-compile</phase>
-                                <goals>
-                                    <goal>add-source</goal>
-                                    <goal>testCompile</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <recompileMode>incremental</recompileMode>
-                            <verbose>true</verbose>
-                            <scalaVersion>${scala.version}</scalaVersion>
-                        </configuration>
                     </plugin>
                 </plugins>
             </build>

@@ -168,6 +168,10 @@ function writeFiles() {
                 this.copy('.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.jar');
                 this.copy('.mvn/wrapper/maven-wrapper.properties', '.mvn/wrapper/maven-wrapper.properties');
                 this.template('_pom.xml', 'pom.xml', null, { interpolate: INTERPOLATE_REGEX });
+                this.template('src/site/_site.xml', 'src/site/site.xml', null, { interpolate: INTERPOLATE_REGEX });
+                this.template('.mvn/parent/_pom.xml', '.mvn/parent/pom.xml', null, { interpolate: INTERPOLATE_REGEX });
+                this.template('.mvn/reporting/_pom.xml', '.mvn/reporting/pom.xml', null, { interpolate: INTERPOLATE_REGEX });
+                this.template('.mvn/plugins/_pom.xml', '.mvn/plugins/pom.xml', null, { interpolate: INTERPOLATE_REGEX });
             }
         },
 
