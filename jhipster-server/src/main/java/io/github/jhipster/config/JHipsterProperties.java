@@ -235,7 +235,7 @@ public class JHipsterProperties {
                     return url;
                 }
     
-                public String setUrl(String url) {
+                public void setUrl(String url) {
                     this.url = url;
                 }
 
