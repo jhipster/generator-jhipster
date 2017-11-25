@@ -40,14 +40,6 @@
     </appender>
 -->
 
-    <logger name="<%=packageName%>" level="#logback.loglevel#"/>
-
-    <logger name="io.github.jhipster" level="#logback.loglevel#"/>
-
-    <%_ if (databaseType === 'couchbase') { _%>
-    <logger name="com.github.couchmove" level="#logback.loglevel#"/>
-    <%_ } _%>
-
     <%_ if (databaseType === 'cassandra') { _%>
     <logger name="io.netty" level="WARN"/>
     <%_ } _%>
@@ -119,12 +111,5 @@
     <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
         <resetJUL>true</resetJUL>
     </contextListener>
-
-    <root level="#logback.loglevel#">
-        <appender-ref ref="CONSOLE"/>
-<!--
-        <appender-ref ref="FILE"/>
--->
-    </root>
 
 </configuration>
