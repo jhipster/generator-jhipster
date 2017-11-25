@@ -78,8 +78,8 @@ import <%=packageName%>.domain.enumeration.<%= element %>;
 <%_ if (databaseType === 'couchbase') { _%>
 import static <%=packageName%>.config.Constants.ID_DELIMITER;
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
-<%_ } _%>
 
+<%_ } _%>
 <%_ if (typeof javadoc == 'undefined') { _%>
 /**
  * A <%= entityClass %>.
