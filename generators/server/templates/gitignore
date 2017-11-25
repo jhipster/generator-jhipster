@@ -72,6 +72,9 @@ classes/
 ######################
 /log/
 /target/
+/.mvn/parent/target/
+/.mvn/plugins/target/
+/.mvn/reporting/target/
 
 ######################
 # Gradle
