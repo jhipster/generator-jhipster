@@ -121,7 +121,7 @@ gulp.task('inject:test', inject.test);
 
 gulp.task('inject:troubleshoot', inject.troubleshoot);
 
-gulp.task('assets:prod', ['images', 'styles', 'html', 'copy:swagger', 'copy:images', 'bundle-sw'], build);
+gulp.task('assets:prod', ['images', 'styles', 'html', 'copy:swagger', 'copy:images'], build);
 
 gulp.task('html', function () {
     return gulp.src(config.app + 'app/**/*.html')
@@ -228,7 +228,7 @@ gulp.task('install', function () {
 gulp.task('serve', ['install'], serve);
 
 gulp.task('build', ['clean'], function (cb) {
-    runSequence(['copy', 'inject:vendor', 'ngconstant:prod'<% if(enableTranslation) { %>, 'copy:languages'<% } %>], 'inject:app', 'inject:troubleshoot', 'assets:prod', cb);
+    runSequence(['copy', 'inject:vendor', 'ngconstant:prod'<% if(enableTranslation) { %>, 'copy:languages'<% } %>], 'inject:app', 'inject:troubleshoot', 'assets:prod', 'bundle-sw');
 });
 
 gulp.task('default', ['serve']);
@@ -236,7 +236,7 @@ gulp.task('default', ['serve']);
 gulp.task('bundle-sw', () => {
   return wbBuild.generateSW({
     globDirectory: config.dist,
-    swDest: `./${config.dist}/sw.js`,
+    swDest: `${config.dist}/sw.js`,
     globPatterns: ['**\/*.{html,js,css,png,svg,jpg,gif,json}'],
   })
   .then(() => {
