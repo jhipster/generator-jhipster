@@ -601,6 +601,16 @@ public class WebConfigurerTest {
         }
 
         @Override
+        public CardinalityEstimator getCardinalityEstimator(String s) {
+            return null;
+        }
+
+        @Override
+        public IScheduledExecutorService getScheduledExecutorService(String s) {
+            return null;
+        }
+        
+        @Override
         public void shutdown() {
 
         }

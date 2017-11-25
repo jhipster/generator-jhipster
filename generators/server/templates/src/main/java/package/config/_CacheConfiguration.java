@@ -257,6 +257,9 @@ public class CacheConfiguration {
         }
         <%_ } _%>
         config.getMapConfigs().put("default", initializeDefaultMapConfig());
+        
+        // Full reference is available at: http://docs.hazelcast.org/docs/management-center/3.9/manual/html/Deploying_and_Starting.html
+        config.setManagementCenterConfig(initializeDefaultManagementCenterConfig(jHipsterProperties))
         <%_ if (hibernateCache === 'hazelcast') { _%>
         config.getMapConfigs().put("<%=packageName%>.domain.*", initializeDomainMapConfig(jHipsterProperties));
         <%_ } _%>
@@ -266,6 +269,14 @@ public class CacheConfiguration {
         return Hazelcast.newHazelcastInstance(config);
     }
 
+    private ManagementCenterConfig initializeDefaultManagementCenterConfig(JHipsterProperties jHipsterProperties) {
+        ManagementCenterConfig managementCenterConfig = new ManagementCenterConfig();
+        managementCenterConfig.setEnabled(jHipsterProperties.getCache().getHazelcast().getManagementCenter().isEnabled());
+        managementCenterConfig.setUrl(jHipsterProperties.getCache().getHazelcast().getManagementCenter().getUrl());
+        managementCenterConfig.setUpdateInterval(jHipsterProperties.getCache().getHazelcast().getManagementCenter().getUpdateInterval());
+        return managementCenterConfig;
+    }
+    
     private MapConfig initializeDefaultMapConfig() {
         MapConfig mapConfig = new MapConfig();
 
