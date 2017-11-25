@@ -51,7 +51,6 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 <%_ } _%>
 import org.springframework.context.annotation.Configuration;
 
-
 @Configuration
 <%_ if (serviceDiscoveryType === "eureka") { _%>
 @ConditionalOnProperty("eureka.client.enabled")
