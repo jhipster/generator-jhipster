@@ -31,5 +31,6 @@
     "entityTableName": "test_multiple_rel",
     "dto": "no",
     "service": "no",
+    "angularJSSuffix": "mySuffix",
     "pagination": "no"
 }
