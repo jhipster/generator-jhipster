@@ -628,7 +628,7 @@ module.exports = class extends BaseGenerator {
                     if (_.isUndefined(relationship.otherEntityModuleName)) {
                         if (relationship.otherEntityNameCapitalized !== 'User') {
                             relationship.otherEntityModuleName = `${context.angularXAppName + relationship.otherEntityNameCapitalized}Module`;
-                            relationship.otherEntityModulePath = _.kebabCase(_.lowerFirst(relationship.otherEntityName));
+                            relationship.otherEntityModulePath = _.kebabCase(_.lowerFirst(relationship.otherEntityName) + _.upperFirst(context.entityAngularJSSuffix));
                         } else {
                             relationship.otherEntityModuleName = `${context.angularXAppName}SharedModule`;
                             relationship.otherEntityModulePath = '../shared';
