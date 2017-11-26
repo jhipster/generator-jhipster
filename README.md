@@ -88,5 +88,3 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 <a href="https://opencollective.com/generator-jhipster/sponsor/7/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/7/avatar.svg"></a>
 <a href="https://opencollective.com/generator-jhipster/sponsor/8/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/8/avatar.svg"></a>
 <a href="https://opencollective.com/generator-jhipster/sponsor/9/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/9/avatar.svg"></a>
-
-
