@@ -632,7 +632,9 @@ _%>
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll().size();
 
         // Update the <%= entityInstance %>
-        <%= entityClass %> updated<%= entityClass %> = <%= entityInstance %>Repository.findOne(<%= entityInstance %>.getId());
+        <%= entityClass %> updated<%= entityClass %> = <%= entityInstance %>Repository.findOne(<%= entityInstance %>.getId());<% if (databaseType === 'sql') { %>
+        // Disconnect from session so that the updates on updated<%= entityClass %> are not directly saved in db
+        em.detach(updated<%= entityClass %>);<% } %>
         <%_ if (fluentMethods && fields.length > 0) { _%>
         updated<%= entityClass %><% for (idx in fields) { %>
             .<%= fields[idx].fieldName %>(<%='UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase()%>)<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>
