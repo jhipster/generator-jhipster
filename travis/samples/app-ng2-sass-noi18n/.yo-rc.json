@@ -22,7 +22,7 @@
       "gatling",
       "protractor"
     ],
-    "jhiPrefix": "jhi",
+    "jhiPrefix": "mySuffix",
     "travis": true,
     "serviceDiscoveryType": false,
     "enableTranslation": false,
