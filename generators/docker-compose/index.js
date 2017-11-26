@@ -129,20 +129,20 @@ module.exports = class extends BaseGenerator {
 
             setAppsYaml() {
                 this.appsYaml = [];
-
+                this.keycloakRedirectUri = '';
                 let portIndex = 8080;
                 this.appsFolders.forEach((appsFolder, index) => {
                     const appConfig = this.appConfigs[index];
                     const lowercaseBaseName = appConfig.baseName.toLowerCase();
                     const parentConfiguration = {};
                     const path = this.destinationPath(this.directoryPath + appsFolder);
-
                     // Add application configuration
                     const yaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/app.yml`));
                     const yamlConfig = yaml.services[`${lowercaseBaseName}-app`];
                     if (this.gatewayType === 'traefik' && appConfig.applicationType === 'gateway') {
                         delete yamlConfig.ports; // Do not export the ports as Traefik is the gateway
                     } else if (appConfig.applicationType === 'gateway' || appConfig.applicationType === 'monolith') {
+                        this.keycloakRedirectUri += `"http://localhost:${portIndex}/*", `;
                         const ports = yamlConfig.ports[0].split(':');
                         ports[0] = portIndex;
                         yamlConfig.ports[0] = ports.join(':');
