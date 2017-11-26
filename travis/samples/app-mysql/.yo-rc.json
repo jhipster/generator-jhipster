@@ -27,7 +27,7 @@
       "protractor"
     ],
     "serverPort": "8080",
-    "jhiPrefix": "mySuffix",
+    "jhiPrefix": "myPrefix",
     "travis": true,
     "messageBroker": false,
     "serviceDiscoveryType": false,

@@ -20,7 +20,7 @@
     "applicationType": "monolith",
     "testFrameworks": [
     ],
-    "jhiPrefix": "mySuffix",
+    "jhiPrefix": "myPrefix",
     "enableTranslation": true,
     "nativeLanguage": "en",
     "languages": [
