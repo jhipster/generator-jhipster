@@ -1213,8 +1213,8 @@
                         <artifactId>maven-war-plugin</artifactId>
                         <version>${maven-war-plugin.version}</version>
                         <configuration>
-                            <%_ if (!skipClient) { _%>
                             <failOnMissingWebXml>false</failOnMissingWebXml>
+                            <%_ if (!skipClient) { _%>
                             <warSourceDirectory><% if (clientFramework !== 'angular1') { %><%= CLIENT_DIST_DIR %><% } else { %><%= CLIENT_MAIN_SRC_DIR %><% } %></warSourceDirectory>
                             <webResources>
                                 <resource>
@@ -1262,8 +1262,8 @@
                         <artifactId>maven-war-plugin</artifactId>
                         <version>${maven-war-plugin.version}</version>
                         <configuration>
-                            <%_ if (!skipClient) { _%>
                             <failOnMissingWebXml>false</failOnMissingWebXml>
+                            <%_ if (!skipClient) { _%>
                             <warSourceDirectory><%= CLIENT_DIST_DIR %></warSourceDirectory>
                             <webResources>
                                 <resource>
