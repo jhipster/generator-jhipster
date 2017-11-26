@@ -54,5 +54,5 @@ If you are using JDL, please share that configuration as well.
 
 - [ ] Checking this box is mandatory (this is just to show you read everything)
 
-<!-- Love generator-jhipster? Please consider supporting our collective:
+<!-- Love JHipster? Please consider supporting our collective:
 👉  https://opencollective.com/generator-jhipster/donate -->
