@@ -478,6 +478,7 @@ const files = {
                 'spec/app/account/password-reset/finish/_password-reset-finish.component.spec.ts',
                 'spec/app/account/register/_register.component.spec.ts',
                 'spec/app/account/settings/_settings.component.spec.ts',
+                // login component tests
                 'spec/app/shared/login/_login.component.spec.ts'
             ]
         },
