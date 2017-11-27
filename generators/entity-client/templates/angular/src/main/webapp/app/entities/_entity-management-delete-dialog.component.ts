@@ -35,7 +35,7 @@ import { <%= entityAngularName %>PopupService } from './<%= entityFileName %>-po
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 
 @Component({
-    selector: '<%= jhiPrefix %>-<%= entityFileName %>-delete-dialog',
+    selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-delete-dialog',
     templateUrl: './<%= entityFileName %>-delete-dialog.component.html'
 })
 export class <%= entityAngularName %>DeleteDialogComponent {
@@ -65,7 +65,7 @@ export class <%= entityAngularName %>DeleteDialogComponent {
 }
 
 @Component({
-    selector: '<%=jhiPrefix%>-<%= entityFileName %>-delete-popup',
+    selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-delete-popup',
     template: ''
 })
 export class <%= entityAngularName %>DeletePopupComponent implements OnInit, OnDestroy {

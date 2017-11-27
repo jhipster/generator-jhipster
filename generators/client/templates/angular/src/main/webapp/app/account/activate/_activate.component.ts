@@ -24,7 +24,7 @@ import { ActivateService } from './activate.service';
 import { LoginModalService } from '../../shared';
 
 @Component({
-    selector: '<%=jhiPrefix%>-activate',
+    selector: '<%= jhiPrefixDashed %>-activate',
     templateUrl: './activate.component.html'
 })
 export class ActivateComponent implements OnInit {

@@ -23,7 +23,7 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { LoginModalService } from '../../shared';
 
 @Component({
-    selector: '<%=jhiPrefix%>-register',
+    selector: '<%= jhiPrefixDashed %>-register',
     templateUrl: './social-register.component.html'
 })
 export class SocialRegisterComponent implements OnInit  {

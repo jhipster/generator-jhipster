@@ -19,7 +19,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: '<%=jhiPrefix%>-footer',
+    selector: '<%= jhiPrefixDashed %>-footer',
     templateUrl: './footer.component.html'
 })
 export class FooterComponent {}

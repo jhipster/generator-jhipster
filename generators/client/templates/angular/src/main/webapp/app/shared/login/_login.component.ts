@@ -25,7 +25,7 @@ import { LoginService } from './login.service';
 import { StateStorageService } from '../auth/state-storage.service';
 
 @Component({
-    selector: '<%=jhiPrefix%>-login-modal',
+    selector: '<%= jhiPrefixDashed %>-login-modal',
     templateUrl: './login.component.html'
 })
 export class <%=jhiPrefixCapitalized%>LoginModalComponent implements AfterViewInit {

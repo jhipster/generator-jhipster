@@ -58,7 +58,7 @@ describe('administration', () => {
     <%_ } _%>
 
     it('should load metrics', () => {
-        navBarPage.clickOnAdmin("<%=jhiPrefix%>-metrics");
+        navBarPage.clickOnAdmin("<%= jhiPrefixDashed %>-metrics");
         <%_ if (enableTranslation) { _%>
         const expect1 = /metrics.title/;
         <%_ } else { _%>
@@ -70,7 +70,7 @@ describe('administration', () => {
     });
 
     it('should load health', () => {
-        navBarPage.clickOnAdmin("<%=jhiPrefix%>-health");
+        navBarPage.clickOnAdmin("<%= jhiPrefixDashed %>-health");
         <%_ if (enableTranslation) { _%>
         const expect1 = /health.title/;
         <%_ } else { _%>
@@ -82,7 +82,7 @@ describe('administration', () => {
     });
 
     it('should load configuration', () => {
-        navBarPage.clickOnAdmin("<%=jhiPrefix%>-configuration");
+        navBarPage.clickOnAdmin("<%= jhiPrefixDashed %>-configuration");
         <%_ if (enableTranslation) { _%>
         const expect1 = /configuration.title/;
         <%_ } else { _%>

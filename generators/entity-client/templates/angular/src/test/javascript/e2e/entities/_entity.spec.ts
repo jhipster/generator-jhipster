@@ -151,7 +151,7 @@ describe('<%= entityClass %> e2e test', () => {
 
 export class <%= entityClass %>ComponentsPage {
     createButton = element(by.css('.jh-create-entity'));
-    title = element.all(by.css('<%= jhiPrefix %>-<%= entityFileName %> div h2 span')).first();
+    title = element.all(by.css('<%= jhiPrefixDashed %>-<%= entityFileName %> div h2 span')).first();
 
     clickOnCreateButton() {
         return this.createButton.click();

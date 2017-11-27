@@ -21,7 +21,7 @@ import { SocialService } from './social.service';
 import { CSRFService } from '../auth/csrf.service';
 
 @Component({
-    selector: '<%=jhiPrefix%>-social',
+    selector: '<%= jhiPrefixDashed %>-social',
     templateUrl: './social.component.html'
 })
 export class <%=jhiPrefixCapitalized%>SocialComponent implements OnInit {

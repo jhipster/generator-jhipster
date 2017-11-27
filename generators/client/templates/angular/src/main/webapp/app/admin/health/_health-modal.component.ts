@@ -22,7 +22,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { <%=jhiPrefixCapitalized%>HealthService } from './health.service';
 
 @Component({
-    selector: '<%=jhiPrefix%>-health-modal',
+    selector: '<%= jhiPrefixDashed %>-health-modal',
     templateUrl: './health-modal.component.html'
 })
 export class <%=jhiPrefixCapitalized%>HealthModalComponent {

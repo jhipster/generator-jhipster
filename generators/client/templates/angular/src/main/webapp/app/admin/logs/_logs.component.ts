@@ -22,7 +22,7 @@ import { Log } from './log.model';
 import { LogsService } from './logs.service';
 
 @Component({
-    selector: '<%=jhiPrefix%>-logs',
+    selector: '<%= jhiPrefixDashed %>-logs',
     templateUrl: './logs.component.html',
 })
 export class LogsComponent implements OnInit {

@@ -124,6 +124,7 @@ module.exports = class extends BaseGenerator {
                 context.languages = this.config.get('languages');
                 context.buildTool = this.config.get('buildTool');
                 context.jhiPrefix = this.config.get('jhiPrefix');
+                context.jhiPrefixDashed = _.kebabCase(context.jhiPrefix);
                 context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
                 context.testFrameworks = this.config.get('testFrameworks');
                 // backward compatibility on testing frameworks
@@ -628,7 +629,7 @@ module.exports = class extends BaseGenerator {
                     if (_.isUndefined(relationship.otherEntityModuleName)) {
                         if (relationship.otherEntityNameCapitalized !== 'User') {
                             relationship.otherEntityModuleName = `${context.angularXAppName + relationship.otherEntityNameCapitalized}Module`;
-                            relationship.otherEntityModulePath = _.kebabCase(_.lowerFirst(relationship.otherEntityName) + _.upperFirst(context.entityAngularJSSuffix));
+                            relationship.otherEntityModulePath = _.kebabCase(relationship.otherEntityAngularName);
                         } else {
                             relationship.otherEntityModuleName = `${context.angularXAppName}SharedModule`;
                             relationship.otherEntityModulePath = '../shared';

@@ -23,7 +23,7 @@ import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 import { ITEMS_PER_PAGE, Principal, User, UserService, ResponseWrapper } from '../../shared';
 
 @Component({
-    selector: '<%=jhiPrefix%>-user-mgmt',
+    selector: '<%= jhiPrefixDashed %>-user-mgmt',
     templateUrl: './user-management.component.html'
 })
 export class UserMgmtComponent implements OnInit, OnDestroy {

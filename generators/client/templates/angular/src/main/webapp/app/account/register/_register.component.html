@@ -112,7 +112,7 @@
                             Your password cannot be longer than 50 characters.
                         </small>
                     </div>
-                    <<%=jhiPrefix%>-password-strength-bar [passwordToCheck]="registerAccount.password"></<%=jhiPrefix%>-password-strength-bar>
+                    <<%= jhiPrefixDashed %>-password-strength-bar [passwordToCheck]="registerAccount.password"></<%= jhiPrefixDashed %>-password-strength-bar>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" for="confirmPassword" jhiTranslate="global.form.confirmpassword">New password confirmation</label>
@@ -145,9 +145,9 @@
         <%_ if (enableSocialSignIn) { _%>
         <div class="col-md-4">
             <br/>
-            <<%=jhiPrefix%>-social provider="google"></<%=jhiPrefix%>-social>
-            <<%=jhiPrefix%>-social provider="facebook"></<%=jhiPrefix%>-social>
-            <<%=jhiPrefix%>-social provider="twitter"></<%=jhiPrefix%>-social>
+            <<%= jhiPrefixDashed %>-social provider="google"></<%= jhiPrefixDashed %>-social>
+            <<%= jhiPrefixDashed %>-social provider="facebook"></<%= jhiPrefixDashed %>-social>
+            <<%= jhiPrefixDashed %>-social provider="twitter"></<%= jhiPrefixDashed %>-social>
             <!-- jhipster-needle-add-social-button -->
         </div>
         <%_ } _%>
