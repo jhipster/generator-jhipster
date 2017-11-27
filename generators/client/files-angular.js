@@ -461,7 +461,6 @@ const files = {
                 'spec/helpers/_mock-principal.service.ts',
                 'spec/helpers/_mock-route.service.ts',
                 'spec/helpers/_mock-login.service.ts',
-                'spec/helpers/_mock-router.service.ts',
                 'spec/helpers/_mock-event-manager.service.ts',
                 'spec/helpers/_mock-active-modal.service.ts',
                 'spec/helpers/_mock-state-storage.service.ts'
