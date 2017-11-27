@@ -26,7 +26,7 @@ import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service
 import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
 
 @Component({
-    selector: '<%= jhiPrefix %>-<%= entityFileName %>',
+    selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>',
     templateUrl: './<%= entityFileName %>.component.html'
 })
 export class <%= entityAngularName %>Component implements OnInit, OnDestroy {

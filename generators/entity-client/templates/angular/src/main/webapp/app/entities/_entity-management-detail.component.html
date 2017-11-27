@@ -20,7 +20,7 @@
 <div *ngIf="<%= entityInstance %>">
     <h2><span jhiTranslate="<%= keyPrefix %>.detail.title"><%= entityClassHumanized %></span> {{<%= entityInstance %>.id}}</h2>
     <hr>
-    <<%=jhiPrefix%>-alert-error></<%=jhiPrefix%>-alert-error>
+    <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
     <dl class="row-md jh-entity-details">
         <%_ for (idx in fields) {
         const fieldName = fields[idx].fieldName;

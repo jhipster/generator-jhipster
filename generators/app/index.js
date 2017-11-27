@@ -119,7 +119,7 @@ module.exports = class extends BaseGenerator {
         this.skipClient = this.configOptions.skipClient = this.options['skip-client'] || this.config.get('skipClient');
         this.skipServer = this.configOptions.skipServer = this.options['skip-server'] || this.config.get('skipServer');
         this.skipUserManagement = this.configOptions.skipUserManagement = this.options['skip-user-management'] || this.config.get('skipUserManagement');
-        this.jhiPrefix = this.configOptions.jhiPrefix = this.config.get('jhiPrefix') || this.options['jhi-prefix'];
+        this.jhiPrefix = this.configOptions.jhiPrefix = _.camelCase(this.config.get('jhiPrefix') || this.options['jhi-prefix']);
         this.withEntities = this.options['with-entities'];
         this.skipChecks = this.options['skip-checks'];
         this.blueprint = this.configOptions.blueprint = this.options.blueprint || this.config.get('blueprint');

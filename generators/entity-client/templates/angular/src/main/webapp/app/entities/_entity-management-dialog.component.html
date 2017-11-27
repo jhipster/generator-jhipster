@@ -27,7 +27,7 @@ _%>
                 (click)="clear()">&times;</button>
     </div>
     <div class="modal-body">
-        <<%=jhiPrefix%>-alert-error></<%=jhiPrefix%>-alert-error>
+        <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
         <div class="form-group" [hidden]="!<%=entityInstance %>.id">
             <label for="id" jhiTranslate="global.field.id">ID</label>
             <input type="text" class="form-control" id="id" name="id"

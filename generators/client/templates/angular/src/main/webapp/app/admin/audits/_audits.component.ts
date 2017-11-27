@@ -25,7 +25,7 @@ import { AuditsService } from './audits.service';
 import { ITEMS_PER_PAGE } from '../../shared';
 
 @Component({
-  selector: '<%=jhiPrefix%>-audit',
+  selector: '<%= jhiPrefixDashed %>-audit',
   templateUrl: './audits.component.html'
 })
 export class AuditsComponent implements OnInit {

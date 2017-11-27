@@ -36,7 +36,7 @@
         "polyfills": "app/polyfills.ts",
         "test": "<%= TEST_SRC_DIR %>spec/entry.ts",
         "tsconfig": "../../../tsconfig.json",
-        "prefix": "<%= jhiPrefix %>",
+        "prefix": "<%= jhiPrefixDashed %>",
         "mobile": false,
         "styles": [
             <%_ if (useSass) { _%>

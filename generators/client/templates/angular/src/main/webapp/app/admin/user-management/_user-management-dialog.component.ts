@@ -26,7 +26,7 @@ import { UserModalService } from './user-modal.service';
 import { <% if (enableTranslation) { %>JhiLanguageHelper,<% } %> User, UserService } from '../../shared';
 
 @Component({
-    selector: '<%=jhiPrefix%>-user-mgmt-dialog',
+    selector: '<%= jhiPrefixDashed %>-user-mgmt-dialog',
     templateUrl: './user-management-dialog.component.html'
 })
 export class UserMgmtDialogComponent implements OnInit {
@@ -84,7 +84,7 @@ export class UserMgmtDialogComponent implements OnInit {
 }
 
 @Component({
-    selector: '<%=jhiPrefix%>-user-dialog',
+    selector: '<%= jhiPrefixDashed %>-user-dialog',
     template: ''
 })
 export class UserDialogComponent implements OnInit, OnDestroy {

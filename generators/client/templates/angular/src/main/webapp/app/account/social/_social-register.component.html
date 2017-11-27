@@ -30,7 +30,7 @@
                 <strong>Registration failed!</strong> Please try again later.
             </div>
 
-            <<%=jhiPrefix%>-social *ngIf="success" provider="{{ provider }}"></<%=jhiPrefix%>-social>
+            <<%= jhiPrefixDashed %>-social *ngIf="success" provider="{{ provider }}"></<%= jhiPrefixDashed %>-social>
             <br/>
             <div class="alert alert-warning">
                 <span jhiTranslate="global.messages.info.authenticated.prefix">If you want to </span>

@@ -29,7 +29,7 @@ import { <% if (enableTranslation) { %>JhiLanguageHelper, <% } %>Principal, <% i
 import { VERSION } from '../../app.constants';
 
 @Component({
-    selector: '<%=jhiPrefix%>-navbar',
+    selector: '<%= jhiPrefixDashed %>-navbar',
     templateUrl: './navbar.component.html',
     styleUrls: [
         <%_ if (useSass) { _%>

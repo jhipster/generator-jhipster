@@ -23,7 +23,7 @@ import { <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent } from './metr
 import { <%=jhiPrefixCapitalized%>MetricsService } from './metrics.service';
 
 @Component({
-    selector: '<%=jhiPrefix%>-metrics',
+    selector: '<%= jhiPrefixDashed %>-metrics',
     templateUrl: './metrics.component.html'
 })
 export class <%=jhiPrefixCapitalized%>MetricsMonitoringComponent implements OnInit {

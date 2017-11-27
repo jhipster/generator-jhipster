@@ -23,7 +23,7 @@ import { Subscription } from 'rxjs/Rx';
 import { User, UserService } from '../../shared';
 
 @Component({
-    selector: '<%=jhiPrefix%>-user-mgmt-detail',
+    selector: '<%= jhiPrefixDashed %>-user-mgmt-detail',
     templateUrl: './user-management-detail.component.html'
 })
 export class UserMgmtDetailComponent implements OnInit, OnDestroy {

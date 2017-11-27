@@ -33,7 +33,7 @@ import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 
 @Component({
-    selector: '<%= jhiPrefix %>-<%= entityFileName %>-detail',
+    selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-detail',
     templateUrl: './<%= entityFileName %>-detail.component.html'
 })
 export class <%= entityAngularName %>DetailComponent implements OnInit, OnDestroy {

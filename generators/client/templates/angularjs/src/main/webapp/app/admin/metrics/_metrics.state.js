@@ -26,7 +26,7 @@
     stateConfig.$inject = ['$stateProvider'];
 
     function stateConfig($stateProvider) {
-        $stateProvider.state('<%=jhiPrefix%>-metrics', {
+        $stateProvider.state('<%= jhiPrefixDashed %>-metrics', {
             parent: 'admin',
             url: '/metrics',
             data: {

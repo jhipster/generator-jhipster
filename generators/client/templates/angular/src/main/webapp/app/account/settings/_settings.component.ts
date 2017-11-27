@@ -22,7 +22,7 @@ import { JhiLanguageService } from 'ng-jhipster';
 import { Principal, AccountService<% if (enableTranslation) { %>, JhiLanguageHelper<% } %> } from '../../shared';
 
 @Component({
-    selector: '<%=jhiPrefix%>-settings',
+    selector: '<%= jhiPrefixDashed %>-settings',
     templateUrl: './settings.component.html'
 })
 export class SettingsComponent implements OnInit {
