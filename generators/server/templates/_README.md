@@ -236,7 +236,7 @@ will generate few files:
 ./mvnw generate-sources
 ```
     <%_ } _%>
-    <%_ if (buildTool === 'maven') { _%>
+    <%_ if (buildTool === 'gradle') { _%>
 ```bash
 ./gradlew swagger
 ```
