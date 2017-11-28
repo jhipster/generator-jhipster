@@ -193,7 +193,7 @@ module.exports = class extends BaseGenerator {
             setupconsts() {
                 const context = this.context;
                 const entityName = context.name;
-                // Specific Entity sub-generator constiables
+                // Specific Entity sub-generator constants
                 if (!context.useConfigurationFile) {
                     // no file present, new entity creation
                     this.log(`\nThe entity ${entityName} is being created.\n`);

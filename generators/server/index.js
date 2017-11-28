@@ -223,7 +223,7 @@ module.exports = class extends BaseGenerator {
                     this.baseName = baseName;
                 }
 
-                // force constiables unused by microservice applications
+                // force variables unused by microservice applications
                 if (this.applicationType === 'microservice' || this.applicationType === 'uaa') {
                     this.clusteredHttpSession = false;
                     this.websocket = false;
