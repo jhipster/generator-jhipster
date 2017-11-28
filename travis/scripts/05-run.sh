@@ -7,6 +7,9 @@ launchCurlOrProtractor() {
     retryCount=1
     maxRetry=10
     httpUrl="http://localhost:8080"
+    if [[ ("$JHIPSTER" == 'app-microservice-eureka') || ("$JHIPSTER" == 'app-microservice-consul') ]]; then
+        httpUrl="http://localhost:8081/management/health"
+    fi
 
     rep=$(curl -v "$httpUrl")
     status=$?
@@ -94,7 +97,5 @@ if [ "$RUN_APP" == 1 ]; then
         --logging.level.io.github.jhipster.travis=ERROR &
     sleep 40
 
-    if [[ ("$JHIPSTER" != 'app-microservice-eureka') && ("$JHIPSTER" != 'app-microservice-consul') ]]; then
-        launchCurlOrProtractor
-    fi
+    launchCurlOrProtractor
 fi
