@@ -20,7 +20,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-    selector: '<%=jhiPrefix%>-metrics-modal',
+    selector: '<%= jhiPrefixDashed %>-metrics-modal',
     templateUrl: './metrics-modal.component.html'
 })
 export class <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent implements OnInit {

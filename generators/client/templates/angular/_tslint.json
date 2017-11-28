@@ -115,7 +115,7 @@
         "space-before-function-paren": [true, "never"],
 
         "directive-selector": [true, "attribute", "<%=jhiPrefix%>", "camelCase"],
-        "component-selector": [true, "element", "<%=jhiPrefix%>", "kebab-case"],
+        "component-selector": [true, "element", "<%= jhiPrefixDashed %>", "kebab-case"],
         "use-input-property-decorator": true,
         "use-output-property-decorator": true,
         "use-host-property-decorator": true,

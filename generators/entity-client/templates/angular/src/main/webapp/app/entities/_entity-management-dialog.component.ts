@@ -58,7 +58,7 @@ import { ResponseWrapper } from '../../shared';
 <%_ } _%>
 
 @Component({
-    selector: '<%= jhiPrefix %>-<%= entityFileName %>-dialog',
+    selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-dialog',
     templateUrl: './<%= entityFileName %>-dialog.component.html'
 })
 export class <%= entityAngularName %>DialogComponent implements OnInit {
@@ -191,7 +191,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
 }
 
 @Component({
-    selector: '<%= jhiPrefix %>-<%= entityFileName %>-popup',
+    selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-popup',
     template: ''
 })
 export class <%= entityAngularName %>PopupComponent implements OnInit, OnDestroy {

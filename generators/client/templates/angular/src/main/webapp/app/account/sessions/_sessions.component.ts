@@ -23,7 +23,7 @@ import { SessionsService } from './sessions.service';
 import { Principal } from '../../shared';
 
 @Component({
-    selector: '<%=jhiPrefix%>-sessions',
+    selector: '<%= jhiPrefixDashed %>-sessions',
     templateUrl: './sessions.component.html'
 })
 export class SessionsComponent implements OnInit {

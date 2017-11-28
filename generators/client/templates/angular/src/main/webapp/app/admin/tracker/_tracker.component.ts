@@ -21,7 +21,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { <%=jhiPrefixCapitalized%>TrackerService } from '../../shared';
 
 @Component({
-    selector: '<%=jhiPrefix%>-tracker',
+    selector: '<%= jhiPrefixDashed %>-tracker',
     templateUrl: './tracker.component.html'
 })
 export class <%=jhiPrefixCapitalized%>TrackerComponent implements OnInit, OnDestroy {

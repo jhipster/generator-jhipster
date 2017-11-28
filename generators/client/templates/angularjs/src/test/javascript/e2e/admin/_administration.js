@@ -60,7 +60,7 @@ describe('administration', function () {
     });
 
     it('should load metrics', function () {
-        element(by.css('[ui-sref="<%=jhiPrefix%>-metrics"]')).click();
+        element(by.css('[ui-sref="<%= jhiPrefixDashed %>-metrics"]')).click();
         <%_ if (enableTranslation) { _%>
         const expect1 = /metrics.title/;
         <%_ } else { _%>
@@ -72,7 +72,7 @@ describe('administration', function () {
     });
 
     it('should load health', function () {
-        element(by.css('[ui-sref="<%=jhiPrefix%>-health"]')).click();
+        element(by.css('[ui-sref="<%= jhiPrefixDashed %>-health"]')).click();
         <%_ if (enableTranslation) { _%>
         const expect1 = /health.title/;
         <%_ } else { _%>
@@ -84,7 +84,7 @@ describe('administration', function () {
     });
 
     it('should load configuration', function () {
-        element(by.css('[ui-sref="<%=jhiPrefix%>-configuration"]')).click();
+        element(by.css('[ui-sref="<%= jhiPrefixDashed %>-configuration"]')).click();
         <%_ if (enableTranslation) { _%>
         const expect1 = /configuration.title/;
         <%_ } else { _%>

@@ -2315,6 +2315,7 @@ module.exports = class extends PrivateBase {
         generator.otherModules = context.configOptions.otherModules || [];
         generator.jhiPrefix = context.configOptions.jhiPrefix || context.config.get('jhiPrefix') || context.options['jhi-prefix'];
         generator.jhiPrefixCapitalized = _.upperFirst(generator.jhiPrefix);
+        generator.jhiPrefixDashed = _.kebabCase(generator.jhiPrefix);
         generator.testFrameworks = [];
 
         if (context.options.protractor) generator.testFrameworks.push('protractor');

@@ -24,7 +24,7 @@ import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { Subscription } from 'rxjs/Rx';
 
 @Component({
-    selector: '<%=jhiPrefix%>-alert-error',
+    selector: '<%= jhiPrefixDashed %>-alert-error',
     template: `
         <div class="alerts" role="alert">
             <div *ngFor="let alert of alerts"  [ngClass]="{\'alert.position\': true, \'toast\': alert.toast}">
