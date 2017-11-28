@@ -259,7 +259,7 @@ public class CacheConfiguration {
         config.getMapConfigs().put("default", initializeDefaultMapConfig());
         
         // Full reference is available at: http://docs.hazelcast.org/docs/management-center/3.9/manual/html/Deploying_and_Starting.html
-        config.setManagementCenterConfig(initializeDefaultManagementCenterConfig(jHipsterProperties))
+        config.setManagementCenterConfig(initializeDefaultManagementCenterConfig(jHipsterProperties));
         <%_ if (hibernateCache === 'hazelcast') { _%>
         config.getMapConfigs().put("<%=packageName%>.domain.*", initializeDomainMapConfig(jHipsterProperties));
         <%_ } _%>
