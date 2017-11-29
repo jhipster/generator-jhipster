@@ -100,7 +100,7 @@
         <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
         <%_ } _%>
         <%_ if (gatlingTests) { _%>
-        <gatling-maven-plugin.version>2.2.4</gatling-maven-plugin.version>
+        <gatling-maven-plugin.version>2.2.1</gatling-maven-plugin.version>
         <%_ } _%>
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
         <scala-maven-plugin.version>3.2.2</scala-maven-plugin.version>
@@ -1403,7 +1403,7 @@
                                         <yarnInheritsProxyConfigFromMaven>false</yarnInheritsProxyConfigFromMaven>
                                     <%_ } else if (clientPackageManager === 'npm') { _%>
                                         <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
-                                    <%_ } _%>                                    
+                                    <%_ } _%>
                                 </configuration>
                             </execution>
                             <execution>
@@ -1418,7 +1418,7 @@
                                         <yarnInheritsProxyConfigFromMaven>false</yarnInheritsProxyConfigFromMaven>
                                     <%_ } else if (clientPackageManager === 'npm') { _%>
                                         <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
-                                    <%_ } _%>                                     
+                                    <%_ } _%>
                                 </configuration>
                             </execution>
                             <%_ } _%>
