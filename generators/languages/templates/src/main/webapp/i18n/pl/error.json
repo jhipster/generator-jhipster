@@ -2,12 +2,12 @@
     "error": {
         "title": "Strona błędu!",
         "http": {
-            "400": "Bad request.",
+            "400": "Nieprawidłowe żądanie.",
             "403": "Nie masz praw dostępu do tej strony.",
-            "405": "The HTTP verb you used is not supported for this URL.",
-            "500": "Internal server error."
+            "405": "Typ żądania HTTP nie jest obsługiwany przez ten adres.",
+            "500": "Wewnętrzny błąd serwera."
         },
-        "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",
-        "validation": "Validation error on the server."
+        "concurrencyFailure": "Inny użytkownik zmodyfikował te same dane chwilę przed Tobą. Twoje zmiany zostały odrzucone.",
+        "validation": "Błąd walidacji po stronie serwera."
     }
 }
