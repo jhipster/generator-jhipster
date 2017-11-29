@@ -191,10 +191,20 @@ const angularFiles = {
     test: [
         {
             path: CLIENT_TEST_SRC_DIR,
-            templates: [{
-                file: 'spec/app/entities/_entity-management-detail.component.spec.ts',
-                renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-detail.component.spec.ts`
-            }]
+            templates: [
+                {
+                    file: 'spec/app/entities/_entity-management-detail.component.spec.ts',
+                    renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-detail.component.spec.ts`
+                },
+                {
+                    file: 'spec/app/entities/_entity-management.component.spec.ts',
+                    renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}.component.spec.ts`
+                },
+                {
+                    file: 'spec/app/entities/_entity-management.service.spec.ts',
+                    renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}.service.spec.ts`
+                }
+            ]
         },
         {
             condition: generator => generator.protractorTests,
