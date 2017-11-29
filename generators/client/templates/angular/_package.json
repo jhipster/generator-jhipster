@@ -143,7 +143,7 @@
     "start": "<%= clientPackageManager %> run webpack:dev",
     "serve": "<%= clientPackageManager %> run start",
     "build": "<%= clientPackageManager %> run webpack:prod",
-    "test": "<%= clientPackageManager run lint && karma start src/test/javascript/karma.conf.js",
+    "test": "<%= clientPackageManager %> run lint && karma start src/test/javascript/karma.conf.js",
     "test:watch": "<%= clientPackageManager %> test -- --watch",
     "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --progress --inline --hot --profile --port=9060 --watch-content-base",
     "webpack:build:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --progress --profile",
