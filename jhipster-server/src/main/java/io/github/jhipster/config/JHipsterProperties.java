@@ -201,6 +201,46 @@ public class JHipsterProperties {
 
             private int backupCount = 1;
 
+            private final ManagementCenter managementCenter = new ManagementCenter();
+    
+            public ManagementCenter getManagementCenter() {
+                return managementCenter;
+            }
+            
+            public static class ManagementCenter {
+
+                private boolean enabled = false;
+    
+                private int updateInterval = 3;
+                
+                private String url;
+                
+                public boolean isEnabled() {
+                    return enabled;
+                }
+    
+                public void setEnabled(boolean enabled) {
+                    this.enabled = enabled;
+                }
+                
+                public int getUpdateInterval() {
+                    return updateInterval;
+                }
+    
+                public void setUpdateInterval(int updateInterval) {
+                    this.updateInterval = updateInterval;
+                }
+                
+                public String getUrl() {
+                    return url;
+                }
+    
+                public void setUrl(String url) {
+                    this.url = url;
+                }
+
+            }
+            
             public int getTimeToLiveSeconds() {
                 return timeToLiveSeconds;
             }
