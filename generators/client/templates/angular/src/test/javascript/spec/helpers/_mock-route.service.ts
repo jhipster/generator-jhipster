@@ -29,5 +29,5 @@ export class MockActivatedRoute extends ActivatedRoute {
 }
 
 export class MockRouter {
-    navigate = jasmine.createSpy('navigate');
+    navigateSpy = jasmine.createSpy('navigate');
 }

@@ -699,7 +699,7 @@ ejs-include-regex@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/ejs-include-regex/-/ejs-include-regex-1.0.0.tgz#e2f71575cbfd551ac800b2474c1f62a38e70093a"
 
-ejs-lint@^0.3.0:
+ejs-lint@0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/ejs-lint/-/ejs-lint-0.3.0.tgz#7a8bd5f415f8822d9219b04043b5efc7b593d595"
   dependencies:
