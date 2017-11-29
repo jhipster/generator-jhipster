@@ -386,7 +386,7 @@ function getPropertyInArray(array, name, generator) {
 
 /**
  * Update or create a property by path in a array
- * 
+ *
  * @param {array} array - array in which we want to update
  * @param {string} name - property name to search "format myProperty.level2.level3"
  * @param {string} generator - The generator
@@ -398,7 +398,7 @@ function updatePropertyInArray(array, name, generator, value) {
 
 /**
  * Delete a property by path in a array
- * 
+ *
  * @param {array} array - array in which we want to delete
  * @param {string} name - property name to search "format myProperty.level2.level3"
  * @param {string} generator - The generator
