@@ -33,7 +33,6 @@ import { MockRouter } from '../../../helpers/mock-route.service';
 import { MockEventManager } from '../../../helpers/mock-event-manager.service';
 import { MockActiveModal } from '../../../helpers/mock-active-modal.service';
 
-
 describe('Component Tests', () => {
 
     describe('LoginComponent', () => {
@@ -80,7 +79,8 @@ describe('Component Tests', () => {
                         useValue: MockActiveModal
                     }
                 ]
-            }).overrideTemplate(<%=jhiPrefixCapitalized%>LoginModalComponent, '')
+            })
+            .overrideTemplate(<%=jhiPrefixCapitalized%>LoginModalComponent, '')
             .compileComponents();
 
             beforeEach(() => {

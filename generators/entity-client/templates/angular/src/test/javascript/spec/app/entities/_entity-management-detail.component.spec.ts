@@ -50,7 +50,8 @@ describe('Component Tests', () => {
                     <%= entityAngularName %>Service,
                     JhiEventManager
                 ]
-            }).overrideTemplate(<%= entityAngularName %>DetailComponent, '')
+            })
+            .overrideTemplate(<%= entityAngularName %>DetailComponent, '')
             .compileComponents();
         }));
 

@@ -28,7 +28,8 @@ describe('Component Tests', () => {
                     },
                     UserService
                 ]
-            }).overrideTemplate(UserMgmtDetailComponent, '')
+            })
+            .overrideTemplate(UserMgmtDetailComponent, '')
             .compileComponents();
         }));
 

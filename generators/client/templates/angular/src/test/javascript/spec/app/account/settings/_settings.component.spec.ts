@@ -66,7 +66,8 @@ describe('Component Tests', () => {
                     },
                     <%_ } _%>
                 ]
-            }).overrideTemplate(SettingsComponent, '')
+            })
+            .overrideTemplate(SettingsComponent, '')
             .compileComponents();
         }));
 

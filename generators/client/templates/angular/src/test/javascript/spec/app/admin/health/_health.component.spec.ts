@@ -41,7 +41,8 @@ describe('Component Tests', () => {
                         useValue: null
                     }
                 ]
-            }).overrideTemplate(<%=jhiPrefixCapitalized%>HealthCheckComponent, '')
+            })
+            .overrideTemplate(<%=jhiPrefixCapitalized%>HealthCheckComponent, '')
             .compileComponents();
         }));
 

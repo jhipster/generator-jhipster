@@ -57,7 +57,8 @@ describe('Component Tests', () => {
                         useValue: new ElementRef(null)
                     }
                 ]
-            }).overrideTemplate(PasswordResetFinishComponent, '')
+            })
+            .overrideTemplate(PasswordResetFinishComponent, '')
             .createComponent(PasswordResetFinishComponent);
             comp = fixture.componentInstance;
         });
