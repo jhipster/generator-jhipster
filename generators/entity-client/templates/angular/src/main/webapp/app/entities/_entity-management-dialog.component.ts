@@ -23,6 +23,10 @@ for (const idx in fields) {
         i18nToLoad.push(fields[idx].enumInstance);
     }
 }
+const query = generateEntityQueries(relationships, entityInstance, dto);
+const queries = query.queries;
+const variables = query.variables;
+let hasManyToMany = query.hasManyToMany;
 _%>
 import { Component, OnInit, OnDestroy<% if (fieldsContainImageBlob) { %>, ElementRef<% } %> } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -30,7 +34,7 @@ import { Response } from '@angular/http';
 
 import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
+import { JhiEventManager<% if (queries && queries.length > 0) { %>, JhiAlertService<% } %><% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
 
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { <%= entityAngularName %>PopupService } from './<%= entityFileName %>-popup.service';
@@ -66,10 +70,6 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     <%= entityInstance %>: <%= entityAngularName %>;
     isSaving: boolean;
     <%_
-    const query = generateEntityQueries(relationships, entityInstance, dto);
-    const queries = query.queries;
-    const variables = query.variables;
-    let hasManyToMany = query.hasManyToMany;
     for (const idx in variables) { %>
     <%- variables[idx] %>
     <%_ } _%>
@@ -85,6 +85,9 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         public activeModal: NgbActiveModal,
         <%_ if (fieldsContainBlob) { _%>
         private dataUtils: JhiDataUtils,
+        <%_ } _%>
+        <%_ if (queries && queries.length > 0) { _%>
+        private jhiAlertService: JhiAlertService,
         <%_ } _%>
         private <%= entityInstance %>Service: <%= entityAngularName %>Service,
         <%_ Object.keys(differentRelationships).forEach(key => {
@@ -159,6 +162,12 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     private onSaveError() {
         this.isSaving = false;
     }
+    <%_ if (queries && queries.length > 0) { _%>
+
+    private onError(error: any) {
+        this.jhiAlertService.error(error.message, null, null);
+    }
+    <%_ } _%>
     <%_
     const entitiesSeen = [];
     for (idx in relationships) {
