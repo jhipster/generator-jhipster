@@ -77,7 +77,7 @@
             "gets": "Odczyty",
             "puts": "Zapisy",
             "removals": "Usunięcia",
-            "evictions": "Eksmisje"
+            "evictions": "Eksmisje",
             "hitPercent": "Trafienia %",
             "missPercent": "Nietrafionych %",
             "averageGetTime": "Średni czas odczytu (µs)",
