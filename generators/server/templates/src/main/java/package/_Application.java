@@ -34,7 +34,9 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 <%_ if (clusteredHttpSession === 'hazelcast') { _%>
 import org.springframework.boot.autoconfigure.hazelcast.HazelcastAutoConfiguration;
 <%_ } _%>
+<%_ if (databaseType === 'sql') { _%>
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
+<%_ } _%>
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 <%_ if (serviceDiscoveryType) { _%>
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
