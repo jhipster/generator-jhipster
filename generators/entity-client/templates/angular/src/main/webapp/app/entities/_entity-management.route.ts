@@ -30,12 +30,15 @@ if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate
     hasDate = true;
 }
 _%>
+<%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
+<%_ } _%>
+import { <% if (pagination === 'pagination' || pagination === 'pager') { %>Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, <% } %>Routes } from '@angular/router';
+<%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
+import { JhiPaginationUtil } from 'ng-jhipster';
+<%_ } _%>
 
 import { UserRouteAccessService } from '../../shared';
-import { JhiPaginationUtil } from 'ng-jhipster';
-
 import { <%= entityAngularName %>Component } from './<%= entityFileName %>.component';
 import { <%= entityAngularName %>DetailComponent } from './<%= entityFileName %>-detail.component';
 import { <%= entityAngularName %>PopupComponent } from './<%= entityFileName %>-dialog.component';

@@ -30,7 +30,7 @@ import { Response } from '@angular/http';
 
 import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager, JhiAlertService<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
+import { JhiEventManager<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
 
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { <%= entityAngularName %>PopupService } from './<%= entityFileName %>-popup.service';
@@ -86,7 +86,6 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         <%_ if (fieldsContainBlob) { _%>
         private dataUtils: JhiDataUtils,
         <%_ } _%>
-        private jhiAlertService: JhiAlertService,
         private <%= entityInstance %>Service: <%= entityAngularName %>Service,
         <%_ Object.keys(differentRelationships).forEach(key => {
             if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
@@ -159,10 +158,6 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
 
     private onSaveError() {
         this.isSaving = false;
-    }
-
-    private onError(error: any) {
-        this.jhiAlertService.error(error.message, null, null);
     }
     <%_
     const entitiesSeen = [];

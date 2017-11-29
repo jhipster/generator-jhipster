@@ -41,16 +41,16 @@ describe('Component Tests', () => {
 
         describe('OnInit', () => {
             it('Should call load all on init', () => {
-            // GIVEN
+                // GIVEN
 
-            spyOn(service, 'find').and.returnValue(Observable.of(new User(1, 'user', 'first', 'last', 'first@last.com', true, 'en', ['ROLE_USER'], 'admin', null, null, null)));
+                spyOn(service, 'find').and.returnValue(Observable.of(new User(1, 'user', 'first', 'last', 'first@last.com', true, 'en', ['ROLE_USER'], 'admin', null, null, null)));
 
-            // WHEN
-            comp.ngOnInit();
+                // WHEN
+                comp.ngOnInit();
 
-            // THEN
-            expect(service.find).toHaveBeenCalledWith('user');
-            expect(comp.user).toEqual(jasmine.objectContaining({ id: 1, login: 'user', firstName: 'first', lastName: 'last', email: 'first@last.com', activated: true, langKey: 'en', authorities: ['ROLE_USER'], createdBy: 'admin', createdDate: null, lastModifiedBy: null, lastModifiedDate: null, password: null }));
+                // THEN
+                expect(service.find).toHaveBeenCalledWith('user');
+                expect(comp.user).toEqual(jasmine.objectContaining({ id: 1, login: 'user', firstName: 'first', lastName: 'last', email: 'first@last.com', activated: true, langKey: 'en', authorities: ['ROLE_USER'], createdBy: 'admin', createdDate: null, lastModifiedBy: null, lastModifiedDate: null, password: null }));
             });
         });
     });
