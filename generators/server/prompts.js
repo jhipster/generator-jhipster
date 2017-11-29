@@ -157,7 +157,7 @@ function askForServerSideOpts(meta) {
             }
         },
         {
-            when: response => applicationType === 'microservice' || ((response.authenticationType === 'uaa' || response.authenticationType === 'oauth2') && applicationType === 'gateway'),
+            when: response => applicationType === 'microservice' || (response.authenticationType === 'uaa' && applicationType === 'gateway'),
             type: 'list',
             name: 'databaseType',
             message: `Which ${chalk.yellow('*type*')} of database would you like to use?`,
