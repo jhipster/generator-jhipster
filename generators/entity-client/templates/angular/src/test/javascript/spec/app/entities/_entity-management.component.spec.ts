@@ -19,7 +19,10 @@
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { Observable } from 'rxjs/Rx';
-import { JhiDataUtils, JhiEventManager, JhiAlertService } from 'ng-jhipster';
+import { ActivatedRoute } from '@angular/router';
+import { JhiParseLinks, JhiDateUtils, JhiDataUtils, JhiEventManager, JhiAlertService } from 'ng-jhipster';
+
+import { MockActivatedRoute } from '../../../helpers/mock-route.service';
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { Principal, AccountService } from '../../../../../../main/webapp/app/shared';
 import { <%= entityAngularName %>Component } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.component';
@@ -42,9 +45,15 @@ describe('Component Tests', () => {
                         provide: JhiAlertService,
                         useValue: null
                     },
+                    {
+                        provide: ActivatedRoute,
+                        useValue: new MockActivatedRoute({id: 123})
+                    },
                     AccountService,
                     Principal,
                     JhiDataUtils,
+                    JhiDateUtils,
+                    JhiParseLinks,
                     <%= entityAngularName %>Service,
                     JhiEventManager
                 ]
