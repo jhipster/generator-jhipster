@@ -19,10 +19,11 @@
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { Observable } from 'rxjs/Rx';
-import { ActivatedRoute } from '@angular/router';
+import { Headers } from '@angular/http';
+import { ActivatedRoute, Router } from '@angular/router';
 import { JhiParseLinks, JhiDateUtils, JhiDataUtils, JhiEventManager, JhiAlertService } from 'ng-jhipster';
 
-import { MockActivatedRoute } from '../../../helpers/mock-route.service';
+import { MockActivatedRoute, MockRouter } from '../../../helpers/mock-route.service';
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { Principal, AccountService } from '../../../../../../main/webapp/app/shared';
 import { <%= entityAngularName %>Component } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.component';
@@ -49,6 +50,10 @@ describe('Component Tests', () => {
                         provide: ActivatedRoute,
                         useValue: new MockActivatedRoute({id: 123})
                     },
+                    {
+                        provide: Router,
+                        useValue: new MockRouter()
+                    },
                     AccountService,
                     Principal,
                     JhiDataUtils,
@@ -72,8 +77,12 @@ describe('Component Tests', () => {
             it('Should call load all on init', () => {
                 // GIVEN
 
-                spyOn(service, 'query').and.returnValue(Observable.of({ json: [new <%= entityAngularName %>(<%_
-                if (databaseType === 'sql' || databaseType === 'no') { %>10<% } else if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { %>'aaa'<% } %>)] }));
+                const headers = new Headers();
+                headers.append('link', 'link;link');
+                spyOn(service, 'query').and.returnValue(Observable.of({
+                    json: [new <%= entityAngularName %>(<%_ if (databaseType === 'sql' || databaseType === 'no') { %>10<% } else if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { %>'aaa'<% } %>)],
+                    headers
+                }));
 
                 // WHEN
                 comp.ngOnInit();
