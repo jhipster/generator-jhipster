@@ -27,7 +27,7 @@ const UnaryOptions = require('../../../lib/core/jhipster/unary_options').UNARY_O
 const BinaryOptions = require('../../../lib/core/jhipster/binary_options').BINARY_OPTIONS;
 const BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').BINARY_OPTION_VALUES;
 
-describe('::parse', () => {
+describe('::parseEntities', () => {
   const entities = {
     Employee: Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Employee.json'),
     Country: Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Country.json'),
@@ -116,6 +116,13 @@ describe('::parse', () => {
           option =>
             option.name === UnaryOptions.NO_FLUENT_METHOD &&
           option.entityNames.has('Employee')
+        ).length
+      ).to.eq(1);
+      expect(
+        content.getOptions().filter(
+          option =>
+            option.name === UnaryOptions.FILTER &&
+            option.entityNames.has('Employee')
         ).length
       ).to.eq(1);
     });
