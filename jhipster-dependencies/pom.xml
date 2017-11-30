@@ -67,7 +67,7 @@
         <cucumber.version>1.2.5</cucumber.version>
         <dropwizard-metrics.version>3.2.5</dropwizard-metrics.version>
         <gatling.version>2.2.5</gatling.version>
-        <guava.version>23.0</guava.version>
+        <guava.version>23.5-jre</guava.version>
         <hazelcast-hibernate52.version>1.2.2</hazelcast-hibernate52.version>
         <hazelcast-wm.version>3.9</hazelcast-wm.version>
         <hibernate.version>5.2.12.Final</hibernate.version>
