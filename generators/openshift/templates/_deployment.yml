@@ -300,7 +300,7 @@ objects:
       type: LoadBalancer
       ports:
       - name: http
-        port: "${APP_PORT}"
+        port: 8080
   -
     apiVersion: v1
     kind: Route
