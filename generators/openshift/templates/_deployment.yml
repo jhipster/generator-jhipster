@@ -280,7 +280,6 @@ objects:
                tcpSocket:
                  port: 8080
                timeoutSeconds: 1            
-<%_ if (app.prodDatabaseType != 'mssql') { _%>
   -
     apiVersion: v1
     kind: Service
@@ -315,4 +314,3 @@ objects:
       port:
         targetPort: "http"
       wildcardPolicy: None
-<%_ } _%>
