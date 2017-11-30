@@ -45,7 +45,7 @@ describe('administration', () => {
     });
     <%_ if (authenticationType !== 'oauth2') { _%>
     it('should load user management', () => {
-        navBarPage.clickOnAdmin("user-management");
+        navBarPage.clickOnAdmin('user-management');
         <%_ if (enableTranslation) { _%>
         const expect1 = /userManagement.home.title/;
         <%_ } else { _%>
@@ -58,7 +58,7 @@ describe('administration', () => {
     <%_ } _%>
 
     it('should load metrics', () => {
-        navBarPage.clickOnAdmin("<%= jhiPrefixDashed %>-metrics");
+        navBarPage.clickOnAdmin('<%= jhiPrefixDashed %>-metrics');
         <%_ if (enableTranslation) { _%>
         const expect1 = /metrics.title/;
         <%_ } else { _%>
@@ -70,7 +70,7 @@ describe('administration', () => {
     });
 
     it('should load health', () => {
-        navBarPage.clickOnAdmin("<%= jhiPrefixDashed %>-health");
+        navBarPage.clickOnAdmin('<%= jhiPrefixDashed %>-health');
         <%_ if (enableTranslation) { _%>
         const expect1 = /health.title/;
         <%_ } else { _%>
@@ -82,7 +82,7 @@ describe('administration', () => {
     });
 
     it('should load configuration', () => {
-        navBarPage.clickOnAdmin("<%= jhiPrefixDashed %>-configuration");
+        navBarPage.clickOnAdmin('<%= jhiPrefixDashed %>-configuration');
         <%_ if (enableTranslation) { _%>
         const expect1 = /configuration.title/;
         <%_ } else { _%>
@@ -95,7 +95,7 @@ describe('administration', () => {
 
 <%_ if (devDatabaseType !== 'cassandra') { _%>
     it('should load audits', () => {
-        navBarPage.clickOnAdmin("audits");
+        navBarPage.clickOnAdmin('audits');
         <%_ if (enableTranslation) { _%>
         const expect1 = /audits.title/;
         <%_ } else { _%>
@@ -108,7 +108,7 @@ describe('administration', () => {
 
 <%_ } _%>
     it('should load logs', () => {
-        navBarPage.clickOnAdmin("logs");
+        navBarPage.clickOnAdmin('logs');
         <%_ if (enableTranslation) { _%>
         const expect1 = /logs.title/;
         <%_ } else { _%>

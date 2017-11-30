@@ -16,14 +16,17 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { browser, element, by, $ } from 'protractor';
+import { browser, element, by } from 'protractor';
 import { NavBarPage } from './../page-objects/jhi-page-objects';
-<%_ for (let field of fields) {
-    if (field.fieldTypeBlobContent !== 'text') {
-        %>const path = require('path');<%
-        break;
+<%_ let fieldHasByte = false;
+fields.forEach((field) => {
+    if (['byte[]', 'ByteBuffer'].includes(field.fieldType)) {
+        fieldHasByte = true;
     }
-} %>
+});
+if (fieldHasByte) {
+    %>import * as path from 'path';<%
+} _%>
 <%_
 let elementGetter = `getText()`;
 let openBlockComment = ``;
@@ -44,13 +47,10 @@ describe('<%= entityClass %> e2e test', () => {
     let navBarPage: NavBarPage;
     let <%= entityInstance %>DialogPage: <%= entityClass %>DialogPage;
     let <%= entityInstance %>ComponentsPage: <%= entityClass %>ComponentsPage;
-    <%_ for (let field of fields) {
-        if (field.fieldTypeBlobContent !== 'text') { _%>
+    <%_ if (fieldHasByte) { _%>
     const fileToUpload = '../../../../main/webapp/content/images/logo-jhipster.png';
     const absolutePath = path.resolve(__dirname, fileToUpload);
-    <%  break;
-        }
-    } %>
+    <%_ } _%>
 
     beforeAll(() => {
         browser.get('/');
@@ -105,7 +105,7 @@ describe('<%= entityClass %> e2e test', () => {
         <%= entityInstance %>DialogPage.set<%= fieldNameCapitalized %>Input(12310020012301);
         expect(<%= entityInstance %>DialogPage.get<%= fieldNameCapitalized %>Input()).toMatch('2001-12-31T02:30');
         <%_ } else if (fieldType === 'Boolean') { _%>
-        <%= entityInstance %>DialogPage.get<%= fieldNameCapitalized %>Input().isSelected().then(function (selected) {
+        <%= entityInstance %>DialogPage.get<%= fieldNameCapitalized %>Input().isSelected().then((selected) => {
             if (selected) {
                 <%= entityInstance %>DialogPage.get<%= fieldNameCapitalized %>Input().click();
                 expect(<%= entityInstance %>DialogPage.get<%= fieldNameCapitalized %>Input().isSelected()).toBeFalsy();
@@ -142,7 +142,7 @@ describe('<%= entityClass %> e2e test', () => {
         <%_ }); _%>
         <%= entityInstance %>DialogPage.save();
         expect(<%= entityInstance %>DialogPage.getSaveButton().isPresent()).toBeFalsy();
-    }); <%= closeBlockComment %>
+    });<%= closeBlockComment %>
 
     afterAll(() => {
         navBarPage.autoSignOut();
@@ -207,36 +207,36 @@ export class <%= entityClass %>DialogPage {
             let ngModelOption = '';
     _%>
             <%_ if (fieldType === 'Boolean') { _%>
-    get<%= fieldNameCapitalized %>Input = function () {
+    get<%= fieldNameCapitalized %>Input = function() {
         return this.<%= fieldName %>Input;
     }
             <%_ } else if (fieldIsEnum) { _%>
-    set<%= fieldNameCapitalized %>Select = function (<%= fieldName %>) {
+    set<%= fieldNameCapitalized %>Select = function(<%= fieldName %>) {
         this.<%= fieldName %>Select.sendKeys(<%= fieldName %>);
     }
 
-    get<%= fieldNameCapitalized %>Select = function () {
+    get<%= fieldNameCapitalized %>Select = function() {
         return this.<%= fieldName %>Select.element(by.css('option:checked')).getText();
     }
 
-    <%=fieldName %>SelectLastOption = function () {
+    <%=fieldName %>SelectLastOption = function() {
         this.<%=fieldName %>Select.all(by.tagName('option')).last().click();
     }
     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
-    set<%= fieldNameCapitalized %>Input = function (<%= fieldName %>) {
+    set<%= fieldNameCapitalized %>Input = function(<%= fieldName %>) {
         this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
     }
 
-    get<%= fieldNameCapitalized %>Input = function () {
+    get<%= fieldNameCapitalized %>Input = function() {
         return this.<%= fieldName %>Input.getAttribute('value');
     }
 
     <%_ } else { _%>
-    set<%= fieldNameCapitalized %>Input = function (<%= fieldName %>) {
+    set<%= fieldNameCapitalized %>Input = function(<%= fieldName %>) {
         this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
     }
 
-    get<%= fieldNameCapitalized %>Input = function () {
+    get<%= fieldNameCapitalized %>Input = function() {
         return this.<%= fieldName %>Input.getAttribute('value');
     }
 
@@ -249,19 +249,19 @@ export class <%= entityClass %>DialogPage {
         const relationshipFieldName = relationship.relationshipFieldName;
         const relationshipNameCapitalized = relationship.relationshipNameCapitalized; _%>
     <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'many-to-many' && ownerSide === true) || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
-    <%=relationshipName %>SelectLastOption = function () {
+    <%=relationshipName %>SelectLastOption = function() {
         this.<%=relationshipName %>Select.all(by.tagName('option')).last().click();
     }
 
-    <%=relationshipName %>SelectOption = function (option) {
+    <%=relationshipName %>SelectOption = function(option) {
         this.<%=relationshipName %>Select.sendKeys(option);
     }
 
-    get<%=relationshipNameCapitalized %>Select = function () {
+    get<%=relationshipNameCapitalized %>Select = function() {
         return this.<%=relationshipName %>Select;
     }
 
-    get<%=relationshipNameCapitalized %>SelectedOption = function () {
+    get<%=relationshipNameCapitalized %>SelectedOption = function() {
         return this.<%=relationshipName %>Select.element(by.css('option:checked')).getText();
     }
 
