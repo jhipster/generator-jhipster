@@ -142,11 +142,6 @@ export const gatewayRoutes = () => ({
   payload: axios.get('/api/gateway/routes')
 });
 
-export const getLoggers = () => ({
-  type: ACTION_TYPES.FETCH_LOGS,
-  payload: axios.get('/management/logs')
-});
-
 export const systemHealth = () => ({
   type: ACTION_TYPES.FETCH_HEALTH,
   payload: axios.get('/management/health')
@@ -162,6 +157,11 @@ export const systemThreadDump = () => ({
   payload: axios.get('/management/dump')
 });
 
+export const getLoggers = () => ({
+  type: ACTION_TYPES.FETCH_LOGS,
+  payload: axios.get('/management/logs')
+});
+
 export const changeLogLevel = (name, level) => {
   const body = {
     level,
@@ -170,7 +170,7 @@ export const changeLogLevel = (name, level) => {
   return async dispatch => {
     await dispatch({
       type: ACTION_TYPES.FETCH_LOGS_CHANGE_LEVEL,
-      payload: axios.put('/management/jhipster/logs', body)
+      payload: axios.put('/management/logs', body)
     });
     dispatch(getLoggers());
   };
