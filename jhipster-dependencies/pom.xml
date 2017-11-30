@@ -60,7 +60,7 @@
         <!-- Dependency versions -->
         <assertj.version>3.8.0</assertj.version>
         <bucket4j.version>3.0.2</bucket4j.version>
-        <cassandra-driver.version>3.3.1</cassandra-driver.version>
+        <cassandra-driver.version>3.3.2</cassandra-driver.version>
         <cassandra-unit-spring.version>3.3.0.2</cassandra-unit-spring.version>
         <couchmove.version>1.0.1</couchmove.version>
         <couchbase-testcontainer.version>1.0</couchbase-testcontainer.version>
