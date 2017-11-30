@@ -83,7 +83,7 @@
         <logstash-logback-encoder.version>4.11</logstash-logback-encoder.version>
         <lz4-java.version>1.4.0</lz4-java.version>
         <metrics-spring.version>3.1.3</metrics-spring.version>
-        <mongobee.version>0.12</mongobee.version>
+        <mongobee.version>0.13</mongobee.version>
         <mssql-jdbc.version>6.2.2.jre8</mssql-jdbc.version>
         <oracle-jdbc.version>12.2.0.1</oracle-jdbc.version>
         <problem-spring-web.version>0.22.0</problem-spring-web.version>
