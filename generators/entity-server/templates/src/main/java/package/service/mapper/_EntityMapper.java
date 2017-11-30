@@ -46,7 +46,7 @@ _%>
 
     @Mapping(source = "<%= relationshipName %>.id", target = "<%= relationships[idx].relationshipFieldName %>Id")<% if (relationships[idx].otherEntityFieldCapitalized !='Id' && relationships[idx].otherEntityFieldCapitalized !== '') { %>
     @Mapping(source = "<%= relationshipName %>.<%= relationships[idx].otherEntityField %>", target = "<%= relationships[idx].relationshipFieldName %><%= relationships[idx].otherEntityFieldCapitalized %>")<% } } } %>
-    <% if(renMapAnotEnt === true) { %><%= entityClass %>DTO toDto(<%= entityClass %> <%= entityInstance %>); <% } %>
+    <% if(renMapAnotEnt === true) { %><%= entityClass %>DTO toDto(<%= entityClass %> <%= entityInstance %>);<% } %>
 <%_
 // DTO -> entity mapping
 var renMapAnotDto = false;  //Render Mapping Annotation during DTO to Entity conversion?
