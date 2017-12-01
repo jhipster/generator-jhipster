@@ -43,7 +43,8 @@
     "pretest": "npm run lint",
     "test": "npm run test:unit -- test/*.spec.js",
     "test:unit": "mocha --timeout 20000 --slow 0 --reporter spec",
-    "jsdoc": "jsdoc --configure jsdoc-conf.json"
+    "jsdoc": "jsdoc --configure jsdoc-conf.json",
+    "postinstall": "opencollective postinstall"
   },
   "dependencies": {
     "chalk": "2.3.0",
@@ -59,6 +60,7 @@
     "lodash": "4.17.4",
     "meow": "3.7.0",
     "mkdirp": "0.5.1",
+    "opencollective": "1.0.3",
     "pluralize": "7.0.0",
     "randexp": "0.4.6",
     "semver": "5.4.1",
@@ -83,5 +85,10 @@
     "node": ">=6.9.0",
     "npm": ">=2.14.2"
   },
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/generator-jhipster",
+    "logo": "https://opencollective.com/opencollective/logo.txt"
+  }
 }
