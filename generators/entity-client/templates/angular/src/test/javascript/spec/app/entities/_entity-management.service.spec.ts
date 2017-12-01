@@ -17,16 +17,7 @@
  limitations under the License.
 -%>
 <%_
-let tsKeyId;
-if (pkType === 'String') {
-    if (prodDatabaseType === 'cassandra') {
-        tsKeyId = "'9fec3727-3421-4967-b213-ba36557ca194'";
-    } else {
-        tsKeyId = "'123'";
-    }
-} else {
-    tsKeyId = 123;
-}
+const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
 _%>
 /* tslint:disable max-line-length */
 import { TestBed, async } from '@angular/core/testing';

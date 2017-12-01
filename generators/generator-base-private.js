@@ -871,4 +871,20 @@ module.exports = class extends Generator {
             done();
         });
     }
+
+    /**
+     * Generate a primary key, according to the type
+     *
+     * @param {any} pkType - the type of the primary key
+     * @param {any} prodDatabaseType - the database type
+     */
+    generateTestEntityId(pkType, prodDatabaseType) {
+        if (pkType === 'String') {
+            if (prodDatabaseType === 'cassandra') {
+                return '\'9fec3727-3421-4967-b213-ba36557ca194\'';
+            }
+            return '\'123\'';
+        }
+        return 123;
+    }
 };
