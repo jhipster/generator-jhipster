@@ -15,7 +15,7 @@ Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submit
 
 ## Sponsors
 
-Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/generator-jhipster#sponsor)] or [[learn more about sponsoring the project](http://www.jhipster.tech/sponsors/)].
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [Become a sponsor](https://opencollective.com/generator-jhipster#sponsor) or [learn more about sponsoring the project](http://www.jhipster.tech/sponsors/).
 
 <a href="https://opencollective.com/generator-jhipster/sponsor/0/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/0/avatar.svg"></a>
 <a href="https://opencollective.com/generator-jhipster/sponsor/1/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/1/avatar.svg"></a>
@@ -30,7 +30,7 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 
 ## Backers
 
-Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/generator-jhipster#backer)] or [[learn more about becoming a backer](http://www.jhipster.tech/sponsors/)]
+Thank you to all our backers! 🙏 [Become a backer](https://opencollective.com/generator-jhipster#backer) or [learn more about becoming a backer](http://www.jhipster.tech/sponsors/).
 
 <a href="https://opencollective.com/generator-jhipster#backers" target="_blank"><img src="https://opencollective.com/generator-jhipster/backers.svg?width=890"></a>
 
