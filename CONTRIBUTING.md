@@ -10,6 +10,8 @@ Are you ready to contribute to JHipster? We'd love to have you on board, and we 
  - [Coding Rules](#rules)
  - [Git Commit Guidelines](#commit)
 
+And don't forget we also accept [financial contributions to the project](http://www.jhipster.tech/sponsors/) using OpenCollective.
+
 ## <a name="question"></a> Questions and help
 This is the JHipster bug tracker, and it is used for [Issues and Bugs](#issue) and for [Feature Requests](#feature). It is **not** a help desk or a support forum.
 
