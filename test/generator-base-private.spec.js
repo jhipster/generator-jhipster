@@ -93,4 +93,22 @@ export * from './entityFolderName/entityFileName.state';`;
             });
         });
     });
+
+    describe('generateTestEntityId', () => {
+        describe('when called with int', () => {
+            it('return 123', () => {
+                expect(BaseGenerator.generateTestEntityId('int')).to.equal(123);
+            });
+        });
+        describe('when called with String', () => {
+            it('return \'123\'', () => {
+                expect(BaseGenerator.generateTestEntityId('String')).to.equal('\'123\'');
+            });
+        });
+        describe('when called with String and cassandra', () => {
+            it('return \'9fec3727-3421-4967-b213-ba36557ca194\'', () => {
+                expect(BaseGenerator.generateTestEntityId('String', 'cassandra')).to.equal('\'9fec3727-3421-4967-b213-ba36557ca194\'');
+            });
+        });
+    });
 });

@@ -27,11 +27,11 @@ import { Router } from '@angular/router';
     <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
-import { AuthServerProvider } from '../../shared/auth/auth-session.service';
-import { StateStorageService } from '../../shared/auth/state-storage.service';
     <%_ if (authenticationType === 'session') { _%>
+import { AuthServerProvider } from '../../shared/auth/auth-session.service';
 import { LoginModalService } from '../../shared/login/login-modal.service';
     <%_ } _%>
+import { StateStorageService } from '../../shared/auth/state-storage.service';
 <%_ } _%>
 
 export class AuthExpiredInterceptor extends JhiHttpInterceptor {

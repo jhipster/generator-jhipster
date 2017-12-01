@@ -66,7 +66,8 @@ currentAccount: any;
             this.predicate = data.pagingParams.predicate;
         });
         <%_ if (searchEngine === 'elasticsearch') { _%>
-        this.currentSearch = activatedRoute.snapshot.params['search'] ? activatedRoute.snapshot.params['search'] : '';
+        this.currentSearch = this.activatedRoute.snapshot && this.activatedRoute.snapshot.params['search'] ?
+            this.activatedRoute.snapshot.params['search'] : '';
         <%_ } _%>
         <%_ } _%>
     }

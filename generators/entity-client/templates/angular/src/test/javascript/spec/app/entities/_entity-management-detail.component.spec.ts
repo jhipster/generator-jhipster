@@ -16,6 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_
+const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
+_%>
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { DatePipe } from '@angular/common';
@@ -45,7 +48,7 @@ describe('Component Tests', () => {
                     DatePipe,
                     {
                         provide: ActivatedRoute,
-                        useValue: new MockActivatedRoute({id: 123})
+                        useValue: new MockActivatedRoute({id: <%- tsKeyId %>})
                     },
                     <%= entityAngularName %>Service,
                     JhiEventManager
@@ -72,7 +75,7 @@ describe('Component Tests', () => {
                 comp.ngOnInit();
 
                 // THEN
-                expect(service.find).toHaveBeenCalledWith(123);
+                expect(service.find).toHaveBeenCalledWith(<%- tsKeyId %>);
                 expect(comp.<%= entityInstance %>).toEqual(jasmine.objectContaining({id: <%
                 if (databaseType === 'sql' || databaseType === 'no') { %>10<% } else if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { %>'aaa'<% } %>}));
             });
