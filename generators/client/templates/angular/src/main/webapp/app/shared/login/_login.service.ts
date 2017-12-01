@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-<%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation && !(authenticationType === 'oauth2')) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
 <%_ } _%>
 
