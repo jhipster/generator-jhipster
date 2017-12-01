@@ -56,7 +56,7 @@ public abstract class AbstractAuditingEntity implements Serializable {
     private String createdBy;
 
     @CreatedDate<% if (databaseType === 'sql') { %>
-    @Column(name = "created_date", nullable = false)<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
+    @Column(name = "created_date", nullable = false, updatable = false)<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
     @Field("created_date")<% } %>
     @JsonIgnore
     private Instant createdDate = Instant.now();
