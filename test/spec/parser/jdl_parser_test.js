@@ -93,6 +93,18 @@ describe('JDLParser', () => {
                 name: 'departmentName',
                 type: FieldTypes.STRING,
                 validations: { required: new JDLValidation({ name: Validations.REQUIRED }) }
+              }),
+              description: new JDLField({
+                name: 'description',
+                type: FieldTypes.TEXT_BLOB
+              }),
+              advertisement: new JDLField({
+                name: 'advertisement',
+                type: FieldTypes.BLOB
+              }),
+              logo: new JDLField({
+                name: 'logo',
+                type: FieldTypes.IMAGE_BLOB
               })
             }
           }));

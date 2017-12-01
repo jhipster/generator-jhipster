@@ -90,7 +90,7 @@ describe('::convert', () => {
         }
         expect(content.Department.relationships.length).to.eq(2);
         expect(content.Department.relationships[1].javadoc).to.eq('A relationship');
-        expect(content.Department.fields.length).to.eq(2);
+        expect(content.Department.fields.length).to.eq(5);
         expect(content.Department.entityTableName).to.eq('department');
         expect(content.Employee.javadoc).to.eq('The Employee entity.\nSecond line in javadoc.');
         expect(content.Employee.pagination).to.eq('infinite-scroll');

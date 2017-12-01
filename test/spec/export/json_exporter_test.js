@@ -85,6 +85,21 @@ describe('::exportToJSON', () => {
             fieldName: 'departmentName',
             fieldType: 'String',
             fieldValidateRules: ['required']
+          },
+          {
+            fieldName: 'description',
+            fieldType: 'byte[]',
+            fieldTypeBlobContent: 'text'
+          },
+          {
+            fieldName: 'advertisement',
+            fieldType: 'byte[]',
+            fieldTypeBlobContent: 'any'
+          },
+          {
+            fieldName: 'logo',
+            fieldType: 'byte[]',
+            fieldTypeBlobContent: 'image'
           }
         ]);
         expect(department.dto).to.eq('no');
