@@ -3,6 +3,10 @@
 
 Greetings, Java Hipster!
 
+Full documentation and information is available on our website at [http://www.jhipster.tech/][jhipster-url]
+
+Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submitting an issue. If your issue is a bug, please use the bug template pre-populated [here](https://github.com/jhipster/generator-jhipster/issues/new). For feature requests and queries you can use [this template][feature-template].
+
 [![NPM version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url-main]
 [![Dependency Status][daviddm-image]][daviddm-url]
@@ -51,10 +55,6 @@ Additional builds on [hipster-labs/jhipster-travis-build](https://github.com/hip
 [![sonar-bugs][sonar-bugs]][sonar-url]
 [![sonar-vulnerabilities][sonar-vulnerabilities]][sonar-url]
 
-
-Full documentation and information is available on our website at [http://www.jhipster.tech/][jhipster-url]
-
-Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submitting an issue. If your issue is a bug, please use the bug template pre populated [here](https://github.com/jhipster/generator-jhipster/issues/new). For feature requests and queries you can use [this template][feature-template].
 
 [travis-url]: https://travis-ci.org/hipster-labs/jhipster-travis-build/branches
 [image-docker]: https://travis-ci.org/hipster-labs/jhipster-travis-build.svg?branch=docker
