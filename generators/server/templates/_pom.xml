@@ -1044,7 +1044,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec><%= SERVER_MAIN_RES_DIR %>swagger/api.yml</inputSpec>
+                            <inputSpec>${project.basedir}/<%= SERVER_MAIN_RES_DIR %>swagger/api.yml</inputSpec>
                             <language>spring</language>
                             <apiPackage><%= packageName %>.web.api</apiPackage>
                             <modelPackage><%= packageName %>.web.api.model</modelPackage>
