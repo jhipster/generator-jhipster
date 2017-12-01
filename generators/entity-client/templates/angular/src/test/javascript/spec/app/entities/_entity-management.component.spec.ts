@@ -16,6 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_
+let tsKeyId;
+if (pkType === 'String') {
+    if (prodDatabaseType === 'cassandra') {
+        tsKeyId = "'9fec3727-3421-4967-b213-ba36557ca194'";
+    } else {
+        tsKeyId = "'123'";
+    }
+} else {
+    tsKeyId = 123;
+}
+_%>
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { Observable } from 'rxjs/Rx';
@@ -48,7 +60,7 @@ describe('Component Tests', () => {
                     },
                     {
                         provide: ActivatedRoute,
-                        useValue: new MockActivatedRoute({id: 123})
+                        useValue: new MockActivatedRoute({id: <%- tsKeyId %>})
                     },
                     {
                         provide: Router,

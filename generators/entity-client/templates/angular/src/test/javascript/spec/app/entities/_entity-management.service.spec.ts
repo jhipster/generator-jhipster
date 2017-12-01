@@ -16,6 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_
+let tsKeyId;
+if (pkType === 'String') {
+    if (prodDatabaseType === 'cassandra') {
+        tsKeyId = "'9fec3727-3421-4967-b213-ba36557ca194'";
+    } else {
+        tsKeyId = "'123'";
+    }
+} else {
+    tsKeyId = 123;
+}
+_%>
 /* tslint:disable max-line-length */
 import { TestBed, async } from '@angular/core/testing';
 import { MockBackend } from '@angular/http/testing';
@@ -57,30 +69,30 @@ describe('Service Tests', () => {
 
         describe('Service methods', () => {
             it('should call correct URL', () => {
-                service.find(123).subscribe(() => {});
+                service.find(<%- tsKeyId %>).subscribe(() => {});
 
                 expect(this.lastConnection).toBeDefined();
-                expect(this.lastConnection.request.url).toEqual('api/<%= entityApiUrl %>/' + 123);
+                expect(this.lastConnection.request.url).toEqual('api/<%= entityApiUrl %>/' + <%- tsKeyId %>);
             });
             it('should return <%= entityAngularName %>', () => {
 
                 let entity: <%= entityAngularName %>;
-                service.find(123).subscribe((_entity: <%= entityAngularName %>) => {
+                service.find(<%- tsKeyId %>).subscribe((_entity: <%= entityAngularName %>) => {
                     entity = _entity;
                 });
 
                 this.lastConnection.mockRespond(new Response(new ResponseOptions({
-                    body: JSON.stringify({id: 123}),
+                    body: JSON.stringify({id: <%- tsKeyId %>}),
                 })));
 
                 expect(entity).toBeDefined();
-                expect(entity.id).toEqual(123);
+                expect(entity.id).toEqual(<%- tsKeyId %>);
             });
 
             it('should propagate not found response', () => {
 
                 let error: any;
-                service.find(123).subscribe(null, (_error: any) => {
+                service.find(<%- tsKeyId %>).subscribe(null, (_error: any) => {
                     error = _error;
                 });
 
