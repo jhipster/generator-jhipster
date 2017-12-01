@@ -46,7 +46,7 @@ for (idx in relationships) {
         renMapAnotEnt = true;
 _%>
     @Mapping(source = "<%= relationshipName %>.id", target = "<%= relationships[idx].relationshipFieldName %>Id")
-<%      if (relationships[idx].otherEntityFieldCapitalized !='Id' && relationships[idx].otherEntityFieldCapitalized !== '') { _%>
+<%      if (relationships[idx].otherEntityFieldCapitalized !== 'Id' && relationships[idx].otherEntityFieldCapitalized !== '') { _%>
     @Mapping(source = "<%= relationshipName %>.<%= relationships[idx].otherEntityField %>", target = "<%= relationships[idx].relationshipFieldName %><%= relationships[idx].otherEntityFieldCapitalized %>")
 <%_     } 
     } 
@@ -63,7 +63,8 @@ for (idx in relationships) {
     const relationshipName = relationships[idx].relationshipName;
     const relationshipNamePlural = relationships[idx].relationshipNamePlural;
     const ownerSide = relationships[idx].ownerSide;
-    if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {renMapAnotDto = true;
+    if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {
+        renMapAnotDto = true;
 _%>
     @Mapping(source = "<%= relationshipName %>Id", target = "<%= relationshipName %>")
 <%_ } else if (relationshipType === 'many-to-many' && ownerSide === false) {
