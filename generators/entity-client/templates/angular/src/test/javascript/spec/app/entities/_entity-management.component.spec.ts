@@ -28,7 +28,7 @@ import { JhiParseLinks, JhiDateUtils, JhiDataUtils, JhiEventManager, JhiAlertSer
 
 import { MockActivatedRoute, MockRouter } from '../../../helpers/mock-route.service';
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { Principal, AccountService } from '../../../../../../main/webapp/app/shared';
+import { Principal, AccountService<% if (websocket === 'spring-websocket') { %>, JhiTrackerService<% } %> } from '../../../../../../main/webapp/app/shared';
 import { <%= entityAngularName %>Component } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.component';
 import { <%= entityAngularName %>Service } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import { <%= entityAngularName %> } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.model';
@@ -49,6 +49,12 @@ describe('Component Tests', () => {
                         provide: JhiAlertService,
                         useValue: null
                     },
+                    <%_ if (websocket === 'spring-websocket') { _%>
+                    {
+                        provide: JhiTrackerService,
+                        useValue: null
+                    },
+                    <%_ } _%>
                     {
                         provide: ActivatedRoute,
                         useValue: new MockActivatedRoute({id: <%- tsKeyId %>})
