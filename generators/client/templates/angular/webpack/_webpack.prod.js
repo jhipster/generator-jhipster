@@ -23,6 +23,7 @@ const Visualizer = require('webpack-visualizer-plugin');
 const ngcWebpack = require('ngc-webpack');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
+const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
 const path = require('path');
 
 const utils = require('./utils.js');
