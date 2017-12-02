@@ -10,6 +10,8 @@ Are you ready to contribute to JHipster? We'd love to have you on board, and we 
  - [Coding Rules](#rules)
  - [Git Commit Guidelines](#commit)
 
+And don't forget we also accept [financial contributions to the project](http://www.jhipster.tech/sponsors/) using OpenCollective.
+
 ## <a name="question"></a> Questions and help
 This is the JHipster bug tracker, and it is used for [Issues and Bugs](#issue) and for [Feature Requests](#feature). It is **not** a help desk or a support forum.
 
@@ -74,7 +76,7 @@ Before you submit your pull request consider the following guidelines:
 * Generate a new JHipster project, and ensure that all tests pass
 
      ```shell
-     mvn package -Pprod
+     mvn verify -Pprod
      ```
 
 * Test that the new project runs correctly:
@@ -203,12 +205,27 @@ Now, running the 'jhipster' command should use your specific JHipster version. Y
 ```shell
 jhipster
 ```
+Depending on which parts of the generator you have changed, do not forget to run jhipster command with the proper arguments e.g. when updating the entity template run:
+
+```shell
+jhipster --with-entities
+```
 
 You should see your changes reflected in the generated project.
 
 ### Use a text editor
 
-As modifying the JHipster generator includes modifying Java and JavaScript templates, most IDE will not work correctly. We recommend you use a text editor like [Atom](https://atom.io/) or [VSCode](https://code.visualstudio.com/) to code your changes.
+As modifying the JHipster generator includes modifying Java and JavaScript templates, most IDE will not work correctly. We recommend you use a text editor like [Atom](https://atom.io/) or [VSCode](https://code.visualstudio.com/) to code your changes. The ESLint and EditorConfig extensions are recommended to help with respecting code conventions.
+
+### Use a debugger
+
+It is possible to debug JHipster's code using a Node.js debugger. To achieve this, setup your debugger to launch `cli/jhipster.js`.
+
+#### Debugging with VSCode
+
+To start debugging JHipster with **VSCode**, open the generator code in your workspace and simply press F5 (or click the green arrow in the **Debug** menu reachable with Ctrl+Shift+D). This will start the generator in debug mode and generate files in the `travis/samples/app-sample-dev` folder.
+
+It is also possible to debug sub generators by selecting one of the other debug options (for example `jhipster entity`). Those debug configurations are specified in the `.vscode/launch.json` file.
 
 ## Local Travis Build
 

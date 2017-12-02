@@ -1,0 +1,18 @@
+{
+    "login": "system",
+    <%_ if (authenticationType !== 'oauth2') { _%>
+    "password": "$2a$10$mE.qmcV0mFU5NcKh73TZx.z4ueI/.bDWbj0T1BYyqP481kGGarKLG",
+    <% } %>
+    "first_name": "System",
+    "last_name": "System",
+    "email": "system@localhost",
+    "activated": true,
+    "lang_key": "fr",
+    "created_by": "system",
+    "last_modified_by": "system",
+    "authorities": [
+        "ROLE_USER",
+        "ROLE_ADMIN"
+    ],
+    "_class": "<%=packageName%>.domain.User"
+}

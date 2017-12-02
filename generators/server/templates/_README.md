@@ -188,7 +188,7 @@ To benefit from TypeScript type definitions from [DefinitelyTyped][] repository 
     <%= clientPackageManager %> <%= clientPackageMngrAddDev %> @types/leaflet
 
 Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] knows about them:
-
+<%_ if (clientFramework === 'angularX') { _%>
 Edit [src/main/webapp/app/vendor.ts](src/main/webapp/app/vendor.ts) file:
 ~~~
 import 'leaflet/dist/leaflet.js';
@@ -198,7 +198,7 @@ Edit [src/main/webapp/content/css/vendor.css](src/main/webapp/content/css/vendor
 ~~~
 @import '~leaflet/dist/leaflet.css';
 ~~~
-
+<%_ } _%>
 Note: there are still few other things remaining to do for Leaflet that we won't detail here.
 <%_ } else { _%>
     gulp
@@ -211,7 +211,7 @@ Add the `-h` flag on any command to see how you can use it. For example, `bower 
 
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
 
-<%_ if (clientFramework !== 'angular1') { _%>
+<%_ if (clientFramework === 'angularX' && applicationType !== 'microservice') { _%>
 ### Using angular-cli
 
 You can also use [Angular CLI][] to generate some custom client code.
@@ -236,7 +236,7 @@ will generate few files:
 ./mvnw generate-sources
 ```
     <%_ } _%>
-    <%_ if (buildTool === 'maven') { _%>
+    <%_ if (buildTool === 'gradle') { _%>
 ```bash
 ./gradlew swagger
 ```
@@ -307,7 +307,7 @@ To stop it and remove the container, run:
 You can also fully dockerize your application and all the services that it depends on.
 To achieve this, first build a docker image of your app by running:
 
-    <% if (buildTool === 'maven') { %>./mvnw package -Pprod dockerfile:build<% } %><% if (buildTool === 'gradle') { %>./gradlew bootRepackage -Pprod buildDocker<% } %>
+    <% if (buildTool === 'maven') { %>./mvnw verify -Pprod dockerfile:build<% } %><% if (buildTool === 'gradle') { %>./gradlew bootRepackage -Pprod buildDocker<% } %>
 
 Then run:
 
@@ -335,7 +335,7 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 [Running tests page]: <%= DOCUMENTATION_ARCHIVE_URL %>/running-tests/
 [Setting up Continuous Integration]: <%= DOCUMENTATION_ARCHIVE_URL %>/setting-up-ci/
 
-<% if (testFrameworks.indexOf("gatling") > -1) { %>[Gatling]: http://gatling.io/<% } %>
+<% if (testFrameworks.includes("gatling")) { %>[Gatling]: http://gatling.io/<% } %>
 <%_ if(!skipClient) {_%>
 [Node.js]: https://nodejs.org/
 [Yarn]: https://yarnpkg.org/

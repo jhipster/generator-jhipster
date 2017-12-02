@@ -197,21 +197,21 @@ function askForApps() {
 function askForClustersMode() {
     if (this.regenerate) return;
 
-    const mongoApps = [];
+    const clusteredDbApps = [];
     this.appConfigs.forEach((appConfig, index) => {
-        if (appConfig.prodDatabaseType === 'mongodb') {
-            mongoApps.push(this.appsFolders[index]);
+        if (appConfig.prodDatabaseType === 'mongodb' || appConfig.prodDatabaseType === 'couchbase') {
+            clusteredDbApps.push(this.appsFolders[index]);
         }
     });
-    if (mongoApps.length === 0) return;
+    if (clusteredDbApps.length === 0) return;
 
     const done = this.async();
 
     const prompts = [{
         type: 'checkbox',
         name: 'clusteredDbApps',
-        message: 'Which applications do you want to use with clustered databases (only available with MongoDB)?',
-        choices: mongoApps,
+        message: 'Which applications do you want to use with clustered databases (only available with MongoDB and Couchbase)?',
+        choices: clusteredDbApps,
         default: this.clusteredDbApps
     }];
 

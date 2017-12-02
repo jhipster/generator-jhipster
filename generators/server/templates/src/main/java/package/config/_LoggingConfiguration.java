@@ -42,19 +42,23 @@ import org.springframework.beans.factory.annotation.Value;
 <%_ if (serviceDiscoveryType === "eureka") { _%>
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.netflix.eureka.EurekaInstanceConfigBean;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 <%_ } _%>
 <%_ if (serviceDiscoveryType === "consul") { _%>
 import org.springframework.cloud.consul.ConditionalOnConsulEnabled;
 import org.springframework.cloud.consul.serviceregistry.ConsulRegistration;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 <%_ } _%>
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 <%_ if (serviceDiscoveryType === "eureka") { _%>
 @ConditionalOnProperty("eureka.client.enabled")
+@RefreshScope
 <%_ } _%>
 <%_ if (serviceDiscoveryType === "consul") { _%>
 @ConditionalOnConsulEnabled
+@RefreshScope
 <%_ } _%>
 public class LoggingConfiguration {
 
@@ -117,7 +121,7 @@ public class LoggingConfiguration {
         log.info("Initializing Logstash logging");
 
         LogstashTcpSocketAppender logstashAppender = new LogstashTcpSocketAppender();
-        logstashAppender.setName("LOGSTASH");
+        logstashAppender.setName(LOGSTASH_APPENDER_NAME);
         logstashAppender.setContext(context);
         <%_ if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { _%>
         String customFields = "{\"app_name\":\"" + appName + "\",\"app_port\":\"" + serverPort + "\"," +
@@ -144,7 +148,7 @@ public class LoggingConfiguration {
         // Wrap the appender in an Async appender for performance
         AsyncAppender asyncLogstashAppender = new AsyncAppender();
         asyncLogstashAppender.setContext(context);
-        asyncLogstashAppender.setName("ASYNC_LOGSTASH");
+        asyncLogstashAppender.setName(ASYNC_LOGSTASH_APPENDER_NAME);
         asyncLogstashAppender.setQueueSize(jHipsterProperties.getLogging().getLogstash().getQueueSize());
         asyncLogstashAppender.addAppender(logstashAppender);
         asyncLogstashAppender.start();
@@ -166,7 +170,7 @@ public class LoggingConfiguration {
         metricsFilter.start();
 
         for (ch.qos.logback.classic.Logger logger : context.getLoggerList()) {
-            for (Iterator<Appender<ILoggingEvent>> it = logger.iteratorForAppenders(); it.hasNext(); ) {
+            for (Iterator<Appender<ILoggingEvent>> it = logger.iteratorForAppenders(); it.hasNext();) {
                 Appender<ILoggingEvent> appender = it.next();
                 if (!appender.getName().equals(ASYNC_LOGSTASH_APPENDER_NAME)) {
                     log.debug("Filter metrics logs from the {} appender", appender.getName());

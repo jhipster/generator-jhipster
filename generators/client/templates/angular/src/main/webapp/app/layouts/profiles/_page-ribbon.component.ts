@@ -21,7 +21,7 @@ import { ProfileService } from './profile.service';
 import { ProfileInfo } from './profile-info.model';
 
 @Component({
-    selector: '<%=jhiPrefix%>-page-ribbon',
+    selector: '<%= jhiPrefixDashed %>-page-ribbon',
     template: `<div class="ribbon" *ngIf="ribbonEnv"><a href=""<% if (enableTranslation) { %> jhiTranslate="global.ribbon.{{ribbonEnv}}"<% } %>>{{ribbonEnv}}</a></div>`,
     styleUrls: [
         <%_ if (useSass) { _%>
@@ -39,7 +39,7 @@ export class PageRibbonComponent implements OnInit {
     constructor(private profileService: ProfileService) {}
 
     ngOnInit() {
-        this.profileService.getProfileInfo().subscribe((profileInfo) => {
+        this.profileService.getProfileInfo().then((profileInfo) => {
             this.profileInfo = profileInfo;
             this.ribbonEnv = profileInfo.ribbonEnv;
         });

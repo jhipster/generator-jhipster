@@ -26,9 +26,9 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Spring Data <% if (databaseType === 'sql') { %>JPA<% } else if (databaseType === 'mongodb') { %>MongoDB<% } %> repository for the Social User Connection entity.
+ * Spring Data <% if (databaseType === 'sql') { %>JPA<% } else if (databaseType === 'mongodb') { %>MongoDB<% } else if (databaseType === 'couchbase') { %>Couchbase<% } %> repository for the Social User Connection entity.
  */
-public interface SocialUserConnectionRepository extends <% if (databaseType === 'sql') { %>JpaRepository<% } else if (databaseType === 'mongodb') { %>MongoRepository<% } %><SocialUserConnection, <% if (databaseType === 'sql') { %>Long<% } else if (databaseType === 'mongodb') { %>String<% } %>> {
+public interface SocialUserConnectionRepository extends <% if (databaseType === 'sql') { %>JpaRepository<% } else if (databaseType === 'mongodb') { %>MongoRepository<% } else if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><SocialUserConnection, <% if (databaseType === 'sql') { %>Long<% } else if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>String<% } %>> {
 
     List<SocialUserConnection> findAllByProviderIdAndProviderUserId(String providerId, String providerUserId);
 
@@ -42,7 +42,7 @@ public interface SocialUserConnectionRepository extends <% if (databaseType === 
 
     SocialUserConnection findOneByUserIdAndProviderIdAndProviderUserId(String userId, String providerId, String providerUserId);
 
-    void deleteByUserIdAndProviderId(String userId, String providerId);
+    <% if (databaseType === 'couchbase') { %>List<SocialUserConnection><% } else { %>void<% } %> deleteByUserIdAndProviderId(String userId, String providerId);
 
-    void deleteByUserIdAndProviderIdAndProviderUserId(String userId, String providerId, String providerUserId);
+    <% if (databaseType === 'couchbase') { %>SocialUserConnection<% } else { %>void<% } %> deleteByUserIdAndProviderIdAndProviderUserId(String userId, String providerId, String providerUserId);
 }

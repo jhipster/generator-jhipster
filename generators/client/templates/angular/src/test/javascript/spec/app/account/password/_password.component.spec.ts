@@ -51,7 +51,8 @@ describe('Component Tests', () => {
                     <%_ } _%>
                     PasswordService
                 ]
-            }).overrideTemplate(PasswordComponent, '')
+            })
+            .overrideTemplate(PasswordComponent, '')
             .compileComponents();
         }));
 

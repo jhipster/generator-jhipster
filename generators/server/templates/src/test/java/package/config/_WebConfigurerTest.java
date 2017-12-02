@@ -63,7 +63,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentMap;
 <%_ } _%>
 
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;

@@ -88,8 +88,24 @@ hystrix:
 #                isolation:
 #                    thread:
 #                        timeoutInMilliseconds: 10000
+# See https://github.com/spring-cloud/spring-cloud-netflix/issues/1330
+feign:
+    hystrix:
+        enabled: true
+
+hystrix:
+    share-security-context: true
 
 <%_ } _%>
+logging:
+    level:
+        ROOT: #logback.loglevel#
+        <%=packageName%>: #logback.loglevel#
+        io.github.jhipster: #logback.loglevel#
+        <%_ if (databaseType === 'couchbase') { _%>
+        com.github.couchmove: #logback.loglevel#
+        <%_ } _%>
+
 management:
     security:
         roles: ADMIN

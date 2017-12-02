@@ -16,7 +16,7 @@ function getFilesForOptions(files, options, prefix, excludeFiles) {
         return Generator.prototype.writeFilesToDisk(files, generator, true, prefix);
     }
     return Generator.prototype.writeFilesToDisk(files, generator, true, prefix)
-        .filter(file => excludeFiles.indexOf(file) === -1);
+        .filter(file => !excludeFiles.includes(file));
 }
 
 function shouldBeV3DockerfileCompatible(databaseType) {

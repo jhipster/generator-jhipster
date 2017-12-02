@@ -46,7 +46,7 @@ module.exports = class extends BaseGenerator {
             this.log(chalk.red('ERROR! There is no existing JHipster configuration file in this directory.'));
             this.error(`JHipster ${jhipsterVar.moduleName} is a JHipster module, and needs a .yo-rc.json configuration file made by JHipster.`);
         }
-        // add required JHipster constiables
+        // add required JHipster variables
         jhipsterVar.baseName = this.baseName = baseName;
         jhipsterVar.packageName = packageName;
         jhipsterVar.packageFolder = packageFolder;
@@ -94,9 +94,11 @@ module.exports = class extends BaseGenerator {
         jhipsterFunc.addSocialButton = this.addSocialButton;
         jhipsterFunc.addSocialConnectionFactory = this.addSocialConnectionFactory;
         jhipsterFunc.addMavenDependency = this.addMavenDependency;
+        jhipsterFunc.addMavenDependencyManagement = this.addMavenDependencyManagement;
         jhipsterFunc.addMavenPlugin = this.addMavenPlugin;
         jhipsterFunc.addGradlePlugin = this.addGradlePlugin;
         jhipsterFunc.addGradleDependency = this.addGradleDependency;
+        jhipsterFunc.addGradleDependencyManagement = this.addGradleDependencyManagement;
         jhipsterFunc.addSocialConfiguration = this.addSocialConfiguration;
         jhipsterFunc.applyFromGradleScript = this.applyFromGradleScript;
         jhipsterFunc.addBowerrcParameter = this.addBowerrcParameter;

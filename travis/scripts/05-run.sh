@@ -7,6 +7,9 @@ launchCurlOrProtractor() {
     retryCount=1
     maxRetry=10
     httpUrl="http://localhost:8080"
+    if [[ ("$JHIPSTER" == 'app-microservice-eureka') || ("$JHIPSTER" == 'app-microservice-consul') ]]; then
+        httpUrl="http://localhost:8081/management/health"
+    fi
 
     rep=$(curl -v "$httpUrl")
     status=$?
@@ -51,7 +54,7 @@ launchCurlOrProtractor() {
 #-------------------------------------------------------------------------------
 if [ "$JHIPSTER" == "app-ng2-gateway-uaa" ]; then
     cd "$HOME"/uaa
-    ./mvnw package -DskipTests -P"$PROFILE"
+    ./mvnw verify -DskipTests -P"$PROFILE"
 fi
 
 #-------------------------------------------------------------------------------
@@ -60,7 +63,7 @@ fi
 cd "$APP_FOLDER"
 
 if [ -f "mvnw" ]; then
-    ./mvnw package -DskipTests -P"$PROFILE"
+    ./mvnw verify -DskipTests -P"$PROFILE"
     mv target/*.war app.war
 elif [ -f "gradlew" ]; then
     ./gradlew bootRepackage -P"$PROFILE" -x test
@@ -94,7 +97,5 @@ if [ "$RUN_APP" == 1 ]; then
         --logging.level.io.github.jhipster.travis=ERROR &
     sleep 40
 
-    if [[ ("$JHIPSTER" != 'app-microservice-eureka') && ("$JHIPSTER" != 'app-microservice-consul') ]]; then
-        launchCurlOrProtractor
-    fi
+    launchCurlOrProtractor
 fi

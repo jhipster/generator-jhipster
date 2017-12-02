@@ -174,7 +174,7 @@ module.exports = class extends BaseGenerator {
 
                 const child = exec(herokuCreateCmd, {}, (err, stdout, stderr) => {
                     if (err) {
-                        if (stderr.indexOf('Name is already taken') > -1) {
+                        if (stderr.includes('Name is already taken')) {
                             const prompts = [
                                 {
                                     type: 'list',

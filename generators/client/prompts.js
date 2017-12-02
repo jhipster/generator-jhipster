@@ -48,6 +48,12 @@ function askForClient(meta) {
             value: 'angular1',
             name: 'AngularJS 1.x'
         });
+        if (this.experimental) {
+            choices.push({
+                value: 'react',
+                name: '[EXPERIMENTAL] React'
+            });
+        }
     }
 
     const PROMPT = {

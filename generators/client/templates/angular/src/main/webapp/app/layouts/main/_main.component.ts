@@ -26,7 +26,7 @@ import { Title } from '@angular/platform-browser';
 <%_ } _%>
 
 @Component({
-    selector: '<%=jhiPrefix%>-main',
+    selector: '<%= jhiPrefixDashed %>-main',
     templateUrl: './main.component.html'
 })
 export class <%=jhiPrefixCapitalized%>MainComponent implements OnInit {

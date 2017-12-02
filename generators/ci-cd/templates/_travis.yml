@@ -99,7 +99,7 @@ script:
   <%_ if (heroku.includes('travis')) { _%>
   - ./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>
   <%_ } else { _%>
-  - ./mvnw package -Pprod -DskipTests
+  - ./mvnw verify -Pprod -DskipTests
   <%_ } _%>
 <%_ } else if (buildTool === 'gradle') { _%>
   - ./gradlew bootRepackage -Pprod -x test

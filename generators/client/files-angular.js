@@ -459,7 +459,11 @@ const files = {
                 'spec/helpers/_spyobject.ts',
                 'spec/helpers/_mock-account.service.ts',
                 'spec/helpers/_mock-principal.service.ts',
-                'spec/helpers/_mock-route.service.ts'
+                'spec/helpers/_mock-route.service.ts',
+                'spec/helpers/_mock-login.service.ts',
+                'spec/helpers/_mock-event-manager.service.ts',
+                'spec/helpers/_mock-active-modal.service.ts',
+                'spec/helpers/_mock-state-storage.service.ts'
             ]
         },
         {
@@ -472,7 +476,9 @@ const files = {
                 'spec/app/account/password-reset/init/_password-reset-init.component.spec.ts',
                 'spec/app/account/password-reset/finish/_password-reset-finish.component.spec.ts',
                 'spec/app/account/register/_register.component.spec.ts',
-                'spec/app/account/settings/_settings.component.spec.ts'
+                'spec/app/account/settings/_settings.component.spec.ts',
+                // login component tests
+                'spec/app/shared/login/_login.component.spec.ts'
             ]
         },
         {

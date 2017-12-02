@@ -51,7 +51,7 @@ export class Principal {
         }
 
         for (let i = 0; i < authorities.length; i++) {
-            if (this.userIdentity.authorities.indexOf(authorities[i]) !== -1) {
+            if (this.userIdentity.authorities.includes(authorities[i])) {
                 return true;
             }
         }
@@ -65,7 +65,7 @@ export class Principal {
         }
 
         return this.identity().then((id) => {
-            return Promise.resolve(id.authorities && id.authorities.indexOf(authority) !== -1);
+            return Promise.resolve(id.authorities && id.authorities.includes(authority));
         }, () => {
             return Promise.resolve(false);
         });

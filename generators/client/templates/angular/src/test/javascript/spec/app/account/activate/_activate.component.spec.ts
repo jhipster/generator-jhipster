@@ -46,7 +46,8 @@ describe('Component Tests', () => {
                         useValue: null
                     }
                 ]
-            }).overrideTemplate(ActivateComponent, '')
+            })
+            .overrideTemplate(ActivateComponent, '')
             .compileComponents();
         }));
 

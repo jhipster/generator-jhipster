@@ -27,11 +27,11 @@ import { Router } from '@angular/router';
     <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
-import { AuthServerProvider } from '../../shared/auth/auth-session.service';
-import { StateStorageService } from '../../shared/auth/state-storage.service';
     <%_ if (authenticationType === 'session') { _%>
+import { AuthServerProvider } from '../../shared/auth/auth-session.service';
 import { LoginModalService } from '../../shared/login/login-modal.service';
     <%_ } _%>
+import { StateStorageService } from '../../shared/auth/state-storage.service';
 <%_ } _%>
 
 export class AuthExpiredInterceptor extends JhiHttpInterceptor {
@@ -76,7 +76,7 @@ export class AuthExpiredInterceptor extends JhiHttpInterceptor {
 
     responseIntercept(observable: Observable<Response>): Observable<Response> {
         return <Observable<Response>> observable.catch((error) => {
-            if (error.status === 401 && error.text() !== '' && error.json().path && error.json().path.indexOf('/api/account') === -1) {
+            if (error.status === 401 && error.text() !== '' && error.json().path && !error.json().path.includes('/api/account')) {
                 const destination = this.stateStorageService.getDestinationState();
                 if (destination !== null) {
                     const to = destination.destination;

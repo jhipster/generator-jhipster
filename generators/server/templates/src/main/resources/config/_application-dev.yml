@@ -190,6 +190,12 @@ spring:
                     logs: <%= BUILD_DIR %>elasticsearch/log
                     data: <%= BUILD_DIR %>elasticsearch/data
     <%_ } _%>
+    <%_ if (databaseType === 'couchbase') { _%>
+    couchbase:
+        bootstrap-hosts: localhost
+        bucket:
+            name: <%= baseName %>
+    <%_ } _%>
     mail:
         host: localhost
         port: 25
@@ -227,8 +233,8 @@ liquibase:
 #    ssl:
 #        key-store: keystore.p12
 #        key-store-password: <your-password>
-#        keyStoreType: PKCS12
-#        keyAlias: <%= baseName %>
+#        key-store-type: PKCS12
+#        key-alias: <%= baseName %>
 # ===================================================================
 server:
     port: <%= serverPort %>

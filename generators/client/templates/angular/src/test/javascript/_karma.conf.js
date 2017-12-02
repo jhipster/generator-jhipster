@@ -17,9 +17,8 @@
  limitations under the License.
 -%>
 const webpackConfig = require('../../../webpack/webpack.test.js');
-process.env.CHROMIUM_BIN = require('puppeteer').executablePath()
 
-const WATCH = process.argv.indexOf('--watch') > -1;
+const WATCH = process.argv.includes('--watch');
 
 module.exports = (config) => {
     config.set({
@@ -86,22 +85,7 @@ module.exports = (config) => {
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['ChromiumHeadlessNoSandbox'],
-
-        customLaunchers: {
-            ChromiumHeadlessNoSandbox: {
-                base: 'ChromiumHeadless',
-                    // the chrome setup is voluntarily permissive to accomodate various environments (different OSes, running inside docker, etc)
-                    // feel free to enable the sandbox if it doesn't cause problems for you
-                    // see http://www.jhipster.tech/running-tests for informations on how to troubleshoot your karma chrome configuration
-                    flags: [
-                        '--no-sandbox',
-                        '--disable-gpu',
-                        '--remote-debugging-port=9222'
-                    ],
-                    debug: true
-            }
-        },
+        browsers: ['PhantomJS'],
 
         // Ensure all browsers can run tests written in .ts files
         mime: {

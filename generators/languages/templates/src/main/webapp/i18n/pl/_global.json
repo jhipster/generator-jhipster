@@ -87,13 +87,13 @@
             "validate": {
                 "newpassword": {
                     "required": "Twoje hasło jest wymagane.",
-                    "minlength": "Twoje hasło powinno mieć minimum 5 znaków",
+                    "minlength": "Twoje hasło powinno mieć minimum 4 znaki",
                     "maxlength": "Twoje hasło nie może być dłuższe niż 50 znaków",
                     "strength": "Siła hasła:"
                 },
                 "confirmpassword": {
                     "required": "Potwierdzenie hasła jest wymagane.",
-                    "minlength": "Potwierdzenie hasła powinno mieć minimum 5 znaków",
+                    "minlength": "Potwierdzenie hasła powinno mieć minimum 4 znaki",
                     "maxlength": "Potwierdzenie hasła nie powinno być dłuższe niż 50 znaków"
                 },
                 "email": {

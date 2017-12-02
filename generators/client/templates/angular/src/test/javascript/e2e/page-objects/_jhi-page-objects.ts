@@ -153,7 +153,7 @@ export class SignInPage {
             this.username.sendKeys(username);
             this.password.sendKeys(password);
             this.loginButton.click();
-        }).catch(error => {
+        }).catch((error) => {
             browser.waitForAngularEnabled(true);
         });
     }

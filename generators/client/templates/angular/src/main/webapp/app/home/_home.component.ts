@@ -25,7 +25,7 @@ import { JhiEventManager } from 'ng-jhipster';
 import { Account, <% if (authenticationType !== 'oauth2') { %>LoginModalService<% } else { %>LoginService<% } %>, Principal } from '../shared';
 
 @Component({
-    selector: '<%=jhiPrefix%>-home',
+    selector: '<%= jhiPrefixDashed %>-home',
     templateUrl: './home.component.html',
     styleUrls: [
         <%_ if (useSass) { _%>

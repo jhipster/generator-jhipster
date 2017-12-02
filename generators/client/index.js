@@ -23,6 +23,7 @@ const BaseGenerator = require('../generator-base');
 const prompts = require('./prompts');
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeAngularJsFiles = require('./files-angularjs').writeFiles;
+const writeReactFiles = require('./files-react').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 
@@ -107,6 +108,13 @@ module.exports = class extends BaseGenerator {
         // This adds support for a `--npm` flag
         this.option('npm', {
             desc: 'Use npm instead of yarn',
+            type: Boolean,
+            defaults: false
+        });
+
+        // This adds support for a `--experimental` flag which can be used to enable experimental features
+        this.option('experimental', {
+            desc: 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
             type: Boolean,
             defaults: false
         });
@@ -299,7 +307,7 @@ module.exports = class extends BaseGenerator {
                 if (this.configOptions.testFrameworks) {
                     this.testFrameworks = this.configOptions.testFrameworks;
                 }
-                this.protractorTests = this.testFrameworks.indexOf('protractor') !== -1;
+                this.protractorTests = this.testFrameworks.includes('protractor');
 
                 if (this.configOptions.enableTranslation !== undefined) {
                     this.enableTranslation = this.configOptions.enableTranslation;
@@ -322,6 +330,9 @@ module.exports = class extends BaseGenerator {
                 } else {
                     this.BUILD_DIR = 'build/';
                 }
+
+                this.styleSheetExt = this.useSass ? 'scss' : 'css';
+
                 this.DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
             },
 
@@ -335,10 +346,14 @@ module.exports = class extends BaseGenerator {
 
     writing() {
         if (useBlueprint) return;
-        if (this.clientFramework === 'angular1') {
+        switch (this.clientFramework) {
+        case 'angular1':
             return writeAngularJsFiles.call(this);
+        case 'react':
+            return writeReactFiles.call(this);
+        default:
+            return writeAngularFiles.call(this);
         }
-        return writeAngularFiles.call(this);
     }
 
     install() {

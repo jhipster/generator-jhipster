@@ -29,7 +29,7 @@ import { <% if (enableTranslation) { %>JhiLanguageHelper, <% } %>Principal, <% i
 import { VERSION } from '../../app.constants';
 
 @Component({
-    selector: '<%=jhiPrefix%>-navbar',
+    selector: '<%= jhiPrefixDashed %>-navbar',
     templateUrl: './navbar.component.html',
     styleUrls: [
         <%_ if (useSass) { _%>
@@ -73,7 +73,7 @@ export class NavbarComponent implements OnInit {
         });
 
         <%_ } _%>
-        this.profileService.getProfileInfo().subscribe((profileInfo) => {
+        this.profileService.getProfileInfo().then((profileInfo) => {
             this.inProduction = profileInfo.inProduction;
             this.swaggerEnabled = profileInfo.swaggerEnabled;
         });

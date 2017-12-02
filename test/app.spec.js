@@ -8,8 +8,9 @@ const getFilesForOptions = require('./utils/utils').getFilesForOptions;
 const expectedFiles = require('./utils/expected-files');
 const shouldBeV3DockerfileCompatible = require('./utils/utils').shouldBeV3DockerfileCompatible;
 const constants = require('../generators/generator-constants');
-const angularJsfiles = require('../generators/client/files-angularjs').files;
-const angularfiles = require('../generators/client/files-angular').files;
+const angularJsFiles = require('../generators/client/files-angularjs').files;
+const angularFiles = require('../generators/client/files-angular').files;
+const reactFiles = require('../generators/client/files-react').files;
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
@@ -53,7 +54,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.maven);
                 assert.file(expectedFiles.dockerServices);
                 assert.file(expectedFiles.mysql);
-                assert.file(getFilesForOptions(angularJsfiles, {
+                assert.file(getFilesForOptions(angularJsFiles, {
                     useSass: false,
                     enableTranslation: true,
                     serviceDiscoveryType: false,
@@ -111,7 +112,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.maven);
                 assert.file(expectedFiles.dockerServices);
                 assert.file(expectedFiles.mysql);
-                assert.file(getFilesForOptions(angularfiles, {
+                assert.file(getFilesForOptions(angularFiles, {
                     useSass: false,
                     enableTranslation: true,
                     serviceDiscoveryType: false,
@@ -124,6 +125,55 @@ describe('JHipster generator', () => {
             });
             it('contains correct custom prefix when specified', () => {
                 assert.fileContent('.angular-cli.json', /"prefix": "test"/);
+            });
+        });
+
+        describe('React', () => {
+            beforeEach((done) => {
+                helpers.run(path.join(__dirname, '../generators/app'))
+                    .withOptions({
+                        skipInstall: true, skipChecks: true, jhiPrefix: 'test', experimental: true
+                    })
+                    .withPrompts({
+                        baseName: 'jhipster',
+                        clientFramework: 'react',
+                        packageName: 'com.mycompany.myapp',
+                        packageFolder: 'com/mycompany/myapp',
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        hibernateCache: 'ehcache',
+                        databaseType: 'sql',
+                        devDatabaseType: 'h2Memory',
+                        prodDatabaseType: 'mysql',
+                        useSass: false,
+                        enableTranslation: true,
+                        nativeLanguage: 'en',
+                        languages: ['fr'],
+                        buildTool: 'maven',
+                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                        skipClient: false,
+                        skipUserManagement: false,
+                        serverSideOptions: []
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected default files for react', () => {
+                assert.file(expectedFiles.server);
+                assert.file(expectedFiles.jwtServer);
+                assert.file(expectedFiles.maven);
+                assert.file(expectedFiles.dockerServices);
+                assert.file(expectedFiles.mysql);
+                assert.file(getFilesForOptions(reactFiles, {
+                    useSass: false,
+                    enableTranslation: true,
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
+                    testFrameworks: []
+                }));
+            });
+            it('contains clientFramework with react value', () => {
+                assert.fileContent('.yo-rc.json', /"clientFramework": "react"/);
             });
         });
 
@@ -161,7 +211,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.maven);
                 assert.file(expectedFiles.dockerServices);
                 assert.file(expectedFiles.mysql);
-                assert.file(getFilesForOptions(angularfiles, {
+                assert.file(getFilesForOptions(angularFiles, {
                     useSass: false,
                     enableTranslation: true,
                     serviceDiscoveryType: false,
@@ -209,7 +259,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.gradle);
                 assert.file(expectedFiles.dockerServices);
                 assert.file(expectedFiles.mysql);
-                assert.file(getFilesForOptions(angularfiles, {
+                assert.file(getFilesForOptions(angularFiles, {
                     useSass: false,
                     enableTranslation: true,
                     serviceDiscoveryType: false,
@@ -255,7 +305,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.maven);
                 assert.file(expectedFiles.dockerServices);
                 assert.file(expectedFiles.mariadb);
-                assert.file(getFilesForOptions(angularfiles, {
+                assert.file(getFilesForOptions(angularFiles, {
                     useSass: false,
                     enableTranslation: true,
                     serviceDiscoveryType: false,
@@ -298,6 +348,40 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.mongodb);
             });
             shouldBeV3DockerfileCompatible('mongodb');
+        });
+
+        describe('couchbase', () => {
+            beforeEach((done) => {
+                helpers.run(path.join(__dirname, '../generators/app'))
+                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withPrompts({
+                        baseName: 'jhipster',
+                        packageName: 'com.mycompany.myapp',
+                        packageFolder: 'com/mycompany/myapp',
+                        clientFramework: 'angularX',
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        hibernateCache: 'no',
+                        databaseType: 'couchbase',
+                        devDatabaseType: 'couchbase',
+                        prodDatabaseType: 'couchbase',
+                        useSass: false,
+                        enableTranslation: true,
+                        nativeLanguage: 'en',
+                        languages: ['fr'],
+                        buildTool: 'maven',
+                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                        skipClient: false,
+                        skipUserManagement: false,
+                        serverSideOptions: []
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected files with "Couchbase"', () => {
+                assert.file(expectedFiles.couchbase);
+            });
+            shouldBeV3DockerfileCompatible('couchbase');
         });
 
         describe('mssql', () => {
@@ -878,7 +962,7 @@ describe('JHipster generator', () => {
 
             it('creates expected default files for i18n with RTL support', () => {
                 assert.file(expectedFiles.i18nRtl);
-                assert.file(getFilesForOptions(angularfiles, {
+                assert.file(getFilesForOptions(angularFiles, {
                     useSass: false,
                     enableTranslation: true,
                     serviceDiscoveryType: false,
@@ -923,7 +1007,7 @@ describe('JHipster generator', () => {
 
             it('creates expected files with social login for HTTP session enabled', () => {
                 assert.file(expectedFiles.session);
-                assert.file(getFilesForOptions(angularfiles, {
+                assert.file(getFilesForOptions(angularFiles, {
                     useSass: false,
                     enableTranslation: true,
                     serviceDiscoveryType: false,
@@ -963,7 +1047,7 @@ describe('JHipster generator', () => {
             });
 
             it('creates expected files with social login for JWT authentication enabled', () => {
-                assert.file(getFilesForOptions(angularfiles, {
+                assert.file(getFilesForOptions(angularFiles, {
                     useSass: false,
                     enableTranslation: true,
                     serviceDiscoveryType: false,
@@ -1004,7 +1088,7 @@ describe('JHipster generator', () => {
 
             it('creates expected files with JWT authentication', () => {
                 assert.file(expectedFiles.jwtServer);
-                assert.file(getFilesForOptions(angularfiles, {
+                assert.file(getFilesForOptions(angularFiles, {
                     useSass: false,
                     enableTranslation: true,
                     serviceDiscoveryType: false,
@@ -1042,7 +1126,7 @@ describe('JHipster generator', () => {
 
             it('creates expected files with HTTP session authentication', () => {
                 assert.file(expectedFiles.session);
-                assert.file(getFilesForOptions(angularfiles, {
+                assert.file(getFilesForOptions(angularFiles, {
                     useSass: false,
                     enableTranslation: true,
                     serviceDiscoveryType: false,
@@ -1093,7 +1177,7 @@ describe('JHipster generator', () => {
 
             it('creates expected files with Protractor enabled', () => {
                 assert.file(expectedFiles.server);
-                assert.file(getFilesForOptions(angularfiles, {
+                assert.file(getFilesForOptions(angularFiles, {
                     useSass: false,
                     enableTranslation: true,
                     serviceDiscoveryType: false,
@@ -1187,7 +1271,7 @@ describe('JHipster generator', () => {
             it('creates expected files for default configuration with skip client option enabled', () => {
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.maven);
-                assert.noFile(getFilesForOptions(angularfiles, {
+                assert.noFile(getFilesForOptions(angularFiles, {
                     useSass: false,
                     enableTranslation: true,
                     serviceDiscoveryType: false,
@@ -1224,7 +1308,7 @@ describe('JHipster generator', () => {
             it('creates expected files for default configuration with skip client option enabled', () => {
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.gradle);
-                assert.noFile(getFilesForOptions(angularfiles, {
+                assert.noFile(getFilesForOptions(angularFiles, {
                     useSass: false,
                     enableTranslation: true,
                     serviceDiscoveryType: false,
@@ -1232,6 +1316,43 @@ describe('JHipster generator', () => {
                     testFrameworks: []
                 }, '', ['package.json']));
                 assert.noFile(['gradle/yeoman.gradle']);
+            });
+        });
+    });
+
+    context('App with skip client and skip user management', () => {
+        describe('Maven', () => {
+            beforeEach((done) => {
+                helpers.run(path.join(__dirname, '../generators/app'))
+                    .withOptions({
+                        skipInstall: true,
+                        skipClient: true,
+                        skipUserManagement: true,
+                        skipChecks: true
+                    })
+                    .withPrompts({
+                        baseName: 'jhipster',
+                        applicationType: 'monolith',
+                        packageName: 'com.mycompany.myapp',
+                        packageFolder: 'com/mycompany/myapp',
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        hibernateCache: 'ehcache',
+                        databaseType: 'sql',
+                        devDatabaseType: 'h2Memory',
+                        prodDatabaseType: 'mysql',
+                        buildTool: 'maven',
+                        enableTranslation: true,
+                        nativeLanguage: 'en',
+                        languages: ['fr'],
+                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                        serverSideOptions: []
+                    })
+                    .on('end', done);
+            });
+
+            it('creates SecurityConfiguration for default configuration with skip client and skip user management option enabled', () => {
+                assert.file(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/SecurityConfiguration.java`);
             });
         });
     });

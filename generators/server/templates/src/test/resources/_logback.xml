@@ -60,6 +60,12 @@
     <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
     <%_ } else if (databaseType === 'mongodb') { _%>
     <logger name="org.mongodb.driver" level="WARN"/>
+    <%_ } else if (databaseType === 'couchbase') { _%>
+    <logger name="com.couchbase.client" level="WARN"/>
+    <logger name="org.testcontainers" level="INFO"/>
+    <logger name="org.github.couchmove" level="INFO"/>
+    <%_ } _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
     <logger name="org.reflections" level="WARN"/>
     <%_ } _%>
     <%_ if (hibernateCache === 'infinispan') { _%>

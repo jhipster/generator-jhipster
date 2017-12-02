@@ -66,7 +66,7 @@ module.exports = class extends BaseGenerator {
                 const insight = this.insight();
                 insight.trackWithEvent('generator', 'ci-cd');
             },
-            setTemplateconstiables() {
+            setTemplateConstants() {
                 if (this.abort || this.jenkinsIntegrations === undefined) return;
                 this.gitLabIndent = this.jenkinsIntegrations.includes('gitlab') ? '    ' : '';
                 this.indent = this.jenkinsIntegrations.includes('docker') ? '    ' : '';

@@ -31,8 +31,11 @@ import java.util.List;
  * Spring Data JPA repository for the PersistentAuditEvent entity.
  */<% } %><% if (databaseType === 'mongodb') { %>/**
  * Spring Data MongoDB repository for the PersistentAuditEvent entity.
+ */<% } %><% if (databaseType === 'couchbase') { %>/**
+ * Spring Data Couchbase repository for the PersistentAuditEvent entity.
  */<% } %>
-public interface PersistenceAuditEventRepository extends <% if (databaseType === 'sql') { %>JpaRepository<PersistentAuditEvent, Long><% } %><% if (databaseType === 'mongodb') { %>MongoRepository<PersistentAuditEvent, String><% } %> {
+public interface PersistenceAuditEventRepository extends <% if (databaseType === 'sql') { %>JpaRepository<PersistentAuditEvent, Long><% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') {
+ %><PersistentAuditEvent, String><% } %> {
 
     List<PersistentAuditEvent> findByPrincipal(String principal);
 

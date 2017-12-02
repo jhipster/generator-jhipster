@@ -24,6 +24,7 @@ const DOCKER_MYSQL = 'mysql:5.7.20';
 const DOCKER_MARIADB = 'mariadb:10.1.17';
 const DOCKER_POSTGRESQL = 'postgres:9.6.5';
 const DOCKER_MONGODB = 'mongo:3.4.8';
+const DOCKER_COUCHBASE = 'couchbase/server:4.6.2';
 const DOCKER_CASSANDRA = 'cassandra:3.9';
 const DOCKER_MSSQL = 'microsoft/mssql-server-linux:latest';
 const DOCKER_ORACLE = 'sath89/oracle-12c:latest';
@@ -48,9 +49,13 @@ const DOCKER_JENKINS = 'jenkins:latest';
 const DOCKER_SWAGGER_EDITOR = 'swaggerapi/swagger-editor:latest';
 const DOCKER_COMPOSE_FORMAT_VERSION = '2';
 
+// Version of Java, Scala
+const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
+const SCALA_VERSION = '2.12.1';
+
 // version of Node, Yarn, NPM
-const NODE_VERSION = '8.9.0';
-const YARN_VERSION = '1.2.1';
+const NODE_VERSION = '8.9.1';
+const YARN_VERSION = '1.3.2';
 const NPM_VERSION = '5.5.1';
 
 // all constants used throughout all generators
@@ -165,6 +170,7 @@ const constants = {
     DOCKER_MARIADB,
     DOCKER_POSTGRESQL,
     DOCKER_MONGODB,
+    DOCKER_COUCHBASE,
     DOCKER_CASSANDRA,
     DOCKER_MSSQL,
     DOCKER_ORACLE,
@@ -185,6 +191,8 @@ const constants = {
     DOCKER_PROMETHEUS,
     DOCKER_PROMETHEUS_ALERTMANAGER,
     DOCKER_GRAFANA,
+    JAVA_VERSION,
+    SCALA_VERSION,
     NODE_VERSION,
     YARN_VERSION,
     NPM_VERSION,

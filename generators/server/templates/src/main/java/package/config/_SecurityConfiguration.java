@@ -24,22 +24,24 @@ import <%=packageName%>.security.*;
 <%_ if (authenticationType === 'jwt') { _%>
 import <%=packageName%>.security.jwt.*;
 <%_ } _%>
-
 <%_ if (authenticationType === 'session') { _%>
+
 import io.github.jhipster.config.JHipsterProperties;
+import io.github.jhipster.security.*;
 <%_ } _%>
-<%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
+<%_ if (authenticationType === 'oauth2') { _%>
+
 import io.github.jhipster.security.*;
 <%_ } _%>
 
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
 import org.springframework.beans.factory.BeanInitializationException;
 <%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 <%_ } _%>
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -51,7 +53,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;<% if (authenticationType === 'jwt') { %>
 import org.springframework.security.config.http.SessionCreationPolicy;<% } %><% if (clusteredHttpSession === 'hazelcast') { %>
 import org.springframework.security.core.session.SessionRegistry;<% } %>
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
 import org.springframework.security.core.userdetails.UserDetailsService;
 <%_ } _%>
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -72,7 +74,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 <%_ } _%>
 import org.springframework.web.filter.CorsFilter;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
 
 import javax.annotation.PostConstruct;
 <% } %>
@@ -85,7 +87,7 @@ import javax.annotation.PostConstruct;
 <%_ } _%>
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    <%_ if (authenticationType !== 'oauth2') { _%>
+    <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
@@ -110,10 +112,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final SecurityProblemSupport problemSupport;
 
-    public SecurityConfiguration(<%_ if (authenticationType !== 'oauth2') { _%>AuthenticationManagerBuilder authenticationManagerBuilder, UserDetailsService userDetailsService<%_ } _%><%_ if (authenticationType === 'session') { _%>,
-        JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices<%_ } if (authenticationType === 'jwt') { _%>,
-            TokenProvider tokenProvider<%_ } _%><%_ if (clusteredHttpSession === 'hazelcast') { _%>, SessionRegistry sessionRegistry<%_ } if (authenticationType !== 'oauth2') { %>,<%_ } _%>CorsFilter corsFilter, SecurityProblemSupport problemSupport) {
-        <%_ if (authenticationType !== 'oauth2') { _%>
+    public SecurityConfiguration(<%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>AuthenticationManagerBuilder authenticationManagerBuilder, UserDetailsService userDetailsService<%_ } _%><%_ if (authenticationType === 'session') { _%>,
+        JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices<%_ } if (authenticationType === 'jwt') { _%><%_ if (!skipUserManagement) { _%>,<%_ } _%>TokenProvider tokenProvider<%_ } _%>
+        <%_ if (clusteredHttpSession === 'hazelcast') { _%>, SessionRegistry sessionRegistry<%_ } _%><%_ if (authenticationType !== 'oauth2') { _%>,<%_ } _%>CorsFilter corsFilter, SecurityProblemSupport problemSupport) {
+        <%_ if (authenticationType !== 'oauth2'  && !skipUserManagement) { _%>
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.userDetailsService = userDetailsService;
         <%_ } _%>
@@ -130,7 +132,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         this.corsFilter = corsFilter;
         this.problemSupport = problemSupport;
     }
-    <%_ if (authenticationType !== 'oauth2') { _%>
+    <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
 
     @PostConstruct
     public void init() {

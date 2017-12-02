@@ -1,0 +1,23 @@
+version: '2'
+services:
+    <%= baseName.toLowerCase() %>-couchbase:
+        build:
+            context: .
+            dockerfile: couchbase/Couchbase.Dockerfile
+        ports:
+            - 8091:8091
+            - 8092:8092
+            - 8093:8093
+            - 11210:11210
+        environment:
+            - TYPE=MASTER
+            - BUCKET=<%= baseName %>
+    <%= baseName.toLowerCase() %>-couchbase-node:
+        build:
+            context: .
+            dockerfile: couchbase/Couchbase.Dockerfile
+        environment:
+            - TYPE=WORKER
+            - BUCKET=<%= baseName %>
+            - COUCHBASE_MASTER=<%= baseName.toLowerCase() %>-couchbase
+            - AUTO_REBALANCE=false

@@ -23,7 +23,7 @@ import { LoginService } from '../../shared';
 import { CookieService } from 'ngx-cookie';
 
 @Component({
-    selector: '<%=jhiPrefix%>-auth',
+    selector: '<%= jhiPrefixDashed %>-auth',
     template: ''
 })
 export class SocialAuthComponent implements OnInit {

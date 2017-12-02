@@ -21,7 +21,7 @@ import { Component, OnInit } from '@angular/core';
 import { <%=jhiPrefixCapitalized%>ConfigurationService } from './configuration.service';
 
 @Component({
-    selector: '<%=jhiPrefix%>-configuration',
+    selector: '<%= jhiPrefixDashed %>-configuration',
     templateUrl: './configuration.component.html'
 })
 export class <%=jhiPrefixCapitalized%>ConfigurationComponent implements OnInit {

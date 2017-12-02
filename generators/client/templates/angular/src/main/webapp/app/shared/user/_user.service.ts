@@ -23,7 +23,9 @@ import { Observable } from 'rxjs/Rx';
 <%_ if (authenticationType !== 'uaa') { _%>
 import { SERVER_API_URL } from '../../app.constants';
 <%_ } _%>
+<%_ if (authenticationType !== 'oauth2') { _%>
 import { User } from './user.model';
+<%_ } _%>
 import { ResponseWrapper } from '../model/response-wrapper.model';
 import { createRequestOption } from '../model/request-util';
 
@@ -60,7 +62,7 @@ export class UserService {
     }
 
     authorities(): Observable<string[]> {
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
         return this.http.get(<% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/<% } else { %>SERVER_API_URL + '<% } %>api/users/authorities').map((res: Response) => {
             const json = res.json();
             return <string[]> json;

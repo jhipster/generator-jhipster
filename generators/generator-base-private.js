@@ -112,9 +112,9 @@ module.exports = class extends Generator {
      * @param language
      * @param prefix
      */
-    copyI18n(language, prefix) {
+    copyI18n(language, prefix = '') {
         try {
-            this.template(`${prefix}/i18n/_entity_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${this.entityInstance}.json`);
+            this.template(`${prefix ? `${prefix}/` : ''}i18n/_entity_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${this.entityInstance}.json`);
             this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClass, language);
         } catch (e) {
             this.debug('Error:', e);
@@ -130,9 +130,9 @@ module.exports = class extends Generator {
      * @param enumInfo
      * @param prefix
      */
-    copyEnumI18n(language, enumInfo, prefix) {
+    copyEnumI18n(language, enumInfo, prefix = '') {
         try {
-            this.template(`${prefix}/i18n/_enum.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.enumInstance}.json`, this, {}, enumInfo);
+            this.template(`${prefix ? `${prefix}/` : ''}i18n/_enum.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.enumInstance}.json`, this, {}, enumInfo);
         } catch (e) {
             this.debug('Error:', e);
             // An exception is thrown if the folder doesn't exist
@@ -605,8 +605,8 @@ module.exports = class extends Generator {
                 this.warning('Java 8 is not found on your computer.');
             } else {
                 const javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
-                if (!javaVersion.match(/1\.8/)) {
-                    this.warning(`Java 8 is not found on your computer. Your Java version is: ${chalk.yellow(javaVersion)}`);
+                if (!javaVersion.match(new RegExp(constants.JAVA_VERSION.replace('.', '\\.')))) {
+                    this.warning(`Java ${constants.JAVA_VERSION} is not found on your computer. Your Java version is: ${chalk.yellow(javaVersion)}`);
                 }
             }
             done();
@@ -840,9 +840,10 @@ module.exports = class extends Generator {
      *
      * @param {any} from - from
      * @param {any} to - to
+     * @param {any} context - generator context
      */
-    copyFilteringFlag(from, to) {
-        if (this.databaseType === 'sql' && this.service !== 'no') {
+    copyFilteringFlag(from, to, context = this) {
+        if (context.databaseType === 'sql' && context.service !== 'no') {
             to.jpaMetamodelFiltering = from.jpaMetamodelFiltering;
         } else {
             to.jpaMetamodelFiltering = false;
@@ -869,5 +870,21 @@ module.exports = class extends Generator {
         this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build']).on('close', () => {
             done();
         });
+    }
+
+    /**
+     * Generate a primary key, according to the type
+     *
+     * @param {any} pkType - the type of the primary key
+     * @param {any} prodDatabaseType - the database type
+     */
+    generateTestEntityId(pkType, prodDatabaseType) {
+        if (pkType === 'String') {
+            if (prodDatabaseType === 'cassandra') {
+                return '\'9fec3727-3421-4967-b213-ba36557ca194\'';
+            }
+            return '\'123\'';
+        }
+        return 123;
     }
 };

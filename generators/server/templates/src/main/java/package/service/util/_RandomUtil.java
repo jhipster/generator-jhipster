@@ -49,30 +49,30 @@ public final class RandomUtil {
     }
 
     /**
-    * Generate a reset key.
-    *
-    * @return the generated reset key
-    */
+     * Generate a reset key.
+     *
+     * @return the generated reset key
+     */
     public static String generateResetKey() {
         return RandomStringUtils.randomNumeric(DEF_COUNT);
     }
     <%_ if (authenticationType === 'session') { _%>
 
     /**
-    * Generate a unique series to validate a persistent token, used in the
-    * authentication remember-me mechanism.
-    *
-    * @return the generated series data
-    */
+     * Generate a unique series to validate a persistent token, used in the
+     * authentication remember-me mechanism.
+     *
+     * @return the generated series data
+     */
     public static String generateSeriesData() {
         return RandomStringUtils.randomAlphanumeric(DEF_COUNT);
     }
 
     /**
-    * Generate a persistent token, used in the authentication remember-me mechanism.
-    *
-    * @return the generated token data
-    */
+     * Generate a persistent token, used in the authentication remember-me mechanism.
+     *
+     * @return the generated token data
+     */
     public static String generateTokenData() {
         return RandomStringUtils.randomAlphanumeric(DEF_COUNT);
     }

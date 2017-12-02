@@ -17,13 +17,19 @@
  limitations under the License.
 -%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
+<%_ if (prodDatabaseType !== 'cassandra') { _%>
 import { ActivatedRoute, Router } from '@angular/router';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
 import { ITEMS_PER_PAGE, Principal, User, UserService, ResponseWrapper } from '../../shared';
+<%_ } else { _%>
+import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
+
+import { Principal, User, UserService, ResponseWrapper } from '../../shared';
+<%_ } _%>
 
 @Component({
-    selector: '<%=jhiPrefix%>-user-mgmt',
+    selector: '<%= jhiPrefixDashed %>-user-mgmt',
     templateUrl: './user-management.component.html'
 })
 export class UserMgmtComponent implements OnInit, OnDestroy {
@@ -46,12 +52,14 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
 
     constructor(
         private userService: UserService,
-        private parseLinks: JhiParseLinks,
         private alertService: JhiAlertService,
         private principal: Principal,
-        private eventManager: JhiEventManager,
+        <%_ if (prodDatabaseType !== 'cassandra') { _%>
+        private parseLinks: JhiParseLinks,
         private activatedRoute: ActivatedRoute,
-        private router: Router
+        private router: Router,
+        <%_ } _%>
+        private eventManager: JhiEventManager
     ) {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.itemsPerPage = ITEMS_PER_PAGE;

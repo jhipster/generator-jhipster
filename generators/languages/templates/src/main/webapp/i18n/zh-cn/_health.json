@@ -43,7 +43,8 @@
             "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql') { %>,
             "db": "数据库"<% } %><% if (databaseType === 'mongodb') { %>,
             "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
-            "cassandra": "Cassandra"<% } %>
+            "cassandra": "Cassandra"<% } %><% if (databaseType === 'couchbase') { %>,
+            "couchbase": "Couchbase"<% } %>
         },
         "table": {
             "service": "服务名称",

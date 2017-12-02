@@ -23,16 +23,16 @@ import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 import <%= packageName %>.config.Constants;
-<%_ if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { _%>
+<%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
 import <%= packageName %>.domain.PersistentToken;
 <%_ } _%>
 import <%= packageName %>.domain.User;
-<%_ if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { _%>
+<%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
 import <%= packageName %>.repository.PersistentTokenRepository;
 <%_ } _%>
 import <%= packageName %>.repository.UserRepository;
 import <%= packageName %>.service.dto.UserDTO;
-<%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb')) { _%>
+<%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 import <%= packageName %>.service.util.RandomUtil;
 <%_ } _%>
 
@@ -44,9 +44,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+<%_ } _%><%_ if (databaseType === 'couchbase') { _%>
+import org.springframework.security.test.context.support.WithAnonymousUser;
 <%_ } _%>
 import org.springframework.test.context.junit4.SpringRunner;
 <%_ if (databaseType === 'sql') { _%>
@@ -57,18 +59,21 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
-<%_ if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { _%>
+<%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
 import java.time.LocalDate;
 <%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
 import java.util.List;
 <%_ } _%>
-<%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb')) { _%>
+<%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 import java.util.Optional;
 <%_ } _%><%_ if (databaseType === 'cassandra') { _%>
 import java.util.UUID;
 <%_ } _%>
 
+<%_ if (databaseType === 'couchbase') { _%>
+import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
+<%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -81,7 +86,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional<% } %>
 public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
-    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { _%>
+    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
     @Autowired
     private PersistentTokenRepository persistentTokenRepository;
 
@@ -96,7 +101,10 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
 
     @Before
     public void init() {
-        <%_ if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { _%>
+        <%_ if (databaseType === 'couchbase') { _%>
+        mockAuthentication();
+        <%_ } _%>
+        <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
         persistentTokenRepository.deleteAll();
         <%_ } _%>
         <%_ if (databaseType !== 'sql') { _%>
@@ -119,7 +127,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         <%_ } _%>
         user.setLangKey("en");
     }
-    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { _%>
+    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
 
     @Test
     <%_ if (databaseType === 'sql') { _%>
@@ -136,7 +144,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         assertThat(persistentTokenRepository.findByUser(user)).hasSize(existingCount + 1);
     }
     <%_ } _%>
-    <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb')) { _%>
+    <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 
     @Test
     <%_ if (databaseType === 'sql') { _%>
@@ -239,12 +247,13 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         assertThat(users).isEmpty();
     }
     <%_ } _%>
-    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { _%>
+    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
 
     private void generateUserToken(User user, String tokenSeries, LocalDate localDate) {
         PersistentToken token = new PersistentToken();
-        token.setSeries(tokenSeries);
-        token.setUser(user);
+        token.setSeries(tokenSeries);<% if (databaseType === 'couchbase') { %>
+        token.setLogin(user.getLogin());<% } else { %>
+        token.setUser(user);<% } %>
         token.setTokenValue(tokenSeries + "-data");
         token.setTokenDate(localDate);
         token.setIpAddress("127.0.0.1");
@@ -256,12 +265,14 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
     @Test
     <%_ if (databaseType === 'sql') { _%>
     @Transactional
+    <%_ } else if (databaseType === 'couchbase') { _%>
+    @WithAnonymousUser
     <%_ } _%>
     public void assertThatAnonymousUserIsNotGet() {
         user.setLogin(Constants.ANONYMOUS_USER);
         if (!userRepository.findOneByLogin(Constants.ANONYMOUS_USER).isPresent()) {
             userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
-        }<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+        }<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
         final PageRequest pageable = new PageRequest(0, (int) userRepository.count());
         final Page<UserDTO> allManagedUsers = userService.getAllManagedUsers(pageable);
         assertThat(allManagedUsers.getContent().stream()<% } %><% if (databaseType === 'cassandra') { %>
@@ -270,7 +281,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
             .noneMatch(user -> Constants.ANONYMOUS_USER.equals(user.getLogin())))
             .isTrue();
     }
-    <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb')) { _%>
+    <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 
     @Test
     <%_ if (databaseType === 'sql') { _%>

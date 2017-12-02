@@ -66,11 +66,11 @@ public class UserMapper {
             user.setLangKey(userDTO.getLangKey());
             <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
             Set<Authority> authorities = this.authoritiesFromStrings(userDTO.getAuthorities());
-            if(authorities != null) {
+            if (authorities != null) {
                 user.setAuthorities(authorities);
             }
             <%_ } _%>
-            <%_ if (databaseType === 'cassandra') { _%>
+            <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
             user.setAuthorities(userDTO.getAuthorities());
             <%_ } _%>
             return user;
@@ -84,7 +84,7 @@ public class UserMapper {
             .collect(Collectors.toList());
     }
 
-    public User userFromId(<% if (databaseType === 'mongodb' || databaseType === 'cassandra') { %>String<% } else { %>Long<% } %> id) {
+    public User userFromId(<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { %>String<% } else { %>Long<% } %> id) {
         if (id == null) {
             return null;
         }

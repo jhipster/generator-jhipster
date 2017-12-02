@@ -70,6 +70,13 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
 
+        // This adds support for a `--experimental` flag which can be used to enable experimental features
+        this.option('experimental', {
+            desc: 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
+            type: Boolean,
+            defaults: false
+        });
+
         this.setupServerOptions(this);
         const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
         useBlueprint = this.composeBlueprint(blueprint, 'server'); // use global variable since getters dont have access to instance property
@@ -101,6 +108,7 @@ module.exports = class extends BaseGenerator {
                 this.DOCKER_MARIADB = constants.DOCKER_MARIADB;
                 this.DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL;
                 this.DOCKER_MONGODB = constants.DOCKER_MONGODB;
+                this.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
                 this.DOCKER_MSSQL = constants.DOCKER_MSSQL;
                 this.DOCKER_ORACLE = constants.DOCKER_ORACLE;
                 this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
@@ -117,11 +125,13 @@ module.exports = class extends BaseGenerator {
                 this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
                 this.DOCKER_SWAGGER_EDITOR = constants.DOCKER_SWAGGER_EDITOR;
 
+                this.JAVA_VERSION = constants.JAVA_VERSION;
+                this.SCALA_VERSION = constants.SCALA_VERSION;
+
                 this.NODE_VERSION = constants.NODE_VERSION;
                 this.YARN_VERSION = constants.YARN_VERSION;
                 this.NPM_VERSION = constants.NPM_VERSION;
 
-                this.javaVersion = '8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
                 this.packagejs = packagejs;
                 this.applicationType = this.config.get('applicationType') || this.configOptions.applicationType;
                 if (!this.applicationType) {
@@ -156,6 +166,10 @@ module.exports = class extends BaseGenerator {
                 if (this.databaseType === 'mongodb') {
                     this.devDatabaseType = 'mongodb';
                     this.prodDatabaseType = 'mongodb';
+                    this.hibernateCache = 'no';
+                } else if (this.databaseType === 'couchbase') {
+                    this.devDatabaseType = 'couchbase';
+                    this.prodDatabaseType = 'couchbase';
                     this.hibernateCache = 'no';
                 } else if (this.databaseType === 'cassandra') {
                     this.devDatabaseType = 'cassandra';
@@ -209,7 +223,7 @@ module.exports = class extends BaseGenerator {
                     this.baseName = baseName;
                 }
 
-                // force constiables unused by microservice applications
+                // force variables unused by microservice applications
                 if (this.applicationType === 'microservice' || this.applicationType === 'uaa') {
                     this.clusteredHttpSession = false;
                     this.websocket = false;
@@ -336,7 +350,7 @@ module.exports = class extends BaseGenerator {
                 this.humanizedBaseName = _.startCase(this.baseName);
                 this.mainClass = this.getMainClassName();
 
-                if (this.databaseType === 'cassandra' || this.databaseType === 'mongodb') {
+                if (this.databaseType === 'cassandra' || this.databaseType === 'mongodb' || this.databaseType === 'couchbase') {
                     this.pkType = 'String';
                 } else {
                     this.pkType = 'Long';
@@ -401,9 +415,9 @@ module.exports = class extends BaseGenerator {
                 if (this.configOptions.clientFramework) {
                     this.clientFramework = this.configOptions.clientFramework;
                 }
-                this.protractorTests = this.testFrameworks.indexOf('protractor') !== -1;
-                this.gatlingTests = this.testFrameworks.indexOf('gatling') !== -1;
-                this.cucumberTests = this.testFrameworks.indexOf('cucumber') !== -1;
+                this.protractorTests = this.testFrameworks.includes('protractor');
+                this.gatlingTests = this.testFrameworks.includes('gatling');
+                this.cucumberTests = this.testFrameworks.includes('cucumber');
             },
 
             composeLanguages() {

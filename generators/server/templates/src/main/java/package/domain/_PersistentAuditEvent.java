@@ -17,13 +17,18 @@
  limitations under the License.
 -%>
 package <%=packageName%>.domain;
-<%_ if (databaseType === 'mongodb') { _%>
 
+<%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+<%_ } else if (databaseType === 'couchbase') { _%>
+import org.springframework.data.annotation.Id;
+import com.couchbase.client.java.repository.annotation.Field;
+import org.springframework.data.couchbase.core.mapping.Document;
+import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
+import org.springframework.data.couchbase.core.mapping.id.IdPrefix;
 <%_ } else if (databaseType === 'sql') { _%>
-
 import javax.persistence.*;
 <%_ } _%>
 import javax.validation.constraints.NotNull;
@@ -32,15 +37,28 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
+<%_ if (databaseType === 'couchbase') { _%>
+import static <%=packageName%>.config.Constants.ID_DELIMITER;
+import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
+
+<%_ } _%>
 /**
- * Persist AuditEvent managed by the Spring Boot actuator
+ * Persist AuditEvent managed by the Spring Boot actuator.
+ *
  * @see org.springframework.boot.actuate.audit.AuditEvent
  */<% if (databaseType === 'sql') { %>
 @Entity
 @Table(name = "<%= jhiTablePrefix %>_persistent_audit_event")<% } %><% if (databaseType === 'mongodb') { %>
-@Document(collection = "<%= jhiTablePrefix %>_persistent_audit_event")<% } %>
+@Document(collection = "<%= jhiTablePrefix %>_persistent_audit_event")<% } %><% if (databaseType === 'couchbase') { %>
+@Document<% } %>
 public class PersistentAuditEvent implements Serializable {
+    <% if (databaseType === 'couchbase') { %>
+    public static final String PREFIX = "audit";
 
+    @SuppressWarnings("unused")
+    @IdPrefix
+    private String prefix = PREFIX;
+    <% } %>
     @Id<% if (databaseType === 'sql') { %>
     <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,16 +68,22 @@ public class PersistentAuditEvent implements Serializable {
     <%_ } _%>
     @Column(name = "event_id")
     private Long id;<% } else { %>
+    <%_ if (databaseType === 'couchbase') { _%>
+    @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)
+    <%_ }  else { _%>
     @Field("event_id")
+    <%_ } _%>
     private String id;<% } %>
 
     @NotNull<% if (databaseType === 'sql') { %>
     @Column(nullable = false)<% } %>
     private String principal;
 <% if (databaseType === 'sql') { %>
-    @Column(name = "event_date")<% } %>
-    private Instant auditEventDate;<% if (databaseType === 'sql') { %>
-    @Column(name = "event_type")<% } %><% if (databaseType === 'mongodb') { %>
+    @Column(name = "event_date")<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
+    @Field("event_date")<% } %>
+    private Instant auditEventDate;
+<% if (databaseType === 'sql') { %>
+    @Column(name = "event_type")<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
     @Field("event_type")<% } %>
     private String auditEventType;
 <% if (databaseType === 'sql') { %>

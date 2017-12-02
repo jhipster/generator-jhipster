@@ -40,10 +40,6 @@
     </appender>
 -->
 
-    <logger name="<%=packageName%>" level="#logback.loglevel#"/>
-
-    <logger name="io.github.jhipster" level="#logback.loglevel#"/>
-
     <%_ if (databaseType === 'cassandra') { _%>
     <logger name="io.netty" level="WARN"/>
     <%_ } _%>
@@ -75,6 +71,10 @@
     <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
     <%_ } else if (databaseType === 'mongodb') { _%>
     <logger name="org.mongodb.driver" level="WARN"/>
+    <%_ } else if (databaseType === 'couchbase') { _%>
+    <logger name="com.couchbase.client" level="WARN"/>
+    <%_ } _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
     <logger name="org.reflections" level="WARN"/>
     <%_ } _%>
     <%_ if (hibernateCache === 'infinispan') { _%>
@@ -111,12 +111,5 @@
     <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
         <resetJUL>true</resetJUL>
     </contextListener>
-
-    <root level="#logback.loglevel#">
-        <appender-ref ref="CONSOLE"/>
-<!--
-        <appender-ref ref="FILE"/>
--->
-    </root>
 
 </configuration>

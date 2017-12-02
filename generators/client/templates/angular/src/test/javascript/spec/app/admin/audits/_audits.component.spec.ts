@@ -61,7 +61,8 @@ describe('Component Tests', () => {
                     PaginationConfig,
                     DatePipe
                 ]
-            }).overrideTemplate(AuditsComponent, '')
+            })
+            .overrideTemplate(AuditsComponent, '')
             .compileComponents();
         }));
 

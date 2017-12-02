@@ -27,7 +27,7 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.*;
-<%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
+<%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
 import java.time.Instant;
 <%_ } _%>
 import java.util.Set;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  */
 public class UserDTO {
 
-    private <% if (databaseType === 'mongodb' || databaseType === 'cassandra') { %>String<% } else { %>Long<% } %> id;
+    private <% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { %>String<% } else { %>Long<% } %> id;
 
     <%_ let columnMax = 50;
         if (enableSocialSignIn) {
@@ -58,7 +58,7 @@ public class UserDTO {
     @Email
     @Size(min = 5, max = 100)
     private String email;
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 
     @Size(max = 256)
     private String imageUrl;
@@ -68,7 +68,7 @@ public class UserDTO {
 
     @Size(min = 2, max = 6)
     private String langKey;
-    <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
 
     private String createdBy;
 
@@ -92,15 +92,17 @@ public class UserDTO {
         this.lastName = user.getLastName();
         this.email = user.getEmail();
         this.activated = user.getActivated();
-        <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
+        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
         this.imageUrl = user.getImageUrl();
         <%_ } _%>
         this.langKey = user.getLangKey();
-        <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
+        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
         this.createdBy = user.getCreatedBy();
         this.createdDate = user.getCreatedDate();
         this.lastModifiedBy = user.getLastModifiedBy();
         this.lastModifiedDate = user.getLastModifiedDate();
+        <%_ } _%>
+        <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
         this.authorities = user.getAuthorities().stream()
             .map(Authority::getName)
             .collect(Collectors.toSet());
@@ -109,11 +111,11 @@ public class UserDTO {
         <%_ } _%>
     }
 
-    public <% if (databaseType === 'mongodb' || databaseType === 'cassandra') { %>String<% } else { %>Long<% } %> getId() {
+    public <% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { %>String<% } else { %>Long<% } %> getId() {
         return id;
     }
 
-    public void setId(<% if (databaseType === 'mongodb' || databaseType === 'cassandra') { %>String<% } else { %>Long<% } %> id) {
+    public void setId(<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { %>String<% } else { %>Long<% } %> id) {
         this.id = id;
     }
 
@@ -148,7 +150,7 @@ public class UserDTO {
     public void setEmail(String email) {
         this.email = email;
     }
-    <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
 
     public String getImageUrl() {
         return imageUrl;
@@ -174,7 +176,7 @@ public class UserDTO {
     public void setLangKey(String langKey) {
         this.langKey = langKey;
     }
-    <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
 
     public String getCreatedBy() {
         return createdBy;
@@ -223,10 +225,10 @@ public class UserDTO {
             "login='" + login + '\'' +
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +<% if (databaseType === 'mongodb' || databaseType === 'sql') { %>
+            ", email='" + email + '\'' +<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>
             ", imageUrl='" + imageUrl + '\'' +<% } %>
             ", activated=" + activated +
-            ", langKey='" + langKey + '\'' +<% if (databaseType === 'mongodb' || databaseType === 'sql') { %>
+            ", langKey='" + langKey + '\'' +<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>
             ", createdBy=" + createdBy +
             ", createdDate=" + createdDate +
             ", lastModifiedBy='" + lastModifiedBy + '\'' +

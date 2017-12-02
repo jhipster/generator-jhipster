@@ -48,7 +48,7 @@ public class AuditResource {
     }
 
     /**
-     * GET  /audits : get a page of AuditEvents.
+     * GET /audits : get a page of AuditEvents.
      *
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of AuditEvents in body
@@ -89,7 +89,7 @@ public class AuditResource {
      * @return the ResponseEntity with status 200 (OK) and the AuditEvent in body, or status 404 (Not Found)
      */
     @GetMapping("/{id:.+}")
-    public ResponseEntity<AuditEvent> get(@PathVariable <% if (databaseType === 'sql') { %>Long <% } %><% if (databaseType === 'mongodb') { %>String <% } %>id) {
+    public ResponseEntity<AuditEvent> get(@PathVariable <% if (databaseType === 'sql') { %>Long <% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>String <% } %>id) {
         return ResponseUtil.wrapOrNotFound(auditEventService.find(id));
     }
 }

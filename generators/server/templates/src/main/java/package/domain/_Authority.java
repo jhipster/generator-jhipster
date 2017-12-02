@@ -19,9 +19,9 @@
 package <%=packageName%>.domain;
 
 <% if (hibernateCache !== 'no' && databaseType === 'sql') { %>import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (databaseType === 'mongodb') { %>
+import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;<% } %><% if (databaseType === 'sql') { %>
+import org.springframework.data.<%= databaseType %>.core.mapping.Document;<% } %><% if (databaseType === 'sql') { %>
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -46,7 +46,8 @@ import java.io.Serializable;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 @Document(collection = "<%= jhiTablePrefix %>_authority")
-<%_ } _%>
+<%_ } _%><% if (databaseType === 'couchbase') { %>
+@Document<% } %>
 public class Authority implements Serializable {
 
     private static final long serialVersionUID = 1L;

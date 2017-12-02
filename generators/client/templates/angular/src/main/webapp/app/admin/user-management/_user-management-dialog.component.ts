@@ -19,14 +19,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { UserModalService } from './user-modal.service';
 import { <% if (enableTranslation) { %>JhiLanguageHelper,<% } %> User, UserService } from '../../shared';
 
 @Component({
-    selector: '<%=jhiPrefix%>-user-mgmt-dialog',
+    selector: '<%= jhiPrefixDashed %>-user-mgmt-dialog',
     templateUrl: './user-management-dialog.component.html'
 })
 export class UserMgmtDialogComponent implements OnInit {
@@ -84,12 +84,11 @@ export class UserMgmtDialogComponent implements OnInit {
 }
 
 @Component({
-    selector: '<%=jhiPrefix%>-user-dialog',
+    selector: '<%= jhiPrefixDashed %>-user-dialog',
     template: ''
 })
 export class UserDialogComponent implements OnInit, OnDestroy {
 
-    modalRef: NgbModalRef;
     routeSub: any;
 
     constructor(
@@ -100,9 +99,9 @@ export class UserDialogComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.routeSub = this.route.params.subscribe((params) => {
             if ( params['login'] ) {
-                this.modalRef = this.userModalService.open(UserMgmtDialogComponent as Component, params['login']);
+                this.userModalService.open(UserMgmtDialogComponent as Component, params['login']);
             } else {
-                this.modalRef = this.userModalService.open(UserMgmtDialogComponent as Component);
+                this.userModalService.open(UserMgmtDialogComponent as Component);
             }
         });
     }

@@ -129,20 +129,20 @@ module.exports = class extends BaseGenerator {
 
             setAppsYaml() {
                 this.appsYaml = [];
-
+                this.keycloakRedirectUri = '';
                 let portIndex = 8080;
                 this.appsFolders.forEach((appsFolder, index) => {
                     const appConfig = this.appConfigs[index];
                     const lowercaseBaseName = appConfig.baseName.toLowerCase();
                     const parentConfiguration = {};
                     const path = this.destinationPath(this.directoryPath + appsFolder);
-
                     // Add application configuration
                     const yaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/app.yml`));
                     const yamlConfig = yaml.services[`${lowercaseBaseName}-app`];
                     if (this.gatewayType === 'traefik' && appConfig.applicationType === 'gateway') {
                         delete yamlConfig.ports; // Do not export the ports as Traefik is the gateway
                     } else if (appConfig.applicationType === 'gateway' || appConfig.applicationType === 'monolith') {
+                        this.keycloakRedirectUri += `"http://localhost:${portIndex}/*", `;
                         const ports = yamlConfig.ports[0].split(':');
                         ports[0] = portIndex;
                         yamlConfig.ports[0] = ports.join(':');
@@ -172,15 +172,13 @@ module.exports = class extends BaseGenerator {
                     // Add database configuration
                     const database = appConfig.prodDatabaseType;
                     if (database !== 'no') {
-                        let relativePath = '';
+                        const relativePath = pathjs.relative(this.destinationRoot(), `${path}/src/main/docker`);
                         const databaseYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/${database}.yml`));
                         const databaseServiceName = `${lowercaseBaseName}-${database}`;
                         let databaseYamlConfig = databaseYaml.services[databaseServiceName];
                         delete databaseYamlConfig.ports;
 
                         if (database === 'cassandra') {
-                            relativePath = pathjs.relative(this.destinationRoot(), `${path}/src/main/docker`);
-
                             // node config
                             const cassandraClusterYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/cassandra-cluster.yml`));
                             const cassandraNodeConfig = cassandraClusterYaml.services[`${databaseServiceName}-node`];
@@ -198,16 +196,23 @@ module.exports = class extends BaseGenerator {
                             parentConfiguration[`${databaseServiceName}-migration`] = cassandraMigrationConfig;
                         }
 
+                        if (database === 'couchbase') {
+                            databaseYamlConfig.build.context = relativePath;
+                        }
+
                         if (appConfig.clusteredDb) {
-                            const clusterDbYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/mongodb-cluster.yml`));
-                            relativePath = pathjs.relative(this.destinationRoot(), `${path}/src/main/docker`);
-                            const mongodbNodeConfig = clusterDbYaml.services[`${databaseServiceName}-node`];
-                            const mongoDbConfigSrvConfig = clusterDbYaml.services[`${databaseServiceName}-config`];
-                            mongodbNodeConfig.build.context = relativePath;
+                            const clusterDbYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/${database}-cluster.yml`));
+                            const dbNodeConfig = clusterDbYaml.services[`${databaseServiceName}-node`];
+                            dbNodeConfig.build.context = relativePath;
                             databaseYamlConfig = clusterDbYaml.services[databaseServiceName];
                             delete databaseYamlConfig.ports;
-                            parentConfiguration[`${databaseServiceName}-node`] = mongodbNodeConfig;
-                            parentConfiguration[`${databaseServiceName}-config`] = mongoDbConfigSrvConfig;
+                            if (database === 'couchbase') {
+                                databaseYamlConfig.build.context = relativePath;
+                            }
+                            parentConfiguration[`${databaseServiceName}-node`] = dbNodeConfig;
+                            if (database === 'mongodb') {
+                                parentConfiguration[`${databaseServiceName}-config`] = clusterDbYaml.services[`${databaseServiceName}-config`];
+                            }
                         }
 
                         parentConfiguration[databaseServiceName] = databaseYamlConfig;

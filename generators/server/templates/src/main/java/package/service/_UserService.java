@@ -23,9 +23,9 @@ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || hibernateC
 }
 _%>
 package <%=packageName%>.service;
-<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
 import <%=packageName%>.domain.Authority;<% } %>
-import <%=packageName%>.domain.User;<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+import <%=packageName%>.domain.User;<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
 import <%=packageName%>.repository.AuthorityRepository;<% if (authenticationType === 'session') { %>
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %><% } %>
 import <%=packageName%>.config.Constants;
@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
 <%_ if (cacheManagerIsAvailable === true) { _%>
 import org.springframework.cache.CacheManager;
 <%_ } _%>
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
     <%_ if (authenticationType !== 'oauth2') { _%>
@@ -69,13 +69,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;<% if (databaseType === 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 
-<%_ if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { _%>
+<%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
 import java.time.LocalDate;
 <%_ } _%>
 <%_ if (authenticationType !== 'oauth2' || applicationType === 'monolith') { _%>
 import java.time.Instant;
 <%_ } _%>
-<%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb')) { _%>
+<%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
 import java.util.*;
@@ -110,7 +110,7 @@ public class UserService {
 
     private final UserSearchRepository userSearchRepository;
     <%_ } _%>
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
         <%_ if (authenticationType === 'session') { _%>
 
     private final PersistentTokenRepository persistentTokenRepository;
@@ -123,7 +123,7 @@ public class UserService {
     private final CacheManager cacheManager;
     <%_ } _%>
 
-    public UserService(UserRepository userRepository<% if (authenticationType !== 'oauth2') { %>, PasswordEncoder passwordEncoder<% } %><% if (enableSocialSignIn) { %>, SocialService socialService<% } %><% if (searchEngine === 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb') { %><% if (authenticationType === 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>, AuthorityRepository authorityRepository<% } %><% if (cacheManagerIsAvailable === true) { %>, CacheManager cacheManager<% } %>) {
+    public UserService(UserRepository userRepository<% if (authenticationType !== 'oauth2') { %>, PasswordEncoder passwordEncoder<% } %><% if (enableSocialSignIn) { %>, SocialService socialService<% } %><% if (searchEngine === 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %><% if (authenticationType === 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>, AuthorityRepository authorityRepository<% } %><% if (cacheManagerIsAvailable === true) { %>, CacheManager cacheManager<% } %>) {
         this.userRepository = userRepository;
         <%_ if (authenticationType !== 'oauth2') { _%>
         this.passwordEncoder = passwordEncoder;
@@ -134,7 +134,7 @@ public class UserService {
         <%_ if (searchEngine === 'elasticsearch') { _%>
         this.userSearchRepository = userSearchRepository;
         <%_ } _%>
-        <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+        <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
             <%_ if (authenticationType === 'session') { _%>
         this.persistentTokenRepository = persistentTokenRepository;
             <%_ } _%>
@@ -153,7 +153,7 @@ public class UserService {
                 // activate given user for the registration key.
                 user.setActivated(true);
                 user.setActivationKey(null);
-                <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
+                <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { _%>
                 userRepository.save(user);
                 <%_ } _%>
                 <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -176,7 +176,7 @@ public class UserService {
                 user.setPassword(passwordEncoder.encode(newPassword));
                 user.setResetKey(null);
                 user.setResetDate(null);
-                <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
+                <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { _%>
                 userRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
@@ -192,7 +192,7 @@ public class UserService {
             .map(user -> {
                 user.setResetKey(RandomUtil.generateResetKey());
                 user.setResetDate(Instant.now());
-                <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
+                <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { _%>
                 userRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
@@ -207,7 +207,7 @@ public class UserService {
         User newUser = new User();<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
         Authority authority = authorityRepository.findOne(AuthoritiesConstants.USER);
         Set<Authority> authorities = new HashSet<>();<% } %><% if (databaseType === 'cassandra') { %>
-        newUser.setId(UUID.randomUUID().toString());
+        newUser.setId(UUID.randomUUID().toString());<% } %><% if (databaseType === 'cassandra' || databaseType === 'couchbase') { %>
         Set<String> authorities = new HashSet<>();<% } %>
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(userDTO.getLogin());
@@ -216,7 +216,7 @@ public class UserService {
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
         newUser.setEmail(userDTO.getEmail());
-        <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+        <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
         newUser.setImageUrl(userDTO.getImageUrl());
         <%_ } _%>
         newUser.setLangKey(userDTO.getLangKey());
@@ -227,7 +227,7 @@ public class UserService {
         <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
         authorities.add(authority);
         <%_ } _%>
-        <%_ if (databaseType === 'cassandra') { _%>
+        <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
         authorities.add(AuthoritiesConstants.USER);
         <%_ } _%>
         newUser.setAuthorities(authorities);
@@ -244,7 +244,7 @@ public class UserService {
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail());
-        <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+        <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
         user.setImageUrl(userDTO.getImageUrl());
         <%_ } _%>
         if (userDTO.getLangKey() == null) {
@@ -260,7 +260,7 @@ public class UserService {
             user.setAuthorities(authorities);
         }
         <%_ } _%>
-        <%_ if (databaseType === 'cassandra') { _%>
+        <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
         user.setAuthorities(userDTO.getAuthorities());
         <%_ } _%>
         String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
@@ -282,11 +282,11 @@ public class UserService {
      * @param lastName last name of user
      * @param email email id of user
      * @param langKey language key
-     <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
+     <%_ if (databaseType === 'mongodb' || databaseType === 'sql' || databaseType === 'couchbase') { _%>
      * @param imageUrl image URL of user
      <%_ } _%>
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey<% if (databaseType === 'mongodb' || databaseType === 'sql') { %>, String imageUrl<% } %>) {
+    public void updateUser(String firstName, String lastName, String email, String langKey<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>, String imageUrl<% } %>) {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
@@ -294,10 +294,10 @@ public class UserService {
                 user.setLastName(lastName);
                 user.setEmail(email);
                 user.setLangKey(langKey);
-                <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
+                <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
                 user.setImageUrl(imageUrl);
                 <%_ } _%>
-                <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
+                <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { _%>
                 userRepository.save(user);
                 <%_ } _%>
                 <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -320,11 +320,16 @@ public class UserService {
         return Optional.of(userRepository
             .findOne(userDTO.getId()))
             .map(user -> {
+                <%_ if (databaseType === 'couchbase') { _%>
+                if (!user.getLogin().equals(userDTO.getLogin())) {
+                    userRepository.delete(userDTO.getId());
+                }
+                <%_ } _%>
                 user.setLogin(userDTO.getLogin());
                 user.setFirstName(userDTO.getFirstName());
                 user.setLastName(userDTO.getLastName());
                 user.setEmail(userDTO.getEmail());
-                <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+                <%_ if (databaseType === 'sql' || databaseType === 'mongodb'|| databaseType === 'couchbase') { _%>
                 user.setImageUrl(userDTO.getImageUrl());
                 <%_ } _%>
                 user.setActivated(userDTO.isActivated());
@@ -335,10 +340,10 @@ public class UserService {
                 userDTO.getAuthorities().stream()
                     .map(authorityRepository::findOne)
                     .forEach(managedAuthorities::add);
-                <%_ } else { // Cassandra _%>
+                <%_ } else { // Cassandra & Couchbase _%>
                 user.setAuthorities(userDTO.getAuthorities());
                 <%_ } _%>
-                <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
+                <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { _%>
                 userRepository.save(user);
                 <%_ } _%>
                 <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -376,7 +381,7 @@ public class UserService {
             .ifPresent(user -> {
                 String encryptedPassword = passwordEncoder.encode(password);
                 user.setPassword(encryptedPassword);
-                <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
+                <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { _%>
                 userRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
@@ -390,7 +395,7 @@ public class UserService {
     <%_ if (databaseType === 'sql') { _%>
     @Transactional(readOnly = true)
     <%_ } _%>
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
     public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
         return userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER).map(UserDTO::new);
     }<% } else { // Cassandra %>
@@ -407,7 +412,7 @@ public class UserService {
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
         <%_ if (databaseType === 'sql') { _%>
         return userRepository.findOneWithAuthoritiesByLogin(login);
-        <%_ } else { // MongoDB and Cassandra _%>
+        <%_ } else { // MongoDB, Couchbase and Cassandra _%>
         return userRepository.findOneByLogin(login);
         <%_ } _%>
     }
@@ -418,7 +423,7 @@ public class UserService {
     public Optional<User> getUserWithAuthorities(<%= pkType %> id) {
         <%_ if (databaseType === 'sql') { _%>
         return userRepository.findOneWithAuthoritiesById(id);
-        <%_ } else { // MongoDB and Cassandra _%>
+        <%_ } else { // MongoDB, Couchbase and and Cassandra _%>
         return Optional.ofNullable(userRepository.findOne(id));
         <%_ } _%>
     }
@@ -429,7 +434,7 @@ public class UserService {
     public Optional<User> getUserWithAuthorities() {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOne<% if (databaseType === 'sql') { %>WithAuthorities<% } %>ByLogin);
     }
-    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb') && authenticationType === 'session') { _%>
+    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
 
     /**
      * Persistent Token are used for providing automatic authentication, they should be automatically deleted after
@@ -448,7 +453,7 @@ public class UserService {
         });
     }
     <%_ } _%>
-    <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb')) { _%>
+    <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 
     /**
      * Not activated users should be automatically deleted after 3 days.
@@ -469,7 +474,7 @@ public class UserService {
             <%_ } _%>
         }
     }
-    <%_ } if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+    <%_ } if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 
     /**
      * @return a list of all the authorities
@@ -490,12 +495,14 @@ public class UserService {
     public UserDTO getUserFromAuthentication(OAuth2Authentication authentication) {
         Map<String, Object> details = (Map<String, Object>) authentication.getUserAuthentication().getDetails();
         User user = getUser(details);
-        Set<Authority> userAuthorities = extractAuthorities(authentication, details);
+        Set<<% if (databaseType === 'couchbase') { %>String<% } else { %>Authority<% } %>> userAuthorities = extractAuthorities(authentication, details);
         user.setAuthorities(userAuthorities);
 
         // convert Authorities to GrantedAuthorities
         Set<GrantedAuthority> grantedAuthorities = userAuthorities.stream()
+        <%_ if (databaseType !== 'couchbase') { _%>
             .map(Authority::getName)
+        <%_ } _%>
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toSet());
 
@@ -544,8 +551,8 @@ public class UserService {
         return token;
     }
 
-    private static Set<Authority> extractAuthorities(OAuth2Authentication authentication, Map<String, Object> details) {
-        Set<Authority> userAuthorities;
+    private static Set<<% if (databaseType === 'couchbase') { %>String<% } else { %>Authority<% } %>> extractAuthorities(OAuth2Authentication authentication, Map<String, Object> details) {
+        Set<<% if (databaseType === 'couchbase') { %>String<% } else { %>Authority<% } %>> userAuthorities;
         // get roles from details
         if (details.get("roles") != null) {
             userAuthorities = extractAuthorities((List<String>) details.get("roles"));
@@ -589,18 +596,19 @@ public class UserService {
         return user;
     }
 
-    private static Set<Authority> extractAuthorities(List<String> values) {
+    private static Set<<% if (databaseType === 'couchbase') { %>String<% } else { %>Authority<% } %>> extractAuthorities(List<String> values) {
         return authoritiesFromStringStream(
             values.stream().filter(role -> role.startsWith("ROLE_"))
         );
     }
 
-    private static Set<Authority> authoritiesFromStringStream(Stream<String> strings) {
-        return strings.map(string -> {
-            Authority auth = new Authority();
-            auth.setName(string);
-            return auth;
-        }).collect(Collectors.toSet());
+    private static Set<<% if (databaseType === 'couchbase') { %>String<% } else { %>Authority<% } %>> authoritiesFromStringStream(Stream<String> strings) {
+        return strings<% if (databaseType !== 'couchbase') { %>
+                    .map(string -> {
+                        Authority auth = new Authority();
+                        auth.setName(string);
+                        return auth;
+                    })<% } %>.collect(Collectors.toSet());
     }
     <%_ } _%>
 

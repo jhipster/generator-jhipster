@@ -23,7 +23,7 @@ import { <%=jhiPrefixCapitalized%>HealthService } from './health.service';
 import { <%=jhiPrefixCapitalized%>HealthModalComponent } from './health-modal.component';
 
 @Component({
-    selector: '<%=jhiPrefix%>-health',
+    selector: '<%= jhiPrefixDashed %>-health',
     templateUrl: './health.component.html'
 })
 export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {

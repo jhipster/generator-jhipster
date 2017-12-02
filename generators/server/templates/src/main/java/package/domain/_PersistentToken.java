@@ -25,14 +25,21 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %>
 import java.time.LocalDate;<% if (databaseType === 'mongodb') { %>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;<% } %>
-
+import org.springframework.data.mongodb.core.mapping.Document;<% } %><% if (databaseType === 'couchbase') { %>
+import org.springframework.data.annotation.Id;
+import org.springframework.data.couchbase.core.mapping.Document;
+import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
+import org.springframework.data.couchbase.core.mapping.id.IdAttribute;
+import org.springframework.data.couchbase.core.mapping.id.IdPrefix;<% } %>
 <% if (databaseType === 'sql') { %>import javax.persistence.*;<% } %>
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;<% if (databaseType === 'cassandra') { %>
 import java.util.Date;<% } %>
-
+<% if (databaseType === 'couchbase') { %>
+import static <%=packageName%>.config.Constants.ID_DELIMITER;
+import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.USE_ATTRIBUTES;
+<% } %>
 /**
  * Persistent tokens are used by Spring Security to automatically log in users.
  *
@@ -43,13 +50,26 @@ import java.util.Date;<% } %>
 <%_ if (hibernateCache !== 'no' && databaseType === 'sql') { if (hibernateCache === 'infinispan') { _%>
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <%_ } else { _%>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<%_ } } _%><% if (databaseType === 'mongodb') { %>
-@Document(collection = "<%= jhiTablePrefix %>_persistent_token")<% } %><% if (databaseType === 'cassandra') { %>
+@Document(collection = "<%= jhiTablePrefix %>_persistent_token")<% } %><% if (databaseType === 'couchbase') { %>
+@Document<% } %><% if (databaseType === 'cassandra') { %>
 @Table(name = "persistent_token")<% } %>
 public class PersistentToken implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private static final int MAX_USER_AGENT_LEN = 255;
+<% if (databaseType === 'couchbase') { %>
+    public static final String PREFIX = "token";
+
+    @SuppressWarnings("unused")
+    @IdPrefix
+    private String prefix = PREFIX;
+
+    @Id
+    @GeneratedValue(strategy = USE_ATTRIBUTES, delimiter = ID_DELIMITER)
+    private String id;
+
+    @IdAttribute<%_ } _%>
 <% if (databaseType === 'sql' || databaseType === 'mongodb')  { %>
     @Id<% } %><% if (databaseType === 'cassandra') { %>
     @PartitionKey<% } %>
@@ -62,7 +82,7 @@ public class PersistentToken implements Serializable {
     private String tokenValue;
     <% if (databaseType === 'sql') { %>
     @Column(name = "token_date")
-    private LocalDate tokenDate;<% } %><% if (databaseType === 'mongodb') { %>
+    private LocalDate tokenDate;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
     private LocalDate tokenDate;<% } %><% if (databaseType === 'cassandra') { %>
     @Column(name = "token_date")
     private Date tokenDate;<% } %>
@@ -74,10 +94,10 @@ public class PersistentToken implements Serializable {
     private String ipAddress;
 
     <% if (databaseType === 'sql' || databaseType === 'cassandra') { %>@Column(name = "user_agent")<% } %>
-    private String userAgent;<% if (databaseType === 'cassandra') { %>
-
-    private String login;
-
+    private String userAgent;
+    <% if (databaseType === 'cassandra' || databaseType === 'couchbase') { %>
+    private String login;<%_ } _%>
+    <% if (databaseType === 'cassandra') { %>
     @Column(name = "user_id")
     private String userId;<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
 
@@ -102,11 +122,11 @@ public class PersistentToken implements Serializable {
         this.tokenValue = tokenValue;
     }
 
-    public <% if (databaseType === 'sql' || databaseType === 'mongodb')  { %>LocalDate<% } %><% if (databaseType === 'cassandra') { %>Date<% } %> getTokenDate() {
+    public <% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')  { %>LocalDate<% } %><% if (databaseType === 'cassandra') { %>Date<% } %> getTokenDate() {
         return tokenDate;
     }
 
-    public void setTokenDate(<% if (databaseType === 'sql' || databaseType === 'mongodb')  { %>LocalDate<% } %><% if (databaseType === 'cassandra') { %>Date<% } %> tokenDate) {
+    public void setTokenDate(<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')  { %>LocalDate<% } %><% if (databaseType === 'cassandra') { %>Date<% } %> tokenDate) {
         this.tokenDate = tokenDate;
     }
 
@@ -136,7 +156,7 @@ public class PersistentToken implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
-    }<% } %><% if (databaseType === 'cassandra') { %>
+    }<% } %><% if (databaseType === 'cassandra' || databaseType === 'couchbase') { %>
 
     public String getLogin() {
         return login;
@@ -144,7 +164,7 @@ public class PersistentToken implements Serializable {
 
     public void setLogin(String login) {
         this.login = login;
-    }
+    }<% } %><% if (databaseType === 'cassandra') { %>
 
     public String getUserId() {
         return userId;

@@ -1186,6 +1186,72 @@ module.exports = class extends PrivateBase {
         }
     }
 
+    /**
+     * Add a Maven dependency Management.
+     *
+     * @param {string} groupId - dependency groupId
+     * @param {string} artifactId - dependency artifactId
+     * @param {string} version - (optional) explicit dependency version number
+     * @param {string} type - (optional) explicit type
+     * @param {string} scope - (optional) explicit scope
+     * @param {string} other - (optional) explicit other thing:  exclusions...
+     */
+    addMavenDependencyManagement(groupId, artifactId, version, type, scope, other) {
+        const fullPath = 'pom.xml';
+        try {
+            let dependency = `${'<dependency>\n' +
+                '                <groupId>'}${groupId}</groupId>\n` +
+                `                <artifactId>${artifactId}</artifactId>\n`;
+            if (version) {
+                dependency += `                <version>${version}</version>\n`;
+            }
+            if (type) {
+                dependency += `                <type>${type}</type>\n`;
+            }
+            if (scope) {
+                dependency += `                <scope>${version}</scope>\n`;
+            }
+            if (other) {
+                dependency += `${other}\n`;
+            }
+            dependency += '             </dependency>';
+            jhipsterUtils.rewriteFile({
+                file: fullPath,
+                needle: 'jhipster-needle-maven-add-dependency-management',
+                splicable: [
+                    dependency
+                ]
+            }, this);
+        } catch (e) {
+            this.log(e);
+            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}maven dependency (groupId: ${groupId}, artifactId:${artifactId}, version:${version})${chalk.yellow(' not added.\n')}`);
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
+     * Add a new Maven property.
+     *
+     * @param {string} name - property name
+     * @param {string} value - property value
+     */
+    addMavenProperty(name, value) {
+        const fullPath = 'pom.xml';
+        try {
+            const property = `<${name}>${value}</${name}>`;
+
+            jhipsterUtils.rewriteFile({
+                file: fullPath,
+                needle: 'jhipster-needle-maven-property',
+                splicable: [
+                    property
+                ]
+            }, this);
+        } catch (e) {
+            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}maven property (name: ${name}, value:${value})${chalk.yellow(' not added.\n')}`);
+            this.debug('Error:', e);
+        }
+    }
 
     /**
      * Add a new Maven dependency.
@@ -1274,6 +1340,34 @@ module.exports = class extends PrivateBase {
             }, this);
         } catch (e) {
             this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}classpath: ${group}:${name}:${version}${chalk.yellow(' not added.\n')}`);
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
+     * A new dependency to build.gradle file.
+     *
+     * @param {string} scope - scope of the new dependency, e.g. compile
+     * @param {string} group - maven GroupId
+     * @param {string} name - maven ArtifactId
+     * @param {string} version - (optional) explicit dependency version number
+     */
+    addGradleDependencyManagement(scope, group, name, version) {
+        const fullPath = 'build.gradle';
+        let dependency = `${group}:${name}`;
+        if (version) {
+            dependency += `:${version}`;
+        }
+        try {
+            jhipsterUtils.rewriteFile({
+                file: fullPath,
+                needle: 'jhipster-needle-gradle-dependency-management',
+                splicable: [
+                    `${scope} "${dependency}"`
+                ]
+            }, this);
+        } catch (e) {
+            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + group}:${name}:${version}${chalk.yellow(' not added.\n')}`);
             this.debug('Error:', e);
         }
     }
@@ -1423,6 +1517,19 @@ module.exports = class extends PrivateBase {
      * @param {boolean} template - flag to use template method instead of copy
      */
     processJs(source, dest, generator, opt, template) {
+        this.copyTemplate(source, dest, 'stripJs', generator, opt, template);
+    }
+
+    /**
+     * Copy JSX templates after stripping translation keys when translation is disabled.
+     *
+     * @param {string} source - path of the source file to copy from
+     * @param {string} dest - path of the destination file to copy to
+     * @param {object} generator - context that can be used as the generator instance or data to process template
+     * @param {object} opt - options that can be passed to template method
+     * @param {boolean} template - flag to use template method instead of copy
+     */
+    processJsx(source, dest, generator, opt, template) {
         this.copyTemplate(source, dest, 'stripJs', generator, opt, template);
     }
 
@@ -1613,50 +1720,51 @@ module.exports = class extends PrivateBase {
      * Load an entity configuration file into context.
      */
     loadEntityJson() {
+        const context = this.context;
         try {
-            this.fileData = this.fs.readJSON(this.fromPath);
+            context.fileData = this.fs.readJSON(context.fromPath);
         } catch (err) {
             this.debug('Error:', err);
             this.error(chalk.red('\nThe entity configuration file could not be read!\n'));
         }
-        this.relationships = this.fileData.relationships || [];
-        this.fields = this.fileData.fields || [];
-        this.changelogDate = this.fileData.changelogDate;
-        this.dto = this.fileData.dto;
-        this.service = this.fileData.service;
-        this.fluentMethods = this.fileData.fluentMethods;
-        this.pagination = this.fileData.pagination;
-        this.searchEngine = this.fileData.searchEngine || this.searchEngine;
-        this.javadoc = this.fileData.javadoc;
-        this.entityTableName = this.fileData.entityTableName;
-        this.jhiPrefix = this.fileData.jhiPrefix || this.jhiPrefix;
-        this.jhiTablePrefix = this.getTableName(this.jhiPrefix);
-        this.copyFilteringFlag(this.fileData, this);
-        if (_.isUndefined(this.entityTableName)) {
-            this.warning(`entityTableName is missing in .jhipster/${this.name}.json, using entity name as fallback`);
-            this.entityTableName = this.getTableName(this.name);
+        context.relationships = context.fileData.relationships || [];
+        context.fields = context.fileData.fields || [];
+        context.changelogDate = context.fileData.changelogDate;
+        context.dto = context.fileData.dto;
+        context.service = context.fileData.service;
+        context.fluentMethods = context.fileData.fluentMethods;
+        context.pagination = context.fileData.pagination;
+        context.searchEngine = context.fileData.searchEngine || context.searchEngine;
+        context.javadoc = context.fileData.javadoc;
+        context.entityTableName = context.fileData.entityTableName;
+        context.jhiPrefix = context.fileData.jhiPrefix || context.jhiPrefix;
+        context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
+        this.copyFilteringFlag(context.fileData, context, context);
+        if (_.isUndefined(context.entityTableName)) {
+            this.warning(`entityTableName is missing in .jhipster/${context.name}.json, using entity name as fallback`);
+            context.entityTableName = this.getTableName(context.name);
         }
-        if (jhiCore.isReservedTableName(this.entityTableName, this.prodDatabaseType)) {
-            this.entityTableName = `${this.jhiTablePrefix}_${this.entityTableName}`;
+        if (jhiCore.isReservedTableName(context.entityTableName, context.prodDatabaseType)) {
+            context.entityTableName = `${context.jhiTablePrefix}_${context.entityTableName}`;
         }
-        this.fields.forEach((field) => {
-            this.fieldNamesUnderscored.push(_.snakeCase(field.fieldName));
-            this.fieldNameChoices.push({ name: field.fieldName, value: field.fieldName });
+        context.fields.forEach((field) => {
+            context.fieldNamesUnderscored.push(_.snakeCase(field.fieldName));
+            context.fieldNameChoices.push({ name: field.fieldName, value: field.fieldName });
         });
-        this.relationships.forEach((rel) => {
-            this.relNameChoices.push({ name: `${rel.relationshipName}:${rel.relationshipType}`, value: `${rel.relationshipName}:${rel.relationshipType}` });
+        context.relationships.forEach((rel) => {
+            context.relNameChoices.push({ name: `${rel.relationshipName}:${rel.relationshipType}`, value: `${rel.relationshipName}:${rel.relationshipType}` });
         });
-        if (this.fileData.angularJSSuffix !== undefined) {
-            this.entityAngularJSSuffix = this.fileData.angularJSSuffix;
+        if (context.fileData.angularJSSuffix !== undefined) {
+            context.entityAngularJSSuffix = context.fileData.angularJSSuffix;
         }
-        this.useMicroserviceJson = this.useMicroserviceJson || !_.isUndefined(this.fileData.microserviceName);
-        if (this.applicationType === 'gateway' && this.useMicroserviceJson) {
-            this.microserviceName = this.fileData.microserviceName;
-            if (!this.microserviceName) {
+        context.useMicroserviceJson = context.useMicroserviceJson || !_.isUndefined(context.fileData.microserviceName);
+        if (context.applicationType === 'gateway' && context.useMicroserviceJson) {
+            context.microserviceName = context.fileData.microserviceName;
+            if (!context.microserviceName) {
                 this.error(chalk.red('Microservice name for the entity is not found. Entity cannot be generated!'));
             }
-            this.microserviceAppName = this.getMicroserviceAppName(this.microserviceName);
-            this.skipServer = true;
+            context.microserviceAppName = this.getMicroserviceAppName(context.microserviceName);
+            context.skipServer = true;
         }
     }
 
@@ -1933,6 +2041,7 @@ module.exports = class extends PrivateBase {
         this.log(chalk.white.bold('                            http://www.jhipster.tech\n'));
         this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow(`v${packagejs.version}`));
         this.log(chalk.white(`Documentation for creating an application: ${chalk.yellow('http://www.jhipster.tech/creating-an-app/')}`));
+        this.log(chalk.white(`If you find JHipster useful consider supporting our collective ${chalk.yellow('https://opencollective.com/generator-jhipster')}`));
         this.log(chalk.white(`Application files will be generated in folder: ${chalk.yellow(process.cwd())}`));
     }
 
@@ -1963,9 +2072,10 @@ module.exports = class extends PrivateBase {
 
     /**
      * get the Angular application name.
+     * @param {string} baseName of application
      */
-    getAngularAppName() {
-        return _.camelCase(this.baseName, true) + (this.baseName.endsWith('App') ? '' : 'App');
+    getAngularAppName(baseName = this.baseName) {
+        return _.camelCase(baseName, true) + (baseName.endsWith('App') ? '' : 'App');
     }
 
     /**
@@ -1977,16 +2087,18 @@ module.exports = class extends PrivateBase {
 
     /**
      * get the Angular 2+ application name.
+     * @param {string} baseName of application
      */
-    getAngularXAppName() {
-        return _.upperFirst(_.camelCase(this.baseName, true));
+    getAngularXAppName(baseName = this.baseName) {
+        return _.upperFirst(_.camelCase(baseName, true));
     }
 
     /**
      * get the java main class name.
+     * @param {string} baseName of application
      */
-    getMainClassName() {
-        const main = _.upperFirst(this.getAngularAppName());
+    getMainClassName(baseName = this.baseName) {
+        const main = _.upperFirst(this.getAngularAppName(baseName));
         const acceptableForJava = new RegExp('^[A-Z][a-zA-Z0-9_]*$');
 
         return acceptableForJava.test(main) ? main : 'Application';
@@ -2107,7 +2219,7 @@ module.exports = class extends PrivateBase {
      * @param {Function} cb - callback when build is complete
      */
     buildApplication(buildTool, profile, cb) {
-        let buildCmd = 'mvnw package -DskipTests=true -B';
+        let buildCmd = 'mvnw verify -DskipTests=true -B';
 
         if (buildTool === 'gradle') {
             buildCmd = 'gradlew bootRepackage -x test';
@@ -2204,6 +2316,7 @@ module.exports = class extends PrivateBase {
         generator.otherModules = context.configOptions.otherModules || [];
         generator.jhiPrefix = context.configOptions.jhiPrefix || context.config.get('jhiPrefix') || context.options['jhi-prefix'];
         generator.jhiPrefixCapitalized = _.upperFirst(generator.jhiPrefix);
+        generator.jhiPrefixDashed = _.kebabCase(generator.jhiPrefix);
         generator.testFrameworks = [];
 
         if (context.options.protractor) generator.testFrameworks.push('protractor');
@@ -2213,6 +2326,7 @@ module.exports = class extends PrivateBase {
         generator.useYarn = context.configOptions.useYarn = !context.options.npm;
         generator.clientPackageManager = context.configOptions.clientPackageManager;
         generator.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
+        generator.experimental = context.configOptions.experimental || context.options.experimental;
     }
 
     /**
@@ -2233,38 +2347,41 @@ module.exports = class extends PrivateBase {
         generator.baseName = context.configOptions.baseName;
         generator.clientPackageManager = context.configOptions.clientPackageManager;
         generator.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
+        generator.experimental = context.configOptions.experimental || context.options.experimental;
     }
 
     /**
      * Setup Entity instance level options from context.
      * @param {any} generator - generator instance
      * @param {any} context - context to use default is generator instance
+     * @param {any} dest - destination context to use default is generator instance
      */
-    setupEntityOptions(generator, context = generator) {
-        generator.name = context.options.name;
+    setupEntityOptions(generator, context = generator, dest = generator) {
+        dest.name = context.options.name;
         // remove extension if feeding json files
-        if (generator.name !== undefined) {
-            generator.name = generator.name.replace('.json', '');
+        if (dest.name !== undefined) {
+            dest.name = dest.name.replace('.json', '');
         }
 
-        generator.regenerate = context.options.regenerate;
-        generator.fluentMethods = context.options['fluent-methods'];
-        generator.entityTableName = generator.getTableName(context.options['table-name'] || generator.name);
-        generator.entityNameCapitalized = _.upperFirst(generator.name);
-        generator.entityAngularJSSuffix = context.options['angular-suffix'];
-        generator.isDebugEnabled = context.options.debug;
-        if (generator.entityAngularJSSuffix && !generator.entityAngularJSSuffix.startsWith('-')) {
-            generator.entityAngularJSSuffix = `-${generator.entityAngularJSSuffix}`;
+        dest.regenerate = context.options.regenerate;
+        dest.fluentMethods = context.options['fluent-methods'];
+        dest.entityTableName = generator.getTableName(context.options['table-name'] || dest.name);
+        dest.entityNameCapitalized = _.upperFirst(dest.name);
+        dest.entityAngularJSSuffix = context.options['angular-suffix'];
+        dest.isDebugEnabled = context.options.debug;
+        generator.experimental = context.options.experimental;
+        if (dest.entityAngularJSSuffix && !dest.entityAngularJSSuffix.startsWith('-')) {
+            dest.entityAngularJSSuffix = `-${dest.entityAngularJSSuffix}`;
         }
-        generator.rootDir = generator.destinationRoot();
+        dest.rootDir = generator.destinationRoot();
         // enum-specific consts
-        generator.enums = [];
+        dest.enums = [];
 
-        generator.existingEnum = false;
+        dest.existingEnum = false;
 
-        generator.fieldNamesUnderscored = ['id'];
+        dest.fieldNamesUnderscored = ['id'];
         // these variable hold field and relationship names for question options during update
-        generator.fieldNameChoices = [];
-        generator.relNameChoices = [];
+        dest.fieldNameChoices = [];
+        dest.relNameChoices = [];
     }
 };

@@ -35,7 +35,9 @@ module.exports = {
     copyWebResource,
     renderContent,
     deepFind,
-    getJavadoc
+    getJavadoc,
+    buildEnumInfo,
+    copyObjectProps
 };
 
 /**
@@ -95,7 +97,7 @@ function rewrite(args) {
 
     let otherwiseLineIndex = -1;
     lines.forEach((line, i) => {
-        if (line.indexOf(args.needle) !== -1) {
+        if (line.includes(args.needle)) {
             otherwiseLineIndex = i;
         }
     });
@@ -302,7 +304,7 @@ function getJavadoc(text, indentSize) {
     if (!text) {
         text = '';
     }
-    if (text.indexOf('"') !== -1) {
+    if (text.includes('"')) {
         text = text.replace(/"/g, '\\"');
     }
     let javadoc = `${_.repeat(' ', indentSize)}/**`;
@@ -312,4 +314,33 @@ function getJavadoc(text, indentSize) {
     }
     javadoc = `${javadoc}\n${_.repeat(' ', indentSize)} */`;
     return javadoc;
+}
+
+/**
+ * Build an enum object
+ * @param {any} field : entity field
+ * @param {string} angularAppName
+ * @param {string} packageName
+ */
+function buildEnumInfo(field, angularAppName, packageName) {
+    const fieldType = field.fieldType;
+    field.enumInstance = _.lowerFirst(fieldType);
+    const enumInfo = {
+        enumName: fieldType,
+        enumValues: field.fieldValues.split(',').join(', '),
+        enumInstance: field.enumInstance,
+        enums: field.fieldValues.replace(/\s/g, '').split(','),
+        angularAppName,
+        packageName
+    };
+    return enumInfo;
+}
+
+/**
+ * Copy object props from source to destination
+ * @param {*} toObj
+ * @param {*} fromObj
+ */
+function copyObjectProps(toObj, fromObj) {
+    Object.assign(toObj, fromObj);
 }
