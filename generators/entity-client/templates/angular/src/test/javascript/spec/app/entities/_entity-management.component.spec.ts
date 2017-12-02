@@ -85,7 +85,6 @@ describe('Component Tests', () => {
         describe('OnInit', () => {
             it('Should call load all on init', () => {
                 // GIVEN
-
                 const headers = new Headers();
                 headers.append('link', 'link;link');
                 spyOn(service, 'query').and.returnValue(Observable.of({

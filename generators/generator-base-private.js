@@ -901,4 +901,16 @@ module.exports = class extends Generator {
         }
         return 10;
     }
+
+    /**
+     * Decide the primary key type based on DB
+     *
+     * @param {any} databaseType - the database type
+     */
+    getPkType(databaseType) {
+        if (['cassandra', 'mongodb', 'couchbase'].includes(databaseType)) {
+            return 'String';
+        }
+        return 'Long';
+    }
 };

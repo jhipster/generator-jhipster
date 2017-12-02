@@ -350,11 +350,7 @@ module.exports = class extends BaseGenerator {
                 this.humanizedBaseName = _.startCase(this.baseName);
                 this.mainClass = this.getMainClassName();
 
-                if (this.databaseType === 'cassandra' || this.databaseType === 'mongodb' || this.databaseType === 'couchbase') {
-                    this.pkType = 'String';
-                } else {
-                    this.pkType = 'Long';
-                }
+                this.pkType = this.getPkType(this.databaseType);
 
                 this.packageFolder = this.packageName.replace(/\./g, '/');
                 this.testDir = `${constants.SERVER_TEST_SRC_DIR + this.packageFolder}/`;

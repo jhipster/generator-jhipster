@@ -6,8 +6,7 @@ import { Observable } from 'rxjs/Rx';
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { MockActivatedRoute } from '../../../helpers/mock-route.service';
 import { UserMgmtDetailComponent } from '../../../../../../main/webapp/app/admin/user-management/user-management-detail.component';
-import { UserService } from '../../../../../../main/webapp/app/shared/user/user.service';
-import { User } from '../../../../../../main/webapp/app/shared/user/user.model';
+import { UserService, User } from '../../../../../../main/webapp/app/shared';
 
 describe('Component Tests', () => {
 

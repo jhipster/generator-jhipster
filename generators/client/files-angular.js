@@ -478,9 +478,7 @@ const files = {
                 'spec/app/account/register/_register.component.spec.ts',
                 'spec/app/account/settings/_settings.component.spec.ts',
                 // login component tests
-                'spec/app/shared/login/_login.component.spec.ts',
-                // user service tests
-                'spec/app/shared/user/_user.service.spec.ts'
+                'spec/app/shared/login/_login.component.spec.ts'
 
             ]
         },
@@ -488,14 +486,26 @@ const files = {
             condition: generator => generator.devDatabaseType !== 'cassandra',
             path: TEST_SRC_DIR,
             templates: [
-                'spec/app/admin/audits/_audits.component.spec.ts',
+                'spec/app/admin/audits/_audits.component.spec.ts'
+            ]
+        },
+        {
+            condition: generator => !generator.skipUserManagement,
+            path: TEST_SRC_DIR,
+            templates: [
+                'spec/app/admin/user-management/_user-management.component.spec.ts',
+                'spec/app/admin/user-management/_user-management-detail.component.spec.ts',
+                'spec/app/admin/user-management/_user-management-dialog.component.spec.ts',
+                'spec/app/admin/user-management/_user-management-delete-dialog.component.spec.ts',
+                // user service tests
+                'spec/app/shared/user/_user.service.spec.ts'
             ]
         },
         {
             condition: generator => generator.authenticationType === 'session',
             path: TEST_SRC_DIR,
             templates: [
-                'spec/app/account/sessions/_sessions.component.spec.ts',
+                'spec/app/account/sessions/_sessions.component.spec.ts'
             ]
         },
         {
