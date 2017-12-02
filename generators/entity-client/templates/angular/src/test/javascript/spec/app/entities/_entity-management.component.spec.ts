@@ -89,7 +89,7 @@ describe('Component Tests', () => {
                 const headers = new Headers();
                 headers.append('link', 'link;link');
                 spyOn(service, 'query').and.returnValue(Observable.of({
-                    json: [new <%= entityAngularName %>(<%_ if (databaseType === 'sql' || databaseType === 'no') { %>10<% } else if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { %>'aaa'<% } %>)],
+                    json: [new <%= entityAngularName %>(<%= generateTestEntityIdForDB(databaseType) %>)],
                     headers
                 }));
 
@@ -98,8 +98,7 @@ describe('Component Tests', () => {
 
                 // THEN
                 expect(service.query).toHaveBeenCalled();
-                expect(comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({id: <%
-                if (databaseType === 'sql' || databaseType === 'no') { %>10<% } else if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { %>'aaa'<% } %>}));
+                expect(comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({id: <%= generateTestEntityIdForDB(databaseType) %>}));
             });
         });
     });

@@ -21,7 +21,6 @@ const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
 _%>
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
-import { DatePipe } from '@angular/common';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Rx';
 import { JhiDateUtils, JhiDataUtils, JhiEventManager } from 'ng-jhipster';
@@ -47,7 +46,6 @@ describe('Component Tests', () => {
                 providers: [
                     JhiDateUtils,
                     JhiDataUtils,
-                    DatePipe,
                     <%= entityAngularName %>Service,
                     {
                         provide: JhiEventManager,

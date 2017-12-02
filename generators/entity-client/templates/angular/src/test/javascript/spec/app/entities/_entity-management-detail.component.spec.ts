@@ -68,16 +68,14 @@ describe('Component Tests', () => {
             it('Should call load all on init', () => {
                 // GIVEN
 
-                spyOn(service, 'find').and.returnValue(Observable.of(new <%= entityAngularName %>(<%_
-                if (databaseType === 'sql' || databaseType === 'no') { %>10<% } else if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { %>'aaa'<% } %>)));
+                spyOn(service, 'find').and.returnValue(Observable.of(new <%= entityAngularName %>(<%= generateTestEntityIdForDB(databaseType) %>)));
 
                 // WHEN
                 comp.ngOnInit();
 
                 // THEN
                 expect(service.find).toHaveBeenCalledWith(<%- tsKeyId %>);
-                expect(comp.<%= entityInstance %>).toEqual(jasmine.objectContaining({id: <%
-                if (databaseType === 'sql' || databaseType === 'no') { %>10<% } else if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { %>'aaa'<% } %>}));
+                expect(comp.<%= entityInstance %>).toEqual(jasmine.objectContaining({id: <%= generateTestEntityIdForDB(databaseType) %>}));
             });
         });
     });
