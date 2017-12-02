@@ -478,7 +478,10 @@ const files = {
                 'spec/app/account/register/_register.component.spec.ts',
                 'spec/app/account/settings/_settings.component.spec.ts',
                 // login component tests
-                'spec/app/shared/login/_login.component.spec.ts'
+                'spec/app/shared/login/_login.component.spec.ts',
+                // user service tests
+                'spec/app/shared/user/_user.service.spec.ts'
+
             ]
         },
         {
