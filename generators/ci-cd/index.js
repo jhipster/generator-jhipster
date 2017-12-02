@@ -111,7 +111,9 @@ module.exports = class extends BaseGenerator {
             this.template('_circle.yml', 'circle.yml');
         }
         if (this.pipelines.includes('travis')) {
-            this.template('_travis.yml', '.travis.yml');
+            this.template('travis/_travis.yml', '.travis.yml');
+            this.copy('travis/before-deploy.sh', 'travis/before-deploy.sh');
+            this.copy('travis/deploy.sh', 'travis/deploy.sh');
         }
     }
 };

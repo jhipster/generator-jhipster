@@ -75,7 +75,12 @@ classes/
 /.mvn/parent/target/
 /.mvn/plugins/target/
 /.mvn/reporting/target/
-
+/src/site/markdown/**
+/.mvn/parent/pom.xml.releaseBackup
+/.mvn/plugins/pom.xml.releaseBackup
+/.mvn/reporting/pom.xml.releaseBackup
+/pom.xml.releaseBackup
+/.mvn/parent/release.properties
 ######################
 # Gradle
 ######################
