@@ -109,7 +109,6 @@ describe('Component Tests', () => {
 
                 // THEN
                 expect(mockActiveModal.dismissSpy).toHaveBeenCalledWith('login success');
-                expect(mockActiveModal.dismissSpy).toHaveBeenCalledWith('login success');
                 expect(comp.authenticationError).toEqual(false);
                 expect(mockEventManager.broadcastSpy).toHaveBeenCalledTimes(1);
                 expect(mockRouter.navigateSpy).toHaveBeenCalledWith(['']);
