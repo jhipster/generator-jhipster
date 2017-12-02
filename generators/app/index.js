@@ -404,6 +404,7 @@ module.exports = class extends BaseGenerator {
                     this.log(`\n${chalk.bold.red('Running post run module hooks failed. No modification done to the generated app.')}`);
                     this.debug('Error:', err);
                 }
+                this.log(chalk.white(`If you find JHipster useful consider supporting our collective ${chalk.yellow('https://opencollective.com/generator-jhipster')}`));
             }
         };
     }
