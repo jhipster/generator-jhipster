@@ -75,7 +75,7 @@
         <%_ if (databaseType === 'sql') { _%>
         <!-- The hibernate version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-        <hibernate.version>5.2.10.Final</hibernate.version>
+        <hibernate.version>5.2.12.Final</hibernate.version>
         <!-- The javassist version should match the one managed by
         https://mvnrepository.com/artifact/org.hibernate/hibernate-core/${hibernate.version} -->
         <javassist.version>3.20.0-GA</javassist.version>
@@ -1044,7 +1044,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec><%= SERVER_MAIN_RES_DIR %>swagger/api.yml</inputSpec>
+                            <inputSpec>${project.basedir}/<%= SERVER_MAIN_RES_DIR %>swagger/api.yml</inputSpec>
                             <language>spring</language>
                             <apiPackage><%= packageName %>.web.api</apiPackage>
                             <modelPackage><%= packageName %>.web.api.model</modelPackage>

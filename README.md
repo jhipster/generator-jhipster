@@ -3,11 +3,36 @@
 
 Greetings, Java Hipster!
 
+Full documentation and information is available on our website at [http://www.jhipster.tech/][jhipster-url]
 
+Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submitting an issue. If your issue is a bug, please use the bug template pre-populated [here](https://github.com/jhipster/generator-jhipster/issues/new). For feature requests and queries you can use [this template][feature-template].
 
 [![NPM version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url-main]
 [![Dependency Status][daviddm-image]][daviddm-url]
+[![Sponsors on Open Collective](https://opencollective.com/colly/sponsors/badge.svg)](#sponsors)
+[![Backers on Open Collective](https://opencollective.com/colly/backers/badge.svg)](#backers)
+
+## Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [Become a sponsor](https://opencollective.com/generator-jhipster#sponsor) or [learn more about sponsoring the project](http://www.jhipster.tech/sponsors/).
+
+<a href="https://opencollective.com/generator-jhipster/sponsor/0/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/1/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/2/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/3/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/4/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/5/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/6/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/7/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/8/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/generator-jhipster/sponsor/9/website" target="_blank"><img src="https://opencollective.com/generator-jhipster/sponsor/9/avatar.svg"></a>
+
+## Backers
+
+Thank you to all our backers! 🙏 [Become a backer](https://opencollective.com/generator-jhipster#backer) or [learn more about becoming a backer](http://www.jhipster.tech/sponsors/).
+
+<a href="https://opencollective.com/generator-jhipster#backers" target="_blank"><img src="https://opencollective.com/generator-jhipster/backers.svg?width=890"></a>
 
 
 ## Travis Builds
@@ -30,10 +55,6 @@ Additional builds on [hipster-labs/jhipster-travis-build](https://github.com/hip
 [![sonar-bugs][sonar-bugs]][sonar-url]
 [![sonar-vulnerabilities][sonar-vulnerabilities]][sonar-url]
 
-
-Full documentation and information is available on our website at [http://www.jhipster.tech/][jhipster-url]
-
-Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submitting an issue. If your issue is a bug, please use the bug template pre populated [here](https://github.com/jhipster/generator-jhipster/issues/new). For feature requests and queries you can use [this template][feature-template].
 
 [travis-url]: https://travis-ci.org/hipster-labs/jhipster-travis-build/branches
 [image-docker]: https://travis-ci.org/hipster-labs/jhipster-travis-build.svg?branch=docker

@@ -69,12 +69,12 @@ describe('account', () => {
         const alert = element.all(by.css('.alert-error'));
         alert.isPresent().then((result) => {
             if (result) {
-                expect(alert.first().getText()).toMatch("Invalid username or password.");
+                expect(alert.first().getText()).toMatch('Invalid username or password.');
             } else {
                 // Okta
                 const error = element.all(by.css('.infobox-error')).first();
                 browser.wait(ec.visibilityOf(error), 2000).then(() => {
-                    expect(error.getText()).toMatch("Sign in failed!");
+                    expect(error.getText()).toMatch('Sign in failed!');
                 });
             }
         });
