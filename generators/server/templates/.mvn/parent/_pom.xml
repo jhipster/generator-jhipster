@@ -29,7 +29,7 @@
     <url>https://github.com/<%= packageName %>/<%= dasherizedBaseName %></url>
     <scm>
         <connection>scm:git:git@github.com:<%= packageName %>/<%= dasherizedBaseName %>.git</connection>
-        <developerConnection>scm:git:ssh://github.com:<%= packageName %>/<%= dasherizedBaseName %>.git</developerConnection>
+        <developerConnection>scm:git:git@github.com:<%= packageName %>/<%= dasherizedBaseName %>.git</developerConnection>
         <url>https://github.com/<%= packageName %>/<%= dasherizedBaseName %></url>
         <tag>HEAD</tag>
     </scm>
@@ -64,6 +64,7 @@
         <maven.version>3.0.0</maven.version>
         <project.reporting.outputEncoding>${encoding}</project.reporting.outputEncoding>
         <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
+        <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <!-- plugins versions -->
         <doxia-module-markdown.version>1.7</doxia-module-markdown.version>
         <maven-enforcer-plugin.version>3.0.0-M1</maven-enforcer-plugin.version>
@@ -72,13 +73,13 @@
         <maven-scm-manager-plexus.version>${org.apache.maven.scm.version}</maven-scm-manager-plexus.version>
         <maven-scm-provider-gitexe.version>${org.apache.maven.scm.version}</maven-scm-provider-gitexe.version>
         <wagon-scm.version>2.10</wagon-scm.version>
-        <apache-rat-plugin.version>0.11</apache-rat-plugin.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
         <maven-javadoc-plugin.version>3.0.0-M1</maven-javadoc-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
         <!-- generic versions -->
         <org.apache.maven.scm.version>1.9.1</org.apache.maven.scm.version>
+        <license-maven-plugin.version>1.14</license-maven-plugin.version>
     </properties>
     <build>
         <defaultGoal>verify</defaultGoal>
@@ -121,7 +122,7 @@
                             </requireMavenVersion>
                             <requireJavaVersion>
                                 <message>You are running an older version of Java. JHipster requires at least JDK ${java.version}</message>
-                                <version>[${java.version}.0,)</version>
+                                <version>[1.8,1.9)</version>
                             </requireJavaVersion>
                         </rules>
                     </configuration>
@@ -152,6 +153,7 @@
                         <scmCommentPrefix>[ci skip][maven-release-plugin]</scmCommentPrefix>
                         <!-- The profile we want to use when doing the release -->
                         <autoVersionSubmodules>true</autoVersionSubmodules>
+                        <releaseProfiles>release</releaseProfiles>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -219,9 +221,40 @@
                     <extensions>true</extensions>
                     <configuration>
                         <serverId>releases</serverId>
+                        <autoReleaseAfterClose>false</autoReleaseAfterClose>
                         <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>license-maven-plugin</artifactId>
+                    <version>${license-maven-plugin.version}</version>
+                    <configuration>
+                        <licenseName>${project.license}</licenseName>
+                        <excludes>
+                            <exclude>**/*persistence.xml</exclude>
+                            <exclude>**/*.hmtl</exclude>
+                        </excludes>
+                        <extraExtensions>
+                            <bnd>properties</bnd>
+                        </extraExtensions>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>first</id>
+                            <goals>
+                                <goal>update-file-header</goal>
+                            </goals>
+                            <phase>process-sources</phase>
+                        </execution>
+                        <execution>
+                            <id>second</id>
+                            <goals>
+                                <goal>update-project-license</goal>
+                            </goals>
+                            <phase>process-sources</phase>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -258,6 +291,10 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>license-maven-plugin</artifactId>
                     </plugin>
                 </plugins>
             </build>
@@ -306,4 +343,5 @@
             </build>
         </profile>
     </profiles>
+
 </project>

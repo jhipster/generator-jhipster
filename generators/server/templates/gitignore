@@ -71,11 +71,11 @@ classes/
 # Maven
 ######################
 /log/
-/target/
-/.mvn/parent/target/
-/.mvn/plugins/target/
-/.mvn/reporting/target/
-/src/site/markdown/**
+/target/**/*
+/.mvn/parent/target/**/*
+/.mvn/plugins/target/**/*
+/.mvn/reporting/target/**/*
+/src/site/markdown/* #remove this one and ant runner declaration within parent pom if you want to have advanced maven site
 /.mvn/parent/pom.xml.releaseBackup
 /.mvn/plugins/pom.xml.releaseBackup
 /.mvn/reporting/pom.xml.releaseBackup
