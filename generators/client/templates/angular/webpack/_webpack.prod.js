@@ -45,7 +45,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         <%_ } else { _%>
         global: './<%= MAIN_SRC_DIR %>content/css/global.css',
         <%_ } _%>
-        main: './<%= MAIN_SRC_DIR %>app/app.main-aot'
+        main: './<%= MAIN_SRC_DIR %>app/app.main'
     },
     output: {
         path: utils.root('<%= BUILD_DIR %>www'),
@@ -54,30 +54,8 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     },
     module: {
         rules: [{
-            test: /\.ts$/,
-            use: [
-                {
-                    loader: 'awesome-typescript-loader',
-                    options: {
-                        configFileName: 'tsconfig-aot.json'
-                    },
-                },
-                { loader: 'angular2-template-loader' }
-            ],
-            exclude: ['node_modules/generator-jhipster']
-        },
-        {
-            test: /\.ts$/,
-            use: [
-                {
-                    loader: 'ngc-webpack',
-                    options: {
-                        disable: false,
-                        tsConfigPath: 'tsconfig-aot.json'
-                    }
-                }
-            ],
-            exclude: /(polyfills\.ts|vendor\.ts|Reflect\.ts)/
+            test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
+            use: [ '@ngtools/webpack' ]
         },
         <%_ if (useSass) { _%>
         {
@@ -141,10 +119,10 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
                 }
             }
         }),
-        new ngcWebpack.NgcWebpackPlugin({
-            disabled: false,
-            tsConfig: utils.root('tsconfig-aot.json'),
-            resourceOverride: ''
+        new AngularCompilerPlugin({
+            mainPath: utils.root('<%= MAIN_SRC_DIR %>app/app.main.ts'),
+            tsConfigPath: utils.root('tsconfig-aot.json'),
+            sourceMap: true
         }),
         new webpack.LoaderOptionsPlugin({
             minimize: true,

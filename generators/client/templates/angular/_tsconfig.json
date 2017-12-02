@@ -32,13 +32,16 @@
         "lib": ["es6", "dom"],
         "typeRoots": [
             "node_modules/@types"
-        ]
+        ],
+        "baseUrl": "./",
+        "paths": {
+            "@angular/*": [
+                "../node_modules/@angular/*"
+            ]
+        }
     },
     "include": [
         "<%= MAIN_SRC_DIR %>app",
         "<%= TEST_SRC_DIR %>"
-    ],
-    "exclude": [
-        "<%= MAIN_SRC_DIR %>app/app.main-aot.ts"
     ]
 }
