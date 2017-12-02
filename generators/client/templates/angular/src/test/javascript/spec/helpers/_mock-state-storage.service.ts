@@ -24,15 +24,18 @@ export class MockStateStorageService extends SpyObject {
 
     getUrlSpy: Spy
     storeUrlSpy: Spy
-    fakeResponse: any;
 
     constructor() {
         super(StateStorageService);
-        this.getUrlSpy = this.spy('getUrl').andReturn(Promise.resolve(this.fakeResponse));
+        this.setUrlSpy({});
         this.storeUrlSpy = this.spy('storeUrl').andReturn(this);
     }
 
+    setUrlSpy(json) {
+        this.getUrlSpy = this.spy('getUrl').andReturn(json);
+    }
+
     setResponse(json: any): void {
-        this.fakeResponse = json;
+        this.setUrlSpy(json);
     }
 }
