@@ -1,4 +1,3 @@
-/* eslint-disable */ // TODO Fix when page is completed
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Table, Input } from 'reactstrap';
@@ -12,11 +11,13 @@ export interface IConfigurationPageProps {
   configuration: any;
 }
 
-export class ConfigurationPage extends React.Component<IConfigurationPageProps, undefined> {
+export class ConfigurationPage extends React.Component<IConfigurationPageProps, { filter: string }> {
 
   constructor(props) {
     super(props);
-    this.getConfigurationList = this.getConfigurationList.bind(this);
+    this.state = {
+      filter: ''
+    };
   }
 
   componentDidMount() {
@@ -24,22 +25,30 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
     this.props.getEnv();
   }
 
-  getConfigurationList() {
+  getConfigurationList = () => {
     if (!this.props.isFetching) {
       this.props.getConfigurations();
       this.props.getEnv();
     }
   }
 
+  setFilter = evt => {
+    this.setState({
+      filter: evt.target.value
+    });
+  }
+
+  filterFn = prefix => prefix.toUpperCase().includes(this.state.filter.toUpperCase());
+
   render() {
     const { configuration } = this.props;
+    const { filter } = this.state;
     const configProps = (configuration && configuration.configProps) ? configuration.configProps : {};
     const env = (configuration && configuration.env) ? configuration.env : {};
     return (
-        <div>
+        <div className="pad-20">
           <h2>Configuration</h2>
-          FIX ME add search function
-          <Input type="search" name="search" id="search" placeholder="Search by Prefix" />
+          <Input type="search" value={filter} onChange={this.setFilter} name="search" id="search" placeholder="Search by Prefix" />
           <hr />
           <div className="row">
             <div className="col-12">
@@ -52,7 +61,7 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
                   </tr>
                 </thead>
                 <tbody>
-                  {Object.keys(configProps).map((configPropKey, configPropIndex) => (
+                  {Object.keys(configProps).filter(this.filterFn).map((configPropKey, configPropIndex) => (
                     <tr key={configPropIndex}>
                       <td>{configProps[configPropKey].prefix}</td>
                       <td>
@@ -86,7 +95,7 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
                     <tbody>
                       {env[envKey] ?
                           typeof env[envKey] === 'object' ?
-                            Object.keys(env[envKey]).map((propKey, propIndex) => (
+                            Object.keys(env[envKey]).filter(this.filterFn).map((propKey, propIndex) => (
                               <tr key={propIndex}>
                                 <td>{propKey} </td>
                                 <td>{JSON.stringify(env[envKey][propKey])}</td>
@@ -107,7 +116,11 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
   }
 }
 
-export default connect(
-  ({ administration }) => ({ configuration: administration.configuration, isFetching: administration.isFetching }),
-  { getConfigurations, getEnv }
-)(ConfigurationPage);
+const mapStateToProps = ({ administration }) => ({
+  configuration: administration.configuration,
+  isFetching: administration.isFetching
+});
+
+const mapDispatchToProps = { getConfigurations, getEnv };
+
+export default connect(mapStateToProps, mapDispatchToProps)(ConfigurationPage);
