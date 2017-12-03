@@ -17,14 +17,13 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
-import { HttpClient } from '@angular/common/http';
+import { Response, Http } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
 @Injectable()
 export class <%=jhiPrefixCapitalized%>MetricsService {
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: Http) {}
 
     getMetrics(): Observable<any> {
         return this.http.get('management/metrics').map((res: Response) => res.json());

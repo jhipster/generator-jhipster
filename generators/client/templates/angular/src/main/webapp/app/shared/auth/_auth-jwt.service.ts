@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 <%_ if (authenticationType !== 'uaa') { _%>
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
@@ -27,7 +27,7 @@ import { SERVER_API_URL } from '../../app.constants';
 @Injectable()
 export class AuthServerProvider {
     constructor(
-        private http: HttpClient<%_ if (authenticationType !== 'uaa') { _%>,
+        private http: Http<%_ if (authenticationType !== 'uaa') { _%>,
         private $localStorage: LocalStorageService,
         private $sessionStorage: SessionStorageService
 <%_ } _%>

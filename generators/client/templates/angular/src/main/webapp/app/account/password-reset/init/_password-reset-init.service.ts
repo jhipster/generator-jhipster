@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 <%_ if (authenticationType !== 'uaa') { _%>
 import { SERVER_API_URL } from '../../../app.constants';
@@ -26,7 +26,7 @@ import { SERVER_API_URL } from '../../../app.constants';
 @Injectable()
 export class PasswordResetInitService {
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: Http) {}
 
     save(mail: string): Observable<any> {
         return this.http.post(<% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/<% } else { %>SERVER_API_URL + '<% } %>api/account/reset-password/init', mail);

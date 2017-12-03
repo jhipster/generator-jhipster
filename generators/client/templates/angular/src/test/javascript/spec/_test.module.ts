@@ -21,7 +21,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgModule, ElementRef, Renderer } from '@angular/core';
 import { MockBackend } from '@angular/http/testing';
 import { Http, BaseRequestOptions } from '@angular/http';
-import { HttpClient } from '@angular/common/http';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageService, JhiDataUtils, JhiDateUtils, JhiEventManager, JhiAlertService, JhiParseLinks } from 'ng-jhipster';
@@ -114,13 +113,6 @@ _%>
         },
         {
             provide: Http,
-            useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
-                return new Http(backendInstance, defaultOptions);
-            },
-            deps: [MockBackend, BaseRequestOptions]
-        },
-        {
-            provide: HttpClient,
             useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
                 return new Http(backendInstance, defaultOptions);
             },
