@@ -20,7 +20,6 @@ const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const Visualizer = require('webpack-visualizer-plugin');
-const ngcWebpack = require('ngc-webpack');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;

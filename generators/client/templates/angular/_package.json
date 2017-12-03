@@ -93,7 +93,6 @@
     <%_ if (enableTranslation) { _%>
     "merge-jsons-webpack-plugin": "1.0.11",
     <%_ } _%>
-    "ngc-webpack": "4.1.2",
     "phantomjs-prebuilt": "2.1.16",
     <%_ if (protractorTests) { _%>
     "protractor": "5.1.2",
