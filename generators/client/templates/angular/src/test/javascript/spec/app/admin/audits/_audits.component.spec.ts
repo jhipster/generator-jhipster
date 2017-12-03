@@ -17,9 +17,8 @@
  limitations under the License.
 -%>
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { DatePipe } from '@angular/common';
 import { NgbPaginationConfig} from '@ng-bootstrap/ng-bootstrap';
-import { JhiParseLinks } from 'ng-jhipster';
+
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { PaginationConfig } from '../../../../../../main/webapp/app/blocks/config/uib-pagination.config'
 import { AuditsComponent } from '../../../../../../main/webapp/app/admin/audits/audits.component';
@@ -58,9 +57,7 @@ describe('Component Tests', () => {
                 providers: [
                     AuditsService,
                     NgbPaginationConfig,
-                    JhiParseLinks,
-                    PaginationConfig,
-                    DatePipe
+                    PaginationConfig
                 ]
             })
             .overrideTemplate(AuditsComponent, '')

@@ -28,25 +28,21 @@ export class MockLoginService extends SpyObject {
     requestResetPasswordSpy: Spy;
     cancelSpy: Spy;
 
-    fakeResponse: any;
-
     constructor() {
         super(LoginService);
 
-        this.fakeResponse = null;
-
-        this.loginSpy = this.spy('login').andReturn(Promise.resolve(this.fakeResponse));
+        this.setLoginSpy({});
         this.logoutSpy = this.spy('logout').andReturn(this);
         this.registerSpy = this.spy('register').andReturn(this);
-        this.requestResetPasswordSpy = this.spy('requestResetPasswordSpy').andReturn(this);
+        this.requestResetPasswordSpy = this.spy('requestResetPassword').andReturn(this);
         this.cancelSpy = this.spy('cancel').andReturn(this);
     }
 
-    subscribe(callback: any) {
-        callback(this.fakeResponse);
+    setLoginSpy(json: any) {
+        this.loginSpy = this.spy('login').andReturn(Promise.resolve(json));
     }
 
     setResponse(json: any): void {
-        this.fakeResponse = json;
+        this.setLoginSpy(json);
     }
 }

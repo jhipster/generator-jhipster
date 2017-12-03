@@ -663,11 +663,7 @@ module.exports = class extends BaseGenerator {
                     context.differentRelationships[entityType].push(relationship);
                 });
 
-                if (['cassandra', 'mongodb', 'couchbase'].includes(context.databaseType)) {
-                    context.pkType = 'String';
-                } else {
-                    context.pkType = 'Long';
-                }
+                context.pkType = this.getPkType(context.databaseType);
             },
 
             insight() {

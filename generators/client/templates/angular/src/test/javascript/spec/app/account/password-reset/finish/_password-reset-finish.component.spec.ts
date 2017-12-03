@@ -19,7 +19,7 @@
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { Renderer, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { LoginModalService } from '../../../../../../../main/webapp/app/shared';
+
 import { <%=angularXAppName%>TestModule } from '../../../../test.module';
 import { PasswordResetFinishComponent } from '../../../../../../../main/webapp/app/account/password-reset/finish/password-reset-finish.component';
 import { PasswordResetFinishService } from '../../../../../../../main/webapp/app/account/password-reset/finish/password-reset-finish.service';
@@ -38,10 +38,6 @@ describe('Component Tests', () => {
                 declarations: [PasswordResetFinishComponent],
                 providers: [
                     PasswordResetFinishService,
-                    {
-                        provide: LoginModalService,
-                        useValue: null
-                    },
                     {
                         provide: ActivatedRoute,
                         useValue: new MockActivatedRoute({'key': 'XYZPDQ'})

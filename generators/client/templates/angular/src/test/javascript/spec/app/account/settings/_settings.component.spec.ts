@@ -18,14 +18,10 @@
 -%>
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { Observable } from 'rxjs/Rx';
-<%_ if (enableTranslation) { _%>
-import { JhiLanguageHelper } from '../../../../../../main/webapp/app/shared';
-<%_ } _%>
+
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { Principal, AccountService } from '../../../../../../main/webapp/app/shared';
 import { SettingsComponent } from '../../../../../../main/webapp/app/account/settings/settings.component';
-import { MockAccountService } from '../../../helpers/mock-account.service';
-import { MockPrincipal } from '../../../helpers/mock-principal.service';
 <%_ if (websocket === 'spring-websocket') { _%>
 import { <%=jhiPrefixCapitalized%>TrackerService } from '../../../../../../main/webapp/app/shared/tracker/tracker.service';
 import { MockTrackerService } from '../../../helpers/mock-tracker.service';
@@ -45,24 +41,10 @@ describe('Component Tests', () => {
                 imports: [<%=angularXAppName%>TestModule],
                 declarations: [SettingsComponent],
                 providers: [
-                    {
-                        provide: Principal,
-                        useClass: MockPrincipal
-                    },
-                    {
-                        provide: AccountService,
-                        useClass: MockAccountService
-                    },
                     <%_ if (websocket === 'spring-websocket') { _%>
                     {
                         provide: <%=jhiPrefixCapitalized%>TrackerService,
                         useClass: MockTrackerService
-                    },
-                    <%_ } _%>
-                    <%_ if (enableTranslation) { _%>
-                    {
-                        provide: JhiLanguageHelper,
-                        useValue: null
                     },
                     <%_ } _%>
                 ]

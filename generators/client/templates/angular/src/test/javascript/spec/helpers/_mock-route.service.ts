@@ -16,8 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SpyObject } from './spyobject';
 import { Observable } from 'rxjs';
+import Spy = jasmine.Spy;
 
 export class MockActivatedRoute extends ActivatedRoute {
 
@@ -33,6 +35,11 @@ export class MockActivatedRoute extends ActivatedRoute {
     }
 }
 
-export class MockRouter {
-    navigateSpy = jasmine.createSpy('navigate');
+export class MockRouter extends SpyObject {
+    navigateSpy: Spy;
+
+    constructor() {
+        super(Router);
+        this.navigateSpy = this.spy('navigate');
+    }
 }
