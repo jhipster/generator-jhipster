@@ -321,7 +321,7 @@ const files = {
             ]
         },
         {
-            condition: generator => (generator.databaseType !== 'no' && generator.devDatabaseType !== 'cassandra'),
+            condition: generator => (generator.databaseType !== 'no' && generator.databaseType !== 'cassandra'),
             path: ANGULAR_DIR,
             templates: [
                 { file: 'admin/audits/_audits.route.ts', method: 'processJs' },
@@ -476,7 +476,7 @@ const files = {
             ]
         },
         {
-            condition: generator => (generator.databaseType !== 'no' && generator.devDatabaseType !== 'cassandra'),
+            condition: generator => (generator.databaseType !== 'no' && generator.databaseType !== 'cassandra'),
             path: TEST_SRC_DIR,
             templates: [
                 'spec/app/admin/audits/_audits.component.spec.ts',

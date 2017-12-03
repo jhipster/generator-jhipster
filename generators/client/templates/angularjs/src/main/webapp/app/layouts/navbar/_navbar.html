@@ -153,7 +153,7 @@
                                 <span data-translate="global.menu.admin.configuration">Configuration</span>
                             </a>
                         </li>
-                        <%_ if (databaseType !== 'no' && devDatabaseType !== 'cassandra') { _%>
+                        <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
                         <li ui-sref-active="active">
                             <a ui-sref="audits" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-bell"></span>&nbsp;

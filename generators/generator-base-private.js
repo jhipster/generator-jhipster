@@ -62,8 +62,8 @@ module.exports = class extends Generator {
      */
     installI18nClientFilesByLanguage(_this, webappDir, lang) {
         const generator = _this || this;
-        if (generator.databaseType !== 'no' && generator.devDatabaseType !== 'cassandra') {
-        generator.copyI18nFilesByName(generator, webappDir, 'audits.json', lang);
+        if (generator.databaseType !== 'no' && generator.databaseType !== 'cassandra') {
+            generator.copyI18nFilesByName(generator, webappDir, 'audits.json', lang);
         }
         generator.copyI18nFilesByName(generator, webappDir, 'configuration.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'error.json', lang);
