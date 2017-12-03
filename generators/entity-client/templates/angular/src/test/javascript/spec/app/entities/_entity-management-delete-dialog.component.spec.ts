@@ -23,10 +23,9 @@ _%>
 import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Rx';
-import { JhiDateUtils, JhiDataUtils, JhiEventManager } from 'ng-jhipster';
+import { JhiEventManager } from 'ng-jhipster';
+
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { MockEventManager } from '../../../helpers/mock-event-manager.service';
-import { MockActiveModal } from '../../../helpers/mock-active-modal.service';
 import { <%= entityAngularName %>DeleteDialogComponent } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>-delete-dialog.component';
 import { <%= entityAngularName %>Service } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 
@@ -44,17 +43,7 @@ describe('Component Tests', () => {
                 imports: [<%=angularXAppName%>TestModule],
                 declarations: [<%= entityAngularName %>DeleteDialogComponent],
                 providers: [
-                    JhiDateUtils,
-                    JhiDataUtils,
-                    <%= entityAngularName %>Service,
-                    {
-                        provide: JhiEventManager,
-                        useClass:  MockEventManager
-                    },
-                    {
-                        provide: NgbActiveModal,
-                        useClass: MockActiveModal
-                    }
+                    <%= entityAngularName %>Service
                 ]
             })
             .overrideTemplate(<%= entityAngularName %>DeleteDialogComponent, '')

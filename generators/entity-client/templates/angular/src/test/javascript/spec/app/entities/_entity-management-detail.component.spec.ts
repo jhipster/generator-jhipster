@@ -21,12 +21,9 @@ const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
 _%>
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { DatePipe } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
-import { JhiDateUtils, JhiDataUtils, JhiEventManager } from 'ng-jhipster';
+
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { MockActivatedRoute } from '../../../helpers/mock-route.service';
 import { <%= entityAngularName %>DetailComponent } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>-detail.component';
 import { <%= entityAngularName %>Service } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import { <%= entityAngularName %> } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.model';
@@ -43,15 +40,7 @@ describe('Component Tests', () => {
                 imports: [<%=angularXAppName%>TestModule],
                 declarations: [<%= entityAngularName %>DetailComponent],
                 providers: [
-                    JhiDateUtils,
-                    JhiDataUtils,
-                    DatePipe,
-                    {
-                        provide: ActivatedRoute,
-                        useValue: new MockActivatedRoute({id: <%- tsKeyId %>})
-                    },
-                    <%= entityAngularName %>Service,
-                    JhiEventManager
+                    <%= entityAngularName %>Service
                 ]
             })
             .overrideTemplate(<%= entityAngularName %>DetailComponent, '')

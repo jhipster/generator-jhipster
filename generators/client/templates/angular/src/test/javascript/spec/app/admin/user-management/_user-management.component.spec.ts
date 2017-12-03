@@ -24,7 +24,7 @@ import { Observable } from 'rxjs/Rx';
 import { Headers } from '@angular/http';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { Principal<% if (websocket === 'spring-websocket') { %>, JhiTrackerService<% } %> } from '../../../../../../main/webapp/app/shared';
+import { Principal } from '../../../../../../main/webapp/app/shared';
 import { UserMgmtComponent } from '../../../../../../main/webapp/app/admin/user-management/user-management.component';
 import { UserService, User } from '../../../../../../main/webapp/app/shared';
 
@@ -41,12 +41,6 @@ describe('Component Tests', () => {
                 imports: [<%=angularXAppName%>TestModule],
                 declarations: [UserMgmtComponent],
                 providers: [
-                    <%_ if (websocket === 'spring-websocket') { _%>
-                    {
-                        provide: JhiTrackerService,
-                        useValue: null
-                    },
-                    <%_ } _%>
                     UserService
                 ]
             })

@@ -479,7 +479,6 @@ const files = {
                 'spec/app/account/settings/_settings.component.spec.ts',
                 // login component tests
                 'spec/app/shared/login/_login.component.spec.ts'
-
             ]
         },
         {

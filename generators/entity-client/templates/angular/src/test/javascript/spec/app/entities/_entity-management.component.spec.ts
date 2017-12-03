@@ -23,12 +23,8 @@ _%>
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { Observable } from 'rxjs/Rx';
 import { Headers } from '@angular/http';
-import { ActivatedRoute, Router } from '@angular/router';
-import { JhiParseLinks, JhiDateUtils, JhiDataUtils, JhiEventManager, JhiAlertService } from 'ng-jhipster';
 
-import { MockActivatedRoute, MockRouter } from '../../../helpers/mock-route.service';
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { Principal, AccountService<% if (websocket === 'spring-websocket') { %>, JhiTrackerService<% } %> } from '../../../../../../main/webapp/app/shared';
 import { <%= entityAngularName %>Component } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.component';
 import { <%= entityAngularName %>Service } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import { <%= entityAngularName %> } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.model';
@@ -45,31 +41,7 @@ describe('Component Tests', () => {
                 imports: [<%=angularXAppName%>TestModule],
                 declarations: [<%= entityAngularName %>Component],
                 providers: [
-                    {
-                        provide: JhiAlertService,
-                        useValue: null
-                    },
-                    <%_ if (websocket === 'spring-websocket') { _%>
-                    {
-                        provide: JhiTrackerService,
-                        useValue: null
-                    },
-                    <%_ } _%>
-                    {
-                        provide: ActivatedRoute,
-                        useValue: new MockActivatedRoute({id: <%- tsKeyId %>})
-                    },
-                    {
-                        provide: Router,
-                        useValue: new MockRouter()
-                    },
-                    AccountService,
-                    Principal,
-                    JhiDataUtils,
-                    JhiDateUtils,
-                    JhiParseLinks,
-                    <%= entityAngularName %>Service,
-                    JhiEventManager
+                    <%= entityAngularName %>Service
                 ]
             })
             .overrideTemplate(<%= entityAngularName %>Component, '')

@@ -21,16 +21,11 @@ const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
 _%>
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
-import { ElementRef } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Rx';
-import { JhiAlertService, JhiDateUtils, JhiDataUtils, JhiEventManager } from 'ng-jhipster';
+import { JhiEventManager } from 'ng-jhipster';
 
-import { MockActivatedRoute, MockRouter } from '../../../helpers/mock-route.service';
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { MockEventManager } from '../../../helpers/mock-event-manager.service';
-import { MockActiveModal } from '../../../helpers/mock-active-modal.service';
 import { <%= entityAngularName %>DialogComponent } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.component';
 import { <%= entityAngularName %>Service } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import { <%= entityAngularName %> } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.model';
@@ -68,9 +63,6 @@ describe('Component Tests', () => {
                 imports: [<%=angularXAppName%>TestModule],
                 declarations: [<%= entityAngularName %>DialogComponent],
                 providers: [
-                    JhiDataUtils,
-                    JhiDateUtils,
-                    <%= entityAngularName %>Service,
                     <%_ Object.keys(differentRelationships).forEach(key => {
                         if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
                             const uniqueRel = differentRelationships[key][0];
@@ -80,30 +72,7 @@ describe('Component Tests', () => {
                             }
                         }
                     }); _%>
-                    {
-                        provide: JhiAlertService,
-                        useValue: null
-                    },
-                    {
-                        provide: ActivatedRoute,
-                        useValue: new MockActivatedRoute({id: 123})
-                    },
-                    {
-                        provide: Router,
-                        useValue: new MockRouter()
-                    },
-                    {
-                        provide: JhiEventManager,
-                        useClass:  MockEventManager
-                    },
-                    {
-                        provide: NgbActiveModal,
-                        useClass: MockActiveModal
-                    },
-                    {
-                        provide: ElementRef,
-                        useValue: null
-                    }
+                    <%= entityAngularName %>Service
                 ]
             })
             .overrideTemplate(<%= entityAngularName %>DialogComponent, '')
