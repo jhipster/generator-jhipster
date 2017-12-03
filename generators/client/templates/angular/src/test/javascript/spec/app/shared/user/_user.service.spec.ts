@@ -85,13 +85,14 @@ describe('Service Tests', () => {
                 service.authorities().subscribe((_authorities) => {
                     authorities = _authorities;
                 });
-
+                <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
                 this.lastConnection.mockRespond(new Response(new ResponseOptions({
-                    body: JSON.stringify(['ADMIN', 'USER']),
+                    body: JSON.stringify(['ROLE_USER', 'ROLE_ADMIN']),
                 })));
+                <%_ } _%>
 
                 expect(authorities).toBeDefined();
-                expect(authorities).toEqual(['ADMIN', 'USER']);
+                expect(authorities).toEqual(['ROLE_USER', 'ROLE_ADMIN']);
             });
 
             it('should propagate not found response', () => {
