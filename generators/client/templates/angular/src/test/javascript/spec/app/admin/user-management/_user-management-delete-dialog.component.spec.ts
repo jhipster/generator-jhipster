@@ -16,9 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
-_%>
 import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Rx';
@@ -65,11 +62,11 @@ describe('Component Tests', () => {
                         spyOn(service, 'delete').and.returnValue(Observable.of({}));
 
                         // WHEN
-                        comp.confirmDelete(1);
+                        comp.confirmDelete('user');
                         tick();
 
                         // THEN
-                        expect(service.delete).toHaveBeenCalledWith(1);
+                        expect(service.delete).toHaveBeenCalledWith('user');
                         expect(mockActiveModal.dismissSpy).toHaveBeenCalled();
                         expect(mockEventManager.broadcastSpy).toHaveBeenCalled();
                     })

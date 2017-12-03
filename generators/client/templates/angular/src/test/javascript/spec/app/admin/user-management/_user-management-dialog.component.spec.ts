@@ -83,7 +83,7 @@ describe('Component Tests', () => {
                 inject([],
                     fakeAsync(() => {
                         // GIVEN
-                        const entity = new User(<%= generateTestEntityIdForDB(databaseType) %>);
+                        const entity = new User(<%- tsKeyId %>);
                         spyOn(service, 'update').and.returnValue(Observable.of(entity));
                         comp.user = entity;
                         // WHEN

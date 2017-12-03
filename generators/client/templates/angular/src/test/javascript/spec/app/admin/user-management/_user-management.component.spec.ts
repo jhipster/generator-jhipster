@@ -63,7 +63,7 @@ describe('Component Tests', () => {
                         const headers = new Headers();
                         headers.append('link', 'link;link');
                         spyOn(service, 'query').and.returnValue(Observable.of({
-                            json: [new User(<%= generateTestEntityIdForDB(databaseType) %>)],
+                            json: [new User(<%- tsKeyId %>)],
                             headers
                         }));
 
@@ -73,7 +73,7 @@ describe('Component Tests', () => {
 
                         // THEN
                         expect(service.query).toHaveBeenCalled();
-                        expect(comp.users[0]).toEqual(jasmine.objectContaining({id: <%= generateTestEntityIdForDB(databaseType) %>}));
+                        expect(comp.users[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
                     })
                 )
             );
@@ -86,7 +86,7 @@ describe('Component Tests', () => {
                         // GIVEN
                         const headers = new Headers();
                         headers.append('link', 'link;link');
-                        const user = new User(<%= generateTestEntityIdForDB(databaseType) %>);
+                        const user = new User(<%- tsKeyId %>);
                         spyOn(service, 'query').and.returnValue(Observable.of({
                             json: [user],
                             headers
@@ -100,7 +100,7 @@ describe('Component Tests', () => {
                         // THEN
                         expect(service.update).toHaveBeenCalledWith(user);
                         expect(service.query).toHaveBeenCalled();
-                        expect(comp.users[0]).toEqual(jasmine.objectContaining({id: <%= generateTestEntityIdForDB(databaseType) %>}));
+                        expect(comp.users[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
                     })
                 )
             );

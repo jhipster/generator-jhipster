@@ -92,7 +92,7 @@ describe('Component Tests', () => {
                 inject([],
                     fakeAsync(() => {
                         // GIVEN
-                        const entity = new <%= entityAngularName %>(<%= generateTestEntityIdForDB(databaseType) %>);
+                        const entity = new <%= entityAngularName %>(<%- tsKeyId %>);
                         spyOn(service, 'update').and.returnValue(Observable.of(entity));
                         comp.<%= entityInstance %> = entity;
                         // WHEN

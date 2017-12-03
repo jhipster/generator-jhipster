@@ -37,6 +37,9 @@ import { MockAccountService } from './helpers/mock-account.service';
 import { MockActivatedRoute, MockRouter } from './helpers/mock-route.service';
 import { MockActiveModal } from './helpers/mock-active-modal.service';
 import { MockEventManager } from './helpers/mock-event-manager.service';
+<%_
+const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
+_%>
 
 @NgModule({
     providers: [
@@ -72,7 +75,7 @@ import { MockEventManager } from './helpers/mock-event-manager.service';
         },
         {
             provide: ActivatedRoute,
-            useValue: new MockActivatedRoute({id: 123})
+            useValue: new MockActivatedRoute({id: <%- tsKeyId %>})
         },
         {
             provide: Router,

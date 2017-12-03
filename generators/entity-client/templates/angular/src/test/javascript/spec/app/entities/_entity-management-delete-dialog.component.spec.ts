@@ -66,11 +66,11 @@ describe('Component Tests', () => {
                         spyOn(service, 'delete').and.returnValue(Observable.of({}));
 
                         // WHEN
-                        comp.confirmDelete(1);
+                        comp.confirmDelete(<%- tsKeyId %>);
                         tick();
 
                         // THEN
-                        expect(service.delete).toHaveBeenCalledWith(1);
+                        expect(service.delete).toHaveBeenCalledWith(<%- tsKeyId %>);
                         expect(mockActiveModal.dismissSpy).toHaveBeenCalled();
                         expect(mockEventManager.broadcastSpy).toHaveBeenCalled();
                     })

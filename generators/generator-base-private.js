@@ -889,20 +889,6 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Generate a primary key, according to the DB type
-     *
-     * @param {any} databaseType - the database type
-     */
-    generateTestEntityIdForDB(databaseType) {
-        if (databaseType === 'sql' || databaseType === 'no') {
-            return 10;
-        } else if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') {
-            return 'aaa';
-        }
-        return 10;
-    }
-
-    /**
      * Decide the primary key type based on DB
      *
      * @param {any} databaseType - the database type
