@@ -86,6 +86,7 @@ describe('Service Tests', () => {
                     authorities = _authorities;
                 });
                 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+
                 this.lastConnection.mockRespond(new Response(new ResponseOptions({
                     body: JSON.stringify(['ROLE_USER', 'ROLE_ADMIN']),
                 })));

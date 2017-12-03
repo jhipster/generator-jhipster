@@ -26,11 +26,11 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiLanguageService, JhiDataUtils, JhiDateUtils, JhiEventManager, JhiAlertService, JhiParseLinks } from 'ng-jhipster';
 
 import { MockLanguageService, MockLanguageHelper } from './helpers/mock-language.service';
-import { JhiLanguageHelper, Principal, AccountService, LoginModalService<% if (websocket === 'spring-websocket') { %>, JhiTrackerService<% } %> } from '../../../main/webapp/app/shared';
+import { JhiLanguageHelper, Principal, AccountService<% if (authenticationType !== 'oauth2') { %>, LoginModalService<% } %><% if (websocket === 'spring-websocket') { %>, JhiTrackerService<% } %> } from '../../../main/webapp/app/shared';
 <%_ } else { _%>
 import { JhiDataUtils, JhiDateUtils, JhiEventManager, JhiAlertService, JhiParseLinks } from 'ng-jhipster';
 
-import { Principal, AccountService, LoginModalService<% if (websocket === 'spring-websocket') { %>, JhiTrackerService<% } %> } from '../../../main/webapp/app/shared';
+import { Principal, AccountService<% if (authenticationType !== 'oauth2') { %>, LoginModalService<% } %><% if (websocket === 'spring-websocket') { %>, JhiTrackerService<% } %> } from '../../../main/webapp/app/shared';
 <%_ } _%>
 import { MockPrincipal } from './helpers/mock-principal.service';
 import { MockAccountService } from './helpers/mock-account.service';
@@ -89,10 +89,12 @@ _%>
             provide: AccountService,
             useClass: MockAccountService
         },
+        <%_ if (authenticationType !== 'oauth2') { _%>
         {
             provide: LoginModalService,
             useValue: null
         },
+        <%_ } _%>
         {
             provide: ElementRef,
             useValue: null
