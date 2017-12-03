@@ -11,7 +11,7 @@ function ctrl_c() {
 function usage() {
     me=$(basename "$0")
     echo
-    echo "Usage: $me generate|build|clean [sample_name]"
+    echo "Usage: $me generate|build|clean [sample_name] | list"
     echo
     exit 2
 }
@@ -50,7 +50,13 @@ function cleanProject() {
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 JHIPSTER_SAMPLES="$mydir/samples"
 
-if [ "$1" = "build" ]; then
+if [ "$1" = "list" ]; then
+    for dir in $(ls -1 "$JHIPSTER_SAMPLES"); do
+        if [ -f "$JHIPSTER_SAMPLES/$dir/.yo-rc.json" ] && [[ $dir != *-sample ]]; then
+            echo "$dir"
+        fi
+    done
+elif [ "$1" = "build" ]; then
     if [ "$2" != "" ]; then
         buildProject "$2"
     else

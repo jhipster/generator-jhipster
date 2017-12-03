@@ -332,7 +332,7 @@ module.exports = class extends BaseGenerator {
                 }
 
                 this.styleSheetExt = this.useSass ? 'scss' : 'css';
-
+                this.pkType = this.getPkType(this.databaseType);
                 this.DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
             },
 

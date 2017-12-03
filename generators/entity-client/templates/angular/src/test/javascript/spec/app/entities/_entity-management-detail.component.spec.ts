@@ -21,12 +21,9 @@ const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
 _%>
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { DatePipe } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
-import { JhiDateUtils, JhiDataUtils, JhiEventManager } from 'ng-jhipster';
+
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { MockActivatedRoute } from '../../../helpers/mock-route.service';
 import { <%= entityAngularName %>DetailComponent } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>-detail.component';
 import { <%= entityAngularName %>Service } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import { <%= entityAngularName %> } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.model';
@@ -43,15 +40,7 @@ describe('Component Tests', () => {
                 imports: [<%=angularXAppName%>TestModule],
                 declarations: [<%= entityAngularName %>DetailComponent],
                 providers: [
-                    JhiDateUtils,
-                    JhiDataUtils,
-                    DatePipe,
-                    {
-                        provide: ActivatedRoute,
-                        useValue: new MockActivatedRoute({id: <%- tsKeyId %>})
-                    },
-                    <%= entityAngularName %>Service,
-                    JhiEventManager
+                    <%= entityAngularName %>Service
                 ]
             })
             .overrideTemplate(<%= entityAngularName %>DetailComponent, '')
@@ -68,16 +57,14 @@ describe('Component Tests', () => {
             it('Should call load all on init', () => {
                 // GIVEN
 
-                spyOn(service, 'find').and.returnValue(Observable.of(new <%= entityAngularName %>(<%_
-                if (databaseType === 'sql' || databaseType === 'no') { %>10<% } else if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { %>'aaa'<% } %>)));
+                spyOn(service, 'find').and.returnValue(Observable.of(new <%= entityAngularName %>(<%- tsKeyId %>)));
 
                 // WHEN
                 comp.ngOnInit();
 
                 // THEN
                 expect(service.find).toHaveBeenCalledWith(<%- tsKeyId %>);
-                expect(comp.<%= entityInstance %>).toEqual(jasmine.objectContaining({id: <%
-                if (databaseType === 'sql' || databaseType === 'no') { %>10<% } else if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { %>'aaa'<% } %>}));
+                expect(comp.<%= entityInstance %>).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
             });
         });
     });

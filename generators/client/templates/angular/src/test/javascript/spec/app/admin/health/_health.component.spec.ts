@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { <%=jhiPrefixCapitalized%>HealthCheckComponent } from '../../../../../../main/webapp/app/admin/health/health.component';
 import { <%=jhiPrefixCapitalized%>HealthService } from '../../../../../../main/webapp/app/admin/health/health.service';
@@ -35,11 +35,7 @@ describe('Component Tests', () => {
                 imports: [<%=angularXAppName%>TestModule],
                 declarations: [<%=jhiPrefixCapitalized%>HealthCheckComponent],
                 providers: [
-                    <%=jhiPrefixCapitalized%>HealthService,
-                    {
-                        provide: NgbModal,
-                        useValue: null
-                    }
+                    <%=jhiPrefixCapitalized%>HealthService
                 ]
             })
             .overrideTemplate(<%=jhiPrefixCapitalized%>HealthCheckComponent, '')
