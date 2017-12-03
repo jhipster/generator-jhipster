@@ -27,6 +27,7 @@
         "removeComments": false,
         "noImplicitAny": false,
         "suppressImplicitAnyIndexErrors": true,
+        "skipLibCheck": true,
         "outDir": "<%= DIST_DIR %>app",
         "lib": ["es2015", "dom"],
         "typeRoots": [
