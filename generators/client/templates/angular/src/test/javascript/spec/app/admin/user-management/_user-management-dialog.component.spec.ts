@@ -36,7 +36,9 @@ describe('Component Tests', () => {
         let service: UserService;
         let mockEventManager: any;
         let mockActiveModal: any;
+        <%_ if(enableTranslation) { _%>
         let mockLanguageHelper: any;
+        <%_ } _%>
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
@@ -56,7 +58,9 @@ describe('Component Tests', () => {
             service = fixture.debugElement.injector.get(UserService);
             mockEventManager = fixture.debugElement.injector.get(JhiEventManager);
             mockActiveModal = fixture.debugElement.injector.get(NgbActiveModal);
+            <%_ if(enableTranslation) { _%>
             mockLanguageHelper = fixture.debugElement.injector.get(JhiLanguageHelper);
+            <%_ } _%>
         });
 
         describe('OnInit', () => {
@@ -72,7 +76,9 @@ describe('Component Tests', () => {
                         // THEN
                         expect(service.authorities).toHaveBeenCalled();
                         expect(comp.authorities).toEqual(['USER']);
+                        <%_ if(enableTranslation) { _%>
                         expect(mockLanguageHelper.getAllSpy).toHaveBeenCalled();
+                        <%_ } _%>
                     })
                 )
             );
