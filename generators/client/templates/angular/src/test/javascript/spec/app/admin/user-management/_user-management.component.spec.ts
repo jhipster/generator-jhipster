@@ -19,18 +19,12 @@
 <%_
 const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
 _%>
-/* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
 import { Observable } from 'rxjs/Rx';
 import { Headers } from '@angular/http';
-import { ActivatedRoute, Router } from '@angular/router';
-import { JhiParseLinks, JhiDateUtils, JhiDataUtils, JhiEventManager, JhiAlertService } from 'ng-jhipster';
 
-import { MockAccountService } from './../../../helpers/mock-account.service';
-import { MockPrincipal } from './../../../helpers/mock-principal.service';
-import { MockActivatedRoute, MockRouter } from '../../../helpers/mock-route.service';
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { Principal, AccountService<% if (websocket === 'spring-websocket') { %>, JhiTrackerService<% } %> } from '../../../../../../main/webapp/app/shared';
+import { Principal<% if (websocket === 'spring-websocket') { %>, JhiTrackerService<% } %> } from '../../../../../../main/webapp/app/shared';
 import { UserMgmtComponent } from '../../../../../../main/webapp/app/admin/user-management/user-management.component';
 import { UserService, User } from '../../../../../../main/webapp/app/shared';
 
@@ -47,37 +41,13 @@ describe('Component Tests', () => {
                 imports: [<%=angularXAppName%>TestModule],
                 declarations: [UserMgmtComponent],
                 providers: [
-                    {
-                        provide: JhiAlertService,
-                        useValue: null
-                    },
                     <%_ if (websocket === 'spring-websocket') { _%>
                     {
                         provide: JhiTrackerService,
                         useValue: null
                     },
                     <%_ } _%>
-                    {
-                        provide: ActivatedRoute,
-                        useValue: new MockActivatedRoute({id: <%- tsKeyId %>})
-                    },
-                    {
-                        provide: Router,
-                        useValue: new MockRouter()
-                    },
-                    {
-                        provide: Principal,
-                        useClass: MockPrincipal
-                    },
-                    {
-                        provide: AccountService,
-                        useClass: MockAccountService
-                    },
-                    JhiDataUtils,
-                    JhiDateUtils,
-                    JhiParseLinks,
-                    UserService,
-                    JhiEventManager
+                    UserService
                 ]
             })
             .overrideTemplate(UserMgmtComponent, '')

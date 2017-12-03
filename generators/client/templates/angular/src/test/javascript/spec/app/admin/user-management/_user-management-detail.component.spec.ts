@@ -1,6 +1,4 @@
-/* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
@@ -20,7 +18,6 @@ describe('Component Tests', () => {
                 imports: [<%=angularXAppName%>TestModule],
                 declarations: [UserMgmtDetailComponent],
                 providers: [
-                    DatePipe,
                     {
                         provide: ActivatedRoute,
                         useValue: new MockActivatedRoute({login: 'user'})
@@ -49,7 +46,21 @@ describe('Component Tests', () => {
 
                 // THEN
                 expect(service.find).toHaveBeenCalledWith('user');
-                expect(comp.user).toEqual(jasmine.objectContaining({ id: 1, login: 'user', firstName: 'first', lastName: 'last', email: 'first@last.com', activated: true, langKey: 'en', authorities: ['ROLE_USER'], createdBy: 'admin', createdDate: null, lastModifiedBy: null, lastModifiedDate: null, password: null }));
+                expect(comp.user).toEqual(jasmine.objectContaining({
+                    id: 1,
+                    login: 'user',
+                    firstName: 'first',
+                    lastName: 'last',
+                    email: 'first@last.com',
+                    activated: true,
+                    langKey: 'en',
+                    authorities: ['ROLE_USER'],
+                    createdBy: 'admin',
+                    createdDate: null,
+                    lastModifiedBy: null,
+                    lastModifiedDate: null,
+                    password: null
+                }));
             });
         });
     });

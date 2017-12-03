@@ -19,21 +19,14 @@
 <%_
 const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
 _%>
-/* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
-import { ElementRef } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Rx';
-import { JhiAlertService, JhiDateUtils, JhiDataUtils, JhiEventManager } from 'ng-jhipster';
+import { JhiEventManager } from 'ng-jhipster';
 
-import { MockLanguageHelper } from './../../../helpers/mock-language.service';
-import { MockActivatedRoute, MockRouter } from '../../../helpers/mock-route.service';
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { MockEventManager } from '../../../helpers/mock-event-manager.service';
-import { MockActiveModal } from '../../../helpers/mock-active-modal.service';
 import { UserMgmtDialogComponent } from '../../../../../../main/webapp/app/admin/user-management/user-management-dialog.component';
-import { UserService, User, JhiLanguageHelper } from '../../../../../../main/webapp/app/shared';
+import { UserService, User<% if(enableTranslation) { %>, JhiLanguageHelper<% } %> } from '../../../../../../main/webapp/app/shared';
 
 describe('Component Tests', () => {
 
@@ -50,37 +43,7 @@ describe('Component Tests', () => {
                 imports: [<%=angularXAppName%>TestModule],
                 declarations: [UserMgmtDialogComponent],
                 providers: [
-                    JhiDataUtils,
-                    JhiDateUtils,
-                    UserService,
-                    {
-                        provide: JhiAlertService,
-                        useValue: null
-                    },
-                    {
-                        provide: ActivatedRoute,
-                        useValue: new MockActivatedRoute({id: 123})
-                    },
-                    {
-                        provide: Router,
-                        useValue: new MockRouter()
-                    },
-                    {
-                        provide: JhiEventManager,
-                        useClass:  MockEventManager
-                    },
-                    {
-                        provide: JhiLanguageHelper,
-                        useClass: MockLanguageHelper
-                    },
-                    {
-                        provide: NgbActiveModal,
-                        useClass: MockActiveModal
-                    },
-                    {
-                        provide: ElementRef,
-                        useValue: null
-                    }
+                    UserService
                 ]
             })
             .overrideTemplate(UserMgmtDialogComponent, '')

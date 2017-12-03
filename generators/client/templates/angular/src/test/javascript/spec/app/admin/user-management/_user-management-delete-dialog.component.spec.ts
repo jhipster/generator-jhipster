@@ -19,14 +19,11 @@
 <%_
 const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
 _%>
-/* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Rx';
-import { JhiDateUtils, JhiDataUtils, JhiEventManager } from 'ng-jhipster';
+import { JhiEventManager } from 'ng-jhipster';
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { MockEventManager } from '../../../helpers/mock-event-manager.service';
-import { MockActiveModal } from '../../../helpers/mock-active-modal.service';
 import { UserMgmtDeleteDialogComponent } from '../../../../../../main/webapp/app/admin/user-management/user-management-delete-dialog.component';
 import { UserService } from '../../../../../../main/webapp/app/shared';
 
@@ -44,17 +41,7 @@ describe('Component Tests', () => {
                 imports: [<%=angularXAppName%>TestModule],
                 declarations: [UserMgmtDeleteDialogComponent],
                 providers: [
-                    JhiDateUtils,
-                    JhiDataUtils,
-                    UserService,
-                    {
-                        provide: JhiEventManager,
-                        useClass:  MockEventManager
-                    },
-                    {
-                        provide: NgbActiveModal,
-                        useClass: MockActiveModal
-                    }
+                    UserService
                 ]
             })
             .overrideTemplate(UserMgmtDeleteDialogComponent, '')

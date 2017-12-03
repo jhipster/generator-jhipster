@@ -17,7 +17,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -%>
 import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
-import { Renderer, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
@@ -28,9 +27,6 @@ import { StateStorageService } from '../../../../../../main/webapp/app/shared/au
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { MockLoginService } from '../../../helpers/mock-login.service';
 import { MockStateStorageService } from '../../../helpers/mock-state-storage.service';
-import { MockRouter } from '../../../helpers/mock-route.service';
-import { MockEventManager } from '../../../helpers/mock-event-manager.service';
-import { MockActiveModal } from '../../../helpers/mock-active-modal.service';
 
 describe('Component Tests', () => {
 
@@ -50,32 +46,12 @@ describe('Component Tests', () => {
                 declarations: [<%=jhiPrefixCapitalized%>LoginModalComponent],
                 providers : [
                     {
-                        provide: JhiEventManager,
-                        useClass:  MockEventManager
-                    },
-                    {
                         provide: LoginService,
                         useClass: MockLoginService
                     },
                     {
                         provide: StateStorageService,
                         useClass: MockStateStorageService
-                    },
-                    {
-                        provide: ElementRef,
-                        useValue: null
-                    },
-                    {
-                        provide: Renderer,
-                        useValue: null
-                    },
-                    {
-                        provide: Router,
-                        useClass: MockRouter
-                    },
-                    {
-                        provide: NgbActiveModal,
-                        useClass: MockActiveModal
                     }
                 ]
             })

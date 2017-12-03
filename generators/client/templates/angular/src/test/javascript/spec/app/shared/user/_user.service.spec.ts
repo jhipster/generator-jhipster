@@ -16,14 +16,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -%>
-/* tslint:disable max-line-length */
 import { TestBed, async } from '@angular/core/testing';
 import { MockBackend } from '@angular/http/testing';
 import { ConnectionBackend, RequestOptions, BaseRequestOptions, Http, Response, ResponseOptions } from '@angular/http';
 import { JhiDateUtils } from 'ng-jhipster';
 
-import { UserService } from './../../../../../../main/webapp/app/shared/user/user.service';
-import { User } from '../../../../../../main/webapp/app/shared/index';
+import { UserService, User } from './../../../../../../main/webapp/app/shared';
 
 describe('Service Tests', () => {
 
