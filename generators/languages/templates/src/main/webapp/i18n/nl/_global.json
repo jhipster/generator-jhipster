@@ -47,7 +47,9 @@
                 "health": "Status",
                 "configuration": "Configuration",
                 "logs": "Logboek",
+                <%_ if (databaseType !== 'no' && devDatabaseType !== 'cassandra') { _%>
                 "audits": "Audits",
+                <%_ } _%>
                 "apidocs": "API",
                 "database": "Databank",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"

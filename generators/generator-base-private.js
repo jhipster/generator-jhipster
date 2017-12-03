@@ -62,12 +62,13 @@ module.exports = class extends Generator {
      */
     installI18nClientFilesByLanguage(_this, webappDir, lang) {
         const generator = _this || this;
+        if (generator.databaseType !== 'no' && generator.devDatabaseType !== 'cassandra') {
         generator.copyI18nFilesByName(generator, webappDir, 'audits.json', lang);
+        }
         generator.copyI18nFilesByName(generator, webappDir, 'configuration.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'error.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'gateway.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'login.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'logs.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'home.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'metrics.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'password.json', lang);
@@ -90,6 +91,7 @@ module.exports = class extends Generator {
         generator.template(`${webappDir}i18n/${lang}/_global.json`, `${webappDir}i18n/${lang}/global.json`);
         generator.template(`${webappDir}i18n/${lang}/_health.json`, `${webappDir}i18n/${lang}/health.json`);
         generator.template(`${webappDir}i18n/${lang}/_reset.json`, `${webappDir}i18n/${lang}/reset.json`);
+        generator.template(`${webappDir}i18n/${lang}/_logs.json`, `${webappDir}i18n/${lang}/logs.json`);
     }
 
     /**

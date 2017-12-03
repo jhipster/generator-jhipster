@@ -24,7 +24,9 @@ Disallow: /api/account
 Disallow: /api/account/change-password
 Disallow: /api/account/sessions
 <%_ } _%>
+<%_ if (databaseType !== 'no' && devDatabaseType !== 'cassandra') { _%>
 Disallow: /api/audits/
+<%_ } _%>
 Disallow: /api/logs/
 Disallow: /api/users/
 Disallow: /management/

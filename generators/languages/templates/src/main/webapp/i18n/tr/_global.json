@@ -47,7 +47,9 @@
                 "health": "Sağlık",
                 "configuration": "Yapılandırma",
                 "logs": "Kayıtlar",
+                <%_ if (databaseType !== 'no' && devDatabaseType !== 'cassandra') { _%>
                 "audits": "Denetim",
+                <%_ } _%>
                 "apidocs": "API",
                 "database": "Veritabanı",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"

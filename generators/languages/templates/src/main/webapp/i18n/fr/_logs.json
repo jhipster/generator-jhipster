@@ -8,6 +8,7 @@
             "level": "Niveau"
         }
     },
+    <%_ if (databaseType !== 'no' && devDatabaseType !== 'cassandra') { _%>
     "audits": {
         "title": "Audits",
         "filter": {
@@ -33,4 +34,5 @@
             }
         }
     }
+    <%_ } _%>
 }
