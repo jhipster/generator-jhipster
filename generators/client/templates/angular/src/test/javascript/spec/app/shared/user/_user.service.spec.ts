@@ -22,6 +22,9 @@ import { ConnectionBackend, RequestOptions, BaseRequestOptions, Http, Response, 
 import { JhiDateUtils } from 'ng-jhipster';
 
 import { UserService, User } from './../../../../../../main/webapp/app/shared';
+<%_ if (authenticationType !== 'uaa') { _%>
+import { SERVER_API_URL } from './../../../../../../main/webapp/app/app.constants';
+<%_ } _%>
 
 describe('Service Tests', () => {
 
@@ -56,9 +59,10 @@ describe('Service Tests', () => {
         describe('Service methods', () => {
             it('should call correct URL', () => {
                 service.find('user').subscribe(() => {});
+                const resourceUrl = <% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/<% } else { %>SERVER_API_URL + '<% } %>api/users';
 
                 expect(this.lastConnection).toBeDefined();
-                expect(this.lastConnection.request.url).toEqual('api/users/user');
+                expect(this.lastConnection.request.url).toEqual(`${resourceUrl}/user`);
             });
             it('should return User', () => {
 
