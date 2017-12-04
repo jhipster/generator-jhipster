@@ -213,9 +213,8 @@ public class <%= entityClass %>DTO implements Serializable {
             <%_ for (idx in fields) {
                 const fieldName = fields[idx].fieldName;
                 const fieldType = fields[idx].fieldType;
-                const fieldNameCapitalized = fieldName.charAt(0).toUpperCase() + fieldName.slice(1)
                 const isNumeric = ['integer', 'long', 'float', 'double', 'bigdecimal'].includes(fieldType.toLowerCase()); _%>
-            ", <%= fieldName %>=<% if (! isNumeric) { %>'<% } %>" + <% if (fieldType.toLowerCase() === 'boolean') { %>is<% } else { %>get<% } %><%= fieldNameCapitalized %>() <% if (! isNumeric) { %>+ "'" <% } %>+
+            ", <%= fieldName %>=<% if (! isNumeric) { %>'<% } %>" + <% if (fieldType.toLowerCase() === 'boolean') { %>is<% } else { %>get<% } %><%= fields[idx].fieldInJavaBeanMethod %>() <% if (! isNumeric) { %>+ "'" <% } %>+
             <%_ } _%>
             "}";
     }
