@@ -46,10 +46,11 @@ public class AsyncSpringLiquibase extends SpringLiquibase {
 
     public static final String DISABLED_MESSAGE = "Liquibase is disabled";
     public static final String STARTING_ASYNC_MESSAGE =
-            "Starting Liquibase asynchronously, your database might not be ready at startup!";
+        "Starting Liquibase asynchronously, your database might not be ready at startup!";
     public static final String STARTING_SYNC_MESSAGE = "Starting Liquibase synchronously";
     public static final String STARTED_MESSAGE = "Liquibase has updated your database in {} ms";
-    public static final String EXCEPTION_MESSAGE = "Liquibase could not start correctly, your database is NOT ready: {}";
+    public static final String EXCEPTION_MESSAGE = "Liquibase could not start correctly, your database is NOT ready: " +
+        "{}";
 
     public static final long SLOWNESS_THRESHOLD = 5; // seconds
     public static final String SLOWNESS_MESSAGE = "Warning, Liquibase took more than {} seconds to start up!";

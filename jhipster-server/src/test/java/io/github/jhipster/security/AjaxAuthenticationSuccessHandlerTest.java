@@ -1,18 +1,17 @@
 package io.github.jhipster.security;
 
+import static javax.servlet.http.HttpServletResponse.SC_OK;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-
-import static javax.servlet.http.HttpServletResponse.SC_OK;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
 
 public class AjaxAuthenticationSuccessHandlerTest {
 

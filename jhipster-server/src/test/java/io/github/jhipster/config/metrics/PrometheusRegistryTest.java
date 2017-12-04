@@ -1,24 +1,5 @@
 package io.github.jhipster.config.metrics;
 
-import io.github.jhipster.config.JHipsterProperties;
-import io.github.jhipster.test.LogbackRecorder;
-import io.github.jhipster.test.LogbackRecorder.Event;
-import io.prometheus.client.CollectorRegistry;
-import io.prometheus.client.dropwizard.DropwizardExports;
-import io.prometheus.client.exporter.MetricsServlet;
-
-import java.util.List;
-
-import javax.servlet.Servlet;
-import javax.servlet.ServletRegistration.Dynamic;
-
-import com.codahale.metrics.MetricRegistry;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.mock.web.MockServletContext;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.Matchers.eq;
@@ -26,6 +7,22 @@ import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.List;
+import javax.servlet.Servlet;
+import javax.servlet.ServletRegistration.Dynamic;
+
+import org.junit.*;
+import org.springframework.mock.web.MockServletContext;
+
+import com.codahale.metrics.MetricRegistry;
+
+import io.github.jhipster.config.JHipsterProperties;
+import io.github.jhipster.test.LogbackRecorder;
+import io.github.jhipster.test.LogbackRecorder.Event;
+import io.prometheus.client.CollectorRegistry;
+import io.prometheus.client.dropwizard.DropwizardExports;
+import io.prometheus.client.exporter.MetricsServlet;
 
 public class PrometheusRegistryTest {
 

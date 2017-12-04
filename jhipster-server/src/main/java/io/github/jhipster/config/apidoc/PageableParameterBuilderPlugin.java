@@ -55,8 +55,8 @@ public class PageableParameterBuilderPlugin implements OperationBuilderPlugin {
     public static final String SORT_NAME = "sort";
     public static final String SORT_TYPE = "query";
     public static final String SORT_DESCRIPTION = "Sorting criteria in the format: property(,asc|desc). "
-            + "Default sort order is ascending. "
-            + "Multiple sort criteria are supported.";
+        + "Default sort order is ascending. "
+        + "Multiple sort criteria are supported.";
 
     private final TypeNameExtractor nameExtractor;
     private final TypeResolver resolver;

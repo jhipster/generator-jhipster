@@ -19,19 +19,19 @@
 
 package io.github.jhipster.config.metrics;
 
-import io.github.jhipster.config.JHipsterProperties;
-
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
-
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.graphite.Graphite;
-import com.codahale.metrics.graphite.GraphiteReporter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Configuration;
+
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.graphite.Graphite;
+import com.codahale.metrics.graphite.GraphiteReporter;
+
+import io.github.jhipster.config.JHipsterProperties;
 
 @Configuration
 @ConditionalOnClass(Graphite.class)

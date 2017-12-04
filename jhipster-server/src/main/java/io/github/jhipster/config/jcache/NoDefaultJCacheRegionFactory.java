@@ -33,7 +33,7 @@ import org.hibernate.cache.spi.CacheDataDescription;
 public class NoDefaultJCacheRegionFactory extends JCacheRegionFactory {
 
     public static final String EXCEPTION_MESSAGE = "All Hibernate caches should be created upfront. " +
-            "Please update CacheConfiguration.java to add";
+        "Please update CacheConfiguration.java to add";
 
     @Override
     protected Cache<Object, Object> createCache(String regionName, Properties properties, CacheDataDescription

@@ -19,7 +19,8 @@
 
 package io.github.jhipster.config;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -208,45 +209,45 @@ public class JHipsterProperties {
             private int backupCount = JHipsterDefaults.Cache.Hazelcast.backupCount;
 
             private final ManagementCenter managementCenter = new ManagementCenter();
-    
+
             public ManagementCenter getManagementCenter() {
                 return managementCenter;
             }
-            
+
             public static class ManagementCenter {
 
                 private boolean enabled = false;
-    
+
                 private int updateInterval = 3;
-                
+
                 private String url;
-                
+
                 public boolean isEnabled() {
                     return enabled;
                 }
-    
+
                 public void setEnabled(boolean enabled) {
                     this.enabled = enabled;
                 }
-                
+
                 public int getUpdateInterval() {
                     return updateInterval;
                 }
-    
+
                 public void setUpdateInterval(int updateInterval) {
                     this.updateInterval = updateInterval;
                 }
-                
+
                 public String getUrl() {
                     return url;
                 }
-    
+
                 public void setUrl(String url) {
                     this.url = url;
                 }
 
             }
-            
+
             public int getTimeToLiveSeconds() {
                 return timeToLiveSeconds;
             }
@@ -508,9 +509,11 @@ public class JHipsterProperties {
 
                 private String secret = JHipsterDefaults.Security.Authentication.Jwt.secret;
 
-                private long tokenValidityInSeconds = JHipsterDefaults.Security.Authentication.Jwt.tokenValidityInSeconds;
+                private long tokenValidityInSeconds = JHipsterDefaults.Security.Authentication.Jwt
+                    .tokenValidityInSeconds;
 
-                private long tokenValidityInSecondsForRememberMe = JHipsterDefaults.Security.Authentication.Jwt.tokenValidityInSecondsForRememberMe;
+                private long tokenValidityInSecondsForRememberMe = JHipsterDefaults.Security.Authentication.Jwt
+                    .tokenValidityInSecondsForRememberMe;
 
                 public String getSecret() {
                     return secret;
@@ -897,7 +900,8 @@ public class JHipsterProperties {
             return rateLimiting;
         }
 
-        private Map<String, List<String>> authorizedMicroservicesEndpoints = JHipsterDefaults.Gateway.authorizedMicroservicesEndpoints;
+        private Map<String, List<String>> authorizedMicroservicesEndpoints = JHipsterDefaults.Gateway
+            .authorizedMicroservicesEndpoints;
 
         public Map<String, List<String>> getAuthorizedMicroservicesEndpoints() {
             return authorizedMicroservicesEndpoints;

@@ -1,14 +1,19 @@
 package io.github.jhipster.config.liquibase;
 
+import static io.github.jhipster.config.JHipsterConstants.SPRING_PROFILE_DEVELOPMENT;
+import static io.github.jhipster.config.JHipsterConstants.SPRING_PROFILE_HEROKU;
+import static io.github.jhipster.config.JHipsterConstants.SPRING_PROFILE_NO_LIQUIBASE;
+import static io.github.jhipster.config.JHipsterConstants.SPRING_PROFILE_PRODUCTION;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.Mockito.*;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-
 import javax.sql.DataSource;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
@@ -19,20 +24,6 @@ import io.github.jhipster.test.LogbackRecorder;
 import io.github.jhipster.test.LogbackRecorder.Event;
 import liquibase.Liquibase;
 import liquibase.exception.LiquibaseException;
-
-import static io.github.jhipster.config.JHipsterConstants.SPRING_PROFILE_DEVELOPMENT;
-import static io.github.jhipster.config.JHipsterConstants.SPRING_PROFILE_HEROKU;
-import static io.github.jhipster.config.JHipsterConstants.SPRING_PROFILE_NO_LIQUIBASE;
-import static io.github.jhipster.config.JHipsterConstants.SPRING_PROFILE_PRODUCTION;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
 
 public class AsyncSpringLiquibaseTest {
 
@@ -231,7 +222,7 @@ public class AsyncSpringLiquibaseTest {
     }
 
     private class TestAsyncSpringLiquibase
-    extends AsyncSpringLiquibase {
+        extends AsyncSpringLiquibase {
 
         public TestAsyncSpringLiquibase(TaskExecutor executor, Environment environment) {
             super(executor, environment);
@@ -246,7 +237,7 @@ public class AsyncSpringLiquibaseTest {
         }
 
         @Override
-        public DataSource getDataSource(){
+        public DataSource getDataSource() {
             DataSource source = mock(DataSource.class);
             try {
                 doReturn(mock(Connection.class)).when(source).getConnection();

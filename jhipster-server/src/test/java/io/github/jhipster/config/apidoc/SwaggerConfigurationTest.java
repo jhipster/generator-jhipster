@@ -1,40 +1,32 @@
 package io.github.jhipster.config.apidoc;
 
-import io.github.jhipster.config.JHipsterProperties;
-import io.github.jhipster.config.JHipsterProperties.Swagger;
-import io.github.jhipster.test.LogbackRecorder;
-import io.github.jhipster.test.LogbackRecorder.Event;
-
-import java.nio.ByteBuffer;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-
-import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Predicate;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.ResponseEntity;
-import org.springframework.plugin.core.SimplePluginRegistry;
-
-import springfox.documentation.schema.TypeNameExtractor;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.spi.schema.TypeNameProviderPlugin;
-import springfox.documentation.spring.web.plugins.ApiSelectorBuilder;
-import springfox.documentation.spring.web.plugins.Docket;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.nio.ByteBuffer;
+import java.util.*;
+
+import org.junit.*;
+import org.mockito.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.plugin.core.SimplePluginRegistry;
+
+import com.fasterxml.classmate.TypeResolver;
+import com.google.common.base.Predicate;
+
+import io.github.jhipster.config.JHipsterProperties;
+import io.github.jhipster.config.JHipsterProperties.Swagger;
+import io.github.jhipster.test.LogbackRecorder;
+import io.github.jhipster.test.LogbackRecorder.Event;
+import springfox.documentation.schema.TypeNameExtractor;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.spi.schema.TypeNameProviderPlugin;
+import springfox.documentation.spring.web.plugins.ApiSelectorBuilder;
+import springfox.documentation.spring.web.plugins.Docket;
 
 public class SwaggerConfigurationTest {
 
@@ -48,7 +40,6 @@ public class SwaggerConfigurationTest {
 
     @Captor
     private ArgumentCaptor<Predicate<String>> pathsCaptor;
-
 
     @Before
     public void setup() {
@@ -134,7 +125,8 @@ public class SwaggerConfigurationTest {
 
     @Test
     public void testSwaggerSpringfoxManagementDocket() {
-        Docket docket = config.swaggerSpringfoxManagementDocket(properties.getTitle(), "/foo/", properties.getVersion());
+        Docket docket = config.swaggerSpringfoxManagementDocket(properties.getTitle(), "/foo/", properties.getVersion
+            ());
 
         verify(docket).groupName(SwaggerConfiguration.MANAGEMENT_GROUP_NAME);
         verify(docket).host(properties.getHost());
@@ -142,7 +134,8 @@ public class SwaggerConfigurationTest {
 
         verify(docket).apiInfo(infoCaptor.capture());
         ApiInfo info = infoCaptor.getValue();
-        assertThat(info.getTitle()).isEqualTo(properties.getTitle() + " " + SwaggerConfiguration.MANAGEMENT_TITLE_SUFFIX);
+        assertThat(info.getTitle()).isEqualTo(properties.getTitle() + " " + SwaggerConfiguration
+            .MANAGEMENT_TITLE_SUFFIX);
         assertThat(info.getDescription()).isEqualTo(SwaggerConfiguration.MANAGEMENT_DESCRIPTION);
         assertThat(info.getVersion()).isEqualTo(properties.getVersion());
         assertThat(info.getTermsOfServiceUrl()).isEqualTo("");

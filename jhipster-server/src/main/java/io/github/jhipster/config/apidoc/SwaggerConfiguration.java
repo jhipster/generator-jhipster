@@ -19,12 +19,11 @@
 
 package io.github.jhipster.config.apidoc;
 
+import static io.github.jhipster.config.JHipsterConstants.SPRING_PROFILE_SWAGGER;
 import static springfox.documentation.builders.PathSelectors.regex;
 
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,12 +38,11 @@ import com.fasterxml.classmate.TypeResolver;
 import io.github.jhipster.config.JHipsterProperties;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.schema.TypeNameExtractor;
-import springfox.documentation.service.*;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
-import static io.github.jhipster.config.JHipsterConstants.SPRING_PROFILE_SWAGGER;
 
 /**
  * Springfox Swagger configuration.
@@ -128,7 +126,7 @@ public class SwaggerConfiguration {
 
         return createDocket()
             .apiInfo(new ApiInfo(appName + " " + MANAGEMENT_TITLE_SUFFIX, MANAGEMENT_DESCRIPTION,
-                    appVersion, "", ApiInfo.DEFAULT_CONTACT, "", "", new ArrayList<>()))
+                appVersion, "", ApiInfo.DEFAULT_CONTACT, "", "", new ArrayList<>()))
             .groupName(MANAGEMENT_GROUP_NAME)
             .host(properties.getHost())
             .protocols(new HashSet<>(Arrays.asList(properties.getProtocols())))

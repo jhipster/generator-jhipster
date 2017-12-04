@@ -1,20 +1,23 @@
 package io.github.jhipster.config.apidoc;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.fasterxml.classmate.TypeResolver;
-
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.plugin.core.SimplePluginRegistry;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
+
+import com.fasterxml.classmate.TypeResolver;
 
 import springfox.documentation.RequestHandler;
 import springfox.documentation.builders.OperationBuilder;
@@ -22,15 +25,8 @@ import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.TypeNameProviderPlugin;
-import springfox.documentation.spi.service.contexts.DocumentationContext;
-import springfox.documentation.spi.service.contexts.OperationContext;
-import springfox.documentation.spi.service.contexts.RequestMappingContext;
+import springfox.documentation.spi.service.contexts.*;
 import springfox.documentation.spring.web.WebMvcRequestHandler;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
 
 /**
  * Unit tests for io.github.jhipster.config.apidoc.PageableParameterBuilderPlugin.
@@ -52,7 +48,7 @@ public class PageableParameterBuilderPluginTest {
     public void setup() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        Method method = this.getClass().getMethod("test", new Class<?>[]{ Pageable.class, Integer.class });
+        Method method = this.getClass().getMethod("test", new Class<?>[] { Pageable.class, Integer.class });
         RequestHandler handler = new WebMvcRequestHandler(null, new HandlerMethod(this, method));
         DocumentationContext docContext = mock(DocumentationContext.class);
         RequestMappingContext reqContext = new RequestMappingContext(docContext, handler);

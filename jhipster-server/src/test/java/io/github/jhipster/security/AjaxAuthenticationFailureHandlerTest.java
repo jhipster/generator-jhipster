@@ -1,16 +1,7 @@
 package io.github.jhipster.security;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import static io.github.jhipster.security.AjaxAuthenticationFailureHandler.UNAUTHORIZED_MESSAGE;
-
 import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.Matchers.anyInt;
@@ -18,6 +9,12 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
+
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+
+import org.junit.Before;
+import org.junit.Test;
 
 public class AjaxAuthenticationFailureHandlerTest {
 

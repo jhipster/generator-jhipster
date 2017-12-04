@@ -1,12 +1,12 @@
 package io.github.jhipster.service.filter;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class LongFilterTest {
 
@@ -92,7 +92,7 @@ public class LongFilterTest {
         filter.setIn(new LinkedList<>());
         String str = value.toString();
         assertThat(filter.toString()).isEqualTo("LongFilter "
-                + "[greaterThan=" + str + ", greaterOrEqualThan=" + str + ", lessThan=" + str + ", "
-                + "lessOrEqualThan=" + str + ", equals=" + str + ", specified=true, in=[]]");
+            + "[greaterThan=" + str + ", greaterOrEqualThan=" + str + ", lessThan=" + str + ", "
+            + "lessOrEqualThan=" + str + ", equals=" + str + ", specified=true, in=[]]");
     }
 }

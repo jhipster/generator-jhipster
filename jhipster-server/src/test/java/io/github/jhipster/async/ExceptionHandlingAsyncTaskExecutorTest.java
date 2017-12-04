@@ -1,13 +1,15 @@
 package io.github.jhipster.async;
 
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import java.util.List;
+import java.util.concurrent.*;
+
+import org.junit.*;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.task.AsyncTaskExecutor;
@@ -15,12 +17,6 @@ import org.springframework.core.task.SimpleAsyncTaskExecutor;
 
 import io.github.jhipster.test.LogbackRecorder;
 import io.github.jhipster.test.LogbackRecorder.Event;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
 
 public class ExceptionHandlingAsyncTaskExecutorTest {
 
@@ -203,7 +199,7 @@ public class ExceptionHandlingAsyncTaskExecutorTest {
     }
 
     private class TestExceptionHandlingAsyncTaskExecutor
-    extends ExceptionHandlingAsyncTaskExecutor {
+        extends ExceptionHandlingAsyncTaskExecutor {
 
         TestExceptionHandlingAsyncTaskExecutor(AsyncTaskExecutor executor) {
             super(executor);
@@ -220,6 +216,7 @@ public class ExceptionHandlingAsyncTaskExecutorTest {
     }
 
     private class MockRunnableWithoutException implements Runnable {
+
         @Override
         public void run() {
             synchronized (executor) {
@@ -230,6 +227,7 @@ public class ExceptionHandlingAsyncTaskExecutorTest {
     }
 
     private class MockRunnableWithException implements Runnable {
+
         @Override
         public void run() {
             synchronized (executor) {
@@ -240,6 +238,7 @@ public class ExceptionHandlingAsyncTaskExecutorTest {
     }
 
     private class MockCallableWithoutException implements Callable<Integer> {
+
         @Override
         public Integer call() {
             done = true;
@@ -248,6 +247,7 @@ public class ExceptionHandlingAsyncTaskExecutorTest {
     }
 
     private class MockCallableWithException implements Callable<Integer> {
+
         @Override
         public Integer call() {
             done = true;
@@ -258,9 +258,11 @@ public class ExceptionHandlingAsyncTaskExecutorTest {
     @SuppressWarnings("serial")
     private class MockAsyncTaskExecutor extends SimpleAsyncTaskExecutor {
 
-        public void afterPropertiesSet() {}
+        public void afterPropertiesSet() {
+        }
 
-        public void destroy() {}
+        public void destroy() {
+        }
     }
 
     @SuppressWarnings("serial")

@@ -1,23 +1,24 @@
 package io.github.jhipster.config;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import io.github.jhipster.config.JHipsterProperties.Http.Version;
 
 public interface JHipsterDefaults {
 
     interface Async {
+
         int corePoolSize = 2;
         int maxPoolSize = 50;
         int queueCapacity = 10000;
     }
 
     interface Http {
+
         Version version = Version.V_1_1;
 
         interface Cache {
+
             int timeToLiveInDays = 1461; // 4 years (including leap day)
         }
     }
@@ -25,31 +26,37 @@ public interface JHipsterDefaults {
     interface Cache {
 
         interface Hazelcast {
+
             int timeToLiveSeconds = 3600; // 1 hour
             int backupCount = 1;
         }
 
         interface Ehcache {
+
             int timeToLiveSeconds = 3600; // 1 hour
             long maxEntries = 100;
         }
 
         interface Infinispan {
+
             String configFile = "default-configs/default-jgroups-tcp.xml";
             boolean statsEnabled = false;
 
             interface Local {
+
                 long timeToLiveSeconds = 60; // 1 minute
                 long maxEntries = 100;
             }
 
             interface Distributed {
+
                 long timeToLiveSeconds = 60; // 1 minute
                 long maxEntries = 100;
                 int instanceCount = 1;
             }
 
             interface Replicated {
+
                 long timeToLiveSeconds = 60; // 1 minute
                 long maxEntries = 100;
             }
@@ -57,13 +64,15 @@ public interface JHipsterDefaults {
     }
 
     interface Mail {
+
         String from = "";
         String baseUrl = "";
     }
 
     interface Security {
 
-        interface ClientAuthorization  {
+        interface ClientAuthorization {
+
             String accessTokenUri = null;
             String tokenServiceId = null;
             String clientId = null;
@@ -73,6 +82,7 @@ public interface JHipsterDefaults {
         interface Authentication {
 
             interface Jwt {
+
                 String secret = null;
                 long tokenValidityInSeconds = 1800; // 0.5 hour
                 long tokenValidityInSecondsForRememberMe = 2592000; // 30 hours;
@@ -80,6 +90,7 @@ public interface JHipsterDefaults {
         }
 
         interface RememberMe {
+
             String key = null;
         }
     }

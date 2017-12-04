@@ -19,18 +19,12 @@
 
 package io.github.jhipster.web.filter;
 
-import io.github.jhipster.config.JHipsterProperties;
-
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
+
+import io.github.jhipster.config.JHipsterProperties;
 
 /**
  * This filter is used in production, to put HTTP cache headers with a long (4 years) expiration time.

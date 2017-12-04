@@ -222,7 +222,7 @@ public abstract class QueryService<ENTITY> {
     }
 
     protected <OTHER, X> Specification<ENTITY> valueIn(SingularAttribute<? super ENTITY, OTHER> reference,
-            SingularAttribute<OTHER, X> valueField, final Collection<X> values) {
+        SingularAttribute<OTHER, X> valueField, final Collection<X> values) {
         return (root, query, builder) -> {
             In<X> in = builder.in(root.get(reference).get(valueField));
             for (X value : values) {

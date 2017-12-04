@@ -1,17 +1,13 @@
 package io.github.jhipster.config;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.util.Lists.newArrayList;
+
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.util.Lists.newArrayList;
 
 public class JHipsterPropertiesTest {
 
@@ -27,7 +23,7 @@ public class JHipsterPropertiesTest {
         // Slightly pedantic; this checks if there are tests for each of the properties.
         Set<String> set = new LinkedHashSet<>(64, 1F);
         reflect(properties, set, "test");
-        for (String name: set) {
+        for (String name : set) {
             this.getClass().getDeclaredMethod(name);
         }
     }

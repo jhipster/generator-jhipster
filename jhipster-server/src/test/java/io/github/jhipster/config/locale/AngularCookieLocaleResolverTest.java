@@ -1,28 +1,5 @@
 package io.github.jhipster.config.locale;
 
-import java.time.ZoneId;
-import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.MockitoAnnotations;
-import org.springframework.context.i18n.LocaleContext;
-import org.springframework.context.i18n.TimeZoneAwareLocaleContext;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
-
-import io.github.jhipster.test.LogbackRecorder;
-import io.github.jhipster.test.LogbackRecorder.Event;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -30,6 +7,20 @@ import static org.mockito.Mockito.when;
 import static org.springframework.web.servlet.i18n.CookieLocaleResolver.DEFAULT_COOKIE_NAME;
 import static org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE_REQUEST_ATTRIBUTE_NAME;
 import static org.springframework.web.servlet.i18n.CookieLocaleResolver.TIME_ZONE_REQUEST_ATTRIBUTE_NAME;
+
+import java.time.ZoneId;
+import java.util.*;
+import javax.servlet.http.*;
+
+import org.junit.*;
+import org.mockito.*;
+import org.springframework.context.i18n.LocaleContext;
+import org.springframework.context.i18n.TimeZoneAwareLocaleContext;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
+
+import io.github.jhipster.test.LogbackRecorder;
+import io.github.jhipster.test.LogbackRecorder.Event;
 
 public class AngularCookieLocaleResolverTest {
 
@@ -64,7 +55,6 @@ public class AngularCookieLocaleResolverTest {
     public void teardown() {
         recorder.release();
     }
-
 
     @Test
     public void testDefaults() {
@@ -223,7 +213,8 @@ public class AngularCookieLocaleResolverTest {
 
         Event event = events.get(0);
         assertThat(event.getLevel()).isEqualTo("DEBUG");
-        assertThat(event.getMessage()).isEqualTo("Added cookie with name [" + DEFAULT_COOKIE_NAME + "] and value [" + resolver.quote(value) + "]");
+        assertThat(event.getMessage()).isEqualTo("Added cookie with name [" + DEFAULT_COOKIE_NAME + "] and value [" +
+            resolver.quote(value) + "]");
         assertThat(event.getThrown()).isNull();
     }
 
@@ -267,7 +258,8 @@ public class AngularCookieLocaleResolverTest {
 
         Event event = events.get(0);
         assertThat(event.getLevel()).isEqualTo("TRACE");
-        assertThat(event.getMessage()).isEqualTo("Parsed cookie value [" + value + "] into locale '" + locale + "' and time zone '" + zone.getID() + "'");
+        assertThat(event.getMessage()).isEqualTo("Parsed cookie value [" + value + "] into locale '" + locale + "' " +
+            "and time zone '" + zone.getID() + "'");
         assertThat(event.getThrown()).isNull();
     }
 }

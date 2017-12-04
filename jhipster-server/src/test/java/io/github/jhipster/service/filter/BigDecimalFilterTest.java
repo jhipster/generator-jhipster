@@ -1,13 +1,13 @@
 package io.github.jhipster.service.filter;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class BigDecimalFilterTest {
 
@@ -93,7 +93,7 @@ public class BigDecimalFilterTest {
         filter.setIn(new LinkedList<>());
         String str = value.toString();
         assertThat(filter.toString()).isEqualTo("BigDecimalFilter "
-                + "[greaterThan=" + str + ", greaterOrEqualThan=" + str + ", lessThan=" + str + ", "
-                + "lessOrEqualThan=" + str + ", equals=" + str + ", specified=true, in=[]]");
+            + "[greaterThan=" + str + ", greaterOrEqualThan=" + str + ", lessThan=" + str + ", "
+            + "lessOrEqualThan=" + str + ", equals=" + str + ", specified=true, in=[]]");
     }
 }

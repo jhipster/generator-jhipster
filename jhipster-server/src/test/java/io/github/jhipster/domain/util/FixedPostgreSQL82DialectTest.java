@@ -1,23 +1,15 @@
 package io.github.jhipster.domain.util;
 
-import io.github.jhipster.test.LogbackRecorder;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.sql.Types;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.hibernate.dialect.Dialect;
-import org.hibernate.type.descriptor.sql.BinaryTypeDescriptor;
-import org.hibernate.type.descriptor.sql.BlobTypeDescriptor;
-import org.hibernate.type.descriptor.sql.BooleanTypeDescriptor;
-import org.hibernate.type.descriptor.sql.SqlTypeDescriptor;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.hibernate.type.descriptor.sql.*;
+import org.junit.*;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import io.github.jhipster.test.LogbackRecorder;
 
 public class FixedPostgreSQL82DialectTest {
 

@@ -19,15 +19,8 @@
 
 package io.github.jhipster.config.metrics;
 
-import io.github.jhipster.config.JHipsterProperties;
-import io.prometheus.client.CollectorRegistry;
-import io.prometheus.client.dropwizard.DropwizardExports;
-import io.prometheus.client.exporter.MetricsServlet;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-
-import com.codahale.metrics.MetricRegistry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,10 +28,16 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Configuration;
 
+import com.codahale.metrics.MetricRegistry;
+
+import io.github.jhipster.config.JHipsterProperties;
+import io.prometheus.client.CollectorRegistry;
+import io.prometheus.client.dropwizard.DropwizardExports;
+import io.prometheus.client.exporter.MetricsServlet;
+
 @Configuration
 @ConditionalOnClass(CollectorRegistry.class)
 public class PrometheusRegistry implements ServletContextInitializer {
-
 
     public static final String INITIALIZING_MESSAGE = "Initializing Metrics Prometheus endpoint at {}";
     public static final String SERVLET_NAME = "prometheusMetrics";

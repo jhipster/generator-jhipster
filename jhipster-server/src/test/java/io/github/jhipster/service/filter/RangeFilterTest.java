@@ -1,12 +1,12 @@
 package io.github.jhipster.service.filter;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class RangeFilterTest {
 
@@ -91,7 +91,7 @@ public class RangeFilterTest {
         filter.setSpecified(true);
         filter.setIn(new LinkedList<>());
         assertThat(filter.toString()).isEqualTo("RangeFilter "
-                + "[greaterThan=42, greaterOrEqualThan=42, lessThan=42, "
-                + "lessOrEqualThan=42, equals=42, specified=true, in=[]]");
+            + "[greaterThan=42, greaterOrEqualThan=42, lessThan=42, "
+            + "lessOrEqualThan=42, equals=42, specified=true, in=[]]");
     }
 }

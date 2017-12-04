@@ -1,12 +1,12 @@
 package io.github.jhipster.config.jcache;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import io.github.jhipster.test.LogbackRecorder;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
 
 public class NoDefaultJCacheRegionFactoryTest {
 

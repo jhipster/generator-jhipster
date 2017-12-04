@@ -1,25 +1,23 @@
 package io.github.jhipster.config.metrics;
 
-import io.github.jhipster.config.JHipsterProperties;
-import io.github.jhipster.test.LogbackRecorder;
-import io.github.jhipster.test.LogbackRecorder.Event;
-
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.graphite.Graphite;
-import com.codahale.metrics.graphite.GraphiteReporter;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import org.junit.*;
+
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.graphite.Graphite;
+import com.codahale.metrics.graphite.GraphiteReporter;
+
+import io.github.jhipster.config.JHipsterProperties;
+import io.github.jhipster.test.LogbackRecorder;
+import io.github.jhipster.test.LogbackRecorder.Event;
 
 public class GraphiteRegistryTest {
 
@@ -54,7 +52,6 @@ public class GraphiteRegistryTest {
     public void testDisabled() {
         properties.getMetrics().getGraphite().setEnabled(false);
         new GraphiteRegistry(registry, properties);
-
 
         List<Event> events = recorder.play();
         assertThat(events).isEmpty();

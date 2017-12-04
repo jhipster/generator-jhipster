@@ -1,17 +1,12 @@
 package io.github.jhipster.test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.*;
 
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
-import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.*;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.IThrowableProxy;
 import ch.qos.logback.core.AppenderBase;
@@ -29,11 +24,10 @@ public class LogbackRecorder {
     public static final String CAPTURE_EXCEPTION_MESSAGE = "Already capturing";
     public static final String RELEASE_EXCEPTION_MESSAGE = "Not currently capturing";
 
-    private static final LoggerContext context =  (LoggerContext) LoggerFactory.getILoggerFactory();
+    private static final LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
     private static final Object lock = context.getConfigurationLock();
 
     private static final Map<Logger, LogbackRecorder> instances = new WeakHashMap<>(32, 0.75F);
-
 
     public static final LogbackRecorder forClass(Class<?> clazz) {
         return forLogger(context.getLogger(clazz));
@@ -115,7 +109,6 @@ public class LogbackRecorder {
         list.addAll(this.events);
         return list;
     }
-
 
     public static final class Event {
 
