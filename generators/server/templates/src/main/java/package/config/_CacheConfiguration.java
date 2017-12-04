@@ -34,12 +34,9 @@ import java.util.concurrent.TimeUnit;
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.config.JHipsterProperties;
 
-import com.hazelcast.config.Config;
+import com.hazelcast.config.*;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.Hazelcast;
-import com.hazelcast.config.MapConfig;
-import com.hazelcast.config.EvictionPolicy;
-import com.hazelcast.config.MaxSizeConfig;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -257,7 +254,7 @@ public class CacheConfiguration {
         }
         <%_ } _%>
         config.getMapConfigs().put("default", initializeDefaultMapConfig());
-        
+
         // Full reference is available at: http://docs.hazelcast.org/docs/management-center/3.9/manual/html/Deploying_and_Starting.html
         config.setManagementCenterConfig(initializeDefaultManagementCenterConfig(jHipsterProperties));
         <%_ if (hibernateCache === 'hazelcast') { _%>
@@ -276,7 +273,7 @@ public class CacheConfiguration {
         managementCenterConfig.setUpdateInterval(jHipsterProperties.getCache().getHazelcast().getManagementCenter().getUpdateInterval());
         return managementCenterConfig;
     }
-    
+
     private MapConfig initializeDefaultMapConfig() {
         MapConfig mapConfig = new MapConfig();
 
