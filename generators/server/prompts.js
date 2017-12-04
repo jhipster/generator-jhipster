@@ -475,7 +475,8 @@ function askForOptionalItems(meta) {
         });
     }
     if ((applicationType === 'monolith' || applicationType === 'gateway') &&
-            (this.hibernateCache === 'no' || this.hibernateCache === 'hazelcast')) {
+            (this.hibernateCache === 'no' || this.hibernateCache === 'hazelcast') &&
+            this.authenticationType !== 'oauth2') {
         choices.push({
             name: 'Clustered HTTP sessions using Hazelcast',
             value: 'clusteredHttpSession:hazelcast'
