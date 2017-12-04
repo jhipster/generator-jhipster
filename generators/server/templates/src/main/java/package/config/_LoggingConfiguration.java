@@ -43,6 +43,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.netflix.eureka.EurekaInstanceConfigBean;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.beans.factory.annotation.Autowired;
 <%_ } _%>
 <%_ if (serviceDiscoveryType === "consul") { _%>
 import org.springframework.cloud.consul.ConditionalOnConsulEnabled;
@@ -53,7 +54,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 <%_ if (serviceDiscoveryType === "eureka") { _%>
-@ConditionalOnProperty("eureka.client.enabled")
 @RefreshScope
 <%_ } _%>
 <%_ if (serviceDiscoveryType === "consul") { _%>
@@ -89,7 +89,7 @@ public class LoggingConfiguration {
     private final JHipsterProperties jHipsterProperties;
 
     public LoggingConfiguration(@Value("${spring.application.name}") String appName, @Value("${server.port}") String serverPort,
-        <% if (serviceDiscoveryType === "eureka") { %>EurekaInstanceConfigBean eurekaInstanceConfigBean,<% } %><% if (serviceDiscoveryType === "consul") { %> ConsulRegistration consulRegistration,<% } %><% if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { %> @Value("${info.project.version}") String version,<% } %> JHipsterProperties jHipsterProperties) {
+        <% if (serviceDiscoveryType === "eureka") { %>@Autowired(required = false) EurekaInstanceConfigBean eurekaInstanceConfigBean,<% } %><% if (serviceDiscoveryType === "consul") { %> ConsulRegistration consulRegistration,<% } %><% if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { %> @Value("${info.project.version}") String version,<% } %> JHipsterProperties jHipsterProperties) {
         this.appName = appName;
         this.serverPort = serverPort;
         <%_ if (serviceDiscoveryType === 'eureka') { _%>
@@ -124,8 +124,19 @@ public class LoggingConfiguration {
         logstashAppender.setName(LOGSTASH_APPENDER_NAME);
         logstashAppender.setContext(context);
         <%_ if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { _%>
+        String optionalFields = "";
+        <%_ if (serviceDiscoveryType === 'eureka') { _%>
+        if (eurekaInstanceConfigBean != null) {
+            optionalFields = "\"instance_id\":\"" + eurekaInstanceConfigBean.getInstanceId() + "\",";
+        }
+        <%_ } _%>
+        <%_ if (serviceDiscoveryType === 'consul') { _%>
+        if (consulRegistration != null) {
+            optionalFields = "\"instance_id\":\"" + consulRegistration.getInstanceId() + "\",";
+        }
+        <%_ } _%>
         String customFields = "{\"app_name\":\"" + appName + "\",\"app_port\":\"" + serverPort + "\"," +
-            "\"instance_id\":\"" + <% if (serviceDiscoveryType === "eureka") { %>eurekaInstanceConfigBean.getInstanceId()<% } %><% if (serviceDiscoveryType === "consul") { %>consulRegistration.getInstanceId()<% } %> + "\"," + "\"version\":\"" + version + "\"}";
+            optionalFields + "\"version\":\"" + version + "\"}";
         <%_ } else { _%>
         String customFields = "{\"app_name\":\"" + appName + "\",\"app_port\":\"" + serverPort + "\"}";
         <%_ } _%>
