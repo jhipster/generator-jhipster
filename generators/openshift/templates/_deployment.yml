@@ -57,12 +57,6 @@ parameters:
     description: Port of the application
     required: true
     displayName: Application Port
-  -
-    name: NAMESPACE
-    value: "<%= openshiftNamespace %>"
-    description: Openshift Namespace
-    required: true
-    displayName: OpenShift namespace
 <%_ if (app.monitoring === 'elk') { _%>
   -
     name: JHIPSTER_LOGSTASH
@@ -136,7 +130,7 @@ objects:
             from:
               kind: ImageStreamTag
               name: ${IMAGE_NAME}
-              namespace: ${NAMESPACE}
+              namespace: <%= openshiftNamespace %> 
       replicas: "1"
       template:
         metadata:
