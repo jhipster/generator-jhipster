@@ -68,7 +68,7 @@
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>0.0.8</jhipster-dependencies.version>
+        <jhipster-dependencies.version>0.1.1</jhipster-dependencies.version>
     </properties>
 
     <dependencyManagement>
