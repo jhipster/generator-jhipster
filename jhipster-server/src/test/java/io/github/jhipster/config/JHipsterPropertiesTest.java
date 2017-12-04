@@ -116,6 +116,42 @@ public class JHipsterPropertiesTest {
     }
 
     @Test
+    public void testCacheHazelcastManagementCenterEnabled() {
+        JHipsterProperties.Cache.Hazelcast.ManagementCenter obj =
+            properties.getCache().getHazelcast().getManagementCenter();
+
+        boolean val = JHipsterDefaults.Cache.Hazelcast.ManagementCenter.enabled;
+        assertThat(obj.isEnabled()).isEqualTo(val);
+        val = !val;
+        obj.setEnabled(val);
+        assertThat(obj.isEnabled()).isEqualTo(val);
+    }
+
+    @Test
+    public void testCacheHazelcastManagementCenterUpdateInterval() {
+        JHipsterProperties.Cache.Hazelcast.ManagementCenter obj =
+            properties.getCache().getHazelcast().getManagementCenter();
+
+        int val = JHipsterDefaults.Cache.Hazelcast.ManagementCenter.updateInterval;
+        assertThat(obj.getUpdateInterval()).isEqualTo(val);
+        val++;
+        obj.setUpdateInterval(val);
+        assertThat(obj.getUpdateInterval()).isEqualTo(val);
+    }
+
+    @Test
+    public void testCacheHazelcastManagementCenterUrl() {
+        JHipsterProperties.Cache.Hazelcast.ManagementCenter obj =
+            properties.getCache().getHazelcast().getManagementCenter();
+
+        String val = JHipsterDefaults.Cache.Hazelcast.ManagementCenter.url;
+        assertThat(obj.getUrl()).isEqualTo(val);
+        val = "http://localhost:8080";
+        obj.setUrl(val);
+        assertThat(obj.getUrl()).isEqualTo(val);
+    }
+
+    @Test
     public void testCacheEhcacheTimeToLiveSeconds() {
         JHipsterProperties.Cache.Ehcache obj = properties.getCache().getEhcache();
         int val = JHipsterDefaults.Cache.Ehcache.timeToLiveSeconds;

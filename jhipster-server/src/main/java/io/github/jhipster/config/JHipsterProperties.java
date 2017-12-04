@@ -216,11 +216,11 @@ public class JHipsterProperties {
 
             public static class ManagementCenter {
 
-                private boolean enabled = false;
+                private boolean enabled = JHipsterDefaults.Cache.Hazelcast.ManagementCenter.enabled;
 
-                private int updateInterval = 3;
+                private int updateInterval = JHipsterDefaults.Cache.Hazelcast.ManagementCenter.updateInterval;
 
-                private String url;
+                private String url =  JHipsterDefaults.Cache.Hazelcast.ManagementCenter.url;
 
                 public boolean isEnabled() {
                     return enabled;
