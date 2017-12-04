@@ -100,17 +100,29 @@ import org.springframework.context.annotation.FilterType;
 @Configuration<% if (databaseType === 'sql') { %>
 @EnableJpaRepositories("<%=packageName%>.repository")
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
-@EnableTransactionManagement<% } %><% if (searchEngine === 'elasticsearch' && databaseType === 'mongodb') { %>
+@EnableTransactionManagement<% } %>
+<%_ if (searchEngine === 'elasticsearch' && databaseType === 'mongodb') { _%>
 @EnableElasticsearchRepositories(basePackages = "<%=packageName%>.repository.search", excludeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = MongoRepository.class))
-@EnableMongoRepositories(basePackages = "<%=packageName%>.repository", excludeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = ElasticsearchRepository.class))<% } %><% if (searchEngine === 'elasticsearch' && databaseType != 'mongodb') { %>
-@EnableElasticsearchRepositories("<%=packageName%>.repository.search")<% } %><% if (searchEngine != 'elasticsearch' && databaseType === 'mongodb') { %>
-@EnableMongoRepositories("<%=packageName%>.repository")<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
+@EnableMongoRepositories(basePackages = "<%=packageName%>.repository", excludeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = ElasticsearchRepository.class))
+<%_ } _%>
+<%_ if (searchEngine === 'elasticsearch' && databaseType != 'mongodb') { _%>
+@EnableElasticsearchRepositories("<%=packageName%>.repository.search")
+<%_ } _%>
+<%_ if (searchEngine != 'elasticsearch' && databaseType === 'mongodb') { _%>
+@EnableMongoRepositories("<%=packageName%>.repository")
+<%_ } _%>
+<%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 @Profile("!" + JHipsterConstants.SPRING_PROFILE_CLOUD)
+<%_ } _%>
+<%_ if (databaseType === 'mongodb') { _%>
 @Import(value = MongoAutoConfiguration.class)
-@EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")<% } %><% if (databaseType === 'couchbase') { %>
+@EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")
+<%_ } _%>
+<%_ if (databaseType === 'couchbase') { _%>
 @EnableCouchbaseRepositories(repositoryBaseClass = CustomN1qlCouchbaseRepository.class, basePackages = "<%=packageName%>.repository")
 @Import(value = CouchbaseAutoConfiguration.class)
-@EnableCouchbaseAuditing(auditorAwareRef = "springSecurityAuditorAware")<% } %>
+@EnableCouchbaseAuditing(auditorAwareRef = "springSecurityAuditorAware")
+<%_ } _%>
 public class DatabaseConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);<% if (databaseType === 'sql') { %>
