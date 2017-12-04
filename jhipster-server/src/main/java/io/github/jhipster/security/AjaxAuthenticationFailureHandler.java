@@ -32,10 +32,11 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
  */
 public class AjaxAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
+    public static final String UNAUTHORIZED_MESSAGE = "Authentication failed";
+
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
         AuthenticationException exception) throws IOException, ServletException {
-
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication failed");
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, UNAUTHORIZED_MESSAGE);
     }
 }

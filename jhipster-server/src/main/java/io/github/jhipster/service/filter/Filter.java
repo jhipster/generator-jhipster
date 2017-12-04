@@ -68,11 +68,14 @@ public class Filter<FIELD_TYPE> implements Serializable {
 
     @Override
     public String toString() {
-        return "Filter ["
+        return getFilterName() + " ["
             + (getEquals() != null ? "equals=" + getEquals() + ", " : "")
-            + (getIn() != null ? "in=" + getIn() : "")
+            + (getIn() != null ? "in=" + getIn() + ", " : "")
             + (getSpecified() != null ? "specified=" + getSpecified() : "")
             + "]";
     }
 
+    protected String getFilterName() {
+        return this.getClass().getSimpleName();
+    }
 }

@@ -47,7 +47,7 @@ public class StringFilter extends Filter<String> {
 
     @Override
     public String toString() {
-        return "StringFilter ["
+        return getFilterName() + " ["
             + (getContains() != null ? "contains=" + getContains() + ", " : "")
             + (getEquals() != null ? "equals=" + getEquals() + ", " : "")
             + (getSpecified() != null ? "specified=" + getSpecified() : "")

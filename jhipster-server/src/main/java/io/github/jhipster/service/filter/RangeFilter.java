@@ -32,8 +32,8 @@ package io.github.jhipster.service.filter;
  *      fieldName.greaterOrEqualThan=42
  *      fieldName.lessOrEqualThan=44
  * </pre>
- * Because problems with the type conversions, the descendant classes needs to be used, where the generic type parameter
- * is materalized.
+ * Due to problems with the type conversions, the descendant classes should be used, where the generic type parameter
+ * is materialized.
  *
  * @param <FIELD_TYPE> the type of filter.
  * @see IntegerFilter
@@ -90,12 +90,13 @@ public class RangeFilter<FIELD_TYPE extends Comparable<? super FIELD_TYPE>> exte
 
     @Override
     public String toString() {
-        return "RangeFilter [" + (getGreaterThan() != null ? "greaterThan=" + getGreaterThan() + ", " : "")
+        return getFilterName() + " ["
+            + (getGreaterThan() != null ? "greaterThan=" + getGreaterThan() + ", " : "")
             + (getGreaterOrEqualThan() != null ? "greaterOrEqualThan=" + getGreaterOrEqualThan() + ", " : "")
             + (getLessThan() != null ? "lessThan=" + getLessThan() + ", " : "")
             + (getLessOrEqualThan() != null ? "lessOrEqualThan=" + getLessOrEqualThan() + ", " : "")
             + (getEquals() != null ? "equals=" + getEquals() + ", " : "")
-            + (getSpecified() != null ? "specified=" + getSpecified() : "")
+            + (getSpecified() != null ? "specified=" + getSpecified() + ", " : "")
             + (getIn() != null ? "in=" + getIn() : "")
             + "]";
     }

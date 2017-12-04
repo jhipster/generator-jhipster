@@ -19,6 +19,10 @@
 
 package io.github.jhipster.config.liquibase;
 
+import static io.github.jhipster.config.JHipsterConstants.SPRING_PROFILE_DEVELOPMENT;
+import static io.github.jhipster.config.JHipsterConstants.SPRING_PROFILE_HEROKU;
+import static io.github.jhipster.config.JHipsterConstants.SPRING_PROFILE_NO_LIQUIBASE;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,7 +30,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.util.StopWatch;
 
-import io.github.jhipster.config.JHipsterConstants;
 import liquibase.exception.LiquibaseException;
 import liquibase.integration.spring.SpringLiquibase;
 
@@ -40,6 +43,16 @@ import liquibase.integration.spring.SpringLiquibase;
  * this can help your application run on platforms like Heroku, where it must start/restart very quickly</li> </ul>
  */
 public class AsyncSpringLiquibase extends SpringLiquibase {
+
+    public static final String DISABLED_MESSAGE = "Liquibase is disabled";
+    public static final String STARTING_ASYNC_MESSAGE =
+            "Starting Liquibase asynchronously, your database might not be ready at startup!";
+    public static final String STARTING_SYNC_MESSAGE = "Starting Liquibase synchronously";
+    public static final String STARTED_MESSAGE = "Liquibase has updated your database in {} ms";
+    public static final String EXCEPTION_MESSAGE = "Liquibase could not start correctly, your database is NOT ready: {}";
+
+    public static final long SLOWNESS_THRESHOLD = 5; // seconds
+    public static final String SLOWNESS_MESSAGE = "Warning, Liquibase took more than {} seconds to start up!";
 
     // named "logger" because there is already a field called "log" in "SpringLiquibase"
     private final Logger logger = LoggerFactory.getLogger(AsyncSpringLiquibase.class);
@@ -55,24 +68,22 @@ public class AsyncSpringLiquibase extends SpringLiquibase {
 
     @Override
     public void afterPropertiesSet() throws LiquibaseException {
-        if (!env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_NO_LIQUIBASE)) {
-            if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT, JHipsterConstants
-                .SPRING_PROFILE_HEROKU)) {
+        if (!env.acceptsProfiles(SPRING_PROFILE_NO_LIQUIBASE)) {
+            if (env.acceptsProfiles(SPRING_PROFILE_DEVELOPMENT, SPRING_PROFILE_HEROKU)) {
                 taskExecutor.execute(() -> {
                     try {
-                        logger.warn("Starting Liquibase asynchronously, your database might not be ready at startup!");
+                        logger.warn(STARTING_ASYNC_MESSAGE);
                         initDb();
                     } catch (LiquibaseException e) {
-                        logger.error("Liquibase could not start correctly, your database is NOT ready: {}", e
-                            .getMessage(), e);
+                        logger.error(EXCEPTION_MESSAGE, e.getMessage(), e);
                     }
                 });
             } else {
-                logger.debug("Starting Liquibase synchronously");
+                logger.debug(STARTING_SYNC_MESSAGE);
                 initDb();
             }
         } else {
-            logger.debug("Liquibase is disabled");
+            logger.debug(DISABLED_MESSAGE);
         }
     }
 
@@ -81,9 +92,9 @@ public class AsyncSpringLiquibase extends SpringLiquibase {
         watch.start();
         super.afterPropertiesSet();
         watch.stop();
-        logger.debug("Liquibase has updated your database in {} ms", watch.getTotalTimeMillis());
-        if (watch.getTotalTimeMillis() > 5_000) {
-            logger.warn("Warning, Liquibase took more than 5 seconds to start up!");
+        logger.debug(STARTED_MESSAGE, watch.getTotalTimeMillis());
+        if (watch.getTotalTimeMillis() > SLOWNESS_THRESHOLD * 1000L) {
+            logger.warn(SLOWNESS_MESSAGE, SLOWNESS_THRESHOLD);
         }
     }
 }
