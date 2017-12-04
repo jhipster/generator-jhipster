@@ -74,6 +74,11 @@ module.exports = class extends BaseGenerator {
                 this.dockerRepositoryName = this.config.get('dockerRepositoryName');
                 this.dockerPushCommand = this.config.get('dockerPushCommand');
                 this.openshiftNamespace = this.config.get('openshiftNamespace');
+                this.mssqlURL = this.config.get('mssqlURL');
+                this.mssqlUser = this.config.get('mssqlUser');
+                this.mssqlPass = this.config.get('mssqlPass');
+                this.mssqlDb = this.config.get('mssqlDb');
+                this.openshiftUrl = this.config.get('openshiftUrl');
                 this.storageType = this.config.get('storageType');
                 this.registryReplicas = this.config.get('registryReplicas');
 
@@ -139,6 +144,7 @@ module.exports = class extends BaseGenerator {
             askForAdminPassword: prompts.askForAdminPassword,
             askForOpenShiftNamespace: prompts.askForOpenShiftNamespace,
             askForStorageType: prompts.askForStorageType,
+            askForMSSQLConfig: prompts.askForMSSQLConfig,
             askForDockerRepositoryName: prompts.askForDockerRepositoryName,
             askForDockerPushCommand: prompts.askForDockerPushCommand
         };
@@ -171,6 +177,11 @@ module.exports = class extends BaseGenerator {
                 this.config.set('dockerRepositoryName', this.dockerRepositoryName);
                 this.config.set('dockerPushCommand', this.dockerPushCommand);
                 this.config.set('openshiftNamespace', this.openshiftNamespace);
+                this.config.set('mssqlURL', this.mssqlURL);
+                this.config.set('mssqlUser', this.mssqlUser);
+                this.config.set('mssqlPass', this.mssqlPass);
+                this.config.set('mssqlDb', this.mssqlDb);
+                this.config.set('openshiftUrl', this.openshiftUrl);
                 this.config.set('storageType', this.storageType);
                 this.config.set('registryReplicas', this.registryReplicas);
             }

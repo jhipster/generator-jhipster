@@ -1,0 +1,24 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+        maven { url "http://repo.spring.io/plugins-release" }
+        maven { url "http://repo.spring.io/milestone" }
+        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url "https://s3-eu-west-1.amazonaws.com/com-henderson-group-dist/gradle"}
+    }
+    dependencies {
+        classpath 'io.gitlab.openshifttasks:openshifttasks:0.2.1'
+    }
+}
+
+apply plugin: io.gitlab.openshifttasks.OpenShiftTasksPlugin
+
+openshift {
+    baseUrl = '<%= openshiftUrl %>'
+    trustCerts = true
+    auth {
+       token = "${System.env['OC_TOKEN']}"
+    }
+}

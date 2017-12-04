@@ -40,12 +40,6 @@ labels:
   createdBy: JHipster-Team
 parameters:
   -
-    name: APPLICATION_NAME
-    value: <%= app.baseName.toLowerCase() %>
-    description: Name of the application
-    required: true
-    displayName: Application Name
-  -
     name: SECRET_REF
     value: <%= app.baseName.toLowerCase() %>-ds-secret-ref
     description: Name of the DataSource Secret Reference
@@ -92,6 +86,7 @@ objects:
           timeoutSeconds: 600
           maxUnavailable: 25%
           maxSurge: 25%
+          <%_ if (app.prodDatabaseType !== 'mssql') { _%>
           pre:
             failurePolicy: ignore
             execNewPod:
@@ -124,7 +119,18 @@ objects:
                       sleep 10
                     done
               containerName: ${APPLICATION_NAME}
+          <%_ } _%>
         resources:
+      triggers:
+        - type: "ImageChange"
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - ${APPLICATION_NAME}
+            from:
+              kind: ImageStreamTag
+              name: ${IMAGE_NAME}
+              namespace: <%= openshiftNamespace %> 
       replicas: "1"
       template:
         metadata:
@@ -168,6 +174,14 @@ objects:
                 secretKeyRef:
                   name: ${SECRET_REF}
                   key: database-password
+            <%_ } _%>
+            <%_ if (app.prodDatabaseType === 'mssql') { _%>
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:sqlserver://<%= mssqlURL %>;databaseName=<%= mssqlDb %>
+            - name: SPRING_DATASOURCE_USERNAME
+              value: <%= mssqlUser %>
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: <%= mssqlPass %>
             <%_ } _%>
             <%_ if (app.prodDatabaseType === 'mariadb') { _%>
             - name: SPRING_DATASOURCE_URL
@@ -251,7 +265,22 @@ objects:
             <%_ } _%>
             ports:
             - name: http
-              containerPort: "${APP_PORT}"
+              containerPort: 8080
+            readinessProbe:
+               failureThreshold: 6
+               initialDelaySeconds: 30
+               periodSeconds: 10
+               successThreshold: 1
+               tcpSocket:
+                 port: 8080
+               timeoutSeconds: 1          
+            resources:
+                limits:
+                    cpu: '1'
+                    memory: 1Gi
+                requests:
+                    cpu: '1'
+                    memory: 1Gi  
   -
     apiVersion: v1
     kind: Service
@@ -272,7 +301,7 @@ objects:
       type: LoadBalancer
       ports:
       - name: http
-        port: "${APP_PORT}"
+        port: 8080
   -
     apiVersion: v1
     kind: Route
