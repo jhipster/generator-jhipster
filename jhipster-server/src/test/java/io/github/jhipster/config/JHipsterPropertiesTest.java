@@ -48,7 +48,7 @@ public class JHipsterPropertiesTest {
         JHipsterProperties.Async obj = properties.getAsync();
         int val = JHipsterDefaults.Async.corePoolSize;
         assertThat(obj.getCorePoolSize()).isEqualTo(val);
-        val = 1 + val;
+        val++;
         obj.setCorePoolSize(val);
         assertThat(obj.getCorePoolSize()).isEqualTo(val);
     }
@@ -58,7 +58,7 @@ public class JHipsterPropertiesTest {
         JHipsterProperties.Async obj = properties.getAsync();
         int val = JHipsterDefaults.Async.maxPoolSize;
         assertThat(obj.getMaxPoolSize()).isEqualTo(val);
-        val = 1 + val;
+        val++;
         obj.setMaxPoolSize(val);
         assertThat(obj.getMaxPoolSize()).isEqualTo(val);
     }
@@ -68,7 +68,7 @@ public class JHipsterPropertiesTest {
         JHipsterProperties.Async obj = properties.getAsync();
         int val = JHipsterDefaults.Async.queueCapacity;
         assertThat(obj.getQueueCapacity()).isEqualTo(val);
-        val = 1 + val;
+        val++;
         obj.setQueueCapacity(val);
         assertThat(obj.getQueueCapacity()).isEqualTo(val);
     }
@@ -90,7 +90,7 @@ public class JHipsterPropertiesTest {
         JHipsterProperties.Http.Cache obj = properties.getHttp().getCache();
         int val = JHipsterDefaults.Http.Cache.timeToLiveInDays;
         assertThat(obj.getTimeToLiveInDays()).isEqualTo(val);
-        val = 1 + val;
+        val++;
         obj.setTimeToLiveInDays(val);
         assertThat(obj.getTimeToLiveInDays()).isEqualTo(val);
     }
@@ -100,7 +100,7 @@ public class JHipsterPropertiesTest {
         JHipsterProperties.Cache.Hazelcast obj = properties.getCache().getHazelcast();
         int val = JHipsterDefaults.Cache.Hazelcast.timeToLiveSeconds;
         assertThat(obj.getTimeToLiveSeconds()).isEqualTo(val);
-        val = 1 + val;
+        val++;
         obj.setTimeToLiveSeconds(val);
         assertThat(obj.getTimeToLiveSeconds()).isEqualTo(val);
     }
@@ -110,7 +110,7 @@ public class JHipsterPropertiesTest {
         JHipsterProperties.Cache.Hazelcast obj = properties.getCache().getHazelcast();
         int val = JHipsterDefaults.Cache.Hazelcast.backupCount;
         assertThat(obj.getBackupCount()).isEqualTo(val);
-        val = 1 + val;
+        val++;
         obj.setBackupCount(val);
         assertThat(obj.getBackupCount()).isEqualTo(val);
     }
@@ -120,7 +120,7 @@ public class JHipsterPropertiesTest {
         JHipsterProperties.Cache.Ehcache obj = properties.getCache().getEhcache();
         int val = JHipsterDefaults.Cache.Ehcache.timeToLiveSeconds;
         assertThat(obj.getTimeToLiveSeconds()).isEqualTo(val);
-        val = 1 + val;
+        val++;
         obj.setTimeToLiveSeconds(val);
         assertThat(obj.getTimeToLiveSeconds()).isEqualTo(val);
     }
@@ -130,7 +130,7 @@ public class JHipsterPropertiesTest {
         JHipsterProperties.Cache.Ehcache obj = properties.getCache().getEhcache();
         long val = JHipsterDefaults.Cache.Ehcache.maxEntries;
         assertThat(obj.getMaxEntries()).isEqualTo(val);
-        val = 1 + val;
+        val++;
         obj.setMaxEntries(val);
         assertThat(obj.getMaxEntries()).isEqualTo(val);
     }
@@ -160,7 +160,7 @@ public class JHipsterPropertiesTest {
         JHipsterProperties.Cache.Infinispan.Local obj = properties.getCache().getInfinispan().getLocal();
         long val = JHipsterDefaults.Cache.Infinispan.Local.timeToLiveSeconds;
         assertThat(obj.getTimeToLiveSeconds()).isEqualTo(val);
-        val = 1 + val;
+        val++;
         obj.setTimeToLiveSeconds(val);
         assertThat(obj.getTimeToLiveSeconds()).isEqualTo(val);
     }
@@ -170,7 +170,7 @@ public class JHipsterPropertiesTest {
         JHipsterProperties.Cache.Infinispan.Local obj = properties.getCache().getInfinispan().getLocal();
         long val = JHipsterDefaults.Cache.Infinispan.Local.maxEntries;
         assertThat(obj.getMaxEntries()).isEqualTo(val);
-        val = 1 + val;
+        val++;
         obj.setMaxEntries(val);
         assertThat(obj.getMaxEntries()).isEqualTo(val);
     }
@@ -180,7 +180,7 @@ public class JHipsterPropertiesTest {
         JHipsterProperties.Cache.Infinispan.Distributed obj = properties.getCache().getInfinispan().getDistributed();
         long val = JHipsterDefaults.Cache.Infinispan.Distributed.timeToLiveSeconds;
         assertThat(obj.getTimeToLiveSeconds()).isEqualTo(val);
-        val = 1 + val;
+        val++;
         obj.setTimeToLiveSeconds(val);
         assertThat(obj.getTimeToLiveSeconds()).isEqualTo(val);
     }
@@ -190,7 +190,7 @@ public class JHipsterPropertiesTest {
         JHipsterProperties.Cache.Infinispan.Distributed obj = properties.getCache().getInfinispan().getDistributed();
         long val = JHipsterDefaults.Cache.Infinispan.Distributed.maxEntries;
         assertThat(obj.getMaxEntries()).isEqualTo(val);
-        val = 1 + val;
+        val++;
         obj.setMaxEntries(val);
         assertThat(obj.getMaxEntries()).isEqualTo(val);
     }
@@ -200,7 +200,7 @@ public class JHipsterPropertiesTest {
         JHipsterProperties.Cache.Infinispan.Distributed obj = properties.getCache().getInfinispan().getDistributed();
         int val = JHipsterDefaults.Cache.Infinispan.Distributed.instanceCount;
         assertThat(obj.getInstanceCount()).isEqualTo(val);
-        val = 1 + val;
+        val++;
         obj.setInstanceCount(val);
         assertThat(obj.getInstanceCount()).isEqualTo(val);
     }
@@ -210,7 +210,7 @@ public class JHipsterPropertiesTest {
         JHipsterProperties.Cache.Infinispan.Replicated obj = properties.getCache().getInfinispan().getReplicated();
         long val = JHipsterDefaults.Cache.Infinispan.Replicated.timeToLiveSeconds;
         assertThat(obj.getTimeToLiveSeconds()).isEqualTo(val);
-        val = 1 + val;
+        val++;
         obj.setTimeToLiveSeconds(val);
         assertThat(obj.getTimeToLiveSeconds()).isEqualTo(val);
     }
@@ -220,7 +220,7 @@ public class JHipsterPropertiesTest {
         JHipsterProperties.Cache.Infinispan.Replicated obj = properties.getCache().getInfinispan().getReplicated();
         long val = JHipsterDefaults.Cache.Infinispan.Replicated.maxEntries;
         assertThat(obj.getMaxEntries()).isEqualTo(val);
-        val = 1 + val;
+        val++;
         obj.setMaxEntries(val);
         assertThat(obj.getMaxEntries()).isEqualTo(val);
     }
@@ -300,7 +300,7 @@ public class JHipsterPropertiesTest {
         JHipsterProperties.Security.Authentication.Jwt obj = properties.getSecurity().getAuthentication().getJwt();
         long val = JHipsterDefaults.Security.Authentication.Jwt.tokenValidityInSeconds;
         assertThat(obj.getTokenValidityInSeconds()).isEqualTo(val);
-        val = 1 + val;
+        val++;
         obj.setTokenValidityInSeconds(val);
         assertThat(obj.getTokenValidityInSeconds()).isEqualTo(val);
     }
@@ -310,7 +310,7 @@ public class JHipsterPropertiesTest {
         JHipsterProperties.Security.Authentication.Jwt obj = properties.getSecurity().getAuthentication().getJwt();
         long val = JHipsterDefaults.Security.Authentication.Jwt.tokenValidityInSecondsForRememberMe;
         assertThat(obj.getTokenValidityInSecondsForRememberMe()).isEqualTo(val);
-        val = 1 + val;
+        val++;
         obj.setTokenValidityInSecondsForRememberMe(val);
         assertThat(obj.getTokenValidityInSecondsForRememberMe()).isEqualTo(val);
     }
@@ -488,7 +488,7 @@ public class JHipsterPropertiesTest {
         JHipsterProperties.Metrics.Graphite obj = properties.getMetrics().getGraphite();
         int val = JHipsterDefaults.Metrics.Graphite.port;
         assertThat(obj.getPort()).isEqualTo(val);
-        val = 1 + val;
+        val++;
         obj.setPort(val);
         assertThat(obj.getPort()).isEqualTo(val);
     }
@@ -538,7 +538,7 @@ public class JHipsterPropertiesTest {
         JHipsterProperties.Metrics.Logs obj = properties.getMetrics().getLogs();
         long val = JHipsterDefaults.Metrics.Logs.reportFrequency;
         assertThat(obj.getReportFrequency()).isEqualTo(val);
-        val = 1 + val;
+        val++;
         obj.setReportFrequency(val);
         assertThat(obj.getReportFrequency()).isEqualTo(val);
     }
@@ -568,7 +568,7 @@ public class JHipsterPropertiesTest {
         JHipsterProperties.Logging.Logstash obj = properties.getLogging().getLogstash();
         int val = JHipsterDefaults.Logging.Logstash.port;
         assertThat(obj.getPort()).isEqualTo(val);
-        val = 1 + val;
+        val++;
         obj.setPort(val);
         assertThat(obj.getPort()).isEqualTo(val);
     }
@@ -578,7 +578,7 @@ public class JHipsterPropertiesTest {
         JHipsterProperties.Logging.Logstash obj = properties.getLogging().getLogstash();
         int val = JHipsterDefaults.Logging.Logstash.queueSize;
         assertThat(obj.getQueueSize()).isEqualTo(val);
-        val = 1 + val;
+        val++;
         obj.setQueueSize(val);
         assertThat(obj.getQueueSize()).isEqualTo(val);
     }
@@ -628,7 +628,7 @@ public class JHipsterPropertiesTest {
         JHipsterProperties.Gateway.RateLimiting obj = properties.getGateway().getRateLimiting();
         long val = JHipsterDefaults.Gateway.RateLimiting.limit;
         assertThat(obj.getLimit()).isEqualTo(val);
-        val = 1 + val;
+        val++;
         obj.setLimit(val);
         assertThat(obj.getLimit()).isEqualTo(val);
     }
@@ -638,7 +638,7 @@ public class JHipsterPropertiesTest {
         JHipsterProperties.Gateway.RateLimiting obj = properties.getGateway().getRateLimiting();
         int val = JHipsterDefaults.Gateway.RateLimiting.durationInSeconds;
         assertThat(obj.getDurationInSeconds()).isEqualTo(val);
-        val = 1 + val;
+        val++;
         obj.setDurationInSeconds(val);
         assertThat(obj.getDurationInSeconds()).isEqualTo(val);
     }
