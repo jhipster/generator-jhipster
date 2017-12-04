@@ -279,7 +279,14 @@ objects:
                successThreshold: 1
                tcpSocket:
                  port: 8080
-               timeoutSeconds: 1            
+               timeoutSeconds: 1          
+            resources:
+                limits:
+                    cpu: '1'
+                    memory: 1Gi
+                requests:
+                    cpu: '1'
+                    memory: 1Gi  
   -
     apiVersion: v1
     kind: Service
