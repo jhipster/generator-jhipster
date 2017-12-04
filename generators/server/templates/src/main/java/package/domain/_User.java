@@ -94,13 +94,9 @@ import org.hibernate.annotations.BatchSize;<% } %><% if (hibernateCache !== 'no'
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %>
 import org.hibernate.validator.constraints.Email;
-<%_ if (searchEngine === 'elasticsearch') { _%>
-import org.springframework.data.elasticsearch.annotations.Document;
-<%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
@@ -138,10 +134,10 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <%_ if (hibernateCache !== 'no' && databaseType === 'sql') { if (hibernateCache === 'infinispan') { _%>
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <%_ } else { _%>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE) <%_ } } _%><% if (databaseType === 'mongodb') { %>
-@Document(collection = "<%= jhiTablePrefix %>_user")<% } %><% if (databaseType === 'couchbase') { %>
+@org.springframework.data.mongodb.core.mapping.Document(collection = "<%= jhiTablePrefix %>_user")<% } %><% if (databaseType === 'couchbase') { %>
 @Document<% } %><% if (databaseType === 'cassandra') { %>
 @Table(name = "user")<% } %><% if (searchEngine === 'elasticsearch') { %>
-@Document(indexName = "user")<% } %>
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "user")<% } %>
 public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %> extends AbstractAuditingEntity<% } %> implements Serializable {
 
     private static final long serialVersionUID = 1L;
