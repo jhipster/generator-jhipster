@@ -20,6 +20,8 @@ package <%=packageName%>.repository;
 
 import <%=packageName%>.domain.<%=entityClass%>;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 <% if (databaseType === 'cassandra') { %>
 import com.datastax.driver.core.*;
 import com.datastax.driver.mapping.Mapper;
@@ -79,9 +81,10 @@ public interface <%=entityClass%>Repository extends <% if (databaseType === 'sql
     List<<%= entityClass %>> findBy<%= relationships[idx].relationshipNameCapitalized %>IsCurrentUser();
     <%_ } } _%>
     <%_ if (fieldsContainOwnerManyToMany === true) { _%>
-    @Query("select distinct <%= entityTableName %> from <%= entityClass %> <%= entityTableName %><% for (idx in relationships) {
-    if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { %> left join fetch <%=entityTableName%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%>")
-    List<<%=entityClass%>> findAllWithEagerRelationships();
+    @Query(value = "select distinct <%= entityTableName %> from <%= entityClass %> <%= entityTableName %><% for (idx in relationships) {
+    if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { %> left join fetch <%=entityTableName%>.<%=relationships[idx].relationshipFieldNamePlural%>",
+        countQuery = "select count(distinct <%= entityTableName %>) from <%= entityClass %> <%= entityTableName %><%} }%>")
+    Page<<%=entityClass%>> findAllWithEagerRelationships(Pageable pageable);
 
     @Query("select <%= entityTableName %> from <%= entityClass %> <%= entityTableName %><% for (idx in relationships) {
     if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { %> left join fetch <%=entityTableName%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%> where <%=entityTableName%>.id =:id")
