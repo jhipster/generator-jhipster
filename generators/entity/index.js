@@ -394,11 +394,11 @@ module.exports = class extends BaseGenerator {
                 if (context.entityAngularJSSuffix) {
                     this.data.angularJSSuffix = context.entityAngularJSSuffix;
                 }
-                if (this.applicationType === 'microservice') {
+                if (context.applicationType === 'microservice') {
                     this.data.microserviceName = context.baseName;
                     this.data.searchEngine = context.searchEngine;
                 }
-                if (this.applicationType === 'gateway' && context.useMicroserviceJson) {
+                if (context.applicationType === 'gateway' && context.useMicroserviceJson) {
                     this.data.microserviceName = context.microserviceName;
                     this.data.searchEngine = context.searchEngine;
                 }
