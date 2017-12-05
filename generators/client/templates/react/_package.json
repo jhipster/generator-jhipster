@@ -139,6 +139,7 @@ limitations under the License.
     "webpack-dev-server": "2.9.4",
     "webpack-merge": "4.1.1",
     "webpack-notifier": "1.5.0",
+    "workbox-webpack-plugin": "2.1.2",
     "write-file-webpack-plugin": "4.2.0"<% if (buildTool === 'maven') { %>,
     "xml2js": "0.4.19"
     <%_ } _%>

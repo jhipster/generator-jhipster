@@ -206,7 +206,6 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}404.html`,
         `${CLIENT_MAIN_SRC_DIR}index.html`,
         `${CLIENT_MAIN_SRC_DIR}manifest.webapp`,
-        `${CLIENT_MAIN_SRC_DIR}sw.js`,
         `${CLIENT_MAIN_SRC_DIR}content/css/main.css`,
         `${CLIENT_MAIN_SRC_DIR}favicon.ico`,
         `${CLIENT_MAIN_SRC_DIR}robots.txt`,

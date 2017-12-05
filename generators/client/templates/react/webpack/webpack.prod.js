@@ -19,6 +19,8 @@ limitations under the License.
 const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const WorkboxPlugin = require('workbox-webpack-plugin');
+const path = require('path');
 
 const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
@@ -91,6 +93,16 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     new webpack.LoaderOptionsPlugin({
       minimize: true,
       debug: false
+    }),
+    new WorkboxPlugin({
+      // to cache all under <%= BUILD_DIR %>www
+      globDirectory: utils.root('<%= BUILD_DIR %>www'),
+      // find these files and cache them
+      globPatterns: ['**/*.{html,bundle.js,css,png,svg,jpg,gif,json}'],
+      // create service worker at the <%= BUILD_DIR %>www
+      swDest: path.resolve(utils.root('<%= BUILD_DIR %>www'), 'sw.js'),
+      clientsClaim: true,
+      skipWaiting: true,
     })
   ]
 });

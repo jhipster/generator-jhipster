@@ -75,7 +75,6 @@ module.exports = options => ({
       { from: './<%= MAIN_SRC_DIR %>static/', to: 'static' },
       { from: './<%= MAIN_SRC_DIR %>favicon.ico', to: 'favicon.ico' },
       { from: './<%= MAIN_SRC_DIR %>manifest.webapp', to: 'manifest.webapp' },
-      // { from: './<%= MAIN_SRC_DIR %>sw.js', to: 'sw.js' },
       // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
       { from: './<%= MAIN_SRC_DIR %>robots.txt', to: 'robots.txt' }
     ]),
