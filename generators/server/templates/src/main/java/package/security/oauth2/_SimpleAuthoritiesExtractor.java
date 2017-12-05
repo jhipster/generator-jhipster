@@ -18,7 +18,6 @@
 -%>
 package <%=packageName%>.security.oauth2;
 
-import <%=packageName%>.security.AuthoritiesConstants;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -42,9 +41,9 @@ public class SimpleAuthoritiesExtractor implements AuthoritiesExtractor {
     public List<GrantedAuthority> extractAuthorities(Map<String, Object> map) {
         return Optional.ofNullable((List<String>) map.get(oauth2AuthoritiesAttribute))
             .filter(it -> !it.isEmpty())
-            .orElse(Collections.singletonList(AuthoritiesConstants.USER))
+            .orElse(Collections.emptyList())
             .stream()
-            .map(role -> new SimpleGrantedAuthority(role))
+            .map(SimpleGrantedAuthority::new)
             .collect(toList());
     }
 }
