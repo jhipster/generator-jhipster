@@ -49,6 +49,9 @@
     <logger name="ch.qos.logback" level="WARN"/>
     <logger name="com.codahale.metrics" level="WARN"/><% if (databaseType === 'cassandra') { %>
     <logger name="com.datastax" level="WARN"/><% } %>
+    <%_ if (hibernateCache === 'hazelcast') { _%>
+    <logger name="com.hazelcast" level="INFO"/>
+    <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || serviceDiscoveryType === 'eureka') { _%>
     <logger name="com.netflix" level="WARN"/>
     <logger name="com.netflix.discovery" level="INFO"/>
@@ -97,7 +100,7 @@
     <logger name="sun.rmi" level="WARN"/><% if (databaseType === 'sql') { %>
     <logger name="liquibase" level="WARN"/>
     <logger name="LiquibaseSchemaResolver" level="INFO"/><% } %>
-    <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
+    <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || hibernateCache === 'hazelcast') { _%>
     <logger name="sun.net.www" level="INFO"/>
     <%_ } _%>
     <logger name="sun.rmi.transport" level="WARN"/>
