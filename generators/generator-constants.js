@@ -28,6 +28,7 @@ const DOCKER_COUCHBASE = 'couchbase/server:4.6.2';
 const DOCKER_CASSANDRA = 'cassandra:3.9';
 const DOCKER_MSSQL = 'microsoft/mssql-server-linux:latest';
 const DOCKER_ORACLE = 'sath89/oracle-12c:latest';
+const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:3.9.1';
 const DOCKER_KEYCLOAK = 'jboss/keycloak:3.3.0.Final';
 const DOCKER_ELASTICSEARCH = 'elasticsearch:2.4.1';
 const DOCKER_KAFKA = 'wurstmeister/kafka:0.10.1.1';
@@ -174,6 +175,7 @@ const constants = {
     DOCKER_CASSANDRA,
     DOCKER_MSSQL,
     DOCKER_ORACLE,
+    DOCKER_HAZELCAST_MANAGEMENT_CENTER,
     DOCKER_ELASTICSEARCH,
     DOCKER_KEYCLOAK,
     DOCKER_KAFKA,

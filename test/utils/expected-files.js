@@ -471,6 +471,10 @@ const expectedFiles = {
         `${DOCKER_DIR}postgresql.yml`
     ],
 
+    hazelcast: [
+        `${DOCKER_DIR}hazelcast-management-center.yml`
+    ],
+
     mongodb: [
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/dbmigrations/package-info.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/dbmigrations/InitialSetupMigration.java`,

@@ -582,6 +582,10 @@ describe('JHipster generator', () => {
                     })
                     .on('end', done);
             });
+            it('creates expected files with "Hazelcast"', () => {
+                assert.file(expectedFiles.server);
+                assert.file(expectedFiles.hazelcast);
+            });
         });
 
         describe('Infinispan', () => {
@@ -1568,6 +1572,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.gateway);
                 assert.file(expectedFiles.dockerServices);
                 assert.file(expectedFiles.eureka);
+                assert.file(expectedFiles.hazelcast);
             });
         });
     });

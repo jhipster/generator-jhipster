@@ -111,6 +111,7 @@ module.exports = class extends BaseGenerator {
                 this.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
                 this.DOCKER_MSSQL = constants.DOCKER_MSSQL;
                 this.DOCKER_ORACLE = constants.DOCKER_ORACLE;
+                this.DOCKER_HAZELCAST_MANAGEMENT_CENTER = constants.DOCKER_HAZELCAST_MANAGEMENT_CENTER;
                 this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
                 this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
                 this.DOCKER_KEYCLOAK = constants.DOCKER_KEYCLOAK;

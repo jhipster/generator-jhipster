@@ -96,6 +96,9 @@ function writeFiles() {
                 this.template(`${DOCKER_DIR}cassandra/scripts/_autoMigrate.sh`, `${DOCKER_DIR}cassandra/scripts/autoMigrate.sh`);
                 this.template(`${DOCKER_DIR}cassandra/scripts/_execute-cql.sh`, `${DOCKER_DIR}cassandra/scripts/execute-cql.sh`);
             }
+            if (this.hibernateCache === 'hazelcast') {
+                this.template(`${DOCKER_DIR}_hazelcast-management-center.yml`, `${DOCKER_DIR}hazelcast-management-center.yml`);
+            }
             if (this.searchEngine === 'elasticsearch') {
                 this.template(`${DOCKER_DIR}_elasticsearch.yml`, `${DOCKER_DIR}elasticsearch.yml`);
             }
