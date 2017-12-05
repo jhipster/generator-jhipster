@@ -267,8 +267,8 @@ dependencies {
     compile "org.apache.commons:commons-lang3"
     compile "commons-io:commons-io"
     compile "javax.transaction:javax.transaction-api"
-    <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
-    compile "net.jpountz.lz4:lz4"
+    <%_ if (databaseType === 'cassandra') { _%>
+    compile "org.lz4:lz4-java"
     <%_ } _%>
     <%_ if (hibernateCache === 'ehcache' && databaseType === 'sql') { _%>
     compile "org.ehcache:ehcache"
