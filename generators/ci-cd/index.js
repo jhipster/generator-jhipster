@@ -23,7 +23,6 @@ const BaseGenerator = require('../generator-base');
 const constants = require('../generator-constants');
 
 module.exports = class extends BaseGenerator {
-
     constructor(args, opts) {
         super(args, opts);
 
