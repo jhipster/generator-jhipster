@@ -350,31 +350,6 @@ function askForServerSideOpts(meta) {
             default: (applicationType === 'microservice' || applicationType === 'uaa') ? 1 : 0
         },
         {
-            when: response => ((response.databaseType === 'no' || response.hibernateCache === 'no') && applicationType !== 'gateway'),
-            type: 'list',
-            name: 'cacheImplementation',
-            message: 'Do you want to use spring cache?',
-            choices: [
-                {
-                    value: 'ehcache',
-                    name: 'Yes, with ehcache implementation (local cache, for a single node)'
-                },
-                {
-                    value: 'hazelcast',
-                    name: 'Yes, with HazelCast implementation(distributed cache, for multiple nodes)'
-                },
-                // {
-                //     value: 'simple',
-                //     name: 'Yes with simple ConcurentHashMap implementation'
-                // },
-                {
-                    value: 'no',
-                    name: 'No'
-                }
-            ],
-            default: 'no'
-        },
-        {
             type: 'list',
             name: 'buildTool',
             message: 'Would you like to use Maven or Gradle for building the backend?',
@@ -429,7 +404,6 @@ function askForServerSideOpts(meta) {
             this.serverPort = '8080';
         }
         this.hibernateCache = props.hibernateCache;
-        this.cacheImplementation = props.cacheImplementation !== undefined ? props.cacheImplementation : 'no';
         this.databaseType = props.databaseType;
         this.devDatabaseType = props.devDatabaseType;
         this.prodDatabaseType = props.prodDatabaseType;
@@ -454,14 +428,9 @@ function askForServerSideOpts(meta) {
             this.prodDatabaseType = 'cassandra';
             this.hibernateCache = 'no';
         }
-
-        if (this.cacheImplementation === 'no' && this.hibernateCache !== 'no') {
-            this.cacheImplementation = this.hibernateCache;
-        }
         // Hazelcast is mandatory for Gateways, as it is used for rate limiting
         if (this.applicationType === 'gateway') {
             this.hibernateCache = 'hazelcast';
-            this.cacheImplementation = 'hazelcast';
         }
         done();
     });

@@ -91,13 +91,6 @@ module.exports = class extends BaseGenerator {
             type: String
         });
 
-        // This adds support for a `--cache-impl` flag
-        this.option('cache-impl', {
-            desc: 'Provide a cache implementation option for the application',
-            type: String,
-            defaults: 'no'
-        });
-
         // This adds support for a `--jhi-prefix` flag
         this.option('jhi-prefix', {
             desc: 'Add prefix before services, controllers and states name',
@@ -260,7 +253,6 @@ module.exports = class extends BaseGenerator {
                     this.authenticationType && this.config.set('authenticationType', this.authenticationType);
                     this.uaaBaseName && this.config.set('uaaBaseName', this.uaaBaseName);
                     this.hibernateCache && this.config.set('hibernateCache', this.hibernateCache);
-                    this.cacheImplementation && this.config.set('cacheImplementation', this.cacheImplementation);
                     this.websocket && this.config.set('websocket', this.websocket);
                     this.databaseType && this.config.set('databaseType', this.databaseType);
                     this.devDatabaseType && this.config.set('devDatabaseType', this.devDatabaseType);
@@ -278,9 +270,6 @@ module.exports = class extends BaseGenerator {
             getSharedConfigOptions() {
                 if (this.configOptions.hibernateCache) {
                     this.hibernateCache = this.configOptions.hibernateCache;
-                }
-                if (this.configOptions.cacheImplementation) {
-                    this.cacheImplementation = this.configOptions.cacheImplementation;
                 }
                 if (this.configOptions.websocket !== undefined) {
                     this.websocket = this.configOptions.websocket;

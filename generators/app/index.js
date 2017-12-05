@@ -103,13 +103,6 @@ module.exports = class extends BaseGenerator {
             type: String
         });
 
-        // This adds support for a `--cache-impl` flag
-        this.option('cache-impl', {
-            desc: 'Provide a cache implementation option for the application',
-            type: String,
-            defaults: 'no'
-        });
-
         // This adds support for a `--blueprint` flag which can be used to specify a blueprint to use for generation
         this.option('blueprint', {
             desc: '[BETA] Specify a generator blueprint to use for the sub generators',
@@ -127,7 +120,6 @@ module.exports = class extends BaseGenerator {
         this.skipServer = this.configOptions.skipServer = this.options['skip-server'] || this.config.get('skipServer');
         this.skipUserManagement = this.configOptions.skipUserManagement = this.options['skip-user-management'] || this.config.get('skipUserManagement');
         this.jhiPrefix = this.configOptions.jhiPrefix = _.camelCase(this.config.get('jhiPrefix') || this.options['jhi-prefix']);
-        this.cacheImplementation = this.configOptions.cacheImplementation = this.options['cache-impl'] || this.config.get('cacheImplementation');
         this.withEntities = this.options['with-entities'];
         this.skipChecks = this.options['skip-checks'];
         this.blueprint = this.configOptions.blueprint = this.options.blueprint || this.config.get('blueprint');

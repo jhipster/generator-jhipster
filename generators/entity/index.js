@@ -115,7 +115,6 @@ module.exports = class extends BaseGenerator {
                 context.authenticationType = this.config.get('authenticationType');
                 context.hibernateCache = this.config.get('hibernateCache');
                 context.websocket = this.config.get('websocket') === 'no' ? false : this.config.get('websocket');
-                context.cacheImplementation = this.config.get('cacheImplementation');
                 context.databaseType = this.config.get('databaseType') || this.getDBTypeFromDBValue(this.options.db);
                 context.prodDatabaseType = this.config.get('prodDatabaseType') || this.options.db;
                 context.devDatabaseType = this.config.get('devDatabaseType') || this.options.db;

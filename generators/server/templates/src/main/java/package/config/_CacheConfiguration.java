@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 package <%=packageName%>.config;
-<%_ if (cacheImplementation === 'ehcache') { _%>
+<%_ if (hibernateCache === 'ehcache') { _%>
 
 import io.github.jhipster.config.JHipsterProperties;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
@@ -29,7 +29,7 @@ import org.ehcache.jsr107.Eh107Configuration;
 import java.util.concurrent.TimeUnit;
 
 <%_ } _%>
-<%_ if (clusteredHttpSession === 'hazelcast' || cacheImplementation === 'hazelcast') { _%>
+<%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
 
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.config.JHipsterProperties;
@@ -46,10 +46,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 <%_ } _%>
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-<%_ if (cacheImplementation === 'ehcache') { _%>
+<%_ if (hibernateCache === 'ehcache') { _%>
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
 <%_ } _%>
-<%_ if (clusteredHttpSession === 'hazelcast' || cacheImplementation === 'hazelcast') { _%>
+<%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
     <%_ if (serviceDiscoveryType === 'eureka') { _%>
 import org.springframework.boot.autoconfigure.web.ServerProperties;
     <%_ } _%>
@@ -62,17 +62,17 @@ import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.serviceregistry.Registration;
 <%_ } _%>
-import org.springframework.context.annotation.*;<% if (clusteredHttpSession === 'hazelcast' || cacheImplementation === 'hazelcast') { %>
+import org.springframework.context.annotation.*;<% if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast') { %>
 import org.springframework.core.env.Environment;<% } %>
 <%_ if (clusteredHttpSession === 'hazelcast') { _%>
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 <%_ } _%>
-<%_ if (clusteredHttpSession === 'hazelcast' || cacheImplementation === 'hazelcast') { _%>
+<%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
 
 import javax.annotation.PreDestroy;
 <%_ } _%>
-<%_ if (cacheImplementation === 'infinispan') { _%>
+<%_ if (hibernateCache === 'infinispan') { _%>
 import org.infinispan.configuration.cache.CacheMode;
 import org.infinispan.configuration.cache.ConfigurationBuilder;
 import org.infinispan.configuration.global.GlobalConfigurationBuilder;
@@ -115,16 +115,17 @@ import java.util.List;
 @EnableCaching
 @AutoConfigureAfter(value = { MetricsConfiguration.class })
 @AutoConfigureBefore(value = { WebConfigurer.class<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>, DatabaseConfiguration.class<% } %> })
-<%_ if (cacheImplementation === 'infinispan') { _%>
+<%_ if (hibernateCache === 'infinispan') { _%>
 @Import(InfinispanEmbeddedCacheManagerAutoConfiguration.class)
 <%_ } _%>
 public class CacheConfiguration {
-    <%_ if (cacheImplementation === 'ehcache') { _%>
+    <%_ if (hibernateCache === 'ehcache') { _%>
 
     private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
 
     public CacheConfiguration(JHipsterProperties jHipsterProperties) {
-        JHipsterProperties.Cache.Ehcache ehcache = jHipsterProperties.getCache().getEhcache();
+        JHipsterProperties.Cache.Ehcache ehcache =
+            jHipsterProperties.getCache().getEhcache();
 
         jcacheConfiguration = Eh107Configuration.fromEhcacheCacheConfiguration(
             CacheConfigurationBuilder.newCacheConfigurationBuilder(Object.class, Object.class,
@@ -156,7 +157,7 @@ public class CacheConfiguration {
         };
     }
     <%_ } _%>
-    <%_ if (clusteredHttpSession === 'hazelcast' || cacheImplementation === 'hazelcast') { _%>
+    <%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
 
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
 
@@ -170,7 +171,7 @@ public class CacheConfiguration {
     private Registration registration;
         <%_ } _%>
 
-    public CacheConfiguration(<% if (clusteredHttpSession === 'hazelcast' || cacheImplementation === 'hazelcast') { %>Environment env<% if (serviceDiscoveryType === 'eureka') { %>, ServerProperties serverProperties, DiscoveryClient discoveryClient<% } } %>) {
+    public CacheConfiguration(<% if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast') { %>Environment env<% if (serviceDiscoveryType === 'eureka') { %>, ServerProperties serverProperties, DiscoveryClient discoveryClient<% } } %>) {
         this.env = env;
         <%_ if (serviceDiscoveryType === 'eureka') { _%>
         this.serverProperties = serverProperties;
@@ -256,7 +257,7 @@ public class CacheConfiguration {
 
         // Full reference is available at: http://docs.hazelcast.org/docs/management-center/3.9/manual/html/Deploying_and_Starting.html
         config.setManagementCenterConfig(initializeDefaultManagementCenterConfig(jHipsterProperties));
-        <%_ if (cacheImplementation === 'hazelcast') { _%>
+        <%_ if (hibernateCache === 'hazelcast') { _%>
         config.getMapConfigs().put("<%=packageName%>.domain.*", initializeDomainMapConfig(jHipsterProperties));
         <%_ } _%>
         <%_ if (clusteredHttpSession === 'hazelcast') { _%>
@@ -302,7 +303,7 @@ public class CacheConfiguration {
 
         return mapConfig;
     }
-    <%_ if (cacheImplementation === 'hazelcast') { _%>
+    <%_ if (hibernateCache === 'hazelcast') { _%>
 
     private MapConfig initializeDomainMapConfig(JHipsterProperties jHipsterProperties) {
         MapConfig mapConfig = new MapConfig();
@@ -330,7 +331,7 @@ public class CacheConfiguration {
     }
     <%_ } _%>
     <%_ } _%>
-    <%_ if (cacheImplementation === 'infinispan') { _%>
+    <%_ if (hibernateCache === 'infinispan') { _%>
 
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
 

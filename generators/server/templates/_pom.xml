@@ -158,15 +158,6 @@
     </dependencyManagement>
 
     <dependencies>
-        <%_ if (cacheImplementation !== 'no') { _%>
-        <!-- TODO move to jhipster-dependencies -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cache</artifactId>
-            <version>1.5.8.RELEASE</version>
-        </dependency>
-        <!-- END TODO -->
-        <%_ } _%>        
         <dependency>
             <groupId>io.github.jhipster</groupId>
             <artifactId>jhipster</artifactId>
@@ -183,7 +174,7 @@
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-json</artifactId>
         </dependency>
-        <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'infinispan' || cacheImplementation === 'ehcache') { _%>
+        <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'infinispan') { _%>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-jcache</artifactId>
@@ -228,7 +219,7 @@
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
-        <%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway' || cacheImplementation === 'hazelcast') { _%>
+        <%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
@@ -240,7 +231,7 @@
             <artifactId>hazelcast-hibernate52</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway' || cacheImplementation === 'hazelcast') { _%>
+        <%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-spring</artifactId>
@@ -345,7 +336,7 @@
             <artifactId>jzlib</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || hibernateCache === 'infinispan' || applicationType === 'gateway' || cacheImplementation !== 'no') { _%>
+        <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || hibernateCache === 'infinispan' || applicationType === 'gateway') { _%>
         <dependency>
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>
@@ -406,12 +397,6 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-jcache</artifactId>
-        </dependency>
-        <%_ } _%>
-        <%_ if (cacheImplementation === 'ehcache') { _%>
-        <dependency>
-            <groupId>org.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
         </dependency>
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>

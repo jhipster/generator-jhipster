@@ -212,13 +212,8 @@ repositories {
 
 dependencies {
     compile "io.github.jhipster:jhipster"
-    <%_ if (cacheImplementation !== 'no') { _%>
-    // TODO move to jhipster-dependencies
-    compile "org.springframework.boot:spring-boot-starter-cache:1.5.8"
-    // END TODO
-    <%_ } _%>
     compile "io.dropwizard.metrics:metrics-core"
-    <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'infinispan' || cacheImplementation === 'ehcache') { _%>
+    <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'infinispan') { _%>
     compile "io.dropwizard.metrics:metrics-jcache"
     <%_ } _%>
     compile "io.dropwizard.metrics:metrics-json"
@@ -236,12 +231,12 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-databind"
     compile "com.fasterxml.jackson.module:jackson-module-afterburner"
     compile "com.ryantenney.metrics:metrics-spring"
-    <%_ if (hibernateCache === 'hazelcast' || cacheImplementation === 'hazelcast') { _%>
+    <%_ if (hibernateCache === 'hazelcast') { _%>
     compile "com.hazelcast:hazelcast"
     compile "com.hazelcast:hazelcast-hibernate52"
     compile "com.hazelcast:hazelcast-spring"
     <%_ } _%>
-    <%_ if ((clusteredHttpSession === 'hazelcast' || applicationType === 'gateway' || cacheImplementation === 'hazelcast') && hibernateCache !== 'hazelcast') { _%>
+    <%_ if ((clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') && hibernateCache !== 'hazelcast') { _%>
     compile "com.hazelcast:hazelcast"
     compile "com.hazelcast:hazelcast-spring"
     <%_ } _%>
@@ -259,7 +254,7 @@ dependencies {
         exclude module: 'undertow-core'
     }
     <%_ } _%>
-    <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || hibernateCache === 'infinispan' || applicationType === 'gateway' || cacheImplementation !== 'no') { _%>
+    <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || hibernateCache === 'infinispan' || applicationType === 'gateway') { _%>
     compile "javax.cache:cache-api"
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
@@ -279,9 +274,6 @@ dependencies {
     compile "org.ehcache:ehcache"
     compile "org.hibernate:hibernate-jcache"
     <%_ } _%>
-    <%_ if (cacheImplementation === 'ehcache') { _%>
-    compile "org.ehcache:ehcache"
-    <%_ } _%>    
     <%_ if (databaseType === 'sql') { _%>
     compile "org.hibernate:hibernate-entitymanager"
     compile "org.hibernate:hibernate-envers"

@@ -55,7 +55,6 @@ module.exports = class extends BaseGenerator {
         jhipsterVar.applicationType = this.config.get('applicationType');
         jhipsterVar.authenticationType = this.config.get('authenticationType');
         jhipsterVar.hibernateCache = this.config.get('hibernateCache');
-        jhipsterVar.cacheImplementation = this.config.get('cacheImplementation');
         jhipsterVar.clusteredHttpSession = this.config.get('clusteredHttpSession');
         jhipsterVar.websocket = this.config.get('websocket');
         jhipsterVar.databaseType = this.config.get('databaseType');
