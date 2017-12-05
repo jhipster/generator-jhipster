@@ -27,16 +27,13 @@
         "removeComments": false,
         "noImplicitAny": false,
         "suppressImplicitAnyIndexErrors": true,
+        "skipLibCheck": true,
         "outDir": "<%= DIST_DIR %>app",
         "lib": ["es2015", "dom"],
         "typeRoots": [
             "node_modules/@types"
         ]
     },
-    "files": [
-        "<%= MAIN_SRC_DIR %>app/app.module.ts",
-        "<%= MAIN_SRC_DIR %>app/app.main-aot.ts"
-    ],
     "angularCompilerOptions": {
         "genDir": "<%= BUILD_DIR %>aot",
         "skipMetadataEmit" : true
