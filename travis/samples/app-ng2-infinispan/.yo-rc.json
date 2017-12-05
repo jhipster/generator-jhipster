@@ -9,7 +9,7 @@
     "packageFolder": "io/github/jhipster/travis",
     "serverPort": "8080",
     "authenticationType": "jwt",
-    "hibernateCache": "infinispan",
+    "cacheProvider": "infinispan",
     "clusteredHttpSession": false,
     "websocket": false,
     "databaseType": "sql",

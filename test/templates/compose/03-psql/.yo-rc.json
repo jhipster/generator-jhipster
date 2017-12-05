@@ -6,7 +6,7 @@
     "packageFolder": "com/mycompany/myapp",
     "serverPort": "8081",
     "authenticationType": "jwt",
-    "hibernateCache": "hazelcast",
+    "cacheProvider": "hazelcast",
     "databaseType": "sql",
     "devDatabaseType": "h2Disk",
     "prodDatabaseType": "postgresql",

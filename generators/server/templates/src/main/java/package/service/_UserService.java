@@ -18,7 +18,7 @@
 -%>
 <%_
 let cacheManagerIsAvailable = false;
-if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || hibernateCache === 'infinispan' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') {
+if (cacheProvider === 'ehcache' || cacheProvider === 'hazelcast' || cacheProvider === 'infinispan' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') {
     cacheManagerIsAvailable = true;
 }
 _%>

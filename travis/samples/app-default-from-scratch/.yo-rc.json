@@ -5,7 +5,7 @@
     "packageName": "io.github.jhipster.sample",
     "packageFolder": "io/github/jhipster/sample",
     "authenticationType": "jwt",
-    "hibernateCache": "ehcache",
+    "cacheProvider": "ehcache",
     "clusteredHttpSession": false,
     "websocket": false,
     "databaseType": "sql",

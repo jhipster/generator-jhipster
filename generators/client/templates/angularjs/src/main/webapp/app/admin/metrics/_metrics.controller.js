@@ -28,7 +28,7 @@
     function <%=jhiPrefixCapitalized%>MetricsMonitoringController ($scope, <%=jhiPrefixCapitalized%>MetricsService, $uibModal) {
         var vm = this;
 
-        <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'infinispan') { _%>
+        <%_ if (cacheProvider === 'ehcache' || cacheProvider === 'infinispan') { _%>
         vm.cachesStats = {};
         <%_ } _%>
         vm.metrics = {};
@@ -47,7 +47,7 @@
                 }
             });
 
-            <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'infinispan') { _%>
+            <%_ if (cacheProvider === 'ehcache' || cacheProvider === 'infinispan') { _%>
             vm.cachesStats = {};
             angular.forEach(newValue.gauges, function (value, key) {
                 if (key.includes('jcache.statistics')) {

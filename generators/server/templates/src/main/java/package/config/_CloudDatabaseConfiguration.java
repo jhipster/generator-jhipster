@@ -29,7 +29,7 @@ import io.github.jhipster.config.JHipsterConstants;
 <%_ } _%>
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;<% if (hibernateCache === 'hazelcast') { %>
+import org.slf4j.LoggerFactory;<% if (cacheProvider === 'hazelcast') { %>
 import org.springframework.cache.CacheManager;<% } %>
 <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.cloud.Cloud;
@@ -71,7 +71,7 @@ public class CloudDatabaseConfiguration extends AbstractCloudConfig {
     <%_ if (databaseType === 'sql') { _%>
 
     @Bean
-    public DataSource dataSource(<% if (hibernateCache === 'hazelcast') { %>CacheManager cacheManager<% } %>) {
+    public DataSource dataSource(<% if (cacheProvider === 'hazelcast') { %>CacheManager cacheManager<% } %>) {
         log.info("Configuring JDBC datasource from a cloud provider");
         return connectionFactory().dataSource();
     }

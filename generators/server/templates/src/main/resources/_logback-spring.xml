@@ -49,7 +49,7 @@
     <logger name="ch.qos.logback" level="WARN"/>
     <logger name="com.codahale.metrics" level="WARN"/><% if (databaseType === 'cassandra') { %>
     <logger name="com.datastax" level="WARN"/><% } %>
-    <%_ if (hibernateCache === 'hazelcast') { _%>
+    <%_ if (cacheProvider === 'hazelcast') { _%>
     <logger name="com.hazelcast" level="INFO"/>
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
@@ -64,7 +64,7 @@
     <logger name="com.zaxxer" level="WARN"/>
     <logger name="io.undertow" level="WARN"/>
     <logger name="io.undertow.websockets.jsr" level="ERROR"/>
-    <%_ if (hibernateCache === 'ehcache') { _%>
+    <%_ if (cacheProvider === 'ehcache') { _%>
     <logger name="org.ehcache" level="WARN"/>
     <%_ } _%>
     <logger name="org.apache" level="WARN"/>
@@ -83,7 +83,7 @@
     <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
     <logger name="org.reflections" level="WARN"/>
     <%_ } _%>
-    <%_ if (hibernateCache === 'infinispan') { _%>
+    <%_ if (cacheProvider === 'infinispan') { _%>
     <logger name="org.infinispan" level="WARN"/>
     <%_ } _%>
     <logger name="org.springframework" level="WARN"/>
@@ -103,11 +103,11 @@
     <logger name="sun.rmi" level="WARN"/><% if (databaseType === 'sql') { %>
     <logger name="liquibase" level="WARN"/>
     <logger name="LiquibaseSchemaResolver" level="INFO"/><% } %>
-    <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || hibernateCache === 'hazelcast') { _%>
+    <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || cacheProvider === 'hazelcast') { _%>
     <logger name="sun.net.www" level="INFO"/>
     <%_ } _%>
     <logger name="sun.rmi.transport" level="WARN"/>
-    <%_ if (hibernateCache === 'infinispan') { _%>
+    <%_ if (cacheProvider === 'infinispan') { _%>
     <logger name="unknown.jul.logger" level="WARN"/>
     <%_ } _%>
 

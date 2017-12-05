@@ -21,7 +21,7 @@ package <%= packageName %>.config;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
 import com.codahale.metrics.servlets.MetricsServlet;
-<%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { _%>
+<%_ if (clusteredHttpSession === 'hazelcast' || cacheProvider === 'hazelcast') { _%>
 import com.hazelcast.cardinality.CardinalityEstimator;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.*;
@@ -61,7 +61,7 @@ import org.xnio.OptionMap;
 
 import javax.servlet.*;
 import java.util.*;
-<%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { _%>
+<%_ if (clusteredHttpSession === 'hazelcast' || cacheProvider === 'hazelcast') { _%>
 import java.util.concurrent.ConcurrentMap;
 <%_ } _%>
 
@@ -106,7 +106,7 @@ public class WebConfigurerTest {
         env = new MockEnvironment();
         props = new JHipsterProperties();
 
-        webConfigurer = new WebConfigurer(env, props<% if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { %>, new MockHazelcastInstance()<% } %>);
+        webConfigurer = new WebConfigurer(env, props<% if (clusteredHttpSession === 'hazelcast' || cacheProvider === 'hazelcast') { %>, new MockHazelcastInstance()<% } %>);
         metricRegistry = new MetricRegistry();
         webConfigurer.setMetricRegistry(metricRegistry);
     }
@@ -408,7 +408,7 @@ public class WebConfigurerTest {
             return null;
         }
     }
-    <%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { _%>
+    <%_ if (clusteredHttpSession === 'hazelcast' || cacheProvider === 'hazelcast') { _%>
 
     public static class MockHazelcastInstance implements HazelcastInstance {
 
