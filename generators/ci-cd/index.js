@@ -23,10 +23,22 @@ const BaseGenerator = require('../generator-base');
 const constants = require('../generator-constants');
 
 module.exports = class extends BaseGenerator {
+
+    constructor(args, opts) {
+        super(args, opts);
+
+        // Automatically configure Travis
+        this.argument('autoconfigure-travis', {
+            type: Boolean,
+            defaults: false,
+            description: 'Automatically configure Travis'
+        });
+    }
+
     get initializing() {
         return {
             sayHello() {
-                this.log(chalk.white('[Beta] Welcome to the JHipster CI/CD Sub-Generator'));
+                this.log(chalk.white('Welcome to the JHipster CI/CD Sub-Generator'));
             },
             getConfig() {
                 this.baseName = this.config.get('baseName');
@@ -37,6 +49,7 @@ module.exports = class extends BaseGenerator {
                 this.herokuAppName = this.config.get('herokuAppName');
                 this.clientFramework = this.config.get('clientFramework');
                 this.testFrameworks = this.config.get('testFrameworks');
+                this.autoconfigureTravis = this.options['autoconfigure-travis'];
                 this.abort = false;
             },
             initConstants() {

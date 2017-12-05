@@ -23,6 +23,11 @@ module.exports = {
 
 function askPipelines() {
     if (this.abort) return;
+    if (this.autoconfigureTravis) {
+        this.log('Auto-configuring Travis CI');
+        this.pipelines = ['travis'];
+        return;
+    }
     const done = this.async();
     const prompts = [
         {
@@ -49,6 +54,10 @@ function askPipelines() {
 
 function askIntegrations() {
     if (this.abort || this.pipelines.length === 0) return;
+    if (this.autoconfigureTravis) {
+        this.heroku = [];
+        return;
+    }
     const done = this.async();
     const herokuChoices = [];
     if (this.pipelines.includes('jenkins')) {
