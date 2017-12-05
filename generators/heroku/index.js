@@ -33,6 +33,7 @@ module.exports = class extends BaseGenerator {
         this.packageName = this.config.get('packageName');
         this.packageFolder = this.config.get('packageFolder');
         this.hibernateCache = this.config.get('hibernateCache');
+        this.cacheImplementation = this.config.get('cacheImplementation');
         this.databaseType = this.config.get('databaseType');
         this.prodDatabaseType = this.config.get('prodDatabaseType');
         this.angularAppName = this.getAngularAppName();

@@ -2315,6 +2315,7 @@ module.exports = class extends PrivateBase {
         generator.enableSocialSignIn = context.options.social || context.config.get('enableSocialSignIn');
         generator.searchEngine = context.options['search-engine'] || context.config.get('searchEngine');
         generator.hibernateCache = context.options['hb-cache'] || context.config.get('hibernateCache');
+        generator.cacheImplementation = context.options['cache-impl'] || context.config.get('cacheImplementation');
         generator.otherModules = context.configOptions.otherModules || [];
         generator.jhiPrefix = context.configOptions.jhiPrefix || context.config.get('jhiPrefix') || context.options['jhi-prefix'];
         generator.jhiPrefixCapitalized = _.upperFirst(generator.jhiPrefix);

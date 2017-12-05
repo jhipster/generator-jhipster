@@ -240,9 +240,9 @@ jhipster:
         version: V_1_1 # To use HTTP/2 you will need SSL support (see above the "server.ssl" configuration)
         cache: # Used by the CachingHttpHeadersFilter
             timeToLiveInDays: 1461
-    <%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast' ||  hibernateCache === 'ehcache' || hibernateCache === 'infinispan') { _%>
+    <%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast' ||  hibernateCache === 'ehcache' || hibernateCache === 'infinispan' || cacheImplementation !== 'no') { _%>
     cache: # Cache configuration
-        <%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { _%>
+        <%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast' || cacheImplementation === 'hazelcast') { _%>
         hazelcast: # Hazelcast distributed cache
             time-to-live-seconds: 3600
             backup-count: 1
@@ -251,7 +251,7 @@ jhipster:
                 update-interval: 3
                 url:
         <%_ } _%>
-        <%_ if (hibernateCache === 'ehcache') { _%>
+        <%_ if (hibernateCache === 'ehcache' || cacheImplementation === 'ehcache') { _%>
         ehcache: # Ehcache configuration
             time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
             max-entries: 1000 # Number of objects in each cache entry

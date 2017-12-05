@@ -190,9 +190,14 @@ module.exports = class extends BaseGenerator {
                 if (this.hibernateCache === undefined) {
                     this.hibernateCache = 'no';
                 }
+                this.cacheImplementation = this.config.get('cacheImplementation');
+                if (this.cacheImplementation === undefined || this.cacheImplementation === 'no') {
+                    this.cacheImplementation = this.hibernateCache;
+                }
                 // Hazelcast is mandatory for Gateways, as it is used for rate limiting
                 if (this.applicationType === 'gateway') {
                     this.hibernateCache = 'hazelcast';
+                    this.cacheImplementation = 'hazelcast';
                 }
                 this.clusteredHttpSession = this.config.get('clusteredHttpSession') === 'no' ? false : this.config.get('clusteredHttpSession');
                 if (this.hibernateCache === 'ehcache') {
@@ -233,6 +238,7 @@ module.exports = class extends BaseGenerator {
                 const serverConfigFound = this.packageName !== undefined &&
                     this.authenticationType !== undefined &&
                     this.hibernateCache !== undefined &&
+                    this.cacheImplementation !== undefined &&
                     this.clusteredHttpSession !== undefined &&
                     this.websocket !== undefined &&
                     this.databaseType !== undefined &&
@@ -292,6 +298,7 @@ module.exports = class extends BaseGenerator {
             setSharedConfigOptions() {
                 this.configOptions.packageName = this.packageName;
                 this.configOptions.hibernateCache = this.hibernateCache;
+                this.configOptions.cacheImplementation = this.cacheImplementation;
                 this.configOptions.clusteredHttpSession = this.clusteredHttpSession;
                 this.configOptions.websocket = this.websocket;
                 this.configOptions.databaseType = this.databaseType;
@@ -329,6 +336,7 @@ module.exports = class extends BaseGenerator {
                 insight.trackWithEvent('generator', 'server');
                 insight.track('app/authenticationType', this.authenticationType);
                 insight.track('app/hibernateCache', this.hibernateCache);
+                insight.track('app/cacheImplementation', this.cacheImplementation);
                 insight.track('app/clusteredHttpSession', this.clusteredHttpSession);
                 insight.track('app/websocket', this.websocket);
                 insight.track('app/databaseType', this.databaseType);
@@ -370,6 +378,7 @@ module.exports = class extends BaseGenerator {
                 this.config.set('authenticationType', this.authenticationType);
                 this.config.set('uaaBaseName', this.uaaBaseName);
                 this.config.set('hibernateCache', this.hibernateCache);
+                this.config.set('cacheImplementation', this.cacheImplementation);
                 this.config.set('clusteredHttpSession', this.clusteredHttpSession);
                 this.config.set('websocket', this.websocket);
                 this.config.set('databaseType', this.databaseType);
