@@ -71,6 +71,7 @@ module.exports = class extends Generator {
         generator.copyI18nFilesByName(generator, webappDir, 'login.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'home.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'metrics.json', lang);
+        generator.copyI18nFilesByName(generator, webappDir, 'logs.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'password.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'register.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'sessions.json', lang);
@@ -91,7 +92,6 @@ module.exports = class extends Generator {
         generator.template(`${webappDir}i18n/${lang}/_global.json`, `${webappDir}i18n/${lang}/global.json`);
         generator.template(`${webappDir}i18n/${lang}/_health.json`, `${webappDir}i18n/${lang}/health.json`);
         generator.template(`${webappDir}i18n/${lang}/_reset.json`, `${webappDir}i18n/${lang}/reset.json`);
-        generator.template(`${webappDir}i18n/${lang}/_logs.json`, `${webappDir}i18n/${lang}/logs.json`);
     }
 
     /**
