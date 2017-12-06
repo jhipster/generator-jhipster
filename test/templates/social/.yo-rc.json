@@ -5,7 +5,7 @@
     "packageName": "com.mycompany.myapp",
     "packageFolder": "com/mycompany/myapp",
     "authenticationType": "session",
-    "hibernateCache": "ehcache",
+    "cacheProvider": "ehcache",
     "clusteredHttpSession": "no",
     "websocket": "no",
     "databaseType": "sql",

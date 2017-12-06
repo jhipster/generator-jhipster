@@ -32,7 +32,7 @@ import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.id.IdPrefix;
 <%_ } _%>
-<%_ if (hibernateCache !== 'no') { _%>
+<%_ if (cacheProvider !== 'no') { _%>
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 <%_ } _%>
@@ -55,7 +55,7 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
  */<% if (databaseType === 'sql') { %>
 @Entity
 @Table(name = "<%= jhiTablePrefix %>_social_user_connection")
-<%_ if (hibernateCache !== 'no') { if (hibernateCache === 'infinispan') { _%>
+<%_ if (cacheProvider !== 'no') { if (cacheProvider === 'infinispan') { _%>
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <%_ } else { _%>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<%_ } } _%><% } %><% if (databaseType === 'mongodb') { %>
 @Document(collection = "<%= jhiTablePrefix %>_social_user_connection")

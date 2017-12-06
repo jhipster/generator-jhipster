@@ -327,7 +327,7 @@ function askForServerSideOpts(meta) {
         {
             when: response => (response.databaseType === 'sql' && applicationType !== 'gateway'),
             type: 'list',
-            name: 'hibernateCache',
+            name: 'cacheProvider',
             message: 'Do you want to use Hibernate 2nd level cache?',
             choices: [
                 {
@@ -403,7 +403,7 @@ function askForServerSideOpts(meta) {
         if (this.serverPort === undefined) {
             this.serverPort = '8080';
         }
-        this.hibernateCache = props.hibernateCache;
+        this.cacheProvider = props.cacheProvider;
         this.databaseType = props.databaseType;
         this.devDatabaseType = props.devDatabaseType;
         this.prodDatabaseType = props.prodDatabaseType;
@@ -414,23 +414,23 @@ function askForServerSideOpts(meta) {
         if (this.databaseType === 'no') {
             this.devDatabaseType = 'no';
             this.prodDatabaseType = 'no';
-            this.hibernateCache = 'no';
+            this.cacheProvider = 'no';
         } else if (this.databaseType === 'mongodb') {
             this.devDatabaseType = 'mongodb';
             this.prodDatabaseType = 'mongodb';
-            this.hibernateCache = 'no';
+            this.cacheProvider = 'no';
         } else if (this.databaseType === 'couchbase') {
             this.devDatabaseType = 'couchbase';
             this.prodDatabaseType = 'couchbase';
-            this.hibernateCache = 'no';
+            this.cacheProvider = 'no';
         } else if (this.databaseType === 'cassandra') {
             this.devDatabaseType = 'cassandra';
             this.prodDatabaseType = 'cassandra';
-            this.hibernateCache = 'no';
+            this.cacheProvider = 'no';
         }
         // Hazelcast is mandatory for Gateways, as it is used for rate limiting
         if (this.applicationType === 'gateway') {
-            this.hibernateCache = 'hazelcast';
+            this.cacheProvider = 'hazelcast';
         }
         done();
     });
@@ -455,7 +455,7 @@ function askForOptionalItems(meta) {
         });
     }
     if ((applicationType === 'monolith' || applicationType === 'gateway') &&
-            (this.hibernateCache === 'no' || this.hibernateCache === 'hazelcast') &&
+            (this.cacheProvider === 'no' || this.cacheProvider === 'hazelcast') &&
             this.authenticationType !== 'oauth2') {
         choices.push({
             name: 'Clustered HTTP sessions using Hazelcast',

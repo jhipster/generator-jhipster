@@ -6,7 +6,7 @@
     "packageFolder": "com/mycompany/myapp",
     "clientFramework": "angularX",
     "authenticationType": "session",
-    "hibernateCache": "hazelcast",
+    "cacheProvider": "hazelcast",
     "clusteredHttpSession": "no",
     "websocket": "yes",
     "databaseType": "sql",

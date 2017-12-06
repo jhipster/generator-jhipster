@@ -252,7 +252,7 @@ module.exports = class extends BaseGenerator {
                 if (this.skipServer) {
                     this.authenticationType && this.config.set('authenticationType', this.authenticationType);
                     this.uaaBaseName && this.config.set('uaaBaseName', this.uaaBaseName);
-                    this.hibernateCache && this.config.set('hibernateCache', this.hibernateCache);
+                    this.cacheProvider && this.config.set('cacheProvider', this.cacheProvider);
                     this.websocket && this.config.set('websocket', this.websocket);
                     this.databaseType && this.config.set('databaseType', this.databaseType);
                     this.devDatabaseType && this.config.set('devDatabaseType', this.devDatabaseType);
@@ -268,8 +268,8 @@ module.exports = class extends BaseGenerator {
         if (useBlueprint) return;
         return {
             getSharedConfigOptions() {
-                if (this.configOptions.hibernateCache) {
-                    this.hibernateCache = this.configOptions.hibernateCache;
+                if (this.configOptions.cacheProvider) {
+                    this.cacheProvider = this.configOptions.cacheProvider;
                 }
                 if (this.configOptions.websocket !== undefined) {
                     this.websocket = this.configOptions.websocket;

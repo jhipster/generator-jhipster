@@ -5,7 +5,7 @@
     "packageFolder": "io/github/jhipster/travis",
     "serverPort": "9999",
     "authenticationType": "uaa",
-    "hibernateCache": "hazelcast",
+    "cacheProvider": "hazelcast",
     "clusteredHttpSession": false,
     "websocket": false,
     "databaseType": "sql",

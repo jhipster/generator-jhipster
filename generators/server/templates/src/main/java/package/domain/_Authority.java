@@ -18,7 +18,7 @@
 -%>
 package <%=packageName%>.domain;
 
-<% if (hibernateCache !== 'no' && databaseType === 'sql') { %>import org.hibernate.annotations.Cache;
+<% if (cacheProvider !== 'no' && databaseType === 'sql') { %>import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.<%= databaseType %>.core.mapping.Document;<% } %><% if (databaseType === 'sql') { %>
@@ -36,8 +36,8 @@ import java.io.Serializable;
 <%_ if (databaseType === 'sql') { _%>
 @Entity
 @Table(name = "<%= jhiTablePrefix %>_authority")
-    <%_ if (hibernateCache !== 'no') { _%>
-        <%_ if (hibernateCache === 'infinispan') { _%>
+    <%_ if (cacheProvider !== 'no') { _%>
+        <%_ if (cacheProvider === 'infinispan') { _%>
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
         <%_ } else { _%>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)

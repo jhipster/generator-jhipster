@@ -245,7 +245,7 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
     @Primary
     public UserInfoTokenServices userInfoTokenServices(PrincipalExtractor principalExtractor, AuthoritiesExtractor authoritiesExtractor) {
         UserInfoTokenServices userInfoTokenServices =
-        <%_ if (hibernateCache !== 'no') { _%>
+        <%_ if (cacheProvider !== 'no') { _%>
             new CachedUserInfoTokenServices(resourceServerProperties.getUserInfoUri(), resourceServerProperties.getClientId());
         <%_ } else { _%>
             new UserInfoTokenServices(resourceServerProperties.getUserInfoUri(), resourceServerProperties.getClientId());

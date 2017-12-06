@@ -24,7 +24,7 @@ import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
 <%_ } _%>
 import <%=packageName%>.domain.User;
-<%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || hibernateCache === 'infinispan' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
+<%_ if (cacheProvider === 'ehcache' || cacheProvider === 'hazelcast' || cacheProvider === 'infinispan' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
 import org.springframework.cache.annotation.Cacheable;
 <%_ } _%>
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
@@ -105,7 +105,7 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     Optional<User> findOneWithAuthoritiesById(<%= pkType %> id);
 
     @EntityGraph(attributePaths = "authorities")
-    <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || hibernateCache === 'infinispan' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
+    <%_ if (cacheProvider === 'ehcache' || cacheProvider === 'hazelcast' || cacheProvider === 'infinispan' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
     @Cacheable(cacheNames = "users")
     <%_ } _%>
     Optional<User> findOneWithAuthoritiesByLogin(String login);

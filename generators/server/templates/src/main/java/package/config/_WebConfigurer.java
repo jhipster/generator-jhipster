@@ -24,7 +24,7 @@ import io.github.jhipster.web.filter.CachingHttpHeadersFilter;<% } %>
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
-import com.codahale.metrics.servlets.MetricsServlet;<% if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { %>
+import com.codahale.metrics.servlets.MetricsServlet;<% if (clusteredHttpSession === 'hazelcast' || cacheProvider === 'hazelcast') { %>
 import com.hazelcast.core.HazelcastInstance;<% } %><% if (clusteredHttpSession === 'hazelcast') { %>
 import com.hazelcast.web.SessionListener;
 import com.hazelcast.web.spring.SpringAwareWebFilter;<% } %>
@@ -59,17 +59,17 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
 
     private final Environment env;
 
-    private final JHipsterProperties jHipsterProperties;<% if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { %>
+    private final JHipsterProperties jHipsterProperties;<% if (clusteredHttpSession === 'hazelcast' || cacheProvider === 'hazelcast') { %>
 
     private final HazelcastInstance hazelcastInstance;<% } %>
 
     private MetricRegistry metricRegistry;
 
-    public WebConfigurer(Environment env, JHipsterProperties jHipsterProperties<% if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { %>, HazelcastInstance hazelcastInstance<% } %>) {
+    public WebConfigurer(Environment env, JHipsterProperties jHipsterProperties<% if (clusteredHttpSession === 'hazelcast' || cacheProvider === 'hazelcast') { %>, HazelcastInstance hazelcastInstance<% } %>) {
 
         this.env = env;
         this.jHipsterProperties = jHipsterProperties;
-        <%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { _%>
+        <%_ if (clusteredHttpSession === 'hazelcast' || cacheProvider === 'hazelcast') { _%>
         this.hazelcastInstance = hazelcastInstance;
         <%_ } _%>
     }
