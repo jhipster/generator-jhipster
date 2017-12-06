@@ -211,6 +211,9 @@ repositories {
 }
 
 dependencies {
+    <%_ if (cacheProvider !== 'no') { _%> 
+    compile "org.springframework.boot:spring-boot-starter-cache:1.5.9.RELEASE" 
+    <%_ } _%> 
     compile "io.github.jhipster:jhipster"
     compile "io.dropwizard.metrics:metrics-core"
     <%_ if (cacheProvider === 'ehcache' || cacheProvider === 'infinispan') { _%>
