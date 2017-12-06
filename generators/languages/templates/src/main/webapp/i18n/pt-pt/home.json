@@ -14,6 +14,8 @@
             "follow": "Contacte @java_hipster no Twitter"
         },
         "like": "Se gosta do JHipster, não se esqueça de avaliar no",
-        "github": "GitHub"
+        "github": "GitHub", 
+        "contribute": "and/or contribute to our",
+        "opencollective": "Open Collective"
     }
 }

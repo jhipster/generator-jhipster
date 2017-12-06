@@ -14,6 +14,8 @@
             "follow": "Користувач @java_hipster в Twitter"
         },
         "like": "Якщо вам подобається JHipster, не забудьте дати нам зірку на",
-        "github": "GitHub"
+        "github": "GitHub", 
+        "contribute": "and/or contribute to our",
+        "opencollective": "Open Collective"
     }
 }

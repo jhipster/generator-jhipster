@@ -14,6 +14,8 @@
             "follow": "jälgi @java_hipster Twitteris"
         },
         "like": "Kui teile meeldib JHipster, siis ärge unustage anda meile tähte",
-        "github": "GitHub-is"
+        "github": "GitHub-is",
+        "contribute": "and/or contribute to our",
+        "opencollective": "Open Collective"
     }
 }

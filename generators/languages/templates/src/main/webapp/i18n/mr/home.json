@@ -14,6 +14,8 @@
             "follow": "Twitter वर @java_hipster अनुसरण करा"
         },
         "like": "JHipster आवडत असल्यास, आम्हाला एक तारा देण्यास विसरू नका ",
-        "github": "GitHub"
+        "github": "GitHub", 
+        "contribute": "and/or contribute to our",
+        "opencollective": "Open Collective"
     }
 }
