@@ -29,6 +29,6 @@ export class PasswordService {
     constructor(private http: Http) {}
 
     save(newPassword: string): Observable<any> {
-        return this.http.post(<% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/<% } else { %>SERVER_API_URL + '<% } %>api/account/change-password', newPassword);
+        return this.http.post(<%- apiUrlPrefix %>api/account/change-password', newPassword);
     }
 }

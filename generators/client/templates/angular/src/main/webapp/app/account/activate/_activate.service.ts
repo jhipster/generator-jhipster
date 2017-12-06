@@ -32,7 +32,7 @@ export class ActivateService {
         const params: URLSearchParams = new URLSearchParams();
         params.set('key', key);
 
-        return this.http.get(<% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/<% } else { %>SERVER_API_URL + '<% } %>api/activate', {
+        return this.http.get(<%- apiUrlPrefix %>api/activate', {
             search: params
         }).map((res: Response) => res);
     }

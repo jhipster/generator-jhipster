@@ -59,7 +59,7 @@ describe('Service Tests', () => {
         describe('Service methods', () => {
             it('should call correct URL', () => {
                 service.find('user').subscribe(() => {});
-                const resourceUrl = <% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/<% } else { %>SERVER_API_URL + '<% } %>api/users';
+                const resourceUrl = <%- apiUrlPrefix %>api/users';
 
                 expect(this.lastConnection).toBeDefined();
                 expect(this.lastConnection.request.url).toEqual(`${resourceUrl}/user`);
