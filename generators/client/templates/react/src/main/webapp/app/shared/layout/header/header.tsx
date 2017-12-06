@@ -76,7 +76,7 @@ export class Header extends React.Component<<%if (enableTranslation) { %>IHeader
       <DropdownItem tag={Link} key="metrics" to="/admin/metrics"><FaDashboard /> Metrics</DropdownItem>,
       <DropdownItem tag={Link} key="health" to="/admin/health"><FaHeart /> Health</DropdownItem>,
       <DropdownItem tag={Link} key="configuration" to="/admin/configuration"><FaList /> Configuration</DropdownItem>,
-    <%_ if (devDatabaseType !== 'cassandra') { _%>
+    <%_ if (databaseType !== 'cassandra') { _%>
       /* TODO: audit menu */
     <%_ } _%>
       <DropdownItem tag={Link} key="logs" to="/admin/logs"><FaTasks /> Logs</DropdownItem>,

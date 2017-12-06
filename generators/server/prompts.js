@@ -192,6 +192,10 @@ function askForServerSideOpts(meta) {
             message: `Which ${chalk.yellow('*type*')} of database would you like to use?`,
             choices: [
                 {
+                    value: 'no',
+                    name: 'No database'
+                },
+                {
                     value: 'sql',
                     name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, Oracle)'
                 },

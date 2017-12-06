@@ -27,7 +27,7 @@ import { <%=angularXAppName%>SharedModule } from '../shared';
 
 import {
     adminState,
-    <%_ if (devDatabaseType !== 'cassandra') { _%>
+    <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
     AuditsComponent,
     <%_ } _%>
     <%_ if (!skipUserManagement) { _%>
@@ -45,7 +45,7 @@ import {
     <%=jhiPrefixCapitalized%>HealthCheckComponent,
     <%=jhiPrefixCapitalized%>ConfigurationComponent,
     <%=jhiPrefixCapitalized%>DocsComponent,
-    <%_ if (devDatabaseType !== 'cassandra') { _%>
+    <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
     AuditsService,
     <%_ } _%>
     <%=jhiPrefixCapitalized%>ConfigurationService,
@@ -73,7 +73,7 @@ import {
         /* jhipster-needle-add-admin-module - JHipster will add admin modules here */
     ],
     declarations: [
-        <%_ if (devDatabaseType !== 'cassandra') { _%>
+        <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
         AuditsComponent,
         <%_ } _%>
         <%_ if (!skipUserManagement) { _%>
@@ -107,7 +107,7 @@ import {
         <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent,
     ],
     providers: [
-        <%_ if (devDatabaseType !== 'cassandra') { _%>
+        <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
         AuditsService,
         <%_ } _%>
         <%=jhiPrefixCapitalized%>ConfigurationService,

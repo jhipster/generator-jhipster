@@ -6,7 +6,9 @@ import Logs from './logs/logs';
 import Health from './health/health';
 import Metrics from './metrics/metrics';
 import Configuration from './configuration/configuration';
+<%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
 import Audits from './audits/audits';
+<%_ } _%>
 import Docs from './docs/docs';
 
 const Routes = ({ match }) => (
@@ -16,7 +18,9 @@ const Routes = ({ match }) => (
     <Route exact path={`${match.url}/metrics`} component={Metrics} />
     <Route exact path={`${match.url}/docs`} component={Docs} />
     <Route exact path={`${match.url}/configuration`} component={Configuration} />
+<%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
     <Route exact path={`${match.url}/audits`} component={Audits} />
+<%_ } _%>
     <Route exact path={`${match.url}/logs`} component={Logs} />
   </div>
 );

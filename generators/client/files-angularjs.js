@@ -249,7 +249,7 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.devDatabaseType !== 'cassandra',
+            condition: generator => (generator.databaseType !== 'no' && generator.databaseType !== 'cassandra'),
             path: ANGULAR_DIR,
             templates: [
                 'admin/audits/_audits.controller.js',

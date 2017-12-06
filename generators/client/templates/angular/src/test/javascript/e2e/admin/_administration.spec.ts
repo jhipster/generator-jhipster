@@ -93,7 +93,7 @@ describe('administration', () => {
         });
     });
 
-<%_ if (devDatabaseType !== 'cassandra') { _%>
+<%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
     it('should load audits', () => {
         navBarPage.clickOnAdmin('audits');
         <%_ if (enableTranslation) { _%>
