@@ -35,7 +35,7 @@ const files = {
                 '_package.json',
                 '_tslint.json',
                 '_tsconfig.json',
-                '_.editorconfig',
+                '.editorconfig',
                 'webpack/logo-jhipster.png',
                 'webpack/webpack.common.js',
                 'webpack/webpack.dev.js',

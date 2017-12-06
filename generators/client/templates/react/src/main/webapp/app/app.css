@@ -55,13 +55,10 @@ Browser Upgrade Prompt
 Generic styles
 ========================================================================== */
 
-/* Error highlight on input fields */
-.ng-valid[required], .ng-valid.required  {
- border-left: 5px solid green;
-}
 
-.ng-invalid:not(form)  {
- border-left: 5px solid red;
+/* Temperory workaround for availity-reactstrap-validation */
+.invalid-feedback {
+    display: inline;
 }
 
 /* other generic styles */

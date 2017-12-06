@@ -58,9 +58,9 @@ export class Login extends React.Component<ILoginProps, ILoginState> {
   }
 }
 
-const mapStateToProps = storeState => ({
-  isAuthenticated: storeState.authentication.isAuthenticated,
-  loginError: storeState.authentication.loginError
+const mapStateToProps = ({ authentication }) => ({
+  isAuthenticated: authentication.isAuthenticated,
+  loginError: authentication.loginError
 });
 
 const mapDispatchToProps = { login };

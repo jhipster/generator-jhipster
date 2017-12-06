@@ -1,48 +1,25 @@
 import * as React from 'react';
 import { Translate, translate } from 'react-jhipster';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { AvForm, AvField } from 'availity-reactstrap-validation';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Label } from 'reactstrap';
+import { AvForm, AvField, AvGroup, AvInput } from 'availity-reactstrap-validation';
 
 export interface ILoginModalProps {
   showModal: boolean;
-  loginError?: boolean;
+  loginError: boolean;
   handleLogin: Function;
   handleClose: Function;
 }
 
-export interface ILoginModalState {
-  username: string;
-  password: string;
-  rememberme: string;
-}
-
-class LoginModal extends React.Component<ILoginModalProps, ILoginModalState> {
-
-  static defaultProps = {
-    loginError: true
-  };
+class LoginModal extends React.Component<ILoginModalProps, {}> {
 
   constructor(props, context) {
     super(props, context);
-    this.state = {
-      username: null,
-      password: null,
-      rememberme: null
-    };
+    this.state = {};
   }
 
-  handleSubmit = () => {
+  handleSubmit = (event, errors, { username, password, rememberMe }) => {
     const { handleLogin } = this.props;
-    const { username, password, rememberme } = this.state;
-    handleLogin(username, password, rememberme);
-  }
-
-  handleUsernameChange = event => {
-    this.setState({ username: event.target.value });
-  }
-
-  handlePasswordChange = event => {
-    this.setState({ password: event.target.value });
+    handleLogin(username, password, rememberMe);
   }
 
   render() {
@@ -63,27 +40,23 @@ class LoginModal extends React.Component<ILoginModalProps, ILoginModalState> {
                 }
               </div>
               <div className="col-md-12">
-                  <AvField
-                    name="username"
-                    label={<Translate contentKey="global.form.username" />}
-                    placeholder={translate('global.form.username.placeholder')}
-                    value={this.state.username}
-                    required errorMessage="Username cannot be empty!"
-                    onChange={this.handleUsernameChange}
-                  />
-                  <AvField
-                    name="password" type="password"
-                    label={<Translate contentKey="login.form.password" />}
-                    placeholder={translate('login.form.password.placeholder')}
-                    value={this.state.password}
-                    required errorMessage="Password cannot be empty!"
-                    onChange={this.handlePasswordChange}
-                  />
-                  <input
-                    type="checkbox"
-                    value={this.state.rememberme}
-                    />
-                <Translate contentKey="login.form.rememberme" />
+                <AvField
+                  name="username"
+                  label={<Translate contentKey="global.form.username" />}
+                  placeholder={translate('global.form.username.placeholder')}
+                  required errorMessage="Username cannot be empty!"
+                />
+                <AvField
+                  name="password" type="password"
+                  label={<Translate contentKey="login.form.password" />}
+                  placeholder={translate('login.form.password.placeholder')}
+                  required errorMessage="Password cannot be empty!"
+                />
+                <AvGroup>
+                  <Label check inline for="rememberMe" className="form-check-label">
+                    <AvInput type="checkbox" name="rememberMe" /> <Translate contentKey="login.form.rememberme" />
+                  </Label>
+                </AvGroup>
               </div>
             </div>
           </ModalBody>
