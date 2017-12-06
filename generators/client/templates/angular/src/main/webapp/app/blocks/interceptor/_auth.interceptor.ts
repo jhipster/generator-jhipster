@@ -20,6 +20,7 @@ import { Observable } from 'rxjs/Observable';
 import { RequestOptionsArgs, Response } from '@angular/http';
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 import { JhiHttpInterceptor } from 'ng-jhipster';
+import { SERVER_API_URL } from '../../app.constants';
 
 export class AuthInterceptor extends JhiHttpInterceptor {
 
@@ -31,7 +32,7 @@ export class AuthInterceptor extends JhiHttpInterceptor {
     }
 
     requestIntercept(options?: RequestOptionsArgs): RequestOptionsArgs {
-        if (!options || !options.url || /^http/.test(options.url)) {
+        if (!options || !options.url || (/^http/.test(options.url) && !(SERVER_API_URL && options.url.startsWith(SERVER_API_URL)))) {
             return options;
         }
 
