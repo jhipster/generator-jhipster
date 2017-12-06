@@ -335,6 +335,7 @@ module.exports = class extends BaseGenerator {
                 this.pkType = this.getPkType(this.databaseType);
                 this.apiUrlPrefix = `${this.authenticationType === 'uaa' ? `'${this.uaaBaseName.toLowerCase()}/` : 'SERVER_API_URL + \''}`;
                 this.apiUaaUrlPrefix = `${this.authenticationType === 'uaa' ? `${this.uaaBaseName.toLowerCase()}/` : ''}`;
+                this.apiServerUrlPrefix = `${this.authenticationType !== 'uaa' ? 'SERVER_API_URL + \'' : '\''}`;
                 this.DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
             },
 
