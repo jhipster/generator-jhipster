@@ -192,7 +192,6 @@ module.exports = class extends BaseGenerator {
                     // sql
                     this.devDatabaseType = this.config.get('devDatabaseType');
                     this.prodDatabaseType = this.config.get('prodDatabaseType');
-                    this.cacheProvider = this.config.get('cacheProvider');
                 }
 
                 // Hazelcast is mandatory for Gateways, as it is used for rate limiting
