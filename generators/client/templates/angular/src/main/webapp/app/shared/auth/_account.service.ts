@@ -28,10 +28,10 @@ export class AccountService  {
     constructor(private http: Http) { }
 
     get(): Observable<any> {
-        return this.http.get(<% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/<% } else { %>SERVER_API_URL + '<% } %>api/account').map((res: Response) => res.json());
+        return this.http.get(<%- apiUrlPrefix %>api/account').map((res: Response) => res.json());
     }
 
     save(account: any): Observable<Response> {
-        return this.http.post(<% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/<% } else { %>SERVER_API_URL + '<% } %>api/account', account);
+        return this.http.post(<%- apiUrlPrefix %>api/account', account);
     }
 }

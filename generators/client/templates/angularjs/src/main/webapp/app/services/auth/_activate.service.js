@@ -26,7 +26,7 @@
     Activate.$inject = ['$resource'];
 
     function Activate ($resource) {
-        var service = $resource(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/activate'<%} else { %>'api/activate'<% } %>, {}, {
+        var service = $resource('<%- apiUaaUrlPrefix %>api/activate', {}, {
             'get': { method: 'GET', params: {}, isArray: false}
         });
 

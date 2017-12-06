@@ -26,7 +26,7 @@
     PasswordResetInit.$inject = ['$resource'];
 
     function PasswordResetInit($resource) {
-        var service = $resource(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account/reset-password/init'<%} else { %>'api/account/reset-password/init'<% } %>, {}, {});
+        var service = $resource('<%- apiUaaUrlPrefix %>api/account/reset-password/init', {}, {});
 
         return service;
     }

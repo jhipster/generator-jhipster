@@ -29,6 +29,6 @@ export class PasswordResetFinishService {
     constructor(private http: Http) {}
 
     save(keyAndPassword: any): Observable<any> {
-        return this.http.post(<% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/<% } else { %>SERVER_API_URL + '<% } %>api/account/reset-password/finish', keyAndPassword);
+        return this.http.post(<%- apiUrlPrefix %>api/account/reset-password/finish', keyAndPassword);
     }
 }

@@ -26,7 +26,7 @@
     Password.$inject = ['$resource'];
 
     function Password($resource) {
-        var service = $resource(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account/change-password'<%} else { %>'api/account/change-password'<% } %>, {}, {});
+        var service = $resource('<%- apiUaaUrlPrefix %>api/account/change-password', {}, {});
 
         return service;
     }
