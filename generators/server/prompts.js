@@ -177,10 +177,10 @@ function askForServerSideOpts(meta) {
                 },
                 {
                     value: 'no',
-                    name: 'No'
+                    name: 'No (Hibernate L2 cache won\'t be available as well)'
                 }
             ],
-            default: 'no'
+            default: (applicationType === 'microservice' || applicationType === 'uaa') ? 1 : 0
         },
         {
             when: response => applicationType === 'microservice' || ((response.authenticationType === 'uaa' ||
@@ -351,11 +351,11 @@ function askForServerSideOpts(meta) {
             default: 0
         },
         {
-            when: response => (response.cacheProvider !== 'no' && response.databaseType === 'sql' && applicationType !== 'gateway'),
+            when: response => ((response.cacheProvider !== 'no' || applicationType === 'gateway') && response.databaseType === 'sql'),
             type: 'confirm',
             name: 'enableHibernateCache',
             message: 'Do you want to use Hibernate 2nd level cache?',
-            default: (applicationType === 'microservice' || applicationType === 'uaa') ? 1 : 0
+            default: true
         },
         {
             type: 'list',

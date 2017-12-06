@@ -158,13 +158,12 @@
     </dependencyManagement>
 
     <dependencies>
-        <%_ if (cacheProvider !== 'no') { _%> 
-        <dependency> 
-            <groupId>org.springframework.boot</groupId> 
-            <artifactId>spring-boot-starter-cache</artifactId> 
-            <version>${spring-boot.version}</version> 
-        </dependency> 
-        <%_ } _%>     
+        <%_ if (cacheProvider !== 'no') { _%>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>io.github.jhipster</groupId>
             <artifactId>jhipster</artifactId>

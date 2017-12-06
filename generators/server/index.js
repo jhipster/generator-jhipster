@@ -163,15 +163,11 @@ module.exports = class extends BaseGenerator {
                     this.serviceDiscoveryType = false;
                 }
 
-                this.cacheProvider = this.config.get('cacheProvider');
                 this.enableHibernateCache = this.config.get('enableHibernateCache');
-                if (this.cacheProvider === undefined) {
-                    // search for old config of hibernate
-                    this.cacheProvider = (this.config.get('hibernateCache') === undefined) ? 'no' : this.config.get('hibernateCache');
-                }
+                this.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no'
                 if (this.enableHibernateCache === undefined) {
                     // search for old config of hibernate
-                    this.enableHibernateCache = !((this.config.get('hibernateCache') === undefined || this.config.get('hibernateCache') === 'no'));
+                    this.enableHibernateCache = !(this.config.get('hibernateCache') === undefined || this.config.get('hibernateCache') === 'no');
                 }
 
                 this.databaseType = this.config.get('databaseType');
