@@ -22,7 +22,6 @@ const webpackMerge = require('webpack-merge');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const WebpackNotifierPlugin = require('webpack-notifier');
 const path = require('path');
-const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
 
 const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
@@ -80,7 +79,10 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         },
         {
             test: /\.ts$/,
-            loader: "@ngtools/webpack",
+            loaders: [
+                'angular2-template-loader',
+                'awesome-typescript-loader'
+            ],
             exclude: ['node_modules/generator-jhipster']
         },
         <%_ if (useSass) { _%>
@@ -121,11 +123,6 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         new webpack.WatchIgnorePlugin([
             utils.root('src/test'),
         ]),
-        new AngularCompilerPlugin({
-            mainPath: utils.root('<%= MAIN_SRC_DIR %>app/app.main.ts'),
-            tsConfigPath: utils.root('tsconfig.json'),
-            sourceMap: true
-        }),
         new WebpackNotifierPlugin({
             title: 'JHipster',
             contentImage: path.join(__dirname, 'logo-jhipster.png')
