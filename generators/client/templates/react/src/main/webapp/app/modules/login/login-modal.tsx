@@ -13,26 +13,28 @@ export interface ILoginModalProps {
 export interface ILoginModalState {
   username: string;
   password: string;
+  rememberme: string;
 }
 
 class LoginModal extends React.Component<ILoginModalProps, ILoginModalState> {
 
   static defaultProps = {
-    loginError: false
+    loginError: true
   };
 
   constructor(props, context) {
     super(props, context);
     this.state = {
       username: null,
-      password: null
+      password: null,
+      rememberme: null
     };
   }
 
   handleSubmit = () => {
     const { handleLogin } = this.props;
-    const { username, password } = this.state;
-    handleLogin(username, password, false);  // FIXME remember me value must be passed
+    const { username, password, rememberme } = this.state;
+    handleLogin(username, password, rememberme);
   }
 
   handleUsernameChange = event => {
@@ -77,6 +79,11 @@ class LoginModal extends React.Component<ILoginModalProps, ILoginModalState> {
                     required errorMessage="Password cannot be empty!"
                     onChange={this.handlePasswordChange}
                   />
+                  <input
+                    type="checkbox"
+                    value={this.state.rememberme}
+                    />
+                <Translate contentKey="login.form.rememberme" />
               </div>
             </div>
           </ModalBody>
