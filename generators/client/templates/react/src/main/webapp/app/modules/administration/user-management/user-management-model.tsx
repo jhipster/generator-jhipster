@@ -103,7 +103,7 @@ export class UserManagementModel extends React.Component<IUserManagementModelPro
               <AvFeedback>This field is required to be at least 5 characters.</AvFeedback>
             </AvGroup>
             <AvGroup>
-              <Label check inline>
+              <Label check inline className="form-check-label">
                 <AvInput type="checkbox" className="form-control" name="activated" /> <Translate contentKey="userManagement.activated">Activated</Translate>
               </Label>
               <AvFeedback>This field is required.</AvFeedback>
