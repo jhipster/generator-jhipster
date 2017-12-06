@@ -36,7 +36,8 @@ export default (state = initialState, action) => {
     case FAILURE(ACTION_TYPES.LOGIN):
       return {
         ...initialState,
-        errorMessage: action.payload
+        errorMessage: action.payload,
+        loginError: true
       };
     case FAILURE(ACTION_TYPES.GET_SESSION):
     case FAILURE(ACTION_TYPES.LOGOUT):
