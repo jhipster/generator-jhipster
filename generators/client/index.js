@@ -280,6 +280,9 @@ module.exports = class extends BaseGenerator {
                 if (this.configOptions.cacheProvider) {
                     this.cacheProvider = this.configOptions.cacheProvider;
                 }
+                if (this.configOptions.enableHibernateCache) {
+                    this.enableHibernateCache = this.configOptions.enableHibernateCache;
+                }
                 if (this.configOptions.websocket !== undefined) {
                     this.websocket = this.configOptions.websocket;
                 }

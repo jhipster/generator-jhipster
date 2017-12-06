@@ -113,7 +113,8 @@ module.exports = class extends BaseGenerator {
                 context.applicationType = this.config.get('applicationType');
                 context.packageFolder = this.config.get('packageFolder');
                 context.authenticationType = this.config.get('authenticationType');
-                context.cacheProvider = this.config.get('cacheProvider');
+                context.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no';
+                context.enableHibernateCache = this.config.get('enableHibernateCache') || (this.config.get('hibernateCache') !== undefined && this.config.get('hibernateCache') !== 'no');
                 context.websocket = this.config.get('websocket') === 'no' ? false : this.config.get('websocket');
                 context.databaseType = this.config.get('databaseType') || this.getDBTypeFromDBValue(this.options.db);
                 context.prodDatabaseType = this.config.get('prodDatabaseType') || this.options.db;
