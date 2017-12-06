@@ -36,7 +36,9 @@ export default (state = initialState, action) => {
     case FAILURE(ACTION_TYPES.LOGIN):
       return {
         ...initialState,
-        errorMessage: action.payload
+        errorMessage: action.payload,
+        showModalLogin: true,
+        loginError: true
       };
     case FAILURE(ACTION_TYPES.GET_SESSION):
     case FAILURE(ACTION_TYPES.LOGOUT):
@@ -44,6 +46,7 @@ export default (state = initialState, action) => {
         ...state,
         loading: false,
         isAuthenticated: false,
+        showModalLogin: true,
         errorMessage: action.payload
       };
     case SUCCESS(ACTION_TYPES.LOGIN):
@@ -51,11 +54,13 @@ export default (state = initialState, action) => {
         ...state,
         loading: false,
         loginError: false,
+        showModalLogin: false,
         loginSuccess: true
       };
     case SUCCESS(ACTION_TYPES.LOGOUT):
       return {
-        ...initialState
+        ...initialState,
+        showModalLogin: true
       };
     case SUCCESS(ACTION_TYPES.GET_SESSION):
       {
@@ -70,12 +75,14 @@ export default (state = initialState, action) => {
     case ACTION_TYPES.ERROR_MESSAGE:
       return {
         ...initialState,
+        showModalLogin: true,
         redirectMessage: action.message
       };
     case ACTION_TYPES.CLEAR_AUTH:
       return {
         ...state,
         loading: false,
+        showModalLogin: true,
         isAuthenticated: false
       };
     default:
