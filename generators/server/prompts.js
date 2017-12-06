@@ -157,6 +157,32 @@ function askForServerSideOpts(meta) {
             }
         },
         {
+            // cache is mandatory for gateway and define later to 'hazelcast' value
+            when: response => (applicationType !== 'gateway'),
+            type: 'list',
+            name: 'cacheProvider',
+            message: 'Do you want to use spring cache?',
+            choices: [
+                {
+                    value: 'ehcache',
+                    name: 'Yes, with ehcache implementation (local cache, for a single node)'
+                {
+                },
+                    value: 'hazelcast',
+                    name: 'Yes, with HazelCast implementation(distributed cache, for multiple nodes)'
+                },
+                {
+                    name: '[BETA] Yes, with Infinispan (hybrid cache, for multiple nodes)'
+                    value: 'infinispan',
+                },
+                {
+                    value: 'no',
+                    name: 'No'
+                }
+            ],
+            default: 'no'
+        },
+        {
             when: response => applicationType === 'microservice' || ((response.authenticationType === 'uaa' ||
             response.authenticationType === 'oauth2') && applicationType === 'gateway'),
             type: 'list',
@@ -325,29 +351,11 @@ function askForServerSideOpts(meta) {
             default: 0
         },
         {
-            when: response => (response.databaseType === 'sql' && applicationType !== 'gateway'),
-            type: 'list',
-            name: 'cacheProvider',
+            when: response => (response.cacheProvider !== 'no' && response.databaseType === 'sql' && applicationType !== 'gateway'),
+            type: 'confirm',
+            name: 'enableHibernateCache',
             message: 'Do you want to use Hibernate 2nd level cache?',
-            choices: [
-                {
-                    value: 'ehcache',
-                    name: 'Yes, with ehcache (local cache, for a single node)'
-                },
-                {
-                    value: 'hazelcast',
-                    name: 'Yes, with HazelCast (distributed cache, for multiple nodes)'
-                },
-                {
-                    value: 'infinispan',
-                    name: '[BETA] Yes, with Infinispan (hybrid cache, for multiple nodes)'
-                },
-                {
-                    value: 'no',
-                    name: 'No'
-                }
-            ],
-            default: (applicationType === 'microservice' || applicationType === 'uaa') ? 1 : 0
+            default: !!((applicationType === 'microservice' || applicationType === 'uaa'))
         },
         {
             type: 'list',
@@ -404,6 +412,7 @@ function askForServerSideOpts(meta) {
             this.serverPort = '8080';
         }
         this.cacheProvider = props.cacheProvider;
+        this.enableHibernateCache = props.enableHibernateCache;
         this.databaseType = props.databaseType;
         this.devDatabaseType = props.devDatabaseType;
         this.prodDatabaseType = props.prodDatabaseType;

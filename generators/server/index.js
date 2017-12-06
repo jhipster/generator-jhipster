@@ -163,6 +163,17 @@ module.exports = class extends BaseGenerator {
                     this.serviceDiscoveryType = false;
                 }
 
+                this.cacheProvider = this.config.get('cacheProvider');
+                this.enableHibernateCache = this.config.get('enableHibernateCache');
+                if (this.cacheProvider === undefined) {
+                    // search for old config of hibernate
+                    this.cacheProvider = (this.config.get('hibernateCache') === undefined) ? 'no' : this.config.get('hibernateCache');
+                }
+                if (this.enableHibernateCache === undefined) {
+                    // search for old config of hibernate
+                    this.enableHibernateCache = !((this.config.get('hibernateCache') === undefined || this.config.get('hibernateCache') === 'no'));
+                }
+
                 this.databaseType = this.config.get('databaseType');
                 if (this.databaseType === 'mongodb') {
                     this.devDatabaseType = 'mongodb';
@@ -187,9 +198,7 @@ module.exports = class extends BaseGenerator {
                     this.prodDatabaseType = this.config.get('prodDatabaseType');
                     this.cacheProvider = this.config.get('cacheProvider');
                 }
-                if (this.cacheProvider === undefined) {
-                    this.cacheProvider = 'no';
-                }
+
                 // Hazelcast is mandatory for Gateways, as it is used for rate limiting
                 if (this.applicationType === 'gateway') {
                     this.cacheProvider = 'hazelcast';
@@ -370,6 +379,7 @@ module.exports = class extends BaseGenerator {
                 this.config.set('authenticationType', this.authenticationType);
                 this.config.set('uaaBaseName', this.uaaBaseName);
                 this.config.set('cacheProvider', this.cacheProvider);
+                this.config.set('enableHibernateCache', this.enableHibernateCache);
                 this.config.set('clusteredHttpSession', this.clusteredHttpSession);
                 this.config.set('websocket', this.websocket);
                 this.config.set('databaseType', this.databaseType);

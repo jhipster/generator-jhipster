@@ -85,10 +85,18 @@ module.exports = class extends BaseGenerator {
             type: String
         });
 
-        // This adds support for a `--search-engine` flag
+        // This adds support for a `--cache-provider` flag
+        this.option('cache-provider', {
+            desc: 'Provide a cache provider option for the application',
+            type: String,
+            defaults: 'no'
+        });
+
+        // This adds support for a `--hb-cache` flag
         this.option('hb-cache', {
             desc: 'Provide hibernate cache option for the application',
-            type: String
+            type: Boolean,
+            default: false
         });
 
         // This adds support for a `--jhi-prefix` flag
@@ -253,6 +261,7 @@ module.exports = class extends BaseGenerator {
                     this.authenticationType && this.config.set('authenticationType', this.authenticationType);
                     this.uaaBaseName && this.config.set('uaaBaseName', this.uaaBaseName);
                     this.cacheProvider && this.config.set('cacheProvider', this.cacheProvider);
+                    this.enableHibernateCache && this.config.set('enableHibernateCache', this.enableHibernateCache);
                     this.websocket && this.config.set('websocket', this.websocket);
                     this.databaseType && this.config.set('databaseType', this.databaseType);
                     this.devDatabaseType && this.config.set('devDatabaseType', this.devDatabaseType);
