@@ -6,6 +6,7 @@ import { login } from '../../reducers/authentication';
 
 export interface ILoginProps {
   isAuthenticated: boolean;
+  showModal: boolean;
   loginError?: boolean;
   location: any;
   login: Function;
@@ -21,14 +22,14 @@ export class Login extends React.Component<ILoginProps, ILoginState> {
   constructor(props) {
     super(props);
     this.state = {
-      showModal: !props.isAuthenticated,
+      showModal: props.showModal,
       redirectToReferrer: props.isAuthenticated
     };
   }
 
   componentWillReceiveProps(nextProps: ILoginProps) {
     this.setState({
-      showModal: !nextProps.isAuthenticated,
+      showModal: nextProps.showModal,
       redirectToReferrer: nextProps.isAuthenticated
     });
   }
@@ -60,7 +61,8 @@ export class Login extends React.Component<ILoginProps, ILoginState> {
 
 const mapStateToProps = ({ authentication }) => ({
   isAuthenticated: authentication.isAuthenticated,
-  loginError: authentication.loginError
+  loginError: authentication.loginError,
+  showModal: authentication.showModalLogin
 });
 
 const mapDispatchToProps = { login };
