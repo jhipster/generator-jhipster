@@ -157,15 +157,12 @@ function askForServerSideOpts(meta) {
             }
         },
         {
-            when: response => applicationType === 'microservice' || (response.authenticationType === 'uaa' && applicationType === 'gateway'),
+            when: response => applicationType === 'microservice' || ((response.authenticationType === 'uaa' ||
+            response.authenticationType === 'oauth2') && applicationType === 'gateway'),
             type: 'list',
             name: 'databaseType',
             message: `Which ${chalk.yellow('*type*')} of database would you like to use?`,
             choices: [
-                {
-                    value: 'no',
-                    name: 'No database'
-                },
                 {
                     value: 'sql',
                     name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, Oracle)'
@@ -181,31 +178,10 @@ function askForServerSideOpts(meta) {
                 {
                     value: 'couchbase',
                     name: '[BETA] Couchbase'
-                }
-            ],
-            default: 1
-        },
-        {
-            when: response => response.authenticationType === 'oauth2' && !response.databaseType,
-            type: 'list',
-            name: 'databaseType',
-            message: `Which ${chalk.yellow('*type*')} of database would you like to use?`,
-            choices: [
+                },
                 {
                     value: 'no',
                     name: 'No database'
-                },
-                {
-                    value: 'sql',
-                    name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, Oracle)'
-                },
-                {
-                    value: 'mongodb',
-                    name: 'MongoDB'
-                },
-                {
-                    value: 'couchbase',
-                    name: '[BETA] Couchbase'
                 }
             ],
             default: 0
