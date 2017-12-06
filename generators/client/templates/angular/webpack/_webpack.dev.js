@@ -79,10 +79,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         },
         {
             test: /\.ts$/,
-            loaders: [
-                'angular2-template-loader',
-                'awesome-typescript-loader'
-            ],
+            loader: "@ngtools/webpack",
             exclude: ['node_modules/generator-jhipster']
         },
         <%_ if (useSass) { _%>
