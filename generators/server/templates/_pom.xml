@@ -839,16 +839,14 @@
                                     <directory><%= SERVER_MAIN_RES_DIR %></directory>
                                     <filtering>true</filtering>
                                     <includes>
-                                        <include>**/*.xml</include>
-                                        <include>**/*.yml</include>
+                                        <include>config/application.yml</include>
                                     </includes>
                                 </resource>
                                 <resource>
                                     <directory><%= SERVER_MAIN_RES_DIR %></directory>
                                     <filtering>false</filtering>
                                     <excludes>
-                                        <exclude>**/*.xml</exclude>
-                                        <exclude>**/*.yml</exclude>
+                                        <exclude>config/application.yml</exclude>
                                     </excludes>
                                 </resource>
                             </resources>
