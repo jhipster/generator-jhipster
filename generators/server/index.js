@@ -163,12 +163,8 @@ module.exports = class extends BaseGenerator {
                     this.serviceDiscoveryType = false;
                 }
 
-                this.enableHibernateCache = this.config.get('enableHibernateCache');
-                this.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no'
-                if (this.enableHibernateCache === undefined) {
-                    // search for old config of hibernate
-                    this.enableHibernateCache = !(this.config.get('hibernateCache') === undefined || this.config.get('hibernateCache') === 'no');
-                }
+                this.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no';
+                this.enableHibernateCache = this.config.get('enableHibernateCache') || (this.config.get('hibernateCache') !== undefined && this.config.get('hibernateCache') !== 'no');
 
                 this.databaseType = this.config.get('databaseType');
                 if (this.databaseType === 'mongodb') {
@@ -237,6 +233,7 @@ module.exports = class extends BaseGenerator {
                 const serverConfigFound = this.packageName !== undefined &&
                     this.authenticationType !== undefined &&
                     this.cacheProvider !== undefined &&
+                    this.enableHibernateCache !== undefined &&
                     this.clusteredHttpSession !== undefined &&
                     this.websocket !== undefined &&
                     this.databaseType !== undefined &&
@@ -296,6 +293,7 @@ module.exports = class extends BaseGenerator {
             setSharedConfigOptions() {
                 this.configOptions.packageName = this.packageName;
                 this.configOptions.cacheProvider = this.cacheProvider;
+                this.configOptions.enableHibernateCache = this.enableHibernateCache;
                 this.configOptions.clusteredHttpSession = this.clusteredHttpSession;
                 this.configOptions.websocket = this.websocket;
                 this.configOptions.databaseType = this.databaseType;
@@ -333,6 +331,7 @@ module.exports = class extends BaseGenerator {
                 insight.trackWithEvent('generator', 'server');
                 insight.track('app/authenticationType', this.authenticationType);
                 insight.track('app/cacheProvider', this.cacheProvider);
+                insight.track('app/enableHibernateCache', this.enableHibernateCache);
                 insight.track('app/clusteredHttpSession', this.clusteredHttpSession);
                 insight.track('app/websocket', this.websocket);
                 insight.track('app/databaseType', this.databaseType);
