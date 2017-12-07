@@ -29,6 +29,7 @@ const utils = require('./utils.js');
 module.exports = (options) => {
     const DATAS = {
         VERSION: `'${utils.parseVersion()}'`,
+        BUILD_TIMESTAMP: `'${new Date().getTime}'`,
         DEBUG_INFO_ENABLED: options.env === 'development'<% if (authenticationType !== 'uaa') { %>,
         // The root URL for API calls, ending with a '/' - for example: `"http://www.jhipster.tech:8081/myservice/"`.
         // If this URL is left empty (""), then it will be relative to the current context.
