@@ -365,6 +365,7 @@ module.exports = class extends BaseGenerator {
             },
 
             saveConfig() {
+                this.config.delete('hibernateCache');
                 this.config.set('jhipsterVersion', packagejs.version);
                 this.config.set('baseName', this.baseName);
                 this.config.set('packageName', this.packageName);
