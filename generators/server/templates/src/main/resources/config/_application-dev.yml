@@ -36,9 +36,6 @@ logging:
         ROOT: DEBUG
         <%=packageName%>: DEBUG
         io.github.jhipster: DEBUG
-        <%_ if (databaseType === 'couchbase') { _%>
-        com.github.couchmove: DEBUG
-        <%_ } _%>
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 
 eureka:

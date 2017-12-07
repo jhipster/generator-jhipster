@@ -52,6 +52,9 @@
     <%_ if (hibernateCache === 'hazelcast') { _%>
     <logger name="com.hazelcast" level="INFO"/>
     <%_ } _%>
+    <%_ if (databaseType === 'couchbase') { _%>
+    <logger name="com.github.couchmove" level="INFO"/>
+    <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || serviceDiscoveryType === 'eureka') { _%>
     <logger name="com.netflix" level="WARN"/>
     <logger name="com.netflix.discovery" level="INFO"/>
