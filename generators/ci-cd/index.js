@@ -32,6 +32,13 @@ module.exports = class extends BaseGenerator {
             defaults: false,
             description: 'Automatically configure Travis'
         });
+
+        // Automatically configure Jenkins
+        this.argument('autoconfigure-jenkins', {
+            type: Boolean,
+            defaults: false,
+            description: 'Automatically configure Jenkins'
+        });
     }
 
     get initializing() {
@@ -49,6 +56,7 @@ module.exports = class extends BaseGenerator {
                 this.clientFramework = this.config.get('clientFramework');
                 this.testFrameworks = this.config.get('testFrameworks');
                 this.autoconfigureTravis = this.options['autoconfigure-travis'];
+                this.autoconfigureJenkins = this.options['autoconfigure-jenkins'];
                 this.abort = false;
             },
             initConstants() {
