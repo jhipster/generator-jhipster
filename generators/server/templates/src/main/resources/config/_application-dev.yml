@@ -30,6 +30,15 @@
 # Full reference is available at:
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
+
+logging:
+    level:
+        ROOT: DEBUG
+        <%=packageName%>: DEBUG
+        io.github.jhipster: DEBUG
+        <%_ if (databaseType === 'couchbase') { _%>
+        com.github.couchmove: DEBUG
+        <%_ } _%>
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 
 eureka:

@@ -30,6 +30,15 @@
 # Full reference is available at:
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
+
+logging:
+    level:
+        ROOT: INFO
+        <%=packageName%>: INFO
+        io.github.jhipster: INFO
+        <%_ if (databaseType === 'couchbase') { _%>
+        com.github.couchmove: INFO
+        <%_ } _%>
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 
 eureka:
@@ -243,7 +252,7 @@ jhipster:
             management-center: # Full reference is available at: http://docs.hazelcast.org/docs/management-center/3.9/manual/html/Deploying_and_Starting.html
                 enabled: false
                 update-interval: 3
-                url: 
+                url:
         <%_ } _%>
         <%_ if (hibernateCache === 'ehcache') { _%>
         ehcache: # Ehcache configuration

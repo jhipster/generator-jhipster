@@ -1236,8 +1236,6 @@
                 </plugins>
             </build>
             <properties>
-                <!-- log configuration -->
-                <logback.loglevel>DEBUG</logback.loglevel>
                 <!-- default Spring profiles -->
                 <spring.profiles.active>dev${profile.no-liquibase}</spring.profiles.active>
             </properties>
@@ -1428,8 +1426,6 @@
                 </plugins>
             </build>
             <properties>
-                <!-- log configuration -->
-                <logback.loglevel>INFO</logback.loglevel>
                 <!-- default Spring profiles -->
                 <spring.profiles.active>prod${profile.swagger}${profile.no-liquibase}</spring.profiles.active>
             </properties>
@@ -1528,8 +1524,6 @@
                 </plugins>
             </build>
             <properties>
-                <!-- log configuration -->
-                <logback.loglevel>DEBUG</logback.loglevel>
                 <!-- default Spring profiles -->
                 <spring.profiles.active>dev,swagger</spring.profiles.active>
             </properties>
