@@ -39,7 +39,7 @@ function askForClient(meta) {
     const choices = [
         {
             value: 'angularX',
-            name: 'Angular 4'
+            name: 'Angular 5'
         }
     ];
 
