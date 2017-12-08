@@ -1,5 +1,5 @@
 /*
-* Bootstrap overrides https://v4-alpha.getbootstrap.com/getting-started/options/
+* Bootstrap overrides https://getbootstrap.com/docs/4.0/getting-started/theming/
 * All values defined in bootstrap source
 * https://github.com/twbs/bootstrap/blob/v4-dev/scss/_variables.scss can be overwritten here
 * Make sure not to add !default to values here
@@ -8,11 +8,11 @@
 // Colors:
 // Grayscale and brand colors for use across Bootstrap.
 
-$brand-primary:             #3E8ACC;
-$brand-success:             #28a745;
-$brand-info:                #17a2b8;
-$brand-warning:             #ffc107;
-$brand-danger:              #dc3545;
+$primary:             #3E8ACC;
+$success:             #28a745;
+$info:                #17a2b8;
+$warning:             #ffc107;
+$danger:              #dc3545;
 
 // Options:
 // Quickly modify global styling by enabling or disabling optional features.
