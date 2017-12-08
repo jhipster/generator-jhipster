@@ -24,10 +24,6 @@ apply plugin: 'com.moowork.gulp'
     <%_ } _%>
 <%_ } _%>
 
-ext {
-    logbackLoglevel = "INFO"
-}
-
 dependencies {
 
 }
