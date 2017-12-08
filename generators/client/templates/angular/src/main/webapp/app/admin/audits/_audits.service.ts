@@ -19,9 +19,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
-<%_ if (authenticationType !== 'uaa') { _%>
 import { SERVER_API_URL } from '../../app.constants';
-<%_ } _%>
 
 @Injectable()
 export class AuditsService  {
@@ -39,6 +37,6 @@ export class AuditsService  {
             search: params
         };
 
-        return this.http.get(<%- apiUrlPrefix %>management/audits', options);
+        return this.http.get(<%- apiUaaUrlPrefix %>management/audits', options);
     }
 }

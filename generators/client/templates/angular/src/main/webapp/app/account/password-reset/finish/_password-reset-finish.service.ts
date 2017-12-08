@@ -19,9 +19,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
-<%_ if (authenticationType !== 'uaa') { _%>
 import { SERVER_API_URL } from '../../../app.constants';
-<%_ } _%>
 
 @Injectable()
 export class PasswordResetFinishService {
@@ -29,6 +27,6 @@ export class PasswordResetFinishService {
     constructor(private http: Http) {}
 
     save(keyAndPassword: any): Observable<any> {
-        return this.http.post(<%- apiUrlPrefix %>api/account/reset-password/finish', keyAndPassword);
+        return this.http.post(<%- apiUaaUrlPrefix %>api/account/reset-password/finish', keyAndPassword);
     }
 }

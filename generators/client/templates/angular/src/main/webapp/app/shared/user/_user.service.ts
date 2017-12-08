@@ -20,9 +20,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
-<%_ if (authenticationType !== 'uaa') { _%>
 import { SERVER_API_URL } from '../../app.constants';
-<%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
 import { User } from './user.model';
 <%_ } _%>
@@ -31,7 +29,7 @@ import { createRequestOption } from '../model/request-util';
 
 @Injectable()
 export class UserService {
-    private resourceUrl = <%- apiUrlPrefix %>api/users';
+    private resourceUrl = <%- apiUaaUrlPrefix %>api/users';
 
     constructor(private http: Http) { }
 <%_ if (authenticationType !== 'oauth2') { _%>
@@ -63,7 +61,7 @@ export class UserService {
 
     authorities(): Observable<string[]> {
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-        return this.http.get(<%- apiUrlPrefix %>api/users/authorities').map((res: Response) => {
+        return this.http.get(<%- apiUaaUrlPrefix %>api/users/authorities').map((res: Response) => {
             const json = res.json();
             return <string[]> json;
         });
