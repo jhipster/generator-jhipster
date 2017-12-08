@@ -26,10 +26,6 @@ apply plugin: 'com.moowork.gulp'
     <%_ } _%>
 <%_ } _%>
 
-ext {
-    logbackLoglevel = "DEBUG"
-}
-
 dependencies {
     compile "org.springframework.boot:spring-boot-devtools"
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
