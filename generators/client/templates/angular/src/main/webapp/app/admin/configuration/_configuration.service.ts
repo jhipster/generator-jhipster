@@ -19,6 +19,9 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
+<%_ if (authenticationType !== 'uaa') { _%>
+import { SERVER_API_URL } from '../../app.constants';
+<%_ } _%>
 
 @Injectable()
 export class <%=jhiPrefixCapitalized%>ConfigurationService {
@@ -27,7 +30,7 @@ export class <%=jhiPrefixCapitalized%>ConfigurationService {
     }
 
     get(): Observable<any> {
-        return this.http.get('management/configprops').map((res: Response) => {
+        return this.http.get(<%- apiServerUrlPrefix %>management/configprops').map((res: Response) => {
             const properties: any[] = [];
 
             const propertiesObject = res.json();
@@ -46,7 +49,7 @@ export class <%=jhiPrefixCapitalized%>ConfigurationService {
     }
 
     getEnv(): Observable<any> {
-        return this.http.get('management/env').map((res: Response) => {
+        return this.http.get(<%- apiServerUrlPrefix %>management/env').map((res: Response) => {
             const properties: any = {};
 
             const propertiesObject = res.json();
