@@ -14,6 +14,8 @@
             "follow": "Sledovat @java_hipster ve službě Twitter"
         },
         "like": "Pokud se vám JHipster líbí, nezapomeňte nám dát hvězdičku ve službě",
-        "github": "GitHub"
+        "github": "GitHub", 
+        "contribute": "and/or contribute to our",
+        "opencollective": "Open Collective"
     }
 }

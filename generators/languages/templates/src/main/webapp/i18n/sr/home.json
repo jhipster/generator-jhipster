@@ -14,6 +14,8 @@
             "follow": "pratite @java_hipster na Twitter-u"
         },
         "like": "Ako Vam se dopada JHipster, ne zaboravite da nam date zvezdicu na",
-        "github": "GitHub-u"
+        "github": "GitHub-u",
+        "contribute": "and/or contribute to our",
+        "opencollective": "Open Collective"
     }
 }

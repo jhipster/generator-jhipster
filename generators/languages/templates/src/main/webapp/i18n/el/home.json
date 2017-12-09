@@ -14,6 +14,8 @@
             "follow": "Ακολουθείστε @java_hipster στο Twitter"
         },
         "like": "Άμα σας αρέσει το JHipster, μην ξεχάσετε να μας δώσετε ένα αστέρι",
-        "github": "GitHub"
+        "github": "GitHub", 
+        "contribute": "and/or contribute to our",
+        "opencollective": "Open Collective"
     }
 }

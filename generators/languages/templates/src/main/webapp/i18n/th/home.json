@@ -14,6 +14,8 @@
             "follow": "ติดตาม @java_hipster ทางทวิตเตอร์"
         },
         "like": "ถ้าคุณชอบ JHipster, อย่าลืมให้ดาวกับเรา",
-        "github": "GitHub"
+        "github": "GitHub", 
+        "contribute": "and/or contribute to our",
+        "opencollective": "Open Collective"
     }
 }

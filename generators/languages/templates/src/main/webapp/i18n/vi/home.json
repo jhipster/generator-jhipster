@@ -14,6 +14,8 @@
             "follow": "Theo dõi @java_hipster trên Twitter"
         },
         "like": "Nếu bạn thích JHipster, đừng quên cho chúng tôi thêm một ngôi sao trên",
-        "github": "GitHub"
+        "github": "GitHub", 
+        "contribute": "and/or contribute to our",
+        "opencollective": "Open Collective"
     }
 }

@@ -14,6 +14,8 @@
             "follow": "@java_hipster चहचहाना पर का पालन करें"
         },
         "like": "यदि आप JHipster की तरह, हम एक स्टार पर देने के लिए मत भूलना",
-        "github": "GitHub"
+        "github": "GitHub", 
+        "contribute": "and/or contribute to our",
+        "opencollective": "Open Collective"
     }
 }

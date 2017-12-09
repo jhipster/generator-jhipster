@@ -99,8 +99,14 @@ export class Home extends React.Component<IHomeProp, IHomeState> {
           </ul>
 
           <p>
-            <Translate contentKey="home.like">If you like JHipster, do not forget to give us a star on</Translate>
-            <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">Github</a>!
+            <Translate contentKey="home.like">If you like JHipster, do not forget to give us a star on</Translate>&nbsp;
+            <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">
+              <Translate contentKey="home.github">GitHub</Translate>
+            </a>&nbsp;
+            <Translate contentKey="home.contribute">and/or contribute to our</Translate>&nbsp;
+            <a href="https://opencollective.com/generator-jhipster" target="_blank" rel="noopener noreferrer">
+              <Translate contentKey="home.opencollective">Open Collective</Translate>
+            </a>!
           </p>
         </div>
         <div className="col-md-3 pad">

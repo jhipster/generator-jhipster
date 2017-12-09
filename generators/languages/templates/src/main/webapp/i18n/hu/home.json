@@ -14,6 +14,8 @@
             "follow": "lépjen kapcsolatba @java_hipster -rel a Twitter-en"
         },
         "like": "Ha tetszik a JHipster, ne feledjen csillagot adni a",
-        "github": "GitHub-on"
+        "github": "GitHub-on",
+        "contribute": "and/or contribute to our",
+        "opencollective": "Open Collective"
     }
 }
