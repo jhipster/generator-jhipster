@@ -30,7 +30,7 @@ export class ActivateService {
         const params: URLSearchParams = new URLSearchParams();
         params.set('key', key);
 
-        return this.http.get(<%- apiUaaUrlPrefix %>api/activate', {
+        return this.http.get(SERVER_API_URL + '<%- apiUaaPath %>api/activate', {
             search: params
         }).map((res: Response) => res);
     }

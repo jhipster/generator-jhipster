@@ -333,7 +333,7 @@ module.exports = class extends BaseGenerator {
 
                 this.styleSheetExt = this.useSass ? 'scss' : 'css';
                 this.pkType = this.getPkType(this.databaseType);
-                this.apiUaaUrlPrefix = `${this.authenticationType === 'uaa' ? `SERVER_API_URL + '${this.uaaBaseName.toLowerCase()}/` : 'SERVER_API_URL + \''}`;
+                this.apiUaaPath = `${this.authenticationType === 'uaa' ? `${this.uaaBaseName.toLowerCase()}/` : ''}`;
                 this.DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
             },
 

@@ -27,6 +27,6 @@ export class PasswordResetFinishService {
     constructor(private http: Http) {}
 
     save(keyAndPassword: any): Observable<any> {
-        return this.http.post(<%- apiUaaUrlPrefix %>api/account/reset-password/finish', keyAndPassword);
+        return this.http.post(SERVER_API_URL + '<%- apiUaaPath %>api/account/reset-password/finish', keyAndPassword);
     }
 }

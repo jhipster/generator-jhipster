@@ -26,7 +26,7 @@
     Account.$inject = ['$resource'];
 
     function Account ($resource) {
-        var service = $resource('<%- apiUaaUrlPrefix %>api/account', {}, {
+        var service = $resource('<%- apiUaaPath %>api/account', {}, {
             'get': { method: 'GET', params: {}, isArray: false,
                 interceptor: {
                     response: function(response) {

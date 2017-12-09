@@ -37,6 +37,6 @@ export class AuditsService  {
             search: params
         };
 
-        return this.http.get(<%- apiUaaUrlPrefix %>management/audits', options);
+        return this.http.get(SERVER_API_URL + '<%- apiUaaPath %>management/audits', options);
     }
 }
