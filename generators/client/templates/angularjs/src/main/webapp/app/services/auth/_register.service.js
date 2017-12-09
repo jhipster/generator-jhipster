@@ -26,6 +26,6 @@
     Register.$inject = ['$resource'];
 
     function Register ($resource) {
-        return $resource('<%- apiUaaUrlPrefix %>api/register', {}, {});
+        return $resource('<%- apiUaaPath %>api/register', {}, {});
     }
 })();

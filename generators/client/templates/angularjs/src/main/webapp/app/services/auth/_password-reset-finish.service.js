@@ -26,7 +26,7 @@
     PasswordResetFinish.$inject = ['$resource'];
 
     function PasswordResetFinish($resource) {
-        var service = $resource('<%- apiUaaUrlPrefix %>api/account/reset-password/finish', {}, {});
+        var service = $resource('<%- apiUaaPath %>api/account/reset-password/finish', {}, {});
 
         return service;
     }
