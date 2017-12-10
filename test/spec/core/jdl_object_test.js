@@ -25,6 +25,7 @@ const BINARY_OPTIONS = require('../../../lib/core/jhipster/binary_options');
 const UNARY_OPTIONS = require('../../../lib/core/jhipster/unary_options');
 const RELATIONSHIP_TYPES = require('../../../lib/core/jhipster/relationship_types');
 const JDLObject = require('../../../lib/core/jdl_object');
+const JDLApplication = require('../../../lib/core/jdl_application');
 const JDLEntity = require('../../../lib/core/jdl_entity');
 const JDLField = require('../../../lib/core/jdl_field');
 const JDLValidation = require('../../../lib/core/jdl_validation');
@@ -34,6 +35,56 @@ const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
 const JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
 
 describe('JDLObject', () => {
+  describe('#addAppliation', () => {
+    context('when adding an invalid application', () => {
+      const object = new JDLObject();
+
+      context('such as a nil application', () => {
+        it('fails', () => {
+          try {
+            object.addApplication(null);
+            fail();
+          } catch (error) {
+            expect(error.name).to.eq('InvalidObjectException');
+            expect(error.message).to.eq('The application must be valid in order to be added.\nErrors: No application');
+          }
+        });
+      });
+      context('such as an incomplete application', () => {
+        it('fails', () => {
+          try {
+            object.addApplication({
+              config: {
+                baseName: 'toto'
+              }
+            });
+            fail();
+          } catch (error) {
+            expect(error.name).to.eq('InvalidObjectException');
+            expect(
+              error.message
+            ).to.eq('The application must be valid in order to be added.\n' +
+              'Errors: No package name or folder, No authentication type, No Hibernate cache, No database type, ' +
+              'No dev database type, No prod database type, No build tool, No application type, No client framework');
+          }
+        });
+      });
+    });
+    context('when adding a valid application', () => {
+      let object = null;
+      let application = null;
+
+      before(() => {
+        object = new JDLObject();
+        application = new JDLApplication({ jhipsterVersion: '4.9.0' });
+        object.addApplication(application);
+      });
+
+      it('works', () => {
+        expect(object.applications[application.config.baseName]).to.deep.eq(application);
+      });
+    });
+  });
   describe('#addEntity', () => {
     context('when adding an invalid entity', () => {
       const object = new JDLObject();
@@ -297,6 +348,7 @@ describe('JDLObject', () => {
     });
   });
   describe('#toString', () => {
+    let application = null;
     let object = null;
     let entityA = null;
     let entityB = null;
@@ -307,6 +359,8 @@ describe('JDLObject', () => {
 
     before(() => {
       object = new JDLObject();
+      application = new JDLApplication({ jhipsterVersion: '4.9.0' });
+      object.addApplication(application);
       entityA = new JDLEntity({ name: 'EntityA', tableName: 't_entity_a' });
       const field = new JDLField({ name: 'myField', type: 'String' });
       field.addValidation(new JDLValidation());
@@ -337,7 +391,9 @@ describe('JDLObject', () => {
 
     it('stringifies the JDL object', () => {
       expect(object.toString()).to.eq(
-        `${entityA.toString()}
+        `${application.toString()}
+
+${entityA.toString()}
 ${entityB.toString()}
 ${enumObject.toString()}
 
