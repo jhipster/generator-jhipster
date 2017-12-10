@@ -35,7 +35,7 @@ const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
 const JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
 
 describe('JDLObject', () => {
-  describe('#addAppliation', () => {
+  describe('#addApplication', () => {
     context('when adding an invalid application', () => {
       const object = new JDLObject();
 
