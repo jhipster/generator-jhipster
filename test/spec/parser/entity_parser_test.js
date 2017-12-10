@@ -284,15 +284,49 @@ describe('::convert', () => {
         );
       });
     });
-    describe('when converting a JDL with filtering', () => {
-      const input = parseFromFiles(['./test/test_files/filtering.jdl']);
-      const content = EntityParser.parse({
-        jdlObject: JDLParser.parse(input, 'sql'),
-        databaseType: 'sql'
+    context('when converting a JDL with filtering', () => {
+      context('if there was not a service option for entity', () => {
+        let content = null;
+
+        before(() => {
+          const input = parseFromFiles(['./test/test_files/filtering_without_service.jdl']);
+          const jdlObject = JDLParser.parse(input, 'sql');
+          content = EntityParser.parse({
+            jdlObject,
+            databaseType: 'sql'
+          });
+        });
+
+        it('converts it', () => {
+          expect(content.A.jpaMetamodelFiltering).to.be.true;
+          expect(content.B.jpaMetamodelFiltering).to.be.false;
+        });
+        it('adds the default service option for the filtered entity', () => {
+          expect(content.A.service).to.equal('serviceClass');
+        });
+        it('keeps the other entities the same', () => {
+          expect(content.B.service).to.equal('no');
+        });
       });
-      it('converts it', () => {
-        expect(content.A.jpaMetamodelFiltering).to.be.true;
-        expect(content.B.jpaMetamodelFiltering).to.be.false;
+      context('if there was a service option for the entity', () => {
+        let content = null;
+
+        before(() => {
+          const input = parseFromFiles(['./test/test_files/filtering_with_service.jdl']);
+          content = EntityParser.parse({
+            jdlObject: JDLParser.parse(input, 'sql'),
+            databaseType: 'sql'
+          });
+        });
+
+        it('converts it', () => {
+          expect(content.A.jpaMetamodelFiltering).to.be.true;
+          expect(content.B.jpaMetamodelFiltering).to.be.false;
+        });
+        it('keeps both entities the same', () => {
+          expect(content.A.service).to.equal('serviceImpl');
+          expect(content.B.service).to.equal('no');
+        });
       });
     });
     describe('when converting a JDL inside a microservice app', () => {
