@@ -484,6 +484,16 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * return the localeId from the given language key (from constants.LANGUAGES)
+     * if no localeId is defined, return the language key (which is a localeId itself)
+     * @param {string} language - language key
+     */
+    getLocaleId(language) {
+        const langObj = this.getAllSupportedLanguageOptions().find(langObj => langObj.value === language);
+        return langObj.localeId || language;
+    }
+
+    /**
      * get all the languages options supported by JHipster
      */
     getAllSupportedLanguageOptions() {
