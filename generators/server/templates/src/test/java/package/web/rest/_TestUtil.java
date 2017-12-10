@@ -82,13 +82,15 @@ public class TestUtil {
         }
         return byteArray;
     }
-    <% if (databaseType === 'couchbase') { %>
+    <%_ if (databaseType === 'couchbase') { _%>
+
     /**
      * Mock user authentication for Spring SpEL expression used in {@link <%=packageName%>.repository.N1qlCouchbaseRepository}
      */
     public static void mockAuthentication() {
         TestSecurityContextHolder.getContext().setAuthentication(new TestingAuthenticationToken("user", null));
-    }<% } %>
+    }
+    <%_ } _%>
 
     /**
      * A matcher that tests that the examined string represents the same instant as the reference datetime.
@@ -164,5 +166,4 @@ public class TestUtil {
         registrar.registerFormatters(dfcs);
         return dfcs;
     }
-
 }
