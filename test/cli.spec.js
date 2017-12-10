@@ -8,11 +8,12 @@ const path = require('path');
 
 describe('jhipster cli test', () => {
     const cmdPath = path.join(__dirname, '../cli/jhipster');
-    const cmd = `node ${cmdPath} `;
-    console.log(cmd);
+    let cmd = `node ${cmdPath} `;
 
     it('verify correct cmd format', () => {
-        expect(cmd).to.match(/node \/(.*)generator-jhipster\/cli\/jhipster/g);
+        // corrected for windows user
+        cmd = cmd.replace(/\\/g, '/');
+        expect(cmd).to.match(/node (.*)generator-jhipster\/cli\/jhipster/g);
     });
 
     it('--help should run without errors', (done) => {
