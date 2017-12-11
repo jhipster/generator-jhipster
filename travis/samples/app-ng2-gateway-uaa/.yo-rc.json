@@ -7,6 +7,7 @@
     "authenticationType": "uaa",
     "uaaBaseName": "travisUaa",
     "cacheProvider": "hazelcast",
+    "enableHibernateCache": true,    
     "clusteredHttpSession": false,
     "websocket": false,
     "databaseType": "sql",

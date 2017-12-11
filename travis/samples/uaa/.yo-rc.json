@@ -6,6 +6,7 @@
     "serverPort": "9999",
     "authenticationType": "uaa",
     "cacheProvider": "hazelcast",
+    "enableHibernateCache": true,    
     "clusteredHttpSession": false,
     "websocket": false,
     "databaseType": "sql",

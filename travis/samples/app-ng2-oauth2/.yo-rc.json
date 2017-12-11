@@ -6,6 +6,7 @@
     "packageFolder": "io/github/jhipster/travis",
     "authenticationType": "oauth2",
     "cacheProvider": "ehcache",
+    "enableHibernateCache": true,    
     "clusteredHttpSession": false,
     "websocket": false,
     "databaseType": "sql",
