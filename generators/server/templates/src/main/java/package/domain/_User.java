@@ -90,7 +90,7 @@ import <%=packageName%>.config.Constants;
 import com.datastax.driver.mapping.annotations.*;<% } %>
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.StringUtils;<% if (databaseType === 'sql') { %>
-import org.hibernate.annotations.BatchSize;<% } %><% if (cacheProvider !== 'no' && databaseType === 'sql') { %>
+import org.hibernate.annotations.BatchSize;<% } %><% if (enableHibernateCache) { %>
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %>
 import org.hibernate.validator.constraints.Email;
@@ -131,7 +131,7 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
  */<% if (databaseType === 'sql') { %>
 @Entity
 @Table(name = "<%= jhiTablePrefix %>_user")<% } %>
-<%_ if (cacheProvider !== 'no' && databaseType === 'sql') { if (cacheProvider === 'infinispan') { _%>
+<%_ if (enableHibernateCache) { if (cacheProvider === 'infinispan') { _%>
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <%_ } else { _%>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE) <%_ } } _%><% if (databaseType === 'mongodb') { %>
 @org.springframework.data.mongodb.core.mapping.Document(collection = "<%= jhiTablePrefix %>_user")<% } %><% if (databaseType === 'couchbase') { %>

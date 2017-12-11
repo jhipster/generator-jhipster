@@ -18,7 +18,7 @@
 -%>
 package <%=packageName%>.domain;
 
-<% if (cacheProvider !== 'no' && databaseType === 'sql') { %>import org.hibernate.annotations.Cache;
+<% if (enableHibernateCache) { %>import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.<%= databaseType %>.core.mapping.Document;<% } %><% if (databaseType === 'sql') { %>

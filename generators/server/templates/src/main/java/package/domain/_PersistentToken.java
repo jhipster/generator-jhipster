@@ -19,7 +19,7 @@
 package <%=packageName%>.domain;
 <% if (databaseType === 'cassandra') { %>
 import com.datastax.driver.mapping.annotations.*;<% } %>
-import com.fasterxml.jackson.annotation.JsonIgnore;<% if (cacheProvider !== 'no' && databaseType === 'sql') { %>
+import com.fasterxml.jackson.annotation.JsonIgnore;<% if (enableHibernateCache) { %>
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %>
 import java.time.LocalDate;<% if (databaseType === 'mongodb') { %>
@@ -47,7 +47,7 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
  */<% if (databaseType === 'sql') { %>
 @Entity
 @Table(name = "<%= jhiTablePrefix %>_persistent_token")<% } %>
-<%_ if (cacheProvider !== 'no' && databaseType === 'sql') { if (cacheProvider === 'infinispan') { _%>
+<%_ if (enableHibernateCache) { if (cacheProvider === 'infinispan') { _%>
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <%_ } else { _%>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<%_ } } _%><% if (databaseType === 'mongodb') { %>
 @Document(collection = "<%= jhiTablePrefix %>_persistent_token")<% } %><% if (databaseType === 'couchbase') { %>
