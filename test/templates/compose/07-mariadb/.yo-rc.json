@@ -7,6 +7,7 @@
     "serverPort": "8081",
     "authenticationType": "jwt",
     "cacheProvider": "hazelcast",
+    "enableHibernateCache": true,
     "databaseType": "sql",
     "devDatabaseType": "h2Disk",
     "prodDatabaseType": "mariadb",

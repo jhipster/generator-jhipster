@@ -6,7 +6,7 @@
     "packageFolder": "io/github/jhipster/travis",
     "authenticationType": "session",
     "cacheProvider": "hazelcast",
-    "enableHibernateCache": true,    
+    "enableHibernateCache": true,
     "clusteredHttpSession": "hazelcast",
     "websocket": false,
     "databaseType": "sql",
