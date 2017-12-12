@@ -62,8 +62,10 @@ import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.serviceregistry.Registration;
 <%_ } _%>
-import org.springframework.context.annotation.*;<% if (cacheProvider === 'hazelcast' || clusteredHttpSession === 'hazelcast') { %>
-import org.springframework.core.env.Environment;<% } %>
+import org.springframework.context.annotation.*;
+<%_ if (cacheProvider === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
+import org.springframework.core.env.Environment;
+<%_ } _%>
 <%_ if (clusteredHttpSession === 'hazelcast') { _%>
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;

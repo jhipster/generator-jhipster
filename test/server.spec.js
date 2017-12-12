@@ -19,6 +19,7 @@ describe('JHipster server generator', () => {
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
                     cacheProvider: 'ehcache',
+                    enableHibernateCache: true,
                     databaseType: 'sql',
                     devDatabaseType: 'h2Memory',
                     prodDatabaseType: 'mysql',

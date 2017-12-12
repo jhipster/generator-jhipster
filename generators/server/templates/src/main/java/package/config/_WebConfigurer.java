@@ -19,15 +19,21 @@
 package <%=packageName%>.config;
 
 import io.github.jhipster.config.JHipsterConstants;
-import io.github.jhipster.config.JHipsterProperties;<% if (!skipClient) { %>
-import io.github.jhipster.web.filter.CachingHttpHeadersFilter;<% } %>
+import io.github.jhipster.config.JHipsterProperties;
+<%_ if (!skipClient) { _%>
+import io.github.jhipster.web.filter.CachingHttpHeadersFilter;
+<%_ } _%>
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
-import com.codahale.metrics.servlets.MetricsServlet;<% if (clusteredHttpSession === 'hazelcast' || cacheProvider === 'hazelcast') { %>
-import com.hazelcast.core.HazelcastInstance;<% } %><% if (clusteredHttpSession === 'hazelcast') { %>
+import com.codahale.metrics.servlets.MetricsServlet;
+<%_ if (clusteredHttpSession === 'hazelcast' || cacheProvider === 'hazelcast') { _%>
+import com.hazelcast.core.HazelcastInstance;
+<%_ } _%>
+<%_ if (clusteredHttpSession === 'hazelcast') { _%>
 import com.hazelcast.web.SessionListener;
-import com.hazelcast.web.spring.SpringAwareWebFilter;<% } %>
+import com.hazelcast.web.spring.SpringAwareWebFilter;
+<%_ } _%>
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

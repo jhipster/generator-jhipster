@@ -17,48 +17,74 @@
  limitations under the License.
 -%>
 package <%=packageName%>.domain;
-<% if (databaseType === 'cassandra') { %>
-import com.datastax.driver.mapping.annotations.*;<% } %>
-import com.fasterxml.jackson.annotation.JsonIgnore;<% if (enableHibernateCache) { %>
+
+<%_ if (databaseType === 'cassandra') { _%>
+import com.datastax.driver.mapping.annotations.*;
+<%_ } _%>
+import com.fasterxml.jackson.annotation.JsonIgnore;
+<%_ if (enableHibernateCache) { _%>
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %>
-import java.time.LocalDate;<% if (databaseType === 'mongodb') { %>
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+<%_ } _%>
+import java.time.LocalDate;
+<%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;<% } %><% if (databaseType === 'couchbase') { %>
+import org.springframework.data.mongodb.core.mapping.Document;
+<%_ } _%>
+<%_ if (databaseType === 'couchbase') { _%>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.id.IdAttribute;
-import org.springframework.data.couchbase.core.mapping.id.IdPrefix;<% } %>
-<% if (databaseType === 'sql') { %>import javax.persistence.*;<% } %>
+import org.springframework.data.couchbase.core.mapping.id.IdPrefix;
+<%_ } _%>
+
+<%_ if (databaseType === 'sql') { _%>
+import javax.persistence.*;
+<%_ } _%>
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;<% if (databaseType === 'cassandra') { %>
-import java.util.Date;<% } %>
-<% if (databaseType === 'couchbase') { %>
+import java.io.Serializable;
+<%_ if (databaseType === 'cassandra') { _%>
+import java.util.Date;
+<%_ } _%>
+
+<%_ if (databaseType === 'couchbase') { _%>
 import static <%=packageName%>.config.Constants.ID_DELIMITER;
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.USE_ATTRIBUTES;
-<% } %>
+<%_ } _%>
+
 /**
  * Persistent tokens are used by Spring Security to automatically log in users.
  *
  * @see <%=packageName%>.security.PersistentTokenRememberMeServices
- */<% if (databaseType === 'sql') { %>
+ */
+<%_ if (databaseType === 'sql') { _%>
 @Entity
-@Table(name = "<%= jhiTablePrefix %>_persistent_token")<% } %>
+@Table(name = "<%= jhiTablePrefix %>_persistent_token")
+<%_ } _%>
 <%_ if (enableHibernateCache) { if (cacheProvider === 'infinispan') { _%>
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <%_ } else { _%>
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<%_ } } _%><% if (databaseType === 'mongodb') { %>
-@Document(collection = "<%= jhiTablePrefix %>_persistent_token")<% } %><% if (databaseType === 'couchbase') { %>
-@Document<% } %><% if (databaseType === 'cassandra') { %>
-@Table(name = "persistent_token")<% } %>
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+<%_ } else { _%>
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+<%_ } } _%>
+<%_ if (databaseType === 'mongodb') { _%>
+@Document(collection = "<%= jhiTablePrefix %>_persistent_token")
+<%_ } _%>
+<%_ if (databaseType === 'couchbase') { _%>
+@Document
+<%_ } _%>
+<%_ if (databaseType === 'cassandra') { _%>
+@Table(name = "persistent_token")
+<%_ } _%>
 public class PersistentToken implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private static final int MAX_USER_AGENT_LEN = 255;
-<% if (databaseType === 'couchbase') { %>
+
+<%_ if (databaseType === 'couchbase') { _%>
     public static final String PREFIX = "token";
 
     @SuppressWarnings("unused")
@@ -69,10 +95,14 @@ public class PersistentToken implements Serializable {
     @GeneratedValue(strategy = USE_ATTRIBUTES, delimiter = ID_DELIMITER)
     private String id;
 
-    @IdAttribute<%_ } _%>
-<% if (databaseType === 'sql' || databaseType === 'mongodb')  { %>
-    @Id<% } %><% if (databaseType === 'cassandra') { %>
-    @PartitionKey<% } %>
+    @IdAttribute
+<%_ } _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb')  { _%>
+    @Id
+<%_ } _%>
+<%_ if (databaseType === 'cassandra') { _%>
+    @PartitionKey
+<%_ } _%>
     private String series;
 
     @JsonIgnore

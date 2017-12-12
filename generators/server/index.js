@@ -170,20 +170,20 @@ module.exports = class extends BaseGenerator {
                 if (this.databaseType === 'mongodb') {
                     this.devDatabaseType = 'mongodb';
                     this.prodDatabaseType = 'mongodb';
-                    this.cacheProvider = 'no';
+                    this.enableHibernateCache = false;
                 } else if (this.databaseType === 'couchbase') {
                     this.devDatabaseType = 'couchbase';
                     this.prodDatabaseType = 'couchbase';
-                    this.cacheProvider = 'no';
+                    this.enableHibernateCache = false;
                 } else if (this.databaseType === 'cassandra') {
                     this.devDatabaseType = 'cassandra';
                     this.prodDatabaseType = 'cassandra';
-                    this.cacheProvider = 'no';
+                    this.enableHibernateCache = false;
                 } else if (this.databaseType === 'no') {
                     // no database, only available for microservice applications
                     this.devDatabaseType = 'no';
                     this.prodDatabaseType = 'no';
-                    this.cacheProvider = 'no';
+                    this.enableHibernateCache = false;
                 } else {
                     // sql
                     this.devDatabaseType = this.config.get('devDatabaseType');

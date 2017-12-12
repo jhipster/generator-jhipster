@@ -245,7 +245,7 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || 
         name = "<%= jhiTablePrefix %>_user_authority",
         joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
-    <%_ if (cacheProvider !== 'no') { if (cacheProvider === 'infinispan') { _%>
+    <%_ if (enableHibernateCache) { if (cacheProvider === 'infinispan') { _%>
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <%_ } else { _%>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE) <%_ } } _%><% if (databaseType === 'sql') { %>
     @BatchSize(size = 20)<% } %><% } %><% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
@@ -254,7 +254,7 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || 
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
-    <%_ if (cacheProvider !== 'no') { if (cacheProvider === 'infinispan') { _%>
+    <%_ if (enableHibernateCache) { if (cacheProvider === 'infinispan') { _%>
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     <%_ } else { _%>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)

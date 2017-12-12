@@ -29,8 +29,10 @@ import io.github.jhipster.config.JHipsterConstants;
 <%_ } _%>
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;<% if (cacheProvider === 'hazelcast') { %>
-import org.springframework.cache.CacheManager;<% } %>
+import org.slf4j.LoggerFactory;
+<%_ if (cacheProvider === 'hazelcast') { _%>
+import org.springframework.cache.CacheManager;
+<%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.cloud.Cloud;
 import org.springframework.cloud.CloudException;

@@ -212,11 +212,11 @@ repositories {
 
 dependencies {
     <%_ if (cacheProvider !== 'no') { _%>
-    compile "org.springframework.boot:spring-boot-starter-cache" 
+    compile "org.springframework.boot:spring-boot-starter-cache"
     <%_ } _%>
     compile "io.github.jhipster:jhipster"
     compile "io.dropwizard.metrics:metrics-core"
-    <%_ if (cacheProvider === 'ehcache' || cacheProvider === 'infinispan') { _%>
+    <%_ if (['ehcache', 'infinispan'].includes(cacheProvider)) { _%>
     compile "io.dropwizard.metrics:metrics-jcache"
     <%_ } _%>
     compile "io.dropwizard.metrics:metrics-json"
@@ -236,7 +236,9 @@ dependencies {
     compile "com.ryantenney.metrics:metrics-spring"
     <%_ if (cacheProvider === 'hazelcast') { _%>
     compile "com.hazelcast:hazelcast"
+    <%_ if (enableHibernateCache) { _%>
     compile "com.hazelcast:hazelcast-hibernate52"
+    <%_ } _%>
     compile "com.hazelcast:hazelcast-spring"
     <%_ } _%>
     <%_ if ((clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') && cacheProvider !== 'hazelcast') { _%>
@@ -246,7 +248,7 @@ dependencies {
     <%_ if (clusteredHttpSession === 'hazelcast') { _%>
     compile "com.hazelcast:hazelcast-wm"
     <%_ } _%>
-    <%_ if (cacheProvider === 'infinispan') { _%>
+    <%_ if (enableHibernateCache && cacheProvider === 'infinispan') { _%>
     compile "org.hibernate:hibernate-infinispan"
     <%_ } _%>
     <%_ if (cacheProvider === 'infinispan') {_%>
@@ -257,7 +259,7 @@ dependencies {
         exclude module: 'undertow-core'
     }
     <%_ } _%>
-    <%_ if (cacheProvider === 'ehcache' || cacheProvider === 'hazelcast' || cacheProvider === 'infinispan' || applicationType === 'gateway') { _%>
+    <%_ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || applicationType === 'gateway') { _%>
     compile "javax.cache:cache-api"
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
@@ -273,9 +275,11 @@ dependencies {
     <%_ if (databaseType === 'cassandra') { _%>
     compile "org.lz4:lz4-java"
     <%_ } _%>
-    <%_ if (cacheProvider === 'ehcache' && databaseType === 'sql') { _%>
+    <%_ if (cacheProvider === 'ehcache') { _%>
     compile "org.ehcache:ehcache"
+        <%_ if (enableHibernateCache) { _%>
     compile "org.hibernate:hibernate-jcache"
+        <%_ } _%>
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     compile "org.hibernate:hibernate-entitymanager"

@@ -32,7 +32,7 @@ import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.id.IdPrefix;
 <%_ } _%>
-<%_ if (cacheProvider !== 'no') { _%>
+<%_ if (enableHibernateCache) { _%>
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 <%_ } _%>
@@ -52,12 +52,17 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <% } %>
 /**
  * A Social user.
- */<% if (databaseType === 'sql') { %>
+ */
+<%_ if (databaseType === 'sql') { _%>
 @Entity
 @Table(name = "<%= jhiTablePrefix %>_social_user_connection")
-<%_ if (cacheProvider !== 'no') { if (cacheProvider === 'infinispan') { _%>
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <%_ } else { _%>
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<%_ } } _%><% } %><% if (databaseType === 'mongodb') { %>
+    <%_ if (enableHibernateCache) { if (cacheProvider === 'infinispan') { _%>
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    <%_ } else { _%>
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    <%_ } } _%>
+<%_ } _%>
+<%_ if (databaseType === 'mongodb') { _%>
 @Document(collection = "<%= jhiTablePrefix %>_social_user_connection")
 @CompoundIndexes(
     @CompoundIndex(name = "user2-prov-provusr-idx", unique = true, def = "{'user_id': 1, 'provider_id': 1, 'provider_user_id': 1}")

@@ -423,19 +423,19 @@ function askForServerSideOpts(meta) {
         if (this.databaseType === 'no') {
             this.devDatabaseType = 'no';
             this.prodDatabaseType = 'no';
-            this.cacheProvider = 'no';
+            this.enableHibernateCache = false;
         } else if (this.databaseType === 'mongodb') {
             this.devDatabaseType = 'mongodb';
             this.prodDatabaseType = 'mongodb';
-            this.cacheProvider = 'no';
+            this.enableHibernateCache = false;
         } else if (this.databaseType === 'couchbase') {
             this.devDatabaseType = 'couchbase';
             this.prodDatabaseType = 'couchbase';
-            this.cacheProvider = 'no';
+            this.enableHibernateCache = false;
         } else if (this.databaseType === 'cassandra') {
             this.devDatabaseType = 'cassandra';
             this.prodDatabaseType = 'cassandra';
-            this.cacheProvider = 'no';
+            this.enableHibernateCache = false;
         }
         // Hazelcast is mandatory for Gateways, as it is used for rate limiting
         if (this.applicationType === 'gateway') {
