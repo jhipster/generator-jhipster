@@ -19,9 +19,7 @@
 import { Injectable } from '@angular/core';
 import { Response, Http } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
-<%_ if (authenticationType !== 'uaa') { _%>
 import { SERVER_API_URL } from '../../app.constants';
-<%_ } _%>
 
 @Injectable()
 export class <%=jhiPrefixCapitalized%>MetricsService {
@@ -29,10 +27,10 @@ export class <%=jhiPrefixCapitalized%>MetricsService {
     constructor(private http: Http) {}
 
     getMetrics(): Observable<any> {
-        return this.http.get(<%- apiServerUrlPrefix %>management/metrics').map((res: Response) => res.json());
+        return this.http.get(SERVER_API_URL + 'management/metrics').map((res: Response) => res.json());
     }
 
     threadDump(): Observable<any> {
-        return this.http.get(<%- apiServerUrlPrefix %>management/dump').map((res: Response) => res.json());
+        return this.http.get(SERVER_API_URL + 'management/dump').map((res: Response) => res.json());
     }
 }

@@ -194,7 +194,7 @@
             </tbody>
         </table>
     </div>
-    <% if (hibernateCache === 'ehcache' || hibernateCache === 'infinispan') { %>
+<%_ if (hibernateCache === 'ehcache' || hibernateCache === 'infinispan') { _%>
     <h3 jhiTranslate="metrics.cache.title">Cache statistics</h3>
     <div class="table-responsive" *ngIf="!updatingMetrics">
         <table class="table table-striped">
@@ -232,7 +232,7 @@
             </tbody>
         </table>
     </div>
-    <% } %>
+<%_ } _%>
     <h3 jhiTranslate="metrics.datasource.title" *ngIf="metrics.gauges && metrics.gauges['HikariPool-1.pool.TotalConnections'] && metrics.gauges['HikariPool-1.pool.TotalConnections'].value > 0">DataSource statistics (time in millisecond)</h3>
     <div class="table-responsive" *ngIf="!updatingMetrics && metrics.gauges && metrics.gauges['HikariPool-1.pool.TotalConnections'] && metrics.gauges['HikariPool-1.pool.TotalConnections'].value > 0">
         <table class="table table-striped">

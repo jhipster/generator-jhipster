@@ -37,7 +37,7 @@ buildscript {
 
 plugins {
     id "org.sonarqube" version "2.5"
-    id "net.ltgt.apt" version "0.11"
+    id "net.ltgt.apt" version "0.13"
     id "io.spring.dependency-management" version "1.0.3.RELEASE"
     <%_ if (gatlingTests) { _%>
     id "com.github.lkishalmi.gatling" version "0.7.1"
@@ -103,7 +103,7 @@ if (OperatingSystem.current().isWindows()) {
         doFirst {
             manifest {
                 attributes 'Class-Path': configurations.runtime.files.collect {
-                    it.toURL().toString().replaceFirst(/file:\/+/, '/').replaceAll(' ', '%20')
+                    it.toURI().toURL().toString().replaceFirst(/file:\/+/, '/').replaceAll(' ', '%20')
                 }.join(' ')
             }
         }

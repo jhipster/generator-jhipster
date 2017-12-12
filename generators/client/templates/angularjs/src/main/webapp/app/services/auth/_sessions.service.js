@@ -26,7 +26,7 @@
     Sessions.$inject = ['$resource'];
 
     function Sessions ($resource) {
-        return $resource('<%- apiUaaUrlPrefix %>api/account/sessions/:series', {}, {
+        return $resource('api/account/sessions/:series', {}, {
             'getAll': { method: 'GET', isArray: true}
         });
     }

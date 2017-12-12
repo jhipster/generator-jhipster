@@ -10,8 +10,8 @@ Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submit
 [![NPM version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url-main]
 [![Dependency Status][daviddm-image]][daviddm-url]
-[![Sponsors on Open Collective](https://opencollective.com/colly/sponsors/badge.svg)](#sponsors)
-[![Backers on Open Collective](https://opencollective.com/colly/backers/badge.svg)](#backers)
+[![Sponsors on Open Collective](https://opencollective.com/generator-jhipster/sponsors/badge.svg)](#sponsors)
+[![Backers on Open Collective](https://opencollective.com/generator-jhipster/backers/badge.svg)](#backers)
 
 ## Sponsors
 

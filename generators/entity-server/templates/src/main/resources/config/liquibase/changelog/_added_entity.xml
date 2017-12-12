@@ -55,6 +55,10 @@
             if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('required')) {
                 nullable = false;
             }
+            let unique = false;
+            if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('unique')) {
+                unique = true;
+            }
             let maxlength = 255;
             if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('maxlength')) {
                 maxlength = fields[idx].fieldValidateRulesMaxlength;
@@ -98,7 +102,11 @@
             }
             %>
             <column name="<%=columnName %>" type="<%=columnType %>">
+                <%_ if (unique) { _%>
+                <constraints nullable="<%= nullable %>" unique="true" />
+                <%_ } else { _%>
                 <constraints nullable="<%= nullable %>" />
+                <%_ } _%>
             </column>
             <%_ if (fieldType === 'byte[]' && fieldTypeBlobContent !== 'text') { _%>
             <column name="<%=columnName %>_content_type" type="varchar(255)">

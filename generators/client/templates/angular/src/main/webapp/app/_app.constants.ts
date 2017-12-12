@@ -20,17 +20,11 @@
  /* tslint:disable */
 let _VERSION = '0.0.1-SNAPSHOT'; // This value will be overwritten by Webpack
 let _DEBUG_INFO_ENABLED = true; // This value will be overwritten by Webpack
-<%_ if (authenticationType !== 'uaa') { _%>
 let _SERVER_API_URL = ''; // This value will be overwritten by Webpack
-<%_ } _%>
 /* @toreplace VERSION */
 /* @toreplace DEBUG_INFO_ENABLED */
-<%_ if (authenticationType !== 'uaa') { _%>
 /* @toreplace SERVER_API_URL */
-<%_ } _%>
 /* tslint:enable */
 export const VERSION = _VERSION;
 export const DEBUG_INFO_ENABLED = _DEBUG_INFO_ENABLED;
-<%_ if (authenticationType !== 'uaa') { _%>
 export const SERVER_API_URL = _SERVER_API_URL;
-<%_ } _%>

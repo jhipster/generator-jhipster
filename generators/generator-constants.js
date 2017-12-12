@@ -67,7 +67,7 @@ const TEST_DIR = 'src/test/';
 // Note: this will be prepended with 'target/' for Maven, or with 'build/' for Gradle.
 const CLIENT_DIST_DIR = 'www/';
 
-const SUPPORTED_VALIDATION_RULES = ['required', 'max', 'min', 'maxlength', 'minlength', 'maxbytes', 'minbytes', 'pattern'];
+const SUPPORTED_VALIDATION_RULES = ['required', 'unique', 'max', 'min', 'maxlength', 'minlength', 'maxbytes', 'minbytes', 'pattern'];
 
 // documentation constants
 const JHIPSTER_DOCUMENTATION_URL = 'http://www.jhipster.tech';
@@ -102,8 +102,12 @@ const LANGUAGES = [
     },
     { name: 'Armenian', dispName: 'Հայերեն', value: 'hy' },
     { name: 'Catalan', dispName: 'Català', value: 'ca' },
-    { name: 'Chinese (Simplified)', dispName: '中文（简体）', value: 'zh-cn' },
-    { name: 'Chinese (Traditional)', dispName: '繁體中文', value: 'zh-tw' },
+    {
+        name: 'Chinese (Simplified)', dispName: '中文（简体）', value: 'zh-cn', localeId: 'zh-Hans'
+    },
+    {
+        name: 'Chinese (Traditional)', dispName: '繁體中文', value: 'zh-tw', localeId: 'zh-Hant'
+    },
     { name: 'Czech', dispName: 'Český', value: 'cs' },
     { name: 'Danish', dispName: 'Dansk', value: 'da' },
     { name: 'Dutch', dispName: 'Nederlands', value: 'nl' },
@@ -124,8 +128,12 @@ const LANGUAGES = [
     { name: 'Korean', dispName: '한국어', value: 'ko' },
     { name: 'Marathi', dispName: 'मराठी', value: 'mr' },
     { name: 'Polish', dispName: 'Polski', value: 'pl' },
-    { name: 'Portuguese (Brazilian)', dispName: 'Português (Brasil)', value: 'pt-br' },
-    { name: 'Portuguese', dispName: 'Português', value: 'pt-pt' },
+    {
+        name: 'Portuguese (Brazilian)', dispName: 'Português (Brasil)', value: 'pt-br', localeId: 'pt'
+    },
+    {
+        name: 'Portuguese', dispName: 'Português', value: 'pt-pt', localeId: 'pt-PT'
+    },
     { name: 'Romanian', dispName: 'Română', value: 'ro' },
     { name: 'Russian', dispName: 'Русский', value: 'ru' },
     { name: 'Slovak', dispName: 'Slovenský', value: 'sk' },
@@ -135,7 +143,9 @@ const LANGUAGES = [
     { name: 'Turkish', dispName: 'Türkçe', value: 'tr' },
     { name: 'Tamil', dispName: 'தமிழ்', value: 'ta' },
     { name: 'Thai', dispName: 'ไทย', value: 'th' },
-    { name: 'Ukrainian', dispName: 'Українська', value: 'ua' },
+    {
+        name: 'Ukrainian', dispName: 'Українська', value: 'ua', localeId: 'uk'
+    },
     { name: 'Vietnamese', dispName: 'Tiếng Việt', value: 'vi' }
 ];
 

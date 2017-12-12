@@ -21,8 +21,8 @@ import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 <%_ if (authenticationType !== 'uaa') { _%>
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
-import { SERVER_API_URL } from '../../app.constants';
 <%_ } _%>
+import { SERVER_API_URL } from '../../app.constants';
 
 @Injectable()
 export class AuthServerProvider {
@@ -48,7 +48,7 @@ export class AuthServerProvider {
             password: credentials.password,
             rememberMe: credentials.rememberMe
         };
-        return this.http.post('auth/login', data, {});
+        return this.http.post(SERVER_API_URL + 'auth/login', data, {});
 <% } else { %>
         const data = {
             username: credentials.username,
@@ -89,7 +89,7 @@ export class AuthServerProvider {
 
     logout(): Observable<any> {
 <%_ if (authenticationType === 'uaa') { _%>
-        return this.http.post('auth/logout', null);
+        return this.http.post(SERVER_API_URL + 'auth/logout', null);
 <% } else { %>
         return new Observable((observer) => {
             this.$localStorage.clear('authenticationToken');

@@ -1176,9 +1176,9 @@
                                 <configuration>
                                     <arguments>run webpack:build</arguments>
                                     <%_ if (clientPackageManager === 'yarn') { _%>
-                                        <yarnInheritsProxyConfigFromMaven>false</yarnInheritsProxyConfigFromMaven>
+                                    <yarnInheritsProxyConfigFromMaven>false</yarnInheritsProxyConfigFromMaven>
                                     <%_ } else if (clientPackageManager === 'npm') { _%>
-                                        <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
+                                    <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
                                     <%_ } _%>
                                 </configuration>
                             </execution>
@@ -1396,9 +1396,9 @@
                                 <configuration>
                                     <arguments>run webpack:test</arguments>
                                     <%_ if (clientPackageManager === 'yarn') { _%>
-                                        <yarnInheritsProxyConfigFromMaven>false</yarnInheritsProxyConfigFromMaven>
+                                    <yarnInheritsProxyConfigFromMaven>false</yarnInheritsProxyConfigFromMaven>
                                     <%_ } else if (clientPackageManager === 'npm') { _%>
-                                        <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
+                                    <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
                                     <%_ } _%>
                                 </configuration>
                             </execution>
@@ -1411,9 +1411,9 @@
                                 <configuration>
                                     <arguments>run webpack:prod</arguments>
                                     <%_ if (clientPackageManager === 'yarn') { _%>
-                                        <yarnInheritsProxyConfigFromMaven>false</yarnInheritsProxyConfigFromMaven>
+                                    <yarnInheritsProxyConfigFromMaven>false</yarnInheritsProxyConfigFromMaven>
                                     <%_ } else if (clientPackageManager === 'npm') { _%>
-                                        <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
+                                    <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
                                     <%_ } _%>
                                 </configuration>
                             </execution>
