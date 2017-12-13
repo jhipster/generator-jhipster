@@ -722,11 +722,11 @@ function askForField(done) {
                 {
                     name: 'Required',
                     value: 'required'
-                },/**
+                }, /**
                 {
                     name: 'Unique',
                     value: 'unique'
-                },*/
+                }, */
                 {
                     name: 'Minimum length',
                     value: 'minlength'
@@ -757,11 +757,11 @@ function askForField(done) {
                 {
                     name: 'Required',
                     value: 'required'
-                },/**
+                }, /**
                 {
                     name: 'Unique',
                     value: 'unique'
-                },*/
+                }, */
                 {
                     name: 'Minimum',
                     value: 'min'
@@ -785,11 +785,11 @@ function askForField(done) {
                 {
                     name: 'Required',
                     value: 'required'
-                },/**
+                }, /**
                 {
                     name: 'Unique',
                     value: 'unique'
-                },*/
+                }, */
                 {
                     name: 'Minimum byte size',
                     value: 'minbytes'
@@ -818,11 +818,11 @@ function askForField(done) {
                 {
                     name: 'Required',
                     value: 'required'
-                }/**,
+                } /** ,
                 {
                     name: 'Unique',
                     value: 'unique'
-                }*/
+                } */
             ],
             default: 0
         },
