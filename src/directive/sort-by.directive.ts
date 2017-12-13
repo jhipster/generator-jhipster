@@ -16,14 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import { Directive, Host, HostListener, Input, ElementRef, Renderer } from '@angular/core';
+import { Directive, Host, HostListener, Input, ElementRef, Renderer, AfterViewInit } from '@angular/core';
 import { JhiSortDirective } from './sort.directive';
 import { JhiConfigService } from '../config.service';
 
 @Directive({
     selector: '[jhiSortBy]'
 })
-export class JhiSortByDirective {
+export class JhiSortByDirective implements AfterViewInit {
+
     @Input() jhiSortBy: string;
 
     sortAscIcon = 'fa-sort-asc';
@@ -36,6 +37,12 @@ export class JhiSortByDirective {
         const config = configService.getConfig();
         this.sortAscIcon = config.sortAscIcon;
         this.sortDescIcon = config.sortDescIcon;
+    }
+
+    ngAfterViewInit(): void {
+        if (this.jhiSort.predicate && this.jhiSort.predicate !== '_score' && this.jhiSort.predicate === this.jhiSortBy) {
+            this.applyClass();
+        }
     }
 
     @HostListener('click') onClick() {
