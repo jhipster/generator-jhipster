@@ -10,7 +10,7 @@
                     "required": "Your username is required.",
                     "minlength": "Your username is required to be at least 1 character.",
                     "maxlength": "Your username cannot be longer than 50 characters.",
-                    "pattern": "Your username can only contain lower-case letters and digits."
+                    "pattern": "Your username can only contain letters and digits."
                 }
             },
             "success": "<strong>Registration saved!</strong> Please check your email for confirmation.",
