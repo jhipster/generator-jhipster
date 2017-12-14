@@ -27,6 +27,9 @@ import { JhiDateUtils } from 'ng-jhipster';
 
 import { <%= entityAngularName %>Service } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import { <%= entityAngularName %> } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.model';
+<%_ if (!(applicationType === 'gateway' && locals.microserviceName) && authenticationType !== 'uaa') { _%>
+import { SERVER_API_URL } from '../../../../../../main/webapp/app/app.constants';
+<%_ } _%>
 
 describe('Service Tests', () => {
 
@@ -63,7 +66,9 @@ describe('Service Tests', () => {
                 service.find(<%- tsKeyId %>).subscribe(() => {});
 
                 expect(this.lastConnection).toBeDefined();
-                expect(this.lastConnection.request.url).toEqual('api/<%= entityApiUrl %>/' + <%- tsKeyId %>);
+
+                const resourceUrl = <% if (applicationType === 'gateway' && locals.microserviceName) { %>'/<%= microserviceName.toLowerCase() %>/<% } else if (authenticationType === 'uaa') { %>'<% } else { %>SERVER_API_URL + '<% } %>api/<%= entityApiUrl %>';
+                expect(this.lastConnection.request.url).toEqual(resourceUrl + '/' + <%- tsKeyId %>);
             });
             it('should return <%= entityAngularName %>', () => {
 
