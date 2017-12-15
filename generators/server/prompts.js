@@ -100,45 +100,37 @@ function askForServerSideOpts(meta) {
             default: false
         },
         {
-            when: response => applicationType === 'monolith' && response.serviceDiscoveryType !== 'eureka',
+            when: response => (
+                (applicationType === 'monolith' && response.serviceDiscoveryType !== 'eureka') ||
+                ['gateway', 'microservice'].includes(applicationType)
+            ),
             type: 'list',
             name: 'authenticationType',
             message: `Which ${chalk.yellow('*type*')} of authentication would you like to use?`,
-            choices: [
-                {
-                    value: 'jwt',
-                    name: 'JWT authentication (stateless, with a token)'
-                },
-                {
-                    value: 'session',
-                    name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)'
-                },
-                {
-                    value: 'oauth2',
-                    name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)'
+            choices: (response) => {
+                const opts = [
+                    {
+                        value: 'jwt',
+                        name: 'JWT authentication (stateless, with a token)'
+                    },
+                    {
+                        value: 'oauth2',
+                        name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)'
+                    }
+                ];
+                if (applicationType === 'monolith' && response.serviceDiscoveryType !== 'eureka') {
+                    opts.push({
+                        value: 'session',
+                        name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)'
+                    });
+                } else if (['gateway', 'microservice'].includes(applicationType)) {
+                    opts.push({
+                        value: 'uaa',
+                        name: 'Authentication with JHipster UAA server (the server must be generated separately)'
+                    });
                 }
-            ],
-            default: 0
-        },
-        {
-            when: response => applicationType === 'gateway' || applicationType === 'microservice',
-            type: 'list',
-            name: 'authenticationType',
-            message: `Which ${chalk.yellow('*type*')} of authentication would you like to use?`,
-            choices: [
-                {
-                    value: 'jwt',
-                    name: 'JWT authentication (stateless, with a token)'
-                },
-                {
-                    value: 'uaa',
-                    name: 'Authentication with JHipster UAA server (the server must be generated separately)'
-                },
-                {
-                    value: 'oauth2',
-                    name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)'
-                }
-            ],
+                return opts;
+            },
             default: 0
         },
         {
@@ -155,6 +147,67 @@ function askForServerSideOpts(meta) {
                 }
                 return `Could not find a valid JHipster UAA server in path "${input}"`;
             }
+        },
+        {
+            type: 'list',
+            name: 'databaseType',
+            message: `Which ${chalk.yellow('*type*')} of database would you like to use?`,
+            choices: (response) => {
+                const opts = [
+                    {
+                        value: 'sql',
+                        name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, Oracle, MSSQL)'
+                    },
+                    {
+                        value: 'mongodb',
+                        name: 'MongoDB'
+                    },
+                    {
+                        value: 'cassandra',
+                        name: 'Cassandra'
+                    },
+                    {
+                        value: 'couchbase',
+                        name: '[BETA] Couchbase'
+                    }
+                ];
+                if (
+                    applicationType === 'microservice' || ((response.authenticationType === 'uaa' ||
+                    response.authenticationType === 'oauth2') && applicationType === 'gateway')
+                ) {
+                    opts.push({
+                        value: 'no',
+                        name: 'No database'
+                    });
+                }
+                return opts;
+            },
+            default: 0
+        },
+        {
+            when: response => response.databaseType === 'sql',
+            type: 'list',
+            name: 'prodDatabaseType',
+            message: `Which ${chalk.yellow('*production*')} database would you like to use?`,
+            choices: constants.SQL_DB_OPTIONS,
+            default: 0
+        },
+        {
+            when: response => response.databaseType === 'sql',
+            type: 'list',
+            name: 'devDatabaseType',
+            message: `Which ${chalk.yellow('*development*')} database would you like to use?`,
+            choices: response => [
+                {
+                    value: 'h2Disk',
+                    name: 'H2 with disk-based persistence'
+                },
+                {
+                    value: 'h2Memory',
+                    name: 'H2 with in-memory persistence'
+                }
+            ].concat(constants.SQL_DB_OPTIONS.find(it => it.value === response.prodDatabaseType)),
+            default: 0
         },
         {
             // cache is mandatory for gateway and define later to 'hazelcast' value
@@ -181,174 +234,6 @@ function askForServerSideOpts(meta) {
                 }
             ],
             default: (applicationType === 'microservice' || applicationType === 'uaa') ? 1 : 0
-        },
-        {
-            when: response => applicationType === 'microservice' || ((response.authenticationType === 'uaa' ||
-            response.authenticationType === 'oauth2') && applicationType === 'gateway'),
-            type: 'list',
-            name: 'databaseType',
-            message: `Which ${chalk.yellow('*type*')} of database would you like to use?`,
-            choices: [
-                {
-                    value: 'sql',
-                    name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, Oracle)'
-                },
-                {
-                    value: 'mongodb',
-                    name: 'MongoDB'
-                },
-                {
-                    value: 'cassandra',
-                    name: 'Cassandra'
-                },
-                {
-                    value: 'couchbase',
-                    name: '[BETA] Couchbase'
-                },
-                {
-                    value: 'no',
-                    name: 'No database'
-                }
-            ],
-            default: 0
-        },
-        {
-            when: response => !response.databaseType,
-            type: 'list',
-            name: 'databaseType',
-            message: `Which ${chalk.yellow('*type*')} of database would you like to use?`,
-            choices: [
-                {
-                    value: 'sql',
-                    name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, Oracle, MSSQL)'
-                },
-                {
-                    value: 'mongodb',
-                    name: 'MongoDB'
-                },
-                {
-                    value: 'cassandra',
-                    name: 'Cassandra'
-                },
-                {
-                    value: 'couchbase',
-                    name: '[BETA] Couchbase'
-                }
-            ],
-            default: 0
-        },
-        {
-            when: response => response.databaseType === 'sql',
-            type: 'list',
-            name: 'prodDatabaseType',
-            message: `Which ${chalk.yellow('*production*')} database would you like to use?`,
-            choices: constants.SQL_DB_OPTIONS,
-            default: 0
-        },
-        {
-            when: response => (response.databaseType === 'sql' && response.prodDatabaseType === 'mysql'),
-            type: 'list',
-            name: 'devDatabaseType',
-            message: `Which ${chalk.yellow('*development*')} database would you like to use?`,
-            choices: [
-                {
-                    value: 'h2Disk',
-                    name: 'H2 with disk-based persistence'
-                },
-                {
-                    value: 'h2Memory',
-                    name: 'H2 with in-memory persistence'
-                },
-                {
-                    value: 'mysql',
-                    name: 'MySQL'
-                }
-            ],
-            default: 0
-        },
-        {
-            when: response => (response.databaseType === 'sql' && response.prodDatabaseType === 'mariadb'),
-            type: 'list',
-            name: 'devDatabaseType',
-            message: `Which ${chalk.yellow('*development*')} database would you like to use?`,
-            choices: [
-                {
-                    value: 'h2Disk',
-                    name: 'H2 with disk-based persistence'
-                },
-                {
-                    value: 'h2Memory',
-                    name: 'H2 with in-memory persistence'
-                },
-                {
-                    value: 'mariadb',
-                    name: 'MariaDB'
-                }
-            ],
-            default: 0
-        },
-        {
-            when: response => (response.databaseType === 'sql' && response.prodDatabaseType === 'postgresql'),
-            type: 'list',
-            name: 'devDatabaseType',
-            message: `Which ${chalk.yellow('*development*')} database would you like to use?`,
-            choices: [
-                {
-                    value: 'h2Disk',
-                    name: 'H2 with disk-based persistence'
-                },
-                {
-                    value: 'h2Memory',
-                    name: 'H2 with in-memory persistence'
-                },
-                {
-                    value: 'postgresql',
-                    name: 'PostgreSQL'
-                }
-            ],
-            default: 0
-        },
-        {
-            when: response => (response.databaseType === 'sql' && response.prodDatabaseType === 'oracle'),
-            type: 'list',
-            name: 'devDatabaseType',
-            message: `Which ${chalk.yellow('*development*')} database would you like to use?`,
-            choices: [
-                {
-                    value: 'h2Disk',
-                    name: 'H2 with disk-based persistence'
-                },
-                {
-                    value: 'h2Memory',
-                    name: 'H2 with in-memory persistence'
-                },
-                {
-                    value: 'oracle',
-                    name: 'Oracle 12c'
-                }
-            ],
-            default: 0
-        },
-        {
-            when: response => (response.databaseType === 'sql' && response.prodDatabaseType === 'mssql'),
-            type: 'list',
-            name: 'devDatabaseType',
-            message: `Which ${chalk.yellow('*development*')} database would you like to use?`,
-            choices: [
-                {
-                    value: 'h2Disk',
-                    name: 'H2 with disk-based persistence'
-                },
-                {
-                    value: 'h2Memory',
-                    name: 'H2 with in-memory persistence'
-                },
-                {
-                    value: 'mssql',
-                    name: 'Microsoft SQL Server'
-                }
-            ],
-            default: 0
         },
         {
             when: response => ((response.cacheProvider !== 'no' || applicationType === 'gateway') && response.databaseType === 'sql'),
