@@ -31,8 +31,8 @@ env:
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
   matrix:
-    - JHIPSTER=app-default-from-scratch PROFILE=prod RUN_APP=0
-    - JHIPSTER=app-ng2-default PROTRACTOR=1
+    - JHIPSTER=app-ng2-default-from-scratch PROFILE=prod RUN_APP=0
+    - JHIPSTER=app-ng2-cache-nol2 PROTRACTOR=1
     - JHIPSTER=app-ng2-psql-es-noi18n PROFILE=prod PROTRACTOR=1
     - JHIPSTER=app-ng2-gradle-jwt-psql PROTRACTOR=1
     - JHIPSTER=app-ng2-social-websocket PROTRACTOR=1
@@ -72,7 +72,7 @@ install:
   - cd "$TRAVIS_BUILD_DIR"/
   - yarn install
   - yarn global add file:"$TRAVIS_BUILD_DIR"
-  - if [ "$JHIPSTER" == "app-default-from-scratch" ]; then
+  - if [ "$JHIPSTER" == "app-ng2-default-from-scratch" ]; then
         yarn run test;
     fi
   - $JHIPSTER_SCRIPTS/01-generate-entities.sh

@@ -100,45 +100,37 @@ function askForServerSideOpts(meta) {
             default: false
         },
         {
-            when: response => applicationType === 'monolith' && response.serviceDiscoveryType !== 'eureka',
+            when: response => (
+                (applicationType === 'monolith' && response.serviceDiscoveryType !== 'eureka') ||
+                ['gateway', 'microservice'].includes(applicationType)
+            ),
             type: 'list',
             name: 'authenticationType',
             message: `Which ${chalk.yellow('*type*')} of authentication would you like to use?`,
-            choices: [
-                {
-                    value: 'jwt',
-                    name: 'JWT authentication (stateless, with a token)'
-                },
-                {
-                    value: 'session',
-                    name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)'
-                },
-                {
-                    value: 'oauth2',
-                    name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)'
+            choices: (response) => {
+                const opts = [
+                    {
+                        value: 'jwt',
+                        name: 'JWT authentication (stateless, with a token)'
+                    },
+                    {
+                        value: 'oauth2',
+                        name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)'
+                    }
+                ];
+                if (applicationType === 'monolith' && response.serviceDiscoveryType !== 'eureka') {
+                    opts.push({
+                        value: 'session',
+                        name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)'
+                    });
+                } else if (['gateway', 'microservice'].includes(applicationType)) {
+                    opts.push({
+                        value: 'uaa',
+                        name: 'Authentication with JHipster UAA server (the server must be generated separately)'
+                    });
                 }
-            ],
-            default: 0
-        },
-        {
-            when: response => applicationType === 'gateway' || applicationType === 'microservice',
-            type: 'list',
-            name: 'authenticationType',
-            message: `Which ${chalk.yellow('*type*')} of authentication would you like to use?`,
-            choices: [
-                {
-                    value: 'jwt',
-                    name: 'JWT authentication (stateless, with a token)'
-                },
-                {
-                    value: 'uaa',
-                    name: 'Authentication with JHipster UAA server (the server must be generated separately)'
-                },
-                {
-                    value: 'oauth2',
-                    name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)'
-                }
-            ],
+                return opts;
+            },
             default: 0
         },
         {
@@ -157,58 +149,39 @@ function askForServerSideOpts(meta) {
             }
         },
         {
-            when: response => applicationType === 'microservice' || ((response.authenticationType === 'uaa' ||
-            response.authenticationType === 'oauth2') && applicationType === 'gateway'),
             type: 'list',
             name: 'databaseType',
             message: `Which ${chalk.yellow('*type*')} of database would you like to use?`,
-            choices: [
-                {
-                    value: 'sql',
-                    name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, Oracle)'
-                },
-                {
-                    value: 'mongodb',
-                    name: 'MongoDB'
-                },
-                {
-                    value: 'cassandra',
-                    name: 'Cassandra'
-                },
-                {
-                    value: 'couchbase',
-                    name: '[BETA] Couchbase'
-                },
-                {
-                    value: 'no',
-                    name: 'No database'
+            choices: (response) => {
+                const opts = [
+                    {
+                        value: 'sql',
+                        name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, Oracle, MSSQL)'
+                    },
+                    {
+                        value: 'mongodb',
+                        name: 'MongoDB'
+                    },
+                    {
+                        value: 'cassandra',
+                        name: 'Cassandra'
+                    },
+                    {
+                        value: 'couchbase',
+                        name: '[BETA] Couchbase'
+                    }
+                ];
+                if (
+                    applicationType === 'microservice' || ((response.authenticationType === 'uaa' ||
+                    response.authenticationType === 'oauth2') && applicationType === 'gateway')
+                ) {
+                    opts.push({
+                        value: 'no',
+                        name: 'No database'
+                    });
                 }
-            ],
-            default: 0
-        },
-        {
-            when: response => !response.databaseType,
-            type: 'list',
-            name: 'databaseType',
-            message: `Which ${chalk.yellow('*type*')} of database would you like to use?`,
-            choices: [
-                {
-                    value: 'sql',
-                    name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, Oracle, MSSQL)'
-                },
-                {
-                    value: 'mongodb',
-                    name: 'MongoDB'
-                },
-                {
-                    value: 'cassandra',
-                    name: 'Cassandra'
-                },
-                {
-                    value: 'couchbase',
-                    name: '[BETA] Couchbase'
-                }
-            ],
+                return opts;
+            },
             default: 0
         },
         {
@@ -220,11 +193,11 @@ function askForServerSideOpts(meta) {
             default: 0
         },
         {
-            when: response => (response.databaseType === 'sql' && response.prodDatabaseType === 'mysql'),
+            when: response => response.databaseType === 'sql',
             type: 'list',
             name: 'devDatabaseType',
             message: `Which ${chalk.yellow('*development*')} database would you like to use?`,
-            choices: [
+            choices: response => [
                 {
                     value: 'h2Disk',
                     name: 'H2 with disk-based persistence'
@@ -232,111 +205,24 @@ function askForServerSideOpts(meta) {
                 {
                     value: 'h2Memory',
                     name: 'H2 with in-memory persistence'
-                },
-                {
-                    value: 'mysql',
-                    name: 'MySQL'
                 }
-            ],
+            ].concat(constants.SQL_DB_OPTIONS.find(it => it.value === response.prodDatabaseType)),
             default: 0
         },
         {
-            when: response => (response.databaseType === 'sql' && response.prodDatabaseType === 'mariadb'),
+            // cache is mandatory for gateway and define later to 'hazelcast' value
+            when: response => applicationType !== 'gateway',
             type: 'list',
-            name: 'devDatabaseType',
-            message: `Which ${chalk.yellow('*development*')} database would you like to use?`,
-            choices: [
-                {
-                    value: 'h2Disk',
-                    name: 'H2 with disk-based persistence'
-                },
-                {
-                    value: 'h2Memory',
-                    name: 'H2 with in-memory persistence'
-                },
-                {
-                    value: 'mariadb',
-                    name: 'MariaDB'
-                }
-            ],
-            default: 0
-        },
-        {
-            when: response => (response.databaseType === 'sql' && response.prodDatabaseType === 'postgresql'),
-            type: 'list',
-            name: 'devDatabaseType',
-            message: `Which ${chalk.yellow('*development*')} database would you like to use?`,
-            choices: [
-                {
-                    value: 'h2Disk',
-                    name: 'H2 with disk-based persistence'
-                },
-                {
-                    value: 'h2Memory',
-                    name: 'H2 with in-memory persistence'
-                },
-                {
-                    value: 'postgresql',
-                    name: 'PostgreSQL'
-                }
-            ],
-            default: 0
-        },
-        {
-            when: response => (response.databaseType === 'sql' && response.prodDatabaseType === 'oracle'),
-            type: 'list',
-            name: 'devDatabaseType',
-            message: `Which ${chalk.yellow('*development*')} database would you like to use?`,
-            choices: [
-                {
-                    value: 'h2Disk',
-                    name: 'H2 with disk-based persistence'
-                },
-                {
-                    value: 'h2Memory',
-                    name: 'H2 with in-memory persistence'
-                },
-                {
-                    value: 'oracle',
-                    name: 'Oracle 12c'
-                }
-            ],
-            default: 0
-        },
-        {
-            when: response => (response.databaseType === 'sql' && response.prodDatabaseType === 'mssql'),
-            type: 'list',
-            name: 'devDatabaseType',
-            message: `Which ${chalk.yellow('*development*')} database would you like to use?`,
-            choices: [
-                {
-                    value: 'h2Disk',
-                    name: 'H2 with disk-based persistence'
-                },
-                {
-                    value: 'h2Memory',
-                    name: 'H2 with in-memory persistence'
-                },
-                {
-                    value: 'mssql',
-                    name: 'Microsoft SQL Server'
-                }
-            ],
-            default: 0
-        },
-        {
-            when: response => (response.databaseType === 'sql' && applicationType !== 'gateway'),
-            type: 'list',
-            name: 'hibernateCache',
-            message: 'Do you want to use Hibernate 2nd level cache?',
+            name: 'cacheProvider',
+            message: 'Do you want to use spring cache?',
             choices: [
                 {
                     value: 'ehcache',
-                    name: 'Yes, with ehcache (local cache, for a single node)'
+                    name: 'Yes, with ehcache implementation (local cache, for a single node)'
                 },
                 {
                     value: 'hazelcast',
-                    name: 'Yes, with HazelCast (distributed cache, for multiple nodes)'
+                    name: 'Yes, with HazelCast implementation(distributed cache, for multiple nodes)'
                 },
                 {
                     value: 'infinispan',
@@ -344,10 +230,17 @@ function askForServerSideOpts(meta) {
                 },
                 {
                     value: 'no',
-                    name: 'No'
+                    name: 'No (Hibernate L2 cache won\'t be available as well)'
                 }
             ],
             default: (applicationType === 'microservice' || applicationType === 'uaa') ? 1 : 0
+        },
+        {
+            when: response => ((response.cacheProvider !== 'no' || applicationType === 'gateway') && response.databaseType === 'sql'),
+            type: 'confirm',
+            name: 'enableHibernateCache',
+            message: 'Do you want to use Hibernate 2nd level cache?',
+            default: true
         },
         {
             type: 'list',
@@ -403,7 +296,8 @@ function askForServerSideOpts(meta) {
         if (this.serverPort === undefined) {
             this.serverPort = '8080';
         }
-        this.hibernateCache = props.hibernateCache;
+        this.cacheProvider = props.cacheProvider;
+        this.enableHibernateCache = props.enableHibernateCache;
         this.databaseType = props.databaseType;
         this.devDatabaseType = props.devDatabaseType;
         this.prodDatabaseType = props.prodDatabaseType;
@@ -414,23 +308,23 @@ function askForServerSideOpts(meta) {
         if (this.databaseType === 'no') {
             this.devDatabaseType = 'no';
             this.prodDatabaseType = 'no';
-            this.hibernateCache = 'no';
+            this.enableHibernateCache = false;
         } else if (this.databaseType === 'mongodb') {
             this.devDatabaseType = 'mongodb';
             this.prodDatabaseType = 'mongodb';
-            this.hibernateCache = 'no';
+            this.enableHibernateCache = false;
         } else if (this.databaseType === 'couchbase') {
             this.devDatabaseType = 'couchbase';
             this.prodDatabaseType = 'couchbase';
-            this.hibernateCache = 'no';
+            this.enableHibernateCache = false;
         } else if (this.databaseType === 'cassandra') {
             this.devDatabaseType = 'cassandra';
             this.prodDatabaseType = 'cassandra';
-            this.hibernateCache = 'no';
+            this.enableHibernateCache = false;
         }
         // Hazelcast is mandatory for Gateways, as it is used for rate limiting
         if (this.applicationType === 'gateway') {
-            this.hibernateCache = 'hazelcast';
+            this.cacheProvider = 'hazelcast';
         }
         done();
     });
@@ -455,7 +349,7 @@ function askForOptionalItems(meta) {
         });
     }
     if ((applicationType === 'monolith' || applicationType === 'gateway') &&
-            (this.hibernateCache === 'no' || this.hibernateCache === 'hazelcast') &&
+            (this.cacheProvider === 'no' || this.cacheProvider === 'hazelcast') &&
             this.authenticationType !== 'oauth2') {
         choices.push({
             name: 'Clustered HTTP sessions using Hazelcast',

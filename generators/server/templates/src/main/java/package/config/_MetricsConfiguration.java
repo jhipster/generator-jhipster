@@ -35,7 +35,7 @@ import com.codahale.metrics.JvmAttributeGaugeSet;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Slf4jReporter;
 import com.codahale.metrics.health.HealthCheckRegistry;
-<%_ if (hibernateCache === 'ehcache' || hibernateCache === 'infinispan') { _%>
+<%_ if (['ehcache', 'infinispan'].includes(cacheProvider)) { _%>
 import com.codahale.metrics.jcache.JCacheGaugeSet;
 <%_ } _%>
 import com.codahale.metrics.jvm.*;
@@ -67,7 +67,7 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
     private static final String PROP_METRIC_REG_JVM_FILES = "jvm.files";
     private static final String PROP_METRIC_REG_JVM_BUFFERS = "jvm.buffers";
     private static final String PROP_METRIC_REG_JVM_ATTRIBUTE_SET = "jvm.attributes";
-<% if (hibernateCache === 'ehcache' || hibernateCache === 'infinispan') { %>
+<% if (['ehcache', 'infinispan'].includes(cacheProvider)) { %>
     private static final String PROP_METRIC_REG_JCACHE_STATISTICS = "jcache.statistics";
 <%_ } _%>
 
@@ -115,7 +115,7 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
         metricRegistry.register(PROP_METRIC_REG_JVM_FILES, new FileDescriptorRatioGauge());
         metricRegistry.register(PROP_METRIC_REG_JVM_BUFFERS, new BufferPoolMetricSet(ManagementFactory.getPlatformMBeanServer()));
         metricRegistry.register(PROP_METRIC_REG_JVM_ATTRIBUTE_SET, new JvmAttributeGaugeSet());
-        <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'infinispan') { _%>
+        <%_ if (['ehcache', 'infinispan'].includes(cacheProvider)) { _%>
         metricRegistry.register(PROP_METRIC_REG_JCACHE_STATISTICS, new JCacheGaugeSet());
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>

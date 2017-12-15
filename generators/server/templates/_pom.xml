@@ -158,6 +158,12 @@
     </dependencyManagement>
 
     <dependencies>
+        <%_ if (cacheProvider !== 'no') { _%>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>io.github.jhipster</groupId>
             <artifactId>jhipster</artifactId>
@@ -174,7 +180,7 @@
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-json</artifactId>
         </dependency>
-        <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'infinispan') { _%>
+        <%_ if (['ehcache', 'infinispan'].includes(cacheProvider)) { _%>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-jcache</artifactId>
@@ -219,19 +225,19 @@
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
-        <%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
+        <%_ if (cacheProvider === 'hazelcast' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (hibernateCache === 'hazelcast') { _%>
+        <%_ if (cacheProvider === 'hazelcast' && enableHibernateCache) { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-hibernate52</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
+        <%_ if (cacheProvider === 'hazelcast' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-spring</artifactId>
@@ -243,13 +249,13 @@
             <artifactId>hazelcast-wm</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (hibernateCache === 'infinispan') { _%>
+        <%_ if (cacheProvider === 'infinispan' && enableHibernateCache) { _%>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-infinispan</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (hibernateCache === 'infinispan') { _%>
+        <%_ if (cacheProvider === 'infinispan') { _%>
         <dependency>
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-spring-boot-starter</artifactId>
@@ -336,7 +342,7 @@
             <artifactId>jzlib</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || hibernateCache === 'infinispan' || applicationType === 'gateway') { _%>
+        <%_ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || applicationType === 'gateway') { _%>
         <dependency>
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>
@@ -389,15 +395,17 @@
             <scope>test</scope>
         </dependency>
         <%_ } _%>
-        <%_ if (hibernateCache === 'ehcache' && databaseType === 'sql') { _%>
+        <%_ if (cacheProvider === 'ehcache') { _%>
         <dependency>
             <groupId>org.ehcache</groupId>
             <artifactId>ehcache</artifactId>
         </dependency>
+            <%_ if (enableHibernateCache) { _%>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-jcache</artifactId>
         </dependency>
+            <%_ } _%>
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
         <dependency>

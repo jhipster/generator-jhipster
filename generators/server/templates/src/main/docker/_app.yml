@@ -84,7 +84,7 @@ services:
             - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka
             - SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES=zookeeper
             <%_ } _%>
-            <%_ if (hibernateCache === 'infinispan') { _%>
+            <%_ if (cacheProvider === 'infinispan') { _%>
             - JAVA_OPTS=-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true
             <%_ } _%>
         <%_ if (applicationType === 'monolith' || applicationType === 'gateway') { _%>

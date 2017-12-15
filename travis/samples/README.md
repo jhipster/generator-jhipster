@@ -7,7 +7,7 @@ To generate test applications, either automatically by Travis or locally on the 
  Those are described in `.yo-rc.json` files which is the descriptor file created by Yeoman to keep track of the choices selected while generating an application.
 
 - app-sample-dev : left empty for local testing, launching the generator with the VSCode debugger will generate an app in this folder
-- app-default-from-scratch
+- app-ng2-default-from-scratch
 - app-mariadb-kafka
 - app-ng2-cassandra
 - app-ng2-gateway-consul
@@ -21,7 +21,7 @@ To generate test applications, either automatically by Travis or locally on the 
 - app-ng2-social-websocket
 - app-hazelcast-cucumber
 - app-microservice-eureka
-- app-ng2-default
+- app-ng2-cache-nol2
 - app-ng2-gateway-uaa
 - app-ng2-oauth2
 - app-react-default
