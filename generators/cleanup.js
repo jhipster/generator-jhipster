@@ -108,4 +108,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir) {
     if (generator.isJhipsterVersionLessThan('4.11.1')) {
         generator.removeFile(`${CLIENT_MAIN_SRC_DIR}app/app.main-aot.ts`);
     }
+    if (generator.isJhipsterVersionLessThan('4.13.1')) {
+        generator.config.delete('hibernateCache');
+    }
 }
