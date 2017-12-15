@@ -373,7 +373,8 @@ public class UserService {
             userSearchRepository.delete(user);
             <%_ } _%>
             <%_ if (cacheManagerIsAvailable === true) { _%>
-            cacheManager.getCache(USERS_CACHE).evict(login);
+            cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
+            cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
             <%_ } _%>
             log.debug("Deleted User: {}", user);
         });

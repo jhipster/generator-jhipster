@@ -82,8 +82,8 @@ import static <%=packageName%>.config.Constants.ID_DELIMITER;
 public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRepository<User, Long><% } %><% if (databaseType === 'mongodb') { %>MongoRepository<User, String><% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<User, String><% } %> {
     <%_ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
 
-    public static final String USERS_BY_LOGIN_CACHE = "usersByLogin";
-    public static final String USERS_BY_EMAIL_CACHE = "usersByEmain";
+    String USERS_BY_LOGIN_CACHE = "usersByLogin";
+    String USERS_BY_EMAIL_CACHE = "usersByEmain";
     <%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
 
@@ -119,7 +119,7 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     <%_ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
     <%_ } _%>
-    Optional<User> findOneWithAuthoritiesByEmailIgnoreCase(String email);
+    Optional<User> findOneWithAuthoritiesByEmail(String email);
 <%_ } _%>
 
     Page<User> findAllByLoginNot(Pageable pageable, String login);

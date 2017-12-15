@@ -53,21 +53,18 @@ public class DomainUserDetailsService implements UserDetailsService {
         log.debug("Authenticating {}", login);
         String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
         <%_ if (databaseType === 'sql') { _%>
-        Optional<User> userByEmailFromDatabase = userRepository.findOneWithAuthoritiesByEmailIgnoreCase(lowercaseLogin);
+        Optional<User> userByEmailFromDatabase = userRepository.findOneWithAuthoritiesByEmail(lowercaseLogin);
         <%_ } else { // MongoDB and Cassandra _%>
         Optional<User> userByEmailFromDatabase = userRepository.findOneByEmailIgnoreCase(lowercaseLogin);
         <%_ } _%>
-        return userByEmailFromDatabase.map(user -> {
-            return createSpringSecurityUser(lowercaseLogin, user);
-        }).orElseGet(() -> {
+        return userByEmailFromDatabase.map(user -> createSpringSecurityUser(lowercaseLogin, user)).orElseGet(() -> {
             <%_ if (databaseType === 'sql') { _%>
             Optional<User> userByLoginFromDatabase = userRepository.findOneWithAuthoritiesByLogin(lowercaseLogin);
             <%_ } else { // MongoDB and Cassandra _%>
             Optional<User> userByLoginFromDatabase = userRepository.findOneByLogin(lowercaseLogin);
             <%_ } _%>
-            return userByLoginFromDatabase.map(user -> {
-                return createSpringSecurityUser(lowercaseLogin, user);
-            }).orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the " +
+            return userByLoginFromDatabase.map(user -> createSpringSecurityUser(lowercaseLogin, user))
+                .orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the " +
                     "database"));
         });
     }
