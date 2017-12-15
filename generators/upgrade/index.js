@@ -78,7 +78,7 @@ module.exports = class extends BaseGenerator {
         let generatorCommand = 'yo jhipster';
         if (semver.gte(version, FIRST_CLI_SUPPORTED_VERSION)) {
             const generatorDir = this.clientPackageManager === 'yarn' ? shelljs.exec('yarn bin', { silent: this.silent }).stdout : shelljs.exec('npm bin', { silent: this.silent }).stdout;
-            generatorCommand = `${generatorDir.replace('\n', '')}/jhipster`;
+            generatorCommand = `"${generatorDir.replace('\n', '')}/jhipster"`;
         }
         const regenerateCmd = `${generatorCommand} --with-entities --force --skip-install`;
         this.info(regenerateCmd);

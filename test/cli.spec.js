@@ -5,14 +5,20 @@ const expect = require('chai').expect;
 // const assert = require('chai').assert;
 const exec = require('child_process').exec;
 const path = require('path');
+const os = require('os');
+
 
 describe('jhipster cli test', () => {
     const cmdPath = path.join(__dirname, '../cli/jhipster');
-    const cmd = `node ${cmdPath} `;
+    let cmd = `node ${cmdPath} `;
     console.log(cmd);
 
     it('verify correct cmd format', () => {
-        expect(cmd).to.match(/node \/(.*)generator-jhipster\/cli\/jhipster/g);
+        if (os.platform() === 'win32') {
+            // corrected test for windows user
+            cmd = cmd.replace(/\\/g, '/');
+        }
+        expect(cmd).to.match(/node (.*)generator-jhipster\/cli\/jhipster/g);
     });
 
     it('--help should run without errors', (done) => {
