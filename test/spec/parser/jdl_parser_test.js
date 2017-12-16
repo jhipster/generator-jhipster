@@ -615,6 +615,46 @@ describe('JDLParser', () => {
           }
         });
       });
+      describe('when parsing application', () => {
+        const input = parseFromFiles(['./test/test_files/application.jdl']);
+        const content = JDLParser.parse(input, 'sql');
+        it('parses it', () => {
+          const application = content.applications.toto.config;
+          expect(application.baseName).to.eq('toto');
+          expect(application.path).to.eq('../../toto');
+          expect(application.packageName).to.eq('com.mathieu.sample');
+          expect(application.packageFolder).to.eq('com/mathieu/sample');
+          expect(application.authenticationType).to.eq('jwt');
+          expect(application.hibernateCache).to.eq('no');
+          expect(application.clusteredHttpSession).to.eq('no');
+          expect(application.websocket).to.be.false;
+          expect(application.databaseType).to.eq('sql');
+          expect(application.devDatabaseType).to.eq('h2Memory');
+          expect(application.prodDatabaseType).to.eq('mysql');
+          expect(application.useCompass).to.be.false;
+          expect(application.buildTool).to.eq('maven');
+          expect(application.searchEngine).to.be.false;
+          expect(application.enableTranslation).to.be.false;
+          expect(application.applicationType).to.eq('monolith');
+          expect(application.testFrameworks.size()).to.equal(0);
+          expect(
+            application.languages.has('en') && application.languages.has('fr')
+          ).be.true;
+          expect(application.serverPort).to.eq(8080);
+          expect(application.enableSocialSignIn).to.be.false;
+          expect(application.useSass).to.be.false;
+          expect(application.jhiPrefix).to.eq('jhi');
+          expect(application.messageBroker).to.be.false;
+          expect(application.serviceDiscoveryType).to.be.false;
+          expect(application.clientPackageManager).to.eq('yarn');
+          expect(application.clientFramework).to.eq('angular1');
+          expect(application.nativeLanguage).to.eq('en');
+          expect(application.frontEndBuilder).to.be.null;
+          expect(application.skipUserManagement).to.be.false;
+          expect(application.skipClient).to.be.false;
+          expect(application.skipServer).to.be.false;
+        });
+      });
       describe('when parsing filtered entities', () => {
         const input = parseFromFiles(['./test/test_files/filtering_without_service.jdl']);
         const content = JDLParser.parse(input, 'sql');
