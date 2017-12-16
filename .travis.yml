@@ -31,7 +31,7 @@ env:
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
   matrix:
-    - JHIPSTER=ngx-mysql-default PROFILE=prod PROTRACTOR=1
+    - JHIPSTER=ngx-default PROFILE=prod PROTRACTOR=1
     - JHIPSTER=ngx-psql-es-noi18n PROFILE=prod PROTRACTOR=1
     - JHIPSTER=ngx-gradle-fr PROFILE=prod PROTRACTOR=1
     - JHIPSTER=ngx-mariadb-oauth2-sass-noi18n PROTRACTOR=1
@@ -44,8 +44,8 @@ env:
     - JHIPSTER=ms-ngx-gateway-uaa
     - JHIPSTER=ms-micro-eureka
     - JHIPSTER=ms-micro-consul
-    - JHIPSTER=react-mysql-default
-    - JHIPSTER=ng1-mysql-default
+    - JHIPSTER=react-default
+    - JHIPSTER=ng1-default
 
 before_install:
   - jdk_switcher use oraclejdk8
@@ -66,7 +66,7 @@ install:
   - cd "$TRAVIS_BUILD_DIR"/
   - yarn install
   - yarn global add file:"$TRAVIS_BUILD_DIR"
-  - if [ "$JHIPSTER" == "ngx-mysql-default" ]; then
+  - if [ "$JHIPSTER" == "ngx-default" ]; then
         yarn test;
     fi
   - $JHIPSTER_SCRIPTS/01-generate-entities.sh

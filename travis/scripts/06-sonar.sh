@@ -4,7 +4,7 @@
 # Launch Sonar analysis
 #--------------------------------------------------
 cd "$APP_FOLDER"
-if [ "$JHIPSTER" == "ngx-mysql-default" ]; then
+if [ "$JHIPSTER" == "ngx-default" ]; then
     if [ "$TRAVIS_REPO_SLUG" = "jhipster/generator-jhipster" ] && [ "$TRAVIS_BRANCH" = "master" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
         ./mvnw clean
         if [ -f "gulpfile.js" ]; then
