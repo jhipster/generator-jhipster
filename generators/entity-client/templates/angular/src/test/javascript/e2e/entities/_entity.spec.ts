@@ -68,9 +68,11 @@ describe('<%= entityClass %> e2e test', () => {
         navBarPage.goToEntity('<%= entityStateName %>');
         <%= entityInstance %>ComponentsPage = new <%= entityClass %>ComponentsPage();
         <%_ if (enableTranslation) { _%>
-        expect(<%= entityInstance %>ComponentsPage.getTitle()).toMatch(/<%= angularAppName %>.<%= entityTranslationKey %>.home.title/);
+        expect(<%= entityInstance %>ComponentsPage.getTitle())
+            .toMatch(/<%= angularAppName %>.<%= entityTranslationKey %>.home.title/);
         <%_ } else { _%>
-        expect(<%= entityInstance %>ComponentsPage.getTitle()).toMatch(/<%= entityClassPluralHumanized %>/);
+        expect(<%= entityInstance %>ComponentsPage.getTitle())
+            .toMatch(/<%= entityClassPluralHumanized %>/);
         <%_ } _%>
 
     });
@@ -79,9 +81,11 @@ describe('<%= entityClass %> e2e test', () => {
         <%= entityInstance %>ComponentsPage.clickOnCreateButton();
         <%= entityInstance %>DialogPage = new <%= entityClass %>DialogPage();
         <%_ if (enableTranslation) { _%>
-        expect(<%= entityInstance %>DialogPage.getModalTitle()).toMatch(/<%= angularAppName %>.<%= entityTranslationKey %>.home.createOrEditLabel/);
+        expect(<%= entityInstance %>DialogPage.getModalTitle())
+            .toMatch(/<%= angularAppName %>.<%= entityTranslationKey %>.home.createOrEditLabel/);
         <%_ } else { _%>
-        expect(<%= entityInstance %>DialogPage.getModalTitle()).toMatch(/Create or edit a <%= entityClassHumanized %>/);
+        expect(<%= entityInstance %>DialogPage.getModalTitle())
+            .toMatch(/Create or edit a <%= entityClassHumanized %>/);
         <%_ } _%>
         <%= entityInstance %>DialogPage.close();
     });
