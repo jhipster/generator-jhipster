@@ -24,7 +24,8 @@
     "enableSocialSignIn": false,
     "rememberMeKey": "f19f0827c622eb9b81f5227a869ccd44932d78eb",
     "testFrameworks": [
-      "gatling"
+      "gatling",
+      "protractor"
     ],
     "serverPort": "8080",
     "jhiPrefix": "myPrefix",
