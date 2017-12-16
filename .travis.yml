@@ -31,28 +31,20 @@ env:
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
   matrix:
-    - JHIPSTER=app-ng2-default-from-scratch PROFILE=prod RUN_APP=0
-    - JHIPSTER=app-ng2-cache-nol2 PROTRACTOR=1
-    - JHIPSTER=app-ng2-psql-es-noi18n PROFILE=prod PROTRACTOR=1
-    - JHIPSTER=app-ng2-gradle-jwt-psql PROTRACTOR=1
-    - JHIPSTER=app-ng2-social-websocket PROTRACTOR=1
-    - JHIPSTER=app-ng2-sass-noi18n PROTRACTOR=1
-    - JHIPSTER=app-ng2-gateway-eureka
-    - JHIPSTER=app-ng2-gateway-consul
-    - JHIPSTER=app-ng2-gateway-uaa
-    - JHIPSTER=app-ng2-infinispan
-    - JHIPSTER=app-ng2-cassandra
-    - JHIPSTER=app-ng2-mongodb
-    - JHIPSTER=app-ng2-mongodb-elasticsearch
-    - JHIPSTER=app-ng2-oauth2 PROTRACTOR=1
-    - JHIPSTER=app-react-default
-    - JHIPSTER=app-mysql PROFILE=prod PROTRACTOR=1
-    - JHIPSTER=app-gradle PROTRACTOR=1
-    - JHIPSTER=app-hazelcast-cucumber
-    - JHIPSTER=app-mariadb-kafka
-    - JHIPSTER=app-jwt
-    - JHIPSTER=app-microservice-eureka
-    - JHIPSTER=app-microservice-consul
+    - JHIPSTER=ngx-mysql-default PROFILE=prod PROTRACTOR=1
+    - JHIPSTER=ngx-psql-es-noi18n PROFILE=prod PROTRACTOR=1
+    - JHIPSTER=ngx-gradle PROFILE=prod PROTRACTOR=1
+    - JHIPSTER=ngx-mariadb-oauth2-sass-noi18n PROTRACTOR=1
+    - JHIPSTER=ngx-couchbase-social-ws-infinispan-nol2
+    - JHIPSTER=ngx-mongodb-kafka-cucumber
+    - JHIPSTER=ngx-session-cassandra-fr
+    - JHIPSTER=ms-ngx-gateway-eureka
+    - JHIPSTER=ms-ngx-gateway-consul
+    - JHIPSTER=ms-ngx-gateway-uaa
+    - JHIPSTER=ms-eureka
+    - JHIPSTER=ms-consul
+    - JHIPSTER=react-mysql-default
+    - JHIPSTER=ng1-default
 
 before_install:
   - jdk_switcher use oraclejdk8

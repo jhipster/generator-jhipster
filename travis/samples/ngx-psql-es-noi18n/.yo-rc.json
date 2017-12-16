@@ -1,9 +1,9 @@
 {
   "generator-jhipster": {
-    "baseName": "travisNg2Jwt",
-    "packageName": "io.github.jhipster.travis",
-    "packageFolder": "io/github/jhipster/travis",
-    "serverPort": "8080",
+    "applicationType": "monolith",
+    "baseName": "travisPsqlEsNoi18n",
+    "packageName": "com.mycompany.myapp",
+    "packageFolder": "com/mycompany/myapp",
     "authenticationType": "jwt",
     "cacheProvider": "ehcache",
     "enableHibernateCache": true,
@@ -12,25 +12,21 @@
     "databaseType": "sql",
     "devDatabaseType": "postgresql",
     "prodDatabaseType": "postgresql",
-    "searchEngine": false,
-    "messageBroker": false,
-    "buildTool": "gradle",
+    "searchEngine": "elasticsearch",
+    "useSass": true,
+    "buildTool": "maven",
+    "enableTranslation": false,
     "enableSocialSignIn": false,
-    "useSass": false,
-    "applicationType": "monolith",
+    "rememberMeKey": "f19f0827c622eb9b81f5227a869ccd44932d78eb",
     "testFrameworks": [
       "gatling",
       "protractor"
     ],
+    "serverPort": "8080",
     "jhiPrefix": "jhi",
-    "enableTranslation": true,
-    "nativeLanguage": "en",
-    "languages": [
-      "en"
-    ],
     "travis": true,
+    "messageBroker": false,
     "serviceDiscoveryType": false,
-    "jwtSecretKey": "82c6dce0d969c5bc3ab2530ecc5c18baaef1c987",
     "clientPackageManager": "yarn",
     "clientFramework": "angularX"
   }
