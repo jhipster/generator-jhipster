@@ -31,8 +31,12 @@ const expectedFiles = {
         'pom.xml',
         'mvnw',
         'mvnw.cmd',
+        '.mvn/parent/pom.xml',
+        '.mvn/plugins/pom.xml',
+        '.mvn/reporting/pom.xml',
         '.mvn/wrapper/maven-wrapper.jar',
-        '.mvn/wrapper/maven-wrapper.properties'
+        '.mvn/wrapper/maven-wrapper.properties',
+        'src/site/site.xml'
     ],
 
     server: [

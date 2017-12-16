@@ -26,6 +26,8 @@ node_js:
 jdk:
   - oraclejdk8
 sudo: false
+addons:
+  ssh_known_hosts: github.com
 cache:
   directories:
     - node
@@ -48,34 +50,38 @@ before_install:
   - java -version
   - sudo /etc/init.d/mysql stop
   - sudo /etc/init.d/postgresql stop
-  <%_ if (clientPackageManager === 'npm') { _%>
+<%_ if (buildTool === 'maven') { _%>
+# Look at and uncomment that file for enabling continuous delivery:  - "./travis/before-deploy.sh"
+# Also configure .mvn/parent/pom distribution management section (and maybe site)
+# Finally, configure you ARM USERNAME and PASSWORD according to .mvn/settings.xml https://docs.travis-ci.com/user/encryption-keys/
+# You can then remove the comments of the deploy section below
+<%_ } _%>
+<%_ if (clientPackageManager === 'npm') { _%>
   - nvm install $NODE_VERSION
   - npm install -g npm
-  <%_ if (clientFramework === 'angular1') { _%>
-  - npm install -g bower gulp-cli
-  <%_ } _%>
   - node -v
   - npm -v
-    <%_ if (clientFramework === 'angular1') { _%>
+  <%_ if (clientFramework === 'angular1') { _%>
+  - npm install -g bower gulp-cli
   - bower -v
   - gulp -v
-    <%_ } _%>
   <%_ } _%>
-  <%_ if (clientPackageManager === 'yarn') { _%>
+<%_ } _%>
+<%_ if (clientPackageManager === 'yarn') { _%>
   # Repo for Yarn
   - curl -o- -L https://yarnpkg.com/install.sh | bash
   - export PATH=$HOME/.yarn/bin:$PATH
-    <%_ if (clientFramework === 'angular1') { _%>
+  <%_ if (clientFramework === 'angular1') { _%>
   - yarn global add bower gulp-cli
-    <%_ } _%>
   <%_ } _%>
+<%_ } _%>
 install:
-  <%_ if (clientPackageManager === 'npm') { _%>
+<%_ if (clientPackageManager === 'npm') { _%>
   - npm install
-  <%_ } _%>
-  <%_ if (clientPackageManager === 'yarn') { _%>
+<%_ } _%>
+<%_ if (clientPackageManager === 'yarn') { _%>
   - yarn install
-  <%_ } _%>
+<%_ } _%>
 script:
 <%_ if (buildTool === 'maven') { _%>
   - chmod +x mvnw
@@ -106,6 +112,13 @@ script:
   <%_ if (heroku.includes('travis')) { _%>
   - ./gradlew deployHeroku
   <%_ } _%>
+<%_ } _%>
+<%_ if (buildTool === 'maven') { _%>
+#deploy:
+#  provider: script
+#  script: travis/deploy.sh
+#  on:
+#    branch: master
 <%_ } _%>
 notifications:
   webhooks:
