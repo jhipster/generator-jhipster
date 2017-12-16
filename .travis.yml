@@ -65,7 +65,7 @@ install:
   - cd "$TRAVIS_BUILD_DIR"/
   - yarn install
   - yarn global add file:"$TRAVIS_BUILD_DIR"
-  - if [ "$JHIPSTER" == "ng2-mysql-default" ]; then
+  - if [ "$JHIPSTER" == "ngx-mysql-default" ]; then
         yarn test;
     fi
   - $JHIPSTER_SCRIPTS/01-generate-entities.sh

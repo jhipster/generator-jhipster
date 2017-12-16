@@ -98,7 +98,7 @@ elif [[ "$JHIPSTER" == *"uaa"* ]]; then
     moveEntity FieldTestPaginationEntity
 
 elif [[ "$JHIPSTER" == *"react"* ]]; then
-    # no entities for the moment
+    echo "no entities for the moment"
 
 else
     moveEntity BankAccount
