@@ -48,6 +48,18 @@ elif [[ "$JHIPSTER" == *"micro"* ]]; then
     moveEntity FieldTestPagerEntity
     moveEntity FieldTestPaginationEntity
 
+elif [[ "$JHIPSTER" == *"react"* ]]; then
+    echo "no entities for the moment"
+
+elif [[ "$JHIPSTER" == *"uaa"* ]]; then
+    moveEntity FieldTestEntity
+    moveEntity FieldTestMapstructEntity
+    moveEntity FieldTestServiceClassEntity
+    moveEntity FieldTestServiceImplEntity
+    moveEntity FieldTestInfiniteScrollEntity
+    moveEntity FieldTestPagerEntity
+    moveEntity FieldTestPaginationEntity
+
 elif [[ ( "$JHIPSTER" == *"mysql"* ) || ( "$JHIPSTER" == *"psql"* ) ]]; then
     moveEntity BankAccount
     moveEntity Label
@@ -87,18 +99,6 @@ elif [[ ( "$JHIPSTER" == *"mysql"* ) || ( "$JHIPSTER" == *"psql"* ) ]]; then
     moveEntity EntityWithServiceImplAndDTO
     moveEntity EntityWithServiceImplAndPagination
     moveEntity EntityWithServiceImplPaginationAndDTO
-
-elif [[ "$JHIPSTER" == *"uaa"* ]]; then
-    moveEntity FieldTestEntity
-    moveEntity FieldTestMapstructEntity
-    moveEntity FieldTestServiceClassEntity
-    moveEntity FieldTestServiceImplEntity
-    moveEntity FieldTestInfiniteScrollEntity
-    moveEntity FieldTestPagerEntity
-    moveEntity FieldTestPaginationEntity
-
-elif [[ "$JHIPSTER" == *"react"* ]]; then
-    echo "no entities for the moment"
 
 else
     moveEntity BankAccount

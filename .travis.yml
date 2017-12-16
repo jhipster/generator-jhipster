@@ -41,10 +41,10 @@ env:
     - JHIPSTER=ms-ngx-gateway-eureka
     - JHIPSTER=ms-ngx-gateway-consul
     - JHIPSTER=ms-ngx-gateway-uaa
-    - JHIPSTER=ms-eureka
-    - JHIPSTER=ms-consul
+    - JHIPSTER=ms-micro-eureka
+    - JHIPSTER=ms-micro-consul
     - JHIPSTER=react-mysql-default
-    - JHIPSTER=ng1-default
+    - JHIPSTER=ng1-mysql-default
 
 before_install:
   - jdk_switcher use oraclejdk8
