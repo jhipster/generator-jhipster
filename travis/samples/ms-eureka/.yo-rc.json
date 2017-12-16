@@ -5,7 +5,7 @@
     "packageName": "io.github.jhipster.travis",
     "packageFolder": "io/github/jhipster/travis",
     "authenticationType": "jwt",
-    "cacheProvider": "ehcache",
+    "cacheProvider": "hazelcast",
     "enableHibernateCache": true,
     "clusteredHttpSession": false,
     "databaseType": "sql",
