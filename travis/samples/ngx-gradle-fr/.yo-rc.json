@@ -24,9 +24,10 @@
     ],
     "jhiPrefix": "jhi",
     "enableTranslation": true,
-    "nativeLanguage": "en",
+    "nativeLanguage": "fr",
     "languages": [
-      "en"
+      "en",
+      "fr"
     ],
     "travis": true,
     "serviceDiscoveryType": false,
