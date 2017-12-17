@@ -123,10 +123,6 @@ export const logout = () => async dispatch => {
   dispatch(getSession());
 };
 <%_ } else { _%>
-export const logout = () => {
-  clearAuthToken();
-};
-
 export const clearAuthToken = () => {
   if (Storage.local.get('jhi-authenticationToken')) {
     Storage.local.remove('jhi-authenticationToken');
@@ -134,6 +130,10 @@ export const clearAuthToken = () => {
   if (Storage.session.get('jhi-authenticationToken')) {
     Storage.session.remove('jhi-authenticationToken');
   }
+};
+
+export const logout = () => {
+  clearAuthToken();
 };
 <%_ } _%>
 
