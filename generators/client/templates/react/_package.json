@@ -43,6 +43,7 @@ limitations under the License.
     "react-redux-loading-bar": "2.9.3",
     "react-router-dom": "4.2.2",
     "react-router-modal": "1.2.0",
+    "react-time-format": "0.0.5",
     "react-transition-group": "2.2.1",
     "reactstrap": "5.0.0-alpha.3",
     "redux": "3.7.2",
