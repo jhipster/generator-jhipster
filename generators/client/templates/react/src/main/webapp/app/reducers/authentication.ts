@@ -139,6 +139,9 @@ export const logout = () => dispatch => {
 <%_ } _%>
 
 export const clearAuthentication = messageKey => (dispatch, getState) => {
+  <%_ if (authenticationType !== 'session') { _%>
+  clearAuthToken();
+  <%_ } _%>
   dispatch(displayAuthError(messageKey));
   dispatch({
     type: ACTION_TYPES.CLEAR_AUTH
