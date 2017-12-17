@@ -27,7 +27,6 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.LOGIN):
-    case REQUEST(ACTION_TYPES.LOGOUT):
     case REQUEST(ACTION_TYPES.GET_SESSION):
       return {
         ...state,
@@ -41,7 +40,6 @@ export default (state = initialState, action) => {
         loginError: true
       };
     case FAILURE(ACTION_TYPES.GET_SESSION):
-    case FAILURE(ACTION_TYPES.LOGOUT):
       return {
         ...state,
         loading: false,
@@ -57,7 +55,7 @@ export default (state = initialState, action) => {
         showModalLogin: false,
         loginSuccess: true
       };
-    case SUCCESS(ACTION_TYPES.LOGOUT):
+    case ACTION_TYPES.LOGOUT:
       return {
         ...initialState,
         showModalLogin: true
@@ -132,8 +130,11 @@ export const clearAuthToken = () => {
   }
 };
 
-export const logout = () => {
+export const logout = () => dispatch => {
   clearAuthToken();
+  dispatch({
+    type: ACTION_TYPES.LOGOUT
+  });
 };
 <%_ } _%>
 
