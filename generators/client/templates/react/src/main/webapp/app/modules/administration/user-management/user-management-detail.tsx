@@ -5,6 +5,7 @@ import { Button } from 'reactstrap';
 import { Translate } from 'react-jhipster';
 import { FaArrowLeft } from 'react-icons/lib/fa';
 import Time from 'react-time-format';
+import { APP_DATE_FORMAT } from '../../../config/constants';
 
 import { ICrudGetAction } from '../../../shared/model/redux-action.type';
 import { getUser } from '../../../reducers/user-management';
@@ -52,11 +53,11 @@ export class UserManagementDetail extends React.Component<IUserManagementDetailP
           <dt><Translate contentKey="userManagement.createdBy">Created By</Translate></dt>
           <dd>{user.createdBy}</dd>
           <dt><Translate contentKey="userManagement.createdDate">Created Date</Translate></dt>
-          <dd><Time value={user.createdDate} format="DD/MM/YY hh:mm" /></dd>
+          <dd><Time value={user.createdDate} format={APP_DATE_FORMAT} /></dd>
           <dt><Translate contentKey="userManagement.lastModifiedBy">Last Modified By</Translate></dt>
           <dd>{user.lastModifiedBy}</dd>
           <dt><Translate contentKey="userManagement.lastModifiedDate">Last Modified Date</Translate></dt>
-          <dd><Time value={user.lastModifiedDate} format="DD/MM/YY hh:mm" /></dd>
+          <dd><Time value={user.lastModifiedDate} format={APP_DATE_FORMAT} /></dd>
           <dt><Translate contentKey="userManagement.profiles">Profiles</Translate></dt>
           <dd>
             <ul className="list-unstyled">
