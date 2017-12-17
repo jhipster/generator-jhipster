@@ -247,8 +247,8 @@ module.exports = class extends BaseGenerator {
             askForRelationships: prompts.askForRelationships,
             askForRelationsToRemove: prompts.askForRelationsToRemove,
             askForTableName: prompts.askForTableName,
-            askForDTO: prompts.askForDTO,
             askForService: prompts.askForService,
+            askForDTO: prompts.askForDTO,
             askForFiltering: prompts.askForFiltering,
             askForPagination: prompts.askForPagination
         };
