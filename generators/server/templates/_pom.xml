@@ -249,7 +249,7 @@
             <artifactId>hazelcast-wm</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (cacheProvider === 'infinispan' && enableHibernateCache) { _%>
+        <%_ if (cacheProvider === 'infinispan') { _%>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-infinispan</artifactId>

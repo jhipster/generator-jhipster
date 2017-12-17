@@ -55,9 +55,9 @@ const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the var
 const SCALA_VERSION = '2.12.1';
 
 // version of Node, Yarn, NPM
-const NODE_VERSION = '8.9.1';
+const NODE_VERSION = '8.9.3';
 const YARN_VERSION = '1.3.2';
-const NPM_VERSION = '5.5.1';
+const NPM_VERSION = '5.6.0';
 
 // all constants used throughout all generators
 

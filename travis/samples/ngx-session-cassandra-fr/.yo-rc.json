@@ -1,28 +1,28 @@
 {
   "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "travisDefault",
+    "applicationType": "monolith",
+    "baseName": "travisCassandra",
     "packageName": "io.github.jhipster.travis",
     "packageFolder": "io/github/jhipster/travis",
-    "authenticationType": "jwt",
-    "cacheProvider": "ehcache",
-    "enableHibernateCache": true,
+    "authenticationType": "session",
+    "cacheProvider": "no",
+    "enableHibernateCache": false,
     "clusteredHttpSession": false,
     "websocket": false,
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "prodDatabaseType": "mysql",
+    "databaseType": "cassandra",
+    "devDatabaseType": "cassandra",
+    "prodDatabaseType": "cassandra",
     "searchEngine": false,
-    "serviceDiscoveryType": "eureka",
     "useSass": false,
     "buildTool": "maven",
     "enableTranslation": true,
-    "nativeLanguage": "en",
+    "nativeLanguage": "fr",
     "languages": [
       "en",
       "fr"
     ],
     "enableSocialSignIn": false,
+    "rememberMeKey": "f19f0827c622eb9b81f5227a869ccd44932d78eb",
     "testFrameworks": [
       "gatling"
     ],
@@ -30,7 +30,7 @@
     "jhiPrefix": "jhi",
     "travis": true,
     "messageBroker": false,
-    "jwtSecretKey": "6acb91d39cc4584bd713bfa5e037d694efb6a1a2",
+    "serviceDiscoveryType": false,
     "clientPackageManager": "yarn",
     "clientFramework": "angularX"
   }

@@ -12,7 +12,7 @@ fi
 #-------------------------------------------------------------------------------
 # Generate the project with jhipster
 #-------------------------------------------------------------------------------
-if [ "$JHIPSTER" == "app-ng2-gateway-uaa" ]; then
+if [[ "$JHIPSTER" == *"uaa"* ]]; then
     mkdir -p "$UAA_APP_FOLDER"
     cp -f "$JHIPSTER_SAMPLES"/uaa/.yo-rc.json "$UAA_APP_FOLDER"/
     cd "$UAA_APP_FOLDER"

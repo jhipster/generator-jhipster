@@ -1,16 +1,16 @@
 {
   "generator-jhipster": {
     "applicationType": "monolith",
-    "baseName": "jhipsterSampleApplication",
-    "packageName": "io.github.jhipster.sample",
-    "packageFolder": "io/github/jhipster/sample",
+    "baseName": "travisSocialWebsocket",
+    "packageName": "io.github.jhipster.travis",
+    "packageFolder": "io/github/jhipster/travis",
     "authenticationType": "jwt",
-    "cacheProvider": "ehcache",
-    "enableHibernateCache": true,
+    "cacheProvider": "no",
+    "enableHibernateCache": false,
     "clusteredHttpSession": false,
-    "websocket": false,
+    "websocket": "spring-websocket",
     "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
+    "devDatabaseType": "h2Memory",
     "prodDatabaseType": "mysql",
     "searchEngine": false,
     "useSass": false,
@@ -21,13 +21,14 @@
       "en",
       "fr"
     ],
-    "enableSocialSignIn": false,
+    "enableSocialSignIn": true,
     "rememberMeKey": "f19f0827c622eb9b81f5227a869ccd44932d78eb",
     "testFrameworks": [
-      "gatling"
+      "gatling",
+      "protractor"
     ],
     "serverPort": "8080",
-    "jhiPrefix": "myPrefix",
+    "jhiPrefix": "jhi",
     "travis": true,
     "messageBroker": false,
     "serviceDiscoveryType": false,
