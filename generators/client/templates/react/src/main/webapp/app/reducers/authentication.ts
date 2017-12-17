@@ -97,15 +97,6 @@ export const getSession = () => dispatch => dispatch({
   payload: axios.get('/api/account')
 });
 
-export const clearAuthToken = () => {
-  if (Storage.local.get('jhi-authenticationToken')) {
-    Storage.local.remove('jhi-authenticationToken');
-  }
-  if (Storage.session.get('jhi-authenticationToken')) {
-    Storage.session.remove('jhi-authenticationToken');
-  }
-};
-
 export const login = (username, password, rememberMe = false) => async (dispatch, getState) => {
   const result = await dispatch({
     type: ACTION_TYPES.LOGIN,
@@ -123,13 +114,28 @@ export const login = (username, password, rememberMe = false) => async (dispatch
   dispatch(getSession());
 };
 
-export const logout = () => dispatch => {
-  dispatch({
+<%_ if (authenticationType === 'session') { _%>
+export const logout = () => async dispatch => {
+  await dispatch({
     type: ACTION_TYPES.LOGOUT,
-    payload: axios.get('/api/account')
+    payload: axios.post('/api/logout', {})
   });
+  dispatch(getSession());
+};
+<%_ } else { _%>
+export const logout = () => {
   clearAuthToken();
 };
+
+export const clearAuthToken = () => {
+  if (Storage.local.get('jhi-authenticationToken')) {
+    Storage.local.remove('jhi-authenticationToken');
+  }
+  if (Storage.session.get('jhi-authenticationToken')) {
+    Storage.session.remove('jhi-authenticationToken');
+  }
+};
+<%_ } _%>
 
 export const clearAuthentication = messageKey => (dispatch, getState) => {
   dispatch(displayAuthError(messageKey));
