@@ -711,7 +711,6 @@ describe('JDLParser', () => {
 
         it('parses it', () => {
           expect(application.baseName).to.eq('toto');
-          expect(application.path).to.eq('../../toto');
           expect(application.packageName).to.eq('com.mathieu.sample');
           expect(application.packageFolder).to.eq('com/mathieu/sample');
           expect(application.authenticationType).to.eq('jwt');

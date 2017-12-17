@@ -1,7 +1,6 @@
 application {
   config {
     baseName toto
-    path ../../toto
     packageName com.mathieu.toto
     enableTranslation false
     languages en, fr
@@ -11,7 +10,6 @@ application {
 application {
   config {
     baseName titi
-    path ../../titi
     packageName com.mathieu.titi
     enableTranslation false
     languages en, fr

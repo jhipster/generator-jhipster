@@ -140,7 +140,6 @@ describe('JHipsterApplicationExporter', () => {
             nativeLanguage: 'en',
             packageFolder: 'com/mathieu/sample',
             packageName: 'com.mathieu.sample',
-            path: '../../toto',
             prodDatabaseType: 'mysql',
             promptValues: {
               packageName: 'com.mathieu.sample'
@@ -238,7 +237,6 @@ describe('JHipsterApplicationExporter', () => {
               nativeLanguage: 'en',
               packageFolder: 'com/mathieu/toto',
               packageName: 'com.mathieu.toto',
-              path: '../../toto',
               prodDatabaseType: 'mysql',
               promptValues: {
                 packageName: 'com.mathieu.toto'
@@ -308,7 +306,6 @@ describe('JHipsterApplicationExporter', () => {
               nativeLanguage: 'en',
               packageFolder: 'com/mathieu/titi',
               packageName: 'com.mathieu.titi',
-              path: '../../titi',
               prodDatabaseType: 'mysql',
               promptValues: {
                 packageName: 'com.mathieu.titi'

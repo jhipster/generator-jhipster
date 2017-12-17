@@ -15,7 +15,6 @@ describe('JDLApplication', () => {
       it('uses default values', () => {
         expect(jdlApplicationConfig.jhipsterVersion).to.eq('4.9.0');
         expect(jdlApplicationConfig.baseName).to.eq('jhipster');
-        expect(jdlApplicationConfig.path).to.eq('jhipster');
         expect(jdlApplicationConfig.packageName).to.eq('com.mycompany.myapp');
         expect(jdlApplicationConfig.packageFolder).to.eq('com/mycompany/myapp');
         expect(jdlApplicationConfig.authenticationType).to.eq('jwt');
@@ -90,7 +89,6 @@ describe('JDLApplication', () => {
       expect(jdlApplication.toString()).to.eq(`application {
   config {
     baseName jhipster
-    path jhipster
     packageName com.mycompany.myapp
     packageFolder com/mycompany/myapp
     authenticationType jwt
