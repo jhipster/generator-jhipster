@@ -5,10 +5,10 @@ import { Button } from 'reactstrap';
 import { Translate } from 'react-jhipster';
 import { FaArrowLeft } from 'react-icons/lib/fa';
 import Time from 'react-time-format';
-import { APP_DATE_FORMAT } from '../../../config/constants';
 
 import { ICrudGetAction } from '../../../shared/model/redux-action.type';
 import { getUser } from '../../../reducers/user-management';
+import { APP_DATE_FORMAT } from '../../../config/constants';
 
 export interface IUserManagementDetailProps {
   getUser: ICrudGetAction;
