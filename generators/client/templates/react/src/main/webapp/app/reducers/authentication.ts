@@ -123,8 +123,8 @@ export const login = (username, password, rememberMe = false) => async (dispatch
   dispatch(getSession());
 };
 
-export const logout = () => async dispatch => {
-  await dispatch({
+export const logout = () => dispatch => {
+  dispatch({
     type: ACTION_TYPES.LOGOUT,
     payload: axios.get('/api/account')
   });
