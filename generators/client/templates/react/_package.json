@@ -26,7 +26,7 @@ limitations under the License.
     "node_modules"
   ],
   "dependencies": {
-    "availity-reactstrap-validation": "1.4.3",
+    "availity-reactstrap-validation": "2.0.0-alpha.1",
     "axios": "0.17.0",
     "bootstrap": "4.0.0-beta.2",
     "loaders.css": "0.1.2",
