@@ -63,6 +63,8 @@ before_install:
   - yarn -v
   - yarn global add yo bower gulp-cli
 install:
+  - cd jhipster-dependencies/ && mvn clean install -Dgpg.skip=true && cd ..
+  - cd jhipster-server/ && mvn clean install -Dgpg.skip=true && cd ..
   - cd "$TRAVIS_BUILD_DIR"/
   - yarn install
   - yarn global add file:"$TRAVIS_BUILD_DIR"
