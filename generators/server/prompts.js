@@ -214,7 +214,7 @@ function askForServerSideOpts(meta) {
             when: response => applicationType !== 'gateway',
             type: 'list',
             name: 'cacheProvider',
-            message: 'Do you want to use spring cache?',
+            message: 'Do you want to use the Spring cache abstraction?',
             choices: [
                 {
                     value: 'ehcache',
