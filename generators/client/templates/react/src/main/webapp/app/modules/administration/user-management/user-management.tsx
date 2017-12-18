@@ -22,7 +22,7 @@ import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import { Translate } from 'react-jhipster';
 import { FaPlus, FaEye, FaPencil, FaTrash } from 'react-icons/lib/fa';
-import Time from 'react-time-format';
+import Time from 'react-time';
 
 import { ICrudGetAction } from '../../../shared/model/redux-action.type';
 import { getUsers } from '../../../reducers/user-management';
@@ -112,9 +112,9 @@ export class UserManagement extends React.Component<IUserManagementProps, undefi
                     }
                   </td>
                   <%_ if (databaseType !== 'cassandra') { _%>
-                  <td><Time value={user.createdDate} format={APP_DATE_FORMAT} /></td>
+                  <td>{user.createdDate ? <Time value={user.createdDate} format={APP_DATE_FORMAT} /> : null}</td>
                   <td>{user.lastModifiedBy}</td>
-                  <td><Time value={user.lastModifiedDate} format={APP_DATE_FORMAT} /></td>
+                  <td>{user.lastModifiedDate ? <Time value={user.lastModifiedDate} format={APP_DATE_FORMAT} /> : null}</td>
                   <%_ } _%>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">

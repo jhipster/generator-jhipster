@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import { Translate } from 'react-jhipster';
 import { FaArrowLeft } from 'react-icons/lib/fa';
-import Time from 'react-time-format';
+import Time from 'react-time';
 
 import { ICrudGetAction } from '../../../shared/model/redux-action.type';
 import { getUser } from '../../../reducers/user-management';
@@ -53,11 +53,11 @@ export class UserManagementDetail extends React.Component<IUserManagementDetailP
           <dt><Translate contentKey="userManagement.createdBy">Created By</Translate></dt>
           <dd>{user.createdBy}</dd>
           <dt><Translate contentKey="userManagement.createdDate">Created Date</Translate></dt>
-          <dd><Time value={user.createdDate} format={APP_DATE_FORMAT} /></dd>
+          <dd>{user.createdDate ? <Time value={user.createdDate} format={APP_DATE_FORMAT} /> : null}</dd>
           <dt><Translate contentKey="userManagement.lastModifiedBy">Last Modified By</Translate></dt>
           <dd>{user.lastModifiedBy}</dd>
           <dt><Translate contentKey="userManagement.lastModifiedDate">Last Modified Date</Translate></dt>
-          <dd><Time value={user.lastModifiedDate} format={APP_DATE_FORMAT} /></dd>
+          <dd>{user.lastModifiedDate ? <Time value={user.lastModifiedDate} format={APP_DATE_FORMAT} /> : null}</dd>
           <dt><Translate contentKey="userManagement.profiles">Profiles</Translate></dt>
           <dd>
             <ul className="list-unstyled">

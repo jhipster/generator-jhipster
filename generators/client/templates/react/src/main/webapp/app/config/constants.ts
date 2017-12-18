@@ -10,4 +10,4 @@ export const messages = {
   DATA_UPDATE_ERROR_ALERT: 'Data deleted successfully!'
 };
 
-export const APP_DATE_FORMAT = 'DD/MM/YY hh:mm';
+export const APP_DATE_FORMAT = 'DD/MM/YY HH:mm';
