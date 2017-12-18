@@ -1,11 +1,11 @@
 {
     "generator-jhipster": {
-      "baseName": "travisCouchbaseInfinispan",
+      "baseName": "travisCouchbaseNoCache",
       "packageName": "io.github.jhipster.travis",
       "packageFolder": "io/github/jhipster/travis",
       "serverPort": "8080",
       "authenticationType": "jwt",
-      "cacheProvider": "infinispan",
+      "cacheProvider": "no",
       "enableHibernateCache": false,
       "clusteredHttpSession": false,
       "websocket": false,

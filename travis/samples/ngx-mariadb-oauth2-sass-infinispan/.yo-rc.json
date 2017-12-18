@@ -1,11 +1,11 @@
 {
   "generator-jhipster": {
-    "baseName": "travisNg2SassNoCache",
+    "baseName": "travisOauth2SassInfinispan",
     "packageName": "io.github.jhipster.travis",
     "packageFolder": "io/github/jhipster/travis",
     "serverPort": "8080",
     "authenticationType": "oauth2",
-    "cacheProvider": "no",
+    "cacheProvider": "infinispan",
     "enableHibernateCache": false,
     "clusteredHttpSession": false,
     "websocket": false,

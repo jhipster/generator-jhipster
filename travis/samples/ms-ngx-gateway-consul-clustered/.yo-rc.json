@@ -7,7 +7,7 @@
     "authenticationType": "jwt",
     "cacheProvider": "hazelcast",
     "enableHibernateCache": true,
-    "clusteredHttpSession": false,
+    "clusteredHttpSession": true,
     "websocket": false,
     "databaseType": "sql",
     "devDatabaseType": "h2Disk",
