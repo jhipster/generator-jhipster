@@ -26,7 +26,7 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiLanguageService, JhiDataUtils, JhiDateUtils, JhiEventManager, JhiAlertService, JhiParseLinks } from 'ng-jhipster';
 
 import { MockLanguageService, MockLanguageHelper } from './helpers/mock-language.service';
-import { JhiLanguageHelper, Principal, AccountService<% if (authenticationType !== 'oauth2') { %>, LoginModalService<% } %><% if (websocket === 'spring-websocket') { %>, JhiTrackerService<% } %> } from '../../../main/webapp/app/shared';
+import { JhiLanguageHelper, Principal, AccountService<% if (authenticationType !== 'oauth2') { %>, LoginModalService<% } %><% if (websocket === 'spring-websocket') { %>, <%=jhiPrefixCapitalized%>TrackerService<% } %> } from '../../../main/webapp/app/shared';
 <%_ } else { _%>
 import { JhiDataUtils, JhiDateUtils, JhiEventManager, JhiAlertService, JhiParseLinks } from 'ng-jhipster';
 
@@ -61,7 +61,7 @@ _%>
         <%_ } _%>
         <%_ if (websocket === 'spring-websocket') { _%>
         {
-            provide: JhiTrackerService,
+            provide: <%=jhiPrefixCapitalized%>TrackerService,
             useValue: null
         },
         <%_ } _%>
