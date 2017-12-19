@@ -23,6 +23,8 @@ import { Observable } from 'rxjs/Observable';
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { LoginService } from '../../shared/login/login.service';
     <%_ if (authenticationType === 'uaa') { _%>
+import { LoginModalService } from '../../shared/login/login-modal.service';
+import { Principal } from '../../shared/auth/principal.service';
 import { Router } from '@angular/router';
     <%_ } _%>
 <%_ } _%>
@@ -62,11 +64,23 @@ export class AuthExpiredInterceptor extends JhiHttpInterceptor {
     responseIntercept(observable: Observable<Response>): Observable<Response> {
         return <Observable<Response>> observable.catch((error, source) => {
             if (error.status === 401) {
+<%_ if (authenticationType === 'jwt') { _%>
                 const loginService: LoginService = this.injector.get(LoginService);
                 loginService.logout();
+<%_ } _%>
 <%_ if (authenticationType === 'uaa') { _%>
-                const router = this.injector.get(Router);
-                router.navigate(['/']);
+                const principal = this.injector.get(Principal);
+
+                if (principal.isAuthenticated()) {
+                    principal.authenticate(null);
+                    const loginModalService: LoginModalService = this.injector.get(LoginModalService);
+                    loginModalService.open();
+                } else {
+                    const loginService: LoginService = this.injector.get(LoginService);
+                    loginService.logout();
+                    const router = this.injector.get(Router);
+                    router.navigate(['/']);
+                }
 <%_ } _%>
             }
             return Observable.throw(error);
