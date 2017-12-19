@@ -12,7 +12,13 @@ export interface IConfigurationPageProps {
   configuration: any;
 }
 
-export class ConfigurationPage extends React.Component<IConfigurationPageProps, { filter: string, reversePrefix: boolean, reverseProperties: boolean }> {
+export interface IConfigurationPageState {
+  filter: string;
+  reversePrefix: boolean;
+  reverseProperties: boolean;
+}
+
+export class ConfigurationPage extends React.Component<IConfigurationPageProps, IConfigurationPageState> {
 
   constructor(props) {
     super(props);
@@ -44,7 +50,8 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
   filterFn = prefix => prefix.toUpperCase().includes(this.state.filter.toUpperCase());
 
   sortPrefixFn = (prop1, prop2) => {
-    if (this.props.configuration && this.props.configuration.configProps) {
+    const { configuration } = this.props;
+    if (configuration && configuration.configProps) {
       const pref1 = this.props.configuration.configProps[prop1].prefix;
       const pref2 = this.props.configuration.configProps[prop2].prefix;
       return this.sortFn(pref1, pref2, this.state.reversePrefix);
@@ -83,9 +90,9 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
     const env = (configuration && configuration.env) ? configuration.env : {};
     return (
         <div>
-          <h2><Translate contentKey="configuration.title">Configuration2</Translate></h2>
+          <h2><Translate contentKey="configuration.title">Configuration</Translate></h2>
           <span>
-            <Translate contentKey="configuration.filter">Configuration2</Translate>
+            <Translate contentKey="configuration.filter">Filter</Translate>
           </span> <Input type="search" value={filter} onChange={this.setFilter} name="search" id="search" />
           <label>Spring configuration</label>
           <Table className="table table-striped table-bordered table-responsive d-table">
@@ -96,11 +103,11 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
               </tr>
             </thead>
             <tbody>
-              {Object.keys(configProps).sort(this.sortPrefixFn.bind(this)).filter(this.filterFn).map((configPropKey, configPropIndex) => (
+              {Object.keys(configProps).sort(this.sortPrefixFn).filter(this.filterFn).map((configPropKey, configPropIndex) => (
                 <tr key={configPropIndex}>
                   <td><span>{configProps[configPropKey].prefix}</span></td>
                   <td>
-                    {Object.keys(configProps[configPropKey].properties).sort(this.sortPropertyFn.bind(this)).map((propKey, propIndex) => (
+                    {Object.keys(configProps[configPropKey].properties).sort(this.sortPropertyFn).map((propKey, propIndex) => (
                       <div key={propIndex} className="row">
                         <div className="col-md-4">{propKey}</div>
                         <div className="col-md-8">
@@ -125,7 +132,7 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
                 </thead>
                 <tbody>
                   {env[envKey] ?
-                    Object.keys(env[envKey]).sort().filter(this.filterFn).map((propKey, propIndex) => (
+                    Object.keys(env[envKey]).filter(this.filterFn).map((propKey, propIndex) => (
                       <tr key={propIndex}>
                         <td className="break">{propKey}</td>
                         <td className="break">
