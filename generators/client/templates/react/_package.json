@@ -152,7 +152,7 @@ limitations under the License.
     "node": ">=6.9.0"
   },
   "scripts": {
-    "lint": "tslint --project './tsconfig.json' -e 'node_modules/**'",
+    "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "cleanup": "rimraf <%= BUILD_DIR %>www",
     "start": "<%= clientPackageManager %> run webpack:dev",
