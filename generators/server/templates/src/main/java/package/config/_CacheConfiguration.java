@@ -146,16 +146,18 @@ public class CacheConfiguration {
             <%_ } _%>
             <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && applicationType === 'monolith')) { _%>
             cm.createCache(CACHE_USERS, jcacheConfiguration);
+                <%_ if (enableHibernateCache) { _%>
             cm.createCache(<%=packageName%>.domain.User.class.getName(), jcacheConfiguration);
             cm.createCache(<%=packageName%>.domain.Authority.class.getName(), jcacheConfiguration);
             cm.createCache(<%=packageName%>.domain.User.class.getName() + ".authorities", jcacheConfiguration);
-            <%_ if (authenticationType === 'session') { _%>
+                    <%_ if (authenticationType === 'session') { _%>
             cm.createCache(<%=packageName%>.domain.PersistentToken.class.getName(), jcacheConfiguration);
             cm.createCache(<%=packageName%>.domain.User.class.getName() + ".persistentTokens", jcacheConfiguration);
-            <%_ } _%>
-            <%_ if (enableSocialSignIn) { _%>
+                    <%_ } _%>
+                    <%_ if (enableSocialSignIn) { _%>
             cm.createCache(<%=packageName%>.domain.SocialUserConnection.class.getName(), jcacheConfiguration);
-            <%_ } _%>
+                    <%_ } _%>
+                <%_ } _%>
             <%_ } _%>
             // jhipster-needle-ehcache-add-entry
         };
@@ -261,7 +263,7 @@ public class CacheConfiguration {
 
         // Full reference is available at: http://docs.hazelcast.org/docs/management-center/3.9/manual/html/Deploying_and_Starting.html
         config.setManagementCenterConfig(initializeDefaultManagementCenterConfig(jHipsterProperties));
-        <%_ if (cacheProvider === 'hazelcast') { _%>
+        <%_ if (enableHibernateCache) { _%>
         config.getMapConfigs().put("<%=packageName%>.domain.*", initializeDomainMapConfig(jHipsterProperties));
         <%_ } _%>
         <%_ if (clusteredHttpSession === 'hazelcast') { _%>
@@ -522,6 +524,7 @@ public class CacheConfiguration {
             registerPredefinedCache(CACHE_USERS, new JCache<Object, Object>(
                 cacheManager.getCache(CACHE_USERS).getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
+                <%_ if (enableHibernateCache) { _%>
             registerPredefinedCache(<%=packageName%>.domain.User.class.getName(), new JCache<Object, Object>(
                 cacheManager.getCache(<%=packageName%>.domain.User.class.getName()).getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
@@ -531,18 +534,19 @@ public class CacheConfiguration {
             registerPredefinedCache(<%=packageName%>.domain.User.class.getName() + ".authorities", new JCache<Object, Object>(
                 cacheManager.getCache(<%=packageName%>.domain.User.class.getName() + ".authorities").getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
-                <%_ if (authenticationType === 'session') { _%>
+                    <%_ if (authenticationType === 'session') { _%>
             registerPredefinedCache(<%=packageName%>.domain.PersistentToken.class.getName(), new JCache<Object, Object>(
                 cacheManager.getCache(<%=packageName%>.domain.PersistentToken.class.getName()).getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
             registerPredefinedCache(<%=packageName%>.domain.User.class.getName() + ".persistentTokens", new JCache<Object, Object>(
                 cacheManager.getCache(<%=packageName%>.domain.User.class.getName() + ".persistentTokens").getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
-                <%_ } _%>
-                <%_ if (enableSocialSignIn) { _%>
+                    <%_ } _%>
+                    <%_ if (enableSocialSignIn) { _%>
             registerPredefinedCache(<%=packageName%>.domain.SocialUserConnection.class.getName(), new JCache<Object, Object>(
                 cacheManager.getCache(<%=packageName%>.domain.SocialUserConnection.class.getName()).getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
+                    <%_ } _%>
                 <%_ } _%>
             <%_ } _%>
             // jhipster-needle-infinispan-add-entry
