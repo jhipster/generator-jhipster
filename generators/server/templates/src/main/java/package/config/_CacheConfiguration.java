@@ -466,7 +466,7 @@ public class CacheConfiguration {
                 .eviction().type(EvictionType.COUNT).size(cacheInfo.getReplicated()
                 .getMaxEntries()).expiration().lifespan(cacheInfo.getReplicated().getTimeToLiveSeconds(), TimeUnit.MINUTES).build());
 
-            // initilaize Hibernate L2 cache
+            // initialize Hibernate L2 cache
             manager.defineConfiguration("entity", new ConfigurationBuilder().clustering().cacheMode(CacheMode.INVALIDATION_SYNC)
                 .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
                 .locking().concurrencyLevel(1000).lockAcquisitionTimeout(15000).build());
