@@ -299,7 +299,6 @@ dependencies {
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
     compile "org.springframework.boot:spring-boot-starter-data-elasticsearch"
-    compile "org.elasticsearch.client:transport"
     // needed to get around elasticsearch stacktrace about jna not found
     // https://github.com/elastic/elasticsearch/issues/13245
     compile "net.java.dev.jna:jna"
