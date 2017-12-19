@@ -48,8 +48,15 @@ import org.springframework.boot.autoconfigure.couchbase.CouchbaseAutoConfigurati
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;<% } %>
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;<% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-import org.springframework.context.annotation.Import;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>
+import org.springframework.context.annotation.Configuration;
+<%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+import org.springframework.context.annotation.Import;
+<%_ } _%>
+<%_ if (searchEngine === 'elasticsearch' && databaseType === 'mongodb') { _%>
+import org.springframework.context.annotation.ComponentScan.Filter;
+import org.springframework.context.annotation.FilterType;
+<%_ } _%>
+<%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 import org.springframework.context.annotation.Profile;<% } %><% if (databaseType === 'sql') { %>
 import org.springframework.core.env.Environment;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
 import org.springframework.core.convert.converter.Converter;<% } %><% if (searchEngine === 'elasticsearch') { %>
@@ -94,8 +101,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 <%_ }_%>
-import org.springframework.context.annotation.ComponentScan.Filter;
-import org.springframework.context.annotation.FilterType;
 
 @Configuration<% if (databaseType === 'sql') { %>
 @EnableJpaRepositories("<%=packageName%>.repository")
