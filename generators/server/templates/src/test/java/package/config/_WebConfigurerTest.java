@@ -49,9 +49,6 @@ import org.xnio.OptionMap;
 
 import javax.servlet.*;
 import java.util.*;
-<%_ if (clusteredHttpSession === 'hazelcast' || cacheProvider === 'hazelcast') { _%>
-import java.util.concurrent.ConcurrentMap;
-<%_ } _%>
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
