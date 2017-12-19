@@ -16,12 +16,21 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_
+let cacheManagerIsAvailable = false;
+if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') {
+    cacheManagerIsAvailable = true;
+}
+_%>
 package <%= packageName %>.web.rest;
 
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
+<%_ if (cacheManagerIsAvailable === true) { _%>
+import <%=packageName%>.config.CacheConfiguration;
+<%_ } _%>
 <%_ if (databaseType !== 'cassandra' && databaseType !== 'couchbase') { _%>
 import <%= packageName %>.domain.Authority;
 <%_ } _%>
@@ -48,6 +57,9 @@ import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+<%_ if (cacheManagerIsAvailable === true) { _%>
+import org.springframework.cache.CacheManager;
+<%_ } _%>
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -152,12 +164,17 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
 
     @Autowired
     private ExceptionTranslator exceptionTranslator;
-
     <%_ if (databaseType === 'sql') { _%>
+
     @Autowired
     private EntityManager em;
-
     <%_ } _%>
+    <%_ if (cacheManagerIsAvailable === true) { _%>
+
+    @Autowired
+    private CacheManager cacheManager;
+    <%_ } _%>
+
     private MockMvc restUserMockMvc;
 
     private User user;
@@ -165,6 +182,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
+        cacheManager.getCache(CacheConfiguration.CACHE_USERS).clear();
         UserResource userResource = new UserResource(userRepository, userService<% if (authenticationType !== 'oauth2') { %>, mailService<% } %><% if (searchEngine === 'elasticsearch') { %>, userSearchRepository<% } %>);
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -762,7 +780,8 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         user.setCreatedDate(Instant.now());
         user.setLastModifiedBy(DEFAULT_LOGIN);
         user.setLastModifiedDate(Instant.now());
-        <%_ } if (databaseType !== 'cassandra' && databaseType !== 'couchbase') { _%>
+        <%_ } _%>
+        <%_ if (databaseType !== 'cassandra' && databaseType !== 'couchbase') { _%>
         Set<Authority> authorities = new HashSet<>();
         Authority authority = new Authority();
         authority.setName(AuthoritiesConstants.USER);

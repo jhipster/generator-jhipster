@@ -16,15 +16,26 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_
+let cacheManagerIsAvailable = false;
+if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') {
+    cacheManagerIsAvailable = true;
+}
+_%>
 package <%=packageName%>.repository;
-
 <%_ if (databaseType === 'cassandra') { _%>
+
 import com.datastax.driver.core.*;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
 <%_ } _%>
+
+<%_ if (cacheManagerIsAvailable === true) { _%>
+import <%=packageName%>.config.CacheConfiguration;
+<%_ } _%>
 import <%=packageName%>.domain.User;
-<%_ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
+
+<%_ if (cacheManagerIsAvailable === true) { _%>
 import org.springframework.cache.annotation.Cacheable;
 <%_ } _%>
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
@@ -94,10 +105,16 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     Optional<User> findOneByEmailIgnoreCase(String email);
 
     <%_ if (databaseType === 'couchbase') { _%>
+        <%_ if (cacheManagerIsAvailable === true) { _%>
+    @Cacheable(cacheNames = CacheConfiguration.CACHE_USERS)
+        <%_ } _%>
     default Optional<User> findOneByLogin(String login) {
         return Optional.ofNullable(findOne(User.PREFIX + ID_DELIMITER + login));
     }
     <%_ } else { _%>
+        <%_ if (cacheManagerIsAvailable === true) { _%>
+    @Cacheable(cacheNames = CacheConfiguration.CACHE_USERS)
+        <%_ } _%>
     Optional<User> findOneByLogin(String login);
 <%_ } _%><%_ if (databaseType === 'sql') { _%>
 
@@ -105,8 +122,8 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     Optional<User> findOneWithAuthoritiesById(<%= pkType %> id);
 
     @EntityGraph(attributePaths = "authorities")
-    <%_ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
-    @Cacheable(cacheNames = "users")
+    <%_ if (cacheManagerIsAvailable === true) { _%>
+    @Cacheable(cacheNames = CacheConfiguration.CACHE_USERS)
     <%_ } _%>
     Optional<User> findOneWithAuthoritiesByLogin(String login);
 <%_ } _%>
@@ -247,6 +264,9 @@ public class UserRepository {
         return findOneFromIndex(stmt);
     }
 
+<%_ if (cacheManagerIsAvailable === true) { _%>
+    @Cacheable(cacheNames = CacheConfiguration.CACHE_USERS)
+<%_ } _%>
     public Optional<User> findOneByLogin(String login) {
         BoundStatement stmt = findOneByLoginStmt.bind();
         stmt.setString("login", login);

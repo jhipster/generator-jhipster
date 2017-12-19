@@ -121,6 +121,8 @@ import java.util.List;
 @Import(InfinispanEmbeddedCacheManagerAutoConfiguration.class)
 <%_ } _%>
 public class CacheConfiguration {
+
+    public static final String CACHE_USERS = "users";
     <%_ if (cacheProvider === 'ehcache') { _%>
 
     private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
@@ -143,7 +145,7 @@ public class CacheConfiguration {
             cm.createCache("oAuth2Authentication", jcacheConfiguration);
             <%_ } _%>
             <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && applicationType === 'monolith')) { _%>
-            cm.createCache("users", jcacheConfiguration);
+            cm.createCache(CACHE_USERS, jcacheConfiguration);
             cm.createCache(<%=packageName%>.domain.User.class.getName(), jcacheConfiguration);
             cm.createCache(<%=packageName%>.domain.Authority.class.getName(), jcacheConfiguration);
             cm.createCache(<%=packageName%>.domain.User.class.getName() + ".authorities", jcacheConfiguration);
@@ -517,8 +519,8 @@ public class CacheConfiguration {
                 ConfigurationAdapter.create()));
             <%_ } _%>
             <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
-            registerPredefinedCache("users", new JCache<Object, Object>(
-                cacheManager.getCache("users").getAdvancedCache(), this,
+            registerPredefinedCache(CACHE_USERS, new JCache<Object, Object>(
+                cacheManager.getCache(CACHE_USERS).getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
             registerPredefinedCache(<%=packageName%>.domain.User.class.getName(), new JCache<Object, Object>(
                 cacheManager.getCache(<%=packageName%>.domain.User.class.getName()).getAdvancedCache(), this,

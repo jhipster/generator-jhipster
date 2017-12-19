@@ -23,7 +23,11 @@ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || clusteredH
 }
 _%>
 package <%=packageName%>.service;
-<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
+
+<%_ if (cacheManagerIsAvailable === true) { _%>
+import <%=packageName%>.config.CacheConfiguration;
+<%_ } _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import <%=packageName%>.domain.Authority;<% } %>
 import <%=packageName%>.domain.User;<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
 import <%=packageName%>.repository.AuthorityRepository;<% if (authenticationType === 'session') { %>
@@ -89,10 +93,6 @@ import java.util.stream.Stream;
 public class UserService {
 
     private final Logger log = LoggerFactory.getLogger(UserService.class);
-    <%_ if (cacheManagerIsAvailable === true) { _%>
-
-    private static final String USERS_CACHE = "users";
-    <%_ } _%>
 
     private final UserRepository userRepository;
     <%_ if (authenticationType !== 'oauth2') { _%>
@@ -157,7 +157,7 @@ public class UserService {
                 userSearchRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache(USERS_CACHE).evict(user.getLogin());
+                cacheManager.getCache(CacheConfiguration.CACHE_USERS).evict(user.getLogin());
                 <%_ } _%>
                 log.debug("Activated user: {}", user);
                 return user;
@@ -177,7 +177,7 @@ public class UserService {
                 userRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache(USERS_CACHE).evict(user.getLogin());
+                cacheManager.getCache(CacheConfiguration.CACHE_USERS).evict(user.getLogin());
                 <%_ } _%>
                 return user;
            });
@@ -193,7 +193,7 @@ public class UserService {
                 userRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache(USERS_CACHE).evict(user.getLogin());
+                cacheManager.getCache(CacheConfiguration.CACHE_USERS).evict(user.getLogin());
                 <%_ } _%>
                 return user;
             });
@@ -230,6 +230,9 @@ public class UserService {
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);<% if (searchEngine === 'elasticsearch') { %>
         userSearchRepository.save(newUser);<% } %>
+        <%_ if (cacheManagerIsAvailable === true) { _%>
+        cacheManager.getCache(CacheConfiguration.CACHE_USERS).evict(newUser.getLogin());
+        <%_ } _%>
         log.debug("Created Information for User: {}", newUser);
         return newUser;
     }
@@ -267,6 +270,9 @@ public class UserService {
         user.setActivated(true);
         userRepository.save(user);<% if (searchEngine === 'elasticsearch') { %>
         userSearchRepository.save(user);<% } %>
+        <%_ if (cacheManagerIsAvailable === true) { _%>
+        cacheManager.getCache(CacheConfiguration.CACHE_USERS).evict(user.getLogin());
+        <%_ } _%>
         log.debug("Created Information for User: {}", user);
         return user;
     }
@@ -301,7 +307,7 @@ public class UserService {
                 userSearchRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache(USERS_CACHE).evict(user.getLogin());
+                cacheManager.getCache(CacheConfiguration.CACHE_USERS).evict(user.getLogin());
                 <%_ } _%>
                 log.debug("Changed Information for User: {}", user);
             });
@@ -347,7 +353,7 @@ public class UserService {
                 userSearchRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache(USERS_CACHE).evict(user.getLogin());
+                cacheManager.getCache(CacheConfiguration.CACHE_USERS).evict(user.getLogin());
                 <%_ } _%>
                 log.debug("Changed Information for User: {}", user);
                 return user;
@@ -365,7 +371,7 @@ public class UserService {
             userSearchRepository.delete(user);
             <%_ } _%>
             <%_ if (cacheManagerIsAvailable === true) { _%>
-            cacheManager.getCache(USERS_CACHE).evict(login);
+            cacheManager.getCache(CacheConfiguration.CACHE_USERS).evict(login);
             <%_ } _%>
             log.debug("Deleted User: {}", user);
         });
@@ -382,7 +388,7 @@ public class UserService {
                 userRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache(USERS_CACHE).evict(user.getLogin());
+                cacheManager.getCache(CacheConfiguration.CACHE_USERS).evict(user.getLogin());
                 <%_ } _%>
                 log.debug("Changed password for User: {}", user);
             });
@@ -467,7 +473,7 @@ public class UserService {
             userSearchRepository.delete(user);
             <%_ } _%>
             <%_ if (cacheManagerIsAvailable === true) { _%>
-            cacheManager.getCache(USERS_CACHE).evict(user.getLogin());
+            cacheManager.getCache(CacheConfiguration.CACHE_USERS).evict(user.getLogin());
             <%_ } _%>
         }
     }
