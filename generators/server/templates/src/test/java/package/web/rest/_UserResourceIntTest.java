@@ -65,8 +65,10 @@ import javax.persistence.EntityManager;
 import java.time.Instant;
 <%_ } _%>
 import java.util.*;
+<%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+<%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
 import java.util.UUID;
 <%_ } _%>
