@@ -93,10 +93,10 @@ public class WebConfigurerTest {
 
         env = new MockEnvironment();
         props = new JHipsterProperties();
+
         <%_ if (clusteredHttpSession === 'hazelcast' || cacheProvider === 'hazelcast') { _%>
-        CacheConfiguration cacheConfiguration = new CacheConfiguration(env);
         webConfigurer = new WebConfigurer(env, props,
-            cacheConfiguration.hazelcastInstance(props));
+            null);
         <%_ } else { _%>
         webConfigurer = new WebConfigurer(env, props);
         <%_ } _%>
