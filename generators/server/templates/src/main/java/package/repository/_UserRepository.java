@@ -111,12 +111,15 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     default Optional<User> findOneByLogin(String login) {
         return Optional.ofNullable(findOne(User.PREFIX + ID_DELIMITER + login));
     }
-    <%_ } else { _%>
+    <%_ } else if (databaseType === 'mongodb') { _%>
         <%_ if (cacheManagerIsAvailable === true) { _%>
     @Cacheable(cacheNames = CacheConfiguration.CACHE_USERS)
         <%_ } _%>
     Optional<User> findOneByLogin(String login);
-<%_ } _%><%_ if (databaseType === 'sql') { _%>
+    <%_ } else { _%>
+    Optional<User> findOneByLogin(String login);
+    <%_ } _%>
+    <%_ if (databaseType === 'sql') { _%>
 
     @EntityGraph(attributePaths = "authorities")
     Optional<User> findOneWithAuthoritiesById(<%= pkType %> id);
