@@ -5,7 +5,7 @@ services:
         ports:
           - 2181:2181
     kafka:
-        image: wurstmeister/kafka:0.10.0.1
+        image: wurstmeister/kafka:1.0.0
         environment:
             KAFKA_ADVERTISED_HOST_NAME: localhost
             KAFKA_ADVERTISED_PORT: 9092
