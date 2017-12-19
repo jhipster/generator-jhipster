@@ -182,7 +182,9 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
+        <%_ if (cacheManagerIsAvailable === true) { _%>
         cacheManager.getCache(CacheConfiguration.CACHE_USERS).clear();
+        <%_ } _%>
         UserResource userResource = new UserResource(userRepository, userService<% if (authenticationType !== 'oauth2') { %>, mailService<% } %><% if (searchEngine === 'elasticsearch') { %>, userSearchRepository<% } %>);
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
