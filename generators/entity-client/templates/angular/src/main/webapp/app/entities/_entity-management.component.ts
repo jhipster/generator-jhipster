@@ -22,7 +22,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 <%_ } else if (searchEngine === 'elasticsearch') { _%>
 import { ActivatedRoute } from '@angular/router';
 <%_ } _%>
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs/Subscription';
 import { JhiEventManager, <% if (pagination !== 'no') { %>JhiParseLinks, <% } %>JhiAlertService<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
 
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';

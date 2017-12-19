@@ -20,6 +20,7 @@ const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const StringReplacePlugin = require('string-replace-webpack-plugin');
+const rxPaths = require('rxjs/_esm5/path-mapping');
 <%_ if (enableTranslation) { _%>
 const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin");
 <%_ } _%>
@@ -39,7 +40,8 @@ module.exports = (options) => {
     return {
         resolve: {
             extensions: ['.ts', '.js'],
-            modules: ['node_modules']
+            modules: ['node_modules'],
+            alias: rxPaths()
         },
         stats: {
             children: false
