@@ -210,7 +210,7 @@ function askForServerSideOpts(meta) {
             default: 0
         },
         {
-            // cache is mandatory for gateway and define later to 'hazelcast' value
+            // cache is mandatory for gateway and defined later to 'hazelcast' value
             when: response => applicationType !== 'gateway',
             type: 'list',
             name: 'cacheProvider',
@@ -218,19 +218,19 @@ function askForServerSideOpts(meta) {
             choices: [
                 {
                     value: 'ehcache',
-                    name: 'Yes, with ehcache implementation (local cache, for a single node)'
+                    name: 'Yes, with the Ehcache implementation (local cache, for a single node)'
                 },
                 {
                     value: 'hazelcast',
-                    name: 'Yes, with HazelCast implementation(distributed cache, for multiple nodes)'
+                    name: 'Yes, with the Hazelcast implementation (distributed cache, for multiple nodes)'
                 },
                 {
                     value: 'infinispan',
-                    name: '[BETA] Yes, with Infinispan (hybrid cache, for multiple nodes)'
+                    name: '[BETA] Yes, with the Infinispan (hybrid cache, for multiple nodes)'
                 },
                 {
                     value: 'no',
-                    name: 'No (Hibernate L2 cache won\'t be available as well)'
+                    name: 'No (when using an SQL database, this will also disable the Hibernate L2 cache)'
                 }
             ],
             default: (applicationType === 'microservice' || applicationType === 'uaa') ? 1 : 0
