@@ -39,9 +39,6 @@ import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.util.RandomUtil;
 <%_ } _%>
 import <%=packageName%>.service.dto.UserDTO;
-<%_ if (authenticationType !== 'oauth2') { _%>
-import <%=packageName%>.web.rest.vm.ManagedUserVM;
-<%_ } _%>
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
