@@ -1,0 +1,177 @@
+<%#
+ Copyright 2013-2017 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see http://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_
+    let hasDate = false;
+    if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) {
+        hasDate = true;
+    }
+    let entityActionName = entityInstance.toUpperCase();
+    let entityActionNamePlural = entityInstancePlural.toUpperCase();
+_%>
+import axios from 'axios';
+
+import { REQUEST, SUCCESS, FAILURE } from './action-type.util';
+import { messages, SERVER_API_URL } from '../config/constants';
+import { ICrudGetAction, ICrudPutAction, ICrudDeleteAction } from '../shared/model/redux-action.type';
+<%_ if (!(applicationType === 'gateway' && locals.microserviceName) && authenticationType !== 'uaa') { _%>
+
+<%_ } _%>
+<%_ if (hasDate) { _%>
+
+// import { JhiDateUtils } from 'ng-jhipster';
+<%_ } _%>
+
+// import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
+
+export const ACTION_TYPES = {
+  FETCH_<%= entityActionNamePlural %>: '<%= entityInstance %>/FETCH_<%= entityActionNamePlural %>',
+  FETCH_<%= entityActionName %>:  '<%= entityInstance %>/FETCH_<%= entityActionName %>',
+  CREATE_<%= entityActionName %>: '<%= entityInstance %>/CREATE_<%= entityActionName %>',
+  UPDATE_<%= entityActionName %>: '<%= entityInstance %>/UPDATE_<%= entityActionName %>',
+  DELETE_<%= entityActionName %>: '<%= entityInstance %>/DELETE_<%= entityActionName %>'
+};
+
+const initialState = {
+  loading: false,
+  errorMessage: null,
+  entities: [],
+  entity: {},
+  updating: false,
+  updateSuccess: false
+};
+
+// Reducer
+export default (state = initialState, action) => {
+  switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
+    case REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>):
+      return {
+        ...state,
+        errorMessage: null,
+        updateSuccess: false,
+        loading: true
+      };
+    case REQUEST(ACTION_TYPES.CREATE_<%= entityActionName %>):
+    case REQUEST(ACTION_TYPES.UPDATE_<%= entityActionName %>):
+    case REQUEST(ACTION_TYPES.DELETE_<%= entityActionName %>):
+      return {
+        ...state,
+        errorMessage: null,
+        updateSuccess: false,
+        updating: true
+      };
+    case FAILURE(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
+    case FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>):
+    case FAILURE(ACTION_TYPES.CREATE_<%= entityActionName %>):
+    case FAILURE(ACTION_TYPES.UPDATE_<%= entityActionName %>):
+    case FAILURE(ACTION_TYPES.DELETE_<%= entityActionName %>):
+      return {
+        ...state,
+        loading: false,
+        updating: false,
+        updateSuccess: false,
+        errorMessage: action.payload
+      };
+    case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
+      return {
+        ...state,
+        loading: false,
+        entities: action.payload.data
+      };
+    case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>):
+      return {
+        ...state,
+        loading: false,
+        entity: action.payload.data
+      };
+    case SUCCESS(ACTION_TYPES.CREATE_<%= entityActionName %>):
+    case SUCCESS(ACTION_TYPES.UPDATE_<%= entityActionName %>):
+      return {
+        ...state,
+        updating: false,
+        updateSuccess: true,
+        entity: action.payload.data
+      };
+    case SUCCESS(ACTION_TYPES.DELETE_<%= entityActionName %>):
+      return {
+        ...state,
+        updating: false,
+        updateSuccess: true,
+        entity: {}
+      };
+    default:
+      return state;
+  }
+};
+
+const apiUrl = <% if (applicationType === 'gateway' && locals.microserviceName) { %>'/<%= microserviceName.toLowerCase() %>/<% } else if (authenticationType === 'uaa') { %>'<% } else { %>SERVER_API_URL + '<% } %>api/<%= entityApiUrl %>';
+
+// Actions
+export const getEntities: ICrudGetAction = (page, size, sort) => ({
+  type: ACTION_TYPES.FETCH_<%= entityActionNamePlural %>,
+  payload: axios.get(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
+});
+
+export const getEntity: ICrudGetAction = id => {
+  const requestUrl = `${apiUrl}/${id}`;
+  return {
+    type: ACTION_TYPES.FETCH_<%= entityActionName %>,
+    payload: axios.get(requestUrl)
+  };
+};
+
+export const createEntity: ICrudPutAction = entity => async dispatch => {
+  const result = await dispatch({
+    type: ACTION_TYPES.CREATE_<%= entityActionName %>,
+    meta: {
+      successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
+      errorMessage: messages.DATA_UPDATE_ERROR_ALERT
+    },
+    payload: axios.post(apiUrl, entity)
+  });
+  dispatch(getEntities());
+  return result;
+};
+
+export const updateEntity: ICrudPutAction = entity => async dispatch => {
+  const result = await dispatch({
+    type: ACTION_TYPES.UPDATE_<%= entityActionName %>,
+    meta: {
+      successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
+      errorMessage: messages.DATA_UPDATE_ERROR_ALERT
+    },
+    payload: axios.put(apiUrl, entity)
+  });
+  dispatch(getEntities());
+  return result;
+};
+
+export const deleteEntity: ICrudDeleteAction = id => async dispatch => {
+  const requestUrl = `${apiUrl}/${id}`;
+  const result = await dispatch({
+    type: ACTION_TYPES.DELETE_<%= entityActionName %>,
+    meta: {
+      successMessage: messages.DATA_DELETE_SUCCESS_ALERT,
+      errorMessage: messages.DATA_UPDATE_ERROR_ALERT
+    },
+    payload: axios.delete(requestUrl)
+  });
+  dispatch(getEntities());
+  return result;
+};

@@ -5,6 +5,8 @@ const config = {
 
 export default config;
 
+export const SERVER_API_URL = '';
+
 export const messages = {
   DATA_CREATE_SUCCESS_ALERT: 'Data created successfully!',
   DATA_DELETE_SUCCESS_ALERT: 'Data deleted successfully!',

@@ -278,9 +278,9 @@ const files = {
             templates: [
                 { file: 'modules/administration/user-management/index.tsx', method: 'processJsx' },
                 { file: 'modules/administration/user-management/user-management.tsx', method: 'processJsx' },
-                { file: 'modules/administration/user-management/user-management-model.tsx', method: 'processJsx' },
+                { file: 'modules/administration/user-management/user-management-dialog.tsx', method: 'processJsx' },
                 { file: 'modules/administration/user-management/user-management-detail.tsx', method: 'processJsx' },
-                { file: 'modules/administration/user-management/user-management-delete-model.tsx', method: 'processJsx' }
+                { file: 'modules/administration/user-management/user-management-delete-dialog.tsx', method: 'processJsx' }
             ]
         },
         {
