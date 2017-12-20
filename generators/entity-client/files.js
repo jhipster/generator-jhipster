@@ -22,9 +22,11 @@ const constants = require('../generator-constants');
 /* Constants use throughout */
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 const ANGULAR_DIR = constants.ANGULAR_DIR;
+const REACT_DIR = constants.ANGULAR_DIR;
 
 const CLIENT_NG1_TEMPLATES_DIR = 'angularjs';
 const CLIENT_NG2_TEMPLATES_DIR = 'angular';
+const CLIENT_NG3_TEMPLATES_DIR = 'react';
 
 /**
 * The default is to use a file path string. It implies use of the template method.
@@ -225,10 +227,61 @@ const angularFiles = {
     ]
 };
 
+const reactFiles = {
+    client: [
+        {
+            path: REACT_DIR,
+            templates: [
+                // {
+                //     file: 'entities/_index.tsx',
+                //     renameTo: generator => `entities/index.tsx`
+                // },
+                // {
+                //     file: 'entities/_entity-management.module.ts',
+                //     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.module.ts`
+                // },
+                // {
+                //     file: 'entities/_entity-management.route.ts',
+                //     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.route.ts`
+                // },
+                // {
+                //     file: 'entities/_entity.model.ts',
+                //     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.model.ts`
+                // },
+                {
+                    file: 'entities/_entity-management.tsx',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.tsx`
+                }
+                // {
+                //     file: 'entities/_entity-management-dialog.component.ts',
+                //     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-dialog.component.ts`
+                // },
+                // {
+                //     file: 'entities/_entity-management-delete-dialog.component.ts',
+                //     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.component.ts`
+                // },
+                // {
+                //     file: 'entities/_entity-management-detail.component.ts',
+                //     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.component.ts`
+                // },
+                // {
+                //     file: 'entities/_entity.service.ts',
+                //     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityServiceFileName}.service.ts`
+                // },
+                // {
+                //     file: 'entities/_entity-popup.service.ts',
+                //     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityServiceFileName}-popup.service.ts`
+                // }
+            ]
+        }
+    ]
+};
+
 module.exports = {
     writeFiles,
     angularjsFiles,
-    angularFiles
+    angularFiles,
+    reactFiles
 };
 
 function writeFiles() {
@@ -240,7 +293,7 @@ function writeFiles() {
             if (this.clientFramework === 'angular1') {
                 // write client side files for angular 1.x
                 this.writeFilesToDisk(angularjsFiles, this, false, CLIENT_NG1_TEMPLATES_DIR);
-            } else {
+            } else if (this.clientFramework === 'angularX') {
                 // write client side files for angular 2.x +
                 this.writeFilesToDisk(angularFiles, this, false, CLIENT_NG2_TEMPLATES_DIR);
                 this.addEntityToModule(this.entityInstance, this.entityClass, this.entityAngularName, this.entityFolderName, this.entityFileName, this.enableTranslation, this.clientFramework);
@@ -248,6 +301,10 @@ function writeFiles() {
                 if (this.applicationType === 'gateway' && !_.isUndefined(this.microserviceName)) {
                     this.addEntityToWebpack(this.microserviceName, this.clientFramework);
                 }
+            } else {
+                // write client side files for react
+                this.writeFilesToDisk(reactFiles, this, false, CLIENT_NG3_TEMPLATES_DIR);
+                this.addEntityToModule(this.entityInstance, this.entityClass, this.entityAngularName, this.entityFolderName, this.entityFileName, this.enableTranslation, this.clientFramework);
             }
 
             this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework);

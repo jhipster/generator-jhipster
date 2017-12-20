@@ -139,6 +139,14 @@ const files = {
     //   ]
     // }
     ],
+    reactEntities: [
+        {
+            path: REACT_DIR,
+            templates: [
+                'entities/index.tsx'
+            ]
+        }
+    ],
     reactMain: [
         {
             path: REACT_DIR,

@@ -89,7 +89,7 @@ module.exports = class extends PrivateBase {
                             </li>`
                     ]
                 }, this);
-            } else {
+            } else if (clientFramework === 'angularX') {
                 navbarPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
                 jhipsterUtils.rewriteFile({
                     file: navbarPath,
@@ -102,6 +102,9 @@ module.exports = class extends PrivateBase {
                             </li>`
                     ]
                 }, this);
+            } else {
+                // React
+                // TODO:
             }
         } catch (e) {
             this.log(`${chalk.yellow('\nUnable to find ') + navbarPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`);
@@ -221,7 +224,7 @@ module.exports = class extends PrivateBase {
                             </li>`
                     ]
                 }, this);
-            } else {
+            } else if (this.clientFramework === 'angularX') {
                 entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
                 jhipsterUtils.rewriteFile({
                     file: entityMenuPath,
@@ -233,6 +236,16 @@ module.exports = class extends PrivateBase {
                              |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${_.camelCase(routerName)}"` : ''}>${_.startCase(routerName)}</span>
                              |                        </a>
                              |                    </li>`)
+                    ]
+                }, this);
+            } else {
+                // React
+                entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/shared/layout/header/header.tsx`;
+                jhipsterUtils.rewriteFile({
+                    file: entityMenuPath,
+                    needle: 'jhipster-needle-add-element-to-menu',
+                    splicable: [
+                        this.stripMargin(`|entityMenuItems.push(<DropdownItem tag={Link} key="${routerName}" to="/${routerName}"><FaAsterisk /> ${_.startCase(routerName)}</DropdownItem>);`)
                     ]
                 }, this);
             }
@@ -258,30 +271,50 @@ module.exports = class extends PrivateBase {
         try {
             if (clientFramework === 'angular1') {
                 return;
-            }
-            const appName = this.getAngularXAppName();
-            let importStatement = `|import { ${appName}${entityAngularName}Module } from './${entityFolderName}/${entityFileName}.module';`;
-            if (importStatement.length > constants.LINE_LENGTH) {
-                importStatement =
-                    `|import {
-                     |    ${appName}${entityAngularName}Module
-                     |} from './${entityFolderName}/${entityFileName}.module';`;
-            }
-            jhipsterUtils.rewriteFile({
-                file: entityModulePath,
-                needle: 'jhipster-needle-add-entity-module-import',
-                splicable: [
-                    this.stripMargin(importStatement)
-                ]
-            }, this);
+            } else if (clientFramework === 'angularX') {
+                const appName = this.getAngularXAppName();
+                let importStatement = `|import { ${appName}${entityAngularName}Module } from './${entityFolderName}/${entityFileName}.module';`;
+                if (importStatement.length > constants.LINE_LENGTH) {
+                    importStatement =
+                        `|import {
+                        |    ${appName}${entityAngularName}Module
+                        |} from './${entityFolderName}/${entityFileName}.module';`;
+                }
+                jhipsterUtils.rewriteFile({
+                    file: entityModulePath,
+                    needle: 'jhipster-needle-add-entity-module-import',
+                    splicable: [
+                        this.stripMargin(importStatement)
+                    ]
+                }, this);
 
-            jhipsterUtils.rewriteFile({
-                file: entityModulePath,
-                needle: 'jhipster-needle-add-entity-module',
-                splicable: [
-                    this.stripMargin(`|${appName}${entityAngularName}Module,`)
-                ]
-            }, this);
+                jhipsterUtils.rewriteFile({
+                    file: entityModulePath,
+                    needle: 'jhipster-needle-add-entity-module',
+                    splicable: [
+                        this.stripMargin(`|${appName}${entityAngularName}Module,`)
+                    ]
+                }, this);
+            } else {
+                // React
+                const indexModulePath = `${CLIENT_MAIN_SRC_DIR}app/entities/index.tsx`;
+
+                jhipsterUtils.rewriteFile({
+                    file: indexModulePath,
+                    needle: 'jhipster-needle-add-route-index-1',
+                    splicable: [
+                        this.stripMargin(`|import ${entityAngularName} from './${entityFolderName}/${entityFolderName}';`)
+                    ]
+                }, this);
+
+                jhipsterUtils.rewriteFile({
+                    file: indexModulePath,
+                    needle: 'jhipster-needle-add-route-index-2',
+                    splicable: [
+                        this.stripMargin(`|<Route path={'/${entityFileName}'} component={${entityAngularName}}/>`)
+                    ]
+                }, this);
+            }
         } catch (e) {
             this.log(`${chalk.yellow('\nUnable to find ') + entityModulePath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + entityInstance + entityClass + entityFolderName + entityFileName} ${chalk.yellow(`not added to ${entityModulePath}.\n`)}`);
             this.debug('Error:', e);

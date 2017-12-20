@@ -9,7 +9,7 @@ import {
 import {
     FaHome, FaThList, FaUserPlus, FaUser, FaFlag, FaHeart,
     FaList, FaTasks, FaDashboard, FaBook, FaWrench, FaSignIn, FaSignOut,
-    FaClockO, FaHddO
+    FaClockO, FaHddO, FaAsterisk
   } from 'react-icons/lib/fa';
 import { NavLink as Link } from 'react-router-dom';
 import LoadingBar from 'react-redux-loading-bar';
@@ -63,6 +63,7 @@ export class Header extends React.Component<<%if (enableTranslation) { %>IHeader
     const entityMenuItems = [
       <DropdownItem divider key="divider"/>
     ];
+    /* jhipster-needle-add-element-to-menu - JHipster will add entities to the menu here */
     const adminMenuItems = [
     <%_ if (applicationType === 'gateway') { _%>
       /* TODO: gateway menu */
