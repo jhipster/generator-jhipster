@@ -30,9 +30,6 @@ import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
 <%_ } _%>
 
-<%_ if (cacheManagerIsAvailable === true) { _%>
-import <%=packageName%>.config.CacheConfiguration;
-<%_ } _%>
 import <%=packageName%>.domain.User;
 
 <%_ if (cacheManagerIsAvailable === true) { _%>
@@ -91,6 +88,12 @@ import static <%=packageName%>.config.Constants.ID_DELIMITER;
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 @Repository
 public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRepository<User, Long><% } %><% if (databaseType === 'mongodb') { %>MongoRepository<User, String><% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<User, String><% } %> {
+    <%_ if (cacheManagerIsAvailable) { _%>
+
+    String USERS_BY_LOGIN_CACHE = "usersByLogin";
+
+    String USERS_BY_EMAIL_CACHE = "usersByEmail";
+    <%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
 
     Optional<User> findOneByActivationKey(String activationKey);
@@ -102,18 +105,23 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     Optional<User> findOneByResetKey(String resetKey);
 <%_ } _%>
 
+    <%_ if (databaseType === 'couchbase' || databaseType === 'mongodb') { _%>
+        <%_ if (cacheManagerIsAvailable === true) { _%>
+    @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
+        <%_ } _%>
+    <%_ } _%>
     Optional<User> findOneByEmailIgnoreCase(String email);
 
     <%_ if (databaseType === 'couchbase') { _%>
         <%_ if (cacheManagerIsAvailable === true) { _%>
-    @Cacheable(cacheNames = CacheConfiguration.CACHE_USERS)
+    @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
         <%_ } _%>
     default Optional<User> findOneByLogin(String login) {
         return Optional.ofNullable(findOne(User.PREFIX + ID_DELIMITER + login));
     }
     <%_ } else if (databaseType === 'mongodb') { _%>
         <%_ if (cacheManagerIsAvailable === true) { _%>
-    @Cacheable(cacheNames = CacheConfiguration.CACHE_USERS)
+    @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
         <%_ } _%>
     Optional<User> findOneByLogin(String login);
     <%_ } else { _%>
@@ -126,9 +134,15 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
 
     @EntityGraph(attributePaths = "authorities")
     <%_ if (cacheManagerIsAvailable === true) { _%>
-    @Cacheable(cacheNames = CacheConfiguration.CACHE_USERS)
+    @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
     <%_ } _%>
     Optional<User> findOneWithAuthoritiesByLogin(String login);
+
+    @EntityGraph(attributePaths = "authorities")
+    <%_ if (cacheManagerIsAvailable === true) { _%>
+    @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
+    <%_ } _%>
+    Optional<User> findOneWithAuthoritiesByEmail(String email);
 <%_ } _%>
 
     Page<User> findAllByLoginNot(Pageable pageable, String login);
@@ -136,6 +150,12 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
 <%_ } else if (databaseType === 'cassandra') { _%>
 @Repository
 public class UserRepository {
+    <%_ if (cacheManagerIsAvailable) { _%>
+
+    public static final String USERS_BY_LOGIN_CACHE = "usersByLogin";
+
+    public static final String USERS_BY_EMAIL_CACHE = "usersByEmail";
+    <%_ } _%>
 
     private final Session session;
 
@@ -261,6 +281,9 @@ public class UserRepository {
         return findOneFromIndex(stmt);
     }
 
+<%_ if (cacheManagerIsAvailable === true) { _%>
+    @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
+<%_ } _%>
     public Optional<User> findOneByEmailIgnoreCase(String email) {
         BoundStatement stmt = findOneByEmailStmt.bind();
         stmt.setString("email", email.toLowerCase());
@@ -268,7 +291,7 @@ public class UserRepository {
     }
 
 <%_ if (cacheManagerIsAvailable === true) { _%>
-    @Cacheable(cacheNames = CacheConfiguration.CACHE_USERS)
+    @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
 <%_ } _%>
     public Optional<User> findOneByLogin(String login) {
         BoundStatement stmt = findOneByLoginStmt.bind();

@@ -121,8 +121,6 @@ import java.util.List;
 @Import(InfinispanEmbeddedCacheManagerAutoConfiguration.class)
 <%_ } _%>
 public class CacheConfiguration {
-
-    public static final String CACHE_USERS = "users";
     <%_ if (cacheProvider === 'ehcache') { _%>
 
     private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
@@ -145,7 +143,8 @@ public class CacheConfiguration {
             cm.createCache("oAuth2Authentication", jcacheConfiguration);
             <%_ } _%>
             <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && applicationType === 'monolith')) { _%>
-            cm.createCache(CACHE_USERS, jcacheConfiguration);
+            cm.createCache(<%=packageName%>.repository.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
+            cm.createCache(<%=packageName%>.repository.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
                 <%_ if (enableHibernateCache) { _%>
             cm.createCache(<%=packageName%>.domain.User.class.getName(), jcacheConfiguration);
             cm.createCache(<%=packageName%>.domain.Authority.class.getName(), jcacheConfiguration);
@@ -521,8 +520,11 @@ public class CacheConfiguration {
                 ConfigurationAdapter.create()));
             <%_ } _%>
             <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
-            registerPredefinedCache(CACHE_USERS, new JCache<Object, Object>(
-                cacheManager.getCache(CACHE_USERS).getAdvancedCache(), this,
+            registerPredefinedCache(<%=packageName%>.repository.UserRepository.USERS_BY_LOGIN_CACHE, new JCache<Object, Object>(
+                cacheManager.getCache(<%=packageName%>.repository.UserRepository.USERS_BY_LOGIN_CACHE).getAdvancedCache(), this,
+                ConfigurationAdapter.create()));
+            registerPredefinedCache(<%=packageName%>.repository.UserRepository.USERS_BY_EMAIL_CACHE, new JCache<Object, Object>(
+                cacheManager.getCache(<%=packageName%>.repository.UserRepository.USERS_BY_EMAIL_CACHE).getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
                 <%_ if (enableHibernateCache) { _%>
             registerPredefinedCache(<%=packageName%>.domain.User.class.getName(), new JCache<Object, Object>(

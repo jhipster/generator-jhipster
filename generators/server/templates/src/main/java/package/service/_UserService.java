@@ -157,7 +157,8 @@ public class UserService {
                 userSearchRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache(CacheConfiguration.CACHE_USERS).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
                 <%_ } _%>
                 log.debug("Activated user: {}", user);
                 return user;
@@ -177,7 +178,8 @@ public class UserService {
                 userRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache(CacheConfiguration.CACHE_USERS).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
                 <%_ } _%>
                 return user;
            });
@@ -193,7 +195,8 @@ public class UserService {
                 userRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache(CacheConfiguration.CACHE_USERS).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
                 <%_ } _%>
                 return user;
             });
@@ -231,7 +234,8 @@ public class UserService {
         userRepository.save(newUser);<% if (searchEngine === 'elasticsearch') { %>
         userSearchRepository.save(newUser);<% } %>
         <%_ if (cacheManagerIsAvailable === true) { _%>
-        cacheManager.getCache(CacheConfiguration.CACHE_USERS).evict(newUser.getLogin());
+        cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(newUser.getLogin());
+        cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(newUser.getEmail());
         <%_ } _%>
         log.debug("Created Information for User: {}", newUser);
         return newUser;
@@ -271,7 +275,8 @@ public class UserService {
         userRepository.save(user);<% if (searchEngine === 'elasticsearch') { %>
         userSearchRepository.save(user);<% } %>
         <%_ if (cacheManagerIsAvailable === true) { _%>
-        cacheManager.getCache(CacheConfiguration.CACHE_USERS).evict(user.getLogin());
+        cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
+        cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
         <%_ } _%>
         log.debug("Created Information for User: {}", user);
         return user;
@@ -307,7 +312,8 @@ public class UserService {
                 userSearchRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache(CacheConfiguration.CACHE_USERS).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
                 <%_ } _%>
                 log.debug("Changed Information for User: {}", user);
             });
@@ -353,7 +359,8 @@ public class UserService {
                 userSearchRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache(CacheConfiguration.CACHE_USERS).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
                 <%_ } _%>
                 log.debug("Changed Information for User: {}", user);
                 return user;
@@ -371,7 +378,8 @@ public class UserService {
             userSearchRepository.delete(user);
             <%_ } _%>
             <%_ if (cacheManagerIsAvailable === true) { _%>
-            cacheManager.getCache(CacheConfiguration.CACHE_USERS).evict(login);
+            cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
+            cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
             <%_ } _%>
             log.debug("Deleted User: {}", user);
         });
@@ -388,7 +396,8 @@ public class UserService {
                 userRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache(CacheConfiguration.CACHE_USERS).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
                 <%_ } _%>
                 log.debug("Changed password for User: {}", user);
             });
@@ -473,7 +482,8 @@ public class UserService {
             userSearchRepository.delete(user);
             <%_ } _%>
             <%_ if (cacheManagerIsAvailable === true) { _%>
-            cacheManager.getCache(CacheConfiguration.CACHE_USERS).evict(user.getLogin());
+            cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
+            cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
             <%_ } _%>
         }
     }
@@ -538,6 +548,10 @@ public class UserService {
         } else {
             log.debug("Saving user '{}' in local database...", user.getLogin());
             userRepository.save(user);
+            <%_ if (cacheManagerIsAvailable === true) { _%>
+            cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
+            cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
+            <%_ } _%>
         }
         return user;
     }

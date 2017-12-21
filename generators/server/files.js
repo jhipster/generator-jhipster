@@ -578,6 +578,11 @@ function writeFiles() {
             if (this.searchEngine === 'elasticsearch') {
                 this.template(`${SERVER_TEST_SRC_DIR}package/config/elasticsearch/_IndexReinitializer.java`, `${testDir}config/elasticsearch/IndexReinitializer.java`);
             }
+
+            // Create auth config test files
+            if (this.applicationType === 'monolith' && this.authenticationType !== 'oauth2') {
+                this.template(`${SERVER_TEST_SRC_DIR}package/security/_DomainUserDetailsServiceIntTest.java`, `${testDir}security/DomainUserDetailsServiceIntTest.java`);
+            }
         },
 
         writeJavaUserManagementFiles() {

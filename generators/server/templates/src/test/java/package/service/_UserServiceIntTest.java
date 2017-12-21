@@ -16,12 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-let cacheManagerIsAvailable = false;
-if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') {
-    cacheManagerIsAvailable = true;
-}
-_%>
 package <%= packageName %>.service;
 
 <%_ if (databaseType === 'cassandra') { _%>
@@ -29,9 +23,6 @@ import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 import <%= packageName %>.config.Constants;
-<%_ if (cacheManagerIsAvailable === true) { _%>
-import <%=packageName%>.config.CacheConfiguration;
-<%_ } _%>
 <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
 import <%= packageName %>.domain.PersistentToken;
 <%_ } _%>
@@ -53,9 +44,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-<%_ if (cacheManagerIsAvailable === true) { _%>
-import org.springframework.cache.CacheManager;
-<%_ } _%>
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -109,11 +97,6 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
     @Autowired
     private UserService userService;
 
-    <%_ if (cacheManagerIsAvailable === true) { _%>
-    @Autowired
-    private CacheManager cacheManager;
-    <%_ } _%>
-
     private User user;
 
     @Before
@@ -126,9 +109,6 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         <%_ } _%>
         <%_ if (databaseType !== 'sql') { _%>
         userRepository.deleteAll();
-        <%_ } _%>
-        <%_ if (cacheManagerIsAvailable === true) { _%>
-        cacheManager.getCache(CacheConfiguration.CACHE_USERS).clear();
         <%_ } _%>
         user = new User();
         <%_ if (databaseType === 'cassandra') { _%>

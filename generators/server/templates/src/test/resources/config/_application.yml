@@ -16,6 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_
+let cacheManagerIsAvailable = false;
+if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') {
+    cacheManagerIsAvailable = true;
+}
+_%>
 # ===================================================================
 # Spring Boot configuration.
 #
@@ -45,8 +51,10 @@ spring:
         name: <%= baseName %>
     jackson:
         serialization.write_dates_as_timestamps: false
+    <%_ if (cacheManagerIsAvailable === true) { _%>
     cache:
-        type: none
+        type: simple
+    <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
     cloud:
         stream:

@@ -183,7 +183,8 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
     public void setup() {
         MockitoAnnotations.initMocks(this);
         <%_ if (cacheManagerIsAvailable === true) { _%>
-        cacheManager.getCache(CacheConfiguration.CACHE_USERS).clear();
+        cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).clear();
+        cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).clear();
         <%_ } _%>
         UserResource userResource = new UserResource(userRepository, userService<% if (authenticationType !== 'oauth2') { %>, mailService<% } %><% if (searchEngine === 'elasticsearch') { %>, userSearchRepository<% } %>);
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource)
@@ -423,6 +424,10 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         <%_ if (searchEngine === 'elasticsearch') { _%>
         userSearchRepository.save(user);
         <%_ } _%>
+        <%_ if (cacheManagerIsAvailable === true) { _%>
+
+        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNull();
+        <%_ } _%>
 
         // Get the user
         restUserMockMvc.perform(get("/api/users/{login}", user.getLogin()))
@@ -436,6 +441,10 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
             .andExpect(jsonPath("$.imageUrl").value(DEFAULT_IMAGEURL))
             <%_ } _%>
             .andExpect(jsonPath("$.langKey").value(DEFAULT_LANGKEY));
+        <%_ if (cacheManagerIsAvailable === true) { _%>
+
+        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNotNull();
+        <%_ } _%>
     }
 
     @Test
@@ -689,6 +698,10 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         restUserMockMvc.perform(delete("/api/users/{login}", user.getLogin())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
+        <%_ if (cacheManagerIsAvailable === true) { _%>
+
+        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNull();
+        <%_ } _%>
 
         // Validate the database is empty
         List<User> userList = userRepository.findAll();
