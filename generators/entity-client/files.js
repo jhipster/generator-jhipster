@@ -232,46 +232,22 @@ const reactFiles = {
         {
             path: REACT_DIR,
             templates: [
-                // {
-                //     file: 'entities/_index.tsx',
-                //     renameTo: generator => `entities/index.tsx`
-                // },
-                // {
-                //     file: 'entities/_entity-management.module.ts',
-                //     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.module.ts`
-                // },
-                // {
-                //     file: 'entities/_entity-management.route.ts',
-                //     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.route.ts`
-                // },
-                // {
-                //     file: 'entities/_entity.model.ts',
-                //     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.model.ts`
-                // },
+                {
+                    file: 'entities/_entity-detail.tsx',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.tsx`
+                },
                 {
                     file: 'entities/_entity-management.tsx',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.tsx`
+                },
+                {
+                    file: 'entities/_entity.reducer.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.reducer.ts`
+                },
+                {
+                    file: 'entities/_index.tsx',
+                    renameTo: generator => `entities/${generator.entityFolderName}/index.tsx`
                 }
-                // {
-                //     file: 'entities/_entity-management-dialog.component.ts',
-                //     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-dialog.component.ts`
-                // },
-                // {
-                //     file: 'entities/_entity-management-delete-dialog.component.ts',
-                //     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.component.ts`
-                // },
-                // {
-                //     file: 'entities/_entity-management-detail.component.ts',
-                //     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.component.ts`
-                // },
-                // {
-                //     file: 'entities/_entity.service.ts',
-                //     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityServiceFileName}.service.ts`
-                // },
-                // {
-                //     file: 'entities/_entity-popup.service.ts',
-                //     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityServiceFileName}-popup.service.ts`
-                // }
             ]
         }
     ]

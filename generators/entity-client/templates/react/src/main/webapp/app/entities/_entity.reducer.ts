@@ -26,9 +26,9 @@
 _%>
 import axios from 'axios';
 
-import { REQUEST, SUCCESS, FAILURE } from './action-type.util';
-import { messages, SERVER_API_URL } from '../config/constants';
-import { ICrudGetAction, ICrudPutAction, ICrudDeleteAction } from '../shared/model/redux-action.type';
+import { REQUEST, SUCCESS, FAILURE } from '../../reducers/action-type.util';
+import { messages, SERVER_API_URL } from '../../config/constants';
+import { ICrudGetAction, ICrudPutAction, ICrudDeleteAction } from '../../shared/model/redux-action.type';
 <%_ if (!(applicationType === 'gateway' && locals.microserviceName) && authenticationType !== 'uaa') { _%>
 
 <%_ } _%>
@@ -36,7 +36,6 @@ import { ICrudGetAction, ICrudPutAction, ICrudDeleteAction } from '../shared/mod
 
 // import { JhiDateUtils } from 'ng-jhipster';
 <%_ } _%>
-
 // import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 
 export const ACTION_TYPES = {
@@ -120,7 +119,7 @@ export default (state = initialState, action) => {
   }
 };
 
-const apiUrl = <% if (applicationType === 'gateway' && locals.microserviceName) { %>'/<%= microserviceName.toLowerCase() %>/<% } else if (authenticationType === 'uaa') { %>'<% } else { %>SERVER_API_URL + '<% } %>api/<%= entityApiUrl %>';
+const apiUrl = <% if (applicationType === 'gateway' && locals.microserviceName) { %>'/<%= microserviceName.toLowerCase() %>/<% } else if (authenticationType === 'uaa') { %>'<% } else { %>SERVER_API_URL + '<% } %>/api/<%= entityApiUrl %>';
 
 // Actions
 export const getEntities: ICrudGetAction = (page, size, sort) => ({

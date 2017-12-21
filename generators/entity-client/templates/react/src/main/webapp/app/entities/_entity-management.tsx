@@ -23,8 +23,8 @@ import { Button } from 'reactstrap';
 import { Translate } from 'react-jhipster';
 import { FaPlus, FaEye, FaPencil, FaTrash } from 'react-icons/lib/fa';
 
-import { ICrudGetAction } from '../../../shared/model/redux-action.type';
-import { getEntities } from '../../../reducers/<%= entityFileName %>';
+import { ICrudGetAction } from '../../shared/model/redux-action.type';
+import { getEntities } from './<%= entityFileName %>.reducer';
 
 export interface I<%= entityReactName %>Props {
   getEntities: ICrudGetAction;
@@ -77,31 +77,24 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                 <%=entityInstancePlural %>.map((<%=entityInstance %>, i) => (
                 <tr key={`entity-${i}`}>
                   <td>
-                    <Button
-                      tag={Link} to={`${match.url}/${<%=entityInstance %>.id}`}
-                      color="link" size="sm"
-                    >
-                      {user.id}
+                    <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}`} color="link" size="sm">
+                      {<%=entityInstance %>.id}
                     </Button>
                   </td>
+                  <%_ for (idx in fields) { _%>
+                    <td>
+                      {<%=entityInstance%>.<%=fields[idx].fieldName%>}
+                    </td>
+                  <%_ } _%>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
-                      <Button
-                        tag={Link} to={`${match.url}/${<%=entityInstance %>.id}`}
-                        color="info" size="sm"
-                      >
+                      <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}`} color="info" size="sm">
                         <FaEye/> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view" /></span>
                       </Button>
-                      <Button
-                        tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/edit`}
-                        color="primary" size="sm"
-                      >
+                      <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/edit`} color="primary" size="sm">
                         <FaPencil/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit" /></span>
                       </Button>
-                      <Button
-                        tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/delete`}
-                        color="danger" size="sm"
-                      >
+                      <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/delete`} color="danger" size="sm">
                         <FaTrash/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete" /></span>
                       </Button>
                     </div>
