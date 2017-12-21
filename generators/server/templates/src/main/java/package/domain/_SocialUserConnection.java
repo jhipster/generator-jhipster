@@ -88,8 +88,8 @@ public class SocialUserConnection implements Serializable {
     <%_ } _%>
     private Long id;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
     @Id<% if (databaseType === 'couchbase') { %>
-    @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)
-    private String id;<% } %><% } %>
+    @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)<% } %>
+    private String id;<% } %>
 
     @NotNull<% if (databaseType === 'sql') { %>
     @Column(name = "user_id", length = 255, nullable = false)<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
