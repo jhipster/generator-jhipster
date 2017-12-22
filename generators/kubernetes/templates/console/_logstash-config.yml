@@ -29,6 +29,11 @@ data:
             type => syslog
             codec => json
         }
+        tcp {
+            port => 5000
+            type => syslog
+            codec => json
+        }
     }
 
     filter {
