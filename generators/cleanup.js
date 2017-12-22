@@ -105,4 +105,10 @@ function cleanupOldServerFiles(generator, javaDir, testDir) {
         generator.removeFile(`${javaDir}web/rest/errors/ErrorVM.java`);
         generator.removeFile(`${javaDir}web/rest/errors/ParameterizedErrorVM.java`);
     }
+    if (generator.isJhipsterVersionLessThan('4.11.1')) {
+        generator.removeFile(`${CLIENT_MAIN_SRC_DIR}app/app.main-aot.ts`);
+    }
+    if (generator.isJhipsterVersionLessThan('4.13.1')) {
+        generator.config.delete('hibernateCache');
+    }
 }

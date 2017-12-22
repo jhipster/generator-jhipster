@@ -18,7 +18,8 @@
 -%>
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
+import { SERVER_API_URL } from '../../app.constants';
 
 @Injectable()
 export class <%=jhiPrefixCapitalized%>HealthService {
@@ -30,7 +31,7 @@ export class <%=jhiPrefixCapitalized%>HealthService {
     }
 
     checkHealth(): Observable<any> {
-        return this.http.get('management/health').map((res: Response) => res.json());
+        return this.http.get(SERVER_API_URL + 'management/health').map((res: Response) => res.json());
     }
 
     transformHealthData(data): any {

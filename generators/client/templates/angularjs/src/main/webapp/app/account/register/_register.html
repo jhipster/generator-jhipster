@@ -51,7 +51,7 @@
                 <div class="form-group">
                     <label class="control-label" for="login" data-translate="global.form.username">Username</label>
                     <input type="text" class="form-control" id="login" name="login" placeholder="{{'global.form.username.placeholder' | translate}}"
-                           ng-model="vm.registerAccount.login" ng-minlength=1 ng-maxlength=50 ng-pattern="/^[_'.@A-Za-z0-9-]*$/" required>
+                           ng-model="vm.registerAccount.login" ng-minlength=1 ng-maxlength=50 ng-pattern="/^[_'.A-Za-z0-9-]*$/" required>
                     <div ng-show="form.login.$dirty && form.login.$invalid">
                         <p class="help-block"
                                ng-show="form.login.$error.required" data-translate="register.messages.validate.login.required">
@@ -67,7 +67,7 @@
                         </p>
                         <p class="help-block"
                                ng-show="form.login.$error.pattern" data-translate="register.messages.validate.login.pattern">
-                            Your username can only contain lower-case letters and digits.
+                            Your username can only contain letters and digits.
                     </p>
                     </div>
                 </div>

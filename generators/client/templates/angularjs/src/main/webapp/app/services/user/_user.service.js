@@ -26,7 +26,7 @@
     User.$inject = ['$resource'];
 
     function User ($resource) {
-        var service = $resource('<%- apiUaaUrlPrefix %>api/users/:login', {}, {
+        var service = $resource('<%- apiUaaPath %>api/users/:login', {}, {
             'query': {method: 'GET', isArray: true},
             'get': {
                 method: 'GET',

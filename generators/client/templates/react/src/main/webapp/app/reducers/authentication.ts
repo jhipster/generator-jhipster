@@ -27,7 +27,6 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.LOGIN):
-    case REQUEST(ACTION_TYPES.LOGOUT):
     case REQUEST(ACTION_TYPES.GET_SESSION):
       return {
         ...state,
@@ -41,7 +40,6 @@ export default (state = initialState, action) => {
         loginError: true
       };
     case FAILURE(ACTION_TYPES.GET_SESSION):
-    case FAILURE(ACTION_TYPES.LOGOUT):
       return {
         ...state,
         loading: false,
@@ -57,7 +55,7 @@ export default (state = initialState, action) => {
         showModalLogin: false,
         loginSuccess: true
       };
-    case SUCCESS(ACTION_TYPES.LOGOUT):
+    case ACTION_TYPES.LOGOUT:
       return {
         ...initialState,
         showModalLogin: true
@@ -97,15 +95,6 @@ export const getSession = () => dispatch => dispatch({
   payload: axios.get('/api/account')
 });
 
-export const clearAuthToken = () => {
-  if (Storage.local.get('jhi-authenticationToken')) {
-    Storage.local.remove('jhi-authenticationToken');
-  }
-  if (Storage.session.get('jhi-authenticationToken')) {
-    Storage.session.remove('jhi-authenticationToken');
-  }
-};
-
 export const login = (username, password, rememberMe = false) => async (dispatch, getState) => {
   const result = await dispatch({
     type: ACTION_TYPES.LOGIN,
@@ -123,15 +112,36 @@ export const login = (username, password, rememberMe = false) => async (dispatch
   dispatch(getSession());
 };
 
+<%_ if (authenticationType === 'session') { _%>
 export const logout = () => async dispatch => {
   await dispatch({
     type: ACTION_TYPES.LOGOUT,
-    payload: axios.get('/api/account')
+    payload: axios.post('/api/logout', {})
   });
-  clearAuthToken();
+  dispatch(getSession());
+};
+<%_ } else { _%>
+export const clearAuthToken = () => {
+  if (Storage.local.get('jhi-authenticationToken')) {
+    Storage.local.remove('jhi-authenticationToken');
+  }
+  if (Storage.session.get('jhi-authenticationToken')) {
+    Storage.session.remove('jhi-authenticationToken');
+  }
 };
 
+export const logout = () => dispatch => {
+  clearAuthToken();
+  dispatch({
+    type: ACTION_TYPES.LOGOUT
+  });
+};
+<%_ } _%>
+
 export const clearAuthentication = messageKey => (dispatch, getState) => {
+  <%_ if (authenticationType !== 'session') { _%>
+  clearAuthToken();
+  <%_ } _%>
   dispatch(displayAuthError(messageKey));
   dispatch({
     type: ACTION_TYPES.CLEAR_AUTH

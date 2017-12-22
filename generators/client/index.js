@@ -85,10 +85,18 @@ module.exports = class extends BaseGenerator {
             type: String
         });
 
-        // This adds support for a `--search-engine` flag
+        // This adds support for a `--cache-provider` flag
+        this.option('cache-provider', {
+            desc: 'Provide a cache provider option for the application',
+            type: String,
+            defaults: 'no'
+        });
+
+        // This adds support for a `--hb-cache` flag
         this.option('hb-cache', {
             desc: 'Provide hibernate cache option for the application',
-            type: String
+            type: Boolean,
+            default: false
         });
 
         // This adds support for a `--jhi-prefix` flag
@@ -252,7 +260,8 @@ module.exports = class extends BaseGenerator {
                 if (this.skipServer) {
                     this.authenticationType && this.config.set('authenticationType', this.authenticationType);
                     this.uaaBaseName && this.config.set('uaaBaseName', this.uaaBaseName);
-                    this.hibernateCache && this.config.set('hibernateCache', this.hibernateCache);
+                    this.cacheProvider && this.config.set('cacheProvider', this.cacheProvider);
+                    this.enableHibernateCache && this.config.set('enableHibernateCache', this.enableHibernateCache);
                     this.websocket && this.config.set('websocket', this.websocket);
                     this.databaseType && this.config.set('databaseType', this.databaseType);
                     this.devDatabaseType && this.config.set('devDatabaseType', this.devDatabaseType);
@@ -268,8 +277,11 @@ module.exports = class extends BaseGenerator {
         if (useBlueprint) return;
         return {
             getSharedConfigOptions() {
-                if (this.configOptions.hibernateCache) {
-                    this.hibernateCache = this.configOptions.hibernateCache;
+                if (this.configOptions.cacheProvider) {
+                    this.cacheProvider = this.configOptions.cacheProvider;
+                }
+                if (this.configOptions.enableHibernateCache) {
+                    this.enableHibernateCache = this.configOptions.enableHibernateCache;
                 }
                 if (this.configOptions.websocket !== undefined) {
                     this.websocket = this.configOptions.websocket;
@@ -333,8 +345,7 @@ module.exports = class extends BaseGenerator {
 
                 this.styleSheetExt = this.useSass ? 'scss' : 'css';
                 this.pkType = this.getPkType(this.databaseType);
-                this.apiUrlPrefix = `${this.authenticationType === 'uaa' ? `'${this.uaaBaseName.toLowerCase()}/` : 'SERVER_API_URL + \''}`;
-                this.apiUaaUrlPrefix = `${this.authenticationType === 'uaa' ? `${this.uaaBaseName.toLowerCase()}/` : ''}`;
+                this.apiUaaPath = `${this.authenticationType === 'uaa' ? `${this.uaaBaseName.toLowerCase()}/` : ''}`;
                 this.DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
             },
 

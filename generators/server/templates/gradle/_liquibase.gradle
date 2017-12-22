@@ -36,7 +36,7 @@ if (OperatingSystem.current().isWindows()) {
                 attributes 'Class-Path':
                     sourceSets.main.runtimeClasspath.plus(configurations.liquibase)
                     .collect {
-                        it.toURL().toString().replaceFirst(/file:\/+/, '/')
+                        it.toURI().toURL().toString().replaceFirst(/file:\/+/, '/')
                     }.join(' ')
             }
         }

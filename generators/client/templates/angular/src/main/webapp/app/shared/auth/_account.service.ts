@@ -18,20 +18,18 @@
 -%>
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
-<%_ if (authenticationType !== 'uaa') { _%>
+import { Observable } from 'rxjs/Observable';
 import { SERVER_API_URL } from '../../app.constants';
-<%_ } _%>
 
 @Injectable()
 export class AccountService  {
     constructor(private http: Http) { }
 
     get(): Observable<any> {
-        return this.http.get(<%- apiUrlPrefix %>api/account').map((res: Response) => res.json());
+        return this.http.get(SERVER_API_URL + '<%- apiUaaPath %>api/account').map((res: Response) => res.json());
     }
 
     save(account: any): Observable<Response> {
-        return this.http.post(<%- apiUrlPrefix %>api/account', account);
+        return this.http.post(SERVER_API_URL + '<%- apiUaaPath %>api/account', account);
     }
 }

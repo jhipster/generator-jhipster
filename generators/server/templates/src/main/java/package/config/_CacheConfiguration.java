@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 package <%=packageName%>.config;
-<%_ if (hibernateCache === 'ehcache') { _%>
+<%_ if (cacheProvider === 'ehcache') { _%>
 
 import io.github.jhipster.config.JHipsterProperties;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
@@ -29,7 +29,7 @@ import org.ehcache.jsr107.Eh107Configuration;
 import java.util.concurrent.TimeUnit;
 
 <%_ } _%>
-<%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
+<%_ if (cacheProvider === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
 
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.config.JHipsterProperties;
@@ -46,10 +46,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 <%_ } _%>
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-<%_ if (hibernateCache === 'ehcache') { _%>
+<%_ if (cacheProvider === 'ehcache') { _%>
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
 <%_ } _%>
-<%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
+<%_ if (cacheProvider === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
     <%_ if (serviceDiscoveryType === 'eureka') { _%>
 import org.springframework.boot.autoconfigure.web.ServerProperties;
     <%_ } _%>
@@ -62,17 +62,19 @@ import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.serviceregistry.Registration;
 <%_ } _%>
-import org.springframework.context.annotation.*;<% if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast') { %>
-import org.springframework.core.env.Environment;<% } %>
+import org.springframework.context.annotation.*;
+<%_ if (cacheProvider === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
+import org.springframework.core.env.Environment;
+<%_ } _%>
 <%_ if (clusteredHttpSession === 'hazelcast') { _%>
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 <%_ } _%>
-<%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
+<%_ if (cacheProvider === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
 
 import javax.annotation.PreDestroy;
 <%_ } _%>
-<%_ if (hibernateCache === 'infinispan') { _%>
+<%_ if (cacheProvider === 'infinispan') { _%>
 import org.infinispan.configuration.cache.CacheMode;
 import org.infinispan.configuration.cache.ConfigurationBuilder;
 import org.infinispan.configuration.global.GlobalConfigurationBuilder;
@@ -115,11 +117,11 @@ import java.util.List;
 @EnableCaching
 @AutoConfigureAfter(value = { MetricsConfiguration.class })
 @AutoConfigureBefore(value = { WebConfigurer.class<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>, DatabaseConfiguration.class<% } %> })
-<%_ if (hibernateCache === 'infinispan') { _%>
+<%_ if (cacheProvider === 'infinispan') { _%>
 @Import(InfinispanEmbeddedCacheManagerAutoConfiguration.class)
 <%_ } _%>
 public class CacheConfiguration {
-    <%_ if (hibernateCache === 'ehcache') { _%>
+    <%_ if (cacheProvider === 'ehcache') { _%>
 
     private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
 
@@ -141,23 +143,26 @@ public class CacheConfiguration {
             cm.createCache("oAuth2Authentication", jcacheConfiguration);
             <%_ } _%>
             <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && applicationType === 'monolith')) { _%>
-            cm.createCache("users", jcacheConfiguration);
+            cm.createCache(<%=packageName%>.repository.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
+            cm.createCache(<%=packageName%>.repository.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
+                <%_ if (enableHibernateCache) { _%>
             cm.createCache(<%=packageName%>.domain.User.class.getName(), jcacheConfiguration);
             cm.createCache(<%=packageName%>.domain.Authority.class.getName(), jcacheConfiguration);
             cm.createCache(<%=packageName%>.domain.User.class.getName() + ".authorities", jcacheConfiguration);
-            <%_ if (authenticationType === 'session') { _%>
+                    <%_ if (authenticationType === 'session') { _%>
             cm.createCache(<%=packageName%>.domain.PersistentToken.class.getName(), jcacheConfiguration);
             cm.createCache(<%=packageName%>.domain.User.class.getName() + ".persistentTokens", jcacheConfiguration);
-            <%_ } _%>
-            <%_ if (enableSocialSignIn) { _%>
+                    <%_ } _%>
+                    <%_ if (enableSocialSignIn) { _%>
             cm.createCache(<%=packageName%>.domain.SocialUserConnection.class.getName(), jcacheConfiguration);
-            <%_ } _%>
+                    <%_ } _%>
+                <%_ } _%>
             <%_ } _%>
             // jhipster-needle-ehcache-add-entry
         };
     }
     <%_ } _%>
-    <%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
+    <%_ if (cacheProvider === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
 
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
 
@@ -171,7 +176,7 @@ public class CacheConfiguration {
     private Registration registration;
         <%_ } _%>
 
-    public CacheConfiguration(<% if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast') { %>Environment env<% if (serviceDiscoveryType === 'eureka') { %>, ServerProperties serverProperties, DiscoveryClient discoveryClient<% } } %>) {
+    public CacheConfiguration(<% if (cacheProvider === 'hazelcast' || clusteredHttpSession === 'hazelcast') { %>Environment env<% if (serviceDiscoveryType === 'eureka') { %>, ServerProperties serverProperties, DiscoveryClient discoveryClient<% } } %>) {
         this.env = env;
         <%_ if (serviceDiscoveryType === 'eureka') { _%>
         this.serverProperties = serverProperties;
@@ -257,7 +262,7 @@ public class CacheConfiguration {
 
         // Full reference is available at: http://docs.hazelcast.org/docs/management-center/3.9/manual/html/Deploying_and_Starting.html
         config.setManagementCenterConfig(initializeDefaultManagementCenterConfig(jHipsterProperties));
-        <%_ if (hibernateCache === 'hazelcast') { _%>
+        <%_ if (enableHibernateCache) { _%>
         config.getMapConfigs().put("<%=packageName%>.domain.*", initializeDomainMapConfig(jHipsterProperties));
         <%_ } _%>
         <%_ if (clusteredHttpSession === 'hazelcast') { _%>
@@ -303,7 +308,7 @@ public class CacheConfiguration {
 
         return mapConfig;
     }
-    <%_ if (hibernateCache === 'hazelcast') { _%>
+    <%_ if (cacheProvider === 'hazelcast') { _%>
 
     private MapConfig initializeDomainMapConfig(JHipsterProperties jHipsterProperties) {
         MapConfig mapConfig = new MapConfig();
@@ -331,7 +336,7 @@ public class CacheConfiguration {
     }
     <%_ } _%>
     <%_ } _%>
-    <%_ if (hibernateCache === 'infinispan') { _%>
+    <%_ if (cacheProvider === 'infinispan') { _%>
 
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
 
@@ -464,7 +469,7 @@ public class CacheConfiguration {
                 .eviction().type(EvictionType.COUNT).size(cacheInfo.getReplicated()
                 .getMaxEntries()).expiration().lifespan(cacheInfo.getReplicated().getTimeToLiveSeconds(), TimeUnit.MINUTES).build());
 
-            // initilaize Hibernate L2 cache
+            // initialize Hibernate L2 cache
             manager.defineConfiguration("entity", new ConfigurationBuilder().clustering().cacheMode(CacheMode.INVALIDATION_SYNC)
                 .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
                 .locking().concurrencyLevel(1000).lockAcquisitionTimeout(15000).build());
@@ -515,9 +520,13 @@ public class CacheConfiguration {
                 ConfigurationAdapter.create()));
             <%_ } _%>
             <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
-            registerPredefinedCache("users", new JCache<Object, Object>(
-                cacheManager.getCache("users").getAdvancedCache(), this,
+            registerPredefinedCache(<%=packageName%>.repository.UserRepository.USERS_BY_LOGIN_CACHE, new JCache<Object, Object>(
+                cacheManager.getCache(<%=packageName%>.repository.UserRepository.USERS_BY_LOGIN_CACHE).getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
+            registerPredefinedCache(<%=packageName%>.repository.UserRepository.USERS_BY_EMAIL_CACHE, new JCache<Object, Object>(
+                cacheManager.getCache(<%=packageName%>.repository.UserRepository.USERS_BY_EMAIL_CACHE).getAdvancedCache(), this,
+                ConfigurationAdapter.create()));
+                <%_ if (enableHibernateCache) { _%>
             registerPredefinedCache(<%=packageName%>.domain.User.class.getName(), new JCache<Object, Object>(
                 cacheManager.getCache(<%=packageName%>.domain.User.class.getName()).getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
@@ -527,18 +536,19 @@ public class CacheConfiguration {
             registerPredefinedCache(<%=packageName%>.domain.User.class.getName() + ".authorities", new JCache<Object, Object>(
                 cacheManager.getCache(<%=packageName%>.domain.User.class.getName() + ".authorities").getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
-                <%_ if (authenticationType === 'session') { _%>
+                    <%_ if (authenticationType === 'session') { _%>
             registerPredefinedCache(<%=packageName%>.domain.PersistentToken.class.getName(), new JCache<Object, Object>(
                 cacheManager.getCache(<%=packageName%>.domain.PersistentToken.class.getName()).getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
             registerPredefinedCache(<%=packageName%>.domain.User.class.getName() + ".persistentTokens", new JCache<Object, Object>(
                 cacheManager.getCache(<%=packageName%>.domain.User.class.getName() + ".persistentTokens").getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
-                <%_ } _%>
-                <%_ if (enableSocialSignIn) { _%>
+                    <%_ } _%>
+                    <%_ if (enableSocialSignIn) { _%>
             registerPredefinedCache(<%=packageName%>.domain.SocialUserConnection.class.getName(), new JCache<Object, Object>(
                 cacheManager.getCache(<%=packageName%>.domain.SocialUserConnection.class.getName()).getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
+                    <%_ } _%>
                 <%_ } _%>
             <%_ } _%>
             // jhipster-needle-infinispan-add-entry

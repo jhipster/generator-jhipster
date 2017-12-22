@@ -371,6 +371,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
         <%_ } _%>
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        assertThat(userRepository.findOneByLogin("joe").isPresent()).isFalse();
 
         restMvc.perform(
             post("/api/register")
@@ -378,8 +379,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
                 .content(TestUtil.convertObjectToJsonBytes(validUser)))
             .andExpect(status().isCreated());
 
-        Optional<User> user = userRepository.findOneByLogin("joe");
-        assertThat(user.isPresent()).isTrue();
+        assertThat(userRepository.findOneByLogin("joe").isPresent()).isTrue();
     }
 
     @Test<% if (databaseType === 'sql') { %>

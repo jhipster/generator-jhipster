@@ -18,6 +18,9 @@
 -%>
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { registerLocaleData } from '@angular/common';
+<%_ const localeId = getLocaleId(nativeLanguage); _%>
+import locale from '@angular/common/locales/<%= localeId %>';
 
 <%_ if (websocket === 'spring-websocket') { _%>
 import { WindowRef } from './tracker/window.service';
@@ -57,7 +60,7 @@ import {
         <%_ if (skipLanguageForLocale(nativeLanguage)) { _%>
             useValue: 'en'
         <%_ } else { _%>
-            useValue: '<%= nativeLanguage %>'
+            useValue: '<%= localeId %>'
         <%_ } _%>
         },
     ],
@@ -70,4 +73,8 @@ import {
         <%=jhiPrefixCapitalized%>AlertErrorComponent
     ]
 })
-export class <%=angularXAppName%>SharedCommonModule {}
+export class <%=angularXAppName%>SharedCommonModule {
+    constructor() {
+        registerLocaleData(locale);
+    }
+}

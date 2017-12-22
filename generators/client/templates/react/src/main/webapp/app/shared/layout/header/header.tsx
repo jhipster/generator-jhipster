@@ -111,7 +111,7 @@ export class Header extends React.Component<<%if (enableTranslation) { %>IHeader
           <NavbarBrand tag={Link} to="/" className="brand-logo">
             <BrandIcon />
             <span className="brand-title"><Translate contentKey="global.title"><%= capitalizedBaseName %></Translate></span>
-            <span className="navbar-version">{appConfig.version}</span>
+            <span className="navbar-version">{appConfig.VERSION}</span>
           </NavbarBrand>
           <Collapse isOpen={this.state.menuOpen} navbar>
             <Nav className="ml-auto" navbar>

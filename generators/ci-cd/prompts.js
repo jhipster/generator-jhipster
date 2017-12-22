@@ -28,6 +28,11 @@ function askPipelines() {
         this.pipelines = ['travis'];
         return;
     }
+    if (this.autoconfigureJenkins) {
+        this.log('Auto-configuring Jenkins');
+        this.pipelines = ['jenkins'];
+        return;
+    }
     const done = this.async();
     const prompts = [
         {
@@ -56,6 +61,11 @@ function askIntegrations() {
     if (this.abort || this.pipelines.length === 0) return;
     if (this.autoconfigureTravis) {
         this.heroku = [];
+        return;
+    }
+    if (this.autoconfigureJenkins) {
+        this.heroku = [];
+        this.jenkinsIntegrations = [];
         return;
     }
     const done = this.async();

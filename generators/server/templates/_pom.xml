@@ -68,7 +68,7 @@
         <profile.swagger />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>0.1.4</jhipster-dependencies.version>
+        <jhipster-dependencies.version>0.1.5</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
         <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
@@ -158,6 +158,12 @@
     </dependencyManagement>
 
     <dependencies>
+        <%_ if (cacheProvider !== 'no') { _%>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>io.github.jhipster</groupId>
             <artifactId>jhipster</artifactId>
@@ -174,7 +180,7 @@
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-json</artifactId>
         </dependency>
-        <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'infinispan') { _%>
+        <%_ if (['ehcache', 'infinispan'].includes(cacheProvider)) { _%>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-jcache</artifactId>
@@ -219,19 +225,19 @@
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
-        <%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
+        <%_ if (cacheProvider === 'hazelcast' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (hibernateCache === 'hazelcast') { _%>
+        <%_ if (cacheProvider === 'hazelcast' && enableHibernateCache) { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-hibernate52</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
+        <%_ if (cacheProvider === 'hazelcast' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-spring</artifactId>
@@ -243,13 +249,13 @@
             <artifactId>hazelcast-wm</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (hibernateCache === 'infinispan') { _%>
+        <%_ if (cacheProvider === 'infinispan') { _%>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-infinispan</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (hibernateCache === 'infinispan') { _%>
+        <%_ if (cacheProvider === 'infinispan') { _%>
         <dependency>
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-spring-boot-starter</artifactId>
@@ -336,7 +342,7 @@
             <artifactId>jzlib</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast' || hibernateCache === 'infinispan' || applicationType === 'gateway') { _%>
+        <%_ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || applicationType === 'gateway') { _%>
         <dependency>
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>
@@ -389,15 +395,17 @@
             <scope>test</scope>
         </dependency>
         <%_ } _%>
-        <%_ if (hibernateCache === 'ehcache' && databaseType === 'sql') { _%>
+        <%_ if (cacheProvider === 'ehcache') { _%>
         <dependency>
             <groupId>org.ehcache</groupId>
             <artifactId>ehcache</artifactId>
         </dependency>
+            <%_ if (enableHibernateCache) { _%>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-jcache</artifactId>
         </dependency>
+            <%_ } _%>
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
         <dependency>
@@ -839,16 +847,14 @@
                                     <directory><%= SERVER_MAIN_RES_DIR %></directory>
                                     <filtering>true</filtering>
                                     <includes>
-                                        <include>**/*.xml</include>
-                                        <include>**/*.yml</include>
+                                        <include>config/application.yml</include>
                                     </includes>
                                 </resource>
                                 <resource>
                                     <directory><%= SERVER_MAIN_RES_DIR %></directory>
                                     <filtering>false</filtering>
                                     <excludes>
-                                        <exclude>**/*.xml</exclude>
-                                        <exclude>**/*.yml</exclude>
+                                        <exclude>config/application.yml</exclude>
                                     </excludes>
                                 </resource>
                             </resources>
@@ -1178,9 +1184,9 @@
                                 <configuration>
                                     <arguments>run webpack:build</arguments>
                                     <%_ if (clientPackageManager === 'yarn') { _%>
-                                        <yarnInheritsProxyConfigFromMaven>false</yarnInheritsProxyConfigFromMaven>
+                                    <yarnInheritsProxyConfigFromMaven>false</yarnInheritsProxyConfigFromMaven>
                                     <%_ } else if (clientPackageManager === 'npm') { _%>
-                                        <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
+                                    <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
                                     <%_ } _%>
                                 </configuration>
                             </execution>
@@ -1236,8 +1242,6 @@
                 </plugins>
             </build>
             <properties>
-                <!-- log configuration -->
-                <logback.loglevel>DEBUG</logback.loglevel>
                 <!-- default Spring profiles -->
                 <spring.profiles.active>dev${profile.no-liquibase}</spring.profiles.active>
             </properties>
@@ -1400,9 +1404,9 @@
                                 <configuration>
                                     <arguments>run webpack:test</arguments>
                                     <%_ if (clientPackageManager === 'yarn') { _%>
-                                        <yarnInheritsProxyConfigFromMaven>false</yarnInheritsProxyConfigFromMaven>
+                                    <yarnInheritsProxyConfigFromMaven>false</yarnInheritsProxyConfigFromMaven>
                                     <%_ } else if (clientPackageManager === 'npm') { _%>
-                                        <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
+                                    <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
                                     <%_ } _%>
                                 </configuration>
                             </execution>
@@ -1415,9 +1419,9 @@
                                 <configuration>
                                     <arguments>run webpack:prod</arguments>
                                     <%_ if (clientPackageManager === 'yarn') { _%>
-                                        <yarnInheritsProxyConfigFromMaven>false</yarnInheritsProxyConfigFromMaven>
+                                    <yarnInheritsProxyConfigFromMaven>false</yarnInheritsProxyConfigFromMaven>
                                     <%_ } else if (clientPackageManager === 'npm') { _%>
-                                        <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
+                                    <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
                                     <%_ } _%>
                                 </configuration>
                             </execution>
@@ -1428,8 +1432,6 @@
                 </plugins>
             </build>
             <properties>
-                <!-- log configuration -->
-                <logback.loglevel>INFO</logback.loglevel>
                 <!-- default Spring profiles -->
                 <spring.profiles.active>prod${profile.swagger}${profile.no-liquibase}</spring.profiles.active>
             </properties>
@@ -1528,8 +1530,6 @@
                 </plugins>
             </build>
             <properties>
-                <!-- log configuration -->
-                <logback.loglevel>DEBUG</logback.loglevel>
                 <!-- default Spring profiles -->
                 <spring.profiles.active>dev,swagger</spring.profiles.active>
             </properties>

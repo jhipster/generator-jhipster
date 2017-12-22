@@ -24,10 +24,6 @@ apply plugin: 'com.moowork.gulp'
     <%_ } _%>
 <%_ } _%>
 
-ext {
-    logbackLoglevel = "INFO"
-}
-
 dependencies {
 
 }
@@ -67,11 +63,6 @@ war {
 <%_ } _%>
 
 processResources {
-    filesMatching('**/logback-spring.xml') {
-        filter {
-            it.replace('#logback.loglevel#', logbackLoglevel)
-        }
-    }
     filesMatching('**/application.yml') {
         filter {
             it.replace('#project.version#', version)

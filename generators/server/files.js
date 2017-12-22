@@ -96,7 +96,7 @@ function writeFiles() {
                 this.template(`${DOCKER_DIR}cassandra/scripts/_autoMigrate.sh`, `${DOCKER_DIR}cassandra/scripts/autoMigrate.sh`);
                 this.template(`${DOCKER_DIR}cassandra/scripts/_execute-cql.sh`, `${DOCKER_DIR}cassandra/scripts/execute-cql.sh`);
             }
-            if (this.hibernateCache === 'hazelcast') {
+            if (this.cacheProvider === 'hazelcast') {
                 this.template(`${DOCKER_DIR}_hazelcast-management-center.yml`, `${DOCKER_DIR}hazelcast-management-center.yml`);
             }
             if (this.searchEngine === 'elasticsearch') {
@@ -359,7 +359,7 @@ function writeFiles() {
             }
             if (this.authenticationType === 'oauth2') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_AuthorizationHeaderUtil.java`, `${javaDir}/security/oauth2/AuthorizationHeaderUtil.java`);
-                if (this.hibernateCache !== 'no') {
+                if (this.cacheProvider !== 'no') {
                     this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_CachedUserInfoTokenServices.java`, `${javaDir}/security/oauth2/CachedUserInfoTokenServices.java`);
                 }
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_SimplePrincipalExtractor.java`, `${javaDir}/security/oauth2/SimplePrincipalExtractor.java`);
@@ -397,10 +397,10 @@ function writeFiles() {
 
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_package-info.java`, `${javaDir}config/package-info.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_AsyncConfiguration.java`, `${javaDir}config/AsyncConfiguration.java`);
-            if (this.hibernateCache === 'ehcache' || this.hibernateCache === 'hazelcast' || this.hibernateCache === 'infinispan' || this.clusteredHttpSession === 'hazelcast' || this.applicationType === 'gateway') {
+            if (['ehcache', 'hazelcast', 'infinispan'].includes(this.cacheProvider) || this.clusteredHttpSession === 'hazelcast' || this.applicationType === 'gateway') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/_CacheConfiguration.java`, `${javaDir}config/CacheConfiguration.java`);
             }
-            if (this.hibernateCache === 'infinispan') {
+            if (this.cacheProvider === 'infinispan') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/_CacheFactoryConfiguration.java`, `${javaDir}config/CacheFactoryConfiguration.java`);
             }
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_Constants.java`, `${javaDir}config/Constants.java`);
@@ -577,6 +577,11 @@ function writeFiles() {
             // Create Elasticsearch test files
             if (this.searchEngine === 'elasticsearch') {
                 this.template(`${SERVER_TEST_SRC_DIR}package/config/elasticsearch/_IndexReinitializer.java`, `${testDir}config/elasticsearch/IndexReinitializer.java`);
+            }
+
+            // Create auth config test files
+            if (this.applicationType === 'monolith' && this.authenticationType !== 'oauth2') {
+                this.template(`${SERVER_TEST_SRC_DIR}package/security/_DomainUserDetailsServiceIntTest.java`, `${testDir}security/DomainUserDetailsServiceIntTest.java`);
             }
         },
 

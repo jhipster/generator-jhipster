@@ -32,7 +32,7 @@ import { Component, OnInit, OnDestroy<% if (fieldsContainImageBlob) { %>, Elemen
 import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager<% if (queries && queries.length > 0) { %>, JhiAlertService<% } %><% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
 

@@ -16,12 +16,21 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_
+let cacheManagerIsAvailable = false;
+if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') {
+    cacheManagerIsAvailable = true;
+}
+_%>
 package <%= packageName %>.web.rest;
 
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
+<%_ if (cacheManagerIsAvailable === true) { _%>
+import <%=packageName%>.config.CacheConfiguration;
+<%_ } _%>
 <%_ if (databaseType !== 'cassandra' && databaseType !== 'couchbase') { _%>
 import <%= packageName %>.domain.Authority;
 <%_ } _%>
@@ -48,6 +57,9 @@ import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+<%_ if (cacheManagerIsAvailable === true) { _%>
+import org.springframework.cache.CacheManager;
+<%_ } _%>
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -65,8 +77,10 @@ import javax.persistence.EntityManager;
 import java.time.Instant;
 <%_ } _%>
 import java.util.*;
+<%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+<%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
 import java.util.UUID;
 <%_ } _%>
@@ -150,12 +164,17 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
 
     @Autowired
     private ExceptionTranslator exceptionTranslator;
-
     <%_ if (databaseType === 'sql') { _%>
+
     @Autowired
     private EntityManager em;
-
     <%_ } _%>
+    <%_ if (cacheManagerIsAvailable === true) { _%>
+
+    @Autowired
+    private CacheManager cacheManager;
+    <%_ } _%>
+
     private MockMvc restUserMockMvc;
 
     private User user;
@@ -163,6 +182,10 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
+        <%_ if (cacheManagerIsAvailable === true) { _%>
+        cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).clear();
+        cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).clear();
+        <%_ } _%>
         UserResource userResource = new UserResource(userRepository, userService<% if (authenticationType !== 'oauth2') { %>, mailService<% } %><% if (searchEngine === 'elasticsearch') { %>, userSearchRepository<% } %>);
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -401,6 +424,10 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         <%_ if (searchEngine === 'elasticsearch') { _%>
         userSearchRepository.save(user);
         <%_ } _%>
+        <%_ if (cacheManagerIsAvailable === true) { _%>
+
+        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNull();
+        <%_ } _%>
 
         // Get the user
         restUserMockMvc.perform(get("/api/users/{login}", user.getLogin()))
@@ -414,6 +441,10 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
             .andExpect(jsonPath("$.imageUrl").value(DEFAULT_IMAGEURL))
             <%_ } _%>
             .andExpect(jsonPath("$.langKey").value(DEFAULT_LANGKEY));
+        <%_ if (cacheManagerIsAvailable === true) { _%>
+
+        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNotNull();
+        <%_ } _%>
     }
 
     @Test
@@ -667,6 +698,10 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         restUserMockMvc.perform(delete("/api/users/{login}", user.getLogin())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
+        <%_ if (cacheManagerIsAvailable === true) { _%>
+
+        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNull();
+        <%_ } _%>
 
         // Validate the database is empty
         List<User> userList = userRepository.findAll();
@@ -760,7 +795,8 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         user.setCreatedDate(Instant.now());
         user.setLastModifiedBy(DEFAULT_LOGIN);
         user.setLastModifiedDate(Instant.now());
-        <%_ } if (databaseType !== 'cassandra' && databaseType !== 'couchbase') { _%>
+        <%_ } _%>
+        <%_ if (databaseType !== 'cassandra' && databaseType !== 'couchbase') { _%>
         Set<Authority> authorities = new HashSet<>();
         Authority authority = new Authority();
         authority.setName(AuthoritiesConstants.USER);

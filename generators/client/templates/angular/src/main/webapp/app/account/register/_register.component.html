@@ -52,7 +52,7 @@
                 <div class="form-group">
                     <label class="form-control-label" for="login" jhiTranslate="global.form.username">Username</label>
                     <input type="text" class="form-control" [(ngModel)]="registerAccount.login" id="login" name="login" #login="ngModel" placeholder="{{'global.form.username.placeholder' | translate}}"
-                            required minlength="1" maxlength="50" pattern="^[_'.@A-Za-z0-9-]*$">
+                            required minlength="1" maxlength="50" pattern="^[_'.A-Za-z0-9-]*$">
                     <div *ngIf="login.dirty && login.invalid">
                         <small class="form-text text-danger" *ngIf="login.errors.required" jhiTranslate="register.messages.validate.login.required">
                             Your username is required.
@@ -67,7 +67,7 @@
                         </small>
                         <small class="form-text text-danger" *ngIf="login.errors.pattern"
                                jhiTranslate="register.messages.validate.login.pattern">
-                            Your username can only contain lower-case letters and digits.
+                            Your username can only contain letters and digits.
                         </small>
                     </div>
                 </div>

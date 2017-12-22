@@ -10,7 +10,7 @@ import initStore from './config/store';
 import { registerLocales } from './config/translation';
 <%_ } _%>
 import setupAxiosInterceptors from './config/axios-interceptor';
-import { clearAuthentication, clearAuthToken } from './reducers/authentication';
+import { clearAuthentication } from './reducers/authentication';
 import AppComponent from './app';
 
 const devTools = process.env.NODE_ENV === 'development' ? <DevTools /> : null;
@@ -21,7 +21,7 @@ registerLocales(store);
 <%_ } _%>
 
 const actions = bindActionCreators({ clearAuthentication }, store.dispatch);
-setupAxiosInterceptors(() => actions.clearAuthentication('login.error.unauthorized'), clearAuthToken);
+setupAxiosInterceptors(() => actions.clearAuthentication('login.error.unauthorized'));
 
 const rootEl = document.getElementById('root');
 

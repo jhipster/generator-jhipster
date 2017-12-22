@@ -4,7 +4,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - "8.9.1"
+  - "8.9.3"
 jdk:
   - oraclejdk8
 addons:
@@ -31,28 +31,21 @@ env:
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
   matrix:
-    - JHIPSTER=app-default-from-scratch PROFILE=prod RUN_APP=0
-    - JHIPSTER=app-ng2-default PROTRACTOR=1
-    - JHIPSTER=app-ng2-psql-es-noi18n PROFILE=prod PROTRACTOR=1
-    - JHIPSTER=app-ng2-gradle-jwt-psql PROTRACTOR=1
-    - JHIPSTER=app-ng2-social-websocket PROTRACTOR=1
-    - JHIPSTER=app-ng2-sass-noi18n PROTRACTOR=1
-    - JHIPSTER=app-ng2-gateway-eureka
-    - JHIPSTER=app-ng2-gateway-consul
-    - JHIPSTER=app-ng2-gateway-uaa
-    - JHIPSTER=app-ng2-infinispan
-    - JHIPSTER=app-ng2-cassandra
-    - JHIPSTER=app-ng2-mongodb
-    - JHIPSTER=app-ng2-mongodb-elasticsearch
-    - JHIPSTER=app-ng2-oauth2 PROTRACTOR=1
-    - JHIPSTER=app-react-default
-    - JHIPSTER=app-mysql PROFILE=prod PROTRACTOR=1
-    - JHIPSTER=app-gradle PROTRACTOR=1
-    - JHIPSTER=app-hazelcast-cucumber
-    - JHIPSTER=app-mariadb-kafka
-    - JHIPSTER=app-jwt
-    - JHIPSTER=app-microservice-eureka
-    - JHIPSTER=app-microservice-consul
+    - JHIPSTER=ngx-default PROFILE=prod PROTRACTOR=1
+    - JHIPSTER=ngx-psql-es-noi18n PROFILE=prod PROTRACTOR=1
+    - JHIPSTER=ngx-gradle-fr PROFILE=prod PROTRACTOR=1
+    - JHIPSTER=ngx-mariadb-oauth2-sass-noi18n PROTRACTOR=1
+    - JHIPSTER=ngx-h2mem-social-ws-nol2
+    - JHIPSTER=ngx-mongodb-kafka-cucumber
+    - JHIPSTER=ngx-session-cassandra-fr
+    - JHIPSTER=ngx-couchbase-infinispan
+    - JHIPSTER=ms-ngx-gateway-eureka
+    - JHIPSTER=ms-ngx-gateway-consul
+    - JHIPSTER=ms-ngx-gateway-uaa
+    - JHIPSTER=ms-micro-eureka
+    - JHIPSTER=ms-micro-consul
+    - JHIPSTER=react-default
+    - JHIPSTER=ng1-default
 
 before_install:
   - jdk_switcher use oraclejdk8
@@ -61,9 +54,10 @@ before_install:
   - date
   - sudo /etc/init.d/mysql stop
   - sudo /etc/init.d/postgresql stop
+  # Use this for Protractor
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
-  # Repo for Yarn
+  # Install Yarn
   - curl -o- -L https://yarnpkg.com/install.sh | bash
   - export PATH=$HOME/.yarn/bin:$PATH
   - yarn -v
@@ -72,8 +66,8 @@ install:
   - cd "$TRAVIS_BUILD_DIR"/
   - yarn install
   - yarn global add file:"$TRAVIS_BUILD_DIR"
-  - if [ "$JHIPSTER" == "app-default-from-scratch" ]; then
-        yarn run test;
+  - if [ "$JHIPSTER" == "ngx-default" ]; then
+        yarn test;
     fi
   - $JHIPSTER_SCRIPTS/01-generate-entities.sh
   - $JHIPSTER_SCRIPTS/02-generate-project.sh

@@ -47,9 +47,11 @@ public class TokenRelayFilter extends ZuulFilter {
         <%_ } _%>
         <%_ if (authenticationType === 'oauth2') { _%>
         // Add specific authorization headers for OAuth2
-        ctx.addZuulRequestHeader(AUTHORIZATION_HEADER,
-            AuthorizationHeaderUtil.getAuthorizationHeader().get());
+        if (AuthorizationHeaderUtil.getAuthorizationHeader().isPresent()) {
+            ctx.addZuulRequestHeader(AUTHORIZATION_HEADER,
+                AuthorizationHeaderUtil.getAuthorizationHeader().get());
 
+        }
         <%_ } _%>
         return null;
     }

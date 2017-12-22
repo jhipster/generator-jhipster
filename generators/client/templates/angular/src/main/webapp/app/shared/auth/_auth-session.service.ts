@@ -18,10 +18,8 @@
 -%>
 import { Injectable } from '@angular/core';
 import { Http, Response<% if (authenticationType !== 'oauth2') { %>, Headers<% } %> } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
-<%_ if (authenticationType !== 'uaa') { _%>
+import { Observable } from 'rxjs/Observable';
 import { SERVER_API_URL } from '../../app.constants';
-<%_ } _%>
 
 @Injectable()
 export class AuthServerProvider {

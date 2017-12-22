@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 <%_ } if (importApiModelProperty === true) { _%>
 import io.swagger.annotations.ApiModelProperty;
-<%_ } if (hibernateCache !== 'no') { _%>
+<%_ } if (enableHibernateCache) { _%>
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 <%_ } if (databaseType === 'mongodb') { _%>
@@ -93,8 +93,8 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <%_ if (databaseType === 'sql') { _%>
 @Entity
 @Table(name = "<%= entityTableName %>")
-<%_     if (hibernateCache !== 'no') {
-            if (hibernateCache === 'infinispan') { _%>
+<%_     if (enableHibernateCache) {
+            if (cacheProvider === 'infinispan') { _%>
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 <%_         } else { _%>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -222,8 +222,8 @@ public class <%= entityClass %> implements Serializable {
     _%>
     @OneToMany(mappedBy = "<%= otherEntityRelationshipName %>")
     @JsonIgnore
-    <%_ if (hibernateCache !== 'no') {
-            if (hibernateCache === 'infinispan') { _%>
+    <%_ if (enableHibernateCache) {
+            if (cacheProvider === 'infinispan') { _%>
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
         <%_ } else { _%>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -241,8 +241,8 @@ public class <%= entityClass %> implements Serializable {
     <%_ } else if (relationshipType === 'many-to-many') { _%>
     @ManyToMany<% if (ownerSide === false) { %>(mappedBy = "<%= otherEntityRelationshipNamePlural %>")
     @JsonIgnore<% } %>
-        <%_ if (hibernateCache !== 'no') {
-                if (hibernateCache === 'infinispan') { _%>
+        <%_ if (enableHibernateCache) {
+                if (cacheProvider === 'infinispan') { _%>
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
             <%_ } else { _%>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)

@@ -19,15 +19,21 @@
 package <%=packageName%>.config;
 
 import io.github.jhipster.config.JHipsterConstants;
-import io.github.jhipster.config.JHipsterProperties;<% if (!skipClient) { %>
-import io.github.jhipster.web.filter.CachingHttpHeadersFilter;<% } %>
+import io.github.jhipster.config.JHipsterProperties;
+<%_ if (!skipClient) { _%>
+import io.github.jhipster.web.filter.CachingHttpHeadersFilter;
+<%_ } _%>
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
-import com.codahale.metrics.servlets.MetricsServlet;<% if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { %>
-import com.hazelcast.core.HazelcastInstance;<% } %><% if (clusteredHttpSession === 'hazelcast') { %>
+import com.codahale.metrics.servlets.MetricsServlet;
+<%_ if (clusteredHttpSession === 'hazelcast' || cacheProvider === 'hazelcast') { _%>
+import com.hazelcast.core.HazelcastInstance;
+<%_ } _%>
+<%_ if (clusteredHttpSession === 'hazelcast') { _%>
 import com.hazelcast.web.SessionListener;
-import com.hazelcast.web.spring.SpringAwareWebFilter;<% } %>
+import com.hazelcast.web.spring.SpringAwareWebFilter;
+<%_ } _%>
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,17 +65,17 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
 
     private final Environment env;
 
-    private final JHipsterProperties jHipsterProperties;<% if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { %>
+    private final JHipsterProperties jHipsterProperties;<% if (clusteredHttpSession === 'hazelcast' || cacheProvider === 'hazelcast') { %>
 
     private final HazelcastInstance hazelcastInstance;<% } %>
 
     private MetricRegistry metricRegistry;
 
-    public WebConfigurer(Environment env, JHipsterProperties jHipsterProperties<% if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { %>, HazelcastInstance hazelcastInstance<% } %>) {
+    public WebConfigurer(Environment env, JHipsterProperties jHipsterProperties<% if (clusteredHttpSession === 'hazelcast' || cacheProvider === 'hazelcast') { %>, HazelcastInstance hazelcastInstance<% } %>) {
 
         this.env = env;
         this.jHipsterProperties = jHipsterProperties;
-        <%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { _%>
+        <%_ if (clusteredHttpSession === 'hazelcast' || cacheProvider === 'hazelcast') { _%>
         this.hazelcastInstance = hazelcastInstance;
         <%_ } _%>
     }
@@ -246,9 +252,11 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         if (config.getAllowedOrigins() != null && !config.getAllowedOrigins().isEmpty()) {
             log.debug("Registering CORS filter");
             source.registerCorsConfiguration("/api/**", config);
+            source.registerCorsConfiguration("/management/**", config);
             source.registerCorsConfiguration("/v2/api-docs", config);
             <%_ if (applicationType === 'gateway') { _%>
             source.registerCorsConfiguration("/*/api/**", config);
+            source.registerCorsConfiguration("/*/management/**", config);
             <%_ if (authenticationType === 'uaa') { _%>
             source.registerCorsConfiguration("/*/oauth/**", config);
             <%_ } _%>

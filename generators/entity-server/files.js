@@ -198,8 +198,8 @@ function writeFiles() {
                 }
                 this.addChangelogToLiquibase(`${this.changelogDate}_added_entity_${this.entityClass}`);
 
-                if (this.hibernateCache === 'ehcache' || this.hibernateCache === 'infinispan') {
-                    this.addEntityToCache(this.entityClass, this.relationships, this.packageName, this.packageFolder, this.hibernateCache);
+                if (['ehcache', 'infinispan'].includes(this.cacheProvider) && this.enableHibernateCache) {
+                    this.addEntityToCache(this.entityClass, this.relationships, this.packageName, this.packageFolder, this.cacheProvider);
                 }
             }
         },

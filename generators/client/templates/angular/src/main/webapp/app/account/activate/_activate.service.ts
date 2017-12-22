@@ -18,10 +18,8 @@
 -%>
 import { Injectable } from '@angular/core';
 import { Http, Response, URLSearchParams } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
-<%_ if (authenticationType !== 'uaa') { _%>
+import { Observable } from 'rxjs/Observable';
 import { SERVER_API_URL } from '../../app.constants';
-<%_ } _%>
 
 @Injectable()
 export class ActivateService {
@@ -32,7 +30,7 @@ export class ActivateService {
         const params: URLSearchParams = new URLSearchParams();
         params.set('key', key);
 
-        return this.http.get(<%- apiUrlPrefix %>api/activate', {
+        return this.http.get(SERVER_API_URL + '<%- apiUaaPath %>api/activate', {
             search: params
         }).map((res: Response) => res);
     }

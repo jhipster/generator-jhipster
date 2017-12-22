@@ -484,6 +484,16 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * return the localeId from the given language key (from constants.LANGUAGES)
+     * if no localeId is defined, return the language key (which is a localeId itself)
+     * @param {string} language - language key
+     */
+    getLocaleId(language) {
+        const langObj = this.getAllSupportedLanguageOptions().find(langObj => langObj.value === language);
+        return langObj.localeId || language;
+    }
+
+    /**
      * get all the languages options supported by JHipster
      */
     getAllSupportedLanguageOptions() {
@@ -2040,8 +2050,10 @@ module.exports = class extends PrivateBase {
         this.log(`${chalk.green('   ╚═════╝ ')}${chalk.red(' ╚═╝   ╚═╝ ╚═══════╝ ╚═╝       ╚═════╝     ╚═╝    ╚═══════╝ ╚═╝   ╚═╝')}\n`);
         this.log(chalk.white.bold('                            http://www.jhipster.tech\n'));
         this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow(`v${packagejs.version}`));
-        this.log(chalk.white(`Documentation for creating an application: ${chalk.yellow('http://www.jhipster.tech/creating-an-app/')}`));
-        this.log(chalk.white(`If you find JHipster useful consider supporting our collective ${chalk.yellow('https://opencollective.com/generator-jhipster')}`));
+        this.log(chalk.green(' _______________________________________________________________________________________________________________\n'));
+        this.log(chalk.white(`  If you find JHipster useful consider supporting our collective ${chalk.yellow('https://opencollective.com/generator-jhipster')}`));
+        this.log(chalk.white(`  Documentation for creating an application: ${chalk.yellow('http://www.jhipster.tech/creating-an-app/')}`));
+        this.log(chalk.green(' _______________________________________________________________________________________________________________\n'));
         this.log(chalk.white(`Application files will be generated in folder: ${chalk.yellow(process.cwd())}`));
     }
 
@@ -2312,7 +2324,8 @@ module.exports = class extends PrivateBase {
         generator.databaseType = generator.getDBTypeFromDBValue(context.options.db) || context.configOptions.databaseType || context.config.get('databaseType');
         generator.enableSocialSignIn = context.options.social || context.config.get('enableSocialSignIn');
         generator.searchEngine = context.options['search-engine'] || context.config.get('searchEngine');
-        generator.hibernateCache = context.options['hb-cache'] || context.config.get('hibernateCache');
+        generator.cacheProvider = context.options['cache-provider'] || context.config.get('cacheProvider') || context.config.get('hibernateCache') || 'no';
+        generator.enableHibernateCache = context.options['hb-cache'] || context.config.get('enableHibernateCache') || (context.config.get('hibernateCache') !== undefined && context.config.get('hibernateCache') !== 'no');
         generator.otherModules = context.configOptions.otherModules || [];
         generator.jhiPrefix = context.configOptions.jhiPrefix || context.config.get('jhiPrefix') || context.options['jhi-prefix'];
         generator.jhiPrefixCapitalized = _.upperFirst(generator.jhiPrefix);

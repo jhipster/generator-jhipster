@@ -23,7 +23,7 @@ fi
 #-------------------------------------------------------------------------------
 # Launch UAA tests
 #-------------------------------------------------------------------------------
-if [ "$JHIPSTER" == "app-ng2-gateway-uaa" ]; then
+if [[ "$JHIPSTER" == *"uaa"* ]]; then
     cd "$UAA_APP_FOLDER"
     ./mvnw test
 fi
@@ -45,5 +45,5 @@ if [ -f "gulpfile.js" ]; then
     gulp test --no-notification
 fi
 if [ -f "tsconfig.json" ]; then
-    yarn run test
+    yarn test
 fi

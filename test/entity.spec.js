@@ -131,7 +131,7 @@ describe('JHipster generator entity for angular1', () => {
         });
     });
 
-    describe('with dto, no service, no pagination', () => {
+    describe('with dto, service, no pagination', () => {
         beforeEach((done) => {
             helpers.run(require.resolve('../generators/entity'))
                 .inTmpDir((dir) => {
@@ -142,33 +142,6 @@ describe('JHipster generator entity for angular1', () => {
                     fieldAdd: false,
                     relationshipAdd: false,
                     dto: 'mapstruct',
-                    service: 'no',
-                    pagination: 'no'
-                })
-                .on('end', done);
-        });
-
-        it('creates expected default files', () => {
-            assert.file(expectedFiles.server);
-            assert.file(expectedFiles.client);
-            assert.file([
-                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooDTO.java`,
-                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/FooMapper.java`
-            ]);
-        });
-    });
-
-    describe('no dto, with serviceClass, no pagination', () => {
-        beforeEach((done) => {
-            helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir((dir) => {
-                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
-                })
-                .withArguments(['foo'])
-                .withPrompts({
-                    fieldAdd: false,
-                    relationshipAdd: false,
-                    dto: 'no',
                     service: 'serviceClass',
                     pagination: 'no'
                 })
@@ -179,6 +152,8 @@ describe('JHipster generator entity for angular1', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.client);
             assert.file([
+                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooDTO.java`,
+                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/FooMapper.java`,
                 `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`
             ]);
         });

@@ -120,7 +120,6 @@ export class UserManagementModel extends React.Component<IUserManagementModelPro
             <%_ } _%>
             <AvGroup>
               <Label for="authorities"><Translate contentKey="userManagement.profiles">Language Key</Translate></Label>
-              {/* TODO: fix issue in selecting the value */}
               <AvInput type="select" className="form-control" name="authorities" multiple>
                 {roles.map(role => <option value={role} key={role}>{role}</option>)}
               </AvInput>

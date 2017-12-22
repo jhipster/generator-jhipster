@@ -26,7 +26,7 @@
     Activate.$inject = ['$resource'];
 
     function Activate ($resource) {
-        var service = $resource('<%- apiUaaUrlPrefix %>api/activate', {}, {
+        var service = $resource('<%- apiUaaPath %>api/activate', {}, {
             'get': { method: 'GET', params: {}, isArray: false}
         });
 

@@ -18,7 +18,8 @@
 -%>
 import { Injectable } from '@angular/core';
 import { Response, Http } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
+import { SERVER_API_URL } from '../../app.constants';
 
 @Injectable()
 export class <%=jhiPrefixCapitalized%>MetricsService {
@@ -26,10 +27,10 @@ export class <%=jhiPrefixCapitalized%>MetricsService {
     constructor(private http: Http) {}
 
     getMetrics(): Observable<any> {
-        return this.http.get('management/metrics').map((res: Response) => res.json());
+        return this.http.get(SERVER_API_URL + 'management/metrics').map((res: Response) => res.json());
     }
 
     threadDump(): Observable<any> {
-        return this.http.get('management/dump').map((res: Response) => res.json());
+        return this.http.get(SERVER_API_URL + 'management/dump').map((res: Response) => res.json());
     }
 }

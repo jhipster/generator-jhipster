@@ -18,7 +18,8 @@
 -%>
 import { Injectable } from '@angular/core';
 import { Http, Response, URLSearchParams } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
+import { SERVER_API_URL } from '../../app.constants';
 
 @Injectable()
 export class AuditsService  {
@@ -36,6 +37,6 @@ export class AuditsService  {
             search: params
         };
 
-        return this.http.get('<%- apiUaaUrlPrefix %>management/audits', options);
+        return this.http.get(SERVER_API_URL + '<%- apiUaaPath %>management/audits', options);
     }
 }

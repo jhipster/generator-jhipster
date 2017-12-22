@@ -18,10 +18,8 @@
 -%>
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
-<%_ if (authenticationType !== 'uaa') { _%>
+import { Observable } from 'rxjs/Observable';
 import { SERVER_API_URL } from '../../app.constants';
-<%_ } _%>
 
 @Injectable()
 export class PasswordService {
@@ -29,6 +27,6 @@ export class PasswordService {
     constructor(private http: Http) {}
 
     save(newPassword: string): Observable<any> {
-        return this.http.post(<%- apiUrlPrefix %>api/account/change-password', newPassword);
+        return this.http.post(SERVER_API_URL + '<%- apiUaaPath %>api/account/change-password', newPassword);
     }
 }

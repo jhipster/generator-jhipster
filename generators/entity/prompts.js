@@ -317,8 +317,9 @@ function askForFiltering() {
 
 function askForDTO() {
     const context = this.context;
-    // don't prompt if data is imported from a file or server is skipped
-    if (context.useConfigurationFile || context.skipServer) {
+    // don't prompt if data is imported from a file or server is skipped or if no service layer
+    if (context.useConfigurationFile || context.skipServer || context.service === 'no') {
+        context.dto = 'no';
         return;
     }
     const done = this.async();
@@ -711,103 +712,63 @@ function askForField(done) {
             default: false
         },
         {
-            when: response => response.fieldAdd === true &&
-                    response.fieldValidate === true &&
-                    (response.fieldType === 'String' ||
-                    response.fieldTypeBlobContent === 'text'),
+            when: response => response.fieldAdd === true && response.fieldValidate === true,
             type: 'checkbox',
             name: 'fieldValidateRules',
             message: 'Which validation rules do you want to add?',
-            choices: [
-                {
-                    name: 'Required',
-                    value: 'required'
-                },
-                {
-                    name: 'Minimum length',
-                    value: 'minlength'
-                },
-                {
-                    name: 'Maximum length',
-                    value: 'maxlength'
-                },
-                {
-                    name: 'Regular expression pattern',
-                    value: 'pattern'
+            choices: (response) => {
+                // Default rules applicable for fieldType 'LocalDate', 'Instant',
+                // 'ZonedDateTime', 'UUID', 'Boolean', 'ByteBuffer' and 'Enum'
+                const opts = [
+                    {
+                        name: 'Required',
+                        value: 'required'
+                    }/* ,
+                    {
+                        name: 'Unique',
+                        value: 'unique'
+                    } */
+                ];
+                if (response.fieldType === 'String' || response.fieldTypeBlobContent === 'text') {
+                    opts.push(
+                        {
+                            name: 'Minimum length',
+                            value: 'minlength'
+                        },
+                        {
+                            name: 'Maximum length',
+                            value: 'maxlength'
+                        },
+                        {
+                            name: 'Regular expression pattern',
+                            value: 'pattern'
+                        }
+                    );
+                } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(response.fieldType)) {
+                    opts.push(
+                        {
+                            name: 'Minimum',
+                            value: 'min'
+                        },
+                        {
+                            name: 'Maximum',
+                            value: 'max'
+                        }
+                    );
+                } else if (response.fieldType === 'byte[]' && response.fieldTypeBlobContent !== 'text') {
+                    opts.push(
+                        {
+                            name: 'Minimum byte size',
+                            value: 'minbytes'
+                        },
+                        {
+                            name: 'Maximum byte size',
+                            value: 'maxbytes'
+                        }
+                    );
                 }
-            ],
-            default: 0
-        },
-        {
-            when: response => response.fieldAdd === true &&
-                    response.fieldValidate === true &&
-                    (response.fieldType === 'Integer' ||
-                    response.fieldType === 'Long' ||
-                    response.fieldType === 'Float' ||
-                    response.fieldType === 'Double' ||
-                    response.fieldType === 'BigDecimal'),
-            type: 'checkbox',
-            name: 'fieldValidateRules',
-            message: 'Which validation rules do you want to add?',
-            choices: [
-                {
-                    name: 'Required',
-                    value: 'required'
-                },
-                {
-                    name: 'Minimum',
-                    value: 'min'
-                },
-                {
-                    name: 'Maximum',
-                    value: 'max'
-                }
-            ],
-            default: 0
-        },
-        {
-            when: response => response.fieldAdd === true &&
-                    response.fieldValidate === true &&
-                    response.fieldType === 'byte[]' &&
-                    response.fieldTypeBlobContent !== 'text',
-            type: 'checkbox',
-            name: 'fieldValidateRules',
-            message: 'Which validation rules do you want to add?',
-            choices: [
-                {
-                    name: 'Required',
-                    value: 'required'
-                },
-                {
-                    name: 'Minimum byte size',
-                    value: 'minbytes'
-                },
-                {
-                    name: 'Maximum byte size',
-                    value: 'maxbytes'
-                }
-            ],
-            default: 0
-        },
-        {
-            when: response => response.fieldAdd === true &&
-                    response.fieldValidate === true &&
-                    (response.fieldType === 'LocalDate' ||
-                    response.fieldType === 'Instant' ||
-                    response.fieldType === 'ZonedDateTime' ||
-                    response.fieldType === 'UUID' ||
-                    response.fieldType === 'Boolean' ||
-                    response.fieldType === 'ByteBuffer' ||
-                    response.fieldIsEnum === true),
-            type: 'checkbox',
-            name: 'fieldValidateRules',
-            message: 'Which validation rules do you want to add?',
-            choices: [
-                {
-                    name: 'Required',
-                    value: 'required'
-                }
-            ],
+                return opts;
+            },
             default: 0
         },
         {
@@ -833,51 +794,31 @@ function askForField(done) {
         {
             when: response => response.fieldAdd === true &&
                     response.fieldValidate === true &&
-                    response.fieldValidateRules.includes('min') &&
-                    (response.fieldType === 'Integer' ||
-                    response.fieldType === 'Long'),
+                    response.fieldValidateRules.includes('min'),
             type: 'input',
             name: 'fieldValidateRulesMin',
             message: 'What is the minimum of your field?',
-            validate: input => (this.isSignedNumber(input) ? true : 'Minimum must be a number'),
+            validate: (input, response) => {
+                if (['Float', 'Double', 'BigDecimal'].includes(response.fieldType)) {
+                    return this.isSignedDecimalNumber(input) ? true : 'Minimum must be a decimal number';
+                }
+                return this.isSignedNumber(input) ? true : 'Minimum must be a number';
+            },
             default: 0
         },
         {
             when: response => response.fieldAdd === true &&
                     response.fieldValidate === true &&
-                    response.fieldValidateRules.includes('max') &&
-                    (response.fieldType === 'Integer' ||
-                    response.fieldType === 'Long'),
+                    response.fieldValidateRules.includes('max'),
             type: 'input',
             name: 'fieldValidateRulesMax',
             message: 'What is the maximum of your field?',
-            validate: input => (this.isSignedNumber(input) ? true : 'Maximum must be a number'),
-            default: 100
-        },
-        {
-            when: response => response.fieldAdd === true &&
-                    response.fieldValidate === true &&
-                    response.fieldValidateRules.includes('min') &&
-                    (response.fieldType === 'Float' ||
-                    response.fieldType === 'Double' ||
-                    response.fieldType === 'BigDecimal'),
-            type: 'input',
-            name: 'fieldValidateRulesMin',
-            message: 'What is the minimum of your field?',
-            validate: input => (this.isSignedDecimalNumber(input, true) ? true : 'Minimum must be a decimal number'),
-            default: 0
-        },
-        {
-            when: response => response.fieldAdd === true &&
-                    response.fieldValidate === true &&
-                    response.fieldValidateRules.includes('max') &&
-                    (response.fieldType === 'Float' ||
-                    response.fieldType === 'Double' ||
-                    response.fieldType === 'BigDecimal'),
-            type: 'input',
-            name: 'fieldValidateRulesMax',
-            message: 'What is the maximum of your field?',
-            validate: input => (this.isSignedDecimalNumber(input, true) ? true : 'Maximum must be a decimal number'),
+            validate: (input, response) => {
+                if (['Float', 'Double', 'BigDecimal'].includes(response.fieldType)) {
+                    return this.isSignedDecimalNumber(input) ? true : 'Maximum must be a decimal number';
+                }
+                return this.isSignedNumber(input) ? true : 'Maximum must be a number';
+            },
             default: 100
         },
         {
@@ -1002,49 +943,33 @@ function askForRelationship(done) {
             default: response => _.lowerFirst(response.otherEntityName)
         },
         {
-            when: response => response.relationshipAdd === true && response.otherEntityName.toLowerCase() !== 'user',
+            when: response => response.relationshipAdd === true,
             type: 'list',
             name: 'relationshipType',
             message: 'What is the type of the relationship?',
-            choices: [
-                {
-                    value: 'one-to-many',
-                    name: 'one-to-many'
-                },
-                {
-                    value: 'many-to-one',
-                    name: 'many-to-one'
-                },
-                {
-                    value: 'many-to-many',
-                    name: 'many-to-many'
-                },
-                {
-                    value: 'one-to-one',
-                    name: 'one-to-one'
+            choices: (response) => {
+                const opts = [
+                    {
+                        value: 'many-to-one',
+                        name: 'many-to-one'
+                    },
+                    {
+                        value: 'many-to-many',
+                        name: 'many-to-many'
+                    },
+                    {
+                        value: 'one-to-one',
+                        name: 'one-to-one'
+                    }
+                ];
+                if (response.otherEntityName.toLowerCase() !== 'user') {
+                    opts.unshift({
+                        value: 'one-to-many',
+                        name: 'one-to-many'
+                    });
                 }
-            ],
-            default: 0
-        },
-        {
-            when: response => response.relationshipAdd === true && response.otherEntityName.toLowerCase() === 'user',
-            type: 'list',
-            name: 'relationshipType',
-            message: 'What is the type of the relationship?',
-            choices: [
-                {
-                    value: 'many-to-one',
-                    name: 'many-to-one'
-                },
-                {
-                    value: 'many-to-many',
-                    name: 'many-to-many'
-                },
-                {
-                    value: 'one-to-one',
-                    name: 'one-to-one'
-                }
-            ],
+                return opts;
+            },
             default: 0
         },
         {
@@ -1143,6 +1068,9 @@ function logFieldsAndRelationships() {
             if (fieldValidate === true) {
                 if (field.fieldValidateRules.includes('required')) {
                     validationDetails.push('required');
+                }
+                if (field.fieldValidateRules.includes('unique')) {
+                    validationDetails.push('unique');
                 }
                 if (field.fieldValidateRules.includes('minlength')) {
                     validationDetails.push(`minlength='${field.fieldValidateRulesMinlength}'`);

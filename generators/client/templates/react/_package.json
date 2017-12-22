@@ -26,7 +26,7 @@ limitations under the License.
     "node_modules"
   ],
   "dependencies": {
-    "availity-reactstrap-validation": "1.4.3",
+    "availity-reactstrap-validation": "2.0.0-alpha.1",
     "axios": "0.17.0",
     "bootstrap": "4.0.0-beta.2",
     "loaders.css": "0.1.2",
@@ -43,6 +43,7 @@ limitations under the License.
     "react-redux-loading-bar": "2.9.3",
     "react-router-dom": "4.2.2",
     "react-router-modal": "1.2.0",
+    "react-time": "4.3.0",
     "react-transition-group": "2.2.1",
     "reactstrap": "5.0.0-alpha.3",
     "redux": "3.7.2",
@@ -151,7 +152,7 @@ limitations under the License.
     "node": ">=6.9.0"
   },
   "scripts": {
-    "lint": "tslint --project './tsconfig.json' -e 'node_modules/**'",
+    "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "cleanup": "rimraf <%= BUILD_DIR %>www",
     "start": "<%= clientPackageManager %> run webpack:dev",

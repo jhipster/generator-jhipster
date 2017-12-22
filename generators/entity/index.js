@@ -113,7 +113,8 @@ module.exports = class extends BaseGenerator {
                 context.applicationType = this.config.get('applicationType');
                 context.packageFolder = this.config.get('packageFolder');
                 context.authenticationType = this.config.get('authenticationType');
-                context.hibernateCache = this.config.get('hibernateCache');
+                context.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no';
+                context.enableHibernateCache = this.config.get('enableHibernateCache') || (this.config.get('hibernateCache') !== undefined && this.config.get('hibernateCache') !== 'no');
                 context.websocket = this.config.get('websocket') === 'no' ? false : this.config.get('websocket');
                 context.databaseType = this.config.get('databaseType') || this.getDBTypeFromDBValue(this.options.db);
                 context.prodDatabaseType = this.config.get('prodDatabaseType') || this.options.db;
@@ -246,8 +247,8 @@ module.exports = class extends BaseGenerator {
             askForRelationships: prompts.askForRelationships,
             askForRelationsToRemove: prompts.askForRelationsToRemove,
             askForTableName: prompts.askForTableName,
-            askForDTO: prompts.askForDTO,
             askForService: prompts.askForService,
+            askForDTO: prompts.askForDTO,
             askForFiltering: prompts.askForFiltering,
             askForPagination: prompts.askForPagination
         };

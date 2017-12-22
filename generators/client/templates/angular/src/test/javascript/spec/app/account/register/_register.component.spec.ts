@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { ComponentFixture, TestBed, async, inject, tick, fakeAsync } from '@angular/core/testing';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
