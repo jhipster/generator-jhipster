@@ -23,4 +23,6 @@ import '../content/scss/vendor.scss';
 <%_} else { _%>
 import '../content/css/vendor.css';
 <%_ } _%>
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
 // jhipster-needle-add-element-to-vendor - JHipster will add new menu items here

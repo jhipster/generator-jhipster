@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { MockActivatedRoute } from '../../../helpers/mock-route.service';
