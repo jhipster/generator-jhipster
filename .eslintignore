@@ -1,3 +1,5 @@
 generators/**/templates
+jhipster-dependencies
+jhipster-server
 travis
 docs
