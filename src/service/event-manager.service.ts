@@ -17,7 +17,10 @@
  limitations under the License.
  */
 import { Injectable } from '@angular/core';
-import { Observable, Observer, Subscription} from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
+import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/operator/filter';
 
 /**
  * An utility class to manage RX events
