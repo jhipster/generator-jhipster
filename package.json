@@ -100,7 +100,7 @@
     "webpack-merge": "4.1.0",
     "write-file-webpack-plugin": "4.1.0"
   },
-  "version": "0.2.0",
+  "version": "0.2.1",
   "scripts": {
     "cleanup": "rimraf src/*.d.ts src/**/*.d.ts src/*.{js,jsx} src/**/*.{js,jsx} tests/**/*.d.ts tests/*.d.ts",
     "lint": "tslint --project tslint.json",
