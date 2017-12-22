@@ -29,4 +29,8 @@ const mapStoreToProps = ({ authentication }) => ({
   isAuthenticated: authentication.isAuthenticated
 });
 
+/**
+ * A route wrapped in an authentication check so that routing happens only when you are authenticated.
+ * Accepts same props as React router Route.
+ */
 export const PrivateRoute = connect(mapStoreToProps, null, null, { pure: false })(PrivateRouteComponent);

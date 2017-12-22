@@ -16,8 +16,4 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-
-export * from './language';
-export * from './util';
-export * from './component';
-export * from './formatter';
+export * from './text-format';

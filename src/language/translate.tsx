@@ -120,6 +120,9 @@ const doTranslate = (key, interpolate, children) => {
   };
 };
 
+/**
+ * Translates the given key using provided i18n values
+ */
 class Translate extends React.Component<ITranslateProps> {
   static defaultProps = {
     component: 'span'

@@ -29,6 +29,8 @@
     "redux": "^3.7.2"
   },
   "dependencies": {
+    "moment": "^2.19.1",
+    "numeral": "^2.0.6",
     "sanitize-html": "^1.14.1"
   },
   "devDependencies": {
