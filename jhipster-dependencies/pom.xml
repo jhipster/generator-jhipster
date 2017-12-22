@@ -12,7 +12,7 @@
 
     <groupId>io.github.jhipster</groupId>
     <artifactId>jhipster-dependencies</artifactId>
-    <version>0.1.4</version>
+    <version>0.1.5</version>
     <packaging>pom</packaging>
     <name>JHipster dependencies</name>
     <description>JHipster bill of materials, see http://www.jhipster.tech/ for more information on JHipster</description>
@@ -66,6 +66,7 @@
         <couchbase-testcontainer.version>1.0</couchbase-testcontainer.version>
         <cucumber.version>1.2.5</cucumber.version>
         <dropwizard-metrics.version>3.2.5</dropwizard-metrics.version>
+        <elasticsearch-transport-client.version>6.1.0</elasticsearch-transport-client.version>
         <gatling.version>2.2.5</gatling.version>
         <guava.version>23.5-jre</guava.version>
         <hazelcast.version>3.9.1</hazelcast.version>
@@ -156,6 +157,11 @@
                 <groupId>com.hazelcast</groupId>
                 <artifactId>hazelcast-wm</artifactId>
                 <version>${hazelcast-wm.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.elasticsearch.client</groupId>
+                <artifactId>transport</artifactId>
+                <version>${elasticsearch-transport-client.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.hibernate</groupId>
