@@ -1,7 +1,7 @@
 import axios from 'axios';
+import Storage from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from './action-type.util';
-import Storage from '../shared/util/storage-util';
 
 export const ACTION_TYPES = {
   LOGIN: 'authentication/LOGIN',

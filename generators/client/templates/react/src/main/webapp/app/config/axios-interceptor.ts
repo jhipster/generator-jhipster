@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { getBasePath } from '../shared/util/url-util';
-import Storage from '../shared/util/storage-util';
+import { getBasePath, Storage } from 'react-jhipster';
 
 const TIMEOUT = 1000000; // 10000
 const setupAxiosInterceptors = onUnauthenticated => {

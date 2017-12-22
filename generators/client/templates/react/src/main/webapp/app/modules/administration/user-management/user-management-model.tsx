@@ -2,10 +2,9 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Label } from 'reactstrap';
 import { AvForm, AvGroup, AvInput, AvFeedback } from 'availity-reactstrap-validation';
-import { Translate } from 'react-jhipster';
+import { Translate, ICrudGetAction, ICrudPutAction } from 'react-jhipster';
 import { FaBan, FaFloppyO } from 'react-icons/lib/fa';
 
-import { ICrudGetAction, ICrudPutAction } from '../../../shared/model/redux-action.type';
 import { getUser, getRoles, updateUser, createUser } from '../../../reducers/user-management';
 <%_ if (enableTranslation) { _%>
 import { locales } from '../../../config/translation';

@@ -1,8 +1,7 @@
 /* global: require*/
-import { TranslatorContext } from 'react-jhipster';
+import { TranslatorContext, Storage } from 'react-jhipster';
 
 import { setLocale } from '../reducers/locale';
-import Storage from '../shared/util/storage-util';
 
 const mergeTranslations = requireContext => requireContext.keys().reduce(
   (merged, key) => ({ ...merged, ...requireContext(key) }),

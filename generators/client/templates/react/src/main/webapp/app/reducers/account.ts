@@ -1,8 +1,8 @@
 import axios from 'axios';
+import { ICrudPutAction } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from './action-type.util';
 import { messages } from '../config/constants';
-import { ICrudPutAction } from '../shared/model/redux-action.type';
 
 export const ACTION_TYPES = {
   UPDATE_ACCOUNT: 'account/UPDATE_ACCOUNT',

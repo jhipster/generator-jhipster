@@ -2,11 +2,10 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
-import { Translate } from 'react-jhipster';
+import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FaArrowLeft } from 'react-icons/lib/fa';
 import Time from 'react-time';
 
-import { ICrudGetAction } from '../../../shared/model/redux-action.type';
 import { getUser } from '../../../reducers/user-management';
 import { APP_DATE_FORMAT } from '../../../config/constants';
 

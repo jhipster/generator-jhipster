@@ -1,4 +1,4 @@
-import { isPromise } from '../shared/util/promise-utils';
+import { isPromise } from 'react-jhipster';
 
 export default () => next => action => {
   // If not a promise, continue on

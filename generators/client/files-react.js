@@ -289,17 +289,10 @@ const files = {
             templates: [
                 // layouts
                 'shared/layout/footer/footer.tsx',
-                'shared/layout/header/header.tsx',
-                'shared/layout/private-route/private-route.tsx',
+                'shared/layout/header/header.tsx'
                 // util
-                'shared/util/log-util.ts',
-                'shared/util/promise-utils.ts',
-                'shared/util/dom-utils.ts',
-                'shared/util/url-util.ts',
-                'shared/util/storage-util.ts',
                 // components
                 // model
-                'shared/model/redux-action.type.ts'
             ]
         },
         {
@@ -379,8 +372,7 @@ const files = {
                 'spec/entry.ts',
                 'spec/app/utils.ts',
                 'spec/app/config/notification-middleware.spec.ts',
-                'spec/app/shared/layout/header.spec.tsx',
-                'spec/app/shared/util/storage-util.spec.ts',
+                'spec/app/shared/layout/header.spec.tsx'
                 // 'spec/app/account/activate/_activate.component.spec.js',
                 // 'spec/app/account/password/_password.component.spec.js',
                 // 'spec/app/account/password/_password-strength-bar.component.spec.js',
