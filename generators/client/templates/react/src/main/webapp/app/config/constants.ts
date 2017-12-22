@@ -1,5 +1,6 @@
 const config = {
-  version: process.env.version || '0.0.0'
+  VERSION: process.env.VERSION,
+  SERVER_API_URL: process.env.SERVER_API_URL
 };
 
 export default config;
