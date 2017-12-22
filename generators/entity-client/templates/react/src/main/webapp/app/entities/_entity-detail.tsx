@@ -26,7 +26,7 @@ import Time from 'react-time';
 
 import { ICrudGetAction } from '../../shared/model/redux-action.type';
 import { getEntity } from './<%= entityFileName %>.reducer';
-import { APP_DATE_FORMAT } from '../../config/constants';
+import { APP_DATE_FORMAT, APP_FORMAT_LOCAL_DATE } from '../../config/constants';
 
 export interface I<%= entityReactName %>DetailProps {
   getEntity: ICrudGetAction;
@@ -49,14 +49,24 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
             <Translate contentKey="<%= keyPrefix %>detail.title"><%= entityClass %></Translate> [<b>{<%= entityInstance %>.id}</b>]
             </h2>
             <dl className="row-md jh-entity-details">
-            <%_ for (idx in fields) { _%>
+            <%_ for (idx in fields) { 
+                const fieldType = fields[idx].fieldType;    
+            _%>
                 <dt>
                     <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
                         <%=fields[idx].fieldName%>
                     </Translate>
                 </dt>
                 <dd>
-                    {<%=entityInstance%>.<%=fields[idx].fieldName%>}
+                    <%_ if (fieldType === 'Boolean') { _%>
+                        {<%= entityInstance %>.<%=fields[idx].fieldName%> ? 'true' : 'false'}
+                    <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
+                        <Time value={<%= entityInstance %>.<%=fields[idx].fieldName%>} format={APP_DATE_FORMAT} />
+                    <%_ } else if (fieldType === 'LocalDate') { _%>
+                        <Time value={<%= entityInstance %>.<%=fields[idx].fieldName%>} format={APP_FORMAT_LOCAL_DATE} />
+                    <%_ } else { _%>
+                        {<%= entityInstance %>.<%= fields[idx].fieldName %>}
+                    <%_ } _%>
                 </dd>
             <%_ } _%>
             </dl>

@@ -33,7 +33,6 @@ import { ICrudGetAction, ICrudPutAction, ICrudDeleteAction } from '../../shared/
 
 <%_ } _%>
 <%_ if (hasDate) { _%>
-
 // import { JhiDateUtils } from 'ng-jhipster';
 <%_ } _%>
 // import { <%= entityAngularName %> } from './<%= entityFileName %>.model';

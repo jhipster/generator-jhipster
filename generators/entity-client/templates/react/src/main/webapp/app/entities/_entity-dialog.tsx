@@ -78,16 +78,43 @@ export class <%= entityReactName %>Dialog extends React.Component<I<%= entityRea
               </AvGroup>
               : null
             }
-            <%_ for (idx in fields) { _%>
+            <%_ for (idx in fields) { 
+                const fieldType = fields[idx].fieldType;    
+            _%>
                 <AvGroup>
-                    <Label for="login">
-                        <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
-                            <%=fields[idx].fieldName%>
-                        </Translate>
-                    </Label>
-                    <AvInput type="text" className="form-control" name="<%= fields[idx].fieldName %>" required />
-                    <AvFeedback>This field is required.</AvFeedback>
-                    <AvFeedback>This field cannot be longer than 50 characters.</AvFeedback>
+                    <%_ if (fieldType === 'Boolean') { _%>
+                        <Label check>
+                            <AvInput type="checkbox" className="form-control" name="<%= fields[idx].fieldName %>" />
+                            <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
+                                <%=fields[idx].fieldName%>
+                            </Translate>
+                        </Label>
+                    <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
+                        <Label for="login">
+                            <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
+                                <%=fields[idx].fieldName%>
+                            </Translate>
+                        </Label>
+                        <AvInput type="datetime" className="form-control" name="<%= fields[idx].fieldName %>" required />
+                        <AvFeedback>This field is required.</AvFeedback>
+                    <%_ } else if (fieldType === 'LocalDate') { _%>
+                        <Label for="login">
+                            <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
+                                <%=fields[idx].fieldName%>
+                            </Translate>
+                        </Label>
+                        <AvInput type="date" className="form-control" name="<%= fields[idx].fieldName %>" required />
+                        <AvFeedback>This field is required.</AvFeedback>
+                    <%_ } else { _%>
+                        <Label for="login">
+                            <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
+                                <%=fields[idx].fieldName%>
+                            </Translate>
+                        </Label>
+                        <AvInput type="text" className="form-control" name="<%= fields[idx].fieldName %>" required />
+                        <AvFeedback>This field is required.</AvFeedback>
+                        <AvFeedback>This field cannot be longer than 50 characters.</AvFeedback>
+                    <%_ } _%>
                 </AvGroup>
             <%_ } _%>
           </ModalBody>

@@ -22,9 +22,11 @@ import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import { Translate } from 'react-jhipster';
 import { FaPlus, FaEye, FaPencil, FaTrash } from 'react-icons/lib/fa';
+import Time from 'react-time';
 
 import { ICrudGetAction } from '../../shared/model/redux-action.type';
 import { getEntities } from './<%= entityFileName %>.reducer';
+import { APP_DATE_FORMAT, APP_FORMAT_LOCAL_DATE } from '../../config/constants';
 
 export interface I<%= entityReactName %>Props {
   getEntities: ICrudGetAction;
@@ -78,12 +80,22 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                 <tr key={`entity-${i}`}>
                   <td>
                     <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}`} color="link" size="sm">
-                      {<%=entityInstance %>.id}
+                      {<%= entityInstance %>.id}
                     </Button>
                   </td>
-                  <%_ for (idx in fields) { _%>
+                  <%_ for (idx in fields) { 
+                    const fieldType = fields[idx].fieldType;  
+                  _%>
                     <td>
-                      {<%=entityInstance%>.<%=fields[idx].fieldName%>}
+                      <%_ if (fieldType === 'Boolean') { _%>
+                        {<%= entityInstance %>.<%=fields[idx].fieldName%> ? 'true' : 'false'}
+                      <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
+                        <Time value={<%= entityInstance %>.<%=fields[idx].fieldName%>} format={APP_DATE_FORMAT} />
+                      <%_ } else if (fieldType === 'LocalDate') { _%>
+                        <Time value={<%= entityInstance %>.<%=fields[idx].fieldName%>} format={APP_FORMAT_LOCAL_DATE} />
+                      <%_ } else { _%>
+                        {<%= entityInstance %>.<%= fields[idx].fieldName %>}
+                      <%_ } _%>
                     </td>
                   <%_ } _%>
                   <td className="text-right">
