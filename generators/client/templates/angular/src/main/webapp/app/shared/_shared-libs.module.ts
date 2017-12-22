@@ -23,6 +23,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgJhipsterModule } from 'ng-jhipster';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { CookieModule } from 'ngx-cookie';
+import { BUILD_TIMESTAMP } from '../app.constants';
 
 @NgModule({
     imports: [
@@ -32,6 +33,7 @@ import { CookieModule } from 'ngx-cookie';
             alertAsToast: false,
             <%_ if (enableTranslation) { _%>
             i18nEnabled: true,
+            buildTimestamp: BUILD_TIMESTAMP,            
             defaultI18nLang: '<%= nativeLanguage %>'
             <%_ } _%>
         }),
