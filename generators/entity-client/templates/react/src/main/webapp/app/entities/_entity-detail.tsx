@@ -43,15 +43,33 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
   render() {
     const { <%= entityInstance %> } = this.props;
     return (
-      <div>
-        detail
-      </div>
+        <%_ const keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
+        <div>
+            <h2>
+            <Translate contentKey="<%= keyPrefix %>detail.title"><%= entityClass %></Translate> [<b>{<%= entityInstance %>.id}</b>]
+            </h2>
+            <dl className="row-md jh-entity-details">
+            <%_ for (idx in fields) { _%>
+                <dt>
+                    <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
+                        <%=fields[idx].fieldName%>
+                    </Translate>
+                </dt>
+                <dd>
+                    {<%=entityInstance%>.<%=fields[idx].fieldName%>}
+                </dd>
+            <%_ } _%>
+            </dl>
+            <Button tag={Link} to="/<%= entityInstance %>" replace color="info">
+                <FaArrowLeft/> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
+            </Button>
+        </div>
     );
   }
 }
 
 const mapStateToProps = storeState => ({
-    <%= entityInstancePlural %>: storeState.<%= entityInstance %>.entity
+    <%= entityInstance %>: storeState.<%= entityInstance %>.entity
 });
 
 const mapDispatchToProps = { getEntity };

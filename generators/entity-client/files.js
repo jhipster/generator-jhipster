@@ -233,11 +233,19 @@ const reactFiles = {
             path: REACT_DIR,
             templates: [
                 {
+                    file: 'entities/_entity-delete-dialog.tsx',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.tsx`
+                },
+                {
                     file: 'entities/_entity-detail.tsx',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.tsx`
                 },
                 {
-                    file: 'entities/_entity-management.tsx',
+                    file: 'entities/_entity-dialog.tsx',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-dialog.tsx`
+                },
+                {
+                    file: 'entities/_entity.tsx',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.tsx`
                 },
                 {
