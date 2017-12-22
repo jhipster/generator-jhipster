@@ -18,3 +18,5 @@
  */
 
 export * from './language';
+export * from './util';
+export * from './component';

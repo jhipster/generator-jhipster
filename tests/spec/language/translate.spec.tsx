@@ -2,7 +2,7 @@ import * as React from 'react';
 import { mount } from 'enzyme';
 import { expect } from 'chai';
 
-import { Translate, translate, TranslatorContext } from '../../../src/language';
+import { Translate, translate, TranslatorContext } from '../../../react-jhipster';
 
 TranslatorContext.registerTranslations('en', {
   foo: {

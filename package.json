@@ -20,10 +20,13 @@
   "homepage": "https://www.jhipster.tech",
   "peerDependencies": {
     "lodash": "^4.17.4",
-    "react": "^15.6.2",
-    "react-addons-css-transition-group": "^15.6.2",
-    "react-addons-transition-group": "^15.6.2",
-    "react-dom": "^15.6.2"
+    "react": "^16.0.0",
+    "react-addons-css-transition-group": "^16.0.0-alpha.3",
+    "react-addons-transition-group": "^16.0.0-alpha.3",
+    "react-dom": "^16.0.0",
+    "react-redux": "^5.0.6",
+    "react-router-dom": "^4.2.2",
+    "redux": "^3.7.2"
   },
   "dependencies": {
     "sanitize-html": "^1.14.1"
@@ -72,7 +75,10 @@
     "react-addons-test-utils": "15.6.2",
     "react-addons-transition-group": "^15.6.2",
     "react-dom": "^15.6.2",
+    "react-redux": "^5.0.6",
+    "react-router-dom": "^4.2.2",
     "react-test-renderer": "15.6.2",
+    "redux": "^3.7.2",
     "rimraf": "^2.6.2",
     "sass-loader": "6.0.6",
     "shx": "^0.2.2",
