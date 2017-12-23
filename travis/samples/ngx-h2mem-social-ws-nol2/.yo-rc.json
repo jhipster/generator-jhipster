@@ -5,7 +5,7 @@
     "packageName": "io.github.jhipster.travis",
     "packageFolder": "io/github/jhipster/travis",
     "authenticationType": "jwt",
-    "cacheProvider": "no",
+    "cacheProvider": "ehcache",
     "enableHibernateCache": false,
     "clusteredHttpSession": false,
     "websocket": "spring-websocket",
@@ -28,7 +28,7 @@
       "protractor"
     ],
     "serverPort": "8080",
-    "jhiPrefix": "jhi",
+    "jhiPrefix": "myPrefix",
     "travis": true,
     "messageBroker": false,
     "serviceDiscoveryType": false,
