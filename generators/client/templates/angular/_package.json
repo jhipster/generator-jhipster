@@ -121,6 +121,7 @@
     "<%= module.name %>": "<%= module.version %>",
     <%_ }); _%>
     "uglifyjs-webpack-plugin": "1.1.4",
+    "uglify-es": "3.2.2",
     "webpack": "3.10.0",
     "webpack-dev-server": "2.9.5",
     "webpack-merge": "4.1.1",
@@ -129,6 +130,9 @@
     "web-app-manifest-loader": "0.1.1",
     "workbox-webpack-plugin": "2.1.2",
     "write-file-webpack-plugin": "4.1.0"
+  },
+  "resolutions": {
+    "uglify-es": "3.2.2"
   },
   "engines": {
     "node": ">=6.9.0"
