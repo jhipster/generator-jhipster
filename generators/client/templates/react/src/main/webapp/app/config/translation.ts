@@ -3,17 +3,28 @@ import { TranslatorContext, Storage } from 'react-jhipster';
 
 import { setLocale } from '../reducers/locale';
 
-const mergeTranslations = requireContext => requireContext.keys().reduce(
-  (merged, key) => ({ ...merged, ...requireContext(key) }),
-  {}
-);
+// const mergeTranslations = requireContext => requireContext.keys().reduce(
+//   (merged, key) => ({ ...merged, ...requireContext(key) }),
+//   {}
+// );
 
 // tslint:disable:object-literal-key-quotes
-const translations = {
+// const translations = {
+// <%_ languages.forEach((lang, index) => { _%>
+//    '<%= lang %>': mergeTranslations(require.context('../../i18n/<%= lang %>', false, /.json$/))<%= index !== languages.length - 1 ? ',' : '' %>
+// <%_ }); _%>
+// };
+let translations = {};
 <%_ languages.forEach((lang, index) => { _%>
-   '<%= lang %>': mergeTranslations(require.context('../../i18n/<%= lang %>', false, /.json$/))<%= index !== languages.length - 1 ? ',' : '' %>
+const context = require.context('../../i18n/<%= lang %>', false, /.json$/);
+let jsonLang = {};
+context.keys().forEach(key => {
+  jsonLang = _.merge(jsonLang, context(key));
+});
+const l = {};
+l['<%= lang %>'] = jsonLang;
+translations = _.merge(translations, l);
 <%_ }); _%>
-};
 // tslint:enable
 
 let currentLocale;
@@ -29,7 +40,7 @@ export const registerLocales = store => {
   });
   store.subscribe(() => {
     const previousLocale = currentLocale;
-    currentLocale = store.getState().locale.currentLocale;
+    currentLocale = store.gereact-router-modaltState().locale.currentLocale;
     if (previousLocale !== currentLocale) {
       Storage.local.set('locale', currentLocale);
       TranslatorContext.setLocale(currentLocale);

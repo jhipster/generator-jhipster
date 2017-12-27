@@ -61,14 +61,14 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
               <tr>
                 <th><Translate contentKey="global.field.id">ID</Translate></th>
                 <%_ for (idx in fields) { _%>
-                <th<% if (pagination !== 'no') { %> <% } %>><Translate contentKey="<%=keyPrefix + fields[idx].fieldName %>"><%= fields[idx].fieldNameHumanized %></Translate><% if (pagination !== 'no') { %> <span className="fa fa-sort"></span><% } %></th>
+                <th<% if (pagination !== 'no') { %> <% } %>><Translate contentKey="<%=keyPrefix + fields[idx].fieldName %>"><%= fields[idx].fieldNameHumanized %></Translate><% if (pagination !== 'no') { %> <span className="fa fa-sort"/><% } %></th>
                 <%_ } _%>
                 <%_ for (idx in relationships) { _%>
                     <%_ if (relationships[idx].relationshipType === 'many-to-one'
                     || (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide === true)
                     || (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true && pagination === 'no')) {
                     const fieldName = dto === 'no' ? "." + relationships[idx].otherEntityField : relationships[idx].otherEntityFieldCapitalized;_%>
-                <th<% if (pagination !== 'no') { %> <% } %>><Translate contentKey="<%= keyPrefix + relationships[idx].relationshipName%>"><%= relationships[idx].relationshipNameHumanized %></Translate><% if (pagination !== 'no') { %> <span className="fa fa-sort"></span><% } %></th>
+                <th<% if (pagination !== 'no') { %> <% } %>><Translate contentKey="<%= keyPrefix + relationships[idx].relationshipName%>"><%= relationships[idx].relationshipNameHumanized %></Translate><% if (pagination !== 'no') { %> <span className="fa fa-sort"/><% } %></th>
                     <%_ } _%>
                 <%_ } _%>
                 <th />
