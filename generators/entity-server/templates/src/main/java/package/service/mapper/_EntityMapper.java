@@ -34,6 +34,7 @@ import org.mapstruct.*;
           existingMappings.push(relationships[idx].otherEntityNameCapitalized);
       } } } %><%= existingMappings.map(otherEntityNameCapitalized => otherEntityNameCapitalized + 'Mapper.class').join(', ') %>})
 public interface <%= entityClass %>Mapper extends EntityMapper<<%= entityClass %>DTO, <%= entityClass %>> {
+
 <%_
 // entity -> DTO mapping
 var renMapAnotEnt = false; //Render Mapping Annotation during Entity to DTO conversion?
@@ -41,12 +42,19 @@ for (idx in relationships) {
     const relationshipType = relationships[idx].relationshipType;
     const relationshipName = relationships[idx].relationshipName;
     const ownerSide = relationships[idx].ownerSide;
-    if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {renMapAnotEnt = true;
+    if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {
+        renMapAnotEnt = true;
 _%>
+    @Mapping(source = "<%= relationshipName %>.id", target = "<%= relationships[idx].relationshipFieldName %>Id")
+<%      if (relationships[idx].otherEntityFieldCapitalized !== 'Id' && relationships[idx].otherEntityFieldCapitalized !== '') { _%>
+    @Mapping(source = "<%= relationshipName %>.<%= relationships[idx].otherEntityField %>", target = "<%= relationships[idx].relationshipFieldName %><%= relationships[idx].otherEntityFieldCapitalized %>")
+<%_     } 
+    } 
+} _%>
+<%_ if(renMapAnotEnt === true) { _%>
+    <%= entityClass %>DTO toDto(<%= entityClass %> <%= entityInstance %>);
 
-    @Mapping(source = "<%= relationshipName %>.id", target = "<%= relationships[idx].relationshipFieldName %>Id")<% if (relationships[idx].otherEntityFieldCapitalized !='Id' && relationships[idx].otherEntityFieldCapitalized !== '') { %>
-    @Mapping(source = "<%= relationshipName %>.<%= relationships[idx].otherEntityField %>", target = "<%= relationships[idx].relationshipFieldName %><%= relationships[idx].otherEntityFieldCapitalized %>")<% } } } %>
-    <% if(renMapAnotEnt === true) { %><%= entityClass %>DTO toDto(<%= entityClass %> <%= entityInstance %>); <% } %>
+<% } _%>
 <%_
 // DTO -> entity mapping
 var renMapAnotDto = false;  //Render Mapping Annotation during DTO to Entity conversion?
@@ -55,16 +63,29 @@ for (idx in relationships) {
     const relationshipName = relationships[idx].relationshipName;
     const relationshipNamePlural = relationships[idx].relationshipNamePlural;
     const ownerSide = relationships[idx].ownerSide;
-    if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {renMapAnotDto = true;
+    if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {
+        renMapAnotDto = true;
 _%>
+    @Mapping(source = "<%= relationshipName %>Id", target = "<%= relationshipName %>")
+<%_ } else if (relationshipType === 'many-to-many' && ownerSide === false) {
+        renMapAnotDto = true; 
+_%>
+    @Mapping(target = "<%= relationshipNamePlural %>", ignore = true)
+<%_ } else if (relationshipType === 'one-to-many') {renMapAnotDto = true;
+_%>
+    @Mapping(target = "<%= relationshipNamePlural %>", ignore = true)
+<%_ } else if (relationshipType === 'one-to-one' && ownerSide === false) {
+        renMapAnotDto = true;
+_%>
+    @Mapping(target = "<%= relationshipName %>", ignore = true)
+<%_ }
+}
+_%>
+<%_ if(renMapAnotDto === true) { _%>
+    <%= entityClass %> toEntity(<%= entityClass%>DTO <%= entityInstance %>DTO);
 
-    @Mapping(source = "<%= relationshipName %>Id", target = "<%= relationshipName %>")<% } else if (relationshipType === 'many-to-many' && ownerSide === false) {renMapAnotDto = true; %>
-    @Mapping(target = "<%= relationshipNamePlural %>", ignore = true)<% } else if (relationshipType === 'one-to-many') {renMapAnotDto = true; %>
-    @Mapping(target = "<%= relationshipNamePlural %>", ignore = true)<% } else if (relationshipType === 'one-to-one' && ownerSide === false) {renMapAnotDto = true; %>
-    @Mapping(target = "<%= relationshipName %>", ignore = true)<% } } %>
-    <% if(renMapAnotDto === true) { %><%= entityClass %> toEntity(<%= entityClass%>DTO <%= entityInstance %>DTO);<% } %>
+<% } _%>
 <%_ if(databaseType === 'sql') { _%>
-
     default <%= entityClass %> fromId(Long id) {
         if (id == null) {
             return null;
