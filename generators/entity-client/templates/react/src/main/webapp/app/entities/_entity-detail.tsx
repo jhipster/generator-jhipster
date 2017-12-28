@@ -58,16 +58,60 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
                     </Translate>
                 </dt>
                 <dd>
-                    <%_ if (fieldType === 'Boolean') { _%>
-                        {<%= entityInstance %>.<%=fields[idx].fieldName%> ? 'true' : 'false'}
-                    <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
-                        <Time value={<%= entityInstance %>.<%=fields[idx].fieldName%>} format={APP_DATE_FORMAT} />
-                    <%_ } else if (fieldType === 'LocalDate') { _%>
-                        <Time value={<%= entityInstance %>.<%=fields[idx].fieldName%>} format={APP_FORMAT_LOCAL_DATE} />
+                <%_ if (fieldType === 'Boolean') { _%>
+                    {<%= entityInstance %>.<%=fields[idx].fieldName%> ? 'true' : 'false'}
+                <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
+                    <Time value={<%= entityInstance %>.<%=fields[idx].fieldName%>} format={APP_DATE_FORMAT} />
+                <%_ } else if (fieldType === 'LocalDate') { _%>
+                    <Time value={<%= entityInstance %>.<%=fields[idx].fieldName%>} format={APP_FORMAT_LOCAL_DATE} />
+                <%_ } else { _%>
+                    {<%= entityInstance %>.<%= fields[idx].fieldName %>}
+                <%_ } _%>
+                </dd>
+            <%_ } _%>
+            <%_ for (idx in relationships) {
+                const relationshipType = relationships[idx].relationshipType;
+                const ownerSide = relationships[idx].ownerSide;
+                const relationshipName = relationships[idx].relationshipName;
+                const relationshipFieldName = relationships[idx].relationshipFieldName;
+                const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+                const relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
+                const otherEntityName = relationships[idx].otherEntityName;
+                const otherEntityStateName = relationships[idx].otherEntityStateName;
+                const otherEntityField = relationships[idx].otherEntityField;
+                const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
+                if (relationshipType === 'many-to-one'
+                || (relationshipType === 'one-to-one' && ownerSide === true)
+                || (relationshipType === 'many-to-many' && ownerSide === true)) { _%>
+                <dt>
+                    <Translate contentKey="<%= keyPrefix %><%= relationshipName %>">
+                        <%= relationshipNameHumanized %>
+                    </Translate>
+                </dt>
+                <dd>
+                    <%_ if (otherEntityName === 'user') { _%>
+                        <%_ if (relationshipType === 'many-to-many') { _%>
+                            TODO
+                        <%_ } else { _%>
+                            <%_ if (dto === 'no') { _%>
+                    {(<%= entityInstance + "." + relationshipFieldName %>) ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %> : ''}
+                                <%_ } else { _%>
+                                    TODO
+                            <%_ } _%>
+                        <%_ } _%>
                     <%_ } else { _%>
-                        {<%= entityInstance %>.<%= fields[idx].fieldName %>}
+                        <%_ if (relationshipType === 'many-to-many') { _%>
+                            TODO
+                        <%_ } else { _%>
+                            <%_ if (dto === 'no') { _%>
+                                TODO
+                            <%_ } else { _%>
+                                TODO
+                            <%_ } _%>
+                        <%_ } _%>
                     <%_ } _%>
                 </dd>
+            <%_ } _%>
             <%_ } _%>
             </dl>
             <Button tag={Link} to="/<%= entityInstance %>" replace color="info">

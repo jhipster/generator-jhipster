@@ -25,12 +25,19 @@ import { FaPlus, FaEye, FaPencil, FaTrash } from 'react-icons/lib/fa';
 import Time from 'react-time';
 
 import { ICrudGetAction } from '../../shared/model/redux-action.type';
-import { getEntities } from './<%= entityFileName %>.reducer';
+import { <%_ for (idx in relationships) { const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural; _%>
+ get<%= relationshipFieldNamePlural %>,<%_ } _%>
+ getEntities } from './<%= entityFileName %>.reducer';
 import { APP_DATE_FORMAT, APP_FORMAT_LOCAL_DATE } from '../../config/constants';
 
 export interface I<%= entityReactName %>Props {
   getEntities: ICrudGetAction;
   <%=entityInstancePlural %>: any[];
+  <%_ for (idx in relationships) {
+    const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+  _%>
+  get<%= relationshipFieldNamePlural %>: ICrudGetAction;
+  <%_ } _%>
   match: any;
 }
 
@@ -42,6 +49,11 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
 
   componentDidMount() {
     this.props.getEntities();
+    <%_ for (idx in relationships) {
+      const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+    _%>
+    this.props.get<%= relationshipFieldNamePlural %>();
+    <%_ } _%>
   }
 
   render() {
@@ -98,6 +110,43 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                       <%_ } _%>
                     </td>
                   <%_ } _%>
+                  <%_ for (idx in relationships) {
+                    const relationshipType = relationships[idx].relationshipType;
+                    const ownerSide = relationships[idx].ownerSide;
+                    const relationshipFieldName = relationships[idx].relationshipFieldName;
+                    const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+                    const otherEntityName = relationships[idx].otherEntityName;
+                    const otherEntityStateName = relationships[idx].otherEntityStateName;
+                    const otherEntityField = relationships[idx].otherEntityField;
+                    const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized; _%>
+                    <%_ if (relationshipType === 'many-to-one'
+                    || (relationshipType === 'one-to-one' && ownerSide === true)
+                    || (relationshipType === 'many-to-many' && ownerSide === true && pagination === 'no')) { _%>
+                    <td>
+                        <%_ if (otherEntityName === 'user') { _%>
+                            <%_ if (relationshipType === 'many-to-many') { _%>
+                              TODO
+                            <%_ } else { _%>
+                                <%_ if (dto === 'no') { _%>
+                                  {<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}
+                                <%_ } else { _%>
+                                  TODO
+                                <%_ } _%>
+                            <%_ } _%>
+                        <%_ } else { _%>
+                            <%_ if (relationshipType === 'many-to-many') { _%>
+                              TODO
+                            <%_ } else { _%>
+                                <%_ if (dto === 'no') { _%>
+                                  TODO
+                                <%_ } else { _%>
+                                  TODO
+                                <%_ } _%>
+                            <%_ } _%>
+                        <%_ } _%>
+                    </td>
+                    <%_ } _%>
+                    <%_ } _%>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}`} color="info" size="sm">
@@ -126,6 +175,8 @@ const mapStateToProps = storeState => ({
   <%=entityInstancePlural %>: storeState.<%= entityInstance %>.entities
 });
 
-const mapDispatchToProps = { getEntities };
+const mapDispatchToProps = { <%_ for (idx in relationships) { const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural; _%>
+ get<%= relationshipFieldNamePlural %>,<%_ } _%>
+ getEntities };
 
 export default connect(mapStateToProps, mapDispatchToProps)(<%= entityReactName %>);
