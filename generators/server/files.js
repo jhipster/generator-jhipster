@@ -388,7 +388,6 @@ function writeFiles() {
             // Create Java files
             // Spring Boot main
             this.template(`${SERVER_MAIN_SRC_DIR}package/_Application.java`, `${javaDir}/${this.mainClass}.java`);
-            this.template(`${SERVER_MAIN_SRC_DIR}package/_ApplicationWebXml.java`, `${javaDir}/ApplicationWebXml.java`);
         },
 
         writeServerJavaConfigFiles() {

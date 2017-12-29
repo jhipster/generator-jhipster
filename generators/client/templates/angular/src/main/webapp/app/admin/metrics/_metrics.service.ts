@@ -31,6 +31,6 @@ export class <%=jhiPrefixCapitalized%>MetricsService {
     }
 
     threadDump(): Observable<any> {
-        return this.http.get(SERVER_API_URL + 'management/dump').map((res: Response) => res.json());
+        return this.http.get(SERVER_API_URL + 'management/threaddump').map((res: Response) => res.json());
     }
 }

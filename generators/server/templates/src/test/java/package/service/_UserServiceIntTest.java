@@ -273,7 +273,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         if (!userRepository.findOneByLogin(Constants.ANONYMOUS_USER).isPresent()) {
             userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
         }<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-        final PageRequest pageable = new PageRequest(0, (int) userRepository.count());
+        final PageRequest pageable = PageRequest.of(0, (int) userRepository.count());
         final Page<UserDTO> allManagedUsers = userService.getAllManagedUsers(pageable);
         assertThat(allManagedUsers.getContent().stream()<% } %><% if (databaseType === 'cassandra') { %>
         final List<UserDTO> allManagedUsers = userService.getAllManagedUsers();

@@ -38,17 +38,17 @@ import com.hazelcast.web.spring.SpringAwareWebFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.embedded.*;
-import org.springframework.boot.context.embedded.undertow.UndertowEmbeddedServletContainerFactory;
 import io.undertow.UndertowOptions;
+import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
+import org.springframework.boot.web.server.*;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.http.MediaType;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import org.springframework.http.MediaType;
 <% if (!skipClient) { %>
 import java.io.File;
 import java.nio.file.Paths;<% } %>
@@ -59,7 +59,7 @@ import javax.servlet.*;
  * Configuration of web application with Servlet 3.0 APIs.
  */
 @Configuration
-public class WebConfigurer implements ServletContextInitializer, EmbeddedServletContainerCustomizer {
+public class WebConfigurer implements ServletContextInitializer, WebServerFactoryCustomizer {
 
     private final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
 
@@ -144,16 +144,11 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
      * Customize the Servlet engine: Mime types, the document root, the cache.
      */
     @Override
-    public void customize(ConfigurableEmbeddedServletContainer container) {
-        MimeMappings mappings = new MimeMappings(MimeMappings.DEFAULT);
-        // IE issue, see https://github.com/jhipster/generator-jhipster/pull/711
-        mappings.add("html", MediaType.TEXT_HTML_VALUE + ";charset=utf-8");
-        // CloudFoundry issue, see https://github.com/cloudfoundry/gorouter/issues/64
-        mappings.add("json", MediaType.TEXT_HTML_VALUE + ";charset=utf-8");
-        container.setMimeMappings(mappings);
+    public void customize(WebServerFactory server) {
+        setMimeMappings(server);
         <%_ if (!skipClient) { _%>
         // When running in an IDE or with <% if (buildTool === 'gradle') { %>./gradlew bootRun<% } else { %>./mvnw spring-boot:run<% } %>, set location of the static web assets.
-        setLocationForStaticAssets(container);
+        setLocationForStaticAssets(server);
         <%_ } _%>
 
         /*
@@ -163,29 +158,44 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
          * for more information.
          */
         if (jHipsterProperties.getHttp().getVersion().equals(JHipsterProperties.Http.Version.V_2_0) &&
-            container instanceof UndertowEmbeddedServletContainerFactory) {
+            server instanceof UndertowServletWebServerFactory) {
 
-            ((UndertowEmbeddedServletContainerFactory) container)
+            ((UndertowServletWebServerFactory) server)
                 .addBuilderCustomizers(builder ->
                     builder.setServerOption(UndertowOptions.ENABLE_HTTP2, true));
         }
     }
+
+    private void setMimeMappings(WebServerFactory server) {
+        if (server instanceof UndertowServletWebServerFactory) {
+            MimeMappings mappings = new MimeMappings(MimeMappings.DEFAULT);
+            // IE issue, see https://github.com/jhipster/generator-jhipster/pull/711
+            mappings.add("html", MediaType.TEXT_HTML_VALUE + ";charset=utf-8");
+            // CloudFoundry issue, see https://github.com/cloudfoundry/gorouter/issues/64
+            mappings.add("json", MediaType.TEXT_HTML_VALUE + ";charset=utf-8");
+            UndertowServletWebServerFactory undertow = (UndertowServletWebServerFactory) server;
+            undertow.setMimeMappings(mappings);
+        }
+    }
     <%_ if (!skipClient) { _%>
 
-    private void setLocationForStaticAssets(ConfigurableEmbeddedServletContainer container) {
-        File root;
-        String prefixPath = resolvePathPrefix();
-        <%_ if (clientFramework !== 'angular1') { _%>
-        root = new File(prefixPath + "<%= CLIENT_DIST_DIR %>");
-        <%_ } else { _%>
-        if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
+    private void setLocationForStaticAssets(WebServerFactory server) {
+        if (server instanceof UndertowServletWebServerFactory) {
+            UndertowServletWebServerFactory undertow = (UndertowServletWebServerFactory) server;
+            File root;
+            String prefixPath = resolvePathPrefix();
+            <%_ if (clientFramework !== 'angular1') { _%>
             root = new File(prefixPath + "<%= CLIENT_DIST_DIR %>");
-        } else {
-            root = new File(prefixPath + "<%= CLIENT_MAIN_SRC_DIR %>");
-        }
-        <%_ } _%>
-        if (root.exists() && root.isDirectory()) {
-            container.setDocumentRoot(root);
+            <%_ } else { _%>
+            if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
+                root = new File(prefixPath + "<%= CLIENT_DIST_DIR %>");
+            } else {
+                root = new File(prefixPath + "<%= CLIENT_MAIN_SRC_DIR %>");
+            }
+            <%_ } _%>
+            if (root.exists() && root.isDirectory()) {
+                undertow.setDocumentRoot(root);
+            }
         }
     }
 

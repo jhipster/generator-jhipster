@@ -50,7 +50,7 @@ export class <%=jhiPrefixCapitalized%>ConfigurationService {
         return this.http.get(SERVER_API_URL + 'management/env').map((res: Response) => {
             const properties: any = {};
 
-            const propertiesObject = res.json();
+            const propertiesObject = res.json().beans;
 
             for (const key in propertiesObject) {
                 if (propertiesObject.hasOwnProperty(key)) {

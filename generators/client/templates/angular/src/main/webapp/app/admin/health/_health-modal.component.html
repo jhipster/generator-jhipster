@@ -36,7 +36,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let entry of currentHealth.details | keys">
+                    <tr *ngFor="let entry of currentHealth.details.details | keys">
                         <td class="text-left">{{entry.key}}</td>
                         <td class="text-left">{{readableValue(entry.value)}}</td>
                     </tr>

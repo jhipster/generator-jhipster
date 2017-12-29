@@ -98,9 +98,13 @@ hystrix:
 
 <%_ } _%>
 management:
-    security:
-        roles: ADMIN
-    context-path: /management
+    endpoints:
+        web:
+            base-path: /management
+            expose: '*'
+    endpoint:
+        health:
+            show-details: true
     health:
         mail:
             enabled: false # When using the MailService, configure an SMTP server and set this to true
@@ -142,7 +146,7 @@ spring:
         favicon:
             enabled: false
     thymeleaf:
-        mode: XHTML
+        mode: HTML
 <%_ if (enableSocialSignIn) { _%>
     social:
         # see https://developers.google.com/+/web/signin/server-side-flow#step_1_create_a_client_id_and_client_secret
@@ -184,9 +188,9 @@ spring:
 # export SECURITY_OAUTH2_CLIENT_CLIENT_SECRET="38561a05"
 # ===================================================================
 <%_ } _%>
+<%_ if (authenticationType === 'uaa' || authenticationType === 'oauth2') { _%>
 security:
-    basic:
-        enabled: false
+<%_ } _%>
     <%_ if (authenticationType === 'uaa') { _%>
     oauth2:
         resource:
@@ -285,4 +289,4 @@ jhipster:
 # http://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-application:
+# application:

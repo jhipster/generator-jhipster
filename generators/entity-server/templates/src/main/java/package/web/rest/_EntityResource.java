@@ -140,7 +140,7 @@ public class <%= entityClass %>Resource {
     @Timed
     public ResponseEntity<<%= instanceType %>> get<%= entityClass %>(@PathVariable <%= pkType %> id) {
         log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {viaService: viaService, returnDirectly:false}); -%>
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(<%= instanceName %>));
+        return ResponseUtil.wrapOrNotFound(<%= instanceName %>);
     }
 
     /**

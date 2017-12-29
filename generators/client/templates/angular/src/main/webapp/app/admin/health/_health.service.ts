@@ -92,9 +92,10 @@ export class <%=jhiPrefixCapitalized%>HealthService {
     }
 
     private flattenHealthData(result, path, data): any {
-        for (const key in data) {
-            if (data.hasOwnProperty(key)) {
-                const value = data[key];
+        const details = data.details;
+        for (const key in details) {
+            if (details.hasOwnProperty(key)) {
+                const value = details[key];
                 if (this.isHealthObject(value)) {
                     if (this.hasSubSystem(value)) {
                         this.addHealthObject(result, false, value, this.getModuleName(path, key));
