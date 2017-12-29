@@ -83,6 +83,12 @@ processResources {
     <%_ } _%>
 }
 
+generateGitProperties {
+    onlyIf {
+        !source.isEmpty()
+    }
+}
+
 gitProperties {
     keys = ['git.branch', 'git.commit.id.abbrev']
 }
