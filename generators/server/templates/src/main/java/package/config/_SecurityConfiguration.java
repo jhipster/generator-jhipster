@@ -45,7 +45,6 @@ import org.springframework.http.HttpMethod;
 <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 <%_ } _%>
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 <%_ if (authenticationType !== 'oauth2') { _%>
@@ -83,7 +82,6 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 @EnableWebSecurity
 <%_ } _%>
 @Import(SecurityProblemSupport.class)
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
 

@@ -48,6 +48,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;<% } %>
+<%_ if (fieldsContainOwnerManyToMany === true) { _%>
+import java.util.Optional;
+<%_ } _%>
 
 <%_ if (databaseType === 'sql') { _%>
 /**
@@ -82,7 +85,7 @@ public interface <%=entityClass%>Repository extends <% if (databaseType === 'sql
 
     @Query("select <%= entityTableName %> from <%= entityClass %> <%= entityTableName %><% for (idx in relationships) {
     if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { %> left join fetch <%=entityTableName%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%> where <%=entityTableName%>.id =:id")
-    <%=entityClass%> findOneWithEagerRelationships(@Param("id") Long id);
+    Optional<<%=entityClass%>> findOneWithEagerRelationships(@Param("id") Long id);
     <%_ } _%>
 
 }

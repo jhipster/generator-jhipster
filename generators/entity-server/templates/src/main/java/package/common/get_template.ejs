@@ -25,4 +25,4 @@
 %>
         <% if (dto === 'mapstruct') { %><%- entityClass %> <%= entityInstance %> = <% } else { %><%- returnPrefix %> <% } %><% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %><%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany === true) { %>findOneWithEagerRelationships<% } else { %>findById<% } %>(id)<% } %><% if (databaseType === 'cassandra') { %><%= entityInstance %>Repository.findOne(UUID.fromString(id))<% } %>;<% if (dto === 'mapstruct') { %>
         <%- returnPrefix %> <%= entityToDto %>(<%= entityInstance %>);<% } } else { %>
-        <%- returnPrefix %> Optional.ofNullable(<%= entityInstance %>Service.findOne(id));<% } %>
+        <%- returnPrefix %> <%= entityInstance %>Service.findOne(id);<% } %>
