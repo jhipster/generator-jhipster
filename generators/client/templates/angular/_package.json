@@ -39,7 +39,7 @@
     "core-js": "2.4.1",
     "font-awesome": "4.7.0",
     "jquery": "3.2.1",
-    "ng-jhipster": "0.3.5",
+    "ng-jhipster": "0.3.6",
     "ngx-cookie": "2.0.1",
     "ngx-infinite-scroll": "0.5.1",
     "ngx-webstorage": "2.0.1",
