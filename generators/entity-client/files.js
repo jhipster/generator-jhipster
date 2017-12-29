@@ -26,7 +26,7 @@ const REACT_DIR = constants.ANGULAR_DIR;
 
 const CLIENT_NG1_TEMPLATES_DIR = 'angularjs';
 const CLIENT_NG2_TEMPLATES_DIR = 'angular';
-const CLIENT_NG3_TEMPLATES_DIR = 'react';
+const CLIENT_REACT_TEMPLATES_DIR = 'react';
 
 /**
 * The default is to use a file path string. It implies use of the template method.
@@ -287,7 +287,7 @@ function writeFiles() {
                 }
             } else {
                 // write client side files for react
-                this.writeFilesToDisk(reactFiles, this, false, CLIENT_NG3_TEMPLATES_DIR);
+                this.writeFilesToDisk(reactFiles, this, false, CLIENT_REACT_TEMPLATES_DIR);
                 this.addEntityToModule(this.entityInstance, this.entityClass, this.entityAngularName, this.entityFolderName, this.entityFileName, this.enableTranslation, this.clientFramework);
             }
 

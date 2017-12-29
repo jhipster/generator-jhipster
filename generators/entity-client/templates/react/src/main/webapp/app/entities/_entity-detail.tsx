@@ -26,7 +26,7 @@ import Time from 'react-time';
 
 import { ICrudGetAction } from '../../shared/model/redux-action.type';
 import { getEntity } from './<%= entityFileName %>.reducer';
-import { APP_DATE_FORMAT, APP_FORMAT_LOCAL_DATE } from '../../config/constants';
+import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from '../../config/constants';
 
 export interface I<%= entityReactName %>DetailProps {
   getEntity: ICrudGetAction;
@@ -34,7 +34,7 @@ export interface I<%= entityReactName %>DetailProps {
   match: any;
 }
 
-export class <%= entityReactName %>Detail extends React.Component<I<%= entityReactName %>DetailProps, undefined> {
+export class <%= entityReactName %>Detail extends React.Component<I<%= entityReactName %>DetailProps> {
 
   componentDidMount() {
     this.props.getEntity(this.props.match.params.id);
@@ -63,7 +63,7 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
                 <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
                     <Time value={<%= entityInstance %>.<%=fields[idx].fieldName%>} format={APP_DATE_FORMAT} />
                 <%_ } else if (fieldType === 'LocalDate') { _%>
-                    <Time value={<%= entityInstance %>.<%=fields[idx].fieldName%>} format={APP_FORMAT_LOCAL_DATE} />
+                    <Time value={<%= entityInstance %>.<%=fields[idx].fieldName%>} format={APP_LOCAL_DATE_FORMAT} />
                 <%_ } else { _%>
                     {<%= entityInstance %>.<%= fields[idx].fieldName %>}
                 <%_ } _%>

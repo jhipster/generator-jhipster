@@ -28,7 +28,7 @@ import { ICrudGetAction } from '../../shared/model/redux-action.type';
 import { <%_ for (idx in relationships) { const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural; _%>
  get<%= relationshipFieldNamePlural %>,<%_ } _%>
  getEntities } from './<%= entityFileName %>.reducer';
-import { APP_DATE_FORMAT, APP_FORMAT_LOCAL_DATE } from '../../config/constants';
+import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from '../../config/constants';
 
 export interface I<%= entityReactName %>Props {
   getEntities: ICrudGetAction;
@@ -104,7 +104,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                       <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
                         <Time value={<%= entityInstance %>.<%=fields[idx].fieldName%>} format={APP_DATE_FORMAT} />
                       <%_ } else if (fieldType === 'LocalDate') { _%>
-                        <Time value={<%= entityInstance %>.<%=fields[idx].fieldName%>} format={APP_FORMAT_LOCAL_DATE} />
+                        <Time value={<%= entityInstance %>.<%=fields[idx].fieldName%>} format={APP_LOCAL_DATE_FORMAT} />
                       <%_ } else { _%>
                         {<%= entityInstance %>.<%= fields[idx].fieldName %>}
                       <%_ } _%>

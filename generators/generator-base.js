@@ -301,7 +301,7 @@ module.exports = class extends PrivateBase {
 
                 jhipsterUtils.rewriteFile({
                     file: indexModulePath,
-                    needle: 'jhipster-needle-add-route-index-1',
+                    needle: 'jhipster-needle-add-route-import',
                     splicable: [
                         this.stripMargin(`|import ${entityAngularName} from './${entityFolderName}';`)
                     ]
@@ -309,7 +309,7 @@ module.exports = class extends PrivateBase {
 
                 jhipsterUtils.rewriteFile({
                     file: indexModulePath,
-                    needle: 'jhipster-needle-add-route-index-2',
+                    needle: 'jhipster-needle-add-route-path',
                     splicable: [
                         this.stripMargin(`|<Route path={'/${entityFileName}'} component={${entityAngularName}}/>`)
                     ]
@@ -319,7 +319,7 @@ module.exports = class extends PrivateBase {
 
                 jhipsterUtils.rewriteFile({
                     file: indexReducerPath,
-                    needle: 'jhipster-needle-add-reducer-1',
+                    needle: 'jhipster-needle-add-reducer-import',
                     splicable: [
                         this.stripMargin(`|import ${entityFileName} from '../entities/${entityFolderName}/${entityFileName}.reducer';`)
                     ]
@@ -327,7 +327,7 @@ module.exports = class extends PrivateBase {
 
                 jhipsterUtils.rewriteFile({
                     file: indexReducerPath,
-                    needle: 'jhipster-needle-add-reducer-2',
+                    needle: 'jhipster-needle-add-reducer-combine',
                     splicable: [
                         this.stripMargin(`,
                             |  ${entityFileName}`)

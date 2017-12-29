@@ -19,11 +19,11 @@ let translations = {};
 const context = require.context('../../i18n/<%= lang %>', false, /.json$/);
 let jsonLang = {};
 context.keys().forEach(key => {
-  jsonLang = _.merge(jsonLang, context(key));
+  jsonLang = merge(jsonLang, context(key));
 });
 const l = {};
 l['<%= lang %>'] = jsonLang;
-translations = _.merge(translations, l);
+translations = merge(translations, l);
 <%_ }); _%>
 // tslint:enable
 

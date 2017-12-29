@@ -8,7 +8,7 @@ import layout from './layout';
 import authentication from './authentication';
 import administration from './administration';
 import userManagement from './user-management';
-/* jhipster-needle-add-reducer-1 - JHipster will add reducer here */
+/* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 export default combineReducers({
   authentication,
@@ -19,5 +19,5 @@ export default combineReducers({
   administration,
   userManagement,
   loadingBar
-  /* jhipster-needle-add-reducer-2 - JHipster will add reducer here */
+  /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
 });
