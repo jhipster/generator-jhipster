@@ -23,6 +23,6 @@
     const returnPrefix = returnDirectly ? 'return' : instanceType + ' ' + instanceName + ' =';
     if (!viaService) {
 %>
-        <% if (dto === 'mapstruct') { %><%- entityClass %> <%= entityInstance %> = <% } else { %><%- returnPrefix %> <% } %><% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %><%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany === true) { %>findOneWithEagerRelationships<% } else { %>findById<% } %>(id)<% } %><% if (databaseType === 'cassandra') { %><%= entityInstance %>Repository.findOne(UUID.fromString(id))<% } %>;<% if (dto === 'mapstruct') { %>
-        <%- returnPrefix %> <%= entityToDto %>(<%= entityInstance %>);<% } } else { %>
+        <% if (dto === 'mapstruct') { %><%- entityClass %> <%= entityInstance %> = <% } else { %><%- returnPrefix %> <% } %><% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %><%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany === true) { %>findOneWithEagerRelationships(id)<% } else { %>findById(id)<% if (dto === 'mapstruct') { %>.get()<% } %><% } %><% } %><% if (databaseType === 'cassandra') { %><%= entityInstance %>Repository.findOne(UUID.fromString(id))<% } %>;<% if (dto === 'mapstruct') { %>
+        <%- returnPrefix %> Optional.of(<%= entityToDto %>(<%= entityInstance %>));<% } } else { %>
         <%- returnPrefix %> <%= entityInstance %>Service.findOne(id);<% } %>
