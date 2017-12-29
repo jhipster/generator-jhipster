@@ -138,7 +138,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                               TODO
                             <%_ } else { _%>
                                 <%_ if (dto === 'no') { _%>
-                                  TODO
+                        {<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}
                                 <%_ } else { _%>
                                   TODO
                                 <%_ } _%>

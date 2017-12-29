@@ -5,11 +5,15 @@ import { AvForm, AvGroup, AvInput, AvFeedback } from 'availity-reactstrap-valida
 import { Translate } from 'react-jhipster';
 import { FaBan, FaFloppyO } from 'react-icons/lib/fa';
 
+import * as moment from 'moment';
+
 import { ICrudGetAction, ICrudPutAction } from '../../shared/model/redux-action.type';
 import { getEntity, updateEntity, createEntity } from './<%= entityFileName %>.reducer';
 <%_ if (enableTranslation) { _%>
 import { locales } from '../../config/translation';
 <%_ } _%>
+import { convertDateTimeFromServer } from '../../shared/util/date-utils';
+import { APP_FORMAT_DATETIME_LOCAL } from '../../config/constants';
 
 export interface I<%= entityReactName %>DialogProps {
   getEntity: ICrudGetAction;
@@ -65,10 +69,13 @@ export class <%= entityReactName %>Dialog extends React.Component<I<%= entityRea
       showModal: true
     };
 <%_ for (idx in relationships) {
+const relationshipType = relationships[idx].relationshipType;
 const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
 const relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
 _%>
+<%_ if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true || relationshipType === 'many-to-one') { _%>
     this.update<%= relationshipNameHumanized %> = this.update<%= relationshipNameHumanized %>.bind(this);
+<%_ } _%>
 <%_ } _%>
   }
 
@@ -77,6 +84,13 @@ _%>
   }
 
   saveEntity = (event, errors, values) => {
+    <%_ for (idx in fields) { 
+        const fieldType = fields[idx].fieldType;    
+    _%>
+    <%_ if (fieldType === 'Instant' || fieldType === 'ZonedDateTime')  { _%>
+    values.<%=fields[idx].fieldName%> = new Date(values.<%=fields[idx].fieldName%>);
+    <%_ } _%>
+    <%_ } _%>
     if (this.state.isNew) {
       this.props.createEntity(values);
     } else {
@@ -117,7 +131,7 @@ _%>
     });
   }
 
-  <%_ } else { _%>
+  <%_ } else if (relationshipType === 'many-to-one') { _%>
   update<%= relationshipNameHumanized %>(element) {
     const <%= otherEntityField %> = element.target.value;
     for (const i in this.props.<%= relationshipFieldNamePlural %>) {
@@ -202,7 +216,7 @@ _%>
                                 <%=fields[idx].fieldName%>
                             </Translate>
                         </Label>
-                        <AvInput type="datetime" className="form-control" name="<%= fields[idx].fieldName %>" required />
+                        <AvInput type="datetime-local" className="form-control" name="<%= fields[idx].fieldName %>" value={convertDateTimeFromServer(this.props.<%= entityInstance %>.<%= fields[idx].fieldName %>)} required />
                         <AvFeedback>This field is required.</AvFeedback>
                     <%_ } else if (fieldType === 'LocalDate') { _%>
                         <Label for="login">

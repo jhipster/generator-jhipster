@@ -297,8 +297,9 @@ const files = {
             templates: [
                 // layouts
                 'shared/layout/footer/footer.tsx',
-                'shared/layout/header/header.tsx'
+                'shared/layout/header/header.tsx',
                 // util
+                'shared/util/date-utils.ts'
                 // components
                 // model
             ]
