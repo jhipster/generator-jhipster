@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Route } from 'react-router-dom';
-import PrivateRoute from 'react-jhipster';
+import { PrivateRoute } from 'react-jhipster';
 
 import Login from './modules/login/login';
 import Logout from './modules/login/logout';

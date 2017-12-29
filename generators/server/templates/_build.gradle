@@ -248,7 +248,7 @@ dependencies {
     <%_ if (clusteredHttpSession === 'hazelcast') { _%>
     compile "com.hazelcast:hazelcast-wm"
     <%_ } _%>
-    <%_ if (enableHibernateCache && cacheProvider === 'infinispan') { _%>
+    <%_ if (cacheProvider === 'infinispan') { _%>
     compile "org.hibernate:hibernate-infinispan"
     <%_ } _%>
     <%_ if (cacheProvider === 'infinispan') {_%>

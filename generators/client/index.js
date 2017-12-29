@@ -393,7 +393,7 @@ module.exports = class extends BaseGenerator {
                     if (this.clientFramework === 'angular1') {
                         this.spawnCommandSync('gulp', ['install']);
                     } else {
-                        this.spawnCommandSync(this.clientPackageManager, ['run', 'webpack:build']);
+                        this.buildResult = this.spawnCommandSync(this.clientPackageManager, ['run', 'webpack:build']);
                     }
                 },
                 (err) => {
@@ -406,6 +406,9 @@ module.exports = class extends BaseGenerator {
 
     end() {
         if (useBlueprint) return;
+        if (this.buildResult !== undefined && this.buildResult.status !== 0) {
+            this.error('webpack:build failed.');
+        }
         this.log(chalk.green.bold('\nClient application generated successfully.\n'));
 
         let logMsg =

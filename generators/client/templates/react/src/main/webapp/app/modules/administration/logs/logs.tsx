@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { Translate } from 'react-jhipster';
 
 import { getLoggers, changeLogLevel } from '../../../reducers/administration';
 
@@ -39,10 +40,7 @@ export class LogsPage extends React.Component<ILogsPageProps, { filter: string }
     });
   }
 
-  getClassName = (level, check, className) =>
-    level === check ?
-      `btn btn-secondary btn-sm btn-${className}`
-      : 'btn btn-secondary btn-sm btn-secondary'
+  getClassName = (level, check, className) => level === check ? `btn btn-sm btn-${className}` : 'btn btn-sm btn-light';
 
   filterFn = l => l.name.toUpperCase().includes(this.state.filter.toUpperCase());
 
@@ -51,18 +49,18 @@ export class LogsPage extends React.Component<ILogsPageProps, { filter: string }
     const { filter } = this.state;
     const loggers = logs ? logs.loggers : {};
     return (
-        <div className="pad-5">
-          <h2>Logs</h2>
-          <p>There are {loggers.length} loggers.</p>
+        <div>
+          <h2><Translate contentKey="logs.title">Logs</Translate></h2>
+          <p><Translate contentKey="logs.nbloggers" interpolate={{ total: loggers.length }}>There are {loggers.length} loggers.</Translate></p>
 
-          <span>Filter</span>
+          <span><Translate contentKey="logs.filter">Filter</Translate></span>
           <input type="text" value={filter} onChange={this.setFilter} className="form-control" disabled={isFetching} />
 
           <table className="table table-sm table-striped table-bordered" >
             <thead>
               <tr title="click to order">
-                <th><span>Name</span></th>
-                <th><span>Level</span></th>
+                <th><span><Translate contentKey="logs.table.name">Name</Translate></span></th>
+                <th><span><Translate contentKey="logs.table.level">Level</Translate></span></th>
               </tr>
             </thead>
             <tbody>
