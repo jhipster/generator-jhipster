@@ -25,8 +25,8 @@ import { FaPlus, FaEye, FaPencil, FaTrash } from 'react-icons/lib/fa';
 import Time from 'react-time';
 
 import { ICrudGetAction } from '../../shared/model/redux-action.type';
-import { <%_ for (idx in relationships) { const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural; _%>
- get<%= relationshipFieldNamePlural %>,<%_ } _%>
+import { <%_ for (idx in relationships) { const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;const otherEntityNamePlural = relationships[idx].otherEntityNamePlural; _%>
+ get<%= otherEntityNamePlural %>,<%_ } _%>
  getEntities } from './<%= entityFileName %>.reducer';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from '../../config/constants';
 
@@ -35,8 +35,9 @@ export interface I<%= entityReactName %>Props {
   <%=entityInstancePlural %>: any[];
   <%_ for (idx in relationships) {
     const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+    const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
   _%>
-  get<%= relationshipFieldNamePlural %>: ICrudGetAction;
+  get<%= otherEntityNamePlural %>: ICrudGetAction;
   <%_ } _%>
   match: any;
 }
@@ -51,8 +52,9 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
     this.props.getEntities();
     <%_ for (idx in relationships) {
       const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+      const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
     _%>
-    this.props.get<%= relationshipFieldNamePlural %>();
+    this.props.get<%= otherEntityNamePlural %>();
     <%_ } _%>
   }
 
@@ -128,7 +130,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                               TODO
                             <%_ } else { _%>
                                 <%_ if (dto === 'no') { _%>
-                                  {<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}
+                                  {<%= entityInstance + "." + relationshipFieldName %> ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %> : ''}
                                 <%_ } else { _%>
                                   TODO
                                 <%_ } _%>
@@ -138,7 +140,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                               TODO
                             <%_ } else { _%>
                                 <%_ if (dto === 'no') { _%>
-                        {<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}
+                        {<%= entityInstance + "." + relationshipFieldName %> ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %> : ''}
                                 <%_ } else { _%>
                                   TODO
                                 <%_ } _%>
@@ -175,8 +177,8 @@ const mapStateToProps = storeState => ({
   <%=entityInstancePlural %>: storeState.<%= entityInstance %>.entities
 });
 
-const mapDispatchToProps = { <%_ for (idx in relationships) { const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural; _%>
- get<%= relationshipFieldNamePlural %>,<%_ } _%>
+const mapDispatchToProps = { <%_ for (idx in relationships) { const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;const otherEntityNamePlural = relationships[idx].otherEntityNamePlural; _%>
+ get<%= otherEntityNamePlural %>,<%_ } _%>
  getEntities };
 
 export default connect(mapStateToProps, mapDispatchToProps)(<%= entityReactName %>);

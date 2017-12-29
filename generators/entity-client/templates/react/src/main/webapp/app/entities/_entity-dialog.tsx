@@ -38,8 +38,9 @@ export interface I<%= entityReactName %>DialogProps {
   <%= entityInstance %>: any;
   <%_ for (idx in relationships) {
     const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+    const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
   _%>
-  <%= relationshipFieldNamePlural %>: any[];
+  <%= otherEntityNamePlural %>: any[];
   <%_ } _%>
   match: any;
   history: any;
@@ -53,7 +54,6 @@ export interface I<%= entityReactName %>DialogState {
     const relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
     const otherEntityField = relationships[idx].otherEntityField;
     const relationshipFieldName = relationships[idx].relationshipFieldName;
-    const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
   _%>
   <%_ if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { _%>
   ids<%= relationshipNameHumanized %>: any[];
@@ -72,7 +72,6 @@ export class <%= entityReactName %>Dialog extends React.Component<I<%= entityRea
       <%_ for (idx in relationships) { 
         const relationshipType = relationships[idx].relationshipType;
         const relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
-        const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
       _%>
       <%_ if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { _%>
       ids<%= relationshipNameHumanized %>: [],
@@ -84,7 +83,6 @@ export class <%= entityReactName %>Dialog extends React.Component<I<%= entityRea
     };
 <%_ for (idx in relationships) {
 const relationshipType = relationships[idx].relationshipType;
-const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
 const relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
 _%>
 <%_ if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true || relationshipType === 'many-to-one') { _%>
@@ -123,6 +121,7 @@ _%>
 <%_ for (idx in relationships) {
 const relationshipType = relationships[idx].relationshipType;
 const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
 const relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
 const otherEntityField = relationships[idx].otherEntityField;
 _%>
@@ -133,9 +132,9 @@ _%>
     for (const i in element.target.selectedOptions) {
         if (element.target.selectedOptions[i]) {
             const prop = element.target.selectedOptions[i].value;
-            for (const j in this.props.<%= relationshipFieldNamePlural %>) {
-                if (prop === this.props.<%= relationshipFieldNamePlural %>[j].<%= otherEntityField %>) {
-                    list.push(this.props.<%= relationshipFieldNamePlural %>[j]);
+            for (const j in this.props.<%= otherEntityNamePlural %>) {
+                if (prop === this.props.<%= otherEntityNamePlural %>[j].<%= otherEntityField %>) {
+                    list.push(this.props.<%= otherEntityNamePlural %>[j]);
                 }
             }
         }
@@ -148,10 +147,10 @@ _%>
   <%_ } else if (relationshipType === 'many-to-one') { _%>
   update<%= relationshipNameHumanized %>(element) {
     const <%= otherEntityField %> = element.target.value;
-    for (const i in this.props.<%= relationshipFieldNamePlural %>) {
-        if (<%= otherEntityField %> === this.props.<%= relationshipFieldNamePlural %>[i].<%= otherEntityField %>) {
+    for (const i in this.props.<%= otherEntityNamePlural %>) {
+        if (<%= otherEntityField %>.toString() === this.props.<%= otherEntityNamePlural %>[i].<%= otherEntityField %>.toString()) {
             this.setState({
-                id<%= relationshipNameHumanized %>: this.props.<%= relationshipFieldNamePlural %>[i].id
+                id<%= relationshipNameHumanized %>: this.props.<%= otherEntityNamePlural %>[i].id
             });
         }
     }
@@ -162,6 +161,7 @@ _%>
 <%_ for (idx in relationships) {
     const relationshipType = relationships[idx].relationshipType;
     const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+    const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
     const relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
     const otherEntityField = relationships[idx].otherEntityField;
     _%>
@@ -176,11 +176,11 @@ _%>
         }
         return list;
     }
-    if (value.<%= relationshipFieldNamePlural %> && value.<%= relationshipFieldNamePlural %>.length !== 0) {
+    if (value.<%= otherEntityNamePlural %> && value.<%= otherEntityNamePlural %>.length !== 0) {
         const list = [];
-        for (const i in value.<%= relationshipFieldNamePlural %>) {
-            if (value.<%= relationshipFieldNamePlural %>[i]) {
-                list.push(value.<%= relationshipFieldNamePlural %>[i].<%= otherEntityField %>);
+        for (const i in value.<%= otherEntityNamePlural %>) {
+            if (value.<%= otherEntityNamePlural %>[i]) {
+                list.push(value.<%= otherEntityNamePlural %>[i].<%= otherEntityField %>);
             }
         }
         return list;
@@ -192,8 +192,8 @@ _%>
 <%_ } _%>
   render() {
     const isInvalid = false;
-    const { <%= entityInstance %>,<%_ for (idx in relationships) { const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural; _%>
- <%= relationshipFieldNamePlural %>,<%_ } _%>
+    const { <%= entityInstance %>,<%_ for (idx in relationships) { const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;const otherEntityNamePlural = relationships[idx].otherEntityNamePlural; _%>
+ <%= otherEntityNamePlural %>,<%_ } _%>
  loading, updating } = this.props;
     const { showModal, isNew } = this.state;
     return (
@@ -240,10 +240,29 @@ _%>
                         </Label>
                         <AvInput type="date" className="form-control" name="<%= fields[idx].fieldName %>" required />
                         <AvFeedback>This field is required.</AvFeedback>
+                    <%_ } else if (fields[idx].fieldIsEnum) { _%>
+                        <Label>
+                            <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
+                                <%=fields[idx].fieldName%>
+                            </Translate>
+                        </Label>
+                        <AvInput type="select"
+                            className="form-control"
+                            name="<%= fields[idx].fieldName %>">
+                            <%_ 
+                                const enumPrefix = angularAppName + '.'+ fieldType;
+                                const values = fields[idx].fieldValues.replace(/\s/g, '').split(',');
+                                for (key in values) {
+                                    const value = values[key]; _%>
+                                    <option value="<%= value %>">
+                                        <%=value%>
+                                    </option>
+                            <%_ } _%>
+                        </AvInput>
                     <%_ } else { _%>
                         <Label for="login">
                             <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
-                                <%=fields[idx].fieldName%>
+                                <%=fields[idx].fieldName%> : <%= fieldType %>
                             </Translate>
                         </Label>
                         <AvInput type="text" className="form-control" name="<%= fields[idx].fieldName %>" required />
@@ -277,7 +296,7 @@ _%>
                                     onChange={this.update<%= relationshipNameHumanized %>}>
                                     <option value="" key="0" />
                                     {
-                                        <%=otherEntityNamePlural.toLowerCase() %>.map(otherEntity =>
+                                        <%= otherEntityNamePlural %>.map(otherEntity =>
                                         <option
                                             value={otherEntity.<%=otherEntityField%>}
                                             key={otherEntity.id}>
@@ -310,12 +329,12 @@ _%>
                         <AvInput type="select"
                             multiple
                             className="form-control"
-                            name="fake<%= relationshipFieldNamePlural %>"
+                            name="fake<%= otherEntityNamePlural %>"
                             value={this.display<%= relationshipNameHumanized %>(<%= entityInstance %>)}
                             onChange={this.update<%= relationshipNameHumanized %>}>
                             <option value="" key="0" />
                             {
-                                (<%=otherEntityNamePlural.toLowerCase() %>) ? (<%=otherEntityNamePlural.toLowerCase() %>.map(otherEntity =>
+                                (<%= otherEntityNamePlural %>) ? (<%=otherEntityNamePlural.toLowerCase() %>.map(otherEntity =>
                                 <option
                                     value={otherEntity.<%=otherEntityField%>}
                                     key={otherEntity.id}>
@@ -325,7 +344,7 @@ _%>
                             }
                         </AvInput>
                         <AvInput type="hidden"
-                            name="<%= relationshipFieldNamePlural %>"
+                            name="<%= otherEntityNamePlural %>"
                             value={this.state.ids<%= relationshipNameHumanized %>} />
                     </AvGroup>
                 <%_ } _%>
@@ -352,8 +371,9 @@ const mapStateToProps = storeState => ({
   <%= entityInstance %>: storeState.<%= entityInstance %>.entity,
   <%_ for (idx in relationships) {
     const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+    const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
   _%>
-  <%= relationshipFieldNamePlural %>: storeState.<%= entityInstance %>.<%= relationshipFieldNamePlural %>,
+  <%= otherEntityNamePlural %>: storeState.<%= entityInstance %>.<%= otherEntityNamePlural %>,
   <%_ } _%>
   loading: storeState.<%= entityInstance %>.loading,
   updating: storeState.<%= entityInstance %>.updating
