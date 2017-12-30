@@ -52,8 +52,8 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
   sortPrefixFn = (prop1, prop2) => {
     const { configuration } = this.props;
     if (configuration && configuration.configProps) {
-      const pref1 = this.props.configuration.configProps[prop1].prefix;
-      const pref2 = this.props.configuration.configProps[prop2].prefix;
+      const pref1 = configuration.configProps[prop1].prefix;
+      const pref2 = configuration.configProps[prop2].prefix;
       return this.sortFn(pref1, pref2, this.state.reversePrefix);
     }
   }
