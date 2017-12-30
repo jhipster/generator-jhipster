@@ -68,7 +68,6 @@ import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;
 public class <%= serviceClassName %> extends QueryService<<%= entityClass %>> {
 
     private final Logger log = LoggerFactory.getLogger(<%= serviceClassName %>.class);
-
 <%- include('../common/inject_template', {viaService: false, constructorName: serviceClassName, queryService: false}); -%>
 
     /**
