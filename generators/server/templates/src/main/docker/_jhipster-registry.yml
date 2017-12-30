@@ -27,7 +27,7 @@ services:
         # When run with the "prod" Spring profile, it will read the configuration from a Git repository
         # See http://www.jhipster.tech/microservices-architecture/#registry_app_configuration
         environment:
-            - SPRING_PROFILES_ACTIVE=dev<% if (authenticationType === 'oauth2') { %>,oauth2<% } %>
+            - SPRING_PROFILES_ACTIVE=dev,native,swagger<% if (authenticationType === 'oauth2') { %>,oauth2<% } %>
             - SECURITY_USER_PASSWORD=admin
             - JHIPSTER_REGISTRY_PASSWORD=admin
             - SPRING_CLOUD_CONFIG_SERVER_NATIVE_SEARCH_LOCATIONS=file:./central-config/localhost-config/
