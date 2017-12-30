@@ -20,7 +20,7 @@ import { browser, element, by } from 'protractor';
 import { NavBarPage } from './../page-objects/jhi-page-objects';
 <%_ let fieldHasByte = false;
 fields.forEach((field) => {
-    if (['byte[]', 'ByteBuffer'].includes(field.fieldType)) {
+    if (['byte[]', 'ByteBuffer'].includes(field.fieldType) && field.fieldTypeBlobContent !== 'text') {
         fieldHasByte = true;
     }
 });
