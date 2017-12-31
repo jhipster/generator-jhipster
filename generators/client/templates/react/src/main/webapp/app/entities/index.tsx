@@ -7,7 +7,7 @@ import { ModalRoute } from 'react-router-modal';
 const Routes = ({ match }) => (
   <div>
     <Switch>
-        /* jhipster-needle-add-route-path - JHipster will routes here */
+      {/* jhipster-needle-add-route-path - JHipster will routes here */}
     </Switch>
   </div>
 );
