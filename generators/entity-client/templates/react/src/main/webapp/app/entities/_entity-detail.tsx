@@ -21,10 +21,12 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
 // TODO import TextFormat only when fieldContainsDate
+// tslint:disable-next-line:no-unused-variable
 import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FaArrowLeft } from 'react-icons/lib/fa';
 
 import { getEntity } from './<%= entityFileName %>.reducer';
+// tslint:disable-next-line:no-unused-variable
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from '../../config/constants';
 
 export interface I<%= entityReactName %>DetailProps {

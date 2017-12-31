@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import * as React from 'react';
+// tslint:disable-next-line:no-unused-variable
 import { Route, Switch } from 'react-router-dom';
 
 /* jhipster-needle-add-route-import - JHipster will add routes here */

@@ -21,12 +21,17 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
 // TODO import TextFormat only when fieldContainsDate
+// tslint:disable-next-line:no-unused-variable
 import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FaPlus, FaEye, FaPencil, FaTrash } from 'react-icons/lib/fa';
 
-import { <%_ for (idx in relationships) { const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;const otherEntityNamePlural = relationships[idx].otherEntityNamePlural; _%>
- get<%= otherEntityNamePlural %>,<%_ } _%>
- getEntities } from './<%= entityFileName %>.reducer';
+import {
+<%_ for (idx in relationships) { const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;const otherEntityNamePlural = relationships[idx].otherEntityNamePlural; _%>
+  get<%= otherEntityNamePlural %>,
+<%_ } _%>
+  getEntities
+} from './<%= entityFileName %>.reducer';
+ // tslint:disable-next-line:no-unused-variable
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from '../../config/constants';
 
 export interface I<%= entityReactName %>Props {

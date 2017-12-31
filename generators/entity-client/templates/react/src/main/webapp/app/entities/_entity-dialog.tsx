@@ -24,8 +24,8 @@ import { Translate, ICrudGetAction, ICrudPutAction } from 'react-jhipster';
 import { FaBan, FaFloppyO } from 'react-icons/lib/fa';
 
 import { getEntity, updateEntity, createEntity } from './<%= entityFileName %>.reducer';
+// tslint:disable-next-line:no-unused-variable
 import { convertDateTimeFromServer } from '../../shared/util/date-utils';
-import { APP_LOCAL_DATETIME_FORMAT } from '../../config/constants';
 
 export interface I<%= entityReactName %>DialogProps {
   getEntity: ICrudGetAction;
