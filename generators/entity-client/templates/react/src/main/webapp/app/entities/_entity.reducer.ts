@@ -25,10 +25,10 @@
     let entityActionNamePlural = entityInstancePlural.toUpperCase();
 _%>
 import axios from 'axios';
+import { ICrudGetAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from '../../reducers/action-type.util';
 import { messages, SERVER_API_URL } from '../../config/constants';
-import { ICrudGetAction, ICrudPutAction, ICrudDeleteAction } from '../../shared/model/redux-action.type';
 <%_ if (!(applicationType === 'gateway' && locals.microserviceName) && authenticationType !== 'uaa') { _%>
 
 <%_ } _%>
@@ -69,15 +69,12 @@ _%>
 // Reducer
 export default (state = initialState, action) => {
   switch (action.type) {
-    <%_ for (idx in relationships) {
-      const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-      const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-    _%>
+<%_ for (idx in relationships) {
+    const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+    const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
+_%>
     case REQUEST(ACTION_TYPES.FETCH_<%= otherEntityNamePlural %>):
-    <%_ } _%>
-     return {
-       ...state
-     };
+<%_ } _%>
     case REQUEST(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
     case REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>):
       return {
@@ -95,12 +92,12 @@ export default (state = initialState, action) => {
         updateSuccess: false,
         updating: true
       };
-    <%_ for (idx in relationships) {
-      const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-      const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-    _%>
-      case FAILURE(ACTION_TYPES.FETCH_<%= otherEntityNamePlural %>):
-    <%_ } _%>
+<%_ for (idx in relationships) {
+    const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+    const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
+_%>
+    case FAILURE(ACTION_TYPES.FETCH_<%= otherEntityNamePlural %>):
+<%_ } _%>
     case FAILURE(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
     case FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>):
     case FAILURE(ACTION_TYPES.CREATE_<%= entityActionName %>):
@@ -113,17 +110,17 @@ export default (state = initialState, action) => {
         updateSuccess: false,
         errorMessage: action.payload
       };
-    <%_ for (idx in relationships) {
-      const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-      const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-    _%>
-      case SUCCESS(ACTION_TYPES.FETCH_<%= otherEntityNamePlural %>):
+<%_ for (idx in relationships) {
+    const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+    const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
+_%>
+    case SUCCESS(ACTION_TYPES.FETCH_<%= otherEntityNamePlural %>):
       return {
         ...state,
         loading: false,
         <%= otherEntityNamePlural %>: action.payload.data
       };
-    <%_ } _%>
+<%_ } _%>
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
       return {
         ...state,
@@ -168,8 +165,8 @@ export const get<%= otherEntityNamePlural %>: ICrudGetAction = () => ({
   type: ACTION_TYPES.FETCH_<%= otherEntityNamePlural %>,
   payload: axios.get(`/api/<%= otherEntityNamePlural %>?cacheBuster=${new Date().getTime()}`)
 });
-<%_ } _%>
 
+<%_ } _%>
 export const getEntities: ICrudGetAction = (page, size, sort) => ({
   type: ACTION_TYPES.FETCH_<%= entityActionNamePlural %>,
   payload: axios.get(`${apiUrl}?cacheBuster=${new Date().getTime()}`)

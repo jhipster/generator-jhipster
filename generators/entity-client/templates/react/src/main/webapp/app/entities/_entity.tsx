@@ -20,11 +20,9 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
-import { Translate } from 'react-jhipster';
+import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FaPlus, FaEye, FaPencil, FaTrash } from 'react-icons/lib/fa';
-import Time from 'react-time';
 
-import { ICrudGetAction } from '../../shared/model/redux-action.type';
 import { <%_ for (idx in relationships) { const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;const otherEntityNamePlural = relationships[idx].otherEntityNamePlural; _%>
  get<%= otherEntityNamePlural %>,<%_ } _%>
  getEntities } from './<%= entityFileName %>.reducer';
@@ -97,16 +95,16 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                       {<%= entityInstance %>.id}
                     </Button>
                   </td>
-                  <%_ for (idx in fields) { 
-                    const fieldType = fields[idx].fieldType;  
+                  <%_ for (idx in fields) {
+                    const fieldType = fields[idx].fieldType;
                   _%>
                     <td>
                       <%_ if (fieldType === 'Boolean') { _%>
                         {<%= entityInstance %>.<%=fields[idx].fieldName%> ? 'true' : 'false'}
                       <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
-                        <Time value={<%= entityInstance %>.<%=fields[idx].fieldName%>} format={APP_DATE_FORMAT} />
+                        <TextFormat type="date" value={<%= entityInstance %>.<%=fields[idx].fieldName%>} format={APP_DATE_FORMAT} />
                       <%_ } else if (fieldType === 'LocalDate') { _%>
-                        <Time value={<%= entityInstance %>.<%=fields[idx].fieldName%>} format={APP_LOCAL_DATE_FORMAT} />
+                        <TextFormat type="date" value={<%= entityInstance %>.<%=fields[idx].fieldName%>} format={APP_LOCAL_DATE_FORMAT} />
                       <%_ } else { _%>
                         {<%= entityInstance %>.<%= fields[idx].fieldName %>}
                       <%_ } _%>

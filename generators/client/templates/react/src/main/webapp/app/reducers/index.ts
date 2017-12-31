@@ -18,6 +18,6 @@ export default combineReducers({
   layout,
   administration,
   userManagement,
-  loadingBar
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
+  loadingBar
 });

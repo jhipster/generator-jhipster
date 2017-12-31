@@ -19,10 +19,9 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
-import { Translate } from 'react-jhipster';
+import { Translate, ICrudGetAction, ICrudDeleteAction } from 'react-jhipster';
 import { FaBan, FaTrash } from 'react-icons/lib/fa';
 
-import { ICrudGetAction, ICrudDeleteAction } from '../../shared/model/redux-action.type';
 import { getEntity, deleteEntity } from './<%= entityFileName %>.reducer';
 
 export interface I<%= entityReactName %>DeleteDialogProps {

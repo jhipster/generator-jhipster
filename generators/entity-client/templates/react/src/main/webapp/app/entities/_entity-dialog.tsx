@@ -20,11 +20,9 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Label } from 'reactstrap';
 import { AvForm, AvGroup, AvInput, AvFeedback } from 'availity-reactstrap-validation';
-import { Translate } from 'react-jhipster';
+import { Translate, ICrudGetAction, ICrudPutAction } from 'react-jhipster';
 import { FaBan, FaFloppyO } from 'react-icons/lib/fa';
-import * as moment from 'moment';
 
-import { ICrudGetAction, ICrudPutAction } from '../../shared/model/redux-action.type';
 import { getEntity, updateEntity, createEntity } from './<%= entityFileName %>.reducer';
 import { convertDateTimeFromServer } from '../../shared/util/date-utils';
 import { APP_LOCAL_DATETIME_FORMAT } from '../../config/constants';
@@ -69,7 +67,7 @@ export class <%= entityReactName %>Dialog extends React.Component<I<%= entityRea
     super(props);
     this.state = {
       isNew: !this.props.match.params || !this.props.match.params.id,
-      <%_ for (idx in relationships) { 
+      <%_ for (idx in relationships) {
         const relationshipType = relationships[idx].relationshipType;
         const relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
       _%>
@@ -96,8 +94,8 @@ _%>
   }
 
   saveEntity = (event, errors, values) => {
-    <%_ for (idx in fields) { 
-        const fieldType = fields[idx].fieldType;    
+    <%_ for (idx in fields) {
+        const fieldType = fields[idx].fieldType;
     _%>
     <%_ if (fieldType === 'Instant' || fieldType === 'ZonedDateTime')  { _%>
     values.<%=fields[idx].fieldName%> = new Date(values.<%=fields[idx].fieldName%>);
@@ -213,8 +211,8 @@ _%>
               </AvGroup>
               : null
             }
-            <%_ for (idx in fields) { 
-                const fieldType = fields[idx].fieldType;    
+            <%_ for (idx in fields) {
+                const fieldType = fields[idx].fieldType;
             _%>
                 <AvGroup>
                     <%_ if (fieldType === 'Boolean') { _%>
@@ -249,7 +247,7 @@ _%>
                         <AvInput type="select"
                             className="form-control"
                             name="<%= fields[idx].fieldName %>">
-                            <%_ 
+                            <%_
                                 const enumPrefix = angularAppName + '.'+ fieldType;
                                 const values = fields[idx].fieldValues.replace(/\s/g, '').split(',');
                                 for (key in values) {
@@ -317,7 +315,7 @@ _%>
                             <%_ } else { _%>
                                 TODO 3
                             <%_ } _%>
-                        <%_ } _%>   
+                        <%_ } _%>
                     </AvGroup>
                 <%_ } else if (relationshipType === 'one-to-one' && ownerSide === true) { _%>
                     <div className="form-group">
