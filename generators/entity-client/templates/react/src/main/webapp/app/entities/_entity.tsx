@@ -104,17 +104,17 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                   <%_ for (idx in fields) {
                     const fieldType = fields[idx].fieldType;
                   _%>
-                    <td>
-                      <%_ if (fieldType === 'Boolean') { _%>
-                        {<%= entityInstance %>.<%=fields[idx].fieldName%> ? 'true' : 'false'}
-                      <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
-                        <TextFormat type="date" value={<%= entityInstance %>.<%=fields[idx].fieldName%>} format={APP_DATE_FORMAT} />
-                      <%_ } else if (fieldType === 'LocalDate') { _%>
-                        <TextFormat type="date" value={<%= entityInstance %>.<%=fields[idx].fieldName%>} format={APP_LOCAL_DATE_FORMAT} />
-                      <%_ } else { _%>
-                        {<%= entityInstance %>.<%= fields[idx].fieldName %>}
-                      <%_ } _%>
-                    </td>
+                  <td>
+                  <%_ if (fieldType === 'Boolean') { _%>
+                    {<%= entityInstance %>.<%=fields[idx].fieldName%> ? 'true' : 'false'}
+                  <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
+                    <TextFormat type="date" value={<%= entityInstance %>.<%=fields[idx].fieldName%>} format={APP_DATE_FORMAT} />
+                  <%_ } else if (fieldType === 'LocalDate') { _%>
+                    <TextFormat type="date" value={<%= entityInstance %>.<%=fields[idx].fieldName%>} format={APP_LOCAL_DATE_FORMAT} />
+                  <%_ } else { _%>
+                    {<%= entityInstance %>.<%= fields[idx].fieldName %>}
+                  <%_ } _%>
+                  </td>
                   <%_ } _%>
                   <%_ for (idx in relationships) {
                     const relationshipType = relationships[idx].relationshipType;
@@ -128,31 +128,31 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                     <%_ if (relationshipType === 'many-to-one'
                     || (relationshipType === 'one-to-one' && ownerSide === true)
                     || (relationshipType === 'many-to-many' && ownerSide === true && pagination === 'no')) { _%>
-                    <td>
-                        <%_ if (otherEntityName === 'user') { _%>
-                            <%_ if (relationshipType === 'many-to-many') { _%>
-                              TODO
-                            <%_ } else { _%>
-                                <%_ if (dto === 'no') { _%>
-                                  {<%= entityInstance + "." + relationshipFieldName %> ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %> : ''}
-                                <%_ } else { _%>
-                                  TODO
-                                <%_ } _%>
-                            <%_ } _%>
+                  <td>
+                    <%_ if (otherEntityName === 'user') { _%>
+                      <%_ if (relationshipType === 'many-to-many') { _%>
+                    TODO
+                      <%_ } else { _%>
+                        <%_ if (dto === 'no') { _%>
+                    {<%= entityInstance + "." + relationshipFieldName %> ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %> : ''}
                         <%_ } else { _%>
-                            <%_ if (relationshipType === 'many-to-many') { _%>
-                              TODO
-                            <%_ } else { _%>
-                                <%_ if (dto === 'no') { _%>
-                        {<%= entityInstance + "." + relationshipFieldName %> ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %> : ''}
-                                <%_ } else { _%>
-                                  TODO
-                                <%_ } _%>
-                            <%_ } _%>
+                    TODO
                         <%_ } _%>
-                    </td>
+                      <%_ } _%>
+                    <%_ } else { _%>
+                      <%_ if (relationshipType === 'many-to-many') { _%>
+                    TODO
+                      <%_ } else { _%>
+                          <%_ if (dto === 'no') { _%>
+                    {<%= entityInstance + "." + relationshipFieldName %> ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %> : ''}
+                          <%_ } else { _%>
+                    TODO
+                          <%_ } _%>
+                      <%_ } _%>
                     <%_ } _%>
-                    <%_ } _%>
+                  </td>
+                  <%_ } _%>
+                  <%_ } _%>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}`} color="info" size="sm">

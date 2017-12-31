@@ -44,87 +44,87 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
   render() {
     const { <%= entityInstance %> } = this.props;
     return (
-        <%_ const keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
-        <div>
-            <h2>
-            <Translate contentKey="<%= keyPrefix %>detail.title"><%= entityClass %></Translate> [<b>{<%= entityInstance %>.id}</b>]
-            </h2>
-            <dl className="row-md jh-entity-details">
-            <%_ for (idx in fields) {
-                const fieldType = fields[idx].fieldType;
-            _%>
-                <dt>
-                    <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
-                        <%=fields[idx].fieldName%>
-                    </Translate>
-                </dt>
-                <dd>
-                <%_ if (fieldType === 'Boolean') { _%>
-                    {<%= entityInstance %>.<%=fields[idx].fieldName%> ? 'true' : 'false'}
-                <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
-                    <TextFormat value={<%= entityInstance %>.<%=fields[idx].fieldName%>} type="date" format={APP_DATE_FORMAT} />
-                <%_ } else if (fieldType === 'LocalDate') { _%>
-                    <TextFormat value={<%= entityInstance %>.<%=fields[idx].fieldName%>} type="date" format={APP_LOCAL_DATE_FORMAT} />
-                <%_ } else { _%>
-                    {<%= entityInstance %>.<%= fields[idx].fieldName %>}
-                <%_ } _%>
-                </dd>
-            <%_ } _%>
-            <%_ for (idx in relationships) {
-                const relationshipType = relationships[idx].relationshipType;
-                const ownerSide = relationships[idx].ownerSide;
-                const relationshipName = relationships[idx].relationshipName;
-                const relationshipFieldName = relationships[idx].relationshipFieldName;
-                const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-                const relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
-                const otherEntityName = relationships[idx].otherEntityName;
-                const otherEntityStateName = relationships[idx].otherEntityStateName;
-                const otherEntityField = relationships[idx].otherEntityField;
-                const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
-                if (relationshipType === 'many-to-one'
-                || (relationshipType === 'one-to-one' && ownerSide === true)
-                || (relationshipType === 'many-to-many' && ownerSide === true)) { _%>
-                <dt>
-                    <Translate contentKey="<%= keyPrefix %><%= relationshipName %>">
-                        <%= relationshipNameHumanized %>
-                    </Translate>
-                </dt>
-                <dd>
-                    <%_ if (otherEntityName === 'user') { _%>
-                        <%_ if (relationshipType === 'many-to-many') { _%>
-                            TODO
-                        <%_ } else { _%>
-                            <%_ if (dto === 'no') { _%>
-                    {(<%= entityInstance + "." + relationshipFieldName %>) ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %> : ''}
-                                <%_ } else { _%>
-                                    TODO
-                            <%_ } _%>
-                        <%_ } _%>
-                    <%_ } else { _%>
-                        <%_ if (relationshipType === 'many-to-many') { _%>
-        {
-            (<%= entityInstance %>.<%= relationshipFieldNamePlural %>) ?
-                (<%= entityInstance %>.<%= relationshipFieldNamePlural %>.map((val, i) =>
-                    <span key={val.id}><a>{val.<%= otherEntityField %>}</a>{(i === <%= entityInstance %>.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
-                )
-            ) : null
-        }
-                        <%_ } else { _%>
-                            <%_ if (dto === 'no') { _%>
-                    {(<%= entityInstance + "." + relationshipFieldName %>) ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %> : ''}
-                            <%_ } else { _%>
-                                TODO
-                            <%_ } _%>
-                        <%_ } _%>
-                    <%_ } _%>
-                </dd>
-            <%_ } _%>
-            <%_ } _%>
-            </dl>
-            <Button tag={Link} to="/<%= entityInstance %>" replace color="info">
-                <FaArrowLeft/> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
-            </Button>
-        </div>
+      <%_ const keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
+      <div>
+        <h2>
+          <Translate contentKey="<%= keyPrefix %>detail.title"><%= entityClass %></Translate> [<b>{<%= entityInstance %>.id}</b>]
+        </h2>
+        <dl className="row-md jh-entity-details">
+        <%_ for (idx in fields) {
+            const fieldType = fields[idx].fieldType;
+        _%>
+          <dt>
+            <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
+              <%=fields[idx].fieldName%>
+            </Translate>
+          </dt>
+          <dd>
+          <%_ if (fieldType === 'Boolean') { _%>
+            {<%= entityInstance %>.<%=fields[idx].fieldName%> ? 'true' : 'false'}
+          <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
+            <TextFormat value={<%= entityInstance %>.<%=fields[idx].fieldName%>} type="date" format={APP_DATE_FORMAT} />
+          <%_ } else if (fieldType === 'LocalDate') { _%>
+            <TextFormat value={<%= entityInstance %>.<%=fields[idx].fieldName%>} type="date" format={APP_LOCAL_DATE_FORMAT} />
+          <%_ } else { _%>
+            {<%= entityInstance %>.<%= fields[idx].fieldName %>}
+          <%_ } _%>
+          </dd>
+          <%_ } _%>
+          <%_ for (idx in relationships) {
+              const relationshipType = relationships[idx].relationshipType;
+              const ownerSide = relationships[idx].ownerSide;
+              const relationshipName = relationships[idx].relationshipName;
+              const relationshipFieldName = relationships[idx].relationshipFieldName;
+              const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+              const relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
+              const otherEntityName = relationships[idx].otherEntityName;
+              const otherEntityStateName = relationships[idx].otherEntityStateName;
+              const otherEntityField = relationships[idx].otherEntityField;
+              const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
+              if (relationshipType === 'many-to-one'
+              || (relationshipType === 'one-to-one' && ownerSide === true)
+              || (relationshipType === 'many-to-many' && ownerSide === true)) { _%>
+          <dt>
+            <Translate contentKey="<%= keyPrefix %><%= relationshipName %>">
+              <%= relationshipNameHumanized %>
+            </Translate>
+          </dt>
+          <dd>
+              <%_ if (otherEntityName === 'user') { _%>
+                  <%_ if (relationshipType === 'many-to-many') { _%>
+                      TODO
+                  <%_ } else { _%>
+                      <%_ if (dto === 'no') { _%>
+              {(<%= entityInstance + "." + relationshipFieldName %>) ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %> : ''}
+                          <%_ } else { _%>
+                              TODO
+                      <%_ } _%>
+                  <%_ } _%>
+              <%_ } else { _%>
+                  <%_ if (relationshipType === 'many-to-many') { _%>
+  {
+      (<%= entityInstance %>.<%= relationshipFieldNamePlural %>) ?
+          (<%= entityInstance %>.<%= relationshipFieldNamePlural %>.map((val, i) =>
+              <span key={val.id}><a>{val.<%= otherEntityField %>}</a>{(i === <%= entityInstance %>.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
+          )
+      ) : null
+  }
+                  <%_ } else { _%>
+                      <%_ if (dto === 'no') { _%>
+              {(<%= entityInstance + "." + relationshipFieldName %>) ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %> : ''}
+                      <%_ } else { _%>
+                          TODO
+                      <%_ } _%>
+                  <%_ } _%>
+              <%_ } _%>
+          </dd>
+          <%_ } _%>
+        <%_ } _%>
+        </dl>
+        <Button tag={Link} to="/<%= entityInstance %>" replace color="info">
+          <FaArrowLeft/> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
+        </Button>
+      </div>
     );
   }
 }

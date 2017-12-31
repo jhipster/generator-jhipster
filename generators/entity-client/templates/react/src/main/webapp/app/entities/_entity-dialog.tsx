@@ -214,60 +214,64 @@ _%>
             <%_ for (idx in fields) {
                 const fieldType = fields[idx].fieldType;
             _%>
-                <AvGroup>
-                    <%_ if (fieldType === 'Boolean') { _%>
-                        <Label check>
-                            <AvInput type="checkbox" className="form-control" name="<%= fields[idx].fieldName %>" />
-                            <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
-                                <%=fields[idx].fieldName%>
-                            </Translate>
-                        </Label>
-                    <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
-                        <Label for="login">
-                            <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
-                                <%=fields[idx].fieldName%>
-                            </Translate>
-                        </Label>
-                        <AvInput type="datetime-local" className="form-control" name="<%= fields[idx].fieldName %>" value={convertDateTimeFromServer(this.props.<%= entityInstance %>.<%= fields[idx].fieldName %>)} required />
-                        <AvFeedback>This field is required.</AvFeedback>
-                    <%_ } else if (fieldType === 'LocalDate') { _%>
-                        <Label for="login">
-                            <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
-                                <%=fields[idx].fieldName%>
-                            </Translate>
-                        </Label>
-                        <AvInput type="date" className="form-control" name="<%= fields[idx].fieldName %>" required />
-                        <AvFeedback>This field is required.</AvFeedback>
-                    <%_ } else if (fields[idx].fieldIsEnum) { _%>
-                        <Label>
-                            <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
-                                <%=fields[idx].fieldName%>
-                            </Translate>
-                        </Label>
-                        <AvInput type="select"
-                            className="form-control"
-                            name="<%= fields[idx].fieldName %>">
-                            <%_
-                                const enumPrefix = angularAppName + '.'+ fieldType;
-                                const values = fields[idx].fieldValues.replace(/\s/g, '').split(',');
-                                for (key in values) {
-                                    const value = values[key]; _%>
-                                    <option value="<%= value %>">
-                                        <%=value%>
-                                    </option>
-                            <%_ } _%>
-                        </AvInput>
-                    <%_ } else { _%>
-                        <Label for="login">
-                            <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
-                                <%=fields[idx].fieldName%> : <%= fieldType %>
-                            </Translate>
-                        </Label>
-                        <AvInput type="text" className="form-control" name="<%= fields[idx].fieldName %>" required />
-                        <AvFeedback>This field is required.</AvFeedback>
-                        <AvFeedback>This field cannot be longer than 50 characters.</AvFeedback>
-                    <%_ } _%>
-                </AvGroup>
+            <AvGroup>
+            <%_ if (fieldType === 'Boolean') { _%>
+              <Label check>
+                <AvInput type="checkbox" className="form-control" name="<%= fields[idx].fieldName %>" />
+                <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
+                  <%=fields[idx].fieldName%>
+                </Translate>
+              </Label>
+            <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
+              <Label for="<%= fields[idx].fieldName %>">
+                <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
+                  <%=fields[idx].fieldName%>
+                </Translate>
+              </Label>
+              <AvInput
+                type="datetime-local" className="form-control" name="<%= fields[idx].fieldName %>"
+                value={convertDateTimeFromServer(this.props.<%= entityInstance %>.<%= fields[idx].fieldName %>)} required
+              />
+              <AvFeedback>This field is required.</AvFeedback>
+            <%_ } else if (fieldType === 'LocalDate') { _%>
+              <Label for="<%= fields[idx].fieldName %>">
+                <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
+                  <%=fields[idx].fieldName%>
+                </Translate>
+              </Label>
+              <AvInput type="date" className="form-control" name="<%= fields[idx].fieldName %>" required />
+              <AvFeedback>This field is required.</AvFeedback>
+            <%_ } else if (fields[idx].fieldIsEnum) { _%>
+              <Label>
+                <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
+                  <%=fields[idx].fieldName%>
+                </Translate>
+              </Label>
+              <AvInput type="select"
+                className="form-control"
+                name="<%= fields[idx].fieldName %>"
+              >
+              <%_
+                const enumPrefix = angularAppName + '.'+ fieldType;
+                const values = fields[idx].fieldValues.replace(/\s/g, '').split(',');
+                for (key in values) {
+                    const value = values[key]; _%>
+                <option value="<%= value %>">
+                    <%=value%>
+                </option>
+              <%_ } _%>
+              </AvInput>
+            <%_ } else { _%>
+              <Label for="<%= fields[idx].fieldName %>">
+                <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
+                  <%=fields[idx].fieldName%>
+                </Translate>
+              </Label>
+              <AvInput type="text" className="form-control" name="<%= fields[idx].fieldName %>" required />
+              <AvFeedback>This field is required.</AvFeedback>
+              <AvFeedback>This field cannot be longer than 50 characters.</AvFeedback>
+            <%_ } _%>
+            </AvGroup>
             <%_ } _%>
             <%_ for (idx in relationships) {
                 const relationshipType = relationships[idx].relationshipType;
@@ -284,69 +288,72 @@ _%>
                 const relationshipRequired = relationships[idx].relationshipRequired;
                 const translationKey = keyPrefix + relationshipName; _%>
                 <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true && otherEntityName === 'user')) { _%>
-                    <AvGroup>
-                        <Label for="langKey"><Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate></Label>
-                        <%_ if (dto === 'no') { _%>
-                            <%_ if (!relationshipRequired) { _%>
-                                <AvInput type="select"
-                                    className="form-control"
-                                    name="<%= relationshipFieldName %>.<%= otherEntityField %>"
-                                    onChange={this.update<%= relationshipNameHumanized %>}>
-                                    <option value="" key="0" />
-                                    {
-                                        <%= otherEntityNamePlural %>.map(otherEntity =>
-                                        <option
-                                            value={otherEntity.<%=otherEntityField%>}
-                                            key={otherEntity.id}>
-                                            {otherEntity.<%=otherEntityField%>}
-                                        </option>
-                                        )
-                                    }
-                                </AvInput>
-                                <AvInput type="hidden"
-                                    name="<%= relationshipFieldName %>.id"
-                                    value={this.state.id<%= relationshipNameHumanized %>} />
-                            <%_ } else { _%>
-                                TODO 1
-                            <%_ } _%>
-                        <%_ } else { _%>
-                            <%_ if (!relationshipRequired) { _%>
-                                TODO 2
-                            <%_ } else { _%>
-                                TODO 3
-                            <%_ } _%>
-                        <%_ } _%>
-                    </AvGroup>
-                <%_ } else if (relationshipType === 'one-to-one' && ownerSide === true) { _%>
-                    <div className="form-group">
-                        TODO 4
-                    </div>
-                <%_ } else if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { _%>
-                    <AvGroup>
-                        <Label for="langKey"><Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate></Label>
-                        <AvInput type="select"
-                            multiple
-                            className="form-control"
-                            name="fake<%= otherEntityNamePlural %>"
-                            value={this.display<%= relationshipNameHumanized %>(<%= entityInstance %>)}
-                            onChange={this.update<%= relationshipNameHumanized %>}>
-                            <option value="" key="0" />
-                            {
-                                (<%= otherEntityNamePlural %>) ? (<%=otherEntityNamePlural.toLowerCase() %>.map(otherEntity =>
-                                <option
-                                    value={otherEntity.<%=otherEntityField%>}
-                                    key={otherEntity.id}>
-                                    {otherEntity.<%=otherEntityField%>}
-                                </option>
-                                )) : null
-                            }
-                        </AvInput>
-                        <AvInput type="hidden"
-                            name="<%= otherEntityNamePlural %>"
-                            value={this.state.ids<%= relationshipNameHumanized %>} />
-                    </AvGroup>
+            <AvGroup>
+              <Label for="<%= relationshipFieldName %>.<%= otherEntityField %>">
+                <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
+              </Label>
+              <%_ if (dto === 'no') { _%>
+                  <%_ if (!relationshipRequired) { _%>
+              <AvInput type="select"
+                className="form-control"
+                name="<%= relationshipFieldName %>.<%= otherEntityField %>"
+                onChange={this.update<%= relationshipNameHumanized %>}>
+                <option value="" key="0" />
+                {
+                  <%= otherEntityNamePlural %>.map(otherEntity =>
+                    <option
+                      value={otherEntity.<%=otherEntityField%>}
+                      key={otherEntity.id}>
+                      {otherEntity.<%=otherEntityField%>}
+                    </option>
+                  )
+                }
+              </AvInput>
+              <AvInput type="hidden"
+                name="<%= relationshipFieldName %>.id"
+                value={this.state.id<%= relationshipNameHumanized %>} />
+                <%_ } else { _%>
+                  TODO 1
                 <%_ } _%>
+              <%_ } else { _%>
+                <%_ if (!relationshipRequired) { _%>
+                  TODO 2
+                <%_ } else { _%>
+                  TODO 3
+                <%_ } _%>
+              <%_ } _%>
+            </AvGroup>
+                <%_ } else if (relationshipType === 'one-to-one' && ownerSide === true) { _%>
+            <div className="form-group">
+                TODO 4
+            </div>
+                <%_ } else if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { _%>
+            <AvGroup>
+              <Label for="<%= otherEntityNamePlural %>"><Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate></Label>
+              <AvInput type="select"
+                multiple
+                className="form-control"
+                name="fake<%= otherEntityNamePlural %>"
+                value={this.display<%= relationshipNameHumanized %>(<%= entityInstance %>)}
+                onChange={this.update<%= relationshipNameHumanized %>}>
+                <option value="" key="0" />
+                {
+                  (<%= otherEntityNamePlural %>) ? (<%=otherEntityNamePlural.toLowerCase() %>.map(otherEntity =>
+                  <option
+                      value={otherEntity.<%=otherEntityField%>}
+                      key={otherEntity.id}>
+                      {otherEntity.<%=otherEntityField%>}
+                  </option>
+                  )) : null
+                }
+              </AvInput>
+              <AvInput type="hidden"
+                name="<%= otherEntityNamePlural %>"
+                value={this.state.ids<%= relationshipNameHumanized %>}
+              />
+            </AvGroup>
             <%_ } _%>
+          <%_ } _%>
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={this.handleClose}>
