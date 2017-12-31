@@ -6,7 +6,7 @@ import { FaEye, FaRefresh } from 'react-icons/lib/fa';
 
 import MetricsModal from './metrics-modal';
 import { systemMetrics, systemThreadDump } from '../../../reducers/administration';
-import { APP_FORMAT_NUMBER_WHOLE, APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT } from '../../../config/constants';
+import { APP_WHOLE_NUMBER_FORMAT, APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT } from '../../../config/constants';
 
 export interface IMetricsPageProps {
   isFetching?: boolean;
@@ -94,12 +94,12 @@ export class MetricsPage extends React.Component<any, any> {
               <span>Total Memory</span> (
                 <TextFormat
                   value={metrics.gauges['jvm.memory.total.used'].value / 1000000}
-                  type="number" 
-                  format={APP_FORMAT_NUMBER_WHOLE} />
+                  type="number"
+                  format={APP_WHOLE_NUMBER_FORMAT} />
                 M / <TextFormat
                   value={metrics.gauges['jvm.memory.total.max'].value / 1000000}
-                  type="number" 
-                  format={APP_FORMAT_NUMBER_WHOLE} />
+                  type="number"
+                  format={APP_WHOLE_NUMBER_FORMAT} />
                 M)
             </p>
             <Progress animated
@@ -110,19 +110,19 @@ export class MetricsPage extends React.Component<any, any> {
             >
               <TextFormat
                 value={metrics.gauges['jvm.memory.total.used'].value * 100 / metrics.gauges['jvm.memory.total.max'].value}
-                type="number" 
-                format={APP_FORMAT_NUMBER_WHOLE} />%
+                type="number"
+                format={APP_WHOLE_NUMBER_FORMAT} />%
             </Progress>
             <p>
               <span>Heap Memory</span> (
                 <TextFormat
                   value={metrics.gauges['jvm.memory.heap.used'].value / 1000000}
-                  type="number" 
-                  format={APP_FORMAT_NUMBER_WHOLE} />
+                  type="number"
+                  format={APP_WHOLE_NUMBER_FORMAT} />
                 M / <TextFormat
                   value={metrics.gauges['jvm.memory.heap.max'].value / 1000000}
-                  type="number" 
-                  format={APP_FORMAT_NUMBER_WHOLE} />
+                  type="number"
+                  format={APP_WHOLE_NUMBER_FORMAT} />
                 M)
             </p>
             <Progress animated
@@ -133,8 +133,8 @@ export class MetricsPage extends React.Component<any, any> {
             >
               <TextFormat
                 value={metrics.gauges['jvm.memory.heap.used'].value * 100 / metrics.gauges['jvm.memory.heap.max'].value}
-                type="number" 
-                format={APP_FORMAT_NUMBER_WHOLE} />
+                type="number"
+                format={APP_WHOLE_NUMBER_FORMAT} />
               %
             </Progress>
 
@@ -142,12 +142,12 @@ export class MetricsPage extends React.Component<any, any> {
               <span>Non-Heap Memory</span> (
                 <TextFormat
                   value={metrics.gauges['jvm.memory.non-heap.used'].value / 1000000}
-                  type="number" 
-                  format={APP_FORMAT_NUMBER_WHOLE} />
+                  type="number"
+                  format={APP_WHOLE_NUMBER_FORMAT} />
                 M / <TextFormat
                   value={metrics.gauges['jvm.memory.non-heap.committed'].value / 1000000}
-                  type="number" 
-                  format={APP_FORMAT_NUMBER_WHOLE} />
+                  type="number"
+                  format={APP_WHOLE_NUMBER_FORMAT} />
                 M)
             </p>
             <Progress animated
@@ -158,8 +158,8 @@ export class MetricsPage extends React.Component<any, any> {
             >
               <TextFormat
                 value={metrics.gauges['jvm.memory.non-heap.used'].value * 100 / metrics.gauges['jvm.memory.non-heap.committed'].value}
-                type="number" 
-                format={APP_FORMAT_NUMBER_WHOLE} />
+                type="number"
+                format={APP_WHOLE_NUMBER_FORMAT} />
               %
             </Progress>
           </div>
@@ -169,8 +169,8 @@ export class MetricsPage extends React.Component<any, any> {
             <Progress animated min="0" value={metrics.gauges['jvm.threads.runnable.count'].value} max={metrics.gauges['jvm.threads.count'].value} color="success">
               <TextFormat
                 value={metrics.gauges['jvm.threads.runnable.count'].value * 100 / metrics.gauges['jvm.threads.count'].value}
-                type="number" 
-                format={APP_FORMAT_NUMBER_WHOLE} />
+                type="number"
+                format={APP_WHOLE_NUMBER_FORMAT} />
               %
             </Progress>
 
@@ -178,8 +178,8 @@ export class MetricsPage extends React.Component<any, any> {
             <Progress animated min="0" value={metrics.gauges['jvm.threads.timed_waiting.count'].value} max={metrics.gauges['jvm.threads.count'].value} color="warning">
               <TextFormat
                 value={metrics.gauges['jvm.threads.timed_waiting.count'].value * 100 / metrics.gauges['jvm.threads.count'].value}
-                type="number" 
-                format={APP_FORMAT_NUMBER_WHOLE} />
+                type="number"
+                format={APP_WHOLE_NUMBER_FORMAT} />
               %
             </Progress>
 
@@ -187,8 +187,8 @@ export class MetricsPage extends React.Component<any, any> {
             <Progress animated min="0" value={metrics.gauges['jvm.threads.waiting.count'].value} max={metrics.gauges['jvm.threads.count'].value} color="warning">
               <TextFormat
                 value={metrics.gauges['jvm.threads.waiting.count'].value * 100 / metrics.gauges['jvm.threads.count'].value}
-                type="number" 
-                format={APP_FORMAT_NUMBER_WHOLE} />
+                type="number"
+                format={APP_WHOLE_NUMBER_FORMAT} />
               %
             </Progress>
 
@@ -196,8 +196,8 @@ export class MetricsPage extends React.Component<any, any> {
             <Progress animated min="0" value={metrics.gauges['jvm.threads.blocked.count'].value} max={metrics.gauges['jvm.threads.count'].value} color="success">
               <TextFormat
                 value={metrics.gauges['jvm.threads.blocked.count'].value * 100 / metrics.gauges['jvm.threads.count'].value}
-                type="number" 
-                format={APP_FORMAT_NUMBER_WHOLE} />
+                type="number"
+                format={APP_WHOLE_NUMBER_FORMAT} />
               %
             </Progress>
           </div>
@@ -249,13 +249,13 @@ export class MetricsPage extends React.Component<any, any> {
                   <span>Active requests:</span> <b>
                     <TextFormat
                       value={metrics.counters['com.codahale.metrics.servlet.InstrumentedFilter.activeRequests'].count}
-                      type="number" 
-                      format={APP_FORMAT_NUMBER_WHOLE} />
+                      type="number"
+                      format={APP_WHOLE_NUMBER_FORMAT} />
                   </b> - <span>Total requests:</span> <b>
                     <TextFormat
                       value={metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count}
-                      type="number" 
-                      format={APP_FORMAT_NUMBER_WHOLE} />
+                      type="number"
+                      format={APP_WHOLE_NUMBER_FORMAT} />
                   </b>
                 </p>
                 <Table>
@@ -284,26 +284,26 @@ export class MetricsPage extends React.Component<any, any> {
                       <td className="text-right">
                         <TextFormat
                           value={this.filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].mean_rate)}
-                          type="number" 
-                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
+                          type="number"
+                          format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT} />
                       </td>
                       <td className="text-right">
                         <TextFormat
                           value={this.filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m1_rate)}
-                          type="number" 
-                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
+                          type="number"
+                          format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT} />
                       </td>
                       <td className="text-right">
                         <TextFormat
                           value={this.filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m5_rate)}
-                          type="number" 
-                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
+                          type="number"
+                          format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT} />
                       </td>
                       <td className="text-right">
                         <TextFormat
                           value={this.filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m15_rate)}
-                          type="number" 
-                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
+                          type="number"
+                          format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT} />
                       </td>
                     </tr>
                     <tr key={1}>
@@ -320,26 +320,26 @@ export class MetricsPage extends React.Component<any, any> {
                       <td className="text-right">
                         <TextFormat
                           value={this.filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].mean_rate)}
-                          type="number" 
-                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
+                          type="number"
+                          format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT} />
                       </td>
                       <td className="text-right">
                         <TextFormat
                           value={this.filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m1_rate)}
-                          type="number" 
-                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
+                          type="number"
+                          format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT} />
                       </td>
                       <td className="text-right">
                         <TextFormat
                           value={this.filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m5_rate)}
-                          type="number" 
-                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
+                          type="number"
+                          format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT} />
                       </td>
                       <td className="text-right">
                         <TextFormat
                           value={this.filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m15_rate)}
-                          type="number" 
-                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
+                          type="number"
+                          format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT} />
                       </td>
                     </tr>
                     <tr key={2}>
@@ -356,26 +356,26 @@ export class MetricsPage extends React.Component<any, any> {
                       <td className="text-right">
                         <TextFormat
                           value={this.filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].mean_rate)}
-                          type="number" 
-                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
+                          type="number"
+                          format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT} />
                       </td>
                       <td className="text-right">
                         <TextFormat
                           value={this.filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m1_rate)}
-                          type="number" 
-                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
+                          type="number"
+                          format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT} />
                       </td>
                       <td className="text-right">
                         <TextFormat
                           value={this.filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m5_rate)}
-                          type="number" 
-                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
+                          type="number"
+                          format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT} />
                       </td>
                       <td className="text-right">
                         <TextFormat
                           value={this.filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m15_rate)}
-                          type="number" 
-                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
+                          type="number"
+                          format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT} />
                       </td>
                     </tr>
                   </tbody>
@@ -410,44 +410,44 @@ export class MetricsPage extends React.Component<any, any> {
                     <td>
                       <TextFormat
                         value={servicesStats[key].mean * 1000}
-                        type="number" 
-                        format={APP_FORMAT_NUMBER_WHOLE} />
+                        type="number"
+                        format={APP_WHOLE_NUMBER_FORMAT} />
                     </td>
                     <td>
                       <TextFormat
                         value={servicesStats[key].min * 1000}
-                        type="number" 
-                        format={APP_FORMAT_NUMBER_WHOLE} />
+                        type="number"
+                        format={APP_WHOLE_NUMBER_FORMAT} />
                     </td>
                     <td>
                       <TextFormat
                         value={servicesStats[key].p50 * 1000}
-                        type="number" 
-                        format={APP_FORMAT_NUMBER_WHOLE} />
+                        type="number"
+                        format={APP_WHOLE_NUMBER_FORMAT} />
                     </td>
                     <td>
                       <TextFormat
                         value={servicesStats[key].p75 * 1000}
-                        type="number" 
-                        format={APP_FORMAT_NUMBER_WHOLE} />
+                        type="number"
+                        format={APP_WHOLE_NUMBER_FORMAT} />
                     </td>
                     <td>
                       <TextFormat
                         value={servicesStats[key].p95 * 1000}
-                        type="number" 
-                        format={APP_FORMAT_NUMBER_WHOLE} />
+                        type="number"
+                        format={APP_WHOLE_NUMBER_FORMAT} />
                     </td>
                     <td>
                       <TextFormat
                         value={servicesStats[key].p99 * 1000}
-                        type="number" 
-                        format={APP_FORMAT_NUMBER_WHOLE} />
+                        type="number"
+                        format={APP_WHOLE_NUMBER_FORMAT} />
                     </td>
                     <td>
                       <TextFormat
                         value={servicesStats[key].max * 1000}
-                        type="number" 
-                        format={APP_FORMAT_NUMBER_WHOLE} />
+                        type="number"
+                        format={APP_WHOLE_NUMBER_FORMAT} />
                     </td>
                   </tr>
                 ))}
@@ -517,8 +517,8 @@ export class MetricsPage extends React.Component<any, any> {
                         >
                           <TextFormat
                             value={metrics.gauges['HikariPool-1.pool.ActiveConnections'].value * 100 / metrics.gauges['HikariPool-1.pool.TotalConnections'].value}
-                            type="number" 
-                            format={APP_FORMAT_NUMBER_WHOLE} />
+                            type="number"
+                            format={APP_WHOLE_NUMBER_FORMAT} />
                           %
                         </Progress>
                       </td>
@@ -526,44 +526,44 @@ export class MetricsPage extends React.Component<any, any> {
                       <td className="text-right">
                         <TextFormat
                           value={this.filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].mean)}
-                          type="number" 
-                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
+                          type="number"
+                          format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT} />
                       </td>
                       <td className="text-right">
                         <TextFormat
                           value={this.filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].min)}
-                          type="number" 
-                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
+                          type="number"
+                          format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT} />
                       </td>
                       <td className="text-right">
                         <TextFormat
                           value={this.filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].p50)}
-                          type="number" 
-                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
+                          type="number"
+                          format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT} />
                       </td>
                       <td className="text-right">
                         <TextFormat
                           value={this.filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].p75)}
-                          type="number" 
-                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
+                          type="number"
+                          format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT} />
                       </td>
                       <td className="text-right">
                         <TextFormat
                           value={this.filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].p95)}
-                          type="number" 
-                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
+                          type="number"
+                          format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT} />
                       </td>
                       <td className="text-right">
                         <TextFormat
                           value={this.filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].p99)}
-                          type="number" 
-                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
+                          type="number"
+                          format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT} />
                       </td>
                       <td className="text-right">
                         <TextFormat
                           value={this.filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].max)}
-                          type="number" 
-                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
+                          type="number"
+                          format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT} />
                       </td>
                     </tr>
                   </tbody>
