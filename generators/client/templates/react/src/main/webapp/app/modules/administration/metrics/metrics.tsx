@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Table, Progress } from 'reactstrap';
-import { Translate } from 'react-jhipster';
+import { Translate, TextFormat } from 'react-jhipster';
 import { FaEye, FaRefresh } from 'react-icons/lib/fa';
-import * as NumberFormat from 'react-number-format';
 
 import MetricsModal from './metrics-modal';
 import { systemMetrics, systemThreadDump } from '../../../reducers/administration';
+import { APP_FORMAT_NUMBER_WHOLE, APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT } from '../../../config/constants';
 
 export interface IMetricsPageProps {
   isFetching?: boolean;
@@ -92,18 +92,14 @@ export class MetricsPage extends React.Component<any, any> {
             <b>Memory</b>
             <p>
               <span>Total Memory</span> (
-                <NumberFormat
+                <TextFormat
                   value={metrics.gauges['jvm.memory.total.used'].value / 1000000}
-                  displayType={'text'}
-                  decimalScale={0}
-                  thousandSeparator
-                />
-                M / <NumberFormat
+                  type="number" 
+                  format={APP_FORMAT_NUMBER_WHOLE} />
+                M / <TextFormat
                   value={metrics.gauges['jvm.memory.total.max'].value / 1000000}
-                  displayType={'text'}
-                  decimalScale={0}
-                  thousandSeparator
-                />
+                  type="number" 
+                  format={APP_FORMAT_NUMBER_WHOLE} />
                 M)
             </p>
             <Progress animated
@@ -112,26 +108,21 @@ export class MetricsPage extends React.Component<any, any> {
               max={metrics.gauges['jvm.memory.total.max'].value}
               color="success"
             >
-              <NumberFormat
+              <TextFormat
                 value={metrics.gauges['jvm.memory.total.used'].value * 100 / metrics.gauges['jvm.memory.total.max'].value}
-                displayType={'text'}
-                decimalScale={0}
-              />%
+                type="number" 
+                format={APP_FORMAT_NUMBER_WHOLE} />%
             </Progress>
             <p>
               <span>Heap Memory</span> (
-                <NumberFormat
+                <TextFormat
                   value={metrics.gauges['jvm.memory.heap.used'].value / 1000000}
-                  displayType={'text'}
-                  decimalScale={0}
-                  thousandSeparator
-                />
-                M / <NumberFormat
+                  type="number" 
+                  format={APP_FORMAT_NUMBER_WHOLE} />
+                M / <TextFormat
                   value={metrics.gauges['jvm.memory.heap.max'].value / 1000000}
-                  displayType={'text'}
-                  decimalScale={0}
-                  thousandSeparator
-                />
+                  type="number" 
+                  format={APP_FORMAT_NUMBER_WHOLE} />
                 M)
             </p>
             <Progress animated
@@ -140,28 +131,23 @@ export class MetricsPage extends React.Component<any, any> {
               value={metrics.gauges['jvm.memory.heap.used'].value}
               color="success"
             >
-              <NumberFormat
+              <TextFormat
                 value={metrics.gauges['jvm.memory.heap.used'].value * 100 / metrics.gauges['jvm.memory.heap.max'].value}
-                displayType={'text'}
-                decimalScale={0}
-              />
+                type="number" 
+                format={APP_FORMAT_NUMBER_WHOLE} />
               %
             </Progress>
 
             <p>
               <span>Non-Heap Memory</span> (
-                <NumberFormat
+                <TextFormat
                   value={metrics.gauges['jvm.memory.non-heap.used'].value / 1000000}
-                  displayType={'text'}
-                  decimalScale={0}
-                  thousandSeparator
-                />
-                M / <NumberFormat
+                  type="number" 
+                  format={APP_FORMAT_NUMBER_WHOLE} />
+                M / <TextFormat
                   value={metrics.gauges['jvm.memory.non-heap.committed'].value / 1000000}
-                  displayType={'text'}
-                  decimalScale={0}
-                  thousandSeparator
-                />
+                  type="number" 
+                  format={APP_FORMAT_NUMBER_WHOLE} />
                 M)
             </p>
             <Progress animated
@@ -170,11 +156,10 @@ export class MetricsPage extends React.Component<any, any> {
               value={metrics.gauges['jvm.memory.non-heap.used'].value}
               color="success"
             >
-              <NumberFormat
+              <TextFormat
                 value={metrics.gauges['jvm.memory.non-heap.used'].value * 100 / metrics.gauges['jvm.memory.non-heap.committed'].value}
-                displayType={'text'}
-                decimalScale={0}
-              />
+                type="number" 
+                format={APP_FORMAT_NUMBER_WHOLE} />
               %
             </Progress>
           </div>
@@ -182,41 +167,37 @@ export class MetricsPage extends React.Component<any, any> {
             <b>Threads</b> (Total: {metrics.gauges['jvm.threads.count'].value}) <FaEye onClick={this.getThreadDump}/>
             <p><span>Runnable</span> {metrics.gauges['jvm.threads.runnable.count'].value}</p>
             <Progress animated min="0" value={metrics.gauges['jvm.threads.runnable.count'].value} max={metrics.gauges['jvm.threads.count'].value} color="success">
-              <NumberFormat
+              <TextFormat
                 value={metrics.gauges['jvm.threads.runnable.count'].value * 100 / metrics.gauges['jvm.threads.count'].value}
-                displayType={'text'}
-                decimalScale={0}
-              />
+                type="number" 
+                format={APP_FORMAT_NUMBER_WHOLE} />
               %
             </Progress>
 
             <p><span>Timed Waiting</span> ({metrics.gauges['jvm.threads.timed_waiting.count'].value})</p>
             <Progress animated min="0" value={metrics.gauges['jvm.threads.timed_waiting.count'].value} max={metrics.gauges['jvm.threads.count'].value} color="warning">
-              <NumberFormat
+              <TextFormat
                 value={metrics.gauges['jvm.threads.timed_waiting.count'].value * 100 / metrics.gauges['jvm.threads.count'].value}
-                displayType={'text'}
-                decimalScale={0}
-              />
+                type="number" 
+                format={APP_FORMAT_NUMBER_WHOLE} />
               %
             </Progress>
 
             <p><span>Waiting</span> ({metrics.gauges['jvm.threads.waiting.count'].value})</p>
             <Progress animated min="0" value={metrics.gauges['jvm.threads.waiting.count'].value} max={metrics.gauges['jvm.threads.count'].value} color="warning">
-              <NumberFormat
+              <TextFormat
                 value={metrics.gauges['jvm.threads.waiting.count'].value * 100 / metrics.gauges['jvm.threads.count'].value}
-                displayType={'text'}
-                decimalScale={0}
-              />
+                type="number" 
+                format={APP_FORMAT_NUMBER_WHOLE} />
               %
             </Progress>
 
             <p><span>Blocked</span> ({metrics.gauges['jvm.threads.blocked.count'].value})</p>
             <Progress animated min="0" value={metrics.gauges['jvm.threads.blocked.count'].value} max={metrics.gauges['jvm.threads.count'].value} color="success">
-              <NumberFormat
+              <TextFormat
                 value={metrics.gauges['jvm.threads.blocked.count'].value * 100 / metrics.gauges['jvm.threads.count'].value}
-                displayType={'text'}
-                decimalScale={0}
-              />
+                type="number" 
+                format={APP_FORMAT_NUMBER_WHOLE} />
               %
             </Progress>
           </div>
@@ -265,20 +246,16 @@ export class MetricsPage extends React.Component<any, any> {
               <div className="col-sm-12">
                 <h3>HTTP requests (events per second)</h3>
                 <p>
-                  <span>Active requests</span>
-                  <b>
-                    <NumberFormat
+                  <span>Active requests:</span> <b>
+                    <TextFormat
                       value={metrics.counters['com.codahale.metrics.servlet.InstrumentedFilter.activeRequests'].count}
-                      displayType={'text'}
-                      decimalScale={0}
-                    />
-                  </b> -
-                  <span>Total requests</span> <b>
-                    <NumberFormat
+                      type="number" 
+                      format={APP_FORMAT_NUMBER_WHOLE} />
+                  </b> - <span>Total requests:</span> <b>
+                    <TextFormat
                       value={metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count}
-                      displayType={'text'}
-                      decimalScale={0}
-                    />
+                      type="number" 
+                      format={APP_FORMAT_NUMBER_WHOLE} />
                   </b>
                 </p>
                 <Table>
@@ -305,32 +282,28 @@ export class MetricsPage extends React.Component<any, any> {
                         />
                       </td>
                       <td className="text-right">
-                        <NumberFormat
+                        <TextFormat
                           value={this.filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].mean_rate)}
-                          displayType={'text'}
-                          decimalScale={2}
-                        />
+                          type="number" 
+                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
                       </td>
                       <td className="text-right">
-                        <NumberFormat
+                        <TextFormat
                           value={this.filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m1_rate)}
-                          displayType={'text'}
-                          decimalScale={2}
-                        />
+                          type="number" 
+                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
                       </td>
                       <td className="text-right">
-                        <NumberFormat
+                        <TextFormat
                           value={this.filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m5_rate)}
-                          displayType={'text'}
-                          decimalScale={2}
-                        />
+                          type="number" 
+                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
                       </td>
                       <td className="text-right">
-                        <NumberFormat
+                        <TextFormat
                           value={this.filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m15_rate)}
-                          displayType={'text'}
-                          decimalScale={2}
-                        />
+                          type="number" 
+                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
                       </td>
                     </tr>
                     <tr key={1}>
@@ -345,32 +318,28 @@ export class MetricsPage extends React.Component<any, any> {
                         />
                       </td>
                       <td className="text-right">
-                        <NumberFormat
+                        <TextFormat
                           value={this.filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].mean_rate)}
-                          displayType={'text'}
-                          decimalScale={2}
-                        />
+                          type="number" 
+                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
                       </td>
                       <td className="text-right">
-                        <NumberFormat
+                        <TextFormat
                           value={this.filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m1_rate)}
-                          displayType={'text'}
-                          decimalScale={2}
-                        />
+                          type="number" 
+                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
                       </td>
                       <td className="text-right">
-                        <NumberFormat
+                        <TextFormat
                           value={this.filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m5_rate)}
-                          displayType={'text'}
-                          decimalScale={2}
-                        />
+                          type="number" 
+                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
                       </td>
                       <td className="text-right">
-                        <NumberFormat
+                        <TextFormat
                           value={this.filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m15_rate)}
-                          displayType={'text'}
-                          decimalScale={2}
-                        />
+                          type="number" 
+                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
                       </td>
                     </tr>
                     <tr key={2}>
@@ -385,32 +354,28 @@ export class MetricsPage extends React.Component<any, any> {
                         />
                       </td>
                       <td className="text-right">
-                        <NumberFormat
+                        <TextFormat
                           value={this.filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].mean_rate)}
-                          displayType={'text'}
-                          decimalScale={2}
-                        />
+                          type="number" 
+                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
                       </td>
                       <td className="text-right">
-                        <NumberFormat
+                        <TextFormat
                           value={this.filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m1_rate)}
-                          displayType={'text'}
-                          decimalScale={2}
-                        />
+                          type="number" 
+                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
                       </td>
                       <td className="text-right">
-                        <NumberFormat
+                        <TextFormat
                           value={this.filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m5_rate)}
-                          displayType={'text'}
-                          decimalScale={2}
-                        />
+                          type="number" 
+                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
                       </td>
                       <td className="text-right">
-                        <NumberFormat
+                        <TextFormat
                           value={this.filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m15_rate)}
-                          displayType={'text'}
-                          decimalScale={2}
-                        />
+                          type="number" 
+                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
                       </td>
                     </tr>
                   </tbody>
@@ -422,12 +387,11 @@ export class MetricsPage extends React.Component<any, any> {
           <div className="row">
             <div className="col-sm-12">
               <h3>Services statistics (time in millisecond)</h3>
-              <span> table </span>
             </div>
             <Table>
               <thead>
                 <tr>
-                  <th>Name</th>
+                  <th>Service name</th>
                   <th>Count</th>
                   <th>Mean</th>
                   <th>Min</th>
@@ -444,53 +408,46 @@ export class MetricsPage extends React.Component<any, any> {
                     <td>{key}</td>
                     <td>{servicesStats[key].count}</td>
                     <td>
-                      <NumberFormat
+                      <TextFormat
                         value={servicesStats[key].mean * 1000}
-                        displayType={'text'}
-                        decimalScale={0}
-                      />
+                        type="number" 
+                        format={APP_FORMAT_NUMBER_WHOLE} />
                     </td>
                     <td>
-                      <NumberFormat
+                      <TextFormat
                         value={servicesStats[key].min * 1000}
-                        displayType={'text'}
-                        decimalScale={0}
-                      />
+                        type="number" 
+                        format={APP_FORMAT_NUMBER_WHOLE} />
                     </td>
                     <td>
-                      <NumberFormat
+                      <TextFormat
                         value={servicesStats[key].p50 * 1000}
-                        displayType={'text'}
-                        decimalScale={0}
-                      />
+                        type="number" 
+                        format={APP_FORMAT_NUMBER_WHOLE} />
                     </td>
                     <td>
-                      <NumberFormat
+                      <TextFormat
                         value={servicesStats[key].p75 * 1000}
-                        displayType={'text'}
-                        decimalScale={0}
-                      />
+                        type="number" 
+                        format={APP_FORMAT_NUMBER_WHOLE} />
                     </td>
                     <td>
-                      <NumberFormat
+                      <TextFormat
                         value={servicesStats[key].p95 * 1000}
-                        displayType={'text'}
-                        decimalScale={0}
-                      />
+                        type="number" 
+                        format={APP_FORMAT_NUMBER_WHOLE} />
                     </td>
                     <td>
-                      <NumberFormat
+                      <TextFormat
                         value={servicesStats[key].p99 * 1000}
-                        displayType={'text'}
-                        decimalScale={0}
-                      />
+                        type="number" 
+                        format={APP_FORMAT_NUMBER_WHOLE} />
                     </td>
                     <td>
-                      <NumberFormat
+                      <TextFormat
                         value={servicesStats[key].max * 1000}
-                        displayType={'text'}
-                        decimalScale={0}
-                      />
+                        type="number" 
+                        format={APP_FORMAT_NUMBER_WHOLE} />
                     </td>
                   </tr>
                 ))}
@@ -558,70 +515,55 @@ export class MetricsPage extends React.Component<any, any> {
                           max={metrics.gauges['HikariPool-1.pool.TotalConnections'].value}
                           value={metrics.gauges['HikariPool-1.pool.ActiveConnections'].value}
                         >
-                          <NumberFormat
+                          <TextFormat
                             value={metrics.gauges['HikariPool-1.pool.ActiveConnections'].value * 100 / metrics.gauges['HikariPool-1.pool.TotalConnections'].value}
-                            displayType={'text'}
-                            decimalScale={0}
-                          />
+                            type="number" 
+                            format={APP_FORMAT_NUMBER_WHOLE} />
                           %
                         </Progress>
                       </td>
-                      <td>{metrics.histograms['HikariPool-1.pool.Usage'].count}</td>
+                      <td className="text-right">{metrics.histograms['HikariPool-1.pool.Usage'].count}</td>
                       <td className="text-right">
-                        <NumberFormat
+                        <TextFormat
                           value={this.filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].mean)}
-                          displayType={'text'}
-                          decimalScale={2}
-                          thousandSeparator
-                        />
+                          type="number" 
+                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
                       </td>
                       <td className="text-right">
-                        <NumberFormat
+                        <TextFormat
                           value={this.filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].min)}
-                          displayType={'text'}
-                          decimalScale={2}
-                          thousandSeparator
-                        />
+                          type="number" 
+                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
                       </td>
                       <td className="text-right">
-                        <NumberFormat
+                        <TextFormat
                           value={this.filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].p50)}
-                          displayType={'text'}
-                          decimalScale={2}
-                          thousandSeparator
-                        />
+                          type="number" 
+                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
                       </td>
                       <td className="text-right">
-                        <NumberFormat
+                        <TextFormat
                           value={this.filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].p75)}
-                          displayType={'text'}
-                          decimalScale={2}
-                          thousandSeparator
-                        />
+                          type="number" 
+                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
                       </td>
                       <td className="text-right">
-                        <NumberFormat
+                        <TextFormat
                           value={this.filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].p95)}
-                          displayType={'text'}
-                          decimalScale={2}
-                          thousandSeparator
-                        />
+                          type="number" 
+                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
                       </td>
                       <td className="text-right">
-                        <NumberFormat
+                        <TextFormat
                           value={this.filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].p99)}
-                          displayType={'text'}
-                          decimalScale={2}
-                          thousandSeparator
-                        />
+                          type="number" 
+                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
                       </td>
                       <td className="text-right">
-                        <NumberFormat
+                        <TextFormat
                           value={this.filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].max)}
-                          displayType={'text'}
-                          decimalScale={2}
-                          thousandSeparator
-                        />
+                          type="number" 
+                          format={APP_FORMAT_NUMBER_TWO_DIGITS_AFTER_POINT} />
                       </td>
                     </tr>
                   </tbody>
