@@ -2,6 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Table, Input } from 'reactstrap';
 import { Translate } from 'react-jhipster';
+import { sortBy, reverse } from 'lodash';
 
 import { getConfigurations, getEnv } from '../../../reducers/administration';
 
@@ -49,25 +50,21 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
 
   filterFn = prefix => prefix.toUpperCase().includes(this.state.filter.toUpperCase());
 
-  sortPrefixFn = (prop1, prop2) => {
+  sortPrefix = (configProps, rev) => {
     const { configuration } = this.props;
     if (configuration && configuration.configProps) {
-      const pref1 = configuration.configProps[prop1].prefix;
-      const pref2 = configuration.configProps[prop2].prefix;
-      return this.sortFn(pref1, pref2, this.state.reversePrefix);
+      const listSorted = sortBy(configProps, [ prop => {
+        return configuration.configProps[prop].prefix;
+      } ]);
+      return rev ? reverse(listSorted) : listSorted;
     }
   }
 
-  sortPropertyFn = (prop1, prop2) => this.sortFn(prop1, prop2, this.state.reverseProperties);
-
-  sortFn = (prop1, prop2, reverse) => {
-    if (prop1 === prop2) {
-      return 0;
-    }
-    if (reverse) {
-      return (prop1 < prop2) ? 1 : -1;
-    } else {
-      return (prop1 < prop2) ? -1 : 1;
+  sortProperties = (configProps, rev) => {
+    const { configuration } = this.props;
+    if (configuration && configuration.configProps) {
+      const listSorted = sortBy(configProps);
+      return rev ? reverse(listSorted) : listSorted;
     }
   }
 
@@ -85,7 +82,7 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
 
   render() {
     const { configuration } = this.props;
-    const { filter } = this.state;
+    const { filter, reversePrefix, reverseProperties } = this.state;
     const configProps = (configuration && configuration.configProps) ? configuration.configProps : {};
     const env = (configuration && configuration.env) ? configuration.env : {};
     return (
@@ -103,11 +100,11 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
               </tr>
             </thead>
             <tbody>
-              {Object.keys(configProps).sort(this.sortPrefixFn).filter(this.filterFn).map((configPropKey, configPropIndex) => (
+              {this.sortPrefix(Object.keys(configProps), reversePrefix).filter(this.filterFn).map((configPropKey, configPropIndex) => (
                 <tr key={configPropIndex}>
                   <td><span>{configProps[configPropKey].prefix}</span></td>
                   <td>
-                    {Object.keys(configProps[configPropKey].properties).sort(this.sortPropertyFn).map((propKey, propIndex) => (
+                    {this.sortProperties(Object.keys(configProps[configPropKey].properties), reverseProperties).map((propKey, propIndex) => (
                       <div key={propIndex} className="row">
                         <div className="col-md-4">{propKey}</div>
                         <div className="col-md-8">
