@@ -53,9 +53,7 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
   sortPrefix = (configProps, rev) => {
     const { configuration } = this.props;
     if (configuration && configuration.configProps) {
-      const listSorted = sortBy(configProps, [ prop => {
-        return configuration.configProps[prop].prefix;
-      } ]);
+      const listSorted = sortBy(configProps, [ prop => configuration.configProps[prop].prefix ]);
       return rev ? reverse(listSorted) : listSorted;
     }
   }
