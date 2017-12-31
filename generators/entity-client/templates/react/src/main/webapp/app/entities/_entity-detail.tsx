@@ -121,7 +121,7 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
           <%_ } _%>
         <%_ } _%>
         </dl>
-        <Button tag={Link} to="/<%= entityInstance %>" replace color="info">
+        <Button tag={Link} to="/<%= entityFileName %>" replace color="info">
           <FaArrowLeft/> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
         </Button>
       </div>

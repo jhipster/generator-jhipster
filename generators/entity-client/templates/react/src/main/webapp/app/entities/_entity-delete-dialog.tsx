@@ -57,7 +57,7 @@ export class <%= entityReactName %>DeleteDialog extends React.Component<I<%= ent
     this.setState({
         showModal: false
     });
-    this.props.history.push('/<%= entityInstance %>');
+    this.props.history.push('/<%= entityFileName %>');
   }
 
   render() {

@@ -113,7 +113,7 @@ _%>
     this.setState({
         showModal: false
     });
-    this.props.history.push('/<%= entityInstance %>');
+    this.props.history.push('/<%= entityFileName %>');
   }
 
 <%_ for (idx in relationships) {
