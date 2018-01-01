@@ -12,3 +12,5 @@ export const messages = {
 };
 
 export const APP_DATE_FORMAT = 'DD/MM/YY HH:mm';
+export const APP_WHOLE_NUMBER_FORMAT = '0,0';
+export const APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT = '0,0.[00]';
