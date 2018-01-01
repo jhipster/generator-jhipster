@@ -169,7 +169,10 @@ module.exports = class extends BaseGenerator {
 
             validateDbExistence() {
                 const context = this.context;
-                if (!context.databaseType || (context.databaseType === 'no' && !(context.authenticationType === 'uaa' && context.applicationType === 'gateway'))) {
+                if (!context.databaseType || (context.databaseType === 'no'
+                    && !((context.authenticationType === 'uaa' || context.authenticationType === 'oauth2')
+                        && context.applicationType === 'gateway'))
+                ) {
                     if (context.skipServer) {
                         this.error(chalk.red('The entity cannot be generated as the database type is not known! Pass the --db <type> & --prod-db <db> flag in command line'));
                     } else {
