@@ -48,12 +48,7 @@ export class MetricsPage extends React.Component<any, any> {
     });
   }
 
-  filterNaN = input => {
-    if (isNaN(input)) {
-        return 0;
-    }
-    return input;
-  }
+  filterNaN = input => isNaN(input)? 0 : input;
 
   getStats = metrics => {
     const stat = {
