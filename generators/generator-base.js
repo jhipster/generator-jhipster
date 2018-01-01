@@ -243,9 +243,14 @@ module.exports = class extends PrivateBase {
                 entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/shared/layout/header/header.tsx`;
                 jhipsterUtils.rewriteFile({
                     file: entityMenuPath,
-                    needle: 'jhipster-needle-add-element-to-menu',
+                    needle: 'jhipster-needle-add-entity-to-menu',
                     splicable: [
-                        this.stripMargin(`|entityMenuItems.push(<DropdownItem tag={Link} key="${routerName}" to="/${routerName}"><FaAsterisk /> ${_.startCase(routerName)}</DropdownItem>);`)
+                        this.stripMargin(`|(
+                        |        <DropdownItem tag={Link} key="${routerName}" to="/${routerName}">
+                        |          <FaAsterisk />&nbsp;
+                        |          ${_.startCase(routerName)}
+                        |        </DropdownItem>
+                        |      ),`)
                     ]
                 }, this);
             }
