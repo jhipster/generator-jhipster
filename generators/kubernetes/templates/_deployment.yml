@@ -70,6 +70,12 @@ spec:
         - name: SPRING_DATA_MONGODB_DATABASE
           value: <%= app.baseName %>
         <%_ } _%>
+        <%_ if (app.prodDatabaseType === 'couchbase') { _%>
+        - name: SPRING_COUCHBASE_BOOTSTRAP_HOSTS
+          value: <%= app.baseName.toLowerCase() %>-couchbase
+        - name: SPRING_COUCHBASE_BUCKET_NAME
+          value: <%= app.baseName.toLowerCase() %>
+        <%_ } _%>
         <%_ if (app.searchEngine === 'elasticsearch') { _%>
         - name: SPRING_DATA_ELASTICSEARCH_CLUSTER_NODES
           value: <%= app.baseName.toLowerCase() %>-elasticsearch.<%= kubernetesNamespace %>.svc.cluster.local:9300

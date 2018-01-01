@@ -118,7 +118,7 @@ function askForPath() {
                 const appsFolders = getAppFolders.call(this, input, composeApplicationType);
 
                 if (appsFolders.length === 0) {
-                    return `No microservice or gateway found in ${path}`;
+                    return (composeApplicationType === 'monolith') ? `No monolith found in ${path}` : `No microservice or gateway found in ${path}`;
                 }
                 return true;
             }
