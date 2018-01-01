@@ -10,7 +10,7 @@ import { getUser, getRoles, updateUser, createUser } from '../../../reducers/use
 import { locales } from '../../../config/translation';
 <%_ } _%>
 
-export interface IUserManagementModelProps {
+export interface IUserManagementDialogProps {
   getUser: ICrudGetAction;
   getRoles: ICrudGetAction;
   updateUser: ICrudPutAction;
@@ -23,11 +23,12 @@ export interface IUserManagementModelProps {
   history: any;
 }
 
-export interface IUserManagementModelState {
+export interface IUserManagementDialogState {
   showModal: boolean;
   isNew: boolean;
 }
-export class UserManagementModel extends React.Component<IUserManagementModelProps, IUserManagementModelState> {
+
+export class UserManagementDialog extends React.Component<IUserManagementDialogProps, IUserManagementDialogState> {
 
   constructor(props) {
     super(props);
@@ -150,4 +151,4 @@ const mapStateToProps = storeState => ({
 
 const mapDispatchToProps = { getUser, getRoles, updateUser, createUser };
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserManagementModel);
+export default connect(mapStateToProps, mapDispatchToProps)(UserManagementDialog);

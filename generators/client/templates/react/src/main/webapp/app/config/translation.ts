@@ -1,10 +1,11 @@
 /* global: require*/
 import { TranslatorContext, Storage } from 'react-jhipster';
+import { merge } from 'lodash';
 
 import { setLocale } from '../reducers/locale';
 
 const mergeTranslations = requireContext => requireContext.keys().reduce(
-  (merged, key) => ({ ...merged, ...requireContext(key) }),
+  (merged, key) => merge({ ...merged }, { ...requireContext(key) }),
   {}
 );
 

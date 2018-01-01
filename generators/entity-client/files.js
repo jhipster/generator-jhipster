@@ -22,9 +22,11 @@ const constants = require('../generator-constants');
 /* Constants use throughout */
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 const ANGULAR_DIR = constants.ANGULAR_DIR;
+const REACT_DIR = constants.ANGULAR_DIR;
 
 const CLIENT_NG1_TEMPLATES_DIR = 'angularjs';
 const CLIENT_NG2_TEMPLATES_DIR = 'angular';
+const CLIENT_REACT_TEMPLATES_DIR = 'react';
 
 /**
 * The default is to use a file path string. It implies use of the template method.
@@ -225,10 +227,45 @@ const angularFiles = {
     ]
 };
 
+const reactFiles = {
+    client: [
+        {
+            path: REACT_DIR,
+            templates: [
+                {
+                    file: 'entities/_entity-delete-dialog.tsx',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.tsx`
+                },
+                {
+                    file: 'entities/_entity-detail.tsx',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.tsx`
+                },
+                {
+                    file: 'entities/_entity-dialog.tsx',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-dialog.tsx`
+                },
+                {
+                    file: 'entities/_entity.tsx',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.tsx`
+                },
+                {
+                    file: 'entities/_entity.reducer.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.reducer.ts`
+                },
+                {
+                    file: 'entities/_index.tsx',
+                    renameTo: generator => `entities/${generator.entityFolderName}/index.tsx`
+                }
+            ]
+        }
+    ]
+};
+
 module.exports = {
     writeFiles,
     angularjsFiles,
-    angularFiles
+    angularFiles,
+    reactFiles
 };
 
 function writeFiles() {
@@ -240,7 +277,7 @@ function writeFiles() {
             if (this.clientFramework === 'angular1') {
                 // write client side files for angular 1.x
                 this.writeFilesToDisk(angularjsFiles, this, false, CLIENT_NG1_TEMPLATES_DIR);
-            } else {
+            } else if (this.clientFramework === 'angularX') {
                 // write client side files for angular 2.x +
                 this.writeFilesToDisk(angularFiles, this, false, CLIENT_NG2_TEMPLATES_DIR);
                 this.addEntityToModule(this.entityInstance, this.entityClass, this.entityAngularName, this.entityFolderName, this.entityFileName, this.enableTranslation, this.clientFramework);
@@ -248,6 +285,10 @@ function writeFiles() {
                 if (this.applicationType === 'gateway' && !_.isUndefined(this.microserviceName)) {
                     this.addEntityToWebpack(this.microserviceName, this.clientFramework);
                 }
+            } else {
+                // write client side files for react
+                this.writeFilesToDisk(reactFiles, this, false, CLIENT_REACT_TEMPLATES_DIR);
+                this.addEntityToModule(this.entityInstance, this.entityClass, this.entityAngularName, this.entityFolderName, this.entityFileName, this.enableTranslation, this.clientFramework);
             }
 
             this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework);
