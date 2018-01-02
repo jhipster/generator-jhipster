@@ -6,7 +6,7 @@ import { FaBan, FaTrash } from 'react-icons/lib/fa';
 
 import { getUser, deleteUser } from '../../../reducers/user-management';
 
-export interface IUserManagementDeleteModalProps {
+export interface IUserManagementDeleteDialogProps {
   getUser: ICrudGetAction;
   deleteUser: ICrudDeleteAction;
   user: any;
@@ -14,10 +14,10 @@ export interface IUserManagementDeleteModalProps {
   history: any;
 }
 
-export interface IUserManagementDeleteModalState {
+export interface IUserManagementDeleteDialogState {
   showModal: boolean;
 }
-export class UserManagementDeleteModel extends React.Component<IUserManagementDeleteModalProps, IUserManagementDeleteModalState> {
+export class UserManagementDeleteDialog extends React.Component<IUserManagementDeleteDialogProps, IUserManagementDeleteDialogState> {
 
   constructor(props) {
     super(props);
@@ -75,4 +75,4 @@ const mapStateToProps = storeState => ({
 
 const mapDispatchToProps = { getUser, deleteUser };
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserManagementDeleteModel);
+export default connect(mapStateToProps, mapDispatchToProps)(UserManagementDeleteDialog);

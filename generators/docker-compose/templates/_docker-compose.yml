@@ -94,6 +94,12 @@ services:
             - jhipster-elasticsearch
     <%_ } _%>
 <%_ } _%>
+<%_ if (authenticationType === 'oauth2') { _%>
+    keycloak:
+        extends:
+            file: keycloak.yml
+            service: keycloak
+<%_ } _%>
 <%_ if (monitoring === 'prometheus') { _%>
 
     prometheus:
@@ -114,10 +120,4 @@ services:
 volumes:
     prometheus_data: {}
     grafana_data: {}
-<%_ } _%>
-<%_ if (authenticationType === 'oauth2') { _%>
-    keycloak:
-        extends:
-            file: keycloak.yml
-            service: keycloak
 <%_ } _%>

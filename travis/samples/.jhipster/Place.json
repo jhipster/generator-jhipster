@@ -39,6 +39,11 @@
         {
             "fieldName": "colorText",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         }
     ],
     "changelogDate": "20170626061521",

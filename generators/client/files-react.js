@@ -139,6 +139,14 @@ const files = {
     //   ]
     // }
     ],
+    reactEntities: [
+        {
+            path: REACT_DIR,
+            templates: [
+                'entities/index.tsx'
+            ]
+        }
+    ],
     reactMain: [
         {
             path: REACT_DIR,
@@ -270,9 +278,9 @@ const files = {
             templates: [
                 { file: 'modules/administration/user-management/index.tsx', method: 'processJsx' },
                 { file: 'modules/administration/user-management/user-management.tsx', method: 'processJsx' },
-                { file: 'modules/administration/user-management/user-management-model.tsx', method: 'processJsx' },
+                { file: 'modules/administration/user-management/user-management-dialog.tsx', method: 'processJsx' },
                 { file: 'modules/administration/user-management/user-management-detail.tsx', method: 'processJsx' },
-                { file: 'modules/administration/user-management/user-management-delete-model.tsx', method: 'processJsx' }
+                { file: 'modules/administration/user-management/user-management-delete-dialog.tsx', method: 'processJsx' }
             ]
         },
         {
@@ -289,8 +297,9 @@ const files = {
             templates: [
                 // layouts
                 'shared/layout/footer/footer.tsx',
-                'shared/layout/header/header.tsx'
+                'shared/layout/header/header.tsx',
                 // util
+                'shared/util/date-utils.ts'
                 // components
                 // model
             ]
