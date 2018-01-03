@@ -705,7 +705,7 @@ function askForField(done) {
             default: 0
         },
         {
-            when: response => response.fieldAdd === true,
+            when: response => response.fieldAdd === true && response.fieldType !== 'byte[]' && response.fieldType !== 'ByteBuffer',
             type: 'confirm',
             name: 'fieldValidate',
             message: 'Do you want to add validation rules to your field?',
