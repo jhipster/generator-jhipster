@@ -36,7 +36,7 @@ export class <%=jhiPrefixCapitalized%>HealthService {
 
     transformHealthData(data): any {
         const response = [];
-        this.flattenHealthData(response, null, data);
+        this.flattenHealthData(response, null, data.details);
         return response;
     }
 
@@ -92,10 +92,9 @@ export class <%=jhiPrefixCapitalized%>HealthService {
     }
 
     private flattenHealthData(result, path, data): any {
-        const details = data.details;
-        for (const key in details) {
-            if (details.hasOwnProperty(key)) {
-                const value = details[key];
+        for (const key in data) {
+            if (data.hasOwnProperty(key)) {
+                const value = data[key];
                 if (this.isHealthObject(value)) {
                     if (this.hasSubSystem(value)) {
                         this.addHealthObject(result, false, value, this.getModuleName(path, key));
