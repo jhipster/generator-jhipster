@@ -29,6 +29,21 @@
       "fieldValidateRules": [
         "required"
       ]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "advertisement",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "logo",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "image"
     }
   ],
   "changelogDate": "20160926092246",
@@ -36,5 +51,7 @@
   "dto": "no",
   "pagination": "no",
   "service": "no",
-  "jpaMetamodelFiltering": false
+  "jpaMetamodelFiltering": false,
+  "skipClient": true,
+  "skipServer": true
 }

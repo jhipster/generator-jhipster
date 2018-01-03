@@ -50,6 +50,16 @@ describe('JDLEnum', () => {
         new JDLEnum({ name: 'MyEnum', values: ['ABC'] });
       });
     });
+    describe('when passing a reserved keyword as name', () => {
+      it('fails', () => {
+        try {
+          new JDLEnum({ name: 'class' });
+          fail();
+        } catch (error) {
+          expect(error.name).to.eq('IllegalNameException');
+        }
+      });
+    });
   });
   describe('#addValue', () => {
     const jdlEnum = new JDLEnum({ name: 'MyEnum' });
@@ -75,6 +85,13 @@ describe('JDLEnum', () => {
       describe('with no name', () => {
         it('returns false', () => {
           expect(JDLEnum.isValid({ values: ['A', 'B'] })).to.be.false;
+        });
+      });
+      describe('with a reserved keyword as name', () => {
+        it('returns false', () => {
+          expect(
+            JDLEnum.isValid({ name: 'class' })
+          ).to.be.false;
         });
       });
     });

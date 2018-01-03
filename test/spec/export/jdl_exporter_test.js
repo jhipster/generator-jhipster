@@ -48,10 +48,7 @@ describe('::exportToJDL', () => {
       Exporter.exportToJDL(jdl);
       const input = JDLReader.parseFromFiles(['./jhipster-jdl.jh']);
       const newEntities = EntityParser.parse({
-        jdlObject: JDLParser.parse({
-          document: input,
-          databaseType: 'sql'
-        }),
+        jdlObject: JDLParser.parse(input, 'sql'),
         databaseType: 'sql'
       });
       const previousEntities = {};
@@ -62,10 +59,14 @@ describe('::exportToJDL', () => {
           previousEntities[entityName].javadoc = undefined;
         }
         // Sort arrays to ease comparison
-        previousEntities[entityName].fields.sort((f1, f2) => (f1.fieldName < f2.fieldName) - (f1.fieldName > f2.fieldName));
-        newEntities[entityName].fields.sort((f1, f2) => (f1.fieldName < f2.fieldName) - (f1.fieldName > f2.fieldName));
-        previousEntities[entityName].relationships.sort((r1, r2) => (r1.relationshipName < r2.relationshipName) - (r1.relationshipName > r2.relationshipName));
-        newEntities[entityName].relationships.sort((r1, r2) => (r1.relationshipName < r2.relationshipName) - (r1.relationshipName > r2.relationshipName));
+        previousEntities[entityName].fields.sort(
+          (f1, f2) => (f1.fieldName < f2.fieldName) - (f1.fieldName > f2.fieldName));
+        newEntities[entityName].fields.sort(
+          (f1, f2) => (f1.fieldName < f2.fieldName) - (f1.fieldName > f2.fieldName));
+        previousEntities[entityName].relationships.sort(
+          (r1, r2) => (r1.relationshipName < r2.relationshipName) - (r1.relationshipName > r2.relationshipName));
+        newEntities[entityName].relationships.sort(
+          (r1, r2) => (r1.relationshipName < r2.relationshipName) - (r1.relationshipName > r2.relationshipName));
       });
       it('exports it', () => {
         expect(fs.statSync('./jhipster-jdl.jh').isFile()).to.be.true;

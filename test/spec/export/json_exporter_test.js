@@ -20,19 +20,19 @@
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
 const fs = require('fs');
-const Exporter = require('../../../lib/export/jhipster_entity_exporter');
+
+const fail = expect.fail;
+const Exporter = require('../../../lib/export/json_exporter');
 const JDLParser = require('../../../lib/parser/jdl_parser');
 const EntityParser = require('../../../lib/parser/entity_parser');
 const parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
 
-const fail = expect.fail;
-
-describe('::exportEntities', () => {
+describe('::exportToJSON', () => {
   describe('when passing invalid parameters', () => {
     describe('such as undefined', () => {
       it('throws an error', () => {
         try {
-          Exporter.exportEntities();
+          Exporter.exportToJSON();
           fail();
         } catch (error) {
           expect(error.name).to.eq('NullPointerException');
@@ -44,16 +44,12 @@ describe('::exportEntities', () => {
     describe('when exporting JDL to entity json for SQL type', () => {
       const input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
       const content = EntityParser.parse({
-        jdlObject: JDLParser.parse({
-          document: input,
-          databaseType: 'sql'
-        }),
+        jdlObject: JDLParser.parse(input, 'sql'),
         databaseType: 'sql'
       });
-      Exporter.exportEntities(content);
+      Exporter.exportToJSON(content);
       const department = JSON.parse(fs.readFileSync('.jhipster/Department.json', { encoding: 'utf-8' }));
       const jobHistory = JSON.parse(fs.readFileSync('.jhipster/JobHistory.json', { encoding: 'utf-8' }));
-
       it('exports it', () => {
         expect(fs.statSync('.jhipster/Department.json').isFile()).to.be.true;
         expect(fs.statSync('.jhipster/JobHistory.json').isFile()).to.be.true;
@@ -89,6 +85,21 @@ describe('::exportEntities', () => {
             fieldName: 'departmentName',
             fieldType: 'String',
             fieldValidateRules: ['required']
+          },
+          {
+            fieldName: 'description',
+            fieldType: 'byte[]',
+            fieldTypeBlobContent: 'text'
+          },
+          {
+            fieldName: 'advertisement',
+            fieldType: 'byte[]',
+            fieldTypeBlobContent: 'any'
+          },
+          {
+            fieldName: 'logo',
+            fieldType: 'byte[]',
+            fieldTypeBlobContent: 'image'
           }
         ]);
         expect(department.dto).to.eq('no');
@@ -153,26 +164,20 @@ describe('::exportEntities', () => {
     describe('when exporting JDL to entity json for an existing entity', () => {
       let input = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
       let content = EntityParser.parse({
-        jdlObject: JDLParser.parse({
-          document: input,
-          databaseType: 'sql'
-        }),
+        jdlObject: JDLParser.parse(input, 'sql'),
         databaseType: 'sql'
       });
       it('exports it with same changeLogDate', (done) => {
-        Exporter.exportEntities(content);
+        Exporter.exportToJSON(content);
         expect(fs.statSync('.jhipster/A.json').isFile()).to.be.true;
         const changeLogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', { encoding: 'utf-8' })).changelogDate;
         setTimeout(() => {
           input = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
           content = EntityParser.parse({
-            jdlObject: JDLParser.parse({
-              document: input,
-              databaseType: 'sql'
-            }),
+            jdlObject: JDLParser.parse(input, 'sql'),
             databaseType: 'sql'
           });
-          Exporter.exportEntities(content, true);
+          Exporter.exportToJSON(content, true);
           expect(fs.statSync('.jhipster/A.json').isFile()).to.be.true;
           const newChangeLogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', { encoding: 'utf-8' })).changelogDate;
           expect(newChangeLogDate).to.eq(changeLogDate);

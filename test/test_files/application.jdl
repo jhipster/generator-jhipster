@@ -1,9 +1,0 @@
-application {
-  config {
-    baseName toto
-    path ../../toto
-    packageName com.mathieu.sample
-    enableTranslation false
-    languages en, fr
-  }
-}
