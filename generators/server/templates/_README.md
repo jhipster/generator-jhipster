@@ -244,7 +244,7 @@ Refer to [Doing API-First development][] for more details.
 To optimize the <%= baseName %> application for production, run:
 <% if (buildTool === 'maven') { %>
     ./mvnw -Pprod clean package<% } %><% if (buildTool === 'gradle') { %>
-    ./gradlew -Pprod clean bootRepackage<% } %>
+    ./gradlew -Pprod clean bootWar<% } %>
 
 <%_ if(!skipClient) { _%>
 This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
@@ -299,7 +299,7 @@ To stop it and remove the container, run:
 You can also fully dockerize your application and all the services that it depends on.
 To achieve this, first build a docker image of your app by running:
 
-    <% if (buildTool === 'maven') { %>./mvnw verify -Pprod dockerfile:build<% } %><% if (buildTool === 'gradle') { %>./gradlew bootRepackage -Pprod buildDocker<% } %>
+    <% if (buildTool === 'maven') { %>./mvnw verify -Pprod dockerfile:build<% } %><% if (buildTool === 'gradle') { %>./gradlew bootWar -Pprod buildDocker<% } %>
 
 Then run:
 

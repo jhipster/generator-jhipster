@@ -149,7 +149,7 @@ node {
 
     <%_ } _%>
 <%= indent %>    stage('packaging') {
-<%= indent %>        sh "./gradlew bootRepackage -x test -Pprod -PnodeInstall --no-daemon"
+<%= indent %>        sh "./gradlew bootWar -x test -Pprod -PnodeInstall --no-daemon"
 <%= indent %>        archiveArtifacts artifacts: '**/build/libs/*.war', fingerprint: true
 <%= indent %>    }
 

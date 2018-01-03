@@ -75,7 +75,7 @@ if [ -f "mvnw" ]; then
     ./mvnw verify -DskipTests -P"$PROFILE"
     mv target/*.war app.war
 elif [ -f "gradlew" ]; then
-    ./gradlew bootRepackage -P"$PROFILE" -x test
+    ./gradlew bootWar -P"$PROFILE" -x test
     mv build/libs/*.war app.war
 else
     echo "No mvnw or gradlew"

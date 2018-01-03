@@ -102,7 +102,7 @@ script:
   - ./mvnw verify -Pprod -DskipTests
   <%_ } _%>
 <%_ } else if (buildTool === 'gradle') { _%>
-  - ./gradlew bootRepackage -Pprod -x test
+  - ./gradlew bootWar -Pprod -x test
   <%_ if (heroku.includes('travis')) { _%>
   - ./gradlew deployHeroku
   <%_ } _%>

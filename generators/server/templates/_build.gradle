@@ -85,8 +85,8 @@ version = '0.0.1-SNAPSHOT'
 
 description = ''
 
-bootRepackage {
-   mainClass = '<%= packageName %>.<%= mainClass %>'
+bootWar {
+   mainClassName = '<%= packageName %>.<%= mainClass %>'
 }
 
 war {
@@ -462,7 +462,7 @@ task wrapper(type: Wrapper) {
     gradleVersion = '4.2.1'
 }
 
-task stage(dependsOn: 'bootRepackage') {
+task stage(dependsOn: 'bootWar') {
 }
 <%_ if (!skipClient) { _%>
 

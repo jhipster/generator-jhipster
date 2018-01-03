@@ -86,7 +86,7 @@ test:
         - ./mvnw verify -Pprod -DskipTests
     <%_ } _%>
 <%_ } else if (buildTool === 'gradle') { _%>
-        - ./gradlew bootRepackage -Pprod -x test --no-daemon
+        - ./gradlew bootWar -Pprod -x test --no-daemon
     <%_ if (heroku.includes('circle')) { _%>
         - ./gradlew deployHeroku --no-daemon
     <%_ } _%>
