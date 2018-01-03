@@ -18,7 +18,7 @@
 -%>
 <%_
 let cacheManagerIsAvailable = false;
-if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') {
+if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || applicationType === 'gateway') {
     cacheManagerIsAvailable = true;
 }
 _%>

@@ -51,8 +51,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 <%_ } _%>
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;<% if (authenticationType === 'jwt') { %>
-import org.springframework.security.config.http.SessionCreationPolicy;<% } %><% if (clusteredHttpSession === 'hazelcast') { %>
-import org.springframework.security.core.session.SessionRegistry;<% } %>
+import org.springframework.security.config.http.SessionCreationPolicy;<% } %>
 <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
 import org.springframework.security.core.userdetails.UserDetailsService;
 <%_ } _%>
@@ -102,7 +101,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final TokenProvider tokenProvider;
     <%_ } _%>
-    <%_ if (clusteredHttpSession === 'hazelcast') { _%>
+    <%_ if ( === 'hazelcast') { _%>
 
     private final SessionRegistry sessionRegistry;
     <%_ } _%>
@@ -113,7 +112,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     public SecurityConfiguration(<%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>AuthenticationManagerBuilder authenticationManagerBuilder, UserDetailsService userDetailsService<%_ } _%><%_ if (authenticationType === 'session') { _%>,
         JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices<%_ } if (authenticationType === 'jwt') { _%><%_ if (!skipUserManagement) { _%>,<%_ } _%>TokenProvider tokenProvider<%_ } _%>
-        <%_ if (clusteredHttpSession === 'hazelcast') { _%>, SessionRegistry sessionRegistry<%_ } _%><%_ if (authenticationType !== 'oauth2') { _%>,<%_ } _%>CorsFilter corsFilter, SecurityProblemSupport problemSupport) {
+        <%_ if (authenticationType !== 'oauth2') { _%>,<%_ } _%>CorsFilter corsFilter, SecurityProblemSupport problemSupport) {
         <%_ if (authenticationType !== 'oauth2'  && !skipUserManagement) { _%>
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.userDetailsService = userDetailsService;
@@ -124,9 +123,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         <%_ } _%>
         <%_ if (authenticationType === 'jwt') { _%>
         this.tokenProvider = tokenProvider;
-        <%_ } _%>
-        <%_ if (clusteredHttpSession === 'hazelcast') { _%>
-        this.sessionRegistry = sessionRegistry;
         <%_ } _%>
         this.corsFilter = corsFilter;
         this.problemSupport = problemSupport;
@@ -186,11 +182,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http<% if (clusteredHttpSession === 'hazelcast') { %>
-            .sessionManagement()
-            .maximumSessions(32) // maximum number of concurrent sessions for one user
-            .sessionRegistry(sessionRegistry)
-            .and().and()<% } %>
+        http
             <%_ if (authenticationType === 'session' || authenticationType == 'oauth2') { _%>
             .csrf()
             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
@@ -220,14 +212,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
             .logout()
             .logoutUrl("/api/logout")
-            .logoutSuccessHandler(ajaxLogoutSuccessHandler())<% if (clusteredHttpSession === 'hazelcast') { %>
-            .deleteCookies("hazelcast.sessionId")<% } %>
+            .logoutSuccessHandler(ajaxLogoutSuccessHandler())
             .permitAll()<% } %><% if (authenticationType === 'oauth2') { %>
         .and()
             .logout()
             .logoutUrl("/api/logout")
-            .logoutSuccessHandler(ajaxLogoutSuccessHandler())<% if (clusteredHttpSession === 'hazelcast') { %>
-            .deleteCookies("hazelcast.sessionId")<% } %>
+            .logoutSuccessHandler(ajaxLogoutSuccessHandler())
             .permitAll()<% } %>
         .and()<% if (authenticationType === 'jwt') { %>
             .csrf()

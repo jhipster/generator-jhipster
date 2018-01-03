@@ -6,7 +6,6 @@
     "packageFolder": "com/mycompany/myapp",
     "authenticationType": "session",
     "cacheProvider": "ehcache",
-    "clusteredHttpSession": "no",
     "websocket": "no",
     "databaseType": "sql",
     "devDatabaseType": "h2Disk",

@@ -40,7 +40,7 @@ env:
     - JHIPSTER=ngx-session-cassandra-fr
     - JHIPSTER=ngx-couchbase
     - JHIPSTER=ms-ngx-gateway-eureka
-    - JHIPSTER=ms-ngx-gateway-consul-clustered
+    - JHIPSTER=ms-ngx-gateway-consul
     - JHIPSTER=ms-ngx-gateway-uaa
     - JHIPSTER=ms-micro-eureka
     - JHIPSTER=ms-micro-consul
