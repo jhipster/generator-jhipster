@@ -116,6 +116,9 @@ objects:
                     <%_ if (app.prodDatabaseType === 'cassandra') { _%>
                       rt=$(nc -z -w 1 ${APPLICATION_NAME}-cassandra 9042)
                     <%_ } _%>
+                    <%_ if (app.prodDatabaseType === 'couchbase') { _%>
+                      rt=$(nc -z -w 1 ${APPLICATION_NAME}-couchbase 8091)
+                    <%_ } _%>
                       if [ $? -eq 0 ]; then
                         echo "DB is UP"
                         break
@@ -216,6 +219,12 @@ objects:
             <%_ if (app.prodDatabaseType === 'cassandra') { _%>
             - name: SPRING_DATA_CASSANDRA_CONTACTPOINTS
               value: ${APPLICATION_NAME}-cassandra
+            <%_ } _%>
+            <%_ if (app.prodDatabaseType === 'couchbase') { _%>
+            - name: SPRING_COUCHBASE_BOOTSTRAP_HOSTS
+              value: ${APPLICATION_NAME}-couchbase
+            - name: SPRING_COUCHBASE_BUCKET_NAME
+              value: ${APPLICATION_NAME}
             <%_ } _%>
             <%_ if (app.searchEngine === 'elasticsearch') { _%>
             - name: SPRING_DATA_ELASTICSEARCH_CLUSTER_NODES
