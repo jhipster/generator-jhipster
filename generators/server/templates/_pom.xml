@@ -83,7 +83,7 @@
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <liquibase.version>3.5.3</liquibase.version>
         <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
-        <validation-api.version>1.1.0.Final</validation-api.version>
+        <validation-api.version>2.0.1.Final</validation-api.version>
         <%_ } _%>
         <mapstruct.version>1.2.0.Final</mapstruct.version>
 
