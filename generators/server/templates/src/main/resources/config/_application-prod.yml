@@ -207,8 +207,6 @@ liquibase:
 # You can also use Let's Encrypt:
 # https://maximilian-boehm.com/hp2121/Create-a-Java-Keystore-JKS-from-Let-s-Encrypt-Certificates.htm
 #
-# The ciphers suite enforce the security by deactivating some old and deprecated SSL cipher, this list was tested against SSL Labs (https://www.ssllabs.com/ssltest/)
-#
 # Then, modify the server.ssl properties so your "server" configuration looks like:
 #
 # server:
