@@ -26,7 +26,7 @@ import { AuditsService } from '../../../../../../main/webapp/app/admin/audits/au
 import { ITEMS_PER_PAGE } from '../../../../../../main/webapp/app/shared';
 
 function build2DigitsDatePart(datePart: number) {
-    return ('0' + datePart).slice(-2);
+    return `0${datePart}`.slice(-2);
 }
 
 function getDate(isToday= true) {
