@@ -214,7 +214,7 @@ public class PersistentTokenRememberMeServices extends
         }
         String presentedSeries = cookieTokens[0];
         String presentedToken = cookieTokens[1];
-        PersistentToken token = persistentTokenRepository.<% if (databaseType === 'couchbase') { %>findBySeries<% } else { %>findOne<% } %>(presentedSeries);
+        PersistentToken token = persistentTokenRepository.<% if (databaseType === 'couchbase') { %>findBySeries(presentedSeries)<% } else { %>findById(presentedSeries).get()<% } %>;
 
         if (token == null) {
             // No series match, so we can't authenticate using this cookie

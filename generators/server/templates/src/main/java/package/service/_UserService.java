@@ -442,7 +442,7 @@ public class UserService {
         <%_ if (databaseType === 'sql') { _%>
         return userRepository.findOneWithAuthoritiesById(id);
         <%_ } else { // MongoDB, Couchbase and and Cassandra _%>
-        return Optional.ofNullable(userRepository.findOne(id));
+        return userRepository.findById(id);
         <%_ } _%>
     }
 
