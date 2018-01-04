@@ -101,10 +101,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final TokenProvider tokenProvider;
     <%_ } _%>
-    <%_ if ( === 'hazelcast') { _%>
-
-    private final SessionRegistry sessionRegistry;
-    <%_ } _%>
 
     private final CorsFilter corsFilter;
 

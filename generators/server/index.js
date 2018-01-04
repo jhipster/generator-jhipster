@@ -194,7 +194,7 @@ module.exports = class extends BaseGenerator {
                 if (this.applicationType === 'gateway') {
                     this.cacheProvider = 'hazelcast';
                 }
-               
+
                 this.buildTool = this.config.get('buildTool');
                 this.enableSocialSignIn = this.config.get('enableSocialSignIn');
                 this.jhipsterVersion = packagejs.version;
