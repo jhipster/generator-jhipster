@@ -94,7 +94,7 @@ war {
 }
 
 springBoot {
-    mainClass = '<%= packageName %>.<%= mainClass %>'
+    mainClassName = '<%= packageName %>.<%= mainClass %>'
     executable = true
     buildInfo()
 }
