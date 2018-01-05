@@ -48,24 +48,43 @@ export class UserManagement extends React.Component<IUserManagementProps, IUserM
 
   constructor(props) {
     super(props);
+    const pageParam = this.getUrlParameter('page', props.location.search);
+    const sortParam = this.getUrlParameter('sort', props.location.search);
+    let sort = 'id';
+    let order = 'asc';
+    let activePage = 1;
+    if (pageParam !== '' && !isNaN(Number(pageParam))) {
+      activePage = Number(pageParam);
+    }
+    if (sortParam !== '') {
+      sort = sortParam.split(',')[0];
+      order = sortParam.split(',')[1];
+    }
     this.state = {
       itemsPerPage: ITEMS_PER_PAGE,
       items: 0,
-      sort: 'id',
-      order: 'asc',
-      activePage: 1,
+      sort,
+      order,
+      activePage,
       totalItems: 0
     };
-    this.handleSelect = this.handleSelect.bind(this);
+    this.handlePagination = this.handlePagination.bind(this);
   }
 
   componentDidMount() {
-    this.props.getUsers().then(action => {
+    this.props.getUsers(this.state.activePage - 1, this.state.itemsPerPage, this.state.sort + ',' + this.state.order).then(action => {
       this.setState({
         totalItems: action.value.headers['x-total-count'],
         items: Math.round(action.value.headers['x-total-count'] / this.state.itemsPerPage) + 1
       });
     });
+  }
+
+  getUrlParameter = (name, search) => {
+    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+    const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+    const results = regex.exec(search);
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
   }
 
   sort(prop) {
@@ -85,6 +104,7 @@ export class UserManagement extends React.Component<IUserManagementProps, IUserM
   }
 
   sortUsers() {
+    location.href = location.href.split('?')[0] + '?page=' + this.state.activePage + '&sort=' + this.state.sort + ',' + this.state.order;
     this.props.getUsers(this.state.activePage - 1, this.state.itemsPerPage, this.state.sort + ',' + this.state.order);
   }
 
@@ -94,7 +114,7 @@ export class UserManagement extends React.Component<IUserManagementProps, IUserM
     };
   }
 
-  handleSelect(eventKey) {
+  handlePagination(eventKey) {
     this.setState({
       activePage: eventKey
     }, () => {
@@ -211,7 +231,7 @@ export class UserManagement extends React.Component<IUserManagementProps, IUserM
             items={this.state.items}
             maxButtons={5}
             activePage={this.state.activePage}
-            onSelect={this.handleSelect}
+            onSelect={this.handlePagination}
           />
         </div>
       </div>
