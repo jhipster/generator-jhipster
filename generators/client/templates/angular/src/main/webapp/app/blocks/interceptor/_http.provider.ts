@@ -58,9 +58,6 @@ export function interceptableFactory(
         defaultOptions,
         [
         <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-            <%_ if (authenticationType !== 'uaa') { _%>
-            new AuthInterceptor(localStorage, sessionStorage),
-            <%_ } _%>
             new AuthExpiredInterceptor(injector),
         <%_ } else if (authenticationType === 'session') { _%>
             new AuthExpiredInterceptor(injector, stateStorageService,
