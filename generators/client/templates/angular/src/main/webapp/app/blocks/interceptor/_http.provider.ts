@@ -57,14 +57,6 @@ export function interceptableFactory(
         backend,
         defaultOptions,
         [
-        <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-            new AuthExpiredInterceptor(injector),
-        <%_ } else if (authenticationType === 'session') { _%>
-            new AuthExpiredInterceptor(injector, stateStorageService,
-                loginServiceModal),
-        <%_ } else if (authenticationType === 'oauth2') { _%>
-        new AuthExpiredInterceptor(injector, stateStorageService),
-        <%_ } _%>
             // Other interceptors can be added here
             new ErrorHandlerInterceptor(eventManager),
             new NotificationInterceptor(injector)

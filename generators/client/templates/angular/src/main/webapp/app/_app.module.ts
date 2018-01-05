@@ -18,7 +18,7 @@
 -%>
 import './vendor.ts';
 
-import { NgModule } from '@angular/core';
+import { NgModule, Injector } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { Ng2Webstorage<%_ if (authenticationType === 'jwt') { _%>, LocalStorageService, SessionStorageService <%_ } _%> } from 'ngx-webstorage';
 
@@ -34,6 +34,13 @@ import { PaginationConfig } from './blocks/config/uib-pagination.config';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 <%_ if (authenticationType === 'jwt') { _%>
 import { AuthInterceptor } from "./blocks/interceptor/auth.interceptor";
+import { AuthExpiredInterceptor } from "./blocks/interceptor/auth-expired.interceptor";
+<%_ } _%>
+<%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
+    <%_ if (authenticationType === 'session') { _%>
+import { LoginModalService } from './shared/login/login-modal.service';
+    <%_ } _%>
+import { StateStorageService } from './shared/auth/state-storage.service';
 <%_ } _%>
 
 // jhipster-needle-angular-add-module-import JHipster will add new module here
@@ -87,7 +94,38 @@ import {
                 LocalStorageService,
                 SessionStorageService
             ]
-        }
+        },
+        <%_ } _%>
+        <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+        {
+            provide: HTTP_INTERCEPTORS,
+            useFactory: (injector) => new AuthExpiredInterceptor(injector),
+            multi: true,
+            deps: [
+                Injector
+            ]
+        },
+        <%_ } else if (authenticationType === 'session') { _%>
+        {
+            provide: HTTP_INTERCEPTORS,
+            useFactory: (injector, stateStorageService, loginModalService) => new AuthExpiredInterceptor(injector, stateStorageService, loginModalService),
+            multi: true,
+            deps: [
+                Injector,
+                StateStorageService,
+                LoginModalService
+            ]
+        },
+        <%_ } else if (authenticationType === 'oauth2') { _%>
+        {
+            provide: HTTP_INTERCEPTORS,
+            useFactory: (injector, stateStorageService) => new AuthExpiredInterceptor(injector, stateStorageService),
+            multi: true,
+            deps: [
+                Injector,
+                StateStorageService,
+            ]
+        },
         <%_ } _%>
     ],
     bootstrap: [ <%=jhiPrefixCapitalized%>MainComponent ]
