@@ -847,7 +847,11 @@
                                     <directory><%= SERVER_MAIN_RES_DIR %></directory>
                                     <filtering>true</filtering>
                                     <includes>
+<%_ if (!serviceDiscoveryType) { _%>
                                         <include>config/application.yml</include>
+<%_ } else { _%>
+                                        <include>config/bootstrap.yml</include>
+<%_ } _%>
                                     </includes>
                                 </resource>
                                 <resource>
