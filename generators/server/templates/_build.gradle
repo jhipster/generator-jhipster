@@ -25,6 +25,7 @@ buildscript {
         maven { url "http://repo.spring.io/plugins-release" }
         maven { url "https://plugins.gradle.org/m2/" }
         // TODO To remove after final Spring Boot 2 release
+        maven { url "https://repo.spring.io/milestone" }
         maven { url "https://repo.spring.io/snapshot" }
         maven { url "https://dl.bintray.com/jhipster/maven" }
     }
@@ -210,6 +211,7 @@ repositories {
     maven { url "https://maven.oracle.com" }
     <%_ } _%>
     // TODO To remove after final Spring Boot 2 release
+    maven { url "https://repo.spring.io/milestone" }
     maven { url "https://repo.spring.io/snapshot" }
     maven { url "https://dl.bintray.com/jhipster/maven" }
 }
