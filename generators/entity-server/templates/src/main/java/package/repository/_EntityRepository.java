@@ -81,9 +81,10 @@ public interface <%=entityClass%>Repository extends <% if (databaseType === 'sql
     List<<%= entityClass %>> findBy<%= relationships[idx].relationshipNameCapitalized %>IsCurrentUser();
     <%_ } } _%>
     <%_ if (fieldsContainOwnerManyToMany === true) { _%>
+
     @Query(value = "select distinct <%= entityTableName %> from <%= entityClass %> <%= entityTableName %><% for (idx in relationships) {
-    if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { %> left join fetch <%=entityTableName%>.<%=relationships[idx].relationshipFieldNamePlural%>",
-        countQuery = "select count(distinct <%= entityTableName %>) from <%= entityClass %> <%= entityTableName %><%} }%>")
+    if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { %> left join fetch <%=entityTableName%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%>",
+        countQuery = "select count(distinct <%= entityTableName %>) from <%= entityClass %> <%= entityTableName %>")
     Page<<%=entityClass%>> findAllWithEagerRelationships(Pageable pageable);
 
     @Query("select <%= entityTableName %> from <%= entityClass %> <%= entityTableName %><% for (idx in relationships) {
