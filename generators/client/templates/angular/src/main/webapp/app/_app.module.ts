@@ -24,9 +24,12 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Ng2Webstorage<% if (authenticationType === 'jwt') { %>, LocalStorageService, SessionStorageService <% } %> } from 'ngx-webstorage';
 import { JhiEventManager } from 'ng-jhipster';
 
+<%_ if (authenticationType === 'jwt') { _%>
+import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
+<%_ } _%>
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-    import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
-    <% } % >
+import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
+<% } %>
 import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
 import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
 
@@ -39,9 +42,7 @@ import { <%=angularXAppName%>AccountModule } from './account/account.module';
 <%_ } _%>
 import { <%=angularXAppName%>EntityModule } from './entities/entity.module';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
-<%_ if (authenticationType === 'jwt') { _%>
-import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
-<%_ } _%>
+
 <%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
     <%_ if (authenticationType === 'session') { _%>
 import { LoginModalService } from './shared/login/login-modal.service';
