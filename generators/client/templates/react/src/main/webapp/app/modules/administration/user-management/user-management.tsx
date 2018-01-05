@@ -56,11 +56,12 @@ export class UserManagement extends React.Component<IUserManagementProps, IUserM
       activePage: 1,
       totalItems: 0
     };
+    this.handleSelect = this.handleSelect.bind(this);
   }
 
   componentDidMount() {
-    this.props.getUsers().then((action) => { 
-      this.setState({ 
+    this.props.getUsers().then(action => {
+      this.setState({
         totalItems: action.value.headers['x-total-count'],
         items: Math.round(action.value.headers['x-total-count'] / this.state.itemsPerPage) + 1
       });
@@ -205,12 +206,12 @@ export class UserManagement extends React.Component<IUserManagementProps, IUserM
           </table>
         </div>
         <div className="row justify-content-center">
-          <Pagination 
+          <Pagination
             prev next first last ellipsis boundaryLinks
             items={this.state.items}
             maxButtons={5}
             activePage={this.state.activePage}
-            onSelect={this.handleSelect.bind(this)}
+            onSelect={this.handleSelect}
           />
         </div>
       </div>
