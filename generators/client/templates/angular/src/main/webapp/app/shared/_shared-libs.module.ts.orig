@@ -18,7 +18,10 @@
 -%>
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+<<<<<<< HEAD
+=======
 import { HttpClientModule } from '@angular/common/http';
+>>>>>>> thisen/master
 import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgJhipsterModule } from 'ng-jhipster';
@@ -41,7 +44,10 @@ import { CookieModule } from 'ngx-cookie';
     ],
     exports: [
         FormsModule,
+<<<<<<< HEAD
+=======
         HttpClientModule,
+>>>>>>> thisen/master
         CommonModule,
         NgbModule,
         NgJhipsterModule,

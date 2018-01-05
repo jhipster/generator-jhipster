@@ -17,8 +17,11 @@
  limitations under the License.
 -%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
+<<<<<<< HEAD
 <%_ if (prodDatabaseType !== 'cassandra') { _%>
+=======
+import { HttpResponse } from '@angular/common/http';
+>>>>>>> thisen/master
 import { ActivatedRoute, Router } from '@angular/router';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 

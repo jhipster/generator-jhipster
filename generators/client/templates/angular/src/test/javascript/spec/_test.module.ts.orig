@@ -20,8 +20,12 @@ import { DatePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgModule, ElementRef, Renderer } from '@angular/core';
 import { MockBackend } from '@angular/http/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { Http, BaseRequestOptions } from '@angular/http';
+<<<<<<< HEAD
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+=======
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+>>>>>>> thisen/master
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageService, JhiDataUtils, JhiDateUtils, JhiEventManager, JhiAlertService, JhiParseLinks } from 'ng-jhipster';
 
@@ -42,12 +46,14 @@ const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
 _%>
 
 @NgModule({
+    exports: [HttpClientTestingModule],
     providers: [
         DatePipe,
         JhiDataUtils,
         JhiDateUtils,
         JhiParseLinks,
         MockBackend,
+        BaseRequestOptions,
         <%_ if (enableTranslation) { _%>
         {
             provide: JhiLanguageService,
@@ -110,7 +116,13 @@ _%>
             provide: NgbModal,
             useValue: null
         },
-    ],
-    imports: [HttpClientTestingModule]
+        {
+            provide: Http,
+            useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
+                return new Http(backendInstance, defaultOptions);
+            },
+            deps: [MockBackend, BaseRequestOptions]
+        }
+    ]
 })
 export class <%=angularXAppName%>TestModule {}

@@ -17,21 +17,32 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+<<<<<<< HEAD
+import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { SERVER_API_URL } from '../../app.constants';
-
-import { Log } from './log.model';
+=======
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs/Rx';
+>>>>>>> thisen/master
 
 @Injectable()
-export class LogsService {
+export class AccountService  {
     constructor(private http: HttpClient) { }
 
-    changeLevel(log: Log): Observable<any> {
-        return this.http.put(SERVER_API_URL + 'management/logs', log);
+    get(): Observable<any> {
+<<<<<<< HEAD
+        return this.http.get(SERVER_API_URL + '<%- apiUaaPath %>api/account').map((res: Response) => res.json());
     }
 
-    findAll(): Observable<Log[]> {
-        return this.http.get<Log[]>(SERVER_API_URL + 'management/logs');
+    save(account: any): Observable<Response> {
+        return this.http.post(SERVER_API_URL + '<%- apiUaaPath %>api/account', account);
+=======
+        return this.http.get(<% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account'<%} else { %>'api/account'<% } %>);
+    }
+
+    save(account: any): Observable<any> {
+        return this.http.post(<% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account'<%} else { %>'api/account'<% } %>, account);
+>>>>>>> thisen/master
     }
 }

@@ -17,31 +17,49 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse<% if (authenticationType !== 'oauth2') { %>, HttpHeaders<% } %> } from '@angular/common/http';
+<<<<<<< HEAD
+import { Http, Response<% if (authenticationType !== 'oauth2') { %>, Headers<% } %> } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { SERVER_API_URL } from '../../app.constants';
+=======
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs/Rx';
+>>>>>>> thisen/master
 
 @Injectable()
 export class AuthServerProvider {
 
+<<<<<<< HEAD
     constructor(
-        private http: HttpClient
+        private http: Http
     ) {}
 <%_ if (authenticationType !== 'oauth2') { _%>
+=======
+    constructor(private http: HttpClient) {}
+>>>>>>> thisen/master
 
     login(credentials): Observable<any> {
         const data = 'j_username=' + encodeURIComponent(credentials.username) +
             '&j_password=' + encodeURIComponent(credentials.password) +
             '&remember-me=' + credentials.rememberMe + '&submit=Login';
-        const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this.http.post(SERVER_API_URL + 'api/authentication', data, { headers: headers});
+<<<<<<< HEAD
+        return this.http.post(SERVER_API_URL + 'api/authentication', data, { headers });
+=======
+        return this.http.post('api/authentication', data, {
+            headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'),
+        });
+>>>>>>> thisen/master
     }
 <%_ } _%>
 
     logout(): Observable<any> {
         // logout from the server
-        return this.http.post(SERVER_API_URL + 'api/logout', {}, { observe: 'response' }).map((response: HttpResponse<any>) => {
+<<<<<<< HEAD
+        return this.http.post(SERVER_API_URL + 'api/logout', {}).map((response: Response) => {
+=======
+        return this.http.post('api/logout', {}, { observe: 'response' }).map((response: HttpResponse<any>) => {
+>>>>>>> thisen/master
             // to get a new csrf token call the api
             this.http.get(SERVER_API_URL + 'api/account').subscribe(() => {}, () => {});
             return response;

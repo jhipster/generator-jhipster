@@ -17,20 +17,35 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+<<<<<<< HEAD
+import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { SERVER_API_URL } from '../../app.constants';
+=======
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs/Rx';
+>>>>>>> thisen/master
+
+import { Log } from './log.model';
 
 @Injectable()
-export class <%=jhiPrefixCapitalized%>MetricsService {
+export class LogsService {
+    constructor(private http: HttpClient) { }
 
-    constructor(private http: HttpClient) {}
-
-    getMetrics(): Observable<any> {
-        return this.http.get(SERVER_API_URL + 'management/metrics');
+<<<<<<< HEAD
+    changeLevel(log: Log): Observable<Response> {
+        return this.http.put(SERVER_API_URL + 'management/logs', log);
     }
 
-    threadDump(): Observable<any> {
-        return this.http.get(SERVER_API_URL + 'management/dump');
+    findAll(): Observable<Log[]> {
+        return this.http.get(SERVER_API_URL + 'management/logs').map((res: Response) => res.json());
+=======
+    changeLevel(log: Log): Observable<any> {
+        return this.http.put('management/logs', log);
+    }
+
+    findAll(): Observable<Log[]> {
+        return this.http.get<Log[]>('management/logs');
+>>>>>>> thisen/master
     }
 }

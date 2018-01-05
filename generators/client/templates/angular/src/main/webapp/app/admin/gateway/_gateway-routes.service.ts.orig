@@ -17,20 +17,26 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+<<<<<<< HEAD
+import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+=======
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs/Rx';
+>>>>>>> thisen/master
+
 import { SERVER_API_URL } from '../../app.constants';
+import { GatewayRoute } from './gateway-route.model';
 
 @Injectable()
-export class <%=jhiPrefixCapitalized%>MetricsService {
+export class GatewayRoutesService {
+    constructor(private http: HttpClient) { }
 
-    constructor(private http: HttpClient) {}
-
-    getMetrics(): Observable<any> {
-        return this.http.get(SERVER_API_URL + 'management/metrics');
-    }
-
-    threadDump(): Observable<any> {
-        return this.http.get(SERVER_API_URL + 'management/dump');
+    findAll(): Observable<GatewayRoute[]> {
+<<<<<<< HEAD
+        return this.http.get(SERVER_API_URL + 'api/gateway/routes/').map((res: Response) => res.json());
+=======
+        return this.http.get<GatewayRoute[]>('api/gateway/routes/');
+>>>>>>> thisen/master
     }
 }

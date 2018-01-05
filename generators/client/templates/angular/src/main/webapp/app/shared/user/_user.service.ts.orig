@@ -17,22 +17,34 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+<<<<<<< HEAD
+import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+=======
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs/Rx';
+>>>>>>> thisen/master
 
 import { SERVER_API_URL } from '../../app.constants';
 <%_ if (authenticationType !== 'oauth2') { _%>
 import { User } from './user.model';
+<<<<<<< HEAD
 <%_ } _%>
 import { ResponseWrapper } from '../model/response-wrapper.model';
+=======
+>>>>>>> thisen/master
 import { createRequestOption } from '../model/request-util';
 
 @Injectable()
 export class UserService {
     private resourceUrl = SERVER_API_URL + '<%- apiUaaPath %>api/users';
 
-    constructor(private http: HttpClient) { }
+<<<<<<< HEAD
+    constructor(private http: Http) { }
 <%_ if (authenticationType !== 'oauth2') { _%>
+=======
+    constructor(private http: HttpClient) { }
+>>>>>>> thisen/master
 
     create(user: User): Observable<HttpResponse<User>> {
         return this.http.post<User>(this.resourceUrl, user, { observe: 'response' });
@@ -45,8 +57,13 @@ export class UserService {
     find(login: string): Observable<User> {
         return this.http.get(`${this.resourceUrl}/${login}`);
     }
+<<<<<<< HEAD
 <% } %>
+    query(req?: any): Observable<ResponseWrapper> {
+=======
+
     query(req?: any): Observable<HttpResponse<User[]>> {
+>>>>>>> thisen/master
         const options = createRequestOption(req);
         return this.http.get<User[]>(this.resourceUrl, { params: options, observe: 'response' });
     }
@@ -57,11 +74,26 @@ export class UserService {
     }
 
     authorities(): Observable<string[]> {
+<<<<<<< HEAD
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-        return this.http.get<string[]>(SERVER_API_URL + '<%- apiUaaPath %>api/users/authorities');
+        return this.http.get(SERVER_API_URL + '<%- apiUaaPath %>api/users/authorities').map((res: Response) => {
+            const json = res.json();
+            return <string[]> json;
+        });
+=======
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+        return this.http.get<string[]>('<% if (authenticationType === 'uaa') { %><%= uaaBaseName.toLowerCase() %>/<% } %>api/users/authorities');
+>>>>>>> thisen/master
 <%_ } else { _%>
         return Observable.of(['ROLE_USER', 'ROLE_ADMIN']);
 <%_ } _%>
     }
+<<<<<<< HEAD
 <% } %>
+    private convertResponse(res: Response): ResponseWrapper {
+        const jsonResponse = res.json();
+        return new ResponseWrapper(res.headers, jsonResponse, res.status);
+    }
+=======
+>>>>>>> thisen/master
 }
