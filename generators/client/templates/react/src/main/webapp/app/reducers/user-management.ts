@@ -100,10 +100,13 @@ export default (state = initialState, action) => {
 
 const apiUrl = '/api/users';
 // Actions
-export const getUsers: ICrudGetAction = (page, size, sort) => ({
-  type: ACTION_TYPES.FETCH_USERS,
-  payload: axios.get(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
-});
+export const getUsers: ICrudGetAction = (page, size, sort) => {
+  const requestUrl = `${apiUrl}` + (sort ? `?page=${page}&size=${size}&sort=${sort}` : ``);
+  return {
+    type: ACTION_TYPES.FETCH_USERS,
+    payload: axios.get(requestUrl)
+  };
+};
 
 export const getRoles: ICrudGetAction = () => ({
   type: ACTION_TYPES.FETCH_ROLES,

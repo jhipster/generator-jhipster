@@ -20,11 +20,13 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
+import { Pagination } from 'react-bootstrap';
 import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FaPlus, FaEye, FaPencil, FaTrash } from 'react-icons/lib/fa';
 
 import { getUsers } from '../../../reducers/user-management';
 import { APP_DATE_FORMAT } from '../../../config/constants';
+import { ITEMS_PER_PAGE } from '../../../shared/util/pagination.constants';
 
 export interface IUserManagementProps {
   getUsers: ICrudGetAction;
@@ -33,14 +35,70 @@ export interface IUserManagementProps {
   match: any;
 }
 
-export class UserManagement extends React.Component<IUserManagementProps, undefined> {
+export interface IUserManagementState {
+  itemsPerPage: number;
+  items: number;
+  sort: string;
+  order: string;
+  activePage: number;
+  totalItems: number;
+}
+
+export class UserManagement extends React.Component<IUserManagementProps, IUserManagementState> {
 
   constructor(props) {
     super(props);
+    this.state = {
+      itemsPerPage: ITEMS_PER_PAGE,
+      items: 0,
+      sort: 'id',
+      order: 'asc',
+      activePage: 1,
+      totalItems: 0
+    };
   }
 
   componentDidMount() {
-    this.props.getUsers();
+    this.props.getUsers().then((action) => { 
+      this.setState({ 
+        totalItems: action.value.headers['x-total-count'],
+        items: Math.round(action.value.headers['x-total-count'] / this.state.itemsPerPage) + 1
+      });
+    });
+  }
+
+  sort(prop) {
+    this.state.order === 'asc' ?
+      this.setState({
+        order: 'desc',
+        sort: prop
+    }, () => {
+      this.sortUsers();
+    }) :
+    this.setState({
+       order: 'asc',
+       sort: prop
+    }, () => {
+      this.sortUsers();
+    });
+  }
+
+  sortUsers() {
+    this.props.getUsers(this.state.activePage - 1, this.state.itemsPerPage, this.state.sort + ',' + this.state.order);
+  }
+
+  getInitialState() {
+    return {
+      activePage: 1
+    };
+  }
+
+  handleSelect(eventKey) {
+    this.setState({
+      activePage: eventKey
+    }, () => {
+      this.sortUsers();
+    });
   }
 
   render() {
@@ -57,18 +115,22 @@ export class UserManagement extends React.Component<IUserManagementProps, undefi
           <table className="table table-striped">
             <thead>
               <tr>
-                <th><Translate contentKey="global.field.id">ID</Translate></th>
-                <th><Translate contentKey="userManagement.login">Login</Translate></th>
-                <th><Translate contentKey="userManagement.email">Email</Translate></th>
+                <th onClick={this.sort.bind(this, 'id')}><Translate contentKey="global.field.id">ID</Translate> <span className="fa fa-sort"/></th>
+                <th onClick={this.sort.bind(this, 'login')}><Translate contentKey="userManagement.login">Login</Translate> <span className="fa fa-sort"/></th>
+                <th onClick={this.sort.bind(this, 'email')}><Translate contentKey="userManagement.email">Email</Translate> <span className="fa fa-sort"/></th>
                 <th />
                 <%_ if (enableTranslation) { _%>
-                <th><Translate contentKey="userManagement.langKey">Lang Key</Translate></th>
+                <th onClick={this.sort.bind(this, 'langKey')}><Translate contentKey="userManagement.langKey">Lang Key</Translate> <span className="fa fa-sort"/></th>
                 <%_ } _%>
                 <th><Translate contentKey="userManagement.profiles">Profiles</Translate></th>
                 <%_ if (databaseType !== 'cassandra') { _%>
-                <th><Translate contentKey="userManagement.createdDate">Created Date</Translate></th>
-                <th><Translate contentKey="userManagement.lastModifiedBy">Last Modified By</Translate></th>
-                <th><Translate contentKey="userManagement.lastModifiedDate">Last Modified Date</Translate></th>
+                <th onClick={this.sort.bind(this, 'createdDate')}><Translate contentKey="userManagement.createdDate">Created Date</Translate> <span className="fa fa-sort"/></th>
+                <th onClick={this.sort.bind(this, 'lastModifiedBy')}>
+                  <Translate contentKey="userManagement.lastModifiedBy">Last Modified By</Translate> <span className="fa fa-sort"/>
+                </th>
+                <th onClick={this.sort.bind(this, 'lastModifiedDate')}>
+                  <Translate contentKey="userManagement.lastModifiedDate">Last Modified Date</Translate> <span className="fa fa-sort"/>
+                </th>
                 <th />
                 <%_ } _%>
               </tr>
@@ -141,6 +203,15 @@ export class UserManagement extends React.Component<IUserManagementProps, undefi
             }
             </tbody>
           </table>
+        </div>
+        <div className="row justify-content-center">
+          <Pagination 
+            prev next first last ellipsis boundaryLinks
+            items={this.state.items}
+            maxButtons={5}
+            activePage={this.state.activePage}
+            onSelect={this.handleSelect.bind(this)}
+          />
         </div>
       </div>
     );
