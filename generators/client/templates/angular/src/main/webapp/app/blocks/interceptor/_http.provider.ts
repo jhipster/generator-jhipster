@@ -58,7 +58,7 @@ export function interceptableFactory(
         defaultOptions,
         [
             // Other interceptors can be added here
-            new NotificationInterceptor(injector)
+
         ]
     );
 }

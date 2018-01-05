@@ -36,6 +36,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
 import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
+import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
 import { JhiEventManager } from 'ng-jhipster';
 <%_ } _%>
 <%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
@@ -137,6 +138,14 @@ import {
                 JhiEventManager,
             ]
         },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useFactory: (injector) => new NotificationInterceptor(injector),
+            multi: true,
+            deps: [
+                Injector
+            ]
+        }
     ],
     bootstrap: [ <%=jhiPrefixCapitalized%>MainComponent ]
 })
