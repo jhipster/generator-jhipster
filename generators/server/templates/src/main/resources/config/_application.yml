@@ -121,7 +121,7 @@ spring:
                 healthCheckPath: /management/health
                 instanceId: ${spring.application.name}:${spring.application.instance-id:${random.value}}
     <%_ } _%>
-    <%_ if (applicationType === 'monolith') { _%>
+    <%_ if (!serviceDiscoveryType) { _%>
     profiles:
         # The commented value for `active` can be replaced with valid Spring profiles to load.
         # Otherwise, it will be filled in by <%= buildTool %> when building the WAR file
