@@ -19,12 +19,6 @@
 package <%=packageName%>.config;
 
 import io.github.jhipster.config.JHipsterProperties;
-<%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
-
-import com.netflix.spectator.api.Registry;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.cloud.netflix.metrics.spectator.SpectatorMetricReader;
-<%_ } _%>
 
 import com.codahale.metrics.JmxReporter;
 import com.codahale.metrics.JvmAttributeGaugeSet;
