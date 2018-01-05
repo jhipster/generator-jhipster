@@ -28,7 +28,7 @@ export class <%=jhiPrefixCapitalized%>ConfigurationService {
     }
 
     get(): Observable<any> {
-        return this.http.get('management/configprops', { observe: 'response' }).map((res: HttpResponse<any>) => {
+        return this.http.get(SERVER_API_URL + 'management/configprops', { observe: 'response' }).map((res: HttpResponse<any>) => {
             const properties: any[] = [];
 
             const propertiesObject = res.body;
