@@ -34,11 +34,13 @@ import { PaginationConfig } from './blocks/config/uib-pagination.config';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 <%_ if (authenticationType === 'jwt') { _%>
 import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
+<%_ } _%>
+<%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
+<% } % >
 import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
 import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
 import { JhiEventManager } from 'ng-jhipster';
-<%_ } _%>
 <%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
     <%_ if (authenticationType === 'session') { _%>
 import { LoginModalService } from './shared/login/login-modal.service';
