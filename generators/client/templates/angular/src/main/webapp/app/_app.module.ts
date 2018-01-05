@@ -33,8 +33,10 @@ import { <%=angularXAppName%>EntityModule } from './entities/entity.module';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 <%_ if (authenticationType === 'jwt') { _%>
-import { AuthInterceptor } from "./blocks/interceptor/auth.interceptor";
-import { AuthExpiredInterceptor } from "./blocks/interceptor/auth-expired.interceptor";
+import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
+import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
+import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
+import { JhiEventManager } from 'ng-jhipster';
 <%_ } _%>
 <%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
     <%_ if (authenticationType === 'session') { _%>
@@ -127,6 +129,14 @@ import {
             ]
         },
         <%_ } _%>
+        {
+            provide: HTTP_INTERCEPTORS,
+            useFactory: (eventManager) => new ErrorHandlerInterceptor(eventManager),
+            multi: true,
+            deps: [
+                JhiEventManager,
+            ]
+        },
     ],
     bootstrap: [ <%=jhiPrefixCapitalized%>MainComponent ]
 })

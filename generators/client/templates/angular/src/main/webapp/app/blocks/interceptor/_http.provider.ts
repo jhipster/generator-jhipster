@@ -58,7 +58,6 @@ export function interceptableFactory(
         defaultOptions,
         [
             // Other interceptors can be added here
-            new ErrorHandlerInterceptor(eventManager),
             new NotificationInterceptor(injector)
         ]
     );
