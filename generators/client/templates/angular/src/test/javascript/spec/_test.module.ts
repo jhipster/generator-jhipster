@@ -19,7 +19,6 @@
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgModule, ElementRef, Renderer } from '@angular/core';
-import { MockBackend } from '@angular/http/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ if (enableTranslation) { _%>
@@ -47,7 +46,6 @@ _%>
         JhiDataUtils,
         JhiDateUtils,
         JhiParseLinks,
-        MockBackend,
         <%_ if (enableTranslation) { _%>
         {
             provide: JhiLanguageService,

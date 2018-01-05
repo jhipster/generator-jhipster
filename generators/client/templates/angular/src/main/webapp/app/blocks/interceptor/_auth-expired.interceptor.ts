@@ -36,7 +36,7 @@ import { LoginModalService } from '../../shared/login/login-modal.service';
 import { StateStorageService } from '../../shared/auth/state-storage.service';
 <%_ } _%>
 
-export class AuthExpiredInterceptor implements HttpInterceptor{
+export class AuthExpiredInterceptor implements HttpInterceptor {
 
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
     constructor(private injector: Injector) {
@@ -54,7 +54,6 @@ export class AuthExpiredInterceptor implements HttpInterceptor{
 <%_ } _%>
 
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(request).do((event: HttpEvent<any>) => {
             if (event instanceof HttpResponse) {
@@ -63,11 +62,10 @@ export class AuthExpiredInterceptor implements HttpInterceptor{
         }, (err: any) => {
             if (err instanceof HttpErrorResponse) {
                 if (err.status === 401) {
-                    <% if (authenticationType === 'jwt') { %>
+<% if (authenticationType === 'jwt') { %>
                     const loginService: LoginService = this.injector.get(LoginService);
                     loginService.logout();
-                    <% } %>
-                    <% if (authenticationType === 'uaa') { %>
+<% } if (authenticationType === 'uaa') { %>
                     const principal = this.injector.get(Principal);
 
                     if (principal.isAuthenticated()) {
@@ -80,13 +78,12 @@ export class AuthExpiredInterceptor implements HttpInterceptor{
                         const router = this.injector.get(Router);
                         router.navigate(['/']);
                     }
-                    <% } %>
+<% } %>
                 }
             }
         });
     }
 <%_ } else if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
-
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(reqest).do((event: HttpEvent<any>) => {
             if (event instanceof HttpResponse) {
@@ -105,14 +102,14 @@ export class AuthExpiredInterceptor implements HttpInterceptor{
                     } else {
                         this.stateStorageService.storeUrl('/');
                     }
-                    <% if (authenticationType === 'session') { %>
+<% if (authenticationType === 'session') { %>
                     const authServer: AuthServerProvider = this.injector.get(AuthServerProvider);
                     authServer.logout();
                     this.loginServiceModal.open();
-                    <% } else { %>
+<% } else { %>
                     const loginService: LoginService = this.injector.get(LoginService);
                     loginService.login();
-                    <% } %>
+<% } %>
                 }
             }
         });

@@ -49,7 +49,6 @@ export * from './user/account.model';
 export * from './user/user.model';
 export * from './user/user.service';
 <%_ } _%>
-export * from './model/response-wrapper.model';
 export * from './model/request-util';
 export * from './model/base-entity';
 <%_ if (enableSocialSignIn) { _%>
