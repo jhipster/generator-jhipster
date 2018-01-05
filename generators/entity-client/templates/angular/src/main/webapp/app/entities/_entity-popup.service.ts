@@ -24,6 +24,7 @@ import { DatePipe } from '@angular/common';
 <%_ } _%>
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
+import { HttpResponse } from '@angular/common/http';
 <%_
 let hasDate = false;
 if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) {
@@ -55,7 +56,8 @@ export class <%= entityAngularName %>PopupService {
             }
 
             if (id) {
-                this.<%= entityInstance %>Service.find(id).subscribe((<%= entityInstance %>) => {
+                this.<%= entityInstance %>Service.find(id).subscribe((<%= entityInstance %>Response: HttpResponse<<%= entityAngularName %>>) => {
+                    const <%= entityInstance %>: <%= entityAngularName %> = <%= entityInstance %>Response.body;
                     <%_ if (hasDate) { _%>
                         <%_ for (idx in fields) { _%>
                             <%_ if (fields[idx].fieldType === 'LocalDate') { _%>

@@ -27,7 +27,8 @@ import { JhiEventManager, <% if (pagination !== 'no') { %>JhiParseLinks, <% } %>
 
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
-import { <% if (pagination !== 'no') { %>ITEMS_PER_PAGE, <% } %>Principal, ResponseWrapper } from '../../shared';
+import { <% if (pagination !== 'no') { %>ITEMS_PER_PAGE, <% } %>Principal } from '../../shared';
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>',

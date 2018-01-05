@@ -24,7 +24,6 @@ import { SERVER_API_URL } from '../../app.constants';
 <%_ if (authenticationType !== 'oauth2') { _%>
 import { User } from './user.model';
 <%_ } _%>
-import { ResponseWrapper } from '../model/response-wrapper.model';
 import { createRequestOption } from '../model/request-util';
 
 @Injectable()

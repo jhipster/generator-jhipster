@@ -379,7 +379,6 @@ const files = {
                 'shared/constants/_error.constants.ts',
                 'shared/constants/_pagination.constants.ts',
                 // models
-                'shared/model/_response-wrapper.model.ts',
                 'shared/model/_request-util.ts',
                 'shared/model/_base-entity.ts',
                 'shared/user/_account.model.ts',

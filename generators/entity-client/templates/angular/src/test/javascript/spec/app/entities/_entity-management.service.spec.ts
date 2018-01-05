@@ -24,6 +24,7 @@ import { TestBed, async } from '@angular/core/testing';
 import { MockBackend } from '@angular/http/testing';
 import { ConnectionBackend, RequestOptions, BaseRequestOptions, Http, Response, ResponseOptions } from '@angular/http';
 import { JhiDateUtils } from 'ng-jhipster';
+import { HttpResponse } from '@angular/common/http';
 
 import { <%= entityAngularName %>Service } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import { <%= entityAngularName %> } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.model';
@@ -71,8 +72,8 @@ describe('Service Tests', () => {
             it('should return <%= entityAngularName %>', () => {
 
                 let entity: <%= entityAngularName %>;
-                service.find(<%- tsKeyId %>).subscribe((_entity: <%= entityAngularName %>) => {
-                    entity = _entity;
+                service.find(<%- tsKeyId %>).subscribe((_entity: HttpResponse<<%= entityAngularName %>>) => {
+                    entity = _entity.body;
                 });
 
                 this.lastConnection.mockRespond(new Response(new ResponseOptions({
