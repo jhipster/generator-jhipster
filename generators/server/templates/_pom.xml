@@ -261,7 +261,7 @@
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
-        <%_ if (cacheProvider === 'hazelcast' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
+        <%_ if (cacheProvider === 'hazelcast' || applicationType === 'gateway') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
@@ -273,16 +273,10 @@
             <artifactId>hazelcast-hibernate52</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (cacheProvider === 'hazelcast' || clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') { _%>
+        <%_ if (cacheProvider === 'hazelcast' || applicationType === 'gateway') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-spring</artifactId>
-        </dependency>
-        <%_ } _%>
-        <%_ if (clusteredHttpSession === 'hazelcast') { _%>
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-wm</artifactId>
         </dependency>
         <%_ } _%>
         <%_ if (cacheProvider === 'infinispan') { _%>
@@ -406,7 +400,7 @@
         <!-- more information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc -->
         <dependency>
             <groupId>com.oracle.jdbc</groupId>
-            <artifactId>ojdbc7</artifactId>
+            <artifactId>ojdbc8</artifactId>
         </dependency>
         <%_ } _%>
         <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
@@ -883,14 +877,14 @@
                                     <directory><%= SERVER_MAIN_RES_DIR %></directory>
                                     <filtering>true</filtering>
                                     <includes>
-                                        <include>config/application.yml</include>
+                                        <include>config/*.yml</include>
                                     </includes>
                                 </resource>
                                 <resource>
                                     <directory><%= SERVER_MAIN_RES_DIR %></directory>
                                     <filtering>false</filtering>
                                     <excludes>
-                                        <exclude>config/application.yml</exclude>
+                                        <exclude>config/*.yml</exclude>
                                     </excludes>
                                 </resource>
                             </resources>

@@ -21,19 +21,6 @@ package <%= packageName %>.config;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
 import com.codahale.metrics.servlets.MetricsServlet;
-<%_ if (clusteredHttpSession === 'hazelcast') { _%>
-import com.hazelcast.cardinality.CardinalityEstimator;
-import com.hazelcast.config.Config;
-import com.hazelcast.core.*;
-import com.hazelcast.durableexecutor.DurableExecutorService;
-import com.hazelcast.logging.LoggingService;
-import com.hazelcast.mapreduce.JobTracker;
-import com.hazelcast.quorum.QuorumService;
-import com.hazelcast.ringbuffer.Ringbuffer;
-import com.hazelcast.scheduledexecutor.IScheduledExecutorService;
-import com.hazelcast.transaction.*;
-import com.hazelcast.web.spring.SpringAwareWebFilter;
-<%_ } _%>
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.config.JHipsterProperties;
 <%_ if (!skipClient) { _%>
@@ -59,9 +46,6 @@ import org.xnio.OptionMap;
 
 import javax.servlet.*;
 import java.util.*;
-<%_ if (clusteredHttpSession === 'hazelcast') { _%>
-import java.util.concurrent.ConcurrentMap;
-<%_ } _%>
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -96,17 +80,11 @@ public class WebConfigurerTest {
             .when(servletContext).addFilter(anyString(), any(Filter.class));
         doReturn(new MockServletRegistration())
             .when(servletContext).addServlet(anyString(), any(Servlet.class));
-        <%_ if (clusteredHttpSession === 'hazelcast') { _%>
-        doNothing()
-            .when(servletContext).addListener(any(EventListener.class));
-        <%_ } _%>
 
         env = new MockEnvironment();
         props = new JHipsterProperties();
 
-        <%_ if (clusteredHttpSession === 'hazelcast') { _%>
-        webConfigurer = new WebConfigurer(env, props, new MockHazelcastInstance());
-        <%_ } else if (cacheProvider === 'hazelcast') { _%>
+        <%_ if (cacheProvider === 'hazelcast') { _%>
         webConfigurer = new WebConfigurer(env, props, null);
         <%_ } else { _%>
         webConfigurer = new WebConfigurer(env, props);
@@ -122,9 +100,6 @@ public class WebConfigurerTest {
 
         assertThat(servletContext.getAttribute(InstrumentedFilter.REGISTRY_ATTRIBUTE)).isEqualTo(metricRegistry);
         assertThat(servletContext.getAttribute(MetricsServlet.METRICS_REGISTRY)).isEqualTo(metricRegistry);
-        <%_ if (clusteredHttpSession === 'hazelcast') { _%>
-        verify(servletContext).addFilter(eq("hazelcastWebFilter"), any(SpringAwareWebFilter.class));
-        <%_ } _%>
         verify(servletContext).addFilter(eq("webappMetricsFilter"), any(InstrumentedFilter.class));
         verify(servletContext).addServlet(eq("metricsServlet"), any(MetricsServlet.class));
         <%_ if (!skipClient) { _%>
@@ -142,9 +117,6 @@ public class WebConfigurerTest {
 
         assertThat(servletContext.getAttribute(InstrumentedFilter.REGISTRY_ATTRIBUTE)).isEqualTo(metricRegistry);
         assertThat(servletContext.getAttribute(MetricsServlet.METRICS_REGISTRY)).isEqualTo(metricRegistry);
-        <%_ if (clusteredHttpSession === 'hazelcast') { _%>
-        verify(servletContext).addFilter(eq("hazelcastWebFilter"), any(SpringAwareWebFilter.class));
-        <%_ } _%>
         verify(servletContext).addFilter(eq("webappMetricsFilter"), any(InstrumentedFilter.class));
         verify(servletContext).addServlet(eq("metricsServlet"), any(MetricsServlet.class));
         <%_ if (!skipClient) { _%>
@@ -412,214 +384,4 @@ public class WebConfigurerTest {
             return null;
         }
     }
-    <%_ if (clusteredHttpSession === 'hazelcast') { _%>
-
-    public static class MockHazelcastInstance implements HazelcastInstance {
-
-        @Override
-        public String getName() {
-            return "HazelcastInstance";
-        }
-
-        @Override
-        public <E> IQueue<E> getQueue(String s) {
-            return null;
-        }
-
-        @Override
-        public <E> ITopic<E> getTopic(String s) {
-            return null;
-        }
-
-        @Override
-        public <E> ISet<E> getSet(String s) {
-            return null;
-        }
-
-        @Override
-        public <E> IList<E> getList(String s) {
-            return null;
-        }
-
-        @Override
-        public <K, V> IMap<K, V> getMap(String s) {
-            return null;
-        }
-
-        @Override
-        public <K, V> ReplicatedMap<K, V> getReplicatedMap(String s) {
-            return null;
-        }
-
-        @Override
-        public JobTracker getJobTracker(String s) {
-            return null;
-        }
-
-        @Override
-        public <K, V> MultiMap<K, V> getMultiMap(String s) {
-            return null;
-        }
-
-        @Override
-        public ILock getLock(String s) {
-            return null;
-        }
-
-        @Override
-        public <E> Ringbuffer<E> getRingbuffer(String s) {
-            return null;
-        }
-
-        @Override
-        public <E> ITopic<E> getReliableTopic(String s) {
-            return null;
-        }
-
-        @Override
-        public Cluster getCluster() {
-            return null;
-        }
-
-        @Override
-        public Endpoint getLocalEndpoint() {
-            return null;
-        }
-
-        @Override
-        public IExecutorService getExecutorService(String s) {
-            return null;
-        }
-
-        @Override
-        public DurableExecutorService getDurableExecutorService(String s) {
-            return null;
-        }
-
-        @Override
-        public <T> T executeTransaction(TransactionalTask<T> transactionalTask) throws TransactionException {
-            return null;
-        }
-
-        @Override
-        public <T> T executeTransaction(TransactionOptions transactionOptions, TransactionalTask<T> transactionalTask) throws TransactionException {
-            return null;
-        }
-
-        @Override
-        public TransactionContext newTransactionContext() {
-            return null;
-        }
-
-        @Override
-        public TransactionContext newTransactionContext(TransactionOptions transactionOptions) {
-            return null;
-        }
-
-        @Override
-        public IdGenerator getIdGenerator(String s) {
-            return null;
-        }
-
-        @Override
-        public IAtomicLong getAtomicLong(String s) {
-            return null;
-        }
-
-        @Override
-        public <E> IAtomicReference<E> getAtomicReference(String s) {
-            return null;
-        }
-
-        @Override
-        public ICountDownLatch getCountDownLatch(String s) {
-            return null;
-        }
-
-        @Override
-        public ISemaphore getSemaphore(String s) {
-            return null;
-        }
-
-        @Override
-        public Collection<DistributedObject> getDistributedObjects() {
-            return null;
-        }
-
-        @Override
-        public String addDistributedObjectListener(DistributedObjectListener distributedObjectListener) {
-            return null;
-        }
-
-        @Override
-        public boolean removeDistributedObjectListener(String s) {
-            return false;
-        }
-
-        @Override
-        public Config getConfig() {
-            return null;
-        }
-
-        @Override
-        public PartitionService getPartitionService() {
-            return null;
-        }
-
-        @Override
-        public QuorumService getQuorumService() {
-            return null;
-        }
-
-        @Override
-        public ClientService getClientService() {
-            return null;
-        }
-
-        @Override
-        public LoggingService getLoggingService() {
-            return null;
-        }
-
-        @Override
-        public LifecycleService getLifecycleService() {
-            return null;
-        }
-
-        @Override
-        public <T extends DistributedObject> T getDistributedObject(String s, String s1) {
-            return null;
-        }
-
-        @Override
-        public ConcurrentMap<String, Object> getUserContext() {
-            return null;
-        }
-
-        @Override
-        public HazelcastXAResource getXAResource() {
-            return null;
-        }
-
-        @Override
-        public ICacheManager getCacheManager() {
-            return null;
-        }
-
-        @Override
-        public CardinalityEstimator getCardinalityEstimator(String s) {
-            return null;
-        }
-
-        @Override
-        public IScheduledExecutorService getScheduledExecutorService(String s) {
-            return null;
-        }
-
-        @Override
-        public void shutdown() {
-
-        }
-    }
-    <%_ } _%>
 }

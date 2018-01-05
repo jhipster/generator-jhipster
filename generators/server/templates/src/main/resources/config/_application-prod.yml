@@ -243,9 +243,9 @@ jhipster:
         version: V_1_1 # To use HTTP/2 you will need SSL support (see above the "server.ssl" configuration)
         cache: # Used by the CachingHttpHeadersFilter
             timeToLiveInDays: 1461
-    <%_ if (clusteredHttpSession === 'hazelcast' || cacheProvider !== 'no') { _%>
+    <%_ if (cacheProvider !== 'no') { _%>
     cache: # Cache configuration
-        <%_ if (clusteredHttpSession === 'hazelcast' || cacheProvider === 'hazelcast') { _%>
+        <%_ if (cacheProvider === 'hazelcast') { _%>
         hazelcast: # Hazelcast distributed cache
             time-to-live-seconds: 3600
             backup-count: 1

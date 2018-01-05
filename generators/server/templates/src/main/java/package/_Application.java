@@ -31,9 +31,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-<%_ if (clusteredHttpSession === 'hazelcast') { _%>
-import org.springframework.boot.autoconfigure.hazelcast.HazelcastAutoConfiguration;
-<%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 <%_ } _%>
