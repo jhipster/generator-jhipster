@@ -397,7 +397,7 @@ function writeFiles() {
 
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_package-info.java`, `${javaDir}config/package-info.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_AsyncConfiguration.java`, `${javaDir}config/AsyncConfiguration.java`);
-            if (['ehcache', 'hazelcast', 'infinispan'].includes(this.cacheProvider) || this.clusteredHttpSession === 'hazelcast' || this.applicationType === 'gateway') {
+            if (['ehcache', 'hazelcast', 'infinispan'].includes(this.cacheProvider) || this.applicationType === 'gateway') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/_CacheConfiguration.java`, `${javaDir}config/CacheConfiguration.java`);
             }
             if (this.cacheProvider === 'infinispan') {

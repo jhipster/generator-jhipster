@@ -8,7 +8,6 @@
     "uaaBaseName": "travisUaa",
     "cacheProvider": "hazelcast",
     "enableHibernateCache": true,
-    "clusteredHttpSession": false,
     "websocket": false,
     "databaseType": "sql",
     "devDatabaseType": "h2Disk",

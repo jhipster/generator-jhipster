@@ -8,7 +8,6 @@
     "authenticationType": "session",
     "cacheProvider": "ehcache",
     "enableHibernateCache": true,
-    "clusteredHttpSession": false,
     "websocket": false,
     "databaseType": "sql",
     "devDatabaseType": "h2Memory",

@@ -7,7 +7,6 @@
       "authenticationType": "jwt",
       "cacheProvider": "no",
       "enableHibernateCache": false,
-      "clusteredHttpSession": false,
       "websocket": false,
       "databaseType": "couchbase",
       "devDatabaseType": "couchbase",
