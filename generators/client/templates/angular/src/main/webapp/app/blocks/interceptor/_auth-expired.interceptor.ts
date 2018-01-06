@@ -20,7 +20,7 @@ import { Injector } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
-<%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+<%_ if (['oauth2', 'jwt', 'uaa'].includes(authenticationType)) { _%>
 import { LoginService } from '../../shared/login/login.service';
     <%_ if (authenticationType === 'uaa') { _%>
 import { LoginModalService } from '../../shared/login/login-modal.service';
@@ -28,7 +28,7 @@ import { Principal } from '../../shared/auth/principal.service';
 import { Router } from '@angular/router';
     <%_ } _%>
 <%_ } _%>
-<%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
+<%_ if (['session', 'oauth2'].includes(authenticationType)) { _%>
     <%_ if (authenticationType === 'session') { _%>
 import { AuthServerProvider } from '../../shared/auth/auth-session.service';
 import { LoginModalService } from '../../shared/login/login-modal.service';
@@ -38,18 +38,10 @@ import { StateStorageService } from '../../shared/auth/state-storage.service';
 
 export class AuthExpiredInterceptor implements HttpInterceptor {
 
-<%_ if (authenticationType === 'jwt') { _%>
+<%_ if (['jwt', 'uaa'].includes(authenticationType)) { _%>
     constructor(private injector: Injector) {
     }
-<%_ } else if (authenticationType === 'uaa') { _%>
-    constructor(private injector: Injector) {
-    }
-<%_ } else if (authenticationType === 'session') { _%>
-    constructor(
-        private injector: Injector,
-        private stateStorageService: StateStorageService) {
-    }
-<%_ } else if (authenticationType === 'oauth2') { _%>
+<%_ } else if (['session', 'oauth2'].includes(authenticationType)) { _%>
     constructor(
         private injector: Injector,
         private stateStorageService: StateStorageService) {
@@ -58,11 +50,7 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
 
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        return next.handle(request).do((event: HttpEvent<any>) => {
-            if (event instanceof HttpResponse) {
-                // success
-            }
-        }, (err: any) => {
+        return next.handle(request).do((event: HttpEvent<any>) => {}, (err: any) => {
             if (err instanceof HttpErrorResponse) {
                 if (err.status === 401) {
 <%_ if (authenticationType === 'jwt') { _%>
@@ -88,11 +76,7 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
     }
 <%_ } else if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        return next.handle(request).do((event: HttpEvent<any>) => {
-            if (event instanceof HttpResponse) {
-                // success
-            }
-        }, (err: any) => {
+        return next.handle(request).do((event: HttpEvent<any>) => {}, (err: any) => {
             if (err instanceof HttpErrorResponse) {
                 if (err.status === 401 && err.url && err.url.includes('/api/account')) {
                     const destination = this.stateStorageService.getDestinationState();

@@ -66,6 +66,7 @@ describe('Service Tests', () => {
                 req.flush(new User(1, 'user'));
             });
 
+            <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
             it('should return Authorities', () => {
 
                 service.authorities().subscribe((_authorities) => {
@@ -73,10 +74,10 @@ describe('Service Tests', () => {
                 });
                 const req = httpMock.expectOne({ method: 'GET' });
 
-                <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+
                 req.flush(['ROLE_USER', 'ROLE_ADMIN']);
-                <%_ } _%>
             });
+            <%_ } _%>
 
             it('should propagate not found response', () => {
 

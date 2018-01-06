@@ -25,9 +25,8 @@ import { Ng2Webstorage<% if (authenticationType === 'jwt') { %>, LocalStorageSer
 import { JhiEventManager } from 'ng-jhipster';
 <%_ if (authenticationType === 'jwt') { _%>
 import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
-<%_} if (authenticationType === 'jwt' || authenticationType === 'uaa' || authenticationType === 'session' || authenticationType === 'oauth2') { _%>
+<%_}_%>
 import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
-<% } %>
 import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
 import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
 
@@ -40,7 +39,7 @@ import { <%=angularXAppName%>AccountModule } from './account/account.module';
 <%_ } _%>
 import { <%=angularXAppName%>EntityModule } from './entities/entity.module';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
-<%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
+<%_ if (['session', 'oauth2'].includes(authenticationType)) { _%>
 import { StateStorageService } from './shared/auth/state-storage.service';
 <%_ } _%>
 // jhipster-needle-angular-add-module-import JHipster will add new module here
@@ -113,7 +112,7 @@ import {
                 Injector
             ]
         },
-        <%_ } else if (authenticationType === 'session') { _%>
+        <%_ } else if (['session', 'oauth2'].includes(authenticationType)) { _%>
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthExpiredInterceptor,
@@ -123,17 +122,6 @@ import {
                 StateStorageService
             ]
         },
-        <%_ } else if (authenticationType === 'oauth2') { _%>
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: AuthExpiredInterceptor,
-            multi: true,
-            deps: [
-                Injector,
-                StateStorageService
-            ]
-        },
-        <%_ } _%>
         {
             provide: HTTP_INTERCEPTORS,
             useClass: ErrorHandlerInterceptor,

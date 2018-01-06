@@ -37,30 +37,26 @@ export class NotificationInterceptor implements HttpInterceptor {
                 const arr = event.headers.keys();
                 let alert = null;
                 let alertParams = null;
-                for (let i = 0; i < arr.length; i++) {
-                    if (arr[i].endsWith('app-alert')) {
-                        alert = event.headers.get(arr[i]);
-                    } else if (arr[i].endsWith('app-params')) {
-                        alertParams = event.headers.get(arr[i]);
+                arr.forEach((entry) => {
+                    if (entry.endsWith('app-alert')) {
+                        alert = event.headers.get(entry);
+                    } else if (entry.endsWith('app-params')) {
+                        alertParams = event.headers.get(entry);
                     }
-                }
+                });
                 if (alert) {
                     if (typeof alert === 'string') {
                         if (this.alertService) {
                             <%_ if (enableTranslation) { _%>
-                                const alertParam = alertParams;
-                                this.alertService.success(alert, { param : alertParam }, null);
-                                <%_ } else { _%>
+                            const alertParam = alertParams;
+                            this.alertService.success(alert, { param : alertParam }, null);
+                            <%_ } else { _%>
                             this.alertService.success(alert, null, null);
-                                <%_ } _%>
+                            <%_ } _%>
                         }
                     }
                 }
             }
-        }, (err: any) => {
-            if (err instanceof HttpErrorResponse) {
-                // error
-            }
-        });
+        }, (err: any) => {});
     }
 }

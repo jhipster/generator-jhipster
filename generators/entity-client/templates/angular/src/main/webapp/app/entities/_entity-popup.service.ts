@@ -19,12 +19,12 @@
 import { Injectable, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { HttpResponse } from '@angular/common/http';
 <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
 import { DatePipe } from '@angular/common';
 <%_ } _%>
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
-import { HttpResponse } from '@angular/common/http';
 <%_
 let hasDate = false;
 if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) {

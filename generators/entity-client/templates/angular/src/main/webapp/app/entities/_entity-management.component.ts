@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
 import { ActivatedRoute, Router } from '@angular/router';
 <%_ } else if (searchEngine === 'elasticsearch') { _%>
@@ -28,7 +29,6 @@ import { JhiEventManager, <% if (pagination !== 'no') { %>JhiParseLinks, <% } %>
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 import { <% if (pagination !== 'no') { %>ITEMS_PER_PAGE, <% } %>Principal } from '../../shared';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>',

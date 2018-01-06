@@ -41,13 +41,13 @@ export class LogsComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.logsService.findAll().subscribe((loggers) => this.loggers = loggers);
+        this.logsService.findAll().subscribe((response) => this.loggers = response.body);
     }
 
     changeLevel(name: string, level: string) {
         const log = new Log(name, level);
         this.logsService.changeLevel(log).subscribe(() => {
-            this.logsService.findAll().subscribe((loggers) => this.loggers = loggers);
+            this.logsService.findAll().subscribe((response) => this.loggers = response.body);
         });
     }
 }

@@ -55,13 +55,13 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
                     const arr = httpErrorResponse.headers.keys();
                     let errorHeader = null;
                     let entityKey = null;
-                    for (i = 0; i < arr.length; i++) {
-                        if (arr[i].endsWith('app-error')) {
-                            errorHeader = httpErrorResponse.headers.get(arr[i]);
-                        } else if (arr[i].endsWith('app-params')) {
-                            entityKey = httpErrorResponse.headers.get(arr[i]);
+                    arr.forEach((entry) => {
+                        if (entry.endsWith('app-error')) {
+                            errorHeader = httpErrorResponse.headers.get(entry);
+                        } else if (entry.endsWith('app-params')) {
+                            entityKey = httpErrorResponse.headers.get(entry);
                         }
-                    }
+                    });
                     if (errorHeader) {
                         const entityName = <% if (enableTranslation) { %>translateService.instant('global.menu.entities.' + entityKey)<% }else{ %>entityKey<% } %>;
                         this.addErrorAlert(errorHeader, errorHeader, { entityName });
