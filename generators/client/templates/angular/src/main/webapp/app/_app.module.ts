@@ -30,7 +30,7 @@ import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 <%_ if (authenticationType === 'jwt') { _%>
 import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 <%_ } _%>
-<%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+<%_ if (authenticationType === 'jwt' || authenticationType === 'uaa' || authenticationType === 'session') { _%>
 import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
 <% } %>
 import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';

@@ -87,12 +87,12 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
     }
 <%_ } else if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        return next.handle(reqest).do((event: HttpEvent<any>) => {
+        return next.handle(request).do((event: HttpEvent<any>) => {
             if (event instanceof HttpResponse) {
                 // success
             }
         }, (err: any) => {
-            if (err instanceof HttpErrorResponse {
+            if (err instanceof HttpErrorResponse) {
                 if (err.status === 401 && err.url && err.url.includes('/api/account')) {
                     const destination = this.stateStorageService.getDestinationState();
                     if (destination !== null) {
