@@ -38,11 +38,11 @@ export class UserService {
     }
 
     update(user: User): Observable<HttpResponse<User>> {
-        return this.http.put<HttpResponse<User>>(this.resourceUrl, user);
+        return this.http.put<User>(this.resourceUrl, user, { observe: 'response' });
     }
 
-    find(login: string): Observable<User> {
-        return this.http.get(`${this.resourceUrl}/${login}`);
+    find(login: string): Observable<HttpResponse<User>> {
+        return this.http.get<User>(`${this.resourceUrl}/${login}`, { observe: 'response' });
     }
 <% } %>
     query(req?: any): Observable<HttpResponse<User[]>> {
