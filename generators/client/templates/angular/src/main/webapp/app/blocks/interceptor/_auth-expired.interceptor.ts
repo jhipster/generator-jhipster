@@ -16,7 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Injector } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';

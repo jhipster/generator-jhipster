@@ -52,9 +52,10 @@ export class <%= entityAngularName %>Service {
         Observable<HttpResponse<<%= entityAngularName %>>> {
     <%_ } _%>
         const copy = this.convert(<%= entityInstance %>);
-        return this.http.post<<%= entityAngularName %>>(this.resourceUrl, copy, { observe: 'response' }).map((res: HttpResponse<<%= entityAngularName %>>) => {
-            return this.convertResponse(res);
-        });
+        return this.http.post<<%= entityAngularName %>>(this.resourceUrl, copy, { observe: 'response' })
+            .map((res: HttpResponse<<%= entityAngularName %>>) => {
+                return this.convertResponse(res);
+            });
     }
     <%_ if (entityAngularName.length <= 30) { _%>
 
@@ -65,20 +66,23 @@ export class <%= entityAngularName %>Service {
         Observable<HttpResponse<<%= entityAngularName %>>> {
     <%_ } _%>
         const copy = this.convert(<%= entityInstance %>);
-        return this.http.put<<%= entityAngularName %>>(this.resourceUrl, copy, { observe: 'response' }).map((res: HttpResponse<<%= entityAngularName %>>) => {
-            return this.convertResponse(res);
-        });
+        return this.http.put<<%= entityAngularName %>>(this.resourceUrl, copy, { observe: 'response' })
+            .map((res: HttpResponse<<%= entityAngularName %>>) => {
+                return this.convertResponse(res);
+            });
     }
 
     find(id: <% if (pkType === 'String') { %>string<% } else { %>number<% } %>): Observable<HttpResponse<<%= entityAngularName %>>> {
-        return this.http.get<<%= entityAngularName %>>(`${this.resourceUrl}/${id}`, { observe: 'response'}).map((res: HttpResponse<<%= entityAngularName %>>) => {
-            return this.convertResponse(res);
-        });
+        return this.http.get<<%= entityAngularName %>>(`${this.resourceUrl}/${id}`, { observe: 'response'})
+            .map((res: HttpResponse<<%= entityAngularName %>>) => {
+                return this.convertResponse(res);
+            });
     }
 
     query(req?: any): Observable<HttpResponse<<%= entityAngularName %>[]>> {
         const options = createRequestOption(req);
-        return this.http.get<<%= entityAngularName %>[]>(this.resourceUrl, { params: options, observe: 'response' }).map((res: HttpResponse<<%= entityAngularName %>[]>) => this.convertArrayResponse(res));
+        return this.http.get<<%= entityAngularName %>[]>(this.resourceUrl, { params: options, observe: 'response' })
+            .map((res: HttpResponse<<%= entityAngularName %>[]>) => this.convertArrayResponse(res));
     }
 
     delete(id: <% if (pkType === 'String') { %>string<% } else { %>number<% } %>): Observable<HttpResponse<any>> {
@@ -88,7 +92,8 @@ export class <%= entityAngularName %>Service {
 
     search(req?: any): Observable<HttpResponse<<%= entityAngularName %>[]>> {
         const options = createRequestOption(req);
-        return this.http.get<<%= entityAngularName %>[]>(this.resourceUrl, { params: options, observe: 'response' }).map((res: HttpResponse<<%= entityAngularName %>[]>) => this.convertArrayResponse(res));
+        return this.http.get<<%= entityAngularName %>[]>(this.resourceUrl, { params: options, observe: 'response' })
+            .map((res: HttpResponse<<%= entityAngularName %>[]>) => this.convertArrayResponse(res));
     }
     <%_ } _%>
 

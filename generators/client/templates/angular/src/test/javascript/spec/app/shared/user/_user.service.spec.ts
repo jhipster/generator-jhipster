@@ -58,7 +58,7 @@ describe('Service Tests', () => {
             });
             it('should return User', () => {
 
-                service.find('user').subscribe(received => {
+                service.find('user').subscribe((received) => {
                     expect(received.body.login).toEqual('user');
                 });
 
@@ -85,7 +85,7 @@ describe('Service Tests', () => {
                 });
 
                 const req  = httpMock.expectOne({ method: 'GET' });
-                req.flush('Invalid request parameters',{
+                req.flush('Invalid request parameters', {
                     status: 404, statusText: 'Bad Request'
                 });
             });

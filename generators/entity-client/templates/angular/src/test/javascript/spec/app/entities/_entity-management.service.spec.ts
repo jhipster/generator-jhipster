@@ -20,10 +20,9 @@
 const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
 _%>
 /* tslint:disable max-line-length */
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { JhiDateUtils } from 'ng-jhipster';
-import { HttpResponse } from '@angular/common/http';
 
 import { <%= entityAngularName %>Service } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import { <%= entityAngularName %> } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.model';
