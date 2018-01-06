@@ -25,7 +25,7 @@ import { Ng2Webstorage<% if (authenticationType === 'jwt') { %>, LocalStorageSer
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 <%_ if (authenticationType === 'jwt') { _%>
 import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
-<%_} if (authenticationType === 'jwt' || authenticationType === 'uaa' || authenticationType === 'session') { _%>
+<%_} if (authenticationType === 'jwt' || authenticationType === 'uaa' || authenticationType === 'session' || authenticationType === 'oauth2') { _%>
 import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
 <% } %>
 import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
@@ -46,7 +46,7 @@ import { StateStorageService } from './shared/auth/state-storage.service';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import {
     <%=jhiPrefixCapitalized%>MainComponent,
-    NavbarComponent,ogin
+    NavbarComponent,
     FooterComponent,
     ProfileService,
     PageRibbonComponent,
@@ -130,7 +130,7 @@ import {
             multi: true,
             deps: [
                 Injector,
-                StateStorageService,
+                StateStorageService
             ]
         },
         <%_ } _%>
@@ -139,7 +139,7 @@ import {
             useClass: ErrorHandlerInterceptor,
             multi: true,
             deps: [
-                JhiEventManager,
+                JhiEventManager
             ]
         },
         {
