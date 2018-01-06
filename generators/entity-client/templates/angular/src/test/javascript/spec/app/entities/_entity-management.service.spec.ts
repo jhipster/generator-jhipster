@@ -25,7 +25,6 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { JhiDateUtils } from 'ng-jhipster';
 
 import { <%= entityAngularName %>Service } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
-import { <%= entityAngularName %> } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.model';
 import { SERVER_API_URL } from '../../../../../../main/webapp/app/app.constants';
 
 describe('Service Tests', () => {
@@ -60,7 +59,7 @@ describe('Service Tests', () => {
             });
             it('should return <%= entityAngularName %>', () => {
 
-                service.find(<%- tsKeyId %>).subscribe(received => {
+                service.find(<%- tsKeyId %>).subscribe((received) => {
                     expect(received.body.id).toEqual(<%- tsKeyId %>);
                 });
 
@@ -75,7 +74,7 @@ describe('Service Tests', () => {
                 });
 
                 const req  = httpMock.expectOne({ method: 'GET' });
-                req.flush('Invalid request parameters',{
+                req.flush('Invalid request parameters', {
                     status: 404, statusText: 'Bad Request'
                 });
 
