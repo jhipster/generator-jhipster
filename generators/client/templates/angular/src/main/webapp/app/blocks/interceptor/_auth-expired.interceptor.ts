@@ -38,17 +38,25 @@ import { StateStorageService } from '../../shared/auth/state-storage.service';
 
 export class AuthExpiredInterceptor implements HttpInterceptor {
 
-<%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-    constructor(private injector: Injector) {
+<%_ if (authenticationType === 'jwt') { _%>
+    constructor(private loginService: LoginService) {
+    }
+<%_ } else if (authenticationType === 'uaa') { _%>
+    constructor(
+        private loginService: LoginService,
+        private loginModalService: LoginModalService,
+        private principal: Principal,
+        private router: Router) {
     }
 <%_ } else if (authenticationType === 'session') { _%>
     constructor(
-        private injector: Injector,
+        private authServerProvider: AuthServerProvider,
         private stateStorageService: StateStorageService,
-        private loginServiceModal: LoginModalService) {
+        private loginModalService: LoginModalService) {
     }
 <%_ } else if (authenticationType === 'oauth2') { _%>
-    constructor(private injector: Injector,
+    constructor(
+        private loginService: LoginService,
         private stateStorageService: StateStorageService) {
     }
 <%_ } _%>
@@ -62,23 +70,17 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
         }, (err: any) => {
             if (err instanceof HttpErrorResponse) {
                 if (err.status === 401) {
-<% if (authenticationType === 'jwt') { %>
-                    const loginService: LoginService = this.injector.get(LoginService);
-                    loginService.logout();
-<% } if (authenticationType === 'uaa') { %>
-                    const principal = this.injector.get(Principal);
-
-                    if (principal.isAuthenticated()) {
-                        principal.authenticate(null);
-                        const loginModalService: LoginModalService = this.injector.get(LoginModalService);
-                        loginModalService.open();
+<%_ if (authenticationType === 'jwt') { _%>
+                    this.loginService.logout();
+<%_ } if (authenticationType === 'uaa') { _%>
+                    if (this.principal.isAuthenticated()) {
+                        this.principal.authenticate(null);
+                        this.loginModalService.open();
                     } else {
-                        const loginService: LoginService = this.injector.get(LoginService);
-                        loginService.logout();
-                        const router = this.injector.get(Router);
-                        router.navigate(['/']);
+                        this.loginService.logout();
+                        this.router.navigate(['/']);
                     }
-<% } %>
+<%_ } _%>
                 }
             }
         });
@@ -102,14 +104,12 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
                     } else {
                         this.stateStorageService.storeUrl('/');
                     }
-<% if (authenticationType === 'session') { %>
-                    const authServer: AuthServerProvider = this.injector.get(AuthServerProvider);
-                    authServer.logout();
-                    this.loginServiceModal.open();
-<% } else { %>
-                    const loginService: LoginService = this.injector.get(LoginService);
-                    loginService.login();
-<% } %>
+                    <%_ if (authenticationType === 'session') { _%>
+                    this.authServerProvider.logout();
+                    this.loginModalService.open();
+                    <%_ } else { _%>
+                    this.loginService.login();
+                    <%_ } _%>
                 }
             }
         });
