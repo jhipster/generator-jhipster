@@ -38,7 +38,7 @@ import { StateStorageService } from '../../shared/auth/state-storage.service';
 
 export class AuthExpiredInterceptor implements HttpInterceptor {
 
-<%_ if (authenticationType === 'jwt) { _%>
+<%_ if (authenticationType === 'jwt') { _%>
     constructor(private injector: Injector) {
     }
 <%_ } else if (authenticationType === 'uaa') { _%>
