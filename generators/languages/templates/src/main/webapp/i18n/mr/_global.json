@@ -59,6 +59,8 @@
         "form": {
             "username": "वापरकर्तानाव ",
             "username.placeholder": "आपले वापरकर्ता नाव",
+            "currentpassword": "Current password",
+            "currentpassword.placeholder": "Current password",
             "newpassword": "नवीन पासवर्ड",
             "newpassword.placeholder": "नवीन पासवर्ड",
             "confirmpassword": "नवीन पासवर्ड पुष्टी",

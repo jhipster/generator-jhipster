@@ -59,6 +59,8 @@
         "form": {
             "username": "نام کاربری",
             "username.placeholder": "نام کاربری شما",
+            "currentpassword": "Current password",
+            "currentpassword.placeholder": "Current password",
             "newpassword": "رمزعبور جدید",
             "newpassword.placeholder": "رمزعبور جدید",
             "confirmpassword": "تصدیق رمزعبور جدید",

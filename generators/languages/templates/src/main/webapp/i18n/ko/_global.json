@@ -59,6 +59,8 @@
         "form": {
             "username": "로그인 아이디",
             "username.placeholder": "로그인 아이디",
+            "currentpassword": "Current password",
+            "currentpassword.placeholder": "Current password",
             "newpassword": "새 비밀번호",
             "newpassword.placeholder": "새 비밀번호",
             "confirmpassword": "새 비밀번호 확인",

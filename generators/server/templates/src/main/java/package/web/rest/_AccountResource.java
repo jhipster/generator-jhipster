@@ -154,6 +154,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import <%=packageName%>.service.dto.PasswordChangeDTO;
 <%_ if (authenticationType === 'session') { _%>
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -278,17 +279,17 @@ public class AccountResource {
     /**
      * POST  /account/change-password : changes the current user's password
      *
-     * @param password the new password
+     * @param PasswordChangeDTO current and new password
      * @throws InvalidPasswordException 400 (Bad Request) if the new password is incorrect
      */
     @PostMapping(path = "/account/change-password")
     @Timed
-    public void changePassword(@RequestBody String password) {
-        if (!checkPasswordLength(password)) {
+    public void changePassword(@RequestBody PasswordChangeDTO passwordChangeDto) {
+        if (!checkPasswordLength(passwordChangeDto.getNewPassword())) {
             throw new InvalidPasswordException();
         }
-        userService.changePassword(password);
-   }<% if (authenticationType === 'session') { %>
+        userService.changePassword(passwordChangeDto.getCurrentPassword(),passwordChangeDto.getNewPassword());
+    }<% if (authenticationType === 'session') { %>
 
     /**
      * GET  /account/sessions : get the current open sessions.

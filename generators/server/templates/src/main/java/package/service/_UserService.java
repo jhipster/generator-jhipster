@@ -66,6 +66,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 <%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.security.crypto.password.PasswordEncoder;
+import <%=packageName%>.web.rest.errors.InvalidPasswordException;
 <%_ } _%>
 import org.springframework.stereotype.Service;<% if (databaseType === 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
@@ -386,11 +387,13 @@ public class UserService {
     }
 <%_ if (authenticationType !== 'oauth2') { _%>
 
-    public void changePassword(String password) {
+        public void changePassword(String currentClearTextPassword, String newPassword) {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
-                String encryptedPassword = passwordEncoder.encode(password);
+                String currentEncryptedPassword = user.getPassword();
+                assertClearTextPasswordMatchesEncryptedPassword(currentClearTextPassword, currentEncryptedPassword);
+                String encryptedPassword = passwordEncoder.encode(newPassword);
                 user.setPassword(encryptedPassword);
                 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { _%>
                 userRepository.save(user);
@@ -402,6 +405,12 @@ public class UserService {
                 log.debug("Changed password for User: {}", user);
             });
     }
+        private void assertClearTextPasswordMatchesEncryptedPassword(String clearTextPassword, String encryptedPassword) {
+            if (!passwordEncoder.matches(clearTextPassword,encryptedPassword)){
+                throw new InvalidPasswordException();
+            }
+        }
+
 <%_ } _%>
 
     <%_ if (databaseType === 'sql') { _%>
