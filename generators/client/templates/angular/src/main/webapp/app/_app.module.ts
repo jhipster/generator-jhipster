@@ -22,7 +22,7 @@ import { NgModule, Injector } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Ng2Webstorage<% if (authenticationType === 'jwt') { %>, LocalStorageService, SessionStorageService <% } %> } from 'ngx-webstorage';
-import { JhiEventManager } from 'ng-jhipster';
+import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 
 <%_ if (authenticationType === 'jwt') { _%>
 import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
@@ -168,7 +168,7 @@ import {
             useClass: NotificationInterceptor,
             multi: true,
             deps: [
-                Injector
+                JhiAlertService
             ]
         }
     ],

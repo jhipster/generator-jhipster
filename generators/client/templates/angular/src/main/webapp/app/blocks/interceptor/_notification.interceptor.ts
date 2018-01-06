@@ -24,11 +24,8 @@ import 'rxjs/add/operator/do';
 
 export class NotificationInterceptor implements HttpInterceptor {
 
-    private alertService: JhiAlertService;
-
     // tslint:disable-next-line: no-unused-variable
-    constructor(private injector: Injector) {
-        setTimeout(() => this.alertService = injector.get(JhiAlertService));
+    constructor(private alertService: JhiAlertService) {
     }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
