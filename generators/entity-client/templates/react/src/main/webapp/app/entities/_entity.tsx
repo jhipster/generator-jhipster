@@ -19,16 +19,24 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Button } from 'reactstrap';
+import { Button<%_ if (searchEngine === 'elasticsearch') { _%>, InputGroup<%_ } _%>
+ } from 'reactstrap';
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
+<%_ } _%>
 // TODO import TextFormat only when fieldContainsDate
 // tslint:disable-next-line:no-unused-variable
-import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
-import { FaPlus, FaEye, FaPencil, FaTrash } from 'react-icons/lib/fa';
+import { Translate, translate, ICrudGetAction, TextFormat } from 'react-jhipster';
+import { FaPlus, FaEye, FaPencil, FaTrash<%_ if (searchEngine === 'elasticsearch') { _%>, FaSearch<%_ } _%>
+ } from 'react-icons/lib/fa';
 
 import {
 <%_ for (idx in relationships) { const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;const otherEntityNamePlural = relationships[idx].otherEntityNamePlural; _%>
   get<%= otherEntityNamePlural %>,
 <%_ } _%>
+  <%_ if (searchEngine === 'elasticsearch') { _%>
+  getSearchEntities,
+  <%_ } _%>
   getEntities
 } from './<%= entityFileName %>.reducer';
  // tslint:disable-next-line:no-unused-variable
@@ -36,6 +44,9 @@ import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from '../../config/constants';
 
 export interface I<%= entityReactName %>Props {
   getEntities: ICrudGetAction;
+  <%_ if (searchEngine === 'elasticsearch') { _%>
+  getSearchEntities: ICrudGetAction;
+  <%_ } _%>
   <%=entityInstancePlural %>: any[];
   <%_ for (idx in relationships) {
     const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
@@ -45,11 +56,25 @@ export interface I<%= entityReactName %>Props {
   <%_ } _%>
   match: any;
 }
+<%_ if (searchEngine === 'elasticsearch') { _%>
 
-export class <%= entityReactName %> extends React.Component<I<%= entityReactName %>Props, undefined> {
+export interface I<%= entityReactName %>State {
+  search: string;
+}
+<%_ } _%>
+
+export class <%= entityReactName %> extends React.Component<I<%= entityReactName %>Props, I<%= entityReactName %>State> {
 
   constructor(props) {
     super(props);
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    this.state = {
+      search: ''
+    };
+    this.search = this.search.bind(this);
+    this.clear = this.clear.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
+    <%_ } _%>
   }
 
   componentDidMount() {
@@ -61,6 +86,25 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
     this.props.get<%= otherEntityNamePlural %>();
     <%_ } _%>
   }
+  <%_ if (searchEngine === 'elasticsearch') { _%>
+
+  search() {
+    if (this.state.search) {
+      this.props.getSearchEntities(this.state.search);
+    }
+  }
+
+  clear() {
+    this.props.getEntities();
+    this.setState({
+      search: ''
+    });
+  }
+
+  handleSearch(event) {
+    this.setState({ search: event.target.value });
+  }
+  <%_ } _%>
 
   render() {
     const { <%=entityInstancePlural %>, match } = this.props;
@@ -73,6 +117,25 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
             <FaPlus /> <Translate contentKey="<%= keyPrefix %>home.createLabel" />
           </Link>
         </h2>
+        <%_ if (searchEngine === 'elasticsearch') { _%>
+        <div className="row">
+          <div className="col-sm-12">
+            <AvForm onSubmit={this.search}>
+              <AvGroup>
+                <InputGroup>
+                  <AvInput type="text" name="search" value={this.state.search} onChange={this.handleSearch} placeholder={translate('<%= keyPrefix %>home.search')} />
+                  <Button className="input-group-addon">
+                    <FaSearch/>
+                  </Button>
+                  <Button type="reset" className="input-group-addon" onClick={this.clear}>
+                    <FaTrash/>
+                  </Button>
+                </InputGroup>
+              </AvGroup>
+            </AvForm>
+          </div>
+        </div>
+        <%_ } _%>
         <div className="table-responsive">
           <table className="table table-striped">
             <thead>
@@ -182,7 +245,8 @@ const mapStateToProps = storeState => ({
 });
 
 const mapDispatchToProps = { <%_ for (idx in relationships) { const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;const otherEntityNamePlural = relationships[idx].otherEntityNamePlural; _%>
- get<%= otherEntityNamePlural %>,<%_ } _%>
+ get<%= otherEntityNamePlural %>,<%_ } _%><%_ if (searchEngine === 'elasticsearch') { _%>
+ getSearchEntities,<%_ } _%>
  getEntities };
 
 export default connect(mapStateToProps, mapDispatchToProps)(<%= entityReactName %>);
