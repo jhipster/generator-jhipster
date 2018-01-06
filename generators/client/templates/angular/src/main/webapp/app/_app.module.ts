@@ -122,6 +122,7 @@ import {
                 StateStorageService
             ]
         },
+        <%_ } _%>
         {
             provide: HTTP_INTERCEPTORS,
             useClass: ErrorHandlerInterceptor,
