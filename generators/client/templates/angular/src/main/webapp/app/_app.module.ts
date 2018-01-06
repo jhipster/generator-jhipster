@@ -95,7 +95,7 @@ import {
         <%_ if (authenticationType === 'jwt') { _%>
         {
             provide: HTTP_INTERCEPTORS,
-            useFactory: (localStorageService, sessionStorageService) => new AuthInterceptor(localStorageService, sessionStorageService),
+            useClass: AuthInterceptor,
             multi: true,
             deps: [
                 LocalStorageService,
@@ -106,7 +106,7 @@ import {
         <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
         {
             provide: HTTP_INTERCEPTORS,
-            useFactory: (injector) => new AuthExpiredInterceptor(injector),
+            useClass: AuthExpiredInterceptor,
             multi: true,
             deps: [
                 Injector
@@ -115,7 +115,7 @@ import {
         <%_ } else if (authenticationType === 'session') { _%>
         {
             provide: HTTP_INTERCEPTORS,
-            useFactory: (injector, stateStorageService, loginModalService) => new AuthExpiredInterceptor(injector, stateStorageService, loginModalService),
+            useClass: AuthExpiredInterceptor,
             multi: true,
             deps: [
                 Injector,
@@ -126,7 +126,7 @@ import {
         <%_ } else if (authenticationType === 'oauth2') { _%>
         {
             provide: HTTP_INTERCEPTORS,
-            useFactory: (injector, stateStorageService) => new AuthExpiredInterceptor(injector, stateStorageService),
+            useClass: AuthExpiredInterceptor,
             multi: true,
             deps: [
                 Injector,
@@ -136,7 +136,7 @@ import {
         <%_ } _%>
         {
             provide: HTTP_INTERCEPTORS,
-            useFactory: (eventManager) => new ErrorHandlerInterceptor(eventManager),
+            useClass: ErrorHandlerInterceptor,
             multi: true,
             deps: [
                 JhiEventManager,
@@ -144,7 +144,7 @@ import {
         },
         {
             provide: HTTP_INTERCEPTORS,
-            useFactory: (injector) => new NotificationInterceptor(injector),
+            useClass: NotificationInterceptor,
             multi: true,
             deps: [
                 Injector
