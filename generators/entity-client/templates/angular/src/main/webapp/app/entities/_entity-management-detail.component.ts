@@ -61,9 +61,10 @@ export class <%= entityAngularName %>DetailComponent implements OnInit, OnDestro
     }
 
     load(id) {
-        this.<%= entityInstance %>Service.find(id).subscribe((<%= entityInstance %>Response: HttpResponse<<%= entityAngularName %>>) => {
-            this.<%= entityInstance %> = <%= entityInstance %>Response.body;
-        });
+        this.<%= entityInstance %>Service.find(id)
+            .subscribe((<%= entityInstance %>Response: HttpResponse<<%= entityAngularName %>>) => {
+                this.<%= entityInstance %> = <%= entityInstance %>Response.body;
+            });
     }
     <%_ if (fieldsContainBlob) { _%>
     byteSize(field) {

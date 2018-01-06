@@ -56,28 +56,29 @@ export class <%= entityAngularName %>PopupService {
             }
 
             if (id) {
-                this.<%= entityInstance %>Service.find(id).subscribe((<%= entityInstance %>Response: HttpResponse<<%= entityAngularName %>>) => {
-                    const <%= entityInstance %>: <%= entityAngularName %> = <%= entityInstance %>Response.body;
-                    <%_ if (hasDate) { _%>
-                        <%_ for (idx in fields) { _%>
-                            <%_ if (fields[idx].fieldType === 'LocalDate') { _%>
-                    if (<%= entityInstance %>.<%=fields[idx].fieldName%>) {
-                        <%= entityInstance %>.<%=fields[idx].fieldName%> = {
-                            year: <%= entityInstance %>.<%=fields[idx].fieldName%>.getFullYear(),
-                            month: <%= entityInstance %>.<%=fields[idx].fieldName%>.getMonth() + 1,
-                            day: <%= entityInstance %>.<%=fields[idx].fieldName%>.getDate()
-                        };
-                    }
-                            <%_ } _%>
-                            <%_ if (['Instant', 'ZonedDateTime'].includes(fields[idx].fieldType)) { _%>
-                    <%= entityInstance %>.<%=fields[idx].fieldName%> = this.datePipe
-                        .transform(<%= entityInstance %>.<%=fields[idx].fieldName%>, 'yyyy-MM-ddTHH:mm:ss');
-                            <%_ } _%>
-                    <%_ } _%>
-                    <%_ } _%>
-                    this.ngbModalRef = this.<%= entityInstance %>ModalRef(component, <%= entityInstance %>);
-                    resolve(this.ngbModalRef);
-                });
+                this.<%= entityInstance %>Service.find(id)
+                    .subscribe((<%= entityInstance %>Response: HttpResponse<<%= entityAngularName %>>) => {
+                        const <%= entityInstance %>: <%= entityAngularName %> = <%= entityInstance %>Response.body;
+                        <%_ if (hasDate) { _%>
+                            <%_ for (idx in fields) { _%>
+                                <%_ if (fields[idx].fieldType === 'LocalDate') { _%>
+                        if (<%= entityInstance %>.<%=fields[idx].fieldName%>) {
+                            <%= entityInstance %>.<%=fields[idx].fieldName%> = {
+                                year: <%= entityInstance %>.<%=fields[idx].fieldName%>.getFullYear(),
+                                month: <%= entityInstance %>.<%=fields[idx].fieldName%>.getMonth() + 1,
+                                day: <%= entityInstance %>.<%=fields[idx].fieldName%>.getDate()
+                            };
+                        }
+                                <%_ } _%>
+                                <%_ if (['Instant', 'ZonedDateTime'].includes(fields[idx].fieldType)) { _%>
+                        <%= entityInstance %>.<%=fields[idx].fieldName%> = this.datePipe
+                            .transform(<%= entityInstance %>.<%=fields[idx].fieldName%>, 'yyyy-MM-ddTHH:mm:ss');
+                                <%_ } _%>
+                        <%_ } _%>
+                        <%_ } _%>
+                        this.ngbModalRef = this.<%= entityInstance %>ModalRef(component, <%= entityInstance %>);
+                        resolve(this.ngbModalRef);
+                    });
             } else {
                 // setTimeout used as a workaround for getting ExpressionChangedAfterItHasBeenCheckedError
                 setTimeout(() => {
