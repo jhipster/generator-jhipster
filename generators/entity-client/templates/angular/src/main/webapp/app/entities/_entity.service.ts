@@ -92,7 +92,7 @@ export class <%= entityAngularName %>Service {
 
     search(req?: any): Observable<HttpResponse<<%= entityAngularName %>[]>> {
         const options = createRequestOption(req);
-        return this.http.get<<%= entityAngularName %>[]>(this.resourceUrl, { params: options, observe: 'response' })
+        return this.http.get<<%= entityAngularName %>[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
             .map((res: HttpResponse<<%= entityAngularName %>[]>) => this.convertArrayResponse(res));
     }
     <%_ } _%>

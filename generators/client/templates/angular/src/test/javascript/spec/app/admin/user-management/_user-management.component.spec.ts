@@ -21,7 +21,7 @@ const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
 _%>
 import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
 import { Observable } from 'rxjs/Observable';
-import { HttpHeaders } from '@angular/common/http';
+import { HttpHeaders, HttpResponse } from '@angular/common/http';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { Principal } from '../../../../../../main/webapp/app/shared';
@@ -61,10 +61,10 @@ describe('Component Tests', () => {
                     fakeAsync(() => {
                         // GIVEN
                         const headers = new HttpHeaders().append('link', 'link;link');
-                        spyOn(service, 'query').and.returnValue(Observable.of({
-                            json: [new User(<%- tsKeyId %>)],
+                        spyOn(service, 'query').and.returnValue(Observable.of(new HttpResponse({
+                            body: [new User(<%- tsKeyId %>)],
                             headers
-                        }));
+                        })));
 
                         // WHEN
                         comp.ngOnInit();
@@ -85,11 +85,11 @@ describe('Component Tests', () => {
                         // GIVEN
                         const headers = new HttpHeaders().append('link', 'link;link');
                         const user = new User(<%- tsKeyId %>);
-                        spyOn(service, 'query').and.returnValue(Observable.of({
-                            json: [user],
+                        spyOn(service, 'query').and.returnValue(Observable.of(new HttpResponse({
+                            body: [user],
                             headers
-                        }));
-                        spyOn(service, 'update').and.returnValue(Observable.of({ status: 200 }));
+                        })));
+                        spyOn(service, 'update').and.returnValue(Observable.of(new HttpResponse({ status: 200 })));
 
                         // WHEN
                         comp.setActive(user, true);

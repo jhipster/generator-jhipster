@@ -22,7 +22,7 @@ _%>
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { Observable } from 'rxjs/Observable';
-import { HttpHeaders } from '@angular/common/http';
+import { HttpHeaders, HttpResponse } from '@angular/common/http';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { <%= entityAngularName %>Component } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.component';
@@ -58,10 +58,10 @@ describe('Component Tests', () => {
             it('Should call load all on init', () => {
                 // GIVEN
                 const headers = new HttpHeaders().append('link', 'link;link');
-                spyOn(service, 'query').and.returnValue(Observable.of({
-                    json: [new <%= entityAngularName %>(<%- tsKeyId %>)],
+                spyOn(service, 'query').and.returnValue(Observable.of(new HttpResponse({
+                    body: [new <%= entityAngularName %>(<%- tsKeyId %>)],
                     headers
-                }));
+                })));
 
                 // WHEN
                 comp.ngOnInit();
