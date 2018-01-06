@@ -21,9 +21,6 @@ import './vendor.ts';
 import { NgModule, Injector } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-<%_ if (authenticationType === 'uaa') { _%>
-import { Router } from '@angular/router';
-<%_ } _%>
 import { Ng2Webstorage<% if (authenticationType === 'jwt') { %>, LocalStorageService, SessionStorageService <% } %> } from 'ngx-webstorage';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 
@@ -46,16 +43,11 @@ import { <%=angularXAppName%>AccountModule } from './account/account.module';
 import { <%=angularXAppName%>EntityModule } from './entities/entity.module';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
 
-<%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-import { LoginService } from './shared/login/login.service';
 <%_ if (authenticationType === 'uaa') { _%>
 import { LoginModalService } from './shared/login/login-modal.service';
-import { Principal } from './shared/auth/principal.service';
-<%_ } _%>
 <%_ } _%>
 <%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
 <%_ if (authenticationType === 'session') { _%>
-import { AuthServerProvider } from './shared/auth/auth-session.service';
 import { LoginModalService } from './shared/login/login-modal.service';
 <%_ } _%>
 import { StateStorageService } from './shared/auth/state-storage.service';
@@ -120,7 +112,7 @@ import {
             useClass: AuthExpiredInterceptor,
             multi: true,
             deps: [
-                LoginService
+                Injector
             ]
         },
         <%_ } else if (authenticationType === 'uaa') { _%>
@@ -129,10 +121,8 @@ import {
             useClass: AuthExpiredInterceptor,
             multi: true,
             deps: [
-                LoginService,
-                LoginModalService,
-                Principal,
-                Router
+                Injector,
+                LoginModalService
             ]
         },
         <%_ } else if (authenticationType === 'session') { _%>
@@ -141,7 +131,7 @@ import {
             useClass: AuthExpiredInterceptor,
             multi: true,
             deps: [
-                AuthServerProvider,
+                Injector,
                 StateStorageService,
                 LoginModalService
             ]
@@ -152,7 +142,7 @@ import {
             useClass: AuthExpiredInterceptor,
             multi: true,
             deps: [
-                LoginService,
+                Injector,
                 StateStorageService,
             ]
         },
