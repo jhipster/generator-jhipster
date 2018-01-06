@@ -42,15 +42,12 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
     constructor(private injector: Injector) {
     }
 <%_ } else if (authenticationType === 'uaa') { _%>
-    constructor(
-        private injector: Injector,
-        private loginModalService: LoginModalService) {
+    constructor(private injector: Injector) {
     }
 <%_ } else if (authenticationType === 'session') { _%>
     constructor(
         private injector: Injector,
-        private stateStorageService: StateStorageService,
-        private loginModalService: LoginModalService) {
+        private stateStorageService: StateStorageService) {
     }
 <%_ } else if (authenticationType === 'oauth2') { _%>
     constructor(
@@ -76,7 +73,8 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
 
                     if (principal.isAuthenticated()) {
                         principal.authenticate(null);
-                        this.loginModalService.open();
+                        const loginModalService: LoginModalService = this.injector.get(LoginModalService);
+                        loginModalService.open();
                     } else {
                         const loginService: LoginService = this.injector.get(LoginService);
                         loginService.logout();
@@ -110,7 +108,8 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
 <% if (authenticationType === 'session') { %>
                     const authServer: AuthServerProvider = this.injector.get(AuthServerProvider);
                     authServer.logout();
-                    this.loginModalService.open();
+                    const loginModalService: LoginModalService = this.injector.get(LoginModalService);
+                    loginModalService.open();
 <% } else { %>
                     const loginService: LoginService = this.injector.get(LoginService);
                     loginService.login();

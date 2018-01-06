@@ -23,11 +23,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Ng2Webstorage<% if (authenticationType === 'jwt') { %>, LocalStorageService, SessionStorageService <% } %> } from 'ngx-webstorage';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
-
 <%_ if (authenticationType === 'jwt') { _%>
 import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
-<%_ } _%>
-<%_ if (authenticationType === 'jwt' || authenticationType === 'uaa' || authenticationType === 'session') { _%>
+<%_} if (authenticationType === 'jwt' || authenticationType === 'uaa' || authenticationType === 'session') { _%>
 import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
 <% } %>
 import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
@@ -42,22 +40,13 @@ import { <%=angularXAppName%>AccountModule } from './account/account.module';
 <%_ } _%>
 import { <%=angularXAppName%>EntityModule } from './entities/entity.module';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
-
-<%_ if (authenticationType === 'uaa') { _%>
-import { LoginModalService } from './shared/login/login-modal.service';
-<%_ } _%>
 <%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
-<%_ if (authenticationType === 'session') { _%>
-import { LoginModalService } from './shared/login/login-modal.service';
-<%_ } _%>
 import { StateStorageService } from './shared/auth/state-storage.service';
 <%_ } _%>
-
 // jhipster-needle-angular-add-module-import JHipster will add new module here
-
 import {
     <%=jhiPrefixCapitalized%>MainComponent,
-    NavbarComponent,
+    NavbarComponent,ogin
     FooterComponent,
     ProfileService,
     PageRibbonComponent,
@@ -121,8 +110,7 @@ import {
             useClass: AuthExpiredInterceptor,
             multi: true,
             deps: [
-                Injector,
-                LoginModalService
+                Injector
             ]
         },
         <%_ } else if (authenticationType === 'session') { _%>
@@ -132,8 +120,7 @@ import {
             multi: true,
             deps: [
                 Injector,
-                StateStorageService,
-                LoginModalService
+                StateStorageService
             ]
         },
         <%_ } else if (authenticationType === 'oauth2') { _%>
