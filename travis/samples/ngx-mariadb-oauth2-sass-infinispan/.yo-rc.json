@@ -7,7 +7,6 @@
     "authenticationType": "oauth2",
     "cacheProvider": "infinispan",
     "enableHibernateCache": true,
-    "clusteredHttpSession": false,
     "websocket": false,
     "databaseType": "sql",
     "devDatabaseType": "mariadb",

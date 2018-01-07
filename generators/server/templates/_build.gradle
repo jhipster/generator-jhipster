@@ -242,12 +242,9 @@ dependencies {
     <%_ } _%>
     compile "com.hazelcast:hazelcast-spring"
     <%_ } _%>
-    <%_ if ((clusteredHttpSession === 'hazelcast' || applicationType === 'gateway') && cacheProvider !== 'hazelcast') { _%>
+    <%_ if ((applicationType === 'gateway') && cacheProvider !== 'hazelcast') { _%>
     compile "com.hazelcast:hazelcast"
     compile "com.hazelcast:hazelcast-spring"
-    <%_ } _%>
-    <%_ if (clusteredHttpSession === 'hazelcast') { _%>
-    compile "com.hazelcast:hazelcast-wm"
     <%_ } _%>
     <%_ if (cacheProvider === 'infinispan') { _%>
     compile "org.hibernate:hibernate-infinispan"
@@ -438,7 +435,7 @@ dependencies {
     testCompile "com.h2database:h2"
     <%_ } _%>
     <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
-    compile "com.oracle.jdbc:ojdbc7"
+    compile "com.oracle.jdbc:ojdbc8"
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
     testCompile "org.springframework.cloud:spring-cloud-stream-test-support"
