@@ -295,9 +295,6 @@ objects:
           labels:
             app: ${KB_APP_NAME}
         spec:
-          volumes:
-          - name: ${KB_APP_NAME}-data
-            emptyDir: {}
           containers:
           - name: ${KB_APP_NAME}
             image: <%= DOCKER_JHIPSTER_CONSOLE %>
