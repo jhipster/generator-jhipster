@@ -34,6 +34,8 @@ import { JhiDateUtils } from 'ng-jhipster';
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { createRequestOption } from '../../shared';
 
+export type EntityResponseType = HttpResponse<<%= entityAngularName %>>;
+
 @Injectable()
 export class <%= entityAngularName %>Service {
 
@@ -45,32 +47,32 @@ export class <%= entityAngularName %>Service {
     constructor(private http: HttpClient<% if (hasDate) { %>, private dateUtils: JhiDateUtils<% } %>) { }
     <%_ if (entityAngularName.length <= 30) { _%>
 
-    create(<%= entityInstance %>: <%= entityAngularName %>): Observable<HttpResponse<<%= entityAngularName %>>> {
+    create(<%= entityInstance %>: <%= entityAngularName %>): Observable<EntityResponseType> {
     <%_ } else { _%>
 
     create(<%= entityInstance %>: <%= entityAngularName %>):
-        Observable<HttpResponse<<%= entityAngularName %>>> {
+        Observable<EntityResponseType> {
     <%_ } _%>
         const copy = this.convert(<%= entityInstance %>);
         return this.http.post<<%= entityAngularName %>>(this.resourceUrl, copy, { observe: 'response' })
-            .map((res: HttpResponse<<%= entityAngularName %>>) => this.convertResponse(res));
+            .map((res: EntityResponseType) => this.convertResponse(res));
     }
     <%_ if (entityAngularName.length <= 30) { _%>
 
-    update(<%= entityInstance %>: <%= entityAngularName %>): Observable<HttpResponse<<%= entityAngularName %>>> {
+    update(<%= entityInstance %>: <%= entityAngularName %>): Observable<EntityResponseType> {
     <%_ } else { _%>
 
     update(<%= entityInstance %>: <%= entityAngularName %>):
-        Observable<HttpResponse<<%= entityAngularName %>>> {
+        Observable<EntityResponseType> {
     <%_ } _%>
         const copy = this.convert(<%= entityInstance %>);
         return this.http.put<<%= entityAngularName %>>(this.resourceUrl, copy, { observe: 'response' })
-            .map((res: HttpResponse<<%= entityAngularName %>>) => this.convertResponse(res));
+            .map((res: EntityResponseType) => this.convertResponse(res));
     }
 
-    find(id: <% if (pkType === 'String') { %>string<% } else { %>number<% } %>): Observable<HttpResponse<<%= entityAngularName %>>> {
+    find(id: <% if (pkType === 'String') { %>string<% } else { %>number<% } %>): Observable<EntityResponseType> {
         return this.http.get<<%= entityAngularName %>>(`${this.resourceUrl}/${id}`, { observe: 'response'})
-            .map((res: HttpResponse<<%= entityAngularName %>>) => this.convertResponse(res));
+            .map((res: EntityResponseType) => this.convertResponse(res));
     }
 
     query(req?: any): Observable<HttpResponse<<%= entityAngularName %>[]>> {
@@ -91,7 +93,7 @@ export class <%= entityAngularName %>Service {
     }
     <%_ } _%>
 
-    private convertResponse(res: HttpResponse<<%= entityAngularName %>>): HttpResponse<<%= entityAngularName %>> {
+    private convertResponse(res: EntityResponseType): EntityResponseType {
         const body: <%= entityAngularName %> = this.convertItemFromServer(res.body);
         return res.clone({body});
     }
