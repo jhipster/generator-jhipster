@@ -42,8 +42,8 @@ export class UserModalService {
             }
 
             if (id) {
-                this.userService.find(id).subscribe((user) => {
-                    this.ngbModalRef = this.userModalRef(component, user);
+                this.userService.find(id).subscribe((response) => {
+                    this.ngbModalRef = this.userModalRef(component, response.body);
                     resolve(this.ngbModalRef);
                 });
             } else {

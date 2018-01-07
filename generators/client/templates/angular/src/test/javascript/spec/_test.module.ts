@@ -19,8 +19,7 @@
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgModule, ElementRef, Renderer } from '@angular/core';
-import { MockBackend } from '@angular/http/testing';
-import { Http, BaseRequestOptions } from '@angular/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageService, JhiDataUtils, JhiDateUtils, JhiEventManager, JhiAlertService, JhiParseLinks } from 'ng-jhipster';
@@ -47,8 +46,6 @@ _%>
         JhiDataUtils,
         JhiDateUtils,
         JhiParseLinks,
-        MockBackend,
-        BaseRequestOptions,
         <%_ if (enableTranslation) { _%>
         {
             provide: JhiLanguageService,
@@ -111,13 +108,7 @@ _%>
             provide: NgbModal,
             useValue: null
         },
-        {
-            provide: Http,
-            useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
-                return new Http(backendInstance, defaultOptions);
-            },
-            deps: [MockBackend, BaseRequestOptions]
-        }
-    ]
+    ],
+    imports: [HttpClientTestingModule]
 })
 export class <%=angularXAppName%>TestModule {}

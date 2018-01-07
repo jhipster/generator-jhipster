@@ -31,6 +31,7 @@ import { JhiEventManager<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } fr
 
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-detail',
@@ -60,9 +61,10 @@ export class <%= entityAngularName %>DetailComponent implements OnInit, OnDestro
     }
 
     load(id) {
-        this.<%= entityInstance %>Service.find(id).subscribe((<%= entityInstance %>) => {
-            this.<%= entityInstance %> = <%= entityInstance %>;
-        });
+        this.<%= entityInstance %>Service.find(id)
+            .subscribe((<%= entityInstance %>Response: HttpResponse<<%= entityAngularName %>>) => {
+                this.<%= entityInstance %> = <%= entityInstance %>Response.body;
+            });
     }
     <%_ if (fieldsContainBlob) { _%>
     byteSize(field) {

@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { Http, Response<% if (authenticationType !== 'oauth2') { %>, Headers<% } %> } from '@angular/http';
+import { HttpClient, HttpResponse<% if (authenticationType !== 'oauth2') { %>, HttpHeaders<% } %> } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { SERVER_API_URL } from '../../app.constants';
 
@@ -25,7 +25,7 @@ import { SERVER_API_URL } from '../../app.constants';
 export class AuthServerProvider {
 
     constructor(
-        private http: Http
+        private http: HttpClient
     ) {}
 <%_ if (authenticationType !== 'oauth2') { _%>
 
@@ -33,9 +33,7 @@ export class AuthServerProvider {
         const data = 'j_username=' + encodeURIComponent(credentials.username) +
             '&j_password=' + encodeURIComponent(credentials.password) +
             '&remember-me=' + credentials.rememberMe + '&submit=Login';
-        const headers = new Headers ({
-            'Content-Type': 'application/x-www-form-urlencoded'
-        });
+        const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
         return this.http.post(SERVER_API_URL + 'api/authentication', data, { headers });
     }
@@ -43,7 +41,7 @@ export class AuthServerProvider {
 
     logout(): Observable<any> {
         // logout from the server
-        return this.http.post(SERVER_API_URL + 'api/logout', {}).map((response: Response) => {
+        return this.http.post(SERVER_API_URL + 'api/logout', {}, { observe: 'response' }).map((response: HttpResponse<any>) => {
             // to get a new csrf token call the api
             this.http.get(SERVER_API_URL + 'api/account').subscribe(() => {}, () => {});
             return response;

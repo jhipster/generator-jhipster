@@ -70,7 +70,7 @@ export class AuditsComponent implements OnInit {
         this.auditsService.query({page: this.page - 1, size: this.itemsPerPage,
             fromDate: this.fromDate, toDate: this.toDate}).subscribe((res) => {
 
-            this.audits = res.json();
+            this.audits = res.body;
             this.links = this.parseLinks.parse(res.headers.get('link'));
             this.totalItems = + res.headers.get('X-Total-Count');
         });

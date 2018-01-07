@@ -712,17 +712,17 @@ module.exports = class extends Generator {
                 query =
         `this.${relationship.otherEntityName}Service
             .query({filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'})
-            .subscribe((res: ResponseWrapper) => {
+            .subscribe((res: HttpResponse<${relationship.otherEntityAngularName}[]>) => {
                 if (${relationshipFieldNameIdCheck}) {
-                    this.${variableName} = res.json;
+                    this.${variableName} = res.body;
                 } else {
                     this.${relationship.otherEntityName}Service
                         .find(${relationshipFieldName}${dto === 'no' ? '.id' : 'Id'})
-                        .subscribe((subRes: ${relationship.otherEntityAngularName}) => {
-                            this.${variableName} = [subRes].concat(res.json);
-                        }, (subRes: ResponseWrapper) => this.onError(subRes.json));
+                        .subscribe((subRes: HttpResponse<${relationship.otherEntityAngularName}>) => {
+                            this.${variableName} = [subRes.body].concat(res.body);
+                        }, (subRes: HttpErrorResponse) => this.onError(subRes.message));
                 }
-            }, (res: ResponseWrapper) => this.onError(res.json));`;
+            }, (res: HttpErrorResponse) => this.onError(res.message));`;
             } else if (relationship.relationshipType !== 'one-to-many') {
                 variableName = relationship.otherEntityNameCapitalizedPlural.toLowerCase();
                 if (variableName === entityInstance) {
@@ -730,7 +730,7 @@ module.exports = class extends Generator {
                 }
                 query =
         `this.${relationship.otherEntityName}Service.query()
-            .subscribe((res: ResponseWrapper) => { this.${variableName} = res.json; }, (res: ResponseWrapper) => this.onError(res.json));`;
+            .subscribe((res: HttpResponse<${relationship.otherEntityAngularName}[]>) => { this.${variableName} = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));`;
             }
             if (variableName && !this.contains(queries, query)) {
                 queries.push(query);
