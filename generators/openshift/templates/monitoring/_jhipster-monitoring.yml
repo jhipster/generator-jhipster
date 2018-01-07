@@ -67,12 +67,6 @@ parameters:
     description: Name of the preloaded kibana application dashboard
     required: true
     displayName: Kibana Preloaded Application Dashboard Name
-  -
-    name: CURATOR_APP_NAME
-    value: jhipster-curator
-    description: Name of the curator
-    required: true
-    displayName: Curator Application Name
 <%_ if (composeApplicationType === 'microservice') { _%>
   -
     name: ZK_APP_NAME
