@@ -59,10 +59,11 @@ function writeFiles() {
 
         writeJhipsterConsole() {
             if (this.jhipsterConsole) {
-                this.template('console/_logstash-config.yml', 'console/logstash-config.yml');
+                // this.template('console/_logstash-config.yml', 'console/logstash-config.yml');
                 this.template('console/_jhipster-elasticsearch.yml', 'console/jhipster-elasticsearch.yml');
                 this.template('console/_jhipster-logstash.yml', 'console/jhipster-logstash.yml');
                 this.template('console/_jhipster-console.yml', 'console/jhipster-console.yml');
+                this.template('console/_jhipster-dashboard-console.yml', 'console/jhipster-dashboard-console.yml');
             }
         },
 
