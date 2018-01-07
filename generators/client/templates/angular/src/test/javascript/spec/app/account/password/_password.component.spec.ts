@@ -78,7 +78,7 @@ describe('Component Tests', () => {
 
         it('should call Auth.changePassword when passwords match', () => {
             // GIVEN
-            spyOn(service, 'save').and.returnValue(Observable.of(new HttpResponse({body:true})));
+            spyOn(service, 'save').and.returnValue(Observable.of(new HttpResponse({body: true})));
             comp.password = comp.confirmPassword = 'myPassword';
 
             // WHEN
@@ -90,7 +90,7 @@ describe('Component Tests', () => {
 
         it('should set success to OK upon success', function() {
             // GIVEN
-            spyOn(service, 'save').and.returnValue(Observable.of(new HttpResponse({body:true})));
+            spyOn(service, 'save').and.returnValue(Observable.of(new HttpResponse({body: true})));
             comp.password = comp.confirmPassword = 'myPassword';
 
             // WHEN
