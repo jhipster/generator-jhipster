@@ -76,7 +76,7 @@ describe('Service Tests', () => {
 
                 req.flush(['ROLE_USER', 'ROLE_ADMIN']);
             });
-            
+
             <%_ } _%>
             it('should propagate not found response', () => {
 
