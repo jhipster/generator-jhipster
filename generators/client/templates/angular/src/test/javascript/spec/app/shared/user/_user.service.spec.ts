@@ -74,7 +74,6 @@ describe('Service Tests', () => {
                 });
                 const req = httpMock.expectOne({ method: 'GET' });
 
-
                 req.flush(['ROLE_USER', 'ROLE_ADMIN']);
             });
             <%_ } _%>

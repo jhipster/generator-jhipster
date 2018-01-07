@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Injector } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 <%_ if (['oauth2', 'jwt', 'uaa'].includes(authenticationType)) { _%>
