@@ -29,7 +29,7 @@
         "suppressImplicitAnyIndexErrors": true,
         "skipLibCheck": true,
         "outDir": "<%= DIST_DIR %>app",
-        "lib": ["es2015", "dom"],
+        "lib": ["es7", "dom"],
         "typeRoots": [
             "node_modules/@types"
         ]
