@@ -33,8 +33,7 @@ const expectedFiles = {
     jhconsole: [
         'console/jhipster-console.yml',
         'console/jhipster-elasticsearch.yml',
-        'console/jhipster-logstash.yml',
-        'console/logstash-config.yml',
+        'console/jhipster-logstash.yml'
     ],
     msmysql: [
         'msmysql/msmysql-deployment.yml',
