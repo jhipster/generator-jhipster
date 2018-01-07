@@ -21,12 +21,12 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 <%_ if (['oauth2', 'jwt', 'uaa'].includes(authenticationType)) { _%>
-import { LoginService } from '../../shared/login/login.service';
     <%_ if (authenticationType === 'uaa') { _%>
+import { Router } from '@angular/router';
 import { LoginModalService } from '../../shared/login/login-modal.service';
 import { Principal } from '../../shared/auth/principal.service';
-import { Router } from '@angular/router';
     <%_ } _%>
+import { LoginService } from '../../shared/login/login.service';
 <%_ } _%>
 <%_ if (['session', 'oauth2'].includes(authenticationType)) { _%>
     <%_ if (authenticationType === 'session') { _%>
@@ -38,15 +38,12 @@ import { StateStorageService } from '../../shared/auth/state-storage.service';
 
 export class AuthExpiredInterceptor implements HttpInterceptor {
 
-<%_ if (['jwt', 'uaa'].includes(authenticationType)) { _%>
-    constructor(private injector: Injector) {
-    }
-<%_ } else if (['session', 'oauth2'].includes(authenticationType)) { _%>
     constructor(
-        private injector: Injector,
-        private stateStorageService: StateStorageService) {
-    }
-<%_ } _%>
+        <%_ if (['session', 'oauth2'].includes(authenticationType)) { _%>
+        private stateStorageService: StateStorageService,
+        <%_ } _%>
+        private injector: Injector
+    ) {}
 
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {

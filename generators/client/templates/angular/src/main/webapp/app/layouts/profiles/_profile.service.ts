@@ -33,15 +33,15 @@ export class ProfileService {
     getProfileInfo(): Promise<ProfileInfo> {
         if (!this.profileInfo) {
             this.profileInfo = this.http.get<ProfileInfo>(this.profileInfoUrl, { observe: 'response' })
-            .map((res: HttpResponse<ProfileInfo>) => {
-                const data = res.body;
-                const pi = new ProfileInfo();
-                pi.activeProfiles = data.activeProfiles;
-                pi.ribbonEnv = data.ribbonEnv;
-                pi.inProduction = data.activeProfiles.includes('prod') ;
-                pi.swaggerEnabled = data.activeProfiles.includes('swagger');
-                return pi;
-            }).toPromise();
+                .map((res: HttpResponse<ProfileInfo>) => {
+                    const data = res.body;
+                    const pi = new ProfileInfo();
+                    pi.activeProfiles = data.activeProfiles;
+                    pi.ribbonEnv = data.ribbonEnv;
+                    pi.inProduction = data.activeProfiles.includes('prod') ;
+                    pi.swaggerEnabled = data.activeProfiles.includes('swagger');
+                    return pi;
+                }).toPromise();
         }
         return this.profileInfo;
     }

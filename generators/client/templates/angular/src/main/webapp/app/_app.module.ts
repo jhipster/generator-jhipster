@@ -23,13 +23,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Ng2Webstorage<% if (authenticationType === 'jwt') { %>, LocalStorageService, SessionStorageService <% } %> } from 'ngx-webstorage';
 import { JhiEventManager } from 'ng-jhipster';
+
 <%_ if (authenticationType === 'jwt') { _%>
 import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
-<%_}_%>
+<%_ } _%>
 import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
 import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
 import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
-
 import { <%=angularXAppName%>SharedModule, UserRouteAccessService } from './shared';
 import { <%=angularXAppName%>AppRoutingModule} from './app-routing.module';
 import { <%=angularXAppName%>HomeModule } from './home/home.module';
@@ -94,35 +94,17 @@ import {
             ]
         },
         <%_ } _%>
-        <%_ if (authenticationType === 'jwt') { _%>
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthExpiredInterceptor,
             multi: true,
             deps: [
+                <%_ if (['session', 'oauth2'].includes(authenticationType)) { _%>
+                StateStorageService,
+                <%_ } _%>
                 Injector
             ]
         },
-        <%_ } else if (authenticationType === 'uaa') { _%>
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: AuthExpiredInterceptor,
-            multi: true,
-            deps: [
-                Injector
-            ]
-        },
-        <%_ } else if (['session', 'oauth2'].includes(authenticationType)) { _%>
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: AuthExpiredInterceptor,
-            multi: true,
-            deps: [
-                Injector,
-                StateStorageService
-            ]
-        },
-        <%_ } _%>
         {
             provide: HTTP_INTERCEPTORS,
             useClass: ErrorHandlerInterceptor,
