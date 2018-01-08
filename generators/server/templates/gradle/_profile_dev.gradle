@@ -31,6 +31,9 @@ dependencies {
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
     compile "com.h2database:h2"
     <%_ } _%>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+        runtime "org.apache.logging.log4j:log4j-core"
+    <%_ } _%>
 }
 
 def profiles = 'dev'
