@@ -113,16 +113,14 @@ describe('Component Tests', () => {
                     fakeAsync(() => {
                         // GIVEN
                         const entity = new User();
-                        spyOn(service, 'create').and.returnValue(Observable.of(entity));
+                        spyOn(service, 'create').and.returnValue(Observable.of(new HttpResponse({body: entity})));
                         comp.user = entity;
                         // WHEN
                         comp.save();
                         tick(); // simulate async
 
                         // THEN
-                        expect(service.create).toHaveBeenCalledWith(new HttpResponse({
-                            body: entity
-                        }));
+                        expect(service.create).toHaveBeenCalledWith(entity);
                         expect(comp.isSaving).toEqual(false);
                         expect(mockEventManager.broadcastSpy).toHaveBeenCalledWith({ name: 'userListModification', content: 'OK'});
                         expect(mockActiveModal.dismissSpy).toHaveBeenCalled();
