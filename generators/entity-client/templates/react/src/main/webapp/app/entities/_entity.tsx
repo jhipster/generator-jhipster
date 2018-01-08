@@ -61,7 +61,7 @@ export interface I<%= entityReactName %>State {
 }
 <%_ } _%>
 
-export class <%= entityReactName %> extends React.Component<I<%= entityReactName %>Props, I<%= entityReactName %>State> {
+export class <%= entityReactName %> extends React.Component<I<%= entityReactName %>Props, <% if (searchEngine === 'elasticsearch') { %>I<%= entityReactName %>State<% } else { %>undefined<% } %>> {
 
   constructor(props) {
     super(props);
