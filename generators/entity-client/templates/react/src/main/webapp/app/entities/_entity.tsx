@@ -61,17 +61,20 @@ export interface I<%= entityReactName %>State {
 }
 <%_ } _%>
 
-export class <%= entityReactName %> extends React.Component<I<%= entityReactName %>Props, <% if (searchEngine === 'elasticsearch') { %>I<%= entityReactName %>State<% } else { %>undefined<% } %>> {
+export class <%= entityReactName %> extends React.Component<I<%= entityReactName %>Props, <% if (searchEngine === 'elasticsearch') { %>I<%= entityReactName %>State> {
 
   constructor(props) {
     super(props);
-    <%_ if (searchEngine === 'elasticsearch') { _%>
     this.state = {
       search: ''
     };
-    <%_ } _%>
   }
+<% } else { %>undefined> {
 
+  constructor(props) {
+    super(props);
+  }
+<% } %>
   componentDidMount() {
     this.props.getEntities();
     <%_ for (idx in relationships) {
