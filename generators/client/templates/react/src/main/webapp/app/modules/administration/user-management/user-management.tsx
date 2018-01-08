@@ -22,34 +22,27 @@ import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import { Pagination } from 'react-bootstrap';
 import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
-import { FaPlus, FaEye, FaPencil, FaTrash } from 'react-icons/lib/fa';
+import { FaPlus, FaEye, FaPencil, FaSort, FaTrash } from 'react-icons/lib/fa';
 
 import { getUsers } from '../../../reducers/user-management';
 import { APP_DATE_FORMAT } from '../../../config/constants';
 import { ITEMS_PER_PAGE } from '../../../shared/util/pagination.constants';
+import { getUrlParameter, IPaginationState } from '../../../shared/util/pagination-utils';
 
 export interface IUserManagementProps {
   getUsers: ICrudGetAction;
   users: any[];
   account: any;
   match: any;
+  totalItems: 0;
 }
 
-export interface IUserManagementState {
-  itemsPerPage: number;
-  items: number;
-  sort: string;
-  order: string;
-  activePage: number;
-  totalItems: number;
-}
-
-export class UserManagement extends React.Component<IUserManagementProps, IUserManagementState> {
+export class UserManagement extends React.Component<IUserManagementProps, IPaginationState> {
 
   constructor(props) {
     super(props);
-    const pageParam = this.getUrlParameter('page', props.location.search);
-    const sortParam = this.getUrlParameter('sort', props.location.search);
+    const pageParam = getUrlParameter('page', props.location.search);
+    const sortParam = getUrlParameter('sort', props.location.search);
     let sort = 'id';
     let order = 'asc';
     let activePage = 1;
@@ -62,32 +55,17 @@ export class UserManagement extends React.Component<IUserManagementProps, IUserM
     }
     this.state = {
       itemsPerPage: ITEMS_PER_PAGE,
-      items: 0,
       sort,
       order,
-      activePage,
-      totalItems: 0
+      activePage
     };
-    this.handlePagination = this.handlePagination.bind(this);
   }
 
   componentDidMount() {
-    this.props.getUsers(this.state.activePage - 1, this.state.itemsPerPage, this.state.sort + ',' + this.state.order).then(action => {
-      this.setState({
-        totalItems: action.value.headers['x-total-count'],
-        items: Math.round(action.value.headers['x-total-count'] / this.state.itemsPerPage) + 1
-      });
-    });
+    this.props.getUsers(this.state.activePage - 1, this.state.itemsPerPage, this.state.sort + ',' + this.state.order);
   }
 
-  getUrlParameter = (name, search) => {
-    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-    const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-    const results = regex.exec(search);
-    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-  }
-
-  sort(prop) {
+  sort = prop => e => {
     this.state.order === 'asc' ?
       this.setState({
         order: 'desc',
@@ -114,7 +92,7 @@ export class UserManagement extends React.Component<IUserManagementProps, IUserM
     };
   }
 
-  handlePagination(eventKey) {
+  handlePagination = eventKey => {
     this.setState({
       activePage: eventKey
     }, () => {
@@ -123,7 +101,7 @@ export class UserManagement extends React.Component<IUserManagementProps, IUserM
   }
 
   render() {
-    const { users, account, match } = this.props;
+    const { users, account, match, totalItems } = this.props;
     return (
       <div>
         <h2>
@@ -136,21 +114,21 @@ export class UserManagement extends React.Component<IUserManagementProps, IUserM
           <table className="table table-striped">
             <thead>
               <tr>
-                <th onClick={this.sort.bind(this, 'id')}><Translate contentKey="global.field.id">ID</Translate> <span className="fa fa-sort"/></th>
-                <th onClick={this.sort.bind(this, 'login')}><Translate contentKey="userManagement.login">Login</Translate> <span className="fa fa-sort"/></th>
-                <th onClick={this.sort.bind(this, 'email')}><Translate contentKey="userManagement.email">Email</Translate> <span className="fa fa-sort"/></th>
+                <th onClick={this.sort('id')}><Translate contentKey="global.field.id">ID</Translate><FaSort/></th>
+                <th onClick={this.sort('login')}><Translate contentKey="userManagement.login">Login</Translate><FaSort/></th>
+                <th onClick={this.sort('email')}><Translate contentKey="userManagement.email">Email</Translate><FaSort/></th>
                 <th />
                 <%_ if (enableTranslation) { _%>
-                <th onClick={this.sort.bind(this, 'langKey')}><Translate contentKey="userManagement.langKey">Lang Key</Translate> <span className="fa fa-sort"/></th>
+                <th onClick={this.sort('langKey')}><Translate contentKey="userManagement.langKey">Lang Key</Translate><FaSort/></th>
                 <%_ } _%>
                 <th><Translate contentKey="userManagement.profiles">Profiles</Translate></th>
                 <%_ if (databaseType !== 'cassandra') { _%>
-                <th onClick={this.sort.bind(this, 'createdDate')}><Translate contentKey="userManagement.createdDate">Created Date</Translate> <span className="fa fa-sort"/></th>
-                <th onClick={this.sort.bind(this, 'lastModifiedBy')}>
-                  <Translate contentKey="userManagement.lastModifiedBy">Last Modified By</Translate> <span className="fa fa-sort"/>
+                <th onClick={this.sort('createdDate')}><Translate contentKey="userManagement.createdDate">Created Date</Translate><FaSort/></th>
+                <th onClick={this.sort('lastModifiedBy')}>
+                  <Translate contentKey="userManagement.lastModifiedBy">Last Modified By</Translate><FaSort/>
                 </th>
-                <th onClick={this.sort.bind(this, 'lastModifiedDate')}>
-                  <Translate contentKey="userManagement.lastModifiedDate">Last Modified Date</Translate> <span className="fa fa-sort"/>
+                <th onClick={this.sort('lastModifiedDate')}>
+                  <Translate contentKey="userManagement.lastModifiedDate">Last Modified Date</Translate><FaSort/>
                 </th>
                 <th />
                 <%_ } _%>
@@ -228,7 +206,7 @@ export class UserManagement extends React.Component<IUserManagementProps, IUserM
         <div className="row justify-content-center">
           <Pagination
             prev next first last ellipsis boundaryLinks
-            items={this.state.items}
+            items={Math.round(totalItems / this.state.itemsPerPage) + 1}
             maxButtons={5}
             activePage={this.state.activePage}
             onSelect={this.handlePagination}
@@ -241,6 +219,7 @@ export class UserManagement extends React.Component<IUserManagementProps, IUserM
 
 const mapStateToProps = storeState => ({
   users: storeState.userManagement.users,
+  totalItems: storeState.userManagement.totalItems,
   account: storeState.authentication.account
 });
 

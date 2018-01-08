@@ -20,7 +20,8 @@ const initialState = {
   authorities: [],
   user: {},
   updating: false,
-  updateSuccess: false
+  updateSuccess: false,
+  totalItems: 0
 };
 
 // Reducer
@@ -70,7 +71,8 @@ export default (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        users: action.payload.data
+        users: action.payload.data,
+        totalItems: action.payload.headers['x-total-count']
       };
     case SUCCESS(ACTION_TYPES.FETCH_USER):
       return {
