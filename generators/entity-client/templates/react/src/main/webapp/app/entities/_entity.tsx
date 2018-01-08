@@ -19,16 +19,14 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Button<%_ if (searchEngine === 'elasticsearch') { _%>, InputGroup<%_ } _%>
- } from 'reactstrap';
+import { Button<% if (searchEngine === 'elasticsearch') { %>, InputGroup <% } %>} from 'reactstrap';
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 <%_ } _%>
 // TODO import TextFormat only when fieldContainsDate
 // tslint:disable-next-line:no-unused-variable
 import { Translate, translate, ICrudGetAction, TextFormat } from 'react-jhipster';
-import { FaPlus, FaEye, FaPencil, FaTrash<%_ if (searchEngine === 'elasticsearch') { _%>, FaSearch<%_ } _%>
- } from 'react-icons/lib/fa';
+import { FaPlus, FaEye, FaPencil, FaTrash<% if (searchEngine === 'elasticsearch') { %>, FaSearch <% } %>} from 'react-icons/lib/fa';
 
 import {
 <%_ for (idx in relationships) { const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;const otherEntityNamePlural = relationships[idx].otherEntityNamePlural; _%>
@@ -71,9 +69,6 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
     this.state = {
       search: ''
     };
-    this.search = this.search.bind(this);
-    this.clear = this.clear.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
     <%_ } _%>
   }
 
@@ -88,22 +83,20 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   }
   <%_ if (searchEngine === 'elasticsearch') { _%>
 
-  search() {
+  search = () => {
     if (this.state.search) {
       this.props.getSearchEntities(this.state.search);
     }
   }
 
-  clear() {
+  clear = () => {
     this.props.getEntities();
     this.setState({
       search: ''
     });
   }
 
-  handleSearch(event) {
-    this.setState({ search: event.target.value });
-  }
+  handleSearch = event => this.setState({ search: event.target.value });
   <%_ } _%>
 
   render() {
