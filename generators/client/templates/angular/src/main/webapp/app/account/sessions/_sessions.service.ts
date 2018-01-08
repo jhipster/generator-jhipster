@@ -27,7 +27,7 @@ import { SERVER_API_URL } from '../../app.constants';
 export class SessionsService {
 
     private resourceUrl = SERVER_API_URL + 'api/account/sessions/';
-    constructor(private http: Http) { }
+    constructor(private http: HttpClient) { }
 
     findAll(): Observable<Session[]> {
         return this.http.get<Session[]>(this.resourceUrl);
