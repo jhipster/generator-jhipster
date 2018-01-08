@@ -18,24 +18,58 @@
 -%>
 package <%=packageName%>.config;
 
-import java.io.IOException;
-
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elasticsearch.client.Client;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.NoneNestedConditions;
+import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.elasticsearch.client.NodeClientFactoryBean;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.EntityMapper;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 
 @Configuration
+@EnableConfigurationProperties(ElasticsearchProperties.class)
 public class ElasticsearchConfiguration {
+
+    private final ElasticsearchProperties properties;
+
+    public ElasticsearchConfiguration(ElasticsearchProperties properties) {
+        this.properties = properties;
+    }
 
     @Bean
     public ElasticsearchTemplate elasticsearchTemplate(Client client, Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder) {
         return new ElasticsearchTemplate(client, new CustomEntityMapper(jackson2ObjectMapperBuilder.createXmlMapper(false).build()));
+    }
+
+    @Conditional(ClusterNodesUnavailableCondition.class)
+    @Bean
+    public NodeClientFactoryBean elasticsearchClient() throws Exception {
+        NodeClientFactoryBean factory = new NodeClientFactoryBean(true);
+        factory.setPathData(properties.getProperties().get("path.data"));
+        factory.setPathHome(System.getProperty("user.dir"));
+        factory.setEnableHttp(false);
+        factory.setClusterName(properties.getClusterName());
+        return factory;
+    }
+
+    private static class ClusterNodesUnavailableCondition extends NoneNestedConditions {
+
+        ClusterNodesUnavailableCondition() {
+            super(ConfigurationPhase.REGISTER_BEAN);
+        }
+
+        @ConditionalOnProperty(value = "spring.data.elasticsearch.cluster-nodes")
+        static class ClusterNodesAvailable {
+        }
     }
 
     public class CustomEntityMapper implements EntityMapper {

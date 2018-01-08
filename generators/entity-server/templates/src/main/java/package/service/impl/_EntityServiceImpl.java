@@ -150,11 +150,8 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
         log.debug("Request to search <%= entityClassPlural %> for query {}", query);<%- include('../../common/search_stream_template', {viaService: viaService}); -%>
         <%_ } else { _%>
         log.debug("Request to search for a page of <%= entityClassPlural %> for query {}", query);
-        Page<<%= entityClass %>> result = <%= entityInstance %>SearchRepository.search(queryStringQuery(query), pageable);
-            <%_ if (dto === 'mapstruct') { _%>
-        return result.map(<%= entityToDtoReference %>);
-            <%_ } else { _%>
-        return result;
+        return <%= entityInstance %>SearchRepository.search(queryStringQuery(query), pageable)<%_ if (dto !== 'mapstruct') { _%>;<% } else { %>
+            .map(<%= entityToDtoReference %>);
         <%_ } } _%>
     }
     <%_ } _%>

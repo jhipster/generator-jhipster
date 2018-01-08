@@ -25,3 +25,4 @@ services:
         ports:
             - 9200:9200
             - 9300:9300
+        command: -Enetwork.host=0.0.0.0 -Ediscovery.type=single-node

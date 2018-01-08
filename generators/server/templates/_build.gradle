@@ -42,7 +42,7 @@ buildscript {
 
 plugins {
     id "org.sonarqube" version "2.5"
-    id "net.ltgt.apt" version "0.13"
+    id "net.ltgt.apt-idea" version "0.13"
     id "io.spring.dependency-management" version "1.0.3.RELEASE"
     <%_ if (gatlingTests) { _%>
     id "com.github.lkishalmi.gatling" version "0.7.1"
@@ -118,9 +118,6 @@ if (OperatingSystem.current().isWindows()) {
         doFirst {
             classpath = files("$buildDir/classes/java/main", "$buildDir/resources/main", pathingJar.archivePath)
         }
-    }
-} else {
-    bootRun {
     }
 }
 
@@ -332,18 +329,18 @@ dependencies {
     compile "com.datastax.cassandra:cassandra-driver-mapping"
     <%_ } _%>
     <%_ if (applicationType === 'gateway') { _%>
-    compile "org.springframework.cloud:spring-cloud-starter-zuul"
+    compile "org.springframework.cloud:spring-cloud-starter-netflix-zuul"
     compile "com.github.vladimir-bukhtoyarov:bucket4j-core"
     compile "com.github.vladimir-bukhtoyarov:bucket4j-jcache"
     <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
     compile "org.springframework.cloud:spring-cloud-starter"
-    compile "org.springframework.cloud:spring-cloud-starter-ribbon"
-    compile "org.springframework.cloud:spring-cloud-starter-hystrix"
+    compile "org.springframework.cloud:spring-cloud-starter-netflix-ribbon"
+    compile "org.springframework.cloud:spring-cloud-starter-netflix-hystrix"
     compile "org.springframework.retry:spring-retry"
     <%_ } _%>
     <%_ if (serviceDiscoveryType === 'eureka') { _%>
-    compile "org.springframework.cloud:spring-cloud-starter-eureka"
+    compile "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
     compile "org.springframework.cloud:spring-cloud-starter-config"
     <%_ } _%>
     <%_ if (serviceDiscoveryType === 'consul') { _%>
@@ -354,7 +351,7 @@ dependencies {
     compile "org.springframework.cloud:spring-cloud-security"
     <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
-    compile "org.springframework.cloud:spring-cloud-starter-feign"
+    compile "org.springframework.cloud:spring-cloud-starter-openfeign"
     <%_ } _%>
     compile "org.springframework.cloud:spring-cloud-spring-service-connector"
     compile "org.springframework:spring-context-support"
