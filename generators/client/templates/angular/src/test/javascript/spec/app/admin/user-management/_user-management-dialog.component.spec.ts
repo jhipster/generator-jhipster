@@ -20,6 +20,7 @@
 const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
 _%>
 import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
+import { HttpResponse } from '@angular/common/http';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
 import { JhiEventManager } from 'ng-jhipster';
@@ -90,7 +91,9 @@ describe('Component Tests', () => {
                     fakeAsync(() => {
                         // GIVEN
                         const entity = new User(<%- tsKeyId %>);
-                        spyOn(service, 'update').and.returnValue(Observable.of(entity));
+                        spyOn(service, 'update').and.returnValue(Observable.of(new HttpResponse({
+                            body: entity
+                        })));
                         comp.user = entity;
                         // WHEN
                         comp.save();
@@ -117,7 +120,9 @@ describe('Component Tests', () => {
                         tick(); // simulate async
 
                         // THEN
-                        expect(service.create).toHaveBeenCalledWith(entity);
+                        expect(service.create).toHaveBeenCalledWith(new HttpResponse({
+                            body: entity
+                        }));
                         expect(comp.isSaving).toEqual(false);
                         expect(mockEventManager.broadcastSpy).toHaveBeenCalledWith({ name: 'userListModification', content: 'OK'});
                         expect(mockActiveModal.dismissSpy).toHaveBeenCalled();

@@ -21,6 +21,7 @@ const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
 _%>
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { HttpResponse } from "@angular/common/http";
 import { Observable } from 'rxjs/Observable';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
@@ -57,7 +58,9 @@ describe('Component Tests', () => {
             it('Should call load all on init', () => {
                 // GIVEN
 
-                spyOn(service, 'find').and.returnValue(Observable.of(new <%= entityAngularName %>(<%- tsKeyId %>)));
+                spyOn(service, 'find').and.returnValue(Observable.of(new HttpResponse({
+                    body: new <%= entityAngularName %>(<%- tsKeyId %>))
+                })));
 
                 // WHEN
                 comp.ngOnInit();
