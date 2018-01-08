@@ -86,12 +86,6 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
     this.props.getUsers(this.state.activePage - 1, this.state.itemsPerPage, this.state.sort + ',' + this.state.order);
   }
 
-  getInitialState() {
-    return {
-      activePage: 1
-    };
-  }
-
   handlePagination = eventKey => {
     this.setState({
       activePage: eventKey
