@@ -4,7 +4,6 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FaRefresh } from 'react-icons/lib/fa';
 
 import { getRoutes } from '../../../reducers/gateway';
-// import GatewayModal from './gateway-modal';
 
 export interface IGatewayPageProps {
   getRoutes: ICrudGetAction;
@@ -13,11 +12,7 @@ export interface IGatewayPageProps {
   isFetching?: boolean;
 }
 
-export class GatewayPage extends React.Component<IGatewayPageProps, any> {
-
-  constructor(props) {
-    super(props);
-  }
+export class GatewayPage extends React.Component<IGatewayPageProps> {
 
   componentDidMount() {
     this.props.getRoutes();
@@ -29,8 +24,8 @@ export class GatewayPage extends React.Component<IGatewayPageProps, any> {
       spans.push((
         <span key={key.toString() + 'value'}>
           <span key={key.toString() + '-containerbadge'} className="badge badge-default font-weight-normal">
-          <span key={key.toString() + '-badge'} className="badge badge-pill badge-info font-weight-normal">{key}</span>
-        {instance[key]}
+            <span key={key.toString() + '-badge'} className="badge badge-pill badge-info font-weight-normal">{key}</span>
+            {instance[key]}
           </span>
         </span>
       ));
@@ -54,21 +49,15 @@ export class GatewayPage extends React.Component<IGatewayPageProps, any> {
     if (route) {
     return (
       <div className="table-responsive">
-      <table className="table table-striped">
-      <tbody>
-      {
-        route.serviceInstances.map((instance, i) => (
-          <tr key={instance.instanceInfo + '-info'}>
-            <td><a href={instance.uri} target="_blank">{instance.uri}</a></td>
-            <td>
-              {this.badgeInfo(instance.instanceInfo)}
-            </td>
-            <td>
-              {this.metadata(instance.metadata)}
-            </td>
-          </tr>
-        ))
-      }
+        <table className="table table-striped">
+          <tbody>
+            {route.serviceInstances.map((instance, i) =>
+              <tr key={instance.instanceInfo + '-info'}>
+                <td><a href={instance.uri} target="_blank">{instance.uri}</a></td>
+                <td>{this.badgeInfo(instance.instanceInfo)}</td>
+                <td>{this.metadata(instance.metadata)}</td>
+              </tr>
+            )}
       </tbody>
       </table>
       </div>);
@@ -85,40 +74,33 @@ export class GatewayPage extends React.Component<IGatewayPageProps, any> {
     const { routes, isFetching } = this.props;
     return (
       <div>
-          <h2>Gateway</h2>
+        <h2>Gateway</h2>
           <p>
-          <button type="button" onClick={this.getRoutes} className={isFetching ? 'btn btn-danger' : 'btn btn-primary'} disabled={isFetching}>
-            <FaRefresh />&nbsp;
-            <Translate component="span" contentKey="health.refresh.button" />
-          </button>
+            <button type="button" onClick={this.getRoutes} className={isFetching ? 'btn btn-danger' : 'btn btn-primary'} disabled={isFetching}>
+              <FaRefresh />&nbsp;
+              <Translate component="span" contentKey="health.refresh.button" />
+            </button>
           </p>
           <div className="table-responsive">
-              <table className="table table-striped">
+            <table className="table table-striped">
               <thead>
-              <tr key="header">
+                <tr key="header">
                   <th><Translate contentKey="gateway.routes.url"/></th>
                   <th><Translate contentKey="gateway.routes.service"/></th>
                   <th><Translate contentKey="gateway.routes.servers"/></th>
-              </tr>
+                </tr>
               </thead>
               <tbody>
-              {
-                routes.map((route, i) => (
-                  <tr key={`routes-${i}`}>
-                    <td>{route.path}</td>
-                    <td>{route.serviceId}</td>
-                    <td>
-                      {
-                        this.instanceInfo(route)
-                      }
-                    </td>
-                  </tr>
-                ))
-            }
+              {routes.map((route, i) =>
+                <tr key={`routes-${i}`}>
+                  <td>{route.path}</td>
+                  <td>{route.serviceId}</td>
+                  <td>{this.instanceInfo(route)}</td>
+                </tr>
+              )}
               </tbody>
-              </table>
+            </table>
           </div>
-
         </div>
     );
   }
