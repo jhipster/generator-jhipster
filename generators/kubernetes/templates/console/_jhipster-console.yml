@@ -44,8 +44,11 @@ metadata:
     app: jhipster-console
 spec:
   ports:
-  - name: "5601"
+  - name: http-bc
     port: 5601
+    targetPort: 5601
+  - name: http
+    port: 80
     targetPort: 5601
   selector:
     app: jhipster-console

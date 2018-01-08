@@ -63,6 +63,9 @@ function writeFiles() {
                 this.template('console/_jhipster-logstash.yml', 'console/jhipster-logstash.yml');
                 this.template('console/_jhipster-console.yml', 'console/jhipster-console.yml');
                 this.template('console/_jhipster-dashboard-console.yml', 'console/jhipster-dashboard-console.yml');
+                if (this.composeApplicationType === 'microservice') {
+                    this.template('console/_jhipster-zipkin.yml', 'console/jhipster-zipkin.yml');
+                }
             }
         },
 
