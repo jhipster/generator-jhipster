@@ -393,6 +393,7 @@ module.exports = class extends BaseGenerator {
                     if (this.clientFramework === 'angular1') {
                         this.spawnCommandSync('gulp', ['install']);
                     } else {
+                        this.spawnCommandSync(this.clientPackageManager, ['run', 'prettier:format']);
                         this.buildResult = this.spawnCommandSync(this.clientPackageManager, ['run', 'webpack:build']);
                     }
                 },

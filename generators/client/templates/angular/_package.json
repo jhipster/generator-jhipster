@@ -46,6 +46,7 @@
     "reflect-metadata": "0.1.10",
     "rxjs": "5.5.5",
     "swagger-ui": "2.2.10",
+    "prettier": "1.9.2",
     <%_ if (websocket === 'spring-websocket') { _%>
     "sockjs-client": "1.1.4",
     "webstomp-client": "1.0.6",
@@ -134,6 +135,7 @@
     "node": ">=6.9.0"
   },
   "scripts": {
+    "prettier:format":"<%= clientPackageManager %> prettier --write \"**/*.ts\"; <%= clientPackageManager %> lint:fix",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "ngc": "ngc -p tsconfig-aot.json",
