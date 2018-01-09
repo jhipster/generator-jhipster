@@ -27,7 +27,7 @@ import { FaPlus, FaEye, FaPencil, FaSort, FaTrash } from 'react-icons/lib/fa';
 import { getUsers } from '../../../reducers/user-management';
 import { APP_DATE_FORMAT } from '../../../config/constants';
 import { ITEMS_PER_PAGE } from '../../../shared/util/pagination.constants';
-import { getUrlParameter, IPaginationState } from '../../../shared/util/pagination-utils';
+import { getSortState, IPaginationState } from '../../../shared/util/pagination-utils';
 
 export interface IUserManagementProps {
   getUsers: ICrudGetAction;
@@ -35,37 +35,24 @@ export interface IUserManagementProps {
   account: any;
   match: any;
   totalItems: 0;
+  history: any;
+  location: any;
 }
 
 export class UserManagement extends React.Component<IUserManagementProps, IPaginationState> {
 
   constructor(props) {
     super(props);
-    const pageParam = getUrlParameter('page', props.location.search);
-    const sortParam = getUrlParameter('sort', props.location.search);
-    let sort = 'id';
-    let order = 'asc';
-    let activePage = 1;
-    if (pageParam !== '' && !isNaN(Number(pageParam))) {
-      activePage = Number(pageParam);
-    }
-    if (sortParam !== '') {
-      sort = sortParam.split(',')[0];
-      order = sortParam.split(',')[1];
-    }
     this.state = {
-      itemsPerPage: ITEMS_PER_PAGE,
-      sort,
-      order,
-      activePage
+      ...getSortState(props.location)
     };
   }
 
   componentDidMount() {
-    this.props.getUsers(this.state.activePage - 1, this.state.itemsPerPage, this.state.sort + ',' + this.state.order);
+    this.props.getUsers(this.state.activePage - 1, this.state.itemsPerPage, `${this.state.sort},${this.state.order}`);
   }
 
-  sort = prop => e => {
+  sort = prop => () => {
     this.state.order === 'asc' ?
       this.setState({
         order: 'desc',
@@ -82,8 +69,8 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
   }
 
   sortUsers() {
-    location.href = location.href.split('?')[0] + '?page=' + this.state.activePage + '&sort=' + this.state.sort + ',' + this.state.order;
-    this.props.getUsers(this.state.activePage - 1, this.state.itemsPerPage, this.state.sort + ',' + this.state.order);
+    this.props.getUsers(this.state.activePage - 1, this.state.itemsPerPage, `${this.state.sort},${this.state.order}`);
+    this.props.history.push(`${this.props.location.pathname}?page=${this.state.activePage}&sort=${this.state.sort},${this.state.order}`);
   }
 
   handlePagination = eventKey => {

@@ -103,7 +103,7 @@ export default (state = initialState, action) => {
 const apiUrl = '/api/users';
 // Actions
 export const getUsers: ICrudGetAction = (page, size, sort) => {
-  const requestUrl = `${apiUrl}` + (sort ? `?page=${page}&size=${size}&sort=${sort}` : ``);
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
   return {
     type: ACTION_TYPES.FETCH_USERS,
     payload: axios.get(requestUrl)
