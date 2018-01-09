@@ -20,7 +20,7 @@
 const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
 _%>
 /* tslint:disable max-line-length */
-import { TestBed } from '@angular/core/testing';
+import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { JhiDateUtils } from 'ng-jhipster';
 
@@ -30,8 +30,9 @@ import { SERVER_API_URL } from '../../../../../../main/webapp/app/app.constants'
 describe('Service Tests', () => {
 
     describe('<%= entityAngularName %> Service', () => {
+        let injector: TestBed;
         let service: <%= entityAngularName %>Service;
-        let httpMock;
+        let httpMock: HttpTestingController;
 
         beforeEach(() => {
             TestBed.configureTestingModule({
@@ -43,9 +44,9 @@ describe('Service Tests', () => {
                     <%= entityAngularName %>Service
                 ]
             });
-
-            service = TestBed.get(<%= entityAngularName %>Service);
-            httpMock = TestBed.get(HttpTestingController);
+            injector = getTestBed();
+            service = injector.get(<%= entityAngularName %>Service);
+            httpMock = injector.get(HttpTestingController);
         });
 
         describe('Service methods', () => {
