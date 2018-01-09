@@ -135,7 +135,7 @@
     "node": ">=6.9.0"
   },
   "scripts": {
-    "prettier:format":"<%= clientPackageManager %> prettier --write \"**/*.ts\"; <%= clientPackageManager %> lint:fix",
+    "prettier:format":"<%= clientPackageManager %> prettier --write '**/*.ts' --single-quote; <%= clientPackageManager %> lint:fix",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "ngc": "ngc -p tsconfig-aot.json",
