@@ -87,6 +87,10 @@ public interface <%=entityClass%>Repository extends <% if (databaseType === 'sql
         countQuery = "select count(distinct <%= entityTableName %>) from <%= entityClass %> <%= entityTableName %>")
     Page<<%=entityClass%>> findAllWithEagerRelationships(Pageable pageable);
 
+    @Query(value = "select distinct <%= entityTableName %> from <%= entityClass %> <%= entityTableName %><% for (idx in relationships) {
+    if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { %> left join fetch <%=entityTableName%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%>")
+    List<<%=entityClass%>> findAllWithEagerRelationships();
+
     @Query("select <%= entityTableName %> from <%= entityClass %> <%= entityTableName %><% for (idx in relationships) {
     if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { %> left join fetch <%=entityTableName%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%> where <%=entityTableName%>.id =:id")
     Optional<<%=entityClass%>> findOneWithEagerRelationships(@Param("id") Long id);
