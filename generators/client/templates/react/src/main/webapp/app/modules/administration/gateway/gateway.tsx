@@ -47,20 +47,20 @@ export class GatewayPage extends React.Component<IGatewayPageProps> {
 
   instanceInfo = route => {
     if (route) {
-    return (
-      <div className="table-responsive">
-        <table className="table table-striped">
-          <tbody>
-            {route.serviceInstances.map((instance, i) =>
-              <tr key={instance.instanceInfo + '-info'}>
-                <td><a href={instance.uri} target="_blank">{instance.uri}</a></td>
-                <td>{this.badgeInfo(instance.instanceInfo)}</td>
-                <td>{this.metadata(instance.metadata)}</td>
-              </tr>
-            )}
-      </tbody>
-      </table>
-      </div>);
+      return (
+        <div className="table-responsive">
+          <table className="table table-striped">
+            <tbody>
+              {route.serviceInstances.map((instance, i) =>
+                <tr key={instance.instanceInfo + '-info'}>
+                  <td><a href={instance.uri} target="_blank">{instance.uri}</a></td>
+                  <td>{this.badgeInfo(instance.instanceInfo)}</td>
+                  <td>{this.metadata(instance.metadata)}</td>
+                </tr>
+              )}
+        </tbody>
+        </table>
+        </div>);
     }
   }
 
