@@ -53,19 +53,10 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
   }
 
   sort = prop => () => {
-    this.state.order === 'asc' ?
-      this.setState({
-        order: 'desc',
-        sort: prop
-    }, () => {
-      this.sortUsers();
-    }) :
     this.setState({
-       order: 'asc',
-       sort: prop
-    }, () => {
-      this.sortUsers();
-    });
+      order: this.state.order === 'asc' ? 'desc' : 'asc',
+      sort: prop
+    }, () => this.sortUsers());
   }
 
   sortUsers() {
