@@ -30,3 +30,9 @@ export const getSortState = location => {
     }
     return { itemsPerPage, sort, order, activePage };
 };
+
+export const getItemsNumber = (totalItems, itemsPerPage) => {
+    const division = Math.round(totalItems / itemsPerPage);
+    const modulo = totalItems % itemsPerPage;
+    return division + (modulo !== 0 ? 1 : 0);
+};

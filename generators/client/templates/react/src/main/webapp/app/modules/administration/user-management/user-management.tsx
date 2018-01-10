@@ -20,14 +20,14 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
-import { Pagination } from 'react-bootstrap';
 import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FaPlus, FaEye, FaPencil, FaSort, FaTrash } from 'react-icons/lib/fa';
 
 import { getUsers } from '../../../reducers/user-management';
 import { APP_DATE_FORMAT } from '../../../config/constants';
 import { ITEMS_PER_PAGE } from '../../../shared/util/pagination.constants';
-import { getSortState, IPaginationState } from '../../../shared/util/pagination-utils';
+import { getItemsNumber, getSortState, IPaginationState } from '../../../shared/util/pagination-utils';
+import { PaginationComponent } from '../../../shared/util/pagination-component';
 
 export interface IUserManagementProps {
   getUsers: ICrudGetAction;
@@ -185,12 +185,11 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
           </table>
         </div>
         <div className="row justify-content-center">
-          <Pagination
-            prev next first last ellipsis boundaryLinks
-            items={Math.round(totalItems / this.state.itemsPerPage) + 1}
-            maxButtons={5}
+          <PaginationComponent
+            items={getItemsNumber(totalItems, this.state.itemsPerPage)}
             activePage={this.state.activePage}
             onSelect={this.handlePagination}
+            maxButtons={5}
           />
         </div>
       </div>

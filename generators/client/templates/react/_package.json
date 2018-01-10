@@ -35,7 +35,6 @@ limitations under the License.
     "react": "16.0.0",
     "react-addons-css-transition-group": "16.0.0-alpha.3",
     "react-addons-transition-group": "16.0.0-alpha.3",
-    "react-bootstrap": "0.31.5",
     "react-dom": "16.0.0",
     "react-hot-loader": "3.1.1",
     "react-icons": "2.2.7",
