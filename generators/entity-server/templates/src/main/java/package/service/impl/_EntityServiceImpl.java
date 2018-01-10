@@ -102,6 +102,17 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
             .map(<%= entityToDtoReference %>);<% } %>
         <%_ } _%>
     }
+    <%_ if (fieldsContainOwnerManyToMany === true) { _%>
+
+    /**
+     * Get all the <%= entityClass %> with eager load of many-to-many relationships.
+     *
+     * @return the list of entities
+     */
+    Page<<%= instanceType %>> findAllWithEagerRelationships(Pageable pageable) {
+        return <%= entityInstance %>Repository.findAllWithEagerRelationships(Pageable pageable);
+    };
+    <% } %>
 <%- include('../../common/get_filtered_template'); -%>
     /**
      * Get one <%= entityInstance %> by id.

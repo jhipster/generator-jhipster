@@ -64,6 +64,15 @@ public interface <%= entityClass %>Service {
     List<<%= instanceType %>> findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull();
 <% } } -%>
 
+    <%_ if (fieldsContainOwnerManyToMany === true) { _%>
+    /**
+     * Get all the <%= entityClass %> with eager load of many-to-many relationships.
+     *
+     * @return the list of entities
+     */
+    Page<<%= instanceType %>> findAllWithEagerRelationships(Pageable pageable);
+    <% } -%>
+
     /**
      * Get the "id" <%= entityInstance %>.
      *
