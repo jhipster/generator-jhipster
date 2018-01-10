@@ -306,10 +306,12 @@
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-jcache</artifactId>
         </dependency>
+<!--
         <dependency>
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-cloud</artifactId>
         </dependency>
+-->
         <%_ } _%>
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
