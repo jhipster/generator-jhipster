@@ -331,7 +331,7 @@ dependencies {
     <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
     compile "org.springframework.cloud:spring-cloud-starter"
-    compile "org.springframework.cloud:spring-cloud-starter-ribbon"
+    compile "org.springframework.cloud:spring-cloud-starter-netflix-ribbon"
     compile "org.springframework.cloud:spring-cloud-starter-hystrix"
     compile "org.springframework.cloud:spring-cloud-starter-spectator"
     compile "org.springframework.retry:spring-retry"
@@ -348,7 +348,7 @@ dependencies {
     compile "org.springframework.cloud:spring-cloud-security"
     <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
-    compile "org.springframework.cloud:spring-cloud-starter-feign"
+    compile "org.springframework.cloud:spring-cloud-starter-openfeign"
     <%_ } _%>
     compile "org.springframework.cloud:spring-cloud-spring-service-connector"
     compile "org.springframework:spring-context-support"
