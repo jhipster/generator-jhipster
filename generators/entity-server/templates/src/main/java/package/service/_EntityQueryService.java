@@ -97,8 +97,8 @@ public class <%= serviceClassName %> extends QueryService<<%= entityClass %>> {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<<%= entityClass %>> specification = createSpecification(criteria);
     <%_ if (dto === 'mapstruct') { _%>
-        final Page<<%= entityClass %>> result = <%= repository %>.findAll(specification, page);
-        return result.map(<%= entityToDtoReference %>);
+        return <%= repository %>.findAll(specification, page)
+            .map(<%= entityToDtoReference %>);
     <%_ } else { _%>
         return <%= repository %>.findAll(specification, page);
     <%_ } _%>

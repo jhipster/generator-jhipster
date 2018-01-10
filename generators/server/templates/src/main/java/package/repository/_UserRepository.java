@@ -117,7 +117,7 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
         <%_ } _%>
     default Optional<User> findOneByLogin(String login) {
-        return Optional.ofNullable(findOne(User.PREFIX + ID_DELIMITER + login));
+        return findById(User.PREFIX + ID_DELIMITER + login);
     }
     <%_ } else if (databaseType === 'mongodb') { _%>
         <%_ if (cacheManagerIsAvailable === true) { _%>
