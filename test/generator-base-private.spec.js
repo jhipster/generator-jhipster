@@ -111,4 +111,40 @@ export * from './entityFolderName/entityFileName.state';`;
             });
         });
     });
+
+    describe('formatAsApiDescription', () => {
+        describe('when formatting a nil text', () => {
+            it('returns it', () => {
+                expect(BaseGenerator.formatAsApiDescription()).to.equal(undefined);
+            });
+        });
+        describe('when formatting an empty text', () => {
+            it('returns it', () => {
+                expect(BaseGenerator.formatAsApiDescription('')).to.equal('');
+            });
+        });
+        describe('when formatting normal texts', () => {
+            describe('when having empty lines', () => {
+                it('discards them', () => {
+                    expect(BaseGenerator.formatAsApiDescription('First line\n \nSecond line\n\nThird line')).to.equal('First line Second line Third line');
+                });
+            });
+            describe('when having HTML tags', () => {
+                it('keeps them', () => {
+                    expect(BaseGenerator.formatAsApiDescription('Not boldy\n<b>boldy</b>')).to.equal('Not boldy<b>boldy</b>');
+                });
+            });
+            describe('when having a plain text', () => {
+                it('puts a space before each line', () => {
+                    expect(BaseGenerator.formatAsApiDescription('JHipster is\na great generator')).to.equal('JHipster is a great generator');
+                });
+            });
+            describe('when having quotes', () => {
+                it('formats the text to make the string valid', () => {
+                    // eslint-disable-next-line quotes
+                    expect(BaseGenerator.formatAsApiDescription("JHipster is \"the\" best")).to.equal("JHipster is \"the\" best");
+                });
+            });
+        });
+    });
 });
