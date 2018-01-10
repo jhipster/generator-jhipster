@@ -2065,6 +2065,7 @@ module.exports = class extends PrivateBase {
         const keyStoreFile = `${SERVER_MAIN_RES_DIR}keystore.jks`;
         if (this.fs.exists(keyStoreFile)) {
             this.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
+            done();
         } else {
             shelljs.mkdir('-p', SERVER_MAIN_RES_DIR);
             const javaHome = shelljs.env.JAVA_HOME;
