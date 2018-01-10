@@ -335,7 +335,7 @@ public class UserService {
             .map(user -> {
                 <%_ if (databaseType === 'couchbase') { _%>
                 if (!user.getLogin().equals(userDTO.getLogin())) {
-                    userRepository.delete(userDTO.getId());
+                    userRepository.deleteById(userDTO.getId());
                 }
                 <%_ } _%>
                 user.setLogin(userDTO.getLogin());
