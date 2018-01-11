@@ -150,15 +150,21 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                     {
                       (<%= entityInstance %>.<%= relationshipFieldNamePlural %>) ?
                           (<%= entityInstance %>.<%= relationshipFieldNamePlural %>.map((val, j) =>
-                              <span key={j}><a>{val.<%= otherEntityField %>}</a>{(j === <%= entityInstance %>.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
+                              <span key={j}><Link to={`<%= otherEntityName %>/${val.id}`}>{val.<%= otherEntityField %>}</Link>{(j === <%= entityInstance %>.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
                           )
                       ) : null
                     }
                       <%_ } else { _%>
                           <%_ if (dto === 'no') { _%>
-                    {<%= entityInstance + "." + relationshipFieldName %> ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %> : ''}
+                    {<%= entityInstance + "." + relationshipFieldName %> ?
+                    <Link to={`<%= otherEntityName %>/${<%= entityInstance + "." + relationshipFieldName + ".id}" %>`}>
+                      {<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}
+                    </Link> : ''}
                           <%_ } else { _%>
-                    {<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %> ? <%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %> : ''}
+                    {<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %> ?
+                    <Link to={`<%= otherEntityName %>/${<%= entityInstance + "." + relationshipFieldName + "Id}" %>`}>
+                      {<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}
+                    </Link> : ''}
                           <%_ } _%>
                       <%_ } _%>
                     <%_ } _%>
