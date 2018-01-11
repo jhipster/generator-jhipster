@@ -461,7 +461,9 @@ const files = {
                 'spec/helpers/_mock-login.service.ts',
                 'spec/helpers/_mock-event-manager.service.ts',
                 'spec/helpers/_mock-active-modal.service.ts',
-                'spec/helpers/_mock-state-storage.service.ts'
+                'spec/helpers/_mock-state-storage.service.ts',
+                'spec/app/shared/model/_request-util.spec.ts',
+                'spec/app/shared/model/_response-wrapper.spec.ts'
             ]
         },
         {
