@@ -308,13 +308,56 @@ _%>
                 name="<%= relationshipFieldName %>.id"
                 value={this.state.<%= relationshipFieldName %>Id} />
                 <%_ } else { _%>
-                  TODO 1
+              <AvInput type="select"
+                className="form-control"
+                name="<%= relationshipFieldName %>.<%= otherEntityField %>"
+                onChange={this.<%= relationshipFieldName %>Update}>
+                {
+                  <%= otherEntityNamePlural %>.map(otherEntity =>
+                    <option
+                      value={otherEntity.<%=otherEntityField%>}
+                      key={otherEntity.id}>
+                      {otherEntity.<%=otherEntityField%>}
+                    </option>
+                  )
+                }
+              </AvInput>
+              <AvInput type="hidden"
+                name="<%= relationshipFieldName %>.id"
+                value={this.state.<%= relationshipFieldName %>Id} />
                 <%_ } _%>
               <%_ } else { _%>
                 <%_ if (!relationshipRequired) { _%>
-                  TODO 2
+                  <AvInput type="select"
+                    className="form-control"
+                    name="<%= relationshipFieldName %>Id"
+                    onChange={this.<%= relationshipFieldName %>Update}>
+                    <option value="" key="0" />
+                    {
+                      <%= otherEntityNamePlural %>.map(otherEntity =>
+                        <option
+                          value={otherEntity.id}
+                          key={otherEntity.id}>
+                          {otherEntity.<%=otherEntityField%>}
+                        </option>
+                      )
+                    }
+                  </AvInput>
                 <%_ } else { _%>
-                  TODO 3
+                  <AvInput type="select"
+                    className="form-control"
+                    name="<%= relationshipFieldName %>Id"
+                    onChange={this.<%= relationshipFieldName %>Update}>
+                    {
+                      <%= otherEntityNamePlural %>.map(otherEntity =>
+                        <option
+                          value={otherEntity.id}
+                          key={otherEntity.id}>
+                          {otherEntity.<%=otherEntityField%>}
+                        </option>
+                      )
+                    }
+                  </AvInput>
                 <%_ } _%>
               <%_ } _%>
             </AvGroup>
