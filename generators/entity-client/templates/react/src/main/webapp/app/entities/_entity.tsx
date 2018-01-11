@@ -141,7 +141,13 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                       <%_ } _%>
                     <%_ } else { _%>
                       <%_ if (relationshipType === 'many-to-many') { _%>
-                    TODO
+                    {
+                      (<%= entityInstance %>.<%= relationshipFieldNamePlural %>) ?
+                          (<%= entityInstance %>.<%= relationshipFieldNamePlural %>.map((val, j) =>
+                              <span key={j}><a>{val.<%= otherEntityField %>}</a>{(j === <%= entityInstance %>.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
+                          )
+                      ) : null
+                    }
                       <%_ } else { _%>
                           <%_ if (dto === 'no') { _%>
                     {<%= entityInstance + "." + relationshipFieldName %> ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %> : ''}
