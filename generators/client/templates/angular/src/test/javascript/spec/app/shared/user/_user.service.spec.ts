@@ -50,7 +50,7 @@ describe('Service Tests', () => {
 
         describe('Service methods', () => {
             it('should call correct URL', () => {
-                service.find('user');
+                service.find('user').subscribe(() => {});
 
                 const req  = httpMock.expectOne({ method: 'GET' });
                 const resourceUrl = SERVER_API_URL + '<%- apiUaaPath %>api/users';

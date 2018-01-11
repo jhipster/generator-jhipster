@@ -51,7 +51,7 @@ describe('Service Tests', () => {
 
         describe('Service methods', () => {
             it('should call correct URL', () => {
-                service.find(<%- tsKeyId %>);
+                service.find(<%- tsKeyId %>).subscribe(() => {});
 
                 const req  = httpMock.expectOne({ method: 'GET' });
 
