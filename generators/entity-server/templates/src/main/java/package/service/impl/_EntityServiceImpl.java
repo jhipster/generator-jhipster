@@ -111,7 +111,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
      */
     Page<<%= instanceType %>> findAllWithEagerRelationships(Pageable pageable) {
         return <%= entityInstance %>Repository.findAllWithEagerRelationships(Pageable pageable);
-    };
+    }
     <% } %>
 <%- include('../../common/get_filtered_template'); -%>
     /**
