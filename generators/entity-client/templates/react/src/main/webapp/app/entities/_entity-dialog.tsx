@@ -230,19 +230,23 @@ _%>
                   <%=fields[idx].fieldName%>
                 </Translate>
               </Label>
-              <AvInput
-                type="datetime-local" className="form-control" name="<%= fields[idx].fieldName %>"
-                value={convertDateTimeFromServer(this.props.<%= entityInstance %>.<%= fields[idx].fieldName %>)} required
-              />
-              <AvFeedback>This field is required.</AvFeedback>
+              <AvField
+                type="datetime-local"
+                className="form-control"
+                name="<%= fields[idx].fieldName %>"
+                value={convertDateTimeFromServer(this.props.<%= entityInstance %>.<%= fields[idx].fieldName %>)}
+                <%- include react_validators %>/>
             <%_ } else if (fieldType === 'LocalDate') { _%>
               <Label for="<%= fields[idx].fieldName %>">
                 <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
                   <%=fields[idx].fieldName%>
                 </Translate>
               </Label>
-              <AvInput type="date" className="form-control" name="<%= fields[idx].fieldName %>" required />
-              <AvFeedback>This field is required.</AvFeedback>
+              <AvField
+                type="date"
+                className="form-control"
+                name="<%= fields[idx].fieldName %>"
+                <%- include react_validators %>/>
             <%_ } else if (fields[idx].fieldIsEnum) { _%>
               <Label>
                 <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
@@ -264,9 +268,19 @@ _%>
               <%_ } _%>
               </AvInput>
             <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
-              <AvField type="number" name="<%= fields[idx].fieldName %>" label="<%= fields[idx].fieldName %>" <%- include react_validators %>/>
+              <Label>
+                <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
+                  <%=fields[idx].fieldName%>
+                </Translate>
+              </Label>
+              <AvField type="number" name="<%= fields[idx].fieldName %>" <%- include react_validators %>/>
             <%_ } else { _%>
-              <AvField type="text" name="<%= fields[idx].fieldName %>" label="<%= fields[idx].fieldName %>" <%- include react_validators %>/>
+              <Label>
+                <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
+                  <%=fields[idx].fieldName%>
+                </Translate>
+              </Label>
+              <AvField type="text" name="<%= fields[idx].fieldName %>" <%- include react_validators %>/>
             <%_ } _%>
             </AvGroup>
             <%_ } _%>

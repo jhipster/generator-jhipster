@@ -25,20 +25,24 @@ if (field.fieldValidate === true) {
 	const rules = field.fieldValidateRules;
 	const validators = [];
 
+
     if (rules.includes('required') && field.fieldType !== 'Boolean') {
         validators.push('required: { value: true, errorMessage: \'Field required\' }');
     }
     if (rules.includes('minlength')) {
-        validators.push('minLength: { value: ' + field.fieldValidateRulesMinlength + ', errorMessage: \'Min character : ' + field.fieldValidateRulesMinlength + ' \' }');
+        validators.push('minLength: { value: ' + field.fieldValidateRulesMinlength + ', errorMessage: \'Min character : ' + field.fieldValidateRulesMinlength + '\' }');
     }
     if (rules.includes('maxlength')) {
-        validators.push('maxLength: { value: ' + field.fieldValidateRulesMaxlength + ', errorMessage: \'Max character : ' + field.fieldValidateRulesMaxlength + ' \' }');
+        validators.push('maxLength: { value: ' + field.fieldValidateRulesMaxlength + ', errorMessage: \'Max character : ' + field.fieldValidateRulesMaxlength + '\' }');
     }
     if (rules.includes('min')) {
-        validators.push('min: { value: ' + field.fieldValidateRulesMin + ', errorMessage: \'Min value : ' + field.fieldValidateRulesMin + ' \' }');
+        validators.push('min: { value: ' + field.fieldValidateRulesMin + ', errorMessage: \'Min value : ' + field.fieldValidateRulesMin + '\' }');
     }
     if (rules.includes('max')) {
-        validators.push('max: { value: ' + field.fieldValidateRulesMax + ', errorMessage: \'Max value : ' + field.fieldValidateRulesMax + ' \' }');
+        validators.push('max: { value: ' + field.fieldValidateRulesMax + ', errorMessage: \'Max value : ' + field.fieldValidateRulesMax + '\' }');
+    }
+    if (rules.includes('pattern')) {
+        validators.push('pattern: { value: \'' + field.fieldValidateRulesPattern + '\', errorMessage: \'Invalid pattern : ' + '' + field.fieldValidateRulesPattern+ '' + '\' }');
     }
 
     result = validators.join(',\n              ');
