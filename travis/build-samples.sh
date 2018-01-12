@@ -21,7 +21,7 @@ function generateProject() {
     dir=$1
     JHIPSTER=$dir
     APP_FOLDER="$JHIPSTER_SAMPLES/$dir-sample"
-    UAA_APP_FOLDER="$JHIPSTER_SAMPLES/$uaa-sample"
+    UAA_APP_FOLDER="$JHIPSTER_SAMPLES/uaa-sample"
     echo "*********************** Copying entities for $dir-sample"
     source ./scripts/01-generate-entities.sh
     echo "*********************** Building $dir-sample"
@@ -34,7 +34,7 @@ function buildProject() {
     dir=$1
     JHIPSTER=$dir
     APP_FOLDER="$JHIPSTER_SAMPLES/$dir-sample"
-    UAA_APP_FOLDER="$JHIPSTER_SAMPLES/$uaa-sample"
+    UAA_APP_FOLDER="$JHIPSTER_SAMPLES/uaa-sample"
     generateProject "$1"
     echo "*********************** Testing $dir-sample"
     source ./scripts/04-tests.sh
