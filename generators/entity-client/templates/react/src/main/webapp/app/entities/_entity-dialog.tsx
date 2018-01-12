@@ -20,7 +20,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Label } from 'reactstrap';
 import { AvForm, AvGroup, AvInput, AvFeedback, AvField } from 'availity-reactstrap-validation';
-import { Translate, ICrudGetAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, ICrudGetAction, ICrudPutAction, translate } from 'react-jhipster';
 import { FaBan, FaFloppyO } from 'react-icons/lib/fa';
 
 import { getEntity, updateEntity, createEntity } from './<%= entityFileName %>.reducer';
