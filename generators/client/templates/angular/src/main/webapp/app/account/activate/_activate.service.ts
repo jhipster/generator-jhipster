@@ -17,21 +17,18 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { Http, Response, URLSearchParams } from '@angular/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { SERVER_API_URL } from '../../app.constants';
 
 @Injectable()
 export class ActivateService {
 
-    constructor(private http: Http) {}
+    constructor(private http: HttpClient) {}
 
     get(key: string): Observable<any> {
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('key', key);
-
         return this.http.get(SERVER_API_URL + '<%- apiUaaPath %>api/activate', {
-            search: params
-        }).map((res: Response) => res);
+            params: new HttpParams().set('key', key)
+        });
     }
 }

@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
 import { Session } from './session.model';
@@ -27,13 +27,13 @@ import { SERVER_API_URL } from '../../app.constants';
 export class SessionsService {
 
     private resourceUrl = SERVER_API_URL + 'api/account/sessions/';
-    constructor(private http: Http) { }
+    constructor(private http: HttpClient) { }
 
     findAll(): Observable<Session[]> {
-        return this.http.get(this.resourceUrl).map((res: Response) => res.json());
+        return this.http.get<Session[]>(this.resourceUrl);
     }
 
-    delete(series: string): Observable<Response> {
-        return this.http.delete(`${this.resourceUrl}${series}`);
+    delete(series: string): Observable<HttpResponse<any>> {
+        return this.http.delete(`${this.resourceUrl}${series}`, { observe: 'response' });
     }
 }

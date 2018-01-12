@@ -16,19 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { JhiHttpInterceptor } from 'ng-jhipster';
 import { Injector } from '@angular/core';
-import { RequestOptionsArgs, Response } from '@angular/http';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-<%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-import { LoginService } from '../../shared/login/login.service';
+import 'rxjs/add/operator/do';
+<%_ if (['oauth2', 'jwt', 'uaa'].includes(authenticationType)) { _%>
     <%_ if (authenticationType === 'uaa') { _%>
+import { Router } from '@angular/router';
 import { LoginModalService } from '../../shared/login/login-modal.service';
 import { Principal } from '../../shared/auth/principal.service';
-import { Router } from '@angular/router';
     <%_ } _%>
+import { LoginService } from '../../shared/login/login.service';
 <%_ } _%>
-<%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
+<%_ if (['session', 'oauth2'].includes(authenticationType)) { _%>
     <%_ if (authenticationType === 'session') { _%>
 import { AuthServerProvider } from '../../shared/auth/auth-session.service';
 import { LoginModalService } from '../../shared/login/login-modal.service';
@@ -36,81 +36,67 @@ import { LoginModalService } from '../../shared/login/login-modal.service';
 import { StateStorageService } from '../../shared/auth/state-storage.service';
 <%_ } _%>
 
-export class AuthExpiredInterceptor extends JhiHttpInterceptor {
+export class AuthExpiredInterceptor implements HttpInterceptor {
 
-<%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-    constructor(private injector: Injector) {
-        super();
-    }
-<%_ } else if (authenticationType === 'session') { _%>
     constructor(
-        private injector: Injector,
+        <%_ if (['session', 'oauth2'].includes(authenticationType)) { _%>
         private stateStorageService: StateStorageService,
-        private loginServiceModal: LoginModalService) {
-        super();
-    }
-<%_ } else if (authenticationType === 'oauth2') { _%>
-    constructor(private injector: Injector,
-        private stateStorageService: StateStorageService) {
-        super();
-    }
-<%_ } _%>
+        <%_ } _%>
+        private injector: Injector
+    ) {}
 
-    requestIntercept(options?: RequestOptionsArgs): RequestOptionsArgs {
-        return options;
-    }
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-
-    responseIntercept(observable: Observable<Response>): Observable<Response> {
-        return <Observable<Response>> observable.catch((error, source) => {
-            if (error.status === 401) {
+    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        return next.handle(request).do((event: HttpEvent<any>) => {}, (err: any) => {
+            if (err instanceof HttpErrorResponse) {
+                if (err.status === 401) {
 <%_ if (authenticationType === 'jwt') { _%>
-                const loginService: LoginService = this.injector.get(LoginService);
-                loginService.logout();
-<%_ } _%>
-<%_ if (authenticationType === 'uaa') { _%>
-                const principal = this.injector.get(Principal);
-
-                if (principal.isAuthenticated()) {
-                    principal.authenticate(null);
-                    const loginModalService: LoginModalService = this.injector.get(LoginModalService);
-                    loginModalService.open();
-                } else {
                     const loginService: LoginService = this.injector.get(LoginService);
                     loginService.logout();
-                    const router = this.injector.get(Router);
-                    router.navigate(['/']);
-                }
+<% } if (authenticationType === 'uaa') { %>
+                    const principal = this.injector.get(Principal);
+
+                    if (principal.isAuthenticated()) {
+                        principal.authenticate(null);
+                        const loginModalService: LoginModalService = this.injector.get(LoginModalService);
+                        loginModalService.open();
+                    } else {
+                        const loginService: LoginService = this.injector.get(LoginService);
+                        loginService.logout();
+                        const router = this.injector.get(Router);
+                        router.navigate(['/']);
+                    }
 <%_ } _%>
+                }
             }
-            return Observable.throw(error);
         });
     }
 <%_ } else if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
-
-    responseIntercept(observable: Observable<Response>): Observable<Response> {
-        return <Observable<Response>> observable.catch((error) => {
-            if (error.status === 401 && error.text() !== '' && error.json().path && !error.json().path.includes('/api/account')) {
-                const destination = this.stateStorageService.getDestinationState();
-                if (destination !== null) {
-                    const to = destination.destination;
-                    const toParams = destination.params;
-                    if (to.name === 'accessdenied') {
-                        this.stateStorageService.storePreviousState(to.name, toParams);
+    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        return next.handle(request).do((event: HttpEvent<any>) => {}, (err: any) => {
+            if (err instanceof HttpErrorResponse) {
+                if (err.status === 401 && err.url && err.url.includes('/api/account')) {
+                    const destination = this.stateStorageService.getDestinationState();
+                    if (destination !== null) {
+                        const to = destination.destination;
+                        const toParams = destination.params;
+                        if (to.name === 'accessdenied') {
+                            this.stateStorageService.storePreviousState(to.name, toParams);
+                        }
+                    } else {
+                        this.stateStorageService.storeUrl('/');
                     }
-                } else {
-                    this.stateStorageService.storeUrl('/');
+<% if (authenticationType === 'session') { %>
+                    const authServer: AuthServerProvider = this.injector.get(AuthServerProvider);
+                    authServer.logout();
+                    const loginModalService: LoginModalService = this.injector.get(LoginModalService);
+                    loginModalService.open();
+<% } else { %>
+                    const loginService: LoginService = this.injector.get(LoginService);
+                    loginService.login();
+<% } %>
                 }
-                <%_ if (authenticationType === 'session') { _%>
-                const authServer: AuthServerProvider = this.injector.get(AuthServerProvider);
-                authServer.logout();
-                this.loginServiceModal.open();
-                <%_ } else { _%>
-                const loginService: LoginService = this.injector.get(LoginService);
-                loginService.login();
-                <%_ } _%>
             }
-            return Observable.throw(error);
         });
     }
 <%_ } _%>
