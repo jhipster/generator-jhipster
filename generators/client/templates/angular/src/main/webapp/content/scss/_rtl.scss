@@ -104,7 +104,7 @@ html[dir=rtl] {
         padding-right: 1.25rem;
     }
     .input-group .form-control:not(:last-child),
-    .input-group-addon:not(:last-child),
+    .input-group-prepend,
     .input-group-btn:not(:last-child)>.btn,
     .input-group-btn:not(:last-child)>.btn-group>.btn,
     .input-group-btn:not(:last-child)>.dropdown-toggle,
@@ -113,12 +113,12 @@ html[dir=rtl] {
         @include border-right-radius($border-radius);
         @include border-left-radius(0);
     }
-    .input-group-addon:not(:last-child) {
+    .input-group-prepend {
         border-left: 0;
         border-right: 1px solid rgba(0, 0, 0, 0.15);
     }
     .input-group .form-control:not(:first-child),
-    .input-group-addon:not(:first-child),
+    .input-group-append,
     .input-group-btn:not(:first-child)>.btn,
     .input-group-btn:not(:first-child)>.btn-group>.btn,
     .input-group-btn:not(:first-child)>.dropdown-toggle,
@@ -127,7 +127,7 @@ html[dir=rtl] {
         @include border-left-radius($border-radius);
         @include border-right-radius(0);
     }
-    .form-control+.input-group-addon:not(:first-child) {
+    .form-control+.input-group-prepend {
         border-right: 0;
         border-left: 1px solid rgba(0, 0, 0, 0.15);
     }
