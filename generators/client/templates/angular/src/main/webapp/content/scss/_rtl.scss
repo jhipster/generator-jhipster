@@ -127,7 +127,7 @@ html[dir=rtl] {
         @include border-left-radius($border-radius);
         @include border-right-radius(0);
     }
-    .form-control+.input-group-prepend {
+    .form-control+.input-group-append {
         border-right: 0;
         border-left: 1px solid rgba(0, 0, 0, 0.15);
     }

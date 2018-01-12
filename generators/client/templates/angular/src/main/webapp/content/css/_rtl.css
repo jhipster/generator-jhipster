@@ -126,7 +126,7 @@ html[dir=rtl] .input-group-btn:not(:first-child)>.btn-group:not(:last-child)>.bt
     border-top-left-radius: 0.0rem;
 }
 
-html[dir=rtl] .input-group-append {
+html[dir=rtl] .input-group-prepend {
     border-left: 0;
     border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
