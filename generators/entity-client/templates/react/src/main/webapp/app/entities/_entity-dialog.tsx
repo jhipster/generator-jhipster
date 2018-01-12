@@ -19,7 +19,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Label } from 'reactstrap';
-import { AvForm, AvGroup, AvInput, AvFeedback } from 'availity-reactstrap-validation';
+import { AvForm, AvGroup, AvInput, AvFeedback, AvField } from 'availity-reactstrap-validation';
 import { Translate, ICrudGetAction, ICrudPutAction } from 'react-jhipster';
 import { FaBan, FaFloppyO } from 'react-icons/lib/fa';
 
@@ -101,12 +101,14 @@ _%>
     values.<%=fields[idx].fieldName%> = new Date(values.<%=fields[idx].fieldName%>);
     <%_ } _%>
     <%_ } _%>
-    if (this.state.isNew) {
-      this.props.createEntity(values);
-    } else {
-      this.props.updateEntity(values);
+    if (errors.length === 0) {
+      if (this.state.isNew) {
+        this.props.createEntity(values);
+      } else {
+        this.props.updateEntity(values);
+      }
+      this.handleClose();
     }
-    this.handleClose();
   }
 
   handleClose = () => {
@@ -261,15 +263,10 @@ _%>
                 </option>
               <%_ } _%>
               </AvInput>
+            <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
+              <AvField type="number" name="<%= fields[idx].fieldName %>" label="<%= fields[idx].fieldName %>" <%- include react_validators %>/>
             <%_ } else { _%>
-              <Label for="<%= fields[idx].fieldName %>">
-                <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
-                  <%=fields[idx].fieldName%>
-                </Translate>
-              </Label>
-              <AvInput type="text" className="form-control" name="<%= fields[idx].fieldName %>" required />
-              <AvFeedback>This field is required.</AvFeedback>
-              <AvFeedback>This field cannot be longer than 50 characters.</AvFeedback>
+              <AvField type="text" name="<%= fields[idx].fieldName %>" label="<%= fields[idx].fieldName %>" <%- include react_validators %>/>
             <%_ } _%>
             </AvGroup>
             <%_ } _%>
