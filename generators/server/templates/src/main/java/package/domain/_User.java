@@ -93,7 +93,7 @@ import org.apache.commons.lang3.StringUtils;<% if (databaseType === 'sql') { %>
 import org.hibernate.annotations.BatchSize;<% } %><% if (enableHibernateCache) { %>
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %>
-import org.hibernate.validator.constraints.Email;
+import javax.validation.constraints.Email;
 <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;

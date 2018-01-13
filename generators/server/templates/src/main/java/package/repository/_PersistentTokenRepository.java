@@ -37,6 +37,7 @@ import javax.validation.Validator;
 import java.util.ArrayList;<% } %>
 import java.util.List;
 <%_ if (databaseType === 'cassandra') { _%>
+import java.util.Optional;
 import java.util.Set;
 <%_ } _%>
 <% if (databaseType === 'couchbase') { %>
@@ -113,8 +114,8 @@ public class PersistentTokenRepository {
         );
     }
 
-    public PersistentToken findOne(String presentedSeries) {
-        return mapper.get(presentedSeries);
+    public Optional<PersistentToken> findById(String presentedSeries) {
+        return Optional.ofNullable(mapper.get(presentedSeries));
     }
 
     public List<PersistentToken> findByUser(User user) {

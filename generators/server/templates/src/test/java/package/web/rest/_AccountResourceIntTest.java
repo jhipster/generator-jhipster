@@ -70,7 +70,7 @@ import org.springframework.web.context.WebApplicationContext;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)
-public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+public class AccountResourceIntTest<% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
     <%_ if (applicationType === 'monolith') { _%>
 
     @Autowired
@@ -275,6 +275,9 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
 
     @Before
     public void setup() {
+        <%_ if (databaseType === 'mongodb') { _%>
+        userRepository.deleteAll();
+        <%_ } _%>
         MockitoAnnotations.initMocks(this);
         doNothing().when(mockMailService).sendActivationEmail(any());
         AccountResource accountResource =

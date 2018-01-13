@@ -50,9 +50,12 @@ public class ElasticsearchConfiguration {
         return new ElasticsearchTemplate(client, new CustomEntityMapper(jackson2ObjectMapperBuilder.createXmlMapper(false).build()));
     }
 
+    // TODO The embedded ElasticSearch server requires the log4j-core on the classpath.
+    // To avoid conflics it's better to use an external ElasticSearch instance or we need to remove the log4j-core
+    // dependency in ElasticSearch by writting an adapter for org.elasticsearch.common.logging.Loggers
     @Conditional(ClusterNodesUnavailableCondition.class)
     @Bean
-    public NodeClientFactoryBean elasticsearchClient() throws Exception {
+    public NodeClientFactoryBean embeddedElasticsearchClient() throws Exception {
         NodeClientFactoryBean factory = new NodeClientFactoryBean(true);
         factory.setPathData(properties.getProperties().get("path.data"));
         factory.setPathHome(System.getProperty("user.dir"));
