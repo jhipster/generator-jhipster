@@ -28,7 +28,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.*;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -132,10 +132,6 @@ public class OAuth2AuthenticationServiceTest {
         OAuth2AccessToken newAccessToken = createAccessToken(NEW_ACCESS_TOKEN_VALUE, NEW_REFRESH_TOKEN_VALUE);
         when(restTemplate.postForEntity("http://uaa/oauth/token", entity, OAuth2AccessToken.class))
             .thenReturn(new ResponseEntity<OAuth2AccessToken>(newAccessToken, HttpStatus.OK));
-        //headers missing -> unauthorized
-        HttpEntity<MultiValueMap<String, String>> headerlessEntity = new HttpEntity<>(params, new HttpHeaders());
-        when(restTemplate.postForEntity("http://uaa/oauth/token", headerlessEntity, OAuth2AccessToken.class))
-            .thenThrow(new HttpClientErrorException(HttpStatus.UNAUTHORIZED));
     }
 
     @Test

@@ -23,8 +23,8 @@ import <%=packageName%>.config.Constants;
 import <%=packageName%>.domain.Authority;<% } %>
 import <%=packageName%>.domain.User;
 
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 import javax.validation.constraints.*;
 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
