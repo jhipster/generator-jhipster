@@ -1,0 +1,6 @@
+# Prettier configuration
+printWidth: 180
+singleQuote: true
+jsxBracketSameLine: false
+parser: typescript
+arrowParens: always

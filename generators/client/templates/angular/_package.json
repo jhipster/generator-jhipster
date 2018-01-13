@@ -46,7 +46,6 @@
     "reflect-metadata": "0.1.10",
     "rxjs": "5.5.5",
     "swagger-ui": "2.2.10",
-    "prettier": "1.9.2",
     <%_ if (websocket === 'spring-websocket') { _%>
     "sockjs-client": "1.1.4",
     "webstomp-client": "1.0.6",
@@ -95,6 +94,7 @@
     "merge-jsons-webpack-plugin": "1.0.11",
     <%_ } _%>
     "phantomjs-prebuilt": "2.1.16",
+    "prettier": "1.9.2",
     <%_ if (protractorTests) { _%>
     "protractor": "5.1.2",
     "protractor-jasmine2-screenshot-reporter": "0.4.0",
@@ -108,6 +108,7 @@
     "ts-node": "3.3.0",
     <%_ } _%>
     "tslint": "5.5.0",
+    "tslint-config-prettier": "1.6.0",
     "tslint-loader": "3.5.3",
     "typescript": "2.5.3",
     <%_ if (useSass) { _%>
@@ -135,7 +136,7 @@
     "node": ">=6.9.0"
   },
   "scripts": {
-    "prettier:format":"<%= clientPackageManager %> prettier --write '**/*.ts' --single-quote; <%= clientPackageManager %> lint:fix",
+    "prettier:format":"<%= clientPackageManager %> prettier --config .prettierrc --write '**/*.ts'",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "ngc": "ngc -p tsconfig-aot.json",
