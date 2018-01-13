@@ -192,6 +192,7 @@ spring:
     <%_ if (searchEngine === 'elasticsearch') { _%>
         elasticsearch:
             cluster-name:
+            cluster-nodes: localhost:9300
             properties:
                 path:
                     logs: <%= BUILD_DIR %>elasticsearch/log

@@ -41,7 +41,6 @@ import io.github.jhipster.domain.util.JSR310DateConverters.ZonedDateTimeToDateCo
 <%_ } _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (databaseType === 'mongodb') { %>
-import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoProperties;<% } %><% if (databaseType === 'couchbase') { %>
 import org.springframework.boot.autoconfigure.couchbase.CouchbaseAutoConfiguration;<% } %><% if (databaseType === 'sql') { %>
@@ -64,13 +63,13 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;<% } %><% if (databaseType === 'mongodb') { %>
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.convert.CustomConversions;
+import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;<% } %><% if (databaseType === 'couchbase') { %>
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
 import org.springframework.data.couchbase.config.BeanNames;
-import org.springframework.data.couchbase.core.convert.CustomConversions;
+import org.springframework.data.couchbase.core.convert.CouchbaseCustomConversions;
 import org.springframework.data.couchbase.core.mapping.event.ValidatingCouchbaseEventListener;
 import org.springframework.data.couchbase.repository.auditing.EnableCouchbaseAuditing;
 import org.springframework.data.couchbase.repository.config.EnableCouchbaseRepositories;
@@ -208,22 +207,15 @@ public class DatabaseConfiguration {
     @Bean
     public LocalValidatorFactoryBean validator() {
         return new LocalValidatorFactoryBean();
-    }
+    }<% } if (databaseType === 'mongodb') { %>
 
-    @Bean<% if (databaseType === 'couchbase') { %>(name = BeanNames.COUCHBASE_CUSTOM_CONVERSIONS)<% } %>
-    public CustomConversions customConversions() {
-        List<Converter<?, ?>> converters = new ArrayList<>();<% if (databaseType === 'couchbase') { %>
-        converters.add(ZonedDateTimeToLongConverter.INSTANCE);
-        converters.add(NumberToLocalDateTimeConverter.INSTANCE);
-        converters.add(BigIntegerToStringConverter.INSTANCE);
-        converters.add(StringToBigIntegerConverter.INSTANCE);
-        converters.add(BigDecimalToStringConverter.INSTANCE);
-        converters.add(StringToBigDecimalConverter.INSTANCE);
-        converters.add(StringToByteConverter.INSTANCE);<% } else { %>
+    @Bean
+    public MongoCustomConversions customConversions() {
+        List<Converter<?, ?>> converters = new ArrayList<>();
         converters.add(DateToZonedDateTimeConverter.INSTANCE);
-        converters.add(ZonedDateTimeToDateConverter.INSTANCE);<% } %>
-        return new CustomConversions(converters);
-    }<% } %><% if (databaseType === 'mongodb') { %>
+        converters.add(ZonedDateTimeToDateConverter.INSTANCE);
+        return new MongoCustomConversions(converters);
+    }
 
     @Bean
     public Mongobee mongobee(MongoClient mongoClient, MongoTemplate mongoTemplate, MongoProperties mongoProperties) {
@@ -236,6 +228,19 @@ public class DatabaseConfiguration {
         mongobee.setEnabled(true);
         return mongobee;
     }<% } %><% if (databaseType === 'couchbase') { %>
+
+    @Bean(name = BeanNames.COUCHBASE_CUSTOM_CONVERSIONS)
+    public CouchbaseCustomConversions customConversions() {
+        List<Converter<?, ?>> converters = new ArrayList<>();
+        converters.add(ZonedDateTimeToLongConverter.INSTANCE);
+        converters.add(NumberToLocalDateTimeConverter.INSTANCE);
+        converters.add(BigIntegerToStringConverter.INSTANCE);
+        converters.add(StringToBigIntegerConverter.INSTANCE);
+        converters.add(BigDecimalToStringConverter.INSTANCE);
+        converters.add(StringToBigDecimalConverter.INSTANCE);
+        converters.add(StringToByteConverter.INSTANCE);
+        return new CouchbaseCustomConversions(converters);
+    }
 
     @Bean
     public Couchmove couchmove(Bucket couchbaseBucket) {
