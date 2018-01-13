@@ -32,6 +32,8 @@ const files = {
     common: [
         {
             templates: [
+                '_prettierrc.json',
+                '_.prettierignore',
                 '_package.json',
                 '_proxy.conf.json',
                 '_tsconfig.json',
