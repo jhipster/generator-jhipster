@@ -1,38 +1,38 @@
 import { ITEMS_PER_PAGE } from '../../shared/util/pagination.constants';
 
 export interface IPaginationState {
-    itemsPerPage: number;
-    sort: string;
-    order: string;
-    activePage: number;
+  itemsPerPage: number;
+  sort: string;
+  order: string;
+  activePage: number;
 }
 
 export const getUrlParameter = (name, search) => {
-    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-    const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-    const results = regex.exec(search);
-    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+  name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+  const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+  const results = regex.exec(search);
+  return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
 };
 
 export const getSortState = location => {
-    const itemsPerPage = ITEMS_PER_PAGE;
-    const pageParam = getUrlParameter('page', location.search);
-    const sortParam = getUrlParameter('sort', location.search);
-    let sort = 'id';
-    let order = 'asc';
-    let activePage = 1;
-    if (pageParam !== '' && !isNaN(parseInt(pageParam, 10))) {
-      activePage = parseInt(pageParam, 10);
-    }
-    if (sortParam !== '') {
-      sort = sortParam.split(',')[0];
-      order = sortParam.split(',')[1];
-    }
-    return { itemsPerPage, sort, order, activePage };
+  const itemsPerPage = ITEMS_PER_PAGE;
+  const pageParam = getUrlParameter('page', location.search);
+  const sortParam = getUrlParameter('sort', location.search);
+  let sort = 'id';
+  let order = 'asc';
+  let activePage = 1;
+  if (pageParam !== '' && !isNaN(parseInt(pageParam, 10))) {
+    activePage = parseInt(pageParam, 10);
+  }
+  if (sortParam !== '') {
+    sort = sortParam.split(',')[0];
+    order = sortParam.split(',')[1];
+  }
+  return { itemsPerPage, sort, order, activePage };
 };
 
 export const getItemsNumber = (totalItems, itemsPerPage) => {
-    const division = Math.round(totalItems / itemsPerPage);
-    const modulo = totalItems % itemsPerPage;
-    return division + (modulo !== 0 ? 1 : 0);
+  const division = Math.round(totalItems / itemsPerPage);
+  const modulo = totalItems % itemsPerPage;
+  return division + (modulo !== 0 ? 1 : 0);
 };

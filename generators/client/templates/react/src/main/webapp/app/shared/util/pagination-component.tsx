@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 
 export interface IPaginationComponentProps {
   items: number;
   activePage: number;
-  onSelect: any;
+  onSelect: (page: number) => void;
   maxButtons: number;
 }
 
@@ -101,7 +100,7 @@ export class PaginationComponent extends React.Component<IPaginationComponentPro
                   <PaginationLink href="#">...</PaginationLink>
                 </PaginationItem>
                 :
-                ''
+                null
               )
             )
           }

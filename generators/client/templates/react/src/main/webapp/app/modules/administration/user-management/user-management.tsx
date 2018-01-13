@@ -49,7 +49,7 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
   }
 
   componentDidMount() {
-    this.props.getUsers(this.state.activePage - 1, this.state.itemsPerPage, `${this.state.sort},${this.state.order}`);
+    this.getUsers();
   }
 
   sort = prop => () => {
@@ -60,16 +60,15 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
   }
 
   sortUsers() {
-    this.props.getUsers(this.state.activePage - 1, this.state.itemsPerPage, `${this.state.sort},${this.state.order}`);
+    this.getUsers();
     this.props.history.push(`${this.props.location.pathname}?page=${this.state.activePage}&sort=${this.state.sort},${this.state.order}`);
   }
 
-  handlePagination = eventKey => {
-    this.setState({
-      activePage: eventKey
-    }, () => {
-      this.sortUsers();
-    });
+  handlePagination = activePage => this.setState({ activePage }, () => this.sortUsers());
+
+  getUsers = () => {
+    const { activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getUsers(activePage - 1, itemsPerPage, `${sort},${order}`);
   }
 
   render() {
