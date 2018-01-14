@@ -204,6 +204,7 @@ module.exports = class extends BaseGenerator {
                     // no file present, new entity creation
                     this.log(`\nThe entity ${entityName} is being created.\n`);
                     context.fields = [];
+                    context.haveFieldWithJavadoc = false;
                     context.relationships = [];
                     context.pagination = 'no';
                     context.validation = false;
