@@ -9,10 +9,11 @@ import {
 import {
   FaHome, FaThList, FaUserPlus, FaUser, FaFlag, FaHeart,
   FaList, FaTasks, FaDashboard, FaBook, FaWrench, FaSignIn, FaSignOut,
-  FaClockO, FaHddO,
+  FaClockO, FaHddO, FaRoad,
   // tslint:disable-next-line
   FaAsterisk
 } from 'react-icons/lib/fa';
+
 import { NavLink as Link } from 'react-router-dom';
 import LoadingBar from 'react-redux-loading-bar';
 
@@ -69,7 +70,7 @@ export class Header extends React.Component<<%if (enableTranslation) { %>IHeader
     /* jhipster-needle-add-element-to-menu - JHipster will add entities to the menu here */
     const adminMenuItems = [
     <%_ if (applicationType === 'gateway') { _%>
-      /* TODO: gateway menu */
+      <DropdownItem tag={Link} key="gateway" to="/admin/gateway"><FaRoad /> Gateway</DropdownItem>,
     <%_ } _%>
     <%_ if (!skipUserManagement) { _%>
       <DropdownItem tag={Link} key="user-management" to="/admin/user-management"><FaUser /> User Management</DropdownItem>,
