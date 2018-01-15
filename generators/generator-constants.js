@@ -34,12 +34,12 @@ const DOCKER_ELASTICSEARCH = 'elasticsearch:5.6.5'; // docker.elastic.co/elastic
 const DOCKER_KAFKA = 'wurstmeister/kafka:1.0.0';
 const DOCKER_ZOOKEEPER = 'wurstmeister/zookeeper:3.4.6';
 const DOCKER_SONAR = 'sonarqube:6.5-alpine';
-const DOCKER_JHIPSTER_CONSOLE = 'jhipster/jhipster-console:v2.2.1';
-const DOCKER_JHIPSTER_CURATOR = 'jhipster/jhipster-curator:v2.2.1';
-const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v2.2.1';
-const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v2.2.1';
-const DOCKER_JHIPSTER_IMPORT_DASHBOARDS = 'jhipster/jhipster-import-dashboards:v2.2.1';
-const DOCKER_JHIPSTER_ZIPKIN = 'jhipster/jhipster-zipkin:v2.2.1';
+const DOCKER_JHIPSTER_CONSOLE = 'jhipster/jhipster-console:v3.0.1';
+const DOCKER_JHIPSTER_CURATOR = 'jhipster/jhipster-curator:v3.0.1';
+const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v3.0.1';
+const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v3.0.1';
+const DOCKER_JHIPSTER_IMPORT_DASHBOARDS = 'jhipster/jhipster-import-dashboards:v3.0.1';
+const DOCKER_JHIPSTER_ZIPKIN = 'jhipster/jhipster-zipkin:v3.0.1';
 const DOCKER_TRAEFIK = 'traefik:1.4';
 const DOCKER_CONSUL = 'consul:0.9.3';
 const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.2.2';
@@ -55,7 +55,7 @@ const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the var
 const SCALA_VERSION = '2.12.1';
 
 // version of Node, Yarn, NPM
-const NODE_VERSION = '8.9.3';
+const NODE_VERSION = '8.9.4';
 const YARN_VERSION = '1.3.2';
 const NPM_VERSION = '5.6.0';
 

@@ -92,12 +92,17 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
           <dd>
               <%_ if (otherEntityName === 'user') { _%>
                   <%_ if (relationshipType === 'many-to-many') { _%>
-                      TODO
-                  <%_ } else { _%>
+  {
+    (<%= entityInstance %>.<%= relationshipFieldNamePlural %>) ?
+        (<%= entityInstance %>.<%= relationshipFieldNamePlural %>.map((val, i) =>
+            <span key={val.id}><a>{val.<%= otherEntityField %>}</a>{(i === <%= entityInstance %>.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
+        )
+    ) : null
+  }                  <%_ } else { _%>
                       <%_ if (dto === 'no') { _%>
               {(<%= entityInstance + "." + relationshipFieldName %>) ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %> : ''}
                           <%_ } else { _%>
-                              TODO
+              {<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %> ? <%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %> : ''}
                       <%_ } _%>
                   <%_ } _%>
               <%_ } else { _%>
@@ -113,7 +118,7 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
                       <%_ if (dto === 'no') { _%>
               {(<%= entityInstance + "." + relationshipFieldName %>) ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %> : ''}
                       <%_ } else { _%>
-                          TODO
+              {<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %> ? <%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %> : ''}
                       <%_ } _%>
                   <%_ } _%>
               <%_ } _%>

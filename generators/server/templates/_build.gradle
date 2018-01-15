@@ -42,7 +42,9 @@ buildscript {
 
 plugins {
     id "org.sonarqube" version "2.5"
+    id "net.ltgt.apt-eclipse" version "0.13"
     id "net.ltgt.apt-idea" version "0.13"
+    id "net.ltgt.apt" version "0.13"
     id "io.spring.dependency-management" version "1.0.3.RELEASE"
     <%_ if (gatlingTests) { _%>
     id "com.github.lkishalmi.gatling" version "0.7.1"
@@ -454,7 +456,7 @@ task cleanResources(type: Delete) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.2.1'
+    gradleVersion = '4.4'
 }
 
 task stage(dependsOn: 'bootWar') {
