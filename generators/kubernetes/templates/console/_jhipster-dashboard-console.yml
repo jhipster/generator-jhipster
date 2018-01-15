@@ -29,8 +29,34 @@ spec:
       labels:
         job: jhipster-import-dashboards
     spec:
+      initContainers:
+        - name: init-dependent-service-check
+          image: busybox
+          command:
+            - '/bin/sh'
+            - '-c'
+            - |
+                until nc -z -w 1 jhipster-elasticsearch 9200
+                do
+                  echo Waiting for elasticsearch cluster to get initialized
+                  sleep 5
+                done
+                until nc -z -w 1 jhipster-console 5601
+                do
+                  echo Waiting for kibana to get initialized
+                  sleep 5
+                done
       containers:
       - name: jhipster-import-dashboards
         image: <%= DOCKER_JHIPSTER_IMPORT_DASHBOARDS %>
         imagePullPolicy: IfNotPresent
+        env:
+        - name: ELASTICSEARCH_URL
+          value: http://jhipster-elasticsearch
+        - name: KIBANA_URL
+          value: http://jhipster-console
+        command:
+          - '/bin/sh'
+          - '-c'
+          - 'metricbeat setup --dashboards -E output.elasticsearch.hosts="[$ELASTICSEARCH_URL]" -E setup.kibana.host=$KIBANA_URL -E setup.dashboards.directory=/tmp'
       restartPolicy: OnFailure

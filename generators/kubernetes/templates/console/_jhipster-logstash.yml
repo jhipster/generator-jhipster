@@ -46,6 +46,18 @@ spec:
       labels:
         app: jhipster-logstash
     spec:
+      initContainers:
+        - name: init-es-check
+          image: busybox
+          command:
+            - '/bin/sh'
+            - '-c'
+            - |
+                until nc -z -w 1 jhipster-elasticsearch 9200
+                do
+                  echo Waiting for elasticsearch cluster to get initialized
+                  sleep 5
+                done
       containers:
       - image: <%= DOCKER_JHIPSTER_LOGSTASH %>
         name: jhipster-logstash

@@ -52,12 +52,8 @@ metadata:
     app: jhipster-zipkin
 spec:
   ports:
-  - name: http-bc
-    port: 9411
-    protocol: TCP
-    targetPort: 9411
   - name: http
-    port: 80
+    port: 9411
     protocol: TCP
     targetPort: 9411
   selector:
