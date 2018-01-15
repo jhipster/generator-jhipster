@@ -48,7 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;<% } %>
-<%_ if (fieldsContainOwnerManyToMany === true) { _%>
+<%_ if (fieldsContainOwnerManyToMany === true || databaseType === 'cassandra') { _%>
 import java.util.Optional;
 <%_ } _%>
 
@@ -140,8 +140,8 @@ public class <%= entityClass %>Repository {
         return <%= entityInstancePlural %>List;
     }
 
-    public <%= entityClass %> findOne(UUID id) {
-        return mapper.get(id);
+    public Optional<<%= entityClass %>> findById(UUID id) {
+        return Optional.ofNullable(mapper.get(id));
     }
 
     public <%= entityClass %> save(<%= entityClass %> <%= entityInstance %>) {

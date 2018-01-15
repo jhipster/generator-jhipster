@@ -61,6 +61,7 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
 <%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
 <%_ } _%>
@@ -71,7 +72,11 @@ import org.springframework.web.filter.CorsFilter;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 @Configuration
+<%_ if (authenticationType === 'oauth2') { _%>
+@EnableOAuth2Sso
+<%_ } else { _%>
 @EnableWebSecurity
+<%_ } _%>
 @Import(SecurityProblemSupport.class)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>

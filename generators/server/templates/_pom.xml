@@ -68,7 +68,8 @@
         <profile.swagger />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>2.0.0-20180110.145429-6</jhipster-dependencies.version>
+        <jhipster-dependencies.version>2.0.0-SNAPSHOT</jhipster-dependencies.version>
+        <!--<jhipster-dependencies.version>2.0.0-20180110.145429-6</jhipster-dependencies.version>-->
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
         <spring-boot.version>2.0.0.BUILD-SNAPSHOT</spring-boot.version>
@@ -371,17 +372,17 @@
             <scope>test</scope>
         </dependency>
         <%_ } _%>
-        <%_ if (gatlingTests) { _%>
-        <dependency>
-            <groupId>io.gatling.highcharts</groupId>
-            <artifactId>gatling-charts-highcharts</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.jcraft</groupId>
-            <artifactId>jzlib</artifactId>
-        </dependency>
-        <%_ } _%>
+        <!--<%_ if (gatlingTests) { _%>-->
+        <!--<dependency>-->
+            <!--<groupId>io.gatling.highcharts</groupId>-->
+            <!--<artifactId>gatling-charts-highcharts</artifactId>-->
+            <!--<scope>test</scope>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.jcraft</groupId>-->
+            <!--<artifactId>jzlib</artifactId>-->
+        <!--</dependency>-->
+        <!--<%_ } _%>-->
         <%_ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || applicationType === 'gateway') { _%>
         <dependency>
             <groupId>javax.cache</groupId>
@@ -453,7 +454,7 @@
             <artifactId>hibernate-envers</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
+            <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
         </dependency>
         <dependency>
@@ -615,6 +616,10 @@
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security.oauth.boot</groupId>
+            <artifactId>``</artifactId>
         </dependency>
             <%_ if (applicationType === 'gateway' || applicationType === 'microservice') { _%>
         <dependency>
@@ -1262,12 +1267,6 @@
                 <dependency>
                     <groupId>com.h2database</groupId>
                     <artifactId>h2</artifactId>
-                </dependency>
-                <%_ } _%>
-                <%_ if (searchEngine === 'elasticsearch') { _%>
-                <dependency>
-                    <groupId>org.apache.logging.log4j</groupId>
-                    <artifactId>log4j-core</artifactId>
                 </dependency>
                 <%_ } _%>
             </dependencies>

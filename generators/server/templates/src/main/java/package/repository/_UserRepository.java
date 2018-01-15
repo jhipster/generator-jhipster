@@ -265,8 +265,8 @@ public class UserRepository {
         truncateByEmailStmt = session.prepare("TRUNCATE user_by_email");
     }
 
-    public User findOne(String id) {
-        return mapper.get(id);
+    public Optional<User> findById(String id) {
+        return Optional.ofNullable(mapper.get(id));
     }
 
     public Optional<User> findOneByActivationKey(String activationKey) {
