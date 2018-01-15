@@ -18,7 +18,9 @@ const Routes = ({ match }) => (
   <div>
     <Route path={`${match.url}/user-management`} component={UserManagement} />
     <Route exact path={`${match.url}/health`} component={Health} />
+<%_ if (applicationType === 'gateway') { _%>
     <Route exact path={`${match.url}/gateway`} component={Gateway} />
+<%_ } _%>
     <Route exact path={`${match.url}/metrics`} component={Metrics} />
     <Route exact path={`${match.url}/docs`} component={Docs} />
     <Route exact path={`${match.url}/configuration`} component={Configuration} />
