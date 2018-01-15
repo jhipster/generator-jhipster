@@ -235,10 +235,13 @@ CD into the travis folder `cd travis` from the generator source code root folder
 
 Run `./build-samples.sh [command_name] [sample_name:optional]`
 
+This will create the travis sample project under the `travis/samples` folder with folder name `[sample_name]-sample`. You can open this application in your editor or IDE to check it further. You can also run tests locally on the project to verify
+
 Sample name is optional and can be any of the folder name in the `travis/samples` folder. If not specified the it will mean all samples
 
 Command name can be as below
 
+    `list`: List all sample names
     `generate`: Generate the sample if specified else generate all samples
     `build` : Generate and test the sample if specified else generate and test all samples
     `clean` : Clean the generated code for the sample if specified else clean all samples

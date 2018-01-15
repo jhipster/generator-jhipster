@@ -339,19 +339,29 @@ module.exports = class extends Generator {
      * @returns formatted api description
      */
     formatAsApiDescription(text) {
+        if (!text) {
+            return text;
+        }
         const rows = text.split('\n');
         let description = rows[0];
         for (let i = 1; i < rows.length; i++) {
             // discard empty rows
-            if (rows[i] !== '') {
+            if (rows[i].trim() !== '') {
                 // if simple text then put space between row strings
                 if (!description.endsWith('>') && !rows[i].startsWith('<')) {
                     description += ' ';
                 }
-                description += rows[i];
+                description += this.formatLineForJavaStringUse(rows[i]);
             }
         }
         return description;
+    }
+
+    formatLineForJavaStringUse(text) {
+        if (!text) {
+            return text;
+        }
+        return text.replace(/"/g, '\\"');
     }
 
     /**

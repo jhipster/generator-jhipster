@@ -39,6 +39,9 @@ import { messages, SERVER_API_URL } from '../../config/constants';
 
 export const ACTION_TYPES = {
   FETCH_<%= entityActionNamePlural %>: '<%= entityInstance %>/FETCH_<%= entityActionNamePlural %>',
+  <%_ if (searchEngine === 'elasticsearch') { _%>
+  SEARCH_<%= entityActionNamePlural %>: '<%= entityInstance %>/SEARCH_<%= entityActionNamePlural %>',
+  <%_ } _%>
   <%_ for (idx in relationships) {
     const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
     const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
@@ -76,6 +79,9 @@ _%>
     case REQUEST(ACTION_TYPES.FETCH_<%= otherEntityNamePlural %>):
 <%_ } _%>
     case REQUEST(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    case REQUEST(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
+    <%_ } _%>
     case REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>):
       return {
         ...state,
@@ -99,6 +105,9 @@ _%>
     case FAILURE(ACTION_TYPES.FETCH_<%= otherEntityNamePlural %>):
 <%_ } _%>
     case FAILURE(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    case FAILURE(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
+    <%_ } _%>
     case FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>):
     case FAILURE(ACTION_TYPES.CREATE_<%= entityActionName %>):
     case FAILURE(ACTION_TYPES.UPDATE_<%= entityActionName %>):
@@ -127,6 +136,14 @@ _%>
         loading: false,
         entities: action.payload.data
       };
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    case SUCCESS(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
+      return {
+        ...state,
+        loading: false,
+        entities: action.payload.data
+    };
+    <%_ } _%>
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>):
       return {
         ...state,
@@ -154,6 +171,9 @@ _%>
 };
 
 const apiUrl = <% if (applicationType === 'gateway' && locals.microserviceName) { %>'/<%= microserviceName.toLowerCase() %>/<% } else if (authenticationType === 'uaa') { %>'<% } else { %>SERVER_API_URL + '<% } %>/api/<%= entityApiUrl %>';
+<%_ if (searchEngine === 'elasticsearch') { _%>
+const apiSearchUrl = <% if (applicationType === 'gateway' && locals.microserviceName) { %>'/<%= microserviceName.toLowerCase() %>/<% } else if (authenticationType === 'uaa') { %>'<% } else { %>SERVER_API_URL + '<% } %>/api/_search/<%= entityApiUrl %>';
+<%_ } _%>
 
 // Actions
 
@@ -171,6 +191,13 @@ export const getEntities: ICrudGetAction = (page, size, sort) => ({
   type: ACTION_TYPES.FETCH_<%= entityActionNamePlural %>,
   payload: axios.get(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
 });
+<%_ if (searchEngine === 'elasticsearch') { _%>
+
+export const getSearchEntities: ICrudGetAction = query => ({
+  type: ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>,
+  payload: axios.get(`${apiSearchUrl}?query=` + query)
+});
+<%_ } _%>
 
 export const getEntity: ICrudGetAction = id => {
   const requestUrl = `${apiUrl}/${id}`;
