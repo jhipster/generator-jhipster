@@ -9,8 +9,9 @@ import {
 import {
   FaHome, FaThList, FaUserPlus, FaUser, FaFlag, FaHeart,
   FaList, FaTasks, FaDashboard, FaBook, FaWrench, FaSignIn, FaSignOut,
-  FaClockO, FaHddO, FaAsterisk<%_ if (applicationType === 'gateway') { _%>, FaRoad<%_ } _%>
-
+  FaClockO, FaHddO, FaAsterisk,
+  // tslint:disable-next-line
+  FaRoad
 } from 'react-icons/lib/fa';
 
 import { NavLink as Link } from 'react-router-dom';

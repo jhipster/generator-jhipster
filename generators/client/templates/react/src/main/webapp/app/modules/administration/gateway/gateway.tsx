@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FaRefresh } from 'react-icons/lib/fa';
 
-import { getRoutes } from '../../../reducers/gateway';
+import { gatewayRoutes } from '../../../reducers/administration';
 
 export interface IGatewayPageProps {
-  getRoutes: ICrudGetAction;
+  gatewayRoutes: ICrudGetAction;
   routes: any[];
   account: any;
   isFetching?: boolean;
@@ -15,7 +15,7 @@ export interface IGatewayPageProps {
 export class GatewayPage extends React.Component<IGatewayPageProps> {
 
   componentDidMount() {
-    this.props.getRoutes();
+    this.props.gatewayRoutes();
   }
 
   metadata = instance => {
@@ -58,15 +58,15 @@ export class GatewayPage extends React.Component<IGatewayPageProps> {
                   <td>{this.metadata(instance.metadata)}</td>
                 </tr>
               )}
-        </tbody>
-        </table>
+            </tbody>
+          </table>
         </div>);
     }
   }
 
-  getRoutes = () => {
+  gatewayRoutes = () => {
     if (!this.props.isFetching) {
-      this.props.getRoutes();
+      this.props.gatewayRoutes();
     }
   }
 
@@ -76,7 +76,7 @@ export class GatewayPage extends React.Component<IGatewayPageProps> {
       <div>
         <h2>Gateway</h2>
           <p>
-            <button type="button" onClick={this.getRoutes} className={isFetching ? 'btn btn-danger' : 'btn btn-primary'} disabled={isFetching}>
+            <button type="button" onClick={this.gatewayRoutes} className={isFetching ? 'btn btn-danger' : 'btn btn-primary'} disabled={isFetching}>
               <FaRefresh />&nbsp;
               <Translate component="span" contentKey="health.refresh.button" />
             </button>
@@ -107,11 +107,10 @@ export class GatewayPage extends React.Component<IGatewayPageProps> {
 }
 
 const mapStateToProps = storeState => ({
-  routes: storeState.gateway.routes,
-  account: storeState.authentication.account,
-  isFetching: storeState.gateway.isFetching
+  routes: storeState.administration.gateway.routes,
+  account: storeState.authentication.account
 });
 
-const mapDispatchToProps = { getRoutes };
+const mapDispatchToProps = { gatewayRoutes };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GatewayPage);

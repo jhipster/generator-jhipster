@@ -185,8 +185,7 @@ const files = {
                 'reducers/authentication.ts',
                 'reducers/layout.ts',
                 'reducers/user-management.ts',
-                'reducers/account.ts',
-                'reducers/gateway.ts'
+                'reducers/account.ts'
             ]
         },
         {
