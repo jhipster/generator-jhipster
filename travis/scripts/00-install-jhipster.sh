@@ -94,7 +94,7 @@ else
     git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 
     yarn install
-    yarn global add file:"$TRAVIS_BUILD_DIR"/generator-jhipster
+    yarn global add file:"$HOME"/generator-jhipster
 fi
 
 #-------------------------------------------------------------------------------
