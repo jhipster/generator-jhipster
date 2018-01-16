@@ -371,17 +371,17 @@
             <scope>test</scope>
         </dependency>
         <%_ } _%>
-        <!--<%_ if (gatlingTests) { _%>-->
-        <!--<dependency>-->
-            <!--<groupId>io.gatling.highcharts</groupId>-->
-            <!--<artifactId>gatling-charts-highcharts</artifactId>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>com.jcraft</groupId>-->
-            <!--<artifactId>jzlib</artifactId>-->
-        <!--</dependency>-->
-        <!--<%_ } _%>-->
+        <%_ if (gatlingTests) { _%>
+        <dependency>
+            <groupId>io.gatling.highcharts</groupId>
+            <artifactId>gatling-charts-highcharts</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jzlib</artifactId>
+        </dependency>
+        <%_ } _%>
         <%_ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || applicationType === 'gateway') { _%>
         <dependency>
             <groupId>javax.cache</groupId>
