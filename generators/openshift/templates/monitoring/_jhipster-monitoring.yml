@@ -61,6 +61,12 @@ parameters:
     description: Name of the kibana application
     required: true
     displayName: Kibana Application Name
+  -
+    name: KB_DASHBOARD_APP_NAME
+    value: jhipster-import-dashboards
+    description: Name of the preloaded kibana application dashboard
+    required: true
+    displayName: Kibana Preloaded Application Dashboard Name
 <%_ if (composeApplicationType === 'microservice') { _%>
   -
     name: ZK_APP_NAME
@@ -106,61 +112,6 @@ objects:
         requests:
           storage: "${VOLUME_CAPACITY}"
 <%_ } _%>
-  -
-    apiVersion: v1
-    kind: ConfigMap
-    metadata:
-      name: ${LS_APP_NAME}-config
-    #common configuration shared between all applications
-    data:
-      logstash.conf: |-
-        input {
-            udp {
-                port => 5000
-                type => syslog
-                codec => json
-            }
-        }
-
-        filter {
-            if [logger_name] =~ "metrics" {
-                kv {
-                    source => "message"
-                    field_split => ", "
-                    prefix => "metric_"
-                }
-                mutate {
-                  convert => { "metric_value" => "float" }
-                  convert => { "metric_count" => "integer" }
-                  convert => { "metric_min" => "float" }
-                  convert => { "metric_max" => "float" }
-                  convert => { "metric_mean" => "float" }
-                  convert => { "metric_stddev" => "float" }
-                  convert => { "metric_median" => "float" }
-                  convert => { "metric_p75" => "float" }
-                  convert => { "metric_p95" => "float" }
-                  convert => { "metric_p98" => "float" }
-                  convert => { "metric_p99" => "float" }
-                  convert => { "metric_p999" => "float" }
-                  convert => { "metric_mean_rate" => "float" }
-                  convert => { "metric_m1" => "float" }
-                  convert => { "metric_m5" => "float" }
-                  convert => { "metric_m15" => "float" }
-                }
-            }
-            mutate {
-                add_field => { "instance_name" => "%{app_name}-%{host}:%{app_port}" }
-            }
-        }
-
-        output {
-            elasticsearch {
-                hosts => ["jhipster-elasticsearch"]
-            }
-            stdout {
-                codec => rubydebug
-            }
-        }
   -
     apiVersion: v1
     kind: DeploymentConfig
@@ -277,26 +228,17 @@ objects:
             <%_ if (storageType === 'ephemeral') { _%>
             emptyDir: {}
             <%_ } _%>
-          - name: ${LS_APP_NAME}-config
-            configMap:
-              name: ${LS_APP_NAME}-config
-              items:
-              - key: logstash.conf
-                path: logstash.conf
           containers:
           - name: ${LS_APP_NAME}
             image: <%= DOCKER_JHIPSTER_LOGSTASH %>
-            command:
-            - "/bin/sh"
-            - "-ec"
-            - "logstash -f /conf/logstash.conf"
             ports:
             - containerPort: 5000
               name: udp
               protocol: UDP
+            - containerPort: 5000
+              name: tcp
+              protocol: TCP
             volumeMounts:
-            - name: ${LS_APP_NAME}-config
-              mountPath: /conf
             - name: ${LS_APP_NAME}-data
               mountPath: /usr/share/logstash/data/
             resources:
@@ -314,10 +256,13 @@ objects:
         app: ${LS_APP_NAME}
     spec:
       ports:
-        -
-          name: udp
+        - name: udp
           port: 5000
           protocol: UDP
+          targetPort: 5000
+        - name: tcp
+          port: 5000
+          protocol: TCP
           targetPort: 5000
       selector:
         app: ${LS_APP_NAME}
@@ -397,6 +342,24 @@ objects:
       port:
         targetPort: "http"
       wildcardPolicy: None
+  -
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: ${KB_DASHBOARD_APP_NAME}
+      labels:
+        job: ${KB_DASHBOARD_APP_NAME}
+    spec:
+      template:
+        metadata:
+          labels:
+            job: ${KB_DASHBOARD_APP_NAME}
+        spec:
+          containers:
+          - name: ${KB_DASHBOARD_APP_NAME}
+            image: <%= DOCKER_JHIPSTER_IMPORT_DASHBOARDS %>
+            imagePullPolicy: IfNotPresent
+          restartPolicy: OnFailure
 <%_ if (composeApplicationType === 'microservice') { _%>
   -
     apiVersion: v1
