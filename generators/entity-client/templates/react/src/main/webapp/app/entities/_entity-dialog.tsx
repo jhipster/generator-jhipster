@@ -206,7 +206,7 @@ _%>
       { loading ? <p>Loading...</p>
       : <AvForm model={isNew ? {} : <%= entityInstance %>} onSubmit={this.saveEntity} >
           <ModalBody>
-            { <%= entityInstance %>.id ?
+            { !isNew ?
               <AvGroup>
                 <Label for="id"><Translate contentKey="global.field.id">ID</Translate></Label>
                 <AvInput type="text" className="form-control" name="id" required readOnly/>
@@ -234,7 +234,7 @@ _%>
                 type="datetime-local"
                 className="form-control"
                 name="<%= fields[idx].fieldName %>"
-                value={convertDateTimeFromServer(this.props.<%= entityInstance %>.<%= fields[idx].fieldName %>)}
+                value={isNew ? null : convertDateTimeFromServer(this.props.<%= entityInstance %>.<%= fields[idx].fieldName %>)}
                 <%- include react_validators %>/>
             <%_ } else if (fieldType === 'LocalDate') { _%>
               <Label for="<%= fields[idx].fieldName %>">
