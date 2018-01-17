@@ -34,7 +34,8 @@ const expectedFiles = {
         'console/jhipster-console.yml',
         'console/jhipster-elasticsearch.yml',
         'console/jhipster-logstash.yml',
-        'console/logstash-config.yml',
+        'console/jhipster-dashboard-console.yml',
+        'console/jhipster-zipkin.yml'
     ],
     msmysql: [
         'msmysql/msmysql-deployment.yml',
@@ -141,7 +142,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
         });
     });
 
-    describe('mysql microservice with custom namespace and jhipster-console', () => {
+    describe('mysql microservice with custom namespace and jhipster-console (with zipkin)', () => {
         beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
