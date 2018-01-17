@@ -54,7 +54,7 @@ export class JhiAlertService {
         this.i18nEnabled = config.i18nEnabled;
         this.alertId = 0; // unique id for each alert. Starts from 0.
         this.alerts = [];
-        this.timeout = 5000; // default timeout in milliseconds
+        this.timeout = config.alertTimeout;
     }
 
     clear() {
