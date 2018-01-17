@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2017 the original author or authors from the JHipster project.
+ * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
@@ -461,7 +461,8 @@ const files = {
                 'spec/helpers/_mock-login.service.ts',
                 'spec/helpers/_mock-event-manager.service.ts',
                 'spec/helpers/_mock-active-modal.service.ts',
-                'spec/helpers/_mock-state-storage.service.ts'
+                'spec/helpers/_mock-state-storage.service.ts',
+                'spec/app/shared/model/_request-util.spec.ts'
             ]
         },
         {

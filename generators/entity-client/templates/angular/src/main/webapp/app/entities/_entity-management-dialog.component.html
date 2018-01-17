@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors from the JHipster project.
+ Copyright 2013-2018 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
@@ -94,7 +94,7 @@ _%>
             <div class="input-group">
                 <input id="field_<%= fieldName %>" type="text" class="form-control" name="<%= fieldName %>" ngbDatepicker  #<%= fieldName %>Dp="ngbDatepicker" [(ngModel)]="<%= entityInstance %>.<%= fieldName %>"
                 <%- include ng_validators %>/>
-                <span class="input-group-btn">
+                <span class="input-group-append">
                     <button type="button" class="btn btn-secondary" (click)="<%= fieldName %>Dp.toggle()"><i class="fa fa-calendar"></i></button>
                 </span>
             </div>

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2017 the original author or authors from the JHipster project.
+ * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
@@ -397,7 +397,7 @@ function writeFiles() {
 
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_package-info.java`, `${javaDir}config/package-info.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_AsyncConfiguration.java`, `${javaDir}config/AsyncConfiguration.java`);
-            if (['ehcache', 'hazelcast', 'infinispan'].includes(this.cacheProvider) || this.clusteredHttpSession === 'hazelcast' || this.applicationType === 'gateway') {
+            if (['ehcache', 'hazelcast', 'infinispan'].includes(this.cacheProvider) || this.applicationType === 'gateway') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/_CacheConfiguration.java`, `${javaDir}config/CacheConfiguration.java`);
             }
             if (this.cacheProvider === 'infinispan') {

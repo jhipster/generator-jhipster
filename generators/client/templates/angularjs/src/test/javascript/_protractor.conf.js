@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors from the JHipster project.
+ Copyright 2013-2018 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
@@ -16,28 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-const os = require('os');
-
 const HtmlScreenshotReporter = require("protractor-jasmine2-screenshot-reporter");
 const JasmineReporters = require('jasmine-reporters');
 
-const prefix = '<%= TEST_SRC_DIR %>'.replace(/[^/]+/g,'..');
-<%_ if (clientPackageManager === 'npm') { _%>
-const seleniumFolder = 'node_modules/protractor/node_modules/webdriver-manager/selenium/';
-<%_ } else { _%>
-const seleniumFolder = 'node_modules/webdriver-manager/selenium/';
-<%_ } _%>
-
-var webbrowserDriver= '';
-if (os.platform() === 'win32') {
-    webbrowserDriver = prefix + seleniumFolder + 'chromedriver_2.34.exe';
-} else {
-    webbrowserDriver = prefix + seleniumFolder + 'chromedriver_2.34';
-}
-
 exports.config = {
-    seleniumServerJar: prefix + seleniumFolder + 'selenium-server-standalone-3.8.1.jar',
-    chromeDriver: webbrowserDriver,
     allScriptsTimeout: 20000,
 
     suites: {

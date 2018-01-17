@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors from the JHipster project.
+ Copyright 2013-2018 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
@@ -25,6 +25,10 @@ import { AuditsComponent } from '../../../../../../main/webapp/app/admin/audits/
 import { AuditsService } from '../../../../../../main/webapp/app/admin/audits/audits.service';
 import { ITEMS_PER_PAGE } from '../../../../../../main/webapp/app/shared';
 
+function build2DigitsDatePart(datePart: number) {
+    return `0${datePart}`.slice(-2);
+}
+
 function getDate(isToday= true) {
     let date: Date = new Date();
     if (isToday) {
@@ -38,8 +42,9 @@ function getDate(isToday= true) {
         date = new Date(date.getFullYear(), date.getMonth() - 1, date.getDate());
       }
     }
-    const dateString = date.getDate() < 10 ? '0' + date.getDate() : '' + date.getDate();
-    return `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${dateString}`;
+    const monthString = build2DigitsDatePart(date.getMonth() + 1);
+    const dateString = build2DigitsDatePart(date.getDate());
+    return `${date.getFullYear()}-${monthString}-${dateString}`;
 }
 
 describe('Component Tests', () => {

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors from the JHipster project.
+ Copyright 2013-2018 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
@@ -29,7 +29,7 @@ import org.ehcache.jsr107.Eh107Configuration;
 import java.util.concurrent.TimeUnit;
 
 <%_ } _%>
-<%_ if (cacheProvider === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
+<%_ if (cacheProvider === 'hazelcast') { _%>
 
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.config.JHipsterProperties;
@@ -49,7 +49,7 @@ import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 <%_ if (cacheProvider === 'ehcache') { _%>
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
 <%_ } _%>
-<%_ if (cacheProvider === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
+<%_ if (cacheProvider === 'hazelcast') { _%>
     <%_ if (serviceDiscoveryType === 'eureka') { _%>
 import org.springframework.boot.autoconfigure.web.ServerProperties;
     <%_ } _%>
@@ -63,14 +63,8 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.serviceregistry.Registration;
 <%_ } _%>
 import org.springframework.context.annotation.*;
-<%_ if (cacheProvider === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
+<%_ if (cacheProvider === 'hazelcast') { _%>
 import org.springframework.core.env.Environment;
-<%_ } _%>
-<%_ if (clusteredHttpSession === 'hazelcast') { _%>
-import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.security.core.session.SessionRegistryImpl;
-<%_ } _%>
-<%_ if (cacheProvider === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
 
 import javax.annotation.PreDestroy;
 <%_ } _%>
@@ -162,7 +156,7 @@ public class CacheConfiguration {
         };
     }
     <%_ } _%>
-    <%_ if (cacheProvider === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
+    <%_ if (cacheProvider === 'hazelcast') { _%>
 
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
 
@@ -176,7 +170,7 @@ public class CacheConfiguration {
     private Registration registration;
         <%_ } _%>
 
-    public CacheConfiguration(<% if (cacheProvider === 'hazelcast' || clusteredHttpSession === 'hazelcast') { %>Environment env<% if (serviceDiscoveryType === 'eureka') { %>, ServerProperties serverProperties, DiscoveryClient discoveryClient<% } } %>) {
+    public CacheConfiguration(<% if (cacheProvider === 'hazelcast') { %>Environment env<% if (serviceDiscoveryType === 'eureka') { %>, ServerProperties serverProperties, DiscoveryClient discoveryClient<% } } %>) {
         this.env = env;
         <%_ if (serviceDiscoveryType === 'eureka') { _%>
         this.serverProperties = serverProperties;
@@ -265,9 +259,6 @@ public class CacheConfiguration {
         <%_ if (enableHibernateCache) { _%>
         config.getMapConfigs().put("<%=packageName%>.domain.*", initializeDomainMapConfig(jHipsterProperties));
         <%_ } _%>
-        <%_ if (clusteredHttpSession === 'hazelcast') { _%>
-        config.getMapConfigs().put("clustered-http-sessions", initializeClusteredSession(jHipsterProperties));
-        <%_ } _%>
         return Hazelcast.newHazelcastInstance(config);
     }
 
@@ -314,25 +305,6 @@ public class CacheConfiguration {
         MapConfig mapConfig = new MapConfig();
         mapConfig.setTimeToLiveSeconds(jHipsterProperties.getCache().getHazelcast().getTimeToLiveSeconds());
         return mapConfig;
-    }
-    <%_ } _%>
-    <%_ if (clusteredHttpSession === 'hazelcast') { _%>
-
-    private MapConfig initializeClusteredSession(JHipsterProperties jHipsterProperties) {
-        MapConfig mapConfig = new MapConfig();
-        mapConfig.setBackupCount(jHipsterProperties.getCache().getHazelcast().getBackupCount());
-        mapConfig.setTimeToLiveSeconds(jHipsterProperties.getCache().getHazelcast().getTimeToLiveSeconds());
-        return mapConfig;
-    }
-
-    /**
-     * Used by Spring Security, to get events from Hazelcast.
-     *
-     * @return the session registry
-     */
-    @Bean
-    public SessionRegistry sessionRegistry() {
-        return new SessionRegistryImpl();
     }
     <%_ } _%>
     <%_ } _%>

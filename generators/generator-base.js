@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2017 the original author or authors from the JHipster project.
+ * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
@@ -2065,6 +2065,7 @@ module.exports = class extends PrivateBase {
         const keyStoreFile = `${SERVER_MAIN_RES_DIR}keystore.jks`;
         if (this.fs.exists(keyStoreFile)) {
             this.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
+            done();
         } else {
             shelljs.mkdir('-p', SERVER_MAIN_RES_DIR);
             const javaHome = shelljs.env.JAVA_HOME;

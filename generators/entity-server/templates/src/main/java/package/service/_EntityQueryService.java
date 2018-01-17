@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors.
+ Copyright 2013-2018 the original author or authors.
 
  This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.

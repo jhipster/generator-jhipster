@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2017 the original author or authors from the JHipster project.
+ * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
@@ -194,10 +194,7 @@ module.exports = class extends BaseGenerator {
                 if (this.applicationType === 'gateway') {
                     this.cacheProvider = 'hazelcast';
                 }
-                this.clusteredHttpSession = this.config.get('clusteredHttpSession') === 'no' ? false : this.config.get('clusteredHttpSession');
-                if (this.cacheProvider === 'ehcache') {
-                    this.clusteredHttpSession = false; // cannot use HazelCast clusering AND ehcache
-                }
+
                 this.buildTool = this.config.get('buildTool');
                 this.enableSocialSignIn = this.config.get('enableSocialSignIn');
                 this.jhipsterVersion = packagejs.version;
@@ -226,7 +223,6 @@ module.exports = class extends BaseGenerator {
 
                 // force variables unused by microservice applications
                 if (this.applicationType === 'microservice' || this.applicationType === 'uaa') {
-                    this.clusteredHttpSession = false;
                     this.websocket = false;
                 }
 
@@ -234,7 +230,6 @@ module.exports = class extends BaseGenerator {
                     this.authenticationType !== undefined &&
                     this.cacheProvider !== undefined &&
                     this.enableHibernateCache !== undefined &&
-                    this.clusteredHttpSession !== undefined &&
                     this.websocket !== undefined &&
                     this.databaseType !== undefined &&
                     this.devDatabaseType !== undefined &&
@@ -294,7 +289,6 @@ module.exports = class extends BaseGenerator {
                 this.configOptions.packageName = this.packageName;
                 this.configOptions.cacheProvider = this.cacheProvider;
                 this.configOptions.enableHibernateCache = this.enableHibernateCache;
-                this.configOptions.clusteredHttpSession = this.clusteredHttpSession;
                 this.configOptions.websocket = this.websocket;
                 this.configOptions.databaseType = this.databaseType;
                 this.configOptions.devDatabaseType = this.devDatabaseType;
@@ -332,7 +326,6 @@ module.exports = class extends BaseGenerator {
                 insight.track('app/authenticationType', this.authenticationType);
                 insight.track('app/cacheProvider', this.cacheProvider);
                 insight.track('app/enableHibernateCache', this.enableHibernateCache);
-                insight.track('app/clusteredHttpSession', this.clusteredHttpSession);
                 insight.track('app/websocket', this.websocket);
                 insight.track('app/databaseType', this.databaseType);
                 insight.track('app/devDatabaseType', this.devDatabaseType);
@@ -374,7 +367,6 @@ module.exports = class extends BaseGenerator {
                 this.config.set('uaaBaseName', this.uaaBaseName);
                 this.config.set('cacheProvider', this.cacheProvider);
                 this.config.set('enableHibernateCache', this.enableHibernateCache);
-                this.config.set('clusteredHttpSession', this.clusteredHttpSession);
                 this.config.set('websocket', this.websocket);
                 this.config.set('databaseType', this.databaseType);
                 this.config.set('devDatabaseType', this.devDatabaseType);

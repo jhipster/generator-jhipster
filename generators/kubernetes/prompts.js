@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2017 the original author or authors from the JHipster project.
+ * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
@@ -147,8 +147,9 @@ function askForIngressDomain() {
         when: () => kubernetesServiceType === 'Ingress',
         type: 'input',
         name: 'ingressDomain',
-        message: 'What is the root FQDN for your ingress services (e.g. example.com, sub.domain.co, www.10.10.10.10.xip.io,...)?',
-        default: this.ingressDomain ? this.ingressDomain : 'mycompany.com',
+        message: 'What is the root FQDN for your ingress services (e.g. example.com, sub.domain.co, www.10.10.10.10.xip.io, [namespace.ip]...)?',
+        // default to minikube ip
+        default: this.ingressDomain ? this.ingressDomain : `${this.kubernetesNamespace}.192.168.99.100.nip.io`,
         validate: (input) => {
             if (input.length === 0) {
                 return 'domain name cannot be empty';

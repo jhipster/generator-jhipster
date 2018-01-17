@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors from the JHipster project.
+ Copyright 2013-2018 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
@@ -34,10 +34,10 @@
             <form name="searchForm" class="form-inline">
                 <div class="input-group w-100 mt-3">
                     <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="<% if (enableTranslation) { %>{{ '<%= keyPrefix %>home.search' | translate }}<% } else { %>Query<% } %>">
-                    <button class="input-group-addon btn btn-info" (click)="search(currentSearch)">
+                    <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
                         <span class="fa fa-search"></span>
                     </button>
-                    <button class="input-group-addon btn btn-danger" (click)="clear()" *ngIf="currentSearch">
+                    <button class="input-group-append btn btn-danger" (click)="clear()" *ngIf="currentSearch">
                         <span class="fa fa-trash-o"></span>
                     </button>
                 </div>

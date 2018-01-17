@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors from the JHipster project.
+ Copyright 2013-2018 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
@@ -144,7 +144,7 @@
             "pattern": "This field should follow pattern for {{ pattern }}.",
             "number": "This field should be a number.",
             "datetimelocal": "This field should be a date and time.",
-            "patternLettersAndDigits": "This field can only contain letters and digits."
+            "patternLogin": "This field can only contain letters, digits and e-mail addresses."
         }
     },
     "error": {

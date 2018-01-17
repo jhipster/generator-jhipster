@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2017 the original author or authors from the JHipster project.
+ * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
@@ -348,14 +348,6 @@ function askForOptionalItems(meta) {
             value: 'searchEngine:elasticsearch'
         });
     }
-    if ((applicationType === 'monolith' || applicationType === 'gateway') &&
-            (this.cacheProvider === 'no' || this.cacheProvider === 'hazelcast') &&
-            this.authenticationType !== 'oauth2') {
-        choices.push({
-            name: 'Clustered HTTP sessions using Hazelcast',
-            value: 'clusteredHttpSession:hazelcast'
-        });
-    }
     if (applicationType === 'monolith' || applicationType === 'gateway') {
         choices.push({
             name: 'WebSockets using Spring Websocket',
@@ -385,7 +377,6 @@ function askForOptionalItems(meta) {
     if (choices.length > 0) {
         this.prompt(PROMPTS).then((prompt) => {
             this.serverSideOptions = prompt.serverSideOptions;
-            this.clusteredHttpSession = this.getOptionFromArray(this.serverSideOptions, 'clusteredHttpSession');
             this.websocket = this.getOptionFromArray(this.serverSideOptions, 'websocket');
             this.searchEngine = this.getOptionFromArray(this.serverSideOptions, 'searchEngine');
             this.enableSocialSignIn = this.getOptionFromArray(this.serverSideOptions, 'enableSocialSignIn');

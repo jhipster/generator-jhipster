@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors from the JHipster project.
+ Copyright 2013-2018 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
@@ -67,13 +67,13 @@ processResources {
         filter {
             it.replace('#project.version#', version)
         }
-        <%_ if (applicationType === 'monolith') { _%>
+        <%_ if (!serviceDiscoveryType) { _%>
         filter {
             it.replace('#spring.profiles.active#', profiles)
         }
         <%_ } _%>
     }
-    <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
+    <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
     filesMatching('**/bootstrap.yml') {
         filter {
             it.replace('#spring.profiles.active#', profiles)

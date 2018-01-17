@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors from the JHipster project.
+ Copyright 2013-2018 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
@@ -35,7 +35,7 @@
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="userManagement.login">Login</label>
             <input type="text" class="form-control" name="login" #loginInput="ngModel"
-                   [(ngModel)]="user.login" required minlength="1" maxlength="50" pattern="^[_'.A-Za-z0-9-]*$">
+                   [(ngModel)]="user.login" required minlength="1" maxlength="50" pattern="^[_'.@A-Za-z0-9-]*$">
 
             <div *ngIf="loginInput.dirty && loginInput.invalid">
                 <small class="form-text text-danger"
@@ -50,8 +50,8 @@
                 </small>
 
                 <small class="form-text text-danger"
-                   *ngIf="loginInput.errors.pattern" jhiTranslate="entity.validation.patternLettersAndDigits">
-                    This field can only contain letters and digits.
+                   *ngIf="loginInput.errors.pattern" jhiTranslate="entity.validation.patternLogin">
+                    This field can only contain letters, digits and e-mail addresses.
                 </small>
             </div>
         </div>

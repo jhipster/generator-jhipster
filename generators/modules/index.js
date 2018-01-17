@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2017 the original author or authors from the JHipster project.
+ * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
@@ -56,7 +56,6 @@ module.exports = class extends BaseGenerator {
         jhipsterVar.authenticationType = this.config.get('authenticationType');
         jhipsterVar.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no';
         jhipsterVar.enableHibernateCache = this.config.get('enableHibernateCache') || (this.config.get('hibernateCache') !== undefined && this.config.get('hibernateCache') !== 'no');
-        jhipsterVar.clusteredHttpSession = this.config.get('clusteredHttpSession');
         jhipsterVar.websocket = this.config.get('websocket');
         jhipsterVar.databaseType = this.config.get('databaseType');
         jhipsterVar.devDatabaseType = this.config.get('devDatabaseType');

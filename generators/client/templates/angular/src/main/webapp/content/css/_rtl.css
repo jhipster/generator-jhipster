@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors from the JHipster project.
+ Copyright 2013-2018 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
@@ -114,7 +114,7 @@ html[dir=rtl] .form-check-label {
 }
 
 html[dir=rtl] .input-group .form-control:not(:last-child),
-html[dir=rtl] .input-group-addon:not(:last-child),
+html[dir=rtl] .input-group-prepend,
 html[dir=rtl] .input-group-btn:not(:last-child)>.btn,
 html[dir=rtl] .input-group-btn:not(:last-child)>.btn-group>.btn,
 html[dir=rtl] .input-group-btn:not(:last-child)>.dropdown-toggle,
@@ -126,13 +126,13 @@ html[dir=rtl] .input-group-btn:not(:first-child)>.btn-group:not(:last-child)>.bt
     border-top-left-radius: 0.0rem;
 }
 
-html[dir=rtl] .input-group-addon:not(:last-child) {
+html[dir=rtl] .input-group-prepend {
     border-left: 0;
     border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 html[dir=rtl] .input-group .form-control:not(:first-child),
-html[dir=rtl] .input-group-addon:not(:first-child),
+html[dir=rtl] .input-group-append,
 html[dir=rtl] .input-group-btn:not(:first-child)>.btn,
 html[dir=rtl] .input-group-btn:not(:first-child)>.btn-group>.btn,
 html[dir=rtl] .input-group-btn:not(:first-child)>.dropdown-toggle,
@@ -144,7 +144,7 @@ html[dir=rtl] .input-group-btn:not(:last-child)>.btn-group:not(:first-child)>.bt
     border-top-left-radius: 0.25rem;
 }
 
-html[dir=rtl] .form-control+.input-group-addon:not(:first-child) {
+html[dir=rtl] .form-control+.input-group-append {
     border-right: 0;
     border-left: 1px solid rgba(0, 0, 0, 0.15);
 }

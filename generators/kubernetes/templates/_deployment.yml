@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors from the JHipster project.
+ Copyright 2013-2018 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
@@ -69,6 +69,12 @@ spec:
           value: mongodb://<%= app.baseName.toLowerCase() %>-mongodb.<%= kubernetesNamespace %>.svc.cluster.local:27017
         - name: SPRING_DATA_MONGODB_DATABASE
           value: <%= app.baseName %>
+        <%_ } _%>
+        <%_ if (app.prodDatabaseType === 'couchbase') { _%>
+        - name: SPRING_COUCHBASE_BOOTSTRAP_HOSTS
+          value: <%= app.baseName.toLowerCase() %>-couchbase
+        - name: SPRING_COUCHBASE_BUCKET_NAME
+          value: <%= app.baseName.toLowerCase() %>
         <%_ } _%>
         <%_ if (app.searchEngine === 'elasticsearch') { _%>
         - name: SPRING_DATA_ELASTICSEARCH_CLUSTER_NODES

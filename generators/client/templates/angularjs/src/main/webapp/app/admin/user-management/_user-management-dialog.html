@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors from the JHipster project.
+ Copyright 2013-2018 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
@@ -35,7 +35,7 @@
         <div class="form-group">
             <label class="control-label" data-translate="userManagement.login">Login</label>
             <input type="text" class="form-control" name="login"
-                   ng-model="vm.user.login" required ng-minlength=1 ng-maxlength=50 ng-pattern="/^[_'.A-Za-z0-9-]*$/">
+                   ng-model="vm.user.login" required ng-minlength=1 ng-maxlength=50 ng-pattern="/^[_'.@A-Za-z0-9-]*$/">
 
             <div ng-show="editForm.login.$invalid">
                 <p class="help-block"

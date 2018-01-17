@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2017 the original author or authors from the JHipster project.
+ Copyright 2013-2018 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see http://www.jhipster.tech/
  for more information.
@@ -31,9 +31,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.autoconfigure.*;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-<%_ if (clusteredHttpSession === 'hazelcast') { _%>
-import org.springframework.boot.autoconfigure.hazelcast.HazelcastAutoConfiguration;
-<%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 <%_ } _%>
@@ -63,7 +60,7 @@ import java.util.Collection;
 <%_ } else { _%>
 @ComponentScan
 <%_ } _%>
-@EnableAutoConfiguration(exclude = {MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class<% if (clusteredHttpSession === 'hazelcast') { %>, HazelcastAutoConfiguration.class<% } %><% if (applicationType === 'gateway') { %>, MetricsDropwizardAutoConfiguration.class<% } %>})
+@EnableAutoConfiguration(exclude = {MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class<% if (applicationType === 'gateway') { %>, MetricsDropwizardAutoConfiguration.class<% } %>})
 @EnableConfigurationProperties({<% if (databaseType === 'sql') { %>LiquibaseProperties.class, <% } %>ApplicationProperties.class})
 <%_ if (serviceDiscoveryType) { _%>
 @EnableDiscoveryClient
