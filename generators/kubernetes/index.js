@@ -95,6 +95,9 @@ module.exports = class extends BaseGenerator {
                 this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
                 this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
                 this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
+                this.DOCKER_PROMETHEUS_OPERATOR = constants.DOCKER_PROMETHEUS_OPERATOR;
+                this.DOCKER_GRAFANA_WATCHER = constants.DOCKER_GRAFANA_WATCHER;
+                this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
 
                 if (this.defaultAppsFolders !== undefined) {
                     this.log('\nFound .yo-rc.json config file...');
@@ -202,7 +205,7 @@ module.exports = class extends BaseGenerator {
             this.log(`  ${chalk.cyan('kubectl apply -f console')}`);
         }
         if (this.prometheusOperator) {
-            this.log(`  ${chalk.cyan('kubectl apply -f prometheus-tpr.yml')}`);
+            this.log(`  ${chalk.cyan('kubectl apply -f monitoring')}`);
         }
         if (this.gatewayNb >= 1 || this.microserviceNb >= 1) {
             this.log(`  ${chalk.cyan('kubectl apply -f registry')}`);

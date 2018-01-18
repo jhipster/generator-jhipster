@@ -49,6 +49,8 @@ const DOCKER_GRAFANA = 'grafana/grafana:4.3.2';
 const DOCKER_JENKINS = 'jenkins:latest';
 const DOCKER_SWAGGER_EDITOR = 'swaggerapi/swagger-editor:latest';
 const DOCKER_COMPOSE_FORMAT_VERSION = '2';
+const DOCKER_PROMETHEUS_OPERATOR = 'quay.io/coreos/prometheus-operator:v0.15.0';
+const DOCKER_GRAFANA_WATCHER = 'quay.io/coreos/grafana-watcher:v0.0.8';
 
 // Version of Java, Scala
 const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
@@ -212,7 +214,9 @@ const constants = {
     DOCKER_JENKINS,
     DOCKER_SWAGGER_EDITOR,
     SQL_DB_OPTIONS,
-    DOCKER_COMPOSE_FORMAT_VERSION
+    DOCKER_COMPOSE_FORMAT_VERSION,
+    DOCKER_PROMETHEUS_OPERATOR,
+    DOCKER_GRAFANA_WATCHER
 };
 
 module.exports = constants;

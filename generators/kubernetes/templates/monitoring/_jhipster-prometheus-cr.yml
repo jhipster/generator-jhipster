@@ -19,13 +19,13 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: prometheus-<%= kubernetesNamespace %>
+  name: jhipster-prometheus-sa
   namespace: <%= kubernetesNamespace %>
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
 metadata:
-  name: prometheus-<%= kubernetesNamespace %>
+  name: jhipster-prometheus-role
   namespace: <%= kubernetesNamespace %>
 rules:
 - apiGroups: [""]
@@ -43,25 +43,23 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
 metadata:
-  name: prometheus-<%= kubernetesNamespace %>
+  name: jhipster-prometheus-rb
   namespace: <%= kubernetesNamespace %>
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: prometheus-<%= kubernetesNamespace %>
+  name: jhipster-prometheus-role
 subjects:
 - kind: ServiceAccount
-  name: prometheus-<%= kubernetesNamespace %>
-  namespace: <%= kubernetesNamespace %>
+  name: jhipster-prometheus-sa
 ---
-apiVersion: monitoring.coreos.com/v1alpha1
+apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
 metadata:
-  name: <%= kubernetesNamespace %>
+  name: jhipster-prometheus
   namespace: <%= kubernetesNamespace %>
 spec:
-  version: v1.6.2
-  serviceAccountName: prometheus-<%= kubernetesNamespace %>
+  serviceAccountName: jhipster-prometheus-sa
   serviceMonitorSelector:
     matchLabels:
       team: <%= kubernetesNamespace %>
@@ -72,15 +70,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: prometheus-<%= kubernetesNamespace %>
+  name: jhipster-prometheus
   namespace: <%= kubernetesNamespace %>
 spec:
-  type: NodePort
   ports:
   - name: web
-    nodePort: 30901
     port: 9090
     protocol: TCP
     targetPort: web
   selector:
-    prometheus: <%= kubernetesNamespace %>
+    prometheus: jhipster-prometheus
