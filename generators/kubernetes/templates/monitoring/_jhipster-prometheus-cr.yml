@@ -41,6 +41,7 @@ rules:
   verbs: ["get"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
+# limit to the namespace
 kind: RoleBinding
 metadata:
   name: jhipster-prometheus-rb
@@ -59,6 +60,7 @@ metadata:
   name: jhipster-prometheus
   namespace: <%= kubernetesNamespace %>
 spec:
+  replica: 1
   serviceAccountName: jhipster-prometheus-sa
   serviceMonitorSelector:
     matchLabels:
