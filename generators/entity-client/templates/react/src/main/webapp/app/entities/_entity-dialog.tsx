@@ -56,7 +56,7 @@ export interface I<%= entityReactName %>DialogState {
   <%_ if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { _%>
   ids<%= relationshipNameHumanized %>: any[];
   <%_ } else { _%>
-  id<%= relationshipNameHumanized %>: number;
+  <%= relationshipFieldName %>Id: number;
   <%_ } _%>
   <%_ } _%>
 }
@@ -70,23 +70,16 @@ export class <%= entityReactName %>Dialog extends React.Component<I<%= entityRea
       <%_ for (idx in relationships) {
         const relationshipType = relationships[idx].relationshipType;
         const relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
+        const relationshipFieldName = relationships[idx].relationshipFieldName;
       _%>
       <%_ if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { _%>
       ids<%= relationshipNameHumanized %>: [],
       <%_ } else { _%>
-      id<%= relationshipNameHumanized %>: 0,
+      <%= relationshipFieldName %>Id: 0,
       <%_ } _%>
       <%_ } _%>
       showModal: true
     };
-<%_ for (idx in relationships) {
-const relationshipType = relationships[idx].relationshipType;
-const relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
-_%>
-<%_ if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true || relationshipType === 'many-to-one') { _%>
-    this.update<%= relationshipNameHumanized %> = this.update<%= relationshipNameHumanized %>.bind(this);
-<%_ } _%>
-<%_ } _%>
   }
 
   componentDidMount() {
@@ -122,9 +115,11 @@ const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlur
 const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
 const relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
 const otherEntityField = relationships[idx].otherEntityField;
+const relationshipFieldName = relationships[idx].relationshipFieldName;
+const ownerSide = relationships[idx].ownerSide;
 _%>
   <%_ if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { _%>
-  update<%= relationshipNameHumanized %>(element) {
+  <%= relationshipFieldName %>Update = element => {
     const <%= otherEntityField %> = element.target.value;
     const list = [];
     for (const i in element.target.selectedOptions) {
@@ -142,13 +137,13 @@ _%>
     });
   }
 
-  <%_ } else if (relationshipType === 'many-to-one') { _%>
-  update<%= relationshipNameHumanized %>(element) {
+  <%_ } else if (relationshipType === 'many-to-one' || relationshipType === 'one-to-one' && ownerSide === true) { _%>
+  <%= relationshipFieldName %>Update = element => {
     const <%= otherEntityField %> = element.target.value;
     for (const i in this.props.<%= otherEntityNamePlural %>) {
         if (<%= otherEntityField %>.toString() === this.props.<%= otherEntityNamePlural %>[i].<%= otherEntityField %>.toString()) {
             this.setState({
-                id<%= relationshipNameHumanized %>: this.props.<%= otherEntityNamePlural %>[i].id
+                <%= relationshipFieldName %>Id: this.props.<%= otherEntityNamePlural %>[i].id
             });
         }
     }
@@ -297,7 +292,7 @@ _%>
               <AvInput type="select"
                 className="form-control"
                 name="<%= relationshipFieldName %>.<%= otherEntityField %>"
-                onChange={this.update<%= relationshipNameHumanized %>}>
+                onChange={this.<%= relationshipFieldName %>Update}>
                 <option value="" key="0" />
                 {
                   <%= otherEntityNamePlural %>.map(otherEntity =>
@@ -311,22 +306,103 @@ _%>
               </AvInput>
               <AvInput type="hidden"
                 name="<%= relationshipFieldName %>.id"
-                value={this.state.id<%= relationshipNameHumanized %>} />
+                value={this.state.<%= relationshipFieldName %>Id} />
                 <%_ } else { _%>
-                  TODO 1
+              <AvInput type="select"
+                className="form-control"
+                name="<%= relationshipFieldName %>.<%= otherEntityField %>"
+                onChange={this.<%= relationshipFieldName %>Update}>
+                {
+                  <%= otherEntityNamePlural %>.map(otherEntity =>
+                    <option
+                      value={otherEntity.<%=otherEntityField%>}
+                      key={otherEntity.id}>
+                      {otherEntity.<%=otherEntityField%>}
+                    </option>
+                  )
+                }
+              </AvInput>
+              <AvInput type="hidden"
+                name="<%= relationshipFieldName %>.id"
+                value={this.state.<%= relationshipFieldName %>Id} />
                 <%_ } _%>
               <%_ } else { _%>
                 <%_ if (!relationshipRequired) { _%>
-                  TODO 2
+                  <AvInput type="select"
+                    className="form-control"
+                    name="<%= relationshipFieldName %>Id"
+                    onChange={this.<%= relationshipFieldName %>Update}>
+                    <option value="" key="0" />
+                    {
+                      <%= otherEntityNamePlural %>.map(otherEntity =>
+                        <option
+                          value={otherEntity.id}
+                          key={otherEntity.id}>
+                          {otherEntity.<%=otherEntityField%>}
+                        </option>
+                      )
+                    }
+                  </AvInput>
                 <%_ } else { _%>
-                  TODO 3
+                  <AvInput type="select"
+                    className="form-control"
+                    name="<%= relationshipFieldName %>Id"
+                    onChange={this.<%= relationshipFieldName %>Update}>
+                    {
+                      <%= otherEntityNamePlural %>.map(otherEntity =>
+                        <option
+                          value={otherEntity.id}
+                          key={otherEntity.id}>
+                          {otherEntity.<%=otherEntityField%>}
+                        </option>
+                      )
+                    }
+                  </AvInput>
                 <%_ } _%>
               <%_ } _%>
             </AvGroup>
                 <%_ } else if (relationshipType === 'one-to-one' && ownerSide === true) { _%>
-            <div className="form-group">
-                TODO 4
-            </div>
+            <AvGroup>
+              <Label for="<%= relationshipFieldName %>.<%= otherEntityField %>">
+                <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
+              </Label>
+                <%_ if (dto === 'no') { _%>
+                  <AvInput type="select"
+                    className="form-control"
+                    name="<%= relationshipFieldName %>.<%=otherEntityField%>"
+                    onChange={this.<%= relationshipFieldName %>Update}>
+                    <option value="" key="0" />
+                    {
+                      <%= otherEntityNamePlural %>.map(otherEntity =>
+                        <option
+                          value={otherEntity.<%=otherEntityField%>}
+                          key={otherEntity.id}>
+                          {otherEntity.<%=otherEntityField%>}
+                        </option>
+                      )
+                    }
+                  </AvInput>
+                  <AvInput type="hidden"
+                    name="<%= relationshipFieldName %>.id"
+                    value={this.state.<%= relationshipFieldName %>Id} />
+                <%_ } else { _%>
+                  <AvInput type="select"
+                    className="form-control"
+                    name="<%= relationshipFieldName %>Id"
+                    onChange={this.<%= relationshipFieldName %>Update}>
+                    <option value="" key="0" />
+                    {
+                      <%= otherEntityNamePlural %>.map(otherEntity =>
+                        <option
+                          value={otherEntity.id}
+                          key={otherEntity.id}>
+                          {otherEntity.<%=otherEntityField%>}
+                        </option>
+                      )
+                    }
+                  </AvInput>
+                <%_ } _%>
+            </AvGroup>
                 <%_ } else if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { _%>
             <AvGroup>
               <Label for="<%= otherEntityNamePlural %>"><Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate></Label>
@@ -335,7 +411,7 @@ _%>
                 className="form-control"
                 name="fake<%= otherEntityNamePlural %>"
                 value={this.display<%= relationshipNameHumanized %>(<%= entityInstance %>)}
-                onChange={this.update<%= relationshipNameHumanized %>}>
+                onChange={this.<%= relationshipFieldName %>Update}>
                 <option value="" key="0" />
                 {
                   (<%= otherEntityNamePlural %>) ? (<%=otherEntityNamePlural.toLowerCase() %>.map(otherEntity =>

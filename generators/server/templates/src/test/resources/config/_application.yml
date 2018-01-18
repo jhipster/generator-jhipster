@@ -110,7 +110,7 @@ spring:
     <%_ if (searchEngine === 'elasticsearch') { _%>
         elasticsearch:
             cluster-name:
-            cluster-nodes:
+            cluster-nodes: localhost:9300
             properties:
                 path:
                     logs: <%= BUILD_DIR %>elasticsearch/log
@@ -121,6 +121,10 @@ spring:
         bucket:
             name: jhipster
     <%_ } _%>
+    <%_ if (databaseType === 'sql') { _%>
+    liquibase:
+        contexts: test
+    <%_ } _%>
     mail:
         host: localhost
     messages:
@@ -129,10 +133,7 @@ spring:
         favicon:
             enabled: false
     thymeleaf:
-        mode: XHTML
-
-liquibase:
-    contexts: test
+        mode: HTML
 
 server:
     port: 10344
@@ -205,4 +206,4 @@ jhipster:
 # http://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-application:
+# application:

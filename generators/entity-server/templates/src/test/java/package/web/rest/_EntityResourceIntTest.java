@@ -87,7 +87,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringRunner.class)
 <%_ if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>
-@SpringBootTest(classes = {<%= mainClass %>.class, SecurityBeanOverrideConfiguration.class})
+@SpringBootTest(classes = {SecurityBeanOverrideConfiguration.class, <%= mainClass %>.class})
 <%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
 <%_ } _%>
@@ -383,7 +383,7 @@ _%>
         <%_ }} if (searchEngine === 'elasticsearch') { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
-        <%= entityClass %> <%= entityInstance %>Es = <%= entityInstance %>SearchRepository.findOne(test<%= entityClass %>.getId());
+        <%= entityClass %> <%= entityInstance %>Es = <%= entityInstance %>SearchRepository.findById(test<%= entityClass %>.getId()).get();
         <%_ for (idx in fields) { if (fields[idx].fieldType === 'ZonedDateTime') { _%>
         assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>());
         <%_ }} _%>
@@ -635,7 +635,7 @@ _%>
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll().size();
 
         // Update the <%= entityInstance %>
-        <%= entityClass %> updated<%= entityClass %> = <%= entityInstance %>Repository.findOne(<%= entityInstance %>.getId());<% if (databaseType === 'sql') { %>
+        <%= entityClass %> updated<%= entityClass %> = <%= entityInstance %>Repository.findById(<%= entityInstance %>.getId()).get();<% if (databaseType === 'sql') { %>
         // Disconnect from session so that the updates on updated<%= entityClass %> are not directly saved in db
         em.detach(updated<%= entityClass %>);<% } %>
         <%_ if (fluentMethods && fields.length > 0) { _%>
@@ -675,7 +675,7 @@ _%>
         <%_ } } if (searchEngine === 'elasticsearch') { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
-        <%= entityClass %> <%= entityInstance %>Es = <%= entityInstance %>SearchRepository.findOne(test<%= entityClass %>.getId());
+        <%= entityClass %> <%= entityInstance %>Es = <%= entityInstance %>SearchRepository.findById(test<%= entityClass %>.getId()).get();
         <%_ for (idx in fields) { if (fields[idx].fieldType === 'ZonedDateTime') { _%>
         assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>());
         <%_ }} _%>
@@ -721,8 +721,9 @@ _%>
             .andExpect(status().isOk());<% if (searchEngine === 'elasticsearch') { %>
 
         // Validate Elasticsearch is empty
-        boolean <%= entityInstance %>ExistsInEs = <%= entityInstance %>SearchRepository.exists(<%= entityInstance %>.getId());
-        assertThat(<%= entityInstance %>ExistsInEs).isFalse();<% } %>
+        boolean <%= entityInstance %>ExistsInEs = <%= entityInstance %>SearchRepository.existsById(<%= entityInstance %>.getId());
+        // TODO enable this check after https://github.com/spring-projects/spring-data-elasticsearch/pull/183 has been merged
+        // assertThat(<%= entityInstance %>ExistsInEs).isFalse();<% } %>
 
         // Validate the database is empty
         List<<%= entityClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();

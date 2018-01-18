@@ -77,7 +77,7 @@ export class <%=jhiPrefixCapitalized%>MetricsMonitoringComponent implements OnIn
     refreshThreadDumpData() {
         this.metricsService.threadDump().subscribe((data) => {
             const modalRef  = this.modalService.open(<%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent, { size: 'lg'});
-            modalRef.componentInstance.threadDump = data;
+            modalRef.componentInstance.threadDump = data.threads;
             modalRef.result.then((result) => {
                 // Left blank intentionally, nothing to do here
             }, (reason) => {

@@ -123,7 +123,7 @@ public class SocialService {
         String login = getLoginDependingOnProviderId(userProfile, providerId);
         String encryptedPassword = passwordEncoder.encode(RandomStringUtils.random(10));
         Set<<% if (databaseType === 'couchbase') { %>String<% } else { %>Authority<% } %>> authorities = new HashSet<>(1);
-        authorities.add(authorityRepository.findOne(AuthoritiesConstants.USER)<%if (databaseType === 'couchbase') { %>.getName()<% } %>);
+        authorities.add(authorityRepository.findById(AuthoritiesConstants.USER).get()<%if (databaseType === 'couchbase') { %>.getName()<% } %>);
 
         User newUser = new User();
         newUser.setLogin(login);

@@ -271,7 +271,7 @@ trickle_fsync_interval_in_kb: 10240
 storage_port: 0
 
 # SSL port, for encrypted communication.  Unused unless enabled in
-# encryption_options
+# server_encryption_options
 ssl_storage_port: 7011
 
 # Address to bind to and tell other Cassandra nodes to connect to. You
@@ -291,7 +291,7 @@ start_native_transport: true
 native_transport_port: 0
 
 # Whether to start the thrift rpc server.
-start_rpc: true
+start_rpc: false
 
 # Address to broadcast to other Cassandra nodes
 # Leaving this blank will set it to the same value as listen_address
@@ -569,23 +569,16 @@ request_scheduler: org.apache.cassandra.scheduler.NoScheduler
 # the request scheduling. Currently the only valid option is keyspace.
 # request_scheduler_id: keyspace
 
-# index_interval controls the sampling of entries from the primrary
-# row index in terms of space versus time.  The larger the interval,
-# the smaller and less effective the sampling will be.  In technicial
-# terms, the interval coresponds to the number of index entries that
-# are skipped between taking each sample.  All the sampled entries
-# must fit in memory.  Generally, a value between 128 and 512 here
-# coupled with a large key cache size on CFs results in the best trade
-# offs.  This value is not often changed, however if you have many
-# very small rows (many to an OS page), then increasing this will
-# often lower memory usage without a impact on performance.
-index_interval: 128
-
 # Enable or disable inter-node encryption
-# Default settings are TLS v1, RSA 1024-bit keys (it is imperative that
-# users generate their own keys) TLS_RSA_WITH_AES_128_CBC_SHA as the cipher
-# suite for authentication, key exchange and encryption of the actual data transfers.
-# NOTE: No custom encryption options are enabled at the moment
+# JVM defaults for supported SSL socket protocols and cipher suites can
+# be replaced using custom encryption options. This is not recommended
+# unless you have policies in place that dictate certain settings, or
+# need to disable vulnerable ciphers or protocols in case the JVM cannot
+# be updated.
+# FIPS compliant settings can be configured at JVM level and should not
+# involve changing encryption settings here:
+# https://docs.oracle.com/javase/8/docs/technotes/guides/security/jsse/FIPS.html
+# *NOTE* No custom encryption options are enabled at the moment
 # The available internode options are : all, none, dc, rack
 #
 # If set to dc cassandra will encrypt the traffic between the DCs
@@ -595,7 +588,7 @@ index_interval: 128
 # the keystore and truststore.  For instructions on generating these files, see:
 # http://download.oracle.com/javase/6/docs/technotes/guides/security/jsse/JSSERefGuide.html#CreateKeystore
 #
-encryption_options:
+server_encryption_options:
     internode_encryption: none
     keystore: conf/.keystore
     keystore_password: cassandra
@@ -605,4 +598,23 @@ encryption_options:
     # protocol: TLS
     # algorithm: SunX509
     # store_type: JKS
-    # cipher_suites: [TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA]
+    # cipher_suites: [TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA]
+    # require_client_auth: false
+    # require_endpoint_verification: false
+
+# enable or disable client/server encryption.
+client_encryption_options:
+    enabled: false
+    # If enabled and optional is set to true encrypted and unencrypted connections are handled.
+    optional: false
+    keystore: conf/.keystore
+    keystore_password: cassandra
+    # require_client_auth: false
+    # Set trustore and truststore_password if require_client_auth is true
+    # truststore: conf/.truststore
+    # truststore_password: cassandra
+    # More advanced defaults below:
+    # protocol: TLS
+    # algorithm: SunX509
+    # store_type: JKS
+    # cipher_suites: [TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA]

@@ -16,13 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%  const instanceType = (dto === 'mapstruct') ? entityClass + 'DTO' : entityClass;
+<%  const instanceType = (dto === 'mapstruct') ? 'Optional<' + entityClass + 'DTO>' : 'Optional<' + entityClass + '>';
     const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
     const mapper = entityInstance  + 'Mapper';
-    const entityToDto = mapper + '.' + 'toDto';
+    const entityToDtoReference = mapper + '::' + 'toDto';
     const returnPrefix = returnDirectly ? 'return' : instanceType + ' ' + instanceName + ' =';
     if (!viaService) {
 %>
-        <% if (dto === 'mapstruct') { %><%= entityClass %> <%= entityInstance %> = <% } else { %><%= returnPrefix %> <% } %><% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %><%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany === true) { %>findOneWithEagerRelationships<% } else { %>findOne<% } %>(id)<% } %><% if (databaseType === 'cassandra') { %><%= entityInstance %>Repository.findOne(UUID.fromString(id))<% } %>;<% if (dto === 'mapstruct') { %>
-        <%= returnPrefix %> <%= entityToDto %>(<%= entityInstance %>);<% } } else { %>
-        <%= returnPrefix %> <%= entityInstance %>Service.findOne(id);<% } %>
+        <%- returnPrefix %> <% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %><%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany === true) { %>findOneWithEagerRelationships(id)<% } else { %>findById(id)<% } %><% } %><% if (databaseType === 'cassandra') { %><%= entityInstance %>Repository.findById(UUID.fromString(id))<% } %><% if (dto !== 'mapstruct') { %>;<% } else { %>
+            .map(<%= entityToDtoReference %>);<% } } else { %>
+        <%- returnPrefix %> <%= entityInstance %>Service.findOne(id);<% } %>

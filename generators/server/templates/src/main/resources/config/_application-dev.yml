@@ -34,8 +34,8 @@
 logging:
     level:
         ROOT: DEBUG
-        <%=packageName%>: DEBUG
         io.github.jhipster: DEBUG
+        <%=packageName%>: DEBUG
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 
 eureka:
@@ -192,7 +192,7 @@ spring:
     <%_ if (searchEngine === 'elasticsearch') { _%>
         elasticsearch:
             cluster-name:
-            cluster-nodes:
+            cluster-nodes: localhost:9300
             properties:
                 path:
                     logs: <%= BUILD_DIR %>elasticsearch/log
@@ -203,6 +203,10 @@ spring:
         bootstrap-hosts: localhost
         bucket:
             name: <%= baseName %>
+    <%_ } _%>
+    <%_ if (databaseType === 'sql') { _%>
+    liquibase:
+        contexts: dev
     <%_ } _%>
     mail:
         host: localhost
@@ -220,11 +224,6 @@ spring:
         locator:
             discovery:
                 enabled: true
-<%_ } _%>
-<%_ if (databaseType === 'sql') { _%>
-
-liquibase:
-    contexts: dev
 <%_ } _%>
 
 # ===================================================================
@@ -353,15 +352,8 @@ jhipster:
         from: <%= baseName %>@localhost
         base-url: http://127.0.0.1:<%= serverPort %>
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
-        jmx.enabled: true
-        graphite: # Use the "graphite" Maven profile to have the Graphite dependencies
-            enabled: false
-            host: localhost
-            port: 2003
-            prefix: <%= baseName %>
-        prometheus: # Use the "prometheus" Maven profile to have the Prometheus dependencies
-            enabled: false
-            endpoint: /prometheusMetrics
+        jmx:
+            enabled: true
         logs: # Reports Dropwizard metrics in the logs
             enabled: false
             report-frequency: 60 # in seconds
@@ -371,12 +363,6 @@ jhipster:
             host: localhost
             port: 5000
             queue-size: 512
-    <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
-        spectator-metrics: # Reports Spectator Circuit Breaker metrics in the logs
-            enabled: false
-            # edit spring.metrics.export.delay-millis to set report frequency
-    <%_ } _%>
-
 <%_ if (applicationType === 'uaa') { _%>
 uaa:
     key-store:
@@ -418,4 +404,4 @@ oauth2:
 # http://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-application:
+# application:

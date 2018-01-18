@@ -32,11 +32,11 @@ launchCurlOrProtractor() {
 
     if [ "$status" -ne 0 ]; then
         echo "[$(date)] Not connected after" $retryCount " retries."
-        exit 1
+        return 1
     fi
 
     if [ "$PROTRACTOR" != 1 ]; then
-        exit 0
+        return 0
     fi
 
     retryCount=0
@@ -55,7 +55,7 @@ launchCurlOrProtractor() {
         echo "e2e tests failed... retryCount =" $retryCount "/" $maxRetry
         sleep 15
     done
-    exit $result
+    return $result
 }
 
 #-------------------------------------------------------------------------------
@@ -75,7 +75,7 @@ if [ -f "mvnw" ]; then
     ./mvnw verify -DskipTests -P"$PROFILE"
     mv target/*.war app.war
 elif [ -f "gradlew" ]; then
-    ./gradlew bootRepackage -P"$PROFILE" -x test
+    ./gradlew bootWar -P"$PROFILE" -x test
     mv build/libs/*.war app.war
 else
     echo "No mvnw or gradlew"
@@ -94,6 +94,7 @@ if [ "$RUN_APP" == 1 ]; then
         cd "$UAA_APP_FOLDER"
         java -jar target/*.war \
             --spring.profiles.active="$PROFILE" \
+            --logging.level.io.github.jhipster=ERROR \
             --logging.level.io.github.jhipster.sample=ERROR \
             --logging.level.io.github.jhipster.travis=ERROR &
         sleep 80
@@ -102,11 +103,14 @@ if [ "$RUN_APP" == 1 ]; then
     cd "$APP_FOLDER"
     java -jar app.war \
         --spring.profiles.active="$PROFILE" \
+        --logging.level.io.github.jhipster=ERROR \
         --logging.level.io.github.jhipster.sample=ERROR \
         --logging.level.io.github.jhipster.travis=ERROR &
     echo $! > .pid
     sleep 40
 
     launchCurlOrProtractor
+    result=$?
     kill $(cat .pid)
+    exit $result
 fi

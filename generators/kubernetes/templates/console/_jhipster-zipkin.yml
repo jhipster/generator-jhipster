@@ -1,0 +1,60 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see http://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jhipster-zipkin
+  namespace: <%= kubernetesNamespace %>
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jhipster-zipkin
+    spec:
+      containers:
+      - name: jhipster-zipkin
+        image: <%= DOCKER_JHIPSTER_ZIPKIN %>
+        ports:
+        - containerPort: 9411
+          name: http
+          protocol: TCP
+        env:
+        - name: ES_HOSTS
+          value: http://jhipster-elasticsearch:9200
+        # TODO - better to update to an Ingress endpoint
+        - name: ZIPKIN_UI_LOGS_URL
+          value: "http://jhipster-console/app/kibana#/dashboard/logs-dashboard?_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:now-1h,mode:quick,to:now))&_a=(filters:!(),options:(darkTheme:!f),panels:!((col:1,id:logs-levels,panelIndex:2,row:1,size_x:6,size_y:3,type:visualization),(col:7,columns:!(stack_trace),id:Stacktraces,panelIndex:7,row:1,size_x:4,size_y:3,sort:!('@timestamp',desc),type:search),(col:11,id:Log-forwarding-instructions,panelIndex:8,row:1,size_x:2,size_y:3,type:visualization),(col:1,columns:!(app_name,level,message),id:All-logs,panelIndex:9,row:4,size_x:12,size_y:7,sort:!('@timestamp',asc),type:search)),query:(query_string:(analyze_wildcard:!t,query:'{traceId}')),title:logs-dashboard,uiState:())"
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jhipster-zipkin
+  namespace: <%= kubernetesNamespace %>
+  labels:
+    app: jhipster-zipkin
+spec:
+  ports:
+  - name: http
+    port: 9411
+    protocol: TCP
+    targetPort: 9411
+  selector:
+    app: jhipster-zipkin

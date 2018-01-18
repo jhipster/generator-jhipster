@@ -117,7 +117,7 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
         <%_ } _%>
     default Optional<User> findOneByLogin(String login) {
-        return Optional.ofNullable(findOne(User.PREFIX + ID_DELIMITER + login));
+        return findById(User.PREFIX + ID_DELIMITER + login);
     }
     <%_ } else if (databaseType === 'mongodb') { _%>
         <%_ if (cacheManagerIsAvailable === true) { _%>
@@ -265,8 +265,8 @@ public class UserRepository {
         truncateByEmailStmt = session.prepare("TRUNCATE user_by_email");
     }
 
-    public User findOne(String id) {
-        return mapper.get(id);
+    public Optional<User> findById(String id) {
+        return Optional.ofNullable(mapper.get(id));
     }
 
     public Optional<User> findOneByActivationKey(String activationKey) {

@@ -24,6 +24,10 @@ buildscript {
         jcenter()
         maven { url "http://repo.spring.io/plugins-release" }
         maven { url "https://plugins.gradle.org/m2/" }
+        // TODO To remove after final Spring Boot 2 release
+        maven { url "https://repo.spring.io/milestone" }
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://dl.bintray.com/jhipster/maven" }
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
@@ -38,6 +42,8 @@ buildscript {
 
 plugins {
     id "org.sonarqube" version "2.5"
+    id "net.ltgt.apt-eclipse" version "0.13"
+    id "net.ltgt.apt-idea" version "0.13"
     id "net.ltgt.apt" version "0.13"
     id "io.spring.dependency-management" version "1.0.3.RELEASE"
     <%_ if (gatlingTests) { _%>
@@ -82,8 +88,8 @@ version = '0.0.1-SNAPSHOT'
 
 description = ''
 
-bootRepackage {
-   mainClass = '<%= packageName %>.<%= mainClass %>'
+bootWar {
+   mainClassName = '<%= packageName %>.<%= mainClass %>'
 }
 
 war {
@@ -91,8 +97,7 @@ war {
 }
 
 springBoot {
-    mainClass = '<%= packageName %>.<%= mainClass %>'
-    executable = true
+    mainClassName = '<%= packageName %>.<%= mainClass %>'
     buildInfo()
 }
 
@@ -111,15 +116,10 @@ if (OperatingSystem.current().isWindows()) {
     }
 
     bootRun {
-        addResources = false
         dependsOn pathingJar
         doFirst {
             classpath = files("$buildDir/classes/java/main", "$buildDir/resources/main", pathingJar.archivePath)
         }
-    }
-} else {
-    bootRun {
-        addResources = false
     }
 }
 
@@ -209,9 +209,15 @@ repositories {
     // more information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc
     maven { url "https://maven.oracle.com" }
     <%_ } _%>
+    // TODO To remove after final Spring Boot 2 release
+    maven { url "https://repo.spring.io/milestone" }
+    maven { url "https://repo.spring.io/snapshot" }
+    maven { url "https://dl.bintray.com/jhipster/maven" }
 }
 
 dependencies {
+    // TODO To remove after final Spring Boot 2 release
+    compile "javax.xml.bind:jaxb-api"
     <%_ if (cacheProvider !== 'no') { _%>
     compile "org.springframework.boot:spring-boot-starter-cache"
     <%_ } _%>
@@ -282,15 +288,15 @@ dependencies {
     <%_ if (databaseType === 'sql') { _%>
     compile "org.hibernate:hibernate-entitymanager"
     compile "org.hibernate:hibernate-envers"
-    compile "org.hibernate:hibernate-validator"
+    compile "org.hibernate.validator:hibernate-validator"
     compile "org.liquibase:liquibase-core"
     compile "com.mattbertolini:liquibase-slf4j"
     <%_ } _%>
-    compile "org.springframework.boot:spring-boot-actuator"
     compile "org.springframework.boot:spring-boot-autoconfigure"
     compile "org.springframework.boot:spring-boot-loader-tools"
     compile "org.springframework.boot:spring-boot-starter-mail"
     compile "org.springframework.boot:spring-boot-starter-logging"
+    compile "org.springframework.boot:spring-boot-starter-actuator"
     compile "org.springframework.boot:spring-boot-starter-aop"
     <%_ if (databaseType === 'sql') { _%>
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
@@ -325,19 +331,19 @@ dependencies {
     compile "com.datastax.cassandra:cassandra-driver-mapping"
     <%_ } _%>
     <%_ if (applicationType === 'gateway') { _%>
-    compile "org.springframework.cloud:spring-cloud-starter-zuul"
+    compile "org.springframework.cloud:spring-cloud-starter-netflix-zuul"
     compile "com.github.vladimir-bukhtoyarov:bucket4j-core"
     compile "com.github.vladimir-bukhtoyarov:bucket4j-jcache"
     <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
     compile "org.springframework.cloud:spring-cloud-starter"
     compile "org.springframework.cloud:spring-cloud-starter-netflix-ribbon"
-    compile "org.springframework.cloud:spring-cloud-starter-hystrix"
-    compile "org.springframework.cloud:spring-cloud-starter-spectator"
+    compile "org.springframework.cloud:spring-cloud-starter-netflix-hystrix"
+    compile "org.springframework.cloud:spring-cloud-starter-spectator"    
     compile "org.springframework.retry:spring-retry"
     <%_ } _%>
     <%_ if (serviceDiscoveryType === 'eureka') { _%>
-    compile "org.springframework.cloud:spring-cloud-starter-eureka"
+    compile "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
     compile "org.springframework.cloud:spring-cloud-starter-config"
     <%_ } _%>
     <%_ if (serviceDiscoveryType === 'consul') { _%>
@@ -360,6 +366,7 @@ dependencies {
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
     compile "org.springframework.security.oauth:spring-security-oauth2"
+    compile "org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure"
         <%_ if (applicationType === 'gateway' || applicationType === 'microservice') { _%>
     compile "org.springframework.security:spring-security-jwt"
         <%_ } _%>
@@ -451,10 +458,10 @@ task cleanResources(type: Delete) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.2.1'
+    gradleVersion = '4.4'
 }
 
-task stage(dependsOn: 'bootRepackage') {
+task stage(dependsOn: 'bootWar') {
 }
 <%_ if (!skipClient) { _%>
 

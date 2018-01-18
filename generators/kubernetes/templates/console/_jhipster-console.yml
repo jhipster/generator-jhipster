@@ -44,8 +44,30 @@ metadata:
     app: jhipster-console
 spec:
   ports:
-  - name: "5601"
+  - name: http
     port: 5601
     targetPort: 5601
+  <%_ if (kubernetesServiceType !== 'Ingress') { _%>
+  type: <%= kubernetesServiceType %>
+  <%_ } else { _%>
+  type: ClusterIP
+  <%_ } _%>
   selector:
     app: jhipster-console
+---
+<%_ if (kubernetesServiceType === 'Ingress') { _%>
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: jhipster-console
+  namespace: <%= kubernetesNamespace %>
+spec:
+  rules:
+  - host: jhipster-console.<%= ingressDomain %>
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: jhipster-console
+          servicePort: 5601
+<%_ } _%>

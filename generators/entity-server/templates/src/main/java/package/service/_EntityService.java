@@ -25,12 +25,15 @@ import <%=packageName%>.service.dto.<%= entityClass %>DTO;
 import <%=packageName%>.domain.<%= entityClass %>;
 <%_ } _%>
 <%_ if (pagination !== 'no') { _%>
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
+
 <%_ if (pagination === 'no' || fieldsContainNoOwnerOneToOne === true) { _%>
 import java.util.List;
 <%_ } _%>
+import java.util.Optional;
 
 /**
  * Service Interface for managing <%= entityClass %>.
@@ -67,7 +70,7 @@ public interface <%= entityClass %>Service {
      * @param id the id of the entity
      * @return the entity
      */
-    <%= instanceType %> findOne(<%= pkType %> id);
+    Optional<<%= instanceType %>> findOne(<%= pkType %> id);
 
     /**
      * Delete the "id" <%= entityInstance %>.

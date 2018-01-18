@@ -179,6 +179,10 @@ spring:
         bucket:
             name: <%= baseName %>
     <%_ } _%>
+    <%_ if (databaseType === 'sql') { _%>
+    liquibase:
+        contexts: prod
+    <%_ } _%>
     mail:
         host: localhost
         port: 25
@@ -193,11 +197,6 @@ spring:
         locator:
             discovery:
                 enabled: true
-<%_ } _%>
-<%_ if (databaseType === 'sql') { _%>
-
-liquibase:
-    contexts: prod
 <%_ } _%>
 
 # ===================================================================
@@ -316,15 +315,8 @@ jhipster:
         from: <%= baseName %>@localhost
         base-url: http://my-server-url-to-change # Modify according to your server's URL
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
-        jmx.enabled: true
-        graphite:
-            enabled: false
-            host: localhost
-            port: 2003
-            prefix: <%= baseName %>
-        prometheus:
-            enabled: false
-            endpoint: /prometheusMetrics
+        jmx:
+            enabled: true
         logs: # Reports Dropwizard metrics in the logs
             enabled: false
             report-frequency: 60 # in seconds
@@ -334,12 +326,6 @@ jhipster:
             host: localhost
             port: 5000
             queue-size: 512
-    <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
-        spectator-metrics: # Reports Spectator Circuit Breaker metrics in the logs
-            enabled: false
-            # edit spring.metrics.export.delay-millis to set report frequency
-    <%_ } _%>
-
 <%_ if (applicationType === 'uaa') { _%>
 uaa:
     #be sure to to change to a different keystore in production!
@@ -384,4 +370,4 @@ oauth2:
 # http://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-application:
+# application:

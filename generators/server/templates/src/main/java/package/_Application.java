@@ -29,8 +29,8 @@ import io.github.jhipster.config.JHipsterConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.actuate.autoconfigure.*;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 <%_ } _%>
@@ -57,10 +57,8 @@ import java.util.Collection;
 @ComponentScan(
     excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = OAuth2InterceptedFeignConfiguration.class)
 )
-<%_ } else { _%>
-@ComponentScan
 <%_ } _%>
-@EnableAutoConfiguration(exclude = {MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class<% if (applicationType === 'gateway') { %>, MetricsDropwizardAutoConfiguration.class<% } %>})
+@SpringBootApplication
 @EnableConfigurationProperties({<% if (databaseType === 'sql') { %>LiquibaseProperties.class, <% } %>ApplicationProperties.class})
 <%_ if (serviceDiscoveryType) { _%>
 @EnableDiscoveryClient

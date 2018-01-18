@@ -44,14 +44,17 @@ import org.springframework.stereotype.Service;
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
-<% if (dto === 'mapstruct' && (pagination === 'no' ||  fieldsContainNoOwnerOneToOne === true)) { %>
+
+import java.util.Optional;
+<%_ if (dto === 'mapstruct' && (pagination === 'no' ||  fieldsContainNoOwnerOneToOne === true)) { _%>
 import java.util.LinkedList;<% } %><% if (pagination === 'no' ||  fieldsContainNoOwnerOneToOne === true) { %>
 import java.util.List;<% } %><% if (databaseType === 'cassandra') { %>
 import java.util.UUID;<% } %><% if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && ((searchEngine === 'elasticsearch' && !viaService) || dto === 'mapstruct'))) { %>
 import java.util.stream.Collectors;<% } %><% if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && searchEngine === 'elasticsearch' && !viaService)) { %>
 import java.util.stream.StreamSupport;<% } %><% if (searchEngine === 'elasticsearch') { %>
 
-import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
+import static org.elasticsearch.index.query.QueryBuilders.*;
+<%_ } _%>
 
 /**
  * Service Implementation for managing <%= entityClass %>.
@@ -112,7 +115,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     <%_ if (databaseType === 'sql') { _%>
     @Transactional(readOnly = true)
     <%_ } _%>
-    public <%= instanceType %> findOne(<%= pkType %> id) {
+    public Optional<<%= instanceType %>> findOne(<%= pkType %> id) {
         log.debug("Request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {viaService: viaService, returnDirectly:true}); -%>
     }
 
@@ -147,11 +150,8 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
         log.debug("Request to search <%= entityClassPlural %> for query {}", query);<%- include('../../common/search_stream_template', {viaService: viaService}); -%>
         <%_ } else { _%>
         log.debug("Request to search for a page of <%= entityClassPlural %> for query {}", query);
-        Page<<%= entityClass %>> result = <%= entityInstance %>SearchRepository.search(queryStringQuery(query), pageable);
-            <%_ if (dto === 'mapstruct') { _%>
-        return result.map(<%= entityToDtoReference %>);
-            <%_ } else { _%>
-        return result;
+        return <%= entityInstance %>SearchRepository.search(queryStringQuery(query), pageable)<%_ if (dto !== 'mapstruct') { _%>;<% } else { %>
+            .map(<%= entityToDtoReference %>);
         <%_ } } _%>
     }
     <%_ } _%>
