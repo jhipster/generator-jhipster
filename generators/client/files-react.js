@@ -184,6 +184,7 @@ const files = {
                 'reducers/administration.ts',
                 'reducers/authentication.ts',
                 'reducers/layout.ts',
+                'reducers/notification.ts',
                 'reducers/user-management.ts',
                 'reducers/account.ts'
             ]
@@ -295,6 +296,8 @@ const files = {
         {
             path: REACT_DIR,
             templates: [
+                // alert
+                'shared/alert/alert.component.tsx',
                 // layouts
                 'shared/layout/footer/footer.tsx',
                 'shared/layout/header/header.tsx',
