@@ -17,61 +17,48 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
 import { SERVER_API_URL } from '../../app.constants';
-<%_ if (authenticationType !== 'oauth2') { _%>
 import { User } from './user.model';
-<%_ } _%>
-import { ResponseWrapper } from '../model/response-wrapper.model';
 import { createRequestOption } from '../model/request-util';
 
 @Injectable()
 export class UserService {
     private resourceUrl = SERVER_API_URL + '<%- apiUaaPath %>api/users';
 
-    constructor(private http: Http) { }
+    constructor(private http: HttpClient) { }
 <%_ if (authenticationType !== 'oauth2') { _%>
 
-    create(user: User): Observable<ResponseWrapper> {
-        return this.http.post(this.resourceUrl, user)
-            .map((res: Response) => this.convertResponse(res));
+    create(user: User): Observable<HttpResponse<User>> {
+        return this.http.post<User>(this.resourceUrl, user, { observe: 'response' });
     }
 
-    update(user: User): Observable<ResponseWrapper> {
-        return this.http.put(this.resourceUrl, user)
-            .map((res: Response) => this.convertResponse(res));
+    update(user: User): Observable<HttpResponse<User>> {
+        return this.http.put<User>(this.resourceUrl, user, { observe: 'response' });
     }
 
-    find(login: string): Observable<User> {
-        return this.http.get(`${this.resourceUrl}/${login}`).map((res: Response) => res.json());
+    find(login: string): Observable<HttpResponse<User>> {
+        return this.http.get<User>(`${this.resourceUrl}/${login}`, { observe: 'response' });
     }
 <% } %>
-    query(req?: any): Observable<ResponseWrapper> {
+    query(req?: any): Observable<HttpResponse<User[]>> {
         const options = createRequestOption(req);
-        return this.http.get(this.resourceUrl, options)
-            .map((res: Response) => this.convertResponse(res));
+        return this.http.get<User[]>(this.resourceUrl, { params: options, observe: 'response' });
     }
 <%_ if (authenticationType !== 'oauth2') { _%>
 
-    delete(login: string): Observable<Response> {
-        return this.http.delete(`${this.resourceUrl}/${login}`);
+    delete(login: string): Observable<HttpResponse<any>> {
+        return this.http.delete(`${this.resourceUrl}/${login}`, { observe: 'response' });
     }
 
     authorities(): Observable<string[]> {
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-        return this.http.get(SERVER_API_URL + '<%- apiUaaPath %>api/users/authorities').map((res: Response) => {
-            const json = res.json();
-            return <string[]> json;
-        });
+        return this.http.get<string[]>(SERVER_API_URL + '<%- apiUaaPath %>api/users/authorities');
 <%_ } else { _%>
         return Observable.of(['ROLE_USER', 'ROLE_ADMIN']);
 <%_ } _%>
     }
 <% } %>
-    private convertResponse(res: Response): ResponseWrapper {
-        const jsonResponse = res.json();
-        return new ResponseWrapper(res.headers, jsonResponse, res.status);
-    }
 }

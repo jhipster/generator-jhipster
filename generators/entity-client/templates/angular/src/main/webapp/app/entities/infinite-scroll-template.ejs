@@ -75,8 +75,8 @@ _%>
                 size: this.itemsPerPage,
                 sort: this.sort()
             }).subscribe(
-                (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
-                (res: ResponseWrapper) => this.onError(res.json)
+                (res: HttpResponse<<%= entityAngularName %>[]>) => this.onSuccess(res.body, res.headers),
+                (res: HttpErrorResponse) => this.onError(res.message)
             );
             return;
         }
@@ -86,8 +86,8 @@ _%>
             size: this.itemsPerPage,
             sort: this.sort()
         }).subscribe(
-            (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
-            (res: ResponseWrapper) => this.onError(res.json)
+            (res: HttpResponse<<%= entityAngularName %>[]>) => this.onSuccess(res.body, res.headers),
+            (res: HttpErrorResponse) => this.onError(res.message)
         );
     }
 
