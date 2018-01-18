@@ -51,7 +51,7 @@ import {
     imports: [
         BrowserModule,
         <%=angularXAppName%>AppRoutingModule,
-        Ng2Webstorage.forRoot({ prefix: 'jhi', separator: '-'}),
+        Ng2Webstorage.forRoot({ prefix: '<%=jhiPrefixDashed %>', separator: '-'}),
         <%=angularXAppName%>SharedModule,
         <%=angularXAppName%>HomeModule,
         <%=angularXAppName%>AdminModule,
