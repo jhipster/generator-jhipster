@@ -29,6 +29,8 @@ export class AuditsService  {
 
     query(req: any): Observable<HttpResponse<Audit[]>> {
         const params: HttpParams = createRequestOption(req);
+        params.set('fromDate', req.fromDate);
+        params.set('toDate', req.toDate);
 
         const requestURL = SERVER_API_URL + '<%- apiUaaPath %>management/audits';
 

@@ -28,6 +28,7 @@ import { <%=angularXAppName%>SharedModule } from '../shared';
 import {
     adminState,
     <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+    AuditResolvePagingParams,
     AuditsComponent,
     <%_ } _%>
     <%_ if (!skipUserManagement) { _%>
@@ -108,6 +109,7 @@ import {
     ],
     providers: [
         <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+        AuditResolvePagingParams,
         AuditsService,
         <%_ } _%>
         <%=jhiPrefixCapitalized%>ConfigurationService,

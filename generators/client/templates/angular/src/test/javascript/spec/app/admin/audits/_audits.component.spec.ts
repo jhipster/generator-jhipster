@@ -93,9 +93,9 @@ describe('Component Tests', () => {
                expect(comp.toDate).toBe(getDate());
                expect(comp.fromDate).toBe(getDate(false));
                expect(comp.itemsPerPage).toBe(ITEMS_PER_PAGE);
-               expect(comp.page).toBe(1);
+               expect(comp.page).toBe(10);
                expect(comp.reverse).toBeFalsy();
-               expect(comp.orderProp).toBe('timestamp');
+               expect(comp.predicate).toBe('id');
             });
         });
     });
