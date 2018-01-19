@@ -2,6 +2,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { translate } from 'react-jhipster';
+import { toast } from 'react-toastify';
 
 import { getSession } from '../../../reducers/authentication';
 import { savePassword } from '../../../reducers/account';
@@ -52,6 +54,7 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
   savePassword = event => {
     if (this.state.firstPassword === this.state.secondPassword) {
       savePassword(this.state.firstPassword);
+      toast.success(translate('password.messages.success'));
     }
     event.preventDefault();
   }

@@ -1,7 +1,9 @@
 /* eslint-disable */ // TODO Fix when page is completed
 import * as React from 'react';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { translate } from 'react-jhipster';
 import { connect } from 'react-redux';
+import { toast } from 'react-toastify';
 <%_ if (enableTranslation) { _%>
 import { locales } from '../../../config/translation';
 <%_ } _%>
@@ -66,6 +68,7 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
 
   saveSettings = event => {
     saveAccountSettings(this.state.account);
+    toast.success(translate('settings.messages.success'));
     event.preventDefault();
   }
 
