@@ -30,6 +30,9 @@ import <%= packageName %>.domain.User;
 <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
 import <%= packageName %>.repository.PersistentTokenRepository;
 <%_ } _%>
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import <%= packageName %>.repository.search.UserSearchRepository;
+<%_ } _%>
 import <%= packageName %>.repository.UserRepository;
 import <%= packageName %>.service.dto.UserDTO;
 <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
@@ -44,6 +47,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import org.springframework.boot.test.mock.mockito.MockBean;
+<%_ } _%>
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -75,6 +81,10 @@ import java.util.UUID;
 import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
 <%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+<%_ } _%>
 
 /**
  * Test class for the UserResource REST controller.
@@ -96,6 +106,11 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
 
     @Autowired
     private UserService userService;
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+
+    @MockBean
+    private UserSearchRepository userSearchRepository;
+    <%_ } _%>
 
     private User user;
 
@@ -245,6 +260,11 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         userService.removeNotActivatedUsers();
         users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS));
         assertThat(users).isEmpty();
+        <%_ if (searchEngine === 'elasticsearch') { _%>
+
+        // Verify Elasticsearch mock
+        verify(userSearchRepository, times(1)).delete(user);
+        <%_ } _%>
     }
     <%_ } _%>
     <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
@@ -297,6 +317,11 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         assertThat(userRepository.findOneByLogin("johndoe")).isPresent();
         userService.removeNotActivatedUsers();
         assertThat(userRepository.findOneByLogin("johndoe")).isNotPresent();
+        <%_ if (searchEngine === 'elasticsearch') { _%>
+
+        // Verify Elasticsearch mock
+        verify(userSearchRepository, times(1)).delete(user);
+        <%_ } _%>
     }
     <%_ } _%>
 
