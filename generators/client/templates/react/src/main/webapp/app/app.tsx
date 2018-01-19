@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Card } from 'reactstrap';
 import { HashRouter as Router } from 'react-router-dom';
 import { ModalContainer } from 'react-router-modal';
+import { ToastContainer } from 'react-toastify';
 
 import { getSession, logout } from './reducers/authentication';
 <%_ if (enableTranslation) { _%>
@@ -42,6 +43,7 @@ export class App extends React.Component<IAppProps, {}> {
     return (
       <Router>
         <div className="app-container" style={{ paddingTop }}>
+          <ToastContainer />
           <Header<% if (enableTranslation) { %>
             isAuthenticated={this.props.isAuthenticated}
             currentLocale={this.props.currentLocale}

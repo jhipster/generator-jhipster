@@ -23,12 +23,10 @@ import { Translate, ICrudGetAction, ICrudDeleteAction } from 'react-jhipster';
 import { FaBan, FaTrash } from 'react-icons/lib/fa';
 
 import { getEntity, deleteEntity } from './<%= entityFileName %>.reducer';
-import { deleteNotification } from './../../reducers/notification';
 
 export interface I<%= entityReactName %>DeleteDialogProps {
   getEntity: ICrudGetAction;
   deleteEntity: ICrudDeleteAction;
-  deleteNotification: ICrudDeleteAction;
   <%= entityInstance %>: any;
   match: any;
   history: any;
@@ -52,7 +50,6 @@ export class <%= entityReactName %>DeleteDialog extends React.Component<I<%= ent
 
   confirmDelete = () => {
     this.props.deleteEntity(this.props.<%= entityInstance %>.id);
-    this.props.deleteNotification();
     this.handleClose();
   }
 
@@ -97,6 +94,6 @@ const mapStateToProps = storeState => ({
     <%= entityInstance %>: storeState.<%= entityInstance %>.entity
 });
 
-const mapDispatchToProps = { getEntity, deleteEntity, deleteNotification };
+const mapDispatchToProps = { getEntity, deleteEntity };
 
 export default connect(mapStateToProps, mapDispatchToProps)(<%= entityReactName %>DeleteDialog);

@@ -1,4 +1,5 @@
-import { isPromise } from 'react-jhipster';
+import { isPromise, translate } from 'react-jhipster';
+import { toast } from 'react-toastify';
 
 export default () => next => action => {
   // If not a promise, continue on
@@ -13,12 +14,16 @@ export default () => next => action => {
    */
   return next(action).then(response => {
     if (action.meta && action.meta.successMessage) {
-      // toast(action.meta.successMessage, { type: toast.TYPE.SUCCESS });
+      if (typeof action.meta.successMessage === 'string') {
+        toast.success(action.meta.successMessage);
+      } else {
+        toast.success(action.meta.successMessage[0] + response.action.payload.data.id);
+      }
     }
     return Promise.resolve(response);
   }).catch(error => {
     if (action.meta && action.meta.errorMessage) {
-      // toast(action.meta.errorMessage, { type: toast.TYPE.ERROR });
+      toast.error(action.meta.errorMessage);
     }
     return Promise.reject(error);
   });

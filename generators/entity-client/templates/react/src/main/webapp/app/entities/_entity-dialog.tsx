@@ -24,7 +24,6 @@ import { Translate, ICrudGetAction, ICrudPutAction } from 'react-jhipster';
 import { FaBan, FaFloppyO } from 'react-icons/lib/fa';
 
 import { getEntity, updateEntity, createEntity } from './<%= entityFileName %>.reducer';
-import { createNotification, updateNotification } from './../../reducers/notification';
 // tslint:disable-next-line:no-unused-variable
 import { convertDateTimeFromServer } from '../../shared/util/date-utils';
 
@@ -32,8 +31,6 @@ export interface I<%= entityReactName %>DialogProps {
   getEntity: ICrudGetAction;
   updateEntity: ICrudPutAction;
   createEntity: ICrudPutAction;
-  createNotification: ICrudPutAction;
-  updateNotification: ICrudPutAction;
   loading: boolean;
   updating: boolean;
   <%= entityInstance %>: any;
@@ -99,10 +96,8 @@ export class <%= entityReactName %>Dialog extends React.Component<I<%= entityRea
     <%_ } _%>
     if (this.state.isNew) {
       this.props.createEntity(values);
-      this.props.createNotification();
     } else {
       this.props.updateEntity(values);
-      this.props.updateNotification();
     }
     this.handleClose();
   }
@@ -465,6 +460,6 @@ const mapStateToProps = storeState => ({
   updating: storeState.<%= entityInstance %>.updating
 });
 
-const mapDispatchToProps = { getEntity, updateEntity, createEntity, createNotification, updateNotification };
+const mapDispatchToProps = { getEntity, updateEntity, createEntity };
 
 export default connect(mapStateToProps, mapDispatchToProps)(<%= entityReactName %>Dialog);

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ICrudPutAction } from 'react-jhipster';
+import { ICrudPutAction, translate } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from './action-type.util';
 import { messages } from '../config/constants';
@@ -57,8 +57,8 @@ const apiUrl = '/api/account';
 export const saveAccountSettings: ICrudPutAction = account => ({
   type: ACTION_TYPES.UPDATE_ACCOUNT,
   meta: {
-    successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
-    errorMessage: messages.DATA_UPDATE_ERROR_ALERT
+    successMessage: translate('settings.messages.success'),
+    errorMessage: messages.DATA_ERROR_ALERT
   },
   payload: axios.post(apiUrl, account)
 });
@@ -66,8 +66,8 @@ export const saveAccountSettings: ICrudPutAction = account => ({
 export const savePassword: ICrudPutAction = password => ({
   type: ACTION_TYPES.UPDATE_PASSWORD,
   meta: {
-    successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
-    errorMessage: messages.DATA_UPDATE_ERROR_ALERT
+    successMessage: translate('password.messages.success'),
+    errorMessage: translate('password.messages.error')
   },
   payload: axios.post(`${apiUrl}/change-password`, password)
 });

@@ -25,7 +25,7 @@
     let entityActionNamePlural = entityInstancePlural.toUpperCase();
 _%>
 import axios from 'axios';
-import { ICrudGetAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
+import { ICrudGetAction, ICrudPutAction, ICrudDeleteAction, translate } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from '../../reducers/action-type.util';
 import { messages, SERVER_API_URL } from '../../config/constants';
@@ -211,8 +211,8 @@ export const createEntity: ICrudPutAction = entity => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_<%= entityActionName %>,
     meta: {
-      successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
-      errorMessage: messages.DATA_UPDATE_ERROR_ALERT
+      successMessage: translate('jhipsterApp.<%= entityInstance %>.created', { param: entity.id }),
+      errorMessage: messages.DATA_ERROR_ALERT
     },
     payload: axios.post(apiUrl, entity)
   });
@@ -224,8 +224,8 @@ export const updateEntity: ICrudPutAction = entity => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_<%= entityActionName %>,
     meta: {
-      successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
-      errorMessage: messages.DATA_UPDATE_ERROR_ALERT
+      successMessage: translate('jhipsterApp.<%= entityInstance %>.updated', { param: entity.id }),
+      errorMessage: messages.DATA_ERROR_ALERT
     },
     payload: axios.put(apiUrl, entity)
   });
@@ -238,8 +238,8 @@ export const deleteEntity: ICrudDeleteAction = id => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.DELETE_<%= entityActionName %>,
     meta: {
-      successMessage: messages.DATA_DELETE_SUCCESS_ALERT,
-      errorMessage: messages.DATA_UPDATE_ERROR_ALERT
+      successMessage: translate('jhipsterApp.<%= entityInstance %>.deleted', { param: id }),
+      errorMessage: messages.DATA_ERROR_ALERT
     },
     payload: axios.delete(requestUrl)
   });

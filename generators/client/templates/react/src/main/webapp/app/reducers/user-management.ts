@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ICrudGetAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
+import { ICrudGetAction, ICrudPutAction, ICrudDeleteAction, translate } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from './action-type.util';
 import { messages } from '../config/constants';
@@ -122,8 +122,8 @@ export const createUser: ICrudPutAction = user => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_USER,
     meta: {
-      successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
-      errorMessage: messages.DATA_UPDATE_ERROR_ALERT
+      successMessage: translate('userManagement.created', { param: user.id }),
+      errorMessage: messages.DATA_ERROR_ALERT
     },
     payload: axios.post(apiUrl, user)
   });
@@ -135,8 +135,8 @@ export const updateUser: ICrudPutAction = user => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_USER,
     meta: {
-      successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
-      errorMessage: messages.DATA_UPDATE_ERROR_ALERT
+      successMessage: translate('userManagement.updated', { param: user.id }),
+      errorMessage: messages.DATA_ERROR_ALERT
     },
     payload: axios.put(apiUrl, user)
   });
@@ -149,8 +149,8 @@ export const deleteUser: ICrudDeleteAction = id => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.DELETE_USER,
     meta: {
-      successMessage: messages.DATA_DELETE_SUCCESS_ALERT,
-      errorMessage: messages.DATA_UPDATE_ERROR_ALERT
+      successMessage: translate('userManagement.deleted', { param: id }),
+      errorMessage: messages.DATA_ERROR_ALERT
     },
     payload: axios.delete(requestUrl)
   });

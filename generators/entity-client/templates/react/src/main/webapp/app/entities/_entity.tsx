@@ -27,7 +27,6 @@ import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 // tslint:disable-next-line:no-unused-variable
 import { Translate, translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FaPlus, FaEye, FaPencil, FaTrash<% if (searchEngine === 'elasticsearch') { %>, FaSearch<% } %> } from 'react-icons/lib/fa';
-import AlertComponent from './../../shared/alert/alert.component';
 
 import {
 <%_ for (idx in relationships) { const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;const otherEntityNamePlural = relationships[idx].otherEntityNamePlural; _%>
@@ -110,7 +109,6 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
             <FaPlus /> <Translate contentKey="<%= keyPrefix %>home.createLabel" />
           </Link>
         </h2>
-        <AlertComponent />
         <%_ if (searchEngine === 'elasticsearch') { _%>
         <div className="row">
           <div className="col-sm-12">
