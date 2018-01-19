@@ -78,7 +78,7 @@
 
         function openFile (type, data) {
             var fileURL = 'data:' + contentType +';base64,' + data;
-            const win = window.open();
+            var win = window.open();
             win.document.write(
                 '<iframe src="' +
                 fileURL +
