@@ -138,7 +138,6 @@ const files = {
                 // interceptors
                 'blocks/interceptor/_errorhandler.interceptor.ts',
                 'blocks/interceptor/_notification.interceptor.ts',
-                'blocks/interceptor/_http.provider.ts',
                 'blocks/interceptor/_auth-expired.interceptor.ts'
             ]
         },
@@ -380,7 +379,6 @@ const files = {
                 'shared/constants/_error.constants.ts',
                 'shared/constants/_pagination.constants.ts',
                 // models
-                'shared/model/_response-wrapper.model.ts',
                 'shared/model/_request-util.ts',
                 'shared/model/_base-entity.ts',
                 'shared/user/_account.model.ts',
@@ -461,8 +459,7 @@ const files = {
                 'spec/helpers/_mock-login.service.ts',
                 'spec/helpers/_mock-event-manager.service.ts',
                 'spec/helpers/_mock-active-modal.service.ts',
-                'spec/helpers/_mock-state-storage.service.ts',
-                'spec/app/shared/model/_request-util.spec.ts'
+                'spec/helpers/_mock-state-storage.service.ts'
             ]
         },
         {
