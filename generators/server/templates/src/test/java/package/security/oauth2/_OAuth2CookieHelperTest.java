@@ -105,4 +105,12 @@ public class OAuth2CookieHelperTest {
         String name = ReflectionTestUtils.invokeMethod(cookieHelper, GET_COOKIE_DOMAIN_METHOD, request);
         Assert.assertEquals(".test.co.uk", name);
     }
+
+    @Test
+    public void testIpAddress() {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setServerName("127.0.0.1");
+        String name = ReflectionTestUtils.invokeMethod(cookieHelper, GET_COOKIE_DOMAIN_METHOD, request);
+        Assert.assertNull(name);
+    }
 }
