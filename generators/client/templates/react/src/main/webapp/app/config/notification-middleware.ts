@@ -22,9 +22,8 @@ export default () => next => action => {
     }
     return Promise.resolve(response);
   }).catch(error => {
-    if (action.meta && action.meta.errorMessage) {
-      toast.error(action.meta.errorMessage);
-    }
+    const errorMessage = (action.meta && action.meta.errorMessage) ? action.meta.errorMessage : error.message;
+    toast.error(errorMessage);
     return Promise.reject(error);
   });
 };

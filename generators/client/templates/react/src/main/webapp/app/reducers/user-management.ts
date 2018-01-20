@@ -135,8 +135,7 @@ export const updateUser: ICrudPutAction = user => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_USER,
     meta: {
-      successMessage: translate('userManagement.updated', { param: user.id }),
-      errorMessage: messages.DATA_ERROR_ALERT
+      successMessage: translate('userManagement.updated', { param: user.id })
     },
     payload: axios.put(apiUrl, user)
   });

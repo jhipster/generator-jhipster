@@ -57,8 +57,7 @@ const apiUrl = '/api/account';
 export const saveAccountSettings: ICrudPutAction = account => ({
   type: ACTION_TYPES.UPDATE_ACCOUNT,
   meta: {
-    successMessage: translate('settings.messages.success'),
-    errorMessage: messages.DATA_ERROR_ALERT
+    successMessage: translate('settings.messages.success')
   },
   payload: axios.post(apiUrl, account)
 });

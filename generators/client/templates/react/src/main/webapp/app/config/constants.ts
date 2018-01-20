@@ -8,7 +8,7 @@ export default config;
 export const SERVER_API_URL = '';
 
 export const messages = {
-  DATA_ERROR_ALERT: 'Error'
+  DATA_ERROR_ALERT: 'Internal Error'
 };
 
 export const APP_DATE_FORMAT = 'DD/MM/YY HH:mm';

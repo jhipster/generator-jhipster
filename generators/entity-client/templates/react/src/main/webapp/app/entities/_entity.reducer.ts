@@ -211,8 +211,7 @@ export const createEntity: ICrudPutAction = entity => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_<%= entityActionName %>,
     meta: {
-      successMessage: translate('jhipsterApp.<%= entityInstance %>.created', { param: entity.id }),
-      errorMessage: messages.DATA_ERROR_ALERT
+      successMessage: translate('jhipsterApp.<%= entityInstance %>.created', { param: entity.id })
     },
     payload: axios.post(apiUrl, entity)
   });
@@ -224,8 +223,7 @@ export const updateEntity: ICrudPutAction = entity => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_<%= entityActionName %>,
     meta: {
-      successMessage: translate('jhipsterApp.<%= entityInstance %>.updated', { param: entity.id }),
-      errorMessage: messages.DATA_ERROR_ALERT
+      successMessage: translate('jhipsterApp.<%= entityInstance %>.updated', { param: entity.id })
     },
     payload: axios.put(apiUrl, entity)
   });
@@ -238,8 +236,7 @@ export const deleteEntity: ICrudDeleteAction = id => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.DELETE_<%= entityActionName %>,
     meta: {
-      successMessage: translate('jhipsterApp.<%= entityInstance %>.deleted', { param: id }),
-      errorMessage: messages.DATA_ERROR_ALERT
+      successMessage: translate('jhipsterApp.<%= entityInstance %>.deleted', { param: id })
     },
     payload: axios.delete(requestUrl)
   });
