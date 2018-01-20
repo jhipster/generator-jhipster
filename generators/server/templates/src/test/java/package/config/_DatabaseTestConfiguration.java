@@ -38,10 +38,13 @@ public class DatabaseTestConfiguration extends AbstractCouchbaseConfiguration {
 
     private static String name;
 
+    private static String password;
+
     private static CouchbaseContainer couchbaseContainer;
 
-    public DatabaseTestConfiguration(@Value("${spring.couchbase.bucket.name}") String name) {
+    public DatabaseTestConfiguration(@Value("${spring.couchbase.bucket.name}") String name, @Value("${spring.couchbase.bucket.password}") String password) {
         DatabaseTestConfiguration.name = name;
+        DatabaseTestConfiguration.password = password;
     }
 
     @Override
@@ -67,7 +70,7 @@ public class DatabaseTestConfiguration extends AbstractCouchbaseConfiguration {
 
     @Override
     protected String getBucketPassword() {
-        return "";
+        return password;
     }
 
     @Override
@@ -82,6 +85,7 @@ public class DatabaseTestConfiguration extends AbstractCouchbaseConfiguration {
         couchbaseContainer = new CouchbaseContainer("<%= DOCKER_COUCHBASE %>")
             .withNewBucket(DefaultBucketSettings.builder()
                 .name(name)
+                .password(password)
                 .type(BucketType.COUCHBASE)
                 .quota(100)
                 .build());

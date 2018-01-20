@@ -178,6 +178,7 @@ spring:
         bootstrap-hosts: localhost
         bucket:
             name: <%= baseName %>
+            password: changeit
     <%_ } _%>
     mail:
         host: localhost

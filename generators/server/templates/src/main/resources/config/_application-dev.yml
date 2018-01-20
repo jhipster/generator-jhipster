@@ -203,6 +203,7 @@ spring:
         bootstrap-hosts: localhost
         bucket:
             name: <%= baseName %>
+            password: password
     <%_ } _%>
     mail:
         host: localhost

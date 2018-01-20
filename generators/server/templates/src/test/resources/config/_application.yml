@@ -120,6 +120,7 @@ spring:
     couchbase:
         bucket:
             name: jhipster
+            password: password
     <%_ } _%>
     mail:
         host: localhost
