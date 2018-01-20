@@ -8,73 +8,73 @@ const fse = require('fs-extra');
 
 const expectedFiles = {
     eurekaregistry: [
-        'registry/jhipster-registry.yml',
-        'registry/application-configmap.yml'
+        './k8s/registry/jhipster-registry.yml',
+        './k8s/registry/application-configmap.yml'
     ],
     consulregistry: [
-        'registry/consul.yml',
-        'registry/consul-config-loader.yml',
-        'registry/application-configmap.yml'
+        './k8s/registry/consul.yml',
+        './k8s/registry/consul-config-loader.yml',
+        './k8s/registry/application-configmap.yml'
     ],
     jhgate: [
-        'jhgate/jhgate-deployment.yml',
-        'jhgate/jhgate-mysql.yml',
-        'jhgate/jhgate-service.yml'
+        './k8s/jhgate/jhgate-deployment.yml',
+        './k8s/jhgate/jhgate-mysql.yml',
+        './k8s/jhgate/jhgate-service.yml'
     ],
     jhgateingress: [
-        'jhgate/jhgate-deployment.yml',
-        'jhgate/jhgate-mysql.yml',
-        'jhgate/jhgate-service.yml',
-        'jhgate/jhgate-ingress.yml'
+        './k8s/jhgate/jhgate-deployment.yml',
+        './k8s/jhgate/jhgate-mysql.yml',
+        './k8s/jhgate/jhgate-service.yml',
+        './k8s/jhgate/jhgate-ingress.yml'
     ],
     customnamespace: [
-        'namespace.yml'
+        './k8s/namespace.yml'
     ],
     jhconsole: [
-        'console/jhipster-console.yml',
-        'console/jhipster-elasticsearch.yml',
-        'console/jhipster-logstash.yml',
-        'console/jhipster-dashboard-console.yml',
-        'console/jhipster-zipkin.yml'
+        './k8s/console/jhipster-console.yml',
+        './k8s/console/jhipster-elasticsearch.yml',
+        './k8s/console/jhipster-logstash.yml',
+        './k8s/console/jhipster-dashboard-console.yml',
+        './k8s/console/jhipster-zipkin.yml'
     ],
     msmysql: [
-        'msmysql/msmysql-deployment.yml',
-        'msmysql/msmysql-mysql.yml',
-        'msmysql/msmysql-service.yml'
+        './k8s/msmysql/msmysql-deployment.yml',
+        './k8s/msmysql/msmysql-mysql.yml',
+        './k8s/msmysql/msmysql-service.yml'
     ],
     mspsql: [
-        'mspsql/mspsql-deployment.yml',
-        'mspsql/mspsql-postgresql.yml',
-        'mspsql/mspsql-service.yml',
-        'mspsql/mspsql-elasticsearch.yml'
+        './k8s/mspsql/mspsql-deployment.yml',
+        './k8s/mspsql/mspsql-postgresql.yml',
+        './k8s/mspsql/mspsql-service.yml',
+        './k8s/mspsql/mspsql-elasticsearch.yml'
     ],
     msmongodb: [
-        'msmongodb/msmongodb-deployment.yml',
-        'msmongodb/msmongodb-mongodb.yml',
-        'msmongodb/msmongodb-service.yml'
+        './k8s/msmongodb/msmongodb-deployment.yml',
+        './k8s/msmongodb/msmongodb-mongodb.yml',
+        './k8s/msmongodb/msmongodb-service.yml'
     ],
     msmariadb: [
-        'msmariadb/msmariadb-deployment.yml',
-        'msmariadb/msmariadb-mariadb.yml',
-        'msmariadb/msmariadb-service.yml'
+        './k8s/msmariadb/msmariadb-deployment.yml',
+        './k8s/msmariadb/msmariadb-mariadb.yml',
+        './k8s/msmariadb/msmariadb-service.yml'
     ],
     monolith: [
-        'samplemysql/samplemysql-deployment.yml',
-        'samplemysql/samplemysql-mysql.yml',
-        'samplemysql/samplemysql-service.yml',
-        'samplemysql/samplemysql-elasticsearch.yml'
+        './k8s/samplemysql/samplemysql-deployment.yml',
+        './k8s/samplemysql/samplemysql-mysql.yml',
+        './k8s/samplemysql/samplemysql-service.yml',
+        './k8s/samplemysql/samplemysql-elasticsearch.yml'
     ],
     kafka: [
-        'samplekafka/samplekafka-deployment.yml',
-        'samplekafka/samplekafka-mysql.yml',
-        'samplekafka/samplekafka-service.yml',
-        'samplekafka/samplekafka-kafka.yml'
+        './k8s/samplekafka/samplekafka-deployment.yml',
+        './k8s/samplekafka/samplekafka-mysql.yml',
+        './k8s/samplekafka/samplekafka-service.yml',
+        './k8s/samplekafka/samplekafka-kafka.yml'
     ],
     prometheusmonit: [
-        'monitoring/jhipster-prometheus-crd.yml',
-        'monitoring/jhipster-prometheus-cr.yml',
-        'monitoring/jhipster-grafana.yml',
-        'monitoring/jhipster-grafana-dashboard.yml'
+        './k8s/monitoring/jhipster-prometheus-crd.yml',
+        './k8s/monitoring/jhipster-prometheus-cr.yml',
+        './k8s/monitoring/jhipster-grafana.yml',
+        './k8s/monitoring/jhipster-grafana-dashboard.yml'
     ]
 };
 
@@ -103,12 +103,12 @@ describe('JHipster Kubernetes Sub Generator', () => {
         });
         it('creates expected registry files and content', () => {
             assert.file(expectedFiles.eurekaregistry);
-            assert.fileContent('registry/jhipster-registry.yml', /# base64 encoded "meetup"/);
+            assert.fileContent('./k8s/registry/jhipster-registry.yml', /# base64 encoded "meetup"/);
         });
         it('creates expected gateway files and content', () => {
             assert.file(expectedFiles.jhgate);
-            assert.fileContent('jhgate/jhgate-deployment.yml', /image: jhipsterrepository\/jhgate/);
-            assert.fileContent('jhgate/jhgate-deployment.yml', /jhipsternamespace.svc.cluster/);
+            assert.fileContent('./k8s/jhgate/jhgate-deployment.yml', /image: jhipsterrepository\/jhgate/);
+            assert.fileContent('./k8s/jhgate/jhgate-deployment.yml', /jhipsternamespace.svc.cluster/);
         });
     });
 
