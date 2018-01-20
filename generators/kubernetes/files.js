@@ -72,6 +72,7 @@ function writeFiles() {
         writePrometheusTpr() {
             if (this.prometheusOperator) {
                 this.template('monitoring/_jhipster-grafana.yml', 'monitoring/jhipster-grafana.yml');
+                this.template('monitoring/_jhipster-grafana-dashboard.yml', 'monitoring/jhipster-grafana-dashboard.yml');
                 this.template('monitoring/_jhipster-prometheus-cr.yml', 'monitoring/jhipster-prometheus-cr.yml');
                 this.template('monitoring/_jhipster-prometheus-crd.yml', 'monitoring/jhipster-prometheus-crd.yml');
             }
