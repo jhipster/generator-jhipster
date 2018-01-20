@@ -70,6 +70,12 @@ const expectedFiles = {
         'samplekafka/samplekafka-service.yml',
         'samplekafka/samplekafka-kafka.yml'
     ],
+    prometheusmonit: [
+        'monitoring/jhipster-prometheus-crd.yml',
+        'monitoring/jhipster-prometheus-cr.yml',
+        'monitoring/jhipster-grafana.yml',
+        'monitoring/jhipster-grafana-dashboard.yml'
+    ]
 };
 
 describe('JHipster Kubernetes Sub Generator', () => {
@@ -91,7 +97,6 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     dockerRepositoryName: 'jhipsterrepository',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'jhipsternamespace',
-                    jhipsterConsole: false,
                     kubernetesServiceType: 'LoadBalancer'
                 })
                 .on('end', done);
@@ -125,7 +130,6 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default',
-                    jhipsterConsole: false,
                     kubernetesServiceType: 'LoadBalancer'
 
                 })
@@ -159,7 +163,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'mynamespace',
-                    jhipsterConsole: true,
+                    monitoring: 'elk',
                     kubernetesServiceType: 'LoadBalancer'
 
                 })
@@ -196,7 +200,6 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default',
-                    jhipsterConsole: false,
                     kubernetesServiceType: 'Ingress',
                     ingressDomain: 'example.com'
 
@@ -232,7 +235,6 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default',
-                    jhipsterConsole: false,
                     kubernetesServiceType: 'LoadBalancer'
 
                 })
@@ -273,7 +275,6 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default',
-                    jhipsterConsole: false,
                     kubernetesServiceType: 'LoadBalancer'
 
                 })
@@ -316,7 +317,6 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default',
-                    jhipsterConsole: false,
                     kubernetesServiceType: 'LoadBalancer'
 
                 })
@@ -347,7 +347,6 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default',
-                    jhipsterConsole: false,
                     kubernetesServiceType: 'LoadBalancer'
 
                 })
@@ -358,6 +357,43 @@ describe('JHipster Kubernetes Sub Generator', () => {
         });
         it('creates expected default files', () => {
             assert.file(expectedFiles.kafka);
+        });
+    });
+
+    describe('mysql microservice with custom namespace and jhipster prometheus monitoring', () => {
+        beforeEach((done) => {
+            helpers
+                .run(require.resolve('../generators/kubernetes'))
+                .inTmpDir((dir) => {
+                    fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+                })
+                .withOptions({ skipChecks: true })
+                .withPrompts({
+                    composeApplicationType: 'microservice',
+                    directoryPath: './',
+                    chosenApps: [
+                        '02-mysql'
+                    ],
+                    dockerRepositoryName: 'jhipster',
+                    dockerPushCommand: 'docker push',
+                    kubernetesNamespace: 'mynamespace',
+                    monitoring: 'prometheus',
+                    kubernetesServiceType: 'LoadBalancer'
+
+                })
+                .on('end', done);
+        });
+        it('creates expected registry files', () => {
+            assert.file(expectedFiles.eurekaregistry);
+        });
+        it('creates expected mysql files', () => {
+            assert.file(expectedFiles.msmysql);
+        });
+        it('creates expected prometheus files', () => {
+            assert.file(expectedFiles.prometheusmonit);
+        });
+        it('creates expected namespace file', () => {
+            assert.file(expectedFiles.customnamespace);
         });
     });
 });

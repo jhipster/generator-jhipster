@@ -72,8 +72,7 @@ module.exports = class extends BaseGenerator {
                 this.dockerRepositoryName = this.config.get('dockerRepositoryName');
                 this.dockerPushCommand = this.config.get('dockerPushCommand');
                 this.kubernetesNamespace = this.config.get('kubernetesNamespace');
-                this.jhipsterConsole = this.config.get('jhipsterConsole');
-                this.prometheusOperator = this.config.get('prometheusOperator');
+                this.monitoring = this.config.get('monitoring');
                 this.kubernetesServiceType = this.config.get('kubernetesServiceType');
                 this.ingressDomain = this.config.get('ingressDomain');
 
@@ -136,13 +135,12 @@ module.exports = class extends BaseGenerator {
             askForApps: prompts.askForApps,
             // cluster for mongodb: it can be done later
             // askForClustersMode: prompts.askForClustersMode,
+            askForMonitoring: prompts.askForMonitoring,
             askForServiceDiscovery: prompts.askForServiceDiscovery,
             askForAdminPassword: prompts.askForAdminPassword,
             askForKubernetesNamespace: prompts.askForKubernetesNamespace,
             askForDockerRepositoryName: prompts.askForDockerRepositoryName,
             askForDockerPushCommand: prompts.askForDockerPushCommand,
-            askForJhipsterConsole: prompts.askForJhipsterConsole,
-            askForPrometheusOperator: prompts.askForPrometheusOperator,
             askForKubernetesServiceType: prompts.askForKubernetesServiceType,
             askForIngressDomain: prompts.askForIngressDomain
         };
@@ -171,6 +169,7 @@ module.exports = class extends BaseGenerator {
                 this.config.set('kubernetesNamespace', this.kubernetesNamespace);
                 this.config.set('kubernetesServiceType', this.kubernetesServiceType);
                 this.config.set('ingressDomain', this.ingressDomain);
+                this.config.set('monitoring', this.monitoring);
             }
         };
     }
@@ -198,22 +197,23 @@ module.exports = class extends BaseGenerator {
         }
 
         this.log('\nYou can deploy all your apps by running: ');
+        this.log(`  ${chalk.cyan(`sh ${this.directoryPath}k8s/kubectl-apply.sh`)}`);
+        this.log('OR');
         if (this.kubernetesNamespace !== 'default') {
-            this.log(`  ${chalk.cyan('kubectl apply -f namespace.yml')}`);
+            this.log(`  ${chalk.cyan(`kubectl apply -f ${this.directoryPath}k8s/namespace.yml`)}`);
         }
-        if (this.jhipsterConsole) {
-            this.log(`  ${chalk.cyan('kubectl apply -f console')}`);
+        if (this.monitoring === 'elk') {
+            this.log(`  ${chalk.cyan(`kubectl apply -f ${this.directoryPath}k8s/console`)}`);
         }
-        if (this.prometheusOperator) {
-            this.log(`  ${chalk.cyan('kubectl apply -f monitoring')}`);
+        if (this.monitoring === 'prometheus') {
+            this.log(`  ${chalk.cyan(`kubectl apply -f ${this.directoryPath}k8s/monitoring`)}`);
         }
-        if (this.gatewayNb >= 1 || this.microserviceNb >= 1) {
-            this.log(`  ${chalk.cyan('kubectl apply -f registry')}`);
+        for (let i = 0, regIndex = 0; i < this.appsFolders.length; i++) {
+            this.log(`  ${chalk.cyan(`kubectl apply -f ${this.directoryPath}k8s/${this.appConfigs[i].baseName.toLowerCase()}`)}`);
+            if (regIndex++ === 0 && this.appConfigs[i].serviceDiscoveryType !== false) {
+                this.log(`  ${chalk.cyan(`kubectl apply -f ${this.directoryPath}k8s/registry`)}`);
+            }
         }
-        for (let i = 0; i < this.appsFolders.length; i++) {
-            this.log(`  ${chalk.cyan(`kubectl apply -f ${this.appConfigs[i].baseName.toLowerCase()}`)}`);
-        }
-
         if (this.gatewayNb + this.monolithicNb >= 1) {
             const namespaceSuffix = this.kubernetesNamespace === 'default' ? '' : ` -n ${this.kubernetesNamespace}`;
             this.log('\nUse these commands to find your application\'s IP addresses:');

@@ -2333,7 +2333,7 @@ spec:
       - name: grafana-configurer
         image: <%= DOCKER_GRAFANA_WATCHER %>
         args:
-          - '--watch-dir=/var/grafana-dashboards'
+          - '--watch-dir=/var/grafana-dashboard'
           - '--grafana-url=http://jhipster-grafana:3000'
         env:
         - name: GRAFANA_USER

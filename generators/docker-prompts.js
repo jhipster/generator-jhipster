@@ -253,7 +253,7 @@ function askForMonitoring() {
                 name: 'Yes, for metrics only with Prometheus (only compatible with JHipster >= v3.12)'
             }
         ],
-        default: 'no'
+        default: this.monitoring ? this.monitoring : 'no'
     }];
 
     this.prompt(prompts).then((props) => {
