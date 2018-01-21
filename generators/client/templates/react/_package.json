@@ -112,6 +112,7 @@ limitations under the License.
     "redux-mock-store": "1.3.0",
     "rimraf": "2.6.2",
     "sinon": "4.1.1",
+    "source-map": "0.6.1",
     "source-map-loader": "0.2.3",
     "sourcemap-istanbul-instrumenter-loader": "0.2.0",
     "stripcomment-loader": "0.1.0",
@@ -145,7 +146,8 @@ limitations under the License.
     <%_ } _%>
   },
   "resolutions": {
-    "@types/react": "16.0.19"
+    "@types/react": "16.0.19",
+    "source-map": "0.6.1"
   },
   "engines": {
     "node": ">=6.9.0"

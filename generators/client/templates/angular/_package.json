@@ -99,6 +99,7 @@
     <%_ } _%>
     "proxy-middleware": "0.15.0",
     "rimraf": "2.6.1",
+    "source-map": "0.6.1",
     "sourcemap-istanbul-instrumenter-loader": "0.2.0",
     "style-loader": "0.18.2",
     "to-string-loader": "1.1.5",
@@ -131,6 +132,9 @@
   },
   "engines": {
     "node": ">=6.9.0"
+  },
+  "resolutions": {
+    "source-map": "0.6.1"
   },
   "scripts": {
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
