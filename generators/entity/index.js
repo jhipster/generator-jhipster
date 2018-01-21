@@ -230,8 +230,7 @@ module.exports = class extends BaseGenerator {
                     this.error(chalk.red('The table name cannot be empty'));
                 } else if (jhiCore.isReservedTableName(entityTableName, prodDatabaseType)) {
                     this.warning(chalk.red(`The table name cannot contain the '${entityTableName.toUpperCase()}' reserved keyword, so it will be prefixed with '${jhiTablePrefix}_'.\n${instructions}`));
-                    this.entityTableName = `${jhiTablePrefix}_${entityTableName}`;
-                    context.entityTableName = this.entityTableName;
+                    context.entityTableName = `${jhiTablePrefix}_${entityTableName}`;
                 } else if (prodDatabaseType === 'oracle' && entityTableName.length > 26) {
                     this.error(chalk.red(`The table name is too long for Oracle, try a shorter name.\n${instructions}`));
                 } else if (prodDatabaseType === 'oracle' && entityTableName.length > 14) {
