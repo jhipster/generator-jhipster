@@ -99,6 +99,7 @@
     <%_ } _%>
     "proxy-middleware": "0.15.0",
     "rimraf": "2.6.1",
+    "source-map": "0.6.1",
     "sourcemap-istanbul-instrumenter-loader": "0.2.0",
     "style-loader": "0.18.2",
     "to-string-loader": "1.1.5",
@@ -123,7 +124,7 @@
     "webpack": "3.10.0",
     "webpack-dev-server": "2.9.5",
     "webpack-merge": "4.1.1",
-    "webpack-notifier": "1.5.0",
+    "webpack-notifier": "1.5.1",
     "webpack-visualizer-plugin": "0.1.11",
     "web-app-manifest-loader": "0.1.1",
     "workbox-webpack-plugin": "3.0.0-alpha.3",
@@ -131,6 +132,9 @@
   },
   "engines": {
     "node": ">=6.9.0"
+  },
+  "resolutions": {
+    "source-map": "0.6.1"
   },
   "scripts": {
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
@@ -146,7 +150,7 @@
     "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --progress --inline --hot --profile --port=9060 --watch-content-base",
     "webpack:build:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --progress --profile",
     "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:main",
-    "webpack:prod:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --progress --profile",
+    "webpack:prod:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --profile",
     "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:prod:main && <%= clientPackageManager %> run clean-www",
     "webpack:test": "<%= clientPackageManager %> run test",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
