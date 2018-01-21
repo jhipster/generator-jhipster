@@ -81,9 +81,6 @@
     "yeoman-assert": "3.1.0",
     "yeoman-test": "1.7.0"
   },
-  "resolutions": {
-    "source-map": "0.6.1"
-  },
   "engines": {
     "node": ">=6.9.0",
     "npm": ">=2.14.2"
