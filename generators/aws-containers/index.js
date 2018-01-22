@@ -337,6 +337,7 @@ module.exports = class extends BaseGenerator {
             checkAndBuildImages() {
                 if (this.abort || !this.deployNow || this.skipBuild) return null;
                 const done = this.async();
+                const cwd = process.cwd();
                 const promises = this.appConfigs.map(config => dockerUtils.checkAndBuildImages.call(
                     this,
                     {
@@ -346,7 +347,10 @@ module.exports = class extends BaseGenerator {
                 ));
 
                 return Promise.all(promises)
-                    .then(() => done())
+                    .then(() => {
+                        process.chdir(cwd);
+                        done();
+                    })
                     .catch(() => {
                         this.abort = true;
                         done();
@@ -369,9 +373,11 @@ module.exports = class extends BaseGenerator {
             },
             uploadBaseTemplate() {
                 if (this.abort || !this.deployNow) return null;
+                const done = this.async;
                 return this._uploadTemplateToAWS('base.template.yml', BASE_TEMPLATE_PATH)
                     .then((result) => {
                         this.aws.s3BaseTemplate = result;
+                        done();
                     });
             },
             uploadAppTemplate() {
