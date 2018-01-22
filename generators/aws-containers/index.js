@@ -6,7 +6,7 @@ const docker = require('../docker-base');
 const dockerCli = require('../docker-cli');
 const dockerUtils = require('../docker-utils');
 const dockerPrompts = require('../docker-prompts');
-const constants = require('../generator-constants');
+const constants = require('./constants');
 
 const prompts = require('./prompts');
 const awsClient = require('./aws-client');
@@ -15,8 +15,6 @@ const AWS_SSM_ARTIFACT = 'aws-java-sdk-ssm';
 const AWS_SSM_GROUP = 'com.amazonaws';
 const SPRING_CLOUD_GROUP = 'org.springframework.cloud';
 const SPRING_CLOUD_ARTIFACT = 'spring-cloud-context';
-const AWS_SSM_VERSION = '1.11.247';
-const SPRING_CLOUD_CTX_VERSION = '1.3.0.RELEASE';
 
 const BASE_TEMPLATE_PATH = 'base.template.yml';
 const APP_TEMPLATE_PATH = baseName => `${baseName}.template.yml`;
@@ -73,15 +71,6 @@ module.exports = class extends BaseGenerator {
                 this.skipBuild = this.options['skip-build'];
             },
             getConfig() {
-                // this.baseName = this.config.get(constants.conf.baseName);
-                // this.dbType = this.config.get(constants.conf.databaseType);
-                // this.buildTool = this.config.get(constants.conf.buildTool);
-                //
-                // this.packageName = this.config.get('packageName');
-                // this.packageFolder = this.config.get('packageFolder');
-                // this.prodDatabaseType = this.config.get('prodDatabaseType');
-                // this.hasAWSConfig = !!this.config.get('aws');
-
                 this.aws = Object.assign(
                     {},
                     {
@@ -267,11 +256,11 @@ module.exports = class extends BaseGenerator {
                 this.appConfigs.forEach((config) => {
                     const directory = `${this.directoryPath}${config.appFolder}`;
                     if (config.buildTool === 'maven') {
-                        this.addMavenDependencyInDirectory(directory, AWS_SSM_GROUP, AWS_SSM_ARTIFACT, AWS_SSM_VERSION);
-                        this.addMavenDependencyInDirectory(directory, SPRING_CLOUD_GROUP, SPRING_CLOUD_ARTIFACT, SPRING_CLOUD_CTX_VERSION);
+                        this.addMavenDependencyInDirectory(directory, AWS_SSM_GROUP, AWS_SSM_ARTIFACT, constants.AWS_SSM_VERSION);
+                        this.addMavenDependencyInDirectory(directory, SPRING_CLOUD_GROUP, SPRING_CLOUD_ARTIFACT, constants.SPRING_CLOUD_CTX_VERSION);
                     } else if (config.buildTool === 'gradle') {
-                        this.addGradleDependencyInDirectory(directory, 'compile', AWS_SSM_GROUP, AWS_SSM_ARTIFACT, AWS_SSM_VERSION);
-                        this.addGradleDependencyInDirectory(directory, 'compile', SPRING_CLOUD_GROUP, SPRING_CLOUD_ARTIFACT, SPRING_CLOUD_CTX_VERSION);
+                        this.addGradleDependencyInDirectory(directory, 'compile', AWS_SSM_GROUP, AWS_SSM_ARTIFACT, constants.AWS_SSM_VERSION);
+                        this.addGradleDependencyInDirectory(directory, 'compile', SPRING_CLOUD_GROUP, SPRING_CLOUD_ARTIFACT, constants.SPRING_CLOUD_CTX_VERSION);
                     }
                 });
             },
