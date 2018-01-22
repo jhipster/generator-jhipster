@@ -294,6 +294,7 @@ function writeFiles() {
             this.template(`${SERVER_MAIN_SRC_DIR}package/security/_package-info.java`, `${javaDir}security/package-info.java`);
 
             if (this.authenticationType === 'session') {
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/_TokenCache.java`, `${javaDir}security/TokenCache.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/_PersistentTokenRememberMeServices.java`, `${javaDir}security/PersistentTokenRememberMeServices.java`);
             }
 
@@ -327,6 +328,7 @@ function writeFiles() {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/web/filter/_RefreshTokenFilter.java`, `${javaDir}web/filter/RefreshTokenFilter.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/web/filter/_RefreshTokenFilterConfigurer.java`, `${javaDir}web/filter/RefreshTokenFilterConfigurer.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/oauth2/_OAuth2AuthenticationConfiguration.java`, `${javaDir}config/oauth2/OAuth2AuthenticationConfiguration.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/_TokenCache.java`, `${javaDir}security/TokenCache.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_CookieCollection.java`, `${javaDir}security/oauth2/CookieCollection.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_CookiesHttpServletRequestWrapper.java`, `${javaDir}security/oauth2/CookiesHttpServletRequestWrapper.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/_CookieTokenExtractor.java`, `${javaDir}security/oauth2/CookieTokenExtractor.java`);
@@ -539,6 +541,10 @@ function writeFiles() {
             this.template(`${SERVER_TEST_RES_DIR}config/_application.yml`, `${SERVER_TEST_RES_DIR}config/application.yml`);
             this.template(`${SERVER_TEST_RES_DIR}_logback.xml`, `${SERVER_TEST_RES_DIR}logback.xml`);
 
+            if (this.authenticationType === 'session') {
+                this.template(`${SERVER_TEST_SRC_DIR}package/security/_TokenCacheTest.java`, `${testDir}security/TokenCacheTest.java`);
+            }
+
             // Create Gateway tests files
             if (this.applicationType === 'gateway') {
                 this.template(`${SERVER_TEST_SRC_DIR}package/gateway/responserewriting/_SwaggerBasePathRewritingFilterTest.java`, `${testDir}gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java`);
@@ -551,6 +557,7 @@ function writeFiles() {
                 this.template(`${SERVER_TEST_SRC_DIR}package/security/_OAuth2TokenMockUtil.java`, `${testDir}security/OAuth2TokenMockUtil.java`);
                 this.template(`${SERVER_TEST_SRC_DIR}package/config/_SecurityBeanOverrideConfiguration.java`, `${testDir}config/SecurityBeanOverrideConfiguration.java`);
                 if (this.applicationType === 'gateway') {
+                    this.template(`${SERVER_TEST_SRC_DIR}package/security/_TokenCacheTest.java`, `${testDir}security/TokenCacheTest.java`);
                     this.template(`${SERVER_TEST_SRC_DIR}package/security/oauth2/_OAuth2CookieHelperTest.java`, `${testDir}security/oauth2/OAuth2CookieHelperTest.java`);
                     this.template(`${SERVER_TEST_SRC_DIR}package/security/oauth2/_OAuth2AuthenticationServiceTest.java`, `${testDir}security/oauth2/OAuth2AuthenticationServiceTest.java`);
                     this.template(`${SERVER_TEST_SRC_DIR}package/security/oauth2/_CookieTokenExtractorTest.java`, `${testDir}security/oauth2/CookieTokenExtractorTest.java`);

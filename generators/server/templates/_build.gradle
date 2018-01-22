@@ -321,6 +321,9 @@ dependencies {
     <%_ } _%>
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"
     compile "org.zalando:problem-spring-web"
+    <%_ if (applicationType === 'gateway' && authenticationType === 'uaa') { _%>
+    compile "de.malkusch.whois-server-list:public-suffix-list:${public_suffix_list_version}"
+    <%_ } _%>
     <%_ if (databaseType === 'cassandra') { _%>
     compile "com.google.guava:guava:18.0"
     compile "com.datastax.cassandra:cassandra-driver-extras"
