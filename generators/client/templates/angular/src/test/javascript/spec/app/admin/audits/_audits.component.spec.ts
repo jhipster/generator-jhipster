@@ -53,7 +53,6 @@ describe('Component Tests', () => {
 
         let comp: AuditsComponent;
         let fixture: ComponentFixture<AuditsComponent>;
-        let service: AuditsService;
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
@@ -72,7 +71,6 @@ describe('Component Tests', () => {
         beforeEach(() => {
             fixture = TestBed.createComponent(AuditsComponent);
             comp = fixture.componentInstance;
-            service = fixture.debugElement.injector.get(AuditsService);
         });
 
         describe('today function ', () => {

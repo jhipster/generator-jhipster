@@ -24,7 +24,6 @@ import { Observable } from 'rxjs/Observable';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { Principal } from '../../../../../../main/webapp/app/shared';
 import { UserMgmtComponent } from '../../../../../../main/webapp/app/admin/user-management/user-management.component';
 import { UserService, User } from '../../../../../../main/webapp/app/shared';
 
@@ -34,7 +33,6 @@ describe('Component Tests', () => {
         let comp: UserMgmtComponent;
         let fixture: ComponentFixture<UserMgmtComponent>;
         let service: UserService;
-        let mockPrincipal: any;
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
@@ -52,7 +50,6 @@ describe('Component Tests', () => {
             fixture = TestBed.createComponent(UserMgmtComponent);
             comp = fixture.componentInstance;
             service = fixture.debugElement.injector.get(UserService);
-            mockPrincipal = fixture.debugElement.injector.get(Principal);
         });
 
         describe('OnInit', () => {
