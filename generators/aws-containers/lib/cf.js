@@ -2,15 +2,11 @@ const AWS = require('aws-sdk'); // eslint-disable-line
 const _ = require('lodash');
 const chalk = require('chalk');
 
-const spinner = require('../../utils').spinner;
-
-const DEFAULT_REGION = 'us-east-1';
-
 const STACK_LISTENER_INTERVAL = 15000;
 const PHYSICAL_RESOURCE_SEPARATOR = ':';
 const STACK_EVENT_STATUS_DISPLAY_LENGTH = 35;
 
-let stdOut = message => console.error(message.trim());
+let stdOut = message => console.error(message.trim()); // eslint-disable-line
 let stdErr = message => console.error(message.trim()); // eslint-disable-line
 module.exports = class CF {
     constructor(region) {

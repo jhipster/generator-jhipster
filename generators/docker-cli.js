@@ -14,8 +14,8 @@ module.exports = {
     pushImage
 };
 
-let stdOut = data => console.log(data.toString().trim());
-let stdErr = data => console.error(data.toString().trim());
+let stdOut = data => console.log(data.toString().trim()); // eslint-disable-line
+let stdErr = data => console.error(data.toString().trim()); // eslint-disable-line
 function setOutputs(stdout, stderr) {
     stdOut = stdout;
     stdErr = stderr;
