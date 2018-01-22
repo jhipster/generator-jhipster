@@ -1,4 +1,3 @@
-
 /**
  * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
@@ -20,7 +19,7 @@
 const shelljs = require('shelljs');
 const chalk = require('chalk');
 const crypto = require('crypto');
-
+const dockerUtils = require('./docker-utils');
 /**
  * This is the Generator base class.
  * This provides all the public API methods exposed via the module system.
@@ -29,7 +28,7 @@ const crypto = require('crypto');
  * The method signatures in public API should not be changed without a major version change
  */
 module.exports = {
-    checkDocker,
+    checkDocker: dockerUtils.checkDocker,
     checkImages,
     generateJwtSecret,
     configureImageNames,

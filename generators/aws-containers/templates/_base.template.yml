@@ -1,0 +1,35 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  applicationStackS3Bucket:
+    Type: String
+    Description: Name of the S3 bucket containing the application.template.yml template file
+    Default: <%= aws.s3BucketName %>
+<% for (app of appConfigs) { %>  <%= app.baseName %>DBPassword:
+    Type: String
+    Description: Aurora master database password for <%= app.baseName %>
+    NoEcho: true
+<%} %>
+  shouldDeployService:
+    Type: String
+    Description: Should the ECS service be initialised
+    AllowedValues:
+        - true
+        - false
+    Default: false
+Resources:
+<% for (app of appConfigs) { %>  <%= app.baseName %>:
+    Type: 'AWS::CloudFormation::Stack'
+    Properties:
+      Parameters:
+        parentStackName: !Ref AWS::StackName
+        repositoryName: <%= app.baseName %>
+        shouldDeployService: !Ref shouldDeployService
+        databasePassword: !Ref <%= app.baseName %>DBPassword
+      TemplateURL: !Join [ '', [ 'https://s3.amazonaws.com/',!Ref applicationStackS3Bucket, '/<%= app.baseName %>.template.yml'] ]
+      TimeoutInMinutes: 5
+<%} %>
+Outputs:
+<% for (app of appConfigs) { %>  LoadBalancerOutput<%= app.baseName %>:
+    Description: The external DNS address of the load-balanancers
+    Value: !GetAtt <%= app.baseName %>.Outputs.LoadBalancerOutput
+<%} %>
