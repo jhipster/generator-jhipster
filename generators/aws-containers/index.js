@@ -6,7 +6,8 @@ const docker = require('../docker-base');
 const dockerCli = require('../docker-cli');
 const dockerUtils = require('../docker-utils');
 const dockerPrompts = require('../docker-prompts');
-const constants = require('./constants');
+const constants = require('../generator-constants');
+const awsConstants = require('./constants');
 
 const prompts = require('./prompts');
 const awsClient = require('./aws-client');
@@ -256,11 +257,11 @@ module.exports = class extends BaseGenerator {
                 this.appConfigs.forEach((config) => {
                     const directory = `${this.directoryPath}${config.appFolder}`;
                     if (config.buildTool === 'maven') {
-                        this.addMavenDependencyInDirectory(directory, AWS_SSM_GROUP, AWS_SSM_ARTIFACT, constants.AWS_SSM_VERSION);
-                        this.addMavenDependencyInDirectory(directory, SPRING_CLOUD_GROUP, SPRING_CLOUD_ARTIFACT, constants.SPRING_CLOUD_CTX_VERSION);
+                        this.addMavenDependencyInDirectory(directory, AWS_SSM_GROUP, AWS_SSM_ARTIFACT, awsConstants.AWS_SSM_VERSION);
+                        this.addMavenDependencyInDirectory(directory, SPRING_CLOUD_GROUP, SPRING_CLOUD_ARTIFACT, awsConstants.SPRING_CLOUD_CTX_VERSION);
                     } else if (config.buildTool === 'gradle') {
-                        this.addGradleDependencyInDirectory(directory, 'compile', AWS_SSM_GROUP, AWS_SSM_ARTIFACT, constants.AWS_SSM_VERSION);
-                        this.addGradleDependencyInDirectory(directory, 'compile', SPRING_CLOUD_GROUP, SPRING_CLOUD_ARTIFACT, constants.SPRING_CLOUD_CTX_VERSION);
+                        this.addGradleDependencyInDirectory(directory, 'compile', AWS_SSM_GROUP, AWS_SSM_ARTIFACT, awsConstants.AWS_SSM_VERSION);
+                        this.addGradleDependencyInDirectory(directory, 'compile', SPRING_CLOUD_GROUP, SPRING_CLOUD_ARTIFACT, awsConstants.SPRING_CLOUD_CTX_VERSION);
                     }
                 });
             },
@@ -580,7 +581,7 @@ module.exports = class extends BaseGenerator {
             },
             saveConf() {
                 delete this.aws.dockerLogin;
-                this.config.set(constants.conf.aws, this.aws);
+                this.config.set(awsConstants.conf.aws, this.aws);
             }
         };
     }
