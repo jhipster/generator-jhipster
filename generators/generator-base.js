@@ -1257,7 +1257,20 @@ module.exports = class extends PrivateBase {
      * @param {string} other - (optional) explicit other thing: scope, exclusions...
      */
     addMavenDependency(groupId, artifactId, version, other) {
-        const fullPath = 'pom.xml';
+        this.addMavenDependencyInDirectory('.', groupId, artifactId, version, other);
+    }
+
+    /**
+     * Add a new Maven dependency in a specific folder..
+     *
+     * @param {string} directory - the folder to add the dependency in
+     * @param {string} groupId - dependency groupId
+     * @param {string} artifactId - dependency artifactId
+     * @param {string} version - (optional) explicit dependency version number
+     * @param {string} other - (optional) explicit other thing: scope, exclusions...
+     */
+    addMavenDependencyInDirectory(directory, groupId, artifactId, version, other) {
+        const fullPath = `${directory}/pom.xml`;
         try {
             let dependency = `${'<dependency>\n' +
                 '            <groupId>'}${groupId}</groupId>\n` +
@@ -1426,7 +1439,19 @@ module.exports = class extends PrivateBase {
      * @param {string} version - (optional) explicit dependency version number
      */
     addGradleDependency(scope, group, name, version) {
-        const fullPath = 'build.gradle';
+        this.addGradleDependencyInDirectory('.', scope, group, name, version);
+    }
+
+    /**
+     * A new dependency to build.gradle file in a specific folder.
+     *
+     * @param {string} scope - scope of the new dependency, e.g. compile
+     * @param {string} group - maven GroupId
+     * @param {string} name - maven ArtifactId
+     * @param {string} version - (optional) explicit dependency version number
+     */
+    addGradleDependencyInDirectory(directory, scope, group, name, version) {
+        const fullPath = `${directory}/build.gradle`;
         let dependency = `${group}:${name}`;
         if (version) {
             dependency += `:${version}`;
