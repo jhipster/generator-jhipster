@@ -17,7 +17,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-# Files are ordered in proper order with needed wait for the dependent crds' to get initialized
+# Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
+# Usage: sh <%-directoryPath%>apply.sh
 <%_ if (kubernetesNamespace !== 'default') { _%>
 kubectl apply -f <%-directoryPath%>k8s/namespace.yml
 <%_ } _%> <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
