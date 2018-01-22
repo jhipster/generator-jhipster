@@ -10,7 +10,7 @@ export const createRequestOption = (req?: any): HttpParams => {
         });
         if (req.sort) {
             req.sort.forEach((val) => {
-                options = options.append('sort', val)
+                options = options.append('sort', val);
             });
         }
     }

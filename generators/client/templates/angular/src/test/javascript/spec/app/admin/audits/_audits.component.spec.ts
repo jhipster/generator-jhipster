@@ -20,7 +20,7 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { NgbPaginationConfig} from '@ng-bootstrap/ng-bootstrap';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { PaginationConfig } from '../../../../../../main/webapp/app/blocks/config/uib-pagination.config'
+import { PaginationConfig } from '../../../../../../main/webapp/app/blocks/config/uib-pagination.config';
 import { AuditsComponent } from '../../../../../../main/webapp/app/admin/audits/audits.component';
 import { AuditsService } from '../../../../../../main/webapp/app/admin/audits/audits.service';
 import { ITEMS_PER_PAGE } from '../../../../../../main/webapp/app/shared';
@@ -53,7 +53,6 @@ describe('Component Tests', () => {
 
         let comp: AuditsComponent;
         let fixture: ComponentFixture<AuditsComponent>;
-        let service: AuditsService;
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
@@ -72,7 +71,6 @@ describe('Component Tests', () => {
         beforeEach(() => {
             fixture = TestBed.createComponent(AuditsComponent);
             comp = fixture.componentInstance;
-            service = fixture.debugElement.injector.get(AuditsService);
         });
 
         describe('today function ', () => {

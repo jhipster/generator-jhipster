@@ -55,7 +55,7 @@ _%>
             }
         _%>
         <div class="form-group">
-            <label class="form-control-label" jhiTranslate="<%= translationKey %>" for="field_<%= fieldName %>"><%= fieldNameHumanized %></label>
+            <label class="form-control-label" jhiTranslate="<%= translationKey %>" for="field_<%= fieldName %>"<% if (fields[idx].javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= keyPrefix %>help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= fields[idx].javadoc %>"<% } } %>><%= fieldNameHumanized %></label>
             <%_ if (fields[idx].fieldIsEnum) { _%>
             <select class="form-control" name="<%= fieldName %>" [(ngModel)]="<%= entityInstance %>.<%= fieldName %>" id="field_<%= fieldName %>" <% if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('required')) { %> required<% } %>>
             <%_ const enumPrefix = angularAppName + '.'+ fieldType;

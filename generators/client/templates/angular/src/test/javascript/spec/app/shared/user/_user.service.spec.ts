@@ -46,7 +46,7 @@ describe('Service Tests', () => {
 
         afterEach(() => {
             httpMock.verify();
-        })
+        });
 
         describe('Service methods', () => {
             it('should call correct URL', () => {
