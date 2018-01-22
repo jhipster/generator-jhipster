@@ -84,7 +84,7 @@ describe('Service Tests', () => {
 
         afterEach(() => {
             httpMock.verify();
-        })
+        });
 
     });
 
