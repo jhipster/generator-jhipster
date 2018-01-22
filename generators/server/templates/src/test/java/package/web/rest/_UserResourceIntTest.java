@@ -57,6 +57,9 @@ import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import org.springframework.boot.test.mock.mockito.MockBean;
+<%_ } _%>
 <%_ if (cacheManagerIsAvailable === true) { _%>
 import org.springframework.cache.CacheManager;
 <%_ } _%>
@@ -139,17 +142,17 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
 
     @Autowired
     private UserRepository userRepository;
-
     <%_ if (searchEngine === 'elasticsearch') { _%>
-    @Autowired
-    private UserSearchRepository userSearchRepository;
 
+    @MockBean
+    private UserSearchRepository userSearchRepository;
     <%_ } _%>
     <%_ if (authenticationType !== 'oauth2') { _%>
+
     @Autowired
     private MailService mailService;
-
     <%_ } _%>
+
     @Autowired
     private UserService userService;
 

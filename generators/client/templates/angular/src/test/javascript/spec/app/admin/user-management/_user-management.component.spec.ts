@@ -21,10 +21,9 @@ const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
 _%>
 import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
 import { Observable } from 'rxjs/Observable';
-import { Headers } from '@angular/http';
+import { HttpHeaders, HttpResponse } from '@angular/common/http';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { Principal } from '../../../../../../main/webapp/app/shared';
 import { UserMgmtComponent } from '../../../../../../main/webapp/app/admin/user-management/user-management.component';
 import { UserService, User } from '../../../../../../main/webapp/app/shared';
 
@@ -34,7 +33,6 @@ describe('Component Tests', () => {
         let comp: UserMgmtComponent;
         let fixture: ComponentFixture<UserMgmtComponent>;
         let service: UserService;
-        let mockPrincipal: any;
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
@@ -52,7 +50,6 @@ describe('Component Tests', () => {
             fixture = TestBed.createComponent(UserMgmtComponent);
             comp = fixture.componentInstance;
             service = fixture.debugElement.injector.get(UserService);
-            mockPrincipal = fixture.debugElement.injector.get(Principal);
         });
 
         describe('OnInit', () => {
@@ -60,12 +57,11 @@ describe('Component Tests', () => {
                 inject([],
                     fakeAsync(() => {
                         // GIVEN
-                        const headers = new Headers();
-                        headers.append('link', 'link;link');
-                        spyOn(service, 'query').and.returnValue(Observable.of({
-                            json: [new User(<%- tsKeyId %>)],
+                        const headers = new HttpHeaders().append('link', 'link;link');
+                        spyOn(service, 'query').and.returnValue(Observable.of(new HttpResponse({
+                            body: [new User(<%- tsKeyId %>)],
                             headers
-                        }));
+                        })));
 
                         // WHEN
                         comp.ngOnInit();
@@ -84,14 +80,13 @@ describe('Component Tests', () => {
                 inject([],
                     fakeAsync(() => {
                         // GIVEN
-                        const headers = new Headers();
-                        headers.append('link', 'link;link');
+                        const headers = new HttpHeaders().append('link', 'link;link');
                         const user = new User(<%- tsKeyId %>);
-                        spyOn(service, 'query').and.returnValue(Observable.of({
-                            json: [user],
+                        spyOn(service, 'query').and.returnValue(Observable.of(new HttpResponse({
+                            body: [user],
                             headers
-                        }));
-                        spyOn(service, 'update').and.returnValue(Observable.of({ status: 200 }));
+                        })));
+                        spyOn(service, 'update').and.returnValue(Observable.of(new HttpResponse({ status: 200 })));
 
                         // WHEN
                         comp.setActive(user, true);

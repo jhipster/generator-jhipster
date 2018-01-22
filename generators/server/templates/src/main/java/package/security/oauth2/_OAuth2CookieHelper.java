@@ -19,6 +19,7 @@
 package <%=packageName%>.security.oauth2;
 
 import <%=packageName%>.config.oauth2.OAuth2Properties;
+import com.google.common.net.InetAddresses;
 import com.google.common.net.InternetDomainName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -310,11 +311,14 @@ public class OAuth2CookieHelper {
         if (domain.startsWith("www.")) {
             domain = domain.substring(4);
         }
-        //strip off subdomains, leaving the top level domain only
-        InternetDomainName domainName = InternetDomainName.from(domain);
-        if (domainName.isUnderPublicSuffix() && !domainName.isTopPrivateDomain()) {
-            //preserve leading dot
-            return "." + domainName.topPrivateDomain().toString();
+        //if it isn't an IP address
+        if (!InetAddresses.isInetAddress(domain)) {
+            //strip off subdomains, leaving the top level domain only
+            InternetDomainName domainName = InternetDomainName.from(domain);
+            if (domainName.isUnderPublicSuffix() && !domainName.isTopPrivateDomain()) {
+                //preserve leading dot
+                return "." + domainName.topPrivateDomain().toString();
+            }
         }
         //no top-level domain, stick with default domain
         return null;

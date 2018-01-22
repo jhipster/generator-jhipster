@@ -213,36 +213,36 @@ export class <%= entityClass %>DialogPage {
             <%_ if (fieldType === 'Boolean') { _%>
     get<%= fieldNameCapitalized %>Input = function() {
         return this.<%= fieldName %>Input;
-    }
+    };
             <%_ } else if (fieldIsEnum) { _%>
     set<%= fieldNameCapitalized %>Select = function(<%= fieldName %>) {
         this.<%= fieldName %>Select.sendKeys(<%= fieldName %>);
-    }
+    };
 
     get<%= fieldNameCapitalized %>Select = function() {
         return this.<%= fieldName %>Select.element(by.css('option:checked')).getText();
-    }
+    };
 
     <%=fieldName %>SelectLastOption = function() {
         this.<%=fieldName %>Select.all(by.tagName('option')).last().click();
-    }
+    };
     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
     set<%= fieldNameCapitalized %>Input = function(<%= fieldName %>) {
         this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
-    }
+    };
 
     get<%= fieldNameCapitalized %>Input = function() {
         return this.<%= fieldName %>Input.getAttribute('value');
-    }
+    };
 
     <%_ } else { _%>
     set<%= fieldNameCapitalized %>Input = function(<%= fieldName %>) {
         this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
-    }
+    };
 
     get<%= fieldNameCapitalized %>Input = function() {
         return this.<%= fieldName %>Input.getAttribute('value');
-    }
+    };
 
     <%_ } _%>
     <%_ }); _%>
@@ -255,19 +255,19 @@ export class <%= entityClass %>DialogPage {
     <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'many-to-many' && ownerSide === true) || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
     <%=relationshipName %>SelectLastOption = function() {
         this.<%=relationshipName %>Select.all(by.tagName('option')).last().click();
-    }
+    };
 
     <%=relationshipName %>SelectOption = function(option) {
         this.<%=relationshipName %>Select.sendKeys(option);
-    }
+    };
 
     get<%=relationshipNameCapitalized %>Select = function() {
         return this.<%=relationshipName %>Select;
-    }
+    };
 
     get<%=relationshipNameCapitalized %>SelectedOption = function() {
         return this.<%=relationshipName %>Select.element(by.css('option:checked')).getText();
-    }
+    };
 
     <%_ } _%>
     <%_ }); _%>

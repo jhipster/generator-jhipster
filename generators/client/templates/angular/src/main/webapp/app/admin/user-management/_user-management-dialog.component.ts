@@ -75,7 +75,7 @@ export class UserMgmtDialogComponent implements OnInit {
     private onSaveSuccess(result) {
         this.eventManager.broadcast({ name: 'userListModification', content: 'OK' });
         this.isSaving = false;
-        this.activeModal.dismiss(result);
+        this.activeModal.dismiss(result.body);
     }
 
     private onSaveError() {

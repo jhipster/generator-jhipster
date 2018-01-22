@@ -30,7 +30,7 @@ let hasManyToMany = query.hasManyToMany;
 _%>
 import { Component, OnInit, OnDestroy<% if (fieldsContainImageBlob) { %>, ElementRef<% } %> } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Response } from '@angular/http';
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -57,9 +57,6 @@ import { <%= uniqueRel.otherEntityAngularName %>, <%= uniqueRel.otherEntityAngul
 <%_     }
     }
 }); _%>
-<%_ if (hasRelationshipQuery) { _%>
-import { ResponseWrapper } from '../../shared';
-<%_ } _%>
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-dialog',
@@ -148,9 +145,9 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         }
     }
 
-    private subscribeToSaveResponse(result: Observable<<%= entityAngularName %>>) {
-        result.subscribe((res: <%= entityAngularName %>) =>
-            this.onSaveSuccess(res), (res: Response) => this.onSaveError());
+    private subscribeToSaveResponse(result: Observable<HttpResponse<<%= entityAngularName %>>>) {
+        result.subscribe((res: HttpResponse<<%= entityAngularName %>>) =>
+            this.onSaveSuccess(res.body), (res: HttpErrorResponse) => this.onSaveError());
     }
 
     private onSaveSuccess(result: <%= entityAngularName %>) {
