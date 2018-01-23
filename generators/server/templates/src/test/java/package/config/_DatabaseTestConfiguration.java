@@ -23,7 +23,7 @@ import com.couchbase.client.java.bucket.BucketType;
 import com.couchbase.client.java.cluster.DefaultBucketSettings;
 import com.couchbase.client.java.env.CouchbaseEnvironment;
 import org.assertj.core.util.Lists;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
@@ -36,15 +36,12 @@ import java.util.List;
 @Configuration
 public class DatabaseTestConfiguration extends AbstractCouchbaseConfiguration {
 
-    private static String name;
-
-    private static String password;
+    private CouchbaseProperties couchbaseProperties;
 
     private static CouchbaseContainer couchbaseContainer;
 
-    public DatabaseTestConfiguration(@Value("${spring.couchbase.bucket.name}") String name, @Value("${spring.couchbase.bucket.password}") String password) {
-        DatabaseTestConfiguration.name = name;
-        DatabaseTestConfiguration.password = password;
+    public DatabaseTestConfiguration(CouchbaseProperties couchbaseProperties) {
+        this.couchbaseProperties = couchbaseProperties;
     }
 
     @Override
@@ -65,12 +62,12 @@ public class DatabaseTestConfiguration extends AbstractCouchbaseConfiguration {
 
     @Override
     protected String getBucketName() {
-        return name;
+        return couchbaseProperties.getBucket().getName();
     }
 
     @Override
     protected String getBucketPassword() {
-        return password;
+        return couchbaseProperties.getBucket().getPassword();
     }
 
     @Override
@@ -78,14 +75,14 @@ public class DatabaseTestConfiguration extends AbstractCouchbaseConfiguration {
         return this;
     }
 
-    private static CouchbaseContainer getCouchbaseContainer() {
+    private CouchbaseContainer getCouchbaseContainer() {
         if (couchbaseContainer != null) {
             return couchbaseContainer;
         }
         couchbaseContainer = new CouchbaseContainer("<%= DOCKER_COUCHBASE %>")
             .withNewBucket(DefaultBucketSettings.builder()
-                .name(name)
-                .password(password)
+                .name(getBucketName())
+                .password(getBucketPassword())
                 .type(BucketType.COUCHBASE)
                 .quota(100)
                 .build());
