@@ -47,8 +47,9 @@ import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-<%_ if (searchEngine === 'elasticsearch') { _%>
-import org.springframework.boot.test.mock.mockito.MockBean;
+<%_ if (searchEngine === 'elasticsearch' && pagination !== 'no') { _%>
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 <%_ } _%>
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
@@ -85,9 +86,7 @@ import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 <%_ } _%>
 import static org.hamcrest.Matchers.hasItem;
 <%_ if (searchEngine === 'elasticsearch') { _%>
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 <%_ } _%>
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -272,7 +271,12 @@ _%>
     @Autowired
     private <%= entityClass %>Service <%= entityInstance %>Service;<% } if (searchEngine === 'elasticsearch') { %>
 
-    @MockBean
+    /**
+     * This repository is mocked in the <%=packageName%>.repository.search test package.
+     *
+     * @see <%= packageName %>.repository.search.<%=entityClass%>SearchRepositoryMockConfiguration
+     */
+    @Autowired
     private <%= entityClass %>SearchRepository mock<%= entityClass %>SearchRepository;<% } %>
     <%_ if (jpaMetamodelFiltering) { _%>
 
@@ -641,6 +645,8 @@ _%>
         // Initialize the database
 <%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
         <%= entityInstance %>Service.save(<%= entityInstance %>);
+        // As the test used the service layer, reset the Elasticsearch mock repository
+        reset(mock<%= entityClass %>SearchRepository);
 <%_ } else { _%>
         <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 <%_ } _%>
@@ -754,9 +760,13 @@ _%>
 <%_ } else { _%>
         <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 <%_ } _%>
-        when(mock<%= entityClass %>SearchRepository.search(queryStringQuery("id:" + <%= entityInstance %>.getId())))
-            .thenReturn(Collections.singletonList(<%= entityInstance %>));
-
+<%_ if (searchEngine === 'elasticsearch' && pagination !== 'no') { _%>
+    when(mock<%= entityClass %>SearchRepository.search(queryStringQuery("id:" + <%= entityInstance %>.getId()), PageRequest.of(0, 20)))
+        .thenReturn(new PageImpl<>(Collections.singletonList(<%= entityInstance %>), PageRequest.of(0, 1), 1));
+<%_ } else { _%>
+    when(mock<%= entityClass %>SearchRepository.search(queryStringQuery("id:" + <%= entityInstance %>.getId())))
+        .thenReturn(Collections.singletonList(<%= entityInstance %>));
+<%_ } _%>
         // Search the <%= entityInstance %>
         rest<%= entityClass %>MockMvc.perform(get("/api/_search/<%= entityApiUrl %>?query=id:" + <%= entityInstance %>.getId()))
             .andExpect(status().isOk())

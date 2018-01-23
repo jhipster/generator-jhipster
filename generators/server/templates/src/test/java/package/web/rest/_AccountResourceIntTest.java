@@ -27,9 +27,6 @@ import <%=packageName%>.<%= mainClass %>;
 import <%=packageName%>.domain.Authority;
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.UserRepository;
-<%_ if (searchEngine === 'elasticsearch') { _%>
-import <%= packageName %>.repository.search.UserSearchRepository;
-<%_ } _%>
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.service.UserService;
     <%_ } _%>
@@ -57,9 +54,6 @@ import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-<%_ if (searchEngine === 'elasticsearch') { _%>
-import org.springframework.boot.test.mock.mockito.MockBean;
-<%_ } _%>
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -89,11 +83,6 @@ public class AccountResourceIntTest<% if (databaseType === 'cassandra') { %>exte
 
     @Autowired
     private UserService userService;
-    <%_ } _%>
-    <%_ if (searchEngine === 'elasticsearch') { _%>
-
-    @MockBean
-    private UserSearchRepository userSearchRepository;
     <%_ } _%>
 
     private MockMvc restUserMockMvc;
@@ -203,9 +192,6 @@ import <%=packageName%>.repository.AuthorityRepository;<% } %>
 import <%=packageName%>.repository.PersistentTokenRepository;
 <%_ } _%>
 import <%=packageName%>.repository.UserRepository;
-<%_ if (searchEngine === 'elasticsearch') { _%>
-import <%= packageName %>.repository.search.UserSearchRepository;
-<%_ } _%>
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.service.MailService;
 import <%=packageName%>.service.dto.UserDTO;
@@ -222,9 +208,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-<%_ if (searchEngine === 'elasticsearch') { _%>
-import org.springframework.boot.test.mock.mockito.MockBean;
-<%_ } _%>
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -285,11 +268,6 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
 
     @Mock
     private MailService mockMailService;
-    <%_ if (searchEngine === 'elasticsearch') { _%>
-
-    @MockBean
-    private UserSearchRepository userSearchRepository;
-    <%_ } _%>
 
     private MockMvc restMvc;
 
