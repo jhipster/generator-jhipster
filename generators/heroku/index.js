@@ -26,6 +26,25 @@ const BaseGenerator = require('../generator-base');
 const constants = require('../generator-constants');
 
 module.exports = class extends BaseGenerator {
+    constructor(args, opts) {
+        super(args, opts);
+
+        this.option('skip-build', {
+            desc: 'Skips building the app',
+            type: Boolean,
+            defaults: false
+        });
+
+        this.option('skip-deploy', {
+            desc: 'Skips deployment to Heroku',
+            type: Boolean,
+            defaults: false
+        });
+
+        this.herokuSkipBuild = this.options['skip-build'];
+        this.herokuSkipDeploy = this.options['skip-deploy'] || this.options['skip-build'];
+    }
+
     initializing() {
         this.log(chalk.bold('Heroku configuration is starting'));
         this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
@@ -345,6 +364,12 @@ module.exports = class extends BaseGenerator {
         return {
             productionBuild() {
                 if (this.abort) return;
+
+                if (this.herokuSkipBuild) {
+                    this.log(chalk.bold('\nSkipping build'));
+                    return;
+                }
+
                 const done = this.async();
                 this.log(chalk.bold('\nBuilding application'));
 
@@ -366,6 +391,12 @@ module.exports = class extends BaseGenerator {
 
             productionDeploy() {
                 if (this.abort) return;
+
+                if (this.herokuSkipDeploy) {
+                    this.log(chalk.bold('\nSkipping deployment'));
+                    return;
+                }
+
                 const done = this.async();
                 this.log(chalk.bold('\nDeploying application'));
 

@@ -17,19 +17,19 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { SERVER_API_URL } from '../../app.constants';
 
 @Injectable()
 export class AccountService  {
-    constructor(private http: Http) { }
+    constructor(private http: HttpClient) { }
 
-    get(): Observable<any> {
-        return this.http.get(SERVER_API_URL + '<%- apiUaaPath %>api/account').map((res: Response) => res.json());
+    get(): Observable<HttpResponse<Account>> {
+        return this.http.get<Account>(SERVER_API_URL + '<%- apiUaaPath %>api/account', {observe : 'response'});
     }
 
-    save(account: any): Observable<Response> {
-        return this.http.post(SERVER_API_URL + '<%- apiUaaPath %>api/account', account);
+    save(account: any): Observable<HttpResponse<any>> {
+        return this.http.post(SERVER_API_URL + '<%- apiUaaPath %>api/account', account, {observe: 'response'});
     }
 }

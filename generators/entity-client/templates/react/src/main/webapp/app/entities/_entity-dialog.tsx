@@ -18,7 +18,7 @@
 -%>
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Label } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Label<% if (haveFieldWithJavadoc) { %>, UncontrolledTooltip<% } %> } from 'reactstrap';
 import { AvForm, AvGroup, AvInput, AvFeedback } from 'availity-reactstrap-validation';
 import { Translate, ICrudGetAction, ICrudPutAction } from 'react-jhipster';
 import { FaBan, FaFloppyO } from 'react-icons/lib/fa';
@@ -211,14 +211,14 @@ _%>
             _%>
             <AvGroup>
             <%_ if (fieldType === 'Boolean') { _%>
-              <Label check>
+              <Label id="<%= fields[idx].fieldName %>Label" check>
                 <AvInput type="checkbox" className="form-control" name="<%= fields[idx].fieldName %>" />
                 <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
                   <%=fields[idx].fieldName%>
                 </Translate>
               </Label>
             <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
-              <Label for="<%= fields[idx].fieldName %>">
+              <Label id="<%= fields[idx].fieldName %>Label" for="<%= fields[idx].fieldName %>">
                 <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
                   <%=fields[idx].fieldName%>
                 </Translate>
@@ -229,7 +229,7 @@ _%>
               />
               <AvFeedback>This field is required.</AvFeedback>
             <%_ } else if (fieldType === 'LocalDate') { _%>
-              <Label for="<%= fields[idx].fieldName %>">
+              <Label id="<%= fields[idx].fieldName %>Label" for="<%= fields[idx].fieldName %>">
                 <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
                   <%=fields[idx].fieldName%>
                 </Translate>
@@ -237,7 +237,7 @@ _%>
               <AvInput type="date" className="form-control" name="<%= fields[idx].fieldName %>" required />
               <AvFeedback>This field is required.</AvFeedback>
             <%_ } else if (fields[idx].fieldIsEnum) { _%>
-              <Label>
+              <Label id="<%= fields[idx].fieldName %>Label">
                 <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
                   <%=fields[idx].fieldName%>
                 </Translate>
@@ -257,7 +257,7 @@ _%>
               <%_ } _%>
               </AvInput>
             <%_ } else { _%>
-              <Label for="<%= fields[idx].fieldName %>">
+              <Label id="<%= fields[idx].fieldName %>Label" for="<%= fields[idx].fieldName %>">
                 <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
                   <%=fields[idx].fieldName%>
                 </Translate>
@@ -265,6 +265,15 @@ _%>
               <AvInput type="text" className="form-control" name="<%= fields[idx].fieldName %>" required />
               <AvFeedback>This field is required.</AvFeedback>
               <AvFeedback>This field cannot be longer than 50 characters.</AvFeedback>
+            <%_ } _%>
+            <%_ if (fields[idx].javadoc) { _%>
+            <UncontrolledTooltip target="<%= fields[idx].fieldName %>Label">
+              <%_ if (enableTranslation) { _%>
+              <Translate contentKey="<%= keyPrefix %>help.<%= fields[idx].fieldName %>"/>
+              <%_ } else { _%>
+              <%= fields[idx].javadoc %>
+              <%_ } _%>
+            </UncontrolledTooltip>
             <%_ } _%>
             </AvGroup>
             <%_ } _%>

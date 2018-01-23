@@ -19,7 +19,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Button } from 'reactstrap';
+import { Button<% if (haveFieldWithJavadoc) { %>, UncontrolledTooltip<% } %> } from 'reactstrap';
 // TODO import TextFormat only when fieldContainsDate
 // tslint:disable-next-line:no-unused-variable
 import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
@@ -54,9 +54,20 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
             const fieldType = fields[idx].fieldType;
         _%>
           <dt>
-            <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
+            <span id="<%= fields[idx].fieldName %>">
+              <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
               <%=fields[idx].fieldName%>
-            </Translate>
+              </Translate>
+            </span>
+            <%_ if (fields[idx].javadoc) { _%>
+            <UncontrolledTooltip target="<%= fields[idx].fieldName %>">
+              <%_ if (enableTranslation) { _%>
+              <Translate contentKey="<%= keyPrefix %>help.<%= fields[idx].fieldName %>"/>
+              <%_ } else { _%>
+              <%= fields[idx].javadoc %>
+              <%_ } _%>
+            </UncontrolledTooltip>
+            <%_ } _%>
           </dt>
           <dd>
           <%_ if (fieldType === 'Boolean') { _%>

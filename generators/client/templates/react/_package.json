@@ -115,6 +115,7 @@ limitations under the License.
     "redux-mock-store": "1.3.0",
     "rimraf": "2.6.2",
     "sinon": "4.1.1",
+    "source-map": "0.6.1",
     "source-map-loader": "0.2.3",
     "sourcemap-istanbul-instrumenter-loader": "0.2.0",
     "stripcomment-loader": "0.1.0",
@@ -142,14 +143,15 @@ limitations under the License.
     "webpack": "3.8.1",
     "webpack-dev-server": "2.9.4",
     "webpack-merge": "4.1.1",
-    "webpack-notifier": "1.5.0",
+    "webpack-notifier": "1.5.1",
     "workbox-webpack-plugin": "2.1.2",
     "write-file-webpack-plugin": "4.2.0"<% if (buildTool === 'maven') { %>,
     "xml2js": "0.4.19"
     <%_ } _%>
   },
   "resolutions": {
-    "@types/react": "16.0.19"
+    "@types/react": "16.0.19",
+    "source-map": "0.6.1"
   },
   "engines": {
     "node": ">=6.9.0"
@@ -167,7 +169,7 @@ limitations under the License.
     "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --progress --inline --profile --port=9060",
     "webpack:build:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --progress --profile",
     "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:main",
-    "webpack:prod:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --progress --profile",
+    "webpack:prod:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --profile",
     "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:prod:main",
     "webpack:test": "<%= clientPackageManager %> run test",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",

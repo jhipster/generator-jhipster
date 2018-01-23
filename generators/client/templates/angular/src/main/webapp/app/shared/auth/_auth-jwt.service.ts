@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 <%_ if (authenticationType !== 'uaa') { _%>
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
@@ -27,7 +27,7 @@ import { SERVER_API_URL } from '../../app.constants';
 @Injectable()
 export class AuthServerProvider {
     constructor(
-        private http: Http<%_ if (authenticationType !== 'uaa') { _%>,
+        private http: HttpClient<%_ if (authenticationType !== 'uaa') { _%>,
         private $localStorage: LocalStorageService,
         private $sessionStorage: SessionStorageService
 <%_ } _%>
@@ -55,7 +55,7 @@ export class AuthServerProvider {
             password: credentials.password,
             rememberMe: credentials.rememberMe
         };
-        return this.http.post(SERVER_API_URL + 'api/authenticate', data).map(authenticateSuccess.bind(this));
+        return this.http.post(SERVER_API_URL + 'api/authenticate', data, {observe : 'response'}).map(authenticateSuccess.bind(this));
 
         function authenticateSuccess(resp) {
             const bearerToken = resp.headers.get('Authorization');

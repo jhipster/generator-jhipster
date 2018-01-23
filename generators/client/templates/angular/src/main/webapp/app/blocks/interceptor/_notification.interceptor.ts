@@ -16,50 +16,49 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { JhiAlertService, JhiHttpInterceptor } from 'ng-jhipster';
-import { RequestOptionsArgs, Response } from '@angular/http';
+import { JhiAlertService } from 'ng-jhipster';
+import { HttpInterceptor, HttpRequest, HttpResponse, HttpHandler, HttpEvent } from '@angular/common/http';
 import { Injector } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/do';
 
-export class NotificationInterceptor extends JhiHttpInterceptor {
+export class NotificationInterceptor implements HttpInterceptor {
 
     private alertService: JhiAlertService;
 
     // tslint:disable-next-line: no-unused-variable
     constructor(private injector: Injector) {
-        super();
         setTimeout(() => this.alertService = injector.get(JhiAlertService));
     }
 
-    requestIntercept(options?: RequestOptionsArgs): RequestOptionsArgs {
-        return options;
-    }
-
-    responseIntercept(observable: Observable<Response>): Observable<Response> {
-        return observable.map((response: Response) => {
-            const headers = [];
-            response.headers.forEach((value, name) => {
-                if (name.toLowerCase().endsWith('app-alert') || name.toLowerCase().endsWith('app-params')) {
-                    headers.push(name);
-                }
-            });
-            if (headers.length > 1) {
-                headers.sort();
-                const alertKey = response.headers.get(headers[ 0 ]);
-                if (typeof alertKey === 'string') {
-                    if (this.alertService) {
-                        <%_ if (enableTranslation) { _%>
-                        const alertParam = headers.length >= 2 ? response.headers.get(headers[ 1 ]) : null;
-                        this.alertService.success(alertKey, { param : alertParam }, null);
-                        <%_ } else { _%>
-                        this.alertService.success(alertKey, null, null);
-                        <%_ } _%>
+    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        return next.handle(request).do((event: HttpEvent<any>) => {
+            if (event instanceof HttpResponse) {
+                const arr = event.headers.keys();
+                let alert = null;
+                <%_ if (enableTranslation) { _%>
+                let alertParams = null;
+                <%_ } _%>
+                arr.forEach((entry) => {
+                    if (entry.endsWith('app-alert')) {
+                        alert = event.headers.get(entry);
+                    }<% if (enableTranslation) { %> else if (entry.endsWith('app-params')) {
+                        alertParams = event.headers.get(entry);
+                    }<% } %>
+                });
+                if (alert) {
+                    if (typeof alert === 'string') {
+                        if (this.alertService) {
+                            <%_ if (enableTranslation) { _%>
+                            const alertParam = alertParams;
+                            this.alertService.success(alert, { param : alertParam }, null);
+                            <%_ } else { _%>
+                            this.alertService.success(alert, null, null);
+                            <%_ } _%>
+                        }
                     }
                 }
             }
-            return response;
-        }).catch((error) => {
-            return Observable.throw(error); // here, response is an error
-        });
+        }, (err: any) => {});
     }
 }
