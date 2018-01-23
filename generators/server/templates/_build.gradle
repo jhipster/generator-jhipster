@@ -327,6 +327,7 @@ dependencies {
     compile "org.zalando:problem-spring-web"
     <%_ if (databaseType === 'cassandra') { _%>
     compile "com.google.guava:guava:18.0"
+    compile "com.datastax.cassandra:cassandra-driver-core"
     compile "com.datastax.cassandra:cassandra-driver-extras"
     compile "com.datastax.cassandra:cassandra-driver-mapping"
     <%_ } _%>
