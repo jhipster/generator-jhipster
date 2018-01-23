@@ -645,8 +645,10 @@ _%>
         // Initialize the database
 <%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
         <%= entityInstance %>Service.save(<%= entityInstance %>);
+    <%_ if (searchEngine === 'elasticsearch') { _%>
         // As the test used the service layer, reset the Elasticsearch mock repository
         reset(mock<%= entityClass %>SearchRepository);
+    <%_ } _%>
 <%_ } else { _%>
         <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 <%_ } _%>
