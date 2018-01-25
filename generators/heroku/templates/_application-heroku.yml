@@ -42,7 +42,7 @@ eureka:
 spring:
 <%_ if (prodDatabaseType === 'postgresql' || prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
     datasource:
-        type: com.zaxxer.hikari.HikariDataSource        
+        type: com.zaxxer.hikari.HikariDataSource
         url: ${JDBC_DATABASE_URL}
         username: ${JDBC_DATABASE_USERNAME}
         password: ${JDBC_DATABASE_PASSWORD}
