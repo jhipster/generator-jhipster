@@ -201,7 +201,7 @@ module.exports = class extends BaseGenerator {
                         done();
                     } else {
                         this.log(chalk.bold('\nInstalling Heroku CLI deployment plugin'));
-                        const child = exec(`heroku plugins:install --force ${cliPlugin}`, (err, stdout) => {
+                        const child = exec(`heroku plugins:install ${cliPlugin} --force`, (err, stdout) => {
                             if (err) {
                                 this.abort = true;
                                 this.log.error(err);
@@ -224,10 +224,7 @@ module.exports = class extends BaseGenerator {
                 const regionParams = (this.herokuRegion !== 'us') ? ` --region ${this.herokuRegion}` : '';
 
                 this.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
-                let herokuCreateCmd = `heroku create ${this.herokuAppName}${regionParams}`;
-                this.log(herokuCreateCmd);
-
-                const child = exec(herokuCreateCmd, (err, stdout, stderr) => {
+                const child = exec(`heroku create ${this.herokuAppName}${regionParams}`, (err, stdout, stderr) => {
                     if (err) {
                         if (stderr.includes('Name is already taken')) {
                             const prompts = [
@@ -247,26 +244,40 @@ module.exports = class extends BaseGenerator {
 
                             this.log('');
                             this.prompt(prompts).then((props) => {
-                                let getHerokuAppName = def => def;
                                 if (props.herokuForceName === 'Yes') {
-                                    herokuCreateCmd = `heroku git:remote --app ${this.herokuAppName}`;
+                                    exec(`heroku git:remote --app ${this.herokuAppName}`, (err, stdout, stderr) => {
+                                        if (err) {
+                                            this.abort = true;
+                                            this.log.error(err);
+                                        } else {
+                                            this.log(stdout.trim());
+                                        }
+                                        this.config.set('herokuAppName', this.herokuAppName);
+                                        done();
+                                    });
                                 } else {
-                                    herokuCreateCmd = `heroku create ${regionParams}`;
+                                    exec(`heroku create ${regionParams}`, (err, stdout, stderr) => {
+                                        if (err) {
+                                            this.abort = true;
+                                            this.log.error(err);
+                                        } else {
+                                            // Extract from "Created random-app-name-1234... done"
+                                            this.herokuAppName = stdout.substring(stdout.indexOf('https://') + 8, stdout.indexOf('.herokuapp'));
+                                            this.log(stdout.trim());
 
-                                    // Extract from "Created random-app-name-1234... done"
-                                    getHerokuAppName = (def, stdout) => stdout.substring(stdout.indexOf('https://') + 8, stdout.indexOf('.herokuapp'));
+                                            // ensure that the git remote is the same as the appName
+                                            exec(`heroku git:remote --app ${this.herokuAppName}`, (err, stdout, stderr) => {
+                                                if (err) {
+                                                    this.abort = true;
+                                                    this.log.error(err);
+                                                } else {
+                                                    this.config.set('herokuAppName', this.herokuAppName);
+                                                }
+                                                done();
+                                            });
+                                        }
+                                    });
                                 }
-                                exec(herokuCreateCmd, (err, stdout, stderr) => {
-                                    if (err) {
-                                        this.abort = true;
-                                        this.log.error(err);
-                                    } else {
-                                        this.herokuAppName = getHerokuAppName(this.herokuAppName, stdout);
-                                        this.log(stdout.trim());
-                                    }
-                                    this.config.set('herokuAppName', this.herokuAppName);
-                                    done();
-                                });
                             });
                         } else {
                             this.abort = true;
