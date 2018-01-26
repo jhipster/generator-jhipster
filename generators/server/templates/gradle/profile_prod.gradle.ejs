@@ -73,14 +73,8 @@ processResources {
     <%_ } _%>
 }
 
-generateGitProperties {
-    onlyIf {
-        !source.isEmpty()
-    }
-}
-
 gitProperties {
-    keys = ['git.branch', 'git.commit.id.abbrev']
+    keys = ['git.branch', 'git.commit.id.abbrev', 'git.commit.id.describe']
 }
 
 <%_ if (!skipClient) { _%>
