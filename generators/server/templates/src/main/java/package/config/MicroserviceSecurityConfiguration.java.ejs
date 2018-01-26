@@ -80,6 +80,7 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
             .authorizeRequests()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/management/health").permitAll()
+            .antMatchers("/management/info").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/swagger-resources/configuration/ui").permitAll()
         .and()
@@ -153,9 +154,9 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
             .authorizeRequests()
-            .antMatchers("/api/profile-info").permitAll()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/management/health").permitAll()
+            .antMatchers("/management/info").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/swagger-resources/configuration/ui").permitAll();
     }
@@ -269,9 +270,9 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
         .and()
             .requestMatcher(authorizationHeaderRequestMatcher())
             .authorizeRequests()
-            .antMatchers("/api/profile-info").permitAll()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/management/health").permitAll()
+            .antMatchers("/management/info").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);
     }
 }
