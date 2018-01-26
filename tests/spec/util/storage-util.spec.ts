@@ -15,10 +15,10 @@ describe('Storage Util', () => {
     it('should set key for correct storage type', () => {
       Storage.session.set('testKey', 'testVal');
       let out = window.sessionStorage.getItem('testKey');
-      expect(out).to.eql('testVal');
+      expect(JSON.parse(out)).to.eql('testVal');
       Storage.local.set('testKey', 'testVal');
       out = window.localStorage.getItem('testKey');
-      expect(out).to.eql('testVal');
+      expect(JSON.parse(out)).to.eql('testVal');
     });
   });
   describe('get', () => {

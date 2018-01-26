@@ -21,7 +21,7 @@ export const getStorage: any = (type: StorageType) => {
  * @param value value to set
  */
 const setItem = (type: StorageType) => (key: string, value: any) => {
-  getStorage(type).setItem(key, value);
+  getStorage(type).setItem(key, JSON.stringify(value));
 };
 
 /**
