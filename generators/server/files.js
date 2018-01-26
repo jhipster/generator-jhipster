@@ -590,13 +590,16 @@ const serverFiles = {
                 { file: 'package/client/TokenRelayRequestInterceptor.java', renameTo: generator => `${generator.javaDir}client/TokenRelayRequestInterceptor.java` }
             ]
         },
-        {
-            condition: generator => !(generator.applicationType !== 'microservice' && !(generator.applicationType === 'gateway' && (generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2')))
-                && (generator.authenticationType === 'oauth2' && generator.applicationType === 'gateway'),
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                { file: 'package/config/OAuth2SsoConfiguration.java', renameTo: generator => `${generator.javaDir}config/OAuth2SsoConfiguration.java` }
-            ]
+
+        writeServerJavaWebFiles() {
+            this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/vm/package-info.java.ejs`, `${javaDir}web/rest/vm/package-info.java`);
+            this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/vm/LoggerVM.java.ejs`, `${javaDir}web/rest/vm/LoggerVM.java`);
+
+            this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/util/HeaderUtil.java.ejs`, `${javaDir}web/rest/util/HeaderUtil.java`);
+            this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/util/PaginationUtil.java.ejs`, `${javaDir}web/rest/util/PaginationUtil.java`);
+            this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/package-info.java.ejs`, `${javaDir}web/rest/package-info.java`);
+
+            this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/LogsResource.java.ejs`, `${javaDir}web/rest/LogsResource.java`);
         },
         {
             condition: generator => !(generator.applicationType !== 'microservice' && !(generator.applicationType === 'gateway' && (generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2')))
@@ -645,12 +648,74 @@ const serverFiles = {
                 { file: 'package/config/WebConfigurer.java', renameTo: generator => `${generator.javaDir}config/WebConfigurer.java` }
             ]
         },
-        {
-            condition: generator => ['ehcache', 'hazelcast', 'infinispan'].includes(generator.cacheProvider) || generator.applicationType === 'gateway',
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                { file: 'package/config/CacheConfiguration.java', renameTo: generator => `${generator.javaDir}config/CacheConfiguration.java` }
-            ]
+
+        writeServerTestFwFiles() {
+            // Create Test Java files
+            const testDir = this.testDir;
+
+            mkdirp(testDir);
+
+            if (this.databaseType === 'cassandra') {
+                this.template(`${SERVER_TEST_SRC_DIR}package/CassandraKeyspaceUnitTest.java.ejs`, `${testDir}CassandraKeyspaceUnitTest.java`);
+                this.template(`${SERVER_TEST_SRC_DIR}package/AbstractCassandraTest.java.ejs`, `${testDir}AbstractCassandraTest.java`);
+                this.template(`${SERVER_TEST_SRC_DIR}package/config/CassandraTestConfiguration.java.ejs`, `${testDir}config/CassandraTestConfiguration.java`);
+                this.template(`${SERVER_TEST_RES_DIR}cassandra-random-port.yml.ejs`, `${SERVER_TEST_RES_DIR}cassandra-random-port.yml`);
+            }
+
+            if (this.databaseType === 'couchbase') {
+                this.template(`${SERVER_TEST_SRC_DIR}package/config/DatabaseTestConfiguration.java.ejs`, `${testDir}config/DatabaseTestConfiguration.java`);
+            }
+
+            this.template(`${SERVER_TEST_SRC_DIR}package/config/WebConfigurerTest.java.ejs`, `${testDir}config/WebConfigurerTest.java`);
+            this.template(`${SERVER_TEST_SRC_DIR}package/config/WebConfigurerTestController.java.ejs`, `${testDir}config/WebConfigurerTestController.java`);
+            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/TestUtil.java.ejs`, `${testDir}web/rest/TestUtil.java`);
+            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/LogsResourceIntTest.java.ejs`, `${testDir}web/rest/LogsResourceIntTest.java`);
+            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/errors/ExceptionTranslatorIntTest.java.ejs`, `${testDir}web/rest/errors/ExceptionTranslatorIntTest.java`);
+            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/errors/ExceptionTranslatorTestController.java.ejs`, `${testDir}web/rest/errors/ExceptionTranslatorTestController.java`);
+            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/util/PaginationUtilUnitTest.java.ejs`, `${testDir}web/rest/util/PaginationUtilUnitTest.java`);
+
+            this.template(`${SERVER_TEST_RES_DIR}config/application.yml.ejs`, `${SERVER_TEST_RES_DIR}config/application.yml`);
+            this.template(`${SERVER_TEST_RES_DIR}logback.xml.ejs`, `${SERVER_TEST_RES_DIR}logback.xml`);
+
+            // Create Gateway tests files
+            if (this.applicationType === 'gateway') {
+                this.template(`${SERVER_TEST_SRC_DIR}package/gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java.ejs`, `${testDir}gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java`);
+            }
+            if (this.serviceDiscoveryType) {
+                this.template(`${SERVER_TEST_RES_DIR}config/bootstrap.yml.ejs`, `${SERVER_TEST_RES_DIR}config/bootstrap.yml`);
+            }
+
+            if (this.authenticationType === 'uaa') {
+                this.template(`${SERVER_TEST_SRC_DIR}package/security/OAuth2TokenMockUtil.java.ejs`, `${testDir}security/OAuth2TokenMockUtil.java`);
+                this.template(`${SERVER_TEST_SRC_DIR}package/config/SecurityBeanOverrideConfiguration.java.ejs`, `${testDir}config/SecurityBeanOverrideConfiguration.java`);
+                if (this.applicationType === 'gateway') {
+                    this.template(`${SERVER_TEST_SRC_DIR}package/security/oauth2/OAuth2CookieHelperTest.java.ejs`, `${testDir}security/oauth2/OAuth2CookieHelperTest.java`);
+                    this.template(`${SERVER_TEST_SRC_DIR}package/security/oauth2/OAuth2AuthenticationServiceTest.java.ejs`, `${testDir}security/oauth2/OAuth2AuthenticationServiceTest.java`);
+                    this.template(`${SERVER_TEST_SRC_DIR}package/security/oauth2/CookieTokenExtractorTest.java.ejs`, `${testDir}security/oauth2/CookieTokenExtractorTest.java`);
+                    this.template(`${SERVER_TEST_SRC_DIR}package/security/oauth2/CookieCollectionTest.java.ejs`, `${testDir}security/oauth2/CookieCollectionTest.java`);
+                }
+            }
+
+            // Create Gatling test files
+            if (this.gatlingTests) {
+                this.copy(`${TEST_DIR}gatling/conf/gatling.conf.ejs`, `${TEST_DIR}gatling/conf/gatling.conf`);
+                this.copy(`${TEST_DIR}gatling/conf/logback.xml.ejs`, `${TEST_DIR}gatling/conf/logback.xml`);
+                mkdirp(`${TEST_DIR}gatling/user-files/data`);
+                mkdirp(`${TEST_DIR}gatling/user-files/bodies`);
+                mkdirp(`${TEST_DIR}gatling/user-files/simulations`);
+            }
+
+            // Create Cucumber test files
+            if (this.cucumberTests) {
+                this.template(`${SERVER_TEST_SRC_DIR}package/cucumber/CucumberTest.java.ejs`, `${testDir}cucumber/CucumberTest.java`);
+                this.template(`${SERVER_TEST_SRC_DIR}package/cucumber/stepdefs/StepDefs.java.ejs`, `${testDir}cucumber/stepdefs/StepDefs.java`);
+                this.copy(`${TEST_DIR}features/gitkeep`, `${TEST_DIR}features/.gitkeep`);
+            }
+
+            // Create auth config test files
+            if (this.applicationType === 'monolith' && this.authenticationType !== 'oauth2') {
+                this.template(`${SERVER_TEST_SRC_DIR}package/security/DomainUserDetailsServiceIntTest.java.ejs`, `${testDir}security/DomainUserDetailsServiceIntTest.java`);
+            }
         },
         {
             condition: generator => generator.cacheProvider === 'infinispan',
