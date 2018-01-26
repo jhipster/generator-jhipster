@@ -29,6 +29,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.security.web.csrf.CsrfFilter;
 
 import io.github.jhipster.security.AjaxLogoutSuccessHandler;
 
