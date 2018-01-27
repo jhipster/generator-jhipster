@@ -26,6 +26,7 @@
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
+    "reactstrap": "^5.0.0-alpha.3",
     "redux": "^3.7.2"
   },
   "dependencies": {
@@ -54,6 +55,7 @@
     "extract-text-webpack-plugin": "3.0.0",
     "file-loader": "0.11.2",
     "html-webpack-plugin": "2.30.1",
+    "husky": "0.14.3",
     "image-webpack-loader": "3.4.2",
     "json-loader": "0.5.7",
     "karma": "1.7.1",
@@ -67,11 +69,13 @@
     "karma-remap-istanbul": "0.6.0",
     "karma-sourcemap-loader": "0.3.7",
     "karma-webpack": "2.0.4",
+    "lint-staged": "6.1.0",
     "lodash": "^4.17.4",
     "merge-jsons-webpack-plugin": "1.0.8",
     "mocha": "3.5.3",
     "node-sass": "4.5.3",
     "postcss-loader": "2.0.6",
+    "prettier": "1.10.2",
     "react": "^15.6.2",
     "react-addons-css-transition-group": "^15.6.2",
     "react-addons-test-utils": "15.6.2",
@@ -80,6 +84,7 @@
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
     "react-test-renderer": "15.6.2",
+    "reactstrap": "^5.0.0-alpha.3",
     "redux": "^3.7.2",
     "rimraf": "^2.6.2",
     "sass-loader": "6.0.6",
@@ -91,6 +96,7 @@
     "style-loader": "0.18.2",
     "to-string-loader": "1.1.5",
     "tslint": "5.7.0",
+    "tslint-config-prettier": "1.6.0",
     "tslint-eslint-rules": "4.1.1",
     "tslint-loader": "3.5.3",
     "tslint-react": "3.2.0",
@@ -101,7 +107,16 @@
     "write-file-webpack-plugin": "4.1.0"
   },
   "version": "0.2.2",
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "prettier --write",
+      "yarn lint:fix",
+      "git add"
+    ]
+  },
   "scripts": {
+    "precommit": "lint-staged",
+    "prettier:format": "prettier --write '**/*.{ts,tsx}'",
     "cleanup": "rimraf src/*.d.ts src/**/*.d.ts src/*.{js,jsx} src/**/*.{js,jsx} tests/**/*.d.ts tests/*.d.ts",
     "lint": "tslint --project tslint.json",
     "lint:fix": "tslint --project tslint.json --fix",

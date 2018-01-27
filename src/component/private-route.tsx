@@ -9,17 +9,18 @@ export interface IPrivateRouteProps {
 }
 
 export const PrivateRouteComponent = ({ component: Component, isAuthenticated, ...rest }: IPrivateRouteProps) => {
-  const renderRedirect = props => (
-    isAuthenticated
-      ? <Component {...props} />
-      : (
-        <Redirect to={{
+  const renderRedirect = props =>
+    isAuthenticated ? (
+      <Component {...props} />
+    ) : (
+      <Redirect
+        to={{
           pathname: '/login',
           search: props.location.search,
           state: { from: props.location }
-        }} />
-      )
-  );
+        }}
+      />
+    );
   if (!Component) throw new Error(`A component needs to be specified for private route for path ${(rest as any).path}`);
 
   return <Route {...rest} render={renderRedirect} />;

@@ -7,7 +7,6 @@ import { PrivateRouteComponent } from '../../../react-jhipster';
 const TestComp = () => <div>Test</div>;
 
 describe('private-route component', () => {
-
   // All tests will go here
   it('Should throw error when no component is provided', () => {
     expect(() => shallow(<PrivateRouteComponent component={null} isAuthenticated />)).to.throw(Error);
@@ -21,9 +20,11 @@ describe('private-route component', () => {
     // tslint:disable-next-line:no-unused-expression
     expect(renderedRoute.props().render).to.not.be.undefined;
     const renderFn = renderedRoute.props().render;
-    const comp = shallow(renderFn({
-      location: '/'
-    }));
+    const comp = shallow(
+      renderFn({
+        location: '/'
+      })
+    );
     expect(comp.length).to.equal(1);
     expect(comp.html()).to.equal('<div>Test</div>');
   });
@@ -34,8 +35,12 @@ describe('private-route component', () => {
     expect(renderedRoute.length).to.equal(1);
     const renderFn = renderedRoute.props().render;
     // as rendering redirect outside router will throw error
-    expect(() => shallow(renderFn({
-      location: '/'
-    }))).to.throw(Error);
+    expect(() =>
+      shallow(
+        renderFn({
+          location: '/'
+        })
+      )
+    ).to.throw(Error);
   });
 });

@@ -1,6 +1,6 @@
-
 export const enum StorageType {
-  SESSION, LOCAL
+  SESSION,
+  LOCAL
 }
 
 /**

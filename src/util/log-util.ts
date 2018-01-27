@@ -25,7 +25,7 @@ export const logDebug = (msg, ...data): void => {
  */
 export const logInfo = (msg, ...data): void => {
   // tslint:disable-next-line
-  if ([ 'debug', 'info' ].includes(level)) console.info(msg, data);
+  if (['debug', 'info'].includes(level)) console.info(msg, data);
 };
 
 /**
@@ -34,7 +34,7 @@ export const logInfo = (msg, ...data): void => {
  * @param data data
  */
 export const logWarn = (msg, ...data): void => {
-  if ([ 'debug', 'info', 'warn' ].includes(level)) console.warn(msg, data);
+  if (['debug', 'info', 'warn'].includes(level)) console.warn(msg, data);
 };
 
 /**
@@ -43,7 +43,7 @@ export const logWarn = (msg, ...data): void => {
  * @param data data
  */
 export const logError = (msg, ...data): void => {
-  if ([ 'debug', 'info', 'warn', 'error' ].includes(level)) console.error(msg, data);
+  if (['debug', 'info', 'warn', 'error'].includes(level)) console.error(msg, data);
 };
 
 export const log = logInfo;

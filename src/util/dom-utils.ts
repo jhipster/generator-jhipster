@@ -1,4 +1,3 @@
-
 /**
  * Fetch the specified element by id or return default
  * @param id id of element

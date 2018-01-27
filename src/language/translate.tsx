@@ -27,11 +27,11 @@ const flatten = array => {
 const toTemplate = string => {
   const expressionRe = /{{\s?\w+\s?}}/g;
   const match = string.match(expressionRe) || [];
-  return [ string.split(expressionRe), ...match ];
+  return [string.split(expressionRe), ...match];
 };
 
 const normalizeValue = (value, key) => {
-  if (value == null || [ 'boolean', 'string', 'number' ].includes(typeof value)) {
+  if (value == null || ['boolean', 'string', 'number'].includes(typeof value)) {
     return value;
   }
   if (value.$$typeof === REACT_ELEMENT) {
@@ -45,25 +45,17 @@ const normalizeValue = (value, key) => {
  */
 const render = (string, values) => {
   if (!values || !string) return string;
-  const [ parts, ...expressions ] = toTemplate(string);
-  return flatten(parts.reduce(
-    (acc, item, index, array) => {
+  const [parts, ...expressions] = toTemplate(string);
+  return flatten(
+    parts.reduce((acc, item, index, array) => {
       if (index === array.length - 1) {
-        return [
-          ...acc,
-          item
-        ];
+        return [...acc, item];
       }
       const match = expressions[index] && expressions[index].match(/{{\s?(\w+)\s?}}/);
       const value = match != null ? values[match[1]] : null;
-      return [
-        ...acc,
-        item,
-        normalizeValue(value, index)
-      ];
-    },
-    []
-  ));
+      return [...acc, item, normalizeValue(value, index)];
+    }, [])
+  );
 };
 
 /**
@@ -75,16 +67,17 @@ const render = (string, values) => {
 const deepFindDirty = (obj, path, placeholder) => {
   const paths = path.split('.');
   let current = obj;
-  if (placeholder) { // dirty fix for placeholders, the json files needs to be corrected
-      paths[paths.length - 2] = `${paths[paths.length - 2]}.${paths[paths.length - 1]}`;
-      paths.pop();
+  if (placeholder) {
+    // dirty fix for placeholders, the json files needs to be corrected
+    paths[paths.length - 2] = `${paths[paths.length - 2]}.${paths[paths.length - 1]}`;
+    paths.pop();
   }
   // tslint:disable-next-line:prefer-for-of
   for (let i = 0; i < paths.length; ++i) {
-      if (current[paths[i]] === undefined) {
-          return undefined;
-      }
-      current = current[paths[i]];
+    if (current[paths[i]] === undefined) {
+      return undefined;
+    }
+    current = current[paths[i]];
   }
   return current;
 };
@@ -106,17 +99,19 @@ const doTranslate = (key, interpolate, children) => {
   if (/<[a-z][\s\S]*>/i.test(preSanitize)) {
     // String contains HTML tags. Allow only a super restricted set of tags and attributes
     const content = sanitizeHtml(preSanitize, {
-      allowedTags: [ 'b', 'i', 'em', 'strong', 'a', 'br', 'hr' ],
+      allowedTags: ['b', 'i', 'em', 'strong', 'a', 'br', 'hr'],
       allowedAttributes: {
-        a: [ 'href', 'target' ]
+        a: ['href', 'target']
       }
     });
     return {
-      content, html: true
+      content,
+      html: true
     };
   }
   return {
-    content: preSanitize, html: false
+    content: preSanitize,
+    html: false
   };
 };
 
@@ -144,6 +139,7 @@ class Translate extends React.Component<ITranslateProps> {
   }
 }
 
-export const translate = (contentKey: string, interpolate?: any, children?: string) => doTranslate(contentKey, interpolate, children).content;
+export const translate = (contentKey: string, interpolate?: any, children?: string) =>
+  doTranslate(contentKey, interpolate, children).content;
 
 export default Translate;

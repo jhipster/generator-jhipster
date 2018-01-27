@@ -2,7 +2,8 @@
   "extends": [
     "tslint:latest",
     "tslint-eslint-rules",
-    "tslint-react"
+    "tslint-react",
+    "tslint-config-prettier"
   ],
   "jsRules": {
     "class-name": true,
@@ -51,7 +52,7 @@
     ],
     "quotemark": [true, "single", "jsx-double"],
     "radix": true,
-    "semicolon": [true, "always"],
+    "semicolon": [true, "always", "ignore-bound-class-methods"],
     "triple-equals": [true, "allow-null-check"],
     "variable-name": false,
     "whitespace": [
@@ -143,7 +144,7 @@
     ],
     "quotemark": [true, "single", "jsx-double"],
     "radix": true,
-    "semicolon": [true, "always"],
+    "semicolon": [true, "always", "ignore-bound-class-methods"],
     "triple-equals": [true, "allow-null-check"],
     "typedef-whitespace": [
       true,
@@ -195,7 +196,7 @@
     "ter-no-sparse-arrays": [true],
     "ter-func-call-spacing": [true, "never"],
     "no-multi-spaces": [true],
-    "array-bracket-spacing": [true, "always"],
+    "array-bracket-spacing": [false],
     "brace-style": [
       true,
       "1tbs",
