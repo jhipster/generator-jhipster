@@ -21,30 +21,58 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
-import { FaPlus, FaEye, FaPencil, FaTrash } from 'react-icons/lib/fa';
+import { FaPlus, FaEye, FaPencil, FaSort, FaTrash } from 'react-icons/lib/fa';
 
 import { getUsers } from '../../../reducers/user-management';
 import { APP_DATE_FORMAT } from '../../../config/constants';
+import { ITEMS_PER_PAGE } from '../../../shared/util/pagination.constants';
+import { getItemsNumber, getSortState, IPaginationState } from '../../../shared/util/pagination-utils';
+import { PaginationComponent } from '../../../shared/util/pagination-component';
 
 export interface IUserManagementProps {
   getUsers: ICrudGetAction;
   users: any[];
   account: any;
   match: any;
+  totalItems: 0;
+  history: any;
+  location: any;
 }
 
-export class UserManagement extends React.Component<IUserManagementProps, undefined> {
+export class UserManagement extends React.Component<IUserManagementProps, IPaginationState> {
 
   constructor(props) {
     super(props);
+    this.state = {
+      ...getSortState(props.location)
+    };
   }
 
   componentDidMount() {
-    this.props.getUsers();
+    this.getUsers();
+  }
+
+  sort = prop => () => {
+    this.setState({
+      order: this.state.order === 'asc' ? 'desc' : 'asc',
+      sort: prop
+    }, () => this.sortUsers());
+  }
+
+  sortUsers() {
+    this.getUsers();
+    this.props.history.push(`${this.props.location.pathname}?page=${this.state.activePage}&sort=${this.state.sort},${this.state.order}`);
+  }
+
+  handlePagination = activePage => this.setState({ activePage }, () => this.sortUsers());
+
+  getUsers = () => {
+    const { activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getUsers(activePage - 1, itemsPerPage, `${sort},${order}`);
   }
 
   render() {
-    const { users, account, match } = this.props;
+    const { users, account, match, totalItems } = this.props;
     return (
       <div>
         <h2>
@@ -57,18 +85,22 @@ export class UserManagement extends React.Component<IUserManagementProps, undefi
           <table className="table table-striped">
             <thead>
               <tr>
-                <th><Translate contentKey="global.field.id">ID</Translate></th>
-                <th><Translate contentKey="userManagement.login">Login</Translate></th>
-                <th><Translate contentKey="userManagement.email">Email</Translate></th>
+                <th onClick={this.sort('id')}><Translate contentKey="global.field.id">ID</Translate><FaSort/></th>
+                <th onClick={this.sort('login')}><Translate contentKey="userManagement.login">Login</Translate><FaSort/></th>
+                <th onClick={this.sort('email')}><Translate contentKey="userManagement.email">Email</Translate><FaSort/></th>
                 <th />
                 <%_ if (enableTranslation) { _%>
-                <th><Translate contentKey="userManagement.langKey">Lang Key</Translate></th>
+                <th onClick={this.sort('langKey')}><Translate contentKey="userManagement.langKey">Lang Key</Translate><FaSort/></th>
                 <%_ } _%>
                 <th><Translate contentKey="userManagement.profiles">Profiles</Translate></th>
                 <%_ if (databaseType !== 'cassandra') { _%>
-                <th><Translate contentKey="userManagement.createdDate">Created Date</Translate></th>
-                <th><Translate contentKey="userManagement.lastModifiedBy">Last Modified By</Translate></th>
-                <th><Translate contentKey="userManagement.lastModifiedDate">Last Modified Date</Translate></th>
+                <th onClick={this.sort('createdDate')}><Translate contentKey="userManagement.createdDate">Created Date</Translate><FaSort/></th>
+                <th onClick={this.sort('lastModifiedBy')}>
+                  <Translate contentKey="userManagement.lastModifiedBy">Last Modified By</Translate><FaSort/>
+                </th>
+                <th onClick={this.sort('lastModifiedDate')}>
+                  <Translate contentKey="userManagement.lastModifiedDate">Last Modified Date</Translate><FaSort/>
+                </th>
                 <th />
                 <%_ } _%>
               </tr>
@@ -142,6 +174,14 @@ export class UserManagement extends React.Component<IUserManagementProps, undefi
             </tbody>
           </table>
         </div>
+        <div className="row justify-content-center">
+          <PaginationComponent
+            items={getItemsNumber(totalItems, this.state.itemsPerPage)}
+            activePage={this.state.activePage}
+            onSelect={this.handlePagination}
+            maxButtons={5}
+          />
+        </div>
       </div>
     );
   }
@@ -149,6 +189,7 @@ export class UserManagement extends React.Component<IUserManagementProps, undefi
 
 const mapStateToProps = storeState => ({
   users: storeState.userManagement.users,
+  totalItems: storeState.userManagement.totalItems,
   account: storeState.authentication.account
 });
 
