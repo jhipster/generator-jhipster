@@ -106,7 +106,7 @@
     "webpack-merge": "4.1.0",
     "write-file-webpack-plugin": "4.1.0"
   },
-  "version": "0.2.2",
+  "version": "0.3.0",
   "lint-staged": {
     "*.{ts,tsx}": [
       "prettier --write",
