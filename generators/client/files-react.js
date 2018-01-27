@@ -300,8 +300,6 @@ const files = {
                 'shared/layout/header/header.tsx',
                 // util
                 'shared/util/date-utils.ts',
-                'shared/util/pagination-component.tsx',
-                'shared/util/pagination-utils.ts',
                 'shared/util/pagination.constants.ts'
                 // components
                 // model
