@@ -144,6 +144,31 @@ describe('account', () => {
         });
     });
 
+    it('should fail to update password when using incorrect current password', () => {
+        passwordPage = navBarPage.getPasswordPage();
+
+        <%_ if (enableTranslation) { _%>
+        expect(passwordPage.getTitle()).toMatch(/password.title/);
+            <%_ } else { _%>
+        expect(passwordPage.getTitle()).toMatch(/Password for \[admin\]/);
+            <%_ } _%>
+
+        passwordPage.setCurrentPassword('wrong_current_password');
+        passwordPage.setPassword('newpassword');
+        passwordPage.setConfirmPassword('newpassword');
+        passwordPage.save();
+
+        <%_ if (enableTranslation) { _%>
+            const expect2 = /password.messages.error/;
+            <%_ } else { _%>
+            const expect2 = /An error has occurred! The password could not be changed./;
+            <%_ } _%>
+        element.all(by.css('.alert-danger')).first().<%- elementGetter %>.then((value) => {
+            expect(value).toMatch(expect2);
+        });
+        settingsPage = navBarPage.getSettingsPage();
+    });
+
     it('should be able to update password', () => {
         passwordPage = navBarPage.getPasswordPage();
 
@@ -172,6 +197,7 @@ describe('account', () => {
 
         // change back to default
         navBarPage.goToPasswordMenu();
+        passwordPage.setCurrentPassword('newpassword');
         passwordPage.setPassword('admin');
         passwordPage.setConfirmPassword('admin');
         passwordPage.save();
