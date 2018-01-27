@@ -298,6 +298,9 @@ public class UserService {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
+                <%_ if (cacheManagerIsAvailable === true) { _%>
+                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
+                <%_ } _%>
                 user.setFirstName(firstName);
                 user.setLastName(lastName);
                 user.setEmail(email);
