@@ -337,6 +337,10 @@ public class UserService {
                     userRepository.delete(userDTO.getId());
                 }
                 <%_ } _%>
+                <%_ if (cacheManagerIsAvailable === true) { _%>
+                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
+                <%_ } _%>
                 user.setLogin(userDTO.getLogin());
                 user.setFirstName(userDTO.getFirstName());
                 user.setLastName(userDTO.getLastName());
