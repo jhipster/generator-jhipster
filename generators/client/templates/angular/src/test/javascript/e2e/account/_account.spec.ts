@@ -153,6 +153,7 @@ describe('account', () => {
         expect(passwordPage.getTitle()).toMatch(/Password for \[admin\]/);
         <%_ } _%>
 
+        passwordPage.setCurrentPassword('admin');
         passwordPage.setPassword('newpassword');
         passwordPage.setConfirmPassword('newpassword');
         passwordPage.save();

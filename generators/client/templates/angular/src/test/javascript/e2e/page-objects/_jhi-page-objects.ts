@@ -165,10 +165,15 @@ export class SignInPage {
 }
 <%_ if (authenticationType !== 'oauth2') { _%>
 export class PasswordPage {
+    currentPassword = element(by.id('currentPassword'));
     password = element(by.id('newPassword'));
     confirmPassword = element(by.id('confirmPassword'));
     saveButton = element(by.css('button[type=submit]'));
     title = element.all(by.css('h2')).first();
+
+    setCurrentPassword(password) {
+        this.currentPassword.sendKeys(password);
+    }
 
     setPassword(password) {
         this.password.sendKeys(password);
