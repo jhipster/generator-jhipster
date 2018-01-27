@@ -165,7 +165,7 @@ export class SignInPage {
 }
 <%_ if (authenticationType !== 'oauth2') { _%>
 export class PasswordPage {
-    password = element(by.id('password'));
+    password = element(by.id('newPassword'));
     confirmPassword = element(by.id('confirmPassword'));
     saveButton = element(by.css('button[type=submit]'));
     title = element.all(by.css('h2')).first();
