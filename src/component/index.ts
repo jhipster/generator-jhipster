@@ -17,3 +17,5 @@
  limitations under the License.
  */
 export * from './private-route';
+export * from './pagination/pagination';
+export * from './pagination/pagination-utils';
