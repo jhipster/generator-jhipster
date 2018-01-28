@@ -387,7 +387,7 @@ public class UserService {
     }
 <%_ if (authenticationType !== 'oauth2') { _%>
 
-        public void changePassword(String currentClearTextPassword, String newPassword) {
+    public void changePassword(String currentClearTextPassword, String newPassword) {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {

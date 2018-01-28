@@ -149,9 +149,9 @@ describe('account', () => {
 
         <%_ if (enableTranslation) { _%>
         expect(passwordPage.getTitle()).toMatch(/password.title/);
-            <%_ } else { _%>
+        <%_ } else { _%>
         expect(passwordPage.getTitle()).toMatch(/Password for \[admin\]/);
-            <%_ } _%>
+        <%_ } _%>
 
         passwordPage.setCurrentPassword('wrong_current_password');
         passwordPage.setPassword('newpassword');
@@ -159,10 +159,10 @@ describe('account', () => {
         passwordPage.save();
 
         <%_ if (enableTranslation) { _%>
-            const expect2 = /password.messages.error/;
-            <%_ } else { _%>
-            const expect2 = /An error has occurred! The password could not be changed./;
-            <%_ } _%>
+        const expect2 = /password.messages.error/;
+        <%_ } else { _%>
+        const expect2 = /An error has occurred! The password could not be changed./;
+        <%_ } _%>
         element.all(by.css('.alert-danger')).first().<%- elementGetter %>.then((value) => {
             expect(value).toMatch(expect2);
         });

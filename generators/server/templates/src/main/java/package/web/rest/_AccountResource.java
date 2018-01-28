@@ -289,7 +289,7 @@ public class AccountResource {
             throw new InvalidPasswordException();
         }
         userService.changePassword(passwordChangeDto.getCurrentPassword(),passwordChangeDto.getNewPassword());
-    }<% if (authenticationType === 'session') { %>
+   }<% if (authenticationType === 'session') { %>
 
     /**
      * GET  /account/sessions : get the current open sessions.
