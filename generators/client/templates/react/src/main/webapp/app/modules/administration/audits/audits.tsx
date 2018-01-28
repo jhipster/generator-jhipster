@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Input } from 'reactstrap';
 import {
   Translate,
-  ICrudGetAction,
   TextFormat,
   JhiPagination,
   getPaginationItemsNumber,
@@ -53,7 +52,7 @@ export class AuditsPage extends React.Component<IAuditsPageProps, IPaginationSta
     }, () => this.getAudits());
   }
 
-  previousMonth(): string {
+  previousMonth = (): string => {
     const now: Date = new Date();
     const fromDate = now.getMonth() === 0
       ? new Date(now.getFullYear() - 1, 11, now.getDate())
@@ -61,7 +60,7 @@ export class AuditsPage extends React.Component<IAuditsPageProps, IPaginationSta
     return fromDate.toISOString().slice(0, 10);
   }
 
-  today(): string {
+  today = (): string => {
     // Today + 1 day - needed if the current day must be included
     const today: Date = new Date();
     today.setDate(today.getDate() + 1);
@@ -76,7 +75,7 @@ export class AuditsPage extends React.Component<IAuditsPageProps, IPaginationSta
     }, () => this.transition());
   }
 
-  transition() {
+  transition = () => {
     this.getAudits();
     this.props.history.push(`${this.props.location.pathname}?page=${this.state.activePage}&sort=${this.state.sort},${this.state.order}`);
   }
@@ -89,7 +88,7 @@ export class AuditsPage extends React.Component<IAuditsPageProps, IPaginationSta
   }
 
   render() {
-    const { audits, onChangeFromDate, onChangeToDate, totalItems } = this.props;
+    const { audits, totalItems } = this.props;
     const { fromDate, toDate } = this.state;
     return (
       <div>
