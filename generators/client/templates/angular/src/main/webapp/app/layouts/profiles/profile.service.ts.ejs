@@ -38,11 +38,7 @@ export class ProfileService {
                     const pi = new ProfileInfo();
                     pi.activeProfiles = data['activeProfiles'];
                     const displayRibbonOnProfiles = data['displayRibbonOnProfiles'].split(',');
-
-                    const ribbonProfiles = displayRibbonOnProfiles.filter(function(profile) {
-                        return pi.activeProfiles.includes(profile);
-                    });
-
+                    const ribbonProfiles = displayRibbonOnProfiles.filter((profile) => pi.activeProfiles.includes(profile));
                     if (ribbonProfiles.length !== 0) {
                         pi.ribbonEnv = ribbonProfiles[0];
                     }
