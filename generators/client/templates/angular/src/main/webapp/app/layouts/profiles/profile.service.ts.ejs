@@ -36,8 +36,8 @@ export class ProfileService {
                 .map((res: HttpResponse<ProfileInfo>) => {
                     const data = res.body;
                     const pi = new ProfileInfo();
-                    pi.activeProfiles = data['active-profiles'];
-                    const displayRibbonOnProfiles = data['display-ribbon-on-profiles'].split(',');
+                    pi.activeProfiles = data['activeProfiles'];
+                    const displayRibbonOnProfiles = data['displayRibbonOnProfiles'].split(',');
 
                     const ribbonProfiles = displayRibbonOnProfiles.filter(function(profile) {
                         return pi.activeProfiles.includes(profile);
