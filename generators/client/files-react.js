@@ -301,7 +301,8 @@ const files = {
                 'shared/layout/footer/footer.tsx',
                 'shared/layout/header/header.tsx',
                 // util
-                'shared/util/date-utils.ts'
+                'shared/util/date-utils.ts',
+                'shared/util/pagination.constants.ts'
                 // components
                 // model
             ]

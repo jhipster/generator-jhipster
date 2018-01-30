@@ -20,7 +20,8 @@ const initialState = {
   authorities: [],
   user: {},
   updating: false,
-  updateSuccess: false
+  updateSuccess: false,
+  totalItems: 0
 };
 
 // Reducer
@@ -70,7 +71,8 @@ export default (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        users: action.payload.data
+        users: action.payload.data,
+        totalItems: action.payload.headers['x-total-count']
       };
     case SUCCESS(ACTION_TYPES.FETCH_USER):
       return {
@@ -100,10 +102,13 @@ export default (state = initialState, action) => {
 
 const apiUrl = '/api/users';
 // Actions
-export const getUsers: ICrudGetAction = (page, size, sort) => ({
-  type: ACTION_TYPES.FETCH_USERS,
-  payload: axios.get(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
-});
+export const getUsers: ICrudGetAction = (page, size, sort) => {
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
+  return {
+    type: ACTION_TYPES.FETCH_USERS,
+    payload: axios.get(requestUrl)
+  };
+};
 
 export const getRoles: ICrudGetAction = () => ({
   type: ACTION_TYPES.FETCH_ROLES,
