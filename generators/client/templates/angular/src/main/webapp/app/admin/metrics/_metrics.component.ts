@@ -66,8 +66,8 @@ export class <%=jhiPrefixCapitalized%>MetricsMonitoringComponent implements OnIn
 
                     // Keep the name of the domain
                     this.cachesStats[newKey] = {
-                        'name': this.JCACHE_KEY.length,
-                        'value': value
+                        name: this.JCACHE_KEY.length,
+                        value
                     };
                 }
             });

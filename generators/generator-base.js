@@ -281,7 +281,8 @@ module.exports = class extends PrivateBase {
                 let importStatement = `|import { ${appName}${entityAngularName}Module } from './${entityFolderName}/${entityFileName}.module';`;
                 if (importStatement.length > constants.LINE_LENGTH) {
                     importStatement =
-                        `|import {
+                        `|// prettier-ignore
+                        |import {
                         |    ${appName}${entityAngularName}Module
                         |} from './${entityFolderName}/${entityFileName}.module';`;
                 }
@@ -1383,6 +1384,34 @@ module.exports = class extends PrivateBase {
             }, this);
         } catch (e) {
             this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}maven plugin (groupId: ${groupId}, artifactId:${artifactId}, version:${version})${chalk.yellow(' not added.\n')}`);
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
+     * Add a new Maven profile.
+     *
+     * @param {string} profileId - profile ID
+     * @param {string} other - explicit other thing: build, dependencies...
+     */
+    addMavenProfile(profileId, other) {
+        const fullPath = 'pom.xml';
+        try {
+            let profile = '<profile>\n' +
+                `            <id>${profileId}</id>\n`;
+            if (other) {
+                profile += `${other}\n`;
+            }
+            profile += '        </profile>';
+            jhipsterUtils.rewriteFile({
+                file: fullPath,
+                needle: 'jhipster-needle-maven-add-profile',
+                splicable: [
+                    profile
+                ]
+            }, this);
+        } catch (e) {
+            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}maven profile (id: ${profileId})${chalk.yellow(' not added.\n')}`);
             this.debug('Error:', e);
         }
     }

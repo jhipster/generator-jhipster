@@ -1624,5 +1624,6 @@
                 </dependency>
             </dependencies>
         </profile>
+        <!-- jhipster-needle-maven-add-profile -->
     </profiles>
 </project>
