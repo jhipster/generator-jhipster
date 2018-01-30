@@ -117,8 +117,6 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         }, {
             reload: false
         }),
-        new webpack.NoEmitOnErrorsPlugin(),
-        new webpack.NamedModulesPlugin(),
         new writeFilePlugin(),
         new webpack.WatchIgnorePlugin([
             utils.root('src/test'),

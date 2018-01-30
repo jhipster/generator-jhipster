@@ -121,7 +121,7 @@
     "<%= module.name %>": "<%= module.version %>",
     <%_ }); _%>
     "uglifyjs-webpack-plugin": "1.1.5",
-    "webpack": "3.10.0",
+    "webpack": "4.0.0-beta.0",
     "webpack-dev-server": "2.9.5",
     "webpack-merge": "4.1.1",
     "webpack-notifier": "1.5.1",
