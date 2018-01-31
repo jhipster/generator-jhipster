@@ -59,6 +59,8 @@
         "form": {
             "username": "Kasutajanimi",
             "username.placeholder": "Teie kasutajanimi",
+            "currentpassword": "Current password",
+            "currentpassword.placeholder": "Current password",
             "newpassword": "Uus salasõna",
             "newpassword.placeholder": "Uus salasõna",
             "confirmpassword": "Uus salasõna uuesti",

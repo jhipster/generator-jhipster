@@ -59,6 +59,8 @@
         "form": {
             "username": "اسم المستخدم",
             "username.placeholder": "إسم المستخدم الخاص بك",
+            "currentpassword": "Current password",
+            "currentpassword.placeholder": "Current password",
             "newpassword": "كلمة السر الجديدة",
             "newpassword.placeholder": "كلمة السر الجديدة",
             "confirmpassword": "تأكيد كلمة السر الجديدة",

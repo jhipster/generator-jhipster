@@ -605,6 +605,7 @@ function writeFiles() {
                         this.template(`${SERVER_MAIN_SRC_DIR}package/service/_UserService.java`, `${javaDir}service/UserService.java`);
                         this.template(`${SERVER_MAIN_SRC_DIR}package/service/dto/_package-info.java`, `${javaDir}service/dto/package-info.java`);
                         this.template(`${SERVER_MAIN_SRC_DIR}package/service/dto/_UserDTO.java`, `${javaDir}service/dto/UserDTO.java`);
+                        this.template(`${SERVER_MAIN_SRC_DIR}package/service/dto/_PasswordChangeDTO.java`, `${javaDir}service/dto/PasswordChangeDTO.java`);
                         this.template(`${SERVER_MAIN_SRC_DIR}package/service/mapper/_package-info.java`, `${javaDir}service/mapper/package-info.java`);
                         this.template(`${SERVER_MAIN_SRC_DIR}package/service/mapper/_UserMapper.java`, `${javaDir}service/mapper/UserMapper.java`);
                         this.template(`${SERVER_MAIN_SRC_DIR}package/repository/_UserRepository.java`, `${javaDir}repository/UserRepository.java`);
@@ -671,6 +672,7 @@ function writeFiles() {
             /* User management java web files */
             this.template(`${SERVER_MAIN_SRC_DIR}package/service/dto/_package-info.java`, `${javaDir}service/dto/package-info.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/service/dto/_UserDTO.java`, `${javaDir}service/dto/UserDTO.java`);
+            this.template(`${SERVER_MAIN_SRC_DIR}package/service/dto/_PasswordChangeDTO.java`, `${javaDir}service/dto/PasswordChangeDTO.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/vm/_ManagedUserVM.java`, `${javaDir}web/rest/vm/ManagedUserVM.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_AccountResource.java`, `${javaDir}web/rest/AccountResource.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_UserResource.java`, `${javaDir}web/rest/UserResource.java`);

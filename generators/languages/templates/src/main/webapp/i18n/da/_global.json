@@ -59,6 +59,8 @@
         "form": {
             "username": "Brugernavn",
             "username.placeholder": "Dit brugernavn",
+            "currentpassword": "Current password",
+            "currentpassword.placeholder": "Current password",
             "newpassword": "Nyt kodeord",
             "newpassword.placeholder": "Indtast det nye kodeord",
             "confirmpassword": "Bekræft det nye kodeordet",
