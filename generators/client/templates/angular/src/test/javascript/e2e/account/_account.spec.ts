@@ -154,8 +154,8 @@ describe('account', () => {
         <%_ } _%>
 
         passwordPage.setCurrentPassword('wrong_current_password');
-        passwordPage.setPassword('newpassword');
-        passwordPage.setConfirmPassword('newpassword');
+        passwordPage.setPassword('new_password');
+        passwordPage.setConfirmPassword('new_password');
         passwordPage.save();
 
         <%_ if (enableTranslation) { _%>
