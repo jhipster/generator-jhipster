@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
 import { ActivatedRoute, Router } from '@angular/router';
 <%_ } else if (searchEngine === 'elasticsearch') { _%>
@@ -88,7 +88,7 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
 
         <%_ } _%>
         <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
-    private onSuccess(data, headers) {
+    private onSuccess(data: <%= entityAngularName %>[], headers: HttpHeaders) {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
@@ -98,7 +98,7 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
         this.<%= entityInstancePlural %> = data;
     }
         <%_ } else if (pagination === 'infinite-scroll') { _%>
-    private onSuccess(data, headers) {
+    private onSuccess(data: <%= entityAngularName %>[], headers: HttpHeaders) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
         for (let i = 0; i < data.length; i++) {
