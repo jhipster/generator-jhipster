@@ -27,10 +27,10 @@ if (!viaService) {
     if (dto === 'mapstruct') {
         resultEntity = entityInstance; %>
         <%= entityClass %> <%= entityInstance %> = <%= dtoToEntity %>(<%= instanceName %>);
-        <%= entityInstance %> = <%= entityInstance %>Repository.saveAndFlush(<%= entityInstance %>);
+        <%= entityInstance %> = <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
         <%= returnPrefix %> <%= entityToDto %>(<%= entityInstance %>);<% } else {
     resultEntity = 'result'; %>
-        <%= returnPrefix %> <%= entityInstance %>Repository.saveAndFlush(<%= entityInstance %>);<% } if (searchEngine === 'elasticsearch') { %>
+        <%= returnPrefix %> <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);<% } if (searchEngine === 'elasticsearch') { %>
         <%= entityInstance %>SearchRepository.save(<%= resultEntity %>);<% if (returnDirectly) { %>
         return result;<% }}} else { %>
         <%= returnPrefix %> <%= entityInstance %>Service.save(<%= instanceName %>);<% } %>
