@@ -59,6 +59,8 @@
         "form": {
             "username": "Username",
             "username.placeholder": "Username anda",
+            "currentpassword": "Current password",
+            "currentpassword.placeholder": "Current password",
             "newpassword": "Password baru",
             "newpassword.placeholder": "Ketik password baru anda disini",
             "confirmpassword": "Konfirmasi password baru",

@@ -59,6 +59,8 @@
         "form": {
             "username": "Օգվողի անուն",
             "username.placeholder": "Ձեր օգտվողի անունը",
+            "currentpassword": "Current password",
+            "currentpassword.placeholder": "Current password",
             "newpassword": "Նոր գաղտնաբառ",
             "newpassword.placeholder": "Նոր գաղտնաբառ",
             "confirmpassword": "Նոր գաղտնաբառի հաստատում",

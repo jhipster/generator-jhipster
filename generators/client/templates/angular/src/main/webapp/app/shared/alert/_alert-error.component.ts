@@ -38,8 +38,9 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
 
     alerts: any[];
     cleanHttpErrorListener: Subscription;
-    // tslint:disable-next-line: no-unused-variable
+    /* tslint:disable */
     constructor(private alertService: JhiAlertService, private eventManager: JhiEventManager<% if (enableTranslation) { %>, private translateService: TranslateService<% } %>) {
+    /* tslint:enable */
         this.alerts = [];
 
         this.cleanHttpErrorListener = eventManager.subscribe('<%=angularAppName%>.httpError', (response) => {

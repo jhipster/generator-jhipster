@@ -82,6 +82,7 @@ limitations under the License.
     "file-loader": "1.1.5",
     "html-webpack-plugin": "2.30.1",
     "http-proxy-middleware": "0.17.4",
+    "husky": "0.14.3",
     "image-webpack-loader": "3.4.2",
     <%_ if (protractorTests) { _%>
     "jasmine-reporters": "2.2.1",
@@ -99,10 +100,12 @@ limitations under the License.
     "karma-remap-istanbul": "0.6.0",
     "karma-sourcemap-loader": "0.3.7",
     "karma-webpack": "2.0.5",
+    "lint-staged": "6.0.0",
     <%_ if (enableTranslation) { _%>
     "merge-jsons-webpack-plugin": "1.0.12",
     <%_ } _%>
     "mocha": "4.0.1",
+    "prettier": "1.9.2",
     <%_ if (protractorTests) { _%>
     "protractor": "5.1.2",
     "protractor-jasmine2-screenshot-reporter": "0.4.1",
@@ -131,6 +134,7 @@ limitations under the License.
     "ts-node": "3.3.0",
     <%_ } _%>
     "tslint": "5.8.0",
+    "tslint-config-prettier": "1.6.0",
     "tslint-eslint-rules": "4.1.1",
     "tslint-loader": "3.5.3",
     "tslint-microsoft-contrib": "5.0.1",
@@ -152,7 +156,12 @@ limitations under the License.
   "engines": {
     "node": ">=6.9.0"
   },
+  "lint-staged": {
+    "*.{ts,tsx}": ["prettier --write", "git add"]
+  },
   "scripts": {
+    "precommit": "lint-staged",
+    "prettier:format":"<%= clientPackageManager %> prettier --write '**/*.{ts,tsx}'",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "cleanup": "rimraf <%= BUILD_DIR %>www",

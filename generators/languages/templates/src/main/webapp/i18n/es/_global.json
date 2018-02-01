@@ -59,6 +59,8 @@
         "form": {
             "username": "Usuario",
             "username.placeholder": "Nombre de usuario",
+            "currentpassword": "Current password",
+            "currentpassword.placeholder": "Current password",
             "newpassword": "Nueva contraseña",
             "newpassword.placeholder": "Nueva contraseña",
             "confirmpassword": "Confirmación de la nueva contraseña",

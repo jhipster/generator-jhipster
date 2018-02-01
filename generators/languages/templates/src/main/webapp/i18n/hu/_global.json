@@ -59,6 +59,8 @@
         "form": {
             "username": "Azonosító",
             "username.placeholder": "Az Ön felhasználói neve",
+            "currentpassword": "Current password",
+            "currentpassword.placeholder": "Current password",
             "newpassword": "Új jelszó",
             "newpassword.placeholder": "Új jelszava",
             "confirmpassword": "Új jelszó megerősítése",

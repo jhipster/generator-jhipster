@@ -59,6 +59,8 @@
         "form": {
             "username": "Username",
             "username.placeholder": "Uw username",
+            "currentpassword": "Current password",
+            "currentpassword.placeholder": "Current password",
             "newpassword": "Nieuw wachtwoord",
             "newpassword.placeholder": "Nieuw wachtwoord",
             "confirmpassword": "Nieuw wachtwoord bevestigen",

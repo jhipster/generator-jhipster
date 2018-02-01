@@ -281,7 +281,8 @@ module.exports = class extends PrivateBase {
                 let importStatement = `|import { ${appName}${entityAngularName}Module } from './${entityFolderName}/${entityFileName}.module';`;
                 if (importStatement.length > constants.LINE_LENGTH) {
                     importStatement =
-                        `|import {
+                        `|// prettier-ignore
+                        |import {
                         |    ${appName}${entityAngularName}Module
                         |} from './${entityFolderName}/${entityFileName}.module';`;
                 }
