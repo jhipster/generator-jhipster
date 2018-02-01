@@ -107,7 +107,7 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
     }
 
     <%_ }} _%>
-    private onError(error) {
-        this.jhiAlertService.error(error.message, null, null);
+    private onError(errorMessage: string) {
+        this.jhiAlertService.error(errorMessage, null, null);
     }
 }
