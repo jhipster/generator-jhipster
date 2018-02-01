@@ -91,7 +91,7 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
     private onSuccess(data: <%= entityAngularName %>[], headers: HttpHeaders) {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.links = this.parseLinks.parse(headers.get('link'));
-        this.totalItems = headers.get('X-Total-Count');
+        this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
         this.queryCount = this.totalItems;
         // this.page = pagingParams.page;
         <%_ } _%>
@@ -100,7 +100,7 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
         <%_ } else if (pagination === 'infinite-scroll') { _%>
     private onSuccess(data: <%= entityAngularName %>[], headers: HttpHeaders) {
         this.links = this.parseLinks.parse(headers.get('link'));
-        this.totalItems = headers.get('X-Total-Count');
+        this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
         for (let i = 0; i < data.length; i++) {
             this.<%= entityInstancePlural %>.push(data[i]);
         }
