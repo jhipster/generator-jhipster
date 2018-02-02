@@ -133,9 +133,8 @@ module.exports = class extends BaseGenerator {
             askForApplicationType: prompts.askForApplicationType,
             askForPath: prompts.askForPath,
             askForApps: prompts.askForApps,
-            // cluster for mongodb: it can be done later
-            // askForClustersMode: prompts.askForClustersMode,
             askForMonitoring: prompts.askForMonitoring,
+            askForClustersMode: prompts.askForClustersMode,
             askForServiceDiscovery: prompts.askForServiceDiscovery,
             askForAdminPassword: prompts.askForAdminPassword,
             askForKubernetesNamespace: prompts.askForKubernetesNamespace,
@@ -157,6 +156,10 @@ module.exports = class extends BaseGenerator {
             generateJwtSecret: docker.generateJwtSecret,
             configureImageNames: docker.configureImageNames,
             setAppsFolderPaths: docker.setAppsFolderPaths,
+
+            setDistributedDBReplicaCount() {
+                this.appConfigs.forEach((element) => element.clusteredDb ? element.dbPeerCount = 3 : element.dbPeerCount = 1);
+            },
 
             saveConfig() {
                 this.config.set('appsFolders', this.appsFolders);
