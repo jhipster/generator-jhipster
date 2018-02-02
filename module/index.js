@@ -29,6 +29,7 @@ const JDLParser = require('../lib/parser/jdl_parser');
 const convertToJHipsterJSON = require('../lib/parser/entity_parser').parse;
 const JsonParser = require('../lib/parser/json_parser');
 const JDLObject = require('../lib/core/jdl_object');
+const JDLApplication = require('../lib/core/jdl_application');
 const JDLEntity = require('../lib/core/jdl_entity');
 const JDLField = require('../lib/core/jdl_field');
 const JDLValidation = require('../lib/core/jdl_validation');
@@ -61,6 +62,7 @@ module.exports = {
   isReservedFieldName: ReservedKeywords.isReservedFieldName,
   /* JDL objects */
   JDLObject,
+  JDLApplication,
   JDLEntity,
   JDLField,
   JDLValidation,
