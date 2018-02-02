@@ -18,14 +18,16 @@
 -%>
 package <%=packageName%>.domain;<%
 let importApiModelProperty = false;
-let importJsonignore = false;
+let importJsonIgnore = false;
+let importJsonIgnoreProperties = false;
 let importSet = false;
 const uniqueEnums = {}; %><%- include imports -%>
 
 <%_ if (databaseType === 'cassandra') { _%>
 import com.datastax.driver.mapping.annotations.*;
-<%_ } if (importJsonignore === true) { _%>
+<%_ } if (importJsonIgnore === true) { _%>
 import com.fasterxml.jackson.annotation.JsonIgnore;
+<%_ } if (importJsonIgnoreProperties === true) { _%>
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 <%_ } if (typeof javadoc != 'undefined') { _%>
 import io.swagger.annotations.ApiModel;
