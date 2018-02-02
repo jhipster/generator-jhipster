@@ -326,7 +326,7 @@ module.exports = class extends BaseGenerator {
                             this.warning(`otherEntityRelationshipName is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(relationship, null, 4)}, using ${_.lowerFirst(entityName)} as fallback`);
                         } else if (relationship.relationshipType === 'many-to-one') {
                             const otherEntityNameCapitalized = _.upperFirst(relationship.otherEntityName);
-                            const otherConfigFile = `${context.jhipsterConfigDirectory}/${otherEntityNameCapitalized}.json`
+                            const otherConfigFile = `${context.jhipsterConfigDirectory}/${otherEntityNameCapitalized}.json`;
                             const otherFileData = this.fs.readJSON(otherConfigFile);
                             otherFileData.relationships.forEach((otherRelationship) => {
                                 if (otherRelationship.otherEntityRelationshipName === relationship.relationshipName && otherRelationship.relationshipType === 'one-to-many') {
