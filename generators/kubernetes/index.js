@@ -158,7 +158,9 @@ module.exports = class extends BaseGenerator {
             setAppsFolderPaths: docker.setAppsFolderPaths,
 
             setDistributedDBReplicaCount() {
-                this.appConfigs.forEach((element) => element.clusteredDb ? element.dbPeerCount = 3 : element.dbPeerCount = 1);
+                this.appConfigs.forEach((element) => {
+                    element.clusteredDb ? element.dbPeerCount = 3 : element.dbPeerCount = 1;
+                });
             },
 
             saveConfig() {
