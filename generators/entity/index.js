@@ -324,18 +324,6 @@ module.exports = class extends BaseGenerator {
                         if ((relationship.relationshipType === 'one-to-many' || (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) || (relationship.relationshipType === 'one-to-one'))) {
                             relationship.otherEntityRelationshipName = _.lowerFirst(entityName);
                             this.warning(`otherEntityRelationshipName is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(relationship, null, 4)}, using ${_.lowerFirst(entityName)} as fallback`);
-                        } else if (relationship.relationshipType === 'many-to-one') {
-                            const otherEntityNameCapitalized = _.upperFirst(relationship.otherEntityName);
-                            const otherConfigFile = `${context.jhipsterConfigDirectory}/${otherEntityNameCapitalized}.json`;
-                            const otherFileData = this.fs.readJSON(otherConfigFile);
-                            if(otherFileData && otherFileData.relationships) {
-                                otherFileData.relationships.forEach((otherRelationship) = > {
-                                    if(otherRelationship.otherEntityRelationshipName === relationship.relationshipName && otherRelationship.relationshipType === 'one-to-many')
-                                    {
-                                        relationship.otherEntityRelationshipName = otherRelationship.relationshipName;
-                                    }
-                                });
-                            }
                         }
                     }
 
@@ -623,6 +611,18 @@ module.exports = class extends BaseGenerator {
 
                     if (_.isUndefined(relationship.otherEntityNameCapitalized)) {
                         relationship.otherEntityNameCapitalized = _.upperFirst(relationship.otherEntityName);
+                    }
+
+                    if (_.isUndefined(relationship.otherEntityRelationshipName)) {
+                        if (relationship.relationshipType === 'many-to-one') {
+                            if (otherEntityData && otherEntityData.relationships) {
+                                otherEntityData.relationships.forEach((otherRelationship) => {
+                                    if (otherRelationship.otherEntityRelationshipName === relationship.relationshipName && otherRelationship.relationshipType === 'one-to-many') {
+                                        relationship.otherEntityRelationshipName = otherRelationship.relationshipName;
+                                    }
+                                });
+                            }
+                        }
                     }
 
                     if (_.isUndefined(relationship.otherEntityAngularName)) {
