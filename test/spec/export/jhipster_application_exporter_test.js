@@ -141,9 +141,6 @@ describe('JHipsterApplicationExporter', () => {
             packageFolder: 'com/mathieu/sample',
             packageName: 'com.mathieu.sample',
             prodDatabaseType: 'mysql',
-            promptValues: {
-              packageName: 'com.mathieu.sample'
-            },
             searchEngine: false,
             serverPort: 8080,
             serviceDiscoveryType: false,
@@ -238,9 +235,6 @@ describe('JHipsterApplicationExporter', () => {
               packageFolder: 'com/mathieu/toto',
               packageName: 'com.mathieu.toto',
               prodDatabaseType: 'mysql',
-              promptValues: {
-                packageName: 'com.mathieu.toto'
-              },
               searchEngine: false,
               serverPort: 8080,
               serviceDiscoveryType: false,
@@ -307,9 +301,6 @@ describe('JHipsterApplicationExporter', () => {
               packageFolder: 'com/mathieu/titi',
               packageName: 'com.mathieu.titi',
               prodDatabaseType: 'mysql',
-              promptValues: {
-                packageName: 'com.mathieu.titi'
-              },
               searchEngine: false,
               serverPort: 8080,
               serviceDiscoveryType: false,
