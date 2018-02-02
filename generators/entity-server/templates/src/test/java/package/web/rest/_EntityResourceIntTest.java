@@ -386,8 +386,11 @@ _%>
         <%= entityClass %> <%= entityInstance %>Es = <%= entityInstance %>SearchRepository.findOne(test<%= entityClass %>.getId());
         <%_ for (idx in fields) { if (fields[idx].fieldType === 'ZonedDateTime') { _%>
         assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>());
-        <%_ }} _%>
-        assertThat(<%= entityInstance %>Es).isEqualToIgnoringGivenFields(test<%= entityClass %> <%_ for (idx in fields) { if (fields[idx].fieldType === 'ZonedDateTime') { _%>, "<%= fields[idx].fieldName %>"  <%_ }} _%>);
+        <%_ }}
+        let ignoredField = "";
+        for (idx in fields) { if (fields[idx].fieldType === 'ZonedDateTime') { ignoredField += ',"' + fields[idx].fieldName + '"' }}
+        for (idx in relationships) { if (relationships[idx].relationshipType === 'many-to-many' || relationships[idx].relationshipType === 'one-to-many') { ignoredField += ',"' + relationships[idx].relationshipFieldNamePlural + '"' }} _%>
+        assertThat(<%= entityInstance %>Es).isEqualToIgnoringGivenFields(test<%= entityClass %> <%- ignoredField %>);
         <%_ } _%>
     }
 
@@ -678,8 +681,11 @@ _%>
         <%= entityClass %> <%= entityInstance %>Es = <%= entityInstance %>SearchRepository.findOne(test<%= entityClass %>.getId());
         <%_ for (idx in fields) { if (fields[idx].fieldType === 'ZonedDateTime') { _%>
         assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>());
-        <%_ }} _%>
-        assertThat(<%= entityInstance %>Es).isEqualToIgnoringGivenFields(test<%= entityClass %> <%_ for (idx in fields) { if (fields[idx].fieldType === 'ZonedDateTime') { _%>, "<%= fields[idx].fieldName %>"  <%_ }} _%>);
+        <%_ }}
+        let ignoredField = "";
+        for (idx in fields) { if (fields[idx].fieldType === 'ZonedDateTime') { ignoredField += ',"' + fields[idx].fieldName + '"' }}
+        for (idx in relationships) { if (relationships[idx].relationshipType === 'many-to-many' || relationships[idx].relationshipType === 'one-to-many') { ignoredField += ',"' + relationships[idx].relationshipFieldNamePlural + '"' }} _%>
+        assertThat(<%= entityInstance %>Es).isEqualToIgnoringGivenFields(test<%= entityClass %> <%- ignoredField %> );
         <%_ } _%>
     }
 
