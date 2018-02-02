@@ -23,15 +23,15 @@ const JDLValidation = require('../../../lib/core/jdl_validation');
 const VALIDATIONS = require('../../../lib/core/jhipster/validations').VALIDATIONS;
 
 describe('JDLValidation', () => {
-  describe('::new', () => {
-    describe('when not passing any argument', () => {
+  context('::new', () => {
+    context('when not passing any argument', () => {
       it('defaults on the \'required\' validation', () => {
         const validation = new JDLValidation();
         expect(validation.name).to.eq('required');
         expect(validation.value).to.eq('');
       });
     });
-    describe('when passing arguments', () => {
+    context('when passing arguments', () => {
       it('uses them', () => {
         const validation = new JDLValidation({
           name: 'min',
@@ -43,30 +43,30 @@ describe('JDLValidation', () => {
     });
   });
   describe('::isValid', () => {
-    describe('when checking the validity of an invalid object', () => {
-      describe('because it is nil or invalid', () => {
+    context('when checking the validity of an invalid object', () => {
+      context('because it is nil or invalid', () => {
         it('returns false', () => {
           expect(JDLValidation.isValid(null)).to.be.false;
           expect(JDLValidation.isValid(undefined)).to.be.false;
         });
       });
-      describe('without a name attribute', () => {
+      context('without a name attribute', () => {
         it('returns false', () => {
           expect(JDLValidation.isValid({})).to.be.false;
         });
       });
-      describe('without a valid name attribute', () => {
+      context('without a valid name attribute', () => {
         it('returns false', () => {
           expect(JDLValidation.isValid({ name: 'something' })).to.be.false;
         });
       });
-      describe('with a valid name but an invalid value', () => {
+      context('with a valid name but an invalid value', () => {
         it('returns false', () => {
           expect(JDLValidation.isValid({ name: VALIDATIONS.MIN })).to.be.false;
         });
       });
     });
-    describe('when checking the validity of a valid object', () => {
+    context('when checking the validity of a valid object', () => {
       it('returns true', () => {
         expect(JDLValidation.isValid({ name: VALIDATIONS.REQUIRED })).to.be.true;
         expect(JDLValidation.isValid({
@@ -77,13 +77,13 @@ describe('JDLValidation', () => {
     });
   });
   describe('#toString', () => {
-    describe('with no value', () => {
+    context('with no value', () => {
       it('stringifies its content', () => {
         const validation = new JDLValidation();
         expect(validation.toString()).to.eq('required');
       });
     });
-    describe('with a value', () => {
+    context('with a value', () => {
       it('stringifies its content', () => {
         const args = {
           name: 'min',
@@ -91,6 +91,14 @@ describe('JDLValidation', () => {
         };
         const validation = new JDLValidation(args);
         expect(validation.toString()).to.eq(`${args.name}(${args.value})`);
+      });
+    });
+    context('when exporting a regexp pattern', () => {
+      it('properly formats it', () => {
+        expect(new JDLValidation({
+          name: VALIDATIONS.PATTERN,
+          value: '[A-z0-9]'
+        }).toString()).to.equal('pattern(/[A-z0-9]/)');
       });
     });
   });

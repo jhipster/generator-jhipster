@@ -25,7 +25,7 @@ const VALIDATIONS = require('../lib/core/jhipster/validations');
 const DATABASE_TYPES = require('../lib/core/jhipster/database_types');
 const JDLReader = require('../lib/reader/jdl_reader');
 const JsonReader = require('../lib/reader/json_reader');
-const convertToJDL = require('../lib/parser/jdl_parser').parse;
+const JDLParser = require('../lib/parser/jdl_parser');
 const convertToJHipsterJSON = require('../lib/parser/entity_parser').parse;
 const JsonParser = require('../lib/parser/json_parser');
 const JDLObject = require('../lib/core/jdl_object');
@@ -76,7 +76,8 @@ module.exports = {
   /* Json reading */
   parseJsonFromDir: JsonReader.parseFromDir,
   /* JDL conversion */
-  convertToJDL,
+  convertToJDL: JDLParser.parse,
+  convertToJDLFromConfigurationObject: JDLParser.parseFromConfigurationObject,
   convertToJHipsterJSON,
   /* Json conversion */
   convertJsonEntitiesToJDL: JsonParser.parseEntities,

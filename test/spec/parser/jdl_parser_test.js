@@ -759,17 +759,29 @@ describe('JDLParser', () => {
       });
       context('when parsing a JDL inside a microservice app', () => {
         context('without the microservice option in the JDL', () => {
-          let input = null;
           let content = null;
 
-          beforeEach(() => {
-            input = parseFromFiles(['./test/test_files/no_microservice.jdl']);
+          before(() => {
+            const input = parseFromFiles(['./test/test_files/no_microservice.jdl']);
             content = JDLParser.parse(input, DatabaseTypes.sql, ApplicationTypes.MICROSERVICE, 'toto');
           });
 
           it('adds it to every entity', () => {
             expect(Object.keys(content.options.options).length).to.equal(1);
-            expect(content.options.options.microservice_toto.entityNames.toString()).to.deep.equal('[*]');
+            expect(content.options.options.microservice_toto.entityNames.toString()).to.equal('[A,B,C,D,E,F,G]');
+          });
+        });
+        context('with the microservice option in the JDL', () => {
+          let content = null;
+
+          before(() => {
+            const input = parseFromFiles(['./test/test_files/simple_microservice_setup.jdl']);
+            content = JDLParser.parse(input, DatabaseTypes.sql, ApplicationTypes.MICROSERVICE, 'toto');
+          });
+
+          it('does not automatically setup the microservice option', () => {
+            expect(Object.keys(content.options.options).length).to.equal(1);
+            expect(content.options.options.microservice_ms.entityNames.toString()).to.equal('[A]');
           });
         });
       });
