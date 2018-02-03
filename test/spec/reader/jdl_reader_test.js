@@ -26,8 +26,8 @@ const parse = require('../../../lib/reader/jdl_reader').parse;
 const parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
 
 describe('::parse', () => {
-  describe('when passing invalid parameters', () => {
-    describe('such as nil', () => {
+  context('when passing invalid parameters', () => {
+    context('such as nil', () => {
       it('throws an error', () => {
         try {
           parse(null);
@@ -37,7 +37,7 @@ describe('::parse', () => {
         }
       });
     });
-    describe('such as an empty array', () => {
+    context('such as an empty array', () => {
       it('throws an error', () => {
         try {
           parse('');
@@ -48,8 +48,8 @@ describe('::parse', () => {
       });
     });
   });
-  describe('when passing valid arguments', () => {
-    describe('when reading JDL content', () => {
+  context('when passing valid arguments', () => {
+    context('when reading JDL content', () => {
       const input = fs.readFileSync('./test/test_files/valid_jdl.jdl', 'utf-8').toString();
       const content = parse(input);
       it('reads it', () => {
@@ -57,10 +57,20 @@ describe('::parse', () => {
       });
     });
   });
+  context('when passing an invalid JDL content', () => {
+    it('fails', () => {
+      try {
+        parse('entiy A');
+        fail();
+      } catch (error) {
+        expect(error.name).to.equal('SyntaxError');
+      }
+    });
+  });
 });
 describe('::parseFromFiles', () => {
-  describe('when passing invalid parameters', () => {
-    describe('such as nil', () => {
+  context('when passing invalid parameters', () => {
+    context('such as nil', () => {
       it('throws an error', () => {
         try {
           parseFromFiles(null);
@@ -70,7 +80,7 @@ describe('::parseFromFiles', () => {
         }
       });
     });
-    describe('such as an empty array', () => {
+    context('such as an empty array', () => {
       it('throws an error', () => {
         try {
           parseFromFiles([]);
@@ -80,7 +90,7 @@ describe('::parseFromFiles', () => {
         }
       });
     });
-    describe('such as files without the \'.jh\' or \'.jdl\' file extension', () => {
+    context('such as files without the \'.jh\' or \'.jdl\' file extension', () => {
       it('throws an error', () => {
         try {
           parseFromFiles(['../../test_files/invalid_file.txt']);
@@ -90,7 +100,7 @@ describe('::parseFromFiles', () => {
         }
       });
     });
-    describe('such as files that do not exist', () => {
+    context('such as files that do not exist', () => {
       it('throws an error', () => {
         try {
           parseFromFiles(['nofile.jh']);
@@ -100,7 +110,7 @@ describe('::parseFromFiles', () => {
         }
       });
     });
-    describe('such as folders', () => {
+    context('such as folders', () => {
       it('throws an error', () => {
         try {
           parseFromFiles(['../../test_files/folder.jdl']);
@@ -111,26 +121,26 @@ describe('::parseFromFiles', () => {
       });
     });
   });
-  describe('when passing valid arguments', () => {
-    describe('when reading a single JDL file', () => {
+  context('when passing valid arguments', () => {
+    context('when reading a single JDL file', () => {
       const content = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
       it('reads it', () => {
         expect(content).not.to.be.null;
       });
     });
-    describe('when reading more than one JDL file', () => {
+    context('when reading more than one JDL file', () => {
       const content = parseFromFiles(['./test/test_files/valid_jdl.jdl', './test/test_files/valid_jdl2.jdl']);
       it('reads them', () => {
         expect(content).not.to.be.null;
       });
     });
-    describe('when reading a complex JDL file', () => {
+    context('when reading a complex JDL file', () => {
       const content = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
       it('reads them', () => {
         expect(content).not.to.be.null;
       });
     });
-    describe('when having multiple internal JDL comments', () => {
+    context('when having multiple internal JDL comments', () => {
       it('ignores them and does not fail', () => {
         try {
           parseFromFiles(['./test/test_files/multiple_jdl_comments.jdl']);
