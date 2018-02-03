@@ -20,11 +20,7 @@
     "activate": {
         "title": "التفعيل",
         "messages": {
-            <%_ if (clientFramework === 'angular1') { _%>
-            "success": "<strong>تم تفعيل المستخدم الخاص بك.</strong> من فضلك <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">تسجيل الدخول</a>.",
-            <%_ } else { _%>
             "success": "<strong>تم تفعيل المستخدم الخاص بك.</strong> من فضلك ",
-            <%_ } _%>
             "error": "<strong>لا يمكن تنشيط المستخدم الخاص بك.</strong> يرجى استخدام نموذج التسجيل للاشتراك."
         }
     }

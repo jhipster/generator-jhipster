@@ -36,11 +36,7 @@
             },
             "messages": {
                 "info": "Elija una contraseña nueva",
-                <%_ if (clientFramework === 'angular1') { _%>
-                "success": "<strong>Su contraseña ha sido restablecida.</strong> Por favor, <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">inicie sesión</a>.",
-                <%_ } else { _%>
                 "success": "<strong>Su contraseña ha sido restablecida.</strong> Por favor, ",
-                <%_ } _%>
                 "keymissing": "Falta la clave de reinicio.",
                 "error": "Su contraseña no puede ser restablecida. Recuerde que una solicitud de reinicio de contraseña sólo es válida durante 24 horas."
             }

@@ -392,7 +392,7 @@ function askForPagination() {
         return;
     }
     const done = this.async();
-    let prompts = [
+    const prompts = [
         {
             type: 'list',
             name: 'pagination',
@@ -401,10 +401,6 @@ function askForPagination() {
                 {
                     value: 'no',
                     name: 'No'
-                },
-                {
-                    value: 'pager',
-                    name: 'Yes, with a simple pager'
                 },
                 {
                     value: 'pagination',
@@ -418,31 +414,6 @@ function askForPagination() {
             default: 0
         }
     ];
-    // Check the issue https://github.com/jhipster/generator-jhipster/issues/5007 for more details
-    if (context.clientFramework !== 'angular1') {
-        prompts = [
-            {
-                type: 'list',
-                name: 'pagination',
-                message: 'Do you want pagination on your entity?',
-                choices: [
-                    {
-                        value: 'no',
-                        name: 'No'
-                    },
-                    {
-                        value: 'pagination',
-                        name: 'Yes, with pagination links'
-                    },
-                    {
-                        value: 'infinite-scroll',
-                        name: 'Yes, with infinite scroll'
-                    }
-                ],
-                default: 0
-            }
-        ];
-    }
     this.prompt(prompts).then((props) => {
         context.pagination = props.pagination;
         this.log(chalk.green('\nEverything is configured, generating the entity...\n'));
@@ -995,7 +966,7 @@ function askForRelationship(done) {
                 (response.relationshipType === 'one-to-one' && response.ownerSide === true))),
             type: 'input',
             name: 'otherEntityField',
-            message: response => `When you display this relationship with Angular, which field from '${response.otherEntityName}' do you want to use? This field will be displayed as a String, so it cannot be a Blob`,
+            message: response => `When you display this relationship on client-side, which field from '${response.otherEntityName}' do you want to use? This field will be displayed as a String, so it cannot be a Blob`,
             default: 'id'
         },
         {

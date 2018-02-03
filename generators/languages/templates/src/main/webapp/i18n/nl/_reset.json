@@ -36,11 +36,7 @@
             },
             "messages": {
                 "info": "Kies een nieuw wachtwoord",
-                <%_ if (clientFramework === 'angular1') { _%>
-                "success": "<strong>Uw wachtwoord is gereset.</strong> Gelieve <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">authenticeer</a>.",
-                <%_ } else { _%>
                 "success": "<strong>Uw wachtwoord is gereset.</strong> Gelieve ",
-                <%_ } _%>
                 "keymissing": "De reset sleutel ontbreekt.",
                 "error": "Uw wachtwoord kon niet gereset worden. Vergeet niet dat een wachtwoord verzoek slechts 24 uur geldig is."
             }
