@@ -67,6 +67,13 @@ module.exports = class extends BaseGenerator {
             defaults: ''
         });
 
+        // This adds support for a `--client-root-folder` flag
+        this.option('client-root-folder', {
+            desc: 'Use a root folder name for entities on client side. By default its empty for monoliths and name of the microservice for gateways',
+            type: String,
+            defaults: ''
+        });
+
         // This adds support for a `--skip-server` flag
         this.option('skip-server', {
             desc: 'Skip the server-side code generation',
@@ -163,7 +170,6 @@ module.exports = class extends BaseGenerator {
                 if (shelljs.test('-f', context.filename)) {
                     this.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
                     context.useConfigurationFile = true;
-                    context.fromPath = context.filename;
                 }
             },
 
@@ -214,7 +220,7 @@ module.exports = class extends BaseGenerator {
                 } else {
                     // existing entity reading values from file
                     this.log(`\nThe entity ${entityName} is being updated.\n`);
-                    this.loadEntityJson();
+                    this.loadEntityJson(context.filename);
                 }
             },
 
@@ -377,6 +383,9 @@ module.exports = class extends BaseGenerator {
                         context.pagination = 'no';
                     }
                 }
+                if (!context.clientRootFolder && context.applicationType === 'gateway' && context.useMicroserviceJson) {
+                    context.clientRootFolder = context.microserviceName;
+                }
             },
 
             writeEntityJson() {
@@ -390,6 +399,7 @@ module.exports = class extends BaseGenerator {
                 }
                 this.data = {};
                 this.data.fluentMethods = context.fluentMethods;
+                this.data.clientRootFolder = context.clientRootFolder;
                 this.data.relationships = context.relationships;
                 this.data.fields = context.fields;
                 this.data.changelogDate = context.changelogDate;
@@ -430,7 +440,8 @@ module.exports = class extends BaseGenerator {
                 context.entityInstancePlural = pluralize(context.entityInstance);
                 context.entityApiUrl = entityNamePluralizedAndSpinalCased;
                 context.entityFileName = _.kebabCase(context.entityNameCapitalized + _.upperFirst(context.entityAngularJSSuffix));
-                context.entityFolderName = context.entityFileName;
+                context.entityFolderName = this.getEntityFolderName(context.clientRootFolder, context.entityFileName);
+                context.entityParentPathAddition = this.getEntityParentPathAddition(context.clientRootFolder);
                 context.entityPluralFileName = entityNamePluralizedAndSpinalCased + context.entityAngularJSSuffix;
                 context.entityServiceFileName = context.entityFileName;
                 context.entityAngularName = context.entityClass + _.upperFirst(_.camelCase(context.entityAngularJSSuffix));

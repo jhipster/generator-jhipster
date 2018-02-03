@@ -24,8 +24,8 @@ import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { JhiDateUtils } from 'ng-jhipster';
 
-import { <%= entityAngularName %>Service } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
-import { SERVER_API_URL } from '../../../../../../main/webapp/app/app.constants';
+import { <%= entityAngularName %>Service } from '../../../../../../<%= entityParentPathAddition %>main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
+import { SERVER_API_URL } from '../../../../../../<%= entityParentPathAddition %>main/webapp/app/app.constants';
 
 describe('Service Tests', () => {
 

@@ -24,10 +24,10 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { Observable } from 'rxjs/Observable';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 
-import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { <%= entityAngularName %>Component } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.component';
-import { <%= entityAngularName %>Service } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
-import { <%= entityAngularName %> } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.model';
+import { <%=angularXAppName%>TestModule } from '../../../<%= entityParentPathAddition %>test.module';
+import { <%= entityAngularName %>Component } from '../../../../../../<%= entityParentPathAddition %>main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.component';
+import { <%= entityAngularName %>Service } from '../../../../../../<%= entityParentPathAddition %>main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
+import { <%= entityAngularName %> } from '../../../../../../<%= entityParentPathAddition %>main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.model';
 
 describe('Component Tests', () => {
 

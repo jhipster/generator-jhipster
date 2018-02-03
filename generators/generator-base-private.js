@@ -897,4 +897,27 @@ module.exports = class extends Generator {
         }
         return 'Long';
     }
+
+    /**
+     * Get a root folder name for entity
+     * @param {string} clientRootFolder
+     * @param {string} entityFileName
+     */
+    getEntityFolderName(clientRootFolder, entityFileName) {
+        if (clientRootFolder) {
+            return `${clientRootFolder}/${entityFileName}`;
+        }
+        return entityFileName;
+    }
+
+    /**
+     * Get a parent folder path addition for entity
+     * @param {string} clientRootFolder
+     */
+    getEntityParentPathAddition(clientRootFolder) {
+        if (clientRootFolder) {
+            return '../';
+        }
+        return '';
+    }
 };

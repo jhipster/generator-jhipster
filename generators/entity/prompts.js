@@ -83,10 +83,9 @@ function askForMicroserviceJson() {
             } else {
                 context.microservicePath = path.resolve(props.microservicePath);
             }
-            context.fromPath = `${context.microservicePath}/${context.jhipsterConfigDirectory}/${context.entityNameCapitalized}.json`;
             context.useConfigurationFile = true;
             context.useMicroserviceJson = true;
-            this.loadEntityJson();
+            this.loadEntityJson(`${context.microservicePath}/${context.jhipsterConfigDirectory}/${context.entityNameCapitalized}.json`);
         }
         done();
     });

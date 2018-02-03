@@ -25,9 +25,9 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { <%= entityAngularName %>DeleteDialogComponent } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>-delete-dialog.component';
-import { <%= entityAngularName %>Service } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
+import { <%=angularXAppName%>TestModule } from '../../../<%= entityParentPathAddition %>test.module';
+import { <%= entityAngularName %>DeleteDialogComponent } from '../../../../../../<%= entityParentPathAddition %>main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>-delete-dialog.component';
+import { <%= entityAngularName %>Service } from '../../../../../../<%= entityParentPathAddition %>main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 
 describe('Component Tests', () => {
 

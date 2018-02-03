@@ -1760,10 +1760,10 @@ module.exports = class extends PrivateBase {
     /**
      * Load an entity configuration file into context.
      */
-    loadEntityJson() {
+    loadEntityJson(fromPath) {
         const context = this.context;
         try {
-            context.fileData = this.fs.readJSON(context.fromPath);
+            context.fileData = this.fs.readJSON(fromPath);
         } catch (err) {
             this.debug('Error:', err);
             this.error(chalk.red('\nThe entity configuration file could not be read!\n'));
@@ -1780,6 +1780,7 @@ module.exports = class extends PrivateBase {
         context.dto = context.fileData.dto;
         context.service = context.fileData.service;
         context.fluentMethods = context.fileData.fluentMethods;
+        context.clientRootFolder = context.fileData.clientRootFolder;
         context.pagination = context.fileData.pagination;
         context.searchEngine = context.fileData.searchEngine || context.searchEngine;
         context.javadoc = context.fileData.javadoc;
@@ -2419,6 +2420,7 @@ module.exports = class extends PrivateBase {
         dest.entityTableName = generator.getTableName(context.options['table-name'] || dest.name);
         dest.entityNameCapitalized = _.upperFirst(dest.name);
         dest.entityAngularJSSuffix = context.options['angular-suffix'];
+        dest.clientRootFolder = context.options['client-root-folder'];
         dest.isDebugEnabled = context.options.debug;
         generator.experimental = context.options.experimental;
         if (dest.entityAngularJSSuffix && !dest.entityAngularJSSuffix.startsWith('-')) {

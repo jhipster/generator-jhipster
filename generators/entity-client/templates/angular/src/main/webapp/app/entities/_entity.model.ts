@@ -77,7 +77,7 @@ relationships.forEach(relationship => {
     variables[fieldName] = fieldName + '?: ' + fieldType;
 });
 _%>
-import { BaseEntity<% if (hasUserRelationship) { %>, User<% } %> } from './../../shared';
+import { BaseEntity<% if (hasUserRelationship) { %>, User<% } %> } from '../../<%= entityParentPathAddition %>shared';
 
 <%_ const enumsAlreadyDeclared = [];
 fields.forEach(field => {
