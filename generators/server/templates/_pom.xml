@@ -150,11 +150,7 @@
         <%_ } _%>
 
         <!-- Sonar properties -->
-        <%_ if (clientFramework === 'angular1') { _%>
-        <sonar.exclusions><%= CLIENT_MAIN_SRC_DIR %>content/**/*.*, <%= CLIENT_MAIN_SRC_DIR %>bower_components/**/*.*, <%= CLIENT_MAIN_SRC_DIR %>i18n/*.js, <%= CLIENT_DIST_DIR %>**/*.*</sonar.exclusions>
-        <%_ } else { _%>
         <sonar.exclusions><%= CLIENT_MAIN_SRC_DIR %>content/**/*.*, <%= CLIENT_MAIN_SRC_DIR %>i18n/*.js, <%= CLIENT_DIST_DIR %>**/*.*</sonar.exclusions>
-        <%_ } _%>
         <sonar.issue.ignore.multicriteria>S3437,UndocumentedApi,BoldAndItalicTagsCheck</sonar.issue.ignore.multicriteria>
         <!-- Rule https://sonarqube.com/coding_rules#rule_key=Web%3ABoldAndItalicTagsCheck is ignored. Even if we agree that using the "i" tag is an awful practice, this is what is recommended by http://fontawesome.io/examples/ -->
         <sonar.issue.ignore.multicriteria.BoldAndItalicTagsCheck.resourceKey><%= CLIENT_MAIN_SRC_DIR %>app/**/*.*</sonar.issue.ignore.multicriteria.BoldAndItalicTagsCheck.resourceKey>
@@ -169,14 +165,7 @@
         <sonar.jacoco.reportPath>${project.testresult.directory}/coverage/jacoco/jacoco.exec</sonar.jacoco.reportPath>
         <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
         <sonar.javascript.jstestdriver.reportsPath>${project.testresult.directory}/karma</sonar.javascript.jstestdriver.reportsPath>
-        <%_ if (clientFramework === 'angular1') { _%>
-        <!-- For Sonar < 6.2 -->
-        <sonar.javascript.lcov.reportPath>${project.testresult.directory}/coverage/report-lcov/lcov.info</sonar.javascript.lcov.reportPath>
-        <!-- For Sonar >= 6.2 -->
-        <sonar.javascript.lcov.reportPaths>${project.testresult.directory}/coverage/report-lcov/lcov.info</sonar.javascript.lcov.reportPaths>
-        <%_ } else { _%>
         <sonar.typescript.lcov.reportPaths>${project.testresult.directory}/coverage/report-lcov/lcov.info</sonar.typescript.lcov.reportPaths>
-        <%_ } _%>
         <sonar.sources>${project.basedir}/<%= MAIN_DIR %></sonar.sources>
         <sonar.surefire.reportsPath>${project.testresult.directory}/surefire-reports</sonar.surefire.reportsPath>
         <sonar.tests>${project.basedir}/<%= TEST_DIR %></sonar.tests>
@@ -1116,10 +1105,6 @@
                                             <goal>install-node-and-npm</goal>
                                             <goal>npm</goal>
                                             <%_ } _%>
-                                            <%_ if (clientFramework === 'angular1') { _%>
-                                            <goal>bower</goal>
-                                            <goal>gulp</goal>
-                                            <%_ } _%>
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
@@ -1147,7 +1132,7 @@
                 <profile.swagger>,swagger</profile.swagger>
             </properties>
         </profile>
-        <%_ if (!skipClient && clientFramework !== 'angular1') { _%>
+        <%_ if (!skipClient) { _%>
         <profile>
             <id>webpack</id>
             <build>
@@ -1232,7 +1217,7 @@
                         <configuration>
                             <failOnMissingWebXml>false</failOnMissingWebXml>
                             <%_ if (!skipClient) { _%>
-                            <warSourceDirectory><% if (clientFramework !== 'angular1') { %><%= CLIENT_DIST_DIR %><% } else { %><%= CLIENT_MAIN_SRC_DIR %><% } %></warSourceDirectory>
+                            <warSourceDirectory><%= CLIENT_MAIN_SRC_DIR %></warSourceDirectory>
                             <webResources>
                                 <resource>
                                     <directory>src/main/webapp</directory>
@@ -1369,37 +1354,6 @@
                             </execution>
                                 <%_ } _%>
                             <%_ } _%>
-                            <%_ if (clientFramework === 'angular1') { _%>
-                            <execution>
-                                <id>bower install</id>
-                                <goals>
-                                    <goal>bower</goal>
-                                </goals>
-                                <configuration>
-                                    <arguments>install --no-color</arguments>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>gulp build</id>
-                                <goals>
-                                    <goal>gulp</goal>
-                                </goals>
-                                <configuration>
-                                    <arguments>build --no-notification</arguments>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>gulp test</id>
-                                <goals>
-                                    <goal>gulp</goal>
-                                </goals>
-                                <phase>test</phase>
-                                <configuration>
-                                    <arguments>test --no-notification</arguments>
-                                </configuration>
-                            </execution>
-                            <%_ } _%>
-                            <%_ if (clientFramework !== 'angular1') { _%>
                             <execution>
                                 <id>webpack build test</id>
                                 <goals>
@@ -1430,7 +1384,6 @@
                                     <%_ } _%>
                                 </configuration>
                             </execution>
-                            <%_ } _%>
                         </executions>
                     </plugin>
                     <%_ } _%>
