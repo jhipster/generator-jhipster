@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+const ApplicationTypes = require('../lib/core/jhipster/application_types');
 const BINARY_OPTIONS = require('../lib/core/jhipster/binary_options');
 const UNARY_OPTIONS = require('../lib/core/jhipster/unary_options');
 const RELATIONSHIP_TYPES = require('../lib/core/jhipster/relationship_types');
@@ -50,6 +51,7 @@ const Set = require('../lib/utils/objects/set');
 
 module.exports = {
   /* JHipster notions */
+  JHipsterApplicationTypes: ApplicationTypes,
   JHipsterBinaryOptions: BINARY_OPTIONS,
   JHipsterUnaryOptions: UNARY_OPTIONS,
   JHipsterRelationshipTypes: RELATIONSHIP_TYPES,
