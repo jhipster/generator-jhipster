@@ -21,7 +21,7 @@
 const expect = require('chai').expect;
 
 const fail = expect.fail;
-const JDLParser = require('../../../lib/parser/jdl_parser');
+const DocumentParser = require('../../../lib/parser/document_parser');
 const EntityParser = require('../../../lib/parser/entity_parser');
 const parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
@@ -49,7 +49,7 @@ describe('EntityParser', () => {
 
         it('throws an error', () => {
           try {
-            EntityParser.parse({ jdlObject: JDLParser.parse(input, 'sql') });
+            EntityParser.parse({ jdlObject: DocumentParser.parse(input, 'sql') });
             fail();
           } catch (error) {
             expect(error.name).to.eq('NullPointerException');
@@ -66,7 +66,7 @@ describe('EntityParser', () => {
         it('throws an error', () => {
           try {
             EntityParser.parse({
-              jdlObject: JDLParser.parse(input, 'sql'),
+              jdlObject: DocumentParser.parse(input, 'sql'),
               databaseType: 'mongodb'
             });
             fail();
@@ -86,7 +86,7 @@ describe('EntityParser', () => {
 
         it('does not fail because of NoSQL modeling mistakes', () => {
           EntityParser.parse({
-            jdlObject: JDLParser.parse(input, 'mysql'),
+            jdlObject: DocumentParser.parse(input, 'mysql'),
             databaseType: 'cassandra',
             applicationType: 'gateway'
           });
@@ -98,7 +98,7 @@ describe('EntityParser', () => {
         before(() => {
           const input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
           content = EntityParser.parse({
-            jdlObject: JDLParser.parse(input, 'mysql'),
+            jdlObject: DocumentParser.parse(input, 'mysql'),
             databaseType: 'mysql'
           });
         });
@@ -126,7 +126,7 @@ describe('EntityParser', () => {
         before(() => {
           const input = parseFromFiles(['./test/test_files/mongo_jdl.jdl']);
           content = EntityParser.parse({
-            jdlObject: JDLParser.parse(input, 'mongodb'),
+            jdlObject: DocumentParser.parse(input, 'mongodb'),
             databaseType: 'mongodb'
           });
         });
@@ -147,7 +147,7 @@ describe('EntityParser', () => {
         before(() => {
           const input = parseFromFiles(['./test/test_files/couchbase_jdl.jdl']);
           content = EntityParser.parse({
-            jdlObject: JDLParser.parse(input, 'couchbase'),
+            jdlObject: DocumentParser.parse(input, 'couchbase'),
             databaseType: 'couchbase'
           });
         });
@@ -168,7 +168,7 @@ describe('EntityParser', () => {
         before(() => {
           const input = parseFromFiles(['./test/test_files/cassandra_jdl.jdl']);
           content = EntityParser.parse({
-            jdlObject: JDLParser.parse(input, 'cassandra'),
+            jdlObject: DocumentParser.parse(input, 'cassandra'),
             databaseType: 'cassandra'
           });
         });
@@ -189,7 +189,7 @@ describe('EntityParser', () => {
         before(() => {
           const input = parseFromFiles(['./test/test_files/required_relationships.jdl']);
           content = EntityParser.parse({
-            jdlObject: JDLParser.parse(input, 'sql'),
+            jdlObject: DocumentParser.parse(input, 'sql'),
             databaseType: 'sql'
           });
         });
@@ -213,7 +213,7 @@ describe('EntityParser', () => {
         before(() => {
           input = parseFromFiles(['./test/test_files/fluent_methods.jdl']);
           content = EntityParser.parse({
-            jdlObject: JDLParser.parse(input, 'sql'),
+            jdlObject: DocumentParser.parse(input, 'sql'),
             databaseType: 'sql'
           });
         });
@@ -228,7 +228,7 @@ describe('EntityParser', () => {
           before(() => {
             input = parseFromFiles(['./test/test_files/fluent_methods2.jdl']);
             content = EntityParser.parse({
-              jdlObject: JDLParser.parse(input, 'sql'),
+              jdlObject: DocumentParser.parse(input, 'sql'),
               databaseType: 'sql'
             });
           });
@@ -246,7 +246,7 @@ describe('EntityParser', () => {
         before(() => {
           const input = parseFromFiles(['./test/test_files/different_relationship_types.jdl']);
           content = EntityParser.parse({
-            jdlObject: JDLParser.parse(input, 'sql'),
+            jdlObject: DocumentParser.parse(input, 'sql'),
             databaseType: 'sql'
           });
         });
@@ -322,7 +322,7 @@ describe('EntityParser', () => {
         before(() => {
           const input = parseFromFiles(['./test/test_files/blob_jdl.jdl']);
           content = EntityParser.parse({
-            jdlObject: JDLParser.parse(input, 'sql'),
+            jdlObject: DocumentParser.parse(input, 'sql'),
             databaseType: 'sql'
           });
         });
@@ -355,7 +355,7 @@ describe('EntityParser', () => {
 
           before(() => {
             const input = parseFromFiles(['./test/test_files/filtering_without_service.jdl']);
-            const jdlObject = JDLParser.parse(input, 'sql');
+            const jdlObject = DocumentParser.parse(input, 'sql');
             content = EntityParser.parse({
               jdlObject,
               databaseType: 'sql'
@@ -379,7 +379,7 @@ describe('EntityParser', () => {
           before(() => {
             const input = parseFromFiles(['./test/test_files/filtering_with_service.jdl']);
             content = EntityParser.parse({
-              jdlObject: JDLParser.parse(input, 'sql'),
+              jdlObject: DocumentParser.parse(input, 'sql'),
               databaseType: 'sql'
             });
           });
@@ -401,7 +401,7 @@ describe('EntityParser', () => {
           before(() => {
             const input = parseFromFiles(['./test/test_files/no_microservice.jdl']);
             content = EntityParser.parse({
-              jdlObject: JDLParser.parse(input, DatabaseTypes.sql, ApplicationTypes.MICROSERVICE, 'toto'),
+              jdlObject: DocumentParser.parse(input, DatabaseTypes.sql, ApplicationTypes.MICROSERVICE, 'toto'),
               databaseType: DatabaseTypes.sql
             });
           });
