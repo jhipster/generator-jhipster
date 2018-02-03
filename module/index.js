@@ -18,12 +18,12 @@
  */
 
 const ApplicationTypes = require('../lib/core/jhipster/application_types');
-const BINARY_OPTIONS = require('../lib/core/jhipster/binary_options');
-const UNARY_OPTIONS = require('../lib/core/jhipster/unary_options');
-const RELATIONSHIP_TYPES = require('../lib/core/jhipster/relationship_types');
-const FIELD_TYPES = require('../lib/core/jhipster/field_types');
-const VALIDATIONS = require('../lib/core/jhipster/validations');
-const DATABASE_TYPES = require('../lib/core/jhipster/database_types');
+const BinaryOptions = require('../lib/core/jhipster/binary_options');
+const UnaryOptions = require('../lib/core/jhipster/unary_options');
+const RelationshipTypes = require('../lib/core/jhipster/relationship_types');
+const FieldTypes = require('../lib/core/jhipster/field_types');
+const Validations = require('../lib/core/jhipster/validations');
+const DatabaseTypes = require('../lib/core/jhipster/database_types');
 const JDLReader = require('../lib/reader/jdl_reader');
 const JsonReader = require('../lib/reader/json_reader');
 const JDLParser = require('../lib/parser/jdl_parser');
@@ -52,12 +52,12 @@ const Set = require('../lib/utils/objects/set');
 module.exports = {
   /* JHipster notions */
   JHipsterApplicationTypes: ApplicationTypes,
-  JHipsterBinaryOptions: BINARY_OPTIONS,
-  JHipsterUnaryOptions: UNARY_OPTIONS,
-  JHipsterRelationshipTypes: RELATIONSHIP_TYPES,
-  JHipsterValidations: VALIDATIONS,
-  JHipsterFieldTypes: FIELD_TYPES,
-  JHipsterDatabaseTypes: DATABASE_TYPES,
+  JHipsterBinaryOptions: BinaryOptions,
+  JHipsterUnaryOptions: UnaryOptions,
+  JHipsterRelationshipTypes: RelationshipTypes,
+  JHipsterValidations: Validations,
+  JHipsterFieldTypes: FieldTypes,
+  JHipsterDatabaseTypes: DatabaseTypes,
   isReservedKeyword: ReservedKeywords.isReserved,
   isReservedClassName: ReservedKeywords.isReservedClassName,
   isReservedTableName: ReservedKeywords.isReservedTableName,
