@@ -30,8 +30,8 @@ import { HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs/Subscription';
 import { JhiEventManager<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
 
-import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
+import { I<%= entityAngularName %> } from '../../<%= entityParentPathAddition %>shared/model/<%= entityFileName %>.model';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-detail',
@@ -39,7 +39,7 @@ import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service
 })
 export class <%= entityAngularName %>DetailComponent implements OnInit, OnDestroy {
 
-    <%= entityInstance %>: <%= entityAngularName %>;
+    <%= entityInstance %>: I<%= entityAngularName %>;
     private subscription: Subscription;
     private eventSubscriber: Subscription;
 
@@ -62,7 +62,7 @@ export class <%= entityAngularName %>DetailComponent implements OnInit, OnDestro
 
     load(id) {
         this.<%= entityInstance %>Service.find(id)
-            .subscribe((<%= entityInstance %>Response: HttpResponse<<%= entityAngularName %>>) => {
+            .subscribe((<%= entityInstance %>Response: HttpResponse<I<%= entityAngularName %>>) => {
                 this.<%= entityInstance %> = <%= entityInstance %>Response.body;
             });
     }

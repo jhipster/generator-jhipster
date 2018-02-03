@@ -49,8 +49,7 @@ export * from './user/account.model';
 export * from './user/user.model';
 export * from './user/user.service';
 <%_ } _%>
-export * from './model/request-util';
-export * from './model/base-entity';
+export * from './util/request-util';
 <%_ if (enableSocialSignIn) { _%>
 export * from './social/social.service';
 export * from './social/social.component';

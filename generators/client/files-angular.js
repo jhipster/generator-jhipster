@@ -381,8 +381,7 @@ const files = {
                 'shared/constants/_error.constants.ts',
                 'shared/constants/_pagination.constants.ts',
                 // models
-                'shared/model/_request-util.ts',
-                'shared/model/_base-entity.ts',
+                'shared/util/_request-util.ts',
                 'shared/user/_account.model.ts',
                 // login
                 'shared/login/_login.service.ts',

@@ -719,13 +719,13 @@ module.exports = class extends Generator {
                 query =
         `this.${relationship.otherEntityName}Service
             .query({filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'})
-            .subscribe((res: HttpResponse<${relationship.otherEntityAngularName}[]>) => {
+            .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
                 if (${relationshipFieldNameIdCheck}) {
                     this.${variableName} = res.body;
                 } else {
                     this.${relationship.otherEntityName}Service
                         .find(${relationshipFieldName}${dto === 'no' ? '.id' : 'Id'})
-                        .subscribe((subRes: HttpResponse<${relationship.otherEntityAngularName}>) => {
+                        .subscribe((subRes: HttpResponse<I${relationship.otherEntityAngularName}>) => {
                             this.${variableName} = [subRes.body].concat(res.body);
                         }, (subRes: HttpErrorResponse) => this.onError(subRes.message));
                 }
@@ -737,11 +737,11 @@ module.exports = class extends Generator {
                 }
                 query =
         `this.${relationship.otherEntityName}Service.query()
-            .subscribe((res: HttpResponse<${relationship.otherEntityAngularName}[]>) => { this.${variableName} = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));`;
+            .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => { this.${variableName} = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));`;
             }
             if (variableName && !this.contains(queries, query)) {
                 queries.push(query);
-                variables.push(`${variableName}: ${relationship.otherEntityAngularName}[];`);
+                variables.push(`${variableName}: I${relationship.otherEntityAngularName}[];`);
             }
         });
         return {

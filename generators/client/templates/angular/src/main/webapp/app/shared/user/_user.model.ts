@@ -16,35 +16,38 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-export class User {
-    public id?: any;
-    public login?: string;
-    public firstName?: string;
-    public lastName?: string;
-    public email?: string;
-    public activated?: Boolean;
-    public langKey?: string;
-    public authorities?: any[];
-    public createdBy?: string;
-    public createdDate?: Date;
-    public lastModifiedBy?: string;
-    public lastModifiedDate?: Date;
-    public password?: string;
 
+export interface IUser {
+    id?: any;
+    login?: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    activated?: Boolean;
+    langKey?: string;
+    authorities?: any[];
+    createdBy?: string;
+    createdDate?: Date;
+    lastModifiedBy?: string;
+    lastModifiedDate?: Date;
+    password?: string;
+}
+
+export class User implements IUser {
     constructor(
-        id?: any,
-        login?: string,
-        firstName?: string,
-        lastName?: string,
-        email?: string,
-        activated?: Boolean,
-        langKey?: string,
-        authorities?: any[],
-        createdBy?: string,
-        createdDate?: Date,
-        lastModifiedBy?: string,
-        lastModifiedDate?: Date,
-        password?: string
+        public id?: any,
+        public login?: string,
+        public firstName?: string,
+        public lastName?: string,
+        public email?: string,
+        public activated?: Boolean,
+        public langKey?: string,
+        public authorities?: any[],
+        public createdBy?: string,
+        public createdDate?: Date,
+        public lastModifiedBy?: string,
+        public lastModifiedDate?: Date,
+        public password?: string
     ) {
         this.id = id ? id : null;
         this.login = login ? login : null;

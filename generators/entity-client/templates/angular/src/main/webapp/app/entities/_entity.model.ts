@@ -17,7 +17,8 @@
  limitations under the License.
 -%>
 <%_
-const variables = {};
+const variablesWithTypes = [];
+const typeImports = new Set();
 const defaultVariablesValues = {};
 let hasUserRelationship = false;
 let tsKeyType;
@@ -26,7 +27,7 @@ if (pkType === 'String') {
 } else {
     tsKeyType = 'number';
 }
-variables['id'] = 'id?: ' + tsKeyType;
+variablesWithTypes.push(`id?: ${tsKeyType}`);
 fields.forEach(field => {
     const fieldType = field.fieldType;
     const fieldName = field.fieldName;
@@ -43,10 +44,10 @@ fields.forEach(field => {
     } else { //(fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate'
         tsType = 'any';
         if (['byte[]', 'ByteBuffer'].includes(fieldType) && field.fieldTypeBlobContent !== 'text') {
-            variables[fieldName + 'ContentType'] = fieldName + 'ContentType?: ' + 'string';
+            variablesWithTypes.push(`${fieldName}ContentType?: string`);
         }
     }
-    variables[fieldName] = fieldName + '?: ' + tsType;
+    variablesWithTypes.push(`${fieldName}?: ${tsType}`);
 });
 relationships.forEach(relationship => {
     let fieldType;
@@ -54,19 +55,21 @@ relationships.forEach(relationship => {
     const relationshipType = relationship.relationshipType;
     if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
         if (relationship.otherEntityAngularName === 'User') {
-            fieldType = 'User[]';
+            fieldType = 'IUser[]';
             hasUserRelationship = true;
         } else {
-            fieldType = 'BaseEntity[]';
+            fieldType = `I${relationship.otherEntityAngularName}[]`;
+            typeImports.add(`import { I${relationship.otherEntityAngularName} } from './${relationship.otherEntityModulePath}.model'`);
         }
         fieldName = relationship.relationshipFieldNamePlural;
     } else {
         if (dto === 'no') {
             if (relationship.otherEntityAngularName === 'User') {
-                fieldType = 'User';
+                fieldType = 'IUser';
                 hasUserRelationship = true;
             } else {
-                fieldType = 'BaseEntity';
+                fieldType = `I${relationship.otherEntityAngularName}`;
+                typeImports.add(`import { I${relationship.otherEntityAngularName} } from './${relationship.otherEntityModulePath}.model'`);
             }
             fieldName = relationship.relationshipFieldName;
         } else {
@@ -74,10 +77,15 @@ relationships.forEach(relationship => {
             fieldName = `${relationship.relationshipFieldName}Id`;
         }
     }
-    variables[fieldName] = fieldName + '?: ' + fieldType;
+    variablesWithTypes.push(`${fieldName}?: ${fieldType}`);
 });
 _%>
-import { BaseEntity<% if (hasUserRelationship) { %>, User<% } %> } from '../../<%= entityParentPathAddition %>shared';
+<%_ if (hasUserRelationship) { _%>
+import { IUser } from '../user/user.model';
+<%_ } _%>
+<%_ typeImports.forEach(typeImport => { _%>
+<%- typeImport %>;
+<%_ }); _%>
 
 <%_ const enumsAlreadyDeclared = [];
 fields.forEach(field => {
@@ -92,9 +100,15 @@ export const enum <%= field.fieldType %> {<%
 
 <%_ }
 }); _%>
-export class <%= entityAngularName %> implements BaseEntity {
-    constructor(<% for (idx in variables) { %>
-        public <%- variables[idx] %>,<% } %>
+export interface I<%= entityAngularName %> {
+    <%_ variablesWithTypes.forEach(variablesWithType => { _%>
+    <%- variablesWithType %>;
+    <%_ }); _%>
+}
+
+export class <%= entityAngularName %> implements I<%= entityAngularName %> {
+    constructor(<% variablesWithTypes.forEach(variablesWithType => { %>
+        public <%- variablesWithType %>,<% }); %>
     ) {<% for (idx in defaultVariablesValues) { %>
         <%- defaultVariablesValues[idx] %><% } %>
     }
