@@ -22,7 +22,6 @@ const _ = require('lodash');
 const BaseGenerator = require('../generator-base');
 const prompts = require('./prompts');
 const writeAngularFiles = require('./files-angular').writeFiles;
-const writeAngularJsFiles = require('./files-angularjs').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
@@ -154,7 +153,7 @@ module.exports = class extends BaseGenerator {
                 this.clientFramework = this.config.get('clientFramework');
                 if (!this.clientFramework) {
                     /* for backward compatibility */
-                    this.clientFramework = 'angular1';
+                    this.clientFramework = 'angularX';
                 }
                 if (this.clientFramework === 'angular2') {
                     /* for backward compatibility */
@@ -360,8 +359,6 @@ module.exports = class extends BaseGenerator {
     writing() {
         if (useBlueprint) return;
         switch (this.clientFramework) {
-        case 'angular1':
-            return writeAngularJsFiles.call(this);
         case 'react':
             return writeReactFiles.call(this);
         default:
@@ -371,16 +368,10 @@ module.exports = class extends BaseGenerator {
 
     install() {
         if (useBlueprint) return;
-        let logMsg =
+        const logMsg =
             `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install`)}`;
 
-        if (this.clientFramework === 'angular1') {
-            logMsg =
-                `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install & bower install`)}`;
-        }
-
         const installConfig = {
-            bower: this.clientFramework === 'angular1',
             npm: this.clientPackageManager !== 'yarn',
             yarn: this.clientPackageManager === 'yarn'
         };
@@ -390,12 +381,8 @@ module.exports = class extends BaseGenerator {
         } else {
             this.installDependencies(installConfig).then(
                 () => {
-                    if (this.clientFramework === 'angular1') {
-                        this.spawnCommandSync('gulp', ['install']);
-                    } else {
-                        this.spawnCommandSync(this.clientPackageManager, ['run', 'prettier:format']);
-                        this.buildResult = this.spawnCommandSync(this.clientPackageManager, ['run', 'webpack:build']);
-                    }
+                    this.spawnCommandSync(this.clientPackageManager, ['run', 'prettier:format']);
+                    this.buildResult = this.spawnCommandSync(this.clientPackageManager, ['run', 'webpack:build']);
                 },
                 (err) => {
                     this.warning('Install of dependencies failed!');
@@ -412,20 +399,9 @@ module.exports = class extends BaseGenerator {
         }
         this.log(chalk.green.bold('\nClient application generated successfully.\n'));
 
-        let logMsg =
+        const logMsg =
             `Start your Webpack development server with:\n ${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
 
-        if (this.clientFramework === 'angular1') {
-            logMsg =
-                'Inject your front end dependencies into your source code:\n' +
-                ` ${chalk.yellow.bold('gulp inject')}\n\n` +
-                'Generate the AngularJS constants:\n' +
-                ` ${chalk.yellow.bold('gulp ngconstant:dev')}` +
-                `${this.useSass ? '\n\nCompile your Sass style sheets:\n\n' +
-                `${chalk.yellow.bold('gulp sass')}` : ''}\n\n` +
-                'Or do all of the above:\n' +
-                ` ${chalk.yellow.bold('gulp install')}\n`;
-        }
         this.log(chalk.green(logMsg));
     }
 };
