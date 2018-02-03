@@ -42,6 +42,7 @@ const JHipsterEntityExporter = require('../lib/export/jhipster_entity_exporter')
 const exportToJDL = require('../lib/export/jdl_exporter').exportToJDL;
 const JSONFileReader = require('../lib/reader/json_file_reader');
 const ReservedKeywords = require('../lib/core/jhipster/reserved_keywords');
+const FileUtils = require('../lib/utils/file_utils');
 const ObjectUtils = require('../lib/utils/object_utils');
 const FormatUtils = require('../lib/utils/format_utils');
 const StringUtils = require('../lib/utils/string_utils');
@@ -98,6 +99,7 @@ module.exports = {
   /* Objects */
   Set,
   /* Utils */
+  FileUtils,
   camelCase: StringUtils.camelCase,
   dateFormatForLiquibase: FormatUtils.dateFormatForLiquibase
 };
