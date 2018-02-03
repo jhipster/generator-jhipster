@@ -24,7 +24,7 @@ const fail = expect.fail;
 const JDLParser = require('../../../lib/parser/jdl_parser');
 const EntityParser = require('../../../lib/parser/entity_parser');
 const parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
-const ApplicationTypes = require('../../../lib/core/jhipster/application_types').APPLICATION_TYPES;
+const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
 const DatabaseTypes = require('../../../lib/core/jhipster/database_types').Types;
 
 describe('EntityParser', () => {
