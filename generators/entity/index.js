@@ -654,7 +654,17 @@ module.exports = class extends BaseGenerator {
                     if (_.isUndefined(relationship.otherEntityModuleName)) {
                         if (relationship.otherEntityNameCapitalized !== 'User') {
                             relationship.otherEntityModuleName = `${context.angularXAppName + relationship.otherEntityNameCapitalized}Module`;
-                            relationship.otherEntityModulePath = _.kebabCase(relationship.otherEntityAngularName);
+                            relationship.otherEntityFileName = _.kebabCase(relationship.otherEntityAngularName);
+                            relationship.otherEntityClientRootFolder = otherEntityData.clientRootFolder;
+                            if (otherEntityData.clientRootFolder) {
+                                if (context.clientRootFolder === otherEntityData.clientRootFolder) {
+                                    relationship.otherEntityModulePath = relationship.otherEntityFileName;
+                                } else {
+                                    relationship.otherEntityModulePath = `${context.entityParentPathAddition ? `${context.entityParentPathAddition}/` : ''}${otherEntityData.clientRootFolder}/${relationship.otherEntityFileName}`;
+                                }
+                            } else {
+                                relationship.otherEntityModulePath = `${context.entityParentPathAddition ? `${context.entityParentPathAddition}/` : ''}${relationship.otherEntityFileName}`;
+                            }
                         } else {
                             relationship.otherEntityModuleName = `${context.angularXAppName}SharedModule`;
                             relationship.otherEntityModulePath = '../shared';

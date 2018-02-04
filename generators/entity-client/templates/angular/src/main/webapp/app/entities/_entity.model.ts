@@ -59,7 +59,7 @@ relationships.forEach(relationship => {
             hasUserRelationship = true;
         } else {
             fieldType = `I${relationship.otherEntityAngularName}[]`;
-            typeImports.add(`import { I${relationship.otherEntityAngularName} } from './${relationship.otherEntityModulePath}.model'`);
+            typeImports.add(`import { I${relationship.otherEntityAngularName} } from './${relationship.otherEntityFileName}.model'`);
         }
         fieldName = relationship.relationshipFieldNamePlural;
     } else {
@@ -69,7 +69,7 @@ relationships.forEach(relationship => {
                 hasUserRelationship = true;
             } else {
                 fieldType = `I${relationship.otherEntityAngularName}`;
-                typeImports.add(`import { I${relationship.otherEntityAngularName} } from './${relationship.otherEntityModulePath}.model'`);
+                typeImports.add(`import { I${relationship.otherEntityAngularName} } from './${relationship.otherEntityFileName}.model'`);
             }
             fieldName = relationship.relationshipFieldName;
         } else {
