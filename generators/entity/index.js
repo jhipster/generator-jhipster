@@ -448,8 +448,8 @@ module.exports = class extends BaseGenerator {
                 context.entityReactName = context.entityClass + _.upperFirst(_.camelCase(this.entityAngularJSSuffix));
                 context.entityStateName = _.kebabCase(context.entityAngularName);
                 context.entityUrl = context.entityStateName;
-                context.entityTranslationKey = context.entityInstance;
-                context.entityTranslationKeyMenu = _.camelCase(context.entityStateName);
+                context.entityTranslationKey = context.clientRootFolder ? `${context.clientRootFolder}-${context.entityInstance}` : context.entityInstance;
+                context.entityTranslationKeyMenu = _.camelCase(context.clientRootFolder ? `${context.clientRootFolder}-${context.entityStateName}` : context.entityStateName);
                 context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
 
                 context.fieldsContainInstant = false;

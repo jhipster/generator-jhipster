@@ -355,4 +355,33 @@ describe('JHipster generator entity for angularX', () => {
             assert.fileContent('.jhipster/Foo.json', 'clientRootFolder');
         });
     });
+
+    describe('JHipster generator entity with all languages and client-root-folder', () => {
+        describe('no dto, no service, no pagination', () => {
+            beforeEach((done) => {
+                helpers.run(require.resolve('../generators/entity'))
+                    .inTmpDir((dir) => {
+                        fse.copySync(path.join(__dirname, '../test/templates/all-languages'), dir);
+                    })
+                    .withArguments(['foo'])
+                    .withOptions({ 'client-root-folder': 'test-root' })
+                    .withPrompts({
+                        fieldAdd: false,
+                        relationshipAdd: false,
+                        dto: 'no',
+                        service: 'no',
+                        pagination: 'no'
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected languages files', () => {
+                constants.LANGUAGES.forEach((language) => {
+                    assert.file([
+                        `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/test-root-foo.json`
+                    ]);
+                });
+            });
+        });
+    });
 });
