@@ -1608,6 +1608,11 @@
                     <artifactId>mapstruct-processor</artifactId>
                     <version>${mapstruct.version}</version>
                 </dependency>
+                 <dependency>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate-jpamodelgen</artifactId>
+                    <version>${hibernate.version}</version>
+                </dependency>               
             </dependencies>
         </profile>
         <!-- jhipster-needle-maven-add-profile -->
