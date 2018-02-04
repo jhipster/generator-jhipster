@@ -53,7 +53,7 @@ Object.keys(differentRelationships).forEach(key => {
         if (uniqueRel.otherEntityAngularName !== entityAngularName) {
             if(uniqueRel.otherEntityAngularName === 'User') {
 _%>
-import { I<%= uniqueRel.otherEntityAngularName %>, <%= uniqueRel.otherEntityAngularName%>Service } from '../<%= uniqueRel.otherEntityModulePath %>';
+import { I<%= uniqueRel.otherEntityAngularName %>, <%= uniqueRel.otherEntityAngularName%>Service } from '../../<%= entityParentPathAddition %>shared';
 <%_         } else { _%>
 import { I<%= uniqueRel.otherEntityAngularName %> } from '../../<%= entityParentPathAddition %>shared/model/<%= uniqueRel.otherEntityModulePath %>.model';
 import { <%= uniqueRel.otherEntityAngularName%>Service } from '../<%= uniqueRel.otherEntityModulePath %>';
