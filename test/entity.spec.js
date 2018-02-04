@@ -24,7 +24,13 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/entities/foo/foo-delete-dialog.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/entities/foo/foo-detail.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/entities/foo/foo.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/foo/foo-popup.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/model/foo.model.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo/foo-delete-dialog.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo/foo-detail.component.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo/foo-dialog.component.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo/foo.component.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo/foo.service.spec.ts`
     ],
     clientNg2WithSuffix: [
         `${CLIENT_MAIN_SRC_DIR}app/entities/foo-management/foo-management.component.html`,
@@ -37,7 +43,51 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/entities/foo-management/foo-management-delete-dialog.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/entities/foo-management/foo-management-detail.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/entities/foo-management/foo-management.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/foo-management/foo-management-popup.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/model/foo-management.model.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo-management/foo-management-delete-dialog.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo-management/foo-management-detail.component.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo-management/foo-management-dialog.component.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo-management/foo-management.component.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo-management/foo-management.service.spec.ts`
+    ],
+    clientNg2WithRootFolder: [
+        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/foo.component.html`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/foo-detail.component.html`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/foo-dialog.component.html`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/foo-delete-dialog.component.html`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/foo.route.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/foo.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/foo-dialog.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/foo-delete-dialog.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/foo-detail.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/foo.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/foo-popup.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/model/foo.model.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo/foo-delete-dialog.component.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo/foo-detail.component.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo/foo-dialog.component.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo/foo.component.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo/foo.service.spec.ts`
+    ],
+    clientNg2WithRootFolderAndSuffix: [
+        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/foo-management.component.html`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/foo-management-detail.component.html`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/foo-management-dialog.component.html`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/foo-management-delete-dialog.component.html`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/foo-management.route.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/foo-management.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/foo-management-dialog.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/foo-management-delete-dialog.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/foo-management-detail.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/foo-management.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/foo-management-popup.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/model/foo-management.model.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo-management/foo-management-delete-dialog.component.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo-management/foo-management-detail.component.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo-management/foo-management-dialog.component.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo-management/foo-management.component.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo-management/foo-management.service.spec.ts`
     ],
     server: [
         '.jhipster/Foo.json',
@@ -202,7 +252,7 @@ describe('JHipster generator entity for angularX', () => {
         });
     });
 
-    describe('with angulr suffix', () => {
+    describe('with angular suffix', () => {
         beforeEach((done) => {
             helpers.run(require.resolve('../generators/entity'))
                 .inTmpDir((dir) => {
@@ -255,31 +305,54 @@ describe('JHipster generator entity for angularX', () => {
         });
     });
 
-    describe('with dto, service, no pagination', () => {
+    describe('with client-root-folder', () => {
         beforeEach((done) => {
             helpers.run(require.resolve('../generators/entity'))
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
                 })
                 .withArguments(['foo'])
+                .withOptions({ 'client-root-folder': 'test-root' })
                 .withPrompts({
                     fieldAdd: false,
                     relationshipAdd: false,
-                    dto: 'mapstruct',
-                    service: 'serviceClass',
-                    pagination: 'no'
+                    dto: 'yes',
+                    service: 'serviceImpl',
+                    pagination: 'infinite-scroll'
                 })
                 .on('end', done);
         });
 
         it('creates expected default files', () => {
             assert.file(expectedFiles.server);
-            assert.file(expectedFiles.clientNg2);
-            assert.file([
-                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooDTO.java`,
-                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/FooMapper.java`,
-                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`
-            ]);
+            assert.file(expectedFiles.clientNg2WithRootFolder);
+            assert.fileContent('.jhipster/Foo.json', 'clientRootFolder');
+        });
+    });
+
+    describe('with client-root-folder and angular-suffix', () => {
+        beforeEach((done) => {
+            helpers.run(require.resolve('../generators/entity'))
+                .inTmpDir((dir) => {
+                    fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
+                })
+                .withArguments(['foo'])
+                .withOptions({ 'client-root-folder': 'test-root' })
+                .withOptions({ 'angular-suffix': 'management' })
+                .withPrompts({
+                    fieldAdd: false,
+                    relationshipAdd: false,
+                    dto: 'yes',
+                    service: 'serviceImpl',
+                    pagination: 'infinite-scroll'
+                })
+                .on('end', done);
+        });
+
+        it('creates expected default files', () => {
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.clientNg2WithRootFolderAndSuffix);
+            assert.fileContent('.jhipster/Foo.json', 'clientRootFolder');
         });
     });
 });
