@@ -372,6 +372,7 @@ module.exports = class extends BaseGenerator {
             `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install`)}`;
 
         const installConfig = {
+            bower: false,
             npm: this.clientPackageManager !== 'yarn',
             yarn: this.clientPackageManager === 'yarn'
         };
