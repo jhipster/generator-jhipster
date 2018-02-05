@@ -8,9 +8,9 @@ const STACK_EVENT_STATUS_DISPLAY_LENGTH = 35;
 
 let stdOut = message => console.error(message.trim()); // eslint-disable-line
 let stdErr = message => console.error(message.trim()); // eslint-disable-line
-module.exports = class CF {
+module.exports = class CloudFormation {
     constructor(region) {
-        this.cloudFormation = new AWS.CloudFormation({ region });
+        this.cf = new AWS.CloudFormation({ region });
     }
 
     setOutputs(stdout, stderr) {
@@ -32,11 +32,11 @@ module.exports = class CF {
      * Create a CloudFormation Stack in AWS
      * @param stackName the stack to give to the name. It MUST to be unique in the WHOLE region the Stack is created in
      * @param templateUrl url to the desired template.
-     * @param additionalParams additional parrameter array to add to CF script
+     * @param additionalParams additional parameter array to add to CF script
      * @returns {Promise.<TResult>}
      */
     createCloudFormationStack(stackName, templateUrl, additionalParams = []) {
-        return this.cloudFormation.createStack({
+        return this.cf.createStack({
             StackName: stackName,
             Capabilities: ['CAPABILITY_IAM'],
             OnFailure: 'DELETE',
@@ -52,7 +52,7 @@ module.exports = class CF {
      * @returns {Promise.<TResult>}
      */
     getEcrId(stackId) {
-        return this.cloudFormation.describeStackResource({
+        return this.cf.describeStackResource({
             StackName: stackId,
             LogicalResourceId: 'JHipsterContainerRegistry'
         }).promise()
@@ -65,7 +65,7 @@ module.exports = class CF {
      * @returns {Promise<PromiseResult<D, E>>}
      */
     getStack(stackName) {
-        return this.cloudFormation.describeStacks({ StackName: stackName }).promise();
+        return this.cf.describeStacks({ StackName: stackName }).promise();
     }
 
     /**
@@ -103,7 +103,7 @@ module.exports = class CF {
             };
 
             listenerInterval = setInterval(
-                () => this.cloudFormation.describeStackEvents(params).promise()
+                () => this.cf.describeStackEvents(params).promise()
                     .then((result) => {
                         const unproceedEvents = _.chain(result.StackEvents).filter(event => !_.has(parentEvents, event.EventId)).reverse().value();
                         unproceedEvents.forEach((stack) => {
@@ -130,7 +130,7 @@ module.exports = class CF {
                             };
                             nestedStacks[nestedStackId].listenerInterval = setInterval(
                                 () =>
-                                    this.cloudFormation.describeStackEvents({ StackName: nestedStackId }).promise()
+                                    this.cf.describeStackEvents({ StackName: nestedStackId }).promise()
                                         .then((result) => {
                                             const stackMeta = nestedStacks[nestedStackId];
                                             const unproceedEvents = _.chain(result.StackEvents).filter(event => !_.has(stackMeta.events, event.EventId)).reverse().value();
@@ -156,7 +156,7 @@ module.exports = class CF {
                 STACK_LISTENER_INTERVAL
             );
 
-            return this.cloudFormation.waitFor('stackCreateComplete', params).promise()
+            return this.cf.waitFor('stackCreateComplete', params).promise()
                 .then(complete)
                 .catch(cancel);
         });
@@ -168,19 +168,11 @@ module.exports = class CF {
      * @param nestedStackNames
      */
     updateCloudFormationStack(stackName, nestedStackNames = [], templateUrl, additionalParams, deployService = 'false') {
-        /*
-            createCloudFormationStack(stackName, templateUrl, additionalParams = []) {
-        return this.cloudFormation.createStack({
-            StackName: stackName,
-            Capabilities: ['CAPABILITY_IAM'],
-            OnFailure: 'DELETE',
-            Parameters: [this.cfParameter('shouldDeployService', 'false')].concat(additionalParams),
-         */
         const stackToListen = _.concat(nestedStackNames, stackName);
         const listeners = { 0: { previousEventId: null, listenerId: null } };
         const clearIntervals = () => _.forEach(listeners, l => clearInterval(l.listenerId));
 
-        return new Promise((resolve, reject) => this.cloudFormation.updateStack({
+        return new Promise((resolve, reject) => this.cf.updateStack({
             StackName: stackName,
             Capabilities: ['CAPABILITY_IAM'],
             Parameters: [this.cfParameter('shouldDeployService', deployService)].concat(additionalParams),
@@ -194,7 +186,7 @@ module.exports = class CF {
                     listeners[id] = {};
                     listeners[id].previousEventId = null;
                     listeners[id].listenerId = setInterval(
-                        () => this.cloudFormation.describeStackEvents({ StackName: id }).promise()
+                        () => this.cf.describeStackEvents({ StackName: id }).promise()
                             .then((result) => {
                                 const listener = listeners[id];
                                 const stack = result.StackEvents[0];
@@ -212,7 +204,7 @@ module.exports = class CF {
                     );
                 });
 
-                return this.cloudFormation.waitFor('stackUpdateComplete', { StackName: stackName }).promise()
+                return this.cf.waitFor('stackUpdateComplete', { StackName: stackName }).promise()
                     .then(success)
                     .catch(failure);
             }));

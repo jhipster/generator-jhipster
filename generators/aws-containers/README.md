@@ -3,7 +3,7 @@
 ## AWS
 ### ECR
 #### Authentication Token
-The token received by ECR to authenticate is structured as follow. We'll only take the first object.
+The token received by ECR to authenticate is structured as follows. We'll only take the first object.
 ```json
   {  
      "authorizationToken":"AUTHORIZATION_TOKEN",
@@ -17,8 +17,8 @@ The token received by ECR to authenticate is structured as follow. We'll only ta
 
 ```
 # NPM
-npm i --save-dev aws-sdk@^2.167.0 progress@2.0.0 ora@1.3.0
+npm i --save-dev aws-sdk@2.167.0 progress@2.0.0 ora@1.3.0
 
 # Yarn
-yarn add --dev aws-sdk@^2.167.0 progress@2.0.0 ora@1.3.0
+yarn add --dev aws-sdk@2.167.0 progress@2.0.0 ora@1.3.0
 ```

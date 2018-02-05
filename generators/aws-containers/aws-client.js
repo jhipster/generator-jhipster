@@ -8,7 +8,7 @@ const utils = require('../utils');
 
 const AwsSSM = require('./lib/ssm');
 const AwsECR = require('./lib/ecr');
-const AwsCF = require('./lib/cf');
+const AwsCF = require('./lib/cloudFormation');
 
 const DEFAULT_REGION = 'us-east-1';
 const S3_MIN_PART_SIZE = 5242880;
@@ -61,9 +61,9 @@ function loadAWS(generator) {
             ora = require('ora'); // eslint-disable-line
         } catch (e) {
             generator.log('Installing AWS dependencies');
-            let installCommand = 'yarn add aws-sdk@^2.167.0 progress@2.0.0 ora@1.3.0';
+            let installCommand = 'yarn add aws-sdk@2.167.0 progress@2.0.0 ora@1.3.0';
             if (generator.config.get('clientPackageManager') === 'npm') {
-                installCommand = 'npm install aws-sdk@^2.167.0 progress@2.0.0 ora@1.3.0--save';
+                installCommand = 'npm install aws-sdk@2.167.0 progress@2.0.0 ora@1.3.0--save';
             }
             shelljs.exec(installCommand, { silent: false }, (code) => {
                 if (code !== 0) {
@@ -127,8 +127,7 @@ function listRegions() {
 }
 
 /**
- * listVpcs(region) returns a Promise, which resolves to an array of AWS VPC objects
- * @param region to look for VPCs
+ * listVpcs() returns a Promise, which resolves to an array of AWS VPC objects
  * @returns {Promise<EC2.Vpc[]>}
  */
 function listVpcs() {
@@ -138,9 +137,8 @@ function listVpcs() {
 }
 
 /**
- * listSubnets(vpcId) returns a Promise, which resolves to an array of
- * Subnets available within the supplied VPC
- * @param region to look for subnets
+ * listSubnets() returns a Promise, which resolves to an array of
+ * Subnets available within the supplied VPC ID
  * @param vpcId of the VPC with the subnets
  * @returns {Promise<EC2.Subnet[]>}
  */
@@ -186,7 +184,7 @@ function getDockerLogin() {
         .then(authToken => sts.getCallerIdentity({}).promise()
             .then((data) => {
                 const decoded = utils.decodeBase64(authToken.authorizationToken);
-                const splitResult = _.split(decoded, ':');
+                const splitResult = decoded.split(':');
                 resolve({
                     username: splitResult[0],
                     password: splitResult[1],
@@ -248,7 +246,7 @@ function createS3Bucket(bucketName, region = DEFAULT_REGION) {
 function uploadTemplate(bucketName, filename, path) {
     return spinner(new Promise((resolve, reject) =>
         fs.stat(path, (error, stats) => {
-            if (_.isNil(stats)) {
+            if (!stats) {
                 reject(new Error(`File ${chalk.bold(path)} not found`));
             }
             const upload = s3.upload(
@@ -264,7 +262,7 @@ function uploadTemplate(bucketName, filename, path) {
             );
             let bar;
             upload.on('httpUploadProgress', (evt) => {
-                if (bar === undefined && evt.total) {
+                if (!bar && evt.total) {
                     const total = evt.total / 1000000;
                     bar = new ProgressBar('uploading [:bar] :percent :etas', {
                         complete: '=',
@@ -291,9 +289,10 @@ function uploadTemplate(bucketName, filename, path) {
  * @returns {string}
  */
 function sanitizeBucketName(bucketName) {
-    let labels = _.split(bucketName, '.');
-    labels = _.filter(labels, e => e);
-    labels = _.map(labels, _.toLower);
-    labels = _.map(labels, e => _.replace(e, '_', '-'));
-    return _.join(labels, '.');
+    return _(bucketName)
+        .split('.')
+        .filter(e => e)
+        .map(_.toLower)
+        .map(e => _.replace(e, '_', '-'))
+        .join('.');
 }
