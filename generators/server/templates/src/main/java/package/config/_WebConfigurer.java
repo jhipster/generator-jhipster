@@ -27,9 +27,6 @@ import io.github.jhipster.web.filter.CachingHttpHeadersFilter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
 import com.codahale.metrics.servlets.MetricsServlet;
-<%_ if (cacheProvider === 'hazelcast') { _%>
-import com.hazelcast.core.HazelcastInstance;
-<%_ } _%>
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,19 +58,14 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
 
     private final Environment env;
 
-    private final JHipsterProperties jHipsterProperties;<% if (cacheProvider === 'hazelcast') { %>
-
-    private final HazelcastInstance hazelcastInstance;<% } %>
+    private final JHipsterProperties jHipsterProperties;
 
     private MetricRegistry metricRegistry;
 
-    public WebConfigurer(Environment env, JHipsterProperties jHipsterProperties<% if (cacheProvider === 'hazelcast') { %>, HazelcastInstance hazelcastInstance<% } %>) {
+    public WebConfigurer(Environment env, JHipsterProperties jHipsterProperties) {
 
         this.env = env;
         this.jHipsterProperties = jHipsterProperties;
-        <%_ if (cacheProvider === 'hazelcast') { _%>
-        this.hazelcastInstance = hazelcastInstance;
-        <%_ } _%>
     }
 
     @Override

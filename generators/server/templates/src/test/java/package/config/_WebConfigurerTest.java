@@ -76,19 +76,15 @@ public class WebConfigurerTest {
     @Before
     public void setup() {
         servletContext = spy(new MockServletContext());
-        doReturn(new MockFilterRegistration())
+        doReturn(mock(FilterRegistration.Dynamic.class))
             .when(servletContext).addFilter(anyString(), any(Filter.class));
-        doReturn(new MockServletRegistration())
+        doReturn(mock(ServletRegistration.Dynamic.class))
             .when(servletContext).addServlet(anyString(), any(Servlet.class));
 
         env = new MockEnvironment();
         props = new JHipsterProperties();
 
-        <%_ if (cacheProvider === 'hazelcast') { _%>
-        webConfigurer = new WebConfigurer(env, props, null);
-        <%_ } else { _%>
         webConfigurer = new WebConfigurer(env, props);
-        <%_ } _%>
         metricRegistry = new MetricRegistry();
         webConfigurer.setMetricRegistry(metricRegistry);
     }
@@ -252,136 +248,5 @@ public class WebConfigurerTest {
                 .header(HttpHeaders.ORIGIN, "other.domain.com"))
             .andExpect(status().isOk())
             .andExpect(header().doesNotExist(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN));
-    }
-
-    static class MockFilterRegistration implements FilterRegistration, FilterRegistration.Dynamic {
-
-        @Override
-        public void addMappingForServletNames(EnumSet<DispatcherType> dispatcherTypes, boolean isMatchAfter, String... servletNames) {
-
-        }
-
-        @Override
-        public Collection<String> getServletNameMappings() {
-            return null;
-        }
-
-        @Override
-        public void addMappingForUrlPatterns(EnumSet<DispatcherType> dispatcherTypes, boolean isMatchAfter, String... urlPatterns) {
-
-        }
-
-        @Override
-        public Collection<String> getUrlPatternMappings() {
-            return null;
-        }
-
-        @Override
-        public void setAsyncSupported(boolean isAsyncSupported) {
-
-        }
-
-        @Override
-        public String getName() {
-            return null;
-        }
-
-        @Override
-        public String getClassName() {
-            return null;
-        }
-
-        @Override
-        public boolean setInitParameter(String name, String value) {
-            return false;
-        }
-
-        @Override
-        public String getInitParameter(String name) {
-            return null;
-        }
-
-        @Override
-        public Set<String> setInitParameters(Map<String, String> initParameters) {
-            return null;
-        }
-
-        @Override
-        public Map<String, String> getInitParameters() {
-            return null;
-        }
-    }
-
-    static class MockServletRegistration implements ServletRegistration, ServletRegistration.Dynamic {
-
-        @Override
-        public void setLoadOnStartup(int loadOnStartup) {
-
-        }
-
-        @Override
-        public Set<String> setServletSecurity(ServletSecurityElement constraint) {
-            return null;
-        }
-
-        @Override
-        public void setMultipartConfig(MultipartConfigElement multipartConfig) {
-
-        }
-
-        @Override
-        public void setRunAsRole(String roleName) {
-
-        }
-
-        @Override
-        public void setAsyncSupported(boolean isAsyncSupported) {
-
-        }
-
-        @Override
-        public Set<String> addMapping(String... urlPatterns) {
-            return null;
-        }
-
-        @Override
-        public Collection<String> getMappings() {
-            return null;
-        }
-
-        @Override
-        public String getRunAsRole() {
-            return null;
-        }
-
-        @Override
-        public String getName() {
-            return null;
-        }
-
-        @Override
-        public String getClassName() {
-            return null;
-        }
-
-        @Override
-        public boolean setInitParameter(String name, String value) {
-            return false;
-        }
-
-        @Override
-        public String getInitParameter(String name) {
-            return null;
-        }
-
-        @Override
-        public Set<String> setInitParameters(Map<String, String> initParameters) {
-            return null;
-        }
-
-        @Override
-        public Map<String, String> getInitParameters() {
-            return null;
-        }
     }
 }
