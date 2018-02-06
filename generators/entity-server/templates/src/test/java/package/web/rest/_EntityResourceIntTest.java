@@ -73,7 +73,8 @@ import java.time.temporal.ChronoUnit;<% } %>
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import java.util.Collections;
 <%_ } _%>
-import java.util.List;<% if (databaseType === 'cassandra') { %>
+import java.util.List;
+import java.util.ArrayList;<% if (databaseType === 'cassandra') { %>
 import java.util.UUID;<% } %>
 <%_ if (databaseType === 'couchbase') { _%>
     import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
@@ -86,7 +87,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 <%_ } _%>
 import static org.hamcrest.Matchers.hasItem;
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngine === 'elasticsearch' || fieldsContainOwnerManyToMany === true) { _%>
 import static org.mockito.Mockito.*;
 <%_ } _%>
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
