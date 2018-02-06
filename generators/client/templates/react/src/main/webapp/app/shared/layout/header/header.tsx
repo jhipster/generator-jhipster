@@ -11,7 +11,7 @@ import {
   FaList, FaTasks, FaDashboard, FaBook, FaWrench, FaSignIn, FaSignOut,
   FaClockO, FaHddO,
   // tslint:disable-next-line
-  FaRoad, FaAsterisk
+  FaRoad, FaAsterisk, FaBell
 } from 'react-icons/lib/fa';
 
 import { NavLink as Link } from 'react-router-dom';
@@ -82,7 +82,7 @@ export class Header extends React.Component<<%if (enableTranslation) { %>IHeader
       <DropdownItem tag={Link} key="health" to="/admin/health"><FaHeart /> Health</DropdownItem>,
       <DropdownItem tag={Link} key="configuration" to="/admin/configuration"><FaList /> Configuration</DropdownItem>,
     <%_ if (databaseType !== 'cassandra') { _%>
-      /* TODO: audit menu */
+      <DropdownItem tag={Link} key="audits" to="/admin/audits"><FaBell /> Audits</DropdownItem>,
     <%_ } _%>
       <DropdownItem tag={Link} key="logs" to="/admin/logs"><FaTasks /> Logs</DropdownItem>,
       /* jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here */

@@ -44,12 +44,10 @@ function askForClient(meta) {
     ];
 
     if (this.authenticationType !== 'oauth2') {
-        if (this.experimental) {
-            choices.push({
-                value: 'react',
-                name: '[BETA] React'
-            });
-        }
+        choices.push({
+            value: 'react',
+            name: '[BETA] React'
+        });
     }
 
     const PROMPT = {

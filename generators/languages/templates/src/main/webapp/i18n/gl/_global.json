@@ -59,6 +59,8 @@
         "form": {
             "username": "Usuario",
             "username.placeholder": "Seu usuario",
+            "currentpassword": "Current password",
+            "currentpassword.placeholder": "Current password",
             "newpassword": "Novo contrasinal",
             "newpassword.placeholder": "Novo contrasinal",
             "confirmpassword": "Confirmación do novo contrasinal",

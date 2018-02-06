@@ -17,19 +17,22 @@
  limitations under the License.
 -%>
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { NgbPaginationConfig} from '@ng-bootstrap/ng-bootstrap';
+import { Observable } from 'rxjs/Observable';
+import { HttpHeaders, HttpResponse } from '@angular/common/http';
+import { NgbPaginationConfig } from '@ng-bootstrap/ng-bootstrap';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { PaginationConfig } from '../../../../../../main/webapp/app/blocks/config/uib-pagination.config';
 import { AuditsComponent } from '../../../../../../main/webapp/app/admin/audits/audits.component';
 import { AuditsService } from '../../../../../../main/webapp/app/admin/audits/audits.service';
+import { Audit } from '../../../../../../main/webapp/app/admin/audits/audit.model';
 import { ITEMS_PER_PAGE } from '../../../../../../main/webapp/app/shared';
 
 function build2DigitsDatePart(datePart: number) {
     return `0${datePart}`.slice(-2);
 }
 
-function getDate(isToday= true) {
+function getDate(isToday = true) {
     let date: Date = new Date();
     if (isToday) {
         // Today + 1 day - needed if the current day must be included
@@ -53,6 +56,7 @@ describe('Component Tests', () => {
 
         let comp: AuditsComponent;
         let fixture: ComponentFixture<AuditsComponent>;
+        let service: AuditsService;
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
@@ -71,6 +75,7 @@ describe('Component Tests', () => {
         beforeEach(() => {
             fixture = TestBed.createComponent(AuditsComponent);
             comp = fixture.componentInstance;
+            service = fixture.debugElement.injector.get(AuditsService);
         });
 
         describe('today function ', () => {
@@ -93,9 +98,57 @@ describe('Component Tests', () => {
                expect(comp.toDate).toBe(getDate());
                expect(comp.fromDate).toBe(getDate(false));
                expect(comp.itemsPerPage).toBe(ITEMS_PER_PAGE);
-               expect(comp.page).toBe(1);
+               expect(comp.page).toBe(10);
                expect(comp.reverse).toBeFalsy();
-               expect(comp.orderProp).toBe('timestamp');
+               expect(comp.predicate).toBe('id');
+            });
+        });
+
+        describe('OnInit', () => {
+            it('Should call load all on init', () => {
+                // GIVEN
+                const headers = new HttpHeaders().append('link', 'link;link');
+                const audit = new Audit({ remoteAddress: '127.0.0.1', sessionId: '123' }, 'user', '20140101', 'AUTHENTICATION_SUCCESS');
+                spyOn(service, 'query').and.returnValue(Observable.of(new HttpResponse({
+                    body: [audit],
+                    headers
+                })));
+
+                // WHEN
+                comp.ngOnInit();
+
+                // THEN
+                expect(service.query).toHaveBeenCalled();
+                expect(comp.audits[0]).toEqual(jasmine.objectContaining(audit));
+            });
+        });
+
+        describe('Create sort object', () => {
+            it('Should sort only by id asc', () => {
+                // GIVEN
+                comp.predicate = 'id';
+                comp.reverse = false;
+
+                // WHEN
+                const sort = comp.sort();
+
+                // THEN
+                expect(sort.length).toEqual(1);
+                expect(sort[0]).toEqual('id,desc');
+            });
+
+            it('Should sort by timestamp asc then by id', () => {
+                // GIVEN
+                comp.predicate = 'timestamp';
+                comp.reverse = true;
+
+                // WHEN
+                const sort = comp.sort();
+
+                // THEN
+                expect(sort.length).toEqual(2);
+                expect(sort[0]).toEqual('timestamp,asc');
+                expect(sort[1]).toEqual('id');
             });
         });
     });

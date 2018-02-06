@@ -483,7 +483,8 @@ const files = {
             condition: generator => (generator.databaseType !== 'no' && generator.databaseType !== 'cassandra'),
             path: TEST_SRC_DIR,
             templates: [
-                'spec/app/admin/audits/_audits.component.spec.ts'
+                'spec/app/admin/audits/_audits.component.spec.ts',
+                'spec/app/admin/audits/_audits.service.spec.ts'
             ]
         },
         {

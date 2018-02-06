@@ -59,6 +59,8 @@
         "form": {
             "username": "Uživatelské jméno",
             "username.placeholder": "Vaše uživatelské jméno",
+            "currentpassword": "Current password",
+            "currentpassword.placeholder": "Current password",
             "newpassword": "Nové heslo",
             "newpassword.placeholder": "Nové heslo",
             "confirmpassword": "Potvrzení nového hesla",
