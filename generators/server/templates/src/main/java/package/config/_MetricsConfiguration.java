@@ -19,16 +19,6 @@
 package <%=packageName%>.config;
 
 import io.github.jhipster.config.JHipsterProperties;
-<%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
-import io.github.jhipster.config.metrics.SpectatorLogMetricWriter;
-
-import com.netflix.spectator.api.Registry;
-import org.springframework.boot.actuate.autoconfigure.ExportMetricReader;
-import org.springframework.boot.actuate.autoconfigure.ExportMetricWriter;
-import org.springframework.boot.actuate.metrics.writer.MetricWriter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.cloud.netflix.metrics.spectator.SpectatorMetricReader;
-<%_ } _%>
 
 import com.codahale.metrics.JmxReporter;
 import com.codahale.metrics.JvmAttributeGaugeSet;
@@ -141,22 +131,4 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
             reporter.start(jHipsterProperties.getMetrics().getLogs().getReportFrequency(), TimeUnit.SECONDS);
         }
     }
-    <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
-
-    /* Spectator metrics log reporting */
-    @Bean
-    @ConditionalOnProperty("jhipster.logging.spectator-metrics.enabled")
-    @ExportMetricReader
-    public SpectatorMetricReader spectatorMetricReader(Registry registry) {
-        log.info("Initializing Spectator Metrics Log reporting");
-        return new SpectatorMetricReader(registry);
-    }
-
-    @Bean
-    @ConditionalOnProperty("jhipster.logging.spectator-metrics.enabled")
-    @ExportMetricWriter
-    MetricWriter metricWriter() {
-        return new SpectatorLogMetricWriter();
-    }
-    <%_ } _%>
 }

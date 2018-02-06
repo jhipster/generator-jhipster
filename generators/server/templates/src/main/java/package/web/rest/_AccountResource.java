@@ -332,7 +332,7 @@ public class AccountResource {
             .ifPresent(u ->
                 persistentTokenRepository.findByUser(u).stream()
                     .filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries))<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
-                    .findAny().ifPresent(t -> persistentTokenRepository.delete(decodedSeries)));<% } else if (databaseType === 'couchbase'){ %>
+                    .findAny().ifPresent(t -> persistentTokenRepository.deleteById(decodedSeries)));<% } else if (databaseType === 'couchbase'){ %>
                 .findAny().ifPresent(t -> persistentTokenRepository.deleteBySeries(decodedSeries)));<% } else { %>
                     .findAny().ifPresent(persistentTokenRepository::delete)
             );<% } %>

@@ -33,10 +33,10 @@ env:
 
     # if JHIPSTER_DEPENDENCIES_BRANCH value is release, use the release from Maven
     - JHIPSTER_DEPENDENCIES_REPO=https://github.com/jhipster/jhipster-dependencies.git
-    - JHIPSTER_DEPENDENCIES_BRANCH=release
+    - JHIPSTER_DEPENDENCIES_BRANCH=spring-boot-2
     # if JHIPSTER_LIB_BRANCH value is release, use the release from Maven
     - JHIPSTER_LIB_REPO=https://github.com/jhipster/jhipster.git
-    - JHIPSTER_LIB_BRANCH=release
+    - JHIPSTER_LIB_BRANCH=spring-boot-2
     # if JHIPSTER_BRANCH value is release, use the release from NPM
     - JHIPSTER_REPO=https://github.com/jhipster/generator-jhipster.git
     - JHIPSTER_BRANCH=release
@@ -56,7 +56,6 @@ env:
     - JHIPSTER=ms-micro-eureka
     - JHIPSTER=ms-micro-consul
     - JHIPSTER=react-default
-    - JHIPSTER=ng1-default
 
 before_install:
   - jdk_switcher use oraclejdk8
@@ -72,7 +71,6 @@ before_install:
   - curl -o- -L https://yarnpkg.com/install.sh | bash
   - export PATH=$HOME/.yarn/bin:$PATH
   - yarn -v
-  - yarn global add yo bower gulp-cli
 install:
   - $JHIPSTER_SCRIPTS/00-install-jhipster.sh
   - $JHIPSTER_SCRIPTS/01-generate-entities.sh

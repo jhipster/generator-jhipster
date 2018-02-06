@@ -25,10 +25,35 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
     <name><%= humanizedBaseName %></name>
-    <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
 
-    <!-- more information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc -->
+    <!-- TODO Remove snapshot repositories after final Spring Boot 2 release -->
     <repositories>
+        <repository>
+            <id>jhipster-snapshot</id>
+            <name>JHipster Snapshots</name>
+            <url>https://dl.bintray.com/jhipster/maven</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>http://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-snapshot</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
+    <!-- more information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc -->
         <repository>
             <id>maven.oracle.com</id>
             <name>oracle-maven-repo</name>
@@ -39,8 +64,26 @@
                 <updatePolicy>always</updatePolicy>
             </releases>
         </repository>
-    </repositories>
     <%_ } _%>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>http://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>spring-snapshot</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 
     <properties>
         <!-- Build properties -->
@@ -68,10 +111,10 @@
         <profile.swagger />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>0.1.7</jhipster-dependencies.version>
+        <jhipster-dependencies.version>2.0.0-20180206.140739-17</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-        <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
+        <spring-boot.version>2.0.0.BUILD-SNAPSHOT</spring-boot.version>
         <%_ if (databaseType === 'sql') { _%>
         <!-- The hibernate version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
@@ -83,7 +126,7 @@
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <liquibase.version>3.5.3</liquibase.version>
         <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
-        <validation-api.version>1.1.0.Final</validation-api.version>
+        <validation-api.version>2.0.1.Final</validation-api.version>
         <%_ } _%>
         <mapstruct.version>1.2.0.Final</mapstruct.version>
 
@@ -98,9 +141,6 @@
         <dockerfile-maven-plugin.version>1.3.4</dockerfile-maven-plugin.version>
         <%_ if (!skipClient) { _%>
         <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
-        <%_ } _%>
-        <%_ if (gatlingTests) { _%>
-        <gatling-maven-plugin.version>2.2.1</gatling-maven-plugin.version>
         <%_ } _%>
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
         <scala-maven-plugin.version>3.2.2</scala-maven-plugin.version>
@@ -158,6 +198,12 @@
     </dependencyManagement>
 
     <dependencies>
+        <!-- TODO To remove after final Spring Boot 2 release -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+        </dependency>
+
         <%_ if (cacheProvider !== 'no') { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -262,10 +308,12 @@
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-jcache</artifactId>
         </dependency>
+<!--
         <dependency>
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-cloud</artifactId>
         </dependency>
+-->
         <%_ } _%>
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
@@ -323,17 +371,6 @@
             <groupId>com.github.differentway</groupId>
             <artifactId>couchbase-testcontainer</artifactId>
             <scope>test</scope>
-        </dependency>
-        <%_ } _%>
-        <%_ if (gatlingTests) { _%>
-        <dependency>
-            <groupId>io.gatling.highcharts</groupId>
-            <artifactId>gatling-charts-highcharts</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.jcraft</groupId>
-            <artifactId>jzlib</artifactId>
         </dependency>
         <%_ } _%>
         <%_ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || applicationType === 'gateway') { _%>
@@ -407,7 +444,7 @@
             <artifactId>hibernate-envers</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
+            <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
         </dependency>
         <dependency>
@@ -447,14 +484,6 @@
             <version>${mapstruct.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-actuator</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
@@ -466,6 +495,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-loader-tools</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -481,10 +514,21 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>net.java.dev.jna</groupId>
             <artifactId>jna</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-to-slf4j</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <%_ } _%>
         <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
@@ -559,6 +603,10 @@
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.security.oauth.boot</groupId>
+            <artifactId>spring-security-oauth2-autoconfigure</artifactId>
+        </dependency>
             <%_ if (applicationType === 'gateway' || applicationType === 'microservice') { _%>
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -601,7 +649,7 @@
         <%_ if (applicationType === 'gateway') { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-zuul</artifactId>
+            <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
         </dependency>
         <dependency>
             <groupId>com.github.vladimir-bukhtoyarov</groupId>
@@ -619,15 +667,11 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-ribbon</artifactId>
+            <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-hystrix</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-spectator</artifactId>
+            <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.retry</groupId>
@@ -637,7 +681,7 @@
         <%_ if (serviceDiscoveryType === 'eureka') { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-eureka</artifactId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -663,7 +707,7 @@
         <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-feign</artifactId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
         <%_ } _%>
         <dependency>
@@ -733,35 +777,6 @@
         </testResources>
         <%_ } _%>
         <plugins>
-            <%_ if (gatlingTests) { _%>
-            <plugin>
-                <groupId>io.gatling</groupId>
-                <artifactId>gatling-maven-plugin</artifactId>
-                <version>${gatling-maven-plugin.version}</version>
-                <configuration>
-                    <configFolder><%= TEST_DIR %>gatling/conf</configFolder>
-                    <dataFolder><%= TEST_DIR %>gatling/user-files/data</dataFolder>
-                    <resultsFolder>target/gatling/results/${maven.build.timestamp}/</resultsFolder>
-                    <bodiesFolder><%= TEST_DIR %>gatling/user-files/bodies</bodiesFolder>
-                    <simulationsFolder><%= TEST_DIR %>gatling/user-files/simulations</simulationsFolder>
-                    <!-- If uncommented, these arguments below will be applied to all your gatling tests -->
-                    <!--<jvmArgs>
-                        <jvmArg>-Dusers=100</jvmArg>
-                        <jvmArg>-Dramp=1</jvmArg>
-                    </jvmArgs>-->
-                    <!--
-                    This will run multiple simulations one by one. Useful when doing Gatling
-                    tests in CI.
-                    -->
-                    <runMultipleSimulations>true</runMultipleSimulations>
-                    <!--
-                    To run only one simulation, you need to disable the "runMultipleSimulations"
-                    above, and write the name of your simulation below.
-                    -->
-                    <!--<simulationClass>WriteTheNameOfYourGatlingSimulation</simulationClass>-->
-                </configuration>
-            </plugin>
-            <%_ } _%>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

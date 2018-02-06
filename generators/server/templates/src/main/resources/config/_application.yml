@@ -47,8 +47,8 @@ eureka:
         instanceId: <%= baseName %>:${spring.application.instance-id:${random.value}}
         lease-renewal-interval-in-seconds: 5
         lease-expiration-duration-in-seconds: 10
-        status-page-url-path: ${management.context-path}/info
-        health-check-url-path: ${management.context-path}/health
+        status-page-url-path: ${management.endpoints.web.base-path}/info
+        health-check-url-path: ${management.endpoints.web.base-path}/health
         metadata-map:
             zone: primary # This is needed for the load balancer
             profile: ${spring.profiles.active}
@@ -98,9 +98,13 @@ hystrix:
 
 <%_ } _%>
 management:
-    security:
-        roles: ADMIN
-    context-path: /management
+    endpoints:
+        web:
+            base-path: /management
+            expose: '*'
+    endpoint:
+        health:
+            show-details: true
     info:
         git:
             mode: full
@@ -145,7 +149,7 @@ spring:
         favicon:
             enabled: false
     thymeleaf:
-        mode: XHTML
+        mode: HTML
 <%_ if (enableSocialSignIn) { _%>
     social:
         # see https://developers.google.com/+/web/signin/server-side-flow#step_1_create_a_client_id_and_client_secret
@@ -187,9 +191,9 @@ spring:
 # export SECURITY_OAUTH2_CLIENT_CLIENT_SECRET="38561a05"
 # ===================================================================
 <%_ } _%>
+<%_ if (authenticationType === 'uaa' || authenticationType === 'oauth2') { _%>
 security:
-    basic:
-        enabled: false
+<%_ } _%>
     <%_ if (authenticationType === 'uaa') { _%>
     oauth2:
         resource:
@@ -288,4 +292,4 @@ jhipster:
 # http://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-application:
+# application:

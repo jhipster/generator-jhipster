@@ -16,20 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.config;
+package <%=packageName%>.repository.search;
 
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.format.FormatterRegistry;
-import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * Configure a Mock version of <%= entityClass %>SearchRepository to test the
+ * application without starting Elasticsearch.
+ */
 @Configuration
-public class DateTimeFormatConfiguration implements WebMvcConfigurer {
+public class <%=entityClass%>SearchRepositoryMockConfiguration {
 
-    @Override
-    public void addFormatters(FormatterRegistry registry) {
-        DateTimeFormatterRegistrar registrar = new DateTimeFormatterRegistrar();
-        registrar.setUseIsoFormat(true);
-        registrar.registerFormatters(registry);
-    }
+    @MockBean
+    private <%= entityClass %>SearchRepository mock<%= entityClass %>SearchRepository;
+
 }

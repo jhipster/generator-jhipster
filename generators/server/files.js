@@ -388,7 +388,6 @@ function writeFiles() {
             // Create Java files
             // Spring Boot main
             this.template(`${SERVER_MAIN_SRC_DIR}package/_Application.java`, `${javaDir}/${this.mainClass}.java`);
-            this.template(`${SERVER_MAIN_SRC_DIR}package/_ApplicationWebXml.java`, `${javaDir}/ApplicationWebXml.java`);
         },
 
         writeServerJavaConfigFiles() {
@@ -574,11 +573,6 @@ function writeFiles() {
                 this.copy(`${TEST_DIR}features/gitkeep`, `${TEST_DIR}features/.gitkeep`);
             }
 
-            // Create Elasticsearch test files
-            if (this.searchEngine === 'elasticsearch') {
-                this.template(`${SERVER_TEST_SRC_DIR}package/config/elasticsearch/_IndexReinitializer.java`, `${testDir}config/elasticsearch/IndexReinitializer.java`);
-            }
-
             // Create auth config test files
             if (this.applicationType === 'monolith' && this.authenticationType !== 'oauth2') {
                 this.template(`${SERVER_TEST_SRC_DIR}package/security/_DomainUserDetailsServiceIntTest.java`, `${testDir}security/DomainUserDetailsServiceIntTest.java`);
@@ -691,6 +685,9 @@ function writeFiles() {
             this.copy(`${SERVER_TEST_RES_DIR}mails/_testEmail.html`, `${SERVER_TEST_RES_DIR}mails/testEmail.html`);
             this.copy(`${SERVER_TEST_RES_DIR}i18n/_messages_en.properties`, `${SERVER_TEST_RES_DIR}i18n/messages_en.properties`);
 
+            if (this.searchEngine === 'elasticsearch') {
+                this.template(`${SERVER_TEST_SRC_DIR}package/repository/search/_UserSearchRepositoryMockConfiguration.java`, `${testDir}repository/search/UserSearchRepositoryMockConfiguration.java`);
+            }
             this.template(`${SERVER_TEST_SRC_DIR}package/service/_MailServiceIntTest.java`, `${testDir}service/MailServiceIntTest.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/service/_UserServiceIntTest.java`, `${testDir}service/UserServiceIntTest.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_UserResourceIntTest.java`, `${testDir}web/rest/UserResourceIntTest.java`);

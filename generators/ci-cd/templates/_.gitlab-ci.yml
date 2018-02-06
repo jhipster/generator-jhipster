@@ -107,7 +107,7 @@ gatling-test:
 gradle-repackage:
     stage: package
     script:
-        - ./gradlew bootRepackage -Pprod -x check -PnodeInstall --no-daemon
+        - ./gradlew bootWar -Pprod -x check -PnodeInstall --no-daemon
     artifacts:
         paths:
             - build/libs/*.war

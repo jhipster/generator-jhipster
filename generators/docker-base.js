@@ -77,7 +77,7 @@ function checkImages() {
             runCommand = './mvnw verify -Pprod dockerfile:build';
         } else {
             imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/build/docker`);
-            runCommand = './gradlew -Pprod bootRepackage buildDocker';
+            runCommand = './gradlew -Pprod bootWar buildDocker';
         }
         if (shelljs.ls(imagePath).length === 0) {
             this.warning = true;

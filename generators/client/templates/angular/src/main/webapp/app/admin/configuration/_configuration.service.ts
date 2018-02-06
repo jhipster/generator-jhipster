@@ -31,7 +31,7 @@ export class <%=jhiPrefixCapitalized%>ConfigurationService {
         return this.http.get(SERVER_API_URL + 'management/configprops', { observe: 'response' }).map((res: HttpResponse<any>) => {
             const properties: any[] = [];
 
-            const propertiesObject = res.body;
+            const propertiesObject = res.body.beans;
 
             for (const key in propertiesObject) {
                 if (propertiesObject.hasOwnProperty(key)) {
@@ -50,7 +50,7 @@ export class <%=jhiPrefixCapitalized%>ConfigurationService {
         return this.http.get(SERVER_API_URL + 'management/env', { observe: 'response' }).map((res: HttpResponse<any>) => {
             const properties: any = {};
 
-            const propertiesObject = res.body;
+            const propertiesObject = res.body.beans;
 
             for (const key in propertiesObject) {
                 if (propertiesObject.hasOwnProperty(key)) {
