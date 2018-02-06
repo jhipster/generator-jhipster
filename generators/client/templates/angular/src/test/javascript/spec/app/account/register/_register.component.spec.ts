@@ -91,9 +91,7 @@ describe('Component Tests', () => {
                 fakeAsync((service: Register) => {
                     spyOn(service, 'save').and.returnValue(Observable.throw({
                         status: 400,
-                        json() {
-                            return {type : LOGIN_ALREADY_USED_TYPE};
-                        }
+                        error: { type: LOGIN_ALREADY_USED_TYPE }
                     }));
                     comp.registerAccount.password = comp.confirmPassword = 'password';
 
@@ -112,9 +110,7 @@ describe('Component Tests', () => {
                 fakeAsync((service: Register) => {
                     spyOn(service, 'save').and.returnValue(Observable.throw({
                         status: 400,
-                        json() {
-                            return {type : EMAIL_ALREADY_USED_TYPE};
-                        }
+                        error: { type: EMAIL_ALREADY_USED_TYPE }
                     }));
                     comp.registerAccount.password = comp.confirmPassword = 'password';
 
