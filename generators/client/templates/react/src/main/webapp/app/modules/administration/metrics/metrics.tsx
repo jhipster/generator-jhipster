@@ -88,11 +88,11 @@ export class MetricsPage extends React.Component<any, any> {
             <p>
               <span>Total Memory</span> (
                 <TextFormat
-                  value={metrics.gauges['jvm.memory.total.used'].value / 1000000}
+                  value={metrics.gauges['jvm.memory.total.used'].value / 1048576}
                   type="number"
                   format={APP_WHOLE_NUMBER_FORMAT} />
                 M / <TextFormat
-                  value={metrics.gauges['jvm.memory.total.max'].value / 1000000}
+                  value={metrics.gauges['jvm.memory.total.max'].value / 1048576}
                   type="number"
                   format={APP_WHOLE_NUMBER_FORMAT} />
                 M)
@@ -111,11 +111,11 @@ export class MetricsPage extends React.Component<any, any> {
             <p>
               <span>Heap Memory</span> (
                 <TextFormat
-                  value={metrics.gauges['jvm.memory.heap.used'].value / 1000000}
+                  value={metrics.gauges['jvm.memory.heap.used'].value / 1048576}
                   type="number"
                   format={APP_WHOLE_NUMBER_FORMAT} />
                 M / <TextFormat
-                  value={metrics.gauges['jvm.memory.heap.max'].value / 1000000}
+                  value={metrics.gauges['jvm.memory.heap.max'].value / 1048576}
                   type="number"
                   format={APP_WHOLE_NUMBER_FORMAT} />
                 M)
@@ -136,11 +136,11 @@ export class MetricsPage extends React.Component<any, any> {
             <p>
               <span>Non-Heap Memory</span> (
                 <TextFormat
-                  value={metrics.gauges['jvm.memory.non-heap.used'].value / 1000000}
+                  value={metrics.gauges['jvm.memory.non-heap.used'].value / 1048576}
                   type="number"
                   format={APP_WHOLE_NUMBER_FORMAT} />
                 M / <TextFormat
-                  value={metrics.gauges['jvm.memory.non-heap.committed'].value / 1000000}
+                  value={metrics.gauges['jvm.memory.non-heap.committed'].value / 1048576}
                   type="number"
                   format={APP_WHOLE_NUMBER_FORMAT} />
                 M)
@@ -404,43 +404,43 @@ export class MetricsPage extends React.Component<any, any> {
                     <td>{servicesStats[key].count}</td>
                     <td>
                       <TextFormat
-                        value={servicesStats[key].mean * 1000}
+                        value={servicesStats[key].mean * 1024}
                         type="number"
                         format={APP_WHOLE_NUMBER_FORMAT} />
                     </td>
                     <td>
                       <TextFormat
-                        value={servicesStats[key].min * 1000}
+                        value={servicesStats[key].min * 1024}
                         type="number"
                         format={APP_WHOLE_NUMBER_FORMAT} />
                     </td>
                     <td>
                       <TextFormat
-                        value={servicesStats[key].p50 * 1000}
+                        value={servicesStats[key].p50 * 1024}
                         type="number"
                         format={APP_WHOLE_NUMBER_FORMAT} />
                     </td>
                     <td>
                       <TextFormat
-                        value={servicesStats[key].p75 * 1000}
+                        value={servicesStats[key].p75 * 1024}
                         type="number"
                         format={APP_WHOLE_NUMBER_FORMAT} />
                     </td>
                     <td>
                       <TextFormat
-                        value={servicesStats[key].p95 * 1000}
+                        value={servicesStats[key].p95 * 1024}
                         type="number"
                         format={APP_WHOLE_NUMBER_FORMAT} />
                     </td>
                     <td>
                       <TextFormat
-                        value={servicesStats[key].p99 * 1000}
+                        value={servicesStats[key].p99 * 1024}
                         type="number"
                         format={APP_WHOLE_NUMBER_FORMAT} />
                     </td>
                     <td>
                       <TextFormat
-                        value={servicesStats[key].max * 1000}
+                        value={servicesStats[key].max * 1024}
                         type="number"
                         format={APP_WHOLE_NUMBER_FORMAT} />
                     </td>

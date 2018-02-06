@@ -26,15 +26,15 @@
     <div class="row" ng-hide="vm.updatingMetrics">
         <div class="col-md-4">
             <b data-translate="metrics.jvm.memory.title">Memory</b>
-            <p><span data-translate="metrics.jvm.memory.total">Total Memory</span> ({{vm.metrics.gauges['jvm.memory.total.used'].value / 1000000 | number:0}}M / {{vm.metrics.gauges['jvm.memory.total.max'].value / 1000000 | number:0}}M)</p>
+            <p><span data-translate="metrics.jvm.memory.total">Total Memory</span> ({{vm.metrics.gauges['jvm.memory.total.used'].value / 1048576 | number:0}}M / {{vm.metrics.gauges['jvm.memory.total.max'].value / 1048576 | number:0}}M)</p>
             <uib-progressbar min="0" max="vm.metrics.gauges['jvm.memory.total.max'].value" value="vm.metrics.gauges['jvm.memory.total.used'].value" class="progress-striped active" type="success">
                 <span>{{vm.metrics.gauges['jvm.memory.total.used'].value * 100 / vm.metrics.gauges['jvm.memory.total.max'].value  | number:0}}%</span>
             </uib-progressbar>
-            <p><span data-translate="metrics.jvm.memory.heap">Heap Memory</span> ({{vm.metrics.gauges['jvm.memory.heap.used'].value / 1000000 | number:0}}M / {{vm.metrics.gauges['jvm.memory.heap.max'].value / 1000000 | number:0}}M)</p>
+            <p><span data-translate="metrics.jvm.memory.heap">Heap Memory</span> ({{vm.metrics.gauges['jvm.memory.heap.used'].value / 1048576 | number:0}}M / {{vm.metrics.gauges['jvm.memory.heap.max'].value / 1048576 | number:0}}M)</p>
             <uib-progressbar min="0" max="vm.metrics.gauges['jvm.memory.heap.max'].value" value="vm.metrics.gauges['jvm.memory.heap.used'].value" class="progress-striped active" type="success">
                 <span>{{vm.metrics.gauges['jvm.memory.heap.used'].value * 100 / vm.metrics.gauges['jvm.memory.heap.max'].value  | number:0}}%</span>
             </uib-progressbar>
-            <p><span data-translate="metrics.jvm.memory.nonheap">Non-Heap Memory</span> ({{vm.metrics.gauges['jvm.memory.non-heap.used'].value / 1000000 | number:0}}M / {{vm.metrics.gauges['jvm.memory.non-heap.committed'].value / 1000000 | number:0}}M)</p>
+            <p><span data-translate="metrics.jvm.memory.nonheap">Non-Heap Memory</span> ({{vm.metrics.gauges['jvm.memory.non-heap.used'].value / 1048576 | number:0}}M / {{vm.metrics.gauges['jvm.memory.non-heap.committed'].value / 1048576 | number:0}}M)</p>
             <uib-progressbar min="0" max="vm.metrics.gauges['jvm.memory.non-heap.committed'].value" value="vm.metrics.gauges['jvm.memory.non-heap.used'].value" class="progress-striped active" type="success">
                 <span>{{vm.metrics.gauges['jvm.memory.non-heap.used'].value * 100 / vm.metrics.gauges['jvm.memory.non-heap.committed'].value  | number:0}}%</span>
             </uib-progressbar>
@@ -177,13 +177,13 @@
             <tr ng-repeat="(k, v) in vm.servicesStats">
                 <td>{{k}}</td>
                 <td class="text-right">{{v.count}}</td>
-                <td class="text-right">{{v.mean * 1000 | number:0}}</td>
-                <td class="text-right">{{v.min * 1000 | number:0}}</td>
-                <td class="text-right">{{v.p50 * 1000 | number:0}}</td>
-                <td class="text-right">{{v.p75 * 1000 | number:0}}</td>
-                <td class="text-right">{{v.p95 * 1000 | number:0}}</td>
-                <td class="text-right">{{v.p99 * 1000 | number:0}}</td>
-                <td class="text-right">{{v.max * 1000 | number:0}}</td>
+                <td class="text-right">{{v.mean * 1024 | number:0}}</td>
+                <td class="text-right">{{v.min * 1024 | number:0}}</td>
+                <td class="text-right">{{v.p50 * 1024 | number:0}}</td>
+                <td class="text-right">{{v.p75 * 1024 | number:0}}</td>
+                <td class="text-right">{{v.p95 * 1024 | number:0}}</td>
+                <td class="text-right">{{v.p99 * 1024 | number:0}}</td>
+                <td class="text-right">{{v.max * 1024 | number:0}}</td>
             </tr>
             </tbody>
         </table>
