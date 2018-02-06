@@ -1623,11 +1623,13 @@
                     <artifactId>mapstruct-processor</artifactId>
                     <version>${mapstruct.version}</version>
                 </dependency>
+<%_ if (databaseType === 'sql') { _%>
                 <dependency>
                     <groupId>org.hibernate</groupId>
                     <artifactId>hibernate-jpamodelgen</artifactId>
                     <version>${hibernate.version}</version>
-                </dependency>                   
+                </dependency>
+<%_ } _%>
             </dependencies>
         </profile>
         <!-- jhipster-needle-maven-add-profile -->
