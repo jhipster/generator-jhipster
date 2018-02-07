@@ -30,7 +30,6 @@ Additional builds on [hipster-labs/jhipster-travis-build](https://github.com/hip
 | Type          | Status                                                   | Description                    |
 |:--------------|:---------------------------------------------------------|:-------------------------------|
 | docker        | [![Build Status][image-docker]][travis-url]              | Build for testing Docker image |
-| ng1-maven     | [![Build Status][image-ng1-maven]][travis-url]           | Builds for ng1 Maven           |
 | ngx-maven     | [![Build Status][image-ngx-maven]][travis-url]           | Builds for ngx Maven           |
 | ngx-gradle    | [![Build Status][image-ngx-gradle]][travis-url]          | Builds for ngx Gradle          |
 | microservices | [![Build Status][image-microservices]][travis-url]       | Builds for Microservices       |
