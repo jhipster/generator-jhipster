@@ -23,7 +23,7 @@ const fs = require('fs');
 
 const fail = expect.fail;
 const Exporter = require('../../../lib/export/jhipster_entity_exporter');
-const JDLParser = require('../../../lib/parser/jdl_parser');
+const DocumentParser = require('../../../lib/parser/document_parser');
 const EntityParser = require('../../../lib/parser/entity_parser');
 const parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
 
@@ -44,7 +44,7 @@ describe('::exportToJSON', () => {
     describe('when exporting JDL to entity json for SQL type', () => {
       const input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
       const content = EntityParser.parse({
-        jdlObject: JDLParser.parse(input, 'sql'),
+        jdlObject: DocumentParser.parse(input, 'sql'),
         databaseType: 'sql'
       });
       Exporter.exportToJSON(content);
@@ -164,7 +164,7 @@ describe('::exportToJSON', () => {
     describe('when exporting JDL to entity json for an existing entity', () => {
       let input = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
       let content = EntityParser.parse({
-        jdlObject: JDLParser.parse(input, 'sql'),
+        jdlObject: DocumentParser.parse(input, 'sql'),
         databaseType: 'sql'
       });
       it('exports it with same changeLogDate', (done) => {
@@ -174,7 +174,7 @@ describe('::exportToJSON', () => {
         setTimeout(() => {
           input = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
           content = EntityParser.parse({
-            jdlObject: JDLParser.parse(input, 'sql'),
+            jdlObject: DocumentParser.parse(input, 'sql'),
             databaseType: 'sql'
           });
           Exporter.exportToJSON(content, true);

@@ -23,7 +23,7 @@ const expect = require('chai').expect;
 const fs = require('fs');
 const path = require('path');
 const Exporter = require('../../../lib/export/jhipster_application_exporter');
-const JDLParser = require('../../../lib/parser/jdl_parser');
+const DocumentParser = require('../../../lib/parser/document_parser');
 const parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
 
 const fail = expect.fail;
@@ -64,7 +64,7 @@ describe('JHipsterApplicationExporter', () => {
         it('throws an error', () => {
           try {
             Exporter.exportApplication(
-              JDLParser.parse(
+              DocumentParser.parse(
                 parseFromFiles(['./test/test_files/application_wrong_basename.jdl']),
                 'sql',
                 'monolith',
@@ -85,7 +85,7 @@ describe('JHipsterApplicationExporter', () => {
 
         before((done) => {
           Exporter.exportApplication(
-            JDLParser.parse(
+            DocumentParser.parse(
               parseFromFiles(['./test/test_files/application.jdl']),
               'sql',
               'monolith',
@@ -173,7 +173,7 @@ describe('JHipsterApplicationExporter', () => {
       context('when exporting applications to JSON', () => {
         before('common setup for both applications', () => {
           Exporter.exportApplications(
-            JDLParser.parse(
+            DocumentParser.parse(
               parseFromFiles([path.join('test', 'test_files', 'applications.jdl')]),
               'sql',
               'monolith',

@@ -25,7 +25,7 @@ const fs = require('fs');
 const readEntityJSON = require('../../../lib/reader/json_file_reader').readEntityJSON;
 const Exporter = require('../../../lib/export/jdl_exporter');
 const JDLReader = require('../../../lib/reader/jdl_reader');
-const JDLParser = require('../../../lib/parser/jdl_parser');
+const DocumentParser = require('../../../lib/parser/document_parser');
 const EntityParser = require('../../../lib/parser/entity_parser');
 const parseFromDir = require('../../../lib/reader/json_reader').parseFromDir;
 
@@ -48,7 +48,7 @@ describe('::exportToJDL', () => {
       Exporter.exportToJDL(jdl);
       const input = JDLReader.parseFromFiles(['./jhipster-jdl.jh']);
       const newEntities = EntityParser.parse({
-        jdlObject: JDLParser.parse(input, 'sql'),
+        jdlObject: DocumentParser.parse(input, 'sql'),
         databaseType: 'sql'
       });
       const previousEntities = {};
