@@ -38,7 +38,7 @@ export class SocialAuthComponent implements OnInit {
     ngOnInit() {
         const token = this.cookieService.get('social-authentication');
         if (token.length) {
-            this.loginService.loginWithToken(token, false).then(() => {
+            this.loginService.loginWithToken(token, true).then(() => {
                     this.cookieService.remove('social-authentication');
                     this.router.navigate(['']);
                  }, () => {
