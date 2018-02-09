@@ -21,8 +21,8 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { LoginService } from './login.service';
-import { StateStorageService } from '../auth/state-storage.service';
+import { LoginService } from '../../core/login/login.service';
+import { StateStorageService } from '../../core/auth/state-storage.service';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-login-modal',

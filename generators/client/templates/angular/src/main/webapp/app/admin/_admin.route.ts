@@ -39,7 +39,7 @@ import {
     <%_ } _%>
 } from './';
 
-import { UserRouteAccessService } from 'app/shared';
+import { UserRouteAccessService } from 'app/core';
 
 const ADMIN_ROUTES = [
     <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>

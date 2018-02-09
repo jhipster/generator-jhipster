@@ -27,7 +27,7 @@ import { JhiEventManager } from 'ng-jhipster';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { UserMgmtDialogComponent } from 'app/admin/user-management/user-management-dialog.component';
-import { UserService, User<% if(enableTranslation) { %>, JhiLanguageHelper<% } %> } from 'app/shared';
+import { UserService, User<% if(enableTranslation) { %>, JhiLanguageHelper<% } %> } from 'app/core';
 
 describe('Component Tests', () => {
 

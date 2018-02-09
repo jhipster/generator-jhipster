@@ -23,7 +23,7 @@ import { JhiEventManager } from 'ng-jhipster';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { UserMgmtDeleteDialogComponent } from 'app/admin/user-management/user-management-delete-dialog.component';
-import { UserService } from 'app/shared';
+import { UserService } from 'app/core';
 
 describe('Component Tests', () => {
 

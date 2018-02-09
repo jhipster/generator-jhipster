@@ -22,7 +22,8 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 <%_ } _%>
 import { JhiEventManager } from 'ng-jhipster';
 
-import { Account, <% if (authenticationType !== 'oauth2') { %>LoginModalService<% } else { %>LoginService<% } %>, Principal } from 'app/shared';
+import { <% if (authenticationType !== 'oauth2') { %>LoginModalService<% } else { %>LoginService<% } %>, Principal } from 'app/core';
+import { Account } from 'app/shared';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-home',

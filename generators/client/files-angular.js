@@ -370,6 +370,32 @@ const files = {
             ]
         }
     ],
+    angularCore: [
+        {
+            path: ANGULAR_DIR,
+            templates: [
+                'core/_index.ts',
+                'core/_core.module.ts',
+                // login
+                'core/login/_login.service.ts'
+            ]
+        },
+        {
+            path: ANGULAR_DIR,
+            condition: generator => generator.authenticationType !== 'oauth2',
+            templates: [
+                // login
+                'core/login/_login-modal.service.ts'
+            ]
+        },
+        {
+            condition: generator => !generator.skipUserManagement || generator.authenticationType === 'oauth2',
+            path: ANGULAR_DIR,
+            templates: [
+                'core/user/_user.service.ts'
+            ]
+        }
+    ],
     angularShared: [
         {
             path: ANGULAR_DIR,
@@ -383,8 +409,6 @@ const files = {
                 // models
                 'shared/util/_request-util.ts',
                 'shared/user/_account.model.ts',
-                // login
-                'shared/login/_login.service.ts',
                 // alert service code
                 'shared/alert/_alert.component.ts',
                 'shared/alert/_alert-error.component.ts'
@@ -396,8 +420,7 @@ const files = {
             templates: [
                 // login
                 'shared/login/_login.component.ts',
-                { file: 'shared/login/_login.component.html', method: 'processHtml' },
-                'shared/login/_login-modal.service.ts'
+                { file: 'shared/login/_login.component.html', method: 'processHtml' }
             ]
         },
         {
@@ -413,8 +436,7 @@ const files = {
             condition: generator => !generator.skipUserManagement || generator.authenticationType === 'oauth2',
             path: ANGULAR_DIR,
             templates: [
-                'shared/user/_user.model.ts',
-                'shared/user/_user.service.ts'
+                'shared/user/_user.model.ts'
             ]
         }
     ],
@@ -422,26 +444,26 @@ const files = {
         {
             path: ANGULAR_DIR,
             templates: [
-                'shared/auth/_csrf.service.ts',
-                'shared/auth/_state-storage.service.ts',
-                'shared/auth/_principal.service.ts',
+                'core/auth/_csrf.service.ts',
+                'core/auth/_state-storage.service.ts',
+                'core/auth/_principal.service.ts',
                 'shared/auth/_has-any-authority.directive.ts',
-                'shared/auth/_account.service.ts',
-                'shared/auth/_user-route-access-service.ts'
+                'core/auth/_account.service.ts',
+                'core/auth/_user-route-access-service.ts'
             ]
         },
         {
             condition: generator => generator.authenticationType === 'jwt' || generator.authenticationType === 'uaa',
             path: ANGULAR_DIR,
             templates: [
-                'shared/auth/_auth-jwt.service.ts'
+                'core/auth/_auth-jwt.service.ts'
             ]
         },
         {
             condition: generator => generator.authenticationType === 'session' || generator.authenticationType === 'oauth2',
             path: ANGULAR_DIR,
             templates: [
-                'shared/auth/_auth-session.service.ts'
+                'core/auth/_auth-session.service.ts'
             ]
         }
     ],
@@ -495,7 +517,7 @@ const files = {
                 'spec/app/admin/user-management/_user-management-dialog.component.spec.ts',
                 'spec/app/admin/user-management/_user-management-delete-dialog.component.spec.ts',
                 // user service tests
-                'spec/app/shared/user/_user.service.spec.ts'
+                'spec/app/core/user/_user.service.spec.ts'
             ]
         },
         {

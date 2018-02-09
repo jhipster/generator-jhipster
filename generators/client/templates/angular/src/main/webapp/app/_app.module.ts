@@ -30,7 +30,8 @@ import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
 import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
 import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
-import { <%=angularXAppName%>SharedModule, UserRouteAccessService } from 'app/shared';
+import { <%=angularXAppName%>SharedModule } from 'app/shared';
+import { <%=angularXAppName%>CoreModule } from 'app/core';
 import { <%=angularXAppName%>AppRoutingModule} from './app-routing.module';
 import { <%=angularXAppName%>HomeModule } from './home/home.module';
 import { <%=angularXAppName%>AdminModule } from './admin/admin.module';
@@ -61,6 +62,7 @@ import {
         <%=angularXAppName%>AppRoutingModule,
         Ng2Webstorage.forRoot({ prefix: '<%=jhiPrefixDashed %>', separator: '-'}),
         <%=angularXAppName%>SharedModule,
+        <%=angularXAppName%>CoreModule,
         <%=angularXAppName%>HomeModule,
         <%=angularXAppName%>AdminModule,
         <%_ if (authenticationType !== 'oauth2') { _%>
@@ -82,7 +84,6 @@ import {
     providers: [
         ProfileService,
         PaginationConfig,
-        UserRouteAccessService,
         <%_ if (authenticationType === 'jwt') { _%>
         {
             provide: HTTP_INTERCEPTORS,
