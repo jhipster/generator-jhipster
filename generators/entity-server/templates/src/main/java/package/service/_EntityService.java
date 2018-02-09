@@ -24,7 +24,7 @@ import <%=packageName%>.service.dto.<%= entityClass %>DTO;
 <%_ } else { _%>
 import <%=packageName%>.domain.<%= entityClass %>;
 <%_ } _%>
-<%_ if (pagination !== 'no') { _%>
+<%_ if (pagination !== 'no' || fieldsContainOwnerManyToMany === true) { _%>
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
