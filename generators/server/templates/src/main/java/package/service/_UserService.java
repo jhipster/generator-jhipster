@@ -301,6 +301,9 @@ public class UserService {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
+                <%_ if (cacheManagerIsAvailable === true) { _%>
+                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
+                <%_ } _%>
                 user.setFirstName(firstName);
                 user.setLastName(lastName);
                 user.setEmail(email);
@@ -338,6 +341,10 @@ public class UserService {
                 if (!user.getLogin().equals(userDTO.getLogin())) {
                     userRepository.deleteById(userDTO.getId());
                 }
+                <%_ } _%>
+                <%_ if (cacheManagerIsAvailable === true) { _%>
+                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
                 <%_ } _%>
                 user.setLogin(userDTO.getLogin());
                 user.setFirstName(userDTO.getFirstName());

@@ -33,6 +33,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+<%_ if (databaseType === 'sql') { _%>
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+<%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 import org.springframework.security.test.context.support.WithMockUser;
 <%_ } _%>
@@ -156,22 +159,27 @@ public class DomainUserDetailsServiceIntTest <% if (databaseType === 'cassandra'
         assertThat(userDetails.getUsername()).isEqualTo(USER_TWO_LOGIN);
     }
 
-    @Test
     <%_ if (databaseType === 'sql') { _%>
+    @Test(expected = UsernameNotFoundException.class)
     @Transactional
-    <%_ } _%>
+    public void assertThatUserCanNotBeFoundByEmailIgnoreCase() {
+    domainUserDetailsService.loadUserByUsername(USER_TWO_EMAIL.toUpperCase(Locale.ENGLISH));
+    }
+    <%_ } else { // MongoDB and Cassandra _%>
+    @Test
     public void assertThatUserCanBeFoundByEmailIgnoreCase() {
         UserDetails userDetails = domainUserDetailsService.loadUserByUsername(USER_TWO_EMAIL.toUpperCase(Locale.ENGLISH));
         assertThat(userDetails).isNotNull();
         assertThat(userDetails.getUsername()).isEqualTo(USER_TWO_LOGIN);
     }
+    <%_ } _%>
 
     @Test
     <%_ if (databaseType === 'sql') { _%>
     @Transactional
     <%_ } _%>
     public void assertThatEmailIsPrioritizedOverLogin() {
-        UserDetails userDetails = domainUserDetailsService.loadUserByUsername(USER_ONE_EMAIL.toUpperCase(Locale.ENGLISH));
+        UserDetails userDetails = domainUserDetailsService.loadUserByUsername(USER_ONE_EMAIL);
         assertThat(userDetails).isNotNull();
         assertThat(userDetails.getUsername()).isEqualTo(USER_ONE_LOGIN);
     }
