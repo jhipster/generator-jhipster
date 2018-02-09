@@ -41,7 +41,7 @@ import { <%=angularXAppName%>AccountModule } from './account/account.module';
 import { <%=angularXAppName%>EntityModule } from './entities/entity.module';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
 <%_ if (['session', 'oauth2'].includes(authenticationType)) { _%>
-import { StateStorageService } from 'app/shared/auth/state-storage.service';
+import { StateStorageService } from 'app/core/auth/state-storage.service';
 <%_ } _%>
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import {

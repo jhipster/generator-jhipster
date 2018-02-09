@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { SpyObject } from './spyobject';
-import { <%=jhiPrefixCapitalized%>TrackerService } from 'app/shared/tracker/tracker.service';
+import { <%=jhiPrefixCapitalized%>TrackerService } from 'app/core/tracker/tracker.service';
 
 export class MockTrackerService extends SpyObject {
 

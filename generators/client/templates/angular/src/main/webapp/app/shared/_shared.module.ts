@@ -24,9 +24,6 @@ import {
     <%_ if (authenticationType !== 'oauth2') { _%>
     <%=jhiPrefixCapitalized%>LoginModalComponent,
     <%_ } _%>
-    <%_ if (websocket === 'spring-websocket') { _%>
-    <%=jhiPrefixCapitalized%>TrackerService,
-    <%_ } _%>
     HasAnyAuthorityDirective,
     <%_ if (enableSocialSignIn) { _%>
     <%=jhiPrefixCapitalized%>SocialComponent,
@@ -49,9 +46,6 @@ import {
         HasAnyAuthorityDirective
     ],
     providers: [
-        <%_ if (websocket === 'spring-websocket') { _%>
-        <%=jhiPrefixCapitalized%>TrackerService,
-        <%_ } _%>
         <%_ if (enableSocialSignIn) { _%>
         SocialService,
         <%_ } _%>

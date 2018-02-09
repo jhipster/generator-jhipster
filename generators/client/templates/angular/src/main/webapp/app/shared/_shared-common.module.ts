@@ -22,9 +22,6 @@ import { registerLocaleData } from '@angular/common';
 <%_ const localeId = getLocaleId(nativeLanguage); _%>
 import locale from '@angular/common/locales/<%= localeId %>';
 
-<%_ if (websocket === 'spring-websocket') { _%>
-import { WindowRef } from './tracker/window.service';
-<%_ } _%>
 import {
     <%=angularXAppName%>SharedLibsModule,
     <%_ if (enableTranslation) { _%>
@@ -51,8 +48,6 @@ import {
         FindLanguageFromKeyPipe,
         <%_ } if (enableTranslation) { _%>
         JhiLanguageHelper,
-        <%_ } if (websocket === 'spring-websocket') { _%>
-        WindowRef,
         <%_ } _%>
         Title,
         {
