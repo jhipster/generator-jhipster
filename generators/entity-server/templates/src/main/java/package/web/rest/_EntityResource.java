@@ -126,7 +126,7 @@ public class <%= entityClass %>Resource {
     /**
      * GET  /<%= entityApiUrl %> : get all the <%= entityInstancePlural %>.
      *<% if (pagination !== 'no') { %>
-     * @param pageable the pagination information<% } if (fieldsContainOwnerManyToMany) { %>
+     * @param pageable the pagination information<% } if (viaService && fieldsContainOwnerManyToMany) { %>
      * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many)<% } if (jpaMetamodelFiltering) { %>
      * @param criteria the criterias which the requested entities should match<% } else if (fieldsContainNoOwnerOneToOne) { %>
      * @param filter the filter of the request<% } %>

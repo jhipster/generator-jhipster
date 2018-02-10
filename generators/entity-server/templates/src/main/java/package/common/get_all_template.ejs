@@ -44,12 +44,12 @@
         return <%= entityListToDtoListReference %>(<%= entityInstancePlural %>);<% } else { %>
         return <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>();<% } %>
     <% } if (pagination !== 'no') { %>
-    public ResponseEntity<List<<%= instanceType %>>> getAll<%= entityClassPlural %>(Pageable pageable<% if (fieldsContainNoOwnerOneToOne) { %>, @RequestParam(required = false) String filter<% } %><% if (fieldsContainOwnerManyToMany === true) { %>, @RequestParam(required = false, defaultValue = "false") boolean eagerload<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
-        log.debug("REST request to get a page of <%= entityClassPlural %>");<% if (viaService) { %><% if (fieldsContainOwnerManyToMany === true) { %>
+    public ResponseEntity<List<<%= instanceType %>>> getAll<%= entityClassPlural %>(Pageable pageable<% if (fieldsContainNoOwnerOneToOne) { %>, @RequestParam(required = false) String filter<% } %><% if (fieldsContainOwnerManyToMany) { %>, @RequestParam(required = false, defaultValue = "false") boolean eagerload<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
+        log.debug("REST request to get a page of <%= entityClassPlural %>");<% if (viaService) { %><% if (fieldsContainOwnerManyToMany) { %>
         Page<<%= instanceType %>> page = eagerload ? <%= entityInstance %>Service.findAllWithEagerRelationships(pageable) : <%= entityInstance %>Service.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, String.format("/api/<%= entityApiUrl %>?eagerload=%b", eagerload));<% } else { %>
         Page<<%= instanceType %>> page = <%= entityInstance %>Service.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityApiUrl %>");<% } %><% } else { %><% if (fieldsContainOwnerManyToMany === true) { %>
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityApiUrl %>");<% } %><% } else { %><% if (fieldsContainOwnerManyToMany) { %>
         Page<<%= instanceType %>> page = eagerload ? <%= entityInstance %>Repository.findAllWithEagerRelationships(pageable)<% if (dto === 'mapstruct') {%>.map(<%= entityToDtoReference %>)<% } %> : <%= entityInstance %>Repository.findAll(pageable)<% if (dto !== 'mapstruct') { %>;<% } else { %>.map(<%= entityToDtoReference %>);<% } %>
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, String.format("/api/<%= entityApiUrl %>?eagerload=%b", eagerload));<% } else { %>
         Page<<%= instanceType %>> page = <%= entityInstance %>Repository.findAll(pageable)<% if (dto !== 'mapstruct') { %>;<% } else { %>.map(<%= entityToDtoReference %>);<% } %>
