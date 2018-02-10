@@ -48,7 +48,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-<%_ if (searchEngine === 'elasticsearch' && pagination !== 'no') { _%>
+<%_ if (searchEngine === 'elasticsearch' && pagination !== 'no' || fieldsContainOwnerManyToMany) { _%>
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 <%_ } _%>
@@ -269,14 +269,13 @@ _%>
 
     <%_ if (fieldsContainOwnerManyToMany === true) { _%>
     @Mock
-    private <%= entityClass %>Service <%= entityInstance %>RepositoryMock;<%_ } _%><% if (dto === 'mapstruct') { %>
+    private <%= entityClass %>Repository <%= entityInstance %>RepositoryMock;<%_ } _%><% if (dto === 'mapstruct') { %>
 
     @Autowired
     private <%= entityClass %>Mapper <%= entityInstance %>Mapper;<% } if (service !== 'no') { %>
-
-    <%_ if (fieldsContainOwnerManyToMany === true) { _%>
+    <% if (fieldsContainOwnerManyToMany === true) { %>
     @Mock
-    private <%= entityClass %>Service <%= entityInstance %>ServiceMock;<%_ } _%>
+    private <%= entityClass %>Service <%= entityInstance %>ServiceMock;<% } %>
 
     @Autowired
     private <%= entityClass %>Service <%= entityInstance %>Service;<% } if (searchEngine === 'elasticsearch') { %>
