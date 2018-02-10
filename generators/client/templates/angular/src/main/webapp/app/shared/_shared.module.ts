@@ -26,8 +26,7 @@ import {
     <%_ } _%>
     HasAnyAuthorityDirective,
     <%_ if (enableSocialSignIn) { _%>
-    <%=jhiPrefixCapitalized%>SocialComponent,
-    SocialService,
+    <%=jhiPrefixCapitalized%>SocialComponent
     <%_ } _%>
 } from './';
 
@@ -45,11 +44,7 @@ import {
         <%_ } _%>
         HasAnyAuthorityDirective
     ],
-    providers: [
-        <%_ if (enableSocialSignIn) { _%>
-        SocialService,
-        <%_ } _%>
-    ],
+    providers: [],
     <%_ if (authenticationType !== 'oauth2') { _%>
     entryComponents: [<%=jhiPrefixCapitalized%>LoginModalComponent],
     <%_ } _%>

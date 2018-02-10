@@ -35,7 +35,6 @@ export * from './user/user.model';
 <%_ } _%>
 export * from './util/request-util';
 <%_ if (enableSocialSignIn) { _%>
-export * from './social/social.service';
 export * from './social/social.component';
 <%_ } _%>
 export * from './shared-libs.module';

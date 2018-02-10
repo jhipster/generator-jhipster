@@ -10,6 +10,9 @@ export * from './auth/auth-session.service';
 export * from './tracker/tracker.service';
 export * from './tracker/window.service';
 <%_ } _%>
+<%_ if (enableSocialSignIn) { _%>
+export * from './social/social.service';
+<%_ } _%>
 export * from './auth/principal.service';
 export * from './auth/user-route-access-service';
 export * from './login/login-modal.service';

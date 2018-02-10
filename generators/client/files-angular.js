@@ -260,7 +260,7 @@ const files = {
                 { file: 'account/social/_social-register.component.html', method: 'processHtml' },
                 { file: 'shared/social/_social.component.ts', method: 'processJs' },
                 { file: 'shared/social/_social.component.html', method: 'processHtml' },
-                'shared/social/_social.service.ts'
+                'core/social/_social.service.ts'
             ]
         },
         {

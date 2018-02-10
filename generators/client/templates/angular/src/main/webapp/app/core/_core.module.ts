@@ -10,6 +10,9 @@ import {
     <%_ if (authenticationType !== 'oauth2') { _%>
     LoginModalService,
     <%_ } _%>
+    <%_ if (enableSocialSignIn) { _%>
+    SocialService,
+    <%_ } _%>
     AccountService,
     StateStorageService,
     Principal,
@@ -33,6 +36,9 @@ import {
         LoginService,
         <%_ if (authenticationType !== 'oauth2') { _%>
         LoginModalService,
+        <%_ } _%>
+        <%_ if (enableSocialSignIn) { _%>
+        SocialService,
         <%_ } _%>
         AccountService,
         StateStorageService,
