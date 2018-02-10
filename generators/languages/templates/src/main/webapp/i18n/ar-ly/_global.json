@@ -70,10 +70,6 @@
         },
         "messages": {
             "info": {
-                <%_ if (clientFramework === 'angular1') { _%>
-                "authenticated": "إذا اردت أن <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">تسجل دخولك</a>, يمكنك تجربة الحسابات التجريبية:<br/>- المدير (login=\"admin\" و كلمة المرور=\"admin\") <br/>- المستخدم (login=\"user\" و كلمة المرور=\"user\").",
-                "register": "لا تملك حسابا حتى الآن؟ <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">تسجيل حساب جديد</a>"
-                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "إذا اردت أن ",
                     "link": "تسجل دخولك",
@@ -83,7 +79,6 @@
                     "noaccount": "لا تملك حسابا حتى الآن؟",
                     "link": "تسجيل حساب جديد"
                 }
-                <%_ } _%>
             },
             "error": {
                 "dontmatch": "كلمة السر وتأكيدها لا تتطابق!"

@@ -202,10 +202,7 @@ module.exports = class extends Generator {
      * @param languages
      */
     updateLanguagesInLanguagePipe(languages) {
-        let fullPath = `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`;
-        if (this.clientFramework === 'angular1') {
-            fullPath = `${CLIENT_MAIN_SRC_DIR}app/components/language/language.filter.js`;
-        }
+        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`;
         try {
             let content = '{\n';
             this.generateLanguageOptions(languages).forEach((ln, i) => {
@@ -860,17 +857,6 @@ module.exports = class extends Generator {
         } else {
             to.jpaMetamodelFiltering = false;
         }
-    }
-
-    /**
-     * Rebuild client for Angular1
-     */
-    injectJsFilesToIndex() {
-        const done = this.async();
-        this.log(`\n${chalk.bold.green('Running `gulp inject` to add JavaScript to index.html\n')}`);
-        this.spawnCommand('gulp', ['inject:app']).on('close', () => {
-            done();
-        });
     }
 
     /**

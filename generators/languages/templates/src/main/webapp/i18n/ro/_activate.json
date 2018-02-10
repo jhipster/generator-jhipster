@@ -20,11 +20,7 @@
     "activate": {
         "title": "Activare",
         "messages": {
-            <%_ if (clientFramework === 'angular1') { _%>
-            "success": "<strong>Contul dumneavoastră a fost activat.</strong> Vă rugăm să vă <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">autentificați</a>.",
-            <%_ } else { _%>
             "success": "<strong>Contul dumneavoastră a fost activat.</strong> Vă rugăm să vă autentificați",
-            <%_ } _%>
             "error": "<strong>Contul dumneavoastră nu a putut fi activat.</strong> Vă rugăm să folosiți formularul de înregistrare."
         }
     }

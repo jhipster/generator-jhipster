@@ -70,10 +70,6 @@
         },
         "messages": {
             "info": {
-                <%_ if (clientFramework === 'angular1') { _%>
-                "authenticated": "Αν θέλετε να <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">συνδεθείτε</a>, μπορείτε να δοκιμάσετε τους ακολουθους ήδη υπάρχων λογαριασμούς:<br/>- Διαχειριστής (login=\"admin\" και κωδικός=\"admin\") <br/>- Χρήστης (login=\"user\" και κωδικός=\"user\").",
-                "register": "Δεν έχετε λογαριασμό; <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Δημιουργήστε έναν νέο λογαριασμό</a>"
-                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Αν θέλετε να ",
                     "link": "συνδεθείτε",
@@ -83,7 +79,6 @@
                     "noaccount": "Δεν έχετε λογαριασμό; ",
                     "link": "Δημιουργήστε έναν νέο λογαριασμό"
                 }
-                <%_ } _%>
             },
             "error": {
                 "dontmatch": "Ο κωδικός και η επιβεβαίωση του δεν ταιριάζουν"

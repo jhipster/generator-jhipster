@@ -70,10 +70,6 @@
         },
         "messages": {
             "info": {
-                <%_ if (clientFramework === 'angular1') { _%>
-                "authenticated": "Si desea <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">iniciar una sesión</a>, puede intentar con las cuentas predeterminadas:<br/>- Administrator (usuario=\"admin\" y contraseña=\"admin\") <br/>- Usuario (usuario=\"user\" y contraseña=\"user\").",
-                "register": "¿No tienes una cuenta todavía? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Crea una cuenta</a>"
-                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Si desea ",
                     "link": "iniciar una sesión",
@@ -83,7 +79,6 @@
                     "noaccount": "¿No tienes una cuenta todavía?",
                     "link": "Crea una cuenta"
                 }
-                <%_ } _%>
             },
             "error": {
                 "dontmatch" : "¡La contraseña y la confirmación de contraseña no coinciden!"

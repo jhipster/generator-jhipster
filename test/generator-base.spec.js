@@ -167,7 +167,7 @@ describe('Generator Base', () => {
     describe('writeFilesToDisk', () => {
         describe('when called with default angular client options', () => {
             it('should produce correct files', () => {
-                const files = require('../generators/client/files-angularjs').files; // eslint-disable-line global-require
+                const files = require('../generators/client/files-angular').files; // eslint-disable-line global-require
                 const generator = {
                     useSass: false,
                     enableTranslation: true,
@@ -184,7 +184,7 @@ describe('Generator Base', () => {
         });
         describe('when called with default angular client options skipping user-management', () => {
             it('should produce correct files', () => {
-                const files = require('../generators/client/files-angularjs').files; // eslint-disable-line global-require
+                const files = require('../generators/client/files-angular').files; // eslint-disable-line global-require
                 const generator = {
                     useSass: false,
                     enableTranslation: true,

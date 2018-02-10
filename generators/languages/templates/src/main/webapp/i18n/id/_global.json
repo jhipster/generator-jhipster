@@ -70,10 +70,6 @@
         },
         "messages": {
             "info": {
-                <%_ if (clientFramework === 'angular1') { _%>
-                "authenticated": "Jika anda ingin <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">login</a>, anda bisa coba menggunakan akun yang sudah ada:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\").",
-                "register": "Anda belum punya akun? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Buat akun baru anda disini</a>"
-                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Jika anda ingin ",
                     "link": "login",
@@ -83,7 +79,6 @@
                     "noaccount": "Anda belum punya akun?",
                     "link": "Buat akun baru anda disini"
                 }
-                <%_ } _%>
             },
             "error": {
                 "dontmatch": "Password dan konfirmasi password tidak sama!"

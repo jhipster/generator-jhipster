@@ -62,7 +62,7 @@ module.exports = class extends BaseGenerator {
                 this.skipClient = this.config.get('skipClient');
                 this.clientFramework = this.config.get('clientFramework');
                 if (!this.clientFramework) {
-                    this.clientFramework = 'angular1';
+                    this.clientFramework = 'angularX';
                 }
                 this.clientPackageManager = this.config.get('clientPackageManager');
                 if (!this.clientPackageManager) {
@@ -148,11 +148,7 @@ module.exports = class extends BaseGenerator {
     end() {
         if (!this.options['skip-install'] && !this.skipClient && !this.options['json-only']) {
             this.debug('Building client');
-            if (this.clientFramework === 'angular1') {
-                this.injectJsFilesToIndex();
-            } else {
-                this.rebuildClient();
-            }
+            this.rebuildClient();
         }
     }
 };

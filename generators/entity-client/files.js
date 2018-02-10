@@ -24,7 +24,6 @@ const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 const ANGULAR_DIR = constants.ANGULAR_DIR;
 const REACT_DIR = constants.ANGULAR_DIR;
 
-const CLIENT_NG1_TEMPLATES_DIR = 'angularjs';
 const CLIENT_NG2_TEMPLATES_DIR = 'angular';
 const CLIENT_REACT_TEMPLATES_DIR = 'react';
 
@@ -32,90 +31,6 @@ const CLIENT_REACT_TEMPLATES_DIR = 'react';
 * The default is to use a file path string. It implies use of the template method.
 * For any other config an object { file:.., method:.., template:.. } can be used
 */
-
-const angularjsFiles = {
-    client: [
-        {
-            path: ANGULAR_DIR,
-            templates: [
-                {
-                    file: 'entities/_entity-management.html',
-                    method: 'processHtml',
-                    template: true,
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityPluralFileName}.html`
-                },
-                {
-                    file: 'entities/_entity-management-detail.html',
-                    method: 'processHtml',
-                    template: true,
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.html`
-                },
-                {
-                    file: 'entities/_entity-management-dialog.html',
-                    method: 'processHtml',
-                    template: true,
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-dialog.html`
-                },
-                {
-                    file: 'entities/_entity-management-delete-dialog.html',
-                    method: 'processHtml',
-                    template: true,
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.html`
-                },
-                {
-                    file: 'entities/_entity-management.state.js',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.state.js`
-                },
-                {
-                    file: 'entities/_entity-management.controller.js',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.controller.js`
-                },
-                {
-                    file: 'entities/_entity-management-dialog.controller.js',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-dialog.controller.js`
-                },
-                {
-                    file: 'entities/_entity-management-delete-dialog.controller.js',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.controller.js`
-                },
-                {
-                    file: 'entities/_entity-management-detail.controller.js',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.controller.js`
-                },
-                {
-                    file: 'entities/_entity.service.js',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityServiceFileName}.service.js`
-                }
-
-            ]
-        },
-        {
-            condition: generator => generator.searchEngine === 'elasticsearch',
-            path: ANGULAR_DIR,
-            templates: [{
-                file: 'entities/_entity-search.service.js',
-                renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityServiceFileName}.search.service.js`
-            }]
-        }
-    ],
-    test: [
-        {
-            path: CLIENT_TEST_SRC_DIR,
-            templates: [{
-                file: 'spec/app/entities/_entity-management-detail.controller.spec.js',
-                renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-detail.controller.spec.js`
-            }]
-        },
-        {
-            condition: generator => generator.protractorTests,
-            path: CLIENT_TEST_SRC_DIR,
-            templates: [{
-                file: 'e2e/entities/_entity.js',
-                renameTo: generator => `e2e/entities/${generator.entityFileName}.js`
-            }]
-        }
-    ]
-};
 
 const angularFiles = {
     client: [
@@ -263,7 +178,6 @@ const reactFiles = {
 
 module.exports = {
     writeFiles,
-    angularjsFiles,
     angularFiles,
     reactFiles
 };
@@ -274,10 +188,7 @@ function writeFiles() {
         writeClientFiles() {
             if (this.skipClient) return;
 
-            if (this.clientFramework === 'angular1') {
-                // write client side files for angular 1.x
-                this.writeFilesToDisk(angularjsFiles, this, false, CLIENT_NG1_TEMPLATES_DIR);
-            } else if (this.clientFramework === 'angularX') {
+            if (this.clientFramework === 'angularX') {
                 // write client side files for angular 2.x +
                 this.writeFilesToDisk(angularFiles, this, false, CLIENT_NG2_TEMPLATES_DIR);
                 this.addEntityToModule(this.entityInstance, this.entityClass, this.entityAngularName, this.entityFolderName, this.entityFileName, this.enableTranslation, this.clientFramework);

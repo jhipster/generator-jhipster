@@ -36,11 +36,7 @@
             },
             "messages": {
                 "info": "Valige uus salasõna",
-                <%_ if (clientFramework === 'angular1') { _%>
-                "success": "<strong>Teie salasõna on muudetud.</strong> Palun <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">logige sisse</a>.",
-                <%_ } else { _%>
                 "success": "<strong>Teie salasõna on muudetud.</strong> Palun ",
-                <%_ } _%>
                 "keymissing": "Muutmise võti puudub.",
                 "error": "Teie salasõna ei saanud ära muuta. Pidage meeles, et salasõna muutmise tellimus kehtib ainult 24 tundi."
             }

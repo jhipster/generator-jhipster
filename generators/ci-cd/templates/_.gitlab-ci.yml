@@ -70,14 +70,10 @@ gradle-test:
 gradle-front-test:
     stage: test
     script:
-        <%_ if (clientFramework === 'angular1') { _%>
-        - ./gradlew gulp_test -PnodeInstall --no-daemon
-        <%_ } else { _%>
-            <%_ if (clientPackageManager === 'yarn') { _%>
+        <%_ if (clientPackageManager === 'yarn') { _%>
         - ./gradlew yarn_test -PnodeInstall --no-daemon
-            <%_ } else if (clientPackageManager === 'npm') { _%>
+        <%_ } else if (clientPackageManager === 'npm') { _%>
         - ./gradlew npm_test -PnodeInstall --no-daemon
-            <%_ } _%>
         <%_ } _%>
     artifacts:
         paths:
@@ -147,14 +143,11 @@ maven-test:
 maven-front-test:
     stage: test
     script:
-        <%_ if (clientFramework === 'angular1') { _%>
         - ./mvnw com.github.eirslett:frontend-maven-plugin:gulp -Dfrontend.gulp.arguments=test
-        <%_ } else { _%>
-            <%_ if (clientPackageManager === 'yarn') { _%>
+        <%_ if (clientPackageManager === 'yarn') { _%>
         - ./mvnw com.github.eirslett:frontend-maven-plugin:yarn -Dfrontend.yarn.arguments=test
-            <%_ } else if (clientPackageManager === 'npm') { _%>
+        <%_ } else if (clientPackageManager === 'npm') { _%>
         - ./mvnw com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.yarn.arguments=test
-            <%_ } _%>
         <%_ } _%>
     artifacts:
         paths:

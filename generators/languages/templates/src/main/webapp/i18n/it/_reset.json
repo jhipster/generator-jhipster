@@ -36,11 +36,7 @@
             },
             "messages": {
                 "info": "Scegliere una nuova password",
-                <%_ if (clientFramework === 'angular1') { _%>
-                "success": "<strong>La tua password è stata reimpostata .</strong> Per favore <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">autenticati</a>.",
-                <%_ } else { _%>
                 "success": "<strong>La tua password è stata reimpostata .</strong> Per favore ",
-                <%_ } _%>
                 "keymissing": "La chiave di reimpostazione non è presente.",
                 "error": "La tua password potrebbe non essere ripristinata. Ricorda che la richiesta della password è valida solo per 24 ore."
             }

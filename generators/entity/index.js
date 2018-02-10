@@ -62,7 +62,7 @@ module.exports = class extends BaseGenerator {
 
         // This adds support for a `--angular-suffix` flag
         this.option('angular-suffix', {
-            desc: 'Use a suffix to generate AngularJS routes and files, to avoid name clashes',
+            desc: 'Use a suffix to generate Angular routes and files, to avoid name clashes',
             type: String,
             defaults: ''
         });
@@ -139,7 +139,7 @@ module.exports = class extends BaseGenerator {
 
                 context.clientFramework = this.config.get('clientFramework');
                 if (!context.clientFramework) {
-                    context.clientFramework = 'angular1';
+                    context.clientFramework = 'angularX';
                 }
                 context.clientPackageManager = this.config.get('clientPackageManager');
                 if (!context.clientPackageManager) {

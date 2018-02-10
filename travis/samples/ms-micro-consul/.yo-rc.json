@@ -31,7 +31,7 @@
     "websocket": false,
     "messageBroker": false,
     "enableSocialSignIn": false,
-    "clientFramework": "angular1",
+    "clientFramework": "angularX",
     "clientPackageManager": "yarn"
   }
 }
