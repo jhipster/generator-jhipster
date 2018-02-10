@@ -21,7 +21,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { Principal, AccountService } from 'app/shared';
-import { SettingsComponent } from '../../../../../../main/webapp/app/account/settings/settings.component';
+import { SettingsComponent } from 'app/account/settings/settings.component';
 <%_ if (websocket === 'spring-websocket') { _%>
 import { <%=jhiPrefixCapitalized%>TrackerService } from 'app/shared/tracker/tracker.service';
 import { MockTrackerService } from '../../../helpers/mock-tracker.service';

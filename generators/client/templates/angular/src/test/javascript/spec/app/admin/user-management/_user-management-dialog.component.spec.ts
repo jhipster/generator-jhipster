@@ -26,7 +26,7 @@ import { Observable } from 'rxjs/Observable';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { UserMgmtDialogComponent } from '../../../../../../main/webapp/app/admin/user-management/user-management-dialog.component';
+import { UserMgmtDialogComponent } from 'app/admin/user-management/user-management-dialog.component';
 import { UserService, User<% if(enableTranslation) { %>, JhiLanguageHelper<% } %> } from 'app/shared';
 
 describe('Component Tests', () => {

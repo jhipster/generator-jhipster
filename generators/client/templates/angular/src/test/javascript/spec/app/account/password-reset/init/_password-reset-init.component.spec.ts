@@ -21,8 +21,8 @@ import { Renderer, ElementRef } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { <%=angularXAppName%>TestModule } from '../../../../test.module';
-import { PasswordResetInitComponent } from '../../../../../../../main/webapp/app/account/password-reset/init/password-reset-init.component';
-import { PasswordResetInitService } from '../../../../../../../main/webapp/app/account/password-reset/init/password-reset-init.service';
+import { PasswordResetInitComponent } from 'app/account/password-reset/init/password-reset-init.component';
+import { PasswordResetInitService } from 'app/account/password-reset/init/password-reset-init.service';
 import { EMAIL_NOT_FOUND_TYPE } from 'app/shared';
 
 describe('Component Tests', () => {
