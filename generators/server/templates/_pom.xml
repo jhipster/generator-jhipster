@@ -1217,7 +1217,7 @@
                         <configuration>
                             <failOnMissingWebXml>false</failOnMissingWebXml>
                             <%_ if (!skipClient) { _%>
-                            <warSourceDirectory><%= CLIENT_MAIN_SRC_DIR %></warSourceDirectory>
+                            <warSourceDirectory><%= CLIENT_DIST_DIR %></warSourceDirectory>
                             <webResources>
                                 <resource>
                                     <directory>src/main/webapp</directory>
