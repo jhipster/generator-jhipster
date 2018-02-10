@@ -13,6 +13,9 @@ export * from './tracker/window.service';
 <%_ if (enableSocialSignIn) { _%>
 export * from './social/social.service';
 <%_ } _%>
+<%_ if (enableTranslation) { _%>
+export * from './language/language.helper';
+<%_ } _%>
 export * from './auth/principal.service';
 export * from './auth/user-route-access-service';
 export * from './login/login-modal.service';

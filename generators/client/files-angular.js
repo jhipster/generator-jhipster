@@ -429,7 +429,7 @@ const files = {
             templates: [
                 'shared/language/_find-language-from-key.pipe.ts',
                 'shared/language/_language.constants.ts',
-                'shared/language/_language.helper.ts'
+                'core/language/_language.helper.ts'
             ]
         },
         {

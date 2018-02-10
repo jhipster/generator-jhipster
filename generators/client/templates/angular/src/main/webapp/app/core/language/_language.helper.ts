@@ -21,9 +21,9 @@ import { Title } from '@angular/platform-browser';
 import { Router, ActivatedRouteSnapshot } from '@angular/router';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
-import { LANGUAGES } from './language.constants';
+import { LANGUAGES } from '../../shared/language/language.constants';
 <%_ if (enableI18nRTL) { _%>
-import { FindLanguageFromKeyPipe } from './find-language-from-key.pipe';
+import { FindLanguageFromKeyPipe } from '../../shared/language/find-language-from-key.pipe';
 <%_ } _%>
 
 @Injectable()
