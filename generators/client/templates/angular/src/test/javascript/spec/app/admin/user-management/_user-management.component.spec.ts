@@ -25,7 +25,7 @@ import { HttpHeaders, HttpResponse } from '@angular/common/http';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { UserMgmtComponent } from '../../../../../../main/webapp/app/admin/user-management/user-management.component';
-import { UserService, User } from '../../../../../../main/webapp/app/shared';
+import { UserService, User } from 'app/shared';
 
 describe('Component Tests', () => {
 

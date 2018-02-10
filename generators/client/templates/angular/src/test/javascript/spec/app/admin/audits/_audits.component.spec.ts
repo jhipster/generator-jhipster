@@ -26,7 +26,7 @@ import { PaginationConfig } from '../../../../../../main/webapp/app/blocks/confi
 import { AuditsComponent } from '../../../../../../main/webapp/app/admin/audits/audits.component';
 import { AuditsService } from '../../../../../../main/webapp/app/admin/audits/audits.service';
 import { Audit } from '../../../../../../main/webapp/app/admin/audits/audit.model';
-import { ITEMS_PER_PAGE } from '../../../../../../main/webapp/app/shared';
+import { ITEMS_PER_PAGE } from 'app/shared';
 
 function build2DigitsDatePart(datePart: number) {
     return `0${datePart}`.slice(-2);

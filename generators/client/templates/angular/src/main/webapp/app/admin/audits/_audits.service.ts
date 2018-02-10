@@ -20,9 +20,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
-import { SERVER_API_URL } from '../../app.constants';
+import { createRequestOption} from 'app/shared';
+import { SERVER_API_URL } from 'app/app.constants';
 import { Audit } from './audit.model';
-import { createRequestOption} from '../../shared';
 
 @Injectable()
 export class AuditsService  {

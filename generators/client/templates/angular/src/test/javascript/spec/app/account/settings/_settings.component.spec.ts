@@ -20,10 +20,10 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { Observable } from 'rxjs/Observable';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { Principal, AccountService } from '../../../../../../main/webapp/app/shared';
+import { Principal, AccountService } from 'app/shared';
 import { SettingsComponent } from '../../../../../../main/webapp/app/account/settings/settings.component';
 <%_ if (websocket === 'spring-websocket') { _%>
-import { <%=jhiPrefixCapitalized%>TrackerService } from '../../../../../../main/webapp/app/shared/tracker/tracker.service';
+import { <%=jhiPrefixCapitalized%>TrackerService } from 'app/shared/tracker/tracker.service';
 import { MockTrackerService } from '../../../helpers/mock-tracker.service';
 <%_ } _%>
 
