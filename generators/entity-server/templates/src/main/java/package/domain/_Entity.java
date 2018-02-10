@@ -18,14 +18,17 @@
 -%>
 package <%=packageName%>.domain;<%
 let importApiModelProperty = false;
-let importJsonignore = false;
+let importJsonIgnore = false;
+let importJsonIgnoreProperties = false;
 let importSet = false;
 const uniqueEnums = {}; %><%- include imports -%>
 
 <%_ if (databaseType === 'cassandra') { _%>
 import com.datastax.driver.mapping.annotations.*;
-<%_ } if (importJsonignore === true) { _%>
+<%_ } if (importJsonIgnore === true) { _%>
 import com.fasterxml.jackson.annotation.JsonIgnore;
+<%_ } if (importJsonIgnoreProperties === true) { _%>
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 <%_ } if (typeof javadoc != 'undefined') { _%>
 import io.swagger.annotations.ApiModel;
 <%_ } if (importApiModelProperty === true) { _%>
@@ -221,7 +224,6 @@ public class <%= entityClass %> implements Serializable {
         if (relationshipType === 'one-to-many') {
     _%>
     @OneToMany(mappedBy = "<%= otherEntityRelationshipName %>")
-    @JsonIgnore
     <%_ if (enableHibernateCache) {
             if (cacheProvider === 'infinispan') { _%>
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -236,6 +238,7 @@ public class <%= entityClass %> implements Serializable {
         <%_ if (relationshipValidate) { _%>
     <%- include relationship_validators -%>
         <%_ }_%>
+    @JsonIgnoreProperties("<%= otherEntityRelationshipName %>")
     private <%= otherEntityNameCapitalized %> <%= relationshipFieldName %>;
 
     <%_ } else if (relationshipType === 'many-to-many') { _%>
