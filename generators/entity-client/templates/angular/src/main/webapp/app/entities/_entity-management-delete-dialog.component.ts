@@ -32,7 +32,7 @@ import { JhiEventManager } from 'ng-jhipster';
 
 import { <%= entityAngularName %>PopupService } from './<%= entityFileName %>-popup.service';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
-import { I<%= entityAngularName %> } from '../../<%= entityParentPathAddition %>shared/model/<%= entityFileName %>.model';
+import { I<%= entityAngularName %> } from '../../<%= entityParentPathAddition %>shared/model/<%= entityFolderName %>.model';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-delete-dialog',

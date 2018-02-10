@@ -31,7 +31,7 @@ import { JhiDateUtils } from 'ng-jhipster';
 
 import { SERVER_API_URL } from '../../<%= entityParentPathAddition %>app.constants';
 import { createRequestOption } from '../../<%= entityParentPathAddition %>shared';
-import { I<%= entityAngularName %> } from '../../<%= entityParentPathAddition %>shared/model/<%= entityFileName %>.model';
+import { I<%= entityAngularName %> } from '../../<%= entityParentPathAddition %>shared/model/<%= entityFolderName %>.model';
 
 export type EntityResponseType = HttpResponse<I<%= entityAngularName %>>;
 export type EntityArrayResponseType = HttpResponse<I<%= entityAngularName %>[]>;

@@ -137,7 +137,7 @@ const angularFiles = {
             path: CLIENT_TEST_SRC_DIR,
             templates: [{
                 file: 'e2e/entities/_entity.spec.ts',
-                renameTo: generator => `e2e/entities/${generator.entityFileName}.spec.ts`
+                renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}.spec.ts`
             }]
         }
     ]

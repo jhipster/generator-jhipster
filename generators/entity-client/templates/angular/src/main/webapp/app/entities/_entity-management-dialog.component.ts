@@ -55,7 +55,7 @@ Object.keys(differentRelationships).forEach(key => {
 _%>
 import { I<%= uniqueRel.otherEntityAngularName %>, <%= uniqueRel.otherEntityAngularName%>Service } from '../../<%= entityParentPathAddition %>shared';
 <%_         } else { _%>
-import { I<%= uniqueRel.otherEntityAngularName %> } from '../../<%= entityParentPathAddition %>shared/model/<%= uniqueRel.otherEntityFileName %>.model';
+import { I<%= uniqueRel.otherEntityAngularName %> } from '../../<%= entityParentPathAddition %>shared/model/<%= uniqueRel.otherEntityFolderName %>.model';
 import { <%= uniqueRel.otherEntityAngularName%>Service } from '../<%= uniqueRel.otherEntityModulePath %>';
 <%_         }
         }

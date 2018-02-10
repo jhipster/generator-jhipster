@@ -24,7 +24,7 @@ import { HttpResponse } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 <%_ } _%>
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
-import { I<%= entityAngularName %>, <%= entityAngularName %> } from '../../<%= entityParentPathAddition %>shared/model/<%= entityFileName %>.model';
+import { I<%= entityAngularName %>, <%= entityAngularName %> } from '../../<%= entityParentPathAddition %>shared/model/<%= entityFolderName %>.model';
 <%_
 let hasDate = false;
 if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) {
