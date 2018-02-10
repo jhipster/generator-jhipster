@@ -74,6 +74,13 @@ module.exports = class extends BaseGenerator {
             defaults: ''
         });
 
+        // This adds support for a `--skip-ui-grouping` flag
+        this.option('skip-ui-grouping', {
+            desc: 'Disables the UI grouping behaviour for entity client side code',
+            type: Boolean,
+            defaults: false
+        });
+
         // This adds support for a `--skip-server` flag
         this.option('skip-server', {
             desc: 'Skip the server-side code generation',
@@ -383,7 +390,7 @@ module.exports = class extends BaseGenerator {
                         context.pagination = 'no';
                     }
                 }
-                if (!context.clientRootFolder && context.applicationType === 'gateway' && context.useMicroserviceJson) {
+                if (!context.clientRootFolder && !context.options['skip-ui-grouping'] && context.applicationType === 'gateway' && context.useMicroserviceJson) {
                     context.clientRootFolder = context.microserviceName;
                 }
             },
@@ -655,7 +662,7 @@ module.exports = class extends BaseGenerator {
                         if (relationship.otherEntityNameCapitalized !== 'User') {
                             relationship.otherEntityModuleName = `${context.angularXAppName + relationship.otherEntityNameCapitalized}Module`;
                             relationship.otherEntityFileName = _.kebabCase(relationship.otherEntityAngularName);
-                            relationship.otherEntityClientRootFolder = otherEntityData.clientRootFolder;
+                            relationship.otherEntityClientRootFolder = context.options['skip-ui-grouping'] ? '' : otherEntityData.clientRootFolder;
                             if (otherEntityData.clientRootFolder) {
                                 if (context.clientRootFolder === otherEntityData.clientRootFolder) {
                                     relationship.otherEntityModulePath = relationship.otherEntityFileName;

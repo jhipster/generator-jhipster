@@ -39,6 +39,13 @@ module.exports = class extends BaseGenerator {
             type: Boolean,
             defaults: false
         });
+
+        // This adds support for a `--skip-ui-grouping` flag
+        this.option('skip-ui-grouping', {
+            desc: 'Disables the UI grouping behaviour for entity client side code',
+            type: Boolean,
+            defaults: false
+        });
     }
 
     get initializing() {
@@ -133,6 +140,7 @@ module.exports = class extends BaseGenerator {
                                 'skip-server': entity.definition.skipServer,
                                 'no-fluent-methods': entity.definition.noFluentMethod,
                                 'skip-user-management': entity.definition.skipUserManagement,
+                                'skip-ui-grouping': this.options['skip-ui-grouping'],
                                 arguments: [entity.name],
                             });
                         }
