@@ -1440,6 +1440,28 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Add Gradle plugin to the plugins block
+     *
+     * @param {string} id - plugin id
+     * @param {string} version - explicit plugin version number
+     */
+    addGradlePluginToPluginsBlock(id, version) {
+        const fullPath = 'build.gradle';
+        try {
+            jhipsterUtils.rewriteFile({
+                file: fullPath,
+                needle: 'jhipster-needle-gradle-plugins',
+                splicable: [
+                    `id "${id}" version "${version}"`
+                ]
+            }, this);
+        } catch (e) {
+            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}id ${id} version ${version}${chalk.yellow(' not added.\n')}`);
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
      * A new dependency to build.gradle file.
      *
      * @param {string} scope - scope of the new dependency, e.g. compile
