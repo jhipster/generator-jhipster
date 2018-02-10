@@ -35,9 +35,7 @@
         ],
         "baseUrl": "./",
         "paths": {
-            "@angular/*": [
-                "../node_modules/@angular/*"
-            ]
+            "app/*": ["src/main/webapp/app/*"]
         }
     },
     "include": [
