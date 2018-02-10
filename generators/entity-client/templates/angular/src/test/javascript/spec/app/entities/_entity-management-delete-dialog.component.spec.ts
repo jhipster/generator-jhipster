@@ -26,8 +26,8 @@ import { Observable } from 'rxjs/Observable';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { <%=angularXAppName%>TestModule } from '../../../<%= entityParentPathAddition %>test.module';
-import { <%= entityAngularName %>DeleteDialogComponent } from '../../../../../../<%= entityParentPathAddition %>main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>-delete-dialog.component';
-import { <%= entityAngularName %>Service } from '../../../../../../<%= entityParentPathAddition %>main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
+import { <%= entityAngularName %>DeleteDialogComponent } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-delete-dialog.component';
+import { <%= entityAngularName %>Service } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 
 describe('Component Tests', () => {
 

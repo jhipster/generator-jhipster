@@ -30,9 +30,9 @@ import { ActivatedRoute } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
+import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityFolderName %>.model';
 import { <%= entityAngularName %>PopupService } from './<%= entityFileName %>-popup.service';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
-import { I<%= entityAngularName %> } from '../../<%= entityParentPathAddition %>shared/model/<%= entityFolderName %>.model';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-delete-dialog',

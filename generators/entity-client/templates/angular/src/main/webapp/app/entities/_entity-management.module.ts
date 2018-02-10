@@ -19,10 +19,10 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { <%= angularXAppName %>SharedModule } from '../../<%= entityParentPathAddition %>shared';
+import { <%= angularXAppName %>SharedModule } from 'app/shared';
 <%_ Object.keys(differentRelationships).forEach(key => {
        if (key === 'User') { _%>
-import { <%= angularXAppName %>AdminModule } from '../../<%= entityParentPathAddition %>admin/admin.module';
+import { <%= angularXAppName %>AdminModule } from 'app/admin/admin.module';
 <%_ }}); _%>
 import {
     <%= entityAngularName %>Service,

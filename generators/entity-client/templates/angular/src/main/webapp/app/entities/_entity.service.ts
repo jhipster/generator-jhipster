@@ -29,9 +29,9 @@ import { Observable } from 'rxjs/Observable';
 import { JhiDateUtils } from 'ng-jhipster';
 <%_ } _%>
 
-import { SERVER_API_URL } from '../../<%= entityParentPathAddition %>app.constants';
-import { createRequestOption } from '../../<%= entityParentPathAddition %>shared';
-import { I<%= entityAngularName %> } from '../../<%= entityParentPathAddition %>shared/model/<%= entityFolderName %>.model';
+import { SERVER_API_URL } from 'app/app.constants';
+import { createRequestOption } from 'app/shared';
+import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityFolderName %>.model';
 
 export type EntityResponseType = HttpResponse<I<%= entityAngularName %>>;
 export type EntityArrayResponseType = HttpResponse<I<%= entityAngularName %>[]>;

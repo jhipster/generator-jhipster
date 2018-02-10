@@ -35,9 +35,9 @@ import { Observable } from 'rxjs/Observable';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager<% if (queries && queries.length > 0) { %>, JhiAlertService<% } %><% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
 
+import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityFileName %>.model';
 import { <%= entityAngularName %>PopupService } from './<%= entityFileName %>-popup.service';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
-import { I<%= entityAngularName %> } from '../../<%= entityParentPathAddition %>shared/model/<%= entityFileName %>.model';
 <%_
 let hasRelationshipQuery = false;
 Object.keys(differentRelationships).forEach(key => {
@@ -53,9 +53,9 @@ Object.keys(differentRelationships).forEach(key => {
         if (uniqueRel.otherEntityAngularName !== entityAngularName) {
             if(uniqueRel.otherEntityAngularName === 'User') {
 _%>
-import { I<%= uniqueRel.otherEntityAngularName %>, <%= uniqueRel.otherEntityAngularName%>Service } from '../../<%= entityParentPathAddition %>shared';
+import { I<%= uniqueRel.otherEntityAngularName %>, <%= uniqueRel.otherEntityAngularName%>Service } from 'app/shared';
 <%_         } else { _%>
-import { I<%= uniqueRel.otherEntityAngularName %> } from '../../<%= entityParentPathAddition %>shared/model/<%= uniqueRel.otherEntityFolderName %>.model';
+import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/<%= uniqueRel.otherEntityFolderName %>.model';
 import { <%= uniqueRel.otherEntityAngularName%>Service } from '../<%= uniqueRel.otherEntityModulePath %>';
 <%_         }
         }

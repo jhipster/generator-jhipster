@@ -26,9 +26,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { JhiEventManager, <% if (pagination !== 'no') { %>JhiParseLinks, <% } %>JhiAlertService<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
 
-import { I<%= entityAngularName %> } from '../../<%= entityParentPathAddition %>shared/model/<%= entityFolderName %>.model';
+import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityFolderName %>.model';
+import { <% if (pagination !== 'no') { %>ITEMS_PER_PAGE, <% } %>Principal } from 'app/shared';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
-import { <% if (pagination !== 'no') { %>ITEMS_PER_PAGE, <% } %>Principal } from '../../<%= entityParentPathAddition %>shared';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>',

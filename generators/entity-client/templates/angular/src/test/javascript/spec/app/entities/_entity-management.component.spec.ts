@@ -25,9 +25,9 @@ import { Observable } from 'rxjs/Observable';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 
 import { <%=angularXAppName%>TestModule } from '../../../<%= entityParentPathAddition %>test.module';
-import { <%= entityAngularName %>Component } from '../../../../../../<%= entityParentPathAddition %>main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.component';
-import { <%= entityAngularName %>Service } from '../../../../../../<%= entityParentPathAddition %>main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
-import { <%= entityAngularName %> } from '../../../../../../<%= entityParentPathAddition %>main/webapp/app/shared/model/<%= entityFileName %>.model';
+import { <%= entityAngularName %>Component } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.component';
+import { <%= entityAngularName %>Service } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
+import { <%= entityAngularName %> } from 'app/shared/model/<%= entityFileName %>.model';
 
 describe('Component Tests', () => {
 
