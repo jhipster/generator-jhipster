@@ -412,7 +412,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/account/sessions/sessions.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/sessions/sessions.route.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/sessions/sessions.service.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/auth/auth-session.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/auth/auth-session.service.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/account/sessions/sessions.component.spec.ts`
     ],
 
