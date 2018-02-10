@@ -97,6 +97,7 @@ module.exports = class extends BaseGenerator {
         jhipsterFunc.addMavenDependencyManagement = this.addMavenDependencyManagement;
         jhipsterFunc.addMavenPlugin = this.addMavenPlugin;
         jhipsterFunc.addGradlePlugin = this.addGradlePlugin;
+        jhipsterFunc.addGradlePluginToPluginsBlock = this.addGradlePluginToPluginsBlock;
         jhipsterFunc.addGradleDependency = this.addGradleDependency;
         jhipsterFunc.addGradleDependencyManagement = this.addGradleDependencyManagement;
         jhipsterFunc.addSocialConfiguration = this.addSocialConfiguration;
