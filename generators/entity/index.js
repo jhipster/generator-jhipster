@@ -448,6 +448,7 @@ module.exports = class extends BaseGenerator {
                 context.entityApiUrl = entityNamePluralizedAndSpinalCased;
                 context.entityFileName = _.kebabCase(context.entityNameCapitalized + _.upperFirst(context.entityAngularJSSuffix));
                 context.entityFolderName = this.getEntityFolderName(context.clientRootFolder, context.entityFileName);
+                context.entityModelFileName = context.entityFolderName;
                 context.entityParentPathAddition = this.getEntityParentPathAddition(context.clientRootFolder);
                 context.entityPluralFileName = entityNamePluralizedAndSpinalCased + context.entityAngularJSSuffix;
                 context.entityServiceFileName = context.entityFileName;
@@ -609,6 +610,9 @@ module.exports = class extends BaseGenerator {
 
                     const otherEntityName = relationship.otherEntityName;
                     const otherEntityData = this.getEntityJson(otherEntityName);
+                    if (otherEntityData && otherEntityData.microserviceName && !otherEntityData.clientRootFolder) {
+                        otherEntityData.clientRootFolder = otherEntityData.microserviceName;
+                    }
                     const jhiTablePrefix = context.jhiTablePrefix;
 
                     if (context.dto && context.dto === 'mapstruct') {
@@ -669,8 +673,10 @@ module.exports = class extends BaseGenerator {
                                 } else {
                                     relationship.otherEntityModulePath = `${context.entityParentPathAddition ? `${context.entityParentPathAddition}/` : ''}${otherEntityData.clientRootFolder}/${relationship.otherEntityFileName}`;
                                 }
+                                relationship.otherEntityModelName = `${relationship.otherEntityModulePath}/${relationship.otherEntityFileName}`;
                             } else {
                                 relationship.otherEntityModulePath = `${context.entityParentPathAddition ? `${context.entityParentPathAddition}/` : ''}${relationship.otherEntityFileName}`;
+                                relationship.otherEntityModelName = relationship.otherEntityFileName;
                             }
                         } else {
                             relationship.otherEntityModuleName = `${context.angularXAppName}SharedModule`;

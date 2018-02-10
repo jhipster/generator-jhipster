@@ -75,8 +75,8 @@ const angularFiles = {
                 },
                 {
                     file: 'entities/_entity.model.ts',
-                    // using entity foldername so that there is no conflict when genertaing microservice entities
-                    renameTo: generator => `shared/model/${generator.entityFolderName}.model.ts`
+                    // using entityModelFileName so that there is no conflict when genertaing microservice entities
+                    renameTo: generator => `shared/model/${generator.entityModelFileName}.model.ts`
                 },
                 {
                     file: 'entities/_entity-management.component.ts',

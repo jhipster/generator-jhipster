@@ -23,8 +23,8 @@ import { HttpResponse } from '@angular/common/http';
 <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
 import { DatePipe } from '@angular/common';
 <%_ } _%>
+import { I<%= entityAngularName %>, <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
-import { I<%= entityAngularName %>, <%= entityAngularName %> } from 'app/shared/model/<%= entityFolderName %>.model';
 <%_
 let hasDate = false;
 if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) {
