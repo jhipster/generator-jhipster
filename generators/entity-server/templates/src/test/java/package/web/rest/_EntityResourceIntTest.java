@@ -485,12 +485,13 @@ _%>
     <% if (fieldsContainOwnerManyToMany === true) { %>
     public void getAll<%= entityClassPlural %>WithEagerRelationshipsIsEnabled() throws Exception {
         <%_ if (service !== 'no') { _%>
-        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>ServiceMock);
+        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>ServiceMock<% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %>);
         when(<%= entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
         <%_ } else { _%>
-        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>RepositoryMock);
+        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>RepositoryMock<% if (dto === 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, mock<%= entityClass %>SearchRepository<% } %><% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %>);
         when(<%= entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
         <%_ } _%>
+
         MockMvc rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -509,11 +510,11 @@ _%>
 
     public void getAll<%= entityClassPlural %>WithEagerRelationshipsIsNotEnabled() throws Exception {
         <%_ if (service !== 'no') { _%>
-        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>ServiceMock);
-        when(<%= entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>ServiceMock<% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %>);
+            when(<%= entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
         <%_ } else { _%>
-        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>RepositoryMock);
-        when(<%= entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>RepositoryMock<% if (dto === 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, mock<%= entityClass %>SearchRepository<% } %><% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %>);
+            when(<%= entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
         <%_ } _%>
             MockMvc rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
