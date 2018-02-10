@@ -79,13 +79,13 @@ relationships.forEach(relationship => {
             const ownerSide = relationship.ownerSide;
 
             if (relationshipType === 'many-to-many' && ownerSide === true) {
-                fieldType = otherEntityNameCapitalized + '[]';
+                fieldType = `${otherEntityFieldCapitalized}[]`;
                 fieldName = relationshipFieldNamePlural;
             } else if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {
-                if (otherEntityFieldCapitalized !='Id' && otherEntityFieldCapitalized !== '') {
+                if (otherEntityFieldCapitalized !== 'Id' && otherEntityFieldCapitalized !== '') {
                     fieldType = 'string';
-                    fieldName = relationshipFieldName + otherEntityFieldCapitalized;
-                    variables[fieldName] = fieldName + '?: ' + fieldType;
+                    fieldName = `${relationshipFieldName}${otherEntityFieldCapitalized}`;
+                    variables[fieldName] = `${fieldName}?: ${fieldType}`;
                 } 
                 fieldType = 'number';
                 fieldName = `${relationshipFieldName}Id`;
@@ -95,7 +95,7 @@ relationships.forEach(relationship => {
             }
         }
     }
-    variables[fieldName] = fieldName + '?: ' + fieldType;
+    variables[fieldName] = `${fieldName}?: ${fieldType}`;
 });
 _%>
 import { BaseEntity<% if (hasUserRelationship) { %>, User<% } %> } from './../../shared';
