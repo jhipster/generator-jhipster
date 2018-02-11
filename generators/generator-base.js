@@ -233,9 +233,17 @@ module.exports = class extends PrivateBase {
         try {
             if (clientFramework === 'angularX') {
                 const appName = this.getAngularXAppName();
-                let importStatement = `|import { ${appName}${entityAngularName}Module } from './${entityFolderName}/${entityFileName}.module';`;
+                let importName = `${appName}${entityAngularName}Module`;
                 if (microServiceName) {
-                    importStatement = `|import { ${appName}${entityAngularName}Module as ${_.upperFirst(_.camelCase(microServiceName))}${entityAngularName}Module } from './${entityFolderName}/${entityFileName}.module';`;
+                    importName = `${importName} as ${_.upperFirst(_.camelCase(microServiceName))}${entityAngularName}Module`;
+                }
+                let importStatement = `|import { ${importName} } from './${entityFolderName}/${entityFileName}.module';`;
+                if (importStatement.length > constants.LINE_LENGTH) {
+                    importStatement =
+                        `|// prettier-ignore
+                         |import {
+                         |    ${importName}
+                         |} from './${entityFolderName}/${entityFileName}.module';`;
                 }
                 jhipsterUtils.rewriteFile({
                     file: entityModulePath,
