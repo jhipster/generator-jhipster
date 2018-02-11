@@ -109,7 +109,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
     private static final String DEFAULT_LOGIN = "johndoe";
     private static final String UPDATED_LOGIN = "jhipster";
 
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && authenticationType !== 'oauth2') { _%>
     private static final Long DEFAULT_ID = 1L;
     <%_ } else if (databaseType === 'couchbase'){ _%>
     private static final String DEFAULT_ID = User.PREFIX + DEFAULT_LOGIN;
@@ -207,7 +207,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
      */
     public static User createEntity(<% if (databaseType === 'sql') { %>EntityManager em<% } %>) {
         User user = new User();
-        <%_ if (databaseType === 'cassandra') { _%>
+        <%_ if (databaseType === 'cassandra' || authenticationType === 'oauth2') { _%>
         user.setId(UUID.randomUUID().toString());
         <%_ } _%>
         user.setLogin(DEFAULT_LOGIN<% if (databaseType === 'sql') { %> + RandomStringUtils.randomAlphabetic(5)<% } %>);
@@ -737,11 +737,11 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
     public void testUserEquals() throws Exception {
         TestUtil.equalsVerifier(User.class);
         User user1 = new User();
-        user1.setId(<% if (databaseType === 'sql') { %>1L<% } else { %>"id1"<% } %>);
+        user1.setId(<% if (databaseType === 'sql' && authenticationType !== 'oauth2') { %>1L<% } else { %>"id1"<% } %>);
         User user2 = new User();
         user2.setId(user1.getId());
         assertThat(user1).isEqualTo(user2);
-        user2.setId(<% if (databaseType === 'sql') { %>2L<% } else { %>"id2"<% } %>);
+        user2.setId(<% if (databaseType === 'sql' && authenticationType !== 'oauth2') { %>2L<% } else { %>"id2"<% } %>);
         assertThat(user1).isNotEqualTo(user2);
         user1.setId(null);
         assertThat(user1).isNotEqualTo(user2);

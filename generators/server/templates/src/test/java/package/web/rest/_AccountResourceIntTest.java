@@ -32,6 +32,7 @@ import <%=packageName%>.service.UserService;
     <%_ } _%>
 import <%=packageName%>.web.rest.errors.ExceptionTranslator;
 
+import org.apache.commons.lang3.RandomStringUtils;
     <%_ if (applicationType === 'monolith') { _%>
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -140,6 +141,9 @@ public class AccountResourceIntTest<% if (databaseType === 'cassandra') { %>exte
         <%_ } _%>
 
         User user = new User();
+        <%_ if (authenticationType === 'oauth2') { _%>
+        user.setId(RandomStringUtils.randomAlphanumeric(50));
+        <%_ } _%>
         user.setLogin("test");
         user.setFirstName("john");
         user.setLastName("doe");

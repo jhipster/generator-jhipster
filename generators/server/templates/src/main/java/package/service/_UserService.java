@@ -609,6 +609,7 @@ public class UserService {
 
     private static User getUser(Map<String, Object> details) {
         User user = new User();
+        user.setId((String) details.get("sub"));
         user.setLogin((String) details.get("preferred_username"));
         if (details.get("given_name") != null) {
             user.setFirstName((String) details.get("given_name"));

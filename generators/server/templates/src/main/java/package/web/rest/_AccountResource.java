@@ -85,7 +85,6 @@ public class AccountResource {
     @GetMapping("/account")
     @Timed
     @SuppressWarnings("unchecked")
-    <%_ if (applicationType === 'monolith') { _%>
     public UserDTO getAccount(Principal principal) {
         if (principal != null) {
             if (principal instanceof OAuth2Authentication) {
@@ -100,34 +99,6 @@ public class AccountResource {
             throw new InternalServerErrorException("User could not be found");
         }
     }
-    <%_ } else { _%>
-    public User getAccount(Principal principal) {
-        return Optional.ofNullable(principal)
-            .filter(it -> it instanceof OAuth2Authentication)
-            .map(it -> ((OAuth2Authentication) it).getUserAuthentication())
-            .map(authentication -> {
-                    Map<String, Object> details = (Map<String, Object>) authentication.getDetails();
-                    Boolean activated = false;
-                    if (details.get("email_verified") != null) {
-                        activated = (Boolean) details.get("email_verified");
-                    }
-                    return new User(
-                        authentication.getName(),
-                        (String) details.get("given_name"),
-                        (String) details.get("family_name"),
-                        (String) details.get("email"),
-                        (String) details.get("langKey"),
-                        (String) details.get("picture"),
-                        activated,
-                        authentication.getAuthorities().stream()
-                            .map(GrantedAuthority::getAuthority)
-                            .collect(Collectors.toSet())
-                    );
-                }
-            )
-            .orElseThrow(() -> new InternalServerErrorException("User could not be found"));
-    }
-    <%_ } _%>
 }
 <%_ } else { _%>
 import com.codahale.metrics.annotation.Timed;

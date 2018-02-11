@@ -57,11 +57,16 @@
     -->
     <changeSet id="00000000000001" author="jhipster">
 <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
-    <%_ if (authenticationType !== 'oauth2' || (authenticationType === 'oauth2' && applicationType === 'monolith')) { _%>
         <createTable tableName="<%= jhiTablePrefix %>_user">
+            <%_ if (authenticationType === 'oauth2') { _%>
+            <column name="id" type="varchar(100)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <%_ } else { _%>
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
+            <%_ } _%>
             <column name="login" type="varchar(<% if (enableSocialSignIn) { %>100<% } else { %>50<% } %>)">
                 <constraints unique="true" nullable="false" uniqueConstraintName="ux_user_login"/>
             </column>
@@ -109,7 +114,6 @@
             <column name="email" type="varchar(100)"/>
         </createIndex>
     <%_ } _%>
-    <%_ } _%>
         <createTable tableName="<%= jhiTablePrefix %>_authority">
             <column name="name" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
@@ -117,7 +121,7 @@
         </createTable>
 
         <createTable tableName="<%= jhiTablePrefix %>_user_authority">
-            <column name="user_id" type="bigint">
+            <column name="user_id" type="<%_ if (authenticationType === 'oauth2') { _%>varchar(100)<%_ } else { _%>bigint<%_ } _%>">
                 <constraints nullable="false"/>
             </column>
             <column name="authority_name" type="varchar(50)">

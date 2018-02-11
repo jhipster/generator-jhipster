@@ -87,7 +87,7 @@ import static <%=packageName%>.config.Constants.ID_DELIMITER;
 <%_ } _%>
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 @Repository
-public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRepository<User, Long><% } %><% if (databaseType === 'mongodb') { %>MongoRepository<User, String><% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<User, String><% } %> {
+public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRepository<User, <% if (authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %>><% } %><% if (databaseType === 'mongodb') { %>MongoRepository<User, String><% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<User, String><% } %> {
     <%_ if (cacheManagerIsAvailable) { _%>
 
     String USERS_BY_LOGIN_CACHE = "usersByLogin";

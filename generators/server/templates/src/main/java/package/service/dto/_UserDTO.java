@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  */
 public class UserDTO {
 
-    private <% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { %>String<% } else { %>Long<% } %> id;
+    private <% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id;
 
     <%_ let columnMax = 50;
         if (enableSocialSignIn) {
@@ -111,11 +111,11 @@ public class UserDTO {
         <%_ } _%>
     }
 
-    public <% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { %>String<% } else { %>Long<% } %> getId() {
+    public <% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> getId() {
         return id;
     }
 
-    public void setId(<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { %>String<% } else { %>Long<% } %> id) {
+    public void setId(<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id) {
         this.id = id;
     }
 
