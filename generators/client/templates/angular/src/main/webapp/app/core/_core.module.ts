@@ -29,7 +29,7 @@ import {
     <%_ } _%>
     UserRouteAccessService
 } from './';
-<%_ if (enableTranslation) { _%>
+<%_ if (enableI18nRTL) { _%>
 import {
     FindLanguageFromKeyPipe
 } from '../shared';<%_ } _%>
