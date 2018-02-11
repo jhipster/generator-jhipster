@@ -45,8 +45,8 @@ Object.keys(differentRelationships).forEach(key => {
         const uniqueRel = differentRelationships[key][0];
         if (uniqueRel.otherEntityAngularName !== entityAngularName) {
             const modulePath = uniqueRel.otherEntityAngularName === 'User' ?
-                `../../../../../../${entityParentPathAddition}main/webapp/app/shared`
-                : `../../../../../../${entityParentPathAddition}main/webapp/app/entities/${uniqueRel.otherEntityClientRootFolder ? `${uniqueRel.otherEntityClientRootFolder}/` : ''}${uniqueRel.otherEntityFileName}`
+                `app/shared`
+                : `app/entities/${uniqueRel.otherEntityClientRootFolder ? `${uniqueRel.otherEntityClientRootFolder}/` : ''}${uniqueRel.otherEntityFileName}`
 _%>
 import { <%= uniqueRel.otherEntityAngularName%>Service } from '<%= modulePath %>';
 <%_     }
