@@ -25,7 +25,10 @@ const utils = require('./utils.js');
 
 module.exports = (WATCH) => ({
     resolve: {
-        extensions: ['.ts', '.js']
+        extensions: ['.ts', '.js'],
+        alias: {
+            app: utils.root('src/main/webapp/app/')
+        }
     },
     module: {
         rules: [
