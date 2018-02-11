@@ -865,6 +865,7 @@ module.exports = class extends Generator {
      */
     rebuildClient() {
         const done = this.async();
+        this.spawnCommandSync(this.clientPackageManager, ['run', 'prettier:format']);
         this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app\n')}`);
         this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build']).on('close', () => {
             done();
