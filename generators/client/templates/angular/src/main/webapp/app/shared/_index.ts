@@ -29,9 +29,6 @@ export * from './language/find-language-from-key.pipe';
 export * from './login/login.component';
 <%_ } _%>
 export * from './user/account.model';
-<%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
-export * from './user/user.model';
-<%_ } _%>
 export * from './util/request-util';
 <%_ if (enableSocialSignIn) { _%>
 export * from './social/social.component';

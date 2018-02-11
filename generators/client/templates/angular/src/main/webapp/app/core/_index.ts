@@ -16,6 +16,10 @@ export * from './social/social.service';
 <%_ if (enableTranslation) { _%>
 export * from './language/language.helper';
 <%_ } _%>
+export * from './user/account.model';
+<%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
+export * from './user/user.model';
+<%_ } _%>
 export * from './auth/principal.service';
 export * from './auth/user-route-access-service';
 export * from './login/login-modal.service';

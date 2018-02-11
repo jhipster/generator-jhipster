@@ -377,7 +377,8 @@ const files = {
                 'core/_index.ts',
                 'core/_core.module.ts',
                 // login
-                'core/login/_login.service.ts'
+                'core/login/_login.service.ts',
+                'core/user/_account.model.ts'
             ]
         },
         {
@@ -408,7 +409,6 @@ const files = {
                 'shared/constants/_pagination.constants.ts',
                 // models
                 'shared/util/_request-util.ts',
-                'shared/user/_account.model.ts',
                 // alert service code
                 'shared/alert/_alert.component.ts',
                 'shared/alert/_alert-error.component.ts'
@@ -436,7 +436,7 @@ const files = {
             condition: generator => !generator.skipUserManagement || generator.authenticationType === 'oauth2',
             path: ANGULAR_DIR,
             templates: [
-                'shared/user/_user.model.ts'
+                'core/user/_user.model.ts'
             ]
         }
     ],

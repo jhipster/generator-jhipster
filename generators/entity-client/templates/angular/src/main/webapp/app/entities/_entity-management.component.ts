@@ -27,7 +27,10 @@ import { Subscription } from 'rxjs/Subscription';
 import { JhiEventManager, <% if (pagination !== 'no') { %>JhiParseLinks, <% } %>JhiAlertService<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
 
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
-import { <% if (pagination !== 'no') { %>ITEMS_PER_PAGE, <% } %>Principal } from 'app/shared';
+import { Principal } from 'app/core';
+<%_ if (pagination !== 'no') { %>
+import { ITEMS_PER_PAGE } from 'app/shared';
+<%_ } _%>
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 
 @Component({

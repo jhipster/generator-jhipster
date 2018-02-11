@@ -38,7 +38,7 @@ import { <% if (pagination === 'pagination' || pagination === 'pager') { %>Resol
 import { JhiPaginationUtil } from 'ng-jhipster';
 <%_ } _%>
 
-import { UserRouteAccessService } from 'app/shared';
+import { UserRouteAccessService } from 'app/core';
 import { <%= entityAngularName %>Component } from './<%= entityFileName %>.component';
 import { <%= entityAngularName %>DetailComponent } from './<%= entityFileName %>-detail.component';
 import { <%= entityAngularName %>PopupComponent } from './<%= entityFileName %>-dialog.component';

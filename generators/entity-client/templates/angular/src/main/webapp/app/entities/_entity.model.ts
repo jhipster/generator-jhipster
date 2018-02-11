@@ -81,7 +81,7 @@ relationships.forEach(relationship => {
 });
 _%>
 <%_ if (hasUserRelationship) { _%>
-import { IUser } from 'app/shared/user/user.model';
+import { IUser } from 'app/core/user/user.model';
 <%_ } _%>
 <%_ typeImports.forEach(typeImport => { _%>
 <%- typeImport %>;
