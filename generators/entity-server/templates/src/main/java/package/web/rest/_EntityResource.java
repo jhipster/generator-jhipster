@@ -73,7 +73,11 @@ public class <%= entityClass %>Resource {
 
     private final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
 
-    private static final String ENTITY_NAME = "<%= entityInstance %>";
+    <%_ let entityName = entityInstance;
+    if (applicationType === 'microservice') {
+        entityName = `${baseName}${entityInstance}`;
+    } _%>
+    private static final String ENTITY_NAME = "<%= entityName %>";
     <%_
     const instanceType = (dto === 'mapstruct') ? entityClass + 'DTO' : entityClass;
     const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
