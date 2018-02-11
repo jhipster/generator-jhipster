@@ -136,6 +136,9 @@ const angularFiles = {
             condition: generator => generator.protractorTests,
             path: CLIENT_TEST_SRC_DIR,
             templates: [{
+                file: 'e2e/entities/_entity-page-object.ts',
+                renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}.page-object.ts`
+            }, {
                 file: 'e2e/entities/_entity.spec.ts',
                 renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}.spec.ts`
             }]
@@ -203,7 +206,7 @@ function writeFiles() {
                 this.addEntityToModule(this.entityInstance, this.entityClass, this.entityAngularName, this.entityFolderName, this.entityFileName, this.enableTranslation, this.clientFramework);
             }
 
-            this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework);
+            this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
         }
     };
 }
