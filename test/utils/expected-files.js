@@ -188,13 +188,13 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management.route.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-modal.service.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/user/user.model.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/user/user.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/user/user.model.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/user/user.service.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-delete-dialog.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-detail.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-dialog.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management.component.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/shared/user/user.service.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/core/user/user.service.spec.ts`,
     ],
 
     client: [
@@ -323,6 +323,8 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/shared/shared-libs.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/shared.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/user/account.model.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/core.module.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/index.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/vendor.ts`,
         `${CLIENT_MAIN_SRC_DIR}content/css/documentation.css`,
         `${CLIENT_MAIN_SRC_DIR}content/css/global.css`,
@@ -424,7 +426,7 @@ const expectedFiles = {
 
     jwtClient: [
         `${CLIENT_MAIN_SRC_DIR}app/blocks/interceptor/auth.interceptor.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/auth/auth-jwt.service.ts`
+        `${CLIENT_MAIN_SRC_DIR}app/core/auth/auth-jwt.service.ts`
     ],
 
     oauth2: [
