@@ -20,7 +20,6 @@ import { Component, OnInit, AfterViewInit, Renderer, ElementRef } from '@angular
 
 import { PasswordResetInitService } from './password-reset-init.service';
 import { EMAIL_NOT_FOUND_TYPE } from '../../../shared';
-import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -54,7 +53,7 @@ export class PasswordResetInitComponent implements OnInit, AfterViewInit {
 
         this.passwordResetInitService.save(this.resetAccount.email).subscribe(() => {
             this.success = 'OK';
-        }, (response: HttpErrorResponse) => {
+        }, (response) => {
             this.success = null;
             if (response.status === 400 && response.error.type === EMAIL_NOT_FOUND_TYPE) {
                 this.errorEmailNotExists = 'ERROR';
