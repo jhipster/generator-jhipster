@@ -73,5 +73,6 @@
   "angularJSSuffix": "myentities",
   "microserviceName": "mymicroservice",
   "skipClient": true,
-  "skipServer": true
+  "skipServer": true,
+  "clientRootFolder": "toto"
 }

@@ -29,6 +29,7 @@ const DocumentParser = require('../../../lib/parser/document_parser');
 const EntityParser = require('../../../lib/parser/entity_parser');
 const parseFromDir = require('../../../lib/reader/json_reader').parseFromDir;
 
+// todo: clean up this test file
 describe('::exportToJDL', () => {
   describe('when passing invalid parameters', () => {
     describe('such as undefined', () => {
@@ -55,7 +56,7 @@ describe('::exportToJDL', () => {
       ['Country', 'Department', 'Employee', 'Job', 'JobHistory', 'Location', 'Region', 'Task'].forEach((entityName) => {
         previousEntities[entityName] = readEntityJSON(`./test/test_files/jhipster_app/.jhipster/${entityName}.json`);
         previousEntities[entityName].changelogDate = newEntities[entityName].changelogDate;
-        if (previousEntities[entityName].javadoc === undefined) {
+        if (!previousEntities[entityName].javadoc) {
           previousEntities[entityName].javadoc = undefined;
         }
         // Sort arrays to ease comparison

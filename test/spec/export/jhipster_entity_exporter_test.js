@@ -27,6 +27,7 @@ const DocumentParser = require('../../../lib/parser/document_parser');
 const EntityParser = require('../../../lib/parser/entity_parser');
 const parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
 
+// todo client this test file
 describe('::exportToJSON', () => {
   describe('when passing invalid parameters', () => {
     describe('such as undefined', () => {

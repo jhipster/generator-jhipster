@@ -39,8 +39,8 @@ const BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').
 
 describe('DocumentParser', () => {
   describe('::parse', () => {
-    describe('when passing invalid args', () => {
-      describe('because there is no document', () => {
+    context('when passing invalid args', () => {
+      context('because there is no document', () => {
         it('fails', () => {
           try {
             DocumentParser.parse(null, 'sql');
@@ -50,7 +50,7 @@ describe('DocumentParser', () => {
           }
         });
       });
-      describe('because there is no database type', () => {
+      context('because there is no database type', () => {
         it('fails', () => {
           try {
             DocumentParser.parse({
@@ -62,7 +62,7 @@ describe('DocumentParser', () => {
           }
         });
       });
-      describe('because the database type doesn\'t exist', () => {
+      context('because the database type doesn\'t exist', () => {
         it('fails', () => {
           try {
             DocumentParser.parse({
@@ -75,8 +75,8 @@ describe('DocumentParser', () => {
         });
       });
     });
-    describe('when passing valid args', () => {
-      describe('with no error', () => {
+    context('when passing valid args', () => {
+      context('with no error', () => {
         const input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
         const content = DocumentParser.parse(input, 'mysql');
         it('builds a JDLObject', () => {
@@ -196,13 +196,13 @@ describe('DocumentParser', () => {
           ]);
         });
       });
-      describe('with an application type', () => {
+      context('with an application type', () => {
         const input = parseFromFiles(['./test/test_files/invalid_field_type.jdl']);
         it('doesn\'t check for field types', () => {
           DocumentParser.parse(input, 'sql', 'gateway');
         });
       });
-      describe('with a required relationship', () => {
+      context('with a required relationship', () => {
         const input = parseFromFiles(['./test/test_files/required_relationships.jdl']);
         const content = DocumentParser.parse(input, 'sql');
         it('adds it', () => {
@@ -210,7 +210,7 @@ describe('DocumentParser', () => {
           expect(content.relationships.relationships.OneToOne['OneToOne_A{b}_B{a}'].isInjectedFieldInToRequired).to.be.false;
         });
       });
-      describe('with a field name \'id\'', () => {
+      context('with a field name \'id\'', () => {
         const input = parseFromFiles(['./test/test_files/id_field.jdl']);
         const content = DocumentParser.parse(input, 'sql');
         it('doesn\'t add it', () => {
@@ -223,7 +223,7 @@ describe('DocumentParser', () => {
           }));
         });
       });
-      describe('with an invalid field type', () => {
+      context('with an invalid field type', () => {
         const input = parseFromFiles(['./test/test_files/invalid_field_type.jdl']);
         it('fails', () => {
           try {
@@ -234,7 +234,7 @@ describe('DocumentParser', () => {
           }
         });
       });
-      describe('with an unexistent validation for a field type', () => {
+      context('with an unexistent validation for a field type', () => {
         const input = parseFromFiles(['./test/test_files/non_existent_validation.jdl']);
         it('fails', () => {
           try {
@@ -245,7 +245,7 @@ describe('DocumentParser', () => {
           }
         });
       });
-      describe('with entities that do not exist for a relationship', () => {
+      context('with entities that do not exist for a relationship', () => {
         const input = parseFromFiles(['./test/test_files/unexistent_entities_for_relationship.jdl']);
         it('fails', () => {
           try {
@@ -256,7 +256,7 @@ describe('DocumentParser', () => {
           }
         });
       });
-      describe('with User entity as from for a relationship', () => {
+      context('with User entity as from for a relationship', () => {
         const input = parseFromFiles(['./test/test_files/user_entity_from_relationship.jdl']);
         it('fails', () => {
           try {
@@ -267,7 +267,7 @@ describe('DocumentParser', () => {
           }
         });
       });
-      describe('with User entity as to for a relationship', () => {
+      context('with User entity as to for a relationship', () => {
         const input = parseFromFiles(['./test/test_files/user_entity_to_relationship.jdl']);
         const content = DocumentParser.parse(input, 'sql');
         it('is processed', () => {
@@ -275,7 +275,7 @@ describe('DocumentParser', () => {
           expect(content.relationships.relationships.OneToOne['OneToOne_B{user}_User'].to.name).to.eq('User');
         });
       });
-      describe('with an invalid option', () => {
+      context('with an invalid option', () => {
         const input = parseFromFiles(['./test/test_files/invalid_option.jdl']);
         it('fails', () => {
           try {
@@ -286,7 +286,7 @@ describe('DocumentParser', () => {
           }
         });
       });
-      describe('with a required enum', () => {
+      context('with a required enum', () => {
         const input = parseFromFiles(['./test/test_files/enum.jdl']);
         const content = DocumentParser.parse(input, 'sql');
         const enumField = new JDLField({
@@ -304,7 +304,7 @@ describe('DocumentParser', () => {
           expect(content.entities.MyEntity.fields.sourceType).to.deep.eq(enumField);
         });
       });
-      describe('when using the noFluentMethods option', () => {
+      context('when using the noFluentMethods option', () => {
         let input = parseFromFiles(['./test/test_files/fluent_methods.jdl']);
         let content = DocumentParser.parse(input, 'sql');
         it('adds it correctly', () => {
@@ -325,7 +325,7 @@ describe('DocumentParser', () => {
           ]);
         });
       });
-      describe('when having following comments', () => {
+      context('when having following comments', () => {
         const input = parseFromFiles(['./test/test_files/following_comments.jdl']);
         const content = DocumentParser.parse(input, 'sql');
         it('accepts them', () => {
@@ -333,19 +333,19 @@ describe('DocumentParser', () => {
           expect(content.entities.A.fields.thing.comment).to.eq('def');
           expect(content.entities.A.fields.another.comment).to.eq('ghi');
         });
-        describe('when having both forms of comments', () => {
+        context('when having both forms of comments', () => {
           it('only accepts the one defined first', () => {
             expect(content.entities.B.fields.name.comment).to.eq('xyz');
           });
         });
-        describe('when using commas', () => {
+        context('when using commas', () => {
           it('assigns the comment to the next field', () => {
             expect(content.entities.C.fields.name.comment).to.be.undefined;
             expect(content.entities.C.fields.thing.comment).to.eq('abc');
           });
         });
       });
-      describe('when parsing another complex JDL file', () => {
+      context('when parsing another complex JDL file', () => {
         const input = parseFromFiles(['./test/test_files/complex_jdl_2.jdl']);
         const content = DocumentParser.parse(input, 'sql');
         it('parses it', () => {
@@ -501,7 +501,7 @@ describe('DocumentParser', () => {
           expect(options[6].value).to.eq('pagination');
         });
       });
-      describe('when having two consecutive comments for fields', () => {
+      context('when having two consecutive comments for fields', () => {
         const input = parseFromFiles(['./test/test_files/field_comments.jdl']);
         const content = DocumentParser.parse(input, 'sql');
         it('assigns them correctly', () => {
@@ -552,7 +552,7 @@ describe('DocumentParser', () => {
           });
         });
       });
-      describe('when having constants', () => {
+      context('when having constants', () => {
         const input = parseFromFiles(['./test/test_files/constants.jdl']);
         const content = DocumentParser.parse(input, 'sql');
         it('assigns the constants\' value when needed', () => {
@@ -605,7 +605,7 @@ describe('DocumentParser', () => {
           });
         });
       });
-      describe('when having a cassandra app with paginated entities', () => {
+      context('when having a cassandra app with paginated entities', () => {
         const input = parseFromFiles(['./test/test_files/cassandra_jdl.jdl']);
         it('fails', () => {
           try {
@@ -615,13 +615,49 @@ describe('DocumentParser', () => {
           }
         });
       });
-      describe('when parsing filtered entities', () => {
+      context('when parsing filtered entities', () => {
         const input = parseFromFiles(['./test/test_files/filtering_without_service.jdl']);
         const content = DocumentParser.parse(input, 'sql');
 
         it('works', () => {
           expect(content.options.options.filter.entityNames.has('*')).to.be.true;
           expect(content.options.options.filter.excludedNames.has('B')).to.be.true;
+        });
+      });
+      context('when parsing entities with a custom client root folder', () => {
+        context('inside a microservice app', () => {
+          let content = null;
+
+          before(() => {
+            const input = parseFromFiles(['./test/test_files/client_root_folder.jdl']);
+            content = DocumentParser.parseFromConfigurationObject({
+              document: input,
+              databaseType: 'sql',
+              applicationType: ApplicationTypes.MICROSERVICE
+            });
+          });
+
+          it('is ignored', () => {
+            expect(content.options.options['clientRootFolder_test-root']).to.be.undefined;
+          });
+        });
+        context('inside any other app', () => {
+          let content = null;
+
+          before(() => {
+            const input = parseFromFiles(['./test/test_files/client_root_folder.jdl']);
+            content = DocumentParser.parseFromConfigurationObject({
+              document: input,
+              databaseType: 'sql',
+              applicationType: ApplicationTypes.MONOLITH
+            });
+          });
+
+          it('works', () => {
+            expect(content.options.options['clientRootFolder_test-root'].entityNames.has('*')).to.be.true;
+            expect(content.options.options['clientRootFolder_test-root'].excludedNames.has('C')).to.be.true;
+            expect(content.options.options['clientRootFolder_test-root'].value).to.equal('test-root');
+          });
         });
       });
       context('when parsing a JDL inside a microservice app', () => {

@@ -53,7 +53,8 @@
     noServer: { list: [], excluded: [] },
     filter: { list: [], excluded: [] },
     angularSuffix: {},
-    noFluentMethod: { list: [], excluded: [] }
+    noFluentMethod: { list: [], excluded: [] },
+    clientRootFolder: {}
   };
 }
 
@@ -115,6 +116,10 @@ prog
   }
   / SPACE* filter:filterDecl SPACE* p:prog {
     parsed.filter = filter;
+    return parsed;
+  }
+  / SPACE* clientRootFolder:clientRootFolderDecl SPACE* p:prog {
+    parsed.clientRootFolder = clientRootFolder;
     return parsed;
   }
   / '' { return parsed; }
@@ -191,7 +196,7 @@ exclusionSub
 
 // noFluentMethod
 noFluentMethod
-  = NO_FLUENT_METHOD SPACE+ decl:subNoFluentMethod SPACE* ex:exclusion? SPACE*  {
+  = NO_FLUENT_METHOD SPACE+ decl:subNoFluentMethod SPACE* ex:exclusion? SPACE* {
     addUniqueElements(parsed.noFluentMethod.list, decl);
     if (ex) {
       addUniqueElements(parsed.noFluentMethod.excluded, ex);
@@ -207,7 +212,7 @@ subNoFluentMethod
 
 // DTO
 dtoDecl
-  = DTO SPACE+ decl:entityList SPACE* ex:exclusion? SPACE*  {
+  = DTO SPACE+ decl:entityList SPACE* ex:exclusion? SPACE* {
     parsed.dto[decl[decl.length - 1]] = parsed.dto[decl[decl.length - 1]] || { list: [], excluded: [] };
     addUniqueElements(parsed.dto[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
     if (ex) {
@@ -218,7 +223,7 @@ dtoDecl
 
 // Pagination
 pagiDecl
-  = PAGINATE SPACE+ decl:entityList SPACE* ex:exclusion? SPACE*  {
+  = PAGINATE SPACE+ decl:entityList SPACE* ex:exclusion? SPACE* {
   	parsed.pagination[decl[decl.length - 1]] =
       parsed.pagination[decl[decl.length - 1]] || { list: [], excluded: [] };
     addUniqueElements(parsed.pagination[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
@@ -230,7 +235,7 @@ pagiDecl
 
 // Service
 serviceDecl
-  = SERVICE SPACE+ decl:entityList SPACE* ex:exclusion? SPACE*  {
+  = SERVICE SPACE+ decl:entityList SPACE* ex:exclusion? SPACE* {
   	parsed.service[decl[decl.length - 1]] =
       parsed.service[decl[decl.length - 1]] || { list: [], excluded: [] };
     addUniqueElements(parsed.service[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
@@ -242,7 +247,7 @@ serviceDecl
 
 // first way of declaring microservices
 microserviceDecl1
-  = MICROSERVICE SPACE+ decl:entityList SPACE* ex:exclusion? SPACE*  {
+  = MICROSERVICE SPACE+ decl:entityList SPACE* ex:exclusion? SPACE* {
     parsed.microservice[decl[decl.length - 1]] =
       parsed.microservice[decl[decl.length - 1]] || { list: [], excluded: [] };
     addUniqueElements(parsed.microservice[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
@@ -254,7 +259,7 @@ microserviceDecl1
 
 // searchEngine
 searchEngineDecl
-  = SEARCH SPACE+ decl:entityList SPACE* ex:exclusion? SPACE*  {
+  = SEARCH SPACE+ decl:entityList SPACE* ex:exclusion? SPACE* {
     parsed.searchEngine[decl[decl.length - 1]] =
       parsed.searchEngine[decl[decl.length - 1]] || { list: [], excluded: [] };
     addUniqueElements(parsed.searchEngine[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
@@ -266,7 +271,7 @@ searchEngineDecl
 
 // skipClient option
 noClientDecl
-  = SKIP_CLIENT SPACE+ decl:subNoClientDecl SPACE* ex:exclusion? SPACE*  {
+  = SKIP_CLIENT SPACE+ decl:subNoClientDecl SPACE* ex:exclusion? SPACE* {
     addUniqueElements(parsed.noClient.list, decl);
     if (ex) {
       addUniqueElements(parsed.noClient.excluded, ex);
@@ -283,7 +288,7 @@ subNoClientDecl
 
 // skipServer option
 noServerDecl
-  = SKIP_SERVER SPACE+ decl:subNoServerDecl SPACE* ex:exclusion? SPACE*  {
+  = SKIP_SERVER SPACE+ decl:subNoServerDecl SPACE* ex:exclusion? SPACE* {
     addUniqueElements(parsed.noServer.list, decl);
     if (ex) {
       addUniqueElements(parsed.noServer.excluded, ex);
@@ -299,7 +304,7 @@ subNoServerDecl
 
 // JPA Metamodel filter option
 filterDecl
-  = FILTER SPACE decl:subFilterDecl SPACE* ex:exclusion? SPACE*  {
+  = FILTER SPACE decl:subFilterDecl SPACE* ex:exclusion? SPACE* {
     addUniqueElements(parsed.filter.list, decl);
     if (ex) {
       addUniqueElements(parsed.filter.excluded, ex);
@@ -316,7 +321,7 @@ subFilterDecl
 
 // angularSuffix option
 angularSuffixDecl
-  = ANGULAR_SUFFIX SPACE* decl:entityList SPACE* ex:exclusion? SPACE*  {
+  = ANGULAR_SUFFIX SPACE* decl:entityList SPACE* ex:exclusion? SPACE* {
     parsed.angularSuffix[decl[decl.length - 1]] =
       parsed.angularSuffix[decl[decl.length - 1]] || { list: [], excluded: [] };
     addUniqueElements(parsed.angularSuffix[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
@@ -324,6 +329,19 @@ angularSuffixDecl
       addUniqueElements(parsed.angularSuffix[decl[decl.length - 1]].excluded, ex);
     }
     return parsed.angularSuffix;
+  }
+
+
+// clientRootFolder option
+clientRootFolderDecl
+  = CLIENT_ROOT_FOLDER SPACE* decl:entityList SPACE* ex:exclusion? SPACE* {
+    parsed.clientRootFolder[decl[decl.length - 1]] =
+      parsed.clientRootFolder[decl[decl.length - 1]] || { list: [], excluded: [] };
+    addUniqueElements(parsed.clientRootFolder[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
+    if (ex) {
+      addUniqueElements(parsed.clientRootFolder[decl[decl.length - 1]].excluded, ex);
+    }
+    return parsed.clientRootFolder;
   }
 
 // common way to declare an entity list
@@ -389,6 +407,7 @@ SKIP_CLIENT = 'skipClient'
 SKIP_SERVER = 'skipServer'
 ANGULAR_SUFFIX = 'angularSuffix'
 FILTER = 'filter'
+CLIENT_ROOT_FOLDER = 'clientRootFolder'
 // validations
 REQUIRED = 'required'
 MINLENGTH = 'minlength'
