@@ -673,14 +673,14 @@ module.exports = class extends BaseGenerator {
                                 } else {
                                     relationship.otherEntityModulePath = `${context.entityParentPathAddition ? `${context.entityParentPathAddition}/` : ''}${otherEntityData.clientRootFolder}/${relationship.otherEntityFileName}`;
                                 }
-                                relationship.otherEntityModelName = `${relationship.otherEntityModulePath}/${relationship.otherEntityFileName}`;
+                                relationship.otherEntityModelName = `${otherEntityData.clientRootFolder}/${relationship.otherEntityFileName}`;
                             } else {
                                 relationship.otherEntityModulePath = `${context.entityParentPathAddition ? `${context.entityParentPathAddition}/` : ''}${relationship.otherEntityFileName}`;
                                 relationship.otherEntityModelName = relationship.otherEntityFileName;
                             }
                         } else {
                             relationship.otherEntityModuleName = `${context.angularXAppName}SharedModule`;
-                            relationship.otherEntityModulePath = '../shared';
+                            relationship.otherEntityModulePath = 'app/shared';
                         }
                     }
                     // Load in-memory data for root

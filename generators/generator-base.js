@@ -1760,7 +1760,7 @@ module.exports = class extends PrivateBase {
     /**
      * Load an entity configuration file into context.
      */
-    loadEntityJson(fromPath) {
+    loadEntityJson(fromPath = this.context.fromPath) {
         const context = this.context;
         try {
             context.fileData = this.fs.readJSON(fromPath);

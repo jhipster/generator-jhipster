@@ -59,7 +59,7 @@ relationships.forEach(relationship => {
             hasUserRelationship = true;
         } else {
             fieldType = `I${relationship.otherEntityAngularName}[]`;
-            typeImports.add(`import { I${relationship.otherEntityAngularName} } from './${relationship.otherEntityFileName}.model'`);
+            typeImports.add(`import { I${relationship.otherEntityAngularName} } from 'app/shared/model/${relationship.otherEntityModelName}.model'`);
         }
         fieldName = relationship.relationshipFieldNamePlural;
     } else {
@@ -69,7 +69,7 @@ relationships.forEach(relationship => {
                 hasUserRelationship = true;
             } else {
                 fieldType = `I${relationship.otherEntityAngularName}`;
-                typeImports.add(`import { I${relationship.otherEntityAngularName} } from './${relationship.otherEntityFileName}.model'`);
+                typeImports.add(`import { I${relationship.otherEntityAngularName} } from 'app/shared/model/${relationship.otherEntityModelName}.model'`);
             }
             fieldName = relationship.relationshipFieldName;
         } else {
@@ -81,7 +81,7 @@ relationships.forEach(relationship => {
 });
 _%>
 <%_ if (hasUserRelationship) { _%>
-import { IUser } from '../user/user.model';
+import { IUser } from 'app/shared/user/user.model';
 <%_ } _%>
 <%_ typeImports.forEach(typeImport => { _%>
 <%- typeImport %>;
