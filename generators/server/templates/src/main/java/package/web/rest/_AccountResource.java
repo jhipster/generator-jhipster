@@ -19,20 +19,15 @@ limitations under the License.
 package <%=packageName%>.web.rest;
 
 <%_ if (authenticationType === 'oauth2') { _%>
-    <%_ if (applicationType === 'monolith') { _%>
 import <%=packageName%>.service.UserService;
 import <%=packageName%>.service.dto.UserDTO;
-    <%_ } else { _%>
 import <%=packageName%>.domain.User;
-    <%_ } _%>
 import <%=packageName%>.web.rest.errors.InternalServerErrorException;
 
 import com.codahale.metrics.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-    <%_ if (applicationType !== 'monolith') { _%>
 import org.springframework.security.core.GrantedAuthority;
-    <%_ } _%>
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,9 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.*;
-    <%_ if (applicationType !== 'monolith') { _%>
 import java.util.stream.Collectors;
-    <%_ } _%>
 
 /**
  * REST controller for managing the current user's account.
@@ -53,14 +46,12 @@ import java.util.stream.Collectors;
 public class AccountResource {
 
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
-    <%_ if (applicationType === 'monolith') { _%>
 
     private final UserService userService;
 
     public AccountResource(UserService userService) {
         this.userService = userService;
     }
-    <%_ } _%>
 
     /**
      * GET  /authenticate : check if the user is authenticated, and return its login.

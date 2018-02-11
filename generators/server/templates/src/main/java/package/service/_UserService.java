@@ -56,14 +56,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
     <%_ } _%>
 <%_ } _%>
-<%_ if (authenticationType === 'oauth2' && applicationType === 'monolith') { _%>
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
-<%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.security.crypto.password.PasswordEncoder;
 import <%=packageName%>.web.rest.errors.InvalidPasswordException;
@@ -74,17 +72,13 @@ import org.springframework.transaction.annotation.Transactional;<% } %>
 <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
 import java.time.LocalDate;
 <%_ } _%>
-<%_ if (authenticationType !== 'oauth2' || applicationType === 'monolith') { _%>
 import java.time.Instant;
-<%_ } _%>
 <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
 import java.util.*;
 import java.util.stream.Collectors;
-<%_ if (authenticationType === 'oauth2' && applicationType === 'monolith') { _%>
 import java.util.stream.Stream;
-<%_ } _%>
 
 /**
  * Service class for managing users.
@@ -204,7 +198,6 @@ public class UserService {
     }
 
     public User registerUser(UserDTO userDTO, String password) {
-
         User newUser = new User();<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
         Authority authority = authorityRepository.findById(AuthoritiesConstants.USER).get();
         Set<Authority> authorities = new HashSet<>();<% } %><% if (databaseType === 'cassandra') { %>
@@ -518,7 +511,6 @@ public class UserService {
         return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
     }
     <%_ } _%>
-    <%_ if (authenticationType === 'oauth2' && applicationType === 'monolith') { _%>
 
     /**
      * Returns the user for a OAuth2 authentication.
@@ -650,6 +642,4 @@ public class UserService {
                         return auth;
                     })<% } %>.collect(Collectors.toSet());
     }
-    <%_ } _%>
-
 }
