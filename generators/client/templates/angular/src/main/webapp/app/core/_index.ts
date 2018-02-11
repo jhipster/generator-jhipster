@@ -22,7 +22,9 @@ export * from './user/user.model';
 <%_ } _%>
 export * from './auth/principal.service';
 export * from './auth/user-route-access-service';
-export * from './login/login-modal.service';
+<%_ if (authenticationType !== 'oauth2') { _%> 
+export * from './login/login-modal.service'; 
+<%_ } _%> 
 export * from './login/login.service';
 export * from './user/user.service';
 export * from './core.module';
