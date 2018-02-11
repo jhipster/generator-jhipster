@@ -26,7 +26,6 @@ import { UserMgmtDetailComponent } from './user-management-detail.component';
 import { UserDialogComponent } from './user-management-dialog.component';
 import { UserDeleteDialogComponent } from './user-management-delete-dialog.component';
 
-
 @Injectable()
 export class UserResolve implements CanActivate {
 

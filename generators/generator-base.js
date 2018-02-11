@@ -228,18 +228,14 @@ module.exports = class extends PrivateBase {
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
      */
-    addEntityToModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, enableTranslation, clientFramework) {
+    addEntityToModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, enableTranslation, clientFramework, microServiceName) {
         const entityModulePath = `${CLIENT_MAIN_SRC_DIR}app/entities/entity.module.ts`;
         try {
             if (clientFramework === 'angularX') {
                 const appName = this.getAngularXAppName();
                 let importStatement = `|import { ${appName}${entityAngularName}Module } from './${entityFolderName}/${entityFileName}.module';`;
-                if (importStatement.length > constants.LINE_LENGTH) {
-                    importStatement =
-                        `|// prettier-ignore
-                        |import {
-                        |    ${appName}${entityAngularName}Module
-                        |} from './${entityFolderName}/${entityFileName}.module';`;
+                if (microServiceName) {
+                    importStatement = `|import { ${appName}${entityAngularName}Module as ${_.upperFirst(_.camelCase(microServiceName))}${entityAngularName}Module } from './${entityFolderName}/${entityFileName}.module';`;
                 }
                 jhipsterUtils.rewriteFile({
                     file: entityModulePath,
@@ -253,7 +249,7 @@ module.exports = class extends PrivateBase {
                     file: entityModulePath,
                     needle: 'jhipster-needle-add-entity-module',
                     splicable: [
-                        this.stripMargin(`|${appName}${entityAngularName}Module,`)
+                        this.stripMargin(microServiceName ? `|${_.upperFirst(_.camelCase(microServiceName))}${entityAngularName}Module,` : `|${appName}${entityAngularName}Module,`)
                     ]
                 }, this);
             } else {
