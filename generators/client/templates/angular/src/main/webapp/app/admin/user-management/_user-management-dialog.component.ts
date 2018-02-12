@@ -22,8 +22,8 @@ import { ActivatedRoute } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
+import { <% if (enableTranslation) { %>JhiLanguageHelper,<% } %> User, UserService } from 'app/shared';
 import { UserModalService } from './user-modal.service';
-import { <% if (enableTranslation) { %>JhiLanguageHelper,<% } %> User, UserService } from '../../shared';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-user-mgmt-dialog',

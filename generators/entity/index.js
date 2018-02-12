@@ -67,6 +67,20 @@ module.exports = class extends BaseGenerator {
             defaults: ''
         });
 
+        // This adds support for a `--client-root-folder` flag
+        this.option('client-root-folder', {
+            desc: 'Use a root folder name for entities on client side. By default its empty for monoliths and name of the microservice for gateways',
+            type: String,
+            defaults: ''
+        });
+
+        // This adds support for a `--skip-ui-grouping` flag
+        this.option('skip-ui-grouping', {
+            desc: 'Disables the UI grouping behaviour for entity client side code',
+            type: Boolean,
+            defaults: false
+        });
+
         // This adds support for a `--skip-server` flag
         this.option('skip-server', {
             desc: 'Skip the server-side code generation',
@@ -163,7 +177,6 @@ module.exports = class extends BaseGenerator {
                 if (shelljs.test('-f', context.filename)) {
                     this.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
                     context.useConfigurationFile = true;
-                    context.fromPath = context.filename;
                 }
             },
 
@@ -214,7 +227,7 @@ module.exports = class extends BaseGenerator {
                 } else {
                     // existing entity reading values from file
                     this.log(`\nThe entity ${entityName} is being updated.\n`);
-                    this.loadEntityJson();
+                    this.loadEntityJson(context.filename);
                 }
             },
 
@@ -377,6 +390,9 @@ module.exports = class extends BaseGenerator {
                         context.pagination = 'no';
                     }
                 }
+                if (!context.clientRootFolder && !context.options['skip-ui-grouping'] && context.applicationType === 'gateway' && context.useMicroserviceJson) {
+                    context.clientRootFolder = context.microserviceName;
+                }
             },
 
             writeEntityJson() {
@@ -390,6 +406,7 @@ module.exports = class extends BaseGenerator {
                 }
                 this.data = {};
                 this.data.fluentMethods = context.fluentMethods;
+                this.data.clientRootFolder = context.clientRootFolder;
                 this.data.relationships = context.relationships;
                 this.data.fields = context.fields;
                 this.data.changelogDate = context.changelogDate;
@@ -430,15 +447,17 @@ module.exports = class extends BaseGenerator {
                 context.entityInstancePlural = pluralize(context.entityInstance);
                 context.entityApiUrl = entityNamePluralizedAndSpinalCased;
                 context.entityFileName = _.kebabCase(context.entityNameCapitalized + _.upperFirst(context.entityAngularJSSuffix));
-                context.entityFolderName = context.entityFileName;
+                context.entityFolderName = this.getEntityFolderName(context.clientRootFolder, context.entityFileName);
+                context.entityModelFileName = context.entityFolderName;
+                context.entityParentPathAddition = this.getEntityParentPathAddition(context.clientRootFolder);
                 context.entityPluralFileName = entityNamePluralizedAndSpinalCased + context.entityAngularJSSuffix;
                 context.entityServiceFileName = context.entityFileName;
                 context.entityAngularName = context.entityClass + _.upperFirst(_.camelCase(context.entityAngularJSSuffix));
                 context.entityReactName = context.entityClass + _.upperFirst(_.camelCase(this.entityAngularJSSuffix));
                 context.entityStateName = _.kebabCase(context.entityAngularName);
                 context.entityUrl = context.entityStateName;
-                context.entityTranslationKey = context.entityInstance;
-                context.entityTranslationKeyMenu = _.camelCase(context.entityStateName);
+                context.entityTranslationKey = context.clientRootFolder ? _.camelCase(`${context.clientRootFolder}-${context.entityInstance}`) : context.entityInstance;
+                context.entityTranslationKeyMenu = _.camelCase(context.clientRootFolder ? `${context.clientRootFolder}-${context.entityStateName}` : context.entityStateName);
                 context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
 
                 context.fieldsContainInstant = false;
@@ -591,6 +610,9 @@ module.exports = class extends BaseGenerator {
 
                     const otherEntityName = relationship.otherEntityName;
                     const otherEntityData = this.getEntityJson(otherEntityName);
+                    if (otherEntityData && otherEntityData.microserviceName && !otherEntityData.clientRootFolder) {
+                        otherEntityData.clientRootFolder = otherEntityData.microserviceName;
+                    }
                     const jhiTablePrefix = context.jhiTablePrefix;
 
                     if (context.dto && context.dto === 'mapstruct') {
@@ -643,10 +665,22 @@ module.exports = class extends BaseGenerator {
                     if (_.isUndefined(relationship.otherEntityModuleName)) {
                         if (relationship.otherEntityNameCapitalized !== 'User') {
                             relationship.otherEntityModuleName = `${context.angularXAppName + relationship.otherEntityNameCapitalized}Module`;
-                            relationship.otherEntityModulePath = _.kebabCase(relationship.otherEntityAngularName);
+                            relationship.otherEntityFileName = _.kebabCase(relationship.otherEntityAngularName);
+                            relationship.otherEntityClientRootFolder = context.options['skip-ui-grouping'] ? '' : otherEntityData.clientRootFolder;
+                            if (otherEntityData.clientRootFolder) {
+                                if (context.clientRootFolder === otherEntityData.clientRootFolder) {
+                                    relationship.otherEntityModulePath = relationship.otherEntityFileName;
+                                } else {
+                                    relationship.otherEntityModulePath = `${context.entityParentPathAddition ? `${context.entityParentPathAddition}/` : ''}${otherEntityData.clientRootFolder}/${relationship.otherEntityFileName}`;
+                                }
+                                relationship.otherEntityModelName = `${otherEntityData.clientRootFolder}/${relationship.otherEntityFileName}`;
+                            } else {
+                                relationship.otherEntityModulePath = `${context.entityParentPathAddition ? `${context.entityParentPathAddition}/` : ''}${relationship.otherEntityFileName}`;
+                                relationship.otherEntityModelName = relationship.otherEntityFileName;
+                            }
                         } else {
                             relationship.otherEntityModuleName = `${context.angularXAppName}SharedModule`;
-                            relationship.otherEntityModulePath = '../shared';
+                            relationship.otherEntityModulePath = 'app/shared';
                         }
                     }
                     // Load in-memory data for root

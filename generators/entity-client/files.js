@@ -75,7 +75,8 @@ const angularFiles = {
                 },
                 {
                     file: 'entities/_entity.model.ts',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.model.ts`
+                    // using entityModelFileName so that there is no conflict when genertaing microservice entities
+                    renameTo: generator => `shared/model/${generator.entityModelFileName}.model.ts`
                 },
                 {
                     file: 'entities/_entity-management.component.ts',
@@ -135,8 +136,11 @@ const angularFiles = {
             condition: generator => generator.protractorTests,
             path: CLIENT_TEST_SRC_DIR,
             templates: [{
+                file: 'e2e/entities/_entity-page-object.ts',
+                renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}.page-object.ts`
+            }, {
                 file: 'e2e/entities/_entity.spec.ts',
-                renameTo: generator => `e2e/entities/${generator.entityFileName}.spec.ts`
+                renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}.spec.ts`
             }]
         }
     ]
@@ -191,7 +195,7 @@ function writeFiles() {
             if (this.clientFramework === 'angularX') {
                 // write client side files for angular 2.x +
                 this.writeFilesToDisk(angularFiles, this, false, CLIENT_NG2_TEMPLATES_DIR);
-                this.addEntityToModule(this.entityInstance, this.entityClass, this.entityAngularName, this.entityFolderName, this.entityFileName, this.enableTranslation, this.clientFramework);
+                this.addEntityToModule(this.entityInstance, this.entityClass, this.entityAngularName, this.entityFolderName, this.entityFileName, this.enableTranslation, this.clientFramework, this.microserviceName);
 
                 if (this.applicationType === 'gateway' && !_.isUndefined(this.microserviceName)) {
                     this.addEntityToWebpack(this.microserviceName, this.clientFramework);
@@ -202,7 +206,7 @@ function writeFiles() {
                 this.addEntityToModule(this.entityInstance, this.entityClass, this.entityAngularName, this.entityFolderName, this.entityFileName, this.enableTranslation, this.clientFramework);
             }
 
-            this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework);
+            this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
         }
     };
 }

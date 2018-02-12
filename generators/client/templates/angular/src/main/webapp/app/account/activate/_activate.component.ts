@@ -20,8 +20,8 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute } from '@angular/router';
 
+import { LoginModalService } from 'app/shared';
 import { ActivateService } from './activate.service';
-import { LoginModalService } from '../../shared';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-activate',

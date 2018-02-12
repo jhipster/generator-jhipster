@@ -22,7 +22,8 @@ import { Observable } from 'rxjs/Observable';
 <%_ if (authenticationType !== 'uaa') { _%>
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 <%_ } _%>
-import { SERVER_API_URL } from '../../app.constants';
+
+import { SERVER_API_URL } from 'app/app.constants';
 
 @Injectable()
 export class AuthServerProvider {

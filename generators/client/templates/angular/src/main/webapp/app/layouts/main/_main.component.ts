@@ -20,7 +20,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, NavigationEnd } from '@angular/router';
 
 <%_ if (enableTranslation) { _%>
-import { JhiLanguageHelper } from '../../shared';
+import { JhiLanguageHelper } from 'app/shared';
 <%_ } else { _%>
 import { Title } from '@angular/platform-browser';
 <%_ } _%>

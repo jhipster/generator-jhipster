@@ -116,7 +116,8 @@ module.exports = class extends Generator {
      */
     copyI18n(language, prefix = '') {
         try {
-            this.template(`${prefix ? `${prefix}/` : ''}i18n/_entity_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${this.entityInstance}.json`);
+            const fileName = this.entityTranslationKey;
+            this.template(`${prefix ? `${prefix}/` : ''}i18n/_entity_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${fileName}.json`);
             this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClass, language);
         } catch (e) {
             this.debug('Error:', e);
@@ -134,7 +135,7 @@ module.exports = class extends Generator {
      */
     copyEnumI18n(language, enumInfo, prefix = '') {
         try {
-            this.template(`${prefix ? `${prefix}/` : ''}i18n/_enum.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.enumInstance}.json`, this, {}, enumInfo);
+            this.template(`${prefix ? `${prefix}/` : ''}i18n/_enum.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.clientRootFolder}${enumInfo.enumInstance}.json`, this, {}, enumInfo);
         } catch (e) {
             this.debug('Error:', e);
             // An exception is thrown if the folder doesn't exist
@@ -719,13 +720,13 @@ module.exports = class extends Generator {
                 query =
         `this.${relationship.otherEntityName}Service
             .query({filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'})
-            .subscribe((res: HttpResponse<${relationship.otherEntityAngularName}[]>) => {
+            .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
                 if (${relationshipFieldNameIdCheck}) {
                     this.${variableName} = res.body;
                 } else {
                     this.${relationship.otherEntityName}Service
                         .find(${relationshipFieldName}${dto === 'no' ? '.id' : 'Id'})
-                        .subscribe((subRes: HttpResponse<${relationship.otherEntityAngularName}>) => {
+                        .subscribe((subRes: HttpResponse<I${relationship.otherEntityAngularName}>) => {
                             this.${variableName} = [subRes.body].concat(res.body);
                         }, (subRes: HttpErrorResponse) => this.onError(subRes.message));
                 }
@@ -737,11 +738,11 @@ module.exports = class extends Generator {
                 }
                 query =
         `this.${relationship.otherEntityName}Service.query()
-            .subscribe((res: HttpResponse<${relationship.otherEntityAngularName}[]>) => { this.${variableName} = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));`;
+            .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => { this.${variableName} = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));`;
             }
             if (variableName && !this.contains(queries, query)) {
                 queries.push(query);
-                variables.push(`${variableName}: ${relationship.otherEntityAngularName}[];`);
+                variables.push(`${variableName}: I${relationship.otherEntityAngularName}[];`);
             }
         });
         return {
@@ -864,6 +865,7 @@ module.exports = class extends Generator {
      */
     rebuildClient() {
         const done = this.async();
+        this.spawnCommandSync(this.clientPackageManager, ['run', 'prettier:format']);
         this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app\n')}`);
         this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build']).on('close', () => {
             done();
@@ -896,5 +898,28 @@ module.exports = class extends Generator {
             return 'String';
         }
         return 'Long';
+    }
+
+    /**
+     * Get a root folder name for entity
+     * @param {string} clientRootFolder
+     * @param {string} entityFileName
+     */
+    getEntityFolderName(clientRootFolder, entityFileName) {
+        if (clientRootFolder) {
+            return `${clientRootFolder}/${entityFileName}`;
+        }
+        return entityFileName;
+    }
+
+    /**
+     * Get a parent folder path addition for entity
+     * @param {string} clientRootFolder
+     */
+    getEntityParentPathAddition(clientRootFolder) {
+        if (clientRootFolder) {
+            return '../';
+        }
+        return '';
     }
 };

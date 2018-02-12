@@ -22,8 +22,8 @@ import { Observable } from 'rxjs/Observable';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { UserMgmtDeleteDialogComponent } from '../../../../../../main/webapp/app/admin/user-management/user-management-delete-dialog.component';
-import { UserService } from '../../../../../../main/webapp/app/shared';
+import { UserMgmtDeleteDialogComponent } from 'app/admin/user-management/user-management-delete-dialog.component';
+import { UserService } from 'app/shared';
 
 describe('Component Tests', () => {
 

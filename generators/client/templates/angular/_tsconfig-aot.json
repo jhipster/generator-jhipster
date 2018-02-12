@@ -32,7 +32,11 @@
         "lib": ["es7", "dom"],
         "typeRoots": [
             "node_modules/@types"
-        ]
+        ],
+        "baseUrl": "./",
+        "paths": {
+            "app/*": ["src/main/webapp/app/*"]
+        }
     },
     "angularCompilerOptions": {
         "genDir": "<%= BUILD_DIR %>aot",

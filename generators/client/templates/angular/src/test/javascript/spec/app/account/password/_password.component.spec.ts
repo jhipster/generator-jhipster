@@ -21,12 +21,12 @@ import { HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { PasswordComponent } from '../../../../../../main/webapp/app/account/password/password.component';
-import { PasswordService } from '../../../../../../main/webapp/app/account/password/password.service';
-import { Principal } from '../../../../../../main/webapp/app/shared/auth/principal.service';
-import { AccountService } from '../../../../../../main/webapp/app/shared/auth/account.service';
+import { PasswordComponent } from 'app/account/password/password.component';
+import { PasswordService } from 'app/account/password/password.service';
+import { Principal } from 'app/shared/auth/principal.service';
+import { AccountService } from 'app/shared/auth/account.service';
 <%_ if (websocket === 'spring-websocket') { _%>
-import { <%=jhiPrefixCapitalized%>TrackerService } from '../../../../../../main/webapp/app/shared/tracker/tracker.service';
+import { <%=jhiPrefixCapitalized%>TrackerService } from 'app/shared/tracker/tracker.service';
 import { MockTrackerService } from '../../../helpers/mock-tracker.service';
 <%_ } _%>
 

@@ -78,5 +78,6 @@
     "pagination": "no",
     "jpaMetamodelFiltering": true,
     "service": "serviceImpl",
-    "angularJSSuffix": "mySuffix"
+    "angularJSSuffix": "mySuffix",
+    "clientRootFolder": "test-root"
 }

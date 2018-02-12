@@ -18,9 +18,9 @@
 -%>
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
-import { LoginService } from '../../shared';
 import { CookieService } from 'ngx-cookie';
+
+import { LoginService } from 'app/shared';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-auth',

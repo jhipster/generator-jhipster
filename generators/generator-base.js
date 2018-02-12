@@ -178,7 +178,7 @@ module.exports = class extends PrivateBase {
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
      */
-    addEntityToMenu(routerName, enableTranslation, clientFramework) {
+    addEntityToMenu(routerName, enableTranslation, clientFramework, entityTranslationKeyMenu = _.camelCase(routerName)) {
         let entityMenuPath;
         try {
             if (this.clientFramework === 'angularX') {
@@ -190,7 +190,7 @@ module.exports = class extends PrivateBase {
                         this.stripMargin(`|<li>
                              |                        <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                              |                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                             |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${_.camelCase(routerName)}"` : ''}>${_.startCase(routerName)}</span>
+                             |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${entityTranslationKeyMenu}"` : ''}>${_.startCase(routerName)}</span>
                              |                        </a>
                              |                    </li>`)
                     ]
@@ -228,18 +228,22 @@ module.exports = class extends PrivateBase {
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
      */
-    addEntityToModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, enableTranslation, clientFramework) {
+    addEntityToModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, enableTranslation, clientFramework, microServiceName) {
         const entityModulePath = `${CLIENT_MAIN_SRC_DIR}app/entities/entity.module.ts`;
         try {
             if (clientFramework === 'angularX') {
                 const appName = this.getAngularXAppName();
-                let importStatement = `|import { ${appName}${entityAngularName}Module } from './${entityFolderName}/${entityFileName}.module';`;
+                let importName = `${appName}${entityAngularName}Module`;
+                if (microServiceName) {
+                    importName = `${importName} as ${_.upperFirst(_.camelCase(microServiceName))}${entityAngularName}Module`;
+                }
+                let importStatement = `|import { ${importName} } from './${entityFolderName}/${entityFileName}.module';`;
                 if (importStatement.length > constants.LINE_LENGTH) {
                     importStatement =
                         `|// prettier-ignore
-                        |import {
-                        |    ${appName}${entityAngularName}Module
-                        |} from './${entityFolderName}/${entityFileName}.module';`;
+                         |import {
+                         |    ${importName}
+                         |} from './${entityFolderName}/${entityFileName}.module';`;
                 }
                 jhipsterUtils.rewriteFile({
                     file: entityModulePath,
@@ -253,7 +257,7 @@ module.exports = class extends PrivateBase {
                     file: entityModulePath,
                     needle: 'jhipster-needle-add-entity-module',
                     splicable: [
-                        this.stripMargin(`|${appName}${entityAngularName}Module,`)
+                        this.stripMargin(microServiceName ? `|${_.upperFirst(_.camelCase(microServiceName))}${entityAngularName}Module,` : `|${appName}${entityAngularName}Module,`)
                     ]
                 }, this);
             } else {
@@ -1760,10 +1764,10 @@ module.exports = class extends PrivateBase {
     /**
      * Load an entity configuration file into context.
      */
-    loadEntityJson() {
+    loadEntityJson(fromPath = this.context.fromPath) {
         const context = this.context;
         try {
-            context.fileData = this.fs.readJSON(context.fromPath);
+            context.fileData = this.fs.readJSON(fromPath);
         } catch (err) {
             this.debug('Error:', err);
             this.error(chalk.red('\nThe entity configuration file could not be read!\n'));
@@ -1780,6 +1784,7 @@ module.exports = class extends PrivateBase {
         context.dto = context.fileData.dto;
         context.service = context.fileData.service;
         context.fluentMethods = context.fileData.fluentMethods;
+        context.clientRootFolder = context.fileData.clientRootFolder;
         context.pagination = context.fileData.pagination;
         context.searchEngine = context.fileData.searchEngine || context.searchEngine;
         context.javadoc = context.fileData.javadoc;
@@ -2419,6 +2424,7 @@ module.exports = class extends PrivateBase {
         dest.entityTableName = generator.getTableName(context.options['table-name'] || dest.name);
         dest.entityNameCapitalized = _.upperFirst(dest.name);
         dest.entityAngularJSSuffix = context.options['angular-suffix'];
+        dest.clientRootFolder = context.options['skip-ui-grouping'] ? '' : context.options['client-root-folder'];
         dest.isDebugEnabled = context.options.debug;
         generator.experimental = context.options.experimental;
         if (dest.entityAngularJSSuffix && !dest.entityAngularJSSuffix.startsWith('-')) {
