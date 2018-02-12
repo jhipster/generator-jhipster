@@ -18,7 +18,7 @@
 -%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import { <%=jhiPrefixCapitalized%>TrackerService } from '../../shared';
+import { <%=jhiPrefixCapitalized%>TrackerService } from 'app/shared';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-tracker',

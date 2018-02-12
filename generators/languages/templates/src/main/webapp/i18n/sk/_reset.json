@@ -36,11 +36,7 @@
             },
             "messages": {
                 "info": "Vyberte si nové heslo",
-                <%_ if (clientFramework === 'angular1') { _%>
-                "success": "<strong>Vaše heslo bolo obnovené.</strong> Môžete sa <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">prihlásiť</a>.",
-                <%_ } else { _%>
                 "success": "<strong>Vaše heslo bolo obnovené.</strong> Môžete sa ",
-                <%_ } _%>
                 "keymissing": "Chýba kľúč na obnovenie hesla.",
                 "error": "Vaše heslo nemohlo byť obnovené. Požiadavka na obnovenie hesla je platná len 24 hodín."
             }

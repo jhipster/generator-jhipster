@@ -216,7 +216,7 @@ function writeFiles() {
             this.fields.forEach((field) => {
                 if (field.fieldIsEnum === true) {
                     const fieldType = field.fieldType;
-                    const enumInfo = utils.buildEnumInfo(field, this.angularAppName, this.packageName);
+                    const enumInfo = utils.buildEnumInfo(field, this.angularAppName, this.packageName, this.clientRootFolder);
                     if (!this.skipServer) {
                         this.template(
                             `${SERVER_MAIN_SRC_DIR}package/domain/enumeration/_Enum.java`,

@@ -139,9 +139,6 @@ function writeFiles() {
                 this.template('_build.gradle', 'build.gradle');
                 this.template('_settings.gradle', 'settings.gradle');
                 this.template('_gradle.properties', 'gradle.properties');
-                if (!this.skipClient && this.clientFramework === 'angular1') {
-                    this.template('gradle/_yeoman.gradle', 'gradle/yeoman.gradle');
-                }
                 this.template('gradle/_sonar.gradle', 'gradle/sonar.gradle');
                 this.template('gradle/_docker.gradle', 'gradle/docker.gradle');
                 this.template('gradle/_profile_dev.gradle', 'gradle/profile_dev.gradle', this, { interpolate: INTERPOLATE_REGEX });

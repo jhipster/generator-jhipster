@@ -67,9 +67,6 @@ apply plugin: 'war'
 apply plugin: 'propdeps'
 <%_ if (!skipClient) { _%>
 apply plugin: 'com.moowork.node'
-    <%_ if (clientFramework === 'angular1') { _%>
-apply plugin: 'com.moowork.gulp'
-    <%_ } _%>
 <%_ } _%>
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'idea'
@@ -159,9 +156,6 @@ task cucumberTestReport(type: TestReport) {
 <%_ } _%>
 
 <%_ if (!skipClient) { _%>
-    <%_ if (clientFramework === 'angular1') { _%>
-apply from: 'gradle/yeoman.gradle'
-    <%_ } _%>
 <%_ } _%>
 apply from: 'gradle/docker.gradle'
 apply from: 'gradle/sonar.gradle'

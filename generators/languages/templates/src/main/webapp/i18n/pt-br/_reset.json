@@ -38,11 +38,7 @@
             },
             "messages": {
                 "info": "Escolha uma nova senha",
-                <%_ if (clientFramework === 'angular1') { _%>
-                "success": "<strong>Sua senha foi alterada com sucesso!</strong> Por favor <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">Entre novamente</a>.",
-                <%_ } else { _%>
                 "success": "<strong>Sua senha foi alterada com sucesso!</strong> Por favor ",
-                <%_ } _%>
                 "keymissing": "Chave de reestabelecimento não encontrada.",
                 "error": "Sua senha não pôde ser trocada. Lembre-se, requisição de troca de senha é válida apenas por 24h."
             }

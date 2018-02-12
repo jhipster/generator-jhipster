@@ -24,8 +24,8 @@ import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { JhiDateUtils } from 'ng-jhipster';
 
-import { <%= entityAngularName %>Service } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
-import { SERVER_API_URL } from '../../../../../../main/webapp/app/app.constants';
+import { <%= entityAngularName %>Service } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
+import { SERVER_API_URL } from 'app/app.constants';
 
 describe('Service Tests', () => {
 
@@ -55,7 +55,7 @@ describe('Service Tests', () => {
 
                 const req  = httpMock.expectOne({ method: 'GET' });
 
-                const resourceUrl = SERVER_API_URL + '<% if (applicationType === 'gateway' && locals.microserviceName) { %>/<%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';
+                const resourceUrl = SERVER_API_URL + '<% if (applicationType === 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';
                 expect(req.request.url).toEqual(resourceUrl + '/' + <%- tsKeyId %>);
             });
             it('should return <%= entityAngularName %>', () => {

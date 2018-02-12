@@ -192,8 +192,8 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || 
     private String lastName;
 
     @Email
-    @Size(min = 5, max = 100)<% if (databaseType === 'sql') { %>
-    @Column(length = 100, unique = true)<% } %><% if (databaseType === 'mongodb') { %>
+    @Size(min = 5, max = 254)<% if (databaseType === 'sql') { %>
+    @Column(length = 254, unique = true)<% } %><% if (databaseType === 'mongodb') { %>
     @Indexed<% } %>
     private String email;
 

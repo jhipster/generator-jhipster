@@ -16,8 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { browser, element, by } from 'protractor';
-import { NavBarPage } from './../page-objects/jhi-page-objects';
+import { browser } from 'protractor';
+import { NavBarPage } from './../../<%= entityParentPathAddition %>page-objects/jhi-page-objects';
+import { <%= entityClass %>ComponentsPage, <%= entityClass %>DialogPage } from './<%= entityFileName %>.page-object';
 <%_ let fieldHasByte = false;
 fields.forEach((field) => {
     if (['byte[]', 'ByteBuffer'].includes(field.fieldType) && field.fieldTypeBlobContent !== 'text') {
@@ -25,8 +26,8 @@ fields.forEach((field) => {
     }
 });
 if (fieldHasByte) {
-    %>import * as path from 'path';<%
-} _%>
+    %>import * as path from 'path';
+<% } _%>
 <%_
 let elementGetter = `getText()`;
 let openBlockComment = ``;
@@ -48,7 +49,7 @@ describe('<%= entityClass %> e2e test', () => {
     let <%= entityInstance %>DialogPage: <%= entityClass %>DialogPage;
     let <%= entityInstance %>ComponentsPage: <%= entityClass %>ComponentsPage;
     <%_ if (fieldHasByte) { _%>
-    const fileToUpload = '../../../../main/webapp/content/images/logo-jhipster.png';
+    const fileToUpload = '../../../../../<%= entityParentPathAddition %>main/webapp/content/images/logo-jhipster.png';
     const absolutePath = path.resolve(__dirname, fileToUpload);
     <%_ } _%>
 
@@ -152,134 +153,3 @@ describe('<%= entityClass %> e2e test', () => {
         navBarPage.autoSignOut();
     });
 });
-
-export class <%= entityClass %>ComponentsPage {
-    createButton = element(by.css('.jh-create-entity'));
-    title = element.all(by.css('<%= jhiPrefixDashed %>-<%= entityFileName %> div h2 span')).first();
-
-    clickOnCreateButton() {
-        return this.createButton.click();
-    }
-
-    getTitle() {
-        return this.title.<%- elementGetter %>;
-    }
-}
-
-export class <%= entityClass %>DialogPage {
-    modalTitle = element(by.css('h4#my<%= entityClass %>Label'));
-    saveButton = element(by.css('.modal-footer .btn.btn-primary'));
-    closeButton = element(by.css('button.close'));
-    <%_ fields.forEach((field) => {
-            const fieldName = field.fieldName;
-            const fieldType = field.fieldType;
-            const fieldIsEnum = field.fieldIsEnum;
-            const fieldTypeBlobContent = field.fieldTypeBlobContent;
-    _%>
-    <%_ if (fieldIsEnum) { _%>
-    <%= fieldName %>Select = element(by.css('select#field_<%= fieldName %>'));
-    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
-    <%= fieldName %>Input = element(by.css('textarea#field_<%= fieldName %>'));
-    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
-    <%= fieldName %>Input = element(by.css('input#file_<%= fieldName %>'));
-    <%_ } else { _%>
-    <%= fieldName %>Input = element(by.css('input#field_<%= fieldName %>'));
-    <%_ } _%>
-    <%_ }); _%>
-    <%_ relationships.forEach((relationship) => {
-        const relationshipType = relationship.relationshipType;
-        const ownerSide = relationship.ownerSide;
-        const relationshipName = relationship.relationshipName;
-        const relationshipFieldName = relationship.relationshipFieldName; _%>
-    <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'many-to-many' && ownerSide === true) || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
-    <%=relationshipName %>Select = element(by.css('select#field_<%= relationshipName %>'));
-    <%_ } _%>
-    <%_ }); _%>
-
-    getModalTitle() {
-        return this.modalTitle.<%- elementGetter %>;
-    }
-
-    <%_ fields.forEach((field) => {
-            const fieldName = field.fieldName;
-            const fieldNameCapitalized = field.fieldNameCapitalized;
-            const fieldNameHumanized = field.fieldNameHumanized;
-            const fieldType = field.fieldType;
-            const fieldTypeBlobContent = field.fieldTypeBlobContent;
-            const fieldIsEnum = field.fieldIsEnum;
-            let fieldInputType = 'text';
-            let ngModelOption = '';
-    _%>
-            <%_ if (fieldType === 'Boolean') { _%>
-    get<%= fieldNameCapitalized %>Input = function() {
-        return this.<%= fieldName %>Input;
-    };
-            <%_ } else if (fieldIsEnum) { _%>
-    set<%= fieldNameCapitalized %>Select = function(<%= fieldName %>) {
-        this.<%= fieldName %>Select.sendKeys(<%= fieldName %>);
-    };
-
-    get<%= fieldNameCapitalized %>Select = function() {
-        return this.<%= fieldName %>Select.element(by.css('option:checked')).getText();
-    };
-
-    <%=fieldName %>SelectLastOption = function() {
-        this.<%=fieldName %>Select.all(by.tagName('option')).last().click();
-    };
-    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
-    set<%= fieldNameCapitalized %>Input = function(<%= fieldName %>) {
-        this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
-    };
-
-    get<%= fieldNameCapitalized %>Input = function() {
-        return this.<%= fieldName %>Input.getAttribute('value');
-    };
-
-    <%_ } else { _%>
-    set<%= fieldNameCapitalized %>Input = function(<%= fieldName %>) {
-        this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
-    };
-
-    get<%= fieldNameCapitalized %>Input = function() {
-        return this.<%= fieldName %>Input.getAttribute('value');
-    };
-
-    <%_ } _%>
-    <%_ }); _%>
-    <%_ relationships.forEach((relationship) => {
-        const relationshipType = relationship.relationshipType;
-        const ownerSide = relationship.ownerSide;
-        const relationshipName = relationship.relationshipName;
-        const relationshipFieldName = relationship.relationshipFieldName;
-        const relationshipNameCapitalized = relationship.relationshipNameCapitalized; _%>
-    <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'many-to-many' && ownerSide === true) || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
-    <%=relationshipName %>SelectLastOption = function() {
-        this.<%=relationshipName %>Select.all(by.tagName('option')).last().click();
-    };
-
-    <%=relationshipName %>SelectOption = function(option) {
-        this.<%=relationshipName %>Select.sendKeys(option);
-    };
-
-    get<%=relationshipNameCapitalized %>Select = function() {
-        return this.<%=relationshipName %>Select;
-    };
-
-    get<%=relationshipNameCapitalized %>SelectedOption = function() {
-        return this.<%=relationshipName %>Select.element(by.css('option:checked')).getText();
-    };
-
-    <%_ } _%>
-    <%_ }); _%>
-    save() {
-        this.saveButton.click();
-    }
-
-    close() {
-        this.closeButton.click();
-    }
-
-    getSaveButton() {
-        return this.saveButton;
-    }
-}

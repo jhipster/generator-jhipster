@@ -20,11 +20,7 @@
     "activate": {
         "title": "Активація",
         "messages": {
-            <%_ if (clientFramework === 'angular1') { _%>
-            "success": "<strong>Ваш обліковий запис був активований.</strong> Будь ласка, <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">увійдіть</a>.",
-            <%_ } else { _%>
             "success": "<strong>Ваш обліковий запис був активований.</strong> Будь ласка, ",
-            <%_ } _%>
             "error": "<strong>Ваш обліковий запис не може бути активований.</strong> Будь ласка, скористайтеся формою реєстрації."
         }
     }

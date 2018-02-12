@@ -26,9 +26,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { JhiEventManager, <% if (pagination !== 'no') { %>JhiParseLinks, <% } %>JhiAlertService<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
 
-import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
+import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
+import { <% if (pagination !== 'no') { %>ITEMS_PER_PAGE, <% } %>Principal } from 'app/shared';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
-import { <% if (pagination !== 'no') { %>ITEMS_PER_PAGE, <% } %>Principal } from '../../shared';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>',
@@ -54,7 +54,7 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
         this.eventManager.destroy(this.eventSubscriber);
     }
 
-    trackId(index: number, item: <%= entityAngularName %>) {
+    trackId(index: number, item: I<%= entityAngularName %>) {
         return item.id;
     }
     <%_ if (fieldsContainBlob) { _%>

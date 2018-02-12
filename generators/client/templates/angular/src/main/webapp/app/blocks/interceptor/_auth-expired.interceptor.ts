@@ -23,17 +23,17 @@ import 'rxjs/add/operator/do';
 <%_ if (['oauth2', 'jwt', 'uaa'].includes(authenticationType)) { _%>
     <%_ if (authenticationType === 'uaa') { _%>
 import { Router } from '@angular/router';
-import { LoginModalService } from '../../shared/login/login-modal.service';
-import { Principal } from '../../shared/auth/principal.service';
+import { LoginModalService } from 'app/shared/login/login-modal.service';
+import { Principal } from 'app/shared/auth/principal.service';
     <%_ } _%>
-import { LoginService } from '../../shared/login/login.service';
+import { LoginService } from 'app/shared/login/login.service';
 <%_ } _%>
 <%_ if (['session', 'oauth2'].includes(authenticationType)) { _%>
     <%_ if (authenticationType === 'session') { _%>
-import { AuthServerProvider } from '../../shared/auth/auth-session.service';
-import { LoginModalService } from '../../shared/login/login-modal.service';
+import { AuthServerProvider } from 'app/shared/auth/auth-session.service';
+import { LoginModalService } from 'app/shared/login/login-modal.service';
     <%_ } _%>
-import { StateStorageService } from '../../shared/auth/state-storage.service';
+import { StateStorageService } from 'app/shared/auth/state-storage.service';
 <%_ } _%>
 
 export class AuthExpiredInterceptor implements HttpInterceptor {

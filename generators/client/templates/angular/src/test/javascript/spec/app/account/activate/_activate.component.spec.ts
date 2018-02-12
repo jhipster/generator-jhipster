@@ -22,8 +22,8 @@ import { Observable } from 'rxjs/Observable';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { MockActivatedRoute } from '../../../helpers/mock-route.service';
-import { ActivateService } from '../../../../../../main/webapp/app/account/activate/activate.service';
-import { ActivateComponent } from '../../../../../../main/webapp/app/account/activate/activate.component';
+import { ActivateService } from 'app/account/activate/activate.service';
+import { ActivateComponent } from 'app/account/activate/activate.component';
 
 describe('Component Tests', () => {
 

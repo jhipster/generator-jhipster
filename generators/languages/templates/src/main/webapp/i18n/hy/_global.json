@@ -70,10 +70,6 @@
         },
         "messages": {
             "info": {
-                <%_ if (clientFramework === 'angular1') { _%>
-                "authenticated": "Եթե դուք ցանկանում եք  <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">մուտք գործել</a>, դուք կարող եք փորձել հետևյալ հաշիվները:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\").",
-                "register": "Դուք դեռ չունե՞ք հաշիվ <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Գրանցել նոր հաշիվ</a>"
-                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Եթե դուք ցանկանում եք ",
                     "link": "Մուտք գործել",
@@ -83,7 +79,6 @@
                     "noaccount": "Դուք դեռ չունե՞ք հաշիվ",
                     "link": "Գրանցել նոր հաշիվ"
                 }
-                <%_ } _%>
             },
             "error": {
                 "dontmatch": "Գաղտնաբառը և հաստատումը չեն համընկնում!"

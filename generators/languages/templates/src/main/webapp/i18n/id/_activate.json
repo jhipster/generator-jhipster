@@ -20,11 +20,7 @@
     "activate": {
         "title": "Aktivasi",
         "messages": {
-            <%_ if (clientFramework === 'angular1') { _%>
-            "success": "<strong>Akun anda sudah diaktivasi.</strong> Silakan <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">mendaftar</a>.",
-            <%_ } else { _%>
             "success": "<strong>Akun anda sudah diaktivasi.</strong> Silakan ",
-            <%_ } _%>
             "error": "<strong>Akun anda tidak bisa diaktivasi.</strong> Silakan mendaftar terlebih dahulu dihalaman registrasi"
         }
     }

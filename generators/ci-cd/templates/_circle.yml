@@ -39,24 +39,14 @@ dependencies:
         - java -version
 <%_ if (clientPackageManager === 'npm') { _%>
         - npm install -g npm
-    <%_ if (clientFramework === 'angular1') { _%>
-        - npm install -g bower gulp
-    <%_ } _%>
         - node -v
         - npm -v
-    <%_ if (clientFramework === 'angular1') { _%>
-        - bower -v
-        - gulp -v
-    <%_ } _%>
         - java -version
         - npm install
 <%_ } else if (clientPackageManager === 'yarn') { _%>
         # Repo for Yarn
         - curl -o- -L https://yarnpkg.com/install.sh | bash
         - export PATH=$HOME/.yarn/bin:$PATH
-    <%_ if (clientFramework === 'angular1') { _%>
-        - yarn global add bower gulp-cli
-    <%_ } _%>
         - yarn install
 <%_ } _%>
 test:
@@ -69,14 +59,10 @@ test:
         - ./gradlew clean test --no-daemon
 <%_ } _%>
 <%_ if (applicationType !== 'microservice') { _%>
-    <%_ if (clientFramework === 'angular1') { _%>
-        - gulp test
-    <%_ } else { _%>
-        <%_ if (clientPackageManager === 'yarn') { _%>
+    <%_ if (clientPackageManager === 'yarn') { _%>
         - yarn test
-        <%_ } else if (clientPackageManager === 'npm') { _%>
+    <%_ } else if (clientPackageManager === 'npm') { _%>
         - npm test
-        <%_ } _%>
     <%_ } _%>
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
