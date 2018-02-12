@@ -393,7 +393,16 @@ const files = {
             condition: generator => !generator.skipUserManagement || generator.authenticationType === 'oauth2',
             path: ANGULAR_DIR,
             templates: [
-                'core/user/_user.service.ts'
+                'core/user/_user.service.ts',
+                'core/user/_user.model.ts'
+            ]
+        },
+        {
+            condition: generator => generator.enableTranslation,
+            path: ANGULAR_DIR,
+            templates: [
+                'core/language/_language.constants.ts',
+                'core/language/_language.helper.ts'
             ]
         }
     ],
@@ -427,16 +436,7 @@ const files = {
             condition: generator => generator.enableTranslation,
             path: ANGULAR_DIR,
             templates: [
-                'shared/language/_find-language-from-key.pipe.ts',
-                'shared/language/_language.constants.ts',
-                'core/language/_language.helper.ts'
-            ]
-        },
-        {
-            condition: generator => !generator.skipUserManagement || generator.authenticationType === 'oauth2',
-            path: ANGULAR_DIR,
-            templates: [
-                'core/user/_user.model.ts'
+                'shared/language/_find-language-from-key.pipe.ts'
             ]
         }
     ],
