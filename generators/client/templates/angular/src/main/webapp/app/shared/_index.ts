@@ -22,13 +22,11 @@ export * from './alert/alert.component';
 export * from './alert/alert-error.component';
 export * from './auth/has-any-authority.directive';
 <%_ if (enableTranslation) { _%>
-export * from './language/language.constants';
 export * from './language/find-language-from-key.pipe';
 <%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
 export * from './login/login.component';
 <%_ } _%>
-export * from './user/account.model';
 export * from './util/request-util';
 <%_ if (enableSocialSignIn) { _%>
 export * from './social/social.component';

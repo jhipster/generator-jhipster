@@ -15,6 +15,7 @@ export * from './social/social.service';
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
 export * from './language/language.helper';
+export * from './language/language.constants';
 <%_ } _%>
 export * from './user/account.model';
 <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
