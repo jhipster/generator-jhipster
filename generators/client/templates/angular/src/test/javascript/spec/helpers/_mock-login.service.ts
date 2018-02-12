@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -%>
 import { SpyObject } from './spyobject';
-import { LoginService } from '../../../../main/webapp/app/shared/login/login.service';
+import { LoginService } from 'app/shared/login/login.service';
 import Spy = jasmine.Spy;
 
 export class MockLoginService extends SpyObject {

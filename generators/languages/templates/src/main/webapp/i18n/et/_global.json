@@ -59,6 +59,8 @@
         "form": {
             "username": "Kasutajanimi",
             "username.placeholder": "Teie kasutajanimi",
+            "currentpassword": "Current password",
+            "currentpassword.placeholder": "Current password",
             "newpassword": "Uus salasõna",
             "newpassword.placeholder": "Uus salasõna",
             "confirmpassword": "Uus salasõna uuesti",
@@ -68,10 +70,6 @@
         },
         "messages": {
             "info": {
-                <%_ if (clientFramework === 'angular1') { _%>
-                "authenticated": "Kui te soovite <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">sisse logida</a>, siis võite kasutada vaikekontosid:<br/>- Administraator (kasutajanimi=\"admin\" ja salasõna=\"admin\") <br/>- Kasutaja (kasutajanimi=\"user\" ja salasõna=\"user\").",
-                "register": "Teil pole veel kontot? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Registreerige uus konto</a>"
-                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Kui te soovite ",
                     "link": "sisse logida",
@@ -81,7 +79,6 @@
                     "noaccount": "Teil pole veel kontot?",
                     "link": "Registreerige uus konto"
                 }
-                <%_ } _%>
             },
             "error": {
                 "dontmatch": "Salasõna ja selle kordus erinevad!"

@@ -47,9 +47,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-<%_ if (searchEngine === 'elasticsearch') { _%>
-import org.springframework.boot.test.mock.mockito.MockBean;
-<%_ } _%>
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -108,8 +105,13 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
     private UserService userService;
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
-    @MockBean
-    private UserSearchRepository userSearchRepository;
+    /**
+     * This repository is mocked in the <%=packageName%>.repository.search test package.
+     *
+     * @see <%= packageName %>.repository.search.UserSearchRepositoryMockConfiguration
+     */
+    @Autowired
+    private UserSearchRepository mockUserSearchRepository;
     <%_ } _%>
 
     private User user;
@@ -263,7 +265,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Verify Elasticsearch mock
-        verify(userSearchRepository, times(1)).delete(user);
+        verify(mockUserSearchRepository, times(1)).delete(user);
         <%_ } _%>
     }
     <%_ } _%>
@@ -320,7 +322,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Verify Elasticsearch mock
-        verify(userSearchRepository, times(1)).delete(user);
+        verify(mockUserSearchRepository, times(1)).delete(user);
         <%_ } _%>
     }
     <%_ } _%>

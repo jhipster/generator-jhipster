@@ -18,8 +18,8 @@
 -%>
 import { Component, OnInit, AfterViewInit, Renderer, ElementRef } from '@angular/core';
 
+import { EMAIL_NOT_FOUND_TYPE } from 'app/shared';
 import { PasswordResetInitService } from './password-reset-init.service';
-import { EMAIL_NOT_FOUND_TYPE } from '../../../shared';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-password-reset-init',

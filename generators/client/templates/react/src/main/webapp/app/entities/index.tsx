@@ -25,6 +25,7 @@ import { Route, Switch } from 'react-router-dom';
 const Routes = ({ match }) => (
   <div>
     <Switch>
+      {/* prettier-ignore */}
       {/* jhipster-needle-add-route-path - JHipster will routes here */}
     </Switch>
   </div>

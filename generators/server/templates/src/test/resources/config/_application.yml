@@ -90,7 +90,7 @@ spring:
             hibernate.generate_statistics: true
             hibernate.hbm2ddl.auto: validate
     <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra' || searchEngine === 'elasticsearch') { _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
     data:
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
@@ -106,15 +106,6 @@ spring:
             protocolVersion: V4
             compression: NONE
             keyspaceName: cassandra_unit_keyspace
-    <%_ } _%>
-    <%_ if (searchEngine === 'elasticsearch') { _%>
-        elasticsearch:
-            cluster-name:
-            cluster-nodes: localhost:9300
-            properties:
-                path:
-                    logs: <%= BUILD_DIR %>elasticsearch/log
-                    data: <%= BUILD_DIR %>elasticsearch/data
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     couchbase:

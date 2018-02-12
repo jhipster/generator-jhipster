@@ -73,14 +73,10 @@ node {
     <%_ if (!skipClient) { _%>
 <%= indent %>    stage('frontend tests') {
 <%= indent %>        try {
-        <%_ if (clientFramework === 'angular1') { _%>
-<%= indent %>            sh "./mvnw com.github.eirslett:frontend-maven-plugin:gulp -Dfrontend.gulp.arguments=test"
-        <%_ } else { _%>
-            <%_ if (clientPackageManager === 'yarn') { _%>
+        <%_ if (clientPackageManager === 'yarn') { _%>
 <%= indent %>            sh "./mvnw com.github.eirslett:frontend-maven-plugin:yarn -Dfrontend.yarn.arguments=test"
-            <%_ } else if (clientPackageManager === 'npm') { _%>
+        <%_ } else if (clientPackageManager === 'npm') { _%>
 <%= indent %>            sh "./mvnw com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments=test"
-            <%_ } _%>
         <%_ } _%>
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
@@ -131,14 +127,10 @@ node {
     <%_ if (!skipClient) { _%>
 <%= indent %>    stage('frontend tests') {
 <%= indent %>        try {
-        <%_ if (clientFramework === 'angular1') { _%>
-<%= indent %>            sh "./gradlew gulp_test -PnodeInstall --no-daemon"
-        <%_ } else { _%>
-            <%_ if (clientPackageManager === 'yarn') { _%>
+        <%_ if (clientPackageManager === 'yarn') { _%>
 <%= indent %>            sh "./gradlew yarn_test -PnodeInstall --no-daemon"
-            <%_ } else if (clientPackageManager === 'npm') { _%>
+        <%_ } else if (clientPackageManager === 'npm') { _%>
 <%= indent %>            sh "./gradlew npm_test -PnodeInstall --no-daemon"
-            <%_ } _%>
         <%_ } _%>
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err

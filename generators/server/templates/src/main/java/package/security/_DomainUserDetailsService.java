@@ -20,6 +20,7 @@ package <%=packageName%>.security;
 
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.UserRepository;
+import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -51,22 +52,26 @@ public class DomainUserDetailsService implements UserDetailsService {
     @Transactional<%}%>
     public UserDetails loadUserByUsername(final String login) {
         log.debug("Authenticating {}", login);
+
+        if (new EmailValidator().isValid(login, null)) {
+            <%_ if (databaseType === 'sql') { _%>
+            Optional<User> userByEmailFromDatabase = userRepository.findOneWithAuthoritiesByEmail(login);
+            <%_ } else { // MongoDB and Cassandra _%>
+            Optional<User> userByEmailFromDatabase = userRepository.findOneByEmailIgnoreCase(login);
+            <%_ } _%>
+            return userByEmailFromDatabase.map(user -> createSpringSecurityUser(login, user))
+                .orElseThrow(() -> new UsernameNotFoundException("User with email " + login + " was not found in the database"));
+        }
+
         String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
         <%_ if (databaseType === 'sql') { _%>
-        Optional<User> userByEmailFromDatabase = userRepository.findOneWithAuthoritiesByEmail(lowercaseLogin);
+        Optional<User> userByLoginFromDatabase = userRepository.findOneWithAuthoritiesByLogin(lowercaseLogin);
         <%_ } else { // MongoDB and Cassandra _%>
-        Optional<User> userByEmailFromDatabase = userRepository.findOneByEmailIgnoreCase(lowercaseLogin);
+        Optional<User> userByLoginFromDatabase = userRepository.findOneByLogin(lowercaseLogin);
         <%_ } _%>
-        return userByEmailFromDatabase.map(user -> createSpringSecurityUser(lowercaseLogin, user)).orElseGet(() -> {
-            <%_ if (databaseType === 'sql') { _%>
-            Optional<User> userByLoginFromDatabase = userRepository.findOneWithAuthoritiesByLogin(lowercaseLogin);
-            <%_ } else { // MongoDB and Cassandra _%>
-            Optional<User> userByLoginFromDatabase = userRepository.findOneByLogin(lowercaseLogin);
-            <%_ } _%>
-            return userByLoginFromDatabase.map(user -> createSpringSecurityUser(lowercaseLogin, user))
-                .orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the " +
-                    "database"));
-        });
+        return userByLoginFromDatabase.map(user -> createSpringSecurityUser(lowercaseLogin, user))
+            .orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database"));
+
     }
 
     private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {

@@ -36,11 +36,7 @@
             },
             "messages": {
                 "info": "请设置新密码",
-                <%_ if (clientFramework === 'angular1') { _%>
-                "success": "<strong>您的密码已被重置.</strong> 请 <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">登录</a>.",
-                <%_ } else { _%>
                 "success": "<strong>您的密码已被重置.</strong> 请 ",
-                <%_ } _%>
                 "keymissing": "无效的重置密码请求.",
                 "error": "无法重置密码. 您必须在请求重置密码后24小时内完成重置."
             }

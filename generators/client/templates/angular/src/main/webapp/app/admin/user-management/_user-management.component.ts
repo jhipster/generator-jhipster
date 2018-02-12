@@ -22,11 +22,11 @@ import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
-import { ITEMS_PER_PAGE, Principal, User, UserService } from '../../shared';
+import { ITEMS_PER_PAGE, Principal, User, UserService } from 'app/shared';
 <%_ } else { _%>
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 
-import { Principal, User, UserService } from '../../shared';
+import { Principal, User, UserService } from 'app/shared';
 <%_ } _%>
 
 @Component({

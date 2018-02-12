@@ -29,7 +29,6 @@ import io.github.jhipster.config.JHipsterConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
@@ -41,7 +40,9 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 <%_ if (applicationType === 'gateway') { _%>
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 <%_ } _%>
+<%_ if (applicationType === 'microservice' && authenticationType === 'uaa') { _%>
 import org.springframework.context.annotation.ComponentScan;
+<%_ } _%>
 <%_ if (authenticationType === 'uaa') { _%>
 import org.springframework.context.annotation.FilterType;
 <%_ } _%>

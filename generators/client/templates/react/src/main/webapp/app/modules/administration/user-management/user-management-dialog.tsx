@@ -99,7 +99,7 @@ export class UserManagementDialog extends React.Component<IUserManagementDialogP
               <Label for="email"><Translate contentKey="userManagement.email">E-mail</Translate></Label>
               <AvInput type="email" className="form-control" name="email" required/>
               <AvFeedback>This field is required.</AvFeedback>
-              <AvFeedback>This field cannot be longer than 100 characters.</AvFeedback>
+              <AvFeedback>This field cannot be longer than 254 characters.</AvFeedback>
               <AvFeedback>This field is required to be at least 5 characters.</AvFeedback>
             </AvGroup>
             <AvGroup>
@@ -107,7 +107,7 @@ export class UserManagementDialog extends React.Component<IUserManagementDialogP
                 <AvInput type="checkbox" name="activated" /> <Translate contentKey="userManagement.activated">Activated</Translate>
               </Label>
               <AvFeedback>This field is required.</AvFeedback>
-              <AvFeedback>This field cannot be longer than 100 characters.</AvFeedback>
+              <AvFeedback>This field cannot be longer than 254 characters.</AvFeedback>
               <AvFeedback>This field is required to be at least 5 characters.</AvFeedback>
             </AvGroup>
             <%_ if (enableTranslation) { _%>

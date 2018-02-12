@@ -1,6 +1,6 @@
 {
   "name": "generator-jhipster",
-  "version": "4.13.3",
+  "version": "4.14.0",
   "description": "Spring Boot + Angular in one handy generator",
   "files": [
     "cli",
@@ -55,7 +55,7 @@
     "glob": "7.1.2",
     "html-wiring": "1.2.0",
     "insight": "0.8.4",
-    "jhipster-core": "1.4.4",
+    "jhipster-core": "1.4.5",
     "js-yaml": "3.10.0",
     "lodash": "4.17.4",
     "meow": "3.7.0",
@@ -78,6 +78,7 @@
     "fs-extra": "4.0.3",
     "jsdoc": "3.5.5",
     "mocha": "4.0.1",
+    "sinon": "2.4.1",
     "yeoman-assert": "3.1.0",
     "yeoman-test": "1.7.0"
   },

@@ -66,6 +66,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 <%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.security.crypto.password.PasswordEncoder;
+import <%=packageName%>.web.rest.errors.InvalidPasswordException;
 <%_ } _%>
 import org.springframework.stereotype.Service;<% if (databaseType === 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
@@ -300,6 +301,9 @@ public class UserService {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
+                <%_ if (cacheManagerIsAvailable === true) { _%>
+                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
+                <%_ } _%>
                 user.setFirstName(firstName);
                 user.setLastName(lastName);
                 user.setEmail(email);
@@ -337,6 +341,10 @@ public class UserService {
                 if (!user.getLogin().equals(userDTO.getLogin())) {
                     userRepository.deleteById(userDTO.getId());
                 }
+                <%_ } _%>
+                <%_ if (cacheManagerIsAvailable === true) { _%>
+                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
+                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
                 <%_ } _%>
                 user.setLogin(userDTO.getLogin());
                 user.setFirstName(userDTO.getFirstName());
@@ -392,11 +400,13 @@ public class UserService {
     }
 <%_ if (authenticationType !== 'oauth2') { _%>
 
-    public void changePassword(String password) {
+    public void changePassword(String currentClearTextPassword, String newPassword) {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
-                String encryptedPassword = passwordEncoder.encode(password);
+                String currentEncryptedPassword = user.getPassword();
+                assertClearTextPasswordMatchesEncryptedPassword(currentClearTextPassword, currentEncryptedPassword);
+                String encryptedPassword = passwordEncoder.encode(newPassword);
                 user.setPassword(encryptedPassword);
                 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { _%>
                 userRepository.save(user);
@@ -408,6 +418,12 @@ public class UserService {
                 log.debug("Changed password for User: {}", user);
             });
     }
+        private void assertClearTextPasswordMatchesEncryptedPassword(String clearTextPassword, String encryptedPassword) {
+            if (!passwordEncoder.matches(clearTextPassword,encryptedPassword)){
+                throw new InvalidPasswordException();
+            }
+        }
+
 <%_ } _%>
 
     <%_ if (databaseType === 'sql') { _%>

@@ -18,7 +18,7 @@
 -%>
 import { Route } from '@angular/router';
 
-import { UserRouteAccessService } from '../../../shared';
+import { UserRouteAccessService } from 'app/shared';
 import { PasswordResetFinishComponent } from './password-reset-finish.component';
 
 export const passwordResetFinishRoute: Route = {

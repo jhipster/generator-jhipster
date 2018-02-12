@@ -39,5 +39,6 @@
     "changelogDate": "20150805125054",
     "dto": "no",
     "service": "no",
-    "pagination": "infinite-scroll"
+    "pagination": "infinite-scroll",
+    "clientRootFolder": "test-root"
 }

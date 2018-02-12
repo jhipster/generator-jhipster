@@ -30,7 +30,10 @@ module.exports = (options) => ({
     resolve: {
         extensions: ['.ts', '.js'],
         modules: ['node_modules'],
-        alias: rxPaths()
+        alias: {
+            app: utils.root('src/main/webapp/app/'),
+            ...rxPaths()
+        }
     },
     stats: {
         children: false

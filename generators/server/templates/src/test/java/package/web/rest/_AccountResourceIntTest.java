@@ -27,9 +27,6 @@ import <%=packageName%>.<%= mainClass %>;
 import <%=packageName%>.domain.Authority;
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.UserRepository;
-<%_ if (searchEngine === 'elasticsearch') { _%>
-import <%= packageName %>.repository.search.UserSearchRepository;
-<%_ } _%>
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.service.UserService;
     <%_ } _%>
@@ -57,9 +54,6 @@ import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-<%_ if (searchEngine === 'elasticsearch') { _%>
-import org.springframework.boot.test.mock.mockito.MockBean;
-<%_ } _%>
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -89,11 +83,6 @@ public class AccountResourceIntTest<% if (databaseType === 'cassandra') { %>exte
 
     @Autowired
     private UserService userService;
-    <%_ } _%>
-    <%_ if (searchEngine === 'elasticsearch') { _%>
-
-    @MockBean
-    private UserSearchRepository userSearchRepository;
     <%_ } _%>
 
     private MockMvc restUserMockMvc;
@@ -203,12 +192,10 @@ import <%=packageName%>.repository.AuthorityRepository;<% } %>
 import <%=packageName%>.repository.PersistentTokenRepository;
 <%_ } _%>
 import <%=packageName%>.repository.UserRepository;
-<%_ if (searchEngine === 'elasticsearch') { _%>
-import <%= packageName %>.repository.search.UserSearchRepository;
-<%_ } _%>
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.service.MailService;
 import <%=packageName%>.service.dto.UserDTO;
+import <%=packageName%>.service.dto.PasswordChangeDTO;
 import <%=packageName%>.web.rest.errors.ExceptionTranslator;
 import <%=packageName%>.web.rest.vm.KeyAndPasswordVM;
 import <%=packageName%>.web.rest.vm.ManagedUserVM;
@@ -222,9 +209,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-<%_ if (searchEngine === 'elasticsearch') { _%>
-import org.springframework.boot.test.mock.mockito.MockBean;
-<%_ } _%>
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -285,11 +269,6 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
 
     @Mock
     private MailService mockMailService;
-    <%_ if (searchEngine === 'elasticsearch') { _%>
-
-    @MockBean
-    private UserSearchRepository userSearchRepository;
-    <%_ } _%>
 
     private MockMvc restMvc;
 
@@ -873,19 +852,44 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
+    @WithMockUser("change-password-wrong-existing-password")
+    public void testChangePasswordWrongExistingPassword() throws Exception {
+        User user = new User();
+    <%_ if (databaseType === 'cassandra') { _%>
+        user.setId(UUID.randomUUID().toString());
+    <%_ } _%>
+        String currentPassword = RandomStringUtils.random(60);
+        user.setPassword(passwordEncoder.encode(currentPassword));
+        user.setLogin("change-password-wrong-existing-password");
+        user.setEmail("change-password-wrong-existing-password@example.com");
+        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
+
+        restMvc.perform(post("/api/account/change-password").contentType(TestUtil.APPLICATION_JSON_UTF8)
+        .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO("1"+currentPassword,"new password"))))
+            .andExpect(status().isBadRequest());
+
+        User updatedUser = userRepository.findOneByLogin("change-password-wrong-existing-password").orElse(null);
+        assertThat(passwordEncoder.matches("new password", updatedUser.getPassword())).isFalse();
+        assertThat(passwordEncoder.matches(currentPassword, updatedUser.getPassword())).isTrue();
+    }
+
+    @Test<% if (databaseType === 'sql') { %>
+    @Transactional<% } %>
     @WithMockUser("change-password")
     public void testChangePassword() throws Exception {
         User user = new User();
         <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
         <%_ } _%>
-        user.setPassword(RandomStringUtils.random(60));
+        String currentPassword = RandomStringUtils.random(60);
+        user.setPassword(passwordEncoder.encode(currentPassword));
         user.setLogin("change-password");
         user.setEmail("change-password@example.com");
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
 
-        restMvc.perform(post("/api/account/change-password").content("new password"))
-            .andExpect(status().isOk());
+        restMvc.perform(post("/api/account/change-password").contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword,"new password"))))
+                .andExpect(status().isOk());
 
         User updatedUser = userRepository.findOneByLogin("change-password").orElse(null);
         assertThat(passwordEncoder.matches("new password", updatedUser.getPassword())).isTrue();
@@ -899,13 +903,15 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
         <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
         <%_ } _%>
-        user.setPassword(RandomStringUtils.random(60));
+        String currentPassword = RandomStringUtils.random(60);
+        user.setPassword(passwordEncoder.encode(currentPassword));
         user.setLogin("change-password-too-small");
         user.setEmail("change-password-too-small@example.com");
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
 
-        restMvc.perform(post("/api/account/change-password").content("new"))
-            .andExpect(status().isBadRequest());
+        restMvc.perform(post("/api/account/change-password").contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword,"new"))))
+                .andExpect(status().isBadRequest());
 
         User updatedUser = userRepository.findOneByLogin("change-password-too-small").orElse(null);
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
@@ -919,13 +925,15 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
         <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
         <%_ } _%>
-        user.setPassword(RandomStringUtils.random(60));
+        String currentPassword = RandomStringUtils.random(60);
+        user.setPassword(passwordEncoder.encode(currentPassword));
         user.setLogin("change-password-too-long");
         user.setEmail("change-password-too-long@example.com");
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
 
-        restMvc.perform(post("/api/account/change-password").content(RandomStringUtils.random(101)))
-            .andExpect(status().isBadRequest());
+        restMvc.perform(post("/api/account/change-password").contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword,RandomStringUtils.random(101)))))
+                .andExpect(status().isBadRequest());
 
         User updatedUser = userRepository.findOneByLogin("change-password-too-long").orElse(null);
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());

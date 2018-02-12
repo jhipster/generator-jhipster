@@ -24,7 +24,7 @@ for (const idx in fields) {
     }
 }
 _%>
-<%= entityInstancePlural %>: <%= entityAngularName %>[];
+<%= entityInstancePlural %>: I<%= entityAngularName %>[];
     currentAccount: any;
     eventSubscriber: Subscription;
     <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -55,14 +55,14 @@ _%>
             this.<%= entityInstance %>Service.search({
                 query: this.currentSearch,
                 }).subscribe(
-                    (res: HttpResponse<<%= entityAngularName %>[]>) => this.<%= entityInstancePlural %> = res.body,
+                    (res: HttpResponse<I<%= entityAngularName %>[]>) => this.<%= entityInstancePlural %> = res.body,
                     (res: HttpErrorResponse) => this.onError(res.message)
                 );
             return;
        }
        <%_ } _%>
         this.<%= entityInstance %>Service.query().subscribe(
-            (res: HttpResponse<<%= entityAngularName %>[]>) => {
+            (res: HttpResponse<I<%= entityAngularName %>[]>) => {
                 this.<%= entityInstancePlural %> = res.body;
                 <%_ if (searchEngine === 'elasticsearch') { _%>
                 this.currentSearch = '';

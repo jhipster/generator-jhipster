@@ -139,9 +139,6 @@ function writeFiles() {
                 this.template('_build.gradle', 'build.gradle');
                 this.template('_settings.gradle', 'settings.gradle');
                 this.template('_gradle.properties', 'gradle.properties');
-                if (!this.skipClient && this.clientFramework === 'angular1') {
-                    this.template('gradle/_yeoman.gradle', 'gradle/yeoman.gradle');
-                }
                 this.template('gradle/_sonar.gradle', 'gradle/sonar.gradle');
                 this.template('gradle/_docker.gradle', 'gradle/docker.gradle');
                 this.template('gradle/_profile_dev.gradle', 'gradle/profile_dev.gradle', this, { interpolate: INTERPOLATE_REGEX });
@@ -599,6 +596,7 @@ function writeFiles() {
                         this.template(`${SERVER_MAIN_SRC_DIR}package/service/_UserService.java`, `${javaDir}service/UserService.java`);
                         this.template(`${SERVER_MAIN_SRC_DIR}package/service/dto/_package-info.java`, `${javaDir}service/dto/package-info.java`);
                         this.template(`${SERVER_MAIN_SRC_DIR}package/service/dto/_UserDTO.java`, `${javaDir}service/dto/UserDTO.java`);
+                        this.template(`${SERVER_MAIN_SRC_DIR}package/service/dto/_PasswordChangeDTO.java`, `${javaDir}service/dto/PasswordChangeDTO.java`);
                         this.template(`${SERVER_MAIN_SRC_DIR}package/service/mapper/_package-info.java`, `${javaDir}service/mapper/package-info.java`);
                         this.template(`${SERVER_MAIN_SRC_DIR}package/service/mapper/_UserMapper.java`, `${javaDir}service/mapper/UserMapper.java`);
                         this.template(`${SERVER_MAIN_SRC_DIR}package/repository/_UserRepository.java`, `${javaDir}repository/UserRepository.java`);
@@ -665,6 +663,7 @@ function writeFiles() {
             /* User management java web files */
             this.template(`${SERVER_MAIN_SRC_DIR}package/service/dto/_package-info.java`, `${javaDir}service/dto/package-info.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/service/dto/_UserDTO.java`, `${javaDir}service/dto/UserDTO.java`);
+            this.template(`${SERVER_MAIN_SRC_DIR}package/service/dto/_PasswordChangeDTO.java`, `${javaDir}service/dto/PasswordChangeDTO.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/vm/_ManagedUserVM.java`, `${javaDir}web/rest/vm/ManagedUserVM.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_AccountResource.java`, `${javaDir}web/rest/AccountResource.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_UserResource.java`, `${javaDir}web/rest/UserResource.java`);
@@ -683,6 +682,9 @@ function writeFiles() {
             this.copy(`${SERVER_TEST_RES_DIR}mails/_testEmail.html`, `${SERVER_TEST_RES_DIR}mails/testEmail.html`);
             this.copy(`${SERVER_TEST_RES_DIR}i18n/_messages_en.properties`, `${SERVER_TEST_RES_DIR}i18n/messages_en.properties`);
 
+            if (this.searchEngine === 'elasticsearch') {
+                this.template(`${SERVER_TEST_SRC_DIR}package/repository/search/_UserSearchRepositoryMockConfiguration.java`, `${testDir}repository/search/UserSearchRepositoryMockConfiguration.java`);
+            }
             this.template(`${SERVER_TEST_SRC_DIR}package/service/_MailServiceIntTest.java`, `${testDir}service/MailServiceIntTest.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/service/_UserServiceIntTest.java`, `${testDir}service/UserServiceIntTest.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_UserResourceIntTest.java`, `${testDir}web/rest/UserResourceIntTest.java`);

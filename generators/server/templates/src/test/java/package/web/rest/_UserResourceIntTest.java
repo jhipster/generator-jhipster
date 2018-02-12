@@ -57,9 +57,6 @@ import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-<%_ if (searchEngine === 'elasticsearch') { _%>
-import org.springframework.boot.test.mock.mockito.MockBean;
-<%_ } _%>
 <%_ if (cacheManagerIsAvailable === true) { _%>
 import org.springframework.cache.CacheManager;
 <%_ } _%>
@@ -144,8 +141,13 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
     private UserRepository userRepository;
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
-    @MockBean
-    private UserSearchRepository userSearchRepository;
+    /**
+     * This repository is mocked in the <%=packageName%>.repository.search test package.
+     *
+     * @see <%= packageName %>.repository.search.UserSearchRepositoryMockConfiguration
+     */
+    @Autowired
+    private UserSearchRepository mockUserSearchRepository;
     <%_ } _%>
     <%_ if (authenticationType !== 'oauth2') { _%>
 
@@ -189,7 +191,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).clear();
         cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).clear();
         <%_ } _%>
-        UserResource userResource = new UserResource(userRepository, userService<% if (authenticationType !== 'oauth2') { %>, mailService<% } %><% if (searchEngine === 'elasticsearch') { %>, userSearchRepository<% } %>);
+        UserResource userResource = new UserResource(userRepository, userService<% if (authenticationType !== 'oauth2') { %>, mailService<% } %><% if (searchEngine === 'elasticsearch') { %>, mockUserSearchRepository<% } %>);
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -326,7 +328,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
         <%_ if (searchEngine === 'elasticsearch') { _%>
-        userSearchRepository.save(user);
+        mockUserSearchRepository.save(user);
         <%_ } _%>
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
@@ -362,7 +364,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
         <%_ if (searchEngine === 'elasticsearch') { _%>
-        userSearchRepository.save(user);
+        mockUserSearchRepository.save(user);
         <%_ } _%>
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
@@ -399,7 +401,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
         <%_ if (searchEngine === 'elasticsearch') { _%>
-        userSearchRepository.save(user);
+        mockUserSearchRepository.save(user);
         <%_ } _%>
 
         // Get all the users
@@ -425,7 +427,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
         <%_ if (searchEngine === 'elasticsearch') { _%>
-        userSearchRepository.save(user);
+        mockUserSearchRepository.save(user);
         <%_ } _%>
         <%_ if (cacheManagerIsAvailable === true) { _%>
 
@@ -468,7 +470,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
         <%_ if (searchEngine === 'elasticsearch') { _%>
-        userSearchRepository.save(user);
+        mockUserSearchRepository.save(user);
         <%_ } _%>
         int databaseSizeBeforeUpdate = userRepository.findAll().size();
 
@@ -521,7 +523,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
         <%_ if (searchEngine === 'elasticsearch') { _%>
-        userSearchRepository.save(user);
+        mockUserSearchRepository.save(user);
         <%_ } _%>
         int databaseSizeBeforeUpdate = userRepository.findAll().size();
 
@@ -575,7 +577,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         // Initialize the database with 2 users
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
         <%_ if (searchEngine === 'elasticsearch') { _%>
-        userSearchRepository.save(user);
+        mockUserSearchRepository.save(user);
         <%_ } _%>
 
         User anotherUser = new User();
@@ -594,7 +596,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         anotherUser.setLangKey("en");
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(anotherUser);
         <%_ if (searchEngine === 'elasticsearch') { _%>
-        userSearchRepository.save(anotherUser);
+        mockUserSearchRepository.save(anotherUser);
         <%_ } _%>
 
         // Update the user
@@ -634,7 +636,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
         <%_ if (searchEngine === 'elasticsearch') { _%>
-        userSearchRepository.save(user);
+        mockUserSearchRepository.save(user);
         <%_ } _%>
 
         User anotherUser = new User();
@@ -653,7 +655,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         anotherUser.setLangKey("en");
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(anotherUser);
         <%_ if (searchEngine === 'elasticsearch') { _%>
-        userSearchRepository.save(anotherUser);
+        mockUserSearchRepository.save(anotherUser);
         <%_ } _%>
 
         // Update the user
@@ -693,7 +695,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
         <%_ if (searchEngine === 'elasticsearch') { _%>
-        userSearchRepository.save(user);
+        mockUserSearchRepository.save(user);
         <%_ } _%>
         int databaseSizeBeforeDelete = userRepository.findAll().size();
 

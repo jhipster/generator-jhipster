@@ -68,6 +68,8 @@
         "form": {
             "username": "Utilizator",
             "username.placeholder": "Numele de utilizator",
+            "currentpassword": "Current password",
+            "currentpassword.placeholder": "Current password",
             "newpassword": "Parolă nouă",
             "newpassword.placeholder": "Parolă nouă",
             "confirmpassword": "Confirma parolă",
@@ -77,10 +79,6 @@
         },
         "messages": {
             "info": {
-                <%_ if (clientFramework === 'angular1') { _%>
-                "authenticated": "Dacă doriți să vă <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">autentificați</a>, puteți încerca conturile implicite:<br/>- Administrator (login=\"admin\" și parola=\"admin\") <br/>- Utilizator (login=\"user\" și parola=\"user\").",
-                "register": "Încă nu aveți un cont? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Înregistrați un cont nou</a>"
-                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Dacă doriți să vă ",
                     "link": "autentificați",
@@ -90,7 +88,6 @@
                     "noaccount": "Încă nu aveți un cont?",
                     "link": "Înregistrați un cont nou"
                 }
-                <%_ } _%>
             },
             "error": {
                 "dontmatch" : "Parola și confirmarea ei nu corespund!"

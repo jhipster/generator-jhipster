@@ -20,9 +20,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
-import { SERVER_API_URL } from '../../app.constants';
-import { User } from './user.model';
-import { createRequestOption } from '../model/request-util';
+import { SERVER_API_URL } from 'app/app.constants';
+import { IUser } from './user.model';
+import { createRequestOption } from '../util/request-util';
 
 @Injectable()
 export class UserService {
@@ -31,21 +31,21 @@ export class UserService {
     constructor(private http: HttpClient) { }
 <%_ if (authenticationType !== 'oauth2') { _%>
 
-    create(user: User): Observable<HttpResponse<User>> {
-        return this.http.post<User>(this.resourceUrl, user, { observe: 'response' });
+    create(user: IUser): Observable<HttpResponse<IUser>> {
+        return this.http.post<IUser>(this.resourceUrl, user, { observe: 'response' });
     }
 
-    update(user: User): Observable<HttpResponse<User>> {
-        return this.http.put<User>(this.resourceUrl, user, { observe: 'response' });
+    update(user: IUser): Observable<HttpResponse<IUser>> {
+        return this.http.put<IUser>(this.resourceUrl, user, { observe: 'response' });
     }
 
-    find(login: string): Observable<HttpResponse<User>> {
-        return this.http.get<User>(`${this.resourceUrl}/${login}`, { observe: 'response' });
+    find(login: string): Observable<HttpResponse<IUser>> {
+        return this.http.get<IUser>(`${this.resourceUrl}/${login}`, { observe: 'response' });
     }
 <% } %>
-    query(req?: any): Observable<HttpResponse<User[]>> {
+    query(req?: any): Observable<HttpResponse<IUser[]>> {
         const options = createRequestOption(req);
-        return this.http.get<User[]>(this.resourceUrl, { params: options, observe: 'response' });
+        return this.http.get<IUser[]>(this.resourceUrl, { params: options, observe: 'response' });
     }
 <%_ if (authenticationType !== 'oauth2') { _%>
 

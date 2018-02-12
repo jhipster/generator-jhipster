@@ -36,11 +36,7 @@
             },
             "messages": {
                 "info": "Elixa un contrasinal novo",
-                <%_ if (clientFramework === 'angular1') { _%>
-                "success": "<strong>O seu contrasinal foi restablecida.</strong> Por favor <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">inicie sesión</a>.",
-                <%_ } else { _%>
                 "success": "<strong>O seu contrasinal foi restablecida.</strong> Por favor ",
-                <%_ } _%>
                 "keymissing": "Falta a clave de reinicio.",
                 "error": "O seu contrasinal non pode ser restablecida. Lembre que unha solicitude de reinicio de contrasinal só é válida durante 24 horas."
             }

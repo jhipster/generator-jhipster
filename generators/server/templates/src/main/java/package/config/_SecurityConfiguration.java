@@ -162,9 +162,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         web.ignoring()
             .antMatchers(HttpMethod.OPTIONS, "/**")
             .antMatchers("/app/**/*.{js,html}")
-            <%_ if (clientFramework === 'angular1') { _%>
-            .antMatchers("/bower_components/**")
-            <%_ } _%>
             .antMatchers("/i18n/**")
             .antMatchers("/content/**")
             .antMatchers("/swagger-ui/index.html")

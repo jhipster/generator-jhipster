@@ -19,8 +19,8 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { <%=jhiPrefixCapitalized%>HealthCheckComponent } from '../../../../../../main/webapp/app/admin/health/health.component';
-import { <%=jhiPrefixCapitalized%>HealthService } from '../../../../../../main/webapp/app/admin/health/health.service';
+import { <%=jhiPrefixCapitalized%>HealthCheckComponent } from 'app/admin/health/health.component';
+import { <%=jhiPrefixCapitalized%>HealthService } from 'app/admin/health/health.service';
 
 describe('Component Tests', () => {
 

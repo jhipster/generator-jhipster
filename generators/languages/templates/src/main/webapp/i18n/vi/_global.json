@@ -68,10 +68,6 @@
         },
         "messages": {
             "info": {
-                <%_ if (clientFramework === 'angular1') { _%>
-                "authenticated": "Nếu bạn muốn <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">đăng nhập</a>, bạn có thể thử với tài khoản mặc định:<br/>- Quản trị viên (tài khoản=\"admin\" và mật khẩu=\"admin\") <br/>- Người dùng (tài khoản=\"user\" và mật khẩu=\"user\").",
-                "register": "Bạn vẫn chưa có tài khoản? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Đăng ký tài khoản mới</a>"
-                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Nếu bạn muốn ",
                     "link": "đăng nhập",
@@ -81,7 +77,6 @@
                     "noaccount": "Bạn vẫn chưa có tài khoản?",
                     "link": "Đăng ký tài khoản mới"
                 }
-                <%_ } _%>
             },
             "error": {
                 "dontmatch": "Xác nhận mật khẩu không khớp!"

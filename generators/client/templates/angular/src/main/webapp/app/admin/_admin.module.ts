@@ -18,16 +18,17 @@
 -%>
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
-<%_ if (websocket === 'spring-websocket') { _%>
-import { <%=jhiPrefixCapitalized%>TrackerService } from './../shared/tracker/tracker.service';
-<%_ } _%>
 
-import { <%=angularXAppName%>SharedModule } from '../shared';
+<%_ if (websocket === 'spring-websocket') { _%>
+import { <%=jhiPrefixCapitalized%>TrackerService } from 'app/shared/tracker/tracker.service';
+<%_ } _%>
+import { <%=angularXAppName%>SharedModule } from 'app/shared';
 /* jhipster-needle-add-admin-module-import - JHipster will add admin modules imports here */
 
 import {
     adminState,
     <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+    AuditResolvePagingParams,
     AuditsComponent,
     <%_ } _%>
     <%_ if (!skipUserManagement) { _%>
@@ -108,6 +109,7 @@ import {
     ],
     providers: [
         <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+        AuditResolvePagingParams,
         AuditsService,
         <%_ } _%>
         <%=jhiPrefixCapitalized%>ConfigurationService,

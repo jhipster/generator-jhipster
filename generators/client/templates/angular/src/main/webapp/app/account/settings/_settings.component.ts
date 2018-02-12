@@ -19,7 +19,7 @@
 import { Component, OnInit } from '@angular/core';
 import { JhiLanguageService } from 'ng-jhipster';
 
-import { Principal, AccountService<% if (enableTranslation) { %>, JhiLanguageHelper<% } %> } from '../../shared';
+import { Principal, AccountService<% if (enableTranslation) { %>, JhiLanguageHelper<% } %> } from 'app/shared';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-settings',

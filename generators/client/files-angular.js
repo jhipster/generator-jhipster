@@ -32,6 +32,8 @@ const files = {
     common: [
         {
             templates: [
+                '_.prettierrc',
+                '_.prettierignore',
                 '_package.json',
                 '_proxy.conf.json',
                 '_tsconfig.json',
@@ -379,8 +381,7 @@ const files = {
                 'shared/constants/_error.constants.ts',
                 'shared/constants/_pagination.constants.ts',
                 // models
-                'shared/model/_request-util.ts',
-                'shared/model/_base-entity.ts',
+                'shared/util/_request-util.ts',
                 'shared/user/_account.model.ts',
                 // login
                 'shared/login/_login.service.ts',
@@ -481,7 +482,8 @@ const files = {
             condition: generator => (generator.databaseType !== 'no' && generator.databaseType !== 'cassandra'),
             path: TEST_SRC_DIR,
             templates: [
-                'spec/app/admin/audits/_audits.component.spec.ts'
+                'spec/app/admin/audits/_audits.component.spec.ts',
+                'spec/app/admin/audits/_audits.service.spec.ts'
             ]
         },
         {

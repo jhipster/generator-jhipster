@@ -25,7 +25,10 @@ const utils = require('./utils.js');
 
 module.exports = (WATCH) => ({
     resolve: {
-        extensions: ['.ts', '.js']
+        extensions: ['.ts', '.js'],
+        alias: {
+            app: utils.root('src/main/webapp/app/')
+        }
     },
     module: {
         rules: [
@@ -62,6 +65,11 @@ module.exports = (WATCH) => ({
             }]
     },
     plugins: [
+        new webpack.DefinePlugin({
+            'process.env': {
+                SERVER_API_URL: `''`
+            }
+        }),
         new webpack.SourceMapDevToolPlugin({
             filename: null, // if no value is provided the sourcemap is inlined
             test: /\.(ts|js)($|\?)/i // process .js and .ts files only

@@ -24,9 +24,9 @@ import { JhiLanguageService } from 'ng-jhipster';
 import { MockLanguageService } from '../../../helpers/mock-language.service';
 <%_ } _%>
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '../../../../../../main/webapp/app/shared';
-import { Register } from '../../../../../../main/webapp/app/account/register/register.service';
-import { RegisterComponent } from '../../../../../../main/webapp/app/account/register/register.component';
+import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/shared';
+import { Register } from 'app/account/register/register.service';
+import { RegisterComponent } from 'app/account/register/register.component';
 
 describe('Component Tests', () => {
 
@@ -91,9 +91,7 @@ describe('Component Tests', () => {
                 fakeAsync((service: Register) => {
                     spyOn(service, 'save').and.returnValue(Observable.throw({
                         status: 400,
-                        json() {
-                            return {type : LOGIN_ALREADY_USED_TYPE};
-                        }
+                        error: { type: LOGIN_ALREADY_USED_TYPE }
                     }));
                     comp.registerAccount.password = comp.confirmPassword = 'password';
 
@@ -112,9 +110,7 @@ describe('Component Tests', () => {
                 fakeAsync((service: Register) => {
                     spyOn(service, 'save').and.returnValue(Observable.throw({
                         status: 400,
-                        json() {
-                            return {type : EMAIL_ALREADY_USED_TYPE};
-                        }
+                        error: { type: EMAIL_ALREADY_USED_TYPE }
                     }));
                     comp.registerAccount.password = comp.confirmPassword = 'password';
 
