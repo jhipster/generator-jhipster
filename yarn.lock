@@ -1573,9 +1573,9 @@ isurl@^1.0.0-alpha5:
     has-to-string-tag-x "^1.2.0"
     is-object "^1.0.1"
 
-jhipster-core@1.4.4:
-  version "1.4.4"
-  resolved "https://registry.yarnpkg.com/jhipster-core/-/jhipster-core-1.4.4.tgz#009540997a1d414498a4e0de422e927a9810c6d3"
+jhipster-core@1.4.5:
+  version "1.4.5"
+  resolved "https://registry.yarnpkg.com/jhipster-core/-/jhipster-core-1.4.5.tgz#4501cdae013ffeb570a874e0666c5c61ad4acd85"
   dependencies:
     lodash "4.17.4"
     winston "2.4.0"

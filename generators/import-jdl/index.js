@@ -93,19 +93,22 @@ module.exports = class extends BaseGenerator {
             parseJDL() {
                 this.log('The jdl is being parsed.');
                 try {
-                    const jdlObject = jhiCore.convertToJDL(
-                        jhiCore.parseFromFiles(this.jdlFiles),
-                        this.prodDatabaseType,
-                        this.applicationType,
-                        this.baseName
-                    );
+                    const jdlObject = jhiCore.convertToJDLFromConfigurationObject({
+                        document: jhiCore.parseFromFiles(this.jdlFiles),
+                        databaseType: this.prodDatabaseType,
+                        applicationType: this.applicationType,
+                        applicationName: this.baseName
+                    });
                     const entities = jhiCore.convertToJHipsterJSON({
                         jdlObject,
                         databaseType: this.prodDatabaseType,
                         applicationType: this.applicationType
                     });
                     this.log('Writing entity JSON files.');
-                    this.changedEntities = jhiCore.exportToJSON(entities, this.options.force);
+                    this.changedEntities = jhiCore.exportEntities({
+                        entities,
+                        forceNoFiltering: this.options.force
+                    });
                     this.updatedKeys = Object.keys(this.changedEntities);
                     if (this.updatedKeys.length > 0) {
                         this.log(`Updated entities are: ${chalk.yellow(this.updatedKeys)}`);
