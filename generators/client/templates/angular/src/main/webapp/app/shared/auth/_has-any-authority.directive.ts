@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
-import { Principal } from '../../core/auth/principal.service';
+import { Principal } from 'app/core/auth/principal.service';
 
 /**
  * @whatItDoes Conditionally includes an HTML element if current user has any

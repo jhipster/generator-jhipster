@@ -18,8 +18,8 @@
 -%>
 import { Component, Input, OnInit } from '@angular/core';
 
-import { SocialService } from '../../core/social/social.service';
-import { CSRFService } from '../../core/auth/csrf.service';
+import { SocialService } from 'app/core/social/social.service';
+import { CSRFService } from 'app/core/auth/csrf.service';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-social',
