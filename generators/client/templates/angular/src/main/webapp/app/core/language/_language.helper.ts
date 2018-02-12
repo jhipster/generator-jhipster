@@ -21,7 +21,7 @@ import { Title } from '@angular/platform-browser';
 import { Router, ActivatedRouteSnapshot } from '@angular/router';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
-import { LANGUAGES } from '../../shared/language/language.constants';
+import { LANGUAGES } from 'app/core/language/language.constants';
 <%_ if (enableI18nRTL) { _%>
 import { FindLanguageFromKeyPipe } from '../../shared/language/find-language-from-key.pipe';
 <%_ } _%>
