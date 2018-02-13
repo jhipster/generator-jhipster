@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 import { Component, OnInit, AfterViewInit, Renderer, ElementRef } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
 import { EMAIL_NOT_FOUND_TYPE } from 'app/shared';
 import { PasswordResetInitService } from './password-reset-init.service';
 
@@ -53,9 +52,9 @@ export class PasswordResetInitComponent implements OnInit, AfterViewInit {
 
         this.passwordResetInitService.save(this.resetAccount.email).subscribe(() => {
             this.success = 'OK';
-        }, (response: HttpErrorResponse) => {
+        }, (response) => {
             this.success = null;
-            if (response.status === 400 && response.error.type === EMAIL_NOT_FOUND_TYPE) {
+            if (response.status === 400 && response.json().type === EMAIL_NOT_FOUND_TYPE) {
                 this.errorEmailNotExists = 'ERROR';
             } else {
                 this.error = 'ERROR';
