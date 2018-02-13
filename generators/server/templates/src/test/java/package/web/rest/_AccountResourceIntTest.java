@@ -641,7 +641,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
         validUser.setImageUrl("http://placehold.it/50x50");
         <%_ } _%>
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
 
         restMvc.perform(
             post("/api/register")
