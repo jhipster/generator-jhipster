@@ -223,7 +223,7 @@ security:
             prefer-token-info: false
             <%_ if (applicationType === 'gateway' || applicationType === 'microservice') {  _%>
             jwt:
-                key-uri: http://localhost:9080/auth/realms/jhipster
+                key-set-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/certs
             <%_ } _%>
     <%_ } _%>
 
