@@ -205,9 +205,7 @@ public class UserService {
 
     public User registerUser(UserDTO userDTO, String password) {
 
-        User newUser = new User();<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
-        Authority authority = authorityRepository.findById(AuthoritiesConstants.USER).get();
-        Set<Authority> authorities = new HashSet<>();<% } %><% if (databaseType === 'cassandra') { %>
+        User newUser = new User();<% if (databaseType === 'cassandra') { %>
         newUser.setId(UUID.randomUUID().toString());<% } %><% if (databaseType === 'cassandra' || databaseType === 'couchbase') { %>
         Set<String> authorities = new HashSet<>();<% } %>
         String encryptedPassword = passwordEncoder.encode(password);
@@ -226,7 +224,8 @@ public class UserService {
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
-        authorities.add(authority);
+        Set<Authority> authorities = new HashSet<>();
+        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         <%_ } _%>
         <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
         authorities.add(AuthoritiesConstants.USER);
