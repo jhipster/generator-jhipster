@@ -19,7 +19,7 @@
 import { Injectable } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-import { <%=jhiPrefixCapitalized%>LoginModalComponent } from '../../shared/login/login.component';
+import { <%=jhiPrefixCapitalized%>LoginModalComponent } from 'app/shared/login/login.component';
 
 @Injectable()
 export class LoginModalService {

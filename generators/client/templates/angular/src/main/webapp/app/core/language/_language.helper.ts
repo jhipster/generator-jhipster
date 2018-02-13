@@ -23,7 +23,7 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
 import { LANGUAGES } from 'app/core/language/language.constants';
 <%_ if (enableI18nRTL) { _%>
-import { FindLanguageFromKeyPipe } from '../../shared/language/find-language-from-key.pipe';
+import { FindLanguageFromKeyPipe } from 'app/shared/language/find-language-from-key.pipe';
 <%_ } _%>
 
 @Injectable()

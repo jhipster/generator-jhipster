@@ -32,7 +32,7 @@ import {
 <%_ if (enableI18nRTL) { _%>
 import {
     FindLanguageFromKeyPipe
-} from '../shared';<%_ } _%>
+} from 'app/shared';<%_ } _%>
 
 @NgModule({
     imports: [],
