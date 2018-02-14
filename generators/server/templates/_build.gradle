@@ -289,7 +289,9 @@ dependencies {
     compile "org.springframework.boot:spring-boot-loader-tools"
     compile "org.springframework.boot:spring-boot-starter-mail"
     compile "org.springframework.boot:spring-boot-starter-logging"
-    compile "org.springframework.boot:spring-boot-starter-actuator"
+    compile ("org.springframework.boot:spring-boot-starter-actuator") {
+        exclude module: 'micrometer-core'
+    }
     compile "org.springframework.boot:spring-boot-starter-aop"
     <%_ if (databaseType === 'sql') { _%>
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
