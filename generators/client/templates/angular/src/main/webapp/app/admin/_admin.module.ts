@@ -19,9 +19,6 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-<%_ if (websocket === 'spring-websocket') { _%>
-import { <%=jhiPrefixCapitalized%>TrackerService } from 'app/shared/tracker/tracker.service';
-<%_ } _%>
 import { <%=angularXAppName%>SharedModule } from 'app/shared';
 /* jhipster-needle-add-admin-module-import - JHipster will add admin modules imports here */
 
@@ -119,9 +116,6 @@ import {
         GatewayRoutesService,
         <%_ } _%>
         LogsService,
-        <%_ if (websocket === 'spring-websocket') { _%>
-        <%=jhiPrefixCapitalized%>TrackerService,
-        <%_ } _%>
         <%_ if (!skipUserManagement) { _%>
         UserResolvePagingParams,
         UserResolve,

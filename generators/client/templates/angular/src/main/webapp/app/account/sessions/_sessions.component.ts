@@ -18,7 +18,7 @@
 -%>
 import { Component, OnInit } from '@angular/core';
 
-import { Principal } from 'app/shared';
+import { Principal } from 'app/core';
 import { Session } from './session.model';
 import { SessionsService } from './sessions.service';
 

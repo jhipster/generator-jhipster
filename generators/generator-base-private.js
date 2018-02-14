@@ -176,7 +176,7 @@ module.exports = class extends Generator {
      * @param languages
      */
     updateLanguagesInLanguageConstantNG2(languages) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/shared/language/language.constants.ts`;
+        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`;
         try {
             let content = 'export const LANGUAGES: string[] = [\n';
             languages.forEach((language, i) => {

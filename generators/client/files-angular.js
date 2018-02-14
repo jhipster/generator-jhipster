@@ -260,7 +260,7 @@ const files = {
                 { file: 'account/social/_social-register.component.html', method: 'processHtml' },
                 { file: 'shared/social/_social.component.ts', method: 'processJs' },
                 { file: 'shared/social/_social.component.html', method: 'processHtml' },
-                'shared/social/_social.service.ts'
+                'core/social/_social.service.ts'
             ]
         },
         {
@@ -338,8 +338,8 @@ const files = {
                 { file: 'admin/tracker/_tracker.route.ts', method: 'processJs' },
                 { file: 'admin/tracker/_tracker.component.ts', method: 'processJs' },
                 { file: 'admin/tracker/_tracker.component.html', method: 'processHtml' },
-                'shared/tracker/_tracker.service.ts',
-                'shared/tracker/_window.service.ts'
+                'core/tracker/_tracker.service.ts',
+                'core/tracker/_window.service.ts'
             ]
         },
         {
@@ -370,6 +370,42 @@ const files = {
             ]
         }
     ],
+    angularCore: [
+        {
+            path: ANGULAR_DIR,
+            templates: [
+                'core/_index.ts',
+                'core/_core.module.ts',
+                // login
+                'core/login/_login.service.ts',
+                'core/user/_account.model.ts'
+            ]
+        },
+        {
+            path: ANGULAR_DIR,
+            condition: generator => generator.authenticationType !== 'oauth2',
+            templates: [
+                // login
+                'core/login/_login-modal.service.ts'
+            ]
+        },
+        {
+            condition: generator => !generator.skipUserManagement || generator.authenticationType === 'oauth2',
+            path: ANGULAR_DIR,
+            templates: [
+                'core/user/_user.service.ts',
+                'core/user/_user.model.ts'
+            ]
+        },
+        {
+            condition: generator => generator.enableTranslation,
+            path: ANGULAR_DIR,
+            templates: [
+                'core/language/_language.constants.ts',
+                'core/language/_language.helper.ts'
+            ]
+        }
+    ],
     angularShared: [
         {
             path: ANGULAR_DIR,
@@ -382,9 +418,6 @@ const files = {
                 'shared/constants/_pagination.constants.ts',
                 // models
                 'shared/util/_request-util.ts',
-                'shared/user/_account.model.ts',
-                // login
-                'shared/login/_login.service.ts',
                 // alert service code
                 'shared/alert/_alert.component.ts',
                 'shared/alert/_alert-error.component.ts'
@@ -396,25 +429,14 @@ const files = {
             templates: [
                 // login
                 'shared/login/_login.component.ts',
-                { file: 'shared/login/_login.component.html', method: 'processHtml' },
-                'shared/login/_login-modal.service.ts'
+                { file: 'shared/login/_login.component.html', method: 'processHtml' }
             ]
         },
         {
             condition: generator => generator.enableTranslation,
             path: ANGULAR_DIR,
             templates: [
-                'shared/language/_find-language-from-key.pipe.ts',
-                'shared/language/_language.constants.ts',
-                'shared/language/_language.helper.ts'
-            ]
-        },
-        {
-            condition: generator => !generator.skipUserManagement || generator.authenticationType === 'oauth2',
-            path: ANGULAR_DIR,
-            templates: [
-                'shared/user/_user.model.ts',
-                'shared/user/_user.service.ts'
+                'shared/language/_find-language-from-key.pipe.ts'
             ]
         }
     ],
@@ -422,26 +444,26 @@ const files = {
         {
             path: ANGULAR_DIR,
             templates: [
-                'shared/auth/_csrf.service.ts',
-                'shared/auth/_state-storage.service.ts',
-                'shared/auth/_principal.service.ts',
+                'core/auth/_csrf.service.ts',
+                'core/auth/_state-storage.service.ts',
+                'core/auth/_principal.service.ts',
                 'shared/auth/_has-any-authority.directive.ts',
-                'shared/auth/_account.service.ts',
-                'shared/auth/_user-route-access-service.ts'
+                'core/auth/_account.service.ts',
+                'core/auth/_user-route-access-service.ts'
             ]
         },
         {
             condition: generator => generator.authenticationType === 'jwt' || generator.authenticationType === 'uaa',
             path: ANGULAR_DIR,
             templates: [
-                'shared/auth/_auth-jwt.service.ts'
+                'core/auth/_auth-jwt.service.ts'
             ]
         },
         {
             condition: generator => generator.authenticationType === 'session' || generator.authenticationType === 'oauth2',
             path: ANGULAR_DIR,
             templates: [
-                'shared/auth/_auth-session.service.ts'
+                'core/auth/_auth-session.service.ts'
             ]
         }
     ],
@@ -495,7 +517,7 @@ const files = {
                 'spec/app/admin/user-management/_user-management-dialog.component.spec.ts',
                 'spec/app/admin/user-management/_user-management-delete-dialog.component.spec.ts',
                 // user service tests
-                'spec/app/shared/user/_user.service.spec.ts'
+                'spec/app/core/user/_user.service.spec.ts'
             ]
         },
         {

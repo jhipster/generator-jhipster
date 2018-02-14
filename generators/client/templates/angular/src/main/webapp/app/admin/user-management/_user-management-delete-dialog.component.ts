@@ -21,7 +21,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { User, UserService } from 'app/shared';
+import { User, UserService } from 'app/core';
 import { UserModalService } from './user-modal.service';
 
 @Component({

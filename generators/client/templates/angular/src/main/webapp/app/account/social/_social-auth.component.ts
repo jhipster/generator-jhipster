@@ -20,7 +20,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie';
 
-import { LoginService } from 'app/shared';
+import { LoginService } from 'app/core';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-auth',

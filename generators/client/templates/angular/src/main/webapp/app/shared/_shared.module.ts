@@ -17,31 +17,16 @@
  limitations under the License.
 -%>
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { DatePipe } from '@angular/common';
 
 import {
     <%=angularXAppName%>SharedLibsModule,
     <%=angularXAppName%>SharedCommonModule,
-    CSRFService,
-    AuthServerProvider,
-    AccountService,
-    <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
-    UserService,
-    <%_ } _%>
-    StateStorageService,
-    LoginService,
     <%_ if (authenticationType !== 'oauth2') { _%>
-    LoginModalService,
     <%=jhiPrefixCapitalized%>LoginModalComponent,
-    <%_ } _%>
-    Principal,
-    <%_ if (websocket === 'spring-websocket') { _%>
-    <%=jhiPrefixCapitalized%>TrackerService,
     <%_ } _%>
     HasAnyAuthorityDirective,
     <%_ if (enableSocialSignIn) { _%>
-    <%=jhiPrefixCapitalized%>SocialComponent,
-    SocialService,
+    <%=jhiPrefixCapitalized%>SocialComponent
     <%_ } _%>
 } from './';
 
@@ -59,27 +44,7 @@ import {
         <%_ } _%>
         HasAnyAuthorityDirective
     ],
-    providers: [
-        LoginService,
-        <%_ if (authenticationType !== 'oauth2') { _%>
-        LoginModalService,
-        <%_ } _%>
-        AccountService,
-        StateStorageService,
-        Principal,
-        CSRFService,
-        <%_ if (websocket === 'spring-websocket') { _%>
-        <%=jhiPrefixCapitalized%>TrackerService,
-        <%_ } _%>
-        AuthServerProvider,
-        <%_ if (enableSocialSignIn) { _%>
-        SocialService,
-        <%_ } _%>
-        <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
-        UserService,
-        <%_ } _%>
-        DatePipe
-    ],
+    providers: [],
     <%_ if (authenticationType !== 'oauth2') { _%>
     entryComponents: [<%=jhiPrefixCapitalized%>LoginModalComponent],
     <%_ } _%>
@@ -91,8 +56,7 @@ import {
         <%_ if (authenticationType !== 'oauth2') { _%>
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         <%_ } _%>
-        HasAnyAuthorityDirective,
-        DatePipe
+        HasAnyAuthorityDirective
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 

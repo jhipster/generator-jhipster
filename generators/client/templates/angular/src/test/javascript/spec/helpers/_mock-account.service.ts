@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { SpyObject } from './spyobject';
-import { AccountService } from 'app/shared/auth/account.service';
+import { AccountService } from 'app/core/auth/account.service';
 import Spy = jasmine.Spy;
 
 export class MockAccountService extends SpyObject {

@@ -22,7 +22,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { <% if (enableTranslation) { %>JhiLanguageHelper,<% } %> User, UserService } from 'app/shared';
+import { <% if (enableTranslation) { %>JhiLanguageHelper,<% } %> User, UserService } from 'app/core';
 import { UserModalService } from './user-modal.service';
 
 @Component({

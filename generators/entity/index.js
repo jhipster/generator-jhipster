@@ -680,7 +680,7 @@ module.exports = class extends BaseGenerator {
                             }
                         } else {
                             relationship.otherEntityModuleName = `${context.angularXAppName}SharedModule`;
-                            relationship.otherEntityModulePath = 'app/shared';
+                            relationship.otherEntityModulePath = 'app/core';
                         }
                     }
                     // Load in-memory data for root

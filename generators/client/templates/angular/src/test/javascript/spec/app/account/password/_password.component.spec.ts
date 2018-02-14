@@ -23,10 +23,10 @@ import { Observable } from 'rxjs/Observable';
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { PasswordComponent } from 'app/account/password/password.component';
 import { PasswordService } from 'app/account/password/password.service';
-import { Principal } from 'app/shared/auth/principal.service';
-import { AccountService } from 'app/shared/auth/account.service';
+import { Principal } from 'app/core/auth/principal.service';
+import { AccountService } from 'app/core/auth/account.service';
 <%_ if (websocket === 'spring-websocket') { _%>
-import { <%=jhiPrefixCapitalized%>TrackerService } from 'app/shared/tracker/tracker.service';
+import { <%=jhiPrefixCapitalized%>TrackerService } from 'app/core/tracker/tracker.service';
 import { MockTrackerService } from '../../../helpers/mock-tracker.service';
 <%_ } _%>
 

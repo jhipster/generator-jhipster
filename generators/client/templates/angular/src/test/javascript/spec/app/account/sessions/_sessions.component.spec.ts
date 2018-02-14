@@ -24,7 +24,7 @@ import { Session } from 'app/account/sessions/session.model';
 import { SessionsComponent } from 'app/account/sessions/sessions.component';
 import { SessionsService } from 'app/account/sessions/sessions.service';
 import { MockPrincipal } from '../../../helpers/mock-principal.service';
-import { Principal } from 'app/shared/auth/principal.service';
+import { Principal } from 'app/core/auth/principal.service';
 
 describe('Component Tests', () => {
 

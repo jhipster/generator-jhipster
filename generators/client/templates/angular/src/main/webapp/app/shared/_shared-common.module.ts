@@ -16,19 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { NgModule, LOCALE_ID } from '@angular/core';
-import { Title } from '@angular/platform-browser';
-import { registerLocaleData } from '@angular/common';
-<%_ const localeId = getLocaleId(nativeLanguage); _%>
-import locale from '@angular/common/locales/<%= localeId %>';
+import { NgModule } from '@angular/core';
 
-<%_ if (websocket === 'spring-websocket') { _%>
-import { WindowRef } from './tracker/window.service';
-<%_ } _%>
 import {
     <%=angularXAppName%>SharedLibsModule,
     <%_ if (enableTranslation) { _%>
-    JhiLanguageHelper,
     FindLanguageFromKeyPipe,
     <%_ } _%>
     <%=jhiPrefixCapitalized%>AlertComponent,
@@ -46,24 +38,7 @@ import {
         <%=jhiPrefixCapitalized%>AlertComponent,
         <%=jhiPrefixCapitalized%>AlertErrorComponent
     ],
-    providers: [
-        <%_ if (enableI18nRTL) { _%>
-        FindLanguageFromKeyPipe,
-        <%_ } if (enableTranslation) { _%>
-        JhiLanguageHelper,
-        <%_ } if (websocket === 'spring-websocket') { _%>
-        WindowRef,
-        <%_ } _%>
-        Title,
-        {
-            provide: LOCALE_ID,
-        <%_ if (skipLanguageForLocale(nativeLanguage)) { _%>
-            useValue: 'en'
-        <%_ } else { _%>
-            useValue: '<%= localeId %>'
-        <%_ } _%>
-        },
-    ],
+    providers: [],
     exports: [
         <%=angularXAppName%>SharedLibsModule,
         <%_ if (enableTranslation) { _%>
@@ -73,8 +48,4 @@ import {
         <%=jhiPrefixCapitalized%>AlertErrorComponent
     ]
 })
-export class <%=angularXAppName%>SharedCommonModule {
-    constructor() {
-        registerLocaleData(locale);
-    }
-}
+export class <%=angularXAppName%>SharedCommonModule {}
