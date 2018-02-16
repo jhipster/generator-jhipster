@@ -18,7 +18,6 @@
  */
 
 const AWS_SSM_VERSION = '1.11.247';
-const SPRING_CLOUD_CTX_VERSION = '1.3.0.RELEASE';
 
 const configuration = {
     aws: 'aws'
@@ -26,8 +25,7 @@ const configuration = {
 
 const constants = {
     conf: configuration,
-    AWS_SSM_VERSION,
-    SPRING_CLOUD_CTX_VERSION
+    AWS_SSM_VERSION
 };
 
 module.exports = constants;
