@@ -258,10 +258,10 @@ module.exports = class extends BaseGenerator {
                     const directory = `${this.directoryPath}${config.appFolder}`;
                     if (config.buildTool === 'maven') {
                         this.addMavenDependencyInDirectory(directory, AWS_SSM_GROUP, AWS_SSM_ARTIFACT, awsConstants.AWS_SSM_VERSION);
-                        this.addMavenDependencyInDirectory(directory, SPRING_CLOUD_GROUP, SPRING_CLOUD_ARTIFACT, awsConstants.SPRING_CLOUD_CTX_VERSION);
+                        this.addMavenDependencyInDirectory(directory, SPRING_CLOUD_GROUP, SPRING_CLOUD_ARTIFACT);
                     } else if (config.buildTool === 'gradle') {
                         this.addGradleDependencyInDirectory(directory, 'compile', AWS_SSM_GROUP, AWS_SSM_ARTIFACT, awsConstants.AWS_SSM_VERSION);
-                        this.addGradleDependencyInDirectory(directory, 'compile', SPRING_CLOUD_GROUP, SPRING_CLOUD_ARTIFACT, awsConstants.SPRING_CLOUD_CTX_VERSION);
+                        this.addGradleDependencyInDirectory(directory, 'compile', SPRING_CLOUD_GROUP, SPRING_CLOUD_ARTIFACT);
                     }
                 });
             },
