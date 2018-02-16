@@ -140,7 +140,7 @@ Resources:
     DependsOn:
     - JHipsterInternalSG
     Properties:
-      GroupDescription: Internal JHIpster Database Secuirty Group
+      GroupDescription: Internal JHIpster Database Security Group
       SecurityGroupIngress:
       - IpProtocol: icmp
         FromPort: -1
