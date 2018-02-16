@@ -35,7 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 <%#
-    Based off the following AWS SSM demonstration code: https://github.com/wcurrie/aws-ssm-demo/blob/master/src/main/java/com/example/config/AwsSsmConfig.java
+    Based on the following AWS SSM demonstration code: https://github.com/wcurrie/aws-ssm-demo/blob/master/src/main/java/com/example/config/AwsSsmConfig.java
 -%>
 @Configuration
 // TODO: To be replaced with a constant once change has been made to https://github.com/jhipster/jhipster
