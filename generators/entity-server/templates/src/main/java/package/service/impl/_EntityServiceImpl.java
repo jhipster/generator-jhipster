@@ -36,10 +36,8 @@ import <%=packageName%>.service.dto.<%= entityClass %>DTO;
 import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-<%_ if (pagination !== 'no') { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-<%_ } _%>
 import org.springframework.stereotype.Service;
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.transaction.annotation.Transactional;
@@ -102,6 +100,17 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
             .map(<%= entityToDtoReference %>);<% } %>
         <%_ } _%>
     }
+    <%_ if (fieldsContainOwnerManyToMany === true) { _%>
+
+    /**
+     * Get all the <%= entityClass %> with eager load of many-to-many relationships.
+     *
+     * @return the list of entities
+     */
+    public Page<<%= instanceType %>> findAllWithEagerRelationships(Pageable pageable) {
+        return <%= entityInstance %>Repository.findAllWithEagerRelationships(pageable)<% if (dto !== 'mapstruct') { %>;<% } else { %>.map(<%= entityToDtoReference %>);<% } %>
+    }
+    <% } %>
 <%- include('../../common/get_filtered_template'); -%>
     /**
      * Get one <%= entityInstance %> by id.

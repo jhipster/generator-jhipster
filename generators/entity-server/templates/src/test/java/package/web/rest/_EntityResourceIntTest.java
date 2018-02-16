@@ -44,10 +44,11 @@ import <%=packageName%>.service.<%= entityClass %>QueryService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-<%_ if (searchEngine === 'elasticsearch' && pagination !== 'no') { _%>
+<%_ if (searchEngine === 'elasticsearch' && pagination !== 'no' || fieldsContainOwnerManyToMany) { _%>
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 <%_ } _%>
@@ -72,7 +73,8 @@ import java.time.temporal.ChronoUnit;<% } %>
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import java.util.Collections;
 <%_ } _%>
-import java.util.List;<% if (databaseType === 'cassandra') { %>
+import java.util.List;
+import java.util.ArrayList;<% if (databaseType === 'cassandra') { %>
 import java.util.UUID;<% } %>
 <%_ if (databaseType === 'couchbase') { _%>
     import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
@@ -85,7 +87,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 <%_ } _%>
 import static org.hamcrest.Matchers.hasItem;
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngine === 'elasticsearch' || fieldsContainOwnerManyToMany === true) { _%>
 import static org.mockito.Mockito.*;
 <%_ } _%>
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -263,10 +265,17 @@ _%>
     <%_ } } _%>
 
     @Autowired
-    private <%= entityClass %>Repository <%= entityInstance %>Repository;<% if (dto === 'mapstruct') { %>
+    private <%= entityClass %>Repository <%= entityInstance %>Repository;
+
+    <%_ if (fieldsContainOwnerManyToMany === true) { _%>
+    @Mock
+    private <%= entityClass %>Repository <%= entityInstance %>RepositoryMock;<%_ } _%><% if (dto === 'mapstruct') { %>
 
     @Autowired
     private <%= entityClass %>Mapper <%= entityInstance %>Mapper;<% } if (service !== 'no') { %>
+    <% if (fieldsContainOwnerManyToMany === true) { %>
+    @Mock
+    private <%= entityClass %>Service <%= entityInstance %>ServiceMock;<% } %>
 
     @Autowired
     private <%= entityClass %>Service <%= entityInstance %>Service;<% } if (searchEngine === 'elasticsearch') { %>
@@ -473,6 +482,55 @@ _%>
             <%_ } _%>
             .andExpect(jsonPath("$.[*].<%=fields[idx].fieldName%>").value(hasItem(<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%><% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (fields[idx].fieldType === 'Integer') { %><% } else if (fields[idx].fieldType === 'Long') { %>.intValue()<% } else if (fields[idx].fieldType === 'Float' || fields[idx].fieldType === 'Double') { %>.doubleValue()<% } else if (fields[idx].fieldType === 'BigDecimal') { %>.intValue()<% } else if (fields[idx].fieldType === 'Boolean') { %>.booleanValue()<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else { %>.toString()<% } %>)))<% } %>;
     }
+    <% if (fieldsContainOwnerManyToMany === true) { %>
+    public void getAll<%= entityClassPlural %>WithEagerRelationshipsIsEnabled() throws Exception {
+        <%_ if (service !== 'no') { _%>
+        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>ServiceMock<% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %>);
+        when(<%= entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        <%_ } else { _%>
+        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>RepositoryMock<% if (dto === 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, mock<%= entityClass %>SearchRepository<% } %><% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %>);
+        when(<%= entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        <%_ } _%>
+
+        MockMvc rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter).build();
+
+        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>?eagerload=true"))
+        .andExpect(status().isOk());
+
+        <%_ if (service !== 'no') { _%>
+        verify(<%= entityInstance %>ServiceMock, times(1)).findAllWithEagerRelationships(any());
+        <%_ } else { _%>
+        verify(<%= entityInstance %>RepositoryMock, times(1)).findAllWithEagerRelationships(any());
+        <%_ } _%>
+    }
+
+    public void getAll<%= entityClassPlural %>WithEagerRelationshipsIsNotEnabled() throws Exception {
+        <%_ if (service !== 'no') { _%>
+        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>ServiceMock<% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %>);
+            when(<%= entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        <%_ } else { _%>
+        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>RepositoryMock<% if (dto === 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, mock<%= entityClass %>SearchRepository<% } %><% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %>);
+            when(<%= entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        <%_ } _%>
+            MockMvc rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter).build();
+
+        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>?eagerload=true"))
+        .andExpect(status().isOk());
+
+        <%_ if (service !== 'no') { _%>
+            verify(<%= entityInstance %>ServiceMock, times(1)).findAllWithEagerRelationships(any());
+        <%_ } else { _%>
+            verify(<%= entityInstance %>RepositoryMock, times(1)).findAllWithEagerRelationships(any());
+        <%_ } _%>
+    }<% } %>
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
