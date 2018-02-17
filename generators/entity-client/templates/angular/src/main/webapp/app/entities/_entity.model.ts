@@ -73,8 +73,29 @@ relationships.forEach(relationship => {
             }
             fieldName = relationship.relationshipFieldName;
         } else {
-            fieldType = tsKeyType;
-            fieldName = `${relationship.relationshipFieldName}Id`;
+            const otherEntityRelationshipName = relationship.otherEntityRelationshipName;
+            const relationshipFieldName = relationship.relationshipFieldName;
+            const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
+            const relationshipType = relationship.relationshipType;
+            const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
+            const otherEntityFieldCapitalized = relationship.otherEntityFieldCapitalized;
+            const ownerSide = relationship.ownerSide;
+
+            if (relationshipType === 'many-to-many' && ownerSide === true) {
+                fieldType = `${otherEntityFieldCapitalized}[]`;
+                fieldName = relationshipFieldNamePlural;
+            } else if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {
+                if (otherEntityFieldCapitalized !== 'Id' && otherEntityFieldCapitalized !== '') {
+                    fieldType = 'string';
+                    fieldName = `${relationshipFieldName}${otherEntityFieldCapitalized}`;
+                    variablesWithTypes.push(`${fieldName}?: ${fieldType}`);
+                } 
+                fieldType = 'number';
+                fieldName = `${relationshipFieldName}Id`;
+            } else {
+                fieldType = tsKeyType;
+                fieldName = `${relationship.relationshipFieldName}Id`;
+            }
         }
     }
     variablesWithTypes.push(`${fieldName}?: ${fieldType}`);
