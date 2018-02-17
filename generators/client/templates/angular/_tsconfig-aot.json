@@ -36,7 +36,8 @@
         "baseUrl": "./",
         "paths": {
             "app/*": ["src/main/webapp/app/*"]
-        }
+        },
+        "importHelpers": true
     },
     "angularCompilerOptions": {
         "genDir": "<%= BUILD_DIR %>aot",

@@ -16,7 +16,8 @@
       "node_modules/@types"
     ],
     "allowJs": true,
-    "checkJs": true
+    "checkJs": true,
+    "importHelpers": true
   },
   "include": [
     "<%= MAIN_SRC_DIR %>app/typing.d.ts",

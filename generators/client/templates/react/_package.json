@@ -51,6 +51,7 @@ limitations under the License.
     "redux-devtools-log-monitor": "1.3.0",
     "redux-promise-middleware": "4.4.2",
     "redux-thunk": "2.2.0",
+    "tslib": "1.9.0",
     "uuid": "3.1.0"
   },
   "devDependencies": {
