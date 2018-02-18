@@ -42,9 +42,13 @@ import org.springframework.http.MediaType;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-<% if (!skipClient) { %>
+<%_ if (!skipClient) { _%>
 import java.io.File;
-import java.nio.file.Paths;<% } %>
+<%_ } _%>
+import java.nio.charset.StandardCharsets;
+<%_ if (!skipClient) { _%>
+import java.nio.file.Paths;
+<%_ } _%>
 import java.util.*;
 import javax.servlet.*;
 
@@ -114,9 +118,9 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
         if (server instanceof UndertowServletWebServerFactory) {
             MimeMappings mappings = new MimeMappings(MimeMappings.DEFAULT);
             // IE issue, see https://github.com/jhipster/generator-jhipster/pull/711
-            mappings.add("html", MediaType.TEXT_HTML_VALUE + ";charset=utf-8");
+            mappings.add("html", MediaType.TEXT_HTML_VALUE + ";charset=" + StandardCharsets.UTF_8.name().toLowerCase());
             // CloudFoundry issue, see https://github.com/cloudfoundry/gorouter/issues/64
-            mappings.add("json", MediaType.TEXT_HTML_VALUE + ";charset=utf-8");
+            mappings.add("json", MediaType.TEXT_HTML_VALUE + ";charset=" + StandardCharsets.UTF_8.name().toLowerCase());
             UndertowServletWebServerFactory undertow = (UndertowServletWebServerFactory) server;
             undertow.setMimeMappings(mappings);
         }
