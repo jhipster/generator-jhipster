@@ -70,12 +70,12 @@ describe('Service Tests', () => {
             });
 
             it('should update a <%= entityAngularName %>', () => {
-                service.update(new <%= entityAngularName %>(123)).subscribe((received) => {
-                    expect(received.body.id).toEqual(123);
+                service.update(new <%= entityAngularName %>(<%- tsKeyId %>)).subscribe((received) => {
+                    expect(received.body.id).toEqual(<%- tsKeyId %>);
                 });
 
                 const req = httpMock.expectOne({ method: 'PUT' });
-                req.flush({ id: 123 });
+                req.flush({ id: <%- tsKeyId %> });
             });
 
             it('should return a <%= entityAngularName %>', () => {
@@ -90,16 +90,16 @@ describe('Service Tests', () => {
 
             it('should return a list of <%= entityAngularName %>', () => {
                 service.query(null).subscribe((received) => {
-                    expect(received.body[0].id).toEqual(123);
+                    expect(received.body[0].id).toEqual(<%- tsKeyId %>);
                 });
 
                 const req = httpMock.expectOne({ method: 'GET' });
-                req.flush([new <%= entityAngularName %>(123)]);
+                req.flush([new <%= entityAngularName %>(<%- tsKeyId %>)]);
             });
 
             it('should delete a <%= entityAngularName %>', () => {
-                service.delete(123).subscribe((received) => {
-                    expect(received.url).toContain('123');
+                service.delete(<%- tsKeyId %>).subscribe((received) => {
+                    expect(received.url).toContain(<%- tsKeyId %>);
                 });
 
                 const req = httpMock.expectOne({ method: 'DELETE' });
