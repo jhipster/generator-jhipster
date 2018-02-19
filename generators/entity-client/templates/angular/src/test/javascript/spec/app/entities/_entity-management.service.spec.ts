@@ -99,7 +99,7 @@ describe('Service Tests', () => {
 
             it('should delete a <%= entityAngularName %>', () => {
                 service.delete(<%- tsKeyId %>).subscribe((received) => {
-                    expect(received.url).toContain(<%- tsKeyId %>);
+                    expect(received.url).toContain('/' + <%- tsKeyId %>);
                 });
 
                 const req = httpMock.expectOne({ method: 'DELETE' });
