@@ -25,7 +25,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { JhiDateUtils } from 'ng-jhipster';
 
 import { <%= entityAngularName %>Service } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
-import { <%= entityAngularName %> } from 'app/shared/model/<%= entityFileName %>.model';
+import { <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { SERVER_API_URL } from 'app/app.constants';
 
 describe('Service Tests', () => {
