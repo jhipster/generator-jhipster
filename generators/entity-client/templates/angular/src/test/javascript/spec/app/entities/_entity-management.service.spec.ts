@@ -25,6 +25,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { JhiDateUtils } from 'ng-jhipster';
 
 import { <%= entityAngularName %>Service } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
+import { <%= entityAngularName %> } from 'app/shared/model/<%= entityFileName %>.model';
 import { SERVER_API_URL } from 'app/app.constants';
 
 describe('Service Tests', () => {
@@ -58,7 +59,26 @@ describe('Service Tests', () => {
                 const resourceUrl = SERVER_API_URL + '<% if (applicationType === 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';
                 expect(req.request.url).toEqual(resourceUrl + '/' + <%- tsKeyId %>);
             });
-            it('should return <%= entityAngularName %>', () => {
+
+            it('should create a <%= entityAngularName %>', () => {
+                service.create(new <%= entityAngularName %>(null)).subscribe((received) => {
+                    expect(received.body.id).toEqual(null);
+                });
+
+                const req = httpMock.expectOne({ method: 'POST' });
+                req.flush({ id: null });
+            });
+
+            it('should update a <%= entityAngularName %>', () => {
+                service.update(new <%= entityAngularName %>(123)).subscribe((received) => {
+                    expect(received.body.id).toEqual(123);
+                });
+
+                const req = httpMock.expectOne({ method: 'PUT' });
+                req.flush({ id: 123 });
+            });
+
+            it('should return a <%= entityAngularName %>', () => {
 
                 service.find(<%- tsKeyId %>).subscribe((received) => {
                     expect(received.body.id).toEqual(<%- tsKeyId %>);
@@ -66,6 +86,24 @@ describe('Service Tests', () => {
 
                 const req = httpMock.expectOne({ method: 'GET' });
                 req.flush({id: <%- tsKeyId %>});
+            });
+
+            it('should return a list of <%= entityAngularName %>', () => {
+                service.query(null).subscribe((received) => {
+                    expect(received.body[0].id).toEqual(123);
+                });
+
+                const req = httpMock.expectOne({ method: 'GET' });
+                req.flush([new <%= entityAngularName %>(123)]);
+            });
+
+            it('should delete a <%= entityAngularName %>', () => {
+                service.delete(123).subscribe((received) => {
+                    expect(received.url).toContain('123');
+                });
+
+                const req = httpMock.expectOne({ method: 'DELETE' });
+                req.flush(null);
             });
 
             it('should propagate not found response', () => {
