@@ -594,7 +594,7 @@ module.exports = class extends Generator {
         }
         const done = this.async();
         const localModule = path.join(process.cwd(), 'node_modules', blueprint);
-        if (!fs.existsSync(localModule)) {
+        if (fs.existsSync(localModule)) {
             shelljs.exec('yo --generators', { silent: true }, (err, stdout, stderr) => {
                 if (!stdout.includes(` ${blueprint}\n`) && !stdout.includes(` ${blueprint.replace('generator-', '')}\n`)) {
                     this.error(`The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(`npm i -g ${blueprint}`)}.`);
