@@ -89,7 +89,7 @@ relationships.forEach(relationship => {
                     fieldType = 'string';
                     fieldName = `${relationshipFieldName}${otherEntityFieldCapitalized}`;
                     variablesWithTypes.push(`${fieldName}?: ${fieldType}`);
-                } 
+                }
                 fieldType = 'number';
                 fieldName = `${relationshipFieldName}Id`;
             } else {
