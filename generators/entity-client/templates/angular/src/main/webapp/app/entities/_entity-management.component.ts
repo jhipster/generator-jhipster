@@ -93,7 +93,7 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
         <%_ } _%>
         <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
 
-    private onSuccess(data, headers) {
+    private paginate<%= entityClassPlural %>(data, headers) {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
@@ -103,7 +103,7 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
     }
         <%_ } else if (pagination === 'infinite-scroll') { _%>
 
-    private onSuccess(data, headers) {
+    private paginate<%= entityClassPlural %>(data, headers) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
         for (let i = 0; i < data.length; i++) {
