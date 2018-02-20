@@ -44,6 +44,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 <%_ if (!skipClient) { _%>
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 <%_ } _%>
 import java.nio.charset.StandardCharsets;
 <%_ if (!skipClient) { _%>
@@ -51,6 +52,10 @@ import java.nio.file.Paths;
 <%_ } _%>
 import java.util.*;
 import javax.servlet.*;
+
+<%_ if (!skipClient) { _%>
+import static java.net.URLDecoder.decode;
+<%_ } _%>
 
 /**
  * Configuration of web application with Servlet 3.0 APIs.
@@ -143,7 +148,13 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
      * Resolve path prefix to static resources.
      */
     private String resolvePathPrefix() {
-        String fullExecutablePath = this.getClass().getResource("").getPath();
+        String fullExecutablePath;
+        try {
+            fullExecutablePath = decode(this.getClass().getResource("").getPath(), StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            /* try without decoding if this ever happens */
+            fullExecutablePath = this.getClass().getResource("").getPath();
+        }
         String rootPath = Paths.get(".").toUri().normalize().getPath();
         String extractedPath = fullExecutablePath.replace(rootPath, "");
         int extractionEndIndex = extractedPath.indexOf("<%= BUILD_DIR %>");
