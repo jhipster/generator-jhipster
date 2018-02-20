@@ -113,8 +113,8 @@ export class <%= entityAngularName %>Service {
     private convertItemFromServer(<%= entityInstance %>: I<%= entityAngularName %>): I<%= entityAngularName %> {
         const copy: I<%= entityAngularName %> = Object.assign({}, <%= entityInstance %>, {
         <%_ for (idx in fields) { _%>
-        <%_ if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType)) { _%>
-        <%=fields[idx].fieldName%>: <%= entityInstance %>.<%=fields[idx].fieldName%> ? moment(<%= entityInstance %>.<%=fields[idx].fieldName%>) : <%= entityInstance %>.<%=fields[idx].fieldName%>,
+        <%_ if ( ['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType) ) { _%>
+        <%=fields[idx].fieldName%>: <%= entityInstance %>.<%= fields[idx].fieldName %> ? moment(<%= entityInstance %>.<%= fields[idx].fieldName %>) : <%= entityInstance %>.<%= fields[idx].fieldName %>,
             <%_ } _%>
         <%_ } _%>
         });
@@ -126,9 +126,9 @@ export class <%= entityAngularName %>Service {
      */
     private convert(<%= entityInstance %>: I<%= entityAngularName %>): I<%= entityAngularName %> {
         const copy: I<%= entityAngularName %> = Object.assign({}, <%= entityInstance %>, {
-        <%_ for (idx in fields){ if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType)) { %>
-        <%=fields[idx].fieldName%>: <%= entityInstance %>.<%=fields[idx].fieldName%> ? <%= entityInstance %>.<%=fields[idx].fieldName%>.toJSON() : <%= entityInstance %>.<%=fields[idx].fieldName%>,
-        copy.<%=fields[idx].fieldName%> = this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>);
+        <%_ for (idx in fields){ if ( ['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType) ) { %>
+        <%= fields[idx].fieldName %>: <%= entityInstance %>.<%= fields[idx].fieldName %> ? <%= entityInstance %>.<%= fields[idx].fieldName %>.toJSON() : <%= entityInstance %>.<%= fields[idx].fieldName %>,
+        copy.<%= fields[idx].fieldName %> = this.dateUtils.toDate(<%= entityInstance %>.<%= fields[idx].fieldName %>);
         <%_ } } _%>
         });
         return copy;
