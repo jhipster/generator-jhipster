@@ -60,7 +60,7 @@ module.exports = (WATCH) => ({
             {
                 test: /src[/|\\]main[/|\\]webapp[/|\\].+\.ts$/,
                 enforce: 'post',
-                exclude: /(test|node_modules)/,
+                exclude: /node_modules/,
                 loader: 'sourcemap-istanbul-instrumenter-loader?force-sourcemap=true'
             }]
     },

@@ -47,7 +47,7 @@ module.exports = {
       {
         test: /src[/|\\]main[/|\\]webapp[/|\\].+\.tsx?$/,
         enforce: 'post',
-        exclude: /(test|node_modules)/,
+        exclude: /node_modules/,
         loader: 'sourcemap-istanbul-instrumenter-loader?force-sourcemap=true'
       },
       {
