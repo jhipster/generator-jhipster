@@ -107,7 +107,9 @@ module.exports = class extends BaseGenerator {
                     this.log('Writing entity JSON files.');
                     this.changedEntities = jhiCore.exportEntities({
                         entities,
-                        forceNoFiltering: this.options.force
+                        forceNoFiltering: this.options.force,
+                        applicationType: this.applicationType,
+                        applicationName: this.baseName
                     });
                     this.updatedKeys = Object.keys(this.changedEntities);
                     if (this.updatedKeys.length > 0) {
