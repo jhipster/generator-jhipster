@@ -38,8 +38,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.rememberme.*;
-import org.springframework.stereotype.Service;<% if (databaseType === 'sql') { %>
-import org.springframework.transaction.annotation.Transactional;<%}%>
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -185,8 +184,7 @@ public class PersistentTokenRememberMeServices extends
      * The standard Spring Security implementations are too basic: they invalidate all tokens for the
      * current user, so when he logs out from one browser, all his other sessions are destroyed.
      */
-    @Override<% if (databaseType === 'sql') { %>
-    @Transactional<% } %>
+    @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         String rememberMeCookie = extractRememberMeCookie(request);
         if (rememberMeCookie != null && rememberMeCookie.length() != 0) {

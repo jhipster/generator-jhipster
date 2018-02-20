@@ -41,6 +41,7 @@
     },
     "angularCompilerOptions": {
         "genDir": "<%= BUILD_DIR %>aot",
-        "skipMetadataEmit" : true
+        "skipMetadataEmit" : true,
+        "fullTemplateTypeCheck": true
     }
 }

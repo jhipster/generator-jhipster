@@ -80,7 +80,7 @@ currentAccount: any;
                 query: this.currentSearch,
                 size: this.itemsPerPage,
                 sort: this.sort()}).subscribe(
-                    (res: HttpResponse<I<%= entityAngularName %>[]>) => this.onSuccess(res.body, res.headers),
+                    (res: HttpResponse<I<%= entityAngularName %>[]>) => this.paginate<%= entityClassPlural %>(res.body, res.headers),
                     (res: HttpErrorResponse) => this.onError(res.message)
                 );
             return;
@@ -90,17 +90,19 @@ currentAccount: any;
             page: this.page - 1,
             size: this.itemsPerPage,
             sort: this.sort()}<%_ } _%>).subscribe(
-                (res: HttpResponse<I<%= entityAngularName %>[]>) => this.onSuccess(res.body, res.headers),
+                (res: HttpResponse<I<%= entityAngularName %>[]>) => this.paginate<%= entityClassPlural %>(res.body, res.headers),
                 (res: HttpErrorResponse) => this.onError(res.message)
         );
     }
     <%_ if (databaseType !== 'cassandra') { _%>
+
     loadPage(page: number) {
         if (page !== this.previousPage) {
             this.previousPage = page;
             this.transition();
         }
     }
+
     transition() {
         this.router.navigate(['/<%= entityUrl %>'], {queryParams:
             {
@@ -128,6 +130,7 @@ currentAccount: any;
     }
     <%_ } _%>
     <%_ if(searchEngine === 'elasticsearch') { _%>
+
     search(query) {
         if (!query) {
             return this.clear();

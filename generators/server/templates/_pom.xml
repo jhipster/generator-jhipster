@@ -111,7 +111,7 @@
         <profile.swagger />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>2.0.0-20180212.223645-23</jhipster-dependencies.version>
+        <jhipster-dependencies.version>2.0.0-20180219.202458-25</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
         <spring-boot.version>2.0.0.BUILD-SNAPSHOT</spring-boot.version>
