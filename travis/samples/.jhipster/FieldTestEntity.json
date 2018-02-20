@@ -181,7 +181,7 @@
             "fieldType": "Instant"
         },
         {
-            "fieldName": "instanteRequiredTom",
+            "fieldName": "instantRequiredTom",
             "fieldType": "Instant",
             "fieldValidateRules": [
                 "required"

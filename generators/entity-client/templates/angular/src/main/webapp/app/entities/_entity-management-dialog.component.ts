@@ -61,6 +61,10 @@ import { <%= uniqueRel.otherEntityAngularName%>Service } from '../<%= uniqueRel.
         }
     }
 }); _%>
+<%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
+import { StringToMomentPipe } from '../../shared/util/string-to-moment-pipe';
+import { MomentToStringPipe } from '../../shared/util/moment-to-string-pipe';
+<%_ } _%>
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-dialog',
@@ -68,7 +72,7 @@ import { <%= uniqueRel.otherEntityAngularName%>Service } from '../<%= uniqueRel.
 })
 export class <%= entityAngularName %>DialogComponent implements OnInit {
 
-    <%= entityInstance %>: I<%= entityAngularName %>;
+    private _<%= entityInstance %>: I<%= entityAngularName %>;
     isSaving: boolean;
     <%_
     for (const idx in variables) { %>
@@ -78,8 +82,10 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         const fieldName = fields[idx].fieldName;
         const fieldType = fields[idx].fieldType;
         if (fieldType === 'LocalDate') { _%>
-    <%= fieldName %>Dp: any;
-        <%_ }
+    <%= fieldName %>Dp: any; %>
+    <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+    <%= fieldName: string; %>
+      <%_  }
     } _%>
 
     constructor(
@@ -100,6 +106,10 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
                 }
             }
         }); _%>
+        <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
+        private stringToMomentPipe: StringToMomentPipe,
+        private momentToStringPipe: MomentToStringPipe,
+        <%_ } %>
         <%_ if (fieldsContainImageBlob) { _%>
         private elementRef: ElementRef,
         <%_ } _%>
@@ -140,6 +150,11 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
 
     save() {
         this.isSaving = true;
+        <%_ for (idx in fields) {
+            const fieldName = fields[idx].fieldName;
+            if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+            this.<%= entityInstance %>.<%= fieldName %> = this.stringToMomentPipe.transform(this.<%= fieldName %>);
+        <%_ } _%>
         if (this.<%= entityInstance %>.id !== undefined) {
             this.subscribeToSaveResponse(
                 this.<%= entityInstance %>Service.update(this.<%= entityInstance %>));
@@ -193,6 +208,18 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         return option;
     }
     <%_ } _%>
+    get <%= entityInstance %>() {
+        return this._<%= entityInstance %>;
+    }
+
+    set <%= entityInstance %>(<%= entityInstance %>: I<%= entityAngularName %>) {
+        this._<%= entityInstance %> = <%= entityInstance %>;
+    <%_ for (idx in fields) {
+        const fieldName = fields[idx].fieldName;
+        if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+        this.<%= fieldName %> = this.momentToStringPipe.transform(<%= entityInstance %>.<%= fieldName %>);
+     <%_ } _%>
+    }
 }
 
 @Component({

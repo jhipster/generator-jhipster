@@ -26,7 +26,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 <%_ if (hasDate) { _%>
-import { JhiDateUtils } from 'ng-jhipster';
+import moment = require('moment');
 <%_ } _%>
 
 import { SERVER_API_URL } from 'app/app.constants';
@@ -111,17 +111,13 @@ export class <%= entityAngularName %>Service {
      * Convert a returned JSON object to <%= entityAngularName %>.
      */
     private convertItemFromServer(<%= entityInstance %>: I<%= entityAngularName %>): I<%= entityAngularName %> {
-        const copy: I<%= entityAngularName %> = Object.assign({}, <%= entityInstance %>);
+        const copy: I<%= entityAngularName %> = Object.assign({}, <%= entityInstance %>, {
         <%_ for (idx in fields) { _%>
-        <%_ if (fields[idx].fieldType === 'LocalDate') { _%>
-        copy.<%=fields[idx].fieldName%> = this.dateUtils
-            .convertLocalDateFromServer(<%= entityInstance %>.<%=fields[idx].fieldName%>);
-        <%_ } _%>
-        <%_ if (['Instant', 'ZonedDateTime'].includes(fields[idx].fieldType)) { _%>
-        copy.<%=fields[idx].fieldName%> = this.dateUtils
-            .convertDateTimeFromServer(<%= entityInstance %>.<%=fields[idx].fieldName%>);
+        <%_ if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType)) { _%>
+        <%=fields[idx].fieldName%>: <%= entityInstance %>.<%=fields[idx].fieldName%> ? moment(<%= entityInstance %>.<%=fields[idx].fieldName%>) : <%= entityInstance %>.<%=fields[idx].fieldName%>,
             <%_ } _%>
         <%_ } _%>
+        });
         return copy;
     }
 
@@ -129,13 +125,12 @@ export class <%= entityAngularName %>Service {
      * Convert a <%= entityAngularName %> to a JSON which can be sent to the server.
      */
     private convert(<%= entityInstance %>: I<%= entityAngularName %>): I<%= entityAngularName %> {
-        const copy: I<%= entityAngularName %> = Object.assign({}, <%= entityInstance %>);
-        <%_ for (idx in fields){ if (fields[idx].fieldType === 'LocalDate') { _%>
-        copy.<%=fields[idx].fieldName%> = this.dateUtils
-            .convertLocalDateToServer(<%= entityInstance %>.<%=fields[idx].fieldName%>);
-        <%_ } if (['Instant', 'ZonedDateTime'].includes(fields[idx].fieldType)) { %>
+        const copy: I<%= entityAngularName %> = Object.assign({}, <%= entityInstance %>, {
+        <%_ for (idx in fields){ if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType)) { %>
+        <%=fields[idx].fieldName%>: <%= entityInstance %>.<%=fields[idx].fieldName%> ? <%= entityInstance %>.<%=fields[idx].fieldName%>.toJSON() : <%= entityInstance %>.<%=fields[idx].fieldName%>,
         copy.<%=fields[idx].fieldName%> = this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>);
         <%_ } } _%>
+        });
         return copy;
     }
 }

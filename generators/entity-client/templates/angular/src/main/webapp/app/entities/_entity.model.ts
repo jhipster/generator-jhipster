@@ -41,6 +41,8 @@ fields.forEach(field => {
         tsType = 'number';
     } else if (fieldType === 'String'  || fieldType === 'UUID') {
         tsType = 'string';
+    } else if (['LocalDate', 'Instant', 'ZonedDateTime'].includes(fieldType)) {
+        tsType = 'Moment';
     } else { //(fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate'
         tsType = 'any';
         if (['byte[]', 'ByteBuffer'].includes(fieldType) && field.fieldTypeBlobContent !== 'text') {
@@ -89,7 +91,7 @@ relationships.forEach(relationship => {
                     fieldType = 'string';
                     fieldName = `${relationshipFieldName}${otherEntityFieldCapitalized}`;
                     variablesWithTypes.push(`${fieldName}?: ${fieldType}`);
-                } 
+                }
                 fieldType = 'number';
                 fieldName = `${relationshipFieldName}Id`;
             } else {
@@ -101,6 +103,9 @@ relationships.forEach(relationship => {
     variablesWithTypes.push(`${fieldName}?: ${fieldType}`);
 });
 _%>
+<%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
+import { Moment } from 'moment';
+<%_ } _%>
 <%_ if (hasUserRelationship) { _%>
 import { IUser } from 'app/core/user/user.model';
 <%_ } _%>

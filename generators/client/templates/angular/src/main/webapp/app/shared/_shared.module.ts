@@ -17,7 +17,10 @@
  limitations under the License.
 -%>
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-
+import { NgbDateMomentAdapter } from './model/datepicker-adapter';
+import { NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
+import { StringToMomentPipe } from './model/string-to-moment-pipe';
+import { MomentToStringPipe } from './model/moment-to-string-pipe';
 import {
     <%=angularXAppName%>SharedLibsModule,
     <%=angularXAppName%>SharedCommonModule,
@@ -42,9 +45,14 @@ import {
         <%_ if (authenticationType !== 'oauth2') { _%>
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         <%_ } _%>
-        HasAnyAuthorityDirective
+        HasAnyAuthorityDirective,
+        StringToMomentPipe,
+        MomentToStringPipe
     ],
-    providers: [],
+    providers: [
+        { provide: NgbDateAdapter, useClass: NgbDateMomentAdapter},
+        StringToMomentPipe,
+        MomentToStringPipe],
     <%_ if (authenticationType !== 'oauth2') { _%>
     entryComponents: [<%=jhiPrefixCapitalized%>LoginModalComponent],
     <%_ } _%>
@@ -56,7 +64,9 @@ import {
         <%_ if (authenticationType !== 'oauth2') { _%>
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         <%_ } _%>
-        HasAnyAuthorityDirective
+        HasAnyAuthorityDirective,
+        StringToMomentPipe,
+        MomentToStringPipe
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 
