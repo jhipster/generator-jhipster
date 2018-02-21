@@ -22,13 +22,13 @@ export default (state = initialState, action) => {
       };
     case FAILURE(ACTION_TYPES.CREATE_ACCOUNT):
       return {
-        ...state,
+        ...initialState,
         registrationFailure: true,
         errorMessage: action.payload.response.data.errorKey
       };
     case SUCCESS(ACTION_TYPES.CREATE_ACCOUNT):
       return {
-        ...state,
+        ...initialState,
         registrationSuccess: true
       };
     case ACTION_TYPES.RESET:
@@ -47,7 +47,7 @@ export const reset = () => dispatch => {
 };
 
 // Action
-export const register = (login, email, password) => dispatch => {
+export const handleRegister = (login, email, password) => dispatch => {
   dispatch({
     type: ACTION_TYPES.CREATE_ACCOUNT,
     payload: axios.post('/api/register', { login, email, password })
