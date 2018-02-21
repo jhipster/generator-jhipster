@@ -757,6 +757,42 @@ describe('DocumentParser', () => {
           expect(content.options.options.filter.excludedNames.has('B')).to.be.true;
         });
       });
+      context('when parsing entities with a custom client root folder', () => {
+        context('inside a microservice app', () => {
+          let content = null;
+
+          before(() => {
+            const input = parseFromFiles(['./test/test_files/client_root_folder.jdl']);
+            content = DocumentParser.parseFromConfigurationObject({
+              document: input,
+              databaseType: 'sql',
+              applicationType: ApplicationTypes.MICROSERVICE
+            });
+          });
+
+          it('is ignored', () => {
+            expect(content.options.options['clientRootFolder_test-root']).to.be.undefined;
+          });
+        });
+        context('inside any other app', () => {
+          let content = null;
+
+          before(() => {
+            const input = parseFromFiles(['./test/test_files/client_root_folder.jdl']);
+            content = DocumentParser.parseFromConfigurationObject({
+              document: input,
+              databaseType: 'sql',
+              applicationType: ApplicationTypes.MONOLITH
+            });
+          });
+
+          it('works', () => {
+            expect(content.options.options['clientRootFolder_test-root'].entityNames.has('*')).to.be.true;
+            expect(content.options.options['clientRootFolder_test-root'].excludedNames.has('C')).to.be.true;
+            expect(content.options.options['clientRootFolder_test-root'].value).to.equal('test-root');
+          });
+        });
+      });
       context('when parsing a JDL inside a microservice app', () => {
         context('without the microservice option in the JDL', () => {
           let content = null;

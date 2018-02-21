@@ -39,5 +39,6 @@
   "service": "no",
   "jpaMetamodelFiltering": false,
   "skipClient": true,
-  "skipServer": true
+  "skipServer": true,
+  "clientRootFolder": "toto"
 }

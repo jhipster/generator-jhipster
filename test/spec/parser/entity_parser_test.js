@@ -81,12 +81,12 @@ describe('EntityParser', () => {
         let input = null;
 
         before(() => {
-          input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
+          input = parseFromFiles(['./test/test_files/cassandra_with_relationships.jdl']);
         });
 
         it('does not fail because of NoSQL modeling mistakes', () => {
           EntityParser.parse({
-            jdlObject: DocumentParser.parse(input, 'mysql'),
+            jdlObject: DocumentParser.parse(input, 'cassandra'),
             databaseType: 'cassandra',
             applicationType: 'gateway'
           });
@@ -410,6 +410,50 @@ describe('EntityParser', () => {
             Object.keys(content).forEach((entityName) => {
               expect(content[entityName].microserviceName).to.equal('toto');
             });
+          });
+        });
+      });
+      context('when converting a JDL with custom client root folder', () => {
+        context('inside a microservice app', () => {
+          let content = null;
+
+          before(() => {
+            const input = parseFromFiles(['./test/test_files/client_root_folder.jdl']);
+            content = EntityParser.parse({
+              jdlObject: DocumentParser.parseFromConfigurationObject({
+                document: input,
+                databaseType: 'sql',
+                applicationType: ApplicationTypes.MICROSERVICE
+              }),
+              databaseType: DatabaseTypes.sql
+            });
+          });
+
+          it('does not set the option', () => {
+            Object.keys(content).forEach((entityName) => {
+              expect(content[entityName].clientRootFolder).to.equal('');
+            });
+          });
+        });
+        context('inside any other application', () => {
+          let content = null;
+
+          before(() => {
+            const input = parseFromFiles(['./test/test_files/client_root_folder.jdl']);
+            content = EntityParser.parse({
+              jdlObject: DocumentParser.parseFromConfigurationObject({
+                document: input,
+                databaseType: 'sql',
+                applicationType: ApplicationTypes.GATEWAY
+              }),
+              databaseType: DatabaseTypes.sql
+            });
+          });
+
+          it('uses it', () => {
+            expect(content.A.clientRootFolder).to.equal('test-root');
+            expect(content.B.clientRootFolder).to.equal('test-root');
+            expect(content.C.clientRootFolder).to.equal('');
           });
         });
       });
