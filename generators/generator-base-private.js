@@ -603,7 +603,6 @@ module.exports = class extends Generator {
         } else {
             done();
         }
-        done();
     }
 
     /**
