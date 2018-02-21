@@ -5,6 +5,7 @@ import { PrivateRoute } from 'react-jhipster';
 import Login from './modules/login/login';
 import Logout from './modules/login/logout';
 import Register from './modules/account/register/register';
+import Activate from './modules/account/activate/activate';
 import Home from './modules/home/home';
 import Admin from './modules/administration';
 import Account from './modules/account';
@@ -16,6 +17,7 @@ const Routes = () => (
     <Route path="/login" component={Login} />
     <Route path="/logout" component={Logout} />
     <Route path="/register" component={Register} />
+    <Route path="/activate" component={Activate} />
     <PrivateRoute path="/admin" component={Admin} />
     <PrivateRoute path="/account" component={Account} />
     <Route path="**" component={Entities} />
