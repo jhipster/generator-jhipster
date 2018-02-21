@@ -599,7 +599,6 @@ module.exports = class extends Generator {
                 if (!stdout.includes(` ${blueprint}\n`) && !stdout.includes(` ${blueprint.replace('generator-', '')}\n`)) {
                     this.error(`The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(`npm i -g ${blueprint}`)}.`);
                 }
-                done();
             });
         } else {
             done();
