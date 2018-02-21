@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
 import { Row, Col, Alert, Button } from 'reactstrap';
 
-import { register, reset } from '../../../reducers/register';
+import { handleRegister, reset } from '../../../reducers/register';
 
 export const mainErrorMessages = {
   failed: (
@@ -26,25 +26,20 @@ export const mainErrorMessages = {
 };
 
 export interface IRegisterProps {
-  register: Function;
+  handleRegister: Function;
   reset: Function;
   registrationSuccess: boolean;
   registrationFailure: boolean;
   errorMessage: string;
 }
 
-export class RegisterPage extends React.Component<IRegisterProps, {}> {
-  constructor(props) {
-    super(props);
-    this.handleValidSubmit = this.handleValidSubmit.bind(this);
-  }
-
+export class RegisterPage extends React.Component<IRegisterProps> {
   componentWillUnmount() {
     this.props.reset();
   }
 
   handleValidSubmit = (event, values) => {
-    this.props.register(values.username, values.email, values.firstPassword);
+    this.props.handleRegister(values.username, values.email, values.firstPassword);
     event.preventDefault();
   };
 
@@ -55,7 +50,7 @@ export class RegisterPage extends React.Component<IRegisterProps, {}> {
     if (registrationFailure) {
       alertMessage = (
         <Alert color="danger">
-          {mainErrorMessages[errorMessage] === undefined ? mainErrorMessages.failed : mainErrorMessages[errorMessage]}
+          {mainErrorMessages[errorMessage] ? mainErrorMessages.failed : mainErrorMessages[errorMessage]}
         </Alert>
       );
     } else {
@@ -156,12 +151,12 @@ export class RegisterPage extends React.Component<IRegisterProps, {}> {
   }
 }
 
-const mapStateToProps = storeState => ({
-  registrationSuccess: storeState.register.registrationSuccess,
-  registrationFailure: storeState.register.registrationFailure,
-  errorMessage: storeState.register.errorMessage
+const mapStateToProps = ({ register }) => ({
+  registrationSuccess: register.registrationSuccess,
+  registrationFailure: register.registrationFailure,
+  errorMessage: register.errorMessage
 });
 
-const mapDispatchToProps = { register, reset };
+const mapDispatchToProps = { handleRegister, reset };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RegisterPage);
