@@ -188,7 +188,8 @@ const files = {
                 'reducers/layout.ts',
                 'reducers/user-management.ts',
                 'reducers/account.ts',
-                'reducers/register.ts'
+                'reducers/register.ts',
+                'reducers/activate.ts'
             ]
         },
         {
@@ -207,6 +208,7 @@ const files = {
                 // { file: 'account/activate/_activate.component.js', method: 'processJsx' },
                 { file: 'modules/account/password/password.tsx', method: 'processJsx' },
                 { file: 'modules/account/register/register.tsx', method: 'processJsx' },
+                { file: 'modules/account/activate/activate.tsx', method: 'processJsx' },
                 // { file: 'account/password-reset/init/_password-reset-init.component.js', method: 'processJsx' },
                 // { file: 'account/password-reset/finish/_password-reset-finish.component.js', method: 'processJsx' },
                 { file: 'modules/account/settings/settings.tsx', method: 'processJsx' }
