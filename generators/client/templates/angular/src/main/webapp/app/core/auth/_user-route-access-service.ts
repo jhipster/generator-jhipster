@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Injectable } from '@angular/core';
+import { Injectable, isDevMode } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 
 import { Principal } from '../';
@@ -61,6 +61,9 @@ export class UserRouteAccessService implements CanActivate {
                 return principal.hasAnyAuthority(authorities).then((response) => {
                     if (response) {
                         return true;
+                    }
+                    if (isDevMode()) {
+                        console.error('User has not any of required authorities: ', authorities);
                     }
                     return false;
                 });
