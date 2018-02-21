@@ -36,7 +36,8 @@
             "discoveryComposite": "Thành phần tìm kiếm dịch vụ",
             "refreshScope": "Phạm vị làm mới Microservice",
             "configServer": "Trung tâm cấu hình Microservice",
-            "hystrix": "Hystrix",
+            "hystrix": "Hystrix",<% if (serviceDiscoveryType === 'consul') { %>
+            "consul": "Consul",<% } %>
             <%_ } _%>
             "diskSpace": "Dung lượng trống",
             "mail": "Email"<% if (searchEngine === 'elasticsearch') { %>,

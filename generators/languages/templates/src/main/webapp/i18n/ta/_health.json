@@ -36,7 +36,8 @@
             "discoveryComposite": "Discovery Composite",
             "refreshScope": "Microservice Refresh Scope",
             "configServer": "Microservice Config Server",
-            "hystrix": "Hystrix",
+            "hystrix": "Hystrix",<% if (serviceDiscoveryType === 'consul') { %>
+            "consul": "Consul",<% } %>
             <%_ } _%>
             "diskSpace": "வட்டு காலியிடம்",
             "mail": "மின்னஞ்சல்"<% if (searchEngine === 'elasticsearch') { %>,

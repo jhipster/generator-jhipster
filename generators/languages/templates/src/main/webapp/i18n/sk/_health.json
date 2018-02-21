@@ -36,7 +36,8 @@
             "discoveryComposite": "Discovery Composite",
             "refreshScope": "Microservice obnovovací rozsah",
             "configServer": "Microservice konfiguračný server",
-            "hystrix": "Hystrix",
+            "hystrix": "Hystrix",<% if (serviceDiscoveryType === 'consul') { %>
+            "consul": "Consul",<% } %>
             <%_ } _%>
             "diskSpace": "Diskový priestor",
             "mail": "Email"<% if (searchEngine === 'elasticsearch') { %>,
