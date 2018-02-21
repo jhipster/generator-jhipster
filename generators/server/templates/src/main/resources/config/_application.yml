@@ -104,7 +104,7 @@ management:
             expose: '*'
     endpoint:
         health:
-            show-details: true
+            show-details: when_authorized
     info:
         git:
             mode: full
