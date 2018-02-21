@@ -11,7 +11,8 @@ import {
   FaList, FaTasks, FaDashboard, FaBook, FaWrench, FaSignIn, FaSignOut,
   FaClockO, FaHddO,
   // tslint:disable-next-line
-  FaRoad, FaAsterisk, FaBell
+  FaRoad,
+  /* FaAsterisk, */ FaBell
 } from 'react-icons/lib/fa';
 
 import { NavLink as Link } from 'react-router-dom';
