@@ -36,7 +36,8 @@
             "discoveryComposite": "Discovery Composite",
             "refreshScope": "Mikroservis Refresh Scope",
             "configServer": "Mikroservis Konfiguracioni Server",
-            "hystrix": "Hystrix",
+            "hystrix": "Hystrix",<% if (serviceDiscoveryType === 'consul') { %>
+            "consul": "Consul",<% } %>
             <%_ } _%>
             "diskSpace": "Veličina diska",
             "mail": "Email"<% if (searchEngine === 'elasticsearch') { %>,

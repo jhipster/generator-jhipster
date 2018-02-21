@@ -36,7 +36,8 @@
             "discoveryComposite": "Discovery Composite",
             "refreshScope": "Межі оновлення мікросервіса",
             "configServer": "Конфігураційний сервер мікросервіса",
-            "hystrix": "Hystrix",
+            "hystrix": "Hystrix",<% if (serviceDiscoveryType === 'consul') { %>
+            "consul": "Consul",<% } %>
             <%_ } _%>
             "diskSpace": "Місце на диску",
             "mail": "Електронна пошта"<% if (searchEngine === 'elasticsearch') { %>,

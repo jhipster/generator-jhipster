@@ -36,7 +36,8 @@
             "discoveryComposite": "Discovery Composite",
             "refreshScope": "Scopo di Aggiornamento Microservice",
             "configServer": "Server di Configurazioni Microservice",
-            "hystrix": "Hystrix",
+            "hystrix": "Hystrix",<% if (serviceDiscoveryType === 'consul') { %>
+            "consul": "Consul",<% } %>
             <%_ } _%>
             "diskSpace": "Spazio su disco",
             "mail": "Email"<% if (searchEngine === 'elasticsearch') { %>,
