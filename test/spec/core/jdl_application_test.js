@@ -46,6 +46,7 @@ describe('JDLApplication', () => {
         expect(jdlApplicationConfig.skipServer).to.eq(false);
         expect(jdlApplicationConfig.rememberMeKey).to.be.undefined;
         expect(jdlApplicationConfig.jwtSecretKey).not.to.be.undefined;
+        expect(jdlApplicationConfig.path).to.equal('.');
       });
     });
     context('when choosing session as authentication type', () => {
@@ -84,11 +85,12 @@ describe('JDLApplication', () => {
   });
   describe('#toString', () => {
     it('stringifies the application object', () => {
-      const jdlApplication = new JDLApplication({ config: { jhipsterVersion: '4.9.0' } });
+      const jdlApplication = new JDLApplication({ config: { jhipsterVersion: '4.9.0', path: '../../' } });
       delete jdlApplication.config.jwtSecretKey;
       expect(jdlApplication.toString()).to.eq(`application {
   config {
     baseName jhipster
+    path ../../
     packageName com.mycompany.myapp
     packageFolder com/mycompany/myapp
     authenticationType jwt

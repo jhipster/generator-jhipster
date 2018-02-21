@@ -159,6 +159,9 @@ applicationConfigDecl
   = BASE_NAME SPACE* baseName:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'baseName', baseName.join(''));
   }
+  / PATH SPACE* path:([^\n]+) SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'path', path.join(''));
+  }
   / PACKAGE_NAME SPACE* packageName:(([a-z]+'.')*[a-z]+) SPACE* applicationConfigDecl:applicationConfigDecl {
     applicationConfigDecl = addToApplicationDecl(
       applicationConfigDecl,
@@ -551,6 +554,7 @@ notAComment = !commentStop !commentStart char:. { return char; }
 // Application constants
 APPLICATION = 'application'
 CONFIG = 'config'
+PATH = 'path'
 BASE_NAME = 'baseName'
 PACKAGE_NAME = 'packageName'
 AUTHENTICATION_TYPE = 'authenticationType'
