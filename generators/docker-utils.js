@@ -84,13 +84,14 @@ function checkAndBuildImages(opts = { cwd: './', forceBuild: false, appConfig: {
     checkImageExist.call(this, opts);
     const pwd = shelljs.pwd();
     shelljs.cd(opts.cwd);
-    return new Promise((resolve, reject) => dockerCLI.command(`${opts.cwd}${this.dockerBuildCommand}`, (err) => {
-        shelljs.cd(pwd);
-        if (err) {
-            this.log.error(chalk.red(`The Docker image build failed. ${err}`));
-            this.abort = true;
-            reject();
-        }
-        resolve();
-    }));
+    return new Promise((resolve, reject) =>
+        dockerCLI.command(`${opts.cwd}${this.dockerBuildCommand}`, (err) => {
+            shelljs.cd(pwd);
+            if (err) {
+                this.log.error(chalk.red(`The Docker image build failed. ${err}`));
+                this.abort = true;
+                reject();
+            }
+            resolve();
+        }));
 }

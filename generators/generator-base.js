@@ -1451,7 +1451,7 @@ module.exports = class extends PrivateBase {
      * @param {string} version - (optional) explicit dependency version number
      */
     addGradleDependencyInDirectory(directory, scope, group, name, version) {
-        const fullPath = `${directory}/build.gradle`;
+        const fullPath = `${directory.resolve(directory, 'build.gradle')}`;
         let dependency = `${group}:${name}`;
         if (version) {
             dependency += `:${version}`;
