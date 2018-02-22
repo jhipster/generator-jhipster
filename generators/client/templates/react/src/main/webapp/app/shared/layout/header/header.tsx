@@ -22,8 +22,8 @@ import { NavLink as Link } from 'react-router-dom';
 import LoadingBar from 'react-redux-loading-bar';
 
 <%_ if (enableTranslation) { _%>
-  import { locales } from '../../../config/translation';
-  <%_ } _%>
+import { locales } from '../../../config/translation';
+<%_ } _%>
 import appConfig from '../../../config/constants';
 
 <%_ if (enableTranslation) { _%>
