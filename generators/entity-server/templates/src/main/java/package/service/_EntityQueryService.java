@@ -27,12 +27,7 @@ package <%=packageName%>.service;
     const entityListToDto = mapper + '.' + 'toDto';
     const entityToDtoReference = mapper + '::'+ 'toDto';
     const repository = entityInstance  + 'Repository';
-    const criteria = entityClass + 'Criteria';
-
-    if (fieldsContainLocalDate === true) { _%>
-import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime === true) { %>
-import java.time.ZonedDateTime;<% } if (fieldsContainBigDecimal === true) { %>
-import java.math.BigDecimal;<% } %>
+    const criteria = entityClass + 'Criteria'; _%>
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -53,9 +48,6 @@ import <%=packageName%>.service.dto.<%= entityClass %>Criteria;
 <% if (dto === 'mapstruct') { %>
 import <%=packageName%>.service.dto.<%= entityClass %>DTO;
 import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;<% } %>
-<%_ for (idx in fields) { if (fields[idx].fieldIsEnum === true) { _%>
-import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;
-<%_ } } _%>
 
 /**
  * Service for executing complex queries for <%= entityClass %> entities in the database.

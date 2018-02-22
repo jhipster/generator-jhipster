@@ -120,6 +120,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
 
     @Bean
+    @Override
     public AuthenticationManager authenticationManager() {
         try {
             return authenticationManagerBuilder

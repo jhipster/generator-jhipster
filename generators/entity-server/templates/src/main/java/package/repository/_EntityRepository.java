@@ -20,14 +20,20 @@ package <%=packageName%>.repository;
 
 import <%=packageName%>.domain.<%=entityClass%>;
 import org.springframework.stereotype.Repository;
+<%_ if (fieldsContainOwnerManyToMany) { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-<% if (databaseType === 'cassandra') { %>
+<%_ } _%>
+<%_ if (databaseType === 'cassandra') { _%>
 import com.datastax.driver.core.*;
 import com.datastax.driver.mapping.Mapper;
-import com.datastax.driver.mapping.MappingManager;<% } %><% if (databaseType === 'sql') { %>
-import org.springframework.data.jpa.repository.*;<% if (fieldsContainOwnerManyToMany==true) { %>
-import org.springframework.data.repository.query.Param;<% } %>
+import com.datastax.driver.mapping.MappingManager;
+<%_ } _%>
+<%_ if (databaseType === 'sql') { _%>
+import org.springframework.data.jpa.repository.*;
+<%_ if (fieldsContainOwnerManyToMany) { _%>
+import org.springframework.data.repository.query.Param;
+<%_ } _%>
 <%_ let importList = fieldsContainOwnerManyToMany;
     for (r of relationships) {
         if (r.relationshipType === 'many-to-one' && r.otherEntityName === 'user') {
@@ -36,20 +42,29 @@ import org.springframework.data.repository.query.Param;<% } %>
     }
     if (importList === true) {
 _%>
-import java.util.List;<% }} %><% if (databaseType === 'mongodb') { %>
-import org.springframework.data.mongodb.repository.MongoRepository;<% } %><% if (databaseType === 'cassandra') { %>
-
+import java.util.List;
+<%_ }} _%>
+<%_ if (databaseType === 'mongodb') { _%>
+import org.springframework.data.mongodb.repository.MongoRepository;
+<%_ } _%>
+<%_ if (databaseType === 'cassandra') { _%>
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
-<% if (fieldsContainInstant === true) { %>
-import java.time.Instant;<% } %><% if (fieldsContainLocalDate === true) { %>
-import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime === true) { %>
-import java.time.ZonedDateTime;<% } %>
+<%_ if (fieldsContainInstant === true) { _%>
+import java.time.Instant;
+<%_ } _%>
+<%_ if (fieldsContainLocalDate === true) { _%>
+import java.time.LocalDate;
+<%_ } _%>
+<%_ if (fieldsContainZonedDateTime === true) { _%>
+import java.time.ZonedDateTime;
+<%_ } _%>
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;<% } %>
+import java.util.UUID;
+<%_ } _%>
 <%_ if (fieldsContainOwnerManyToMany === true || databaseType === 'cassandra') { _%>
 import java.util.Optional;
 <%_ } _%>
