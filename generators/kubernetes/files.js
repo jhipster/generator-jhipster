@@ -26,64 +26,72 @@ function writeFiles() {
             for (let i = 0; i < this.appConfigs.length; i++) {
                 const appName = this.appConfigs[i].baseName.toLowerCase();
                 this.app = this.appConfigs[i];
-                this.template('_deployment.yml', `${appName}/${appName}-deployment.yml`);
-                this.template('_service.yml', `${appName}/${appName}-service.yml`);
+                this.template('_deployment.yml', `${this.directoryPath}/k8s/${appName}/${appName}-deployment.yml`);
+                this.template('_service.yml', `${this.directoryPath}/k8s/${appName}/${appName}-service.yml`);
                 // If we choose microservice with no DB, it is trying to move _no.yml as prodDatabaseType is getting tagged as 'string' type
                 if (this.app.prodDatabaseType !== 'no') {
-                    this.template(`db/_${this.app.prodDatabaseType}.yml`, `${appName}/${appName}-${this.app.prodDatabaseType}.yml`);
+                    this.template(`db/_${this.app.prodDatabaseType}.yml`, `${this.directoryPath}/k8s/${appName}/${appName}-${this.app.prodDatabaseType}.yml`);
                 }
                 if (this.app.searchEngine === 'elasticsearch') {
-                    this.template('db/_elasticsearch.yml', `${appName}/${appName}-elasticsearch.yml`);
+                    this.template('db/_elasticsearch.yml', `${this.directoryPath}/k8s/${appName}/${appName}-elasticsearch.yml`);
                 }
                 if (this.app.messageBroker === 'kafka') {
-                    this.template('db/_kafka.yml', `${appName}/${appName}-kafka.yml`);
+                    this.template('db/_kafka.yml', `${this.directoryPath}/k8s/${appName}/${appName}-kafka.yml`);
                 }
                 if ((this.app.applicationType === 'gateway' || this.app.applicationType === 'monolith') && this.kubernetesServiceType === 'Ingress') {
-                    this.template('_ingress.yml', `${appName}/${appName}-ingress.yml`);
+                    this.template('_ingress.yml', `${this.directoryPath}/k8s/${appName}/${appName}-ingress.yml`);
                 }
-                if (this.prometheusOperator) {
-                    this.template('_prometheus.yml', `${appName}/${appName}-prometheus.yml`);
+                if (this.monitoring === 'prometheus') {
+                    this.template('monitoring/_jhipster-prometheus-sm.yml', `${this.directoryPath}/k8s/${appName}/${appName}-prometheus-sm.yml`);
                 }
             }
         },
 
         writeReadme() {
-            this.template('_README-KUBERNETES.md', 'README.md');
+            this.template('_README-KUBERNETES.md', `${this.directoryPath}/k8s/README.md`);
         },
 
         writeNamespace() {
             if (this.kubernetesNamespace !== 'default') {
-                this.template('_namespace.yml', 'namespace.yml');
+                this.template('_namespace.yml', `${this.directoryPath}/k8s/namespace.yml`);
             }
         },
 
         writeJhipsterConsole() {
-            if (this.jhipsterConsole) {
-                this.template('console/_jhipster-elasticsearch.yml', 'console/jhipster-elasticsearch.yml');
-                this.template('console/_jhipster-logstash.yml', 'console/jhipster-logstash.yml');
-                this.template('console/_jhipster-console.yml', 'console/jhipster-console.yml');
-                this.template('console/_jhipster-dashboard-console.yml', 'console/jhipster-dashboard-console.yml');
+            if (this.monitoring === 'elk') {
+                this.template('console/_jhipster-elasticsearch.yml', `${this.directoryPath}/k8s/console/jhipster-elasticsearch.yml`);
+                this.template('console/_jhipster-logstash.yml', `${this.directoryPath}/k8s/console/jhipster-logstash.yml`);
+                this.template('console/_jhipster-console.yml', `${this.directoryPath}/k8s/console/jhipster-console.yml`);
+                this.template('console/_jhipster-dashboard-console.yml', `${this.directoryPath}/k8s/console/jhipster-dashboard-console.yml`);
                 if (this.composeApplicationType === 'microservice') {
-                    this.template('console/_jhipster-zipkin.yml', 'console/jhipster-zipkin.yml');
+                    this.template('console/_jhipster-zipkin.yml', `${this.directoryPath}/k8s/console/jhipster-zipkin.yml`);
                 }
             }
         },
 
-        writePrometheusTpr() {
-            if (this.prometheusOperator) {
-                this.template('_prometheus-tpr.yml', 'prometheus-tpr.yml');
+        writePrometheusGrafanaFiles() {
+            if (this.monitoring === 'prometheus') {
+                this.template('monitoring/_jhipster-prometheus-crd.yml', `${this.directoryPath}/k8s/monitoring/jhipster-prometheus-crd.yml`);
+                this.template('monitoring/_jhipster-prometheus-cr.yml', `${this.directoryPath}/k8s/monitoring/jhipster-prometheus-cr.yml`);
+                this.template('monitoring/_jhipster-grafana.yml', `${this.directoryPath}/k8s/monitoring/jhipster-grafana.yml`);
+                this.template('monitoring/_jhipster-grafana-dashboard.yml', `${this.directoryPath}/k8s/monitoring/jhipster-grafana-dashboard.yml`);
             }
         },
 
         writeRegistryFiles() {
             if (this.serviceDiscoveryType === 'eureka') {
-                this.template('registry/_jhipster-registry.yml', 'registry/jhipster-registry.yml');
-                this.template('registry/_application-configmap.yml', 'registry/application-configmap.yml');
+                this.template('registry/_jhipster-registry.yml', `${this.directoryPath}/k8s/registry/jhipster-registry.yml`);
+                this.template('registry/_application-configmap.yml', `${this.directoryPath}/k8s/registry/application-configmap.yml`);
             } else if (this.serviceDiscoveryType === 'consul') {
-                this.template('registry/_consul.yml', 'registry/consul.yml');
-                this.template('registry/_consul-config-loader.yml', 'registry/consul-config-loader.yml');
-                this.template('registry/_application-configmap.yml', 'registry/application-configmap.yml');
+                this.template('registry/_consul.yml', `${this.directoryPath}/k8s/registry/consul.yml`);
+                this.template('registry/_consul-config-loader.yml', `${this.directoryPath}/k8s/registry/consul-config-loader.yml`);
+                this.template('registry/_application-configmap.yml', `${this.directoryPath}/k8s/registry/application-configmap.yml`);
             }
+        },
+
+        writeConfigRunFile() {
+            this.template('_apply.sh', `${this.directoryPath}/k8s/kubectl-apply.sh`);
         }
+
     };
 }

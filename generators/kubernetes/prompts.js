@@ -21,10 +21,6 @@ const dockerPrompts = require('../docker-prompts');
 
 module.exports = _.extend({
     askForKubernetesNamespace,
-    askForDockerRepositoryName,
-    askForDockerPushCommand,
-    askForJhipsterConsole,
-    askForPrometheusOperator,
     askForKubernetesServiceType,
     askForIngressDomain
 }, dockerPrompts);
@@ -41,70 +37,6 @@ function askForKubernetesNamespace() {
 
     this.prompt(prompts).then((props) => {
         this.kubernetesNamespace = props.kubernetesNamespace;
-        done();
-    });
-}
-
-function askForDockerRepositoryName() {
-    const done = this.async();
-
-    const prompts = [{
-        type: 'input',
-        name: 'dockerRepositoryName',
-        message: 'What should we use for the base Docker repository name?',
-        default: this.dockerRepositoryName
-    }];
-
-    this.prompt(prompts).then((props) => {
-        this.dockerRepositoryName = props.dockerRepositoryName;
-        done();
-    });
-}
-
-function askForDockerPushCommand() {
-    const done = this.async();
-
-    const prompts = [{
-        type: 'input',
-        name: 'dockerPushCommand',
-        message: 'What command should we use for push Docker image to repository?',
-        default: this.dockerPushCommand ? this.dockerPushCommand : 'docker push'
-    }];
-
-    this.prompt(prompts).then((props) => {
-        this.dockerPushCommand = props.dockerPushCommand;
-        done();
-    });
-}
-
-function askForJhipsterConsole() {
-    const done = this.async();
-
-    const prompts = [{
-        type: 'confirm',
-        name: 'jhipsterConsole',
-        message: 'Do you want to use JHipster Console for log aggregation (ELK)?',
-        default: this.jhipsterConsole ? this.jhipsterConsole : true
-    }];
-
-    this.prompt(prompts).then((props) => {
-        this.jhipsterConsole = props.jhipsterConsole;
-        done();
-    });
-}
-
-function askForPrometheusOperator() {
-    const done = this.async();
-
-    const prompts = [{
-        type: 'confirm',
-        name: 'prometheusOperator',
-        message: 'Do you want to export your services for Prometheus (needs a running prometheus operator)?',
-        default: this.prometheusOperator ? this.prometheusOperator : true
-    }];
-
-    this.prompt(prompts).then((props) => {
-        this.prometheusOperator = props.prometheusOperator;
         done();
     });
 }
