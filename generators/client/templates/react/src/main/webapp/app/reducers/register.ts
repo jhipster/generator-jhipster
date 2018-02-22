@@ -40,13 +40,13 @@ export default (state = initialState, action) => {
   }
 };
 
+// Actions
 export const reset = () => dispatch => {
   dispatch({
     type: ACTION_TYPES.RESET
   });
 };
 
-// Action
 export const handleRegister = (login, email, password) => dispatch => {
   dispatch({
     type: ACTION_TYPES.CREATE_ACCOUNT,

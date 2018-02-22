@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import { AvForm, AvField } from 'availity-reactstrap-validation';
 import { Row, Col, Alert, Button } from 'reactstrap';
+import PasswordStrengthBar from '../password/password-strength-bar';
 
 import { handleRegister, reset } from '../../../reducers/register';
 
@@ -33,7 +34,18 @@ export interface IRegisterProps {
   errorMessage: string;
 }
 
-export class RegisterPage extends React.Component<IRegisterProps> {
+export interface IRegisterState {
+  password: string;
+}
+
+export class RegisterPage extends React.Component<IRegisterProps, IRegisterState> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      password: ''
+    };
+  }
+
   componentWillUnmount() {
     this.props.reset();
   }
@@ -43,15 +55,17 @@ export class RegisterPage extends React.Component<IRegisterProps> {
     event.preventDefault();
   };
 
+  updatePassword = event => {
+    this.setState({ password: event.target.value });
+  }
+
   render() {
     const { registrationSuccess, registrationFailure, errorMessage } = this.props;
     let alertMessage = null;
 
     if (registrationFailure) {
       alertMessage = (
-        <Alert color="danger">
-          {mainErrorMessages[errorMessage] ? mainErrorMessages.failed : mainErrorMessages[errorMessage]}
-        </Alert>
+        <Alert color="danger">{mainErrorMessages[errorMessage] ? mainErrorMessages.failed : mainErrorMessages[errorMessage]}</Alert>
       );
     } else {
       if (registrationSuccess) {
@@ -107,12 +121,14 @@ export class RegisterPage extends React.Component<IRegisterProps> {
                 label={<Translate contentKey="global.form.newpassword" />}
                 placeholder={translate('global.form.newpassword.placeholder')}
                 type="password"
+                onChange={this.updatePassword}
                 validate={{
                   required: { value: true, errorMessage: translate('global.messages.validate.newpassword.required') },
                   minLength: { value: 4, errorMessage: translate('global.messages.validate.newpassword.minlength') },
                   maxLength: { value: 50, errorMessage: translate('global.messages.validate.newpassword.maxlength') }
                 }}
               />
+              <PasswordStrengthBar password={this.state.password} />
               <AvField
                 name="secondPassword"
                 label={<Translate contentKey="global.form.confirmpassword" />}
