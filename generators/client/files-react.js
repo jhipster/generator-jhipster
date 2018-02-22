@@ -206,9 +206,8 @@ const files = {
                 { file: 'modules/account/index.tsx', method: 'processJsx' },
                 // { file: 'account/activate/_activate.component.js', method: 'processJsx' },
                 { file: 'modules/account/password/password.tsx', method: 'processJsx' },
-		{ file: 'modules/account/password/password-strength-bar.tsx', method: 'processJsx' },
+		        { file: 'modules/account/password/password-strength-bar.tsx', method: 'processJsx' },
                 { file: 'modules/account/register/register.tsx', method: 'processJsx' },
-		{ file: 'modules/account/register/register.tsx', method: 'processJsx' },
                 // { file: 'account/password-reset/init/_password-reset-init.component.js', method: 'processJsx' },
                 // { file: 'account/password-reset/finish/_password-reset-finish.component.js', method: 'processJsx' },
                 { file: 'modules/account/settings/settings.tsx', method: 'processJsx' }
