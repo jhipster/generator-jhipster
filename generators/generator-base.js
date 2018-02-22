@@ -1270,7 +1270,7 @@ module.exports = class extends PrivateBase {
      * @param {string} other - (optional) explicit other thing: scope, exclusions...
      */
     addMavenDependencyInDirectory(directory, groupId, artifactId, version, other) {
-        const fullPath = `${directory}/pom.xml`;
+        const fullPath = path.resolve(directory, 'pom.xml');
         try {
             let dependency = `${'<dependency>\n' +
                 '            <groupId>'}${groupId}</groupId>\n` +
@@ -1451,7 +1451,7 @@ module.exports = class extends PrivateBase {
      * @param {string} version - (optional) explicit dependency version number
      */
     addGradleDependencyInDirectory(directory, scope, group, name, version) {
-        const fullPath = `${directory.resolve(directory, 'build.gradle')}`;
+        const fullPath = path.resolve(directory, 'build.gradle');
         let dependency = `${group}:${name}`;
         if (version) {
             dependency += `:${version}`;
