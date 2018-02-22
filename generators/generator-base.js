@@ -2331,7 +2331,14 @@ module.exports = class extends PrivateBase {
                         }
                         filesOut.push(templatePathTo);
                         if (!returnFiles) {
-                            const templatePathFrom = prefix ? `${prefix}/${templatePath}.ejs` : `${templatePath}.ejs`;
+                            let templatePathFrom = prefix ? `${prefix}/${templatePath}` : templatePath;
+                            if (
+                                !templateObj.noEjs && !templatePathFrom.endsWith('.png')
+                                && !templatePathFrom.endsWith('.jpg') && !templatePathFrom.endsWith('.gif')
+                                && !templatePathFrom.endsWith('.svg') && !templatePathFrom.endsWith('.ico')
+                            ) {
+                                templatePathFrom = `${templatePathFrom}.ejs`;
+                            }
                             // if (method === 'template')
                             _this[method](templatePathFrom, templatePathTo, _this, options, useTemplate);
                         }

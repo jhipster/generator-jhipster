@@ -499,7 +499,7 @@ function writeFiles() {
                 this.template(`${SERVER_TEST_SRC_DIR}package/CassandraKeyspaceUnitTest.java.ejs`, `${testDir}CassandraKeyspaceUnitTest.java`);
                 this.template(`${SERVER_TEST_SRC_DIR}package/AbstractCassandraTest.java.ejs`, `${testDir}AbstractCassandraTest.java`);
                 this.template(`${SERVER_TEST_SRC_DIR}package/config/CassandraTestConfiguration.java.ejs`, `${testDir}config/CassandraTestConfiguration.java`);
-                this.template(`${SERVER_TEST_RES_DIR}_cassandra-random-port.yml.ejs`, `${SERVER_TEST_RES_DIR}cassandra-random-port.yml`);
+                this.template(`${SERVER_TEST_RES_DIR}cassandra-random-port.yml.ejs`, `${SERVER_TEST_RES_DIR}cassandra-random-port.yml`);
             }
 
             if (this.databaseType === 'couchbase') {

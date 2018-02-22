@@ -37,7 +37,7 @@ const files = {
                 'package.json',
                 'tslint.json',
                 'tsconfig.json',
-                '.editorconfig',
+                { file: '.editorconfig', method: 'copy', noEjs: true },
                 'webpack/logo-jhipster.png',
                 'webpack/webpack.common.js',
                 'webpack/webpack.dev.js',
@@ -70,7 +70,7 @@ const files = {
         {
             path: MAIN_SRC_DIR,
             templates: [
-                'swagger-ui/_index.html',
+                'swagger-ui/index.html',
                 { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }
             ]
         }
