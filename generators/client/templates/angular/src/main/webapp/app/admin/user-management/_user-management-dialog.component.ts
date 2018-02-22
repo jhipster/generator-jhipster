@@ -34,7 +34,7 @@ export class UserMgmtDialogComponent implements OnInit {
     user: User;
     languages: any[];
     authorities: any[];
-    isSaving: Boolean;
+    isSaving: boolean;
 
     constructor(
         public activeModal: NgbActiveModal,

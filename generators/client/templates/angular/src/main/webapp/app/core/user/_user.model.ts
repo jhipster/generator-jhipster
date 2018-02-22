@@ -23,7 +23,7 @@ export interface IUser {
     firstName?: string;
     lastName?: string;
     email?: string;
-    activated?: Boolean;
+    activated?: boolean;
     langKey?: string;
     authorities?: any[];
     createdBy?: string;
@@ -40,7 +40,7 @@ export class User implements IUser {
         public firstName?: string,
         public lastName?: string,
         public email?: string,
-        public activated?: Boolean,
+        public activated?: boolean,
         public langKey?: string,
         public authorities?: any[],
         public createdBy?: string,
