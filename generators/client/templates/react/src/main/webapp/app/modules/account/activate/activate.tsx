@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { Row, Col, Alert, Button } from 'reactstrap';
+import { Row, Col, Alert } from 'reactstrap';
 import { Translate } from 'react-jhipster';
 import { parse } from 'query-string';
 
@@ -31,11 +31,19 @@ export interface IActivateProps {
 
 export class ActivatePage extends React.Component<IActivateProps> {
 
-  componentWillMount() {
+  getKeyFromLocation = () => {
     const location = this.props['location'];
     if (location && location['search']) {
-      const getParameters = parse(location.search);
-      this.props.activateAction(getParameters.key);
+      return parse(location.search).key;
+    } else {
+      return undefined;
+    }
+  };
+
+  componentWillMount() {
+    const key = this.getKeyFromLocation();
+    if (key) {
+      this.props.activateAction(key);
     }
   }
 

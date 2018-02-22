@@ -38,13 +38,13 @@ export default (state = initialState, action) => {
   }
 };
 
+// Actions
 export const reset = () => dispatch => {
   dispatch({
     type: ACTION_TYPES.RESET
   });
 };
 
-// Action
 export const activateAction = key => dispatch => {
   dispatch({
     type: ACTION_TYPES.ACTIVATE_ACCOUNT,
