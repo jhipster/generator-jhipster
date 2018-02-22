@@ -23,48 +23,48 @@ module.exports = {
 function writeFiles() {
     return {
         writeDockerCompose() {
-            this.template('_docker-compose.yml', 'docker-compose.yml');
-            this.template('_README-DOCKER-COMPOSE.md', 'README-DOCKER-COMPOSE.md');
+            this.template('docker-compose.yml.ejs', 'docker-compose.yml');
+            this.template('README-DOCKER-COMPOSE.md.ejs', 'README-DOCKER-COMPOSE.md');
         },
 
         writeRegistryFiles() {
             if (this.serviceDiscoveryType === 'eureka') {
-                this.template('_jhipster-registry.yml', 'jhipster-registry.yml');
+                this.template('jhipster-registry.yml.ejs', 'jhipster-registry.yml');
             }
             if (this.serviceDiscoveryType) {
-                this.template('central-server-config/_application.yml', 'central-server-config/application.yml');
+                this.template('central-server-config/application.yml.ejs', 'central-server-config/application.yml');
             }
             if (this.gatewayNb === 0 && this.microserviceNb === 0) return;
             if (this.serviceDiscoveryType === 'consul') {
-                this.template('_consul.yml', 'consul.yml');
+                this.template('consul.yml.ejs', 'consul.yml');
             }
         },
 
         writeTraefikFiles() {
             if (this.gatewayType !== 'traefik') return;
-            this.template('_traefik.yml', 'traefik.yml');
-            this.template('traefik/_traefik.toml', 'traefik/traefik.toml');
+            this.template('traefik.yml.ejs', 'traefik.yml');
+            this.template('traefik/traefik.toml.ejs', 'traefik/traefik.toml');
         },
 
         writeKafkaFiles() {
             if (!this.useKafka) return;
 
-            this.template('_kafka.yml', 'kafka.yml');
+            this.template('kafka.yml.ejs', 'kafka.yml');
         },
 
         writeKeycloakFiles() {
             if (this.authenticationType !== 'oauth2') return;
-            this.template('_keycloak.yml', 'keycloak.yml');
-            this.template('realm-config/_jhipster-realm.json', 'realm-config/jhipster-realm.json');
-            this.template('realm-config/_jhipster-users-0.json', 'realm-config/jhipster-users-0.json');
+            this.template('keycloak.yml.ejs', 'keycloak.yml');
+            this.template('realm-config/jhipster-realm.json.ejs', 'realm-config/jhipster-realm.json');
+            this.template('realm-config/jhipster-users-0.json.ejs', 'realm-config/jhipster-users-0.json');
         },
 
         writeElkFiles() {
             if (this.monitoring !== 'elk') return;
 
-            this.template('_jhipster-console.yml', 'jhipster-console.yml');
-            this.template('log-conf/_logstash.conf', 'log-conf/logstash.conf');
-            this.template('log-data/_.gitignore', 'log-data/.gitignore');
+            this.template('jhipster-console.yml.ejs', 'jhipster-console.yml');
+            this.template('log-conf/logstash.conf.ejs', 'log-conf/logstash.conf');
+            this.template('log-data/.gitignore.ejs', 'log-data/.gitignore');
         },
 
         writePrometheusFiles() {
@@ -79,10 +79,10 @@ function writeFiles() {
             // Format the application target list as a YAML array
             this.appsToMonitorList = appsToMonitor.join('\n').replace(/'/g, '');
 
-            this.template('_prometheus.yml', 'prometheus.yml');
-            this.template('prometheus-conf/_prometheus.yml', 'prometheus-conf/prometheus.yml');
-            this.template('prometheus-conf/_alert.rules', 'prometheus-conf/alert.rules');
-            this.template('alertmanager-conf/_config.yml', 'alertmanager-conf/config.yml');
+            this.template('prometheus.yml.ejs', 'prometheus.yml');
+            this.template('prometheus-conf/prometheus.yml.ejs', 'prometheus-conf/prometheus.yml');
+            this.template('prometheus-conf/alert.rules.ejs', 'prometheus-conf/alert.rules');
+            this.template('alertmanager-conf/config.yml.ejs', 'alertmanager-conf/config.yml');
         }
     };
 }

@@ -38,68 +38,68 @@ const angularFiles = {
             path: ANGULAR_DIR,
             templates: [
                 {
-                    file: 'entities/_entity-management.component.html',
+                    file: 'entities/entity-management.component.html',
                     method: 'processHtml',
                     template: true,
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.component.html`
                 },
                 {
-                    file: 'entities/_entity-management-detail.component.html',
+                    file: 'entities/entity-management-detail.component.html',
                     method: 'processHtml',
                     template: true,
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.component.html`
                 },
                 {
-                    file: 'entities/_entity-management-dialog.component.html',
+                    file: 'entities/entity-management-dialog.component.html',
                     method: 'processHtml',
                     template: true,
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-dialog.component.html`
                 },
                 {
-                    file: 'entities/_entity-management-delete-dialog.component.html',
+                    file: 'entities/entity-management-delete-dialog.component.html',
                     method: 'processHtml',
                     template: true,
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.component.html`
                 },
                 {
-                    file: 'entities/_index.ts',
+                    file: 'entities/index.ts',
                     renameTo: generator => `entities/${generator.entityFolderName}/index.ts`
                 },
                 {
-                    file: 'entities/_entity-management.module.ts',
+                    file: 'entities/entity-management.module.ts',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.module.ts`
                 },
                 {
-                    file: 'entities/_entity-management.route.ts',
+                    file: 'entities/entity-management.route.ts',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.route.ts`
                 },
                 {
-                    file: 'entities/_entity.model.ts',
+                    file: 'entities/entity.model.ts',
                     // using entityModelFileName so that there is no conflict when genertaing microservice entities
                     renameTo: generator => `shared/model/${generator.entityModelFileName}.model.ts`
                 },
                 {
-                    file: 'entities/_entity-management.component.ts',
+                    file: 'entities/entity-management.component.ts',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.component.ts`
                 },
                 {
-                    file: 'entities/_entity-management-dialog.component.ts',
+                    file: 'entities/entity-management-dialog.component.ts',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-dialog.component.ts`
                 },
                 {
-                    file: 'entities/_entity-management-delete-dialog.component.ts',
+                    file: 'entities/entity-management-delete-dialog.component.ts',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.component.ts`
                 },
                 {
-                    file: 'entities/_entity-management-detail.component.ts',
+                    file: 'entities/entity-management-detail.component.ts',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.component.ts`
                 },
                 {
-                    file: 'entities/_entity.service.ts',
+                    file: 'entities/entity.service.ts',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityServiceFileName}.service.ts`
                 },
                 {
-                    file: 'entities/_entity-popup.service.ts',
+                    file: 'entities/entity-popup.service.ts',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityServiceFileName}-popup.service.ts`
                 }
 
@@ -111,23 +111,23 @@ const angularFiles = {
             path: CLIENT_TEST_SRC_DIR,
             templates: [
                 {
-                    file: 'spec/app/entities/_entity-management-detail.component.spec.ts',
+                    file: 'spec/app/entities/entity-management-detail.component.spec.ts',
                     renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-detail.component.spec.ts`
                 },
                 {
-                    file: 'spec/app/entities/_entity-management-dialog.component.spec.ts',
+                    file: 'spec/app/entities/entity-management-dialog.component.spec.ts',
                     renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-dialog.component.spec.ts`
                 },
                 {
-                    file: 'spec/app/entities/_entity-management-delete-dialog.component.spec.ts',
+                    file: 'spec/app/entities/entity-management-delete-dialog.component.spec.ts',
                     renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.component.spec.ts`
                 },
                 {
-                    file: 'spec/app/entities/_entity-management.component.spec.ts',
+                    file: 'spec/app/entities/entity-management.component.spec.ts',
                     renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}.component.spec.ts`
                 },
                 {
-                    file: 'spec/app/entities/_entity-management.service.spec.ts',
+                    file: 'spec/app/entities/entity-management.service.spec.ts',
                     renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}.service.spec.ts`
                 }
             ]
@@ -136,10 +136,10 @@ const angularFiles = {
             condition: generator => generator.protractorTests,
             path: CLIENT_TEST_SRC_DIR,
             templates: [{
-                file: 'e2e/entities/_entity-page-object.ts',
+                file: 'e2e/entities/entity-page-object.ts',
                 renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}.page-object.ts`
             }, {
-                file: 'e2e/entities/_entity.spec.ts',
+                file: 'e2e/entities/entity.spec.ts',
                 renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}.spec.ts`
             }]
         }
@@ -152,27 +152,27 @@ const reactFiles = {
             path: REACT_DIR,
             templates: [
                 {
-                    file: 'entities/_entity-delete-dialog.tsx',
+                    file: 'entities/entity-delete-dialog.tsx',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.tsx`
                 },
                 {
-                    file: 'entities/_entity-detail.tsx',
+                    file: 'entities/entity-detail.tsx',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.tsx`
                 },
                 {
-                    file: 'entities/_entity-dialog.tsx',
+                    file: 'entities/entity-dialog.tsx',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-dialog.tsx`
                 },
                 {
-                    file: 'entities/_entity.tsx',
+                    file: 'entities/entity.tsx',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.tsx`
                 },
                 {
-                    file: 'entities/_entity.reducer.ts',
+                    file: 'entities/entity.reducer.ts',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.reducer.ts`
                 },
                 {
-                    file: 'entities/_index.tsx',
+                    file: 'entities/index.tsx',
                     renameTo: generator => `entities/${generator.entityFolderName}/index.tsx`
                 }
             ]

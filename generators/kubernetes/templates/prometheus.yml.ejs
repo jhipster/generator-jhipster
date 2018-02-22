@@ -16,14 +16,17 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Route } from '@angular/router';
-
-import { <%=jhiPrefixCapitalized%>DocsComponent } from './docs.component';
-
-export const docsRoute: Route = {
-    path: 'docs',
-    component: <%=jhiPrefixCapitalized%>DocsComponent,
-    data: {
-        pageTitle: 'global.menu.admin.apidocs'
-    }
-};
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ServiceMonitor
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-app
+  namespace: <%= kubernetesNamespace %>
+  labels:
+    team: <%= kubernetesNamespace %>
+spec:
+  selector:
+    matchLabels:
+      app: <%= app.baseName.toLowerCase() %>
+  endpoints:
+  - port: web
+    path: /prometheusMetrics

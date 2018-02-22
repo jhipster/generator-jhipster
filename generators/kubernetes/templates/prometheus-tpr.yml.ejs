@@ -1,0 +1,86 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see http://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: prometheus-<%= kubernetesNamespace %>
+  namespace: <%= kubernetesNamespace %>
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: prometheus-<%= kubernetesNamespace %>
+  namespace: <%= kubernetesNamespace %>
+rules:
+- apiGroups: [""]
+  resources:
+  - nodes
+  - services
+  - endpoints
+  - pods
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources:
+  - configmaps
+  verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: prometheus-<%= kubernetesNamespace %>
+  namespace: <%= kubernetesNamespace %>
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: prometheus-<%= kubernetesNamespace %>
+subjects:
+- kind: ServiceAccount
+  name: prometheus-<%= kubernetesNamespace %>
+  namespace: <%= kubernetesNamespace %>
+---
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: Prometheus
+metadata:
+  name: <%= kubernetesNamespace %>
+  namespace: <%= kubernetesNamespace %>
+spec:
+  version: v1.6.2
+  serviceAccountName: prometheus-<%= kubernetesNamespace %>
+  serviceMonitorSelector:
+    matchLabels:
+      team: <%= kubernetesNamespace %>
+  resources:
+    requests:
+      memory: 400Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-<%= kubernetesNamespace %>
+  namespace: <%= kubernetesNamespace %>
+spec:
+  type: NodePort
+  ports:
+  - name: web
+    nodePort: 30901
+    port: 9090
+    protocol: TCP
+    targetPort: web
+  selector:
+    prometheus: <%= kubernetesNamespace %>

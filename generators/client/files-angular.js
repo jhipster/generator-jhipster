@@ -32,19 +32,19 @@ const files = {
     common: [
         {
             templates: [
-                '_.prettierrc',
-                '_.prettierignore',
-                '_package.json',
-                '_proxy.conf.json',
-                '_tsconfig.json',
-                '_tsconfig-aot.json',
-                '_tslint.json',
-                '_.angular-cli.json',
-                'webpack/_utils.js',
-                'webpack/_webpack.common.js',
-                'webpack/_webpack.dev.js',
-                'webpack/_webpack.prod.js',
-                'webpack/_webpack.test.js',
+                '.prettierrc',
+                '.prettierignore',
+                'package.json',
+                'proxy.conf.json',
+                'tsconfig.json',
+                'tsconfig-aot.json',
+                'tslint.json',
+                '.angular-cli.json',
+                'webpack/utils.js',
+                'webpack/webpack.common.js',
+                'webpack/webpack.dev.js',
+                'webpack/webpack.prod.js',
+                'webpack/webpack.test.js',
                 { file: 'webpack/logo-jhipster.png', method: 'copy' }
             ]
         }
@@ -56,16 +56,16 @@ const files = {
             condition: generator => !generator.useSass,
             path: MAIN_SRC_DIR,
             templates: [
-                'content/css/_global.css',
-                'content/css/_vendor.css',
-                'content/css/_documentation.css'
+                'content/css/global.css',
+                'content/css/vendor.css',
+                'content/css/documentation.css'
             ]
         },
         {
             condition: generator => !generator.useSass && generator.enableI18nRTL,
             path: MAIN_SRC_DIR,
             templates: [
-                'content/css/_rtl.css',
+                'content/css/rtl.css',
             ]
         }
     ],
@@ -74,22 +74,22 @@ const files = {
             condition: generator => generator.useSass,
             path: MAIN_SRC_DIR,
             templates: [
-                'content/scss/__bootstrap-variables.scss',
-                'content/scss/_global.scss',
-                'content/scss/_vendor.scss'
+                'content/scss/_bootstrap-variables.scss',
+                'content/scss/global.scss',
+                'content/scss/vendor.scss'
             ]
         },
         {
             condition: generator => generator.useSass && generator.enableI18nRTL,
             path: MAIN_SRC_DIR,
             templates: [
-                'content/scss/_rtl.scss',
+                'content/scss/rtl.scss',
             ]
         },
         {
             condition: generator => generator.useSass,
             templates: [
-                '_postcss.config.js'
+                'postcss.config.js'
             ]
         }
     ],
@@ -97,9 +97,9 @@ const files = {
         {
             path: MAIN_SRC_DIR,
             templates: [
-                { file: 'content/images/_hipster.png', method: 'copy' },
-                { file: 'content/images/_hipster2x.png', method: 'copy' },
-                { file: 'content/images/_logo-jhipster.png', method: 'copy' }
+                { file: 'content/images/hipster.png', method: 'copy' },
+                { file: 'content/images/hipster2x.png', method: 'copy' },
+                { file: 'content/images/logo-jhipster.png', method: 'copy' }
             ]
         }
     ],
@@ -108,7 +108,7 @@ const files = {
             path: MAIN_SRC_DIR,
             templates: [
                 'swagger-ui/_index.html',
-                { file: 'swagger-ui/dist/images/_throbber.gif', method: 'copy' }
+                { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }
             ]
         }
     ],
@@ -116,11 +116,11 @@ const files = {
         {
             path: MAIN_SRC_DIR,
             templates: [
-                { file: '_favicon.ico', method: 'copy' },
-                '_robots.txt',
-                '_404.html',
-                '_index.html',
-                '_manifest.webapp'
+                { file: 'favicon.ico', method: 'copy' },
+                'robots.txt',
+                '404.html',
+                'index.html',
+                'manifest.webapp'
             ]
         }
     ],
@@ -128,26 +128,26 @@ const files = {
         {
             path: ANGULAR_DIR,
             templates: [
-                '_app.main.ts',
-                '_app.route.ts',
-                '_app.module.ts',
-                '_app-routing.module.ts',
-                '_app.constants.ts',
-                '_polyfills.ts',
-                '_vendor.ts',
-                'blocks/config/_prod.config.ts',
-                'blocks/config/_uib-pagination.config.ts',
+                'app.main.ts',
+                'app.route.ts',
+                'app.module.ts',
+                'app-routing.module.ts',
+                'app.constants.ts',
+                'polyfills.ts',
+                'vendor.ts',
+                'blocks/config/prod.config.ts',
+                'blocks/config/uib-pagination.config.ts',
                 // interceptors
-                'blocks/interceptor/_errorhandler.interceptor.ts',
-                'blocks/interceptor/_notification.interceptor.ts',
-                'blocks/interceptor/_auth-expired.interceptor.ts'
+                'blocks/interceptor/errorhandler.interceptor.ts',
+                'blocks/interceptor/notification.interceptor.ts',
+                'blocks/interceptor/auth-expired.interceptor.ts'
             ]
         },
         {
             condition: generator => generator.authenticationType === 'jwt',
             path: ANGULAR_DIR,
             templates: [
-                'blocks/interceptor/_auth.interceptor.ts'
+                'blocks/interceptor/auth.interceptor.ts'
             ]
         }
     ],
@@ -156,53 +156,53 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 // entities
-                'entities/_entity.module.ts',
+                'entities/entity.module.ts',
                 // home module
-                'home/_index.ts',
-                { file: 'home/_home.module.ts', method: 'processJs' },
-                { file: 'home/_home.route.ts', method: 'processJs' },
-                { file: 'home/_home.component.ts', method: 'processJs' },
-                { file: 'home/_home.component.html', method: 'processHtml' },
+                'home/index.ts',
+                { file: 'home/home.module.ts', method: 'processJs' },
+                { file: 'home/home.route.ts', method: 'processJs' },
+                { file: 'home/home.component.ts', method: 'processJs' },
+                { file: 'home/home.component.html', method: 'processHtml' },
                 // layouts
-                'layouts/_index.ts',
-                'layouts/profiles/_page-ribbon.component.ts',
-                'layouts/profiles/_profile.service.ts',
-                'layouts/profiles/_profile-info.model.ts',
-                'layouts/main/_main.component.ts',
-                'layouts/main/_main.component.html',
-                { file: 'layouts/navbar/_navbar.component.ts', method: 'processJs' },
-                { file: 'layouts/navbar/_navbar.component.html', method: 'processHtml' },
-                'layouts/navbar/_navbar.route.ts',
-                'layouts/footer/_footer.component.ts',
-                { file: 'layouts/footer/_footer.component.html', method: 'processHtml' },
-                { file: 'layouts/error/_error.route.ts', method: 'processJs' },
-                { file: 'layouts/error/_error.component.ts', method: 'processJs' },
-                { file: 'layouts/error/_error.component.html', method: 'processHtml' }
+                'layouts/index.ts',
+                'layouts/profiles/page-ribbon.component.ts',
+                'layouts/profiles/profile.service.ts',
+                'layouts/profiles/profile-info.model.ts',
+                'layouts/main/main.component.ts',
+                'layouts/main/main.component.html',
+                { file: 'layouts/navbar/navbar.component.ts', method: 'processJs' },
+                { file: 'layouts/navbar/navbar.component.html', method: 'processHtml' },
+                'layouts/navbar/navbar.route.ts',
+                'layouts/footer/footer.component.ts',
+                { file: 'layouts/footer/footer.component.html', method: 'processHtml' },
+                { file: 'layouts/error/error.route.ts', method: 'processJs' },
+                { file: 'layouts/error/error.component.ts', method: 'processJs' },
+                { file: 'layouts/error/error.component.html', method: 'processHtml' }
             ]
         },
         {
             condition: generator => generator.enableTranslation,
             path: ANGULAR_DIR,
             templates: [
-                'layouts/navbar/_active-menu.directive.ts'
+                'layouts/navbar/active-menu.directive.ts'
             ]
         },
         {
             condition: generator => generator.useSass,
             path: ANGULAR_DIR,
             templates: [
-                'layouts/profiles/_page-ribbon.scss',
-                'layouts/navbar/_navbar.scss',
-                'home/_home.scss'
+                'layouts/profiles/page-ribbon.scss',
+                'layouts/navbar/navbar.scss',
+                'home/home.scss'
             ]
         },
         {
             condition: generator => !generator.useSass,
             path: ANGULAR_DIR,
             templates: [
-                'layouts/profiles/_page-ribbon.css',
-                'layouts/navbar/_navbar.css',
-                'home/_home.css'
+                'layouts/profiles/page-ribbon.css',
+                'layouts/navbar/navbar.css',
+                'home/home.css'
             ]
         },
     ],
@@ -211,77 +211,77 @@ const files = {
             path: ANGULAR_DIR,
             condition: generator => generator.authenticationType !== 'oauth2',
             templates: [
-                'account/_index.ts',
-                { file: 'account/_account.route.ts', method: 'processJs' },
-                'account/_account.module.ts',
-                { file: 'account/activate/_activate.route.ts', method: 'processJs' },
-                { file: 'account/activate/_activate.component.ts', method: 'processJs' },
-                { file: 'account/activate/_activate.component.html', method: 'processHtml' },
-                'account/activate/_activate.service.ts',
-                { file: 'account/password/_password.route.ts', method: 'processJs' },
-                'account/password/_password-strength-bar.component.ts',
-                { file: 'account/password/_password.component.ts', method: 'processJs' },
-                { file: 'account/password/_password.component.html', method: 'processHtml' },
-                'account/password/_password.service.ts',
-                { file: 'account/register/_register.route.ts', method: 'processJs' },
-                { file: 'account/register/_register.component.ts', method: 'processJs' },
-                { file: 'account/register/_register.component.html', method: 'processHtml' },
-                'account/register/_register.service.ts',
-                { file: 'account/password-reset/init/_password-reset-init.route.ts', method: 'processJs' },
-                { file: 'account/password-reset/init/_password-reset-init.component.ts', method: 'processJs' },
-                { file: 'account/password-reset/init/_password-reset-init.component.html', method: 'processHtml' },
-                'account/password-reset/init/_password-reset-init.service.ts',
-                { file: 'account/password-reset/finish/_password-reset-finish.route.ts', method: 'processJs' },
-                { file: 'account/password-reset/finish/_password-reset-finish.component.ts', method: 'processJs' },
-                { file: 'account/password-reset/finish/_password-reset-finish.component.html', method: 'processHtml' },
-                'account/password-reset/finish/_password-reset-finish.service.ts',
-                { file: 'account/settings/_settings.route.ts', method: 'processJs' },
-                { file: 'account/settings/_settings.component.ts', method: 'processJs' },
-                { file: 'account/settings/_settings.component.html', method: 'processHtml' }
+                'account/index.ts',
+                { file: 'account/account.route.ts', method: 'processJs' },
+                'account/account.module.ts',
+                { file: 'account/activate/activate.route.ts', method: 'processJs' },
+                { file: 'account/activate/activate.component.ts', method: 'processJs' },
+                { file: 'account/activate/activate.component.html', method: 'processHtml' },
+                'account/activate/activate.service.ts',
+                { file: 'account/password/password.route.ts', method: 'processJs' },
+                'account/password/password-strength-bar.component.ts',
+                { file: 'account/password/password.component.ts', method: 'processJs' },
+                { file: 'account/password/password.component.html', method: 'processHtml' },
+                'account/password/password.service.ts',
+                { file: 'account/register/register.route.ts', method: 'processJs' },
+                { file: 'account/register/register.component.ts', method: 'processJs' },
+                { file: 'account/register/register.component.html', method: 'processHtml' },
+                'account/register/register.service.ts',
+                { file: 'account/password-reset/init/password-reset-init.route.ts', method: 'processJs' },
+                { file: 'account/password-reset/init/password-reset-init.component.ts', method: 'processJs' },
+                { file: 'account/password-reset/init/password-reset-init.component.html', method: 'processHtml' },
+                'account/password-reset/init/password-reset-init.service.ts',
+                { file: 'account/password-reset/finish/password-reset-finish.route.ts', method: 'processJs' },
+                { file: 'account/password-reset/finish/password-reset-finish.component.ts', method: 'processJs' },
+                { file: 'account/password-reset/finish/password-reset-finish.component.html', method: 'processHtml' },
+                'account/password-reset/finish/password-reset-finish.service.ts',
+                { file: 'account/settings/settings.route.ts', method: 'processJs' },
+                { file: 'account/settings/settings.component.ts', method: 'processJs' },
+                { file: 'account/settings/settings.component.html', method: 'processHtml' }
             ]
         },
         {
             condition: generator => generator.authenticationType === 'session',
             path: ANGULAR_DIR,
             templates: [
-                { file: 'account/sessions/_sessions.route.ts', method: 'processJs' },
-                'account/sessions/_session.model.ts',
-                { file: 'account/sessions/_sessions.component.ts', method: 'processJs' },
-                { file: 'account/sessions/_sessions.component.html', method: 'processHtml' },
-                'account/sessions/_sessions.service.ts'
+                { file: 'account/sessions/sessions.route.ts', method: 'processJs' },
+                'account/sessions/session.model.ts',
+                { file: 'account/sessions/sessions.component.ts', method: 'processJs' },
+                { file: 'account/sessions/sessions.component.html', method: 'processHtml' },
+                'account/sessions/sessions.service.ts'
             ]
         },
         {
             condition: generator => generator.enableSocialSignIn,
             path: ANGULAR_DIR,
             templates: [
-                { file: 'account/social/_social.route.ts', method: 'processJs' },
-                { file: 'account/social/_social-register.component.ts', method: 'processJs' },
-                { file: 'account/social/_social-register.component.html', method: 'processHtml' },
-                { file: 'shared/social/_social.component.ts', method: 'processJs' },
-                { file: 'shared/social/_social.component.html', method: 'processHtml' },
-                'core/social/_social.service.ts'
+                { file: 'account/social/social.route.ts', method: 'processJs' },
+                { file: 'account/social/social-register.component.ts', method: 'processJs' },
+                { file: 'account/social/social-register.component.html', method: 'processHtml' },
+                { file: 'shared/social/social.component.ts', method: 'processJs' },
+                { file: 'shared/social/social.component.html', method: 'processHtml' },
+                'core/social/social.service.ts'
             ]
         },
         {
             condition: generator => generator.enableSocialSignIn && generator.authenticationType === 'jwt',
             path: ANGULAR_DIR,
             templates: [
-                { file: 'account/social/_social-auth.component.ts', method: 'processJs' },
+                { file: 'account/social/social-auth.component.ts', method: 'processJs' },
             ]
         },
         {
             condition: generator => generator.useSass && generator.authenticationType !== 'oauth2',
             path: ANGULAR_DIR,
             templates: [
-                'account/password/_password-strength-bar.scss'
+                'account/password/password-strength-bar.scss'
             ]
         },
         {
             condition: generator => !generator.useSass && generator.authenticationType !== 'oauth2',
             path: ANGULAR_DIR,
             templates: [
-                'account/password/_password-strength-bar.css'
+                'account/password/password-strength-bar.css'
             ]
         }
     ],
@@ -289,84 +289,84 @@ const files = {
         {
             path: ANGULAR_DIR,
             templates: [
-                'admin/_index.ts',
-                { file: 'admin/_admin.route.ts', method: 'processJs' },
-                'admin/_admin.module.ts',
+                'admin/index.ts',
+                { file: 'admin/admin.route.ts', method: 'processJs' },
+                'admin/admin.module.ts',
                 // admin modules
-                { file: 'admin/configuration/_configuration.route.ts', method: 'processJs' },
-                { file: 'admin/configuration/_configuration.component.ts', method: 'processJs' },
-                { file: 'admin/configuration/_configuration.component.html', method: 'processHtml' },
-                'admin/configuration/_configuration.service.ts',
-                { file: 'admin/docs/_docs.route.ts', method: 'processJs' },
-                { file: 'admin/docs/_docs.component.ts', method: 'processJs' },
-                'admin/docs/_docs.component.html',
-                { file: 'admin/health/_health.route.ts', method: 'processJs' },
-                { file: 'admin/health/_health.component.ts', method: 'processJs' },
-                { file: 'admin/health/_health.component.html', method: 'processHtml' },
-                'admin/health/_health-modal.component.ts',
-                { file: 'admin/health/_health-modal.component.html', method: 'processHtml' },
-                'admin/health/_health.service.ts',
-                { file: 'admin/logs/_logs.route.ts', method: 'processJs' },
-                'admin/logs/_log.model.ts',
-                { file: 'admin/logs/_logs.component.ts', method: 'processJs' },
-                { file: 'admin/logs/_logs.component.html', method: 'processHtml' },
-                'admin/logs/_logs.service.ts',
-                { file: 'admin/metrics/_metrics.route.ts', method: 'processJs' },
-                { file: 'admin/metrics/_metrics.component.ts', method: 'processJs' },
-                { file: 'admin/metrics/_metrics.component.html', method: 'processHtml', template: true },
-                'admin/metrics/_metrics-modal.component.ts',
-                { file: 'admin/metrics/_metrics-modal.component.html', method: 'processHtml', template: true },
-                'admin/metrics/_metrics.service.ts'
+                { file: 'admin/configuration/configuration.route.ts', method: 'processJs' },
+                { file: 'admin/configuration/configuration.component.ts', method: 'processJs' },
+                { file: 'admin/configuration/configuration.component.html', method: 'processHtml' },
+                'admin/configuration/configuration.service.ts',
+                { file: 'admin/docs/docs.route.ts', method: 'processJs' },
+                { file: 'admin/docs/docs.component.ts', method: 'processJs' },
+                'admin/docs/docs.component.html',
+                { file: 'admin/health/health.route.ts', method: 'processJs' },
+                { file: 'admin/health/health.component.ts', method: 'processJs' },
+                { file: 'admin/health/health.component.html', method: 'processHtml' },
+                'admin/health/health-modal.component.ts',
+                { file: 'admin/health/health-modal.component.html', method: 'processHtml' },
+                'admin/health/health.service.ts',
+                { file: 'admin/logs/logs.route.ts', method: 'processJs' },
+                'admin/logs/log.model.ts',
+                { file: 'admin/logs/logs.component.ts', method: 'processJs' },
+                { file: 'admin/logs/logs.component.html', method: 'processHtml' },
+                'admin/logs/logs.service.ts',
+                { file: 'admin/metrics/metrics.route.ts', method: 'processJs' },
+                { file: 'admin/metrics/metrics.component.ts', method: 'processJs' },
+                { file: 'admin/metrics/metrics.component.html', method: 'processHtml', template: true },
+                'admin/metrics/metrics-modal.component.ts',
+                { file: 'admin/metrics/metrics-modal.component.html', method: 'processHtml', template: true },
+                'admin/metrics/metrics.service.ts'
             ]
         },
         {
             condition: generator => (generator.databaseType !== 'no' && generator.databaseType !== 'cassandra'),
             path: ANGULAR_DIR,
             templates: [
-                { file: 'admin/audits/_audits.route.ts', method: 'processJs' },
-                'admin/audits/_audit-data.model.ts',
-                'admin/audits/_audit.model.ts',
-                { file: 'admin/audits/_audits.component.ts', method: 'processJs' },
-                { file: 'admin/audits/_audits.component.html', method: 'processHtml' },
-                'admin/audits/_audits.service.ts'
+                { file: 'admin/audits/audits.route.ts', method: 'processJs' },
+                'admin/audits/audit-data.model.ts',
+                'admin/audits/audit.model.ts',
+                { file: 'admin/audits/audits.component.ts', method: 'processJs' },
+                { file: 'admin/audits/audits.component.html', method: 'processHtml' },
+                'admin/audits/audits.service.ts'
             ]
         },
         {
             condition: generator => generator.websocket === 'spring-websocket',
             path: ANGULAR_DIR,
             templates: [
-                { file: 'admin/tracker/_tracker.route.ts', method: 'processJs' },
-                { file: 'admin/tracker/_tracker.component.ts', method: 'processJs' },
-                { file: 'admin/tracker/_tracker.component.html', method: 'processHtml' },
-                'core/tracker/_tracker.service.ts',
-                'core/tracker/_window.service.ts'
+                { file: 'admin/tracker/tracker.route.ts', method: 'processJs' },
+                { file: 'admin/tracker/tracker.component.ts', method: 'processJs' },
+                { file: 'admin/tracker/tracker.component.html', method: 'processHtml' },
+                'core/tracker/tracker.service.ts',
+                'core/tracker/window.service.ts'
             ]
         },
         {
             condition: generator => !generator.skipUserManagement,
             path: ANGULAR_DIR,
             templates: [
-                { file: 'admin/user-management/_user-management.route.ts', method: 'processJs' },
-                { file: 'admin/user-management/_user-management.component.ts', method: 'processJs' },
-                { file: 'admin/user-management/_user-management.component.html', method: 'processHtml' },
-                { file: 'admin/user-management/_user-management-detail.component.ts', method: 'processJs' },
-                { file: 'admin/user-management/_user-management-detail.component.html', method: 'processHtml' },
-                { file: 'admin/user-management/_user-management-dialog.component.ts', method: 'processJs' },
-                { file: 'admin/user-management/_user-management-dialog.component.html', method: 'processHtml' },
-                { file: 'admin/user-management/_user-management-delete-dialog.component.ts', method: 'processJs' },
-                { file: 'admin/user-management/_user-management-delete-dialog.component.html', method: 'processHtml' },
-                'admin/user-management/_user-modal.service.ts'
+                { file: 'admin/user-management/user-management.route.ts', method: 'processJs' },
+                { file: 'admin/user-management/user-management.component.ts', method: 'processJs' },
+                { file: 'admin/user-management/user-management.component.html', method: 'processHtml' },
+                { file: 'admin/user-management/user-management-detail.component.ts', method: 'processJs' },
+                { file: 'admin/user-management/user-management-detail.component.html', method: 'processHtml' },
+                { file: 'admin/user-management/user-management-dialog.component.ts', method: 'processJs' },
+                { file: 'admin/user-management/user-management-dialog.component.html', method: 'processHtml' },
+                { file: 'admin/user-management/user-management-delete-dialog.component.ts', method: 'processJs' },
+                { file: 'admin/user-management/user-management-delete-dialog.component.html', method: 'processHtml' },
+                'admin/user-management/user-modal.service.ts'
             ]
         },
         {
             condition: generator => generator.applicationType === 'gateway',
             path: ANGULAR_DIR,
             templates: [
-                { file: 'admin/gateway/_gateway.route.ts', method: 'processJs' },
-                'admin/gateway/_gateway-route.model.ts',
-                { file: 'admin/gateway/_gateway.component.ts', method: 'processJs' },
-                { file: 'admin/gateway/_gateway.component.html', method: 'processHtml' },
-                'admin/gateway/_gateway-routes.service.ts'
+                { file: 'admin/gateway/gateway.route.ts', method: 'processJs' },
+                'admin/gateway/gateway-route.model.ts',
+                { file: 'admin/gateway/gateway.component.ts', method: 'processJs' },
+                { file: 'admin/gateway/gateway.component.html', method: 'processHtml' },
+                'admin/gateway/gateway-routes.service.ts'
             ]
         }
     ],
@@ -374,11 +374,11 @@ const files = {
         {
             path: ANGULAR_DIR,
             templates: [
-                'core/_index.ts',
-                'core/_core.module.ts',
+                'core/index.ts',
+                'core/core.module.ts',
                 // login
-                'core/login/_login.service.ts',
-                'core/user/_account.model.ts'
+                'core/login/login.service.ts',
+                'core/user/account.model.ts'
             ]
         },
         {
@@ -386,23 +386,23 @@ const files = {
             condition: generator => generator.authenticationType !== 'oauth2',
             templates: [
                 // login
-                'core/login/_login-modal.service.ts'
+                'core/login/login-modal.service.ts'
             ]
         },
         {
             condition: generator => !generator.skipUserManagement || generator.authenticationType === 'oauth2',
             path: ANGULAR_DIR,
             templates: [
-                'core/user/_user.service.ts',
-                'core/user/_user.model.ts'
+                'core/user/user.service.ts',
+                'core/user/user.model.ts'
             ]
         },
         {
             condition: generator => generator.enableTranslation,
             path: ANGULAR_DIR,
             templates: [
-                'core/language/_language.constants.ts',
-                'core/language/_language.helper.ts'
+                'core/language/language.constants.ts',
+                'core/language/language.helper.ts'
             ]
         }
     ],
@@ -410,17 +410,17 @@ const files = {
         {
             path: ANGULAR_DIR,
             templates: [
-                'shared/_index.ts',
-                'shared/_shared.module.ts',
-                'shared/_shared-libs.module.ts',
-                'shared/_shared-common.module.ts',
-                'shared/constants/_error.constants.ts',
-                'shared/constants/_pagination.constants.ts',
+                'shared/index.ts',
+                'shared/shared.module.ts',
+                'shared/shared-libs.module.ts',
+                'shared/shared-common.module.ts',
+                'shared/constants/error.constants.ts',
+                'shared/constants/pagination.constants.ts',
                 // models
-                'shared/util/_request-util.ts',
+                'shared/util/request-util.ts',
                 // alert service code
-                'shared/alert/_alert.component.ts',
-                'shared/alert/_alert-error.component.ts'
+                'shared/alert/alert.component.ts',
+                'shared/alert/alert-error.component.ts'
             ]
         },
         {
@@ -428,15 +428,15 @@ const files = {
             condition: generator => generator.authenticationType !== 'oauth2',
             templates: [
                 // login
-                'shared/login/_login.component.ts',
-                { file: 'shared/login/_login.component.html', method: 'processHtml' }
+                'shared/login/login.component.ts',
+                { file: 'shared/login/login.component.html', method: 'processHtml' }
             ]
         },
         {
             condition: generator => generator.enableTranslation,
             path: ANGULAR_DIR,
             templates: [
-                'shared/language/_find-language-from-key.pipe.ts'
+                'shared/language/find-language-from-key.pipe.ts'
             ]
         }
     ],
@@ -444,26 +444,26 @@ const files = {
         {
             path: ANGULAR_DIR,
             templates: [
-                'core/auth/_csrf.service.ts',
-                'core/auth/_state-storage.service.ts',
-                'core/auth/_principal.service.ts',
-                'shared/auth/_has-any-authority.directive.ts',
-                'core/auth/_account.service.ts',
-                'core/auth/_user-route-access-service.ts'
+                'core/auth/csrf.service.ts',
+                'core/auth/state-storage.service.ts',
+                'core/auth/principal.service.ts',
+                'shared/auth/has-any-authority.directive.ts',
+                'core/auth/account.service.ts',
+                'core/auth/user-route-access-service.ts'
             ]
         },
         {
             condition: generator => generator.authenticationType === 'jwt' || generator.authenticationType === 'uaa',
             path: ANGULAR_DIR,
             templates: [
-                'core/auth/_auth-jwt.service.ts'
+                'core/auth/auth-jwt.service.ts'
             ]
         },
         {
             condition: generator => generator.authenticationType === 'session' || generator.authenticationType === 'oauth2',
             path: ANGULAR_DIR,
             templates: [
-                'core/auth/_auth-session.service.ts'
+                'core/auth/auth-session.service.ts'
             ]
         }
     ],
@@ -471,84 +471,84 @@ const files = {
         {
             path: TEST_SRC_DIR,
             templates: [
-                '_karma.conf.js',
-                'spec/_entry.ts',
-                'spec/_test.module.ts',
-                'spec/app/admin/health/_health.component.spec.ts',
-                'spec/helpers/_spyobject.ts',
-                'spec/helpers/_mock-account.service.ts',
-                'spec/helpers/_mock-principal.service.ts',
-                'spec/helpers/_mock-route.service.ts',
-                'spec/helpers/_mock-login.service.ts',
-                'spec/helpers/_mock-event-manager.service.ts',
-                'spec/helpers/_mock-active-modal.service.ts',
-                'spec/helpers/_mock-state-storage.service.ts'
+                'karma.conf.js',
+                'spec/entry.ts',
+                'spec/test.module.ts',
+                'spec/app/admin/health/health.component.spec.ts',
+                'spec/helpers/spyobject.ts',
+                'spec/helpers/mock-account.service.ts',
+                'spec/helpers/mock-principal.service.ts',
+                'spec/helpers/mock-route.service.ts',
+                'spec/helpers/mock-login.service.ts',
+                'spec/helpers/mock-event-manager.service.ts',
+                'spec/helpers/mock-active-modal.service.ts',
+                'spec/helpers/mock-state-storage.service.ts'
             ]
         },
         {
             condition: generator => generator.authenticationType !== 'oauth2',
             path: TEST_SRC_DIR,
             templates: [
-                'spec/app/account/activate/_activate.component.spec.ts',
-                'spec/app/account/password/_password.component.spec.ts',
-                'spec/app/account/password/_password-strength-bar.component.spec.ts',
-                'spec/app/account/password-reset/init/_password-reset-init.component.spec.ts',
-                'spec/app/account/password-reset/finish/_password-reset-finish.component.spec.ts',
-                'spec/app/account/register/_register.component.spec.ts',
-                'spec/app/account/settings/_settings.component.spec.ts',
+                'spec/app/account/activate/activate.component.spec.ts',
+                'spec/app/account/password/password.component.spec.ts',
+                'spec/app/account/password/password-strength-bar.component.spec.ts',
+                'spec/app/account/password-reset/init/password-reset-init.component.spec.ts',
+                'spec/app/account/password-reset/finish/password-reset-finish.component.spec.ts',
+                'spec/app/account/register/register.component.spec.ts',
+                'spec/app/account/settings/settings.component.spec.ts',
                 // login component tests
-                'spec/app/shared/login/_login.component.spec.ts'
+                'spec/app/shared/login/login.component.spec.ts'
             ]
         },
         {
             condition: generator => (generator.databaseType !== 'no' && generator.databaseType !== 'cassandra'),
             path: TEST_SRC_DIR,
             templates: [
-                'spec/app/admin/audits/_audits.component.spec.ts',
-                'spec/app/admin/audits/_audits.service.spec.ts'
+                'spec/app/admin/audits/audits.component.spec.ts',
+                'spec/app/admin/audits/audits.service.spec.ts'
             ]
         },
         {
             condition: generator => !generator.skipUserManagement,
             path: TEST_SRC_DIR,
             templates: [
-                'spec/app/admin/user-management/_user-management.component.spec.ts',
-                'spec/app/admin/user-management/_user-management-detail.component.spec.ts',
-                'spec/app/admin/user-management/_user-management-dialog.component.spec.ts',
-                'spec/app/admin/user-management/_user-management-delete-dialog.component.spec.ts',
+                'spec/app/admin/user-management/user-management.component.spec.ts',
+                'spec/app/admin/user-management/user-management-detail.component.spec.ts',
+                'spec/app/admin/user-management/user-management-dialog.component.spec.ts',
+                'spec/app/admin/user-management/user-management-delete-dialog.component.spec.ts',
                 // user service tests
-                'spec/app/core/user/_user.service.spec.ts'
+                'spec/app/core/user/user.service.spec.ts'
             ]
         },
         {
             condition: generator => generator.authenticationType === 'session',
             path: TEST_SRC_DIR,
             templates: [
-                'spec/app/account/sessions/_sessions.component.spec.ts'
+                'spec/app/account/sessions/sessions.component.spec.ts'
             ]
         },
         {
             condition: generator => generator.enableTranslation,
             path: TEST_SRC_DIR,
             templates: [
-                'spec/helpers/_mock-language.service.ts'
+                'spec/helpers/mock-language.service.ts'
             ]
         },
         {
             condition: generator => generator.websocket === 'spring-websocket',
             path: TEST_SRC_DIR,
             templates: [
-                'spec/helpers/_mock-tracker.service.ts'
+                'spec/helpers/mock-tracker.service.ts'
             ]
         },
         {
             condition: generator => generator.protractorTests,
             path: TEST_SRC_DIR,
             templates: [
-                'e2e/account/_account.spec.ts',
-                'e2e/admin/_administration.spec.ts',
-                'e2e/page-objects/_jhi-page-objects.ts',
-                '_protractor.conf.js'
+                'e2e/account/account.spec.ts',
+                'e2e/admin/administration.spec.ts',
+                'e2e/page-objects/jhi-page-objects.ts',
+                'protractor.conf.js'
             ]
         }
     ]

@@ -32,11 +32,11 @@ const files = {
     common: [
         {
             templates: [
-                '_.prettierrc',
-                '_.prettierignore',
-                '_package.json',
-                '_tslint.json',
-                '_tsconfig.json',
+                '.prettierrc',
+                '.prettierignore',
+                'package.json',
+                'tslint.json',
+                'tsconfig.json',
                 '.editorconfig',
                 'webpack/logo-jhipster.png',
                 'webpack/webpack.common.js',
@@ -51,7 +51,7 @@ const files = {
         {
             condition: generator => generator.useSass,
             templates: [
-                { file: '_postcss.config.js', method: 'copy' }
+                { file: 'postcss.config.js', method: 'copy' }
             ]
         }
     ],
@@ -59,9 +59,9 @@ const files = {
         {
             path: MAIN_SRC_DIR,
             templates: [
-                { file: 'static/images/_hipster.png', method: 'copy' },
-                { file: 'static/images/_hipster2x.png', method: 'copy' },
-                { file: 'static/images/_logo-jhipster.png', method: 'copy' },
+                { file: 'static/images/hipster.png', method: 'copy' },
+                { file: 'static/images/hipster2x.png', method: 'copy' },
+                { file: 'static/images/logo-jhipster.png', method: 'copy' },
                 { file: 'static/images/logo-jhipster-react.svg', method: 'copy' }
             ]
         }
@@ -71,7 +71,7 @@ const files = {
             path: MAIN_SRC_DIR,
             templates: [
                 'swagger-ui/_index.html',
-                { file: 'swagger-ui/dist/images/_throbber.gif', method: 'copy' }
+                { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }
             ]
         }
     ],
@@ -82,8 +82,8 @@ const files = {
                 { file: 'favicon.ico', method: 'copy' },
                 'robots.txt',
                 '404.html',
-                '_index.html',
-                '_manifest.webapp'
+                'index.html',
+                'manifest.webapp'
             ]
         }
     ],
@@ -116,7 +116,7 @@ const files = {
             path: REACT_DIR,
             templates: [
                 'app.scss',
-                '__bootstrap-variables.scss',
+                '_bootstrap-variables.scss',
             ]
         },
         {
