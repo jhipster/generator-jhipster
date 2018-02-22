@@ -36,11 +36,7 @@
             },
             "messages": {
                 "info": "Yeni şifre seç",
-                <%_ if (clientFramework === 'angular1') { _%>
-                "success": "<strong>Şifren sıfırlandı.</strong> Lütfen <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">giriş yap</a>.",
-                <%_ } else { _%>
                 "success": "<strong>Şifren sıfırlandı.</strong> Lütfen ",
-                <%_ } _%>
                 "keymissing": "Şifre sıfırlama anahtarı geçersiz.",
                 "error": "Şifren sıfırlanamaz. Şifre isteği sadece 24 saat geçerlidir."
             }

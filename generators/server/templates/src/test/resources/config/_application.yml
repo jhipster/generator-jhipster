@@ -90,7 +90,7 @@ spring:
             hibernate.generate_statistics: true
             hibernate.hbm2ddl.auto: validate
     <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra' || searchEngine === 'elasticsearch') { _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
     data:
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
@@ -107,19 +107,14 @@ spring:
             compression: NONE
             keyspaceName: cassandra_unit_keyspace
     <%_ } _%>
-    <%_ if (searchEngine === 'elasticsearch') { _%>
-        elasticsearch:
-            cluster-name:
-            cluster-nodes:
-            properties:
-                path:
-                    logs: <%= BUILD_DIR %>elasticsearch/log
-                    data: <%= BUILD_DIR %>elasticsearch/data
-    <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     couchbase:
         bucket:
             name: jhipster
+    <%_ } _%>
+    <%_ if (databaseType === 'sql') { _%>
+    liquibase:
+        contexts: test
     <%_ } _%>
     mail:
         host: localhost
@@ -129,10 +124,7 @@ spring:
         favicon:
             enabled: false
     thymeleaf:
-        mode: XHTML
-
-liquibase:
-    contexts: test
+        mode: HTML
 
 server:
     port: 10344
@@ -205,4 +197,4 @@ jhipster:
 # http://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-application:
+# application:

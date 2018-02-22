@@ -56,7 +56,7 @@ public class AuditEventConverter {
         if (persistentAuditEvent == null) {
             return null;
         }
-        return new AuditEvent(Date.from(persistentAuditEvent.getAuditEventDate()), persistentAuditEvent.getPrincipal(),
+        return new AuditEvent(persistentAuditEvent.getAuditEventDate(), persistentAuditEvent.getPrincipal(),
             persistentAuditEvent.getAuditEventType(), convertDataToObjects(persistentAuditEvent.getData()));
     }
 
@@ -89,21 +89,16 @@ public class AuditEventConverter {
 
         if (data != null) {
             for (Map.Entry<String, Object> entry : data.entrySet()) {
-                Object object = entry.getValue();
-
                 // Extract the data that will be saved.
-                if (object instanceof WebAuthenticationDetails) {
-                    WebAuthenticationDetails authenticationDetails = (WebAuthenticationDetails) object;
+                if (entry.getValue() instanceof WebAuthenticationDetails) {
+                    WebAuthenticationDetails authenticationDetails = (WebAuthenticationDetails) entry.getValue();
                     results.put("remoteAddress", authenticationDetails.getRemoteAddress());
                     results.put("sessionId", authenticationDetails.getSessionId());
-                } else if (object != null) {
-                    results.put(entry.getKey(), object.toString());
                 } else {
-                    results.put(entry.getKey(), "null");
+                    results.put(entry.getKey(), Objects.toString(entry.getValue()));
                 }
             }
         }
-
         return results;
     }
 }

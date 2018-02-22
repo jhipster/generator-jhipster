@@ -68,10 +68,6 @@
         },
         "messages": {
             "info": {
-                <%_ if (clientFramework === 'angular1') { _%>
-                "authenticated": "Se vuoi <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">accedere</a>, puoi provare gli account di default: <br/> - Amministratore (user = \"admin\" e la password = \"admin\") <br/> - utente (user = \"user\" e la password = \"user\")",
-                "register": "Non hai ancora un account? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Crea un account</a>"
-                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Se vuoi ",
                     "link": "accedere",
@@ -81,7 +77,6 @@
                     "noaccount": "Non hai ancora un account?",
                     "link": "Crea un account"
                 }
-                <%_ } _%>
             },
             "error": {
                 "dontmatch" : "La password e la sua conferma non corrispondono!"

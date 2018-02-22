@@ -22,8 +22,8 @@ import { Renderer, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { <%=angularXAppName%>TestModule } from '../../../../test.module';
-import { PasswordResetFinishComponent } from '../../../../../../../main/webapp/app/account/password-reset/finish/password-reset-finish.component';
-import { PasswordResetFinishService } from '../../../../../../../main/webapp/app/account/password-reset/finish/password-reset-finish.service';
+import { PasswordResetFinishComponent } from 'app/account/password-reset/finish/password-reset-finish.component';
+import { PasswordResetFinishService } from 'app/account/password-reset/finish/password-reset-finish.service';
 import { MockActivatedRoute } from '../../../../helpers/mock-route.service';
 
 describe('Component Tests', () => {

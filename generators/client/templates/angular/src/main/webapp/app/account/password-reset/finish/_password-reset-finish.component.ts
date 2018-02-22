@@ -20,8 +20,8 @@ import { Component, OnInit, AfterViewInit, Renderer, ElementRef } from '@angular
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute } from '@angular/router';
 
+import { LoginModalService } from 'app/core';
 import { PasswordResetFinishService } from './password-reset-finish.service';
-import { LoginModalService } from '../../../shared';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-password-reset-finish',

@@ -36,11 +36,7 @@
             },
             "messages": {
                 "info": "Wybierz nowe hasło",
-                <%_ if (clientFramework === 'angular1') { _%>
-                "success": "<strong>Twoje hasło zostało zresetowane.</strong> Proszę <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">zaloguj się</a>.",
-                <%_ } else { _%>
                 "success": "<strong>Twoje hasło zostało zresetowane.</strong> Proszę ",
-                <%_ } _%>
                 "keymissing": "Brakuje klucza resetującego hasło.",
                 "error": "Twoje hasło nie mogło zostać zresetowane. Pamiętaj, że prośba o zresetowanie hasła jest ważna tylko przez 24 godziny."
             }

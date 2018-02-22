@@ -158,6 +158,14 @@ const serverFiles = {
             }]
         },
         {
+            condition: generator => generator.searchEngine === 'elasticsearch',
+            path: SERVER_TEST_SRC_DIR,
+            templates: [{
+                file: 'package/repository/search/_EntitySearchRepositoryMockConfiguration.java',
+                renameTo: generator => `${generator.packageFolder}/repository/search/${generator.entityClass}SearchRepositoryMockConfiguration.java`
+            }]
+        },
+        {
             condition: generator => generator.gatlingTests,
             path: TEST_DIR,
             templates: [{
@@ -208,7 +216,7 @@ function writeFiles() {
             this.fields.forEach((field) => {
                 if (field.fieldIsEnum === true) {
                     const fieldType = field.fieldType;
-                    const enumInfo = utils.buildEnumInfo(field, this.angularAppName, this.packageName);
+                    const enumInfo = utils.buildEnumInfo(field, this.angularAppName, this.packageName, this.clientRootFolder);
                     if (!this.skipServer) {
                         this.template(
                             `${SERVER_MAIN_SRC_DIR}package/domain/enumeration/_Enum.java`,

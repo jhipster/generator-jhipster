@@ -17,8 +17,9 @@
  limitations under the License.
 -%>
 import { Component, Input, OnInit } from '@angular/core';
-import { SocialService } from './social.service';
-import { CSRFService } from '../auth/csrf.service';
+
+import { SocialService } from 'app/core/social/social.service';
+import { CSRFService } from 'app/core/auth/csrf.service';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-social',

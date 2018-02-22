@@ -24,6 +24,10 @@ buildscript {
         jcenter()
         maven { url "http://repo.spring.io/plugins-release" }
         maven { url "https://plugins.gradle.org/m2/" }
+        // TODO To remove after final Spring Boot 2 release
+        maven { url "https://repo.spring.io/milestone" }
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://dl.bintray.com/jhipster/maven" }
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
@@ -63,9 +67,6 @@ apply plugin: 'war'
 apply plugin: 'propdeps'
 <%_ if (!skipClient) { _%>
 apply plugin: 'com.moowork.node'
-    <%_ if (clientFramework === 'angular1') { _%>
-apply plugin: 'com.moowork.gulp'
-    <%_ } _%>
 <%_ } _%>
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'idea'
@@ -84,8 +85,8 @@ version = '0.0.1-SNAPSHOT'
 
 description = ''
 
-bootRepackage {
-   mainClass = '<%= packageName %>.<%= mainClass %>'
+bootWar {
+   mainClassName = '<%= packageName %>.<%= mainClass %>'
 }
 
 war {
@@ -93,8 +94,7 @@ war {
 }
 
 springBoot {
-    mainClass = '<%= packageName %>.<%= mainClass %>'
-    executable = true
+    mainClassName = '<%= packageName %>.<%= mainClass %>'
     buildInfo()
 }
 
@@ -113,15 +113,10 @@ if (OperatingSystem.current().isWindows()) {
     }
 
     bootRun {
-        addResources = false
         dependsOn pathingJar
         doFirst {
             classpath = files("$buildDir/classes/java/main", "$buildDir/resources/main", pathingJar.archivePath)
         }
-    }
-} else {
-    bootRun {
-        addResources = false
     }
 }
 
@@ -161,9 +156,6 @@ task cucumberTestReport(type: TestReport) {
 <%_ } _%>
 
 <%_ if (!skipClient) { _%>
-    <%_ if (clientFramework === 'angular1') { _%>
-apply from: 'gradle/yeoman.gradle'
-    <%_ } _%>
 <%_ } _%>
 apply from: 'gradle/docker.gradle'
 apply from: 'gradle/sonar.gradle'
@@ -211,9 +203,15 @@ repositories {
     // more information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc
     maven { url "https://maven.oracle.com" }
     <%_ } _%>
+    // TODO To remove after final Spring Boot 2 release
+    maven { url "https://repo.spring.io/milestone" }
+    maven { url "https://repo.spring.io/snapshot" }
+    maven { url "https://dl.bintray.com/jhipster/maven" }
 }
 
 dependencies {
+    // TODO To remove after final Spring Boot 2 release
+    compile "javax.xml.bind:jaxb-api"
     <%_ if (cacheProvider !== 'no') { _%>
     compile "org.springframework.boot:spring-boot-starter-cache"
     <%_ } _%>
@@ -284,15 +282,16 @@ dependencies {
     <%_ if (databaseType === 'sql') { _%>
     compile "org.hibernate:hibernate-entitymanager"
     compile "org.hibernate:hibernate-envers"
-    compile "org.hibernate:hibernate-validator"
+    compile "org.hibernate.validator:hibernate-validator"
     compile "org.liquibase:liquibase-core"
     compile "com.mattbertolini:liquibase-slf4j"
     <%_ } _%>
-    compile "org.springframework.boot:spring-boot-actuator"
-    compile "org.springframework.boot:spring-boot-autoconfigure"
     compile "org.springframework.boot:spring-boot-loader-tools"
     compile "org.springframework.boot:spring-boot-starter-mail"
     compile "org.springframework.boot:spring-boot-starter-logging"
+    compile ("org.springframework.boot:spring-boot-starter-actuator") {
+        exclude module: 'micrometer-core'
+    }
     compile "org.springframework.boot:spring-boot-starter-aop"
     <%_ if (databaseType === 'sql') { _%>
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
@@ -323,23 +322,23 @@ dependencies {
     compile "org.zalando:problem-spring-web"
     <%_ if (databaseType === 'cassandra') { _%>
     compile "com.google.guava:guava:18.0"
+    compile "com.datastax.cassandra:cassandra-driver-core"
     compile "com.datastax.cassandra:cassandra-driver-extras"
     compile "com.datastax.cassandra:cassandra-driver-mapping"
     <%_ } _%>
     <%_ if (applicationType === 'gateway') { _%>
-    compile "org.springframework.cloud:spring-cloud-starter-zuul"
+    compile "org.springframework.cloud:spring-cloud-starter-netflix-zuul"
     compile "com.github.vladimir-bukhtoyarov:bucket4j-core"
     compile "com.github.vladimir-bukhtoyarov:bucket4j-jcache"
     <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
     compile "org.springframework.cloud:spring-cloud-starter"
-    compile "org.springframework.cloud:spring-cloud-starter-ribbon"
-    compile "org.springframework.cloud:spring-cloud-starter-hystrix"
-    compile "org.springframework.cloud:spring-cloud-starter-spectator"
+    compile "org.springframework.cloud:spring-cloud-starter-netflix-ribbon"
+    compile "org.springframework.cloud:spring-cloud-starter-netflix-hystrix"
     compile "org.springframework.retry:spring-retry"
     <%_ } _%>
     <%_ if (serviceDiscoveryType === 'eureka') { _%>
-    compile "org.springframework.cloud:spring-cloud-starter-eureka"
+    compile "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
     compile "org.springframework.cloud:spring-cloud-starter-config"
     <%_ } _%>
     <%_ if (serviceDiscoveryType === 'consul') { _%>
@@ -350,10 +349,9 @@ dependencies {
     compile "org.springframework.cloud:spring-cloud-security"
     <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
-    compile "org.springframework.cloud:spring-cloud-starter-feign"
+    compile "org.springframework.cloud:spring-cloud-starter-openfeign"
     <%_ } _%>
     compile "org.springframework.cloud:spring-cloud-spring-service-connector"
-    compile "org.springframework:spring-context-support"
     compile "org.springframework.security:spring-security-config"
     compile "org.springframework.security:spring-security-data"
     compile "org.springframework.security:spring-security-web"
@@ -362,6 +360,7 @@ dependencies {
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
     compile "org.springframework.security.oauth:spring-security-oauth2"
+    compile "org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure"
         <%_ if (applicationType === 'gateway' || applicationType === 'microservice') { _%>
     compile "org.springframework.security:spring-security-jwt"
         <%_ } _%>
@@ -456,7 +455,7 @@ task wrapper(type: Wrapper) {
     gradleVersion = '4.4'
 }
 
-task stage(dependsOn: 'bootRepackage') {
+task stage(dependsOn: 'bootWar') {
 }
 <%_ if (!skipClient) { _%>
 

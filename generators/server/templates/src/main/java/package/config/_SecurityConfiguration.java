@@ -40,16 +40,14 @@ import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.http.HttpMethod;
 <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 <%_ } _%>
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
-<%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-<%_ } _%>
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;<% if (authenticationType === 'jwt') { %>
 import org.springframework.security.config.http.SessionCreationPolicy;<% } %>
 <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
@@ -72,18 +70,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 <%_ } _%>
 import org.springframework.web.filter.CorsFilter;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
-<%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
 
-import javax.annotation.PostConstruct;
-<% } %>
 @Configuration
-@Import(SecurityProblemSupport.class)
 <%_ if (authenticationType === 'oauth2') { _%>
 @EnableOAuth2Sso
 <%_ } else { _%>
 @EnableWebSecurity
 <%_ } _%>
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+@Import(SecurityProblemSupport.class)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
 
@@ -125,12 +119,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
     <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
 
-    @PostConstruct
-    public void init() {
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManager() {
         try {
-            authenticationManagerBuilder
+            return authenticationManagerBuilder
                 .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
+                .passwordEncoder(passwordEncoder())
+                .and()
+                .build();
         } catch (Exception e) {
             throw new BeanInitializationException("Security configuration failed", e);
         }
@@ -166,9 +163,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         web.ignoring()
             .antMatchers(HttpMethod.OPTIONS, "/**")
             .antMatchers("/app/**/*.{js,html}")
-            <%_ if (clientFramework === 'angular1') { _%>
-            .antMatchers("/bower_components/**")
-            <%_ } _%>
             .antMatchers("/i18n/**")
             .antMatchers("/content/**")
             .antMatchers("/swagger-ui/index.html")
@@ -250,5 +244,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private JWTConfigurer securityConfigurerAdapter() {
         return new JWTConfigurer(tokenProvider);
     }<% } %>
-
 }

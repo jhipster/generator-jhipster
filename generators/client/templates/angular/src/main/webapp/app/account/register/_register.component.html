@@ -52,7 +52,7 @@
                 <div class="form-group">
                     <label class="form-control-label" for="login" jhiTranslate="global.form.username">Username</label>
                     <input type="text" class="form-control" [(ngModel)]="registerAccount.login" id="login" name="login" #login="ngModel" placeholder="{{'global.form.username.placeholder' | translate}}"
-                            required minlength="1" maxlength="50" pattern="^[_'.@A-Za-z0-9-]*$">
+                            required minlength="1" maxlength="50" pattern="^[_.@A-Za-z0-9-]*$">
                     <div *ngIf="login.dirty && login.invalid">
                         <small class="form-text text-danger" *ngIf="login.errors.required" jhiTranslate="register.messages.validate.login.required">
                             Your username is required.
@@ -74,7 +74,7 @@
                 <div class="form-group">
                     <label class="form-control-label" for="email" jhiTranslate="global.form.email">Email</label>
                     <input type="email" class="form-control" id="email" name="email" #email="ngModel" placeholder="{{'global.form.email.placeholder' | translate}}"
-                            [(ngModel)]="registerAccount.email" minlength=5 maxlength=100 email required>
+                            [(ngModel)]="registerAccount.email" minlength=5 maxlength=254 email required>
                     <div *ngIf="email.dirty && email.invalid">
                         <small class="form-text text-danger" *ngIf="email.errors.required"
                                 jhiTranslate="global.messages.validate.email.required">

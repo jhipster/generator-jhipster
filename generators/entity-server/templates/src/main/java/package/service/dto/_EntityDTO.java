@@ -18,20 +18,37 @@
 -%>
 package <%=packageName%>.service.dto;
 
-<% if (fieldsContainInstant === true) { %>
-import java.time.Instant;<% } %><% if (fieldsContainLocalDate === true) { %>
-import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime === true) { %>
-import java.time.ZonedDateTime;<% } %><% if (validation) { %>
-import javax.validation.constraints.*;<% } %>
-import java.io.Serializable;<% if (fieldsContainBigDecimal === true) { %>
-import java.math.BigDecimal;<% } %><% if (fieldsContainBlob && databaseType === 'cassandra') { %>
-import java.nio.ByteBuffer;<% } %><% if (relationships.length > 0) { %>
+<%_ if (fieldsContainInstant) { _%>
+import java.time.Instant;
+<%_ } _%>
+<%_ if (fieldsContainLocalDate) { _%>
+import java.time.LocalDate;
+<%_ } _%>
+<%_ if (fieldsContainZonedDateTime) { _%>
+import java.time.ZonedDateTime;
+<%_ } _%>
+<%_ if (validation) { _%>
+import javax.validation.constraints.*;
+<%_ } _%>
+import java.io.Serializable;
+<%_ if (fieldsContainBigDecimal) { _%>
+import java.math.BigDecimal;
+<%_ } _%>
+<%_ if (fieldsContainBlob && databaseType === 'cassandra') { _%>
+import java.nio.ByteBuffer;
+<%_ } _%>
+<%_ if (fieldsContainOwnerManyToMany) { _%>
 import java.util.HashSet;
-import java.util.Set;<% } %>
-import java.util.Objects;<% if (databaseType === 'cassandra') { %>
-import java.util.UUID;<% } %><% if (fieldsContainBlob && databaseType === 'sql') { %>
-import javax.persistence.Lob;<% } %>
-<%_ for (idx in fields) { if (fields[idx].fieldIsEnum === true) { _%>
+import java.util.Set;
+<%_ } _%>
+import java.util.Objects;
+<%_ if (databaseType === 'cassandra') { _%>
+import java.util.UUID;
+<%_ } _%>
+<%_ if (fieldsContainBlob && databaseType === 'sql') { _%>
+import javax.persistence.Lob;
+<%_ } _%>
+<%_ for (idx in fields) { if (fields[idx].fieldIsEnum) { _%>
 import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;
 <%_ } } _%>
 
@@ -90,7 +107,7 @@ public class <%= entityClass %>DTO implements Serializable {
     <%_ } else if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
 
     private Long <%= relationshipFieldName %>Id;
-    <%_ if (otherEntityFieldCapitalized !='Id' && otherEntityFieldCapitalized !== '') { _%>
+    <%_ if (otherEntityFieldCapitalized !== 'Id' && otherEntityFieldCapitalized !== '') { _%>
 
     private String <%= relationshipFieldName %><%= otherEntityFieldCapitalized %>;
     <%_ } } } _%>
@@ -174,7 +191,7 @@ public class <%= entityClass %>DTO implements Serializable {
         this.<%= relationshipFieldName %>Id = <%= otherEntityName %>Id;
     }
     <%_ } _%>
-    <%_ if (otherEntityFieldCapitalized !='Id' && otherEntityFieldCapitalized !== '') { _%>
+    <%_ if (otherEntityFieldCapitalized !== 'Id' && otherEntityFieldCapitalized !== '') { _%>
 
     public String get<%= relationshipNameCapitalized %><%= otherEntityFieldCapitalized %>() {
         return <%= relationshipFieldName %><%= otherEntityFieldCapitalized %>;

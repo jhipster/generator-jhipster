@@ -70,10 +70,6 @@
         },
         "messages": {
             "info": {
-                <%_ if (clientFramework === 'angular1') { _%>
-                "authenticated": "اگر مایل به ورود هستید؟ <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">ورود</a>.",
-                "register": "حساب کاربری ندارید؟ <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">ثبت حساب کاربری</a>"
-                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "اگر شما می‌خواهید",
                     "link": "ورود",
@@ -83,7 +79,6 @@
                     "noaccount": "آیا هنوز حساب کاربری ندارید؟",
                     "link": "ثبت نام حساب کاربری جدید"
                 }
-                <%_ } _%>
             },
             "error": {
                 "dontmatch": "رمزعبور و تصدیق رمزعبور یکی نیستند!"

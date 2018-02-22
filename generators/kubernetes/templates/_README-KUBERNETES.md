@@ -19,21 +19,23 @@ You can deploy your apps by running:
 
 ```
 <%_ if (kubernetesNamespace !== 'default') { _%>
-$ kubectl apply -f namespace.yml
-<%_ } _%>
-<%_ if (jhipsterConsole) { _%>
-$ kubectl apply -f console
-<%_ } _%>
-<%_ if (prometheusOperator) { _%>
-$ kubectl apply -f prometheus-tpr.yml
-<%_ } _%>
-<%_ if (gatewayNb >= 1 || microserviceNb >= 1) { _%>
-$ kubectl apply -f registry
-<%_ } _%>
-
-<%_ for (let i = 0; i < appsFolders.length; i++) { _%>
-$ kubectl apply -f <%= appConfigs[i].baseName.toLowerCase() %>
-<%_ } _%>
+kubectl apply -f <%-directoryPath%>k8s/namespace.yml
+<%_ } _%> <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
+kubectl apply -f <%-directoryPath%>k8s/registry/
+<%_ } _%> <%_ if (monitoring === 'elk') { _%>
+kubectl apply -f <%-directoryPath%>k8s/console/
+<%_ } _%> <%_ if (monitoring === 'prometheus') { _%>
+kubectl apply -f <%-directoryPath%>k8s/monitoring/jhipster-prometheus-crd.yml
+until [ $(kubectl get crd prometheuses.monitoring.coreos.com | wc -l) -ge 2 ]; do
+    echo "Waiting for the custom resource prometheus operator to get initialised";
+    sleep 5;
+done
+kubectl apply -f <%-directoryPath%>k8s/monitoring/jhipster-prometheus-cr.yml
+kubectl apply -f <%-directoryPath%>k8s/monitoring/jhipster-grafana.yml
+kubectl apply -f <%-directoryPath%>k8s/monitoring/jhipster-grafana-dashboard.yml
+<%_ } _%> <%_ appConfigs.forEach((appConfig, index) =>  { _%>
+kubectl apply -f <%-directoryPath%>k8s/<%- appConfig.baseName.toLowerCase() %>/
+<%_ }) _%>
 ```
 
 ## Exploring your services
@@ -68,11 +70,11 @@ $ kubectl set image deployment/<app-name>-app <app-name>=<new-image> <%= kuberne
 ```
 
 Using livenessProbes and readinessProbe allows you to tell kubernetes about the state of your apps, in order to ensure availablity of your services. You will need minimum 2 replicas for every app deployment, you want to have zero-downtime deployed. This is because the rolling upgrade strategy first kills a running replica in order to place a new. Running only one replica, will cause a short downtime during upgrades.
-<%_ if (jhipsterConsole || prometheusOperator) { _%>
+<%_ if (monitoring === 'elk' || monitoring === 'prometheus') { _%>
 
 ## Monitoring tools
 
-<%_ if (jhipsterConsole) { _%>
+<%_ if (monitoring === 'elk') { _%>
 ### JHipster console
 
 Your application logs can be found in JHipster console (powered by Kibana). You can find its service details by
@@ -80,25 +82,33 @@ Your application logs can be found in JHipster console (powered by Kibana). You 
 $ kubectl get svc jhipster-console<%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
-Point your browser to an IP of any of your nodes and use the node port described in the output.
+* If you have chosen *Ingress*, then you should be able to access Kibana using the given ingress domain. 
+* If you have chosen *NodePort*, then point your browser to an IP of any of your nodes and use the node port described in the output.
+* If you have chosen *LoadBalancer*, then use the IaaS provided LB IP
 <%_ } _%>
-<%_ if (prometheusOperator) { _%>
+<%_ if (monitoring === 'prometheus') { _%>
 
 ### Prometheus metrics
 
-If not already done, install the [Prometheus operator by CoreOS](https://github.com/coreos/prometheus-operator). You can quickly deploy the operator using 
+Generator is also packaged with [Prometheus operator by CoreOS](https://github.com/coreos/prometheus-operator). 
 
 **hint**: use must build your apps with `prometheus` profile active!
 
-```
-$ kubectl create -f https://raw.githubusercontent.com/coreos/prometheus-operator/master/bundle.yaml
-```
-
-The prometheus instance for your apps can be explored using
+Application metrics can be explored in Prometheus through,
 
 ```
-$ kubectl get svc prometheus-<%= kubernetesNamespace %><%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
+$ kubectl get svc jhipster-prometheus<%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
 ```
+
+Also the visualisation can be explored in Grafana which is pre-configured with a dashboard view. You can find the service details by
+```
+$ kubectl get svc jhipster-grafana<%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
+```
+
+* If you have chosen *Ingress*, then you should be able to access Grafana using the given ingress domain. 
+* If you have chosen *NodePort*, then point your browser to an IP of any of your nodes and use the node port described in the output.
+* If you have chosen *LoadBalancer*, then use the IaaS provided LB IP
+
 <%_ } _%>
 <%_ } _%>
 
@@ -139,7 +149,7 @@ This can occur, if your cluster has low resource (e.g. Minikube). Increase the `
 
 The default setting are optimized for middle scale clusters. You are free to increase the JAVA_OPTS environment variable, and resource requests and limits to improve the performance. Be careful!
 
-<%_ if (prometheusOperator) { _%>
+<%_ if (monitoring === 'prometheus') { _%>
 > I have selected prometheus but no targets are visible
 
 This depends on the setup of prometheus operator and the access control policies in your cluster. Version 1.6.0+ is needed for the RBAC setup to work.
@@ -151,4 +161,4 @@ This means your apps are probably not built using the `prometheus` profile in Ma
 
 > my SQL based microservice stuck during liquibase initialization when running multiple replicas
 
-Somethimes the database changelog lock gets corrupted. You will need to connect to the database using `kubectl exec -it` and remove all lines of liquibases `databasechangeloglock` table.
+Sometimes the database changelog lock gets corrupted. You will need to connect to the database using `kubectl exec -it` and remove all lines of liquibases `databasechangeloglock` table.

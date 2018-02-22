@@ -222,7 +222,7 @@ public class AccountResource {
     public void activateAccount(@RequestParam(value = "key") String key) {
         Optional<User> user = userService.activateRegistration(key);
         if (!user.isPresent()) {
-            throw new InternalServerErrorException("No user was found for this reset key");
+            throw new InternalServerErrorException("No user was found for this activation key");
         }
     }
 
@@ -332,7 +332,7 @@ public class AccountResource {
             .ifPresent(u ->
                 persistentTokenRepository.findByUser(u).stream()
                     .filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries))<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
-                    .findAny().ifPresent(t -> persistentTokenRepository.delete(decodedSeries)));<% } else if (databaseType === 'couchbase'){ %>
+                    .findAny().ifPresent(t -> persistentTokenRepository.deleteById(decodedSeries)));<% } else if (databaseType === 'couchbase'){ %>
                 .findAny().ifPresent(t -> persistentTokenRepository.deleteBySeries(decodedSeries)));<% } else { %>
                     .findAny().ifPresent(persistentTokenRepository::delete)
             );<% } %>

@@ -40,11 +40,7 @@ module.exports = class extends BaseGenerator {
     end() {
         if (useBlueprint) return;
         if (!this.options['skip-install'] && !this.skipClient) {
-            if (this.clientFramework === 'angular1') {
-                this.injectJsFilesToIndex();
-            } else {
-                this.rebuildClient();
-            }
+            this.rebuildClient();
         }
         this.log(chalk.bold.green('Entity generation completed'));
     }

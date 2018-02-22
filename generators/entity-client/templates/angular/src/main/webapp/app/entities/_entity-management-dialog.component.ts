@@ -31,12 +31,11 @@ _%>
 import { Component, OnInit, OnDestroy<% if (fieldsContainImageBlob) { %>, ElementRef<% } %> } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-
 import { Observable } from 'rxjs/Observable';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager<% if (queries && queries.length > 0) { %>, JhiAlertService<% } %><% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
 
-import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
+import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { <%= entityAngularName %>PopupService } from './<%= entityFileName %>-popup.service';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 <%_
@@ -52,9 +51,14 @@ Object.keys(differentRelationships).forEach(key => {
     if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
         const uniqueRel = differentRelationships[key][0];
         if (uniqueRel.otherEntityAngularName !== entityAngularName) {
+            if(uniqueRel.otherEntityAngularName === 'User') {
 _%>
-import { <%= uniqueRel.otherEntityAngularName %>, <%= uniqueRel.otherEntityAngularName%>Service } from '../<%= uniqueRel.otherEntityModulePath %>';
-<%_     }
+import { I<%= uniqueRel.otherEntityAngularName %>, <%= uniqueRel.otherEntityAngularName%>Service } from 'app/core';
+<%_         } else { _%>
+import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/<%= uniqueRel.otherEntityModelName %>.model';
+import { <%= uniqueRel.otherEntityAngularName%>Service } from '../<%= uniqueRel.otherEntityModulePath %>';
+<%_         }
+        }
     }
 }); _%>
 
@@ -64,7 +68,7 @@ import { <%= uniqueRel.otherEntityAngularName %>, <%= uniqueRel.otherEntityAngul
 })
 export class <%= entityAngularName %>DialogComponent implements OnInit {
 
-    <%= entityInstance %>: <%= entityAngularName %>;
+    <%= entityInstance %>: I<%= entityAngularName %>;
     isSaving: boolean;
     <%_
     for (const idx in variables) { %>
@@ -145,12 +149,12 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         }
     }
 
-    private subscribeToSaveResponse(result: Observable<HttpResponse<<%= entityAngularName %>>>) {
-        result.subscribe((res: HttpResponse<<%= entityAngularName %>>) =>
+    private subscribeToSaveResponse(result: Observable<HttpResponse<I<%= entityAngularName %>>>) {
+        result.subscribe((res: HttpResponse<I<%= entityAngularName %>>) =>
             this.onSaveSuccess(res.body), (res: HttpErrorResponse) => this.onSaveError());
     }
 
-    private onSaveSuccess(result: <%= entityAngularName %>) {
+    private onSaveSuccess(result: I<%= entityAngularName %>) {
         this.eventManager.broadcast({ name: '<%= entityInstance %>ListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
@@ -172,7 +176,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         if(relationships[idx].relationshipType !== 'one-to-many' && !entitiesSeen.includes(otherEntityNameCapitalized)) {
     _%>
 
-    track<%- otherEntityNameCapitalized -%>ById(index: number, item: <%- relationships[idx].otherEntityAngularName -%>) {
+    track<%= otherEntityNameCapitalized %>ById(index: number, item: I<%= relationships[idx].otherEntityAngularName %>) {
         return item.id;
     }
     <%_ entitiesSeen.push(otherEntityNameCapitalized); } } _%>

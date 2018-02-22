@@ -94,16 +94,16 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
 
     String USERS_BY_EMAIL_CACHE = "usersByEmail";
     <%_ } _%>
-<%_ if (authenticationType !== 'oauth2') { _%>
+    <%_ if (authenticationType !== 'oauth2') { _%>
 
     Optional<User> findOneByActivationKey(String activationKey);
-<%_ } _%>
+    <%_ } _%>
 
     List<User> findAllByActivatedIsFalseAndCreatedDateBefore(Instant dateTime);
-<%_ if (authenticationType !== 'oauth2') { _%>
+    <%_ if (authenticationType !== 'oauth2') { _%>
 
     Optional<User> findOneByResetKey(String resetKey);
-<%_ } _%>
+    <%_ } _%>
 
     <%_ if (databaseType === 'couchbase' || databaseType === 'mongodb') { _%>
         <%_ if (cacheManagerIsAvailable === true) { _%>
@@ -117,7 +117,7 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
         <%_ } _%>
     default Optional<User> findOneByLogin(String login) {
-        return Optional.ofNullable(findOne(User.PREFIX + ID_DELIMITER + login));
+        return findById(User.PREFIX + ID_DELIMITER + login);
     }
     <%_ } else if (databaseType === 'mongodb') { _%>
         <%_ if (cacheManagerIsAvailable === true) { _%>
@@ -143,7 +143,7 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
     <%_ } _%>
     Optional<User> findOneWithAuthoritiesByEmail(String email);
-<%_ } _%>
+    <%_ } _%>
 
     Page<User> findAllByLoginNot(Pageable pageable, String login);
 }
@@ -265,8 +265,8 @@ public class UserRepository {
         truncateByEmailStmt = session.prepare("TRUNCATE user_by_email");
     }
 
-    public User findOne(String id) {
-        return mapper.get(id);
+    public Optional<User> findById(String id) {
+        return Optional.ofNullable(mapper.get(id));
     }
 
     public Optional<User> findOneByActivationKey(String activationKey) {
@@ -281,18 +281,18 @@ public class UserRepository {
         return findOneFromIndex(stmt);
     }
 
-<%_ if (cacheManagerIsAvailable === true) { _%>
+    <%_ if (cacheManagerIsAvailable === true) { _%>
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
-<%_ } _%>
+    <%_ } _%>
     public Optional<User> findOneByEmailIgnoreCase(String email) {
         BoundStatement stmt = findOneByEmailStmt.bind();
         stmt.setString("email", email.toLowerCase());
         return findOneFromIndex(stmt);
     }
 
-<%_ if (cacheManagerIsAvailable === true) { _%>
+    <%_ if (cacheManagerIsAvailable === true) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
-<%_ } _%>
+    <%_ } _%>
     public Optional<User> findOneByLogin(String login) {
         BoundStatement stmt = findOneByLoginStmt.bind();
         stmt.setString("login", login);

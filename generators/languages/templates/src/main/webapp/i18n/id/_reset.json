@@ -36,11 +36,7 @@
             },
             "messages": {
                 "info": "Pilih password baru",
-                <%_ if (clientFramework === 'angular1') { _%>
-                "success": "<strong>Password anda sudah direset.</strong> Silakan <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">login</a>.",
-                <%_ } else { _%>
                 "success": "<strong>Password anda sudah direset.</strong> Silakan ",
-                <%_ } _%>
                 "keymissing": "reset key hilang.",
                 "error": "PAssword anda tidak bisa direset. Permintaan mengingat password hanya berlaku dalam 24 jam."
             }

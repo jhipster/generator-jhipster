@@ -27,19 +27,14 @@ package <%=packageName%>.service;
     const entityListToDto = mapper + '.' + 'toDto';
     const entityToDtoReference = mapper + '::'+ 'toDto';
     const repository = entityInstance  + 'Repository';
-    const criteria = entityClass + 'Criteria';
-
-    if (fieldsContainLocalDate === true) { _%>
-import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime === true) { %>
-import java.time.ZonedDateTime;<% } if (fieldsContainBigDecimal === true) { %>
-import java.math.BigDecimal;<% } %>
+    const criteria = entityClass + 'Criteria'; _%>
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specifications;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,13 +48,10 @@ import <%=packageName%>.service.dto.<%= entityClass %>Criteria;
 <% if (dto === 'mapstruct') { %>
 import <%=packageName%>.service.dto.<%= entityClass %>DTO;
 import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;<% } %>
-<%_ for (idx in fields) { if (fields[idx].fieldIsEnum === true) { _%>
-import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;
-<%_ } } _%>
 
 /**
  * Service for executing complex queries for <%= entityClass %> entities in the database.
- * The main input is a {@link <%= entityClass %>Criteria} which get's converted to {@link Specifications},
+ * The main input is a {@link <%= entityClass %>Criteria} which gets converted to {@link Specification},
  * in a way that all the filters must apply.
  * It returns a {@link List} of {@link <%= instanceType %>} or a {@link Page} of {@link <%= instanceType %>} which fulfills the criteria.
  */
@@ -68,7 +60,6 @@ import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;
 public class <%= serviceClassName %> extends QueryService<<%= entityClass %>> {
 
     private final Logger log = LoggerFactory.getLogger(<%= serviceClassName %>.class);
-
 <%- include('../common/inject_template', {viaService: false, constructorName: serviceClassName, queryService: false}); -%>
 
     /**
@@ -79,7 +70,7 @@ public class <%= serviceClassName %> extends QueryService<<%= entityClass %>> {
     @Transactional(readOnly = true)
     public List<<%= instanceType %>> findByCriteria(<%= criteria %> criteria) {
         log.debug("find by criteria : {}", criteria);
-        final Specifications<<%= entityClass %>> specification = createSpecification(criteria);
+        final Specification<<%= entityClass %>> specification = createSpecification(criteria);
     <%_ if (dto === 'mapstruct') { _%>
         return <%= entityListToDto %>(<%= repository %>.findAll(specification));
     <%_ } else { _%>
@@ -96,20 +87,20 @@ public class <%= serviceClassName %> extends QueryService<<%= entityClass %>> {
     @Transactional(readOnly = true)
     public Page<<%= instanceType %>> findByCriteria(<%= criteria %> criteria, Pageable page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
-        final Specifications<<%= entityClass %>> specification = createSpecification(criteria);
+        final Specification<<%= entityClass %>> specification = createSpecification(criteria);
     <%_ if (dto === 'mapstruct') { _%>
-        final Page<<%= entityClass %>> result = <%= repository %>.findAll(specification, page);
-        return result.map(<%= entityToDtoReference %>);
+        return <%= repository %>.findAll(specification, page)
+            .map(<%= entityToDtoReference %>);
     <%_ } else { _%>
         return <%= repository %>.findAll(specification, page);
     <%_ } _%>
     }
 
     /**
-     * Function to convert <%= criteria %> to a {@link Specifications}
+     * Function to convert <%= criteria %> to a {@link Specification}
      */
-    private Specifications<<%= entityClass %>> createSpecification(<%= criteria %> criteria) {
-        Specifications<<%= entityClass %>> specification = Specifications.where(null);
+    private Specification<<%= entityClass %>> createSpecification(<%= criteria %> criteria) {
+        Specification<<%= entityClass %>> specification = Specification.where(null);
         if (criteria != null) {
             if (criteria.getId() != null) {
                 specification = specification.and(buildSpecification(criteria.getId(), <%= entityClass %>_.id));

@@ -18,7 +18,7 @@
 -%>
 import { Component, OnInit } from '@angular/core';
 
-import { Principal } from '../../shared';
+import { Principal } from 'app/core';
 import { PasswordService } from './password.service';
 
 @Component({

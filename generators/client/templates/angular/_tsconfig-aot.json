@@ -32,10 +32,16 @@
         "lib": ["es7", "dom"],
         "typeRoots": [
             "node_modules/@types"
-        ]
+        ],
+        "baseUrl": "./",
+        "paths": {
+            "app/*": ["src/main/webapp/app/*"]
+        },
+        "importHelpers": true
     },
     "angularCompilerOptions": {
         "genDir": "<%= BUILD_DIR %>aot",
-        "skipMetadataEmit" : true
+        "skipMetadataEmit" : true,
+        "fullTemplateTypeCheck": true
     }
 }

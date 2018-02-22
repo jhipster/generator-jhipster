@@ -35,7 +35,6 @@ module.exports = (config) => {
             'spec/entry.ts'
         ],
 
-
         // list of files to exclude
         exclude: [<% if (protractorTests) { %>'e2e/**'<% } %>],
 
@@ -60,7 +59,6 @@ module.exports = (config) => {
             reportEachFailure: true, // Default: false, will notify on every failed sepc
             reportSuccess: true // Default: true, will notify when a suite was successful
         },
-
 
         remapIstanbulReporter: {
             reports: { // eslint-disable-line

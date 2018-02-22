@@ -73,7 +73,11 @@ public class <%= entityClass %>Resource {
 
     private final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
 
-    private static final String ENTITY_NAME = "<%= entityInstance %>";
+    <%_ let entityName = entityInstance;
+    if (applicationType === 'microservice') {
+        entityName = `${baseName}${entityInstance}`;
+    } _%>
+    private static final String ENTITY_NAME = "<%= entityName %>";
     <%_
     const instanceType = (dto === 'mapstruct') ? entityClass + 'DTO' : entityClass;
     const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
@@ -122,7 +126,8 @@ public class <%= entityClass %>Resource {
     /**
      * GET  /<%= entityApiUrl %> : get all the <%= entityInstancePlural %>.
      *<% if (pagination !== 'no') { %>
-     * @param pageable the pagination information<% } if (jpaMetamodelFiltering) { %>
+     * @param pageable the pagination information<% } if (!jpaMetamodelFiltering && fieldsContainOwnerManyToMany) { %>
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many)<% } if (jpaMetamodelFiltering) { %>
      * @param criteria the criterias which the requested entities should match<% } else if (fieldsContainNoOwnerOneToOne) { %>
      * @param filter the filter of the request<% } %>
      * @return the ResponseEntity with status 200 (OK) and the list of <%= entityInstancePlural %> in body
@@ -140,7 +145,7 @@ public class <%= entityClass %>Resource {
     @Timed
     public ResponseEntity<<%= instanceType %>> get<%= entityClass %>(@PathVariable <%= pkType %> id) {
         log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {viaService: viaService, returnDirectly:false}); -%>
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(<%= instanceName %>));
+        return ResponseUtil.wrapOrNotFound(<%= instanceName %>);
     }
 
     /**

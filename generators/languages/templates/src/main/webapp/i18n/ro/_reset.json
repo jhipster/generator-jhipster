@@ -36,11 +36,7 @@
             },
             "messages": {
                 "info": "Alegeți o nouă parolă",
-                <%_ if (clientFramework === 'angular1') { _%>
-                "success": "<strong>Parola dumneavoastră a fost resetată</strong>. Vă rugăm să vă <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">autentificați</a>.",
-                <%_ } else { _%>
                 "success": "<strong>Parola dumneavoastra a fost resetată</strong>. Vă rugăm să vă autentificați.",
-                <%_ } _%>
                 "keymissing": "Cheia de resetare lipsește.",
                 "error": "Parola dumneavoastră nu a fost resetată. Vă reamintim că o cerere de resetare este valabilă doar 24 de ore."
             }

@@ -55,7 +55,7 @@ public class AbstractCassandraTest {
     private static boolean started = false;
 
     @BeforeClass
-    public static void startServer() throws InterruptedException, TTransportException, ConfigurationException, IOException, URISyntaxException  {
+    public static void startServer() throws TTransportException, ConfigurationException, IOException, URISyntaxException  {
         if (! started) {
             EmbeddedCassandraServerHelper.startEmbeddedCassandra(CASSANDRA_UNIT_RANDOM_PORT_YAML, CASSANDRA_TIMEOUT);
             Cluster cluster = new Cluster.Builder().addContactPoints("127.0.0.1").withPort(getNativeTransportPort()).build();

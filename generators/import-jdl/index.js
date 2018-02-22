@@ -39,6 +39,13 @@ module.exports = class extends BaseGenerator {
             type: Boolean,
             defaults: false
         });
+
+        // This adds support for a `--skip-ui-grouping` flag
+        this.option('skip-ui-grouping', {
+            desc: 'Disables the UI grouping behaviour for entity client side code',
+            type: Boolean,
+            defaults: false
+        });
     }
 
     get initializing() {
@@ -62,7 +69,7 @@ module.exports = class extends BaseGenerator {
                 this.skipClient = this.config.get('skipClient');
                 this.clientFramework = this.config.get('clientFramework');
                 if (!this.clientFramework) {
-                    this.clientFramework = 'angular1';
+                    this.clientFramework = 'angularX';
                 }
                 this.clientPackageManager = this.config.get('clientPackageManager');
                 if (!this.clientPackageManager) {
@@ -86,19 +93,24 @@ module.exports = class extends BaseGenerator {
             parseJDL() {
                 this.log('The jdl is being parsed.');
                 try {
-                    const jdlObject = jhiCore.convertToJDL(
-                        jhiCore.parseFromFiles(this.jdlFiles),
-                        this.prodDatabaseType,
-                        this.applicationType,
-                        this.baseName
-                    );
+                    const jdlObject = jhiCore.convertToJDLFromConfigurationObject({
+                        document: jhiCore.parseFromFiles(this.jdlFiles),
+                        databaseType: this.prodDatabaseType,
+                        applicationType: this.applicationType,
+                        applicationName: this.baseName
+                    });
                     const entities = jhiCore.convertToJHipsterJSON({
                         jdlObject,
                         databaseType: this.prodDatabaseType,
                         applicationType: this.applicationType
                     });
                     this.log('Writing entity JSON files.');
-                    this.changedEntities = jhiCore.exportToJSON(entities, this.options.force);
+                    this.changedEntities = jhiCore.exportEntities({
+                        entities,
+                        forceNoFiltering: this.options.force,
+                        applicationType: this.applicationType,
+                        applicationName: this.baseName
+                    });
                     this.updatedKeys = Object.keys(this.changedEntities);
                     if (this.updatedKeys.length > 0) {
                         this.log(`Updated entities are: ${chalk.yellow(this.updatedKeys)}`);
@@ -133,6 +145,7 @@ module.exports = class extends BaseGenerator {
                                 'skip-server': entity.definition.skipServer,
                                 'no-fluent-methods': entity.definition.noFluentMethod,
                                 'skip-user-management': entity.definition.skipUserManagement,
+                                'skip-ui-grouping': this.options['skip-ui-grouping'],
                                 arguments: [entity.name],
                             });
                         }
@@ -148,11 +161,7 @@ module.exports = class extends BaseGenerator {
     end() {
         if (!this.options['skip-install'] && !this.skipClient && !this.options['json-only']) {
             this.debug('Building client');
-            if (this.clientFramework === 'angular1') {
-                this.injectJsFilesToIndex();
-            } else {
-                this.rebuildClient();
-            }
+            this.rebuildClient();
         }
     }
 };

@@ -195,5 +195,35 @@ describe('JHipster Heroku Sub Generator', () => {
                 assert.fileContent('.yo-rc.json', `"herokuAppName": "${existingHerokuAppName}"`);
             });
         });
+
+        describe('with elasticsearch', () => {
+            beforeEach((done) => {
+                stub.withArgs(`heroku create ${herokuAppName}`).yields(false, '', '');
+                stub.withArgs(`heroku addons:create jawsdb:kitefin --as DATABASE --app ${herokuAppName}`).yields(false, '', '');
+                stub.withArgs(`heroku addons:create searchbox:starter --as SEARCHBOX --app ${herokuAppName}`).yields(false, '', '');
+
+                helpers
+                    .run(require.resolve('../generators/heroku'))
+                    .inTmpDir((dir) => {
+                        fse.copySync(path.join(__dirname, './templates/default-elasticsearch/'), dir);
+                    })
+                    .withOptions({ skipBuild: true })
+                    .withPrompts({
+                        herokuAppName,
+                        herokuRegion: 'us',
+                        herokuDeployType: 'jar'
+                    })
+                    .on('end', done);
+            });
+            after(() => {
+                stub.restore();
+            });
+            it('creates expected monolith files', () => {
+                assert.file(expectedFiles.monolith);
+                assert.fileContent('.yo-rc.json', '"herokuDeployType": "jar"');
+                assert.fileContent(`${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'datasource:');
+                assert.noFileContent(`${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'mongodb:');
+            });
+        });
     });
 });

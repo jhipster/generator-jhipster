@@ -21,9 +21,9 @@ import { Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { LoginService } from '../../../../../../main/webapp/app/shared/login/login.service';
-import { <%=jhiPrefixCapitalized%>LoginModalComponent } from '../../../../../../main/webapp/app/shared/login/login.component';
-import { StateStorageService } from '../../../../../../main/webapp/app/shared/auth/state-storage.service';
+import { LoginService } from 'app/core/login/login.service';
+import { <%=jhiPrefixCapitalized%>LoginModalComponent } from 'app/shared/login/login.component';
+import { StateStorageService } from 'app/core/auth/state-storage.service';
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { MockLoginService } from '../../../helpers/mock-login.service';
 import { MockStateStorageService } from '../../../helpers/mock-state-storage.service';

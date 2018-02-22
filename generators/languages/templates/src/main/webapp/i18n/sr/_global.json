@@ -68,10 +68,6 @@
         },
         "messages": {
             "info": {
-                <%_ if (clientFramework === 'angular1') { _%>
-                "authenticated": "Ako želite da se <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">prijavite</a>, možete probati sa univerzanlnim korisničkim nalozima:<br/>- Administrator (korisničko ime=\"admin\" i lozinka=\"admin\") <br/>- User (korisničko ime=\"user\" i lozinka=\"user\").",
-                "register": "Još uvek nemate profil? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Registrujte svoj profil</a>"
-                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Ako želite da se ",
                     "link": "prijavite",
@@ -81,7 +77,6 @@
                     "noaccount": "Još uvek nemate profil?",
                     "link": "Registrujte svoj profil"
                 }
-                <%_ } _%>
             },
             "error": {
                 "dontmatch": "Lozinke se ne poklapaju!"

@@ -20,11 +20,7 @@
     "activate": {
         "title": "فعال سازی",
         "messages": {
-            <%_ if (clientFramework === 'angular1') { _%>
-            "success": "<strong>حساب کاربری شما فعال شد.</strong> لطفا <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">ثبت نام کنید</a>.",
-            <%_ } else { _%>
             "success": "<strong>حساب کاربری شما فعال شد.</strong> لطفا ",
-            <%_ } _%>
             "error": "<strong>کاربر شما نمی‌تواند فعال شود.</strong> لطفا از فرم ثبت نام برای ثبت نام استفاده کنید."
         }
     }

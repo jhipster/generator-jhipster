@@ -19,7 +19,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { SERVER_API_URL } from '../../app.constants';
+
+import { SERVER_API_URL } from 'app/app.constants';
 
 @Injectable()
 export class <%=jhiPrefixCapitalized%>ConfigurationService {
@@ -30,9 +31,7 @@ export class <%=jhiPrefixCapitalized%>ConfigurationService {
     get(): Observable<any> {
         return this.http.get(SERVER_API_URL + 'management/configprops', { observe: 'response' }).map((res: HttpResponse<any>) => {
             const properties: any[] = [];
-
-            const propertiesObject = res.body;
-
+            const propertiesObject = res.body.contexts.<%= baseName %>.beans;
             for (const key in propertiesObject) {
                 if (propertiesObject.hasOwnProperty(key)) {
                     properties.push(propertiesObject[key]);
@@ -50,7 +49,7 @@ export class <%=jhiPrefixCapitalized%>ConfigurationService {
         return this.http.get(SERVER_API_URL + 'management/env', { observe: 'response' }).map((res: HttpResponse<any>) => {
             const properties: any = {};
 
-            const propertiesObject = res.body;
+            const propertiesObject = res.body.beans;
 
             for (const key in propertiesObject) {
                 if (propertiesObject.hasOwnProperty(key)) {

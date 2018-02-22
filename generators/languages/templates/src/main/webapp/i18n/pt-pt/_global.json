@@ -70,10 +70,6 @@
         },
         "messages": {
             "info": {
-                <%_ if (clientFramework === 'angular1') { _%>
-                "authenticated": "Para <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">entrar</a>, utilize as seguintes contas:<br/>- Administrador (utilizador=\"admin\" e palavra-passe=\"admin\") <br/>- Utilizador (utilizador=\"user\" e palavra-passe=\"user\").",
-                "register": "Ainda não tem uma conta? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Crie uma nova conta</a>"
-                <%_ } else { _%>
                 "authenticated": {
                     "prefix": "Para ",
                     "link": "entrar",
@@ -83,7 +79,6 @@
                     "noaccount": "Ainda não tem uma conta?",
                     "link": "Crie uma nova conta"
                 }
-                <%_ } _%>
             },
             "error": {
                 "dontmatch" : "A palavra-passe e a sua confirmação devem ser iguais!"

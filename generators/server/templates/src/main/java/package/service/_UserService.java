@@ -24,9 +24,6 @@ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || applicatio
 _%>
 package <%=packageName%>.service;
 
-<%_ if (cacheManagerIsAvailable === true) { _%>
-import <%=packageName%>.config.CacheConfiguration;
-<%_ } _%>
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import <%=packageName%>.domain.Authority;<% } %>
 import <%=packageName%>.domain.User;<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
@@ -158,8 +155,7 @@ public class UserService {
                 userSearchRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
-                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
+                this.clearUserCaches(user);
                 <%_ } _%>
                 log.debug("Activated user: {}", user);
                 return user;
@@ -179,8 +175,7 @@ public class UserService {
                 userRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
-                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
+                this.clearUserCaches(user);
                 <%_ } _%>
                 return user;
            });
@@ -196,8 +191,7 @@ public class UserService {
                 userRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
-                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
+                this.clearUserCaches(user);
                 <%_ } _%>
                 return user;
             });
@@ -205,9 +199,7 @@ public class UserService {
 
     public User registerUser(UserDTO userDTO, String password) {
 
-        User newUser = new User();<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
-        Authority authority = authorityRepository.findOne(AuthoritiesConstants.USER);
-        Set<Authority> authorities = new HashSet<>();<% } %><% if (databaseType === 'cassandra') { %>
+        User newUser = new User();<% if (databaseType === 'cassandra') { %>
         newUser.setId(UUID.randomUUID().toString());<% } %><% if (databaseType === 'cassandra' || databaseType === 'couchbase') { %>
         Set<String> authorities = new HashSet<>();<% } %>
         String encryptedPassword = passwordEncoder.encode(password);
@@ -226,7 +218,8 @@ public class UserService {
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
-        authorities.add(authority);
+        Set<Authority> authorities = new HashSet<>();
+        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         <%_ } _%>
         <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
         authorities.add(AuthoritiesConstants.USER);
@@ -235,8 +228,7 @@ public class UserService {
         userRepository.save(newUser);<% if (searchEngine === 'elasticsearch') { %>
         userSearchRepository.save(newUser);<% } %>
         <%_ if (cacheManagerIsAvailable === true) { _%>
-        cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(newUser.getLogin());
-        cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(newUser.getEmail());
+        this.clearUserCaches(newUser);
         <%_ } _%>
         log.debug("Created Information for User: {}", newUser);
         return newUser;
@@ -260,7 +252,9 @@ public class UserService {
         <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
         if (userDTO.getAuthorities() != null) {
             Set<Authority> authorities = userDTO.getAuthorities().stream()
-                .map(authorityRepository::findOne)
+                .map(authorityRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .collect(Collectors.toSet());
             user.setAuthorities(authorities);
         }
@@ -276,8 +270,7 @@ public class UserService {
         userRepository.save(user);<% if (searchEngine === 'elasticsearch') { %>
         userSearchRepository.save(user);<% } %>
         <%_ if (cacheManagerIsAvailable === true) { _%>
-        cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
-        cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
+        this.clearUserCaches(user);
         <%_ } _%>
         log.debug("Created Information for User: {}", user);
         return user;
@@ -313,8 +306,7 @@ public class UserService {
                 userSearchRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
-                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
+                this.clearUserCaches(user);
                 <%_ } _%>
                 log.debug("Changed Information for User: {}", user);
             });
@@ -328,12 +320,17 @@ public class UserService {
      */
     public Optional<UserDTO> updateUser(UserDTO userDTO) {
         return Optional.of(userRepository
-            .findOne(userDTO.getId()))
+            .findById(userDTO.getId()))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
             .map(user -> {
                 <%_ if (databaseType === 'couchbase') { _%>
                 if (!user.getLogin().equals(userDTO.getLogin())) {
-                    userRepository.delete(userDTO.getId());
+                    userRepository.deleteById(userDTO.getId());
                 }
+                <%_ } _%>
+                <%_ if (cacheManagerIsAvailable === true) { _%>
+                this.clearUserCaches(user);
                 <%_ } _%>
                 user.setLogin(userDTO.getLogin());
                 user.setFirstName(userDTO.getFirstName());
@@ -348,7 +345,9 @@ public class UserService {
                 Set<Authority> managedAuthorities = user.getAuthorities();
                 managedAuthorities.clear();
                 userDTO.getAuthorities().stream()
-                    .map(authorityRepository::findOne)
+                    .map(authorityRepository::findById)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
                     .forEach(managedAuthorities::add);
                 <%_ } else { // Cassandra & Couchbase _%>
                 user.setAuthorities(userDTO.getAuthorities());
@@ -360,8 +359,7 @@ public class UserService {
                 userSearchRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
-                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
+                this.clearUserCaches(user);
                 <%_ } _%>
                 log.debug("Changed Information for User: {}", user);
                 return user;
@@ -379,8 +377,7 @@ public class UserService {
             userSearchRepository.delete(user);
             <%_ } _%>
             <%_ if (cacheManagerIsAvailable === true) { _%>
-            cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
-            cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
+            this.clearUserCaches(user);
             <%_ } _%>
             log.debug("Deleted User: {}", user);
         });
@@ -399,8 +396,7 @@ public class UserService {
                 userRepository.save(user);
                 <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
-                cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
-                cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
+                this.clearUserCaches(user);
                 <%_ } _%>
                 log.debug("Changed password for User: {}", user);
             });
@@ -445,7 +441,7 @@ public class UserService {
         <%_ if (databaseType === 'sql') { _%>
         return userRepository.findOneWithAuthoritiesById(id);
         <%_ } else { // MongoDB, Couchbase and and Cassandra _%>
-        return Optional.ofNullable(userRepository.findOne(id));
+        return userRepository.findById(id);
         <%_ } _%>
     }
 
@@ -491,8 +487,7 @@ public class UserService {
             userSearchRepository.delete(user);
             <%_ } _%>
             <%_ if (cacheManagerIsAvailable === true) { _%>
-            cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
-            cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
+            this.clearUserCaches(user);
             <%_ } _%>
         }
     }
@@ -558,8 +553,7 @@ public class UserService {
             log.debug("Saving user '{}' in local database...", user.getLogin());
             userRepository.save(user);
             <%_ if (cacheManagerIsAvailable === true) { _%>
-            cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
-            cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
+            this.clearUserCaches(user);
             <%_ } _%>
         }
         return user;
@@ -637,5 +631,11 @@ public class UserService {
                     })<% } %>.collect(Collectors.toSet());
     }
     <%_ } _%>
+    <%_ if (cacheManagerIsAvailable === true) { _%>
 
+    private void clearUserCaches(User user) {
+        Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
+        Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
+    }
+    <%_ } _%>
 }

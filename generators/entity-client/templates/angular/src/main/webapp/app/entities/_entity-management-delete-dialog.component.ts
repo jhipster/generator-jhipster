@@ -30,7 +30,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
+import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { <%= entityAngularName %>PopupService } from './<%= entityFileName %>-popup.service';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 
@@ -40,7 +40,7 @@ import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service
 })
 export class <%= entityAngularName %>DeleteDialogComponent {
 
-    <%= entityInstance %>: <%= entityAngularName %>;
+    <%= entityInstance %>: I<%= entityAngularName %>;
 
     constructor(
         private <%= entityInstance %>Service: <%= entityAngularName %>Service,

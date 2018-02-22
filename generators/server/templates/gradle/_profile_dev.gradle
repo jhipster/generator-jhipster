@@ -21,9 +21,6 @@ import org.gradle.internal.os.OperatingSystem
 apply plugin: 'org.springframework.boot'
 <%_ if(!skipClient) { _%>
 apply plugin: 'com.moowork.node'
-    <%_ if (clientFramework === 'angular1') { _%>
-apply plugin: 'com.moowork.gulp'
-    <%_ } _%>
 <%_ } _%>
 
 dependencies {
@@ -43,22 +40,12 @@ bootRun {
 }
 
 <%_ if (!skipClient) { _%>
-    <%_ if (clientFramework === 'angular1') { _%>
-task gulpConstantDev(type: GulpTask) {
-    args = ["ngconstant:dev", "--no-notification"]
-}
-    <%_ } else { _%>
 task webpackBuildDev(type: <%= clientPackageManager.charAt(0).toUpperCase() + clientPackageManager.slice(1) %>Task) {
     args = ["run", "webpack:build"]
 }
-    <%_ } _%>
 
 war {
-    <%_ if (clientFramework !== 'angular1') { _%>
-    webAppDirName = '<%= CLIENT_DIST_DIR %>'
-    <%_ } else { _%>
     webAppDirName = '<%= CLIENT_MAIN_SRC_DIR %>'
-    <%_ } _%>
 }
 <%_ } _%>
 
@@ -83,10 +70,6 @@ processResources {
 }
 
 <%_ if (!skipClient) { _%>
-    <%_ if (clientFramework === 'angular1') { _%>
-processResources.dependsOn gulpConstantDev
-    <%_ } else { _%>
 processResources.dependsOn webpackBuildDev
 webpackBuildDev.onlyIf { project.hasProperty('webpack') }
-    <%_ } _%>
 <%_ } _%>

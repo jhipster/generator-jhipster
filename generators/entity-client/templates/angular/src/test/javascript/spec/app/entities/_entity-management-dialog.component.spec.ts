@@ -26,10 +26,11 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { <%= entityAngularName %>DialogComponent } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.component';
-import { <%= entityAngularName %>Service } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
-import { <%= entityAngularName %> } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.model';
+import { <%=angularXAppName%>TestModule } from '../../../<%= entityParentPathAddition %>test.module';
+import { <%= entityAngularName %>DialogComponent } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.component';
+import { <%= entityAngularName %>Service } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
+import { <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
+
 <%_
 let hasRelationshipQuery = false;
 Object.keys(differentRelationships).forEach(key => {
@@ -43,7 +44,9 @@ Object.keys(differentRelationships).forEach(key => {
     if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
         const uniqueRel = differentRelationships[key][0];
         if (uniqueRel.otherEntityAngularName !== entityAngularName) {
-        const modulePath = uniqueRel.otherEntityAngularName === 'User' ? '../../../../../../main/webapp/app/shared' : `../../../../../../main/webapp/app/entities/${uniqueRel.otherEntityModulePath}`
+            const modulePath = uniqueRel.otherEntityAngularName === 'User' ?
+                `app/core`
+                : `app/entities/${uniqueRel.otherEntityClientRootFolder ? `${uniqueRel.otherEntityClientRootFolder}/` : ''}${uniqueRel.otherEntityFileName}`
 _%>
 import { <%= uniqueRel.otherEntityAngularName%>Service } from '<%= modulePath %>';
 <%_     }

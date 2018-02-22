@@ -18,7 +18,7 @@
 -%>
 import { SpyObject } from './spyobject';
 import { JhiLanguageService } from 'ng-jhipster';
-import { JhiLanguageHelper } from './../../../../main/webapp/app/shared/language/language.helper';
+import { JhiLanguageHelper } from 'app/core/language/language.helper';
 import Spy = jasmine.Spy;
 
 export class MockLanguageService extends SpyObject {

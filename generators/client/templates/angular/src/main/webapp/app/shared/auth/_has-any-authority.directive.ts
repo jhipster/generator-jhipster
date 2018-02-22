@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
-import { Principal } from './principal.service';
+import { Principal } from 'app/core/auth/principal.service';
 
 /**
  * @whatItDoes Conditionally includes an HTML element if current user has any
@@ -42,7 +42,7 @@ export class HasAnyAuthorityDirective {
 
     @Input()
     set <%=jhiPrefix%>HasAnyAuthority(value: string|string[]) {
-        this.authorities = typeof value === 'string' ? [ <string> value ] : <string[]> value;
+        this.authorities = typeof value === 'string' ? [ value ] : value;
         this.updateView();
         // Get notified each time authentication state changes.
         this.principal.getAuthenticationState().subscribe((identity) => this.updateView());

@@ -36,11 +36,7 @@
             },
             "messages": {
                 "info": "Válasszon új jelszót",
-                <%_ if (clientFramework === 'angular1') { _%>
-                "success": "<strong>Az Ön jelszava meg lett változtatva.</strong> Kérjük <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">lépjen be vele</a>.",
-                <%_ } else { _%>
                 "success": "<strong>Az Ön jelszava meg lett változtatva.</strong> Kérjük ",
-                <%_ } _%>
                 "keymissing": "A jelszó visszaállító kulcs hiányzik.",
                 "error": "Az Ön jelszavát nem lehetett átállítani. Kérjük vegye figyelembe, hogy a jelszó visszaállító kulcs csak 24 óráig érvényes."
             }

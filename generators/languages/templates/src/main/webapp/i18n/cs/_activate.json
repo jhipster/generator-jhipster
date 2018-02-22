@@ -20,11 +20,7 @@
     "activate": {
         "title": "Aktivace",
         "messages": {
-            <%_ if (clientFramework === 'angular1') { _%>
-            "success": "<strong>Váš uživatelský účet byl aktivován.</strong> <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">Přihlašte sa</a>.",
-            <%_ } else { _%>
             "success": "<strong>Váš uživatelský účet byl aktivován.</strong> ",
-            <%_ } _%>
             "error": "<strong>Váš uživatelský účet nemohl být aktivován.</strong> Prosím použijte registračný formulář pro přihlášení."
         }
     }

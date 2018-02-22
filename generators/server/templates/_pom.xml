@@ -25,10 +25,35 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
     <name><%= humanizedBaseName %></name>
-    <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
 
-    <!-- more information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc -->
+    <!-- TODO Remove snapshot repositories after final Spring Boot 2 release -->
     <repositories>
+        <repository>
+            <id>jhipster-snapshot</id>
+            <name>JHipster Snapshots</name>
+            <url>https://dl.bintray.com/jhipster/maven</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>http://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-snapshot</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
+    <!-- more information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc -->
         <repository>
             <id>maven.oracle.com</id>
             <name>oracle-maven-repo</name>
@@ -39,8 +64,26 @@
                 <updatePolicy>always</updatePolicy>
             </releases>
         </repository>
-    </repositories>
     <%_ } _%>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>http://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>spring-snapshot</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 
     <properties>
         <!-- Build properties -->
@@ -68,10 +111,10 @@
         <profile.swagger />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>0.1.7</jhipster-dependencies.version>
+        <jhipster-dependencies.version>2.0.0-20180222.205536-30</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-        <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
+        <spring-boot.version>2.0.0.BUILD-SNAPSHOT</spring-boot.version>
         <%_ if (databaseType === 'sql') { _%>
         <!-- The hibernate version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
@@ -83,7 +126,7 @@
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <liquibase.version>3.5.3</liquibase.version>
         <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
-        <validation-api.version>1.1.0.Final</validation-api.version>
+        <validation-api.version>2.0.1.Final</validation-api.version>
         <%_ } _%>
         <mapstruct.version>1.2.0.Final</mapstruct.version>
 
@@ -99,9 +142,6 @@
         <%_ if (!skipClient) { _%>
         <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
         <%_ } _%>
-        <%_ if (gatlingTests) { _%>
-        <gatling-maven-plugin.version>2.2.1</gatling-maven-plugin.version>
-        <%_ } _%>
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
         <scala-maven-plugin.version>3.2.2</scala-maven-plugin.version>
         <sonar-maven-plugin.version>3.2</sonar-maven-plugin.version>
@@ -110,11 +150,7 @@
         <%_ } _%>
 
         <!-- Sonar properties -->
-        <%_ if (clientFramework === 'angular1') { _%>
-        <sonar.exclusions><%= CLIENT_MAIN_SRC_DIR %>content/**/*.*, <%= CLIENT_MAIN_SRC_DIR %>bower_components/**/*.*, <%= CLIENT_MAIN_SRC_DIR %>i18n/*.js, <%= CLIENT_DIST_DIR %>**/*.*</sonar.exclusions>
-        <%_ } else { _%>
         <sonar.exclusions><%= CLIENT_MAIN_SRC_DIR %>content/**/*.*, <%= CLIENT_MAIN_SRC_DIR %>i18n/*.js, <%= CLIENT_DIST_DIR %>**/*.*</sonar.exclusions>
-        <%_ } _%>
         <sonar.issue.ignore.multicriteria>S3437,UndocumentedApi,BoldAndItalicTagsCheck</sonar.issue.ignore.multicriteria>
         <!-- Rule https://sonarqube.com/coding_rules#rule_key=Web%3ABoldAndItalicTagsCheck is ignored. Even if we agree that using the "i" tag is an awful practice, this is what is recommended by http://fontawesome.io/examples/ -->
         <sonar.issue.ignore.multicriteria.BoldAndItalicTagsCheck.resourceKey><%= CLIENT_MAIN_SRC_DIR %>app/**/*.*</sonar.issue.ignore.multicriteria.BoldAndItalicTagsCheck.resourceKey>
@@ -129,14 +165,7 @@
         <sonar.jacoco.reportPath>${project.testresult.directory}/coverage/jacoco/jacoco.exec</sonar.jacoco.reportPath>
         <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
         <sonar.javascript.jstestdriver.reportsPath>${project.testresult.directory}/karma</sonar.javascript.jstestdriver.reportsPath>
-        <%_ if (clientFramework === 'angular1') { _%>
-        <!-- For Sonar < 6.2 -->
-        <sonar.javascript.lcov.reportPath>${project.testresult.directory}/coverage/report-lcov/lcov.info</sonar.javascript.lcov.reportPath>
-        <!-- For Sonar >= 6.2 -->
-        <sonar.javascript.lcov.reportPaths>${project.testresult.directory}/coverage/report-lcov/lcov.info</sonar.javascript.lcov.reportPaths>
-        <%_ } else { _%>
         <sonar.typescript.lcov.reportPaths>${project.testresult.directory}/coverage/report-lcov/lcov.info</sonar.typescript.lcov.reportPaths>
-        <%_ } _%>
         <sonar.sources>${project.basedir}/<%= MAIN_DIR %></sonar.sources>
         <sonar.surefire.reportsPath>${project.testresult.directory}/surefire-reports</sonar.surefire.reportsPath>
         <sonar.tests>${project.basedir}/<%= TEST_DIR %></sonar.tests>
@@ -158,6 +187,12 @@
     </dependencyManagement>
 
     <dependencies>
+        <!-- TODO To remove after final Spring Boot 2 release -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+        </dependency>
+
         <%_ if (cacheProvider !== 'no') { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -262,10 +297,12 @@
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-jcache</artifactId>
         </dependency>
+<!--
         <dependency>
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-cloud</artifactId>
         </dependency>
+-->
         <%_ } _%>
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
@@ -323,17 +360,6 @@
             <groupId>com.github.differentway</groupId>
             <artifactId>couchbase-testcontainer</artifactId>
             <scope>test</scope>
-        </dependency>
-        <%_ } _%>
-        <%_ if (gatlingTests) { _%>
-        <dependency>
-            <groupId>io.gatling.highcharts</groupId>
-            <artifactId>gatling-charts-highcharts</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.jcraft</groupId>
-            <artifactId>jzlib</artifactId>
         </dependency>
         <%_ } _%>
         <%_ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || applicationType === 'gateway') { _%>
@@ -407,7 +433,7 @@
             <artifactId>hibernate-envers</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
+            <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
         </dependency>
         <dependency>
@@ -447,18 +473,6 @@
             <version>${mapstruct.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-autoconfigure</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
@@ -466,6 +480,16 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-loader-tools</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.micrometer</groupId>
+                    <artifactId>micrometer-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -481,10 +505,21 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>net.java.dev.jna</groupId>
             <artifactId>jna</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-to-slf4j</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <%_ } _%>
         <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
@@ -493,6 +528,41 @@
             <artifactId>spring-boot-starter-data-<%=databaseType%></artifactId>
         </dependency>
         <%_ } _%>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
         <%_ if (messageBroker === 'kafka') { _%>
         <!-- Kafka support -->
         <dependency>
@@ -510,41 +580,6 @@
         </dependency>
         <%_ } _%>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-logging</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-mail</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.zalando</groupId>
             <artifactId>problem-spring-web</artifactId>
         </dependency>
@@ -558,6 +593,10 @@
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security.oauth.boot</groupId>
+            <artifactId>spring-security-oauth2-autoconfigure</artifactId>
         </dependency>
             <%_ if (applicationType === 'gateway' || applicationType === 'microservice') { _%>
         <dependency>
@@ -601,7 +640,7 @@
         <%_ if (applicationType === 'gateway') { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-zuul</artifactId>
+            <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
         </dependency>
         <dependency>
             <groupId>com.github.vladimir-bukhtoyarov</groupId>
@@ -619,15 +658,11 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-ribbon</artifactId>
+            <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-hystrix</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-spectator</artifactId>
+            <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.retry</groupId>
@@ -637,7 +672,7 @@
         <%_ if (serviceDiscoveryType === 'eureka') { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-eureka</artifactId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -663,7 +698,7 @@
         <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-feign</artifactId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
         <%_ } _%>
         <dependency>
@@ -733,35 +768,6 @@
         </testResources>
         <%_ } _%>
         <plugins>
-            <%_ if (gatlingTests) { _%>
-            <plugin>
-                <groupId>io.gatling</groupId>
-                <artifactId>gatling-maven-plugin</artifactId>
-                <version>${gatling-maven-plugin.version}</version>
-                <configuration>
-                    <configFolder><%= TEST_DIR %>gatling/conf</configFolder>
-                    <dataFolder><%= TEST_DIR %>gatling/user-files/data</dataFolder>
-                    <resultsFolder>target/gatling/results/${maven.build.timestamp}/</resultsFolder>
-                    <bodiesFolder><%= TEST_DIR %>gatling/user-files/bodies</bodiesFolder>
-                    <simulationsFolder><%= TEST_DIR %>gatling/user-files/simulations</simulationsFolder>
-                    <!-- If uncommented, these arguments below will be applied to all your gatling tests -->
-                    <!--<jvmArgs>
-                        <jvmArg>-Dusers=100</jvmArg>
-                        <jvmArg>-Dramp=1</jvmArg>
-                    </jvmArgs>-->
-                    <!--
-                    This will run multiple simulations one by one. Useful when doing Gatling
-                    tests in CI.
-                    -->
-                    <runMultipleSimulations>true</runMultipleSimulations>
-                    <!--
-                    To run only one simulation, you need to disable the "runMultipleSimulations"
-                    above, and write the name of your simulation below.
-                    -->
-                    <!--<simulationClass>WriteTheNameOfYourGatlingSimulation</simulationClass>-->
-                </configuration>
-            </plugin>
-            <%_ } _%>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -1105,10 +1111,6 @@
                                             <goal>install-node-and-npm</goal>
                                             <goal>npm</goal>
                                             <%_ } _%>
-                                            <%_ if (clientFramework === 'angular1') { _%>
-                                            <goal>bower</goal>
-                                            <goal>gulp</goal>
-                                            <%_ } _%>
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
@@ -1136,7 +1138,7 @@
                 <profile.swagger>,swagger</profile.swagger>
             </properties>
         </profile>
-        <%_ if (!skipClient && clientFramework !== 'angular1') { _%>
+        <%_ if (!skipClient) { _%>
         <profile>
             <id>webpack</id>
             <build>
@@ -1221,7 +1223,7 @@
                         <configuration>
                             <failOnMissingWebXml>false</failOnMissingWebXml>
                             <%_ if (!skipClient) { _%>
-                            <warSourceDirectory><% if (clientFramework !== 'angular1') { %><%= CLIENT_DIST_DIR %><% } else { %><%= CLIENT_MAIN_SRC_DIR %><% } %></warSourceDirectory>
+                            <warSourceDirectory><%= CLIENT_DIST_DIR %></warSourceDirectory>
                             <webResources>
                                 <resource>
                                     <directory>src/main/webapp</directory>
@@ -1358,37 +1360,6 @@
                             </execution>
                                 <%_ } _%>
                             <%_ } _%>
-                            <%_ if (clientFramework === 'angular1') { _%>
-                            <execution>
-                                <id>bower install</id>
-                                <goals>
-                                    <goal>bower</goal>
-                                </goals>
-                                <configuration>
-                                    <arguments>install --no-color</arguments>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>gulp build</id>
-                                <goals>
-                                    <goal>gulp</goal>
-                                </goals>
-                                <configuration>
-                                    <arguments>build --no-notification</arguments>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>gulp test</id>
-                                <goals>
-                                    <goal>gulp</goal>
-                                </goals>
-                                <phase>test</phase>
-                                <configuration>
-                                    <arguments>test --no-notification</arguments>
-                                </configuration>
-                            </execution>
-                            <%_ } _%>
-                            <%_ if (clientFramework !== 'angular1') { _%>
                             <execution>
                                 <id>webpack build test</id>
                                 <goals>
@@ -1419,7 +1390,6 @@
                                     <%_ } _%>
                                 </configuration>
                             </execution>
-                            <%_ } _%>
                         </executions>
                     </plugin>
                     <%_ } _%>
@@ -1598,8 +1568,8 @@
         <profile>
             <!--
                 Profile for applying IDE-specific configuration.
-                At the moment it only configures MapStruct, which you need when working
-                with DTOs.
+                At the moment it configures MapStruct and Hibernate JPA Metamodel Generator, which you need when working
+                with DTOs and entity filtering.
             -->
             <id>IDE</id>
             <dependencies>
@@ -1608,6 +1578,13 @@
                     <artifactId>mapstruct-processor</artifactId>
                     <version>${mapstruct.version}</version>
                 </dependency>
+<%_ if (databaseType === 'sql') { _%>
+                <dependency>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate-jpamodelgen</artifactId>
+                    <version>${hibernate.version}</version>
+                </dependency>
+<%_ } _%>
             </dependencies>
         </profile>
         <!-- jhipster-needle-maven-add-profile -->

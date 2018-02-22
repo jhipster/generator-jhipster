@@ -23,10 +23,9 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 <%_ } _%>
 import { JhiLanguageService } from 'ng-jhipster';
 
+import { VERSION } from 'app/app.constants';
+import { <% if (enableTranslation) { %>JhiLanguageHelper, <% } %>Principal, <% if (authenticationType !== 'oauth2') { %>LoginModalService, <% } %>LoginService } from 'app/core';
 import { ProfileService } from '../profiles/profile.service';
-import { <% if (enableTranslation) { %>JhiLanguageHelper, <% } %>Principal, <% if (authenticationType !== 'oauth2') { %>LoginModalService, <% } %>LoginService } from '../../shared';
-
-import { VERSION } from '../../app.constants';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-navbar',

@@ -38,8 +38,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.rememberme.*;
-import org.springframework.stereotype.Service;<% if (databaseType === 'sql') { %>
-import org.springframework.transaction.annotation.Transactional;<%}%>
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -51,8 +50,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
 import java.util.concurrent.TimeUnit;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.*;
 
 /**
  * Custom implementation of Spring Security's RememberMeServices.
@@ -186,8 +184,7 @@ public class PersistentTokenRememberMeServices extends
      * The standard Spring Security implementations are too basic: they invalidate all tokens for the
      * current user, so when he logs out from one browser, all his other sessions are destroyed.
      */
-    @Override<% if (databaseType === 'sql') { %>
-    @Transactional<% } %>
+    @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         String rememberMeCookie = extractRememberMeCookie(request);
         if (rememberMeCookie != null && rememberMeCookie.length() != 0) {
@@ -214,13 +211,16 @@ public class PersistentTokenRememberMeServices extends
         }
         String presentedSeries = cookieTokens[0];
         String presentedToken = cookieTokens[1];
-        PersistentToken token = persistentTokenRepository.<% if (databaseType === 'couchbase') { %>findBySeries<% } else { %>findOne<% } %>(presentedSeries);
-
-        if (token == null) {
+        <%_ if (databaseType === 'couchbase') { _%>
+        Optional<PersistentToken> optionalToken = Optional.of(persistentTokenRepository.findBySeries(presentedSeries));
+        <%_ } else { _%>
+        Optional<PersistentToken> optionalToken = persistentTokenRepository.findById(presentedSeries);
+        <%_ } _%>
+        if (!optionalToken.isPresent()) {
             // No series match, so we can't authenticate using this cookie
             throw new RememberMeAuthenticationException("No persistent token found for series id: " + presentedSeries);
         }
-
+        PersistentToken token = optionalToken.get();
         // We have a match for this user/series combination
         log.info("presentedToken={} / tokenValue={}", presentedToken, token.getTokenValue());
         if (!presentedToken.equals(token.getTokenValue())) {
