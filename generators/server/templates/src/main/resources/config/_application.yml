@@ -101,7 +101,8 @@ management:
     endpoints:
         web:
             base-path: /management
-            expose: '*'
+            exposure:
+                include: ["configprops", "env", "health", "info", "threaddump"]
     endpoint:
         health:
             show-details: when_authorized

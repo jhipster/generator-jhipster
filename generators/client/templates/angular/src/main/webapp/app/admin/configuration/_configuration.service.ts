@@ -31,9 +31,7 @@ export class <%=jhiPrefixCapitalized%>ConfigurationService {
     get(): Observable<any> {
         return this.http.get(SERVER_API_URL + 'management/configprops', { observe: 'response' }).map((res: HttpResponse<any>) => {
             const properties: any[] = [];
-
-            const propertiesObject = res.body.beans;
-
+            const propertiesObject = res.body.contexts.<%= baseName %>.beans;
             for (const key in propertiesObject) {
                 if (propertiesObject.hasOwnProperty(key)) {
                     properties.push(propertiesObject[key]);
