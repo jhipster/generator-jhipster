@@ -36,7 +36,8 @@ import <%=packageName%>.service.dto.<%= entityClass %>DTO;
 import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-<%_ if (pagination !== 'no') { _%>
+
+<%_ if (pagination !== 'no' || fieldsContainOwnerManyToMany === true) { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
