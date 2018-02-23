@@ -8,6 +8,7 @@ export const ACTION_TYPES = {
 };
 
 const initialState = {
+  loading: false,
   registrationSuccess: false,
   registrationFailure: false,
   errorMessage: null
@@ -18,7 +19,8 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.CREATE_ACCOUNT):
       return {
-        ...state
+        ...state,
+        loading: true
       };
     case FAILURE(ACTION_TYPES.CREATE_ACCOUNT):
       return {
