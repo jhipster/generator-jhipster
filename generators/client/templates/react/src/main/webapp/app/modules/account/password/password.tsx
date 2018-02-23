@@ -13,8 +13,8 @@ import PasswordStrengthBar from './password-strength-bar';
 
 export interface IUserSettingsProps {
   account: any;
-  updatePasswordSuccess: boolean;
-  updatePasswordFailure: boolean;
+  updateSuccess: boolean;
+  updateFailure: boolean;
   getSession: Function;
   savePassword: Function;
   reset: Function;
@@ -46,10 +46,10 @@ export class SettingsPage extends React.Component<IUserSettingsProps> {
   };
 
   render() {
-    const { account , updatePasswordSuccess, updatePasswordFailure } = this.props;
+    const { account , updateSuccess, updateFailure } = this.props;
     let alertMessage = null;
 
-    if (updatePasswordFailure) {
+    if (updateFailure) {
       alertMessage = (
         <Alert color="danger">
           <Translate contentKey="password.messages.error">
@@ -58,7 +58,7 @@ export class SettingsPage extends React.Component<IUserSettingsProps> {
         </Alert>
       );
     } else {
-      if (updatePasswordSuccess) {
+      if (updateSuccess) {
         alertMessage = (
           <Alert color="success">
             <Translate contentKey="password.messages.success">
@@ -120,8 +120,8 @@ export class SettingsPage extends React.Component<IUserSettingsProps> {
 }
 
 const mapStateToProps = ({ authentication, account }) => ({
-  updatePasswordSuccess: account.updatePasswordSuccess,
-  updatePasswordFailure: account.updatePasswordFailure,
+  updateSuccess: account.updateSuccess,
+  updateFailure: account.updateFailure,
   account: authentication.account,
   isAuthenticated: authentication.isAuthenticated
 });

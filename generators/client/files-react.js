@@ -187,9 +187,7 @@ const files = {
                 'reducers/authentication.ts',
                 'reducers/layout.ts',
                 'reducers/user-management.ts',
-                'reducers/account.ts',
-                'reducers/register.ts',
-                'reducers/activate.ts'
+                'reducers/account.ts'
             ]
         },
         {
@@ -207,12 +205,9 @@ const files = {
                 { file: 'modules/account/index.tsx', method: 'processJsx' },
                 // { file: 'account/activate/_activate.component.js', method: 'processJsx' },
                 { file: 'modules/account/password/password.tsx', method: 'processJsx' },
-                { file: 'modules/account/register/register.tsx', method: 'processJsx' },
-                { file: 'modules/account/activate/activate.tsx', method: 'processJsx' },
                 // { file: 'account/password-reset/init/_password-reset-init.component.js', method: 'processJsx' },
                 // { file: 'account/password-reset/finish/_password-reset-finish.component.js', method: 'processJsx' },
                 { file: 'modules/account/settings/settings.tsx', method: 'processJsx' }
-                // { file: 'account/settings/_settings.component.js', method: 'processJsx' }
             ]
         }
     // {
@@ -388,7 +383,6 @@ const files = {
                 'spec/app/utils.ts',
                 'spec/app/config/notification-middleware.spec.ts',
                 'spec/app/shared/layout/header.spec.tsx',
-                'spec/app/account/register/register.spec.tsx',
                 // 'spec/app/account/activate/_activate.component.spec.js',
                 // 'spec/app/account/password/_password.component.spec.js',
                 // 'spec/app/account/password/_password-strength-bar.component.spec.js',
