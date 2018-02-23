@@ -9,7 +9,8 @@ import authentication from './authentication';
 import administration from './administration';
 import userManagement from './user-management';
 import register from './register';
-import account from'./account';
+import account from './account';
+
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 export default combineReducers({

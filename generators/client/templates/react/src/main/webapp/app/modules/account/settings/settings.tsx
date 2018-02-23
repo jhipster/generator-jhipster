@@ -1,17 +1,25 @@
-/* eslint-disable */ // TODO Fix when page is completed
 import * as React from 'react';
-import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Col, Alert, Row } from 'reactstrap';
 import { connect } from 'react-redux';
-<%_ if (enableTranslation) { _%>
-import { locales } from '../../../config/translation';
-<%_ } _%>
-
+import { Translate, translate } from 'react-jhipster';
+import { AvForm, AvField } from 'availity-reactstrap-validation';
 import { getSession } from '../../../reducers/authentication';
 import { saveAccountSettings } from '../../../reducers/account';
+<%_ if (enableTranslation) { _%>
+  import { locales } from '../../../config/translation';
+<%_ } _%>
+
+const successAlert = (
+  <Alert color="success" >
+    <strong><Translate contentKey="settings.messages.success" /></strong>
+  </Alert>
+);
 
 export interface IUserSettingsProps {
   account: any;
   getSession: Function;
+  saveAccountSettings: Function;
+  updateSuccess: boolean;
 }
 
 export interface IUserSettingsState {
@@ -19,7 +27,6 @@ export interface IUserSettingsState {
 }
 
 export class SettingsPage extends React.Component<IUserSettingsProps, IUserSettingsState> {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -36,79 +43,116 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
       account: nextProps.account
     });
   }
-
-  setFirstName = event => {
+  <%_ if (enableTranslation) { _%>
+  setLangKey = event => {
     this.setState({
       account: {
         ...this.state.account,
-        firstName: event.target.value
+        langKey: event.target.value
       }
     });
-  }
+  };
+  <%_ } _%>
+  handleValidSubmit = (event, values) => {
+    const account = {
+      ...this.state.account,
+      ...values<%_ if (enableTranslation) { _%>,
+      langKey: this.state.account.langKey
+      <%_ } _%>
+    };
 
-  setLastName = event => {
-    this.setState({
-      account: {
-        ...this.state.account,
-        lastName: event.target.value
-      }
-    });
-  }
-
-  setEmail = event => {
-    this.setState({
-      account: {
-        ...this.state.account,
-        email: event.target.value
-      }
-    });
-  }
-
-  saveSettings = event => {
-    saveAccountSettings(this.state.account);
-    event.preventDefault();
-  }
+    this.props.saveAccountSettings(account);
+    event.persist();
+  };
 
   render() {
     const { account } = this.state;
+    const { updateSuccess } = this.props;
+
     return (
-        <div>
-          <h2>User settings for [{account.login}]</h2>
-          <Form>
-            {/* TODO: change to Availity form components */}
-            <FormGroup>
-              <Label for="firstName">First Name</Label>
-              <Input type="text" className="form-control" value={account.firstName} id="firstName" name="firstName" placeholder="First Name"
-              onChange={this.setFirstName}/>
-            </FormGroup>
-            <FormGroup>
-              <Label for="lastName">Last Name</Label>
-              <Input type="text" className="form-control" value={account.lastName} id="lastName" name="lastName" placeholder="Last Name"
-              onChange={this.setLastName}/>
-            </FormGroup>
-            <FormGroup>
-              <Label for="email">Email</Label>
-              <Input type="text" className="form-control" value={account.email} id="email" name="email" placeholder="Email"
-              onChange={this.setEmail}/>
-            </FormGroup>
-            <%_ if (enableTranslation) { _%>
-            <FormGroup>
-              <Label for="langKey">Language</Label>
-              <Input type="select" id="langKey" name="langKey" className="form-control">
-                {locales.map(lang => <option value={lang} key={lang}>{lang}</option>)}
-              </Input>
-            </FormGroup>
-            <%_ } _%>
-            <Button type="submit" color="success" onClick={this.saveSettings}>Save</Button>
-          </Form>
+      <div>
+        <Row className="justify-content-center">
+          <Col md="8" >
+            {/* TODO: use translation on this title */}
+            <h2>User settings for [{account.login}]</h2>
+            { (updateSuccess) ? successAlert : null }
+            <AvForm onValidSubmit={this.handleValidSubmit}>
+              {/* First name */}
+              <AvField
+                className="form-control"
+                name="firstName"
+                label={<Translate contentKey="settings.form.firstname" />}
+                id="firstName"
+                placeholder={translate('settings.form.firstname.placeholder')}
+                validate={{
+                  required: { value: true, errorMessage: translate('settings.messages.validate.firstname.required') },
+                  minLength: { value: 1, errorMessage: translate('settings.messages.validate.firstname.minlength') },
+                  maxLength: { value: 50, errorMessage: translate('settings.messages.validate.firstname.maxlength') }
+                }}
+                value={account.firstName}
+              />
+              {/* Last name */}
+              <AvField
+                className="form-control"
+                name="lastName"
+                label={<Translate contentKey="settings.form.lastname" />}
+                id="lastName"
+                placeholder={translate('settings.form.lastname.placeholder')}
+                validate={{
+                  required: { value: true, errorMessage: translate('settings.messages.validate.lastname.required') },
+                  minLength: { value: 1, errorMessage: translate('settings.messages.validate.lastname.minlength') },
+                  maxLength: { value: 50, errorMessage: translate('settings.messages.validate.lastname.maxlength') }
+                }}
+                value={account.lastName}
+              />
+              {/* Email */}
+              <AvField
+                name="email"
+                label={<Translate contentKey="global.form.email" />}
+                placeholder={translate('global.form.email.placeholder')}
+                type="email"
+                validate={{
+                  required: { value: true, errorMessage: translate('global.messages.validate.email.required') },
+                  minLength: { value: 5, errorMessage: translate('global.messages.validate.email.minlength') },
+                  maxLength: { value: 254, errorMessage: translate('global.messages.validate.email.maxlength') }
+                }}
+                value={account.email}
+              />
+              <%_ if (enableTranslation) { _%>
+              {/* Language key */}
+              <AvField
+                type="select"
+                id="langKey"
+                name="langKey"
+                className="form-control"
+                label={translate('settings.form.language')}
+                onChange={this.setLangKey}
+                defaultValue={account.langKey}
+              >
+                {/* TODO: Add findLanguageFromKey translation to options */}
+                {locales.map(lang => (
+                  <option value={lang} key={lang}>
+                    {lang}
+                  </option>
+                ))}
+              </AvField>
+              <%_ } _%>
+              <Button color="primary" type="submit">
+                <Translate contentKey="settings.form.button" />
+              </Button>
+            </AvForm>
+          </Col>
+        </Row>
       </div>
     );
   }
 }
 
-const mapStateToProps = storeState => ({
-  account: storeState.authentication.account,
-  isAuthenticated: storeState.authentication.isAuthenticated
+const mapStateToProps = ({ authentication, account }) => ({
+  account: authentication.account,
+  isAuthenticated: authentication.isAuthenticated,
+  updateSuccess: account.updateSuccess,
+  updateFailure: account.updateFailure
 });
 
 const mapDispatchToProps = { getSession, saveAccountSettings };

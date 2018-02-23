@@ -107,6 +107,7 @@ limitations under the License.
     <%_ } _%>
     "mocha": "4.0.1",
     "prettier": "1.9.2",
+    "query-string": "^5.1.0",
     <%_ if (protractorTests) { _%>
     "protractor": "5.1.2",
     "protractor-jasmine2-screenshot-reporter": "0.4.1",
