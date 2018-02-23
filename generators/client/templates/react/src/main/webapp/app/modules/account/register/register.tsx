@@ -38,13 +38,10 @@ export interface IRegisterState {
   password: string;
 }
 
-export class RegisterPage extends React.Component<IRegisterProps, IRegisterState> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      password: ''
-    };
-  }
+export class RegisterPage extends React.Component<IRegisterProps> {
+  state: IRegisterState = {
+    password: ''
+  };
 
   componentWillUnmount() {
     this.props.reset();
@@ -57,7 +54,7 @@ export class RegisterPage extends React.Component<IRegisterProps, IRegisterState
 
   updatePassword = event => {
     this.setState({ password: event.target.value });
-  }
+  };
 
   render() {
     const { registrationSuccess, registrationFailure, errorMessage } = this.props;

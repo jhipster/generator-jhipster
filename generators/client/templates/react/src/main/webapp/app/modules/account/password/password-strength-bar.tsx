@@ -7,19 +7,20 @@ export interface IPasswordStrengthBarProps {
   password: string;
 }
 
-export default class PasswordStrengthBar extends React.Component<IPasswordStrengthBarProps> {
-  colors = ['#F00', '#F90', '#FF0', '#9F0', '#0F0'];
+export const PasswordStrengthBar = ({ password }: IPasswordStrengthBarProps) => {
+  const colors = ['#F00', '#F90', '#FF0', '#9F0', '#0F0'];
 
-  measureStrength(p: string): number {
+  const measureStrength = (p: string): number => {
     let force = 0;
-    const regex = /[$-/:-?{-~!"^_`\[\]]/g; // "
-    const lowerLetters = /[a-z]+/.test(p);
-    const upperLetters = /[A-Z]+/.test(p);
-    const numbers = /[0-9]+/.test(p);
-    const symbols = regex.test(p);
+    const regex = /[$-/:-?{-~!"^_`\[\]]/g;
+    const flags = {
+      lowerLetters: /[a-z]+/.test(p),
+      upperLetters: /[A-Z]+/.test(p),
+      numbers: /[0-9]+/.test(p),
+      symbols: regex.test(p)
+    };
 
-    const flags = [lowerLetters, upperLetters, numbers, symbols];
-    const passedMatches = flags.filter((isMatchedFlag: boolean) => isMatchedFlag === true).length;
+    const passedMatches = Object.values(flags).filter((isMatchedFlag: boolean) => !!isMatchedFlag).length;
 
     force += 2 * p.length + ((p.length >= 10) ? 1 : 0);
     force += passedMatches * 10;
@@ -33,9 +34,9 @@ export default class PasswordStrengthBar extends React.Component<IPasswordStreng
     force = (passedMatches === 3) ? Math.min(force, 40) : force;
 
     return force;
-  }
+  };
 
-  getColor(s: number): any {
+  const getColor = (s: number): any => {
     let idx = 0;
     if (s <= 10) {
       idx = 0;
@@ -48,32 +49,35 @@ export default class PasswordStrengthBar extends React.Component<IPasswordStreng
     } else {
       idx = 4;
     }
-    return { idx: idx + 1, col: this.colors[idx] };
-  }
+    return { idx: idx + 1, col: colors[idx] };
+  };
 
-  render() {
-    const { password } = this.props;
-    const strength = this.getColor(this.measureStrength(password));
-    const points = [];
-
+  const getPoints = force => {
+    const pts = [];
     for (let i = 0; i < 5; i++) {
-      const style = {
-        backgroundColor: (i < strength.idx) ? strength.col : '#DDD'
-      };
-      points.push(
-        <li key={i} className="point" style={style}/>
+      pts.push(
+        <li key={i}
+            className="point"
+            style={ (i < force.idx) ? { backgroundColor: force.col } : { backgroundColor: '#DDD' } }
+        />
       );
     }
+    return pts;
+  };
 
-    return (
-      <div id="strength">
-        <small>
-          <Translate contentKey="global.messages.validate.newpassword.strength" />
-        </small>
-          <ul id="strengthBar">
-            {points}
-          </ul>
-      </div>
-    );
-  }
-}
+  const strength = getColor(measureStrength(password));
+  const points = getPoints(strength);
+
+  return (
+    <div id="strength">
+      <small>
+        <Translate contentKey="global.messages.validate.newpassword.strength" />
+      </small>
+      <ul id="strengthBar">
+        {points}
+      </ul>
+    </div>
+  );
+};
+
+export default PasswordStrengthBar;
