@@ -71,6 +71,7 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/SecurityConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/ThymeleafConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/WebConfigurer.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/UndertowConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/audit/package-info.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/audit/AuditEventConverter.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/package-info.java`,

@@ -73,6 +73,8 @@ public class WebConfigurerTest {
 
     private MetricRegistry metricRegistry;
 
+    private UndertowConfiguration undertowConfiguration;
+
     @Before
     public void setup() {
         servletContext = spy(new MockServletContext());
@@ -87,6 +89,7 @@ public class WebConfigurerTest {
         webConfigurer = new WebConfigurer(env, props);
         metricRegistry = new MetricRegistry();
         webConfigurer.setMetricRegistry(metricRegistry);
+        undertowConfiguration = new UndertowConfiguration(env);
     }
 
     @Test
@@ -231,5 +234,52 @@ public class WebConfigurerTest {
                 .header(HttpHeaders.ORIGIN, "other.domain.com"))
             .andExpect(status().isOk())
             .andExpect(header().doesNotExist(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN));
+    }
+
+    @Test
+    public void testUndertownConfigurationOk() throws Exception {
+        env.setProperty("server.ssl.key-store", "store");
+        env.setProperty("server.ssl.ciphers", "cipher");
+        env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION);
+
+        UndertowServletWebServerFactory container = undertowConfiguration.embeddedServletContainerFactory();
+
+        Builder builder = Undertow.builder();
+        container.getBuilderCustomizers().forEach(c -> c.customize(builder));
+        OptionMap.Builder serverOptions = (OptionMap.Builder) ReflectionTestUtils.getField(builder, "socketOptions");
+
+        assertThat(container).isNotNull();
+        assertThat(serverOptions.getMap().get(UndertowOptions.SSL_USER_CIPHER_SUITES_ORDER)).isTrue();
+    }
+
+    @Test
+    public void testUndertownConfigurationNoHttps() throws Exception {
+        env.setProperty("server.ssl.ciphers", "cipher");
+        env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION);
+
+        UndertowServletWebServerFactory container = undertowConfiguration.embeddedServletContainerFactory();
+
+        Builder builder = Undertow.builder();
+        container.getBuilderCustomizers().forEach(c -> c.customize(builder));
+        OptionMap.Builder serverOptions = (OptionMap.Builder) ReflectionTestUtils.getField(builder, "socketOptions");
+
+        assertThat(container).isNotNull();
+        assertThat(serverOptions.getMap().get(UndertowOptions.SSL_USER_CIPHER_SUITES_ORDER)).isNull();
+    }
+
+    @Test
+    public void testUndertownConfigurationNoProd() throws Exception {
+        env.setProperty("server.ssl.key-store", "store");
+        env.setProperty("server.ssl.ciphers", "cipher");
+        env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT);
+
+        UndertowServletWebServerFactory container = undertowConfiguration.embeddedServletContainerFactory();
+
+        Builder builder = Undertow.builder();
+        container.getBuilderCustomizers().forEach(c -> c.customize(builder));
+        OptionMap.Builder serverOptions = (OptionMap.Builder) ReflectionTestUtils.getField(builder, "socketOptions");
+
+        assertThat(container).isNotNull();
+        assertThat(serverOptions.getMap().get(UndertowOptions.SSL_USER_CIPHER_SUITES_ORDER)).isNull();
     }
 }

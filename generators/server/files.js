@@ -405,6 +405,7 @@ function writeFiles() {
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/MetricsConfiguration.java.ejs`, `${javaDir}config/MetricsConfiguration.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/ThymeleafConfiguration.java.ejs`, `${javaDir}config/ThymeleafConfiguration.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/WebConfigurer.java.ejs`, `${javaDir}config/WebConfigurer.java`);
+            this.template(`${SERVER_MAIN_SRC_DIR}package/config/_UndertowConfiguration.java`, `${javaDir}config/UndertowConfiguration.java`);
             if (this.websocket === 'spring-websocket') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/WebsocketConfiguration.java.ejs`, `${javaDir}config/WebsocketConfiguration.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/WebsocketSecurityConfiguration.java.ejs`, `${javaDir}config/WebsocketSecurityConfiguration.java`);
