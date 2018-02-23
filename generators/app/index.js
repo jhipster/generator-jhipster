@@ -357,7 +357,7 @@ module.exports = class extends BaseGenerator {
                     // Generate a package.json file containing the current version
                     // of the generator as dependency
                     this.dasherizedBaseName = _.kebabCase(this.baseName);
-                    this.template('_skipClientApp.package.json', 'package.json');
+                    this.template('skipClientApp.package.json.ejs', 'package.json');
 
                     if (!this.options['skip-install']) {
                         if (this.clientPackageManager === 'yarn') {

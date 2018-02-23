@@ -40,6 +40,7 @@ module.exports = {
  * Check Docker
  */
 function checkDocker() {
+    if (this.options['skip-checks']) return;
     const done = this.async();
 
     shelljs.exec('docker -v', { silent: true }, (code, stdout, stderr) => {
