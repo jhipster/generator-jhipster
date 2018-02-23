@@ -162,7 +162,7 @@ limitations under the License.
   },
   "scripts": {
     "precommit": "lint-staged",
-    "prettier:format":"<%= clientPackageManager %> prettier --write '**/*.{ts,tsx}'",
+    "prettier:format":"<%= clientPackageManager %> prettier --write **/*.{ts,tsx}",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "cleanup": "rimraf <%= BUILD_DIR %>www",
