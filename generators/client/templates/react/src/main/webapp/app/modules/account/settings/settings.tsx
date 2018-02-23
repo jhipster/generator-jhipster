@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Form, FormGroup, Label, Input, Col, Alert, Row } from 'reactstrap';
+import { Button, Col, Alert, Row } from 'reactstrap';
 import { connect } from 'react-redux';
 import { Translate, translate } from 'react-jhipster';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
