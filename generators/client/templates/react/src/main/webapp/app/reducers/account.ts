@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { ICrudPutAction } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from './action-type.util';
 import { messages } from '../config/constants';
@@ -13,7 +12,8 @@ const initialState = {
   loading: false,
   errorMessage: null,
   account: {},
-  updateSuccess: false
+  updateSuccess: false,
+  updateFailure: false
 };
 
 // Reducer
@@ -34,6 +34,12 @@ export default (state = initialState, action) => {
         loading: true
       };
     case FAILURE(ACTION_TYPES.UPDATE_ACCOUNT):
+      return {
+        ...state,
+        loading: false,
+        updateSuccess: false,
+        updateFailure: true
+      };
     case SUCCESS(ACTION_TYPES.UPDATE_ACCOUNT):
       return {
         ...state,
@@ -54,16 +60,18 @@ export default (state = initialState, action) => {
 
 const apiUrl = '/api/account';
 // Actions
-export const saveAccountSettings: ICrudPutAction = account => ({
-  type: ACTION_TYPES.UPDATE_ACCOUNT,
-  meta: {
-    successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
-    errorMessage: messages.DATA_UPDATE_ERROR_ALERT
-  },
-  payload: axios.post(apiUrl, account)
-});
+export const saveAccountSettings = account => dispatch => {
+  dispatch({
+    type: ACTION_TYPES.UPDATE_ACCOUNT,
+    meta: {
+      successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
+      errorMessage: messages.DATA_UPDATE_ERROR_ALERT
+    },
+    payload: axios.post(apiUrl, account)
+  });
+};
 
-export const savePassword: ICrudPutAction = password => ({
+export const savePassword = password => dispatch => dispatch({
   type: ACTION_TYPES.UPDATE_PASSWORD,
   meta: {
     successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
