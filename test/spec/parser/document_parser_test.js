@@ -700,7 +700,7 @@ describe('DocumentParser', () => {
           }
         });
       });
-      context('when parsing application', () => {
+      context('when parsing applications', () => {
         let application = null;
 
         before(() => {
@@ -819,6 +819,24 @@ describe('DocumentParser', () => {
             expect(Object.keys(content.options.options).length).to.equal(1);
             expect(content.options.options.microservice_ms.entityNames.toString()).to.equal('[A]');
           });
+        });
+      });
+      context('when parsing a JDL microservice application with entities', () => {
+        let content = null;
+
+        before(() => {
+          const input = parseFromFiles(['./test/test_files/application_with_entities.jdl']);
+          content = DocumentParser.parseFromConfigurationObject({
+            document: input,
+            databaseType: DatabaseTypes.sql,
+            applicationType: ApplicationTypes.MICROSERVICE,
+            applicationName: 'MyApp'
+          });
+        });
+
+        it('adds the application entities in the application object', () => {
+          expect(content.applications.MyApp.entities.has('BankAccount')).to.be.true;
+          expect(content.applications.MyApp.entities.size()).to.equal(1);
         });
       });
     });

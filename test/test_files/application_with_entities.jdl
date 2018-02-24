@@ -1,0 +1,10 @@
+application {
+  config {
+    baseName MyApp
+    applicationType microservice
+  }
+  entities * except Customer
+}
+
+entity BankAccount
+entity Customer

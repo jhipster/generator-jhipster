@@ -147,13 +147,15 @@ applicationDecl
 applicationSubDecl
   = SPACE* CONFIG SPACE* '{' SPACE* applicationConfigDecl:applicationConfigDecl? SPACE* '}' SPACE* applicationSubDecl:applicationSubDecl {
     applicationSubDecl.config = applicationConfigDecl || {};
+    applicationSubDecl.entities = applicationSubDecl.entities || { entityList: [], excluded: [] };
     return applicationSubDecl;
   }
-  / SPACE* 'entities' SPACE* entityList:simpleEntityList SPACE* exclusion:exclusion? SPACE* applicationSubDecl:applicationSubDecl {
-    applicationSubDecl.entities = { entityList, exclusion };
+  / SPACE* 'entities' SPACE* entityList:simpleEntityList SPACE* excluded:exclusion? SPACE* applicationSubDecl:applicationSubDecl {
+    applicationSubDecl.config = applicationSubDecl.config || {};
+    applicationSubDecl.entities = { entityList, excluded };
     return applicationSubDecl;
   }
-  / '' { return { config: {} }; }
+  / '' { return { config: {}, entities: { entityList: [], excluded: [] } }; }
 
 applicationConfigDecl
   = BASE_NAME SPACE* baseName:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
