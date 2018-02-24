@@ -49,8 +49,6 @@ eureka:
 spring:
     application:
         name: <%= baseName %>
-    jackson:
-        serialization.write_dates_as_timestamps: false
     <%_ if (cacheManagerIsAvailable === true) { _%>
     cache:
         type: simple
