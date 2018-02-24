@@ -34,36 +34,58 @@ describe('ExceptionFactory', () => {
         expect(error.name).not.to.be.undefined;
       }
     });
-    describe('when only passing a name', () => {
+    context('when only passing a name', () => {
+      let exception1 = null;
+      let exception2 = null;
+
+      before(() => {
+        exception1 = BuildException('Working', null);
+        exception2 = BuildException('Working', '');
+      });
+
       it('takes the name and adds no message', () => {
-        const exception1 = BuildException('Working', null);
-        const exception2 = BuildException('Working', '');
         expect(exception1.name).to.eq('WorkingException');
         expect(exception1.message).to.be.empty;
         expect(exception2.name).to.eq('WorkingException');
         expect(exception2.message).to.be.empty;
       });
     });
-    describe('when only passing a message', () => {
+    context('when only passing a message', () => {
+      let exception1 = null;
+      let exception2 = null;
+
+      before(() => {
+        exception1 = BuildException(null, 'The message');
+        exception2 = BuildException('', 'The message');
+      });
+
       it('just adds the suffix and keeps the message', () => {
-        const exception1 = BuildException(null, 'The message');
-        const exception2 = BuildException('', 'The message');
         expect(exception1.name).to.eq('Exception');
         expect(exception1.message).to.eq('The message');
         expect(exception2.name).to.eq('Exception');
         expect(exception2.message).to.eq('The message');
       });
     });
-    describe('when passing in a name and a message', () => {
+    context('when passing in a name and a message', () => {
+      let exception = null;
+
+      before(() => {
+        exception = BuildException('Good', 'The message');
+      });
+
       it('keeps both', () => {
-        const exception = BuildException('Good', 'The message');
         expect(exception.name).to.eq('GoodException');
         expect(exception.message).to.eq('The message');
       });
     });
-    describe('when not passing anything', () => {
+    context('when not passing anything', () => {
+      let exception = null;
+
+      before(() => {
+        exception = BuildException(null, null);
+      });
+
       it('names the exception \'Exception\' and puts no message', () => {
-        const exception = BuildException(null, null);
         expect(exception.name).to.eq('Exception');
         expect(exception.message).to.be.empty;
       });
