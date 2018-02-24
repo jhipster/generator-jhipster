@@ -19,8 +19,8 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { NgbDateMomentAdapter } from './model/datepicker-adapter';
 import { NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
-import { StringToMomentPipe } from './model/string-to-moment-pipe';
-import { MomentToStringPipe } from './model/moment-to-string-pipe';
+import { StringToMomentPipe } from './util/string-to-moment-pipe';
+import { MomentToStringPipe } from './util/moment-to-string-pipe';
 import {
     <%=angularXAppName%>SharedLibsModule,
     <%=angularXAppName%>SharedCommonModule,

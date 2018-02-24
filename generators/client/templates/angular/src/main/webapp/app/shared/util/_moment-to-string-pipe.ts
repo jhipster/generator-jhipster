@@ -1,12 +1,11 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { Moment } from 'moment';
-import moment = require('moment');
 
 @Pipe({name: 'moment'})
 export class MomentToStringPipe implements PipeTransform {
-    transform(value: Moment): string {
+    transform(value: Moment, format = 'YYYY-MM-DDThh:mm'): string {
         if (value) {
-            return value.format('YYYY-MM-DDThh:mm');
+            return value.format(format);
         }
         return null;
     }

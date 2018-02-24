@@ -420,7 +420,12 @@ const files = {
                 'shared/util/_request-util.ts',
                 // alert service code
                 'shared/alert/_alert.component.ts',
-                'shared/alert/_alert-error.component.ts'
+                'shared/alert/_alert-error.component.ts',
+                // dates
+                'shared/util/_datepicker-adapter.ts',
+                'shared/util/_moment-to-string-pipe.ts',
+                'shared/util/_string-to-moment-pipe.ts'
+
             ]
         },
         {
