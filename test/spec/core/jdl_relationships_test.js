@@ -82,7 +82,7 @@ describe('JDLRelationships', () => {
           injectedFieldInFrom: 'somethingElse',
           type: RELATIONSHIP_TYPES.ONE_TO_ONE
         }));
-        expect(relationships.size).to.eq(2);
+        expect(relationships.size()).to.eq(2);
         expect(Object.keys(relationships.relationships.OneToOne).length).to.eq(2);
       });
     });
@@ -114,6 +114,23 @@ describe('JDLRelationships', () => {
       relationships.add(relationship2);
       const array = relationships.toArray();
       expect(array).to.deep.eq([relationship1, relationship2]);
+    });
+  });
+  describe('#size', () => {
+    it('returns the number of relationships', () => {
+      const relationships = new JDLRelationships();
+      expect(relationships.size()).to.equal(0);
+      relationships.add(new JDLRelationship({
+        from: new JDLEntity({
+          name: 'Abc'
+        }),
+        to: new JDLEntity({
+          name: 'Abc2'
+        }),
+        injectedFieldInFrom: 'something',
+        type: RELATIONSHIP_TYPES.ONE_TO_ONE
+      }));
+      expect(relationships.size()).to.equal(1);
     });
   });
   describe('#toString', () => {

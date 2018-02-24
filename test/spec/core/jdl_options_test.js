@@ -93,6 +93,18 @@ describe('JDLOptions', () => {
       });
     });
   });
+  context('#size', () => {
+    it('returns the number of options', () => {
+      const options = new JDLOptions();
+      expect(options.size()).to.equal(0);
+      options.addOption(new JDLUnaryOption({
+        name: UNARY_OPTIONS.SKIP_CLIENT,
+        entityNames: ['A', 'B', 'C'],
+        excludedNames: ['M']
+      }));
+      expect(options.size()).to.equal(1);
+    });
+  });
   describe('#toString', () => {
     const options = new JDLOptions();
     before(() => {
