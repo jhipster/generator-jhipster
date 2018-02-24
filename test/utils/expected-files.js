@@ -319,6 +319,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/shared/login/login.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/login/login.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/util/request-util.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/util/datepicker-adapter.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/shared-common.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/shared-libs.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/shared.module.ts`,

@@ -26,7 +26,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 <%_ if (hasDate) { _%>
-import moment = require('moment');
+import * as moment from 'moment';
 <%_ } _%>
 
 import { SERVER_API_URL } from 'app/app.constants';
@@ -44,7 +44,7 @@ export class <%= entityAngularName %>Service {
     private resourceSearchUrl = SERVER_API_URL + '<% if (applicationType === 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/_search/<%= entityApiUrl %>';
     <%_ } _%>
 
-    constructor(private http: HttpClient<% if (hasDate) { %>, private dateUtils: JhiDateUtils<% } %>) { }
+    constructor(private http: HttpClient) { }
     <%_ if (entityAngularName.length <= 30) { _%>
 
     create(<%= entityInstance %>: I<%= entityAngularName %>): Observable<EntityResponseType> {
@@ -114,7 +114,7 @@ export class <%= entityAngularName %>Service {
         const copy: I<%= entityAngularName %> = Object.assign({}, <%= entityInstance %>, {
         <%_ for (idx in fields) { _%>
         <%_ if ( ['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType) ) { _%>
-        <%=fields[idx].fieldName%>: <%= entityInstance %>.<%= fields[idx].fieldName %> ? moment(<%= entityInstance %>.<%= fields[idx].fieldName %>) : <%= entityInstance %>.<%= fields[idx].fieldName %>,
+        <%=fields[idx].fieldName%>: <%= entityInstance %>.<%= fields[idx].fieldName %> != null ? moment(<%= entityInstance %>.<%= fields[idx].fieldName %>) : <%= entityInstance %>.<%= fields[idx].fieldName %>,
             <%_ } _%>
         <%_ } _%>
         });
@@ -126,9 +126,8 @@ export class <%= entityAngularName %>Service {
      */
     private convert(<%= entityInstance %>: I<%= entityAngularName %>): I<%= entityAngularName %> {
         const copy: I<%= entityAngularName %> = Object.assign({}, <%= entityInstance %>, {
-        <%_ for (idx in fields){ if ( ['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType) ) { %>
-        <%= fields[idx].fieldName %>: <%= entityInstance %>.<%= fields[idx].fieldName %> ? <%= entityInstance %>.<%= fields[idx].fieldName %>.toJSON() : <%= entityInstance %>.<%= fields[idx].fieldName %>,
-        copy.<%= fields[idx].fieldName %> = this.dateUtils.toDate(<%= entityInstance %>.<%= fields[idx].fieldName %>);
+        <%_ for (idx in fields){ if ( ['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType) ) { _%>
+        <%= fields[idx].fieldName %>: <%= entityInstance %>.<%= fields[idx].fieldName %> != null && <%= entityInstance %>.<%= fields[idx].fieldName %>.isValid() ? <%= entityInstance %>.<%= fields[idx].fieldName %>.toJSON() : null,
         <%_ } } _%>
         });
         return copy;
