@@ -27,7 +27,7 @@ const fail = expect.fail;
 
 describe('JDLEntity', () => {
   describe('::new', () => {
-    describe('when not passing any argument', () => {
+    context('when not passing any argument', () => {
       it('fails', () => {
         try {
           new JDLEntity();
@@ -37,7 +37,7 @@ describe('JDLEntity', () => {
         }
       });
     });
-    describe('when not passing the name', () => {
+    context('when not passing the name', () => {
       it('fails', () => {
         try {
           new JDLEntity({ name: null, comment: 'My entity' });
@@ -47,15 +47,23 @@ describe('JDLEntity', () => {
         }
       });
     });
-    describe('when not passing the table name', () => {
+    context('when not passing the table name', () => {
+      let entity = null;
+
+      before(() => {
+        entity = new JDLEntity({ name: 'Abc' });
+      });
+
       it('uses the names as value', () => {
-        const entity = new JDLEntity({ name: 'Abc' });
         expect(entity.tableName).to.eq('Abc');
       });
     });
-    describe('when passing arguments', () => {
-      it('creates a new instance', () => {
-        const args = {
+    context('when passing arguments', () => {
+      let entity = null;
+      let args = {};
+
+      before(() => {
+        args = {
           name: 'Abc',
           tableName: 'String',
           comment: 'comment',
@@ -66,14 +74,17 @@ describe('JDLEntity', () => {
             validations: [new JDLValidation()]
           })]
         };
-        const entity = new JDLEntity(args);
+        entity = new JDLEntity(args);
+      });
+
+      it('creates a new instance', () => {
         expect(entity.name).to.eq(args.name);
         expect(entity.tableName).to.eq(args.tableName);
         expect(entity.comment).to.eq(args.comment);
         expect(entity.fields).to.deep.eq(args.fields);
       });
     });
-    describe('when passing a reserved keyword as name', () => {
+    context('when passing a reserved keyword as name', () => {
       it('fails', () => {
         try {
           new JDLEntity({ name: 'class' });
@@ -85,35 +96,35 @@ describe('JDLEntity', () => {
     });
   });
   describe('::isValid', () => {
-    describe('when checking the validity of an invalid object', () => {
-      describe('because it is nil or invalid', () => {
+    context('when checking the validity of an invalid object', () => {
+      context('because it is nil or invalid', () => {
         it('returns false', () => {
           expect(JDLEntity.isValid(null)).to.be.false;
           expect(JDLEntity.isValid(undefined)).to.be.false;
         });
       });
-      describe('without a name attribute', () => {
+      context('without a name attribute', () => {
         it('returns false', () => {
           expect(
             JDLEntity.isValid({ tableName: 'Something', fields: [] })
           ).to.be.false;
         });
       });
-      describe('with a reserved keyword as name', () => {
+      context('with a reserved keyword as name', () => {
         it('returns false', () => {
           expect(
             JDLEntity.isValid({ name: 'class' })
           ).to.be.false;
         });
       });
-      describe('without a table name', () => {
+      context('without a table name', () => {
         it('returns false', () => {
           expect(
             JDLEntity.isValid({ name: 'Something', fields: [] })
           ).to.be.false;
         });
       });
-      describe('because its fields are invalid', () => {
+      context('because its fields are invalid', () => {
         it('returns false', () => {
           expect(
             JDLEntity.isValid({
@@ -129,7 +140,7 @@ describe('JDLEntity', () => {
         });
       });
     });
-    describe('when checking the validity of a valid object', () => {
+    context('when checking the validity of a valid object', () => {
       it('returns true', () => {
         expect(
           JDLEntity.isValid({ name: 'Valid', tableName: 't_valid', fields: [] })
@@ -138,12 +149,17 @@ describe('JDLEntity', () => {
     });
   });
   describe('#addField', () => {
-    describe('when adding an invalid field', () => {
+    let entity = null;
+
+    before(() => {
+      entity = new JDLEntity({
+        name: 'Abc',
+        tableName: 'String'
+      });
+    });
+
+    context('when adding an invalid field', () => {
       it('fails', () => {
-        const entity = new JDLEntity({
-          name: 'Abc',
-          tableName: 'String'
-        });
         try {
           entity.addField(null);
           fail();
@@ -164,37 +180,50 @@ describe('JDLEntity', () => {
         }
       });
     });
-    describe('when adding a valid field', () => {
+    context('when adding a valid field', () => {
+      let validField = null;
+
+      before(() => {
+        validField = new JDLField({ name: 'myField', type: 'String' });
+      });
+
       it('works', () => {
-        const entity = new JDLEntity({
-          name: 'Abc',
-          tableName: 'String'
-        });
-        const validField = new JDLField({ name: 'myField', type: 'String' });
         entity.addField(validField);
         expect(entity.fields).to.deep.eq({ myField: validField });
       });
     });
   });
   describe('#toString', () => {
-    describe('without a comment', () => {
-      it('stringifies its content', () => {
-        const args = {
+    context('without a comment', () => {
+      let entity = null;
+      let args = null;
+
+      before(() => {
+        args = {
           name: 'Abc',
           tableName: 'String'
         };
-        const entity = new JDLEntity(args);
+        entity = new JDLEntity(args);
+      });
+
+      it('stringifies its content', () => {
         expect(entity.toString()).to.eq(`entity ${args.name} (${args.tableName})`);
       });
     });
-    describe('without fields', () => {
-      it('stringifies its content', () => {
-        const args = {
+    context('without fields', () => {
+      let entity = null;
+      let args = null;
+
+      before(() => {
+        args = {
           name: 'Abc',
           tableName: 'String',
           comment: 'comment'
         };
-        const entity = new JDLEntity(args);
+        entity = new JDLEntity(args);
+      });
+
+      it('stringifies its content', () => {
         expect(entity.toString()).to.eq(
           `/**
  * ${args.comment}
@@ -203,23 +232,30 @@ entity ${args.name} (${args.tableName})`
         );
       });
     });
-    describe('with fields', () => {
-      it('stringifies its content', () => {
-        const entity = new JDLEntity({
+    context('with fields', () => {
+      let entity = null;
+      let field1 = null;
+      let field2 = null;
+
+      before(() => {
+        entity = new JDLEntity({
           name: 'Abc',
           tableName: 'String',
           comment: 'Entity comment'
         });
-        const field1 = new JDLField({
+        field1 = new JDLField({
           name: 'myField',
           type: 'Integer',
           comment: 'Field comment',
           validations: [new JDLValidation()]
         });
-        const field2 = new JDLField({
+        field2 = new JDLField({
           name: 'myOtherField',
           type: 'Long'
         });
+      });
+
+      it('stringifies its content', () => {
         entity.addField(field1);
         entity.addField(field2);
         expect(entity.toString()).to.eq(

@@ -19,19 +19,20 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
-const RELATIONSHIP_TYPES = require('../../../../lib/core/jhipster/relationship_types').RELATIONSHIP_TYPES;
-const exists = require('../../../../lib/core/jhipster/relationship_types').exists;
+const RelationshipTypes = require('../../../../lib/core/jhipster/relationship_types');
 
-describe('RELATIONSHIP_TYPES', () => {
+const Types = RelationshipTypes.RelationshipTypes;
+
+describe('RelationshipTypes', () => {
   describe('::exists', () => {
-    describe('when checking for a valid unary relationship type', () => {
+    context('when checking for a valid unary relationship type', () => {
       it('returns true', () => {
-        expect(exists(RELATIONSHIP_TYPES.MANY_TO_ONE)).to.be.true;
+        expect(RelationshipTypes.exists(Types.MANY_TO_ONE)).to.be.true;
       });
     });
-    describe('when checking for an invalid relationship type', () => {
+    context('when checking for an invalid relationship type', () => {
       it('returns false', () => {
-        expect(exists('NOTHING')).to.be.false;
+        expect(RelationshipTypes.exists('NOTHING')).to.be.false;
       });
     });
   });

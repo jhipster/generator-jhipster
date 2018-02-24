@@ -22,12 +22,12 @@ const expect = require('chai').expect;
 
 const fail = expect.fail;
 const FieldTypes = require('../../../../lib/core/jhipster/field_types');
-const Validations = require('../../../../lib/core/jhipster/validations').VALIDATIONS;
+const Validations = require('../../../../lib/core/jhipster/validations').Validations;
 const JDLEnum = require('../../../../lib/core/jdl_enum');
 
 describe('FieldTypes', () => {
   describe('::isCommonDBType', () => {
-    describe('when passing an invalid argument', () => {
+    context('when passing an invalid argument', () => {
       it('fails', () => {
         try {
           FieldTypes.isCommonDBType(null);
@@ -49,24 +49,24 @@ describe('FieldTypes', () => {
         }
       });
     });
-    describe('when passing a false type', () => {
+    context('when passing a false type', () => {
       it('returns false', () => {
-        expect(FieldTypes.isCommonDBType(FieldTypes.CASSANDRA_TYPES.UUID)).to.be.false;
+        expect(FieldTypes.isCommonDBType(FieldTypes.CassandraTypes.UUID)).to.be.false;
       });
     });
-    describe('when passing a valid type', () => {
+    context('when passing a valid type', () => {
       it('returns true', () => {
-        expect(FieldTypes.isCommonDBType(FieldTypes.COMMON_DB_TYPES.BIG_DECIMAL)).to.be.true;
+        expect(FieldTypes.isCommonDBType(FieldTypes.CommonDBTypes.BIG_DECIMAL)).to.be.true;
       });
     });
-    describe('when passing an enum', () => {
+    context('when passing an enum', () => {
       it('returns true', () => {
         expect(FieldTypes.isCommonDBType(new JDLEnum({ name: 'MyEnum' }))).to.be.true;
       });
     });
   });
   describe('::isCassandraType', () => {
-    describe('when passing an invalid argument', () => {
+    context('when passing an invalid argument', () => {
       it('fails', () => {
         try {
           FieldTypes.isCassandraType(null);
@@ -75,7 +75,7 @@ describe('FieldTypes', () => {
           expect(error.name).to.eq('NullPointerException');
         }
         try {
-          FieldTypes.isCassandraType(undefined);
+          FieldTypes.isCassandraType();
           fail();
         } catch (error) {
           expect(error.name).to.eq('NullPointerException');
@@ -88,24 +88,24 @@ describe('FieldTypes', () => {
         }
       });
     });
-    describe('when passing a false type', () => {
+    context('when passing a false type', () => {
       it('returns false', () => {
-        expect(FieldTypes.isCassandraType(FieldTypes.COMMON_DB_TYPES.LOCAL_DATE)).to.be.false;
+        expect(FieldTypes.isCassandraType(FieldTypes.CommonDBTypes.LOCAL_DATE)).to.be.false;
       });
     });
-    describe('when passing a valid type', () => {
+    context('when passing a valid type', () => {
       it('returns true', () => {
-        expect(FieldTypes.isCassandraType(FieldTypes.CASSANDRA_TYPES.BIG_DECIMAL)).to.be.true;
+        expect(FieldTypes.isCassandraType(FieldTypes.CassandraTypes.BIG_DECIMAL)).to.be.true;
       });
     });
-    describe('when passing an enum', () => {
+    context('when passing an enum', () => {
       it('returns false', () => {
         expect(FieldTypes.isCassandraType(new JDLEnum({ name: 'MyEnum' }))).to.be.false;
       });
     });
   });
   describe('::getIsType', () => {
-    describe('when passing an invalid argument', () => {
+    context('when passing an invalid argument', () => {
       it('fails', () => {
         try {
           FieldTypes.getIsType(null);
@@ -123,12 +123,12 @@ describe('FieldTypes', () => {
         }
       });
     });
-    describe('when passing a valid argument without callback', () => {
+    context('when passing a valid argument without callback', () => {
       it('returns isType', () => {
         expect(FieldTypes.getIsType('mysql')).to.eq(FieldTypes.isCommonDBType);
       });
     });
-    describe('when passing a valid argument and callback', () => {
+    context('when passing a valid argument and callback', () => {
       it('returns true', () => {
         expect(FieldTypes.getIsType('sql', () => {
           // do nothing
@@ -137,7 +137,7 @@ describe('FieldTypes', () => {
     });
   });
   describe('::hasValidation', () => {
-    describe('when passing an invalid argument', () => {
+    context('when passing an invalid argument', () => {
       it('fails', () => {
         try {
           FieldTypes.hasValidation(null, null);
@@ -152,21 +152,21 @@ describe('FieldTypes', () => {
           expect(error.name).to.eq('NullPointerException');
         }
         try {
-          FieldTypes.hasValidation(FieldTypes.CASSANDRA_TYPES.BIG_DECIMAL, null);
+          FieldTypes.hasValidation(FieldTypes.CassandraTypes.BIG_DECIMAL, null);
           fail();
         } catch (error) {
           expect(error.name).to.eq('NullPointerException');
         }
       });
     });
-    describe('when passing a false argument', () => {
+    context('when passing a false argument', () => {
       it('returns false', () => {
-        expect(FieldTypes.hasValidation(FieldTypes.CASSANDRA_TYPES.BIG_DECIMAL, Validations.PATTERN)).to.be.false;
+        expect(FieldTypes.hasValidation(FieldTypes.CassandraTypes.BIG_DECIMAL, Validations.PATTERN)).to.be.false;
       });
     });
-    describe('when passing a valid argument', () => {
+    context('when passing a valid argument', () => {
       it('returns true', () => {
-        expect(FieldTypes.hasValidation(FieldTypes.CASSANDRA_TYPES.BIG_DECIMAL, Validations.MIN)).to.be.true;
+        expect(FieldTypes.hasValidation(FieldTypes.CassandraTypes.BIG_DECIMAL, Validations.MIN)).to.be.true;
       });
     });
   });
