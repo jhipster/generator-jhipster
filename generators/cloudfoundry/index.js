@@ -57,8 +57,8 @@ module.exports = class extends BaseGenerator {
             copyCloudFoundryFiles() {
                 if (this.abort) return;
                 this.log(chalk.bold('\nCreating Cloud Foundry deployment files'));
-                this.template('_manifest.yml', 'deploy/cloudfoundry/manifest.yml');
-                this.template('_application-cloudfoundry.yml', `${constants.SERVER_MAIN_RES_DIR}config/application-cloudfoundry.yml`);
+                this.template('manifest.yml.ejs', 'deploy/cloudfoundry/manifest.yml');
+                this.template('application-cloudfoundry.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}config/application-cloudfoundry.yml`);
             },
 
             addCloudFoundryDependencies() {

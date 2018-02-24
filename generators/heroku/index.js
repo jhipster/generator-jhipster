@@ -386,11 +386,11 @@ module.exports = class extends BaseGenerator {
                 const done = this.async();
                 this.log(chalk.bold('\nCreating Heroku deployment files'));
 
-                this.template('_bootstrap-heroku.yml', `${constants.SERVER_MAIN_RES_DIR}/config/bootstrap-heroku.yml`);
-                this.template('_application-heroku.yml', `${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`);
-                this.template('_Procfile', 'Procfile');
+                this.template('bootstrap-heroku.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/bootstrap-heroku.yml`);
+                this.template('application-heroku.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`);
+                this.template('Procfile.ejs', 'Procfile');
                 if (this.buildTool === 'gradle') {
-                    this.template('_heroku.gradle', 'gradle/heroku.gradle');
+                    this.template('heroku.gradle.ejs', 'gradle/heroku.gradle');
                 }
 
                 this.conflicter.resolve((err) => {
@@ -416,7 +416,7 @@ module.exports = class extends BaseGenerator {
 
             addHerokuMavenProfile() {
                 if (this.buildTool === 'maven') {
-                    fs.readFile(path.join(__dirname, 'templates', '_pom-profile.xml'), (err, profile) => {
+                    fs.readFile(path.join(__dirname, 'templates', 'pom-profile.xml.ejs'), (err, profile) => {
                         this.addMavenProfile('heroku', `            ${profile.toString().trim()}`);
                     });
                 }
