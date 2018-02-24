@@ -40,17 +40,17 @@
     }
   ],
   "dependencies": {
-    "lodash": "4.17.4",
+    "lodash": "4.17.5",
     "winston": "2.4.0"
   },
   "devDependencies": {
     "chai": "4.1.2",
-    "eslint": "4.16.0",
+    "eslint": "4.18.1",
     "eslint-config-airbnb-base": "12.1.0",
     "eslint-plugin-mocha": "4.11.0",
-    "eslint-plugin-import": "2.8.0",
+    "eslint-plugin-import": "2.9.0",
     "nyc": "11.4.1",
-    "mocha": "5.0.0",
+    "mocha": "5.0.1",
     "mocha-clean": "1.0.0",
     "pegjs": "0.10.0"
   },
