@@ -74,5 +74,6 @@
   "microserviceName": "mymicroservice",
   "skipClient": true,
   "skipServer": true,
-  "clientRootFolder": "toto"
+  "clientRootFolder": "toto",
+  "applications": "*"
 }

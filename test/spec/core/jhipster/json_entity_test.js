@@ -69,7 +69,8 @@ describe('JSONEntity', () => {
           jpaMetamodelFiltering: false,
           pagination: 'no',
           relationships: [],
-          service: 'no'
+          service: 'no',
+          applications: []
         });
       });
     });
@@ -93,7 +94,8 @@ describe('JSONEntity', () => {
           angularJSSuffix: 'yes',
           clientRootFolder: 'oh',
           skipServer: true,
-          skipClient: true
+          skipClient: true,
+          applications: []
         });
       });
 
@@ -113,7 +115,8 @@ describe('JSONEntity', () => {
           angularJSSuffix: 'yes',
           clientRootFolder: 'oh',
           skipServer: true,
-          skipClient: true
+          skipClient: true,
+          applications: []
         });
       });
     });

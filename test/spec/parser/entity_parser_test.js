@@ -457,6 +457,24 @@ describe('EntityParser', () => {
           });
         });
       });
+      context('when parsing a JDL application with entities inside', () => {
+        let content = null;
+
+        before(() => {
+          const input = parseFromFiles(['./test/test_files/application_with_entities.jdl']);
+          content = EntityParser.parse({
+            jdlObject: DocumentParser.parse(input, DatabaseTypes.sql, ApplicationTypes.MICROSERVICE, 'MyApp'),
+            databaseType: DatabaseTypes.sql
+          });
+        });
+
+        it('adds the application name inside the entities', () => {
+          expect(content.BankAccount.applications).to.deep.equal(['MyApp']);
+        });
+        it('does not add the application name if excluded', () => {
+          expect(content.Customer.applications).to.deep.equal([]);
+        });
+      });
     });
   });
 });

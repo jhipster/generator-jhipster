@@ -12,6 +12,7 @@
     "lint": "eslint .",
     "lint-fix": "yarn lint -- --fix",
     "test": "yarn lint && nyc mocha test",
+    "test:watch": "mocha test --watch --reporter min",
     "posttest": "yarn coverage",
     "coverage": "nyc --reporter=text-summary report",
     "peg-parse": "pegjs -o lib/dsl/pegjs_parser.js lib/dsl/grammar.txt",
