@@ -121,7 +121,7 @@
                     nullable_relation = false;
                 }
                 if (relationships[idx].relationshipType === 'many-to-one') { %>
-            <column name="<%=getColumnName(relationshipName) %>_id" type="bigint">
+            <column name="<%=getColumnName(relationshipName) %>_id" type="<%_ if (relationshipName === 'user' && authenticationType === 'oauth2') { _%>varchar(100)<%_ } else { _%>bigint<%_ } _%>">
                 <constraints nullable="<%= nullable_relation %>" />
             </column>
             <%_ } else if (relationshipType === 'one-to-one' && relationships[idx].ownerSide === true) { _%>
