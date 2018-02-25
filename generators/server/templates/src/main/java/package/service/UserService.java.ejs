@@ -71,9 +71,7 @@ import org.springframework.transaction.annotation.Transactional;<% } %>
 <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
 import java.time.LocalDate;
 <%_ } _%>
-<%_ if (authenticationType !== 'oauth2') { _%>
 import java.time.Instant;
-<%_ } _%>
 <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
