@@ -21,9 +21,7 @@
 const expect = require('chai').expect;
 
 const fail = expect.fail;
-const DocumentParser = require('../../../lib/parser/document_parser');
 const EntityParser = require('../../../lib/parser/entity_parser');
-const parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
 const DatabaseTypes = require('../../../lib/core/jhipster/database_types').Types;
 const JDLObject = require('../../../lib/core/jdl_object');
@@ -58,15 +56,9 @@ describe('EntityParser', () => {
         });
       });
       context('such as an no databaseType', () => {
-        let input = null;
-
-        before(() => {
-          input = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
-        });
-
         it('throws an error', () => {
           try {
-            EntityParser.parse({ jdlObject: DocumentParser.parse(input, 'sql') });
+            EntityParser.parse({ jdlObject: new JDLObject() });
             fail();
           } catch (error) {
             expect(error.name).to.eq('NullPointerException');
@@ -74,16 +66,28 @@ describe('EntityParser', () => {
         });
       });
       context('such as invalid databaseType', () => {
-        let input = null;
+        let jdlObject = null;
 
         before(() => {
-          input = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
+          const entityA = new JDLEntity({ name: 'A' });
+          const entityB = new JDLEntity({ name: 'B' });
+          const relationship = new JDLRelationship({
+            from: entityA,
+            to: entityB,
+            injectedFieldInFrom: 'b',
+            injectedFieldInTo: 'a',
+            type: RelationshipTypes.MANY_TO_MANY
+          });
+          jdlObject = new JDLObject();
+          jdlObject.addEntity(entityA);
+          jdlObject.addEntity(entityB);
+          jdlObject.addRelationship(relationship);
         });
 
         it('throws an error', () => {
           try {
             EntityParser.parse({
-              jdlObject: DocumentParser.parse(input, 'sql'),
+              jdlObject,
               databaseType: 'mongodb'
             });
             fail();
