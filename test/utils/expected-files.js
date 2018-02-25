@@ -188,13 +188,13 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management.route.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-modal.service.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/user/user.model.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/user/user.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/user/user.model.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/user/user.service.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-delete-dialog.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-detail.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-dialog.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management.component.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/shared/user/user.service.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/core/user/user.service.spec.ts`,
     ],
 
     client: [
@@ -302,28 +302,29 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/polyfills.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/alert/alert-error.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/alert/alert.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/auth/account.service.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/auth/csrf.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/auth/account.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/auth/csrf.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/auth/has-any-authority.directive.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/auth/principal.service.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/auth/state-storage.service.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/auth/user-route-access-service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/auth/principal.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/auth/state-storage.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/auth/user-route-access-service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/constants/error.constants.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/constants/pagination.constants.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/index.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/language/language.constants.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/language/language.helper.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/login/login-modal.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/language/language.helper.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/login/login-modal.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/login/login.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/login/login.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/login/login.service.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/model/base-entity.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/model/request-util.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/login/login.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/util/request-util.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/shared-common.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/shared-libs.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/shared.module.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/user/account.model.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/user/account.model.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/core.module.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/index.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/vendor.ts`,
         `${CLIENT_MAIN_SRC_DIR}content/css/documentation.css`,
         `${CLIENT_MAIN_SRC_DIR}content/css/global.css`,
@@ -376,8 +377,8 @@ const expectedFiles = {
         `${SERVER_MAIN_RES_DIR}i18n/messages_fr.properties`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/global.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/global.json`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/language/language.constants.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/language/language.helper.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/language/language.helper.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
     ],
 
@@ -386,9 +387,9 @@ const expectedFiles = {
         `${SERVER_MAIN_RES_DIR}i18n/messages_ar_ly.properties`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/global.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/ar-ly/global.json`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/language/language.constants.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`,
         `${CLIENT_MAIN_SRC_DIR}content/css/rtl.css`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/language/language.helper.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/language/language.helper.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
     ],
 
@@ -413,7 +414,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/account/sessions/sessions.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/sessions/sessions.route.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/sessions/sessions.service.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/auth/auth-session.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/auth/auth-session.service.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/account/sessions/sessions.component.spec.ts`
     ],
 
@@ -425,7 +426,7 @@ const expectedFiles = {
 
     jwtClient: [
         `${CLIENT_MAIN_SRC_DIR}app/blocks/interceptor/auth.interceptor.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/auth/auth-jwt.service.ts`
+        `${CLIENT_MAIN_SRC_DIR}app/core/auth/auth-jwt.service.ts`
     ],
 
     oauth2: [

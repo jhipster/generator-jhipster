@@ -935,7 +935,7 @@ describe('JHipster generator', () => {
                 }));
             });
             it('contains updatePageDirection in language helper', () => {
-                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/shared/language/language.helper.ts`, /private updatePageDirection/);
+                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/core/language/language.helper.ts`, /private updatePageDirection/);
             });
         });
     });

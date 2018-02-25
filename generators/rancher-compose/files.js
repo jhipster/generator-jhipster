@@ -23,17 +23,17 @@ module.exports = {
 function writeFiles() {
     return {
         writeRancherCompose() {
-            this.template('_rancher-compose.yml', 'rancher-compose.yml');
+            this.template('rancher-compose.yml.ejs', 'rancher-compose.yml');
         },
 
         writeDockerCompose() {
-            this.template('_docker-compose.yml', 'docker-compose.yml');
+            this.template('docker-compose.yml.ejs', 'docker-compose.yml');
         },
 
         writeRegistrySidekickFiles() {
             if (this.serviceDiscoveryType === 'eureka' || this.serviceDiscoveryType === 'consul') {
                 this.copy('registry-config-sidekick/Dockerfile', 'registry-config-sidekick/Dockerfile');
-                this.template('registry-config-sidekick/_application.yml', 'registry-config-sidekick/application.yml');
+                this.template('registry-config-sidekick/application.yml.ejs', 'registry-config-sidekick/application.yml');
             }
         }
     };

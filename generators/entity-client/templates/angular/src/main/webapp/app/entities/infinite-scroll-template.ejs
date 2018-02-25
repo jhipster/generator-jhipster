@@ -25,7 +25,7 @@ for (const idx in fields) {
 }
 _%>
 
-    <%= entityInstancePlural %>: <%= entityAngularName %>[];
+    <%= entityInstancePlural %>: I<%= entityAngularName %>[];
     currentAccount: any;
     eventSubscriber: Subscription;
     itemsPerPage: number;
@@ -75,7 +75,7 @@ _%>
                 size: this.itemsPerPage,
                 sort: this.sort()
             }).subscribe(
-                (res: HttpResponse<<%= entityAngularName %>[]>) => this.onSuccess(res.body, res.headers),
+                (res: HttpResponse<I<%= entityAngularName %>[]>) => this.paginate<%= entityClassPlural %>(res.body, res.headers),
                 (res: HttpErrorResponse) => this.onError(res.message)
             );
             return;
@@ -86,7 +86,7 @@ _%>
             size: this.itemsPerPage,
             sort: this.sort()
         }).subscribe(
-            (res: HttpResponse<<%= entityAngularName %>[]>) => this.onSuccess(res.body, res.headers),
+            (res: HttpResponse<I<%= entityAngularName %>[]>) => this.paginate<%= entityClassPlural %>(res.body, res.headers),
             (res: HttpErrorResponse) => this.onError(res.message)
         );
     }
