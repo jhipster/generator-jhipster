@@ -58,7 +58,9 @@ function writeFiles() {
             this.template(`${DOCKER_DIR}Dockerfile.ejs`, `${DOCKER_DIR}Dockerfile`);
             this.template(`${DOCKER_DIR}.dockerignore.ejs`, `${DOCKER_DIR}.dockerignore`);
             this.template(`${DOCKER_DIR}app.yml.ejs`, `${DOCKER_DIR}app.yml`);
-            this.template(`${DOCKER_DIR}${this.prodDatabaseType}.yml.ejs`, `${DOCKER_DIR}${this.prodDatabaseType}.yml`);
+            if (this.prodDatabaseType !== 'no') {
+                this.template(`${DOCKER_DIR}${this.prodDatabaseType}.yml.ejs`, `${DOCKER_DIR}${this.prodDatabaseType}.yml`);
+            }
             if (this.prodDatabaseType === 'mongodb') {
                 this.template(`${DOCKER_DIR}mongodb-cluster.yml.ejs`, `${DOCKER_DIR}mongodb-cluster.yml`);
                 this.template(`${DOCKER_DIR}mongodb/MongoDB.Dockerfile.ejs`, `${DOCKER_DIR}mongodb/MongoDB.Dockerfile`);
