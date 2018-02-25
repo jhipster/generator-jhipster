@@ -1,6 +1,5 @@
 entity Department {
-  departmentId Long,
-  departmentName String required,
+  name String required,
   description TextBlob,
   advertisement Blob,
   logo ImageBlob
@@ -24,7 +23,6 @@ enum JobType {
 }
 
 entity Job {
-  jobId Long,
   jobTitle String minlength(5) maxlength(25),
   jobType JobType,
   minSalary Long,
@@ -36,7 +34,6 @@ entity Job {
  * Second line in javadoc.
  */
 entity Employee {
-  employeeId Long,
   /**
    * The firstname attribute.
    */
@@ -50,7 +47,6 @@ entity Employee {
 }
 
 entity Location {
-  locationId Long,
   streetAddress String,
   postalCode String,
   city String,
@@ -58,18 +54,15 @@ entity Location {
 }
 
 entity Task {
-  taskId Long,
   title String,
   description String
 }
 
 entity Country {
-  countryId Long,
   countryName String
 }
 
 entity Region {
-  regionId Long,
   regionName String
 }
 

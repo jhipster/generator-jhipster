@@ -90,11 +90,7 @@ describe('JHipsterEntityExporter', () => {
           ]);
           expect(department.fields).to.deep.eq([
             {
-              fieldName: 'departmentId',
-              fieldType: 'Long'
-            },
-            {
-              fieldName: 'departmentName',
+              fieldName: 'name',
               fieldType: 'String',
               fieldValidateRules: ['required']
             },

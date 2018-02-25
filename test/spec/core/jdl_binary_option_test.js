@@ -100,6 +100,23 @@ describe('JDLBinaryOption', () => {
       });
     });
   });
+  describe('#setEnityNames', () => {
+    let option = null;
+
+    before(() => {
+      option = new JDLBinaryOption({
+        name: BinaryOptions.Options.DTO,
+        value: BinaryOptions.Values.dto.MAPSTRUCT,
+        entityNames: ['A', 'B', 'C']
+      });
+      option.setEntityNames(['A']);
+    });
+
+    it('sets the entity names', () => {
+      expect(option.entityNames.size()).to.equal(1);
+      expect(option.entityNames.has('A')).to.be.true;
+    });
+  });
   describe('::isValid', () => {
     context('when passing a nil object', () => {
       it('returns false', () => {

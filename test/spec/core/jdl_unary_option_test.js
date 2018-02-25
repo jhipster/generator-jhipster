@@ -81,6 +81,22 @@ describe('JDLUnaryOption', () => {
       });
     });
   });
+  describe('#setEnityNames', () => {
+    let option = null;
+
+    before(() => {
+      option = new JDLUnaryOption({
+        name: UnaryOptions.SKIP_CLIENT,
+        entityNames: ['A', 'B', 'C']
+      });
+      option.setEntityNames(['A']);
+    });
+
+    it('sets the entity names', () => {
+      expect(option.entityNames.size()).to.equal(1);
+      expect(option.entityNames.has('A')).to.be.true;
+    });
+  });
   describe('::isValid', () => {
     context('when passing a nil object', () => {
       it('returns false', () => {

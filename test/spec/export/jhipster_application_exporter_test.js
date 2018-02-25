@@ -21,11 +21,9 @@
 
 const expect = require('chai').expect;
 const fs = require('fs');
-const FileUtils = require('../../../lib/utils/file_utils');
 const path = require('path');
-const Exporter = require('../../../lib/export/jhipster_application_exporter');
-const DocumentParser = require('../../../lib/parser/document_parser');
-const parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
+const JHipsterApplicationExporter = require('../../../lib/export/jhipster_application_exporter');
+const JDLApplication = require('../../../lib/core/jdl_application');
 
 const fail = expect.fail;
 
@@ -35,7 +33,7 @@ describe('JHipsterApplicationExporter', () => {
       context('such as undefined', () => {
         it('throws an error', () => {
           try {
-            Exporter.exportApplication();
+            JHipsterApplicationExporter.exportApplication();
             fail();
           } catch (error) {
             expect(error.name).to.eq('NullPointerException');
@@ -45,7 +43,7 @@ describe('JHipsterApplicationExporter', () => {
       context('such as an invalid application', () => {
         it('throws an error', () => {
           try {
-            Exporter.exportApplication({
+            JHipsterApplicationExporter.exportApplication({
               application: {
                 config: {}
               }
@@ -66,14 +64,14 @@ describe('JHipsterApplicationExporter', () => {
 
         it('throws an error', () => {
           try {
-            Exporter.exportApplication({
-              application: DocumentParser.parse(
-                parseFromFiles(['./test/test_files/application_wrong_basename.jdl']),
-                'sql',
-                'monolith',
-                'toto',
-                '4.9.0'
-              ).applications.aFile
+            JHipsterApplicationExporter.exportApplication({
+              application: new JDLApplication({
+                config: {
+                  baseName: 'aFile',
+                  enableTranslation: false,
+                  languages: ['en', 'fr']
+                }
+              })
             });
             fail();
           } catch (error) {
@@ -88,14 +86,16 @@ describe('JHipsterApplicationExporter', () => {
           let content = null;
 
           before((done) => {
-            Exporter.exportApplication({
-              application: DocumentParser.parse(
-                parseFromFiles(['./test/test_files/application.jdl']),
-                'sql',
-                'monolith',
-                'toto',
-                '4.9.0'
-              ).applications.toto
+            JHipsterApplicationExporter.exportApplication({
+              application: new JDLApplication({
+                config: {
+                  baseName: 'toto',
+                  packageName: 'com.mathieu.sample',
+                  enableTranslation: false,
+                  languages: ['en', 'fr'],
+                  jhipsterVersion: '4.9.0'
+                }
+              })
             });
             fs.readFile(path.join('toto', '.yo-rc.json'), { encoding: 'utf8' }, (err, data) => {
               if (err) {
@@ -160,16 +160,19 @@ describe('JHipsterApplicationExporter', () => {
         });
         context('and passing a path', () => {
           let content = null;
+          let directoryExistence = null;
 
           before((done) => {
-            Exporter.exportApplication({
-              application: DocumentParser.parse(
-                parseFromFiles(['./test/test_files/application.jdl']),
-                'sql',
-                'monolith',
-                'toto',
-                '4.9.0'
-              ).applications.toto,
+            JHipsterApplicationExporter.exportApplication({
+              application: new JDLApplication({
+                config: {
+                  baseName: 'toto',
+                  packageName: 'com.mathieu.sample',
+                  enableTranslation: false,
+                  languages: ['en', 'fr'],
+                  jhipsterVersion: '4.9.0'
+                }
+              }),
               path: '../'
             });
             fs.readFile(path.join('../', 'toto', '.yo-rc.json'), { encoding: 'utf8' }, (err, data) => {
@@ -177,6 +180,7 @@ describe('JHipsterApplicationExporter', () => {
                 return done(err);
               }
               content = JSON.parse(data);
+              directoryExistence = fs.statSync(path.join('../', 'toto')).isDirectory();
               return done();
             });
           });
@@ -188,7 +192,7 @@ describe('JHipsterApplicationExporter', () => {
           });
 
           it('creates the folders if needed', () => {
-            expect(FileUtils.doesDirectoryExist(path.join('../', 'toto'))).to.be.true;
+            expect(directoryExistence).to.be.true;
           });
           it('exports it', () => {
             expect(content).not.to.be.undefined;
@@ -244,7 +248,7 @@ describe('JHipsterApplicationExporter', () => {
       context('such as undefined', () => {
         it('throws an error', () => {
           try {
-            Exporter.exportApplications();
+            JHipsterApplicationExporter.exportApplications();
             fail();
           } catch (error) {
             expect(error.name).to.eq('NullPointerException');
@@ -255,14 +259,27 @@ describe('JHipsterApplicationExporter', () => {
     context('when passing valid arguments', () => {
       context('when exporting applications to JSON', () => {
         before('common setup for both applications', () => {
-          Exporter.exportApplications({
-            applications: DocumentParser.parse(
-              parseFromFiles([path.join('test', 'test_files', 'applications.jdl')]),
-              'sql',
-              'monolith',
-              'toto',
-              '4.9.0'
-            ).applications
+          JHipsterApplicationExporter.exportApplications({
+            applications: [
+              new JDLApplication({
+                config: {
+                  baseName: 'toto',
+                  packageName: 'com.mathieu.toto',
+                  enableTranslation: false,
+                  languages: ['en', 'fr'],
+                  jhipsterVersion: '4.9.0'
+                }
+              }),
+              new JDLApplication({
+                config: {
+                  baseName: 'titi',
+                  packageName: 'com.mathieu.titi',
+                  enableTranslation: false,
+                  languages: ['en', 'fr'],
+                  jhipsterVersion: '4.9.0'
+                }
+              })
+            ]
           });
         });
 

@@ -90,12 +90,8 @@ describe('DocumentParser', () => {
             name: 'Department',
             tableName: 'Department',
             fields: {
-              departmentId: new JDLField({
-                name: 'departmentId',
-                type: FieldTypes.LONG
-              }),
-              departmentName: new JDLField({
-                name: 'departmentName',
+              name: new JDLField({
+                name: 'name',
                 type: FieldTypes.STRING,
                 validations: { required: new JDLValidation({ name: Validations.REQUIRED }) }
               }),
@@ -137,7 +133,6 @@ describe('DocumentParser', () => {
             name: 'Job',
             tableName: 'Job',
             fields: {
-              jobId: new JDLField({ name: 'jobId', type: FieldTypes.LONG }),
               jobTitle: new JDLField({
                 name: 'jobTitle',
                 type: FieldTypes.STRING,
