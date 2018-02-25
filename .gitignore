@@ -6,9 +6,8 @@ node_modules
 atlassian-ide-plugin.xml
 /.project
 test/temp/
-docs
+/docs
 *debug.log*
 .vscode
-yarn.lock
 .DS_Store
-.jhipster
+/.jhipster

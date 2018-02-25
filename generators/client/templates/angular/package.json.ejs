@@ -146,7 +146,7 @@
   },
   "scripts": {
     "precommit": "lint-staged",
-    "prettier:format":"<%= clientPackageManager %> prettier --write '**/*.ts'",
+    "prettier:format":"<%= clientPackageManager %> prettier --write **/*.ts",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "ngc": "ngc -p tsconfig-aot.json",

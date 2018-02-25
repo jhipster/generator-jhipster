@@ -28,6 +28,16 @@ const docker = require('../docker-base');
 const constants = require('../generator-constants');
 
 module.exports = class extends BaseGenerator {
+    constructor(args, opts) {
+        super(args, opts);
+        // This adds support for a `--skip-checks` flag
+        this.option('skip-checks', {
+            desc: 'Check the status of the required tools',
+            type: Boolean,
+            defaults: false
+        });
+    }
+
     get initializing() {
         return {
             sayHello() {
@@ -59,6 +69,8 @@ module.exports = class extends BaseGenerator {
             checkDocker: docker.checkDocker,
 
             checkDockerCompose() {
+                if (this.options['skip-checks']) return;
+
                 const done = this.async();
 
                 shelljs.exec('docker-compose -v', { silent: true }, (code, stdout, stderr) => {
