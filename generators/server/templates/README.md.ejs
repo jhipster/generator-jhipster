@@ -261,9 +261,9 @@ Unit tests are run by [Karma][] and written with [Jasmine][]. They're located in
 and can be run by starting Spring Boot in one terminal (`<% if (buildTool === 'maven') { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`<%= clientPackageManager %> run e2e`) in a second one.<% } %>
 <% } %><% if (gatlingTests) { %>### Other tests
 
-Performance tests are run by [Gatling][] and written in Scala. They're located in [src/test/gatling](src/test/gatling) and can be run with:
+Performance tests are run by [Gatling][] and written in Scala. They're located in [src/test/gatling](src/test/gatling).
 
-    <% if (buildTool === 'maven') { %>./mvnw gatling:execute<% } else { %>./gradlew gatlingRun<% } %>
+To use those tests, you must install Gatling from [https://gatling.io/](https://gatling.io/).
 <% } %>
 For more information, refer to the [Running tests page][].
 

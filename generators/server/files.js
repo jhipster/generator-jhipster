@@ -132,9 +132,6 @@ function writeFiles() {
                 this.template('gradle/graphite.gradle.ejs', 'gradle/graphite.gradle');
                 this.template('gradle/prometheus.gradle.ejs', 'gradle/prometheus.gradle');
                 this.template('gradle/zipkin.gradle.ejs', 'gradle/zipkin.gradle');
-                if (this.gatlingTests) {
-                    this.template('gradle/gatling.gradle.ejs', 'gradle/gatling.gradle');
-                }
                 if (this.databaseType === 'sql') {
                     this.template('gradle/liquibase.gradle.ejs', 'gradle/liquibase.gradle');
                 }

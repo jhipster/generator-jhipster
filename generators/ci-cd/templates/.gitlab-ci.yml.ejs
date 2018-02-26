@@ -79,27 +79,6 @@ gradle-front-test:
         paths:
             - build/test-results/karma/*
     <%_ } _%>
-    <%_ if (testFrameworks.includes('gatling')) { _%>
-gatling-test:
-    stage: test
-    allow_failure: true
-    script:
-        - ./gradlew gatlingRun -x cleanResources -PnodeInstall --no-daemon
-    before_script:
-        - export GRADLE_USER_HOME=`pwd`/.gradle
-        - chmod +x gradlew
-        <%_ if (!skipClient) { _%>
-            <%_ if (clientPackageManager === 'yarn') { _%>
-        - ./gradlew yarn_install -PnodeInstall --no-daemon
-            <%_ } else if (clientPackageManager === 'npm') { _%>
-        - ./gradlew npmInstall -PnodeInstall --no-daemon
-            <%_ } _%>
-        <%_ } _%>
-        - ./gradlew bootRun &
-    artifacts:
-        paths:
-            - build/reports/gatling/*
-    <%_ } _%>
 gradle-repackage:
     stage: package
     script:
@@ -152,29 +131,6 @@ maven-front-test:
     artifacts:
         paths:
             - target/test-results/karma/*
-    <%_ } _%>
-    <%_ if (testFrameworks.includes('gatling')) { _%>
-gatling-test:
-    stage: test
-    allow_failure: true
-    script:
-        - ./mvnw gatling:execute -Dmaven.repo.local=$MAVEN_USER_HOME
-    before_script:
-        - export MAVEN_USER_HOME=`pwd`/.maven
-        - chmod +x mvnw
-        <%_ if (!skipClient) { _%>
-            <%_ if (clientPackageManager === 'yarn') { _%>
-        - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v<%= NODE_VERSION %> -DyarnVersion=v<%= YARN_VERSION %>
-        - ./mvnw com.github.eirslett:frontend-maven-plugin:yarn
-            <%_ } else if (clientPackageManager === 'npm') { _%>
-        - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v<%= NODE_VERSION %> -DnpmVersion=<%= NPM_VERSION %>
-        - ./mvnw com.github.eirslett:frontend-maven-plugin:npm
-            <%_ } _%>
-        <%_ } _%>
-        - ./mvnw &
-    artifacts:
-        paths:
-            - target/gatling/*
     <%_ } _%>
     <%_ if (heroku.includes('gitlab')) { _%>
 maven-deploy:

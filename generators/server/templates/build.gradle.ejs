@@ -46,9 +46,6 @@ plugins {
     id "net.ltgt.apt-idea" version "0.13"
     id "net.ltgt.apt" version "0.13"
     id "io.spring.dependency-management" version "1.0.3.RELEASE"
-    <%_ if (gatlingTests) { _%>
-    id "com.github.lkishalmi.gatling" version "0.7.1"
-    <%_ } _%>
     <%_ if (!skipClient) { _%>
     id "com.moowork.node" version "1.2.0"
     <%_ } _%>
@@ -161,9 +158,6 @@ apply from: 'gradle/docker.gradle'
 apply from: 'gradle/sonar.gradle'
 <%_ if (databaseType === 'sql') { _%>
 apply from: 'gradle/liquibase.gradle'
-<%_ } _%>
-<%_ if (gatlingTests) { _%>
-apply from: 'gradle/gatling.gradle'
 <%_ } _%>
 apply from: 'gradle/mapstruct.gradle'
 <%_ if (enableSwaggerCodegen) { _%>
