@@ -206,8 +206,8 @@ const files = {
                 { file: 'modules/account/index.tsx', method: 'processJsx' },
                 // { file: 'account/activate/_activate.component.js', method: 'processJsx' },
                 { file: 'modules/account/password/password.tsx', method: 'processJsx' },
-		        { file: 'modules/account/password/password-strength-bar.tsx', method: 'processJsx' },
                 { file: 'modules/account/register/register.tsx', method: 'processJsx' },
+                { file: 'modules/account/password/password-strength-bar.tsx', method: 'processJsx' },
                 // { file: 'account/password-reset/init/_password-reset-init.component.js', method: 'processJsx' },
                 // { file: 'account/password-reset/finish/_password-reset-finish.component.js', method: 'processJsx' },
                 { file: 'modules/account/settings/settings.tsx', method: 'processJsx' }
@@ -238,20 +238,20 @@ const files = {
     //             { file: 'account/social/_social-auth.component.js', method: 'processJsx' },
     //   ]
     // },
-	{
-	    condition: generator => generator.useSass,
-	    path: REACT_DIR,
-	    templates: [
-		'modules/account/password/password-strength-bar.scss'
-	    ]
-	},
-	{
-	    condition: generator => !generator.useSass,
-	    path: REACT_DIR,
-	    templates: [
-		'modules/account/password/password-strength-bar.css'
-	    ]
-	}
+        {
+            condition: generator => generator.useSass,
+            path: REACT_DIR,
+            templates: [
+                'modules/account/password/password-strength-bar.scss'
+            ]
+        },
+        {
+            condition: generator => !generator.useSass,
+            path: REACT_DIR,
+            templates: [
+            'modules/account/password/password-strength-bar.css'
+            ]
+        }
     ],
     adminModule: [
         {
@@ -386,11 +386,10 @@ const files = {
                 'spec/entry.ts',
                 'spec/app/utils.ts',
                 'spec/app/config/notification-middleware.spec.ts',
-                'spec/app/shared/layout/header.spec.tsx',
-                'spec/app/account/register/register.spec.tsx',
-                // ='spec/app/account/activate/_activate.component.spec.js',
+                'spec/app/shared/layout/header.spec.tsx'
+                // 'spec/app/account/activate/_activate.component.spec.js',
                 // 'spec/app/account/password/_password.component.spec.js',
-                // 'spec/app/account/password/password-strength-bar.spec.tsx'
+                // 'spec/app/account/password/_password-strength-bar.component.spec.js',
                 // 'spec/app/account/password-reset/init/_password-reset-init.component.spec.js',
                 // 'spec/app/account/password-reset/finish/_password-reset-finish.component.spec.js',
                 // 'spec/app/account/register/_register.component.spec.js',
