@@ -386,7 +386,8 @@ const files = {
                 'spec/entry.ts',
                 'spec/app/utils.ts',
                 'spec/app/config/notification-middleware.spec.ts',
-                'spec/app/shared/layout/header.spec.tsx'
+                'spec/app/shared/layout/header.spec.tsx',
+                'spec/app/reducers/register.spec.ts'
                 // 'spec/app/account/activate/_activate.component.spec.js',
                 // 'spec/app/account/password/_password.component.spec.js',
                 // 'spec/app/account/password/_password-strength-bar.component.spec.js',
