@@ -179,7 +179,7 @@ public class <%= entityClass %>DTO implements Serializable {
         return <%= relationshipFieldName %>Id;
     }
 
-    public void set<%= relationshipNameCapitalized %>Id(Long <%= otherEntityName %>Id) {
+    public void set<%= relationshipNameCapitalized %>Id(<% if (relationshipFieldName === 'user' && authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> <%= otherEntityName %>Id) {
         this.<%= relationshipFieldName %>Id = <%= otherEntityName %>Id;
     }
     <%_ } else { // special case when the entity name has one character _%>
