@@ -19,6 +19,7 @@ export interface IUserSettingsProps {
   account: any;
   getSession: Function;
   saveAccountSettings: Function;
+  reset: Function;
   updateSuccess: boolean;
 }
 
