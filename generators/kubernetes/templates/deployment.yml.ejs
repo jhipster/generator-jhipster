@@ -28,6 +28,37 @@ spec:
       labels:
         app: <%= app.baseName.toLowerCase() %>
     spec:
+      initContainers:
+        - name: init-ds
+          image: busybox
+          command:
+            - '/bin/sh'
+            - '-c'
+            - |
+                while true
+                do
+                <%_ if (app.prodDatabaseType === 'mysql') { _%>
+                  rt=$(nc -z -w 1 <%= app.baseName.toLowerCase() %>-mysql 3306)
+                <%_ } _%>
+                <%_ if (app.prodDatabaseType === 'mariadb') { _%>
+                  rt=$(nc -z -w 1 <%= app.baseName.toLowerCase() %>-mariadb 3306)
+                <%_ } _%>
+                <%_ if (app.prodDatabaseType === 'postgresql') { _%>
+                  rt=$(nc -z -w 1 <%= app.baseName.toLowerCase() %>-postgresql 5432)
+                <%_ } _%>
+                <%_ if (app.prodDatabaseType === 'mongodb') { _%>
+                  rt=$(nc -z -w 1 <%= app.baseName.toLowerCase() %>-mongodb 27017)
+                <%_ } _%>
+                <%_ if (app.prodDatabaseType === 'couchbase') { _%>
+                  rt=$(nc -z -w 1 <%= app.baseName.toLowerCase() %>-couchbase 8091)
+                <%_ } _%>
+                  if [ $? -eq 0 ]; then
+                    echo "DB is UP"
+                    break
+                  fi
+                  echo "DB is not yet reachable;sleep for 10s before retry"
+                  sleep 10
+                done
       containers:
       - name: <%= app.baseName.toLowerCase() %>-app
         image: <%= app.targetImageName %>
@@ -86,7 +117,7 @@ spec:
         - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES
           value: <%= app.baseName.toLowerCase() %>-zookeeper.<%= kubernetesNamespace %>.svc.cluster.local
         <%_ } _%>
-        <%_ if (jhipsterConsole) { _%>
+        <%_ if (monitoring === 'elk') { _%>
         - name: JHIPSTER_METRICS_LOGS_ENABLED
           value: 'true'
         - name: JHIPSTER_LOGGING_LOGSTASH_ENABLED
@@ -100,7 +131,7 @@ spec:
           value: http://jhipster-zipkin
             <%_ } _%>
         <%_ } _%>
-        <%_ if (prometheusOperator) { _%>
+        <%_ if (monitoring === 'prometheus') { _%>
         - name: JHIPSTER_METRICS_PROMETHEUS_ENABLED
           value: 'true'
         - name: JHIPSTER_METRICS_PROMETHEUS_ENDPOINT
@@ -122,9 +153,11 @@ spec:
           httpGet:
             path: /management/health
             port: web
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
         livenessProbe:
           httpGet:
             path: /management/health
             port: web
-          initialDelaySeconds: 180
-
+          initialDelaySeconds: 120

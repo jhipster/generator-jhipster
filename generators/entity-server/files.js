@@ -40,7 +40,7 @@ const serverFiles = {
             condition: generator => generator.databaseType === 'sql',
             path: SERVER_MAIN_RES_DIR,
             templates: [{
-                file: 'config/liquibase/changelog/_added_entity.xml',
+                file: 'config/liquibase/changelog/added_entity.xml',
                 options: { interpolate: INTERPOLATE_REGEX },
                 renameTo: generator => `config/liquibase/changelog/${generator.changelogDate}_added_entity_${generator.entityClass}.xml`
             }]
@@ -49,7 +49,7 @@ const serverFiles = {
             condition: generator => generator.databaseType === 'sql' && (generator.fieldsContainOwnerManyToMany || generator.fieldsContainOwnerOneToOne || generator.fieldsContainManyToOne),
             path: SERVER_MAIN_RES_DIR,
             templates: [{
-                file: 'config/liquibase/changelog/_added_entity_constraints.xml',
+                file: 'config/liquibase/changelog/added_entity_constraints.xml',
                 options: { interpolate: INTERPOLATE_REGEX },
                 renameTo: generator => `config/liquibase/changelog/${generator.changelogDate}_added_entity_constraints_${generator.entityClass}.xml`
             }]
@@ -58,7 +58,7 @@ const serverFiles = {
             condition: generator => generator.databaseType === 'cassandra',
             path: SERVER_MAIN_RES_DIR,
             templates: [{
-                file: 'config/cql/changelog/_added_entity.cql',
+                file: 'config/cql/changelog/added_entity.cql',
                 renameTo: generator => `config/cql/changelog/${generator.changelogDate}_added_entity_${generator.entityClass}.cql`
             }]
         }
@@ -68,15 +68,15 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/domain/_Entity.java',
+                    file: 'package/domain/Entity.java',
                     renameTo: generator => `${generator.packageFolder}/domain/${generator.entityClass}.java`
                 },
                 {
-                    file: 'package/repository/_EntityRepository.java',
+                    file: 'package/repository/EntityRepository.java',
                     renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}Repository.java`
                 },
                 {
-                    file: 'package/web/rest/_EntityResource.java',
+                    file: 'package/web/rest/EntityResource.java',
                     renameTo: generator => `${generator.packageFolder}/web/rest/${generator.entityClass}Resource.java`
                 }
             ]
@@ -86,11 +86,11 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/service/dto/_EntityCriteria.java',
+                    file: 'package/service/dto/EntityCriteria.java',
                     renameTo: generator => `${generator.packageFolder}/service/dto/${generator.entityClass}Criteria.java`
                 },
                 {
-                    file: 'package/service/_EntityQueryService.java',
+                    file: 'package/service/EntityQueryService.java',
                     renameTo: generator => `${generator.packageFolder}/service/${generator.entityClass}QueryService.java`
                 },
             ]
@@ -99,7 +99,7 @@ const serverFiles = {
             condition: generator => generator.searchEngine === 'elasticsearch',
             path: SERVER_MAIN_SRC_DIR,
             templates: [{
-                file: 'package/repository/search/_EntitySearchRepository.java',
+                file: 'package/repository/search/EntitySearchRepository.java',
                 renameTo: generator => `${generator.packageFolder}/repository/search/${generator.entityClass}SearchRepository.java`
             }]
         },
@@ -108,11 +108,11 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/service/_EntityService.java',
+                    file: 'package/service/EntityService.java',
                     renameTo: generator => `${generator.packageFolder}/service/${generator.entityClass}Service.java`
                 },
                 {
-                    file: 'package/service/impl/_EntityServiceImpl.java',
+                    file: 'package/service/impl/EntityServiceImpl.java',
                     renameTo: generator => `${generator.packageFolder}/service/impl/${generator.entityClass}ServiceImpl.java`
                 }
             ]
@@ -121,7 +121,7 @@ const serverFiles = {
             condition: generator => generator.service === 'serviceClass',
             path: SERVER_MAIN_SRC_DIR,
             templates: [{
-                file: 'package/service/impl/_EntityServiceImpl.java',
+                file: 'package/service/impl/EntityServiceImpl.java',
                 renameTo: generator => `${generator.packageFolder}/service/${generator.entityClass}Service.java`
             }]
         },
@@ -130,15 +130,15 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/service/dto/_EntityDTO.java',
+                    file: 'package/service/dto/EntityDTO.java',
                     renameTo: generator => `${generator.packageFolder}/service/dto/${generator.entityClass}DTO.java`
                 },
                 {
-                    file: 'package/service/mapper/_BaseEntityMapper.java',
+                    file: 'package/service/mapper/BaseEntityMapper.java',
                     renameTo: generator => `${generator.packageFolder}/service/mapper/EntityMapper.java`
                 },
                 {
-                    file: 'package/service/mapper/_EntityMapper.java',
+                    file: 'package/service/mapper/EntityMapper.java',
                     renameTo: generator => `${generator.packageFolder}/service/mapper/${generator.entityClass}Mapper.java`
                 }
             ]
@@ -148,7 +148,7 @@ const serverFiles = {
         {
             path: SERVER_TEST_SRC_DIR,
             templates: [{
-                file: 'package/web/rest/_EntityResourceIntTest.java',
+                file: 'package/web/rest/EntityResourceIntTest.java',
                 options: {
                     context: {
                         randexp, _, chalkRed: chalk.red, fs, SERVER_TEST_SRC_DIR
@@ -161,7 +161,7 @@ const serverFiles = {
             condition: generator => generator.searchEngine === 'elasticsearch',
             path: SERVER_TEST_SRC_DIR,
             templates: [{
-                file: 'package/repository/search/_EntitySearchRepositoryMockConfiguration.java',
+                file: 'package/repository/search/EntitySearchRepositoryMockConfiguration.java',
                 renameTo: generator => `${generator.packageFolder}/repository/search/${generator.entityClass}SearchRepositoryMockConfiguration.java`
             }]
         },
@@ -169,7 +169,7 @@ const serverFiles = {
             condition: generator => generator.gatlingTests,
             path: TEST_DIR,
             templates: [{
-                file: 'gatling/user-files/simulations/_EntityGatlingTest.scala',
+                file: 'gatling/user-files/simulations/EntityGatlingTest.scala',
                 options: { interpolate: INTERPOLATE_REGEX },
                 renameTo: generator => `gatling/user-files/simulations/${generator.entityClass}GatlingTest.scala`
             }]
@@ -219,7 +219,7 @@ function writeFiles() {
                     const enumInfo = utils.buildEnumInfo(field, this.angularAppName, this.packageName, this.clientRootFolder);
                     if (!this.skipServer) {
                         this.template(
-                            `${SERVER_MAIN_SRC_DIR}package/domain/enumeration/_Enum.java`,
+                            `${SERVER_MAIN_SRC_DIR}package/domain/enumeration/Enum.java.ejs`,
                             `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/domain/enumeration/${fieldType}.java`,
                             this, {}, enumInfo
                         );

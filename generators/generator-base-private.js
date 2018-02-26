@@ -88,10 +88,10 @@ module.exports = class extends Generator {
         }
 
         // Templates
-        generator.template(`${webappDir}i18n/${lang}/_activate.json`, `${webappDir}i18n/${lang}/activate.json`);
-        generator.template(`${webappDir}i18n/${lang}/_global.json`, `${webappDir}i18n/${lang}/global.json`);
-        generator.template(`${webappDir}i18n/${lang}/_health.json`, `${webappDir}i18n/${lang}/health.json`);
-        generator.template(`${webappDir}i18n/${lang}/_reset.json`, `${webappDir}i18n/${lang}/reset.json`);
+        generator.template(`${webappDir}i18n/${lang}/activate.json.ejs`, `${webappDir}i18n/${lang}/activate.json`);
+        generator.template(`${webappDir}i18n/${lang}/global.json.ejs`, `${webappDir}i18n/${lang}/global.json`);
+        generator.template(`${webappDir}i18n/${lang}/health.json.ejs`, `${webappDir}i18n/${lang}/health.json`);
+        generator.template(`${webappDir}i18n/${lang}/reset.json.ejs`, `${webappDir}i18n/${lang}/reset.json`);
     }
 
     /**
@@ -105,7 +105,7 @@ module.exports = class extends Generator {
         const generator = _this || this;
         // Template the message server side properties
         const langProp = lang.replace(/-/g, '_');
-        generator.template(`${resourceDir}i18n/_messages_${langProp}.properties`, `${resourceDir}i18n/messages_${langProp}.properties`);
+        generator.template(`${resourceDir}i18n/messages_${langProp}.properties.ejs`, `${resourceDir}i18n/messages_${langProp}.properties`);
     }
 
     /**
@@ -117,7 +117,7 @@ module.exports = class extends Generator {
     copyI18n(language, prefix = '') {
         try {
             const fileName = this.entityTranslationKey;
-            this.template(`${prefix ? `${prefix}/` : ''}i18n/_entity_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${fileName}.json`);
+            this.template(`${prefix ? `${prefix}/` : ''}i18n/entity_${language}.json.ejs`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${fileName}.json`);
             this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClass, language);
         } catch (e) {
             this.debug('Error:', e);
@@ -135,7 +135,7 @@ module.exports = class extends Generator {
      */
     copyEnumI18n(language, enumInfo, prefix = '') {
         try {
-            this.template(`${prefix ? `${prefix}/` : ''}i18n/_enum.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.clientRootFolder}${enumInfo.enumInstance}.json`, this, {}, enumInfo);
+            this.template(`${prefix ? `${prefix}/` : ''}i18n/enum.json.ejs`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.clientRootFolder}${enumInfo.enumInstance}.json`, this, {}, enumInfo);
         } catch (e) {
             this.debug('Error:', e);
             // An exception is thrown if the folder doesn't exist
