@@ -207,11 +207,12 @@ const files = {
                 // { file: 'account/activate/_activate.component.js', method: 'processJsx' },
                 { file: 'modules/account/activate/activate.tsx', method: 'processJsx' },
                 { file: 'modules/account/password/password.tsx', method: 'processJsx' },
+                { file: 'modules/account/password/password-strength-bar.tsx', method: 'processJsx' },
                 // { file: 'account/password-reset/init/_password-reset-init.component.js', method: 'processJsx' },
                 // { file: 'account/password-reset/finish/_password-reset-finish.component.js', method: 'processJsx' },
                 { file: 'modules/account/settings/settings.tsx', method: 'processJsx' }
             ]
-        }
+        },
     // {
     //   condition: generator => generator.authenticationType === 'session',
     //   path: REACT_DIR,
@@ -236,20 +237,20 @@ const files = {
     //             { file: 'account/social/_social-auth.component.js', method: 'processJsx' },
     //   ]
     // },
-    // {
-    //   condition: generator => generator.useSass,
-    //   path: REACT_DIR,
-    //   templates: [
-    //     'account/password/_password-strength-bar.scss'
-    //   ]
-    // },
-    // {
-    //   condition: generator => !generator.useSass,
-    //   path: REACT_DIR,
-    //   templates: [
-    //     'account/password/_password-strength-bar.css'
-    //   ]
-    // }
+        {
+            condition: generator => generator.useSass,
+            path: REACT_DIR,
+            templates: [
+                'modules/account/password/password-strength-bar.scss'
+            ]
+        },
+        {
+            condition: generator => !generator.useSass,
+            path: REACT_DIR,
+            templates: [
+                'modules/account/password/password-strength-bar.css'
+            ]
+        }
     ],
     adminModule: [
         {
@@ -390,7 +391,7 @@ const files = {
                 // 'spec/app/account/password/_password-strength-bar.component.spec.js',
                 // 'spec/app/account/password-reset/init/_password-reset-init.component.spec.js',
                 // 'spec/app/account/password-reset/finish/_password-reset-finish.component.spec.js',
-                // 'spec/app/account/register/_register.component.spec.js',
+                // 'spec/app/account/register/component.spec.js',
                 // 'spec/app/account/settings/_settings.component.spec.js',
                 // 'spec/app/admin/health/_health.component.spec.js',
                 // 'spec/app/admin/audits/_audits.component.spec.js',
