@@ -388,6 +388,7 @@ const files = {
                 'spec/app/shared/layout/header.spec.tsx',
                 'spec/app/reducers/activate.spec.tsx',
                 'spec/app/reducers/account.spec.tsx',
+                'spec/app/reducers/authentication.spec.tsx',
                 // 'spec/app/account/activate/_activate.component.spec.js',
                 // 'spec/app/account/password/_password.component.spec.js',
                 // 'spec/app/account/password/_password-strength-bar.component.spec.js',
