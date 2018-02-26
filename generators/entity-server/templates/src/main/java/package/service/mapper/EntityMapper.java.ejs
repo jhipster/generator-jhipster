@@ -80,7 +80,7 @@ _%>
     <%_ } _%>
     <%_ if(databaseType === 'sql') { _%>
 
-    default <%= entityClass %> fromId(Long id) {
+    default <%= entityClass %> fromId(<% if (authenticationType === 'oauth2' && relationshipName === 'user') { _%>String<%_ } else { _%>Long<% } %> id) {
         if (id == null) {
             return null;
         }
