@@ -32,6 +32,7 @@ limitations under the License.
     "loaders.css": "0.1.2",
     "lodash": "4.17.4",
     "moment": "2.19.1",
+    "query-string": "5.1.0",
     "react": "16.0.0",
     "react-addons-css-transition-group": "16.0.0-alpha.3",
     "react-addons-transition-group": "16.0.0-alpha.3",
