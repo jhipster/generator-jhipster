@@ -107,7 +107,7 @@ describe('<%= entityClass %> e2e test', () => {
         <%= entityInstance %>DialogPage.set<%= fieldNameCapitalized %>Input('2000-12-31');
         expect(<%= entityInstance %>DialogPage.get<%= fieldNameCapitalized %>Input()).toMatch('2000-12-31');
         <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-        <%= entityInstance %>DialogPage.set<%= fieldNameCapitalized %>Input('31/12/2001' + protractor.Key.TAB + '02:30');
+        <%= entityInstance %>DialogPage.set<%= fieldNameCapitalized %>Input('31/12/2001' + protractor.Key.TAB + '02:30' + protractor.Key.TAB + 'AM');
         expect(<%= entityInstance %>DialogPage.get<%= fieldNameCapitalized %>Input()).toMatch('2001-12-31T02:30');
         <%_ } else if (fieldType === 'Boolean') { _%>
         <%= entityInstance %>DialogPage.get<%= fieldNameCapitalized %>Input().isSelected().then((selected) => {

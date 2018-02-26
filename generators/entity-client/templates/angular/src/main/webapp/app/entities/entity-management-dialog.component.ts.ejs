@@ -33,6 +33,10 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+<%_ if ( fieldsContainInstant || fieldsContainZonedDateTime ) { _%>
+import { DateFormatPipe, ParsePipe } from 'angular2-moment';
+import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
+<%_ } _%>
 import { JhiEventManager<% if (queries && queries.length > 0) { %>, JhiAlertService<% } %><% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
 
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
@@ -61,9 +65,6 @@ import { <%= uniqueRel.otherEntityAngularName%>Service } from '../<%= uniqueRel.
         }
     }
 }); _%>
-<%_ if ( fieldsContainInstant || fieldsContainZonedDateTime ) { _%>
-import { DateFormatPipe, ParsePipe } from 'angular2-moment';
-<%_ } _%>
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-dialog',
@@ -153,7 +154,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
             const fieldName = fields[ idx ].fieldName;
             const fieldType = fields[idx].fieldType;
             if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType)) { _%>
-                this.<%= entityInstance %>.<%= fieldName %> = this.stringToMomentPipe.transform(this.<%= fieldName %>, 'YYYY-MM-DDThh:mm');
+                this.<%= entityInstance %>.<%= fieldName %> = this.stringToMomentPipe.transform(this.<%= fieldName %>, DATE_TIME_FORMAT);
         <%_ }
         } _%>
         if (this.<%= entityInstance %>.id !== undefined) {
