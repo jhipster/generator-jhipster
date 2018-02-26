@@ -23,14 +23,21 @@ const constants = require('../generator-constants');
 
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
+let useBlueprint = false;
+
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
-        this.argument('name', { type: String, required: true });
-        this.name = this.options.name;
+ 
+        this.name = this.options.name || this.options._;
+
+        this.setupSpringServiceOptions(this);
+        const blueprint = this.options.blueprint || this.config.get('blueprint');
+        useBlueprint = this.composeBlueprint(blueprint, 'spring-service'); // use global variable since getters dont have access to instance property        
     }
 
     initializing() {
+        if (useBlueprint) return;
         this.log(`The service ${this.name} is being created.`);
         this.baseName = this.config.get('baseName');
         this.packageName = this.config.get('packageName');
@@ -39,6 +46,7 @@ module.exports = class extends BaseGenerator {
     }
 
     prompting() {
+        if (useBlueprint) return;
         const done = this.async();
 
         const prompts = [
@@ -56,6 +64,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get default() {
+        if (useBlueprint) return;
         return {
             insight() {
                 const insight = this.insight();
@@ -66,6 +75,7 @@ module.exports = class extends BaseGenerator {
     }
 
     writing() {
+        if (useBlueprint) return;
         this.serviceClass = _.upperFirst(this.name);
         this.serviceInstance = _.lowerCase(this.name);
 
