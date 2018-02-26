@@ -390,7 +390,7 @@ const files = {
                 'spec/app/account/register/register.spec.tsx',
                 // ='spec/app/account/activate/_activate.component.spec.js',
                 // 'spec/app/account/password/_password.component.spec.js',
-                'spec/app/account/password/password-strength-bar.spec.tsx'
+                // 'spec/app/account/password/password-strength-bar.spec.tsx'
                 // 'spec/app/account/password-reset/init/_password-reset-init.component.spec.js',
                 // 'spec/app/account/password-reset/finish/_password-reset-finish.component.spec.js',
                 // 'spec/app/account/register/_register.component.spec.js',
