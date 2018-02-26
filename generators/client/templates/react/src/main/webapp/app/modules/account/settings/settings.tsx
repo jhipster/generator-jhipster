@@ -38,6 +38,10 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
     this.props.getSession();
   }
 
+  componentWillUnmount() {
+    this.props.reset();
+  }
+
   componentWillReceiveProps(nextProps) {
     this.setState({
       account: nextProps.account

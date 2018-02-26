@@ -30,6 +30,7 @@ export class SettingsPage extends React.Component<IUserSettingsProps> {
   };
 
   componentDidMount() {
+    this.props.reset();
     this.props.getSession();
   }
 
@@ -46,7 +47,7 @@ export class SettingsPage extends React.Component<IUserSettingsProps> {
   };
 
   render() {
-    const { account , updateSuccess, updateFailure } = this.props;
+    const { account, updateSuccess, updateFailure } = this.props;
     let alertMessage = null;
 
     if (updateFailure) {

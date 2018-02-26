@@ -23,17 +23,18 @@ export default (state = initialState, action) => {
       return {
         ...state,
         errorMessage: null,
-        updatePasswordSuccess: false,
+        updateSuccess: false,
         loading: true
       };
     case REQUEST(ACTION_TYPES.UPDATE_PASSWORD):
       return {
         ...initialState,
         errorMessage: null,
-        updatePasswordSuccess: false,
+        updateSuccess: false,
         loading: true
       };
     case FAILURE(ACTION_TYPES.UPDATE_ACCOUNT):
+      console.log('Failure');
       return {
         ...state,
         loading: false,
@@ -41,24 +42,27 @@ export default (state = initialState, action) => {
         updateFailure: true
       };
     case SUCCESS(ACTION_TYPES.UPDATE_ACCOUNT):
+      console.log('Success');
       return {
         ...state,
         loading: false,
+        updateSuccess: true,
+        updateFailure: false,
         account: action.payload.data
       };
     case FAILURE(ACTION_TYPES.UPDATE_PASSWORD):
       return {
         ...initialState,
         loading: false,
-        updatePasswordSuccess: false,
-        updatePasswordFailure: true
+        updateSuccess: false,
+        updateFailure: true
       };
     case SUCCESS(ACTION_TYPES.UPDATE_PASSWORD):
       return {
         ...initialState,
         loading: false,
-        updatePasswordSuccess: true,
-        updatePasswordFailure: false
+        updateSuccess: true,
+        updateFailure: false
       };
     case ACTION_TYPES.RESET:
       return {
@@ -90,4 +94,3 @@ export const saveAccountSettings = account => dispatch => {
     payload: axios.post(apiUrl, account)
   });
 };
-

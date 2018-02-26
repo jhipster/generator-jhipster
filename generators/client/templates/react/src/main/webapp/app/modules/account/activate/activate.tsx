@@ -30,7 +30,6 @@ export interface IActivateProps {
 }
 
 export class ActivatePage extends React.Component<IActivateProps> {
-
   getKeyFromLocation = () => {
     const location = this.props['location'];
     if (location && location['search']) {
@@ -41,6 +40,7 @@ export class ActivatePage extends React.Component<IActivateProps> {
   };
 
   componentWillMount() {
+    this.props.reset();
     const key = this.getKeyFromLocation();
     if (key) {
       this.props.activateAction(key);
@@ -61,8 +61,8 @@ export class ActivatePage extends React.Component<IActivateProps> {
             <h1>
               <Translate contentKey="activate.title" />
             </h1>
-            {(activationSuccess) ? successAlert : undefined}
-            {(activationFailure) ? failureAlert : undefined}
+            {activationSuccess ? successAlert : undefined}
+            {activationFailure ? failureAlert : undefined}
           </Col>
         </Row>
       </div>
