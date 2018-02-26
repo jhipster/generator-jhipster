@@ -8,8 +8,8 @@ import layout from './layout';
 import authentication from './authentication';
 import administration from './administration';
 import userManagement from './user-management';
-import register from './register';
 import account from './account';
+import activate from './activate';
 
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
@@ -21,8 +21,8 @@ export default combineReducers({
   layout,
   administration,
   userManagement,
-  register,
   account,
+  activate,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar
 });
