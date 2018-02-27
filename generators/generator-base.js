@@ -1737,7 +1737,7 @@ module.exports = class extends PrivateBase {
     composeExternalModule(npmPackageName, subGen, options) {
         let generatorTocall = path.join(process.cwd(), 'node_modules', npmPackageName, 'generators', subGen);
         try {
-            if (!fs.existsSync(generatorTocall)) {    
+            if (!fs.existsSync(generatorTocall)) {
                 this.debug('using global module as local version could not be found in node_modules');
                 generatorTocall = path.join(npmPackageName, 'generators', subGen);
             }
@@ -2395,7 +2395,14 @@ module.exports = class extends PrivateBase {
 
 
     setupSpringServiceOptions(generator, context = generator) {
-        generator.serviceName = context.options.name;
+        if (!context.options.name) {
+            if (context.options._) {
+                generator.name = context.options.name;
+            } else {
+                this.argument('name', { type: String, required: true });
+                generator.name = context.options.name;
+            }
+        }
     }
 
     /**

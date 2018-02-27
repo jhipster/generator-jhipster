@@ -28,12 +28,10 @@ let useBlueprint = false;
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
- 
-        this.name = this.options.name || this.options._;
 
         this.setupSpringServiceOptions(this);
         const blueprint = this.options.blueprint || this.config.get('blueprint');
-        useBlueprint = this.composeBlueprint(blueprint, 'spring-service'); // use global variable since getters dont have access to instance property        
+        useBlueprint = this.composeBlueprint(blueprint, 'spring-service'); // use global variable since getters dont have access to instance property
     }
 
     initializing() {
