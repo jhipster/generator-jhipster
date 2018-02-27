@@ -491,7 +491,7 @@ public class CacheConfiguration {
                 cacheManager.getCache("oAuth2Authentication").getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
             <%_ } _%>
-            <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
+            <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && applicationType !== 'microservice')) { _%>
             registerPredefinedCache(<%=packageName%>.repository.UserRepository.USERS_BY_LOGIN_CACHE, new JCache<Object, Object>(
                 cacheManager.getCache(<%=packageName%>.repository.UserRepository.USERS_BY_LOGIN_CACHE).getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
