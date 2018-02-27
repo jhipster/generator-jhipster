@@ -112,7 +112,7 @@ if (OperatingSystem.current().isWindows()) {
     bootRun {
         dependsOn pathingJar
         doFirst {
-            classpath = files("$buildDir/classes/java/main", "$buildDir/resources/main", pathingJar.archivePath)
+            classpath += files("$buildDir/classes/java/main", "$buildDir/resources/main", pathingJar.archivePath)
         }
     }
 }
