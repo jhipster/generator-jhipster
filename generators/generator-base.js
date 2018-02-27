@@ -2397,7 +2397,7 @@ module.exports = class extends PrivateBase {
     setupSpringServiceOptions(generator, context = generator) {
         if (!context.options.name) {
             if (context.options._) {
-                generator.name = context.options.name;
+                generator.name = context.options._;
             } else {
                 this.argument('name', { type: String, required: true });
                 generator.name = context.options.name;
