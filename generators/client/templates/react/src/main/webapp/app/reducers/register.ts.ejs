@@ -42,12 +42,12 @@ export default (state = initialState, action) => {
   }
 };
 
+// Actions
 export const handleRegister = (login, email, password) => ({
   type: ACTION_TYPES.CREATE_ACCOUNT,
   payload: axios.post('/api/register', { login, email, password })
 });
 
-// Actions
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
