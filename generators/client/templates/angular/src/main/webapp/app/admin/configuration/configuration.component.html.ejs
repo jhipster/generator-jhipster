@@ -20,7 +20,7 @@
     <h2 jhiTranslate="configuration.title">Configuration</h2>
 
     <span jhiTranslate="configuration.filter">Filter (by prefix)</span> <input type="text" [(ngModel)]="filter" class="form-control">
-    <label>Spring configuration</label>
+    <h3>Spring configuration</h3>
     <table class="table table-striped table-bordered table-responsive d-table">
         <thead>
         <tr>
@@ -43,7 +43,7 @@
         </tbody>
     </table>
     <div *ngFor="let key of keys(allConfiguration)">
-        <label><span>{{key}}</span></label>
+        <h4><span>{{key}}</span></h4>
         <table class="table table-sm table-striped table-bordered table-responsive d-table">
             <thead>
             <tr>
