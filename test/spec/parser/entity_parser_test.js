@@ -705,6 +705,33 @@ describe('EntityParser', () => {
           expect(content.B.applications).to.deep.equal([]);
         });
       });
+      context('when parsing a relationship with no from injected field for a one-to-one', () => {
+        let content = null;
+
+        before(() => {
+          const entityA = new JDLEntity({ name: 'A' });
+          const entityB = new JDLEntity({ name: 'B' });
+          const relationship = new JDLRelationship({
+            from: entityA,
+            to: entityB,
+            injectedFieldInTo: 'a',
+            type: RelationshipTypes.ONE_TO_ONE
+          });
+          const jdlObject = new JDLObject();
+          jdlObject.addEntity(entityA);
+          jdlObject.addEntity(entityB);
+          jdlObject.addRelationship(relationship);
+          content = EntityParser.parse({
+            jdlObject,
+            databaseType: DatabaseTypes.sql
+          });
+        });
+
+        it('sets one by default', () => {
+          expect(content.A.relationships[0].relationshipName).to.equal('b');
+          expect(content.B.relationships[0].otherEntityRelationshipName).to.equal('a');
+        });
+      });
     });
   });
 });
