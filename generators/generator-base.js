@@ -1467,7 +1467,7 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * Add a Maven Repository
+     * Add a remote Maven Repository to the Gradle build.
      *
      * @param {string} url - url of the repository
      * @param {string} username - (optional) username of the repository credentials
