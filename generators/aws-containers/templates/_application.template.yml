@@ -155,6 +155,21 @@ Resources:
         ToPort: 65535
         SourceSecurityGroupId: !GetAtt JHipsterInternalSG.GroupId
       VpcId: !Ref vpcID
+  JHipsterInternetSG:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: External JHipster Container Security Group for ALB
+      VpcId: !Ref vpcID
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '80'
+        ToPort: '80'
+        CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+      - IpProtocol: tcp
+        FromPort: '8080'
+        ToPort: '8080'
+        DestinationSecurityGroupId: !Ref JHipsterInternalSG
   JHipsterContainerRegistry:
     Type: 'AWS::ECR::Repository'
     Properties:
@@ -260,13 +275,15 @@ Resources:
     Type: 'AWS::ElasticLoadBalancingV2::LoadBalancer'
     Properties:
       Scheme: internet-facing
-      Type: network
+      Type: application
       Subnets: !Ref elbSubnets
+      SecurityGroups:
+      - !Ref JHipsterInternetSG
   JHIpsterALBTargetGroup:
     Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
     Properties:
       Port: 80
-      Protocol: TCP
+      Protocol: HTTP
       TargetType: ip
       VpcId: !Ref vpcID
       HealthCheckIntervalSeconds: 30
@@ -278,7 +295,7 @@ Resources:
           TargetGroupArn: !Ref JHIpsterALBTargetGroup
       LoadBalancerArn: !Ref JHipsterLoadBalancer
       Port: '80'
-      Protocol: TCP
+      Protocol: HTTP
   JHipsterAppService:
     Type: 'AWS::ECS::Service'
     DependsOn:

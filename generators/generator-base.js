@@ -1270,7 +1270,6 @@ module.exports = class extends PrivateBase {
      * @param {string} other - (optional) explicit other thing: scope, exclusions...
      */
     addMavenDependencyInDirectory(directory, groupId, artifactId, version, other) {
-        const fullPath = path.resolve(directory, 'pom.xml');
         try {
             let dependency = `${'<dependency>\n' +
                 '            <groupId>'}${groupId}</groupId>\n` +
@@ -1283,14 +1282,15 @@ module.exports = class extends PrivateBase {
             }
             dependency += '        </dependency>';
             jhipsterUtils.rewriteFile({
-                file: fullPath,
+                path: directory,
+                file: 'pom.xml',
                 needle: 'jhipster-needle-maven-add-dependency',
                 splicable: [
                     dependency
                 ]
             }, this);
         } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}maven dependency (groupId: ${groupId}, artifactId:${artifactId}, version:${version})${chalk.yellow(' not added.\n')}`);
+            this.log(`${chalk.yellow('\nUnable to find ') + directory + chalk.yellow(' or missing required jhipster-needle. Reference to ')}maven dependency (groupId: ${groupId}, artifactId:${artifactId}, version:${version})${chalk.yellow(' not added.\n')}`);
             this.debug('Error:', e);
         }
     }
@@ -1451,21 +1451,21 @@ module.exports = class extends PrivateBase {
      * @param {string} version - (optional) explicit dependency version number
      */
     addGradleDependencyInDirectory(directory, scope, group, name, version) {
-        const fullPath = path.resolve(directory, 'build.gradle');
         let dependency = `${group}:${name}`;
         if (version) {
             dependency += `:${version}`;
         }
         try {
             jhipsterUtils.rewriteFile({
-                file: fullPath,
+                path: directory,
+                file: 'build.gradle',
                 needle: 'jhipster-needle-gradle-dependency',
                 splicable: [
                     `${scope} "${dependency}"`
                 ]
             }, this);
         } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + group}:${name}:${version}${chalk.yellow(' not added.\n')}`);
+            this.log(`${chalk.yellow('\nUnable to find ') + directory + chalk.yellow(' or missing required jhipster-needle. Reference to ') + group}:${name}:${version}${chalk.yellow(' not added.\n')}`);
             this.debug('Error:', e);
         }
     }

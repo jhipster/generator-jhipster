@@ -36,31 +36,6 @@ module.exports = {
 };
 
 /**
- * Check Docker
- */
-function checkDocker() {
-    if (this.options['skip-checks']) return;
-    const done = this.async();
-
-    shelljs.exec('docker -v', { silent: true }, (code, stdout, stderr) => {
-        if (stderr) {
-            this.log(chalk.red('Docker version 1.10.0 or later is not installed on your computer.\n' +
-                '         Read http://docs.docker.com/engine/installation/#installation\n'));
-        } else {
-            const dockerVersion = stdout.split(' ')[2].replace(/,/g, '');
-            const dockerVersionMajor = dockerVersion.split('.')[0];
-            const dockerVersionMinor = dockerVersion.split('.')[1];
-            if (dockerVersionMajor < 1 || (dockerVersionMajor === 1 && dockerVersionMinor < 10)) {
-                this.log(chalk.red(`${'Docker version 1.10.0 or later is not installed on your computer.\n' +
-                    '         Docker version found: '}${dockerVersion}\n` +
-                    '         Read http://docs.docker.com/engine/installation/#installation\n'));
-            }
-        }
-        done();
-    });
-}
-
-/**
  * Check Images
  */
 function checkImages() {

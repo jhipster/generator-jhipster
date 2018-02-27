@@ -1,39 +1,65 @@
 const _ = require('lodash');
 const chalk = require('chalk');
+const databaseTypes = require('jhipster-core').JHipsterDatabaseTypes.Types;
 
 const AURORA_DB_PASSORD_REGEX = /^[^@"\/]{8,42}$/; // eslint-disable-line
-const PERF_TO_CONFIG = {
+const CLOUDFORMATION_STACK_NAME = /[a-zA-Z][-a-zA-Z0-9]*/; // eslint-disable-line
+
+const SCALING_TO_CONFIG = {
     low: {
         fargate: {
-            taskCount: 1,
-            CPU: '1024',
-            memory: '2GB'
+            taskCount: 1
         },
         database: {
-            instances: 1,
-            size: 'db.t2.small'
+            instances: 1
         }
     },
     medium: {
         fargate: {
-            taskCount: 2,
-            CPU: '2048',
-            memory: '4GB'
+            taskCount: 2
         },
         database: {
-            instances: 1,
-            size: 'db.t2.medium'
+            instances: 1
         }
     },
     high: {
         fargate: {
-            taskCount: 4,
+            taskCount: 4
+        },
+        database: {
+            instances: 2
+        }
+    }
+};
+const PERF_TO_CONFIG = {
+    low: {
+        fargate: {
+            CPU: '1024',
+            memory: '2GB'
+        },
+        database: {
+            size: 'db.t2.small',
+            supportedEngines: [databaseTypes.mariadb, databaseTypes.mysql]
+        }
+    },
+    medium: {
+        fargate: {
+            CPU: '2048',
+            memory: '4GB'
+        },
+        database: {
+            size: 'db.t2.medium',
+            supportedEngines: [databaseTypes.mariadb, databaseTypes.mysql]
+        }
+    },
+    high: {
+        fargate: {
             CPU: '4096',
             memory: '16GB'
         },
         database: {
-            instances: 2,
-            size: 'db.r4.large'
+            size: 'db.r4.large',
+            supportedEngines: [databaseTypes.mariadb, databaseTypes.mysql, databaseTypes.postgresql]
         }
     }
 };
@@ -51,6 +77,7 @@ module.exports = {
     askRegion,
     askCloudFormation,
     askPerformances,
+    askScaling,
     askVPC,
     askForDBPasswords,
     askForSubnets,
@@ -144,11 +171,10 @@ function askCloudFormation() {
             message: 'Please enter your stack\'s name. (must be unique within a region)',
             default: this.aws.cloudFormationName || this.baseName,
             validate: (input) => {
-                if (input) {
-                    return true;
+                if (_.isEmpty(input) || !input.match(CLOUDFORMATION_STACK_NAME)) {
+                    return 'Stack name must contain letters, digits, or hyphens ';
                 }
-
-                return 'Stack\'s name cannot be empty!';
+                return true;
             }
         }
     ];
@@ -185,8 +211,9 @@ function askPerformances() {
         const awsConfig = this.aws.apps.find(a => a.baseName === config.baseName) || { baseName: config.baseName };
         return promptPerformance.call(this, config, awsConfig).then((performance) => {
             awsConfig.performance = performance;
-            awsConfig.fargate = PERF_TO_CONFIG[performance].fargate;
-            awsConfig.database = PERF_TO_CONFIG[performance].database;
+
+            awsConfig.fargate = Object.assign({}, awsConfig.fargate, PERF_TO_CONFIG[performance].fargate);
+            awsConfig.database = Object.assign({}, awsConfig.database, PERF_TO_CONFIG[performance].database);
 
             _.remove(this.aws.apps, a => _.isEqual(a, awsConfig));
             this.aws.apps.push(awsConfig);
@@ -200,32 +227,34 @@ function askPerformances() {
 function promptPerformance(config, awsConfig = { performance: 'low' }) {
     if (this.abort) return null;
 
-    const performanceLevels = _.keys(PERF_TO_CONFIG)
+    const prodDatabaseType = config.prodDatabaseType;
+
+    if (prodDatabaseType === databaseTypes.postgresql) {
+        this.log(' ⚠️ Postgresql databases are currently only supported by Aurora on high-performance database instances');
+    }
+
+    const performanceLevels = _(PERF_TO_CONFIG).keys()
         .map((key) => {
             const perf = PERF_TO_CONFIG[key];
-            return {
-                name: `${_.startCase(key)} Performance \t ${chalk.green(`Task: ${perf.fargate.CPU} CPU Units, ${perf.fargate.memory} Ram, Count: ${perf.fargate.taskCount}`)}\t ${chalk.yellow(`DB: ${perf.database.instances} Instance, Size: ${perf.database.size}`)}`,
-                value: key,
-                short: key
-            };
-        });
-
+            const isEngineSupported = perf.database.supportedEngines.includes(prodDatabaseType);
+            if (isEngineSupported) {
+                return {
+                    name: `${_.startCase(key)} Performance \t ${chalk.green(`Task: ${perf.fargate.CPU} CPU Units, ${perf.fargate.memory} Ram`)}\t ${chalk.yellow(`DB: Size: ${perf.database.size}`)}`,
+                    value: key,
+                    short: key
+                };
+            }
+            return null;
+        })
+        .compact()
+        .value();
     const prompts = [
         {
             type: 'list',
             name: 'performance',
-            message: `${chalk.red(config.baseName)} Please select your performance.`,
+            message: `${chalk.red(config.baseName)} Please select your performance level`,
             choices: performanceLevels,
-            default: awsConfig.performance,
-            validate: (input) => {
-                if (!input) {
-                    return 'You Must choose at least one performance!';
-                }
-                if (input !== 'high' && config.prodDatabaseType === 'postgresql') {
-                    return 'Aurora DB for postgresql is limited to the high performance configuration';
-                }
-                return true;
-            }
+            default: awsConfig.performance
         }
     ];
 
@@ -233,6 +262,59 @@ function promptPerformance(config, awsConfig = { performance: 'low' }) {
         const performance = props.performance;
         return performance;
     });
+}
+
+
+/**
+ * Ask about scaling
+ */
+function askScaling() {
+    if (this.abort) return null;
+    const done = this.async();
+    const chainPromises = (index) => {
+        if (index === this.appConfigs.length) {
+            done();
+            return null;
+        }
+        const config = this.appConfigs[index];
+        const awsConfig = this.aws.apps.find(a => a.baseName === config.baseName) || { baseName: config.baseName };
+        return promptScaling.call(this, config, awsConfig).then((scaling) => {
+            awsConfig.scaling = scaling;
+            awsConfig.fargate = Object.assign({}, awsConfig.fargate, SCALING_TO_CONFIG[scaling].fargate);
+            awsConfig.database = Object.assign({}, awsConfig.database, SCALING_TO_CONFIG[scaling].database);
+
+            _.remove(this.aws.apps, a => _.isEqual(a, awsConfig));
+            this.aws.apps.push(awsConfig);
+            return chainPromises(index + 1);
+        });
+    };
+
+    return chainPromises(0);
+}
+
+function promptScaling(config, awsConfig = { scaling: 'low' }) {
+    if (this.abort) return null;
+
+    const scalingLevels = _(SCALING_TO_CONFIG).keys()
+        .map((key) => {
+            const scale = SCALING_TO_CONFIG[key];
+            return {
+                name: `${chalk.green(`${_.startCase(key)} Scaling \t\t Number of Tasks: ${scale.fargate.taskCount}`)}\t ${chalk.yellow(`DB Instances: ${scale.database.instances}`)}`,
+                value: key,
+                short: key
+            };
+        }).value();
+    const prompts = [
+        {
+            type: 'list',
+            name: 'scaling',
+            message: `${chalk.red(config.baseName)} Please select your scaling level`,
+            choices: scalingLevels,
+            default: awsConfig.scaling
+        }
+    ];
+
+    return this.prompt(prompts).then(props => props.scaling);
 }
 
 /**
