@@ -127,7 +127,7 @@
     "webpack-notifier": "1.5.1",
     "webpack-visualizer-plugin": "0.1.11",
     "web-app-manifest-loader": "0.1.1",
-    "workbox-webpack-plugin": "3.0.0-alpha.3",
+    "workbox-webpack-plugin": "3.0.0-beta.1",
     "write-file-webpack-plugin": "4.1.0"
   },
   "engines": {
