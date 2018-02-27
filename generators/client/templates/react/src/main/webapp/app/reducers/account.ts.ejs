@@ -71,24 +71,19 @@ export default (state = initialState, action) => {
   }
 };
 
-const apiUrl = '/api/account';
 // Actions
-export const savePassword = (currentPassword, newPassword) => dispatch => {
-  dispatch({
-    type: ACTION_TYPES.UPDATE_PASSWORD,
-    payload: axios.post(`${apiUrl}/change-password`, { currentPassword, newPassword })
-  });
-};
+const apiUrl = '/api/account';
 
-export const saveAccountSettings = account => dispatch => {
-  dispatch({
-    type: ACTION_TYPES.UPDATE_ACCOUNT,
-    payload: axios.post(apiUrl, account)
-  });
-};
+export const savePassword = (currentPassword, newPassword) => ({
+  type: ACTION_TYPES.UPDATE_PASSWORD,
+  payload: axios.post(`${apiUrl}/change-password`, { currentPassword, newPassword })
+});
 
-export const reset = () => dispatch => {
-  dispatch({
-    type: ACTION_TYPES.RESET
-  });
-};
+export const saveAccountSettings = account => ({
+  type: ACTION_TYPES.UPDATE_ACCOUNT,
+  payload: axios.post(apiUrl, account)
+});
+
+export const reset = () => ({
+  type: ACTION_TYPES.RESET
+});

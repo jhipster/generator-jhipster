@@ -15,7 +15,7 @@ const Routes = () => (
     <Route exact path="/" component={Home}/>
     <Route path="/login" component={Login} />
     <Route path="/logout" component={Logout} />
-    <Route path="/activate" component={Activate} />
+    <Route path="/activate/:key?" component={Activate} />
     <PrivateRoute path="/admin" component={Admin} />
     <PrivateRoute path="/account" component={Account} />
     <Route path="**" component={Entities} />
