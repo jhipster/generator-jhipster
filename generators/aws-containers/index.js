@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const chalk = require('chalk');
+const databaseTypes = require('jhipster-core').JHipsterDatabaseTypes.Types;
 
 const BaseGenerator = require('../generator-base');
 const docker = require('../docker-base');
@@ -183,6 +184,7 @@ module.exports = class extends BaseGenerator {
             askForSubnets: prompts.askForSubnets,
             askCloudFormation: prompts.askCloudFormation,
             askPerformances: prompts.askPerformances,
+            askScaling: prompts.askScaling,
             retrievePassword() {
                 const done = this.async;
                 // Attempts to retrieve a previously set database password from SSM.
@@ -281,11 +283,13 @@ module.exports = class extends BaseGenerator {
                 if (this.abort) return;
                 this.appConfigs.forEach((appConfig) => {
                     const app = this.aws.apps.find(a => a.baseName === appConfig.baseName);
+                    const postgresqlType = databaseTypes.postgresql;
                     app.dbType = appConfig.prodDatabaseType;
-                    app.auroraEngine = appConfig.dbType === 'postgresql' ? 'aurora-postgresql' : 'aurora';
-                    app.auroraFamily = appConfig.dbType === 'postgresql' ? 'aurora-postgresql9.6' : 'aurora5.6';
-                    app.auroraClusterParam = appConfig.dbType === 'postgresql' ? 'client_encoding: UTF8' : 'character_set_database: utf8';
-                    app.auroraDbParam = appConfig.dbType === 'postgresql' ? 'check_function_bodies: 0' : 'sql_mode: IGNORE_SPACE';
+
+                    app.auroraEngine = appConfig.prodDatabaseType === postgresqlType ? 'aurora-postgresql' : 'aurora-mysql';
+                    app.auroraFamily = appConfig.prodDatabaseType === postgresqlType ? 'aurora-postgresql9.6' : 'aurora-mysql5.7';
+                    app.auroraClusterParam = appConfig.prodDatabaseType === postgresqlType ? 'client_encoding: UTF8' : 'character_set_database: utf8';
+                    app.auroraDbParam = appConfig.prodDatabaseType === postgresqlType ? 'check_function_bodies: 0' : 'sql_mode: IGNORE_SPACE';
                 });
             },
             springProjectChanges() {
