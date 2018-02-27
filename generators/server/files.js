@@ -156,8 +156,11 @@ function writeFiles() {
         writeServerResourceFiles() {
             // Create Java resource files
             mkdirp(SERVER_MAIN_RES_DIR);
-            this.copy(`${SERVER_MAIN_RES_DIR}banner.txt`, `${SERVER_MAIN_RES_DIR}banner.txt`);
-
+            if (this.clientFramework === 'react') {
+                this.copy(`${SERVER_MAIN_RES_DIR}banner-react.txt`, `${SERVER_MAIN_RES_DIR}banner.txt`);
+            } else {
+                this.copy(`${SERVER_MAIN_RES_DIR}banner.txt`, `${SERVER_MAIN_RES_DIR}banner.txt`);
+            }
             if (this.devDatabaseType === 'h2Disk' || this.devDatabaseType === 'h2Memory') {
                 this.template(`${SERVER_MAIN_RES_DIR}h2.server.properties.ejs`, `${SERVER_MAIN_RES_DIR}.h2.server.properties`);
             }
