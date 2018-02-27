@@ -64,15 +64,15 @@ module.exports = options => ({
         SERVER_API_URL: `''`
       }
     }),
-    // new webpack.optimize.CommonsChunkPlugin({
-    //   name: 'vendor',
-    //   chunks: ['main'],
-    //   minChunks: module => utils.isExternalLib(module)
-    // }),
-    // new webpack.optimize.CommonsChunkPlugin({
-    //   name: ['manifest'],
-    //   minChunks: Infinity
-    // }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      chunks: ['main'],
+      minChunks: module => utils.isExternalLib(module)
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: ['manifest'],
+      minChunks: Infinity
+    }),
     new CopyWebpackPlugin([
       { from: './node_modules/swagger-ui/dist/css', to: 'swagger-ui/dist/css' },
       { from: './node_modules/swagger-ui/dist/lib', to: 'swagger-ui/dist/lib' },
