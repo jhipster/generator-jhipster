@@ -250,16 +250,10 @@ function replacePlaceholders(body, generator) {
 function geti18nJson(key, generator) {
     const i18nDirectory = `${LANGUAGES_MAIN_SRC_DIR}i18n/en/`;
     const name = _.kebabCase(key.split('.')[0]);
-    let filename;
+    let filename = `${i18nDirectory + name}.json`;
     let render;
-    if (['activate', 'global', 'health', 'reset'].indexOf(name) !== -1) {
-        filename = `${i18nDirectory + name}.json.ejs`;
-        render = true;
-    } else {
-        filename = `${i18nDirectory + name}.json`;
-    }
     if (!shelljs.test('-f', path.join(generator.sourceRoot(), filename))) {
-        filename = `${i18nDirectory}_${name}.json`;
+        filename = `${i18nDirectory}${name}.json.ejs`;
         render = true;
     }
     try {
