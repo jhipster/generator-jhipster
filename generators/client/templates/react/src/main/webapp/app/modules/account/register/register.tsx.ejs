@@ -62,7 +62,7 @@ export class RegisterPage extends React.Component<IRegisterProps> {
 
     if (registrationFailure) {
       alertMessage = (
-        <Alert color="danger">{mainErrorMessages[errorMessage] ? mainErrorMessages.failed : mainErrorMessages[errorMessage]}</Alert>
+        <Alert color="danger">{mainErrorMessages[errorMessage] ? mainErrorMessages[errorMessage] : mainErrorMessages.failed}</Alert>
       );
     } else {
       if (registrationSuccess) {
