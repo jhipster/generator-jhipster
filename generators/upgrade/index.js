@@ -105,13 +105,6 @@ module.exports = class extends BaseGenerator {
 
     _regenerate(version, callback) {
         this._generate(version, () => {
-            if (this.clientFramework === 'angular1' && version === this.latestVersion) {
-                this.info('bower install');
-                const result = this.spawnCommandSync('bower', ['install']);
-                if (result.status !== 0) {
-                    this.error('bower install failed.');
-                }
-            }
             const keystore = `${SERVER_MAIN_RES_DIR}keystore.jks`;
             this.info(`Removing ${keystore}`);
             shelljs.rm('-Rf', keystore);
@@ -347,18 +340,12 @@ module.exports = class extends BaseGenerator {
                 if (code !== 0) {
                     this.error(`${installCommand} failed.`);
                 }
-                if (this.clientFramework === 'angular1') {
-                    this.info('bower install');
-                    this.spawnCommandSync('bower', ['install']);
-                }
                 done();
             });
         } else {
-            if (this.clientFramework !== 'angular1') {
-                const logMsg =
-                    `Start your Webpack development server with:\n${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
-                this.success(logMsg);
-            }
+            const logMsg =
+                `Start your Webpack development server with:\n${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
+            this.success(logMsg);
             done();
         }
     }

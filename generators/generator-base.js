@@ -68,7 +68,7 @@ module.exports = class extends PrivateBase {
     /**
      * Add a new menu element, at the root of the menu.
      *
-     * @param {string} routerName - The name of the AngularJS router that is added to the menu.
+     * @param {string} routerName - The name of the Angular router that is added to the menu.
      * @param {string} glyphiconName - The name of the Glyphicon (from Bootstrap) that will be displayed.
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
@@ -76,20 +76,7 @@ module.exports = class extends PrivateBase {
     addElementToMenu(routerName, glyphiconName, enableTranslation, clientFramework) {
         let navbarPath;
         try {
-            if (clientFramework === 'angular1') {
-                navbarPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.html`;
-                jhipsterUtils.rewriteFile({
-                    file: navbarPath,
-                    needle: 'jhipster-needle-add-element-to-menu',
-                    splicable: [`<li ui-sref-active="active">
-                                <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
-                                    <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
-                                    <span${enableTranslation ? ` data-translate="global.menu.${routerName}"` : ''}>${_.startCase(routerName)}</span>
-                                </a>
-                            </li>`
-                    ]
-                }, this);
-            } else if (clientFramework === 'angularX') {
+            if (clientFramework === 'angularX') {
                 navbarPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
                 jhipsterUtils.rewriteFile({
                     file: navbarPath,
@@ -141,7 +128,7 @@ module.exports = class extends PrivateBase {
     /**
      * Add a new menu element to the admin menu.
      *
-     * @param {string} routerName - The name of the AngularJS router that is added to the admin menu.
+     * @param {string} routerName - The name of the Angular router that is added to the admin menu.
      * @param {string} glyphiconName - The name of the Glyphicon (from Bootstrap) that will be displayed.
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
@@ -149,20 +136,7 @@ module.exports = class extends PrivateBase {
     addElementToAdminMenu(routerName, glyphiconName, enableTranslation, clientFramework) {
         let navbarAdminPath;
         try {
-            if (clientFramework === 'angular1') {
-                navbarAdminPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.html`;
-                jhipsterUtils.rewriteFile({
-                    file: navbarAdminPath,
-                    needle: 'jhipster-needle-add-element-to-admin-menu',
-                    splicable: [`<li ui-sref-active="active">
-                            <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
-                                <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
-                                <span${enableTranslation ? ` data-translate="global.menu.admin.${routerName}"` : ''}>${_.startCase(routerName)}</span>
-                            </a>
-                        </li>`
-                    ]
-                }, this);
-            } else {
+            if (clientFramework === 'angularX') {
                 navbarAdminPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
                 jhipsterUtils.rewriteFile({
                     file: navbarAdminPath,
@@ -189,10 +163,6 @@ module.exports = class extends PrivateBase {
      * @param {string} clientFramework - The name of the client framework
      */
     addEntityToWebpack(microserviceName, clientFramework) {
-        if (clientFramework === 'angular1') {
-            return;
-        }
-
         const webpackDevPath = `${CLIENT_WEBPACK_DIR}/webpack.dev.js`;
         jhipsterUtils.rewriteFile({
             file: webpackDevPath,
@@ -204,27 +174,14 @@ module.exports = class extends PrivateBase {
     /**
      * Add a new entity in the "entities" menu.
      *
-     * @param {string} routerName - The name of the AngularJS router (which by default is the name of the entity).
+     * @param {string} routerName - The name of the Angular router (which by default is the name of the entity).
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
      */
-    addEntityToMenu(routerName, enableTranslation, clientFramework) {
+    addEntityToMenu(routerName, enableTranslation, clientFramework, entityTranslationKeyMenu = _.camelCase(routerName)) {
         let entityMenuPath;
         try {
-            if (clientFramework === 'angular1') {
-                entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.html`;
-                jhipsterUtils.rewriteFile({
-                    file: entityMenuPath,
-                    needle: 'jhipster-needle-add-entity-to-menu',
-                    splicable: [`<li ui-sref-active="active">
-                                <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
-                                    <span class="glyphicon glyphicon-asterisk"></span>&nbsp;
-                                    <span${enableTranslation ? ` data-translate="global.menu.entities.${_.camelCase(routerName)}"` : ''}>${_.startCase(routerName)}</span>
-                                </a>
-                            </li>`
-                    ]
-                }, this);
-            } else if (this.clientFramework === 'angularX') {
+            if (this.clientFramework === 'angularX') {
                 entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
                 jhipsterUtils.rewriteFile({
                     file: entityMenuPath,
@@ -233,7 +190,7 @@ module.exports = class extends PrivateBase {
                         this.stripMargin(`|<li>
                              |                        <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                              |                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                             |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${_.camelCase(routerName)}"` : ''}>${_.startCase(routerName)}</span>
+                             |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${entityTranslationKeyMenu}"` : ''}>${_.startCase(routerName)}</span>
                              |                        </a>
                              |                    </li>`)
                     ]
@@ -271,19 +228,22 @@ module.exports = class extends PrivateBase {
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
      */
-    addEntityToModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, enableTranslation, clientFramework) {
+    addEntityToModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, enableTranslation, clientFramework, microServiceName) {
         const entityModulePath = `${CLIENT_MAIN_SRC_DIR}app/entities/entity.module.ts`;
         try {
-            if (clientFramework === 'angular1') {
-                return;
-            } else if (clientFramework === 'angularX') {
+            if (clientFramework === 'angularX') {
                 const appName = this.getAngularXAppName();
-                let importStatement = `|import { ${appName}${entityAngularName}Module } from './${entityFolderName}/${entityFileName}.module';`;
+                let importName = `${appName}${entityAngularName}Module`;
+                if (microServiceName) {
+                    importName = `${importName} as ${_.upperFirst(_.camelCase(microServiceName))}${entityAngularName}Module`;
+                }
+                let importStatement = `|import { ${importName} } from './${entityFolderName}/${entityFileName}.module';`;
                 if (importStatement.length > constants.LINE_LENGTH) {
                     importStatement =
-                        `|import {
-                        |    ${appName}${entityAngularName}Module
-                        |} from './${entityFolderName}/${entityFileName}.module';`;
+                        `|// prettier-ignore
+                         |import {
+                         |    ${importName}
+                         |} from './${entityFolderName}/${entityFileName}.module';`;
                 }
                 jhipsterUtils.rewriteFile({
                     file: entityModulePath,
@@ -297,7 +257,7 @@ module.exports = class extends PrivateBase {
                     file: entityModulePath,
                     needle: 'jhipster-needle-add-entity-module',
                     splicable: [
-                        this.stripMargin(`|${appName}${entityAngularName}Module,`)
+                        this.stripMargin(microServiceName ? `|${_.upperFirst(_.camelCase(microServiceName))}${entityAngularName}Module,` : `|${appName}${entityAngularName}Module,`)
                     ]
                 }, this);
             } else {
@@ -357,9 +317,6 @@ module.exports = class extends PrivateBase {
     addAdminToModule(appName, adminAngularName, adminFolderName, adminFileName, enableTranslation, clientFramework) {
         const adminModulePath = `${CLIENT_MAIN_SRC_DIR}app/admin/admin.module.ts`;
         try {
-            if (clientFramework === 'angular1') {
-                return;
-            }
             let importStatement = `|import { ${appName}${adminAngularName}Module } from './${adminFolderName}/${adminFileName}.module';`;
             if (importStatement.length > constants.LINE_LENGTH) {
                 importStatement =
@@ -726,28 +683,6 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * Add a new module to the AngularJS application in "app.module.js".
-     *
-     * @param {string} moduleName - module name
-     *
-     */
-    addAngularJsModule(moduleName) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/app.module.js`;
-        try {
-            jhipsterUtils.rewriteFile({
-                file: fullPath,
-                needle: 'jhipster-needle-angularjs-add-module',
-                splicable: [
-                    `'${moduleName}',`
-                ]
-            }, this);
-        } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + moduleName + chalk.yellow(' not added to JHipster app.\n'));
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
      * Add a new module in the TS modules file.
      *
      * @param {string} appName - Angular2 application name.
@@ -760,9 +695,6 @@ module.exports = class extends PrivateBase {
     addAngularModule(appName, angularName, folderName, fileName, enableTranslation, clientFramework) {
         const modulePath = `${CLIENT_MAIN_SRC_DIR}app/app.module.ts`;
         try {
-            if (clientFramework === 'angular1') {
-                return;
-            }
             let importStatement = `|import { ${appName}${angularName}Module } from './${folderName}/${fileName}.module';`;
             if (importStatement.length > constants.LINE_LENGTH) {
                 importStatement =
@@ -985,10 +917,7 @@ module.exports = class extends PrivateBase {
         const socialServicefullPath = `${CLIENT_MAIN_SRC_DIR}app/account/social/social.service.js`;
         let loginfullPath;
         let registerfullPath;
-        if (clientFramework === 'angular1') {
-            loginfullPath = `${CLIENT_MAIN_SRC_DIR}app/account/login/login.html`;
-            registerfullPath = `${CLIENT_MAIN_SRC_DIR}app/account/register/register.html`;
-        } else {
+        if (clientFramework === 'angularX') {
             loginfullPath = `${CLIENT_MAIN_SRC_DIR}app/account/login/login.component.html`;
             registerfullPath = `${CLIENT_MAIN_SRC_DIR}app/account/register/register.component.html`;
         }
@@ -1439,6 +1368,28 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Add Gradle plugin to the plugins block
+     *
+     * @param {string} id - plugin id
+     * @param {string} version - explicit plugin version number
+     */
+    addGradlePluginToPluginsBlock(id, version) {
+        const fullPath = 'build.gradle';
+        try {
+            jhipsterUtils.rewriteFile({
+                file: fullPath,
+                needle: 'jhipster-needle-gradle-plugins',
+                splicable: [
+                    `id "${id}" version "${version}"`
+                ]
+            }, this);
+        } catch (e) {
+            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}id ${id} version ${version}${chalk.yellow(' not added.\n')}`);
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
      * A new dependency to build.gradle file.
      *
      * @param {string} scope - scope of the new dependency, e.g. compile
@@ -1813,10 +1764,10 @@ module.exports = class extends PrivateBase {
     /**
      * Load an entity configuration file into context.
      */
-    loadEntityJson() {
+    loadEntityJson(fromPath = this.context.fromPath) {
         const context = this.context;
         try {
-            context.fileData = this.fs.readJSON(context.fromPath);
+            context.fileData = this.fs.readJSON(fromPath);
         } catch (err) {
             this.debug('Error:', err);
             this.error(chalk.red('\nThe entity configuration file could not be read!\n'));
@@ -1833,6 +1784,7 @@ module.exports = class extends PrivateBase {
         context.dto = context.fileData.dto;
         context.service = context.fileData.service;
         context.fluentMethods = context.fileData.fluentMethods;
+        context.clientRootFolder = context.fileData.clientRootFolder;
         context.pagination = context.fileData.pagination;
         context.searchEngine = context.fileData.searchEngine || context.searchEngine;
         context.javadoc = context.fileData.javadoc;
@@ -2325,7 +2277,7 @@ module.exports = class extends PrivateBase {
         let buildCmd = 'mvnw verify -DskipTests=true -B';
 
         if (buildTool === 'gradle') {
-            buildCmd = 'gradlew bootRepackage -x test';
+            buildCmd = 'gradlew bootWar -x test';
         }
 
         if (os.platform() !== 'win32') {
@@ -2375,10 +2327,18 @@ module.exports = class extends PrivateBase {
                             templatePathTo = path + templateObj.renameTo(_this);
                         } else {
                             templatePathTo = templatePath.replace(/([/])_|^_/, '$1');
+                            templatePathTo = templatePath.replace('.ejs', '');
                         }
                         filesOut.push(templatePathTo);
                         if (!returnFiles) {
-                            const templatePathFrom = prefix ? `${prefix}/${templatePath}` : templatePath;
+                            let templatePathFrom = prefix ? `${prefix}/${templatePath}` : templatePath;
+                            if (
+                                !templateObj.noEjs && !templatePathFrom.endsWith('.png')
+                                && !templatePathFrom.endsWith('.jpg') && !templatePathFrom.endsWith('.gif')
+                                && !templatePathFrom.endsWith('.svg') && !templatePathFrom.endsWith('.ico')
+                            ) {
+                                templatePathFrom = `${templatePathFrom}.ejs`;
+                            }
                             // if (method === 'template')
                             _this[method](templatePathFrom, templatePathTo, _this, options, useTemplate);
                         }
@@ -2472,6 +2432,7 @@ module.exports = class extends PrivateBase {
         dest.entityTableName = generator.getTableName(context.options['table-name'] || dest.name);
         dest.entityNameCapitalized = _.upperFirst(dest.name);
         dest.entityAngularJSSuffix = context.options['angular-suffix'];
+        dest.clientRootFolder = context.options['skip-ui-grouping'] ? '' : context.options['client-root-folder'];
         dest.isDebugEnabled = context.options.debug;
         generator.experimental = context.options.experimental;
         if (dest.entityAngularJSSuffix && !dest.entityAngularJSSuffix.startsWith('-')) {

@@ -88,10 +88,10 @@ module.exports = class extends Generator {
         }
 
         // Templates
-        generator.template(`${webappDir}i18n/${lang}/_activate.json`, `${webappDir}i18n/${lang}/activate.json`);
-        generator.template(`${webappDir}i18n/${lang}/_global.json`, `${webappDir}i18n/${lang}/global.json`);
-        generator.template(`${webappDir}i18n/${lang}/_health.json`, `${webappDir}i18n/${lang}/health.json`);
-        generator.template(`${webappDir}i18n/${lang}/_reset.json`, `${webappDir}i18n/${lang}/reset.json`);
+        generator.template(`${webappDir}i18n/${lang}/activate.json.ejs`, `${webappDir}i18n/${lang}/activate.json`);
+        generator.template(`${webappDir}i18n/${lang}/global.json.ejs`, `${webappDir}i18n/${lang}/global.json`);
+        generator.template(`${webappDir}i18n/${lang}/health.json.ejs`, `${webappDir}i18n/${lang}/health.json`);
+        generator.template(`${webappDir}i18n/${lang}/reset.json.ejs`, `${webappDir}i18n/${lang}/reset.json`);
     }
 
     /**
@@ -105,7 +105,7 @@ module.exports = class extends Generator {
         const generator = _this || this;
         // Template the message server side properties
         const langProp = lang.replace(/-/g, '_');
-        generator.template(`${resourceDir}i18n/_messages_${langProp}.properties`, `${resourceDir}i18n/messages_${langProp}.properties`);
+        generator.template(`${resourceDir}i18n/messages_${langProp}.properties.ejs`, `${resourceDir}i18n/messages_${langProp}.properties`);
     }
 
     /**
@@ -116,7 +116,8 @@ module.exports = class extends Generator {
      */
     copyI18n(language, prefix = '') {
         try {
-            this.template(`${prefix ? `${prefix}/` : ''}i18n/_entity_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${this.entityInstance}.json`);
+            const fileName = this.entityTranslationKey;
+            this.template(`${prefix ? `${prefix}/` : ''}i18n/entity_${language}.json.ejs`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${fileName}.json`);
             this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClass, language);
         } catch (e) {
             this.debug('Error:', e);
@@ -134,7 +135,7 @@ module.exports = class extends Generator {
      */
     copyEnumI18n(language, enumInfo, prefix = '') {
         try {
-            this.template(`${prefix ? `${prefix}/` : ''}i18n/_enum.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.enumInstance}.json`, this, {}, enumInfo);
+            this.template(`${prefix ? `${prefix}/` : ''}i18n/enum.json.ejs`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.clientRootFolder}${enumInfo.enumInstance}.json`, this, {}, enumInfo);
         } catch (e) {
             this.debug('Error:', e);
             // An exception is thrown if the folder doesn't exist
@@ -175,7 +176,7 @@ module.exports = class extends Generator {
      * @param languages
      */
     updateLanguagesInLanguageConstantNG2(languages) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/shared/language/language.constants.ts`;
+        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`;
         try {
             let content = 'export const LANGUAGES: string[] = [\n';
             languages.forEach((language, i) => {
@@ -202,10 +203,7 @@ module.exports = class extends Generator {
      * @param languages
      */
     updateLanguagesInLanguagePipe(languages) {
-        let fullPath = `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`;
-        if (this.clientFramework === 'angular1') {
-            fullPath = `${CLIENT_MAIN_SRC_DIR}app/components/language/language.filter.js`;
-        }
+        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`;
         try {
             let content = '{\n';
             this.generateLanguageOptions(languages).forEach((ln, i) => {
@@ -603,6 +601,8 @@ module.exports = class extends Generator {
                 }
                 done();
             });
+        } else {
+            done();
         }
     }
 
@@ -722,13 +722,13 @@ module.exports = class extends Generator {
                 query =
         `this.${relationship.otherEntityName}Service
             .query({filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'})
-            .subscribe((res: HttpResponse<${relationship.otherEntityAngularName}[]>) => {
+            .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
                 if (${relationshipFieldNameIdCheck}) {
                     this.${variableName} = res.body;
                 } else {
                     this.${relationship.otherEntityName}Service
                         .find(${relationshipFieldName}${dto === 'no' ? '.id' : 'Id'})
-                        .subscribe((subRes: HttpResponse<${relationship.otherEntityAngularName}>) => {
+                        .subscribe((subRes: HttpResponse<I${relationship.otherEntityAngularName}>) => {
                             this.${variableName} = [subRes.body].concat(res.body);
                         }, (subRes: HttpErrorResponse) => this.onError(subRes.message));
                 }
@@ -740,11 +740,11 @@ module.exports = class extends Generator {
                 }
                 query =
         `this.${relationship.otherEntityName}Service.query()
-            .subscribe((res: HttpResponse<${relationship.otherEntityAngularName}[]>) => { this.${variableName} = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));`;
+            .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => { this.${variableName} = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));`;
             }
             if (variableName && !this.contains(queries, query)) {
                 queries.push(query);
-                variables.push(`${variableName}: ${relationship.otherEntityAngularName}[];`);
+                variables.push(`${variableName}: I${relationship.otherEntityAngularName}[];`);
             }
         });
         return {
@@ -863,21 +863,11 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Rebuild client for Angular1
-     */
-    injectJsFilesToIndex() {
-        const done = this.async();
-        this.log(`\n${chalk.bold.green('Running `gulp inject` to add JavaScript to index.html\n')}`);
-        this.spawnCommand('gulp', ['inject:app']).on('close', () => {
-            done();
-        });
-    }
-
-    /**
      * Rebuild client for Angular
      */
     rebuildClient() {
         const done = this.async();
+        this.spawnCommandSync(this.clientPackageManager, ['run', 'prettier:format']);
         this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app\n')}`);
         this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build']).on('close', () => {
             done();
@@ -910,5 +900,28 @@ module.exports = class extends Generator {
             return 'String';
         }
         return 'Long';
+    }
+
+    /**
+     * Get a root folder name for entity
+     * @param {string} clientRootFolder
+     * @param {string} entityFileName
+     */
+    getEntityFolderName(clientRootFolder, entityFileName) {
+        if (clientRootFolder) {
+            return `${clientRootFolder}/${entityFileName}`;
+        }
+        return entityFileName;
+    }
+
+    /**
+     * Get a parent folder path addition for entity
+     * @param {string} clientRootFolder
+     */
+    getEntityParentPathAddition(clientRootFolder) {
+        if (clientRootFolder) {
+            return '../';
+        }
+        return '';
     }
 };

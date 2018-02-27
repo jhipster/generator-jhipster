@@ -95,6 +95,7 @@ module.exports = class extends BaseGenerator {
         this.enableSocialSignIn = this.config.get('enableSocialSignIn');
         this.currentLanguages = this.config.get('languages');
         this.clientFramework = this.config.get('clientFramework');
+        this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
         // Make dist dir available in templates
         if (this.config.get('buildTool') === 'maven') {
             this.BUILD_DIR = 'target/';
@@ -192,12 +193,8 @@ module.exports = class extends BaseGenerator {
         });
         if (!this.skipClient) {
             this.updateLanguagesInLanguagePipe(this.config.get('languages'));
-            if (this.clientFramework === 'angular1') {
-                this.updateLanguagesInLanguageConstant(this.config.get('languages'));
-            } else {
-                this.updateLanguagesInLanguageConstantNG2(this.config.get('languages'));
-                this.updateLanguagesInWebpack(this.config.get('languages'));
-            }
+            this.updateLanguagesInLanguageConstantNG2(this.config.get('languages'));
+            this.updateLanguagesInWebpack(this.config.get('languages'));
         }
     }
 };

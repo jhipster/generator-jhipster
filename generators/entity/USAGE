@@ -1,5 +1,5 @@
 Description:
-    Creates a new JHipster entity: JPA entity, Spring server side components and Angular client side components
+    Creates a new JHipster entity: JPA entity, Spring server side components and client side components
 
 Example:
     jhipster entity Foo

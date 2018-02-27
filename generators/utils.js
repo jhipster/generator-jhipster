@@ -250,9 +250,14 @@ function replacePlaceholders(body, generator) {
 function geti18nJson(key, generator) {
     const i18nDirectory = `${LANGUAGES_MAIN_SRC_DIR}i18n/en/`;
     const name = _.kebabCase(key.split('.')[0]);
-    let filename = `${i18nDirectory + name}.json`;
+    let filename;
     let render;
-
+    if (['activate', 'global', 'health', 'reset'].indexOf(name) !== -1) {
+        filename = `${i18nDirectory + name}.json.ejs`;
+        render = true;
+    } else {
+        filename = `${i18nDirectory + name}.json`;
+    }
     if (!shelljs.test('-f', path.join(generator.sourceRoot(), filename))) {
         filename = `${i18nDirectory}_${name}.json`;
         render = true;
@@ -322,7 +327,7 @@ function getJavadoc(text, indentSize) {
  * @param {string} angularAppName
  * @param {string} packageName
  */
-function buildEnumInfo(field, angularAppName, packageName) {
+function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
     const fieldType = field.fieldType;
     field.enumInstance = _.lowerFirst(fieldType);
     const enumInfo = {
@@ -331,7 +336,8 @@ function buildEnumInfo(field, angularAppName, packageName) {
         enumInstance: field.enumInstance,
         enums: field.fieldValues.replace(/\s/g, '').split(','),
         angularAppName,
-        packageName
+        packageName,
+        clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : '',
     };
     return enumInfo;
 }

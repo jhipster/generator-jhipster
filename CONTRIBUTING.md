@@ -254,7 +254,6 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 * Java files **must be** formatted using [Intellij IDEA's code style](http://confluence.jetbrains.com/display/IntelliJIDEA/Code+Style+and+Formatting). Please note that JHipster committers have a free Intellij IDEA Ultimate Edition for developing the project.
 * Generators JavaScript files **must follow** the eslint configuration defined at the project root, which is based on [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript).
 * Web apps JavaScript files **must follow** [Google's JavaScript Style Guide](https://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml).
-* AngularJS files **must follow** [John Papa's Angular 1 style guide](https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md).
 * Angular 2+ Typescript files **must follow** [Official Angular style guide](https://angular.io/styleguide).
 
 Please ensure to run `npm run lint` and `npm test` on the project root before submitting a pull request. You can also run `npm run lint-fix` to fix some of the lint issues automatically.

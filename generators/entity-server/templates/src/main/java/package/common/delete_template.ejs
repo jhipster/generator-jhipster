@@ -18,9 +18,9 @@
 -%>
 <% if (!viaService) {
     if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-        <%= entityInstance %>Repository.delete(id);<% } %><% if (databaseType === 'cassandra') { %>
+        <%= entityInstance %>Repository.deleteById(id);<% } %><% if (databaseType === 'cassandra') { %>
         <%= entityInstance %>Repository.delete(UUID.fromString(id));<% } %><% if (searchEngine === 'elasticsearch') { %><% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-        <%= entityInstance %>SearchRepository.delete(id);<% } %><% if (databaseType === 'cassandra') { %>
-        <%= entityInstance %>SearchRepository.delete(UUID.fromString(id));<% } %><% }
+        <%= entityInstance %>SearchRepository.deleteById(id);<% } %><% if (databaseType === 'cassandra') { %>
+        <%= entityInstance %>SearchRepository.deleteById(UUID.fromString(id));<% } %><% }
 } else { %>
         <%= entityInstance %>Service.delete(id);<% } %>
