@@ -63,10 +63,19 @@ class LoginModal extends React.Component<ILoginModalProps, {}> {
             <Alert color="warning">
               <Link to="/reset/request"><Translate contentKey="login.password.forgot" /></Link>
             </Alert>
+            <Alert color="warning">
+              <span><Translate contentKey="global.messages.info.register.noaccount" /></span>
+              {' '}
+              <Link to="/register">
+                <Translate contentKey="global.messages.info.register.link"></Translate>
+              </Link>
+            </Alert>
           </ModalBody>
           <ModalFooter>
-            <Button color="secondary" onClick={handleClose} tabIndex="1"><Translate contentKey="entity.action.cancel" /></Button>{' '}
-            <Button color="primary" type="submit"><Translate contentKey="login.form.button" /></Button>
+            <Button color="secondary" onClick={handleClose} tabIndex="1">
+                <Translate contentKey="entity.action.cancel" />
+            </Button>{' '}
+              <Button color="primary" type="submit"><Translate contentKey="login.form.button" /></Button>
           </ModalFooter>
         </AvForm>
       </Modal>
