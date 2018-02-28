@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Translate, translate } from 'react-jhipster';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
 import { getSession } from '../../../reducers/authentication';
-import { saveAccountSettings } from '../../../reducers/account';
+import { saveAccountSettings, reset } from '../../../reducers/account';
 <%_ if (enableTranslation) { _%>
   import { locales } from '../../../config/translation';
 <%_ } _%>
@@ -159,6 +159,6 @@ const mapStateToProps = ({ authentication, account }) => ({
   updateFailure: account.updateFailure
 });
 
-const mapDispatchToProps = { getSession, saveAccountSettings };
+const mapDispatchToProps = { getSession, saveAccountSettings, reset };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsPage);
