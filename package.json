@@ -1,7 +1,7 @@
 {
   "name": "generator-jhipster",
-  "version": "4.14.0",
-  "description": "Spring Boot + Angular in one handy generator",
+  "version": "5.0.0-alpha.1",
+  "description": "Spring Boot + Angular/React in one handy generator",
   "files": [
     "cli",
     "generators"
@@ -14,7 +14,7 @@
     "Spring Security",
     "JPA",
     "Hibernate",
-    "AngularJS",
+    "React",
     "Angular",
     "Twitter Bootstrap"
   ],
