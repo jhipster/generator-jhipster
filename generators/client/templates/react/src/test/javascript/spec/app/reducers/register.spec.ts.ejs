@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
 import { FAILURE, REQUEST, SUCCESS } from '../../../../../main/webapp/app/reducers/action-type.util';
-import reducer, { ACTION_TYPES } from '../../../../../main/webapp/app/reducers/register';
+import register, { ACTION_TYPES } from '../../../../../main/webapp/app/reducers/register';
 
 describe('Creating account tests', () => {
   const initialState = {
@@ -12,13 +12,13 @@ describe('Creating account tests', () => {
   };
 
   it('should return the initial state', () => {
-    expect(reducer(undefined, {})).to.eql({
+    expect(register(undefined, {})).to.eql({
       ...initialState
     });
   });
 
   it('should detect a request', () => {
-    expect(reducer(
+    expect(register(
       undefined,
       { type: REQUEST(ACTION_TYPES.CREATE_ACCOUNT) })
     ).to.eql({
@@ -28,7 +28,7 @@ describe('Creating account tests', () => {
   });
 
   it('should handle RESET', () => {
-    expect(reducer(
+    expect(register(
       { loading: true, registrationSuccess: true, registrationFailure: true, errorMessage: '' },
       { type: ACTION_TYPES.RESET })
     ).to.eql({
@@ -37,7 +37,7 @@ describe('Creating account tests', () => {
   });
 
   it('should handle CREATE_ACCOUNT success', () => {
-    expect(reducer(
+    expect(register(
       undefined,
       {
         type: SUCCESS(ACTION_TYPES.CREATE_ACCOUNT),
@@ -51,7 +51,7 @@ describe('Creating account tests', () => {
 
   it('should handle CREATE_ACCOUNT failure', () => {
     const payload = { response : { data : { errorKey : 'fake error' } } };
-    expect(reducer(
+    expect(register(
       undefined,
       {
         type: FAILURE(ACTION_TYPES.CREATE_ACCOUNT),
