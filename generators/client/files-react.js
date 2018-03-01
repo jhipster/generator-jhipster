@@ -188,7 +188,7 @@ const files = {
                 'reducers/layout.ts',
                 'reducers/user-management.ts',
                 'reducers/account.ts',
-                'reducers/activate.ts'
+                'reducers/register.ts'
             ]
         },
         {
@@ -207,6 +207,7 @@ const files = {
                 // { file: 'account/activate/_activate.component.js', method: 'processJsx' },
                 { file: 'modules/account/activate/activate.tsx', method: 'processJsx' },
                 { file: 'modules/account/password/password.tsx', method: 'processJsx' },
+                { file: 'modules/account/register/register.tsx', method: 'processJsx' },
                 { file: 'modules/account/password/password-strength-bar.tsx', method: 'processJsx' },
                 // { file: 'account/password-reset/init/_password-reset-init.component.js', method: 'processJsx' },
                 // { file: 'account/password-reset/finish/_password-reset-finish.component.js', method: 'processJsx' },
@@ -248,7 +249,7 @@ const files = {
             condition: generator => !generator.useSass,
             path: REACT_DIR,
             templates: [
-                'modules/account/password/password-strength-bar.css'
+            'modules/account/password/password-strength-bar.css'
             ]
         }
     ],
@@ -386,10 +387,7 @@ const files = {
                 'spec/app/utils.ts',
                 'spec/app/config/notification-middleware.spec.ts',
                 'spec/app/shared/layout/header.spec.tsx',
-                'spec/app/reducers/activate.spec.ts',
-                'spec/app/reducers/account.spec.ts',
-                'spec/app/reducers/authentication.spec.ts',
-                'spec/app/reducers/user-management.spec.ts',
+                'spec/app/reducers/register.spec.ts'
                 // 'spec/app/account/activate/_activate.component.spec.js',
                 // 'spec/app/account/password/_password.component.spec.js',
                 // 'spec/app/account/password/_password-strength-bar.component.spec.js',
