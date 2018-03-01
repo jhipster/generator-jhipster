@@ -252,7 +252,7 @@ const files = {
             condition: generator => !generator.useSass,
             path: REACT_DIR,
             templates: [
-            'modules/account/password/password-strength-bar.css'
+                'modules/account/password/password-strength-bar.css'
             ]
         }
     ],
