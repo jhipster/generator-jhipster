@@ -516,7 +516,7 @@ module.exports = class extends PrivateBase {
     /**
      * Add new social configuration in the "application.yml".
      *
-     * @param {string} name - social name (twitter, google, etc.)
+     * @param {string} name - social name (twitter, facebook, ect.)
      * @param {string} clientId - clientId
      * @param {string} clientSecret - clientSecret
      * @param {string} comment - url of how to configure the social service
@@ -907,7 +907,7 @@ module.exports = class extends PrivateBase {
      * Add a new social button in the login and register modules
      *
      * @param {boolean} isUseSass - flag indicating if sass should be used
-     * @param {string} socialName - name of the social module. ex: 'twitter'
+     * @param {string} socialName - name of the social module. ex: 'facebook'
      * @param {string} socialParameter - parameter to send to social connection ex: 'public_profile,email'
      * @param {string} buttonColor - color of the social button. ex: '#3b5998'
      * @param {string} buttonHoverColor - color of the social button when is hover. ex: '#2d4373'
