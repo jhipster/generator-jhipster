@@ -59,7 +59,7 @@ export class HealthPage extends React.Component<IHealthPageProps, any> {
 
   render() {
     const { health, isFetching } = this.props;
-    const data = health || {};
+    const data = (health || {}).details || {};
     return (
       <div>
           <h2>Health Checks</h2>
