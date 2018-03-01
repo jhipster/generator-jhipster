@@ -19,7 +19,8 @@ const initialState = {
   errorMessage: null, // Errors returned from server side
   loginError: false, // Errors returned from server side
   redirectMessage: null,
-  showModalLogin: false
+  showModalLogin: false,
+  isAdmin: false
 };
 
 // Reducer
@@ -67,6 +68,7 @@ export default (state = initialState, action) => {
           ...state,
           isAuthenticated,
           loading: false,
+          isAdmin: action.payload.data.authorities.includes('ROLE_ADMIN'),
           account: action.payload.data
         };
       }
