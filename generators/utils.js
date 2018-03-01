@@ -252,9 +252,8 @@ function geti18nJson(key, generator) {
     const name = _.kebabCase(key.split('.')[0]);
     let filename = `${i18nDirectory + name}.json`;
     let render;
-
     if (!shelljs.test('-f', path.join(generator.sourceRoot(), filename))) {
-        filename = `${i18nDirectory}_${name}.json`;
+        filename = `${i18nDirectory}${name}.json.ejs`;
         render = true;
     }
     try {

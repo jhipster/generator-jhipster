@@ -56,6 +56,7 @@ module.exports = class extends BaseGenerator {
         this.enableHibernateCache = this.config.get('enableHibernateCache') || (this.config.get('hibernateCache') !== undefined && this.config.get('hibernateCache') !== 'no');
         this.databaseType = this.config.get('databaseType');
         this.prodDatabaseType = this.config.get('prodDatabaseType');
+        this.searchEngine = this.config.get('searchEngine');
         this.angularAppName = this.getAngularAppName();
         this.buildTool = this.config.get('buildTool');
         this.applicationType = this.config.get('applicationType');
@@ -305,6 +306,26 @@ module.exports = class extends BaseGenerator {
                 if (this.abort) return;
                 const done = this.async();
 
+                const addonCreateCallback = (addon, err, stdout, stderr) => {
+                    if (err) {
+                        const verifyAccountUrl = 'https://heroku.com/verify';
+                        if (_.includes(err, verifyAccountUrl)) {
+                            this.abort = true;
+                            this.log.error(`Account must be verified to use addons. Please go to: ${verifyAccountUrl}`);
+                            this.log.error(err);
+                        } else {
+                            this.log(`No new ${addon} addon created`);
+                        }
+                    } else {
+                        this.log(`Created ${addon} addon`);
+                    }
+                };
+
+                this.log(chalk.bold('\nProvisioning addons'));
+                if (this.searchEngine === 'elasticsearch') {
+                    exec(`heroku addons:create searchbox:starter --as SEARCHBOX --app ${this.herokuAppName}`, addonCreateCallback.bind(this, 'Elasticsearch'));
+                }
+
                 let dbAddOn = '';
                 if (this.prodDatabaseType === 'postgresql') {
                     dbAddOn = 'heroku-postgresql --as DATABASE';
@@ -315,23 +336,12 @@ module.exports = class extends BaseGenerator {
                 } else if (this.prodDatabaseType === 'mongodb') {
                     dbAddOn = 'mongolab:sandbox --as MONGODB';
                 } else {
+                    done();
                     return;
                 }
 
-                this.log(chalk.bold('\nProvisioning addons'));
                 exec(`heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`, (err, stdout, stderr) => {
-                    if (err) {
-                        const verifyAccountUrl = 'https://heroku.com/verify';
-                        if (_.includes(err, verifyAccountUrl)) {
-                            this.abort = true;
-                            this.log.error(`Account must be verified to use addons. Please go to: ${verifyAccountUrl}`);
-                            this.log.error(err);
-                        } else {
-                            this.log('No new addons created');
-                        }
-                    } else {
-                        this.log(`Created ${dbAddOn}`);
-                    }
+                    addonCreateCallback('Database', err, stdout, stderr);
                     done();
                 });
             },
@@ -376,11 +386,11 @@ module.exports = class extends BaseGenerator {
                 const done = this.async();
                 this.log(chalk.bold('\nCreating Heroku deployment files'));
 
-                this.template('_bootstrap-heroku.yml', `${constants.SERVER_MAIN_RES_DIR}/config/bootstrap-heroku.yml`);
-                this.template('_application-heroku.yml', `${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`);
-                this.template('_Procfile', 'Procfile');
+                this.template('bootstrap-heroku.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/bootstrap-heroku.yml`);
+                this.template('application-heroku.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`);
+                this.template('Procfile.ejs', 'Procfile');
                 if (this.buildTool === 'gradle') {
-                    this.template('_heroku.gradle', 'gradle/heroku.gradle');
+                    this.template('heroku.gradle.ejs', 'gradle/heroku.gradle');
                 }
 
                 this.conflicter.resolve((err) => {
@@ -406,7 +416,7 @@ module.exports = class extends BaseGenerator {
 
             addHerokuMavenProfile() {
                 if (this.buildTool === 'maven') {
-                    fs.readFile(path.join(__dirname, 'templates', '_pom-profile.xml'), (err, profile) => {
+                    fs.readFile(path.join(__dirname, 'templates', 'pom-profile.xml.ejs'), (err, profile) => {
                         this.addMavenProfile('heroku', `            ${profile.toString().trim()}`);
                     });
                 }

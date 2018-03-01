@@ -39,7 +39,7 @@ S3.prototype.createBucket = function createBucket(params, callback) {
                 if (err) {
                     error(err.message, callback);
                 } else {
-                    success(`Bucket ${bucket} created successful`, callback);
+                    success(`Bucket ${bucket} created successfully`, callback);
                 }
             });
         } else if (err && err.statusCode === 301) {
