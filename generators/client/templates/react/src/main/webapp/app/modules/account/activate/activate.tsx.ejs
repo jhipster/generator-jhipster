@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 
 import { Row, Col, Alert } from 'reactstrap';
 import { Translate } from 'react-jhipster';
-import { parse } from 'query-string';
 
 import { activateAction, reset } from '../../../reducers/activate';
 
@@ -27,28 +26,17 @@ export interface IActivateProps {
   reset: Function;
   activationSuccess: boolean;
   activationFailure: boolean;
+  match: any;
 }
 
 export class ActivatePage extends React.Component<IActivateProps> {
-  getKeyFromLocation = () => {
-    const location = this.props['location'];
-    if (location && location['search']) {
-      return parse(location.search).key;
-    } else {
-      return undefined;
-    }
-  };
-
-  componentWillMount() {
-    this.props.reset();
-    const key = this.getKeyFromLocation();
-    if (key) {
-      this.props.activateAction(key);
-    }
-  }
-
   componentWillUnmount() {
     this.props.reset();
+  }
+
+  componentDidMount() {
+    const { key } = this.props.match.params;
+    this.props.activateAction(key);
   }
 
   render() {

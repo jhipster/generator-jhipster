@@ -27,13 +27,10 @@ export interface IUserSettingsState {
   account: any;
 }
 
-export class SettingsPage extends React.Component<IUserSettingsProps, IUserSettingsState> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      account: props.account
-    };
-  }
+export class SettingsPage extends React.Component<IUserSettingsProps> {
+  state: IUserSettingsState = {
+    account: this.props.account
+  };
 
   componentDidMount() {
     this.props.getSession();
@@ -48,6 +45,7 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
       account: nextProps.account
     });
   }
+
   <%_ if (enableTranslation) { _%>
   setLangKey = event => {
     this.setState({
@@ -57,6 +55,7 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
       }
     });
   };
+
   <%_ } _%>
   handleValidSubmit = (event, values) => {
     const account = {

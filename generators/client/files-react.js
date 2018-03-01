@@ -188,7 +188,9 @@ const files = {
                 'reducers/layout.ts',
                 'reducers/user-management.ts',
                 'reducers/account.ts',
-                'reducers/register.ts'
+                'reducers/register.ts',
+                'reducers/activate.ts',
+                'reducers/password-reset.ts'
             ]
         },
         {
@@ -209,35 +211,36 @@ const files = {
                 { file: 'modules/account/password/password.tsx', method: 'processJsx' },
                 { file: 'modules/account/register/register.tsx', method: 'processJsx' },
                 { file: 'modules/account/password/password-strength-bar.tsx', method: 'processJsx' },
-                // { file: 'account/password-reset/init/_password-reset-init.component.js', method: 'processJsx' },
+                { file: 'modules/account/password-reset/init/password-reset-init.tsx', method: 'processJsx' },
+                { file: 'modules/account/password-reset/finish/password-reset-finish.tsx', method: 'processJsx' },
                 // { file: 'account/password-reset/finish/_password-reset-finish.component.js', method: 'processJsx' },
                 { file: 'modules/account/settings/settings.tsx', method: 'processJsx' }
             ]
         },
-    // {
-    //   condition: generator => generator.authenticationType === 'session',
-    //   path: REACT_DIR,
-    //   templates: [
-    //     'account/sessions/_session.model.js',
-    //     { file: 'account/sessions/_sessions.component.js', method: 'processJsx' }
-    //   ]
-    // },
-    // {
-    //   condition: generator => generator.enableSocialSignIn,
-    //   path: REACT_DIR,
-    //   templates: [
-    //             { file: 'account/social/_social-register.component.js', method: 'processJsx' },
-    //             { file: 'shared/social/_social.component.js', method: 'processJsx' },
-    //     'shared/social/_social.service.js'
-    //   ]
-    // },
-    // {
-    //   condition: generator => generator.enableSocialSignIn && generator.authenticationType === 'jwt',
-    //   path: REACT_DIR,
-    //   templates: [
-    //             { file: 'account/social/_social-auth.component.js', method: 'processJsx' },
-    //   ]
-    // },
+        // {
+        //   condition: generator => generator.authenticationType === 'session',
+        //   path: REACT_DIR,
+        //   templates: [
+        //     'account/sessions/_session.model.js',
+        //     { file: 'account/sessions/_sessions.component.js', method: 'processJsx' }
+        //   ]
+        // },
+        // {
+        //   condition: generator => generator.enableSocialSignIn,
+        //   path: REACT_DIR,
+        //   templates: [
+        //             { file: 'account/social/_social-register.component.js', method: 'processJsx' },
+        //             { file: 'shared/social/_social.component.js', method: 'processJsx' },
+        //     'shared/social/_social.service.js'
+        //   ]
+        // },
+        // {
+        //   condition: generator => generator.enableSocialSignIn && generator.authenticationType === 'jwt',
+        //   path: REACT_DIR,
+        //   templates: [
+        //             { file: 'account/social/_social-auth.component.js', method: 'processJsx' },
+        //   ]
+        // },
         {
             condition: generator => generator.useSass,
             path: REACT_DIR,

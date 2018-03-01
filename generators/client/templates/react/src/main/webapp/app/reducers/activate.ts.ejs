@@ -3,8 +3,8 @@ import axios from 'axios';
 import { REQUEST, SUCCESS, FAILURE } from './action-type.util';
 
 export const ACTION_TYPES = {
-  ACTIVATE_ACCOUNT: 'register/ACTIVATE_ACCOUNT',
-  RESET: 'reset'
+  ACTIVATE_ACCOUNT: 'activate/ACTIVATE_ACCOUNT',
+  RESET: 'activate/RESET'
 };
 
 const initialState = {
@@ -39,15 +39,12 @@ export default (state = initialState, action) => {
 };
 
 // Actions
-export const reset = () => dispatch => {
-  dispatch({
-    type: ACTION_TYPES.RESET
-  });
-};
+export const activateAction = key => ({
+  type: ACTION_TYPES.ACTIVATE_ACCOUNT,
+  payload: axios.get('/api/activate?key=' + key)
+});
 
-export const activateAction = key => dispatch => {
-  dispatch({
-    type: ACTION_TYPES.ACTIVATE_ACCOUNT,
-    payload: axios.get('/api/activate?key=' + key)
-  });
-};
+
+export const reset = () => ({
+  type: ACTION_TYPES.RESET
+});
