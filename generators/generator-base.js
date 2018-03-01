@@ -516,7 +516,7 @@ module.exports = class extends PrivateBase {
     /**
      * Add new social configuration in the "application.yml".
      *
-     * @param {string} name - social name (twitter, facebook, ect.)
+     * @param {string} name - social name (twitter, google, etc.)
      * @param {string} clientId - clientId
      * @param {string} clientSecret - clientSecret
      * @param {string} comment - url of how to configure the social service
@@ -907,7 +907,7 @@ module.exports = class extends PrivateBase {
      * Add a new social button in the login and register modules
      *
      * @param {boolean} isUseSass - flag indicating if sass should be used
-     * @param {string} socialName - name of the social module. ex: 'facebook'
+     * @param {string} socialName - name of the social module. ex: 'twitter'
      * @param {string} socialParameter - parameter to send to social connection ex: 'public_profile,email'
      * @param {string} buttonColor - color of the social button. ex: '#3b5998'
      * @param {string} buttonHoverColor - color of the social button when is hover. ex: '#2d4373'
@@ -1462,6 +1462,44 @@ module.exports = class extends PrivateBase {
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + name + chalk.yellow(' not added.\n'));
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
+     * Add a remote Maven Repository to the Gradle build.
+     *
+     * @param {string} url - url of the repository
+     * @param {string} username - (optional) username of the repository credentials
+     * @param {string} password - (optional) password of the repository credentials
+     */
+    addGradleMavenRepository(url, username, password) {
+        const fullPath = 'build.gradle';
+        try {
+            let repository = 'maven {\n';
+            if (url) {
+                repository += `        url "${url}"\n`;
+            }
+            if (username || password) {
+                repository += '        credentials {\n';
+                if (username) {
+                    repository += `            username = "${username}"\n`;
+                }
+                if (password) {
+                    repository += `            password = "${password}"\n`;
+                }
+                repository += '        }\n';
+            }
+            repository += '    }';
+            jhipsterUtils.rewriteFile({
+                file: fullPath,
+                needle: 'jhipster-needle-gradle-repositories',
+                splicable: [
+                    repository
+                ]
+            }, this);
+        } catch (e) {
+            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + url + chalk.yellow(' not added.\n'));
             this.debug('Error:', e);
         }
     }

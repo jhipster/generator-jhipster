@@ -13,6 +13,6 @@ if [ "$JHIPSTER" == "ngx-default" ]; then
         if [ -f "tsconfig.json" ]; then
             yarn test
         fi
-        ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar -Dsonar.host.url=https://sonarqube.com -Dsonar.login=$SONAR_TOKEN
+        ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
     fi
 fi

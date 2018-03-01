@@ -53,7 +53,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
     <%_ } _%>
 <%_ } _%>
-<%_ if (authenticationType === 'oauth2' && applicationType === 'monolith') { _%>
+<%_ if (authenticationType === 'oauth2') { _%>
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -71,15 +71,13 @@ import org.springframework.transaction.annotation.Transactional;<% } %>
 <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
 import java.time.LocalDate;
 <%_ } _%>
-<%_ if (authenticationType !== 'oauth2' || applicationType === 'monolith') { _%>
 import java.time.Instant;
-<%_ } _%>
 <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
 import java.util.*;
 import java.util.stream.Collectors;
-<%_ if (authenticationType === 'oauth2' && applicationType === 'monolith') { _%>
+<%_ if (authenticationType === 'oauth2') { _%>
 import java.util.stream.Stream;
 <%_ } _%>
 
@@ -500,7 +498,7 @@ public class UserService {
         return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
     }
     <%_ } _%>
-    <%_ if (authenticationType === 'oauth2' && applicationType === 'monolith') { _%>
+    <%_ if (authenticationType === 'oauth2') { _%>
 
     /**
      * Returns the user for a OAuth2 authentication.
@@ -590,6 +588,7 @@ public class UserService {
 
     private static User getUser(Map<String, Object> details) {
         User user = new User();
+        user.setId((String) details.get("sub"));
         user.setLogin((String) details.get("preferred_username"));
         if (details.get("given_name") != null) {
             user.setFirstName((String) details.get("given_name"));

@@ -165,8 +165,8 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     }
     <%_ if (queries && queries.length > 0) { _%>
 
-    private onError(error: any) {
-        this.jhiAlertService.error(error.message, null, null);
+    private onError(errorMessage: string) {
+        this.jhiAlertService.error(errorMessage, null, null);
     }
     <%_ } _%>
     <%_

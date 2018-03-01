@@ -18,73 +18,6 @@
 -%>
 package <%=packageName%>.domain;
 
-<%_ if (authenticationType === 'oauth2' && applicationType !== 'monolith') { _%>
-import java.util.Set;
-
-public class User {
-
-    private final String login;
-
-    private final String firstName;
-
-    private final String lastName;
-
-    private final String email;
-
-    private final String langKey;
-
-    private final String imageUrl;
-
-    private final boolean activated;
-
-    private final Set<String> authorities;
-
-    public User(String login, String firstName, String lastName, String email, String langKey,
-        String imageUrl, boolean activated, Set<String> authorities) {
-
-        this.login = login;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.langKey = langKey;
-        this.imageUrl = imageUrl;
-        this.activated = activated;
-        this.authorities = authorities;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getLangKey() {
-        return langKey;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public boolean isActivated() {
-        return activated;
-    }
-
-    public Set<String> getAuthorities() {
-        return authorities;
-    }
-}
-<%_ } else { _%>
 import <%=packageName%>.config.Constants;
 <% if (databaseType === 'cassandra') { %>
 import com.datastax.driver.mapping.annotations.*;<% } %>
@@ -143,13 +76,13 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || 
     private static final long serialVersionUID = 1L;
 <% if (databaseType === 'sql') { %>
     @Id
-    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
+    <%_ if (authenticationType !== 'oauth2' && (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb')) { _%>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    <%_ }  else { _%>
+    <%_ } else if (authenticationType !== 'oauth2') { _%>
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     <%_ } _%>
-    private Long id;<% } else { %><% if (databaseType === 'couchbase') { %>
+    private <% if (authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id;<% } else { %><% if (databaseType === 'couchbase') { %>
     public static final String PREFIX = "user";
 
     @SuppressWarnings("unused")
@@ -261,11 +194,11 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || 
     <%_ } } _%>
     private Set<PersistentToken> persistentTokens = new HashSet<>();<% } %>
 
-    public <% if (databaseType === 'sql') { %>Long<% } else { %>String<% } %> getId() {
+    public <% if (databaseType === 'sql' && authenticationType !== 'oauth2') { %>Long<% } else { %>String<% } %> getId() {
         return id;
     }
 
-    public void setId(<% if (databaseType === 'sql') { %>Long<% } else { %>String<% } %> id) {
+    public void setId(<% if (databaseType === 'sql' && authenticationType !== 'oauth2') { %>Long<% } else { %>String<% } %> id) {
         this.id = id;
     }
 
@@ -414,4 +347,3 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || 
             "}";
     }
 }
-<%_ } _%>

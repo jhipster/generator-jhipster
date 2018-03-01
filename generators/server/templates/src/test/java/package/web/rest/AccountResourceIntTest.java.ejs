@@ -23,30 +23,23 @@ package <%=packageName%>.web.rest;
 import <%=packageName%>.AbstractCassandraTest;
 <%_ } _%>
 import <%=packageName%>.<%= mainClass %>;
-    <%_ if (applicationType === 'monolith') { _%>
 import <%=packageName%>.domain.Authority;
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.service.UserService;
-    <%_ } _%>
 import <%=packageName%>.web.rest.errors.ExceptionTranslator;
 
-    <%_ if (applicationType === 'monolith') { _%>
+import org.apache.commons.lang3.RandomStringUtils;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-    <%_ } _%>
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-    <%_ if (applicationType === 'monolith') { _%>
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-    <%_ } _%>
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-    <%_ if (applicationType === 'monolith') { _%>
 
 import java.util.HashSet;
 import java.util.Set;
-    <%_ } _%>
 
 import org.junit.Before;
 import org.junit.Test;
@@ -58,9 +51,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-    <%_ if (applicationType === 'monolith') { _%>
 import org.springframework.transaction.annotation.Transactional;
-    <%_ } _%>
 import org.springframework.web.context.WebApplicationContext;
 
 /**
@@ -71,19 +62,15 @@ import org.springframework.web.context.WebApplicationContext;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)
 public class AccountResourceIntTest<% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
-    <%_ if (applicationType === 'monolith') { _%>
 
     @Autowired
     private UserRepository userRepository;
-    <%_ } _%>
 
     @Autowired
     private ExceptionTranslator exceptionTranslator;
-    <%_ if (applicationType === 'monolith') { _%>
 
     @Autowired
     private UserService userService;
-    <%_ } _%>
 
     private MockMvc restUserMockMvc;
 
@@ -93,12 +80,7 @@ public class AccountResourceIntTest<% if (databaseType === 'cassandra') { %>exte
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        AccountResource accountUserMockResource =
-        <%_ if (applicationType === 'monolith') { _%>
-            new AccountResource(userService);
-        <%_ } else { _%>
-            new AccountResource();
-        <%_ } _%>
+        AccountResource accountUserMockResource = new AccountResource(userService);
 
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(accountUserMockResource)
             .setControllerAdvice(exceptionTranslator)
@@ -124,7 +106,6 @@ public class AccountResourceIntTest<% if (databaseType === 'cassandra') { %>exte
             .andExpect(status().isOk())
             .andExpect(content().string("test"));
     }
-    <%_ if (applicationType === 'monolith') { _%>
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
@@ -140,6 +121,9 @@ public class AccountResourceIntTest<% if (databaseType === 'cassandra') { %>exte
         <%_ } _%>
 
         User user = new User();
+        <%_ if (authenticationType === 'oauth2') { _%>
+        user.setId(RandomStringUtils.randomAlphanumeric(50));
+        <%_ } _%>
         user.setLogin("test");
         user.setFirstName("john");
         user.setLastName("doe");
@@ -175,7 +159,6 @@ public class AccountResourceIntTest<% if (databaseType === 'cassandra') { %>exte
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isInternalServerError());
     }
-    <%_ } _%>
 }
 <%_ } else { _%>
 
