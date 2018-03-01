@@ -338,7 +338,7 @@ function askForOptionalItems(meta) {
     const defaultChoice = [];
     if (this.databaseType !== 'cassandra' && applicationType === 'monolith' && (this.authenticationType === 'session' || this.authenticationType === 'jwt')) {
         choices.push({
-            name: 'Social login (Google, Facebook, Twitter)',
+            name: 'Social login (Google, Twitter)',
             value: 'enableSocialSignIn:true'
         });
     }
