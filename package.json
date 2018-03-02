@@ -19,6 +19,7 @@
   "types": "lib/index.d.ts",
   "files": [
     "bundles",
+    "src",
     "lib/src",
     "lib/*.d.ts",
     "lib/*.js",
