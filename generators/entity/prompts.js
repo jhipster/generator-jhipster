@@ -558,7 +558,8 @@ function askForField(done) {
                 if (input === '') {
                     return 'You must specify values for your enumeration';
                 }
-                if (!/^[A-Za-z0-9_,]*$/.test(input)) {
+                // We have whitespaces and commas allowed so that user can input a list of values split by commas.
+                if (!/^[A-Za-z0-9_,\s]+$/.test(input)) {
                     return 'Enum values cannot contain special characters (allowed characters: A-Z, a-z, 0-9 and _)';
                 }
                 const enums = input.replace(/\s/g, '').split(',');
