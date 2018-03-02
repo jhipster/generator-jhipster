@@ -49,7 +49,11 @@ export class RegisterPage extends React.Component<IRegisterProps> {
   }
 
   handleValidSubmit = (event, values) => {
+    <%_ if (enableTranslation) { _%>
     this.props.handleRegister(values.username, values.email, values.firstPassword, this.props.currentLocale);
+    <%_ } else { _%>
+    this.props.handleRegister(values.username, values.email, values.firstPassword);
+    <%_ } _%>
     event.preventDefault();
   };
 

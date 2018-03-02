@@ -11,7 +11,7 @@ const initialState = {
   loading: false,
   registrationSuccess: false,
   registrationFailure: false,
-  errorMessage: null,
+  errorMessage: null
 };
 
 // Reducer
@@ -43,7 +43,7 @@ export default (state = initialState, action) => {
 };
 
 // Actions
-export const handleRegister = (login, email, password, langKey) => ({
+export const handleRegister = (login, email, password, langKey = 'en') => ({
   type: ACTION_TYPES.CREATE_ACCOUNT,
   payload: axios.post('/api/register', { login, email, password, langKey })
 });

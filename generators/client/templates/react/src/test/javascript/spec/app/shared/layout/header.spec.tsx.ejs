@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
 import { expect } from 'chai';
+<% if (enableTranslation) { %>
 import * as sinon from 'sinon';
+<% } %>
 
 import {
   Navbar,
@@ -12,7 +14,9 @@ import Header from '../../../../../../main/webapp/app/shared/layout/header/heade
 
 describe('Header', () => {
   let mountedWrapper;
+  <% if (enableTranslation) { %>
   const localeSpy = sinon.spy();
+  <% } %>
   const wrapper = () => {
     if (!mountedWrapper) {
       mountedWrapper = shallow(
