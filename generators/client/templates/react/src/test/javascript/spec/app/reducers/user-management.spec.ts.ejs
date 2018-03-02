@@ -2,7 +2,7 @@
 import { expect } from 'chai';
 import { REQUEST, SUCCESS, FAILURE } from '../../../../../main/webapp/app/reducers/action-type.util';
 
-import userManagment, { ACTION_TYPES } from '../../../../../main/webapp/app/reducers/user-management';
+import userManagement, { ACTION_TYPES } from '../../../../../main/webapp/app/reducers/user-management';
 
 describe('User managment reducer tests', () => {
   function isEmpty(element): boolean {
@@ -28,19 +28,19 @@ describe('User managment reducer tests', () => {
 
   function testMultipleTypes(types, payload, testFunction) {
     types.forEach(e => {
-      testFunction(userManagment(undefined, { type: e, payload }));
+      testFunction(userManagement(undefined, { type: e, payload }));
     });
   }
 
   describe('Common', () => {
     it('should return the initial state', () => {
-      testInitialState(userManagment(undefined, {}));
+      testInitialState(userManagement(undefined, {}));
     });
   });
 
   describe('Requests', () => {
     it('should not modify the current state', () => {
-      testInitialState(userManagment(undefined, { type: REQUEST(ACTION_TYPES.FETCH_ROLES) }));
+      testInitialState(userManagement(undefined, { type: REQUEST(ACTION_TYPES.FETCH_ROLES) }));
     });
 
     it('should set state to loading', () => {
@@ -105,7 +105,7 @@ describe('User managment reducer tests', () => {
     it('should update state according to a successful fetch users request', () => {
       const headers = { ['x-total-count']: 42 };
       const payload = { data: 'some handsome users', headers };
-      const toTest = userManagment(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_USERS), payload });
+      const toTest = userManagement(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_USERS), payload });
 
       expect(toTest).to.contain({
         loading: false,
@@ -116,7 +116,7 @@ describe('User managment reducer tests', () => {
 
     it('should update state according to a successful fetch user request', () => {
       const payload = { data: 'some handsome user' };
-      const toTest = userManagment(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_USER), payload });
+      const toTest = userManagement(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_USER), payload });
 
       expect(toTest).to.contain({
         loading: false,
@@ -141,7 +141,7 @@ describe('User managment reducer tests', () => {
     });
 
     it('should set state to successful update with an empty user', () => {
-      const toTest = userManagment(undefined, { type: SUCCESS(ACTION_TYPES.DELETE_USER) });
+      const toTest = userManagement(undefined, { type: SUCCESS(ACTION_TYPES.DELETE_USER) });
 
       expect(toTest).to.contain({
         updating: false,
