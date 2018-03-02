@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
+import { Link } from 'react-router-dom';
 import { Row, Col, Alert } from 'reactstrap';
 import { Translate } from 'react-jhipster';
 
@@ -9,9 +10,9 @@ import { activateAction, reset } from '../../../reducers/activate';
 const successAlert = (
   <Alert color="success">
     <Translate contentKey="activate.messages.success" />
-    <a className="alert-link">
+    <Link to="/login" className="alert-link">
       <Translate contentKey="global.messages.info.authenticated.link" />
-    </a>.
+    </Link>.
   </Alert>
 );
 
