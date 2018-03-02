@@ -534,6 +534,9 @@ function askForField(done) {
                 } else if (jhiCore.isReservedKeyword(input, 'JAVA')) {
                     return 'Your enum name cannot contain a Java reserved keyword';
                 }
+                if (!/^[A-Za-z0-9_]*$/.test(input)) {
+                    return 'Your enum name cannot contain special characters (allowed characters: A-Z, a-z, 0-9 and _)';
+                }
                 if (context.enums.includes(input)) {
                     context.existingEnum = true;
                 } else {
@@ -555,7 +558,7 @@ function askForField(done) {
                 if (input === '') {
                     return 'You must specify values for your enumeration';
                 }
-                if (!/^[A-Za-z0-9_,\s]*$/.test(input)) {
+                if (!/^[A-Za-z0-9_,]*$/.test(input)) {
                     return 'Enum values cannot contain special characters (allowed characters: A-Z, a-z, 0-9 and _)';
                 }
                 const enums = input.replace(/\s/g, '').split(',');
@@ -830,6 +833,7 @@ function askForField(done) {
         if (props.fieldAdd) {
             if (props.fieldIsEnum) {
                 props.fieldType = _.upperFirst(props.fieldType);
+                props.fieldValues = props.fieldValues.toUpperCase();
             }
 
             const field = {
