@@ -110,7 +110,7 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
             <%_
-            // The datasource cannot be monitored when Kafka is is is enabled.
+            // The datasource cannot be monitored when Kafka is enabled.
             // See https://github.com/jhipster/generator-jhipster/issues/7214
             if (messageBroker !== 'kafka') { _%>
         if (hikariDataSource != null) {
