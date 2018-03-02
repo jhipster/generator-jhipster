@@ -6,6 +6,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "declaration": true,
+    "sourceMap": true,
     "moduleResolution": "node",
     "noUnusedLocals": true,
     "suppressImplicitAnyIndexErrors": true,
@@ -13,9 +14,7 @@
       "node_modules/@types"
     ],
     "lib": ["es2015", "es2017", "dom"],
-    "allowJs": true,
-    "checkJs": true,
-    "outDir": "target"
+    "outDir": "./lib"
   },
   "exclude": [
     "node_modules",

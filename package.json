@@ -14,9 +14,21 @@
   "bugs": {
     "url": "https://github.com/jhipster/generator-jhipster/issues"
   },
-  "main": "bundles/react-jhipster.umd.js",
-  "module": "index.js",
-  "typings": "index.d.ts",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "types": "lib/index.d.ts",
+  "files": [
+    "bundles",
+    "lib/src",
+    "lib/*.d.ts",
+    "lib/*.js",
+    "lib/*.map",
+    "LICENCE.txt",
+    "NOTICE",
+    "README.md",
+    "index.ts",
+    "react-jhipster.ts"
+  ],
   "homepage": "https://www.jhipster.tech",
   "peerDependencies": {
     "lodash": "^4.17.4",
@@ -115,15 +127,16 @@
     ]
   },
   "scripts": {
+    "tsc": "tsc",
     "precommit": "lint-staged",
     "prettier:format": "prettier --write '**/*.{ts,tsx}'",
-    "cleanup": "rimraf src/*.d.ts src/**/*.d.ts src/*.{js,jsx} src/**/*.{js,jsx} tests/**/*.d.ts tests/*.d.ts",
+    "cleanup": "rimraf lib/* src/*.d.ts src/**/*.d.ts src/*.{js,jsx} src/**/*.{js,jsx} tests/**/*.d.ts tests/*.d.ts",
     "lint": "tslint --project tslint.json",
     "lint:fix": "tslint --project tslint.json --fix",
     "test": "npm run lint && karma start tests/karma.conf.js --test",
     "test:watch": "karma start tests/karma.conf.js --watch --test",
-    "build": "npm run cleanup && webpack && shx cp bundles/react-jhipster.umd.js bundles/index.js",
-    "release": "npm run cleanup && npm run build && npm test && git push && git push --tags && npm publish",
+    "build": "npm run cleanup && npm run tsc && webpack && shx cp bundles/react-jhipster.umd.js bundles/index.js",
+    "release": "npm run build && npm test && git push && git push --tags && npm publish",
     "release:patch": "npm version patch -a -m \"Update to %s\" && npm run release",
     "release:minor": "npm version minor -a -m \"Update to %s\" && npm run release",
     "release:major": "npm version major -a -m \"Update to %s\" && npm run release"
