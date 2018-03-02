@@ -65,6 +65,45 @@ export * from './entityFolderName/entityFileName.state';`;
         });
     });
 
+    describe('generateEntityClientImports', () => {
+        const relationships = [
+            {
+                otherEntityAngularName: 'User'
+            },
+            {
+                otherEntityAngularName: 'AnEntity'
+            }
+        ];
+        describe('when called with dto option', () => {
+            it('return an empty Map', () => {
+                const imports = BaseGenerator.generateEntityClientImports(relationships, 'yes');
+                expect(imports.size).to.eql(0);
+            });
+        });
+        describe('when called with 2 distinct relationships without dto option', () => {
+            it('return a Map with 2 imports', () => {
+                const imports = BaseGenerator.generateEntityClientImports(relationships, 'no');
+                expect(imports).to.have.all.keys('IUser', 'IAnEntity');
+                expect(imports.size).to.eql(relationships.length);
+            });
+        });
+        describe('when called with 2 identical relationships without dto option', () => {
+            const relationships = [
+                {
+                    otherEntityAngularName: 'User'
+                },
+                {
+                    otherEntityAngularName: 'User'
+                }
+            ];
+            it('return a Map with 1 import', () => {
+                const imports = BaseGenerator.generateEntityClientImports(relationships, 'no');
+                expect(imports).to.have.key('IUser');
+                expect(imports.size).to.eql(1);
+            });
+        });
+    });
+
     describe('generateLanguageOptions', () => {
         describe('when called with empty array', () => {
             it('return empty', () => {
