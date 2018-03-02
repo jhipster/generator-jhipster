@@ -109,15 +109,10 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
         metricRegistry.register(PROP_METRIC_REG_JCACHE_STATISTICS, new JCacheGaugeSet());
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
-            <%_
-            // The datasource cannot be monitored when Kafka is enabled.
-            // See https://github.com/jhipster/generator-jhipster/issues/7214
-            if (messageBroker !== 'kafka') { _%>
         if (hikariDataSource != null) {
             log.debug("Monitoring the datasource");
             hikariDataSource.setMetricRegistry(metricRegistry);
         }
-            <%_ } _%>
         <%_ } _%>
         if (jHipsterProperties.getMetrics().getJmx().isEnabled()) {
             log.debug("Initializing Metrics JMX reporting");
