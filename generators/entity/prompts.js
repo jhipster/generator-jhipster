@@ -558,8 +558,8 @@ function askForField(done) {
                 if (input === '') {
                     return 'You must specify values for your enumeration';
                 }
-                // We have whitespaces and commas allowed so that user can input a list of values split by commas.
-                if (!/^[A-Za-z0-9_,\s]+$/.test(input)) {
+                // Commas allowed so that user can input a list of values split by commas.
+                if (!/^[A-Za-z0-9_,]+$/.test(input)) {
                     return 'Enum values cannot contain special characters (allowed characters: A-Z, a-z, 0-9 and _)';
                 }
                 const enums = input.replace(/\s/g, '').split(',');
@@ -579,9 +579,9 @@ function askForField(done) {
             },
             message: (answers) => {
                 if (!context.existingEnum) {
-                    return 'What are the values of your enumeration (separated by comma)?';
+                    return 'What are the values of your enumeration (separated by comma, no spaces)?';
                 }
-                return 'What are the new values of your enumeration (separated by comma)?\nThe new values will replace the old ones.\nNothing will be done if there are no new values.';
+                return 'What are the new values of your enumeration (separated by comma, no spaces)?\nThe new values will replace the old ones.\nNothing will be done if there are no new values.';
             }
         },
         {
