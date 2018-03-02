@@ -7,6 +7,7 @@ import Logout from './modules/login/logout';
 import Home from './modules/home/home';
 import Admin from './modules/administration';
 import Account from './modules/account';
+import Activate from './modules/account/activate/activate';
 import Entities from './entities';
 
 const Routes = () => (
@@ -14,6 +15,7 @@ const Routes = () => (
     <Route exact path="/" component={Home}/>
     <Route path="/login" component={Login} />
     <Route path="/logout" component={Logout} />
+    <Route path="/activate/:key?" component={Activate} />
     <PrivateRoute path="/admin" component={Admin} />
     <PrivateRoute path="/account" component={Account} />
     <Route path="**" component={Entities} />
