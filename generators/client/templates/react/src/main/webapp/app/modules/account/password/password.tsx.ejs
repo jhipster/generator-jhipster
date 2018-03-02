@@ -41,39 +41,54 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
     this.setState({
       firstPassword: event.target.value
     });
-  }
+  };
 
   setSecondAccountPassword = event => {
     this.setState({
       secondPassword: event.target.value
     });
-  }
+  };
 
   savePassword = event => {
     if (this.state.firstPassword === this.state.secondPassword) {
       savePassword(this.state.firstPassword);
     }
     event.preventDefault();
-  }
+  };
 
   render() {
     const { account } = this.state;
     return (
-        <div>
-          <h2>Password for [{account.login}]</h2>
-          <Form>
-            <FormGroup>
-              <Label>New password</Label>
-              <Input type="password" className="form-control" id="firstName" name="firstName" placeholder="New password"
-                     onChange={this.setFirstAccountPassword} />
-            </FormGroup>
-            <FormGroup>
-              <Label>New password confirmation</Label>
-              <Input type="password" className="form-control" id="lastName" name="lastName" placeholder="Confirm the new password" onChange={this.setSecondAccountPassword}/>
-            </FormGroup>
-             <Button type="submit" color="success" onClick={this.savePassword}>Save</Button>
-          </Form>
-        </div>
+      <div>
+        <h2>Password for [{account.login}]</h2>
+        <Form>
+          <FormGroup>
+            <Label>New password</Label>
+            <Input
+              type="password"
+              className="form-control"
+              id="firstName"
+              name="firstName"
+              placeholder="New password"
+              onChange={this.setFirstAccountPassword}
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label>New password confirmation</Label>
+            <Input
+              type="password"
+              className="form-control"
+              id="lastName"
+              name="lastName"
+              placeholder="Confirm the new password"
+              onChange={this.setSecondAccountPassword}
+            />
+          </FormGroup>
+          <Button type="submit" color="success" onClick={this.savePassword}>
+            Save
+          </Button>
+        </Form>
+      </div>
     );
   }
 }

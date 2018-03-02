@@ -187,7 +187,8 @@ const files = {
                 'reducers/authentication.ts',
                 'reducers/layout.ts',
                 'reducers/user-management.ts',
-                'reducers/account.ts'
+                'reducers/account.ts',
+                'reducers/register.ts'
             ]
         },
         {
@@ -205,13 +206,14 @@ const files = {
                 { file: 'modules/account/index.tsx', method: 'processJsx' },
                 // { file: 'account/activate/_activate.component.js', method: 'processJsx' },
                 { file: 'modules/account/password/password.tsx', method: 'processJsx' },
-                // { file: 'account/register/_register.component.js', method: 'processJsx' },
+                { file: 'modules/account/register/register.tsx', method: 'processJsx' },
+                { file: 'modules/account/password/password-strength-bar.tsx', method: 'processJsx' },
                 // { file: 'account/password-reset/init/_password-reset-init.component.js', method: 'processJsx' },
                 // { file: 'account/password-reset/finish/_password-reset-finish.component.js', method: 'processJsx' },
                 { file: 'modules/account/settings/settings.tsx', method: 'processJsx' }
                 // { file: 'account/settings/_settings.component.js', method: 'processJsx' }
             ]
-        }
+        },
     // {
     //   condition: generator => generator.authenticationType === 'session',
     //   path: REACT_DIR,
@@ -236,20 +238,20 @@ const files = {
     //             { file: 'account/social/_social-auth.component.js', method: 'processJsx' },
     //   ]
     // },
-    // {
-    //   condition: generator => generator.useSass,
-    //   path: REACT_DIR,
-    //   templates: [
-    //     'account/password/_password-strength-bar.scss'
-    //   ]
-    // },
-    // {
-    //   condition: generator => !generator.useSass,
-    //   path: REACT_DIR,
-    //   templates: [
-    //     'account/password/_password-strength-bar.css'
-    //   ]
-    // }
+        {
+            condition: generator => generator.useSass,
+            path: REACT_DIR,
+            templates: [
+                'modules/account/password/password-strength-bar.scss'
+            ]
+        },
+        {
+            condition: generator => !generator.useSass,
+            path: REACT_DIR,
+            templates: [
+            'modules/account/password/password-strength-bar.css'
+            ]
+        }
     ],
     adminModule: [
         {
@@ -384,7 +386,8 @@ const files = {
                 'spec/entry.ts',
                 'spec/app/utils.ts',
                 'spec/app/config/notification-middleware.spec.ts',
-                'spec/app/shared/layout/header.spec.tsx'
+                'spec/app/shared/layout/header.spec.tsx',
+                'spec/app/reducers/register.spec.ts'
                 // 'spec/app/account/activate/_activate.component.spec.js',
                 // 'spec/app/account/password/_password.component.spec.js',
                 // 'spec/app/account/password/_password-strength-bar.component.spec.js',
