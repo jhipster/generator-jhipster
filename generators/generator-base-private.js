@@ -859,16 +859,10 @@ module.exports = class extends Generator {
      * @returns typeImports: Map
      */
     generateEntityClientImports(relationships, dto) {
-        
         const typeImports = new Map();
-        <%_ if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDateTime) { _%>
-        typeImports.set('Moment', 'moment');
-        <%_ } _%>
-
         relationships.forEach((relationship) => {
             const relationshipType = relationship.relationshipType;
             let toBeImported = false;
-
             if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
                 toBeImported = true;
             } else if (dto === 'no') {
@@ -880,7 +874,6 @@ module.exports = class extends Generator {
                     toBeImported = true;
                 }
             }
-
             if (toBeImported) {
                 const otherEntityAngularName = relationship.otherEntityAngularName;
                 const importType = `I${otherEntityAngularName}`;
