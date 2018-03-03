@@ -1,0 +1,110 @@
+entity Department {
+  name String required,
+  description TextBlob,
+  advertisement Blob,
+  logo ImageBlob
+}
+
+/**
+ * JobHistory comment.
+ */
+entity JobHistory {
+  startDate ZonedDateTime,
+  endDate ZonedDateTime,
+  language Language
+}
+
+enum Language {
+  FRENCH, ENGLISH, SPANISH
+}
+
+enum JobType {
+  BOSS, SLAVE
+}
+
+entity Job {
+  title String minlength(5) maxlength(25),
+  type JobType,
+  minSalary Long,
+  maxSalary Long
+}
+
+/**
+ * The Employee entity.
+ * Second line in javadoc.
+ */
+entity Employee {
+  /**
+   * The firstname attribute.
+   */
+  firstName String,
+  lastName String,
+  email String,
+  phoneNumber String,
+  hireDate ZonedDateTime,
+  salary Long,
+  commissionPct Long
+}
+
+entity Location {
+  streetAddress String,
+  postalCode String,
+  city String,
+  stateProvince String
+}
+
+entity Task {
+  title String,
+  description String
+}
+
+entity Country {
+  name String
+}
+
+entity Region {
+  name String
+}
+
+relationship OneToOne {
+  Department{location} to Location
+}
+
+relationship OneToMany {
+  /**
+   * A relationship
+   */
+  Department{employee} to
+  /**
+   * Another side of the same relationship,
+   */
+  Employee{department},
+  Employee{job} to Job{employee},
+  Location{country} to Country,
+  Country{region} to Region
+}
+
+relationship ManyToOne {
+  Employee{user(login)} to User{employee},
+  Employee{manager} to Employee
+}
+
+relationship ManyToMany {
+  JobHistory{department} to Department,
+  JobHistory{department} to Job,
+  JobHistory{employee} to Employee,
+  Job{chore(title)} to Task{job}
+}
+
+paginate JobHistory, Employee with infinite-scroll
+paginate Job with pagination
+
+dto Employee with mapstruct
+
+service Employee with serviceClass
+
+microservice * with mymicroservice
+
+search Employee with elasticsearch
+
+skipServer Country
