@@ -23,7 +23,7 @@ const expect = require('chai').expect;
 const fail = expect.fail;
 const JDLEntity = require('../../../lib/core/jdl_entity');
 const JDLRelationship = require('../../../lib/core/jdl_relationship');
-const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types').RelationshipTypes;
+const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types');
 
 describe('JDLRelationship', () => {
   describe('::new', () => {

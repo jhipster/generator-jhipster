@@ -39,7 +39,7 @@ const Validations = require('../../../lib/core/jhipster/validations').Validation
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options').Options;
 const BinaryOptions = require('../../../lib/core/jhipster/binary_options').Options;
 const BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').Values;
-const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types').RelationshipTypes;
+const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types');
 
 
 describe('EntityParser', () => {

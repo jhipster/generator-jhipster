@@ -244,7 +244,7 @@ describe('JDLObject', () => {
             object.addRelationship({
               from: {},
               to: { name: 'Valid', tableName: 't_valid', fields: [] },
-              type: RelationshipTypes.RelationshipTypes.MANY_TO_MANY,
+              type: RelationshipTypes.MANY_TO_MANY,
               injectedFieldInFrom: 'something'
             });
             fail();
@@ -266,7 +266,7 @@ describe('JDLObject', () => {
         relationship = new JDLRelationship({
           from: { name: 'Valid2', tableName: 't_valid2', fields: [] },
           to: { name: 'Valid', tableName: 't_valid', fields: [] },
-          type: RelationshipTypes.RelationshipTypes.MANY_TO_MANY,
+          type: RelationshipTypes.MANY_TO_MANY,
           injectedFieldInFrom: 'something'
         });
         object.addRelationship(relationship);
@@ -284,7 +284,7 @@ describe('JDLObject', () => {
         const relationship = new JDLRelationship({
           from: { name: 'Valid2', tableName: 't_valid2', fields: [] },
           to: { name: 'Valid', tableName: 't_valid', fields: [] },
-          type: RelationshipTypes.RelationshipTypes.MANY_TO_MANY,
+          type: RelationshipTypes.MANY_TO_MANY,
           injectedFieldInFrom: 'something'
         });
         object.addRelationship(relationship);
@@ -373,7 +373,7 @@ describe('JDLObject', () => {
       relationship = new JDLRelationship({
         from: entityA,
         to: entityB,
-        type: RelationshipTypes.RelationshipTypes.ONE_TO_ONE,
+        type: RelationshipTypes.ONE_TO_ONE,
         injectedFieldInFrom: 'entityB',
         injectedFieldInTo: 'entityA(myField)'
       });
