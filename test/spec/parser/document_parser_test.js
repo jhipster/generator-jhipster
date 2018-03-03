@@ -21,7 +21,7 @@
 const expect = require('chai').expect;
 
 const fail = expect.fail;
-const parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
+const JDLReader = require('../../../lib/reader/jdl_reader');
 const DocumentParser = require('../../../lib/parser/document_parser');
 const JDLEntity = require('../../../lib/core/jdl_entity');
 const JDLEnum = require('../../../lib/core/jdl_enum');
@@ -43,7 +43,9 @@ describe('DocumentParser', () => {
       context('because there is no document', () => {
         it('fails', () => {
           try {
-            DocumentParser.parse(null, 'sql');
+            DocumentParser.parseFromConfigurationObject({
+              databaseType: DatabaseTypes.mysql
+            });
             fail();
           } catch (error) {
             expect(error.name).to.eq('NullPointerException');
@@ -53,9 +55,9 @@ describe('DocumentParser', () => {
       context('because there is no database type', () => {
         it('fails', () => {
           try {
-            DocumentParser.parse({
-              notNull: 42
-            }, null);
+            DocumentParser.parseFromConfigurationObject({
+              document: 42
+            });
             fail();
           } catch (error) {
             expect(error.name).to.eq('NullPointerException');
@@ -65,9 +67,10 @@ describe('DocumentParser', () => {
       context('because the database type doesn\'t exist', () => {
         it('fails', () => {
           try {
-            DocumentParser.parse({
-              notNull: 42
-            }, 'WRONG');
+            DocumentParser.parseFromConfigurationObject({
+              document: 42,
+              databaseType: 'oops'
+            });
             fail();
           } catch (error) {
             expect(error.name).to.eq('IllegalArgumentException');
@@ -80,8 +83,11 @@ describe('DocumentParser', () => {
         let content = null;
 
         before(() => {
-          const input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
-          content = DocumentParser.parse(input, 'mysql');
+          const input = JDLReader.parseFromFiles(['./test/test_files/complex_jdl.jdl']);
+          content = DocumentParser.parseFromConfigurationObject({
+            document: input,
+            databaseType: DatabaseTypes.mysql
+          });
         });
 
         it('builds a JDLObject', () => {
@@ -200,19 +206,26 @@ describe('DocumentParser', () => {
         let input = null;
 
         before(() => {
-          input = parseFromFiles(['./test/test_files/invalid_field_type.jdl']);
+          input = JDLReader.parseFromFiles(['./test/test_files/invalid_field_type.jdl']);
         });
 
         it('doesn\'t check for field types', () => {
-          DocumentParser.parse(input, 'sql', 'gateway');
+          DocumentParser.parseFromConfigurationObject({
+            document: input,
+            databaseType: DatabaseTypes.sql,
+            applicationType: ApplicationTypes.GATEWAY
+          });
         });
       });
       context('with a required relationship', () => {
         let content = null;
 
         before(() => {
-          const input = parseFromFiles(['./test/test_files/required_relationships.jdl']);
-          content = DocumentParser.parse(input, 'sql');
+          const input = JDLReader.parseFromFiles(['./test/test_files/required_relationships.jdl']);
+          content = DocumentParser.parseFromConfigurationObject({
+            document: input,
+            databaseType: DatabaseTypes.sql
+          });
         });
 
         it('adds it', () => {
@@ -224,8 +237,11 @@ describe('DocumentParser', () => {
         let content = null;
 
         before(() => {
-          const input = parseFromFiles(['./test/test_files/id_field.jdl']);
-          content = DocumentParser.parse(input, 'sql');
+          const input = JDLReader.parseFromFiles(['./test/test_files/id_field.jdl']);
+          content = DocumentParser.parseFromConfigurationObject({
+            document: input,
+            databaseType: DatabaseTypes.sql
+          });
         });
 
         it('doesn\'t add it', () => {
@@ -242,12 +258,15 @@ describe('DocumentParser', () => {
         let input = null;
 
         before(() => {
-          input = parseFromFiles(['./test/test_files/invalid_field_type.jdl']);
+          input = JDLReader.parseFromFiles(['./test/test_files/invalid_field_type.jdl']);
         });
 
         it('fails', () => {
           try {
-            DocumentParser.parse(input, 'sql');
+            DocumentParser.parseFromConfigurationObject({
+              document: input,
+              databaseType: DatabaseTypes.sql
+            });
             fail();
           } catch (error) {
             expect(error.name).to.eq('WrongTypeException');
@@ -258,12 +277,15 @@ describe('DocumentParser', () => {
         let input = null;
 
         before(() => {
-          input = parseFromFiles(['./test/test_files/non_existent_validation.jdl']);
+          input = JDLReader.parseFromFiles(['./test/test_files/non_existent_validation.jdl']);
         });
 
         it('fails', () => {
           try {
-            DocumentParser.parse(input, 'sql');
+            DocumentParser.parseFromConfigurationObject({
+              document: input,
+              databaseType: DatabaseTypes.sql
+            });
             fail();
           } catch (error) {
             expect(error.name).to.eq('WrongValidationException');
@@ -274,12 +296,15 @@ describe('DocumentParser', () => {
         let input = null;
 
         before(() => {
-          input = parseFromFiles(['./test/test_files/unexistent_entities_for_relationship.jdl']);
+          input = JDLReader.parseFromFiles(['./test/test_files/unexistent_entities_for_relationship.jdl']);
         });
 
         it('fails', () => {
           try {
-            DocumentParser.parse(input, 'sql');
+            DocumentParser.parseFromConfigurationObject({
+              document: input,
+              databaseType: DatabaseTypes.sql
+            });
             fail();
           } catch (error) {
             expect(error.name).to.eq('UndeclaredEntityException');
@@ -290,12 +315,15 @@ describe('DocumentParser', () => {
         let input = null;
 
         before(() => {
-          input = parseFromFiles(['./test/test_files/user_entity_from_relationship.jdl']);
+          input = JDLReader.parseFromFiles(['./test/test_files/user_entity_from_relationship.jdl']);
         });
 
         it('fails', () => {
           try {
-            DocumentParser.parse(input, 'sql');
+            DocumentParser.parseFromConfigurationObject({
+              document: input,
+              databaseType: DatabaseTypes.sql
+            });
             fail();
           } catch (error) {
             expect(error.name).to.eq('IllegalAssociationException');
@@ -306,8 +334,11 @@ describe('DocumentParser', () => {
         let content = null;
 
         before(() => {
-          const input = parseFromFiles(['./test/test_files/user_entity_to_relationship.jdl']);
-          content = DocumentParser.parse(input, 'sql');
+          const input = JDLReader.parseFromFiles(['./test/test_files/user_entity_to_relationship.jdl']);
+          content = DocumentParser.parseFromConfigurationObject({
+            document: input,
+            databaseType: DatabaseTypes.sql
+          });
         });
 
         it('is processed', () => {
@@ -319,12 +350,15 @@ describe('DocumentParser', () => {
         let input = null;
 
         before(() => {
-          input = parseFromFiles(['./test/test_files/invalid_option.jdl']);
+          input = JDLReader.parseFromFiles(['./test/test_files/invalid_option.jdl']);
         });
 
         it('fails', () => {
           try {
-            DocumentParser.parse(input, 'sql');
+            DocumentParser.parseFromConfigurationObject({
+              document: input,
+              databaseType: DatabaseTypes.sql
+            });
             fail();
           } catch (error) {
             expect(error.name).to.eq('IllegalArgumentException');
@@ -336,8 +370,11 @@ describe('DocumentParser', () => {
         let enumField = null;
 
         before(() => {
-          const input = parseFromFiles(['./test/test_files/enum.jdl']);
-          content = DocumentParser.parse(input, 'sql');
+          const input = JDLReader.parseFromFiles(['./test/test_files/enum.jdl']);
+          content = DocumentParser.parseFromConfigurationObject({
+            document: input,
+            databaseType: DatabaseTypes.sql
+          });
           enumField = new JDLField({
             name: 'sourceType',
             type: 'MyEnum'
@@ -360,8 +397,11 @@ describe('DocumentParser', () => {
         let content = null;
 
         before(() => {
-          input = parseFromFiles(['./test/test_files/fluent_methods.jdl']);
-          content = DocumentParser.parse(input, 'sql');
+          input = JDLReader.parseFromFiles(['./test/test_files/fluent_methods.jdl']);
+          content = DocumentParser.parseFromConfigurationObject({
+            document: input,
+            databaseType: DatabaseTypes.sql
+          });
         });
 
         it('adds it correctly', () => {
@@ -377,8 +417,11 @@ describe('DocumentParser', () => {
         let content = null;
 
         before(() => {
-          const input = parseFromFiles(['./test/test_files/following_comments.jdl']);
-          content = DocumentParser.parse(input, 'sql');
+          const input = JDLReader.parseFromFiles(['./test/test_files/following_comments.jdl']);
+          content = DocumentParser.parseFromConfigurationObject({
+            document: input,
+            databaseType: DatabaseTypes.sql
+          });
         });
 
         it('accepts them', () => {
@@ -403,8 +446,11 @@ describe('DocumentParser', () => {
         let options = null;
 
         before(() => {
-          const input = parseFromFiles(['./test/test_files/complex_jdl_2.jdl']);
-          content = DocumentParser.parse(input, 'sql');
+          const input = JDLReader.parseFromFiles(['./test/test_files/complex_jdl_2.jdl']);
+          content = DocumentParser.parseFromConfigurationObject({
+            document: input,
+            databaseType: DatabaseTypes.sql
+          });
           options = content.getOptions();
         });
 
@@ -570,8 +616,11 @@ describe('DocumentParser', () => {
         let content = null;
 
         before(() => {
-          const input = parseFromFiles(['./test/test_files/field_comments.jdl']);
-          content = DocumentParser.parse(input, 'sql');
+          const input = JDLReader.parseFromFiles(['./test/test_files/field_comments.jdl']);
+          content = DocumentParser.parseFromConfigurationObject({
+            document: input,
+            databaseType: DatabaseTypes.sql
+          });
         });
 
         it('assigns them correctly', () => {
@@ -626,8 +675,11 @@ describe('DocumentParser', () => {
         let content = null;
 
         before(() => {
-          const input = parseFromFiles(['./test/test_files/constants.jdl']);
-          content = DocumentParser.parse(input, 'sql');
+          const input = JDLReader.parseFromFiles(['./test/test_files/constants.jdl']);
+          content = DocumentParser.parseFromConfigurationObject({
+            document: input,
+            databaseType: DatabaseTypes.sql
+          });
         });
 
         it('assigns the constants\' value when needed', () => {
@@ -684,12 +736,15 @@ describe('DocumentParser', () => {
         let input = null;
 
         before(() => {
-          input = parseFromFiles(['./test/test_files/cassandra_jdl.jdl']);
+          input = JDLReader.parseFromFiles(['./test/test_files/cassandra_jdl.jdl']);
         });
 
         it('fails', () => {
           try {
-            DocumentParser.parse(input, 'cassandra');
+            DocumentParser.parseFromConfigurationObject({
+              document: input,
+              databaseType: DatabaseTypes.cassandra
+            });
           } catch (error) {
             expect(error.name).to.eq('IllegalOptionException');
           }
@@ -699,8 +754,11 @@ describe('DocumentParser', () => {
         let application = null;
 
         before(() => {
-          const input = parseFromFiles(['./test/test_files/application.jdl']);
-          const content = DocumentParser.parse(input, 'sql');
+          const input = JDLReader.parseFromFiles(['./test/test_files/application.jdl']);
+          const content = DocumentParser.parseFromConfigurationObject({
+            document: input,
+            databaseType: DatabaseTypes.sql
+          });
           application = content.applications.toto.config;
         });
 
@@ -712,14 +770,14 @@ describe('DocumentParser', () => {
           expect(application.hibernateCache).to.eq('no');
           expect(application.clusteredHttpSession).to.eq('no');
           expect(application.websocket).to.be.false;
-          expect(application.databaseType).to.eq('sql');
+          expect(application.databaseType).to.eq(DatabaseTypes.sql);
           expect(application.devDatabaseType).to.eq('h2Memory');
           expect(application.prodDatabaseType).to.eq('mysql');
           expect(application.useCompass).to.be.false;
           expect(application.buildTool).to.eq('maven');
           expect(application.searchEngine).to.be.false;
           expect(application.enableTranslation).to.be.false;
-          expect(application.applicationType).to.eq('monolith');
+          expect(application.applicationType).to.eq(ApplicationTypes.MONOLITH);
           expect(application.testFrameworks.size()).to.equal(0);
           expect(
             application.languages.has('en') && application.languages.has('fr')
@@ -743,8 +801,11 @@ describe('DocumentParser', () => {
         let content = null;
 
         before(() => {
-          const input = parseFromFiles(['./test/test_files/filtering_without_service.jdl']);
-          content = DocumentParser.parse(input, 'sql');
+          const input = JDLReader.parseFromFiles(['./test/test_files/filtering_without_service.jdl']);
+          content = DocumentParser.parseFromConfigurationObject({
+            document: input,
+            databaseType: DatabaseTypes.sql
+          });
         });
 
         it('works', () => {
@@ -757,10 +818,10 @@ describe('DocumentParser', () => {
           let content = null;
 
           before(() => {
-            const input = parseFromFiles(['./test/test_files/client_root_folder.jdl']);
+            const input = JDLReader.parseFromFiles(['./test/test_files/client_root_folder.jdl']);
             content = DocumentParser.parseFromConfigurationObject({
               document: input,
-              databaseType: 'sql',
+              databaseType: DatabaseTypes.sql,
               applicationType: ApplicationTypes.MICROSERVICE
             });
           });
@@ -773,10 +834,10 @@ describe('DocumentParser', () => {
           let content = null;
 
           before(() => {
-            const input = parseFromFiles(['./test/test_files/client_root_folder.jdl']);
+            const input = JDLReader.parseFromFiles(['./test/test_files/client_root_folder.jdl']);
             content = DocumentParser.parseFromConfigurationObject({
               document: input,
-              databaseType: 'sql',
+              databaseType: DatabaseTypes.sql,
               applicationType: ApplicationTypes.MONOLITH
             });
           });
@@ -793,8 +854,13 @@ describe('DocumentParser', () => {
           let content = null;
 
           before(() => {
-            const input = parseFromFiles(['./test/test_files/no_microservice.jdl']);
-            content = DocumentParser.parse(input, DatabaseTypes.sql, ApplicationTypes.MICROSERVICE, 'toto');
+            const input = JDLReader.parseFromFiles(['./test/test_files/no_microservice.jdl']);
+            content = DocumentParser.parseFromConfigurationObject({
+              document: input,
+              databaseType: DatabaseTypes.sql,
+              applicationType: ApplicationTypes.MICROSERVICE,
+              applicationName: 'toto'
+            });
           });
 
           it('adds it to every entity', () => {
@@ -806,8 +872,13 @@ describe('DocumentParser', () => {
           let content = null;
 
           before(() => {
-            const input = parseFromFiles(['./test/test_files/simple_microservice_setup.jdl']);
-            content = DocumentParser.parse(input, DatabaseTypes.sql, ApplicationTypes.MICROSERVICE, 'toto');
+            const input = JDLReader.parseFromFiles(['./test/test_files/simple_microservice_setup.jdl']);
+            content = DocumentParser.parseFromConfigurationObject({
+              document: input,
+              databaseType: DatabaseTypes.sql,
+              applicationType: ApplicationTypes.MICROSERVICE,
+              applicationName: 'toto'
+            });
           });
 
           it('does not automatically setup the microservice option', () => {
@@ -820,7 +891,7 @@ describe('DocumentParser', () => {
         let content = null;
 
         before(() => {
-          const input = parseFromFiles(['./test/test_files/application_with_entities.jdl']);
+          const input = JDLReader.parseFromFiles(['./test/test_files/application_with_entities.jdl']);
           content = DocumentParser.parseFromConfigurationObject({
             document: input,
             databaseType: DatabaseTypes.sql,
