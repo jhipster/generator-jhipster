@@ -22,7 +22,7 @@ const expect = require('chai').expect;
 
 const fail = expect.fail;
 const FieldTypes = require('../../../../lib/core/jhipster/field_types');
-const Validations = require('../../../../lib/core/jhipster/validations').Validations;
+const Validations = require('../../../../lib/core/jhipster/validations');
 const JDLEnum = require('../../../../lib/core/jdl_enum');
 
 describe('FieldTypes', () => {

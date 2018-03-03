@@ -20,7 +20,7 @@
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
 const JDLValidation = require('../../../lib/core/jdl_validation');
-const Validations = require('../../../lib/core/jhipster/validations').Validations;
+const Validations = require('../../../lib/core/jhipster/validations');
 
 describe('JDLValidation', () => {
   context('::new', () => {

@@ -23,7 +23,7 @@ const expect = require('chai').expect;
 const fail = expect.fail;
 const JDLField = require('../../../lib/core/jdl_field');
 const JDLValidation = require('../../../lib/core/jdl_validation');
-const VALIDATIONS = require('../../../lib/core/jhipster/validations').VALIDATIONS;
+const Validations = require('../../../lib/core/jhipster/validations');
 
 describe('JDLField', () => {
   describe('::new', () => {
@@ -151,7 +151,7 @@ describe('JDLField', () => {
           expect(error.message).to.eq('The passed validation must be valid.\nErrors: No validation');
         }
         try {
-          field.addValidation({ name: VALIDATIONS.MIN });
+          field.addValidation({ name: Validations.MIN });
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
@@ -163,7 +163,7 @@ describe('JDLField', () => {
       let validation = null;
 
       before(() => {
-        validation = { name: VALIDATIONS.MIN, value: 42 };
+        validation = { name: Validations.MIN, value: 42 };
         field.addValidation(validation);
       });
 
