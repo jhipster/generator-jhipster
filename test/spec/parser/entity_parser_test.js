@@ -43,7 +43,7 @@ const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types
 
 
 describe('EntityParser', () => {
-  describe('::convert', () => {
+  describe('::parse', () => {
     context('when passing invalid parameters', () => {
       context('such as undefined', () => {
         it('throws an error', () => {
