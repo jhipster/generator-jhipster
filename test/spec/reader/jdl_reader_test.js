@@ -23,8 +23,6 @@ const fs = require('fs');
 const JDLReader = require('../../../lib/reader/jdl_reader');
 
 const fail = expect.fail;
-const parse = JDLReader.parse;
-const parseFromFiles = JDLReader.parseFromFiles;
 
 describe('JDLReader', () => {
   describe('::parse', () => {
@@ -32,7 +30,7 @@ describe('JDLReader', () => {
       context('such as nil', () => {
         it('throws an error', () => {
           try {
-            parse(null);
+            JDLReader.parse(null);
             fail();
           } catch (error) {
             expect(error.name).to.eq('IllegalArgumentException');
@@ -42,7 +40,7 @@ describe('JDLReader', () => {
       context('such as an empty array', () => {
         it('throws an error', () => {
           try {
-            parse('');
+            JDLReader.parse('');
             fail();
           } catch (error) {
             expect(error.name).to.eq('IllegalArgumentException');
@@ -56,7 +54,7 @@ describe('JDLReader', () => {
 
         before(() => {
           const input = fs.readFileSync('./test/test_files/valid_jdl.jdl', 'utf-8').toString();
-          content = parse(input);
+          content = JDLReader.parse(input);
         });
 
         it('reads it', () => {
@@ -70,7 +68,7 @@ describe('JDLReader', () => {
       context('such as nil', () => {
         it('throws an error', () => {
           try {
-            parseFromFiles(null);
+            JDLReader.parseFromFiles(null);
             fail();
           } catch (error) {
             expect(error.name).to.eq('IllegalArgumentException');
@@ -80,7 +78,7 @@ describe('JDLReader', () => {
       context('such as an empty array', () => {
         it('throws an error', () => {
           try {
-            parseFromFiles([]);
+            JDLReader.parseFromFiles([]);
             fail();
           } catch (error) {
             expect(error.name).to.eq('IllegalArgumentException');
@@ -90,7 +88,7 @@ describe('JDLReader', () => {
       context('such as files without the \'.jh\' or \'.jdl\' file extension', () => {
         it('throws an error', () => {
           try {
-            parseFromFiles(['../../test_files/invalid_file.txt']);
+            JDLReader.parseFromFiles(['../../test_files/invalid_file.txt']);
             fail();
           } catch (error) {
             expect(error.name).to.eq('WrongFileException');
@@ -100,7 +98,7 @@ describe('JDLReader', () => {
       context('such as files that do not exist', () => {
         it('throws an error', () => {
           try {
-            parseFromFiles(['nofile.jh']);
+            JDLReader.parseFromFiles(['nofile.jh']);
             fail();
           } catch (error) {
             expect(error.name).to.eq('WrongFileException');
@@ -110,7 +108,7 @@ describe('JDLReader', () => {
       context('such as folders', () => {
         it('throws an error', () => {
           try {
-            parseFromFiles(['../../test_files/folder.jdl']);
+            JDLReader.parseFromFiles(['../../test_files/folder.jdl']);
             fail();
           } catch (error) {
             expect(error.name).to.eq('WrongFileException');
@@ -123,7 +121,7 @@ describe('JDLReader', () => {
         let content = null;
 
         before(() => {
-          content = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
+          content = JDLReader.parseFromFiles(['./test/test_files/valid_jdl.jdl']);
         });
 
         it('reads it', () => {
@@ -134,7 +132,7 @@ describe('JDLReader', () => {
         let content = null;
 
         before(() => {
-          content = parseFromFiles(['./test/test_files/valid_jdl.jdl', './test/test_files/valid_jdl2.jdl']);
+          content = JDLReader.parseFromFiles(['./test/test_files/valid_jdl.jdl', './test/test_files/valid_jdl2.jdl']);
         });
 
         it('reads them', () => {
@@ -145,7 +143,7 @@ describe('JDLReader', () => {
         let content = null;
 
         before(() => {
-          content = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
+          content = JDLReader.parseFromFiles(['./test/test_files/complex_jdl.jdl']);
         });
 
         it('reads them', () => {
@@ -155,7 +153,7 @@ describe('JDLReader', () => {
       context('when having multiple internal JDL comments', () => {
         it('ignores them and does not fail', () => {
           try {
-            parseFromFiles(['./test/test_files/multiple_jdl_comments.jdl']);
+            JDLReader.parseFromFiles(['./test/test_files/multiple_jdl_comments.jdl']);
           } catch (error) {
             fail(error, null, error);
           }

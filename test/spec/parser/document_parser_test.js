@@ -31,11 +31,11 @@ const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
 const JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
 const DatabaseTypes = require('../../../lib/core/jhipster/database_types').Types;
-const FieldTypes = require('../../../lib/core/jhipster/field_types').COMMON_DB_TYPES;
-const Validations = require('../../../lib/core/jhipster/validations').VALIDATIONS;
-const UnaryOptions = require('../../../lib/core/jhipster/unary_options').UNARY_OPTIONS;
-const BinaryOptions = require('../../../lib/core/jhipster/binary_options').BINARY_OPTIONS;
-const BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').BINARY_OPTION_VALUES;
+const FieldTypes = require('../../../lib/core/jhipster/field_types').CommonDBTypes;
+const Validations = require('../../../lib/core/jhipster/validations').Validations;
+const UnaryOptions = require('../../../lib/core/jhipster/unary_options').Options;
+const BinaryOptions = require('../../../lib/core/jhipster/binary_options').Options;
+const BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').Values;
 
 describe('DocumentParser', () => {
   describe('::parse', () => {

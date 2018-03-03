@@ -20,13 +20,11 @@
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
 const fs = require('fs');
+const path = require('path');
 
 const fail = expect.fail;
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
-const Exporter = require('../../../lib/export/jhipster_entity_exporter');
-const DocumentParser = require('../../../lib/parser/document_parser');
-const EntityParser = require('../../../lib/parser/entity_parser');
-const parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
+const JHipsterEntityExporter = require('../../../lib/export/jhipster_entity_exporter');
 const FileUtils = require('../../../lib/utils/file_utils');
 
 describe('JHipsterEntityExporter', () => {
@@ -35,7 +33,7 @@ describe('JHipsterEntityExporter', () => {
       context('such as undefined', () => {
         it('throws an error', () => {
           try {
-            Exporter.exportToJSON();
+            JHipsterEntityExporter.exportToJSON();
             fail();
           } catch (error) {
             expect(error.name).to.eq('NullPointerException');
@@ -44,189 +42,198 @@ describe('JHipsterEntityExporter', () => {
       });
     });
     context('when passing valid arguments', () => {
-      context('when exporting JDL to entity json for SQL type', () => {
-        let department = null;
-        let jobHistory = null;
+      context('for only entities and a monolith app', () => {
+        let entities = null;
+        let aEntityContent = null;
 
         before(() => {
-          const input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
-          const content = EntityParser.parse({
-            jdlObject: DocumentParser.parseFromConfigurationObject({
-              document: input,
-              databaseType: 'sql'
-            }),
-            databaseType: 'sql'
+          entities = {
+            A: {
+              fields: [{
+                fieldName: 'myEnum',
+                fieldType: 'MyEnum',
+                fieldValues: 'FRENCH,ENGLISH'
+              }],
+              relationships: [],
+              changelogDate: '42',
+              javadoc: '',
+              entityTableName: 'a',
+              dto: 'no',
+              pagination: 'no',
+              service: 'no',
+              fluentMethods: true,
+              jpaMetamodelFiltering: false,
+              clientRootFolder: '',
+              applications: []
+            }
+          };
+          JHipsterEntityExporter.exportEntities({
+            entities,
+            applicationName: 'MyApp',
+            applicationType: ApplicationTypes.MONOLITH
           });
-          Exporter.exportToJSON(content);
-          department = JSON.parse(fs.readFileSync('.jhipster/Department.json', { encoding: 'utf-8' }));
-          jobHistory = JSON.parse(fs.readFileSync('.jhipster/JobHistory.json', { encoding: 'utf-8' }));
-        });
-
-        it('exports it', () => {
-          expect(fs.statSync('.jhipster/Department.json').isFile()).to.be.true;
-          expect(fs.statSync('.jhipster/JobHistory.json').isFile()).to.be.true;
-          expect(fs.statSync('.jhipster/Job.json').isFile()).to.be.true;
-          expect(fs.statSync('.jhipster/Employee.json').isFile()).to.be.true;
-          expect(fs.statSync('.jhipster/Location.json').isFile()).to.be.true;
-          expect(fs.statSync('.jhipster/Task.json').isFile()).to.be.true;
-          expect(fs.statSync('.jhipster/Country.json').isFile()).to.be.true;
-          expect(fs.statSync('.jhipster/Region.json').isFile()).to.be.true;
-          expect(department.relationships).to.deep.eq([
-            {
-              relationshipType: 'one-to-one',
-              relationshipName: 'location',
-              otherEntityName: 'location',
-              otherEntityField: 'id',
-              ownerSide: true,
-              otherEntityRelationshipName: 'department'
-            },
-            {
-              relationshipType: 'one-to-many',
-              javadoc: 'A relationship',
-              relationshipName: 'employee',
-              otherEntityName: 'employee',
-              otherEntityRelationshipName: 'department'
-            }
-          ]);
-          expect(department.fields).to.deep.eq([
-            {
-              fieldName: 'name',
-              fieldType: 'String',
-              fieldValidateRules: ['required']
-            },
-            {
-              fieldName: 'description',
-              fieldType: 'byte[]',
-              fieldTypeBlobContent: 'text'
-            },
-            {
-              fieldName: 'advertisement',
-              fieldType: 'byte[]',
-              fieldTypeBlobContent: 'any'
-            },
-            {
-              fieldName: 'logo',
-              fieldType: 'byte[]',
-              fieldTypeBlobContent: 'image'
-            }
-          ]);
-          expect(department.dto).to.eq('no');
-          expect(department.service).to.eq('no');
-          expect(department.pagination).to.eq('no');
-          expect(jobHistory.relationships).to.deep.eq([
-            {
-              relationshipType: 'one-to-one',
-              relationshipName: 'department',
-              otherEntityName: 'department',
-              otherEntityField: 'id',
-              ownerSide: true,
-              otherEntityRelationshipName: 'jobHistory'
-            },
-            {
-              relationshipType: 'one-to-one',
-              relationshipName: 'job',
-              otherEntityName: 'job',
-              otherEntityField: 'id',
-              ownerSide: true,
-              otherEntityRelationshipName: 'jobHistory'
-            },
-            {
-              relationshipType: 'one-to-one',
-              relationshipName: 'employee',
-              otherEntityName: 'employee',
-              otherEntityField: 'id',
-              ownerSide: true,
-              otherEntityRelationshipName: 'jobHistory'
-            }
-          ]);
-          expect(jobHistory.fields).to.deep.eq([
-            {
-              fieldName: 'startDate',
-              fieldType: 'ZonedDateTime'
-            },
-            {
-              fieldName: 'endDate',
-              fieldType: 'ZonedDateTime'
-            },
-            {
-              fieldName: 'language',
-              fieldType: 'Language',
-              fieldValues: 'FRENCH,ENGLISH,SPANISH'
-            }
-          ]);
-          expect(jobHistory.dto).to.eq('no');
-          expect(jobHistory.service).to.eq('no');
-          expect(jobHistory.pagination).to.eq('infinite-scroll');
-        });
-
-        after(() => {
-          fs.unlinkSync('.jhipster/Department.json');
-          fs.unlinkSync('.jhipster/JobHistory.json');
-          fs.unlinkSync('.jhipster/Job.json');
-          fs.unlinkSync('.jhipster/Employee.json');
-          fs.unlinkSync('.jhipster/Location.json');
-          fs.unlinkSync('.jhipster/Task.json');
-          fs.unlinkSync('.jhipster/Country.json');
-          fs.unlinkSync('.jhipster/Region.json');
-          fs.rmdirSync('.jhipster');
-        });
-      });
-      context('when exporting JDL to entity json for an existing entity', () => {
-        let changeLogDate = null;
-
-        before(() => {
-          const input = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
-          const content = EntityParser.parse({
-            jdlObject: DocumentParser.parseFromConfigurationObject({
-              document: input,
-              databaseType: 'sql'
-            }),
-            databaseType: 'sql'
-          });
-          Exporter.exportToJSON(content);
-          changeLogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', { encoding: 'utf-8' })).changelogDate;
-        });
-
-        it('exports it with same changeLogDate', (done) => {
-          setTimeout(() => {
-            const input = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
-            const content = EntityParser.parse({
-              jdlObject: DocumentParser.parseFromConfigurationObject({
-                document: input,
-                databaseType: 'sql'
-              }),
-              databaseType: 'sql'
-            });
-            Exporter.exportToJSON(content, true);
-            expect(fs.statSync('.jhipster/A.json').isFile()).to.be.true;
-            const newChangeLogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', { encoding: 'utf-8' })).changelogDate;
-            expect(newChangeLogDate).to.eq(changeLogDate);
-            done();
-          }, 1000);
+          aEntityContent = JSON.parse(fs.readFileSync(path.join('.jhipster', 'A.json'), { encoding: 'utf-8' }));
         });
 
         after(() => {
           fs.unlinkSync('.jhipster/A.json');
-          fs.unlinkSync('.jhipster/B.json');
-          fs.unlinkSync('.jhipster/C.json');
-          fs.unlinkSync('.jhipster/D.json');
+          fs.rmdirSync('.jhipster');
+        });
+
+        it('exports the entities', () => {
+          expect(aEntityContent).to.deep.equal(entities.A);
+        });
+      });
+      context('when exporting the same entity', () => {
+        let entities = null;
+        let previousChangelogDate = null;
+        let newChangelogDate = null;
+
+        before((done) => {
+          entities = {
+            A: {
+              fields: [{
+                fieldName: 'myEnum',
+                fieldType: 'MyEnum',
+                fieldValues: 'FRENCH,ENGLISH'
+              }],
+              relationships: [],
+              changelogDate: '42',
+              javadoc: '',
+              entityTableName: 'a',
+              dto: 'no',
+              pagination: 'no',
+              service: 'no',
+              fluentMethods: true,
+              jpaMetamodelFiltering: false,
+              clientRootFolder: '',
+              applications: []
+            }
+          };
+          JHipsterEntityExporter.exportEntities({
+            entities,
+            applicationName: 'MyApp',
+            applicationType: ApplicationTypes.MONOLITH
+          });
+          previousChangelogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', { encoding: 'utf-8' })).changelogDate;
+          setTimeout(() => {
+            JHipsterEntityExporter.exportEntities({
+              entities,
+              applicationName: 'MyApp',
+              applicationType: ApplicationTypes.MONOLITH
+            });
+            newChangelogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', { encoding: 'utf-8' })).changelogDate;
+            done();
+          }, 1000);
+        });
+
+        it('exports it with same changelogDate', () => {
+          expect(newChangelogDate).to.eq(previousChangelogDate);
+        });
+
+        after(() => {
+          fs.unlinkSync('.jhipster/A.json');
           fs.rmdirSync('.jhipster');
         });
       });
       context('when passing an application name and application type', () => {
         context('inside a monolith', () => {
+          let entities = null;
+
           before(() => {
-            const input = parseFromFiles(['./test/test_files/two_microservices.jdl']);
-            const content = EntityParser.parse({
-              jdlObject: DocumentParser.parseFromConfigurationObject({
-                document: input,
-                databaseType: 'sql'
-              }),
-              databaseType: 'sql',
-              applicationType: ApplicationTypes.MONOLITH
-            });
-            Exporter.exportEntities({
-              entities: content,
+            entities = {
+              Client: {
+                fields: [],
+                relationships: [
+                  {
+                    relationshipType: 'many-to-one',
+                    relationshipName: 'location',
+                    otherEntityName: 'location',
+                    otherEntityField: 'id'
+                  }
+                ],
+                changelogDate: '20180303092308',
+                entityTableName: 'client',
+                dto: 'no',
+                pagination: 'no',
+                service: 'serviceClass',
+                jpaMetamodelFiltering: true,
+                fluentMethods: true,
+                clientRootFolder: '',
+                applications: '*',
+                microserviceName: 'client'
+              },
+              Location: {
+                fields: [],
+                relationships: [
+                  {
+                    relationshipType: 'one-to-many',
+                    relationshipName: 'clients',
+                    otherEntityName: 'client',
+                    otherEntityRelationshipName: 'location'
+                  }
+                ],
+                changelogDate: '20180303092309',
+                entityTableName: 'location',
+                dto: 'no',
+                pagination: 'no',
+                service: 'serviceClass',
+                jpaMetamodelFiltering: true,
+                fluentMethods: true,
+                clientRootFolder: '',
+                applications: '*',
+                microserviceName: 'client'
+              },
+              LocalStore: {
+                fields: [],
+                relationships: [
+                  {
+                    relationshipType: 'one-to-many',
+                    relationshipName: 'products',
+                    otherEntityName: 'product',
+                    otherEntityRelationshipName: 'store'
+                  }
+                ],
+                changelogDate: '20180303092310',
+                entityTableName: 'local_store',
+                dto: 'no',
+                pagination: 'no',
+                service: 'serviceClass',
+                jpaMetamodelFiltering: true,
+                fluentMethods: true,
+                clientRootFolder: '',
+                applications: '*',
+                microserviceName: 'store'
+              },
+              Product: {
+                fields: [
+                  {
+                    fieldName: 'name',
+                    fieldType: 'String'
+                  }
+                ],
+                relationships: [
+                  {
+                    relationshipType: 'many-to-one',
+                    relationshipName: 'store',
+                    otherEntityName: 'localStore',
+                    otherEntityField: 'id'
+                  }
+                ],
+                changelogDate: '20180303092311',
+                entityTableName: 'product',
+                dto: 'no',
+                pagination: 'no',
+                service: 'serviceClass',
+                jpaMetamodelFiltering: true,
+                fluentMethods: true,
+                clientRootFolder: '',
+                applications: '*',
+                microserviceName: 'store'
+              }
+            };
+            JHipsterEntityExporter.exportEntities({
+              entities,
               applicationName: 'client',
               applicationType: ApplicationTypes.MONOLITH
             });
@@ -249,18 +256,104 @@ describe('JHipsterEntityExporter', () => {
         });
         context('inside a microservice', () => {
           context('and when entities without the microservice option are passed', () => {
+            let entities = null;
+
             before(() => {
-              const input = parseFromFiles(['./test/test_files/no_microservice.jdl']);
-              const content = EntityParser.parse({
-                jdlObject: DocumentParser.parseFromConfigurationObject({
-                  document: input,
-                  databaseType: 'sql'
-                }),
-                databaseType: 'sql',
-                applicationType: ApplicationTypes.MICROSERVICE
-              });
-              Exporter.exportEntities({
-                entities: content,
+              entities = {
+                A: {
+                  fields: [],
+                  relationships: [],
+                  changelogDate: '20180303092920',
+                  entityTableName: 'a',
+                  dto: 'no',
+                  pagination: 'no',
+                  service: 'no',
+                  jpaMetamodelFiltering: false,
+                  fluentMethods: true,
+                  clientRootFolder: '',
+                  applications: '*'
+                },
+                B: {
+                  fields: [],
+                  relationships: [],
+                  changelogDate: '20180303092921',
+                  entityTableName: 'b',
+                  dto: 'no',
+                  pagination: 'no',
+                  service: 'no',
+                  jpaMetamodelFiltering: false,
+                  fluentMethods: true,
+                  clientRootFolder: '',
+                  applications: '*'
+                },
+                C: {
+                  fields: [],
+                  relationships: [],
+                  changelogDate: '20180303092922',
+                  entityTableName: 'c',
+                  dto: 'no',
+                  pagination: 'no',
+                  service: 'no',
+                  jpaMetamodelFiltering: false,
+                  fluentMethods: true,
+                  clientRootFolder: '',
+                  applications: '*'
+                },
+                D: {
+                  fields: [],
+                  relationships: [],
+                  changelogDate: '20180303092923',
+                  entityTableName: 'd',
+                  dto: 'no',
+                  pagination: 'no',
+                  service: 'no',
+                  jpaMetamodelFiltering: false,
+                  fluentMethods: true,
+                  clientRootFolder: '',
+                  applications: '*'
+                },
+                E: {
+                  fields: [],
+                  relationships: [],
+                  changelogDate: '20180303092924',
+                  entityTableName: 'e',
+                  dto: 'no',
+                  pagination: 'no',
+                  service: 'no',
+                  jpaMetamodelFiltering: false,
+                  fluentMethods: true,
+                  clientRootFolder: '',
+                  applications: '*'
+                },
+                F: {
+                  fields: [],
+                  relationships: [],
+                  changelogDate: '20180303092925',
+                  entityTableName: 'f',
+                  dto: 'no',
+                  pagination: 'no',
+                  service: 'no',
+                  jpaMetamodelFiltering: false,
+                  fluentMethods: true,
+                  clientRootFolder: '',
+                  applications: '*'
+                },
+                G: {
+                  fields: [],
+                  relationships: [],
+                  changelogDate: '20180303092926',
+                  entityTableName: 'g',
+                  dto: 'no',
+                  pagination: 'no',
+                  service: 'no',
+                  jpaMetamodelFiltering: false,
+                  fluentMethods: true,
+                  clientRootFolder: '',
+                  applications: '*'
+                }
+              };
+              JHipsterEntityExporter.exportEntities({
+                entities,
                 applicationName: 'client',
                 applicationType: ApplicationTypes.MICROSERVICE
               });
@@ -280,18 +373,102 @@ describe('JHipsterEntityExporter', () => {
             });
           });
           context('and when microservice entities are passed', () => {
+            let entities = null;
+
             before(() => {
-              const input = parseFromFiles(['./test/test_files/two_microservices.jdl']);
-              const content = EntityParser.parse({
-                jdlObject: DocumentParser.parseFromConfigurationObject({
-                  document: input,
-                  databaseType: 'sql'
-                }),
-                databaseType: 'sql',
-                applicationType: ApplicationTypes.MICROSERVICE
-              });
-              Exporter.exportEntities({
-                entities: content,
+              entities = {
+                Client: {
+                  fields: [],
+                  relationships: [
+                    {
+                      relationshipType: 'many-to-one',
+                      relationshipName: 'location',
+                      otherEntityName: 'location',
+                      otherEntityField: 'id'
+                    }
+                  ],
+                  changelogDate: '20180303093006',
+                  entityTableName: 'client',
+                  dto: 'no',
+                  pagination: 'no',
+                  service: 'serviceClass',
+                  jpaMetamodelFiltering: true,
+                  fluentMethods: true,
+                  clientRootFolder: '',
+                  applications: '*',
+                  microserviceName: 'client'
+                },
+                Location: {
+                  fields: [],
+                  relationships: [
+                    {
+                      relationshipType: 'one-to-many',
+                      relationshipName: 'clients',
+                      otherEntityName: 'client',
+                      otherEntityRelationshipName: 'location'
+                    }
+                  ],
+                  changelogDate: '20180303093007',
+                  entityTableName: 'location',
+                  dto: 'no',
+                  pagination: 'no',
+                  service: 'serviceClass',
+                  jpaMetamodelFiltering: true,
+                  fluentMethods: true,
+                  clientRootFolder: '',
+                  applications: '*',
+                  microserviceName: 'client'
+                },
+                LocalStore: {
+                  fields: [],
+                  relationships: [
+                    {
+                      relationshipType: 'one-to-many',
+                      relationshipName: 'products',
+                      otherEntityName: 'product',
+                      otherEntityRelationshipName: 'store'
+                    }
+                  ],
+                  changelogDate: '20180303093008',
+                  entityTableName: 'local_store',
+                  dto: 'no',
+                  pagination: 'no',
+                  service: 'serviceClass',
+                  jpaMetamodelFiltering: true,
+                  fluentMethods: true,
+                  clientRootFolder: '',
+                  applications: '*',
+                  microserviceName: 'store'
+                },
+                Product: {
+                  fields: [
+                    {
+                      fieldName: 'name',
+                      fieldType: 'String'
+                    }
+                  ],
+                  relationships: [
+                    {
+                      relationshipType: 'many-to-one',
+                      relationshipName: 'store',
+                      otherEntityName: 'localStore',
+                      otherEntityField: 'id'
+                    }
+                  ],
+                  changelogDate: '20180303093009',
+                  entityTableName: 'product',
+                  dto: 'no',
+                  pagination: 'no',
+                  service: 'serviceClass',
+                  jpaMetamodelFiltering: true,
+                  fluentMethods: true,
+                  clientRootFolder: '',
+                  applications: '*',
+                  microserviceName: 'store'
+                }
+              };
+              JHipsterEntityExporter.exportEntities({
+                entities,
                 applicationName: 'client',
                 applicationType: ApplicationTypes.MICROSERVICE
               });

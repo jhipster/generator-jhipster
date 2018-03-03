@@ -21,8 +21,7 @@
 const expect = require('chai').expect;
 
 const fail = expect.fail;
-const toFilePath = require('../../../lib/reader/json_file_reader').toFilePath;
-const readEntityJSON = require('../../../lib/reader/json_file_reader').readEntityJSON;
+const JSONFileReader = require('../../../lib/reader/json_file_reader');
 
 describe('JSONFileReader', () => {
   describe('::readEntityJSON', () => {
@@ -30,7 +29,7 @@ describe('JSONFileReader', () => {
       context('because it is nil', () => {
         it('fails', () => {
           try {
-            readEntityJSON();
+            JSONFileReader.readEntityJSON();
             fail();
           } catch (error) {
             expect(error.name).to.eq('NullPointerException');
@@ -40,7 +39,7 @@ describe('JSONFileReader', () => {
       context('because it is empty', () => {
         it('fails', () => {
           try {
-            readEntityJSON('');
+            JSONFileReader.readEntityJSON('');
             fail();
           } catch (error) {
             expect(error.name).to.eq('NullPointerException');
@@ -50,7 +49,7 @@ describe('JSONFileReader', () => {
       context('because the file does not exist', () => {
         it('fails', () => {
           try {
-            readEntityJSON('test/test_files/WrongFile.json');
+            JSONFileReader.readEntityJSON('test/test_files/WrongFile.json');
             fail();
           } catch (error) {
             expect(error.name).to.eq('WrongFileException');
@@ -60,7 +59,7 @@ describe('JSONFileReader', () => {
       context('because the file is a folder', () => {
         it('fails', () => {
           try {
-            readEntityJSON('test/test_files/');
+            JSONFileReader.readEntityJSON('test/test_files/');
             fail();
           } catch (error) {
             expect(error.name).to.eq('WrongFileException');
@@ -69,7 +68,7 @@ describe('JSONFileReader', () => {
       });
     });
     context('when passing a valid entity name', () => {
-      const content = readEntityJSON('test/test_files/MyEntity.json');
+      const content = JSONFileReader.readEntityJSON('test/test_files/MyEntity.json');
       it('reads the file', () => {
         expect(content).to.deep.eq(
           {
@@ -95,7 +94,7 @@ describe('JSONFileReader', () => {
       context('with a nil entity name', () => {
         it('fails', () => {
           try {
-            toFilePath();
+            JSONFileReader.toFilePath();
             fail();
           } catch (error) {
             expect(error.name).to.eq('NullPointerException');
@@ -105,7 +104,7 @@ describe('JSONFileReader', () => {
       context('with an empty entity name', () => {
         it('fails', () => {
           try {
-            toFilePath('');
+            JSONFileReader.toFilePath('');
             fail();
           } catch (error) {
             expect(error.name).to.eq('NullPointerException');
@@ -115,7 +114,7 @@ describe('JSONFileReader', () => {
       context('with a valid entity name', () => {
         it('returns the path', () => {
           const name = 'MyEntity';
-          expect(toFilePath(name)).to.eq(`.jhipster/${name}.json`);
+          expect(JSONFileReader.toFilePath(name)).to.eq(`.jhipster/${name}.json`);
         });
       });
       context('with a valid entity name with the first letter lowercase', () => {
@@ -123,7 +122,7 @@ describe('JSONFileReader', () => {
           const expectedFirstLetter = 'M';
           const name = 'myEntity';
           expect(
-            toFilePath(name)
+            JSONFileReader.toFilePath(name)
           ).to.eq(`.jhipster/${expectedFirstLetter}${name.slice(1, name.length)}.json`);
         });
       });

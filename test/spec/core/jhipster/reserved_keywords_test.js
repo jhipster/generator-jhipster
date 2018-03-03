@@ -27,7 +27,6 @@ describe('ReservedKeywords', () => {
       it('returns false', () => {
         expect(ReservedKeywords.isReserved()).to.be.false;
         expect(ReservedKeywords.isReserved('', '')).to.be.false;
-        expect(ReservedKeywords.isReserved('ValidKeyword')).to.be.false;
       });
     });
     context('when passing a valid keyword', () => {
