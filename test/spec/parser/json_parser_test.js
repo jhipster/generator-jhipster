@@ -24,9 +24,9 @@ const fail = expect.fail;
 const fs = require('fs');
 const path = require('path');
 const JSONParser = require('../../../lib/parser/json_parser');
-const UnaryOptions = require('../../../lib/core/jhipster/unary_options').UNARY_OPTIONS;
-const BinaryOptions = require('../../../lib/core/jhipster/binary_options').BINARY_OPTIONS;
-const BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').BINARY_OPTION_VALUES;
+const UnaryOptions = require('../../../lib/core/jhipster/unary_options').Options;
+const BinaryOptions = require('../../../lib/core/jhipster/binary_options').Options;
+const BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').Values;
 
 describe('JSONParser', () => {
   describe('::parseEntities', () => {
