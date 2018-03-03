@@ -33,7 +33,7 @@ describe('JHipsterEntityExporter', () => {
       context('such as undefined', () => {
         it('throws an error', () => {
           try {
-            JHipsterEntityExporter.exportToJSON();
+            JHipsterEntityExporter.exportEntities();
             fail();
           } catch (error) {
             expect(error.name).to.eq('NullPointerException');
