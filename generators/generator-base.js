@@ -1467,6 +1467,44 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Add a remote Maven Repository to the Gradle build.
+     *
+     * @param {string} url - url of the repository
+     * @param {string} username - (optional) username of the repository credentials
+     * @param {string} password - (optional) password of the repository credentials
+     */
+    addGradleMavenRepository(url, username, password) {
+        const fullPath = 'build.gradle';
+        try {
+            let repository = 'maven {\n';
+            if (url) {
+                repository += `        url "${url}"\n`;
+            }
+            if (username || password) {
+                repository += '        credentials {\n';
+                if (username) {
+                    repository += `            username = "${username}"\n`;
+                }
+                if (password) {
+                    repository += `            password = "${password}"\n`;
+                }
+                repository += '        }\n';
+            }
+            repository += '    }';
+            jhipsterUtils.rewriteFile({
+                file: fullPath,
+                needle: 'jhipster-needle-gradle-repositories',
+                splicable: [
+                    repository
+                ]
+            }, this);
+        } catch (e) {
+            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + url + chalk.yellow(' not added.\n'));
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
      * Generate a date to be used by Liquibase changelogs.
      */
     dateFormatForLiquibase() {

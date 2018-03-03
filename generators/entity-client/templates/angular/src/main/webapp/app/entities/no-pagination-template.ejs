@@ -24,7 +24,7 @@ for (const idx in fields) {
     }
 }
 _%>
-<%= entityInstancePlural %>: I<%= entityAngularName %>[];
+    <%= entityInstancePlural %>: I<%= entityAngularName %>[];
     currentAccount: any;
     eventSubscriber: Subscription;
     <%_ if (searchEngine === 'elasticsearch') { _%>

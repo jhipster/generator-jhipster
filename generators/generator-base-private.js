@@ -755,6 +755,148 @@ module.exports = class extends Generator {
     }
 
     /**
+     * Generate Entity Client Field Default Values
+     *
+     * @param {Array|Object} fields - array of fields
+     * @returns {Array} defaultVariablesValues
+     */
+    generateEntityClientFieldDefaultValues(fields) {
+        const defaultVariablesValues = {};
+        fields.forEach((field) => {
+            const fieldType = field.fieldType;
+            const fieldName = field.fieldName;
+            if (fieldType === 'Boolean') {
+                defaultVariablesValues[fieldName] = `this.${fieldName} = false;`;
+            }
+        });
+        return defaultVariablesValues;
+    }
+
+    /**
+     * Generate Entity Client Field Declarations
+     *
+     * @param {string} pkType - type of primary key
+     * @param {Array|Object} fields - array of fields
+     * @param {Array|Object} relationships - array of relationships
+     * @param {string} dto - dto
+     * @returns variablesWithTypes: Array
+     */
+    generateEntityClientFields(pkType, fields, relationships, dto) {
+        const variablesWithTypes = [];
+        let tsKeyType;
+        if (pkType === 'String') {
+            tsKeyType = 'string';
+        } else {
+            tsKeyType = 'number';
+        }
+        variablesWithTypes.push(`id?: ${tsKeyType}`);
+        fields.forEach((field) => {
+            const fieldType = field.fieldType;
+            const fieldName = field.fieldName;
+            let tsType;
+            if (field.fieldIsEnum) {
+                tsType = fieldType;
+            } else if (fieldType === 'Boolean') {
+                tsType = 'boolean';
+            } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) {
+                tsType = 'number';
+            } else if (fieldType === 'String' || fieldType === 'UUID') {
+                tsType = 'string';
+            } else if (['LocalDate', 'Instant', 'ZonedDateTime'].includes(fieldType)) {
+                tsType = 'Moment';
+            } else { // (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate'
+                tsType = 'any';
+                if (['byte[]', 'ByteBuffer'].includes(fieldType) && field.fieldTypeBlobContent !== 'text') {
+                    variablesWithTypes.push(`${fieldName}ContentType?: string`);
+                }
+            }
+            variablesWithTypes.push(`${fieldName}?: ${tsType}`);
+        });
+
+        relationships.forEach((relationship) => {
+            let fieldType;
+            let fieldName;
+            const relationshipType = relationship.relationshipType;
+            if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
+                fieldType = `I${relationship.otherEntityAngularName}[]`;
+                fieldName = relationship.relationshipFieldNamePlural;
+            } else if (dto === 'no') {
+                fieldType = `I${relationship.otherEntityAngularName}`;
+                fieldName = relationship.relationshipFieldName;
+            } else {
+                const relationshipFieldName = relationship.relationshipFieldName;
+                const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
+                const relationshipType = relationship.relationshipType;
+                const otherEntityFieldCapitalized = relationship.otherEntityFieldCapitalized;
+                const ownerSide = relationship.ownerSide;
+
+                if (relationshipType === 'many-to-many' && ownerSide === true) {
+                    fieldType = `I${otherEntityFieldCapitalized}[]`;
+                    fieldName = relationshipFieldNamePlural;
+                } else if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {
+                    if (otherEntityFieldCapitalized !== 'Id' && otherEntityFieldCapitalized !== '') {
+                        fieldType = 'string';
+                        fieldName = `${relationshipFieldName}${otherEntityFieldCapitalized}`;
+                        variablesWithTypes.push(`${fieldName}?: ${fieldType}`);
+                    }
+                    fieldType = 'number';
+                    fieldName = `${relationshipFieldName}Id`;
+                } else {
+                    fieldType = tsKeyType;
+                    fieldName = `${relationship.relationshipFieldName}Id`;
+                }
+            }
+            variablesWithTypes.push(`${fieldName}?: ${fieldType}`);
+        });
+        return variablesWithTypes;
+    }
+
+    /**
+     * Generate Entity Client Imports
+     *
+     * @param {Array|Object} relationships - array of relationships
+     * @param {string} dto - dto
+     * @returns typeImports: Map
+     */
+    generateEntityClientImports(relationships, dto) {
+        
+        const typeImports = new Map();
+        <%_ if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDateTime) { _%>
+        typeImports.set('Moment', 'moment');
+        <%_ } _%>
+
+        relationships.forEach((relationship) => {
+            const relationshipType = relationship.relationshipType;
+            let toBeImported = false;
+
+            if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
+                toBeImported = true;
+            } else if (dto === 'no') {
+                toBeImported = true;
+            } else {
+                const ownerSide = relationship.ownerSide;
+
+                if (relationshipType === 'many-to-many' && ownerSide === true) {
+                    toBeImported = true;
+                }
+            }
+
+            if (toBeImported) {
+                const otherEntityAngularName = relationship.otherEntityAngularName;
+                const importType = `I${otherEntityAngularName}`;
+                let importPath;
+                if (otherEntityAngularName === 'User') {
+                    importPath = 'app/core/user/user.model';
+                } else {
+                    importPath = `./${relationship.otherEntityFileName}.model`;
+                }
+                typeImports.set(importType, importPath);
+            }
+        });
+        return typeImports;
+    }
+
+    /**
      * Get DB type from DB value
      * @param {string} db - db
      */

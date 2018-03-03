@@ -19,14 +19,12 @@
 package <%=packageName%>.config;
 <%_ if (cacheProvider === 'ehcache') { _%>
 
-import io.github.jhipster.config.JHipsterProperties;
-import org.ehcache.config.builders.CacheConfigurationBuilder;
-import org.ehcache.config.builders.ResourcePoolsBuilder;
-import org.ehcache.expiry.Duration;
-import org.ehcache.expiry.Expirations;
+import java.time.Duration;
+
+import org.ehcache.config.builders.*;
 import org.ehcache.jsr107.Eh107Configuration;
 
-import java.util.concurrent.TimeUnit;
+import io.github.jhipster.config.JHipsterProperties;
 
 <%_ } _%>
 <%_ if (cacheProvider === 'hazelcast') { _%>
@@ -126,7 +124,7 @@ public class CacheConfiguration {
         jcacheConfiguration = Eh107Configuration.fromEhcacheCacheConfiguration(
             CacheConfigurationBuilder.newCacheConfigurationBuilder(Object.class, Object.class,
                 ResourcePoolsBuilder.heap(ehcache.getMaxEntries()))
-                .withExpiry(Expirations.timeToLiveExpiration(Duration.of(ehcache.getTimeToLiveSeconds(), TimeUnit.SECONDS)))
+                .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(ehcache.getTimeToLiveSeconds())))
                 .build());
     }
 
@@ -491,7 +489,7 @@ public class CacheConfiguration {
                 cacheManager.getCache("oAuth2Authentication").getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
             <%_ } _%>
-            <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
+            <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && applicationType !== 'microservice')) { _%>
             registerPredefinedCache(<%=packageName%>.repository.UserRepository.USERS_BY_LOGIN_CACHE, new JCache<Object, Object>(
                 cacheManager.getCache(<%=packageName%>.repository.UserRepository.USERS_BY_LOGIN_CACHE).getAdvancedCache(), this,
                 ConfigurationAdapter.create()));

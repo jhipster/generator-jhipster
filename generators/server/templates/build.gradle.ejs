@@ -41,14 +41,11 @@ buildscript {
 }
 
 plugins {
-    id "org.sonarqube" version "2.5"
+    id "org.sonarqube" version "2.6.2"
     id "net.ltgt.apt-eclipse" version "0.13"
     id "net.ltgt.apt-idea" version "0.13"
     id "net.ltgt.apt" version "0.13"
     id "io.spring.dependency-management" version "1.0.3.RELEASE"
-    <%_ if (gatlingTests) { _%>
-    id "com.github.lkishalmi.gatling" version "0.7.1"
-    <%_ } _%>
     <%_ if (!skipClient) { _%>
     id "com.moowork.node" version "1.2.0"
     <%_ } _%>
@@ -115,7 +112,7 @@ if (OperatingSystem.current().isWindows()) {
     bootRun {
         dependsOn pathingJar
         doFirst {
-            classpath = files("$buildDir/classes/java/main", "$buildDir/resources/main", pathingJar.archivePath)
+            classpath += files("$buildDir/classes/java/main", "$buildDir/resources/main", pathingJar.archivePath)
         }
     }
 }
@@ -162,9 +159,6 @@ apply from: 'gradle/sonar.gradle'
 <%_ if (databaseType === 'sql') { _%>
 apply from: 'gradle/liquibase.gradle'
 <%_ } _%>
-<%_ if (gatlingTests) { _%>
-apply from: 'gradle/gatling.gradle'
-<%_ } _%>
 apply from: 'gradle/mapstruct.gradle'
 <%_ if (enableSwaggerCodegen) { _%>
 apply from: 'gradle/swagger.gradle'
@@ -207,6 +201,7 @@ repositories {
     maven { url "https://repo.spring.io/milestone" }
     maven { url "https://repo.spring.io/snapshot" }
     maven { url "https://dl.bintray.com/jhipster/maven" }
+    //jhipster-needle-gradle-repositories - JHipster will add additional repositories
 }
 
 dependencies {

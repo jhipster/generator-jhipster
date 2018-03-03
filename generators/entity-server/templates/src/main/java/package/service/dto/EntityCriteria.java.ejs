@@ -44,7 +44,12 @@ import io.github.jhipster.service.filter.ZonedDateTimeFilter;<% } %>
   });
   relationships.forEach((relationship) => {
     const relationshipType = relationship.relationshipType;
-    filterVariables.push({ filterType : referenceFilterType,
+    // user has a String PK when using OAuth, so change relationships accordingly
+    let oauthAwareReferenceFilterType = referenceFilterType;
+    if (relationship.otherEntityName === 'user' && authenticationType === 'oauth2') {
+        oauthAwareReferenceFilterType = 'StringFilter';
+    }
+    filterVariables.push({ filterType : oauthAwareReferenceFilterType,
         name: relationship.relationshipFieldName + 'Id',
         type: relationshipType,
         fieldInJavaBeanMethod: relationship.relationshipNameCapitalized + 'Id' });
