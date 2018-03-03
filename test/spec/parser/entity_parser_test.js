@@ -23,7 +23,7 @@ const expect = require('chai').expect;
 const fail = expect.fail;
 const EntityParser = require('../../../lib/parser/entity_parser');
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
-const DatabaseTypes = require('../../../lib/core/jhipster/database_types').Types;
+const DatabaseTypes = require('../../../lib/core/jhipster/database_types');
 const JDLObject = require('../../../lib/core/jdl_object');
 const JDLApplication = require('../../../lib/core/jdl_application');
 const JDLEntity = require('../../../lib/core/jdl_entity');
@@ -88,7 +88,7 @@ describe('EntityParser', () => {
           try {
             EntityParser.parse({
               jdlObject,
-              databaseType: 'mongodb'
+              databaseType: DatabaseTypes.MONGODB
             });
             fail();
           } catch (error) {
@@ -161,7 +161,7 @@ describe('EntityParser', () => {
         it('does not fail because of NoSQL modeling mistakes', () => {
           EntityParser.parse({
             jdlObject,
-            databaseType: DatabaseTypes.cassandra,
+            databaseType: DatabaseTypes.CASSANDRA,
             applicationType: ApplicationTypes.GATEWAY
           });
         });
@@ -170,7 +170,7 @@ describe('EntityParser', () => {
         before(() => {
           content = EntityParser.parse({
             jdlObject,
-            databaseType: DatabaseTypes.mysql
+            databaseType: DatabaseTypes.MYSQL
           });
         });
 
@@ -252,7 +252,7 @@ describe('EntityParser', () => {
           jdlObject.relationships = new JDLRelationships();
           content = EntityParser.parse({
             jdlObject,
-            databaseType: DatabaseTypes.mongodb
+            databaseType: DatabaseTypes.MONGODB
           });
         });
 
@@ -316,7 +316,7 @@ describe('EntityParser', () => {
           jdlObject.relationships = new JDLRelationships();
           content = EntityParser.parse({
             jdlObject,
-            databaseType: DatabaseTypes.couchbase
+            databaseType: DatabaseTypes.COUCHBASE
           });
         });
 
@@ -382,7 +382,7 @@ describe('EntityParser', () => {
           jdlObject.relationships = new JDLRelationships();
           content = EntityParser.parse({
             jdlObject,
-            databaseType: DatabaseTypes.cassandra
+            databaseType: DatabaseTypes.CASSANDRA
           });
         });
 
@@ -488,7 +488,7 @@ describe('EntityParser', () => {
           jdlObject.addRelationship(manyToOneRelationship);
           content = EntityParser.parse({
             jdlObject,
-            databaseType: DatabaseTypes.sql
+            databaseType: DatabaseTypes.SQL
           });
         });
 
@@ -581,7 +581,7 @@ describe('EntityParser', () => {
           }));
           content = EntityParser.parse({
             jdlObject,
-            databaseType: DatabaseTypes.sql
+            databaseType: DatabaseTypes.SQL
           });
         });
 
@@ -624,7 +624,7 @@ describe('EntityParser', () => {
             jdlObject.addOption(option);
             content = EntityParser.parse({
               jdlObject,
-              databaseType: DatabaseTypes.sql
+              databaseType: DatabaseTypes.SQL
             });
           });
 
@@ -661,7 +661,7 @@ describe('EntityParser', () => {
             jdlObject.addOption(serviceOption);
             content = EntityParser.parse({
               jdlObject,
-              databaseType: DatabaseTypes.sql
+              databaseType: DatabaseTypes.SQL
             });
           });
 
@@ -694,7 +694,7 @@ describe('EntityParser', () => {
           jdlObject.addEntity(entityB);
           content = EntityParser.parse({
             jdlObject,
-            databaseType: DatabaseTypes.sql
+            databaseType: DatabaseTypes.SQL
           });
         });
 
@@ -723,7 +723,7 @@ describe('EntityParser', () => {
           jdlObject.addRelationship(relationship);
           content = EntityParser.parse({
             jdlObject,
-            databaseType: DatabaseTypes.sql
+            databaseType: DatabaseTypes.SQL
           });
         });
 

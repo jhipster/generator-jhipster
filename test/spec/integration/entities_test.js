@@ -23,7 +23,7 @@ const path = require('path');
 const expect = require('chai').expect;
 
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
-const DatabaseTypes = require('../../../lib/core/jhipster/database_types').Types;
+const DatabaseTypes = require('../../../lib/core/jhipster/database_types');
 const JDLReader = require('../../../lib/reader/jdl_reader');
 const DocumentParser = require('../../../lib/parser/document_parser');
 const EntityParser = require('../../../lib/parser/entity_parser');
@@ -393,12 +393,12 @@ describe('entity integration tests', () => {
       const parsed = JDLReader.parseFromFiles(['./test/test_files/big_sample.jdl']);
       const jdlObject = DocumentParser.parseFromConfigurationObject({
         document: parsed,
-        databaseType: DatabaseTypes.sql,
+        databaseType: DatabaseTypes.SQL,
         applicationType: ApplicationTypes.MONOLITH
       });
       const jsonEntities = EntityParser.parse({
         jdlObject,
-        databaseType: DatabaseTypes.sql
+        databaseType: DatabaseTypes.SQL
       });
       JHipsterEntityExporter.exportEntities({
         entities: jsonEntities,
@@ -435,13 +435,13 @@ describe('entity integration tests', () => {
     before(() => {
       originalContent = DocumentParser.parseFromConfigurationObject({
         document: JDLReader.parseFromFiles(['./test/test_files/big_sample.jdl']),
-        databaseType: DatabaseTypes.sql,
+        databaseType: DatabaseTypes.SQL,
         applicationType: ApplicationTypes.MONOLITH
       });
       JDLExporter.exportToJDL(originalContent, 'exported.jdl');
       writtenContent = DocumentParser.parseFromConfigurationObject({
         document: JDLReader.parseFromFiles(['exported.jdl']),
-        databaseType: DatabaseTypes.sql,
+        databaseType: DatabaseTypes.SQL,
         applicationType: ApplicationTypes.MONOLITH
       });
     });
