@@ -61,7 +61,7 @@ import java.util.Collection;
     excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = OAuth2InterceptedFeignConfiguration.class)
 )
 <%_ } _%>
-@SpringBootApplication<% if (databaseType === 'sql' && messageBroker === 'kafka') { %>(exclude = DataSourcePoolMetricsAutoConfiguration.class)<%_ } _%>
+@SpringBootApplication<% if (databaseType === 'sql' && messageBroker === 'kafka') { %>(exclude = DataSourcePoolMetricsAutoConfiguration.class)<% } %>
 @EnableConfigurationProperties({<% if (databaseType === 'sql') { %>LiquibaseProperties.class, <% } %>ApplicationProperties.class})
 <%_ if (serviceDiscoveryType) { _%>
 @EnableDiscoveryClient
