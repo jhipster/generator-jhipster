@@ -328,7 +328,7 @@ describe('JDLObject', () => {
         it('fails', () => {
           try {
             object.addOption({
-              name: UnaryOptions.Options.SKIP_CLIENT,
+              name: UnaryOptions.SKIP_CLIENT,
               type: 'WrongType'
             });
             fail();
@@ -343,7 +343,7 @@ describe('JDLObject', () => {
     });
     context('when adding a valid option', () => {
       it('works', () => {
-        new JDLObject().addOption(new JDLUnaryOption({ name: UnaryOptions.Options.SKIP_CLIENT }));
+        new JDLObject().addOption(new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT }));
       });
     });
   });
@@ -378,7 +378,7 @@ describe('JDLObject', () => {
         injectedFieldInTo: 'entityA(myField)'
       });
       object.addRelationship(relationship);
-      option = new JDLUnaryOption({ name: UnaryOptions.Options.SKIP_CLIENT });
+      option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
       option.excludeEntity(entityA);
       object.addOption(option);
       option2 = new JDLBinaryOption({

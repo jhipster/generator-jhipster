@@ -23,7 +23,7 @@ const expect = require('chai').expect;
 const fail = expect.fail;
 const JDLOptions = require('../../../lib/core/jdl_options');
 const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
-const UnaryOptions = require('../../../lib/core/jhipster/unary_options').Options;
+const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 
 describe('JDLOptions', () => {
   describe('#addOption', () => {

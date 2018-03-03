@@ -33,7 +33,7 @@ const ApplicationTypes = require('../../../lib/core/jhipster/application_types')
 const DatabaseTypes = require('../../../lib/core/jhipster/database_types');
 const FieldTypes = require('../../../lib/core/jhipster/field_types').CommonDBTypes;
 const Validations = require('../../../lib/core/jhipster/validations').Validations;
-const UnaryOptions = require('../../../lib/core/jhipster/unary_options').Options;
+const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 const BinaryOptions = require('../../../lib/core/jhipster/binary_options').Options;
 const BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').Values;
 

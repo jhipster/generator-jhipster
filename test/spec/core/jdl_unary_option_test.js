@@ -23,7 +23,7 @@ const expect = require('chai').expect;
 const fail = expect.fail;
 const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
 const JDLEntity = require('../../../lib/core/jdl_entity');
-const UnaryOptions = require('../../../lib/core/jhipster/unary_options').Options;
+const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 
 describe('JDLUnaryOption', () => {
   describe('::new', () => {

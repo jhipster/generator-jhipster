@@ -21,13 +21,11 @@
 const expect = require('chai').expect;
 const UnaryOptions = require('../../../../lib/core/jhipster/unary_options');
 
-const Options = UnaryOptions.Options;
-
 describe('UnaryOptions', () => {
   describe('::exists', () => {
     context('when checking for a valid unary option', () => {
       it('returns true', () => {
-        expect(UnaryOptions.exists(Options.SKIP_CLIENT)).to.be.true;
+        expect(UnaryOptions.exists(UnaryOptions.SKIP_CLIENT)).to.be.true;
       });
     });
     context('when checking for an invalid unary option', () => {

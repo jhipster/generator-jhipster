@@ -22,7 +22,7 @@ const expect = require('chai').expect;
 
 const fail = expect.fail;
 const JSONReader = require('../../../lib/reader/json_reader');
-const UnaryOptions = require('../../../lib/core/jhipster/unary_options').Options;
+const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 
 describe('JSONReader', () => {
   describe('::parseFromDir', () => {
