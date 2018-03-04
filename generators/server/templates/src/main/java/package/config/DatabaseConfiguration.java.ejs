@@ -27,6 +27,7 @@ import liquibase.integration.spring.SpringLiquibase;
 <%_ if (databaseType === 'mongodb') { _%>
 import com.github.mongobee.Mongobee;
 import com.mongodb.MongoClient;
+import org.springframework.data.mongodb.repository.MongoRepository;
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 
