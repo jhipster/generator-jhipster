@@ -356,7 +356,9 @@ function writeFiles() {
             if (this.authenticationType === 'oauth2' && this.applicationType === 'gateway') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/OAuth2SsoConfiguration.java.ejs`, `${javaDir}config/OAuth2SsoConfiguration.java`);
             }
-            this.copy(`${SERVER_MAIN_RES_DIR}static/microservices_index.html.ejs`, `${SERVER_MAIN_RES_DIR}static/index.html`);
+            if (this.applicationType === 'microservice') {
+                this.copy(`${SERVER_MAIN_RES_DIR}static/microservices_index.html.ejs`, `${SERVER_MAIN_RES_DIR}static/index.html`);
+            }
         },
 
         writeServerMicroserviceAndGatewayFiles() {

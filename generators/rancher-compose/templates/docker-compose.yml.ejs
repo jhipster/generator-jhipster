@@ -55,7 +55,7 @@ services:
         # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
         environment:
             - SPRING_PROFILES_ACTIVE=dev,native
-            - SECURITY_USER_PASSWORD=<%= adminPassword %>
+            - SPRING_SECURITY_USER_PASSWORD=<%= adminPassword %>
             <%_ if (monitoring === 'elk') { _%>
             - JHIPSTER_LOGGING_LOGSTASH_ENABLED=true
             - JHIPSTER_LOGGING_LOGSTASH_HOST=jhipster-logstash
