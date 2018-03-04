@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { REQUEST, SUCCESS, FAILURE } from '../../../../../main/webapp/app/reducers/action-type.util';
+import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 
-import account, { ACTION_TYPES } from '../../../../../main/webapp/app/reducers/account';
+import account, { ACTION_TYPES } from 'app/modules/account/settings/settings.reducer';
 
 describe('Account reducer tests', () => {
   function isAccountEmpty(state): boolean {
@@ -43,36 +43,6 @@ describe('Account reducer tests', () => {
     });
     it('should detect a failure', () => {
       const toTest = account(undefined, { type: FAILURE(ACTION_TYPES.UPDATE_ACCOUNT) });
-      expect(toTest).to.contain({
-        updateSuccess: false,
-        updateFailure: true,
-        loading: false
-      });
-      expect(isAccountEmpty(toTest));
-    });
-  });
-
-  describe('Password update', () => {
-    it('should detect a request', () => {
-      const toTest = account(undefined, { type: REQUEST(ACTION_TYPES.UPDATE_PASSWORD) });
-      expect(toTest).to.contain({
-        updateSuccess: false,
-        updateFailure: false,
-        loading: true
-      });
-      expect(isAccountEmpty(toTest));
-    });
-    it('should detect a success', () => {
-      const toTest = account(undefined, { type: SUCCESS(ACTION_TYPES.UPDATE_PASSWORD) });
-      expect(toTest).to.contain({
-        updateSuccess: true,
-        updateFailure: false,
-        loading: false
-      });
-      expect(isAccountEmpty(toTest));
-    });
-    it('should detect a failure', () => {
-      const toTest = account(undefined, { type: FAILURE(ACTION_TYPES.UPDATE_PASSWORD) });
       expect(toTest).to.contain({
         updateSuccess: false,
         updateFailure: true,

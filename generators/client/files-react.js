@@ -180,24 +180,17 @@ const files = {
         {
             path: REACT_DIR,
             templates: [
-                // home module
-                'reducers/index.ts',
-                'reducers/action-type.util.ts',
-                'reducers/administration.ts',
-                'reducers/authentication.ts',
-                'reducers/layout.ts',
-                'reducers/user-management.ts',
-                'reducers/account.ts',
-                'reducers/register.ts',
-                'reducers/activate.ts',
-                'reducers/password-reset.ts'
+                'shared/reducers/index.ts',
+                'shared/reducers/action-type.util.ts',
+                'shared/reducers/authentication.ts',
+                'shared/reducers/layout.ts'
             ]
         },
         {
             condition: generator => generator.enableTranslation,
             path: REACT_DIR,
             templates: [
-                'reducers/locale.ts'
+                'shared/reducers/locale.ts'
             ]
         }
     ],
@@ -213,7 +206,12 @@ const files = {
                 { file: 'modules/account/password-reset/init/password-reset-init.tsx', method: 'processJsx' },
                 { file: 'modules/account/password-reset/finish/password-reset-finish.tsx', method: 'processJsx' },
                 // { file: 'account/password-reset/finish/_password-reset-finish.component.js', method: 'processJsx' },
-                { file: 'modules/account/settings/settings.tsx', method: 'processJsx' }
+                { file: 'modules/account/settings/settings.tsx', method: 'processJsx' },
+                'modules/account/register/register.reducer.ts',
+                'modules/account/activate/activate.reducer.ts',
+                'modules/account/password-reset/password-reset.reducer.ts',
+                'modules/account/password/password.reducer.ts',
+                'modules/account/settings/settings.reducer.ts'
             ]
         }
         // {
@@ -255,6 +253,7 @@ const files = {
                 { file: 'modules/administration/logs/logs.tsx', method: 'processJsx' },
                 { file: 'modules/administration/metrics/metrics.tsx', method: 'processJsx' },
                 { file: 'modules/administration/metrics/metrics-modal.tsx', method: 'processJsx' },
+                'modules/administration/administration.reducer.ts'
             ]
         },
         // {
@@ -272,7 +271,8 @@ const files = {
                 { file: 'modules/administration/user-management/user-management.tsx', method: 'processJsx' },
                 { file: 'modules/administration/user-management/user-management-dialog.tsx', method: 'processJsx' },
                 { file: 'modules/administration/user-management/user-management-detail.tsx', method: 'processJsx' },
-                { file: 'modules/administration/user-management/user-management-delete-dialog.tsx', method: 'processJsx' }
+                { file: 'modules/administration/user-management/user-management-delete-dialog.tsx', method: 'processJsx' },
+                'modules/administration/user-management/user-management.reducer.ts'
             ]
         },
         {
@@ -378,11 +378,12 @@ const files = {
                 'spec/app/utils.ts',
                 'spec/app/config/notification-middleware.spec.ts',
                 'spec/app/shared/layout/header.spec.tsx',
-                'spec/app/reducers/register.spec.ts',
-                'spec/app/reducers/activate.spec.ts',
-                'spec/app/reducers/account.spec.ts',
-                'spec/app/reducers/authentication.spec.ts',
-                'spec/app/reducers/user-management.spec.ts',
+                'spec/app/shared/reducers/authentication.spec.ts',
+                'spec/app/modules/account/register/register.reducer.spec.ts',
+                'spec/app/modules/account/activate/activate.reducer.spec.ts',
+                'spec/app/modules/account/password/password.reducer.spec.ts',
+                'spec/app/modules/account/settings/settings.reducer.spec.ts',
+                'spec/app/modules/administration/user-management/user-management.reducer.spec.ts',
                 // 'spec/app/account/activate/_activate.component.spec.js',
                 // 'spec/app/account/password/_password.component.spec.js',
                 // 'spec/app/account/password/_password-strength-bar.component.spec.js',

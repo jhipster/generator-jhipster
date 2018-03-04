@@ -2,8 +2,8 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
+import { login } from 'app/shared/reducers/authentication';
 import LoginModal from './login-modal';
-import { login } from 'app/reducers/authentication';
 
 export interface ILoginProps {
   isAuthenticated: boolean;

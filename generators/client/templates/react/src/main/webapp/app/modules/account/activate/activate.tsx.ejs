@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-
 import { Link } from 'react-router-dom';
 import { Row, Col, Alert } from 'reactstrap';
 import { Translate } from 'react-jhipster';
 
-import { activateAction, reset } from 'app/reducers/activate';
+import { activateAction, reset } from './activate.reducer';
 
 const successAlert = (
   <Alert color="success">

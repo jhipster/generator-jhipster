@@ -1,8 +1,8 @@
 
 import { expect } from 'chai';
-import { REQUEST, SUCCESS, FAILURE } from '../../../../../main/webapp/app/reducers/action-type.util';
+import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 
-import userManagement, { ACTION_TYPES } from '../../../../../main/webapp/app/reducers/user-management';
+import userManagement, { ACTION_TYPES } from 'app/modules/administration/user-management/user-management.reducer';
 
 describe('User managment reducer tests', () => {
   function isEmpty(element): boolean {

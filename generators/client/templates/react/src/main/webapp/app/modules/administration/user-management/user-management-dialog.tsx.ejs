@@ -5,10 +5,10 @@ import { AvForm, AvGroup, AvInput, AvFeedback } from 'availity-reactstrap-valida
 import { Translate, ICrudGetAction, ICrudPutAction } from 'react-jhipster';
 import { FaBan, FaFloppyO } from 'react-icons/lib/fa';
 
-import { getUser, getRoles, updateUser, createUser } from 'app/reducers/user-management';
 <%_ if (enableTranslation) { _%>
 import { locales } from 'app/config/translation';
 <%_ } _%>
+import { getUser, getRoles, updateUser, createUser } from './user-management.reducer';
 
 export interface IUserManagementDialogProps {
   getUser: ICrudGetAction;

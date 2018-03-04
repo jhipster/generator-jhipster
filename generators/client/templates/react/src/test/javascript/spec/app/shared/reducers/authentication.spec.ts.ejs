@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { REQUEST, SUCCESS, FAILURE } from '../../../../../main/webapp/app/reducers/action-type.util';
+import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 
-import authentication, { ACTION_TYPES } from '../../../../../main/webapp/app/reducers/authentication';
+import authentication, { ACTION_TYPES } from 'app/shared/reducers/authentication';
 
 describe('Authentication reducer tests', () => {
   function isAccountEmpty(state): boolean {

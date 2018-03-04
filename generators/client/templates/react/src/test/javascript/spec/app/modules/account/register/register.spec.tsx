@@ -6,7 +6,7 @@
 // import configureStore from 'redux-mock-store';
 // import { spy, sandbox } from 'sinon';
 
-// import RegisterPage from '../../../../../../main/webapp/app/modules/account/register/register';
+// import RegisterPage from 'app/modules/account/register/register';
 
 /*
 describe('RegisterComponent', () => {

@@ -5,8 +5,8 @@ import { Button } from 'reactstrap';
 import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FaArrowLeft } from 'react-icons/lib/fa';
 
-import { getUser } from 'app/reducers/user-management';
 import { APP_DATE_FORMAT } from 'app/config/constants';
+import { getUser } from './user-management.reducer';
 
 export interface IUserManagementDetailProps {
   getUser: ICrudGetAction;
