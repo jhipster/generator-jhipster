@@ -27,7 +27,6 @@ import liquibase.integration.spring.SpringLiquibase;
 <%_ if (databaseType === 'mongodb') { _%>
 import com.github.mongobee.Mongobee;
 import com.mongodb.MongoClient;
-import org.springframework.data.mongodb.repository.MongoRepository;
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 
@@ -41,7 +40,8 @@ import io.github.jhipster.domain.util.JSR310DateConverters.DateToZonedDateTimeCo
 import io.github.jhipster.domain.util.JSR310DateConverters.ZonedDateTimeToDateConverter;
 <%_ } _%>
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;<% if (databaseType === 'mongodb') { %>
+import org.slf4j.LoggerFactory;
+<%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoProperties;<% } %><% if (databaseType === 'couchbase') { %>
 import org.springframework.boot.autoconfigure.couchbase.CouchbaseAutoConfiguration;<% } %><% if (databaseType === 'sql') { %>
@@ -66,6 +66,9 @@ import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+import org.springframework.data.mongodb.repository.MongoRepository;
+    <%_ } _%>
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;<% } %><% if (databaseType === 'couchbase') { %>
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
