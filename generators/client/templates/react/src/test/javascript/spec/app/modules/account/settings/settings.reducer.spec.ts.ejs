@@ -3,11 +3,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 
 import account, { ACTION_TYPES } from 'app/modules/account/settings/settings.reducer';
 
-describe('Account reducer tests', () => {
-  function isAccountEmpty(state): boolean {
-    return Object.keys(state.account).length === 0;
-  }
-
+describe('Settings reducer tests', () => {
   describe('Common tests', () => {
     it('should return the initial state', () => {
       const toTest = account(undefined, {});
@@ -17,11 +13,10 @@ describe('Account reducer tests', () => {
         updateSuccess: false,
         updateFailure: false
       });
-      expect(isAccountEmpty(toTest));
     });
   });
 
-  describe('Account update', () => {
+  describe('Settings update', () => {
     it('should detect a request', () => {
       const toTest = account(undefined, { type: REQUEST(ACTION_TYPES.UPDATE_ACCOUNT) });
       expect(toTest).to.contain({
@@ -29,16 +24,13 @@ describe('Account reducer tests', () => {
         updateFailure: false,
         loading: true
       });
-      expect(isAccountEmpty(toTest));
     });
     it('should detect a success', () => {
-      const payloadValue = { data: 'fancy payload' };
-      const toTest = account(undefined, { type: SUCCESS(ACTION_TYPES.UPDATE_ACCOUNT), payload: payloadValue });
+      const toTest = account(undefined, { type: SUCCESS(ACTION_TYPES.UPDATE_ACCOUNT) });
       expect(toTest).to.contain({
         updateSuccess: true,
         updateFailure: false,
-        loading: false,
-        account: 'fancy payload'
+        loading: false
       });
     });
     it('should detect a failure', () => {
@@ -48,7 +40,6 @@ describe('Account reducer tests', () => {
         updateFailure: true,
         loading: false
       });
-      expect(isAccountEmpty(toTest));
     });
   });
 });

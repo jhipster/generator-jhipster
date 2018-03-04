@@ -1,0 +1,132 @@
+import axios from 'axios';
+import { expect } from 'chai';
+import configureStore from 'redux-mock-store';
+import promiseMiddleware from 'redux-promise-middleware';
+import thunk from 'redux-thunk';
+import * as sinon from 'sinon';
+
+import reducer, { ACTION_TYPES, getSystemProperties, getSystemPropertyByKey } from 'app/reducers/system-property';
+import { REQUEST, SUCCESS, FAILURE } from 'app/reducers/action-type.util';
+import { getDefaultSystemProperties } from '../utils';
+
+// tslint:disable no-invalid-template-strings
+describe('system property reducer', () => {
+  describe('systemPropertyReducer', () => {
+    const initialState = {
+      loading: false,
+      errorMessage: null,
+      systemPropertiesByKey: {},
+      systemProperty: null,
+      updateSuccess: false
+    };
+    const data = {
+      id: 1,
+      key: 'KEY_1'
+    };
+    it('should return initialState when invalid action specified', () => {
+      expect(reducer(initialState, { type: 'INVALID' })).to.eql(initialState);
+    });
+    it('should return initialState with loading for FETCH_PENDING', () => {
+      expect(reducer(initialState, { type: REQUEST(ACTION_TYPES.FETCH_PROPERTIES) })).to.eql({ ...initialState, loading: true });
+    });
+    it('should return initialState with errrMessage for FETCH_REJECTED', () => {
+      expect(reducer(initialState, { type: FAILURE(ACTION_TYPES.FETCH_PROPERTIES), payload: 'ERROR' })).to.eql({
+        ...initialState,
+        errorMessage: 'ERROR'
+      });
+    });
+    it('should reduce systemProperties array into systemPropertiesByKey for FETCH_PROPERTIES', () => {
+      const action = {
+        type: SUCCESS(ACTION_TYPES.FETCH_PROPERTIES),
+        payload: {
+          data: [
+            {
+              id: 1,
+              key: 'KEY_1'
+            },
+            {
+              id: 2,
+              key: 'KEY_2'
+            }
+          ]
+        }
+      };
+      const expected = {
+        KEY_1: {
+          id: 1,
+          key: 'KEY_1'
+        },
+        KEY_2: {
+          id: 2,
+          key: 'KEY_2'
+        }
+      };
+      expect(reducer(initialState, action)).to.eql({ ...initialState, systemPropertiesByKey: expected });
+    });
+    it('should return initialState with systemProperty for FETCH_PROPERTY', () => {
+      expect(reducer(initialState, { type: SUCCESS(ACTION_TYPES.FETCH_PROPERTY), payload: { data } })).to.eql({
+        ...initialState,
+        systemProperty: data
+      });
+    });
+    it('should return initialState with systemProperty for CREATE_PROPERTY', () => {
+      expect(reducer(initialState, { type: SUCCESS(ACTION_TYPES.CREATE_PROPERTY), payload: { data } })).to.eql({
+        ...initialState,
+        systemProperty: data,
+        updateSuccess: true
+      });
+    });
+    it('should return initialState with systemProperty for UPDATE_PROPERTY', () => {
+      expect(reducer(initialState, { type: SUCCESS(ACTION_TYPES.UPDATE_PROPERTY), payload: { data } })).to.eql({
+        ...initialState,
+        systemProperty: data,
+        updateSuccess: true
+      });
+    });
+    it('should return initialState with updateSuccess for DELETE_PROPERTY', () => {
+      expect(reducer(initialState, { type: SUCCESS(ACTION_TYPES.DELETE_PROPERTY) })).to.eql({
+        ...initialState,
+        systemProperty: {},
+        updateSuccess: true
+      });
+    });
+  });
+  describe('system property actions', () => {
+    let store;
+
+    beforeEach(() => {
+      const mockStore = configureStore([thunk, promiseMiddleware()]);
+      store = mockStore({});
+    });
+
+    describe('getSystemProperties', () => {
+      const resolvedObject = { value: 'whatever' };
+      beforeEach(() => {
+        axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
+      });
+      it('should return a Promise', async () => {
+        const mockDispatch = val => ({ ...val, value: { data: Object.values(getDefaultSystemProperties()) } });
+        const dispatch = getSystemProperties() as any;
+        const res = await dispatch(mockDispatch);
+        expect(res).to.have.property('type', ACTION_TYPES.FETCH_PROPERTIES);
+        const local = JSON.parse(window.sessionStorage.getItem(XLI_SYS_PROPERTIES));
+        expect(local).to.eql(getDefaultSystemProperties());
+        window.sessionStorage.removeItem(XLI_SYS_PROPERTIES);
+      });
+
+      it('dispatches FETCH_PROPERTIES_PENDING and FETCH_PROPERTIES_FULFILLED actions', async () => {
+        const expectedActions = [
+          {
+            type: REQUEST(ACTION_TYPES.FETCH_PROPERTIES)
+          },
+          {
+            type: SUCCESS(ACTION_TYPES.FETCH_PROPERTIES),
+            payload: resolvedObject
+          }
+        ];
+
+        await store.dispatch(getSystemProperties()).then(() => expect(store.getActions()).to.eql(expectedActions));
+      });
+    });
+  });
+});
