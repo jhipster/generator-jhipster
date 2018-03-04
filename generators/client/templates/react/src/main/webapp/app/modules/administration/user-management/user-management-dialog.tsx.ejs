@@ -2,17 +2,17 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Label } from 'reactstrap';
 import { AvForm, AvGroup, AvInput, AvFeedback } from 'availity-reactstrap-validation';
-import { Translate, ICrudGetAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
 import { FaBan, FaFloppyO } from 'react-icons/lib/fa';
 
-import { getUser, getRoles, updateUser, createUser } from '../../../reducers/user-management';
 <%_ if (enableTranslation) { _%>
-import { locales } from '../../../config/translation';
+import { locales } from 'app/config/translation';
 <%_ } _%>
+import { getUser, getRoles, updateUser, createUser } from './user-management.reducer';
 
 export interface IUserManagementDialogProps {
   getUser: ICrudGetAction;
-  getRoles: ICrudGetAction;
+  getRoles: ICrudGetAllAction;
   updateUser: ICrudPutAction;
   createUser: ICrudPutAction;
   loading: boolean;
@@ -30,13 +30,10 @@ export interface IUserManagementDialogState {
 
 export class UserManagementDialog extends React.Component<IUserManagementDialogProps, IUserManagementDialogState> {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      showModal: true,
-      isNew: !this.props.match.params || !this.props.match.params.login
-    };
-  }
+  state: IUserManagementDialogState = {
+    showModal: true,
+    isNew: !this.props.match.params || !this.props.match.params.login
+  };
 
   componentDidMount() {
     !this.state.isNew && this.props.getUser(this.props.match.params.login);

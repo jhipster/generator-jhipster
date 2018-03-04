@@ -20,6 +20,7 @@ const webpack = require('webpack');
 const path = require('path');
 const webpackMerge = require('webpack-merge');
 const commonConfig = require('./webpack.common.js');
+const utils = require('./utils.js');
 
 const ENV = 'development';
 
@@ -69,7 +70,10 @@ module.exports = {
     extensions: [
       '.js', '.jsx', '.ts', '.tsx', '.json'
     ],
-    modules: ['node_modules']
+    modules: ['node_modules'],
+    alias: {
+      app: utils.root('<%= MAIN_SRC_DIR %>app/')
+    }
   },
   plugins: [
     new webpack.SourceMapDevToolPlugin({

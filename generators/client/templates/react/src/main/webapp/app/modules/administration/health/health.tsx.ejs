@@ -4,8 +4,8 @@ import { Translate } from 'react-jhipster';
 import { Table } from 'reactstrap';
 import { FaEye, FaRefresh } from 'react-icons/lib/fa';
 
+import { systemHealth } from '../administration.reducer';
 import HealthModal from './health-modal';
-import { systemHealth } from '../../../reducers/administration';
 
 export interface IHealthPageProps {
   isFetching?: boolean;
@@ -14,15 +14,16 @@ export interface IHealthPageProps {
   systemHealthInfo: any;
 }
 
-export class HealthPage extends React.Component<IHealthPageProps, any> {
+export interface IHealthPageState {
+  healthObject: any,
+  showModal: boolean
+}
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      healthObject: {},
-      showModal: false
-    };
-  }
+export class HealthPage extends React.Component<IHealthPageProps, IHealthPageState> {
+  state: IHealthPageState = {
+    healthObject: {},
+    showModal: false
+  };
 
   componentDidMount() {
     this.props.systemHealth();

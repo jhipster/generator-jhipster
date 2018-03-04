@@ -8,7 +8,7 @@ const MetricsModal = ({ handleClose, showModal, threadDump }) => (
   >
     <ModalHeader toggle={handleClose}>Thread Dump Info</ModalHeader>
     <ModalBody>
-      {threadDump ? threadDump.map((threadDumpInfo, i) => (
+      {threadDump && threadDump.threads ? threadDump.threads.map((threadDumpInfo, i) => (
         <div key={`dump-${i}`}>
           <h5>{threadDumpInfo.threadState} {threadDumpInfo.threadName} (ID {threadDumpInfo.threadId})</h5>
           <div className="row" >

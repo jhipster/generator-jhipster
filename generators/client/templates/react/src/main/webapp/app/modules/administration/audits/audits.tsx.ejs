@@ -7,13 +7,13 @@ import {
   JhiPagination,
   getPaginationItemsNumber,
   getSortState,
-  IPaginationState
+  IPaginationBaseState
 } from 'react-jhipster';
 import { FaSort } from 'react-icons/lib/fa';
 
-import { getAudits } from '../../../reducers/administration';
-import { APP_TIMESTAMP_FORMAT } from '../../../config/constants';
-import { ITEMS_PER_PAGE } from '../../../shared/util/pagination.constants';
+import { APP_TIMESTAMP_FORMAT } from 'app/config/constants';
+import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
+import { getAudits } from '../administration.reducer';
 
 export interface IAuditsPageProps {
   isFetching?: boolean;
@@ -26,16 +26,34 @@ export interface IAuditsPageProps {
   onChangeToDate: any;
 }
 
-export class AuditsPage extends React.Component<IAuditsPageProps, IPaginationState> {
+export interface IAuditsPageState extends IPaginationBaseState {
+  fromDate: string;
+  toDate: string;
+}
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      ...getSortState(props.location, ITEMS_PER_PAGE),
-      fromDate: this.previousMonth(),
-      toDate: this.today()
-    };
-  }
+const previousMonth = (): string => {
+  const now: Date = new Date();
+  const fromDate =
+    now.getMonth() === 0
+      ? new Date(now.getFullYear() - 1, 11, now.getDate())
+      : new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+  return fromDate.toISOString().slice(0, 10);
+};
+
+const today = (): string => {
+  // Today + 1 day - needed if the current day must be included
+  const day: Date = new Date();
+  day.setDate(day.getDate() + 1);
+  const toDate = new Date(day.getFullYear(), day.getMonth(), day.getDate());
+  return toDate.toISOString().slice(0, 10);
+};
+
+export class AuditsPage extends React.Component<IAuditsPageProps, IAuditsPageState> {
+  state: IAuditsPageState = {
+    ...getSortState(this.props.location, ITEMS_PER_PAGE),
+    fromDate: previousMonth(),
+    toDate: today()
+  };
 
   componentDidMount() {
     this.getAudits();
@@ -50,22 +68,6 @@ export class AuditsPage extends React.Component<IAuditsPageProps, IPaginationSta
     this.setState({
       toDate: evt.target.value
     }, () => this.getAudits());
-  }
-
-  previousMonth = (): string => {
-    const now: Date = new Date();
-    const fromDate = now.getMonth() === 0
-      ? new Date(now.getFullYear() - 1, 11, now.getDate())
-      : new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
-    return fromDate.toISOString().slice(0, 10);
-  }
-
-  today = (): string => {
-    // Today + 1 day - needed if the current day must be included
-    const today: Date = new Date();
-    today.setDate(today.getDate() + 1);
-    const toDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    return toDate.toISOString().slice(0, 10);
   }
 
   sort = prop => () => {

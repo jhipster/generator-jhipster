@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-jhipster';
 
-import { getLoggers, changeLogLevel } from '../../../reducers/administration';
+import { getLoggers, changeLogLevel } from '../administration.reducer';
 
 export interface ILogsPageProps {
   isFetching?: boolean;
@@ -11,14 +11,15 @@ export interface ILogsPageProps {
   logs: any;
 }
 
-export class LogsPage extends React.Component<ILogsPageProps, { filter: string }> {
+export interface ILogsPageState {
+  filter: string
+}
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      filter: ''
-    };
-  }
+export class LogsPage extends React.Component<ILogsPageProps, ILogsPageState> {
+
+  state: ILogsPageState = {
+    filter: ''
+  };
 
   componentDidMount() {
     this.props.getLoggers();

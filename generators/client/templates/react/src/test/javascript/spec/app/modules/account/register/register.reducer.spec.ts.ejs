@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
-import { FAILURE, REQUEST, SUCCESS } from '../../../../../main/webapp/app/reducers/action-type.util';
-import register, { ACTION_TYPES } from '../../../../../main/webapp/app/reducers/register';
+import { FAILURE, REQUEST, SUCCESS } from 'app/shared/reducers/action-type.util';
+import register, { ACTION_TYPES } from 'app/modules/account/register/register.reducer';
 
 describe('Creating account tests', () => {
   const initialState = {

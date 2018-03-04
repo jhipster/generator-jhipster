@@ -280,13 +280,13 @@ module.exports = class extends PrivateBase {
                     ]
                 }, this);
 
-                const indexReducerPath = `${CLIENT_MAIN_SRC_DIR}app/reducers/index.ts`;
+                const indexReducerPath = `${CLIENT_MAIN_SRC_DIR}app/shared/reducers/index.ts`;
 
                 jhipsterUtils.rewriteFile({
                     file: indexReducerPath,
                     needle: 'jhipster-needle-add-reducer-import',
                     splicable: [
-                        this.stripMargin(`|import ${entityInstance} from '../entities/${entityFolderName}/${entityFileName}.reducer';`)
+                        this.stripMargin(`|import ${entityInstance} from 'app/entities/${entityFolderName}/${entityFileName}.reducer';`)
                     ]
                 }, this);
 

@@ -1,17 +1,16 @@
 import axios from 'axios';
 
-import { REQUEST, SUCCESS, FAILURE } from './action-type.util';
+import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
+import { getSession } from 'app/shared/reducers/authentication';
 
 export const ACTION_TYPES = {
   UPDATE_ACCOUNT: 'account/UPDATE_ACCOUNT',
-  UPDATE_PASSWORD: 'account/UPDATE_PASSWORD',
   RESET: 'account/RESET'
 };
 
 const initialState = {
   loading: false,
   errorMessage: null,
-  account: {},
   updateSuccess: false,
   updateFailure: false
 };
@@ -22,13 +21,6 @@ export default (state = initialState, action) => {
     case REQUEST(ACTION_TYPES.UPDATE_ACCOUNT):
       return {
         ...state,
-        errorMessage: null,
-        updateSuccess: false,
-        loading: true
-      };
-    case REQUEST(ACTION_TYPES.UPDATE_PASSWORD):
-      return {
-        ...initialState,
         errorMessage: null,
         updateSuccess: false,
         loading: true
@@ -45,21 +37,6 @@ export default (state = initialState, action) => {
         ...state,
         loading: false,
         updateSuccess: true,
-        updateFailure: false,
-        account: action.payload.data
-      };
-    case FAILURE(ACTION_TYPES.UPDATE_PASSWORD):
-      return {
-        ...initialState,
-        loading: false,
-        updateSuccess: false,
-        updateFailure: true
-      };
-    case SUCCESS(ACTION_TYPES.UPDATE_PASSWORD):
-      return {
-        ...initialState,
-        loading: false,
-        updateSuccess: true,
         updateFailure: false
       };
     case ACTION_TYPES.RESET:
@@ -74,15 +51,13 @@ export default (state = initialState, action) => {
 // Actions
 const apiUrl = '/api/account';
 
-export const savePassword = (currentPassword, newPassword) => ({
-  type: ACTION_TYPES.UPDATE_PASSWORD,
-  payload: axios.post(`${apiUrl}/change-password`, { currentPassword, newPassword })
-});
-
-export const saveAccountSettings = account => ({
-  type: ACTION_TYPES.UPDATE_ACCOUNT,
-  payload: axios.post(apiUrl, account)
-});
+export const saveAccountSettings = account => async dispatch => {
+  await dispatch({
+    type: ACTION_TYPES.UPDATE_ACCOUNT,
+    payload: axios.post(apiUrl, account)
+  })
+  dispatch(getSession())
+};
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

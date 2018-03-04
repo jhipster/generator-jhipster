@@ -3,11 +3,12 @@ import { Button, Col, Alert, Row } from 'reactstrap';
 import { connect } from 'react-redux';
 import { Translate, translate } from 'react-jhipster';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
-import { getSession } from '../../../reducers/authentication';
-import { saveAccountSettings, reset } from '../../../reducers/account';
+
 <%_ if (enableTranslation) { _%>
-  import { locales } from '../../../config/translation';
+import { locales } from 'app/config/translation';
 <%_ } _%>
+import { getSession } from 'app/shared/reducers/authentication';
+import { saveAccountSettings, reset } from './settings.reducer';
 
 const successAlert = (
   <Alert color="success" >
@@ -27,7 +28,7 @@ export interface IUserSettingsState {
   account: any;
 }
 
-export class SettingsPage extends React.Component<IUserSettingsProps> {
+export class SettingsPage extends React.Component<IUserSettingsProps, IUserSettingsState> {
   state: IUserSettingsState = {
     account: this.props.account
   };
@@ -60,9 +61,8 @@ export class SettingsPage extends React.Component<IUserSettingsProps> {
   handleValidSubmit = (event, values) => {
     const account = {
       ...this.state.account,
-      ...values<%_ if (enableTranslation) { _%>,
-      langKey: this.state.account.langKey
-      <%_ } _%>
+      ...values<% if (enableTranslation) { %>,
+      langKey: this.state.account.langKey<% } %>
     };
 
     this.props.saveAccountSettings(account);
@@ -152,11 +152,11 @@ export class SettingsPage extends React.Component<IUserSettingsProps> {
   }
 }
 
-const mapStateToProps = ({ authentication, account }) => ({
+const mapStateToProps = ({ authentication, settings }) => ({
   account: authentication.account,
   isAuthenticated: authentication.isAuthenticated,
-  updateSuccess: account.updateSuccess,
-  updateFailure: account.updateFailure
+  updateSuccess: settings.updateSuccess,
+  updateFailure: settings.updateFailure
 });
 
 const mapDispatchToProps = { getSession, saveAccountSettings, reset };

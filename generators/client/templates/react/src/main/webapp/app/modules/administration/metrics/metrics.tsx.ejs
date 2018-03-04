@@ -4,9 +4,9 @@ import { Table, Progress } from 'reactstrap';
 import { Translate, TextFormat } from 'react-jhipster';
 import { FaEye, FaRefresh } from 'react-icons/lib/fa';
 
+import { APP_WHOLE_NUMBER_FORMAT, APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT } from 'app/config/constants';
+import { systemMetrics, systemThreadDump } from '../administration.reducer';
 import MetricsModal from './metrics-modal';
-import { systemMetrics, systemThreadDump } from '../../../reducers/administration';
-import { APP_WHOLE_NUMBER_FORMAT, APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT } from '../../../config/constants';
 
 export interface IMetricsPageProps {
   isFetching?: boolean;
@@ -16,14 +16,14 @@ export interface IMetricsPageProps {
   threadDump: any;
 }
 
-export class MetricsPage extends React.Component<any, any> {
+export interface IMetricsPageState {
+  showModal: boolean;
+}
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      showModal: false
-    };
-  }
+export class MetricsPage extends React.Component<any, IMetricsPageState> {
+  state: IMetricsPageState = {
+    showModal: false
+  };
 
   componentDidMount() {
     this.props.systemMetrics();
