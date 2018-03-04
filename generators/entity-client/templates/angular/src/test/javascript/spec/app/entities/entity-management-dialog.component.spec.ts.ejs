@@ -25,6 +25,7 @@ import { HttpResponse } from '@angular/common/http';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
 import { JhiEventManager } from 'ng-jhipster';
+import { DateFormatPipe, ParsePipe } from 'angular2-moment';
 
 import { <%=angularXAppName%>TestModule } from '../../../<%= entityParentPathAddition %>test.module';
 import { <%= entityAngularName %>DialogComponent } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.component';
@@ -66,16 +67,16 @@ describe('Component Tests', () => {
             TestBed.configureTestingModule({
                 imports: [<%=angularXAppName%>TestModule],
                 declarations: [<%= entityAngularName %>DialogComponent],
-                providers: [
-                    <%_ Object.keys(differentRelationships).forEach(key => {
-                        if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
-                            const uniqueRel = differentRelationships[key][0];
-                            if (uniqueRel.otherEntityAngularName !== entityAngularName) { _%>
+                providers: [ParsePipe, DateFormatPipe,
+    <%_ Object.keys(differentRelationships).forEach(key => {
+        if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
+            const uniqueRel = differentRelationships[key][0];
+            if (uniqueRel.otherEntityAngularName !== entityAngularName) { _%>
                     <%= uniqueRel.otherEntityAngularName %>Service,
-                    <%_
-                            }
-                        }
-                    }); _%>
+    <%_
+            }
+        }
+    }); _%>
                     <%= entityAngularName %>Service
                 ]
             })

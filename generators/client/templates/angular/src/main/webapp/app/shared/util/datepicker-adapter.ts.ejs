@@ -14,21 +14,26 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { HttpParams } from '@angular/common/http';
 
-export const createRequestOption = (req?: any): HttpParams => {
-    let options: HttpParams = new HttpParams();
-    if (req) {
-        Object.keys(req).forEach((key) => {
-            if (key !== 'sort') {
-                options = options.set(key, req[key]);
-            }
-        });
-        if (req.sort) {
-            req.sort.forEach((val) => {
-                options = options.append('sort', val);
-            });
+/**
+ * Angular bootstrap Date adapter
+ */
+import { Injectable } from '@angular/core';
+import { NgbDateAdapter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { Moment } from 'moment';
+import * as moment from 'moment';
+
+@Injectable()
+export class NgbDateMomentAdapter extends NgbDateAdapter<Moment> {
+
+    fromModel(date: Moment): NgbDateStruct {
+        if ( date != null && date.isValid() ) {
+            return { year: date.year(), month: date.month() + 1, day: date.date() };
         }
+        return null;
     }
-    return options;
-};
+
+    toModel(date: NgbDateStruct): Moment {
+        return date ? moment(date.year + '-' + date.month + '-' + date.day, 'YYYY-MM-DD') : null;
+    }
+}

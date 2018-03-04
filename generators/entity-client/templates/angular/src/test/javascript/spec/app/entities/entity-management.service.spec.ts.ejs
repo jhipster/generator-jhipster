@@ -22,8 +22,7 @@ _%>
 /* tslint:disable max-line-length */
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { JhiDateUtils } from 'ng-jhipster';
-
+import { DateFormatPipe, ParsePipe } from 'angular2-moment';
 import { <%= entityAngularName %>Service } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import { <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { SERVER_API_URL } from 'app/app.constants';
@@ -41,8 +40,7 @@ describe('Service Tests', () => {
                     HttpClientTestingModule
                 ],
                 providers: [
-                    JhiDateUtils,
-                    <%= entityAngularName %>Service
+                    ParsePipe, DateFormatPipe, <%= entityAngularName %>Service
                 ]
             });
             injector = getTestBed();

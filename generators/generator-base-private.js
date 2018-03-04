@@ -802,6 +802,8 @@ module.exports = class extends Generator {
                 tsType = 'number';
             } else if (fieldType === 'String' || fieldType === 'UUID') {
                 tsType = 'string';
+            } else if (['LocalDate', 'Instant', 'ZonedDateTime'].includes(fieldType)) {
+                tsType = 'Moment';
             } else { // (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate'
                 tsType = 'any';
                 if (['byte[]', 'ByteBuffer'].includes(fieldType) && field.fieldTypeBlobContent !== 'text') {
@@ -858,11 +860,9 @@ module.exports = class extends Generator {
      */
     generateEntityClientImports(relationships, dto, clientFramework = this.clientFramework) {
         const typeImports = new Map();
-
         relationships.forEach((relationship) => {
             const relationshipType = relationship.relationshipType;
             let toBeImported = false;
-
             if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
                 toBeImported = true;
             } else if (dto === 'no') {
@@ -874,7 +874,6 @@ module.exports = class extends Generator {
                     toBeImported = true;
                 }
             }
-
             if (toBeImported) {
                 const otherEntityAngularName = relationship.otherEntityAngularName;
                 const importType = `I${otherEntityAngularName}`;
