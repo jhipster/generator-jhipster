@@ -156,7 +156,7 @@ export const systemMetrics = () => ({
 
 export const systemThreadDump = () => ({
   type: ACTION_TYPES.FETCH_THREAD_DUMP,
-  payload: axios.get('/management/dump')
+  payload: axios.get('/management/threaddump')
 });
 
 export const getLoggers = () => ({

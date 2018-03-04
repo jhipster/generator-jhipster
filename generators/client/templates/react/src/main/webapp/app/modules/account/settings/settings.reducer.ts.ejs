@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
+import { getSession } from 'app/shared/reducers/authentication';
 
 export const ACTION_TYPES = {
   UPDATE_ACCOUNT: 'account/UPDATE_ACCOUNT',
@@ -10,7 +11,6 @@ export const ACTION_TYPES = {
 const initialState = {
   loading: false,
   errorMessage: null,
-  account: {},
   updateSuccess: false,
   updateFailure: false
 };
@@ -37,8 +37,7 @@ export default (state = initialState, action) => {
         ...state,
         loading: false,
         updateSuccess: true,
-        updateFailure: false,
-        account: action.payload.data
+        updateFailure: false
       };
     case ACTION_TYPES.RESET:
       return {
@@ -52,10 +51,13 @@ export default (state = initialState, action) => {
 // Actions
 const apiUrl = '/api/account';
 
-export const saveAccountSettings = account => ({
-  type: ACTION_TYPES.UPDATE_ACCOUNT,
-  payload: axios.post(apiUrl, account)
-});
+export const saveAccountSettings = account => async dispatch => {
+  await dispatch({
+    type: ACTION_TYPES.UPDATE_ACCOUNT,
+    payload: axios.post(apiUrl, account)
+  })
+  dispatch(getSession())
+};
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
