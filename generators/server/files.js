@@ -319,6 +319,10 @@ function writeFiles() {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/OAuth2TokenEndpointClientAdapter.java.ejs`, `${javaDir}security/oauth2/OAuth2TokenEndpointClientAdapter.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/UaaTokenEndpointClient.java.ejs`, `${javaDir}security/oauth2/UaaTokenEndpointClient.java`);
             }
+            if (this.authenticationType === 'oauth2') {
+                this.template(`${SERVER_MAIN_SRC_DIR}package/config/OAuth2Configuration.java.ejs`, `${javaDir}config/OAuth2Configuration.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/OAuth2AuthenticationSuccessHandler.java.ejs`, `${javaDir}security/OAuth2AuthenticationSuccessHandler.java`);
+            }
         },
 
         writeServerMicroserviceFiles() {
