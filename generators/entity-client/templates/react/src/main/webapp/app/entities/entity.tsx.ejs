@@ -25,7 +25,7 @@ import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 <%_ } _%>
 // TODO import TextFormat only when fieldContainsDate
 // tslint:disable-next-line:no-unused-variable
-import { Translate, translate, ICrudGetAction, TextFormat } from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, TextFormat } from 'react-jhipster';
 import { FaPlus, FaEye, FaPencil, FaTrash<% if (searchEngine === 'elasticsearch') { %>, FaSearch<% } %> } from 'react-icons/lib/fa';
 
 import {
@@ -41,16 +41,16 @@ import {
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
 export interface I<%= entityReactName %>Props {
-  getEntities: ICrudGetAction;
+  getEntities: ICrudGetAllAction;
   <%_ if (searchEngine === 'elasticsearch') { _%>
-  getSearchEntities: ICrudGetAction;
+  getSearchEntities: ICrudGetAllAction;
   <%_ } _%>
   <%=entityInstancePlural %>: any[];
   <%_ for (idx in relationships) {
     const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
     const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
   _%>
-  get<%= otherEntityNamePlural %>: ICrudGetAction;
+  get<%= otherEntityNamePlural %>: ICrudGetAllAction;
   <%_ } _%>
   match: any;
 }

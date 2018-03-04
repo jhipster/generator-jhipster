@@ -25,7 +25,7 @@
     let entityActionNamePlural = entityInstancePlural.toUpperCase();
 _%>
 import axios from 'axios';
-import { ICrudGetAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
+import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import { messages, SERVER_API_URL } from 'app/config/constants';
@@ -183,19 +183,19 @@ const apiSearchUrl = <% if (applicationType === 'gateway' && locals.microservice
   const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
 _%>
 // TODO use camelcase
-export const get<%= otherEntityNamePlural %>: ICrudGetAction = () => ({
+export const get<%= otherEntityNamePlural %>: ICrudGetAllAction = () => ({
   type: ACTION_TYPES.FETCH_<%= otherEntityNamePlural.toUpperCase() %>,
   payload: axios.get(`/api/<%= otherEntityNamePlural %>?cacheBuster=${new Date().getTime()}`)
 });
 
 <%_ } _%>
-export const getEntities: ICrudGetAction = (page, size, sort) => ({
+export const getEntities: ICrudGetAllAction = (page, size, sort) => ({
   type: ACTION_TYPES.FETCH_<%= entityActionNamePlural %>,
   payload: axios.get(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
 });
 <%_ if (searchEngine === 'elasticsearch') { _%>
 
-export const getSearchEntities: ICrudGetAction = query => ({
+export const getSearchEntities: ICrudGetAllAction = query => ({
   type: ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>,
   payload: axios.get(`${apiSearchUrl}?query=` + query)
 });

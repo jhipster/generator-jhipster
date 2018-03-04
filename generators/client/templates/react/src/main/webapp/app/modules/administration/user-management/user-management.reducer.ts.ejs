@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ICrudGetAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
+import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import { messages } from 'app/config/constants';
@@ -102,7 +102,7 @@ export default (state = initialState, action) => {
 
 const apiUrl = '/api/users';
 // Actions
-export const getUsers: ICrudGetAction = (page, size, sort) => {
+export const getUsers: ICrudGetAllAction = (page, size, sort) => {
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
   return {
     type: ACTION_TYPES.FETCH_USERS,

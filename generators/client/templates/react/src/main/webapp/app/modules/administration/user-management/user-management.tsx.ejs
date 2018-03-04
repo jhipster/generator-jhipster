@@ -22,12 +22,12 @@ import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import {
   Translate,
-  ICrudGetAction,
+  ICrudGetAllAction,
   TextFormat,
   JhiPagination,
   getPaginationItemsNumber,
   getSortState,
-  IPaginationState
+  IPaginationBaseState
 } from 'react-jhipster';
 import { FaPlus, FaEye, FaPencil, FaSort, FaTrash } from 'react-icons/lib/fa';
 
@@ -36,7 +36,7 @@ import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { getUsers } from './user-management.reducer';
 
 export interface IUserManagementProps {
-  getUsers: ICrudGetAction;
+  getUsers: ICrudGetAllAction;
   users: any[];
   account: any;
   match: any;
@@ -45,8 +45,8 @@ export interface IUserManagementProps {
   location: any;
 }
 
-export class UserManagement extends React.Component<IUserManagementProps, IPaginationState> {
-  state: IPaginationState = {
+export class UserManagement extends React.Component<IUserManagementProps, IPaginationBaseState> {
+  state: IPaginationBaseState = {
     ...getSortState(this.props.location, ITEMS_PER_PAGE)
   };
 

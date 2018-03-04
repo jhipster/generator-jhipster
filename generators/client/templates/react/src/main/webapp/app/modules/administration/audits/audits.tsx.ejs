@@ -7,7 +7,7 @@ import {
   JhiPagination,
   getPaginationItemsNumber,
   getSortState,
-  IPaginationState
+  IPaginationBaseState
 } from 'react-jhipster';
 import { FaSort } from 'react-icons/lib/fa';
 
@@ -24,6 +24,11 @@ export interface IAuditsPageProps {
   location: any;
   onChangeFromDate: any;
   onChangeToDate: any;
+}
+
+export interface IAuditsPageState extends IPaginationBaseState {
+  fromDate: string;
+  toDate: string;
 }
 
 const previousMonth = (): string => {
@@ -43,8 +48,8 @@ const today = (): string => {
   return toDate.toISOString().slice(0, 10);
 };
 
-export class AuditsPage extends React.Component<IAuditsPageProps, IPaginationState> {
-  state: IPaginationState = {
+export class AuditsPage extends React.Component<IAuditsPageProps, IAuditsPageState> {
+  state: IAuditsPageState = {
     ...getSortState(this.props.location, ITEMS_PER_PAGE),
     fromDate: previousMonth(),
     toDate: today()

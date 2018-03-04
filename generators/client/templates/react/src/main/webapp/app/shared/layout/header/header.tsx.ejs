@@ -132,7 +132,7 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
                 </NavLink>
               </NavItem>
               {isAuthenticated ? [
-                <UncontrolledDropdown nav key="entities">
+                <UncontrolledDropdown nav inNavbar key="entities">
                   <DropdownToggle nav caret className="d-flex align-items-center">
                     <FaThList />
                     <span>Entities</span>
@@ -141,7 +141,7 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
                     {entityMenuItems}
                   </DropdownMenu>
                 </UncontrolledDropdown>,
-                <UncontrolledDropdown nav key="admin">
+                <UncontrolledDropdown nav inNavbar key="admin">
                   <DropdownToggle nav caret className="d-flex align-items-center">
                     <FaUserPlus />
                     <span>Administration</span>
@@ -153,7 +153,7 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
               ] : null}
             <%_ if (enableTranslation) { _%>
               { locales.length > 1 ?
-                <UncontrolledDropdown nav>
+                <UncontrolledDropdown nav inNavbar>
                   <DropdownToggle nav caret className="d-flex align-items-center">
                     <FaFlag />
                     <span>{currentLocale.toUpperCase()}</span>
@@ -164,7 +164,7 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
                 </UncontrolledDropdown> : null
               }
             <%_ } _%>
-              <UncontrolledDropdown nav>
+              <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret className="d-flex align-items-center">
                   <FaUser />
                   <span>Account</span>

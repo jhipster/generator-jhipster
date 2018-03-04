@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Label } from 'reactstrap';
 import { AvForm, AvGroup, AvInput, AvFeedback } from 'availity-reactstrap-validation';
-import { Translate, ICrudGetAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
 import { FaBan, FaFloppyO } from 'react-icons/lib/fa';
 
 <%_ if (enableTranslation) { _%>
@@ -12,7 +12,7 @@ import { getUser, getRoles, updateUser, createUser } from './user-management.red
 
 export interface IUserManagementDialogProps {
   getUser: ICrudGetAction;
-  getRoles: ICrudGetAction;
+  getRoles: ICrudGetAllAction;
   updateUser: ICrudPutAction;
   createUser: ICrudPutAction;
   loading: boolean;
