@@ -534,6 +534,9 @@ function askForField(done) {
                 } else if (jhiCore.isReservedKeyword(input, 'JAVA')) {
                     return 'Your enum name cannot contain a Java reserved keyword';
                 }
+                if (!/^[A-Za-z0-9_]*$/.test(input)) {
+                    return 'Your enum name cannot contain special characters (allowed characters: A-Z, a-z, 0-9 and _)';
+                }
                 if (context.enums.includes(input)) {
                     context.existingEnum = true;
                 } else {
@@ -555,7 +558,8 @@ function askForField(done) {
                 if (input === '') {
                     return 'You must specify values for your enumeration';
                 }
-                if (!/^[A-Za-z0-9_,\s]*$/.test(input)) {
+                // Commas allowed so that user can input a list of values split by commas.
+                if (!/^[A-Za-z0-9_,]+$/.test(input)) {
                     return 'Enum values cannot contain special characters (allowed characters: A-Z, a-z, 0-9 and _)';
                 }
                 const enums = input.replace(/\s/g, '').split(',');
@@ -575,9 +579,9 @@ function askForField(done) {
             },
             message: (answers) => {
                 if (!context.existingEnum) {
-                    return 'What are the values of your enumeration (separated by comma)?';
+                    return 'What are the values of your enumeration (separated by comma, no spaces)?';
                 }
-                return 'What are the new values of your enumeration (separated by comma)?\nThe new values will replace the old ones.\nNothing will be done if there are no new values.';
+                return 'What are the new values of your enumeration (separated by comma, no spaces)?\nThe new values will replace the old ones.\nNothing will be done if there are no new values.';
             }
         },
         {
@@ -830,6 +834,7 @@ function askForField(done) {
         if (props.fieldAdd) {
             if (props.fieldIsEnum) {
                 props.fieldType = _.upperFirst(props.fieldType);
+                props.fieldValues = props.fieldValues.toUpperCase();
             }
 
             const field = {
