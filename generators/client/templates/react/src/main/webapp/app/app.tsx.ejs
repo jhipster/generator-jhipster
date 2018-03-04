@@ -6,13 +6,14 @@ import { Card } from 'reactstrap';
 import { HashRouter as Router } from 'react-router-dom';
 import { ModalContainer } from 'react-router-modal';
 
-import { getSession, logout } from './reducers/authentication';
+import { getSession, logout } from './shared/reducers/authentication';
 <%_ if (enableTranslation) { _%>
-import { setLocale } from './reducers/locale';
+import { setLocale } from './shared/reducers/locale';
 <%_ } _%>
 import Header from './shared/layout/header/header';
 import Footer from './shared/layout/footer/footer';
 import AppRoutes from './routes';
+
 export interface IAppProps {
   location: any;
   isAuthenticated?: boolean;

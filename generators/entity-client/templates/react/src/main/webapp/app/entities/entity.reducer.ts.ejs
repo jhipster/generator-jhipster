@@ -27,7 +27,7 @@ _%>
 import axios from 'axios';
 import { ICrudGetAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
 
-import { REQUEST, SUCCESS, FAILURE } from 'app/reducers/action-type.util';
+import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import { messages, SERVER_API_URL } from 'app/config/constants';
 <%_ if (!(applicationType === 'gateway' && locals.microserviceName) && authenticationType !== 'uaa') { _%>
 
