@@ -61,9 +61,8 @@ export class SettingsPage extends React.Component<IUserSettingsProps> {
   handleValidSubmit = (event, values) => {
     const account = {
       ...this.state.account,
-      ...values<%_ if (enableTranslation) { _%>,
-      langKey: this.state.account.langKey
-      <%_ } _%>
+      ...values<% if (enableTranslation) { %>,
+      langKey: this.state.account.langKey<% } %>
     };
 
     this.props.saveAccountSettings(account);

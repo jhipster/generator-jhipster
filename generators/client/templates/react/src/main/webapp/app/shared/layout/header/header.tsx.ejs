@@ -11,7 +11,11 @@ import {
   FaList, FaTasks, FaDashboard, FaBook, FaWrench, FaSignIn, FaSignOut,
   FaClockO, FaHddO,
   // tslint:disable-next-line
-  FaRoad, FaAsterisk, FaBell
+  FaRoad,
+  // tslint:disable-next-line
+  FaAsterisk,
+  // tslint:disable-next-line
+  FaBell
 } from 'react-icons/lib/fa';
 import { NavLink as Link } from 'react-router-dom';
 import LoadingBar from 'react-redux-loading-bar';
@@ -28,6 +32,11 @@ export interface IHeaderProps {
   onLocaleChange: Function;
 <%_ } _%>
 }
+
+export interface IHeaderState {
+  menuOpen: boolean
+}
+
 const BrandIcon = props => (
   <div {...props} className="brand-icon">
     <img
@@ -36,13 +45,10 @@ const BrandIcon = props => (
     />
   </div>
 );
-export class Header extends React.Component<IHeaderProps, { menuOpen: boolean }> {
-  constructor(props) {
-    super(props);
-    this.state = {
+export class Header extends React.Component<IHeaderProps, IHeaderState> {
+  state: IHeaderState = {
       menuOpen: false
-    };
-  }
+  };
 
   <%_ if (enableTranslation) { _%>
   handleLocaleChange = event => {
