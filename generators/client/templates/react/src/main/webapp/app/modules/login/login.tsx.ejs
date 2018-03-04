@@ -20,13 +20,10 @@ export interface ILoginState {
 
 export class Login extends React.Component<ILoginProps, ILoginState> {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      showModal: props.showModal,
-      redirectToReferrer: props.isAuthenticated
-    };
-  }
+  state: ILoginState = {
+    showModal: this.props.showModal,
+    redirectToReferrer: this.props.isAuthenticated
+  };
 
   componentWillReceiveProps(nextProps: ILoginProps) {
     this.setState({

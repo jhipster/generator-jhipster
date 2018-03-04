@@ -46,13 +46,9 @@ export interface IUserManagementProps {
 }
 
 export class UserManagement extends React.Component<IUserManagementProps, IPaginationState> {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      ...getSortState(props.location, ITEMS_PER_PAGE)
-    };
-  }
+  state: IPaginationState = {
+    ...getSortState(this.props.location, ITEMS_PER_PAGE)
+  };
 
   componentDidMount() {
     this.getUsers();

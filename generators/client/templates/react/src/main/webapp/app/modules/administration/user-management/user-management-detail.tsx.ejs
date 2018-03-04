@@ -13,8 +13,8 @@ export interface IUserManagementDetailProps {
   user: any;
   match: any;
 }
-export class UserManagementDetail extends React.Component<IUserManagementDetailProps, undefined> {
 
+export class UserManagementDetail extends React.Component<IUserManagementDetailProps> {
   componentDidMount() {
     this.props.getUser(this.props.match.params.login);
   }

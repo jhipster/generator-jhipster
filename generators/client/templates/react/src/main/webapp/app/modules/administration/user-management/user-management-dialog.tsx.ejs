@@ -30,13 +30,10 @@ export interface IUserManagementDialogState {
 
 export class UserManagementDialog extends React.Component<IUserManagementDialogProps, IUserManagementDialogState> {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      showModal: true,
-      isNew: !this.props.match.params || !this.props.match.params.login
-    };
-  }
+  state: IUserManagementDialogState = {
+    showModal: true,
+    isNew: !this.props.match.params || !this.props.match.params.login
+  };
 
   componentDidMount() {
     !this.state.isNew && this.props.getUser(this.props.match.params.login);

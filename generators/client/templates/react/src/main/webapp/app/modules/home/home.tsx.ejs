@@ -17,12 +17,9 @@ export interface IHomeState {
 }
 
 export class Home extends React.Component<IHomeProp, IHomeState> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentUser: props.account
-    };
-  }
+  state: IHomeState = {
+    currentUser: this.props.account
+  };
 
   componentWillMount() {
     this.props.getSession();

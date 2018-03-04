@@ -38,7 +38,7 @@ export interface IRegisterState {
   password: string;
 }
 
-export class RegisterPage extends React.Component<IRegisterProps> {
+export class RegisterPage extends React.Component<IRegisterProps, IRegisterState> {
   state: IRegisterState = {
     password: ''
   };

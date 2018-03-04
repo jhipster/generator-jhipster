@@ -8,7 +8,7 @@ export interface ILogoutProps {
   logout: Function;
 }
 
-export class Logout extends React.Component<ILogoutProps, undefined> {
+export class Logout extends React.Component<ILogoutProps> {
 
   componentWillMount() {
     this.props.logout();

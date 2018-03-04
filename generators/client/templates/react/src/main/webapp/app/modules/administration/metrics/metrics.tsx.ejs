@@ -16,14 +16,14 @@ export interface IMetricsPageProps {
   threadDump: any;
 }
 
-export class MetricsPage extends React.Component<any, any> {
+export interface IMetricsPageState {
+  showModal: boolean
+}
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      showModal: false
-    };
-  }
+export class MetricsPage extends React.Component<any, IMetricsPageState> {
+  state: IMetricsPageState = {
+    showModal: false
+  };
 
   componentDidMount() {
     this.props.systemMetrics();

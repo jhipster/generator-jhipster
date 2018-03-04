@@ -28,7 +28,7 @@ export interface IUserSettingsState {
   account: any;
 }
 
-export class SettingsPage extends React.Component<IUserSettingsProps> {
+export class SettingsPage extends React.Component<IUserSettingsProps, IUserSettingsState> {
   state: IUserSettingsState = {
     account: this.props.account
   };

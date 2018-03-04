@@ -19,12 +19,9 @@ export interface IUserManagementDeleteDialogState {
 }
 export class UserManagementDeleteDialog extends React.Component<IUserManagementDeleteDialogProps, IUserManagementDeleteDialogState> {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      showModal: true
-    };
-  }
+  state: IUserManagementDeleteDialogState = {
+    showModal: true
+  };
 
   componentDidMount() {
     this.props.getUser(this.props.match.params.login);

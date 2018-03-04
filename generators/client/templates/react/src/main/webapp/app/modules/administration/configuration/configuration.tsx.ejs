@@ -20,15 +20,11 @@ export interface IConfigurationPageState {
 }
 
 export class ConfigurationPage extends React.Component<IConfigurationPageProps, IConfigurationPageState> {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      filter: '',
-      reversePrefix: false,
-      reverseProperties: false
-    };
-  }
+  state: IConfigurationPageState = {
+    filter: '',
+    reversePrefix: false,
+    reverseProperties: false
+  };
 
   componentDidMount() {
     this.props.getConfigurations();

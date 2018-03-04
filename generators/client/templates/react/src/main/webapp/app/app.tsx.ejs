@@ -29,7 +29,7 @@ export interface IAppProps {
   routes: any;
 }
 
-export class App extends React.Component<IAppProps, {}> {
+export class App extends React.Component<IAppProps> {
   componentDidMount() {
     this.props.getSession();
   }

@@ -14,15 +14,16 @@ export interface IHealthPageProps {
   systemHealthInfo: any;
 }
 
-export class HealthPage extends React.Component<IHealthPageProps, any> {
+export interface IHealthPageState {
+  healthObject: any,
+  showModal: boolean
+}
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      healthObject: {},
-      showModal: false
-    };
-  }
+export class HealthPage extends React.Component<IHealthPageProps, IHealthPageState> {
+  state: IHealthPageState = {
+    healthObject: {},
+    showModal: false
+  };
 
   componentDidMount() {
     this.props.systemHealth();
