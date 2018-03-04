@@ -172,6 +172,10 @@ const reactFiles = {
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.reducer.ts`
                 },
                 {
+                    file: 'entities/entity.model.ts',
+                    renameTo: generator => `shared/model/${generator.entityModelFileName}.model.ts`
+                },
+                {
                     file: 'entities/index.tsx',
                     renameTo: generator => `entities/${generator.entityFolderName}/index.tsx`
                 }

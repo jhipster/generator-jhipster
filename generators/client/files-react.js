@@ -293,9 +293,10 @@ const files = {
                 { file: 'shared/layout/password/password-strength-bar.tsx', method: 'processJsx' },
                 // util
                 'shared/util/date-utils.ts',
-                'shared/util/pagination.constants.ts'
+                'shared/util/pagination.constants.ts',
                 // components
                 // model
+                'shared/model/user.model.ts'
             ]
         },
         {
