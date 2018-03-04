@@ -12,7 +12,7 @@ export const getUrlParameter = (name, search) => {
   return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
 };
 
-export const getSortState = (location, itemsPerPage) => {
+export const getSortState = (location, itemsPerPage): IPaginationBaseState => {
   const pageParam = getUrlParameter('page', location.search);
   const sortParam = getUrlParameter('sort', location.search);
   let sort = 'id';
