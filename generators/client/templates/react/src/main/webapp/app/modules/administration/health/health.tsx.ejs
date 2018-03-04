@@ -4,8 +4,8 @@ import { Translate } from 'react-jhipster';
 import { Table } from 'reactstrap';
 import { FaEye, FaRefresh } from 'react-icons/lib/fa';
 
+import { systemHealth } from '../administration.reducer';
 import HealthModal from './health-modal';
-import { systemHealth } from 'app/shared/reducers/administration';
 
 export interface IHealthPageProps {
   isFetching?: boolean;

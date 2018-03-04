@@ -4,7 +4,7 @@ import { Table, Input } from 'reactstrap';
 import { Translate } from 'react-jhipster';
 import { sortBy, reverse } from 'lodash';
 
-import { getConfigurations, getEnv } from 'app/shared/reducers/administration';
+import { getConfigurations, getEnv } from '../administration.reducer';
 
 export interface IConfigurationPageProps {
   isFetching?: boolean;
