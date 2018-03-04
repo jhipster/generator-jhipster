@@ -1,19 +1,19 @@
 import axios from 'axios';
-import { ICrudPutAction } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from './action-type.util';
-import { messages } from '../config/constants';
 
 export const ACTION_TYPES = {
   UPDATE_ACCOUNT: 'account/UPDATE_ACCOUNT',
-  UPDATE_PASSWORD: 'account/UPDATE_PASSWORD'
+  UPDATE_PASSWORD: 'account/UPDATE_PASSWORD',
+  RESET: 'account/RESET'
 };
 
 const initialState = {
   loading: false,
   errorMessage: null,
   account: {},
-  updateSuccess: false
+  updateSuccess: false,
+  updateFailure: false
 };
 
 // Reducer
@@ -28,46 +28,62 @@ export default (state = initialState, action) => {
       };
     case REQUEST(ACTION_TYPES.UPDATE_PASSWORD):
       return {
-        ...state,
+        ...initialState,
         errorMessage: null,
         updateSuccess: false,
         loading: true
       };
     case FAILURE(ACTION_TYPES.UPDATE_ACCOUNT):
+      return {
+        ...state,
+        loading: false,
+        updateSuccess: false,
+        updateFailure: true
+      };
     case SUCCESS(ACTION_TYPES.UPDATE_ACCOUNT):
       return {
         ...state,
         loading: false,
         updateSuccess: true,
+        updateFailure: false,
         account: action.payload.data
+      };
+    case FAILURE(ACTION_TYPES.UPDATE_PASSWORD):
+      return {
+        ...initialState,
+        loading: false,
+        updateSuccess: false,
+        updateFailure: true
       };
     case SUCCESS(ACTION_TYPES.UPDATE_PASSWORD):
       return {
-        ...state,
+        ...initialState,
         loading: false,
-        updateSuccess: true
+        updateSuccess: true,
+        updateFailure: false
+      };
+    case ACTION_TYPES.RESET:
+      return {
+        ...initialState
       };
     default:
       return state;
   }
 };
 
-const apiUrl = '/api/account';
 // Actions
-export const saveAccountSettings: ICrudPutAction = account => ({
+const apiUrl = '/api/account';
+
+export const savePassword = (currentPassword, newPassword) => ({
+  type: ACTION_TYPES.UPDATE_PASSWORD,
+  payload: axios.post(`${apiUrl}/change-password`, { currentPassword, newPassword })
+});
+
+export const saveAccountSettings = account => ({
   type: ACTION_TYPES.UPDATE_ACCOUNT,
-  meta: {
-    successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
-    errorMessage: messages.DATA_UPDATE_ERROR_ALERT
-  },
   payload: axios.post(apiUrl, account)
 });
 
-export const savePassword: ICrudPutAction = password => ({
-  type: ACTION_TYPES.UPDATE_PASSWORD,
-  meta: {
-    successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
-    errorMessage: messages.DATA_UPDATE_ERROR_ALERT
-  },
-  payload: axios.post(`${apiUrl}/change-password`, password)
+export const reset = () => ({
+  type: ACTION_TYPES.RESET
 });

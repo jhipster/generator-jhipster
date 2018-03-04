@@ -614,9 +614,9 @@ function writeFiles() {
             }
 
             // Email templates
-            this.copy(`${SERVER_MAIN_RES_DIR}mails/activationEmail.html.ejs`, `${SERVER_MAIN_RES_DIR}mails/activationEmail.html`);
-            this.copy(`${SERVER_MAIN_RES_DIR}mails/creationEmail.html.ejs`, `${SERVER_MAIN_RES_DIR}mails/creationEmail.html`);
-            this.copy(`${SERVER_MAIN_RES_DIR}mails/passwordResetEmail.html.ejs`, `${SERVER_MAIN_RES_DIR}mails/passwordResetEmail.html`);
+            this.template(`${SERVER_MAIN_RES_DIR}mails/activationEmail.html.ejs`, `${SERVER_MAIN_RES_DIR}mails/activationEmail.html`);
+            this.template(`${SERVER_MAIN_RES_DIR}mails/creationEmail.html.ejs`, `${SERVER_MAIN_RES_DIR}mails/creationEmail.html`);
+            this.template(`${SERVER_MAIN_RES_DIR}mails/passwordResetEmail.html.ejs`, `${SERVER_MAIN_RES_DIR}mails/passwordResetEmail.html`);
             if (this.enableSocialSignIn) {
                 this.copy(`${SERVER_MAIN_RES_DIR}mails/socialRegistrationValidationEmail.html.ejs`, `${SERVER_MAIN_RES_DIR}mails/socialRegistrationValidationEmail.html`);
             }

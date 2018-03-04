@@ -7,7 +7,7 @@ import {
   UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem
 } from 'reactstrap';
 import {
-  FaHome, FaThList, FaUserPlus, FaUser, FaFlag, FaHeart,
+  FaHome, FaThList, FaUserPlus, FaUser, <%_ if (enableTranslation) { _%>FaFlag,<%_ } _%> FaHeart,
   FaList, FaTasks, FaDashboard, FaBook, FaWrench, FaSignIn, FaSignOut,
   FaClockO, FaHddO,
   // tslint:disable-next-line
@@ -22,13 +22,13 @@ import { locales } from '../../../config/translation';
 <%_ } _%>
 import appConfig from '../../../config/constants';
 
-<%_ if (enableTranslation) { _%>
 export interface IHeaderProps {
   isAuthenticated: boolean;
+<%_ if (enableTranslation) { _%>
   currentLocale: string;
   onLocaleChange: Function;
-}
 <%_ } _%>
+}
 const BrandIcon = props => (
   <div {...props} className="brand-icon">
     <img
@@ -37,7 +37,7 @@ const BrandIcon = props => (
     />
   </div>
 );
-export class Header extends React.Component<<%if (enableTranslation) { %>IHeaderProps<% } else { %>{}<% } %>, { menuOpen: boolean }> {
+export class Header extends React.Component<IHeaderProps, { menuOpen: boolean }> {
   constructor(props) {
     super(props);
     this.state = {
@@ -62,7 +62,7 @@ export class Header extends React.Component<<%if (enableTranslation) { %>IHeader
   }
 
   render() {
-    const { currentLocale, isAuthenticated } = this.props;
+    const {<%_ if (enableTranslation) { _%>currentLocale,<%_ } _%> isAuthenticated } = this.props;
     const entityMenuItems = [
       /* jhipster-needle-add-entity-to-menu - - JHipster will add entities to the menu here */
       <span key="dummy-placeholder"/> /* workaround to avoid error when there are no entities */
@@ -141,7 +141,7 @@ export class Header extends React.Component<<%if (enableTranslation) { %>IHeader
                     <FaUserPlus />
                     <span>Administration</span>
                   </DropdownToggle>
-                  <DropdownMenu right style={{ width: '120%' }}>
+                  <DropdownMenu right style={{ width: '130%' }}>
                     {adminMenuItems}
                   </DropdownMenu>
                 </UncontrolledDropdown>
