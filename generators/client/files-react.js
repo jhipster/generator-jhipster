@@ -210,13 +210,12 @@ const files = {
                 { file: 'modules/account/activate/activate.tsx', method: 'processJsx' },
                 { file: 'modules/account/password/password.tsx', method: 'processJsx' },
                 { file: 'modules/account/register/register.tsx', method: 'processJsx' },
-                { file: 'modules/account/password/password-strength-bar.tsx', method: 'processJsx' },
                 { file: 'modules/account/password-reset/init/password-reset-init.tsx', method: 'processJsx' },
                 { file: 'modules/account/password-reset/finish/password-reset-finish.tsx', method: 'processJsx' },
                 // { file: 'account/password-reset/finish/_password-reset-finish.component.js', method: 'processJsx' },
                 { file: 'modules/account/settings/settings.tsx', method: 'processJsx' }
             ]
-        },
+        }
         // {
         //   condition: generator => generator.authenticationType === 'session',
         //   path: REACT_DIR,
@@ -241,20 +240,6 @@ const files = {
         //             { file: 'account/social/_social-auth.component.js', method: 'processJsx' },
         //   ]
         // },
-        {
-            condition: generator => generator.useSass,
-            path: REACT_DIR,
-            templates: [
-                'modules/account/password/password-strength-bar.scss'
-            ]
-        },
-        {
-            condition: generator => !generator.useSass,
-            path: REACT_DIR,
-            templates: [
-                'modules/account/password/password-strength-bar.css'
-            ]
-        }
     ],
     adminModule: [
         {
@@ -305,6 +290,7 @@ const files = {
                 // layouts
                 'shared/layout/footer/footer.tsx',
                 'shared/layout/header/header.tsx',
+                { file: 'shared/layout/password/password-strength-bar.tsx', method: 'processJsx' },
                 // util
                 'shared/util/date-utils.ts',
                 'shared/util/pagination.constants.ts'
@@ -317,7 +303,8 @@ const files = {
             path: REACT_DIR,
             templates: [
                 'shared/layout/header/header.scss',
-                'shared/layout/footer/footer.scss'
+                'shared/layout/footer/footer.scss',
+                'shared/layout/password/password-strength-bar.scss'
             ]
         },
         {
@@ -325,7 +312,8 @@ const files = {
             path: REACT_DIR,
             templates: [
                 'shared/layout/header/header.css',
-                'shared/layout/footer/footer.css'
+                'shared/layout/footer/footer.css',
+                'shared/layout/password/password-strength-bar.css'
             ]
         },
     // {

@@ -3,10 +3,10 @@ import { Button, Col, Alert, Row } from 'reactstrap';
 import { connect } from 'react-redux';
 import { Translate, translate } from 'react-jhipster';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
-import { getSession } from '../../../reducers/authentication';
-import { saveAccountSettings, reset } from '../../../reducers/account';
+import { getSession } from 'app/reducers/authentication';
+import { saveAccountSettings, reset } from 'app/reducers/account';
 <%_ if (enableTranslation) { _%>
-  import { locales } from '../../../config/translation';
+  import { locales } from 'app/config/translation';
 <%_ } _%>
 
 const successAlert = (
