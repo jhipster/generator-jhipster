@@ -22,21 +22,21 @@ import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import {
   Translate,
-  ICrudGetAction,
+  ICrudGetAllAction,
   TextFormat,
   JhiPagination,
   getPaginationItemsNumber,
   getSortState,
-  IPaginationState
+  IPaginationBaseState
 } from 'react-jhipster';
 import { FaPlus, FaEye, FaPencil, FaSort, FaTrash } from 'react-icons/lib/fa';
 
-import { getUsers } from '../../../reducers/user-management';
-import { APP_DATE_FORMAT } from '../../../config/constants';
-import { ITEMS_PER_PAGE } from '../../../shared/util/pagination.constants';
+import { APP_DATE_FORMAT } from 'app/config/constants';
+import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
+import { getUsers } from './user-management.reducer';
 
 export interface IUserManagementProps {
-  getUsers: ICrudGetAction;
+  getUsers: ICrudGetAllAction;
   users: any[];
   account: any;
   match: any;
@@ -45,14 +45,10 @@ export interface IUserManagementProps {
   location: any;
 }
 
-export class UserManagement extends React.Component<IUserManagementProps, IPaginationState> {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      ...getSortState(props.location, ITEMS_PER_PAGE)
-    };
-  }
+export class UserManagement extends React.Component<IUserManagementProps, IPaginationBaseState> {
+  state: IPaginationBaseState = {
+    ...getSortState(this.props.location, ITEMS_PER_PAGE)
+  };
 
   componentDidMount() {
     this.getUsers();

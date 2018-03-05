@@ -6,13 +6,14 @@ import { Card } from 'reactstrap';
 import { HashRouter as Router } from 'react-router-dom';
 import { ModalContainer } from 'react-router-modal';
 
-import { getSession, logout } from './reducers/authentication';
+import { getSession, logout } from './shared/reducers/authentication';
 <%_ if (enableTranslation) { _%>
-import { setLocale } from './reducers/locale';
+import { setLocale } from './shared/reducers/locale';
 <%_ } _%>
 import Header from './shared/layout/header/header';
 import Footer from './shared/layout/footer/footer';
 import AppRoutes from './routes';
+
 export interface IAppProps {
   location: any;
   isAuthenticated?: boolean;
@@ -28,7 +29,7 @@ export interface IAppProps {
   routes: any;
 }
 
-export class App extends React.Component<IAppProps, {}> {
+export class App extends React.Component<IAppProps> {
   componentDidMount() {
     this.props.getSession();
   }
@@ -42,11 +43,13 @@ export class App extends React.Component<IAppProps, {}> {
     return (
       <Router>
         <div className="app-container" style={{ paddingTop }}>
-          <Header<% if (enableTranslation) { %>
+          <Header
             isAuthenticated={this.props.isAuthenticated}
+          <%_ if (enableTranslation) { _%>
             currentLocale={this.props.currentLocale}
             onLocaleChange={this.props.setLocale}
-          <% } %>/>
+          <%_ } _%>
+          />
           <div className="container-fluid view-container" id="app-view-container">
             <Card className="jh-card">
               <AppRoutes/>

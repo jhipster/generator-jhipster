@@ -42,6 +42,6 @@ module.exports = class extends BaseGenerator {
         if (!this.options['skip-install'] && !this.skipClient) {
             this.rebuildClient();
         }
-        this.log(chalk.bold.green('Entity generation completed'));
+        this.log(chalk.bold.green(`Entity ${this.entityNameCapitalized} generated successfully.`));
     }
 };

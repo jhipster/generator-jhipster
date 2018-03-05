@@ -34,10 +34,12 @@
     "@angular/platform-browser-dynamic": "5.2.0",
     "@angular/router": "5.2.0",
     "@ng-bootstrap/ng-bootstrap": "1.0.0",
+    "angular2-moment": "1.8.0",
     "bootstrap": "4.0.0",
     "core-js": "2.4.1",
     "font-awesome": "4.7.0",
     "jquery": "3.2.1",
+    "moment": "2.20.1",
     "ng-jhipster": "0.4.1",
     "ngx-cookie": "2.0.1",
     "ngx-infinite-scroll": "0.5.1",
@@ -47,7 +49,7 @@
     "swagger-ui": "2.2.10",
     <%_ if (websocket === 'spring-websocket') { _%>
     "sockjs-client": "1.1.4",
-    "webstomp-client": "1.0.6",
+    "webstomp-client": "1.2.0",
     <%_ } _%>
     "tether": "1.4.0",
     "tslib": "1.9.0",
@@ -56,7 +58,7 @@
   "devDependencies": {
     "@angular/cli": "1.6.6",
     "@angular/compiler-cli": "5.2.0",
-    "@ngtools/webpack": "1.8.5",
+    "@ngtools/webpack": "6.0.0-beta.4",
     "@types/jasmine": "2.5.53",
     "@types/node": "8.0.18",
     <%_ if (protractorTests) { _%>
@@ -67,14 +69,14 @@
     "browser-sync": "2.18.13",
     "browser-sync-webpack-plugin": "1.2.0",
     "codelyzer": "4.0.1",
-    "copy-webpack-plugin": "4.2.3",
-    "css-loader": "0.28.4",
+    "copy-webpack-plugin": "4.4.1",
+    "css-loader": "0.28.10",
     "exports-loader": "0.6.4",
-    "extract-text-webpack-plugin": "3.0.2",
-    "file-loader": "1.1.5",
+    "extract-text-webpack-plugin": "4.0.0-alpha.0",
+    "file-loader": "1.1.6",
     "generator-jhipster": "<%= packagejs.version %>",
     "html-loader": "0.5.0",
-    "html-webpack-plugin": "2.30.1",
+    "html-webpack-plugin": "3.0.0",
     "husky": "0.14.3",
     "jasmine-core": "2.7.0",
     <%_ if (protractorTests) { _%>
@@ -93,7 +95,7 @@
     "karma-webpack": "2.0.4",
     "lint-staged": "6.0.0",
     <%_ if (enableTranslation) { _%>
-    "merge-jsons-webpack-plugin": "1.0.11",
+    "merge-jsons-webpack-plugin": "1.0.14",
     <%_ } _%>
     "phantomjs-prebuilt": "2.1.16",
     "prettier": "1.9.2",
@@ -105,14 +107,15 @@
     "rimraf": "2.6.1",
     "source-map": "0.6.1",
     "sourcemap-istanbul-instrumenter-loader": "0.2.0",
-    "style-loader": "0.18.2",
+    "style-loader": "0.20.2",
+    "tapable": "1.0.0-beta.5",
     "to-string-loader": "1.1.5",
     <%_ if (protractorTests) { _%>
     "ts-node": "3.3.0",
     <%_ } _%>
     "tslint": "5.5.0",
     "tslint-config-prettier": "1.6.0",
-    "tslint-loader": "3.5.3",
+    "tslint-loader": "sendilkumarn/tslint-loader",
     "typescript": "2.6.2",
     <%_ if (useSass) { _%>
     "sass-loader": "6.0.6",
@@ -125,14 +128,14 @@
     <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
     <%_ }); _%>
-    "uglifyjs-webpack-plugin": "1.1.5",
-    "webpack": "3.10.0",
-    "webpack-dev-server": "2.9.5",
+    "uglifyjs-webpack-plugin": "1.2.2",
+    "webpack": "4.0.0",
+    "webpack-cli": "2.0.10",
+    "webpack-dev-server": "3.0.1-beta.0",
     "webpack-merge": "4.1.1",
     "webpack-notifier": "1.5.1",
     "webpack-visualizer-plugin": "0.1.11",
-    "web-app-manifest-loader": "0.1.1",
-    "workbox-webpack-plugin": "3.0.0-alpha.3",
+    "workbox-webpack-plugin": "3.0.0-beta.1",
     "write-file-webpack-plugin": "4.1.0"
   },
   "engines": {

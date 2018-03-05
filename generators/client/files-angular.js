@@ -415,12 +415,15 @@ const files = {
                 'shared/shared-libs.module.ts',
                 'shared/shared-common.module.ts',
                 'shared/constants/error.constants.ts',
+                'shared/constants/input.constants.ts',
                 'shared/constants/pagination.constants.ts',
                 // models
                 'shared/util/request-util.ts',
                 // alert service code
                 'shared/alert/alert.component.ts',
-                'shared/alert/alert-error.component.ts'
+                'shared/alert/alert-error.component.ts',
+                // dates
+                'shared/util/datepicker-adapter.ts'
             ]
         },
         {

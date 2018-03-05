@@ -156,8 +156,11 @@ function writeFiles() {
         writeServerResourceFiles() {
             // Create Java resource files
             mkdirp(SERVER_MAIN_RES_DIR);
-            this.copy(`${SERVER_MAIN_RES_DIR}banner.txt`, `${SERVER_MAIN_RES_DIR}banner.txt`);
-
+            if (this.clientFramework === 'react') {
+                this.copy(`${SERVER_MAIN_RES_DIR}banner-react.txt`, `${SERVER_MAIN_RES_DIR}banner.txt`);
+            } else {
+                this.copy(`${SERVER_MAIN_RES_DIR}banner.txt`, `${SERVER_MAIN_RES_DIR}banner.txt`);
+            }
             if (this.devDatabaseType === 'h2Disk' || this.devDatabaseType === 'h2Memory') {
                 this.template(`${SERVER_MAIN_RES_DIR}h2.server.properties.ejs`, `${SERVER_MAIN_RES_DIR}.h2.server.properties`);
             }
@@ -316,6 +319,10 @@ function writeFiles() {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/OAuth2TokenEndpointClientAdapter.java.ejs`, `${javaDir}security/oauth2/OAuth2TokenEndpointClientAdapter.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/oauth2/UaaTokenEndpointClient.java.ejs`, `${javaDir}security/oauth2/UaaTokenEndpointClient.java`);
             }
+            if (this.authenticationType === 'oauth2') {
+                this.template(`${SERVER_MAIN_SRC_DIR}package/config/OAuth2Configuration.java.ejs`, `${javaDir}config/OAuth2Configuration.java`);
+                this.template(`${SERVER_MAIN_SRC_DIR}package/security/OAuth2AuthenticationSuccessHandler.java.ejs`, `${javaDir}security/OAuth2AuthenticationSuccessHandler.java`);
+            }
         },
 
         writeServerMicroserviceFiles() {
@@ -353,7 +360,9 @@ function writeFiles() {
             if (this.authenticationType === 'oauth2' && this.applicationType === 'gateway') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/OAuth2SsoConfiguration.java.ejs`, `${javaDir}config/OAuth2SsoConfiguration.java`);
             }
-            this.copy(`${SERVER_MAIN_RES_DIR}static/microservices_index.html.ejs`, `${SERVER_MAIN_RES_DIR}static/index.html`);
+            if (this.applicationType === 'microservice') {
+                this.copy(`${SERVER_MAIN_RES_DIR}static/microservices_index.html.ejs`, `${SERVER_MAIN_RES_DIR}static/index.html`);
+            }
         },
 
         writeServerMicroserviceAndGatewayFiles() {
@@ -571,35 +580,31 @@ function writeFiles() {
                     this.template(`${SERVER_MAIN_SRC_DIR}package/domain/User.java.ejs`, `${javaDir}domain/User.java`);
                     this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/AccountResourceIntTest.java.ejs`, `${testDir}web/rest/AccountResourceIntTest.java`);
                     this.template(`${SERVER_TEST_SRC_DIR}package/security/SecurityUtilsUnitTest.java.ejs`, `${testDir}security/SecurityUtilsUnitTest.java`);
+                    this.template(`${SERVER_MAIN_RES_DIR}config/liquibase/users.csv.ejs`, `${SERVER_MAIN_RES_DIR}config/liquibase/users.csv`);
+                    this.template(`${SERVER_MAIN_SRC_DIR}package/domain/Authority.java.ejs`, `${javaDir}domain/Authority.java`);
+                    this.template(`${SERVER_MAIN_SRC_DIR}package/service/UserService.java.ejs`, `${javaDir}service/UserService.java`);
+                    this.template(`${SERVER_MAIN_SRC_DIR}package/service/dto/package-info.java.ejs`, `${javaDir}service/dto/package-info.java`);
+                    this.template(`${SERVER_MAIN_SRC_DIR}package/service/dto/UserDTO.java.ejs`, `${javaDir}service/dto/UserDTO.java`);
+                    this.template(`${SERVER_MAIN_SRC_DIR}package/service/mapper/package-info.java.ejs`, `${javaDir}service/mapper/package-info.java`);
+                    this.template(`${SERVER_MAIN_SRC_DIR}package/service/mapper/UserMapper.java.ejs`, `${javaDir}service/mapper/UserMapper.java`);
+                    this.template(`${SERVER_MAIN_SRC_DIR}package/repository/UserRepository.java.ejs`, `${javaDir}repository/UserRepository.java`);
+                    this.template(`${SERVER_MAIN_SRC_DIR}package/repository/AuthorityRepository.java.ejs`, `${javaDir}repository/AuthorityRepository.java`);
+                    this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/UserResource.java.ejs`, `${javaDir}web/rest/UserResource.java`);
+                    if (this.searchEngine === 'elasticsearch') {
+                        this.template(`${SERVER_MAIN_SRC_DIR}package/repository/search/UserSearchRepository.java.ejs`, `${javaDir}repository/search/UserSearchRepository.java`);
+                    }
+                    this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/vm/ManagedUserVM.java.ejs`, `${javaDir}web/rest/vm/ManagedUserVM.java`);
+                    this.template(`${SERVER_TEST_SRC_DIR}package/service/UserServiceIntTest.java.ejs`, `${testDir}service/UserServiceIntTest.java`);
+                    this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/UserResourceIntTest.java.ejs`, `${testDir}web/rest/UserResourceIntTest.java`);
 
-                    if (this.applicationType === 'monolith') {
-                        this.template(`${SERVER_MAIN_RES_DIR}config/liquibase/users.csv.ejs`, `${SERVER_MAIN_RES_DIR}config/liquibase/users.csv`);
-                        this.template(`${SERVER_MAIN_SRC_DIR}package/domain/Authority.java.ejs`, `${javaDir}domain/Authority.java`);
-                        this.template(`${SERVER_MAIN_SRC_DIR}package/service/UserService.java.ejs`, `${javaDir}service/UserService.java`);
-                        this.template(`${SERVER_MAIN_SRC_DIR}package/service/dto/package-info.java.ejs`, `${javaDir}service/dto/package-info.java`);
-                        this.template(`${SERVER_MAIN_SRC_DIR}package/service/dto/UserDTO.java.ejs`, `${javaDir}service/dto/UserDTO.java`);
-                        this.template(`${SERVER_MAIN_SRC_DIR}package/service/dto/PasswordChangeDTO.java.ejs`, `${javaDir}service/dto/PasswordChangeDTO.java`);
-                        this.template(`${SERVER_MAIN_SRC_DIR}package/service/mapper/package-info.java.ejs`, `${javaDir}service/mapper/package-info.java`);
-                        this.template(`${SERVER_MAIN_SRC_DIR}package/service/mapper/UserMapper.java.ejs`, `${javaDir}service/mapper/UserMapper.java`);
-                        this.template(`${SERVER_MAIN_SRC_DIR}package/repository/UserRepository.java.ejs`, `${javaDir}repository/UserRepository.java`);
+                    if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
+                        this.template(`${SERVER_MAIN_SRC_DIR}package/repository/CustomAuditEventRepository.java.ejs`, `${javaDir}repository/CustomAuditEventRepository.java`);
                         this.template(`${SERVER_MAIN_SRC_DIR}package/repository/AuthorityRepository.java.ejs`, `${javaDir}repository/AuthorityRepository.java`);
-                        this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/UserResource.java.ejs`, `${javaDir}web/rest/UserResource.java`);
-                        if (this.searchEngine === 'elasticsearch') {
-                            this.template(`${SERVER_MAIN_SRC_DIR}package/repository/search/UserSearchRepository.java.ejs`, `${javaDir}repository/search/UserSearchRepository.java`);
-                        }
-                        this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/vm/ManagedUserVM.java.ejs`, `${javaDir}web/rest/vm/ManagedUserVM.java`);
-                        this.template(`${SERVER_TEST_SRC_DIR}package/service/UserServiceIntTest.java.ejs`, `${testDir}service/UserServiceIntTest.java`);
-                        this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/UserResourceIntTest.java.ejs`, `${testDir}web/rest/UserResourceIntTest.java`);
-
-                        if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
-                            this.template(`${SERVER_MAIN_SRC_DIR}package/repository/CustomAuditEventRepository.java.ejs`, `${javaDir}repository/CustomAuditEventRepository.java`);
-                            this.template(`${SERVER_MAIN_SRC_DIR}package/repository/AuthorityRepository.java.ejs`, `${javaDir}repository/AuthorityRepository.java`);
-                            this.template(`${SERVER_MAIN_SRC_DIR}package/repository/PersistenceAuditEventRepository.java.ejs`, `${javaDir}repository/PersistenceAuditEventRepository.java`);
-                            this.template(`${SERVER_MAIN_SRC_DIR}package/service/AuditEventService.java.ejs`, `${javaDir}service/AuditEventService.java`);
-                            this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/AuditResource.java.ejs`, `${javaDir}web/rest/AuditResource.java`);
-                            this.template(`${SERVER_TEST_SRC_DIR}package/repository/CustomAuditEventRepositoryIntTest.java.ejs`, `${testDir}repository/CustomAuditEventRepositoryIntTest.java`);
-                            this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/AuditResourceIntTest.java.ejs`, `${testDir}web/rest/AuditResourceIntTest.java`);
-                        }
+                        this.template(`${SERVER_MAIN_SRC_DIR}package/repository/PersistenceAuditEventRepository.java.ejs`, `${javaDir}repository/PersistenceAuditEventRepository.java`);
+                        this.template(`${SERVER_MAIN_SRC_DIR}package/service/AuditEventService.java.ejs`, `${javaDir}service/AuditEventService.java`);
+                        this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/AuditResource.java.ejs`, `${javaDir}web/rest/AuditResource.java`);
+                        this.template(`${SERVER_TEST_SRC_DIR}package/repository/CustomAuditEventRepositoryIntTest.java.ejs`, `${testDir}repository/CustomAuditEventRepositoryIntTest.java`);
+                        this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/AuditResourceIntTest.java.ejs`, `${testDir}web/rest/AuditResourceIntTest.java`);
                     }
                 }
                 return;
@@ -613,9 +618,9 @@ function writeFiles() {
             }
 
             // Email templates
-            this.copy(`${SERVER_MAIN_RES_DIR}mails/activationEmail.html.ejs`, `${SERVER_MAIN_RES_DIR}mails/activationEmail.html`);
-            this.copy(`${SERVER_MAIN_RES_DIR}mails/creationEmail.html.ejs`, `${SERVER_MAIN_RES_DIR}mails/creationEmail.html`);
-            this.copy(`${SERVER_MAIN_RES_DIR}mails/passwordResetEmail.html.ejs`, `${SERVER_MAIN_RES_DIR}mails/passwordResetEmail.html`);
+            this.template(`${SERVER_MAIN_RES_DIR}mails/activationEmail.html.ejs`, `${SERVER_MAIN_RES_DIR}mails/activationEmail.html`);
+            this.template(`${SERVER_MAIN_RES_DIR}mails/creationEmail.html.ejs`, `${SERVER_MAIN_RES_DIR}mails/creationEmail.html`);
+            this.template(`${SERVER_MAIN_RES_DIR}mails/passwordResetEmail.html.ejs`, `${SERVER_MAIN_RES_DIR}mails/passwordResetEmail.html`);
             if (this.enableSocialSignIn) {
                 this.copy(`${SERVER_MAIN_RES_DIR}mails/socialRegistrationValidationEmail.html.ejs`, `${SERVER_MAIN_RES_DIR}mails/socialRegistrationValidationEmail.html`);
             }

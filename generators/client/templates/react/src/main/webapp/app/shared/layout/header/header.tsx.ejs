@@ -4,31 +4,39 @@ import * as React from 'react';
 import { Translate } from 'react-jhipster';
 import {
   Navbar, Nav, NavItem, NavLink, NavbarToggler, NavbarBrand, Collapse,
-  UncontrolledNavDropdown, DropdownToggle, DropdownMenu, DropdownItem
+  UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem
 } from 'reactstrap';
 import {
-  FaHome, FaThList, FaUserPlus, FaUser, FaFlag, FaHeart,
+  FaHome, FaThList, FaUserPlus, FaUser, <%_ if (enableTranslation) { _%>FaFlag,<%_ } _%> FaHeart,
   FaList, FaTasks, FaDashboard, FaBook, FaWrench, FaSignIn, FaSignOut,
   FaClockO, FaHddO,
   // tslint:disable-next-line
-  FaRoad, FaAsterisk, FaBell
+  FaRoad,
+  // tslint:disable-next-line
+  FaAsterisk,
+  // tslint:disable-next-line
+  FaBell
 } from 'react-icons/lib/fa';
-
 import { NavLink as Link } from 'react-router-dom';
 import LoadingBar from 'react-redux-loading-bar';
 
 <%_ if (enableTranslation) { _%>
-import { locales } from '../../../config/translation';
+import { locales } from 'app/config/translation';
 <%_ } _%>
-import appConfig from '../../../config/constants';
+import appConfig from 'app/config/constants';
 
-<%_ if (enableTranslation) { _%>
 export interface IHeaderProps {
   isAuthenticated: boolean;
+<%_ if (enableTranslation) { _%>
   currentLocale: string;
   onLocaleChange: Function;
-}
 <%_ } _%>
+}
+
+export interface IHeaderState {
+  menuOpen: boolean
+}
+
 const BrandIcon = props => (
   <div {...props} className="brand-icon">
     <img
@@ -37,13 +45,10 @@ const BrandIcon = props => (
     />
   </div>
 );
-export class Header extends React.Component<<%if (enableTranslation) { %>IHeaderProps<% } else { %>{}<% } %>, { menuOpen: boolean }> {
-  constructor(props) {
-    super(props);
-    this.state = {
+export class Header extends React.Component<IHeaderProps, IHeaderState> {
+  state: IHeaderState = {
       menuOpen: false
-    };
-  }
+  };
 
   <%_ if (enableTranslation) { _%>
   handleLocaleChange = event => {
@@ -62,7 +67,7 @@ export class Header extends React.Component<<%if (enableTranslation) { %>IHeader
   }
 
   render() {
-    const { currentLocale, isAuthenticated } = this.props;
+    const {<%_ if (enableTranslation) { _%>currentLocale,<%_ } _%> isAuthenticated } = this.props;
     const entityMenuItems = [
       /* jhipster-needle-add-entity-to-menu - - JHipster will add entities to the menu here */
       <span key="dummy-placeholder"/> /* workaround to avoid error when there are no entities */
@@ -127,7 +132,7 @@ export class Header extends React.Component<<%if (enableTranslation) { %>IHeader
                 </NavLink>
               </NavItem>
               {isAuthenticated ? [
-                <UncontrolledNavDropdown key="entities">
+                <UncontrolledDropdown nav inNavbar key="entities">
                   <DropdownToggle nav caret className="d-flex align-items-center">
                     <FaThList />
                     <span>Entities</span>
@@ -135,20 +140,20 @@ export class Header extends React.Component<<%if (enableTranslation) { %>IHeader
                   <DropdownMenu right>
                     {entityMenuItems}
                   </DropdownMenu>
-                </UncontrolledNavDropdown>,
-                <UncontrolledNavDropdown key="admin">
+                </UncontrolledDropdown>,
+                <UncontrolledDropdown nav inNavbar key="admin">
                   <DropdownToggle nav caret className="d-flex align-items-center">
                     <FaUserPlus />
                     <span>Administration</span>
                   </DropdownToggle>
-                  <DropdownMenu right style={{ width: '120%' }}>
+                  <DropdownMenu right style={{ width: '130%' }}>
                     {adminMenuItems}
                   </DropdownMenu>
-                </UncontrolledNavDropdown>
+                </UncontrolledDropdown>
               ] : null}
             <%_ if (enableTranslation) { _%>
               { locales.length > 1 ?
-                <UncontrolledNavDropdown>
+                <UncontrolledDropdown nav inNavbar>
                   <DropdownToggle nav caret className="d-flex align-items-center">
                     <FaFlag />
                     <span>{currentLocale.toUpperCase()}</span>
@@ -156,10 +161,10 @@ export class Header extends React.Component<<%if (enableTranslation) { %>IHeader
                   <DropdownMenu right>
                     {locales.map(lang => <DropdownItem key={lang} value={lang} onClick={this.handleLocaleChange}>{lang.toUpperCase()}</DropdownItem>)}
                   </DropdownMenu>
-                </UncontrolledNavDropdown> : null
+                </UncontrolledDropdown> : null
               }
             <%_ } _%>
-              <UncontrolledNavDropdown>
+              <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret className="d-flex align-items-center">
                   <FaUser />
                   <span>Account</span>
@@ -167,7 +172,7 @@ export class Header extends React.Component<<%if (enableTranslation) { %>IHeader
                 <DropdownMenu right>
                   {accountMenuItems}
                 </DropdownMenu>
-              </UncontrolledNavDropdown>
+              </UncontrolledDropdown>
             </Nav>
           </Collapse>
         </Navbar>

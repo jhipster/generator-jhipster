@@ -5,16 +5,16 @@ import { Button } from 'reactstrap';
 import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FaArrowLeft } from 'react-icons/lib/fa';
 
-import { getUser } from '../../../reducers/user-management';
-import { APP_DATE_FORMAT } from '../../../config/constants';
+import { APP_DATE_FORMAT } from 'app/config/constants';
+import { getUser } from './user-management.reducer';
 
 export interface IUserManagementDetailProps {
   getUser: ICrudGetAction;
   user: any;
   match: any;
 }
-export class UserManagementDetail extends React.Component<IUserManagementDetailProps, undefined> {
 
+export class UserManagementDetail extends React.Component<IUserManagementDetailProps> {
   componentDidMount() {
     this.props.getUser(this.props.match.params.login);
   }

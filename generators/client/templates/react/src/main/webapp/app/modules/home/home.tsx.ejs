@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Translate } from 'react-jhipster';
 import { connect } from 'react-redux';
 
-import { getSession } from '../../reducers/authentication';
+import { getSession } from 'app/shared/reducers/authentication';
 
 export interface IHomeProp {
   account: any;
@@ -17,12 +17,9 @@ export interface IHomeState {
 }
 
 export class Home extends React.Component<IHomeProp, IHomeState> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentUser: props.account
-    };
-  }
+  state: IHomeState = {
+    currentUser: this.props.account
+  };
 
   componentWillMount() {
     this.props.getSession();
@@ -61,7 +58,7 @@ export class Home extends React.Component<IHomeProp, IHomeState> {
 
                 <div className="alert alert-warning">
                   <Translate contentKey="global.messages.info.register.noaccount">You do not have an account yet?</Translate>&nbsp;
-                  <a className="alert-link"><Translate contentKey="global.messages.info.register.link">Register a new account</Translate></a>
+                  <Link to="/register" className="alert-link"><Translate contentKey="global.messages.info.register.link">Register a new account</Translate></Link>
                 </div>
               </div>
             )

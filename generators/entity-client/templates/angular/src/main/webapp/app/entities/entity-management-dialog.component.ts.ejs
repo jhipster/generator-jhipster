@@ -33,6 +33,10 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+<%_ if ( fieldsContainInstant || fieldsContainZonedDateTime ) { _%>
+import { DateFormatPipe, ParsePipe } from 'angular2-moment';
+import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
+<%_ } _%>
 import { JhiEventManager<% if (queries && queries.length > 0) { %>, JhiAlertService<% } %><% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
 
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
@@ -68,19 +72,21 @@ import { <%= uniqueRel.otherEntityAngularName%>Service } from '../<%= uniqueRel.
 })
 export class <%= entityAngularName %>DialogComponent implements OnInit {
 
-    <%= entityInstance %>: I<%= entityAngularName %>;
+    private _<%= entityInstance %>: I<%= entityAngularName %>;
     isSaving: boolean;
     <%_
-    for (const idx in variables) { %>
+    for ( const idx in variables ) { %>
     <%- variables[idx] %>
     <%_ } _%>
-    <%_ for (idx in fields) {
+    <%_ for ( idx in fields ) {
         const fieldName = fields[idx].fieldName;
         const fieldType = fields[idx].fieldType;
-        if (fieldType === 'LocalDate') { _%>
+        if ( fieldType === 'LocalDate' ) { _%>
     <%= fieldName %>Dp: any;
-        <%_ }
-    } _%>
+    <%_ } else if ( ['Instant', 'ZonedDateTime'].includes(fieldType) ) { _%>
+    <%= fieldName %>: string;
+      <%_ } _%>
+    <%_ } _%>
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -100,6 +106,10 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
                 }
             }
         }); _%>
+        <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
+        private stringToMomentPipe: ParsePipe,
+        private momentToStringPipe: DateFormatPipe,
+        <%_ } _%>
         <%_ if (fieldsContainImageBlob) { _%>
         private elementRef: ElementRef,
         <%_ } _%>
@@ -140,6 +150,13 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
 
     save() {
         this.isSaving = true;
+        <%_ for (idx in fields) {
+            const fieldName = fields[ idx ].fieldName;
+            const fieldType = fields[idx].fieldType;
+            if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType)) { _%>
+                this.<%= entityInstance %>.<%= fieldName %> = this.stringToMomentPipe.transform(this.<%= fieldName %>, DATE_TIME_FORMAT);
+        <%_ }
+        } _%>
         if (this.<%= entityInstance %>.id !== undefined) {
             this.subscribeToSaveResponse(
                 this.<%= entityInstance %>Service.update(this.<%= entityInstance %>));
@@ -165,8 +182,8 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     }
     <%_ if (queries && queries.length > 0) { _%>
 
-    private onError(error: any) {
-        this.jhiAlertService.error(error.message, null, null);
+    private onError(errorMessage: string) {
+        this.jhiAlertService.error(errorMessage, null, null);
     }
     <%_ } _%>
     <%_
@@ -193,6 +210,19 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         return option;
     }
     <%_ } _%>
+    get <%= entityInstance %>() {
+        return this._<%= entityInstance %>;
+    }
+
+    set <%= entityInstance %>(<%= entityInstance %>: I<%= entityAngularName %>) {
+        this._<%= entityInstance %> = <%= entityInstance %>;
+    <%_ for (idx in fields) {
+        const fieldName = fields[idx].fieldName;
+        const fieldType = fields[idx].fieldType;
+        if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+        this.<%= fieldName %> = this.momentToStringPipe.transform(<%= entityInstance %>.<%= fieldName %>);
+     <%_ } } _%>
+    }
 }
 
 @Component({

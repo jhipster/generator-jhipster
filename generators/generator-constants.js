@@ -18,7 +18,7 @@
  */
 
 // version of docker images
-const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v3.2.4';
+const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:develop';
 const DOCKER_JAVA_JRE = 'openjdk:8-jre-alpine';
 const DOCKER_MYSQL = 'mysql:5.7.20';
 const DOCKER_MARIADB = 'mariadb:10.1.17';
@@ -33,7 +33,7 @@ const DOCKER_KEYCLOAK = 'jboss/keycloak:3.3.0.Final';
 const DOCKER_ELASTICSEARCH = 'elasticsearch:5.6.5'; // docker.elastic.co/elasticsearch/elasticsearch-oss:6.1.1
 const DOCKER_KAFKA = 'wurstmeister/kafka:1.0.0';
 const DOCKER_ZOOKEEPER = 'wurstmeister/zookeeper:3.4.6';
-const DOCKER_SONAR = 'sonarqube:6.5-alpine';
+const DOCKER_SONAR = 'sonarqube:7.0-alpine';
 const DOCKER_JHIPSTER_CONSOLE = 'jhipster/jhipster-console:v3.0.1';
 const DOCKER_JHIPSTER_CURATOR = 'jhipster/jhipster-curator:v3.0.1';
 const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v3.0.1';
@@ -58,8 +58,8 @@ const SCALA_VERSION = '2.12.1';
 
 // version of Node, Yarn, NPM
 const NODE_VERSION = '8.9.4';
-const YARN_VERSION = '1.3.2';
-const NPM_VERSION = '5.6.0';
+const YARN_VERSION = '1.5.1';
+const NPM_VERSION = '5.7.1';
 
 // all constants used throughout all generators
 

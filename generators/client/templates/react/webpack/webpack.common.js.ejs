@@ -21,13 +21,17 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const utils = require('./utils.js');
+
 module.exports = options => ({
   cache: options.env !== 'production',
   resolve: {
     extensions: [
       '.js', '.jsx', '.ts', '.tsx', '.json'
     ],
-    modules: ['node_modules']
+    modules: ['node_modules'],
+    alias: {
+      app: utils.root('<%= MAIN_SRC_DIR %>app/')
+    }
   },
   module: {
     rules: [

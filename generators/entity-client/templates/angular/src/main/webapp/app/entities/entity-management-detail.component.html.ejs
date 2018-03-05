@@ -37,10 +37,6 @@
                 </a>
                 {{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}
             </div>
-            <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-            <span>{{<%=entityInstance %>.<%= fieldName %> | date:'medium'}}</span>
-            <%_ } else if (fieldType === 'LocalDate') { _%>
-            <span>{{<%=entityInstance %>.<%= fieldName %> | date:'mediumDate'}}</span>
             <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'any') { _%>
             <div *ngIf="<%= entityInstance %>.<%= fieldName %>">
                 <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" jhiTranslate="entity.action.open">open</a>

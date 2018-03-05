@@ -123,7 +123,7 @@ function createDbInstance(params, callback) {
         } else if (err) {
             callback(err, null);
         } else {
-            callback(null, { message: 'Database created successful' });
+            callback(null, { message: 'Database created successfully' });
         }
     });
 }
