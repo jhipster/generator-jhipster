@@ -152,7 +152,7 @@
     "prettier:format":"<%= clientPackageManager %> prettier --write **/*.ts",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
-    "ngc": "ngc -p tsconfig-aot.json",
+    "ngc": "ngc -p tsconfig.json",
     "cleanup": "rimraf <%= BUILD_DIR %>{aot,www}",
     "clean-www": "rimraf <%= BUILD_DIR %>/www/app/{src,<%= BUILD_DIR %>}",
     "start": "<%= clientPackageManager %> run webpack:dev",

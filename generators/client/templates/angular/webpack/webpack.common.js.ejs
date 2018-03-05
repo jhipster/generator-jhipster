@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 const webpack = require('webpack');
+const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const rxPaths = require('rxjs/_esm5/path-mapping');
@@ -40,6 +41,10 @@ module.exports = (options) => ({
     },
     module: {
         rules: [
+            {
+                test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
+                use: [ '@ngtools/webpack' ]
+            },
             { test: /bootstrap\/dist\/js\/umd\//, loader: 'imports-loader?jQuery=jquery' },
             {
                 test: /\.html$/,
@@ -64,6 +69,11 @@ module.exports = (options) => ({
         ]
     },
     plugins: [
+        new AngularCompilerPlugin({
+            mainPath: utils.root('src/main/webapp/app/app.main.ts'),
+            tsConfigPath: utils.root('tsconfig.json'),
+            sourceMap: true
+        }),
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: `'${options.env}'`,
@@ -77,13 +87,6 @@ module.exports = (options) => ({
                 SERVER_API_URL: `''`
             }
         }),
-        /**
-         * See: https://github.com/angular/angular/issues/11580
-         */
-        new webpack.ContextReplacementPlugin(
-            /(.+)?angular(\\|\/)core(.+)?/,
-            utils.root('<%= MAIN_SRC_DIR %>app'), {}
-        ),
         new CopyWebpackPlugin([
             { from: './node_modules/swagger-ui/dist/css', to: 'swagger-ui/dist/css' },
             { from: './node_modules/swagger-ui/dist/lib', to: 'swagger-ui/dist/lib' },
