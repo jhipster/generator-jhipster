@@ -70,7 +70,7 @@ module.exports = (options) => ({
     },
     plugins: [
         new AngularCompilerPlugin({
-            mainPath: utils.root('src/main/webapp/app/app.main.ts'),
+            mainPath: utils.root('<%= MAIN_SRC_DIR %>app.main.ts'),
             tsConfigPath: utils.root('tsconfig.json'),
             sourceMap: true
         }),
