@@ -112,6 +112,13 @@ const files = {
             ]
         },
         {
+            condition: generator => generator.websocket === 'spring-websocket',
+            path: REACT_DIR,
+            templates: [
+                { file: 'config/websocket-middleware.ts', method: 'processJsx' }
+            ]
+        },
+        {
             condition: generator => generator.useSass,
             path: REACT_DIR,
             templates: [
@@ -256,13 +263,13 @@ const files = {
                 'modules/administration/administration.reducer.ts'
             ]
         },
-        // {
-        //   condition: generator => generator.websocket === 'spring-websocket',
-        //   path: REACT_DIR,
-        //   templates: [
-        //     { file: 'modules/administration/tracker/Tracker.js', method: 'processJsx' }
-        //   ]
-        // },
+        {
+            condition: generator => generator.websocket === 'spring-websocket',
+            path: REACT_DIR,
+            templates: [
+                { file: 'modules/administration/tracker/tracker.tsx', method: 'processJsx' }
+            ]
+        },
         {
             condition: generator => !generator.skipUserManagement,
             path: REACT_DIR,
