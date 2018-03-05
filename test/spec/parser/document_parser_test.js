@@ -789,7 +789,7 @@ describe('DocumentParser', () => {
           expect(application.messageBroker).to.be.false;
           expect(application.serviceDiscoveryType).to.be.false;
           expect(application.clientPackageManager).to.eq('yarn');
-          expect(application.clientFramework).to.eq('angular1');
+          expect(application.clientFramework).to.eq('angularX');
           expect(application.nativeLanguage).to.eq('en');
           expect(application.frontEndBuilder).to.be.null;
           expect(application.skipUserManagement).to.be.false;

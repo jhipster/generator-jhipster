@@ -57,7 +57,7 @@ describe('JDLApplication', () => {
         expect(jdlApplicationConfig.messageBroker).to.eq(false);
         expect(jdlApplicationConfig.serviceDiscoveryType).to.eq(false);
         expect(jdlApplicationConfig.clientPackageManager).to.eq('yarn');
-        expect(jdlApplicationConfig.clientFramework).to.eq('angular1');
+        expect(jdlApplicationConfig.clientFramework).to.eq('angularX');
         expect(jdlApplicationConfig.nativeLanguage).to.eq('en');
         expect(jdlApplicationConfig.frontEndBuilder).to.be.null;
         expect(jdlApplicationConfig.skipUserManagement).to.eq(false);
@@ -139,7 +139,7 @@ describe('JDLApplication', () => {
     messageBroker false
     serviceDiscoveryType false
     clientPackageManager yarn
-    clientFramework angular1
+    clientFramework angularX
     nativeLanguage en
     frontEndBuilder
     skipUserManagement false
