@@ -60,9 +60,7 @@ describe('Component Tests', () => {
             })
             .overrideTemplate(<%= entityAngularName %>Component, '')
             .compileComponents();
-        });
 
-        beforeEach(() => {
             fixture = TestBed.createComponent(<%= entityAngularName %>Component);
             comp = fixture.componentInstance;
             service = fixture.debugElement.injector.get(<%= entityAngularName %>Service);

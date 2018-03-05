@@ -82,9 +82,7 @@ describe('Component Tests', () => {
             })
             .overrideTemplate(<%= entityAngularName %>DialogComponent, '')
             .compileComponents();
-        });
 
-        beforeEach(() => {
             fixture = TestBed.createComponent(<%= entityAngularName %>DialogComponent);
             comp = fixture.componentInstance;
             service = fixture.debugElement.injector.get(<%= entityAngularName %>Service);
