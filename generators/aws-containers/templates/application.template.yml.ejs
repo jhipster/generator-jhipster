@@ -188,26 +188,18 @@ Resources:
     Type: AWS::RDS::DBCluster
     DependsOn:
     - JHipsterDatabaseSG
-    - JHipsterRDSClusterParamGroup
     DeletionPolicy: Delete
     Properties:
       DatabaseName: !Ref databaseName
       MasterUsername: !Ref databaseUsername
       MasterUserPassword: !Ref databasePassword
-      DBClusterParameterGroupName: !Ref JHipsterRDSClusterParamGroup
+      DBClusterParameterGroupName: <%= app.auroraClusterParameterGroupName %>
       VpcSecurityGroupIds:
       - !GetAtt JHipsterDatabaseSG.GroupId
       # need to toggle between aurora, aurora-postgresql
       Engine: <%= app.auroraEngine %>
       DBSubnetGroupName:
         Ref: JHipsterDBSubnetGroup
-  JHipsterRDSClusterParamGroup:
-      Type: AWS::RDS::DBClusterParameterGroup
-      Properties:
-        Description: JHipster Default Cluster Param Group
-        Family: <%= app.auroraFamily %>
-        Parameters:
-            <%= app.auroraClusterParam %>
 <% for (inst = 1; inst <= app.database.instances; inst++) { %>
   JHipsterRDSDBInstance<%= inst %>:
     Type: AWS::RDS::DBInstance

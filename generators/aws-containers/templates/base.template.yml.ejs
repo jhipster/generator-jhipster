@@ -26,7 +26,6 @@ Resources:
         shouldDeployService: !Ref shouldDeployService
         databasePassword: !Ref <%= app.baseName %>DBPassword
       TemplateURL: !Join [ '', [ 'https://s3.amazonaws.com/',!Ref applicationStackS3Bucket, '/<%= app.baseName %>.template.yml'] ]
-      TimeoutInMinutes: 5
 <%} %>
 Outputs:
 <% for (app of appConfigs) { %>  LoadBalancerOutput<%= app.baseName %>:
