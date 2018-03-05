@@ -1,53 +1,14 @@
 import * as React from 'react';
 import { Translate } from 'react-jhipster';
-
-import { TrackerService } from 'app/config/websocket-middleware';
+import { connect } from 'react-redux';
 
 export interface ITrackerPageProps {
-  tracker: any;
-}
-
-export interface ITrackerPageState {
   activities: any[];
 }
 
-export default class TrackerPage extends React.Component<ITrackerPageProps, ITrackerPageState> {
-  state: ITrackerPageState = {
-    activities: []
-  };
-
-  componentDidMount() {
-    TrackerService.subscribe();
-    TrackerService.receive().subscribe(activity => {
-      this.showActivity(activity);
-    });
-  }
-
-  componentWillUnmount() {
-    TrackerService.unsubscribe();
-  }
-
-  showActivity(activity: any) {
-    let existingActivity = false;
-    const activities = this.state.activities;
-    for (let index = 0; index < activities.length; index++) {
-      if (activities[index].sessionId === activity.sessionId) {
-        existingActivity = true;
-        if (activity.page === 'logout') {
-          activities.splice(index, 1);
-        } else {
-          activities[index] = activity;
-        }
-      }
-    }
-    if (!existingActivity && (activity.page !== 'logout')) {
-      activities.push(activity);
-    }
-    this.setState({ activities });
-  }
-
+export class TrackerPage extends React.Component<ITrackerPageProps> {
   render() {
-    const activities = this.state.activities;
+    const activities = this.props.activities;
     return (
       <div>
         <h2>
@@ -93,3 +54,9 @@ export default class TrackerPage extends React.Component<ITrackerPageProps, ITra
     );
   }
 }
+
+const mapStateToProps = ({ administration }) => ({
+  activities: administration.tracker.activities
+});
+
+export default connect(mapStateToProps)(TrackerPage);
