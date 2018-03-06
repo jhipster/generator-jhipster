@@ -53,7 +53,7 @@ module.exports = config => {
     },
 
     junitReporter: {
-      outputFile: '../../../../build/test-results/karma/TESTS-results.xml'
+      outputFile: '../../../../<%= BUILD_DIR %>test-results/karma/TESTS-results.xml'
     },
 
     notifyReporter: {
@@ -63,7 +63,7 @@ module.exports = config => {
 
     remapIstanbulReporter: {
       reports: {
-        html: 'build/test-results/coverage',
+        html: '<%= BUILD_DIR %>test-results/coverage',
         'text-summary': null
       }
     },
