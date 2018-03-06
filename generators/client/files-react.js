@@ -213,15 +213,15 @@ const files = {
                 'modules/account/password/password.reducer.ts',
                 'modules/account/settings/settings.reducer.ts'
             ]
-        }
-        // {
-        //   condition: generator => generator.authenticationType === 'session',
-        //   path: REACT_DIR,
-        //   templates: [
-        //     'account/sessions/_session.model.js',
-        //     { file: 'account/sessions/_sessions.component.js', method: 'processJsx' }
-        //   ]
-        // },
+        },
+        {
+            condition: generator => generator.authenticationType === 'session',
+            path: REACT_DIR,
+            templates: [
+                { file: 'modules/account/sessions/sessions.tsx', method: 'processJsx' },
+                { file: 'modules/account/sessions/sessions.reducer.ts', method: 'processJsx' }
+            ]
+        },
         // {
         //   condition: generator => generator.enableSocialSignIn,
         //   path: REACT_DIR,
