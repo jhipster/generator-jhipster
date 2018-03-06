@@ -1,57 +1,175 @@
 import * as React from 'react';
-import { Table, Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Table, Modal, ModalHeader, ModalBody, ModalFooter, Button, Input } from 'reactstrap';
 
-const MetricsModal = ({ handleClose, showModal, threadDump }) => (
-  <Modal
-    isOpen={showModal} modalTransition={{ timeout: 20 }} backdropTransition={{ timeout: 10 }}
-    toggle={handleClose} className="modal-lg"
-  >
-    <ModalHeader toggle={handleClose}>Thread Dump Info</ModalHeader>
-    <ModalBody>
-      {threadDump && threadDump.threads ? threadDump.threads.map((threadDumpInfo, i) => (
-        <div key={`dump-${i}`}>
-          <h5>{threadDumpInfo.threadState} {threadDumpInfo.threadName} (ID {threadDumpInfo.threadId})</h5>
-          <div className="row" >
-            <div className="col-xs-12">
-              {Object.entries(threadDumpInfo.stackTrace).map(([ stK, stV ]) => (
-                <p key={`detail-${stK}`}>
-                  {stV.className}.{stV.methodName}
-                  ({stV.fileName}:{stV.lineNumber})
-                </p>
-              ))}
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-xs-12">
-              <Table responsive>
-                <thead>
-                  <tr>
-                    <th>Blocked Time</th>
-                    <th>Blocked Count</th>
-                    <th>Waited Time</th>
-                    <th>Waited Count</th>
-                    <th>Lock Name</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr key={threadDumpInfo.lockName}>
-                    <td>{threadDumpInfo.blockedTime}</td>
-                    <td>{threadDumpInfo.blockedCount}</td>
-                    <td>{threadDumpInfo.waitedTime}</td>
-                    <td>{threadDumpInfo.waitedCount}</td>
-                    <td>{threadDumpInfo.lockName}</td>
-                  </tr>
-                </tbody>
-              </Table>
-            </div>
-          </div>
+import ThreadItem from './thread-item';
+
+export interface IMetricsModalProps {
+  showModal: boolean;
+  handleClose: Function;
+  threadDump: any;
+}
+
+export interface IMetricsModalState {
+  threadDump: any;
+  displayedThreads: any;
+  threadDumpAll: number;
+  threadDumpBlocked: number;
+  threadDumpRunnable: number;
+  threadDumpTimedWaiting: number;
+  threadDumpWaiting: number;
+}
+
+export class MetricsModal extends React.Component<IMetricsModalProps, IMetricsModalState> {
+  state: IMetricsModalState = {
+    threadDump: {},
+    displayedThreads: [],
+    threadDumpAll: 0,
+    threadDumpBlocked: 0,
+    threadDumpRunnable: 0,
+    threadDumpTimedWaiting: 0,
+    threadDumpWaiting: 0
+  };
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.threadDump.threads && nextProps.threadDump !== this.props.threadDump) {
+      this.setState({
+        threadDump: nextProps.threadDump,
+        displayedThreads: nextProps.threadDump.threads
+      }, () => {
+        this.refreshThreadsCounter();
+      });
+    }
+  }
+
+  refreshThreadsCounter = () => {
+    let threadDumpAll = 0;
+    let threadDumpRunnable = 0;
+    let threadDumpWaiting = 0;
+    let threadDumpTimedWaiting = 0;
+    let threadDumpBlocked = 0;
+
+    this.state.threadDump.threads.forEach(t => {
+      switch (t.threadState) {
+        case 'RUNNABLE':
+          threadDumpRunnable++;
+          break;
+        case 'WAITING':
+          threadDumpWaiting++;
+          break;
+        case 'TIMED_WAITING':
+          threadDumpTimedWaiting++;
+          break;
+        case 'BLOCKED':
+          threadDumpBlocked++;
+          break;
+        default:
+          break;
+      }
+    });
+
+    threadDumpAll = threadDumpRunnable + threadDumpWaiting + threadDumpTimedWaiting + threadDumpBlocked;
+    this.setState({ threadDumpAll, threadDumpRunnable, threadDumpWaiting, threadDumpTimedWaiting, threadDumpBlocked });
+  };
+
+  searchFilter = event => {
+    let filteredList = this.state.threadDump.threads;
+    filteredList = filteredList.filter(t => t.lockName != null &&
+                                            t.lockName.toLowerCase().includes(event.target.value.toLowerCase()));
+    this.setState({
+      displayedThreads: filteredList
+    });
+  };
+
+  filterByBadge = badge => {
+    if (badge !== '') {
+      let filteredList = this.state.threadDump.threads;
+      filteredList = filteredList.filter(t => t.threadState === badge);
+      this.setState({
+        displayedThreads: filteredList
+      });
+    } else {
+      this.setState({
+        displayedThreads: this.state.threadDump.threads
+      });
+    }
+  };
+
+  getBadgeClass = threadState => {
+    if (threadState === 'RUNNABLE') {
+      return 'badge-success';
+    } else if (threadState === 'WAITING') {
+      return 'badge-info';
+    } else if (threadState === 'TIMED_WAITING') {
+      return 'badge-warning';
+    } else if (threadState === 'BLOCKED') {
+      return 'badge-danger';
+    }
+  };
+
+  render() {
+    const { showModal, handleClose } = this.props;
+    const { threadDump, displayedThreads } = this.state;
+
+    return <Modal
+      isOpen={showModal} modalTransition={{ timeout: 20 }} backdropTransition={{ timeout: 10 }}
+      toggle={handleClose} className="modal-lg">
+      <ModalHeader toggle={handleClose}>Threads dump</ModalHeader>
+      <ModalBody>
+          <span className="badge badge-primary" onClick={this.filterByBadge.bind(this, '')}>All&nbsp;<span
+            className="badge badge-pill badge-default">{this.state.threadDumpAll}</span></span>&nbsp;
+        <span className="badge badge-success" onClick={this.filterByBadge.bind(this, 'RUNNABLE')}>Runnable&nbsp;<span
+          className="badge badge-pill badge-default">{this.state.threadDumpRunnable}</span></span>&nbsp;
+        <span className="badge badge-info" onClick={this.filterByBadge.bind(this, 'WAITING')}>Waiting&nbsp;<span
+          className="badge badge-pill badge-default">{this.state.threadDumpWaiting}</span></span>&nbsp;
+        <span className="badge badge-warning"
+              onClick={this.filterByBadge.bind(this, 'TIMED_WAITING')}>Timed Waiting&nbsp;
+          <span
+            className="badge badge-pill badge-default">{this.state.threadDumpTimedWaiting}</span></span>&nbsp;
+        <span className="badge badge-danger" onClick={this.filterByBadge.bind(this, 'BLOCKED')}>Blocked&nbsp;<span
+          className="badge badge-pill badge-default">{this.state.threadDumpBlocked}</span></span>&nbsp;
+        <div className="mt-2">&nbsp;</div>
+        <Input type="text" className="form-control" placeholder="Filter by Lock Name..." onChange={this.searchFilter}/>
+        <div className="mt-1">&nbsp;</div>
+        <div style={{ padding: '10px' }}>
+          {threadDump && threadDump.threads && displayedThreads ? displayedThreads.map((threadDumpInfo, i) => (
+              <div key={`dump-${i}`}>
+                <h6> <span className={'badge ' + this.getBadgeClass(threadDumpInfo.threadState)}>{threadDumpInfo.threadState}</span>&nbsp;
+                  {threadDumpInfo.threadName} (ID {threadDumpInfo.threadId})&nbsp;
+                </h6>
+                <ThreadItem threadDumpInfo={threadDumpInfo}/>
+                <div className="row">
+                  <Table responsive>
+                    <thead>
+                    <tr>
+                      <th>Blocked Time</th>
+                      <th>Blocked Count</th>
+                      <th>Waited Time</th>
+                      <th>Waited Count</th>
+                      <th>Lock Name</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr key={threadDumpInfo.lockName}>
+                      <td>{threadDumpInfo.blockedTime}</td>
+                      <td>{threadDumpInfo.blockedCount}</td>
+                      <td>{threadDumpInfo.waitedTime}</td>
+                      <td>{threadDumpInfo.waitedCount}</td>
+                      <td className="thread-dump-modal-lock" title={threadDumpInfo.lockName}>
+                        <code>{threadDumpInfo.lockName}</code></td>
+                    </tr>
+                    </tbody>
+                  </Table>
+                </div>
+              </div>
+            )
+          ) : null}
         </div>
-    )
-  ) : null }
-  </ModalBody>
-  <ModalFooter>
-    <Button color="primary" onClick={handleClose}>Close</Button>
-  </ModalFooter>
-</Modal>);
+      </ModalBody>
+      <ModalFooter>
+        <Button color="primary" onClick={handleClose}>Close</Button>
+      </ModalFooter>
+    </Modal>;
+  }
+}
 
 export default MetricsModal;

@@ -253,6 +253,7 @@ const files = {
                 { file: 'modules/administration/logs/logs.tsx', method: 'processJsx' },
                 { file: 'modules/administration/metrics/metrics.tsx', method: 'processJsx' },
                 { file: 'modules/administration/metrics/metrics-modal.tsx', method: 'processJsx' },
+                { file: 'modules/administration/metrics/thread-item.tsx', method: 'processJsx' },
                 'modules/administration/administration.reducer.ts'
             ]
         },
