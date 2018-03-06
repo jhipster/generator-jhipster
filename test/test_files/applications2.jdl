@@ -1,0 +1,31 @@
+application {
+  config {
+    baseName tata,
+    applicationType monolith,
+    packageName com.mathieu.tata,
+    path "../"
+  }
+}
+application {
+  config {
+    baseName titi,
+    applicationType gateway,
+    packageName com.mathieu.titi
+  }
+}
+application {
+  config {
+    baseName toto,
+    applicationType microservice,
+    packageName com.mathieu.toto,
+    path "../../"
+  }
+}
+application {
+  config {
+    baseName tutu,
+    applicationType monolith,
+    packageName com.mathieu.tutu,
+    path "./"
+  }
+}

@@ -27,6 +27,7 @@ const DatabaseTypes = require('../../../lib/core/jhipster/database_types');
 const JDLReader = require('../../../lib/reader/jdl_reader');
 const DocumentParser = require('../../../lib/parser/document_parser');
 const EntityParser = require('../../../lib/parser/entity_parser');
+const JHipsterApplicationParser = require('../../../lib/export/jhipster_application_exporter');
 const JHipsterEntityExporter = require('../../../lib/export/jhipster_entity_exporter');
 const JDLExporter = require('../../../lib/export/jdl_exporter');
 
@@ -390,7 +391,7 @@ describe('entity integration tests', () => {
     };
 
     before(() => {
-      const parsed = JDLReader.parseFromFiles(['./test/test_files/big_sample.jdl']);
+      const parsed = JDLReader.parseFromFiles([path.join('test', 'test_files', 'big_sample.jdl')]);
       const jdlObject = DocumentParser.parseFromConfigurationObject({
         document: parsed,
         databaseType: DatabaseTypes.SQL,
@@ -434,7 +435,7 @@ describe('entity integration tests', () => {
 
     before(() => {
       originalContent = DocumentParser.parseFromConfigurationObject({
-        document: JDLReader.parseFromFiles(['./test/test_files/big_sample.jdl']),
+        document: JDLReader.parseFromFiles([path.join('test', 'test_files', 'big_sample.jdl')]),
         databaseType: DatabaseTypes.SQL,
         applicationType: ApplicationTypes.MONOLITH
       });
@@ -452,6 +453,207 @@ describe('entity integration tests', () => {
 
     it('keeps the same JDL content', () => {
       expect(writtenContent).to.deep.equal(originalContent);
+    });
+  });
+  context('when parsing JDL applications and exporting them', () => {
+    const contents = [];
+    const expectedContents = [
+      {
+        entities: [],
+        'generator-jhipster': {
+          baseName: 'tata',
+          packageName: 'com.mathieu.tata',
+          packageFolder: 'com/mathieu/tata',
+          authenticationType: 'jwt',
+          hibernateCache: 'no',
+          clusteredHttpSession: 'no',
+          websocket: false,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'mysql',
+          useCompass: false,
+          buildTool: 'maven',
+          searchEngine: false,
+          enableTranslation: true,
+          applicationType: 'monolith',
+          testFrameworks: [],
+          languages: [
+            'en'
+          ],
+          serverPort: 8080,
+          enableSocialSignIn: false,
+          enableSwaggerCodegen: false,
+          useSass: false,
+          jhiPrefix: 'jhi',
+          messageBroker: false,
+          serviceDiscoveryType: false,
+          clientPackageManager: 'yarn',
+          clientFramework: 'angularX',
+          nativeLanguage: 'en',
+          skipUserManagement: false,
+          skipClient: false,
+          skipServer: false
+        }
+      },
+      {
+        entities: [],
+        'generator-jhipster': {
+          baseName: 'titi',
+          packageName: 'com.mathieu.titi',
+          packageFolder: 'com/mathieu/titi',
+          authenticationType: 'jwt',
+          hibernateCache: 'no',
+          clusteredHttpSession: 'no',
+          websocket: false,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'mysql',
+          useCompass: false,
+          buildTool: 'maven',
+          searchEngine: false,
+          enableTranslation: true,
+          applicationType: 'gateway',
+          testFrameworks: [],
+          languages: [
+            'en'
+          ],
+          serverPort: 8080,
+          enableSocialSignIn: false,
+          enableSwaggerCodegen: false,
+          useSass: false,
+          jhiPrefix: 'jhi',
+          messageBroker: false,
+          serviceDiscoveryType: false,
+          clientPackageManager: 'yarn',
+          clientFramework: 'angularX',
+          nativeLanguage: 'en',
+          skipUserManagement: false,
+          skipClient: false,
+          skipServer: false
+        }
+      },
+      {
+        entities: [],
+        'generator-jhipster': {
+          baseName: 'toto',
+          packageName: 'com.mathieu.toto',
+          packageFolder: 'com/mathieu/toto',
+          authenticationType: 'jwt',
+          hibernateCache: 'no',
+          clusteredHttpSession: 'no',
+          websocket: false,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'mysql',
+          useCompass: false,
+          buildTool: 'maven',
+          searchEngine: false,
+          enableTranslation: true,
+          applicationType: 'microservice',
+          testFrameworks: [],
+          languages: [
+            'en'
+          ],
+          serverPort: 8080,
+          enableSocialSignIn: false,
+          enableSwaggerCodegen: false,
+          useSass: false,
+          jhiPrefix: 'jhi',
+          messageBroker: false,
+          serviceDiscoveryType: false,
+          clientPackageManager: 'yarn',
+          clientFramework: 'angularX',
+          nativeLanguage: 'en',
+          skipUserManagement: false,
+          skipClient: false,
+          skipServer: false
+        }
+      },
+      {
+        entities: [],
+        'generator-jhipster': {
+          baseName: 'tutu',
+          packageName: 'com.mathieu.tutu',
+          packageFolder: 'com/mathieu/tutu',
+          authenticationType: 'jwt',
+          hibernateCache: 'no',
+          clusteredHttpSession: 'no',
+          websocket: false,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'mysql',
+          useCompass: false,
+          buildTool: 'maven',
+          searchEngine: false,
+          enableTranslation: true,
+          applicationType: 'monolith',
+          testFrameworks: [],
+          languages: [
+            'en'
+          ],
+          serverPort: 8080,
+          enableSocialSignIn: false,
+          enableSwaggerCodegen: false,
+          useSass: false,
+          jhiPrefix: 'jhi',
+          messageBroker: false,
+          serviceDiscoveryType: false,
+          clientPackageManager: 'yarn',
+          clientFramework: 'angularX',
+          nativeLanguage: 'en',
+          skipUserManagement: false,
+          skipClient: false,
+          skipServer: false
+        }
+      }
+    ];
+    const APPLICATION_PATHS = [
+      path.join('..', 'tata'),
+      'titi',
+      path.join('..', '..', 'toto'),
+      'tutu'
+    ];
+
+    before(() => {
+      const parsed = JDLReader.parseFromFiles([path.join('test', 'test_files', 'applications2.jdl')]);
+      const jdlObject = DocumentParser.parseFromConfigurationObject({
+        document: parsed,
+        databaseType: DatabaseTypes.SQL,
+        applicationType: ApplicationTypes.MONOLITH
+      });
+      JHipsterApplicationParser.exportApplications({
+        applications: jdlObject.applications,
+        paths: {
+          tata: jdlObject.applications.tata.config.path,
+          titi: jdlObject.applications.titi.config.path,
+          toto: jdlObject.applications.toto.config.path,
+          tutu: jdlObject.applications.tutu.config.path
+        }
+      });
+      APPLICATION_PATHS.forEach((applicationPath) => {
+        contents.push(JSON.parse(fs.readFileSync(path.join(applicationPath, '.yo-rc.json'), 'utf-8')));
+      });
+    });
+
+    after(() => {
+      APPLICATION_PATHS.forEach((applicationPath) => {
+        fs.unlinkSync(path.join(applicationPath, '.yo-rc.json'));
+        fs.rmdirSync(applicationPath);
+      });
+    });
+
+    it('creates the folders and the .yo-rc.json files', () => {
+      APPLICATION_PATHS.forEach((applicationPath) => {
+        expect(fs.statSync(path.join(applicationPath, '.yo-rc.json')).isFile()).to.be.true;
+        expect(fs.statSync(applicationPath).isDirectory()).to.be.true;
+      });
+    });
+    it('exports the application contents', () => {
+      contents.forEach((content) => {
+        expect(content['generator-jhipster'].jwtSecretKey).not.to.be.undefined;
+        delete content['generator-jhipster'].jwtSecretKey;
+      });
+      expect(contents).to.deep.equal(expectedContents);
     });
   });
 });
