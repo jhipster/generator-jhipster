@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Alert, Table, Button } from 'reactstrap';
+import { Alert, Table, Button, Row } from 'reactstrap';
 import { Translate } from 'react-jhipster';
 import { getSession } from '../../../shared/reducers/authentication';
 import { findAll, invalidateSession } from './sessions.reducer';
@@ -23,6 +23,11 @@ export class SessionsPage extends React.Component<ISessionsProps> {
 
   doSessionInvalidation = series => {
     this.props.invalidateSession(series);
+    this.props.findAll();
+  };
+
+  refreshList = () => {
+    this.props.findAll();
   };
 
   render() {
@@ -43,15 +48,17 @@ export class SessionsPage extends React.Component<ISessionsProps> {
         </Alert>
         ) : null}
 
+        <Button color="primary" onClick={this.refreshList}>Refresh</Button>
+
         <div className="table-responsive">
           <Table className="table-striped">
             <thead>
-              <tr>
-                <th><Translate contentKey="sessions.table.ipaddress"/></th>
-                <th><Translate contentKey="sessions.table.useragent"/></th>
-                <th><Translate contentKey="sessions.table.date"/></th>
-                <th />
-              </tr>
+            <tr>
+              <th><Translate contentKey="sessions.table.ipaddress"/></th>
+              <th><Translate contentKey="sessions.table.useragent"/></th>
+              <th><Translate contentKey="sessions.table.date"/></th>
+              <th />
+            </tr>
             </thead>
 
             <tbody>
