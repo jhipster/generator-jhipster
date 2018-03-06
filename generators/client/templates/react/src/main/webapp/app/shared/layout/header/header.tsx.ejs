@@ -10,6 +10,9 @@ import {
   FaHome, FaThList, FaUserPlus, FaUser, <%_ if (enableTranslation) { _%>FaFlag,<%_ } _%> FaHeart,
   FaList, FaTasks, FaDashboard, FaBook, FaWrench, FaSignIn, FaSignOut,
   FaClockO, FaHddO,
+  <%_ if (authenticationType === 'session') { _%>
+  FaCloud,
+  <%_ } _%>
   // tslint:disable-next-line
   FaRoad,
   // tslint:disable-next-line
