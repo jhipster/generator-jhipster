@@ -1,6 +1,7 @@
 import * as SockJS from 'sockjs-client';
 import * as Stomp from 'webstomp-client';
-import { Observable, Observer } from 'rxjs';
+import { Observable } from 'rxjs/Observable'; // tslint:disable-line
+import { Observer } from 'rxjs/Observer'; // tslint:disable-line
 import { Storage } from 'react-jhipster';
 
 import { ACTION_TYPES as ADMIN_ACTIONS } from 'app/modules/administration/administration.reducer';
