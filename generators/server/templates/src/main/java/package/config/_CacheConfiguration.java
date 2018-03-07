@@ -40,7 +40,7 @@ import com.hazelcast.core.Hazelcast;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-    <%_ if (serviceDiscoveryType === 'eureka') { _%>
+    <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
 import org.springframework.beans.factory.annotation.Autowired;
     <%_ } _%>
 <%_ } _%>
@@ -50,14 +50,14 @@ import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
 <%_ } _%>
 <%_ if (cacheProvider === 'hazelcast') { _%>
-    <%_ if (serviceDiscoveryType === 'eureka') { _%>
+    <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
 import org.springframework.boot.autoconfigure.web.ServerProperties;
     <%_ } _%>
 
 import org.springframework.cache.CacheManager;
 <%_ } _%>
 import org.springframework.cache.annotation.EnableCaching;
-<%_ if (serviceDiscoveryType === 'eureka') { _%>
+<%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.serviceregistry.Registration;
@@ -88,7 +88,7 @@ import org.infinispan.jcache.embedded.JCacheManager;
 import javax.cache.Caching;
 import javax.cache.spi.CachingProvider;
 import java.net.URI;
-    <%_ if (serviceDiscoveryType === 'eureka') { _%>
+    <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.infinispan.remoting.transport.jgroups.JGroupsTransport;
 import org.jgroups.Channel;
@@ -161,7 +161,7 @@ public class CacheConfiguration {
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
 
     private final Environment env;
-        <%_ if (serviceDiscoveryType === 'eureka') { _%>
+        <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
 
     private final ServerProperties serverProperties;
 
@@ -170,14 +170,14 @@ public class CacheConfiguration {
     private Registration registration;
         <%_ } _%>
 
-    public CacheConfiguration(<% if (cacheProvider === 'hazelcast') { %>Environment env<% if (serviceDiscoveryType === 'eureka') { %>, ServerProperties serverProperties, DiscoveryClient discoveryClient<% } } %>) {
+    public CacheConfiguration(<% if (cacheProvider === 'hazelcast') { %>Environment env<% if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { %>, ServerProperties serverProperties, DiscoveryClient discoveryClient<% } } %>) {
         this.env = env;
-        <%_ if (serviceDiscoveryType === 'eureka') { _%>
+        <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
         this.serverProperties = serverProperties;
         this.discoveryClient = discoveryClient;
         <%_ } _%>
     }
-        <%_ if (serviceDiscoveryType === 'eureka') { _%>
+        <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
 
     @Autowired(required = false)
     public void setRegistration(Registration registration) {
@@ -208,12 +208,13 @@ public class CacheConfiguration {
         }
         Config config = new Config();
         config.setInstanceName("<%=baseName%>");
-        <%_ if (serviceDiscoveryType === 'eureka') { _%>
+        <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
         config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
         if (this.registration == null) {
             log.warn("No discovery service is set up, Hazelcast cannot create a cluster.");
         } else {
-            // The serviceId is by default the application's name, see Spring Boot's eureka.instance.appname property
+            // The serviceId is by default the application's name,
+            // see the "spring.application.name" standard Spring property
             String serviceId = registration.getServiceId();
             log.debug("Configuring Hazelcast clustering for instanceId: {}", serviceId);
             // In development, everything goes through 127.0.0.1, with a different port
@@ -314,7 +315,7 @@ public class CacheConfiguration {
 
     // Initialize the cache in a non Spring-managed bean
     private static EmbeddedCacheManager cacheManager;
-        <%_ if (serviceDiscoveryType === 'eureka') { _%>
+        <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
 
     private DiscoveryClient discoveryClient;
 
@@ -342,17 +343,17 @@ public class CacheConfiguration {
     /**
      * Inject a {@link org.infinispan.configuration.global.GlobalConfiguration GlobalConfiguration} for Infinispan cache.
      * <p>
-     * If the JHipster Registry is enabled, then the host list will be populated
-     * from Eureka.
+     * If a service discovery solution is enabled (JHipster Registry or Consul),
+     * then the host list will be populated from the service discovery.
      *
      * <p>
-     * If the JHipster Registry is not enabled, host discovery will be based on
+     * If the service discovery is not enabled, host discovery will be based on
      * the default transport settings defined in the 'config-file' packaged within
      * the Jar. The 'config-file' can be overridden using the application property
      * <i>jhipster.cache.inifnispan.config-file</i>
      *
      * <p>
-     * If the JHipster Registry is not defined, you have the choice of 'config-file'
+     * If no service discovery is defined, you have the choice of 'config-file'
      * based on the underlying platform for hosts discovery. Infinispan
      * supports discovery natively for most of the platforms like Kubernets/OpenShift,
      * AWS, Azure and Google.
@@ -361,8 +362,8 @@ public class CacheConfiguration {
     @Bean
     public InfinispanGlobalConfigurer globalConfiguration(JHipsterProperties jHipsterProperties) {
         log.info("Defining Infinispan Global Configuration");
-        <%_ if (serviceDiscoveryType === 'eureka') { _%>
-            if(this.registration == null) { // if registry is not defined, use native discovery
+        <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
+            if (this.registration == null) { // if registry is not defined, use native discovery
                 log.warn("No discovery service is set up, Infinispan will use default discovery for cluster formation");
                 return () -> GlobalConfigurationBuilder
                     .defaultClusteredBuilder().transport().defaultTransport()
@@ -376,7 +377,7 @@ public class CacheConfiguration {
                     .clusterName("infinispan-<%=baseName%>-cluster").globalJmxStatistics()
                     .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
                     .allowDuplicateDomains(true).build();
-        <%_ }else { _%>
+        <%_ } else { _%>
             return () -> GlobalConfigurationBuilder
                     .defaultClusteredBuilder().transport().defaultTransport()
                     .addProperty("configurationFile", jHipsterProperties.getCache().getInfinispan().getConfigFile())
@@ -532,9 +533,10 @@ public class CacheConfiguration {
         }
     }
 
-        <%_ if(serviceDiscoveryType === 'eureka') { _%>
+        <%_ if(serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
     /**
-     * TCP channel with the host details populated from the JHipster Registry.
+     * TCP channel with the host details populated from the service discovery
+     * (JHipster Registry or Consul).
      * <p>
      * MPING multicast is replaced with TCPPING with the host details discovered
      * from registry and sends only unicast messages to the host list.
