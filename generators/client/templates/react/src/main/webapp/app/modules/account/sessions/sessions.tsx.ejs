@@ -34,8 +34,9 @@ export class SessionsPage extends React.Component<ISessionsProps> {
     const { account, sessions, updateSuccess, updateFailure } = this.props;
     return (
       <div>
-        {/* TODO: Translate this h2. */}
-        <h2>Active sessions for [<b>{account.login}</b>]</h2>
+        <h2>
+          <Translate contentKey="sessions.title" interpolate={{ username: account.login }}/>
+        </h2>
 
         {(updateSuccess) ? (
         <Alert color="success">
