@@ -507,6 +507,7 @@ public class UserService {
      * @param authentication OAuth2 authentication
      * @return the user from the authentication
      */
+    @SuppressWarnings("unchecked")
     public UserDTO getUserFromAuthentication(OAuth2Authentication authentication) {
         Map<String, Object> details = (Map<String, Object>) authentication.getUserAuthentication().getDetails();
         User user = getUser(details);
@@ -569,6 +570,7 @@ public class UserService {
         return token;
     }
 
+    @SuppressWarnings("unchecked")
     private static Set<<% if (databaseType === 'couchbase') { %>String<% } else { %>Authority<% } %>> extractAuthorities(OAuth2Authentication authentication, Map<String, Object> details) {
         Set<<% if (databaseType === 'couchbase') { %>String<% } else { %>Authority<% } %>> userAuthorities;
         // get roles from details

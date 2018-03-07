@@ -26,5 +26,5 @@ import java.util.UUID;<% } %>
 /**
  * Spring Data Elasticsearch repository for the User entity.
  */
-public interface UserSearchRepository extends ElasticsearchRepository<User, <% if (databaseType === 'sql') { %>Long<% } %><% if (databaseType === 'cassandra' || databaseType === 'mongodb') { %>String<% } %>> {
+public interface UserSearchRepository extends ElasticsearchRepository<User, <% if (databaseType === 'sql' && authenticationType !== 'oauth2') { %>Long<% } %><% if (databaseType === 'cassandra' || databaseType === 'mongodb' || authenticationType === 'oauth2') { %>String<% } %>> {
 }
