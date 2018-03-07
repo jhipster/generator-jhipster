@@ -6,10 +6,7 @@ export interface ITrackerPageProps {
   activities: any[];
 }
 
-export class TrackerPage extends React.Component<ITrackerPageProps> {
-  render() {
-    const activities = this.props.activities;
-    return (
+export const TrackerPage = ({ activities }:ITrackerPageProps) => (
       <div>
         <h2>
           <Translate contentKey="tracker.title">Real-time user activities</Translate>
@@ -52,8 +49,6 @@ export class TrackerPage extends React.Component<ITrackerPageProps> {
         </table>
       </div>
     );
-  }
-}
 
 const mapStateToProps = ({ administration }) => ({
   activities: administration.tracker.activities

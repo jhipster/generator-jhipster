@@ -2,7 +2,10 @@ import * as SockJS from 'sockjs-client';
 import * as Stomp from 'webstomp-client';
 import { Observable, Observer } from 'rxjs';
 import { Storage } from 'react-jhipster';
-import { ACTION_TYPES } from 'app/modules/administration/administration.reducer';
+
+import { ACTION_TYPES as ADMIN_ACTIONS } from 'app/modules/administration/administration.reducer';
+import { ACTION_TYPES as AUTH_ACTIONS } from 'app/shared/reducers/authentication';
+import { SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 
 let stompClient = null;
 
@@ -90,17 +93,17 @@ const unsubscribe = () => {
 };
 
 export default store => next => action => {
-  if (action.type === 'authentication/GET_SESSION_FULFILLED') {
+  if (action.type === SUCCESS(AUTH_ACTIONS.GET_SESSION)) {
     connect();
     if (!alreadyConnectedOnce) {
       receive().subscribe(activity => {
         return store.dispatch({
-          type: ACTION_TYPES.WEBSOCKET_MESSAGE,
+          type: ADMIN_ACTIONS.WEBSOCKET_ACTIVITY_MESSAGE,
           payload: activity
         });
       });
     }
-  } else if (action.type === 'authentication/GET_SESSION_REJECTED') {
+  } else if (action.type === FAILURE(AUTH_ACTIONS.GET_SESSION)) {
     unsubscribe();
     disconnect();
   }
