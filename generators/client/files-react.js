@@ -385,7 +385,6 @@ const files = {
                 'spec/app/modules/account/activate/activate.reducer.spec.ts',
                 'spec/app/modules/account/password/password.reducer.spec.ts',
                 'spec/app/modules/account/settings/settings.reducer.spec.ts',
-                'spec/app/modules/administration/user-management/user-management.reducer.spec.ts',
                 // 'spec/app/account/activate/_activate.component.spec.js',
                 // 'spec/app/account/password/_password.component.spec.js',
                 // 'spec/app/account/password/_password-strength-bar.component.spec.js',
@@ -398,6 +397,13 @@ const files = {
                 // 'spec/helpers/_mock-account.service.js',
                 // 'spec/helpers/_mock-principal.service.js',
                 // 'spec/helpers/_mock-route.service.js'
+            ]
+        },
+        {
+            condition: generator => !generator.skipUserManagement,
+            path: TEST_SRC_DIR,
+            templates: [
+                'spec/app/modules/administration/user-management/user-management.reducer.spec.ts'
             ]
         },
     //   {
