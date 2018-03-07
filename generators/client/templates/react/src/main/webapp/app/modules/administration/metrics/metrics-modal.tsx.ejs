@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Table, Modal, ModalHeader, ModalBody, ModalFooter, Button, Input } from 'reactstrap';
+import { Table, Modal, ModalHeader, ModalBody, ModalFooter, Button, Input, Badge } from 'reactstrap';
 
 import ThreadItem from './thread-item';
 
@@ -10,45 +10,37 @@ export interface IMetricsModalProps {
 }
 
 export interface IMetricsModalState {
-  threadDump: any;
-  displayedThreads: any;
-  threadDumpAll: number;
-  threadDumpBlocked: number;
-  threadDumpRunnable: number;
-  threadDumpTimedWaiting: number;
-  threadDumpWaiting: number;
+  badgeFilter: string;
+  searchFilter: string;
 }
 
 export class MetricsModal extends React.Component<IMetricsModalProps, IMetricsModalState> {
   state: IMetricsModalState = {
-    threadDump: {},
-    displayedThreads: [],
-    threadDumpAll: 0,
-    threadDumpBlocked: 0,
-    threadDumpRunnable: 0,
-    threadDumpTimedWaiting: 0,
-    threadDumpWaiting: 0
+    badgeFilter: '',
+    searchFilter: ''
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.threadDump.threads && nextProps.threadDump !== this.props.threadDump) {
-      this.setState({
-        threadDump: nextProps.threadDump,
-        displayedThreads: nextProps.threadDump.threads
-      }, () => {
-        this.refreshThreadsCounter();
-      });
+  computeFilteredList = () => {
+    const { badgeFilter, searchFilter } = this.state;
+    let filteredList = this.props.threadDump.threads;
+    if(badgeFilter !== '') {
+      filteredList = filteredList.filter(t => t.threadState === badgeFilter);
     }
-  }
+    if(searchFilter !== '') {
+      filteredList = filteredList.filter(t => t.lockName != null &&
+                                              t.lockName.toLowerCase().includes(searchFilter.toLowerCase()));
+    }
+    return filteredList;
+  };
 
-  refreshThreadsCounter = () => {
+  computeCounters = () => {
     let threadDumpAll = 0;
     let threadDumpRunnable = 0;
     let threadDumpWaiting = 0;
     let threadDumpTimedWaiting = 0;
     let threadDumpBlocked = 0;
 
-    this.state.threadDump.threads.forEach(t => {
+    this.props.threadDump.threads.forEach(t => {
       switch (t.threadState) {
         case 'RUNNABLE':
           threadDumpRunnable++;
@@ -68,30 +60,7 @@ export class MetricsModal extends React.Component<IMetricsModalProps, IMetricsMo
     });
 
     threadDumpAll = threadDumpRunnable + threadDumpWaiting + threadDumpTimedWaiting + threadDumpBlocked;
-    this.setState({ threadDumpAll, threadDumpRunnable, threadDumpWaiting, threadDumpTimedWaiting, threadDumpBlocked });
-  };
-
-  searchFilter = event => {
-    let filteredList = this.state.threadDump.threads;
-    filteredList = filteredList.filter(t => t.lockName != null &&
-                                            t.lockName.toLowerCase().includes(event.target.value.toLowerCase()));
-    this.setState({
-      displayedThreads: filteredList
-    });
-  };
-
-  filterByBadge = badge => {
-    if (badge !== '') {
-      let filteredList = this.state.threadDump.threads;
-      filteredList = filteredList.filter(t => t.threadState === badge);
-      this.setState({
-        displayedThreads: filteredList
-      });
-    } else {
-      this.setState({
-        displayedThreads: this.state.threadDump.threads
-      });
-    }
+    return { threadDumpAll, threadDumpRunnable, threadDumpWaiting, threadDumpTimedWaiting, threadDumpBlocked };
   };
 
   getBadgeClass = threadState => {
@@ -106,32 +75,49 @@ export class MetricsModal extends React.Component<IMetricsModalProps, IMetricsMo
     }
   };
 
+  updateBadgeFilter = badge => () => {
+    this.setState({ badgeFilter: badge });
+  };
+
+  updateSearchFilter = () => event => {
+    this.setState({ searchFilter: event.target.value });
+  };
+
   render() {
-    const { showModal, handleClose } = this.props;
-    const { threadDump, displayedThreads } = this.state;
+    const { showModal, handleClose, threadDump } = this.props;
+    let counters = null;
+    let filteredList = null;
+    if (threadDump && threadDump.threads) {
+      counters = this.computeCounters();
+      filteredList = this.computeFilteredList();
+    }
 
     return <Modal
       isOpen={showModal} modalTransition={{ timeout: 20 }} backdropTransition={{ timeout: 10 }}
       toggle={handleClose} className="modal-lg">
       <ModalHeader toggle={handleClose}>Threads dump</ModalHeader>
       <ModalBody>
-          <span className="badge badge-primary" onClick={this.filterByBadge.bind(this, '')}>All&nbsp;<span
-            className="badge badge-pill badge-default">{this.state.threadDumpAll}</span></span>&nbsp;
-        <span className="badge badge-success" onClick={this.filterByBadge.bind(this, 'RUNNABLE')}>Runnable&nbsp;<span
-          className="badge badge-pill badge-default">{this.state.threadDumpRunnable}</span></span>&nbsp;
-        <span className="badge badge-info" onClick={this.filterByBadge.bind(this, 'WAITING')}>Waiting&nbsp;<span
-          className="badge badge-pill badge-default">{this.state.threadDumpWaiting}</span></span>&nbsp;
-        <span className="badge badge-warning"
-              onClick={this.filterByBadge.bind(this, 'TIMED_WAITING')}>Timed Waiting&nbsp;
-          <span
-            className="badge badge-pill badge-default">{this.state.threadDumpTimedWaiting}</span></span>&nbsp;
-        <span className="badge badge-danger" onClick={this.filterByBadge.bind(this, 'BLOCKED')}>Blocked&nbsp;<span
-          className="badge badge-pill badge-default">{this.state.threadDumpBlocked}</span></span>&nbsp;
+        <Badge color="primary" onClick={this.updateBadgeFilter('')}>All&nbsp;
+          <span className="badge badge-pill badge-default">{counters ? counters.threadDumpAll : null}</span>
+        </Badge>&nbsp;
+        <Badge color="success" onClick={this.updateBadgeFilter('RUNNABLE')}>Runnable&nbsp;
+          <span className="badge badge-pill badge-default">{counters ? counters.threadDumpRunnable : null}</span>
+        </Badge>&nbsp;
+        <Badge color="info" onClick={this.updateBadgeFilter('WAITING')}>Waiting&nbsp;
+          <span className="badge badge-pill badge-default">{counters ? counters.threadDumpWaiting : null}</span>
+        </Badge>&nbsp;
+        <Badge color="warning" onClick={this.updateBadgeFilter('TIMED_WAITING')}>Timed Waiting&nbsp;
+          <span className="badge badge-pill badge-default">{counters ? counters.threadDumpTimedWaiting : null}</span>
+        </Badge>&nbsp;
+        <Badge color="danger" onClick={this.updateBadgeFilter('BLOCKED')}>Blocked&nbsp;
+          <span className="badge badge-pill badge-default">{counters ? counters.threadDumpBlocked : null}</span>
+        </Badge>&nbsp;
         <div className="mt-2">&nbsp;</div>
-        <Input type="text" className="form-control" placeholder="Filter by Lock Name..." onChange={this.searchFilter}/>
-        <div className="mt-1">&nbsp;</div>
+        <Input type="text" className="form-control" placeholder="Filter by Lock Name..."
+               onChange={this.updateSearchFilter()}/>
         <div style={{ padding: '10px' }}>
-          {threadDump && threadDump.threads && displayedThreads ? displayedThreads.map((threadDumpInfo, i) => (
+          {filteredList ? filteredList.map((threadDumpInfo, i) =>
+            (
               <div key={`dump-${i}`}>
                 <h6> <span className={'badge ' + this.getBadgeClass(threadDumpInfo.threadState)}>{threadDumpInfo.threadState}</span>&nbsp;
                   {threadDumpInfo.threadName} (ID {threadDumpInfo.threadId})&nbsp;
