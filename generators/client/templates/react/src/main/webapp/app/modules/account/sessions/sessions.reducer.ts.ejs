@@ -53,12 +53,13 @@ export default (state = initialState, action) => {
 };
 
 // Actions
+const apiURL = '/api/account/sessions/';
 export const findAll = () => ({
   type: ACTION_TYPES.FIND_ALL,
-  payload: axios.get('/api/account/sessions/')
+  payload: axios.get(apiURL)
 });
 
 export const invalidateSession = series => ({
   type: ACTION_TYPES.INVALIDATE,
-  payload: axios.delete('/api/account/sessions/' + series)
+  payload: axios.delete(`${apiURL}${series}`)
 });

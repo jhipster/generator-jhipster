@@ -1,5 +1,7 @@
 import axios from 'axios';
+<%_ if (authenticationType !== 'session') { _%>
 import { Storage } from 'react-jhipster';
+<%_ } _%>
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 
@@ -97,27 +99,11 @@ export const getSession = () => dispatch => dispatch({
 
 <%_ if (authenticationType === 'session') { _%>
 export const login = (username, password, rememberMe = false) => async (dispatch, getState) => {
-  const data = 'j_username=' +
-    encodeURIComponent(username) +
-    '&j_password=' +
-    encodeURIComponent(password) +
-    '&remember-me=' +
-    rememberMe +
-    '&submit=Login';
-  const result = await dispatch({
+  const data = `j_username=${encodeURIComponent(username)}&j_password=${encodeURIComponent(password)}&remember-me=${rememberMe}&submit=Login`;
+  await dispatch({
     type: ACTION_TYPES.LOGIN,
-    payload: axios.post('/api/authentication', data)
+    payload: axios.post('/api/authentication', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
   });
-
-  const bearerToken = result.value.headers.authorization;
-  if (bearerToken && bearerToken.slice(0, 7) === 'Bearer ') {
-    const jwt = bearerToken.slice(7, bearerToken.length);
-    if (rememberMe) {
-      Storage.local.set('jhi-authenticationToken', jwt);
-    } else {
-      Storage.session.set('jhi-authenticationToken', jwt);
-    }
-  }
   dispatch(getSession());
 };
 <%_ } else { _%>

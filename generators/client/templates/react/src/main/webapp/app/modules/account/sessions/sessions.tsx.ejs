@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Alert, Table, Button, Row } from 'reactstrap';
+import { Alert, Table, Button } from 'reactstrap';
 import { Translate } from 'react-jhipster';
-import { getSession } from '../../../shared/reducers/authentication';
+import { getSession } from 'app/shared/reducers/authentication';
 import { findAll, invalidateSession } from './sessions.reducer';
 
 export interface ISessionsProps {
@@ -21,7 +21,7 @@ export class SessionsPage extends React.Component<ISessionsProps> {
     this.props.findAll();
   }
 
-  doSessionInvalidation = series => {
+  doSessionInvalidation = series => () => {
     this.props.invalidateSession(series);
     this.props.findAll();
   };
@@ -34,6 +34,7 @@ export class SessionsPage extends React.Component<ISessionsProps> {
     const { account, sessions, updateSuccess, updateFailure } = this.props;
     return (
       <div>
+        {/* TODO: Translate this h2. */}
         <h2>Active sessions for [<b>{account.login}</b>]</h2>
 
         {(updateSuccess) ? (
@@ -68,7 +69,7 @@ export class SessionsPage extends React.Component<ISessionsProps> {
                 <td>{s.userAgent}</td>
                 <td>{s.tokenDate}</td>
                 <td>
-                  <Button color="primary" onClick={this.doSessionInvalidation.bind(this, s.series)}>
+                  <Button color="primary" onClick={this.doSessionInvalidation(s.series)}>
                     <Translate contentKey="sessions.table.button"/>
                   </Button>
                 </td>
