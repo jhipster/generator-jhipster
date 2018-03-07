@@ -23,10 +23,10 @@ export class MetricsModal extends React.Component<IMetricsModalProps, IMetricsMo
   computeFilteredList = () => {
     const { badgeFilter, searchFilter } = this.state;
     let filteredList = this.props.threadDump.threads;
-    if(badgeFilter !== '') {
+    if (badgeFilter !== '') {
       filteredList = filteredList.filter(t => t.threadState === badgeFilter);
     }
-    if(searchFilter !== '') {
+    if (searchFilter !== '') {
       filteredList = filteredList.filter(t => t.lockName != null &&
                                               t.lockName.toLowerCase().includes(searchFilter.toLowerCase()));
     }
