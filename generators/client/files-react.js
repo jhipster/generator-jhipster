@@ -400,13 +400,13 @@ const files = {
                 // 'spec/helpers/_mock-route.service.js'
             ]
         },
-    //   {
-    //     condition: generator => generator.authenticationType === 'session',
-    //     path: TEST_SRC_DIR,
-    //     templates: [
-    //       'spec/app/account/sessions/_sessions.component.spec.js',
-    //     ]
-    //   },
+        {
+            condition: generator => generator.authenticationType === 'session',
+            path: TEST_SRC_DIR,
+            templates: [
+                'spec/app/modules/account/sessions/sessions.reducer.spec.ts',
+            ]
+        }
     //   {
     //     condition: generator => generator.enableTranslation,
     //     path: TEST_SRC_DIR,
