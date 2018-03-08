@@ -182,8 +182,7 @@ const apiSearchUrl = <% if (applicationType === 'gateway' && locals.microservice
   const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
   const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
 _%>
-// TODO use camelcase
-export const get<%= otherEntityNamePlural %>: ICrudGetAllAction = () => ({
+export const get<%= otherEntityNamePlural.charAt(0).toUpperCase() + otherEntityNamePlural.slice(1) %>: ICrudGetAllAction = () => ({
   type: ACTION_TYPES.FETCH_<%= otherEntityNamePlural.toUpperCase() %>,
   payload: axios.get(`/api/<%= otherEntityNamePlural %>?cacheBuster=${new Date().getTime()}`)
 });
