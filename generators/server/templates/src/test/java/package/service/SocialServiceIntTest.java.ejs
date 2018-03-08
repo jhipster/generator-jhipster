@@ -16,12 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-let cacheManagerIsAvailable = false;
-if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || applicationType === 'gateway') {
-    cacheManagerIsAvailable = true;
-}
-_%>
 package <%=packageName%>.service;
 
 import <%=packageName%>.<%= mainClass %>;
