@@ -183,10 +183,12 @@ limitations under the License.
     "test": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> test:start -- --browsers Chrome",
     "test:ci": "<%= clientPackageManager %> test:start -- --browsers ChromiumHeadless",
     "test:start": "karma start src/test/javascript/karma.conf.js",
-    "test:watch": "<%= clientPackageManager %> test:ci -- --watch",
     <%_ if (protractorTests) { _%>
+    "test:watch": "<%= clientPackageManager %> test:ci -- --watch",
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
     "postinstall": "webdriver-manager update"
+    <%_ } else { _%>
+    "test:watch": "<%= clientPackageManager %> test:ci -- --watch"
     <%_ } _%>
   }
 }
