@@ -46,10 +46,12 @@ function cleanupOldFiles(generator, javaDir, testDir) {
  * Removes server files that where generated in previous JHipster versions and therefore need to be removed
  *
  * @param {any} generator - reference to generator
- * @param {string} javaDir - Java Dir
- * @param {string} testDir - Test Dir
+ * @param {string} javaDir - Java directory
+ * @param {string} testDir - Java tests directory
+ * @param {string} mainResourceDir - Main resources directory
+ * @param {string} testResourceDir - Test resources directory
  */
-function cleanupOldServerFiles(generator, javaDir, testDir) {
+function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, testResourceDir) {
     if (generator.isJhipsterVersionLessThan('3.5.0')) {
         generator.removeFile(`${javaDir}domain/util/JSR310DateTimeSerializer.java`);
         generator.removeFile(`${javaDir}domain/util/JSR310LocalDateDeserializer.java`);
@@ -114,5 +116,10 @@ function cleanupOldServerFiles(generator, javaDir, testDir) {
     if (generator.isJhipsterVersionLessThan('5.0.0')) {
         generator.removeFile(`${javaDir}/ApplicationWebXml.java`);
         generator.removeFile(`${javaDir}/config/ThymeleafConfiguration.java`);
+        generator.removeFile(`${mainResourceDir}/mails/activationEmail.html`);
+        generator.removeFile(`${mainResourceDir}/mails/creationEmail.html`);
+        generator.removeFile(`${mainResourceDir}/mails/passwordResetEmail.html`);
+        generator.removeFile(`${mainResourceDir}/mails/socialRegistrationValidationEmail.html`);
+        generator.removeFile(`${testResourceDir}/mail/testEmail.html`);
     }
 }

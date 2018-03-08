@@ -43,7 +43,7 @@ function writeFiles() {
         },
 
         cleanupOldServerFiles() {
-            cleanup.cleanupOldServerFiles(this, this.javaDir, this.testDir);
+            cleanup.cleanupOldServerFiles(this, this.javaDir, this.testDir, SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR);
         },
 
         writeGlobalFiles() {
@@ -665,7 +665,7 @@ function writeFiles() {
             }
 
             /* User management java test files */
-            this.copy(`${SERVER_TEST_RES_DIR}mails/testEmail.html.ejs`, `${SERVER_TEST_RES_DIR}mails/testEmail.html`);
+            this.copy(`${SERVER_TEST_RES_DIR}templates/mail/testEmail.html.ejs`, `${SERVER_TEST_RES_DIR}templates/mail/testEmail.html`);
             this.copy(`${SERVER_TEST_RES_DIR}i18n/messages_en.properties.ejs`, `${SERVER_TEST_RES_DIR}i18n/messages_en.properties`);
 
             if (this.searchEngine === 'elasticsearch') {
