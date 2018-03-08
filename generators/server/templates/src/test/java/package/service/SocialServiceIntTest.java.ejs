@@ -34,6 +34,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+<%_ if (cacheManagerIsAvailable === true) { _%>
+import org.springframework.cache.CacheManager;
+<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -69,6 +72,11 @@ public class SocialServiceIntTest {
     private UserSearchRepository userSearchRepository;
 
     <%_ } _%>
+    <%_ if (cacheManagerIsAvailable === true) { _%>
+    @Autowired
+    private CacheManager cacheManager;
+
+    <%_ } _%>
 
     @Mock
     private MailService mockMailService;
@@ -86,13 +94,18 @@ public class SocialServiceIntTest {
         <%_ if (databaseType === 'couchbase') { _%>
         mockAuthentication();
         <%_ } _%>
+        userRepository.deleteAll();
+        <%_ if (cacheManagerIsAvailable === true) { _%>
+        cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).clear();
+        cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).clear();
+        <%_ } _%>
         MockitoAnnotations.initMocks(this);
         doNothing().when(mockMailService).sendSocialRegistrationValidationEmail(any(), anyString());
         doNothing().when(mockConnectionRepository).addConnection(any());
         when(mockUsersConnectionRepository.createConnectionRepository(anyString())).thenReturn(mockConnectionRepository);
 
         socialService = new SocialService(mockUsersConnectionRepository, authorityRepository,
-                passwordEncoder, userRepository, mockMailService<% if (searchEngine === 'elasticsearch') { %>, userSearchRepository<% } %>);
+                passwordEncoder, userRepository, mockMailService<% if (searchEngine === 'elasticsearch') { %>, userSearchRepository<% } %><% if (cacheManagerIsAvailable === true) { %>, cacheManager<% } %>);
     }
 
     @Test
