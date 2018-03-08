@@ -27,7 +27,7 @@ export class MetricsModal extends React.Component<IMetricsModalProps, IMetricsMo
       filteredList = filteredList.filter(t => t.threadState === badgeFilter);
     }
     if (searchFilter !== '') {
-      filteredList = filteredList.filter(t => t.lockName != null &&
+      filteredList = filteredList.filter(t => t.lockName &&
                                               t.lockName.toLowerCase().includes(searchFilter.toLowerCase()));
     }
     return filteredList;
@@ -79,13 +79,13 @@ export class MetricsModal extends React.Component<IMetricsModalProps, IMetricsMo
     this.setState({ badgeFilter: badge });
   };
 
-  updateSearchFilter = () => event => {
+  updateSearchFilter = event => {
     this.setState({ searchFilter: event.target.value });
   };
 
   render() {
     const { showModal, handleClose, threadDump } = this.props;
-    let counters = null;
+    let counters = {} as any;
     let filteredList = null;
     if (threadDump && threadDump.threads) {
       counters = this.computeCounters();
@@ -93,28 +93,27 @@ export class MetricsModal extends React.Component<IMetricsModalProps, IMetricsMo
     }
 
     return <Modal
-      isOpen={showModal} modalTransition={{ timeout: 20 }} backdropTransition={{ timeout: 10 }}
-      toggle={handleClose} className="modal-lg">
+      isOpen={showModal} toggle={handleClose} className="modal-lg">
       <ModalHeader toggle={handleClose}>Threads dump</ModalHeader>
       <ModalBody>
         <Badge color="primary" onClick={this.updateBadgeFilter('')}>All&nbsp;
-          <span className="badge badge-pill badge-default">{counters ? counters.threadDumpAll : null}</span>
+          <span className="badge badge-pill badge-default">{counters.threadDumpAll || 0}</span>
         </Badge>&nbsp;
         <Badge color="success" onClick={this.updateBadgeFilter('RUNNABLE')}>Runnable&nbsp;
-          <span className="badge badge-pill badge-default">{counters ? counters.threadDumpRunnable : null}</span>
+          <span className="badge badge-pill badge-default">{counters.threadDumpRunnable || 0}</span>
         </Badge>&nbsp;
         <Badge color="info" onClick={this.updateBadgeFilter('WAITING')}>Waiting&nbsp;
-          <span className="badge badge-pill badge-default">{counters ? counters.threadDumpWaiting : null}</span>
+          <span className="badge badge-pill badge-default">{counters.threadDumpWaiting || 0}</span>
         </Badge>&nbsp;
         <Badge color="warning" onClick={this.updateBadgeFilter('TIMED_WAITING')}>Timed Waiting&nbsp;
-          <span className="badge badge-pill badge-default">{counters ? counters.threadDumpTimedWaiting : null}</span>
+          <span className="badge badge-pill badge-default">{counters.threadDumpTimedWaiting || 0}</span>
         </Badge>&nbsp;
         <Badge color="danger" onClick={this.updateBadgeFilter('BLOCKED')}>Blocked&nbsp;
-          <span className="badge badge-pill badge-default">{counters ? counters.threadDumpBlocked : null}</span>
+          <span className="badge badge-pill badge-default">{counters.threadDumpBlocked || 0}</span>
         </Badge>&nbsp;
         <div className="mt-2">&nbsp;</div>
         <Input type="text" className="form-control" placeholder="Filter by Lock Name..."
-               onChange={this.updateSearchFilter()}/>
+               onChange={this.updateSearchFilter}/>
         <div style={{ padding: '10px' }}>
           {filteredList ? filteredList.map((threadDumpInfo, i) =>
             (
