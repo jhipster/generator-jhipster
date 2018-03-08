@@ -102,7 +102,6 @@ limitations under the License.
     "karma-mocha": "1.3.0",
     "karma-mocha-reporter": "2.2.5",
     "karma-notify-reporter": "1.0.1",
-    "karma-phantomjs-launcher": "1.0.4",
     "karma-remap-istanbul": "0.6.0",
     "karma-sourcemap-loader": "0.3.7",
     "karma-webpack": "2.0.5",
@@ -112,6 +111,7 @@ limitations under the License.
     <%_ } _%>
     "mocha": "4.0.1",
     "prettier": "1.9.2",
+    "puppeteer": "1.1.1",
     <%_ if (protractorTests) { _%>
     "protractor": "5.1.2",
     "protractor-jasmine2-screenshot-reporter": "0.4.1",
@@ -181,14 +181,14 @@ limitations under the License.
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js",
     "test": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> test:start -- --browsers Chrome",
-    "test:ci": "<%= clientPackageManager %> test:start -- --browsers PhantomJS",
+    "test:ci": "<%= clientPackageManager %> test:start -- --browsers ChromiumHeadless",
     "test:start": "karma start src/test/javascript/karma.conf.js",
-    "test:watch": "<%= clientPackageManager %> test:ci -- --watch",
     <%_ if (protractorTests) { _%>
+    "test:watch": "<%= clientPackageManager %> test:ci -- --watch",
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
-    "postinstall": "webdriver-manager update && node node_modules/phantomjs-prebuilt/install.js"
+    "postinstall": "webdriver-manager update"
     <%_ } else { _%>
-    "postinstall": "node node_modules/phantomjs-prebuilt/install.js"
+    "test:watch": "<%= clientPackageManager %> test:ci -- --watch"
     <%_ } _%>
   }
 }
