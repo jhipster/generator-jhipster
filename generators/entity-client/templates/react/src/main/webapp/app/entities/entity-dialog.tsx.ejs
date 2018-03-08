@@ -256,6 +256,15 @@ _%>
                 </option>
               <%_ } _%>
               </AvInput>
+            <%_ } else if (fieldType === 'Integer' || fieldType === 'Long' || fieldType === 'Float' || fieldType === 'Double') { _%>
+              <Label id="<%= fields[idx].fieldName %>Label" for="<%= fields[idx].fieldName %>">
+                <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
+                  <%=fields[idx].fieldName%>
+                </Translate>
+              </Label>
+              <AvInput type="number" className="form-control" name="<%= fields[idx].fieldName %>" required />
+              <AvFeedback>This field is required.</AvFeedback>
+              <AvFeedback>This field cannot be longer than 50 characters.</AvFeedback>
             <%_ } else { _%>
               <Label id="<%= fields[idx].fieldName %>Label" for="<%= fields[idx].fieldName %>">
                 <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
