@@ -98,7 +98,7 @@ export class RegisterPage extends React.Component<IRegisterProps, IRegisterState
               <AvField
                 name="username"
                 label={<Translate contentKey="global.form.username" />}
-                placeholder={translate('global.form.username.placeholder')}
+                placeholder={translate('global.form.username.placeholder', null, 'Your username')}
                 validate={{
                   required: { value: true, errorMessage: translate('register.messages.validate.login.required') },
                   pattern: { value: '^[_.@A-Za-z0-9-]*$', errorMessage: translate('register.messages.validate.login.pattern') },
@@ -109,7 +109,7 @@ export class RegisterPage extends React.Component<IRegisterProps, IRegisterState
               <AvField
                 name="email"
                 label={<Translate contentKey="global.form.email" />}
-                placeholder={translate('global.form.email.placeholder')}
+                placeholder={translate('global.form.email.placeholder', null, 'Your email')}
                 type="email"
                 validate={{
                   required: { value: true, errorMessage: translate('global.messages.validate.email.required') },
@@ -120,7 +120,7 @@ export class RegisterPage extends React.Component<IRegisterProps, IRegisterState
               <AvField
                 name="firstPassword"
                 label={<Translate contentKey="global.form.newpassword" />}
-                placeholder={translate('global.form.newpassword.placeholder')}
+                placeholder={translate('global.form.newpassword.placeholder', null, 'New password')}
                 type="password"
                 onChange={this.updatePassword}
                 validate={{
@@ -133,7 +133,7 @@ export class RegisterPage extends React.Component<IRegisterProps, IRegisterState
               <AvField
                 name="secondPassword"
                 label={<Translate contentKey="global.form.confirmpassword" />}
-                placeholder={translate('global.form.confirmpassword.placeholder')}
+                placeholder={translate('global.form.confirmpassword.placeholder', null, 'Confirm the new password')}
                 type="password"
                 validate={{
                   required: { value: true, errorMessage: translate('global.messages.validate.confirmpassword.required') },
