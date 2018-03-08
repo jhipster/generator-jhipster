@@ -112,6 +112,13 @@ const files = {
             ]
         },
         {
+            condition: generator => generator.websocket === 'spring-websocket',
+            path: REACT_DIR,
+            templates: [
+                { file: 'config/websocket-middleware.ts', method: 'processJsx' }
+            ]
+        },
+        {
             condition: generator => generator.useSass,
             path: REACT_DIR,
             templates: [
@@ -256,13 +263,13 @@ const files = {
                 'modules/administration/administration.reducer.ts'
             ]
         },
-        // {
-        //   condition: generator => generator.websocket === 'spring-websocket',
-        //   path: REACT_DIR,
-        //   templates: [
-        //     { file: 'modules/administration/tracker/Tracker.js', method: 'processJsx' }
-        //   ]
-        // },
+        {
+            condition: generator => generator.websocket === 'spring-websocket',
+            path: REACT_DIR,
+            templates: [
+                { file: 'modules/administration/tracker/tracker.tsx', method: 'processJsx' }
+            ]
+        },
         {
             condition: generator => !generator.skipUserManagement,
             path: REACT_DIR,
@@ -385,6 +392,7 @@ const files = {
                 'spec/app/modules/account/activate/activate.reducer.spec.ts',
                 'spec/app/modules/account/password/password.reducer.spec.ts',
                 'spec/app/modules/account/settings/settings.reducer.spec.ts',
+                'spec/app/modules/administration/administration.reducer.spec.ts',
                 // 'spec/app/account/activate/_activate.component.spec.js',
                 // 'spec/app/account/password/_password.component.spec.js',
                 // 'spec/app/account/password/_password-strength-bar.component.spec.js',
@@ -418,13 +426,6 @@ const files = {
     //     path: TEST_SRC_DIR,
     //     templates: [
     //       'spec/helpers/_mock-language.service.js'
-    //     ]
-    //   },
-    //   {
-    //     condition: generator => generator.websocket === 'spring-websocket',
-    //     path: TEST_SRC_DIR,
-    //     templates: [
-    //       'spec/helpers/_mock-tracker.service.js'
     //     ]
     //   },
     //   {

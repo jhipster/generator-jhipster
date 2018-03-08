@@ -15,11 +15,17 @@ import Docs from './docs/docs';
 <%_ if (applicationType === 'gateway') { _%>
 import Gateway from './gateway/gateway';
 <%_ } _%>
+<%_ if (websocket === 'spring-websocket') { _%>
+import Tracker from './tracker/tracker';
+<%_ } _%>
 
 const Routes = ({ match }) => (
   <div>
 <%_ if (!skipUserManagement) { _%>
     <Route path={`${match.url}/user-management`} component={UserManagement} />
+<%_ } _%>
+<%_ if (websocket === 'spring-websocket') { _%>
+    <Route exact path={`${match.url}/tracker`} component={Tracker} />
 <%_ } _%>
     <Route exact path={`${match.url}/health`} component={Health} />
 <%_ if (applicationType === 'gateway') { _%>

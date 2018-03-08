@@ -21,6 +21,9 @@ const variablesWithTypes = generateEntityClientFields(pkType, fields, relationsh
 const typeImports = generateEntityClientImports(relationships, dto);
 const defaultVariablesValues = generateEntityClientFieldDefaultValues(fields);
 %>
+<%_ if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
+import { Moment } from 'moment';
+<%_ } _%>
 <%_ typeImports.forEach( (importedPath, importedType) => { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
