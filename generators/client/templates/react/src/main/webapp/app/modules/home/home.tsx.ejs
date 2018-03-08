@@ -43,7 +43,7 @@ export class Home extends React.Component<IHomeProp, IHomeState> {
             (currentUser && currentUser.login) ? (
               <div>
                 <div className="alert alert-success">
-                  <Translate contentKey="home.logged.message" interpolate={{ username: currentUser.login }}>You are logged in as user </Translate>
+                  <Translate contentKey="home.logged.message" interpolate={{ username: currentUser.login }}>You are logged in as user {currentUser.login}.</Translate>
                 </div>
               </div>
             ) : (
@@ -52,8 +52,9 @@ export class Home extends React.Component<IHomeProp, IHomeState> {
                   <Translate contentKey="global.messages.info.authenticated.prefix">If you want to </Translate>
                   <Link to="/login" className="alert-link"><Translate contentKey="global.messages.info.authenticated.link">sign in</Translate></Link>
                   <Translate contentKey="global.messages.info.authenticated.suffix">, you can try the default accounts:
-                  <br />- Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;)
-                  <br />- User (login=&quot;user&quot; and password=&quot;user&quot;).</Translate>
+                    Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;)
+                    User (login=&quot;user&quot; and password=&quot;user&quot;).
+                  </Translate>
                 </div>
 
                 <div className="alert alert-warning">

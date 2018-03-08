@@ -39,19 +39,19 @@ class LoginModal extends React.Component<ILoginModalProps> {
               <div className="col-md-12">
                 <AvField
                   name="username"
-                  label={translate('global.form.username')}
+                  label={<Translate contentKey="global.form.username">Username</Translate>}
                   placeholder={translate('global.form.username.placeholder', null, 'Your username')}
                   required errorMessage="Username cannot be empty!"
                 />
                 <AvField
                   name="password" type="password"
-                  label={<Translate contentKey="login.form.password" />}
+                  label={<Translate contentKey="login.form.password">Password</Translate>}
                   placeholder={translate('login.form.password.placeholder', null, 'Your password')}
                   required errorMessage="Password cannot be empty!"
                 />
                 <AvGroup check>
                   <Label check for="rememberMe" className="form-check-label">
-                    <AvInput type="checkbox" name="rememberMe" /> <Translate contentKey="login.form.rememberme" />
+                    <AvInput type="checkbox" name="rememberMe" /> <Translate contentKey="login.form.rememberme">Remember me</Translate>
                   </Label>
                 </AvGroup>
               </div>
@@ -73,10 +73,10 @@ class LoginModal extends React.Component<ILoginModalProps> {
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={handleClose} tabIndex="1">
-                <Translate contentKey="entity.action.cancel" />
+                <Translate contentKey="entity.action.cancel">Cancel</Translate>
             </Button>
             {' '}
-            <Button color="primary" type="submit"><Translate contentKey="login.form.button" /></Button>
+            <Button color="primary" type="submit"><Translate contentKey="login.form.button">Sign in</Translate></Button>
           </ModalFooter>
         </AvForm>
       </Modal>
