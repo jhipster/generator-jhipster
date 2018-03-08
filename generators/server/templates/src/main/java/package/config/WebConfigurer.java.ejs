@@ -20,6 +20,9 @@ package <%=packageName%>.config;
 
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.config.JHipsterProperties;
+<%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+import io.github.jhipster.config.h2.H2ConfigurationHelper;
+<%_ } _%>
 <%_ if (!skipClient) { _%>
 import io.github.jhipster.web.filter.CachingHttpHeadersFilter;
 <%_ } _%>
@@ -231,24 +234,7 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
      */
     private void initH2Console(ServletContext servletContext) {
         log.debug("Initialize H2 console");
-        try {
-            // We don't want to include H2 when we are packaging for the "prod" profile and won't
-            // actually need it, so we have to load / invoke things at runtime through reflection.
-            ClassLoader loader = Thread.currentThread().getContextClassLoader();
-            Class<?> servletClass = Class.forName("org.h2.server.web.WebServlet", true, loader);
-            Servlet servlet = (Servlet) servletClass.newInstance();
-
-            ServletRegistration.Dynamic h2ConsoleServlet = servletContext.addServlet("H2Console", servlet);
-            h2ConsoleServlet.addMapping("/h2-console/*");
-            h2ConsoleServlet.setInitParameter("-properties", "src/main/resources/");
-            h2ConsoleServlet.setLoadOnStartup(1);
-
-        } catch (ClassNotFoundException | LinkageError  e) {
-            throw new RuntimeException("Failed to load and initialize org.h2.server.web.WebServlet", e);
-
-        } catch (IllegalAccessException | InstantiationException e) {
-            throw new RuntimeException("Failed to instantiate org.h2.server.web.WebServlet", e);
-        }
+        H2ConfigurationHelper.initH2Console(servletContext);
     }<% } %>
 
     @Autowired(required = false)
