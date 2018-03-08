@@ -75,13 +75,9 @@ export class MetricsModal extends React.Component<IMetricsModalProps, IMetricsMo
     }
   };
 
-  updateBadgeFilter = badge => () => {
-    this.setState({ badgeFilter: badge });
-  };
+  updateBadgeFilter = badge => () => this.setState({ badgeFilter: badge });
 
-  updateSearchFilter = event => {
-    this.setState({ searchFilter: event.target.value });
-  };
+  updateSearchFilter = event => this.setState({ searchFilter: event.target.value });
 
   render() {
     const { showModal, handleClose, threadDump } = this.props;
