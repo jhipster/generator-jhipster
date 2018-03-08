@@ -21,10 +21,10 @@ package <%=packageName%>.config;
 import io.github.jhipster.config.JHipsterConstants;
 <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 import io.github.jhipster.config.h2.H2ConfigurationHelper;
-
+<%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
 import io.github.jhipster.config.liquibase.AsyncSpringLiquibase;
-<%_ } _%>
+
 import liquibase.integration.spring.SpringLiquibase;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
