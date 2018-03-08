@@ -50,9 +50,6 @@ function cleanupOldFiles(generator, javaDir, testDir) {
  * @param {string} testDir - Test Dir
  */
 function cleanupOldServerFiles(generator, javaDir, testDir) {
-    if (generator.isJhipsterVersionLessThan('5.0.0')) {
-        generator.removeFile(`${javaDir}/ApplicationWebXml.java`);
-    }
     if (generator.isJhipsterVersionLessThan('3.5.0')) {
         generator.removeFile(`${javaDir}domain/util/JSR310DateTimeSerializer.java`);
         generator.removeFile(`${javaDir}domain/util/JSR310LocalDateDeserializer.java`);
@@ -113,5 +110,9 @@ function cleanupOldServerFiles(generator, javaDir, testDir) {
     }
     if (generator.isJhipsterVersionLessThan('4.13.1')) {
         generator.config.delete('hibernateCache');
+    }
+    if (generator.isJhipsterVersionLessThan('5.0.0')) {
+        generator.removeFile(`${javaDir}/ApplicationWebXml.java`);
+        generator.removeFile(`${javaDir}/config/ThymeleafConfiguration.java`);
     }
 }
