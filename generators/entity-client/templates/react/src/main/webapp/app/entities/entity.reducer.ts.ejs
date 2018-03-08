@@ -38,17 +38,10 @@ import { messages, SERVER_API_URL } from 'app/config/constants';
 // import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 
 export const ACTION_TYPES = {
-  FETCH_<%= entityActionNamePlural %>: '<%= entityInstance %>/FETCH_<%= entityActionNamePlural %>',
   <%_ if (searchEngine === 'elasticsearch') { _%>
   SEARCH_<%= entityActionNamePlural %>: '<%= entityInstance %>/SEARCH_<%= entityActionNamePlural %>',
   <%_ } _%>
-  <%_ for (idx in relationships) {
-    const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-    const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-   _%>
-  // TODO: this should be replaced by using the action and state from the related entity
-  FETCH_<%= otherEntityNamePlural.toUpperCase() %>: '<%= otherEntityNamePlural %>/FETCH_<%= otherEntityNamePlural.toUpperCase() %>',
-  <%_ } _%>
+  FETCH_<%= entityActionNamePlural %>: '<%= entityInstance %>/FETCH_<%= entityActionNamePlural %>',
   FETCH_<%= entityActionName %>:  '<%= entityInstance %>/FETCH_<%= entityActionName %>',
   CREATE_<%= entityActionName %>: '<%= entityInstance %>/CREATE_<%= entityActionName %>',
   UPDATE_<%= entityActionName %>: '<%= entityInstance %>/UPDATE_<%= entityActionName %>',
@@ -60,12 +53,6 @@ const initialState = {
   errorMessage: null,
   entities: [],
   entity: {},
-<%_ for (idx in relationships) {
-  const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-  const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-_%>
-  <%= otherEntityNamePlural %>: [],
-<%_ } _%>
   updating: false,
   updateSuccess: false
 };
@@ -73,16 +60,10 @@ _%>
 // Reducer
 export default (state = initialState, action) => {
   switch (action.type) {
-<%_ for (idx in relationships) {
-    const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-    const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-_%>
-    case REQUEST(ACTION_TYPES.FETCH_<%= otherEntityNamePlural.toUpperCase() %>):
-<%_ } _%>
-    case REQUEST(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
     <%_ if (searchEngine === 'elasticsearch') { _%>
     case REQUEST(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
     <%_ } _%>
+    case REQUEST(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
     case REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>):
       return {
         ...state,
@@ -99,16 +80,10 @@ _%>
         updateSuccess: false,
         updating: true
       };
-<%_ for (idx in relationships) {
-    const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-    const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-_%>
-    case FAILURE(ACTION_TYPES.FETCH_<%= otherEntityNamePlural.toUpperCase() %>):
-<%_ } _%>
-    case FAILURE(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
     <%_ if (searchEngine === 'elasticsearch') { _%>
     case FAILURE(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
     <%_ } _%>
+    case FAILURE(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
     case FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>):
     case FAILURE(ACTION_TYPES.CREATE_<%= entityActionName %>):
     case FAILURE(ACTION_TYPES.UPDATE_<%= entityActionName %>):
@@ -120,23 +95,6 @@ _%>
         updateSuccess: false,
         errorMessage: action.payload
       };
-<%_ for (idx in relationships) {
-    const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-    const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-_%>
-    case SUCCESS(ACTION_TYPES.FETCH_<%= otherEntityNamePlural.toUpperCase() %>):
-      return {
-        ...state,
-        loading: false,
-        <%= otherEntityNamePlural %>: action.payload.data
-      };
-<%_ } _%>
-    case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
-      return {
-        ...state,
-        loading: false,
-        entities: action.payload.data
-      };
     <%_ if (searchEngine === 'elasticsearch') { _%>
     case SUCCESS(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
       return {
@@ -145,6 +103,12 @@ _%>
         entities: action.payload.data
     };
     <%_ } _%>
+    case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
+      return {
+        ...state,
+        loading: false,
+        entities: action.payload.data
+      };
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>):
       return {
         ...state,
@@ -178,13 +142,10 @@ const apiSearchUrl = <% if (applicationType === 'gateway' && locals.microservice
 
 // Actions
 
-<%_ for (idx in relationships) {
-  const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-  const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-_%>
-export const get<%= upperFirstCamelCase(otherEntityNamePlural) %>: ICrudGetAllAction = () => ({
-  type: ACTION_TYPES.FETCH_<%= otherEntityNamePlural.toUpperCase() %>,
-  payload: axios.get(`/api/<%= otherEntityNamePlural %>?cacheBuster=${new Date().getTime()}`)
+<%_ if (searchEngine === 'elasticsearch') { _%>
+export const getSearchEntities: ICrudGetAllAction = query => ({
+  type: ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>,
+  payload: axios.get(`${apiSearchUrl}?query=` + query)
 });
 
 <%_ } _%>
@@ -192,13 +153,6 @@ export const getEntities: ICrudGetAllAction = (page, size, sort) => ({
   type: ACTION_TYPES.FETCH_<%= entityActionNamePlural %>,
   payload: axios.get(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
 });
-<%_ if (searchEngine === 'elasticsearch') { _%>
-
-export const getSearchEntities: ICrudGetAllAction = query => ({
-  type: ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>,
-  payload: axios.get(`${apiSearchUrl}?query=` + query)
-});
-<%_ } _%>
 
 export const getEntity: ICrudGetAction = id => {
   const requestUrl = `${apiUrl}/${id}`;
