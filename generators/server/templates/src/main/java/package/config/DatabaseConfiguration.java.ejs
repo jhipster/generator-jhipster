@@ -62,9 +62,14 @@ import org.springframework.context.annotation.FilterType;
 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 import org.springframework.context.annotation.Profile;<% } %><% if (databaseType === 'sql') { %>
 import org.springframework.core.env.Environment;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-import org.springframework.core.convert.converter.Converter;<% } %><% if (searchEngine === 'elasticsearch') { %>
+import org.springframework.core.convert.converter.Converter;<% } %>
+<%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
-import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;<% } %><% if (databaseType === 'mongodb') { %>
+    <%_ } _%>
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
+<%_ } _%>
+<%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
