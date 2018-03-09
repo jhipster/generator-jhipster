@@ -54,7 +54,8 @@ const initialState = {
   entities: [],
   entity: {},
   updating: false,
-  updateSuccess: false
+  updateSuccess: false,
+  updateFailure: false
 };
 
 // Reducer
@@ -93,6 +94,7 @@ export default (state = initialState, action) => {
         loading: false,
         updating: false,
         updateSuccess: false,
+        updateFailure: true,
         errorMessage: action.payload
       };
     <%_ if (searchEngine === 'elasticsearch') { _%>
