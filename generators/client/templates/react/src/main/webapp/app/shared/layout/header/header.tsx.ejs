@@ -10,6 +10,9 @@ import {
   FaHome, FaThList, FaUserPlus, FaUser, <%_ if (enableTranslation) { _%>FaFlag,<%_ } _%> FaHeart,
   FaList, FaTasks, FaDashboard, FaBook, FaWrench, FaSignIn, FaSignOut,
   FaClockO, FaHddO,
+  <%_ if (authenticationType === 'session') { _%>
+  FaCloud,
+  <%_ } _%>
   // tslint:disable-next-line
   FaRoad,
   // tslint:disable-next-line
@@ -103,7 +106,7 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
         <DropdownItem tag={Link} key="settings" to="/account/settings"><FaWrench /> Settings</DropdownItem>,
         <DropdownItem tag={Link} key="password" to="/account/password"><FaClockO /> Password</DropdownItem>,
         <%_ if (authenticationType === 'session') { _%>
-          /* TODO: sessions menu */
+        <DropdownItem tag={Link} key="sessions" to="/account/sessions"><FaCloud /> Sessions</DropdownItem>,
         <%_ } _%>
         <DropdownItem tag={Link} key="logout" to="/logout"><FaSignOut /> Logout</DropdownItem>
       );

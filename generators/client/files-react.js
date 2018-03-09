@@ -220,15 +220,15 @@ const files = {
                 'modules/account/password/password.reducer.ts',
                 'modules/account/settings/settings.reducer.ts'
             ]
-        }
-        // {
-        //   condition: generator => generator.authenticationType === 'session',
-        //   path: REACT_DIR,
-        //   templates: [
-        //     'account/sessions/_session.model.js',
-        //     { file: 'account/sessions/_sessions.component.js', method: 'processJsx' }
-        //   ]
-        // },
+        },
+        {
+            condition: generator => generator.authenticationType === 'session',
+            path: REACT_DIR,
+            templates: [
+                { file: 'modules/account/sessions/sessions.tsx', method: 'processJsx' },
+                { file: 'modules/account/sessions/sessions.reducer.ts', method: 'processJsx' }
+            ]
+        },
         // {
         //   condition: generator => generator.enableSocialSignIn,
         //   path: REACT_DIR,
@@ -415,13 +415,13 @@ const files = {
                 'spec/app/modules/administration/user-management/user-management.reducer.spec.ts'
             ]
         },
-    //   {
-    //     condition: generator => generator.authenticationType === 'session',
-    //     path: TEST_SRC_DIR,
-    //     templates: [
-    //       'spec/app/account/sessions/_sessions.component.spec.js',
-    //     ]
-    //   },
+        {
+            condition: generator => generator.authenticationType === 'session',
+            path: TEST_SRC_DIR,
+            templates: [
+                'spec/app/modules/account/sessions/sessions.reducer.spec.ts',
+            ]
+        }
     //   {
     //     condition: generator => generator.enableTranslation,
     //     path: TEST_SRC_DIR,
