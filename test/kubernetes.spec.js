@@ -97,7 +97,9 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     dockerRepositoryName: 'jhipsterrepository',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'jhipsternamespace',
-                    kubernetesServiceType: 'LoadBalancer'
+                    jhipsterConsole: false,
+                    kubernetesServiceType: 'LoadBalancer',
+                    clusteredDbApps: []
                 })
                 .on('end', done);
         });
@@ -130,8 +132,9 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default',
-                    kubernetesServiceType: 'LoadBalancer'
-
+                    jhipsterConsole: false,
+                    kubernetesServiceType: 'LoadBalancer',
+                    clusteredDbApps: []
                 })
                 .on('end', done);
         });
@@ -164,8 +167,9 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'mynamespace',
                     monitoring: 'elk',
-                    kubernetesServiceType: 'LoadBalancer'
-
+                    jhipsterConsole: true,
+                    kubernetesServiceType: 'LoadBalancer',
+                    clusteredDbApps: []
                 })
                 .on('end', done);
         });
@@ -201,8 +205,8 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default',
                     kubernetesServiceType: 'Ingress',
-                    ingressDomain: 'example.com'
-
+                    ingressDomain: 'example.com',
+                    clusteredDbApps: []
                 })
                 .on('end', done);
         });
@@ -235,8 +239,9 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default',
-                    kubernetesServiceType: 'LoadBalancer'
-
+                    jhipsterConsole: false,
+                    kubernetesServiceType: 'LoadBalancer',
+                    clusteredDbApps: []
                 })
                 .on('end', done);
         });
@@ -275,8 +280,9 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default',
-                    kubernetesServiceType: 'LoadBalancer'
-
+                    jhipsterConsole: false,
+                    kubernetesServiceType: 'LoadBalancer',
+                    clusteredDbApps: []
                 })
                 .on('end', done);
         });
@@ -317,8 +323,9 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default',
-                    kubernetesServiceType: 'LoadBalancer'
-
+                    jhipsterConsole: false,
+                    kubernetesServiceType: 'LoadBalancer',
+                    clusteredDbApps: []
                 })
                 .on('end', done);
         });
@@ -347,8 +354,9 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default',
-                    kubernetesServiceType: 'LoadBalancer'
-
+                    jhipsterConsole: false,
+                    kubernetesServiceType: 'LoadBalancer',
+                    clusteredDbApps: []
                 })
                 .on('end', done);
         });
