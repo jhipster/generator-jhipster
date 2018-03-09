@@ -33,7 +33,14 @@ export class Home extends React.Component<IHomeProp, IHomeState> {
 
   render() {
     const { currentUser } = this.state;
+    <%_ if (authenticationType === 'oauth2') { _%>
+    let port = (location.port ? ':' + location.port : '');
+    if (port === ':9000') {
+      port = ':8080';
+    }
+    const loginUrl = '//' + location.hostname + port + '/login';
 
+    <%_ } _%>
     return (
       <div className="row">
         <div className="col-md-9">
@@ -50,7 +57,13 @@ export class Home extends React.Component<IHomeProp, IHomeState> {
               <div>
                 <div className="alert alert-warning">
                   <Translate contentKey="global.messages.info.authenticated.prefix">If you want to </Translate>
+                  <%_ if (authenticationType === 'oauth2') { _%>
+                  <a href={loginUrl} className="alert-link">
+                    <Translate contentKey="global.messages.info.authenticated.link">sign in</Translate>
+                  </a>
+                  <%_ } else { _%>
                   <Link to="/login" className="alert-link"><Translate contentKey="global.messages.info.authenticated.link">sign in</Translate></Link>
+                  <%_ } _%>
                   <Translate contentKey="global.messages.info.authenticated.suffix">, you can try the default accounts:
                   <br />- Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;)
                   <br />- User (login=&quot;user&quot; and password=&quot;user&quot;).</Translate>

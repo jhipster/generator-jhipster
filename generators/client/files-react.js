@@ -160,11 +160,15 @@ const files = {
         {
             path: REACT_DIR,
             templates: [
-                // home module
                 { file: 'modules/home/home.tsx', method: 'processJsx' },
-                // login module
-                { file: 'modules/login/login.tsx', method: 'processJsx' },
                 { file: 'modules/login/logout.tsx', method: 'processJsx' },
+            ]
+        },
+        {
+            condition: generator => generator.authenticationType !== 'oauth2',
+            path: REACT_DIR,
+            templates: [
+                { file: 'modules/login/login.tsx', method: 'processJsx' },
                 { file: 'modules/login/login-modal.tsx', method: 'processJsx' }
             ]
         },

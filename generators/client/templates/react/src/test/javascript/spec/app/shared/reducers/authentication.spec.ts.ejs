@@ -14,11 +14,17 @@ describe('Authentication reducer tests', () => {
       expect(toTest).to.contain({
         loading: false,
         isAuthenticated: false,
+        <%_ if (authenticationType !== 'oauth2') { _%>
         loginSuccess: false,
+        <%_ } _%>
         errorMessage: null, // Errors returned from server side
+        <%_ if (authenticationType !== 'oauth2') { _%>
         loginError: false, // Errors returned from server side
+        <%_ } _%>
         redirectMessage: null,
+        <%_ if (authenticationType !== 'oauth2') { _%>
         showModalLogin: false
+        <%_ } _%>
       });
       expect(isAccountEmpty(toTest));
     });
@@ -26,9 +32,11 @@ describe('Authentication reducer tests', () => {
 
   describe('Requests', () =>{
     it('should detect a request', () => {
+      <%_ if (authenticationType !== 'oauth2') { _%>
       expect(authentication(undefined, { type: REQUEST(ACTION_TYPES.LOGIN) })).to.contain({
         loading: true
       });
+      <%_ } _%>
       expect(authentication(undefined, { type: REQUEST(ACTION_TYPES.GET_SESSION) })).to.contain({
         loading: true
       });
@@ -36,6 +44,7 @@ describe('Authentication reducer tests', () => {
   });
 
   describe('Success', () => {
+    <%_ if (authenticationType !== 'oauth2') { _%>
     it('should detect a success on login', () => {
       const toTest = authentication(undefined, { type: SUCCESS(ACTION_TYPES.LOGIN) });
       expect(toTest).to.contain({
@@ -46,6 +55,7 @@ describe('Authentication reducer tests', () => {
       });
     });
 
+    <%_ } _%>
     it('should detect a success on get session and be authenticated', () => {
       const payload = { data: { activated: true } };
       const toTest = authentication(undefined, { type: SUCCESS(ACTION_TYPES.GET_SESSION), payload });
@@ -68,6 +78,7 @@ describe('Authentication reducer tests', () => {
   });
 
   describe('Failure', () => {
+    <%_ if (authenticationType !== 'oauth2') { _%>
     it('should detect a failure on login', () => {
       const payload = 'Something happened.';
       const toTest = authentication(undefined, { type: FAILURE(ACTION_TYPES.LOGIN), payload });
@@ -78,9 +89,9 @@ describe('Authentication reducer tests', () => {
         loginError: true
       });
       expect(isAccountEmpty(toTest));
-
     });
 
+    <%_ } _%>
     it('should detect a failure', () => {
       const payload = 'Something happened.';
       const toTest = authentication(undefined, { type: FAILURE(ACTION_TYPES.GET_SESSION), payload });
