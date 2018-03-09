@@ -37,10 +37,6 @@ module.exports = {
         loaders: ['style-loader', 'css-loader']
       },
       {
-        test: /\.(jpe?g|png|gif|svg|woff2?|ttf|eot)$/i,
-        loaders: ['file-loader?hash=sha512&digest=hex&name=[hash].[ext]']
-      },
-      {
         enforce: 'pre',
         test: /\.jsx?$/,
         loader: 'source-map-loader'
