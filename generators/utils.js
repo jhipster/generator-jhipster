@@ -37,7 +37,8 @@ module.exports = {
     deepFind,
     getJavadoc,
     buildEnumInfo,
-    copyObjectProps
+    copyObjectProps,
+    decodeBase64
 };
 
 /**
@@ -343,4 +344,13 @@ function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
  */
 function copyObjectProps(toObj, fromObj) {
     Object.assign(toObj, fromObj);
+}
+
+/**
+ * Decode the given string from base64 to said encoding.
+ * @param string the base64 string to decode
+ * @param encoding the encoding to decode into. default to 'utf-8'
+ */
+function decodeBase64(string, encoding = 'utf-8') {
+    return Buffer.from(string, 'base64').toString(encoding);
 }

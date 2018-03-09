@@ -1,4 +1,3 @@
-
 /**
  * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
@@ -20,7 +19,7 @@
 const shelljs = require('shelljs');
 const chalk = require('chalk');
 const crypto = require('crypto');
-
+const dockerUtils = require('./docker-utils');
 /**
  * This is the Generator base class.
  * This provides all the public API methods exposed via the module system.
@@ -29,37 +28,12 @@ const crypto = require('crypto');
  * The method signatures in public API should not be changed without a major version change
  */
 module.exports = {
-    checkDocker,
+    checkDocker: dockerUtils.checkDocker,
     checkImages,
     generateJwtSecret,
     configureImageNames,
     setAppsFolderPaths,
 };
-
-/**
- * Check Docker
- */
-function checkDocker() {
-    if (this.options['skip-checks']) return;
-    const done = this.async();
-
-    shelljs.exec('docker -v', { silent: true }, (code, stdout, stderr) => {
-        if (stderr) {
-            this.log(chalk.red('Docker version 1.10.0 or later is not installed on your computer.\n' +
-                '         Read http://docs.docker.com/engine/installation/#installation\n'));
-        } else {
-            const dockerVersion = stdout.split(' ')[2].replace(/,/g, '');
-            const dockerVersionMajor = dockerVersion.split('.')[0];
-            const dockerVersionMinor = dockerVersion.split('.')[1];
-            if (dockerVersionMajor < 1 || (dockerVersionMajor === 1 && dockerVersionMinor < 10)) {
-                this.log(chalk.red(`${'Docker version 1.10.0 or later is not installed on your computer.\n' +
-                    '         Docker version found: '}${dockerVersion}\n` +
-                    '         Read http://docs.docker.com/engine/installation/#installation\n'));
-            }
-        }
-        done();
-    });
-}
 
 /**
  * Check Images
