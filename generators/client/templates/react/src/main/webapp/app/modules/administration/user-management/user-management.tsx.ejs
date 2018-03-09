@@ -75,7 +75,7 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
     this.props.getUsers(activePage - 1, itemsPerPage, `${sort},${order}`);
   }
 
-  toggleActive = ({ user }) => () => {
+  toggleActive = user => () => {
     this.props.updateUser({
       ...user,
       activated: !user.activated
