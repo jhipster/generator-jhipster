@@ -119,7 +119,7 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
         <DropdownItem tag={Link} key="register" to="/register"><FaSignIn /> Register</DropdownItem>
       );
       <%_ } else { _%>
-      let port = (location.port ? ':' + location.port : '');
+      let port = location.port ? ':' + location.port : '';
       if (port === ':9000') {
         port = ':8080';
       }
