@@ -1,10 +1,23 @@
-
 import { expect } from 'chai';
+import configureStore from 'redux-mock-store';
+import promiseMiddleware from 'redux-promise-middleware';
+import axios from 'axios';
+import thunk from 'redux-thunk';
+import * as sinon from 'sinon';
+
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
+import userManagement, {
+  ACTION_TYPES,
+  getUsers,
+  getRoles,
+  getUser,
+  createUser,
+  updateUser,
+  deleteUser
+} from 'app/modules/administration/user-management/user-management.reducer';
+import { messages } from 'app/config/constants';
 
-import userManagement, { ACTION_TYPES } from 'app/modules/administration/user-management/user-management.reducer';
-
-describe('User managment reducer tests', () => {
+describe('User management reducer tests', () => {
   function isEmpty(element): boolean {
     if (element instanceof Array) {
       return element.length === 0;
@@ -44,13 +57,7 @@ describe('User managment reducer tests', () => {
     });
 
     it('should set state to loading', () => {
-      testMultipleTypes(
-        [
-          REQUEST(ACTION_TYPES.FETCH_USERS),
-          REQUEST(ACTION_TYPES.FETCH_USER)
-        ],
-        {},
-        state => {
+      testMultipleTypes([REQUEST(ACTION_TYPES.FETCH_USERS), REQUEST(ACTION_TYPES.FETCH_USER)], {}, state => {
         expect(state).to.contain({
           errorMessage: null,
           updateSuccess: false,
@@ -61,11 +68,7 @@ describe('User managment reducer tests', () => {
 
     it('should set state to updating', () => {
       testMultipleTypes(
-        [
-          REQUEST(ACTION_TYPES.CREATE_USER),
-          REQUEST(ACTION_TYPES.UPDATE_USER),
-          REQUEST(ACTION_TYPES.DELETE_USER)
-        ],
+        [REQUEST(ACTION_TYPES.CREATE_USER), REQUEST(ACTION_TYPES.UPDATE_USER), REQUEST(ACTION_TYPES.DELETE_USER)],
         {},
         state => {
           expect(state).to.contain({
@@ -73,7 +76,8 @@ describe('User managment reducer tests', () => {
             updateSuccess: false,
             updating: true
           });
-        });
+        }
+      );
     });
   });
 
@@ -86,7 +90,7 @@ describe('User managment reducer tests', () => {
           FAILURE(ACTION_TYPES.FETCH_ROLES),
           FAILURE(ACTION_TYPES.CREATE_USER),
           FAILURE(ACTION_TYPES.UPDATE_USER),
-          FAILURE(ACTION_TYPES.DELETE_USER),
+          FAILURE(ACTION_TYPES.DELETE_USER)
         ],
         'something happened',
         state => {
@@ -124,20 +128,24 @@ describe('User managment reducer tests', () => {
       });
     });
 
+    it('should update state according to a successful fetch role request', () => {
+      const payload = { data: ['ROLE_ADMIN'] };
+      const toTest = userManagement(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_ROLES), payload });
+
+      expect(toTest).to.contain({
+        loading: false,
+        authorities: payload.data
+      });
+    });
+
     it('should set state to successful update', () => {
-      testMultipleTypes(
-        [
-          SUCCESS(ACTION_TYPES.CREATE_USER),
-          SUCCESS(ACTION_TYPES.UPDATE_USER)
-        ],
-        { data: 'some handsome user' },
-        types => {
-          expect(types).to.contain({
-            updating: false,
-            updateSuccess: true,
-            user: 'some handsome user'
-          });
+      testMultipleTypes([SUCCESS(ACTION_TYPES.CREATE_USER), SUCCESS(ACTION_TYPES.UPDATE_USER)], { data: 'some handsome user' }, types => {
+        expect(types).to.contain({
+          updating: false,
+          updateSuccess: true,
+          user: 'some handsome user'
         });
+      });
     });
 
     it('should set state to successful update with an empty user', () => {
@@ -148,6 +156,150 @@ describe('User managment reducer tests', () => {
         updateSuccess: true
       });
       expect(isEmpty(toTest.user));
+    });
+  });
+
+  describe('Actions', () => {
+    let store;
+
+    const resolvedObject = { value: 'whatever' };
+    beforeEach(() => {
+      const mockStore = configureStore([thunk, promiseMiddleware()]);
+      store = mockStore({});
+      axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.put = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.delete = sinon.stub().returns(Promise.resolve(resolvedObject));
+    });
+
+    it('dispatches FETCH_USERS_PENDING and FETCH_USERS_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_USERS)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_USERS),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(getUsers()).then(() => expect(store.getActions()).to.eql(expectedActions));
+    });
+    it('dispatches FETCH_USERS_PENDING and FETCH_USERS_FULFILLED actions with pagination options', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_USERS)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_USERS),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(getUsers(1, 20, 'id,desc')).then(() => expect(store.getActions()).to.eql(expectedActions));
+    });
+    it('dispatches FETCH_ROLES_PENDING and FETCH_ROLES_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_ROLES)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_ROLES),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(getRoles('admin')).then(() => expect(store.getActions()).to.eql(expectedActions));
+    });
+    it('dispatches FETCH_USER_PENDING and FETCH_USER_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_USER)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_USER),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(getUser('admin')).then(() => expect(store.getActions()).to.eql(expectedActions));
+    });
+    it('dispatches CREATE_USER_PENDING and CREATE_USER_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.CREATE_USER),
+          meta: {
+            successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
+            errorMessage: messages.DATA_UPDATE_ERROR_ALERT
+          }
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.CREATE_USER),
+          meta: {
+            successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
+            errorMessage: messages.DATA_UPDATE_ERROR_ALERT
+          },
+          payload: resolvedObject
+        },
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_USERS)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_USERS),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(createUser()).then(() => expect(store.getActions()).to.eql(expectedActions));
+    });
+    it('dispatches UPDATE_USER_PENDING and UPDATE_USER_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.UPDATE_USER),
+          meta: {
+            successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
+            errorMessage: messages.DATA_UPDATE_ERROR_ALERT
+          }
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.UPDATE_USER),
+          meta: {
+            successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
+            errorMessage: messages.DATA_UPDATE_ERROR_ALERT
+          },
+          payload: resolvedObject
+        },
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_USERS)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_USERS),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(updateUser({ userLogin: 'admin' })).then(() => expect(store.getActions()).to.eql(expectedActions));
+    });
+    it('dispatches DELETE_USER_PENDING and DELETE_USER_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.DELETE_USER),
+          meta: {
+            successMessage: messages.DATA_DELETE_SUCCESS_ALERT,
+            errorMessage: messages.DATA_UPDATE_ERROR_ALERT
+          }
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.DELETE_USER),
+          meta: {
+            successMessage: messages.DATA_DELETE_SUCCESS_ALERT,
+            errorMessage: messages.DATA_UPDATE_ERROR_ALERT
+          },
+          payload: resolvedObject
+        },
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_USERS)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_USERS),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(deleteUser('admin')).then(() => expect(store.getActions()).to.deep.equal(expectedActions));
     });
   });
 });

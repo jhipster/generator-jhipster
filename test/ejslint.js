@@ -10,7 +10,7 @@ describe('EJS Lint', () => {
         delimiter: '%',
     };
     it('EJS templates are valid', () => {
-        const files = glob.sync('generators/**/templates/**/*.ejs');
+        const files = glob.sync('generators/**/*.ejs');
         files.forEach((file) => {
             if (fs.statSync(file).isFile()) {
                 const content = fs.readFileSync(file, 'utf8');

@@ -40,15 +40,12 @@ function askForClient(meta) {
         {
             value: 'angularX',
             name: 'Angular 5'
-        }
-    ];
-
-    if (this.authenticationType !== 'oauth2') {
-        choices.push({
+        },
+        {
             value: 'react',
             name: '[BETA] React'
-        });
-    }
+        }
+    ];
 
     const PROMPT = {
         type: 'list',

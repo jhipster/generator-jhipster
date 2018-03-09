@@ -1,0 +1,96 @@
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { Alert, Table, Button } from 'reactstrap';
+import { Translate } from 'react-jhipster';
+import { getSession } from 'app/shared/reducers/authentication';
+import { findAll, invalidateSession } from './sessions.reducer';
+
+export interface ISessionsProps {
+  getSession: Function;
+  findAll: Function;
+  invalidateSession: Function;
+  account: any;
+  sessions: any;
+  updateSuccess: boolean;
+  updateFailure: boolean;
+}
+
+export class SessionsPage extends React.Component<ISessionsProps> {
+  componentDidMount() {
+    this.props.getSession();
+    this.props.findAll();
+  }
+
+  doSessionInvalidation = series => () => {
+    this.props.invalidateSession(series);
+    this.props.findAll();
+  };
+
+  refreshList = () => {
+    this.props.findAll();
+  };
+
+  render() {
+    const { account, sessions, updateSuccess, updateFailure } = this.props;
+    return (
+      <div>
+        <h2>
+          <Translate contentKey="sessions.title" interpolate={{ username: account.login }}/>
+        </h2>
+
+        {(updateSuccess) ? (
+        <Alert color="success">
+          <Translate contentKey="sessions.messages.success"/>
+        </Alert>
+        ) : null}
+
+        {(updateFailure) ? (
+        <Alert color="danger">
+          <Translate contentKey="sessions.messages.error"/>
+        </Alert>
+        ) : null}
+
+        <Button color="primary" onClick={this.refreshList}>Refresh</Button>
+
+        <div className="table-responsive">
+          <Table className="table-striped">
+            <thead>
+            <tr>
+              <th><Translate contentKey="sessions.table.ipaddress"/></th>
+              <th><Translate contentKey="sessions.table.useragent"/></th>
+              <th><Translate contentKey="sessions.table.date"/></th>
+              <th />
+            </tr>
+            </thead>
+
+            <tbody>
+            {sessions.map(s => (
+              <tr>
+                <td>{s.ipAddress}</td>
+                <td>{s.userAgent}</td>
+                <td>{s.tokenDate}</td>
+                <td>
+                  <Button color="primary" onClick={this.doSessionInvalidation(s.series)}>
+                    <Translate contentKey="sessions.table.button"/>
+                  </Button>
+                </td>
+              </tr>
+            ))}
+            </tbody>
+          </Table>
+        </div>
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = ({ authentication, sessions }) => ({
+  account: authentication.account,
+  sessions: sessions.sessions,
+  updateSuccess: sessions.updateSuccess,
+  updateFailure: sessions.updateFailure
+});
+
+const mapDispatchToProps = { getSession, findAll, invalidateSession };
+
+export default connect(mapStateToProps, mapDispatchToProps)(SessionsPage);

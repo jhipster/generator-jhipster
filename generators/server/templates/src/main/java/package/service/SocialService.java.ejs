@@ -31,6 +31,9 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+<%_ if (cacheManagerIsAvailable === true) { _%>
+import org.springframework.cache.CacheManager;
+<%_ } _%>
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
@@ -38,10 +41,7 @@ import org.springframework.social.connect.UserProfile;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class SocialService {
@@ -61,10 +61,14 @@ public class SocialService {
 
     private final UserSearchRepository userSearchRepository;
     <%_ } _%>
+    <%_ if (cacheManagerIsAvailable === true) { _%>
+
+    private final CacheManager cacheManager;
+    <%_ } _%>
 
     public SocialService(UsersConnectionRepository usersConnectionRepository, AuthorityRepository authorityRepository,
             PasswordEncoder passwordEncoder, UserRepository userRepository,
-            MailService mailService<% if (searchEngine === 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %>) {
+            MailService mailService<% if (searchEngine === 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %><% if (cacheManagerIsAvailable === true) { %>, CacheManager cacheManager<% } %>) {
 
         this.usersConnectionRepository = usersConnectionRepository;
         this.authorityRepository = authorityRepository;
@@ -73,6 +77,9 @@ public class SocialService {
         this.mailService = mailService;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         this.userSearchRepository = userSearchRepository;
+        <%_ } _%>
+        <%_ if (cacheManagerIsAvailable === true) { _%>
+        this.cacheManager = cacheManager;
         <%_ } _%>
     }
 
@@ -138,6 +145,10 @@ public class SocialService {
 
         <%_ if (searchEngine === 'elasticsearch') { _%>
         userSearchRepository.save(newUser);
+        <%_ } _%>
+        <%_ if (cacheManagerIsAvailable === true) { _%>
+        Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(newUser.getLogin());
+        Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(newUser.getEmail());
         <%_ } _%>
         return userRepository.save(newUser);
     }

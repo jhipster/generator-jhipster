@@ -43,7 +43,7 @@ function writeFiles() {
         },
 
         cleanupOldServerFiles() {
-            cleanup.cleanupOldServerFiles(this, this.javaDir, this.testDir);
+            cleanup.cleanupOldServerFiles(this, this.javaDir, this.testDir, SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR);
         },
 
         writeGlobalFiles() {
@@ -411,7 +411,6 @@ function writeFiles() {
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/LocaleConfiguration.java.ejs`, `${javaDir}config/LocaleConfiguration.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/LoggingAspectConfiguration.java.ejs`, `${javaDir}config/LoggingAspectConfiguration.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/MetricsConfiguration.java.ejs`, `${javaDir}config/MetricsConfiguration.java`);
-            this.template(`${SERVER_MAIN_SRC_DIR}package/config/ThymeleafConfiguration.java.ejs`, `${javaDir}config/ThymeleafConfiguration.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/WebConfigurer.java.ejs`, `${javaDir}config/WebConfigurer.java`);
             if (this.websocket === 'spring-websocket') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/config/WebsocketConfiguration.java.ejs`, `${javaDir}config/WebsocketConfiguration.java`);
@@ -618,11 +617,11 @@ function writeFiles() {
             }
 
             // Email templates
-            this.template(`${SERVER_MAIN_RES_DIR}mails/activationEmail.html.ejs`, `${SERVER_MAIN_RES_DIR}mails/activationEmail.html`);
-            this.template(`${SERVER_MAIN_RES_DIR}mails/creationEmail.html.ejs`, `${SERVER_MAIN_RES_DIR}mails/creationEmail.html`);
-            this.template(`${SERVER_MAIN_RES_DIR}mails/passwordResetEmail.html.ejs`, `${SERVER_MAIN_RES_DIR}mails/passwordResetEmail.html`);
+            this.template(`${SERVER_MAIN_RES_DIR}templates/mail/activationEmail.html.ejs`, `${SERVER_MAIN_RES_DIR}templates/mail/activationEmail.html`);
+            this.template(`${SERVER_MAIN_RES_DIR}templates/mail/creationEmail.html.ejs`, `${SERVER_MAIN_RES_DIR}templates/mail/creationEmail.html`);
+            this.template(`${SERVER_MAIN_RES_DIR}templates/mail/passwordResetEmail.html.ejs`, `${SERVER_MAIN_RES_DIR}templates/mail/passwordResetEmail.html`);
             if (this.enableSocialSignIn) {
-                this.copy(`${SERVER_MAIN_RES_DIR}mails/socialRegistrationValidationEmail.html.ejs`, `${SERVER_MAIN_RES_DIR}mails/socialRegistrationValidationEmail.html`);
+                this.copy(`${SERVER_MAIN_RES_DIR}templates/mail/socialRegistrationValidationEmail.html.ejs`, `${SERVER_MAIN_RES_DIR}templates/mail/socialRegistrationValidationEmail.html`);
             }
 
             /* User management java domain files */
@@ -666,7 +665,7 @@ function writeFiles() {
             }
 
             /* User management java test files */
-            this.copy(`${SERVER_TEST_RES_DIR}mails/testEmail.html.ejs`, `${SERVER_TEST_RES_DIR}mails/testEmail.html`);
+            this.copy(`${SERVER_TEST_RES_DIR}templates/mail/testEmail.html.ejs`, `${SERVER_TEST_RES_DIR}templates/mail/testEmail.html`);
             this.copy(`${SERVER_TEST_RES_DIR}i18n/messages_en.properties.ejs`, `${SERVER_TEST_RES_DIR}i18n/messages_en.properties`);
 
             if (this.searchEngine === 'elasticsearch') {

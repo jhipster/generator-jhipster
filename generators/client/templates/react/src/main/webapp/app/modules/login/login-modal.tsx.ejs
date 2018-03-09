@@ -21,7 +21,7 @@ class LoginModal extends React.Component<ILoginModalProps> {
     const { loginError, handleClose } = this.props;
 
     return (
-      <Modal isOpen={this.props.showModal} toggle={handleClose} backdrop="static" id="login-page">
+      <Modal isOpen={this.props.showModal} toggle={handleClose} backdrop="static" id="login-page" autoFocus={false}>
         <AvForm onSubmit={this.handleSubmit}>
           <ModalHeader toggle={handleClose} id="login-title"><Translate contentKey="login.title">Sign in</Translate></ModalHeader>
           <ModalBody>
@@ -42,6 +42,7 @@ class LoginModal extends React.Component<ILoginModalProps> {
                   label={<Translate contentKey="global.form.username">Username</Translate>}
                   placeholder={translate('global.form.username.placeholder', null, 'Your username')}
                   required errorMessage="Username cannot be empty!"
+                  autoFocus
                 />
                 <AvField
                   name="password" type="password"
@@ -50,12 +51,13 @@ class LoginModal extends React.Component<ILoginModalProps> {
                   required errorMessage="Password cannot be empty!"
                 />
                 <AvGroup check>
-                  <Label check for="rememberMe" className="form-check-label">
-                    <AvInput type="checkbox" name="rememberMe" /> <Translate contentKey="login.form.rememberme">Remember me</Translate>
+                  <Label inline className="form-check-label">
+                    <AvInput type="checkbox" name="rememberMe" /> <Translate contentKey="login.form.rememberme" />
                   </Label>
                 </AvGroup>
               </div>
             </div>
+            <div className="mt-1">&nbsp;</div>
             <Alert color="warning">
               <Link to="/reset/request">
                 <Translate contentKey="login.password.forgot">Did you forget your password?</Translate>

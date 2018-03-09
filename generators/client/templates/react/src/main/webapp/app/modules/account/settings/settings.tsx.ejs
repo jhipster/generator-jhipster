@@ -81,7 +81,9 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
       <div>
         <Row className="justify-content-center">
           <Col md="8" >
-            <h2><Translate contentKey="settings.title" interpolate={{ username: account.login }}>User settings for {account.login}</Translate></h2>
+            <h2>
+              <Translate contentKey="settings.title" interpolate={ { username: account.login } }/>
+            </h2>
             { (updateSuccess) ? successAlert : null }
             <AvForm onValidSubmit={this.handleValidSubmit}>
               {/* First name */}

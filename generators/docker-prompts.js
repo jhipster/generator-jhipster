@@ -30,7 +30,8 @@ module.exports = {
     askForServiceDiscovery,
     askForAdminPassword,
     askForDockerRepositoryName,
-    askForDockerPushCommand
+    askForDockerPushCommand,
+    loadConfigs
 };
 
 /**
@@ -144,6 +145,7 @@ function askForPath() {
     });
 }
 
+
 /**
  * Ask For Apps
  */
@@ -165,29 +167,38 @@ function askForApps() {
     this.prompt(prompts).then((props) => {
         this.appsFolders = props.chosenApps;
 
-        this.appConfigs = [];
-        this.gatewayNb = 0;
-        this.monolithicNb = 0;
-        this.microserviceNb = 0;
-
-        // Loading configs
-        this.appsFolders.forEach((appFolder) => {
-            const path = this.destinationPath(`${this.directoryPath + appFolder}/.yo-rc.json`);
-            const fileData = this.fs.readJSON(path);
-            const config = fileData['generator-jhipster'];
-
-            if (config.applicationType === 'monolith') {
-                this.monolithicNb++;
-            } else if (config.applicationType === 'gateway') {
-                this.gatewayNb++;
-            } else if (config.applicationType === 'microservice') {
-                this.microserviceNb++;
-            }
-
-            this.portsToBind = this.monolithicNb + this.gatewayNb;
-            this.appConfigs.push(config);
-        });
+        loadConfigs.call(this);
         done();
+    });
+}
+
+/*
+ * Load config from this.appFolders
+ * TODO: Extracted from AdForApps. Move into utils?
+ */
+function loadConfigs() {
+    this.appConfigs = [];
+    this.gatewayNb = 0;
+    this.monolithicNb = 0;
+    this.microserviceNb = 0;
+
+    // Loading configs
+    this.appsFolders.forEach((appFolder) => {
+        const path = this.destinationPath(`${this.directoryPath + appFolder}/.yo-rc.json`);
+        const fileData = this.fs.readJSON(path);
+        const config = fileData['generator-jhipster'];
+
+        if (config.applicationType === 'monolith') {
+            this.monolithicNb++;
+        } else if (config.applicationType === 'gateway') {
+            this.gatewayNb++;
+        } else if (config.applicationType === 'microservice') {
+            this.microserviceNb++;
+        }
+
+        this.portsToBind = this.monolithicNb + this.gatewayNb;
+        config.appFolder = appFolder;
+        this.appConfigs.push(config);
     });
 }
 
@@ -307,7 +318,10 @@ function askForServiceDiscovery() {
     const serviceDiscoveryEnabledApps = [];
     this.appConfigs.forEach((appConfig, index) => {
         if (appConfig.serviceDiscoveryType) {
-            serviceDiscoveryEnabledApps.push({ baseName: appConfig.baseName, serviceDiscoveryType: appConfig.serviceDiscoveryType });
+            serviceDiscoveryEnabledApps.push({
+                baseName: appConfig.baseName,
+                serviceDiscoveryType: appConfig.serviceDiscoveryType
+            });
         }
     });
 

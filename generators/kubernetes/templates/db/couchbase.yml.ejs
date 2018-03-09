@@ -22,10 +22,9 @@ kind: Secret
 metadata:
   name: ds-secret-ref
   namespace: <%= kubernetesNamespace %>
-stringData:
-  database-admin-user: "admin"
-  database-admin-password: "password"
-
+data:
+  database-admin-user: "YWRtaW4K"
+  database-admin-password: "cGFzc3dvcmQK"
 ---
 apiVersion: apps/v1beta1
 kind: StatefulSet
@@ -33,7 +32,8 @@ metadata:
   name: <%= app.baseName.toLowerCase() %>-couchbase
   namespace: <%= kubernetesNamespace %>
 spec:
-  replicas: 1
+  serviceName: <%= app.baseName.toLowerCase() %>-couchbase
+  replicas: <%= app.dbPeerCount %>
   selector:
     matchLabels:
       app: <%= app.baseName.toLowerCase() %>-couchbase
@@ -62,6 +62,12 @@ spec:
             secretKeyRef:
               name: ds-secret-ref
               key: database-admin-password
+        - name: CB_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: DB_PEER_COUNT
+          value: "<%= app.dbPeerCount %>"
         ports:
         - containerPort: 8091
           protocol: TCP
@@ -73,32 +79,59 @@ spec:
           protocol: TCP
         command:
             - "/bin/bash"
-            - "-ec"
+            - "-c"
             - |
                 set -x
                 set -m
+                REPLICA_CNT=$(( $DB_PEER_COUNT - 1))
+                CB_POD_NAME=$CB_POD_NAME.<%= app.baseName.toLowerCase() %>-couchbase
+                CB_BASE_POD_NAME=<%= app.baseName.toLowerCase() %>-couchbase-0.<%= app.baseName.toLowerCase() %>-couchbase
+                cluster_node=
+                echo "checking if the cluster is already initialized"
+                nc -z -w 1 <%= app.baseName.toLowerCase() %>-couchbase-discovery 8091 2>>/dev/null
+
+                if [ $? -eq 0 ]; then
+                    cluster_node=$(couchbase-cli server-list -u ${COUCHBASE_ADMIN_USER} -p ${COUCHBASE_ADMIN_PASSWORD} -c <%= app.baseName.toLowerCase() %>-couchbase-discovery | tail -1 | cut -d ' ' -f 2)
+                fi
+
+                set -e
+
                 /entrypoint.sh couchbase-server &
 
-                echo "waiting for http://${APPLICATION_NAME}:8091/ui/index.html"
-                while [ "$(curl -Isw '%{http_code}' -o /dev/null http://${APPLICATION_NAME}:8091/ui/index.html#/)" != 200 ]
+                echo "waiting for http://${CB_POD_NAME}:8091/ui/index.html"
+                while [ "$(curl -Isw '%{http_code}' -o /dev/null http://${CB_POD_NAME}:8091/ui/index.html#/)" != 200 ]
                 do
                     sleep 5
                 done
 
-                echo "Setup index and memory quota"
-                curl -X POST http://${APPLICATION_NAME}:8091/pools/default -d memoryQuota=300 -d indexMemoryQuota=300
+                if [ "$CB_POD_NAME" != "$CB_BASE_POD_NAME" ]; then
+                    echo "Adding ${CB_POD_NAME} to the cluster node ${CB_BASE_POD_NAME}:8091"
+                    couchbase-cli server-add --cluster=${CB_BASE_POD_NAME}:8091 --user=${COUCHBASE_ADMIN_USER} --password=${COUCHBASE_ADMIN_PASSWORD} --server-add=${CB_POD_NAME}:8091 --server-add-username=${COUCHBASE_ADMIN_USER} --server-add-password=${COUCHBASE_ADMIN_PASSWORD} --services=data,index,query
+                elif [ ! -z "$cluster_node" ] && [ "$CB_POD_NAME" == "$CB_BASE_POD_NAME" ]; then
+                    echo "Cluster is active; going to join one of the existing cluster ${cluster_node} nodes"
+                    couchbase-cli server-add --cluster=${cluster_node} --user=${COUCHBASE_ADMIN_USER} --password=${COUCHBASE_ADMIN_PASSWORD} --server-add=${CB_POD_NAME}:8091 --server-add-username=${COUCHBASE_ADMIN_USER} --server-add-password=${COUCHBASE_ADMIN_PASSWORD}
+                else
+                    echo "Initializing jhipster-couchbase cluster"
+                    echo "Setup index and memory quota"
+                    curl -v -X POST -u '${COUCHBASE_ADMIN_USER}:${COUCHBASE_ADMIN_PASSWORD}' http://127.0.0.1:8091/node/controller/rename -d hostname=${CB_POD_NAME}
+                    couchbase-cli cluster-init --cluster ${CB_POD_NAME}:8091 --cluster-name=jhipster-couchbase --cluster-username=${COUCHBASE_ADMIN_USER} --cluster-password=${COUCHBASE_ADMIN_PASSWORD} --cluster-ramsize=500 --cluster-index-ramsize=300 --index-storage-setting default --services=data,index,query
+                    echo "Setup bucket $BUCKET"
+                    couchbase-cli bucket-create -c ${CB_POD_NAME}:8091 -u ${COUCHBASE_ADMIN_USER} -p ${COUCHBASE_ADMIN_PASSWORD} --bucket=$BUCKET --bucket-type=couchbase --bucket-ramsize=300 --bucket-replica=$REPLICA_CNT --enable-index-replica=1
+                fi
 
-                echo "Setup services"
-                curl http://${APPLICATION_NAME}:8091/node/controller/setupServices -d services=kv%2Cn1ql%2Cindex
+                couchbase-cli setting-autofailover -c ${CB_POD_NAME}:8091 -u ${COUCHBASE_ADMIN_USER} -p ${COUCHBASE_ADMIN_PASSWORD} --enable-auto-failover 1 --auto-failover-timeout 30
 
-                echo "Setup credentials"
-                curl http://${APPLICATION_NAME}:8091/settings/web -d port=8091 -d username=${COUCHBASE_ADMIN_USER} -d password=${COUCHBASE_ADMIN_PASSWORD}
+                set +e
+                echo "Waiting for configured nodes to join to initiate rebalance"
+                while [ "$CB_POD_NAME" == "$CB_BASE_POD_NAME" ]
+                do
+                    if [ $(couchbase-cli server-list -u ${COUCHBASE_ADMIN_USER} -p ${COUCHBASE_ADMIN_PASSWORD} -c $CB_BASE_POD_NAME:8091 | wc -l) -ge $DB_PEER_COUNT ]; then
+                        couchbase-cli rebalance -c ${CB_BASE_POD_NAME}:8091 -u ${COUCHBASE_ADMIN_USER} -p ${COUCHBASE_ADMIN_PASSWORD}
+                        test $? -eq 0 && break
+                    fi
+                    sleep 10
+                done
 
-                echo "Setup Memory Optimized Indexes"
-                curl -u ${COUCHBASE_ADMIN_USER}:${COUCHBASE_ADMIN_PASSWORD} -X POST http://${APPLICATION_NAME}:8091/settings/indexes -d 'storageMode=memory_optimized'
-
-                echo "Setup bucket $BUCKET"
-                curl -u ${COUCHBASE_ADMIN_USER}:${COUCHBASE_ADMIN_PASSWORD} -X POST http://${APPLICATION_NAME}:8091/pools/default/buckets -d name=${BUCKET} -d bucketType=couchbase -d ramQuotaMB=300 -dauthType=sasl
                 fg
 
         readinessProbe:
@@ -163,5 +196,24 @@ spec:
       port: 11210
       targetPort: 11210
   clusterIP: None
+  type: ClusterIP
+  selector:
+    app: <%= app.baseName.toLowerCase() %>-couchbase
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-couchbase-discovery
+  namespace: <%= kubernetesNamespace %>
+  labels:
+    app: <%= app.baseName.toLowerCase() %>-couchbase
+spec:
+  ports:
+    -
+      name: couchbase-8091
+      protocol: TCP
+      port: 8091
+      targetPort: 8091
+  type: NodePort
   selector:
     app: <%= app.baseName.toLowerCase() %>-couchbase

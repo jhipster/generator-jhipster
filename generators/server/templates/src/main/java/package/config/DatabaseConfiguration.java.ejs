@@ -19,6 +19,9 @@
 package <%=packageName%>.config;
 
 import io.github.jhipster.config.JHipsterConstants;
+<%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+import io.github.jhipster.config.h2.H2ConfigurationHelper;
+<%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
 import io.github.jhipster.config.liquibase.AsyncSpringLiquibase;
 
@@ -59,9 +62,14 @@ import org.springframework.context.annotation.FilterType;
 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 import org.springframework.context.annotation.Profile;<% } %><% if (databaseType === 'sql') { %>
 import org.springframework.core.env.Environment;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-import org.springframework.core.convert.converter.Converter;<% } %><% if (searchEngine === 'elasticsearch') { %>
+import org.springframework.core.convert.converter.Converter;<% } %>
+<%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
-import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;<% } %><% if (databaseType === 'mongodb') { %>
+    <%_ } _%>
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
+<%_ } _%>
+<%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
@@ -103,7 +111,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-<%_ }_%>
+<%_ } _%>
 
 @Configuration<% if (databaseType === 'sql') { %>
 @EnableJpaRepositories("<%=packageName%>.repository")
@@ -151,30 +159,7 @@ public class DatabaseConfiguration {
     @Bean(initMethod = "start", destroyMethod = "stop")
     @Profile(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)
     public Object h2TCPServer() throws SQLException {
-        try {
-            // We don't want to include H2 when we are packaging for the "prod" profile and won't
-            // actually need it, so we have to load / invoke things at runtime through reflection.
-            ClassLoader loader = Thread.currentThread().getContextClassLoader();
-            Class<?> serverClass = Class.forName("org.h2.tools.Server", true, loader);
-            Method createServer = serverClass.getMethod("createTcpServer", String[].class);
-            return createServer.invoke(null, new Object[] { new String[] { "-tcp", "-tcpAllowOthers" } });
-
-        } catch (ClassNotFoundException | LinkageError  e) {
-            throw new RuntimeException("Failed to load and initialize org.h2.tools.Server", e);
-
-        } catch (SecurityException | NoSuchMethodException e) {
-            throw new RuntimeException("Failed to get method org.h2.tools.Server.createTcpServer()", e);
-
-        } catch (IllegalAccessException | IllegalArgumentException e) {
-            throw new RuntimeException("Failed to invoke org.h2.tools.Server.createTcpServer()", e);
-
-        } catch (InvocationTargetException e) {
-            Throwable t = e.getTargetException();
-            if (t instanceof SQLException) {
-                throw (SQLException) t;
-            }
-            throw new RuntimeException("Unchecked exception in org.h2.tools.Server.createTcpServer()", t);
-        }
+        return H2ConfigurationHelper.createServer();
     }
 <%_ } _%>
 
