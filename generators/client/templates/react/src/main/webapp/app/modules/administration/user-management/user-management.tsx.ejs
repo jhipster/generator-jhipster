@@ -75,9 +75,11 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
     this.props.getUsers(activePage - 1, itemsPerPage, `${sort},${order}`);
   }
 
-  toggleActive = ({ user }) => {
-    user.activated = !user.activated;
-    this.props.updateUser(user);
+  toggleActive = ({ user }) => () => {
+    this.props.updateUser({
+      ...user,
+      activated: !user.activated
+    });
   };
 
   render() {
@@ -130,11 +132,11 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
                   <td>{user.email}</td>
                   <td>
                     {user.activated ? (
-                      <Button color="success" onClick={this.toggleActive.bind(this, { user }) }>
+                      <Button color="success" onClick={this.toggleActive({ user }) }>
                         Activated
                       </Button>
                     ) : (
-                      <Button color="danger" onClick={this.toggleActive.bind(this, { user }) }>
+                      <Button color="danger" onClick={this.toggleActive({ user }) }>
                         Deactivated
                       </Button>
                     )}
