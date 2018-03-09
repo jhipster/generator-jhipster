@@ -2183,7 +2183,15 @@ module.exports = class extends PrivateBase {
      * @param {string} baseName of application
      */
     getAngularXAppName(baseName = this.baseName) {
-        return _.upperFirst(_.camelCase(baseName, true));
+        return this.upperFirstCamelCase(baseName);
+    }
+
+    /**
+     * get the an upperFirst camelCase value.
+     * @param {string} value string to convert
+     */
+    upperFirstCamelCase(value) {
+        return _.upperFirst(_.camelCase(value, true));
     }
 
     /**

@@ -1,3 +1,4 @@
+process.env.CHROMIUM_BIN = require('puppeteer').executablePath();
 /* eslint-disable */
 const webpackConfig = require('../../../webpack/webpack.test.js');
 /* eslint-enable */
@@ -7,7 +8,7 @@ const DEBUG = process.argv.indexOf('--debug') > -1;
 module.exports = config => {
   config.set({
     // Add any browsers here
-    // browsers: ['Chrome'],
+    // browsers: ['ChromiumHeadless'],
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: './',
@@ -53,7 +54,7 @@ module.exports = config => {
     },
 
     junitReporter: {
-      outputFile: '../../../../build/test-results/karma/TESTS-results.xml'
+      outputFile: '../../../../<%= BUILD_DIR %>test-results/karma/TESTS-results.xml'
     },
 
     notifyReporter: {
@@ -63,7 +64,7 @@ module.exports = config => {
 
     remapIstanbulReporter: {
       reports: {
-        html: 'build/test-results/coverage',
+        html: '<%= BUILD_DIR %>test-results/coverage',
         'text-summary': null
       }
     },

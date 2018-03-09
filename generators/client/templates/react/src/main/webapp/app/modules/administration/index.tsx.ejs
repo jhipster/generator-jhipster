@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { Route } from 'react-router-dom';
 
+<%_ if (!skipUserManagement) { _%>
 import UserManagement from './user-management';
+<%_ } _%>
 import Logs from './logs/logs';
 import Health from './health/health';
 import Metrics from './metrics/metrics';
@@ -13,10 +15,18 @@ import Docs from './docs/docs';
 <%_ if (applicationType === 'gateway') { _%>
 import Gateway from './gateway/gateway';
 <%_ } _%>
+<%_ if (websocket === 'spring-websocket') { _%>
+import Tracker from './tracker/tracker';
+<%_ } _%>
 
 const Routes = ({ match }) => (
   <div>
+<%_ if (!skipUserManagement) { _%>
     <Route path={`${match.url}/user-management`} component={UserManagement} />
+<%_ } _%>
+<%_ if (websocket === 'spring-websocket') { _%>
+    <Route exact path={`${match.url}/tracker`} component={Tracker} />
+<%_ } _%>
     <Route exact path={`${match.url}/health`} component={Health} />
 <%_ if (applicationType === 'gateway') { _%>
     <Route exact path={`${match.url}/gateway`} component={Gateway} />

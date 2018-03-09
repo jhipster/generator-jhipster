@@ -22,7 +22,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.bmuschko:gradle-docker-plugin:3.2.0'
+        classpath 'com.bmuschko:gradle-docker-plugin:3.2.5'
     }
 }
 
@@ -45,4 +45,3 @@ task buildDocker(type: DockerBuildImage, dependsOn: 'copyDockerFiles') {
     inputDir = project.file("${project.buildDir}/docker")
     tags = ["<%= baseName.toLowerCase() %>:latest".toString(), "<%= baseName.toLowerCase() %>:${project.version}".toString()]
 }
-

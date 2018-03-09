@@ -16,6 +16,8 @@ import {
   // tslint:disable-next-line
   FaRoad,
   // tslint:disable-next-line
+  FaEye,
+  // tslint:disable-next-line
   FaAsterisk,
   // tslint:disable-next-line
   FaBell
@@ -84,7 +86,7 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
       <DropdownItem tag={Link} key="user-management" to="/admin/user-management"><FaUser /> User Management</DropdownItem>,
     <%_ } _%>
     <%_ if (websocket === 'spring-websocket') { _%>
-        /* TOD: tracker menu */
+      <DropdownItem tag={Link} key="tracker" to="/admin/tracker"><FaEye /> Tracker</DropdownItem>,
     <%_ } _%>
       <DropdownItem tag={Link} key="metrics" to="/admin/metrics"><FaDashboard /> Metrics</DropdownItem>,
       <DropdownItem tag={Link} key="health" to="/admin/health"><FaHeart /> Health</DropdownItem>,
