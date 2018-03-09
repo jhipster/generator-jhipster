@@ -22,6 +22,9 @@ const BaseGenerator = require('../generator-base');
 const cleanup = require('../cleanup');
 const prompts = require('./prompts');
 const packagejs = require('../../package.json');
+const through = require('through2');
+const filter = require('gulp-filter');
+const prettier = require('prettier');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -203,10 +206,44 @@ module.exports = class extends BaseGenerator {
                         this.clientPackageManager = 'npm';
                     }
                 }
+            },
+
+            registerPrettier() {
+                if (this.skipClient) {
+                    return;
+                }
+                const tsFilter = filter(['**/*.{ts,tsx}'], { restore: true });
+
+                const tsPrettier = function () {
+                    function transform(file, encoding, callback) {
+                        const str = file.contents.toString('utf8');
+                        const options = {
+                            printWidth: 140,
+                            singleQuote: true,
+                            jsxBracketSameLine: false,
+                            parser: 'typescript',
+                            arrowParens: 'always',
+                            // for better errors
+                            filepath: file.relative
+                        };
+                        const data = prettier.format(str, options);
+                        file.contents = Buffer.from(data);
+
+                        callback(null, file);
+                    }
+
+                    return through.obj(transform);
+                };
+
+                // this pipe will pass through (restore) anything that doesn't match tsFilter
+                this.registerTransformStream([
+                    tsFilter,
+                    tsPrettier(),
+                    tsFilter.restore
+                ]);
             }
         };
     }
-
     get prompting() {
         return {
             askForInsightOptIn: prompts.askForInsightOptIn,
