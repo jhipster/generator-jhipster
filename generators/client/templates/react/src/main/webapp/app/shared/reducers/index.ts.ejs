@@ -8,13 +8,16 @@ import layout from './layout';
 import authentication from './authentication';
 
 import administration from 'app/modules/administration/administration.reducer';
+<%_ if (!skipUserManagement) { _%>
 import userManagement from 'app/modules/administration/user-management/user-management.reducer';
+<%_ } _%>
+<%_ if (authenticationType !== 'oauth2') { _%>
 import register from 'app/modules/account/register/register.reducer';
 import activate from 'app/modules/account/activate/activate.reducer';
 import password from 'app/modules/account/password/password.reducer';
 import settings from 'app/modules/account/settings/settings.reducer';
 import passwordReset from 'app/modules/account/password-reset/password-reset.reducer';
-
+<%_ } _%>
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 export default combineReducers({
@@ -24,12 +27,16 @@ export default combineReducers({
   <%_ } _%>
   layout,
   administration,
+  <%_ if (!skipUserManagement) { _%>
   userManagement,
+  <%_ } _%>
+  <%_ if (authenticationType !== 'oauth2') { _%>
   register,
   activate,
   passwordReset,
   password,
   settings,
+  <%_ } _%>
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar
 });
