@@ -26,8 +26,7 @@ const initialState = {
   <%_ if (authenticationType !== 'oauth2') { _%>
   loginError: false, // Errors returned from server side
   <%_ } _%>
-  redirectMessage: null,
-  <%_ if (authenticationType !== 'oauth2') { _%>
+  redirectMessage: null<%_ if (authenticationType !== 'oauth2') { _%>,
   showModalLogin: false
   <%_ } _%>
 };
@@ -139,7 +138,7 @@ export const login = (username, password, rememberMe = false) => async (dispatch
 };
 <%_ } _%>
 
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
 export const logout = () => async dispatch => {
   await dispatch({
     type: ACTION_TYPES.LOGOUT,
@@ -159,12 +158,6 @@ export const clearAuthToken = () => {
 
 export const logout = () => dispatch => {
   clearAuthToken();
-  dispatch({
-    type: ACTION_TYPES.LOGOUT
-  });
-};
-<%_ } else if (authenticationType === 'oauth2') { _%>
-export const logout = () => dispatch => {
   dispatch({
     type: ACTION_TYPES.LOGOUT
   });

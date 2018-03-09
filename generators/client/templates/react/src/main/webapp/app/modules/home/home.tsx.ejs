@@ -34,7 +34,7 @@ export class Home extends React.Component<IHomeProp, IHomeState> {
   render() {
     const { currentUser } = this.state;
     <%_ if (authenticationType === 'oauth2') { _%>
-    let port = (location.port ? ':' + location.port : '');
+    let port = location.port ? ':' + location.port : '';
     if (port === ':9000') {
       port = ':8080';
     }
