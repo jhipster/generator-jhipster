@@ -27,7 +27,7 @@ const isNilOrEmpty = require('../../../lib/utils/string_utils').isNilOrEmpty;
 
 describe('StringUtils', () => {
   describe('::camelCase', () => {
-    describe('when passing a valid string', () => {
+    context('when passing a valid string', () => {
       it('camel-cases it', () => {
         expect(camelCase('e')).to.eq('e');
         expect(camelCase('entity')).to.eq('entity');
@@ -40,8 +40,8 @@ describe('StringUtils', () => {
         expect(camelCase('En tity_AN ')).to.eq('entityAN');
       });
     });
-    describe('when passing an invalid parameter', () => {
-      describe('as it is nil', () => {
+    context('when passing an invalid parameter', () => {
+      context('as it is nil', () => {
         it('fails', () => {
           try {
             camelCase();
@@ -51,7 +51,7 @@ describe('StringUtils', () => {
           }
         });
       });
-      describe('as it is empty', () => {
+      context('as it is empty', () => {
         it('returns it', () => {
           expect(camelCase('')).to.eq('');
         });
@@ -59,22 +59,22 @@ describe('StringUtils', () => {
     });
   });
   describe('::isNilOrEmpty', () => {
-    describe('when passing a nil object', () => {
+    context('when passing a nil object', () => {
       it('returns true', () => {
         expect(isNilOrEmpty(null)).to.be.true;
       });
     });
-    describe('when passing an undefined object', () => {
+    context('when passing an undefined object', () => {
       it('returns true', () => {
         expect(isNilOrEmpty(undefined)).to.be.true;
       });
     });
-    describe('when passing an empty string', () => {
+    context('when passing an empty string', () => {
       it('returns true', () => {
         expect(isNilOrEmpty('')).to.be.true;
       });
     });
-    describe('when passing a valid string', () => {
+    context('when passing a valid string', () => {
       it('returns false', () => {
         expect(isNilOrEmpty('ABC')).to.be.false;
       });

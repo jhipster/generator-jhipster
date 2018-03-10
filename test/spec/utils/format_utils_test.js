@@ -26,7 +26,7 @@ const dateFormatForLiquibase = FormatUtils.dateFormatForLiquibase;
 
 describe('FormatUtils', () => {
   describe('::formatComment', () => {
-    describe('when the comment is in the one-line form', () => {
+    context('when the comment is in the one-line form', () => {
       const oneLineComment1 = ' comment ';
       const oneLineComment2 = 'comment';
       const oneLineComment3 = ' * a one line comment. ';
@@ -36,34 +36,34 @@ describe('FormatUtils', () => {
       const expectedResult2 = 'a one line comment.';
       const expectedResult3 = 'multi word\tcomment';
 
-      describe(buildTestTitle(oneLineComment1), () => {
+      context(buildTestTitle(oneLineComment1), () => {
         it(`returns ${buildTestTitle(expectedResult1)}`, () => {
           expect(formatComment(oneLineComment1)).to.eq(expectedResult1);
         });
       });
-      describe(buildTestTitle(oneLineComment2), () => {
+      context(buildTestTitle(oneLineComment2), () => {
         it(`returns ${buildTestTitle(expectedResult1)}`, () => {
           expect(formatComment(oneLineComment2)).to.eq(expectedResult1);
         });
       });
-      describe(buildTestTitle(oneLineComment3), () => {
+      context(buildTestTitle(oneLineComment3), () => {
         it(`returns ${buildTestTitle(expectedResult2)}`, () => {
           expect(formatComment(oneLineComment3)).to.eq(expectedResult2);
         });
       });
-      describe(buildTestTitle(oneLineComment4), () => {
+      context(buildTestTitle(oneLineComment4), () => {
         it(`returns ${buildTestTitle(expectedResult3)}`, () => {
           expect(formatComment(oneLineComment4)).to.eq(expectedResult3);
         });
       });
-      describe(buildTestTitle(oneLineComment5), () => {
+      context(buildTestTitle(oneLineComment5), () => {
         it(`returns ${buildTestTitle(expectedResult3)}`, () => {
           expect(formatComment(oneLineComment5)).to.eq(expectedResult3);
         });
       });
     });
 
-    describe('when the comment is in the multi-line form', () => {
+    context('when the comment is in the multi-line form', () => {
       const multiLineComment1 = '\n* <p>first line of comment</p><br/>\n*<p>second line</p>\n';
       const multiLineComment2 = '*** <p>first line of comment</p><br/>\n* *<p>second line</p>\n\n';
       const multiLineComment3 = '\n * abcde\n * fghij\n * nothing\n';
@@ -71,17 +71,17 @@ describe('FormatUtils', () => {
       const expectedResult2 = '<p>first line of comment</p><br/>\n*<p>second line</p>';
       const expectedResult3 = 'abcde\nfghij\nnothing';
 
-      describe(buildTestTitle(multiLineComment1), () => {
+      context(buildTestTitle(multiLineComment1), () => {
         it(`returns ${buildTestTitle(expectedResult1)}`, () => {
           expect(formatComment(multiLineComment1)).to.eq(expectedResult1);
         });
       });
-      describe(buildTestTitle(multiLineComment2), () => {
+      context(buildTestTitle(multiLineComment2), () => {
         it(`returns ${buildTestTitle(expectedResult2)}`, () => {
           expect(formatComment(multiLineComment2)).to.eq(expectedResult2);
         });
       });
-      describe(buildTestTitle(multiLineComment3), () => {
+      context(buildTestTitle(multiLineComment3), () => {
         it(`returns ${buildTestTitle(expectedResult3)}`, () => {
           expect(formatComment(multiLineComment3)).to.eq(expectedResult3);
         });
@@ -89,7 +89,7 @@ describe('FormatUtils', () => {
     });
   });
   describe('::dateFormatForLiquibase', () => {
-    describe('when passing both arguments', () => {
+    context('when passing both arguments', () => {
       it('uses the increment with the passed date', () => {
         const now = new Date();
         const increment = 1000042;
@@ -129,12 +129,12 @@ describe('FormatUtils', () => {
         ).to.equal(`${year}${month}${day}${hour}${minute}${second}`);
       });
     });
-    describe('when not passing the date', () => {
+    context('when not passing the date', () => {
       it('does not fail', () => {
         expect(dateFormatForLiquibase().length).to.equal(14);
       });
     });
-    describe('when not passing the increment', () => {
+    context('when not passing the increment', () => {
       it('formats the current time for liquibase with no increment', () => {
         const now = new Date();
         const result = dateFormatForLiquibase({ date: now });
