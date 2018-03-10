@@ -40,7 +40,7 @@ launchCurlOrProtractor() {
     fi
 
     retryCount=0
-    maxRetry=2
+    maxRetry=1
     until [ "$retryCount" -ge "$maxRetry" ]
     do
         result=0
@@ -94,18 +94,20 @@ if [ "$RUN_APP" == 1 ]; then
         cd "$UAA_APP_FOLDER"
         java -jar target/*.war \
             --spring.profiles.active="$PROFILE" \
-            --logging.level.io.github.jhipster=ERROR \
-            --logging.level.io.github.jhipster.sample=ERROR \
-            --logging.level.io.github.jhipster.travis=ERROR &
+            --logging.level.org.zalando=OFF \
+            --logging.level.io.github.jhipster=OFF \
+            --logging.level.io.github.jhipster.sample=OFF \
+            --logging.level.io.github.jhipster.travis=OFF &
         sleep 80
     fi
 
     cd "$APP_FOLDER"
     java -jar app.war \
         --spring.profiles.active="$PROFILE" \
-        --logging.level.io.github.jhipster=ERROR \
-        --logging.level.io.github.jhipster.sample=ERROR \
-        --logging.level.io.github.jhipster.travis=ERROR &
+        --logging.level.org.zalando=OFF \
+        --logging.level.io.github.jhipster=OFF \
+        --logging.level.io.github.jhipster.sample=OFF \
+        --logging.level.io.github.jhipster.travis=OFF &
     echo $! > .pid
     sleep 40
 

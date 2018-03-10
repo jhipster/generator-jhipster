@@ -34,12 +34,16 @@ fi
 cd "$APP_FOLDER"
 if [ -f "mvnw" ]; then
     ./mvnw test \
-        -Dlogging.level.io.github.jhipster.sample=ERROR \
-        -Dlogging.level.io.github.jhipster.travis=ERROR
+        -Dlogging.level.org.zalando=OFF \
+        -Dlogging.level.io.github.jhipster=OFF \
+        -Dlogging.level.io.github.jhipster.sample=OFF \
+        -Dlogging.level.io.github.jhipster.travis=OFF
 elif [ -f "gradlew" ]; then
     ./gradlew test \
-        -Dlogging.level.io.github.jhipster.sample=ERROR \
-        -Dlogging.level.io.github.jhipster.travis=ERROR
+        -Dlogging.level.org.zalando=OFF \
+        -Dlogging.level.io.github.jhipster=OFF \
+        -Dlogging.level.io.github.jhipster.sample=OFF \
+        -Dlogging.level.io.github.jhipster.travis=OFF
 fi
 if [ -f "gulpfile.js" ]; then
     gulp test --no-notification
