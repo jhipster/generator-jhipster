@@ -212,7 +212,7 @@ applicationConfigDecl
   / APPLICATION_TYPE SPACE* applicationType:[a-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'applicationType', applicationType.join(''));
   }
-  / TEST_FRAMEWORK SPACE* testFrameworks:[a-z, ]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+  / TEST_FRAMEWORK SPACE* '[' testFrameworks:[a-z, ]+ ']' SPACE* applicationConfigDecl:applicationConfigDecl {
     const testFrameworkEntries = [];
     const results = testFrameworks.join('').split(',');
     for (let i = 0; i < results.length; i++) {
