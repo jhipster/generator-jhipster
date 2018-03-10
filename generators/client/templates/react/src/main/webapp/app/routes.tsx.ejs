@@ -2,7 +2,9 @@ import * as React from 'react';
 import { Route } from 'react-router-dom';
 import { PrivateRoute } from 'react-jhipster';
 
+<%_ if (authenticationType !== 'oauth2') { _%>
 import Login from './modules/login/login';
+<%_ } _%>
 import Logout from './modules/login/logout';
 import Register from './modules/account/register/register';
 import Home from './modules/home/home';
@@ -16,7 +18,9 @@ import Entities from './entities';
 const Routes = () => (
   <div className="view-routes">
     <Route exact path="/" component={Home}/>
+    <%_ if (authenticationType !== 'oauth2') { _%>
     <Route path="/login" component={Login} />
+    <%_ } _%>
     <Route path="/logout" component={Logout} />
     <Route path="/register" component={Register} />
     <Route path="/activate/:key?" component={Activate} />

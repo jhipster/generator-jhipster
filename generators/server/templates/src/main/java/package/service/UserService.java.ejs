@@ -606,6 +606,7 @@ public class UserService {
         if (details.get("picture") != null) {
             user.setImageUrl((String) details.get("picture"));
         }
+        user.setActivated(true);
         return user;
     }
 
