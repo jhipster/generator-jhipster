@@ -312,6 +312,13 @@ const files = {
             ]
         },
         {
+            condition: generator => generator.authenticationType === 'oauth2',
+            path: REACT_DIR,
+            templates: [
+                'shared/util/url-utils.ts'
+            ]
+        },
+        {
             condition: generator => generator.useSass,
             path: REACT_DIR,
             templates: [

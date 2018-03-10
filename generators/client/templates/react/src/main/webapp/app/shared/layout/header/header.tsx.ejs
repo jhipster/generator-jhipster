@@ -25,6 +25,9 @@ import {
 import { NavLink as Link } from 'react-router-dom';
 import LoadingBar from 'react-redux-loading-bar';
 
+<%_ if (authenticationType === 'oauth2') { _%>
+import { getLoginUrl } from 'app/shared/util/url-utils';
+<%_ } _%>
 <%_ if (enableTranslation) { _%>
 import { locales } from 'app/config/translation';
 <%_ } _%>
@@ -119,15 +122,8 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
         <DropdownItem tag={Link} key="register" to="/register"><FaSignIn /> Register</DropdownItem>
       );
       <%_ } else { _%>
-      let port = location.port ? ':' + location.port : '';
-      if (port === ':9000') {
-        port = ':8080';
-      }
-      const loginUrl = '//' + location.hostname + port + '/login';
       accountMenuItems.push(
-        <DropdownItem tag="a" key="login" href={loginUrl}>
-          <FaSignIn /> Login
-        </DropdownItem>
+        <DropdownItem tag="a" key="login" href={getLoginUrl()}><FaSignIn /> Login</DropdownItem>
       );
       <%_ } _%>
     }

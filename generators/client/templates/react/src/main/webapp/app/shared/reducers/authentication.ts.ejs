@@ -15,20 +15,21 @@ export const ACTION_TYPES = {
   ERROR_MESSAGE: 'authentication/ERROR_MESSAGE'
 };
 
+<%_ if (authenticationType === 'jwt') { _%>
+const AUTH_TOKEN_KEY = 'jhi-authenticationToken';
+<%_ } _%>
+
 const initialState = {
   loading: false,
   isAuthenticated: false,
   <%_ if (authenticationType !== 'oauth2') { _%>
   loginSuccess: false,
+  loginError: false, // Errors returned from server side
+  showModalLogin: false,
   <%_ } _%>
   account: {},
   errorMessage: null, // Errors returned from server side
-  <%_ if (authenticationType !== 'oauth2') { _%>
-  loginError: false, // Errors returned from server side
-  <%_ } _%>
-  redirectMessage: null<%_ if (authenticationType !== 'oauth2') { _%>,
-  showModalLogin: false
-  <%_ } _%>
+  redirectMessage: null
 };
 
 // Reducer
@@ -119,7 +120,7 @@ export const login = (username, password, rememberMe = false) => async (dispatch
   });
   dispatch(getSession());
 };
-<%_ } else if (authenticationType !== 'oauth2') { _%>
+<%_ } else if (authenticationType === 'jwt') { _%>
 export const login = (username, password, rememberMe = false) => async (dispatch, getState) => {
   const result = await dispatch({
     type: ACTION_TYPES.LOGIN,
@@ -129,30 +130,22 @@ export const login = (username, password, rememberMe = false) => async (dispatch
   if (bearerToken && bearerToken.slice(0, 7) === 'Bearer ') {
     const jwt = bearerToken.slice(7, bearerToken.length);
     if (rememberMe) {
-      Storage.local.set('jhi-authenticationToken', jwt);
+      Storage.local.set(AUTH_TOKEN_KEY, jwt);
     } else {
-      Storage.session.set('jhi-authenticationToken', jwt);
+      Storage.session.set(AUTH_TOKEN_KEY, jwt);
     }
   }
   dispatch(getSession());
 };
 <%_ } _%>
 
-<%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
-export const logout = () => async dispatch => {
-  await dispatch({
-    type: ACTION_TYPES.LOGOUT,
-    payload: axios.post('/api/logout', {})
-  });
-  dispatch(getSession());
-};
-<%_ } else if (authenticationType === 'jwt') { _%>
+<%_ if (authenticationType === 'jwt') { _%>
 export const clearAuthToken = () => {
-  if (Storage.local.get('jhi-authenticationToken')) {
-    Storage.local.remove('jhi-authenticationToken');
+  if (Storage.local.get(AUTH_TOKEN_KEY)) {
+    Storage.local.remove(AUTH_TOKEN_KEY);
   }
-  if (Storage.session.get('jhi-authenticationToken')) {
-    Storage.session.remove('jhi-authenticationToken');
+  if (Storage.session.get(AUTH_TOKEN_KEY)) {
+    Storage.session.remove(AUTH_TOKEN_KEY);
   }
 };
 
@@ -161,6 +154,14 @@ export const logout = () => dispatch => {
   dispatch({
     type: ACTION_TYPES.LOGOUT
   });
+};
+<%_ } else { _%>
+export const logout = () => async dispatch => {
+  await dispatch({
+    type: ACTION_TYPES.LOGOUT,
+    payload: axios.post('/api/logout', {})
+  });
+  dispatch(getSession());
 };
 <%_ } _%>
 
