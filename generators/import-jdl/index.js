@@ -46,6 +46,7 @@ module.exports = class extends BaseGenerator {
             type: Boolean,
             defaults: false
         });
+        this.registerClientTransforms();
     }
 
     get initializing() {

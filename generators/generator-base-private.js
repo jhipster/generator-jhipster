@@ -32,6 +32,7 @@ const jhiCore = require('jhipster-core');
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
+const { prettierTransform, typescriptFilter, defaultTsPrettierOptions } = require('./generator-transforms');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 
@@ -1057,5 +1058,20 @@ module.exports = class extends Generator {
             return '../';
         }
         return '';
+    }
+
+    /**
+     * Register file transforms for client side files
+     * @param {any} generator
+     */
+    registerClientTransforms(generator = this) {
+        if (!generator.skipClient) {
+            // this pipe will pass through (restore) anything that doesn't match typescriptFilter
+            generator.registerTransformStream([
+                typescriptFilter,
+                prettierTransform(defaultTsPrettierOptions),
+                typescriptFilter.restore
+            ]);
+        }
     }
 };

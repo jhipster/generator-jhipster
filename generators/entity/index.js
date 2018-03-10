@@ -112,6 +112,7 @@ module.exports = class extends BaseGenerator {
         this.setupEntityOptions(this, this, this.context);
         const blueprint = this.config.get('blueprint');
         useBlueprint = this.composeBlueprint(blueprint, 'entity'); // use global variable since getters dont have access to instance property
+        this.registerClientTransforms();
     }
 
     get initializing() {
