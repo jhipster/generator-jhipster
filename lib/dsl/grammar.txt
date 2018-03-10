@@ -627,8 +627,8 @@ PATTERN = 'pattern'
 REGEX = pattern:[^\n\r/]* { return pattern.join(''); }
 
 ENUMNAME = head:[A-Z]tail:[A-z0-9]* { return `${head}${tail.join('')}`; }
-ENUMPROP = underscore:[_]*head:[A-Z0-9]tail:[A-Z0-9_]* {
-    return `${underscore.join('')}${head}${tail.join('')}`;
+ENUMPROP = head:[A-z_]tail:[A-z0-9_]* {
+    return `${head}${tail.join('')}`;
   }
 CONSTANT_NAME = name:[A-Z_]+ { return name.join(''); }
 INTEGER = negative:'-'?int:[0-9]+ { return parseInt(`${(negative ? negative : '') + int.join('')}`, 10); }
