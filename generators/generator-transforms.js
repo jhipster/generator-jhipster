@@ -9,7 +9,7 @@ const defaultTsPrettierOptions = {
     singleQuote: true,
     jsxBracketSameLine: false,
     parser: 'typescript',
-    arrowParens: 'always',
+    arrowParens: 'avoid',
 };
 
 const prettierTransform = function (defaultOptions) {
