@@ -92,19 +92,19 @@ export class MetricsModal extends React.Component<IMetricsModalProps, IMetricsMo
       isOpen={showModal} toggle={handleClose} className="modal-lg">
       <ModalHeader toggle={handleClose}>Threads dump</ModalHeader>
       <ModalBody>
-        <Badge color="primary" onClick={this.updateBadgeFilter('')}>All&nbsp;
+        <Badge color="primary" className="hand" onClick={this.updateBadgeFilter('')}>All&nbsp;
           <span className="badge badge-pill badge-default">{counters.threadDumpAll || 0}</span>
         </Badge>&nbsp;
-        <Badge color="success" onClick={this.updateBadgeFilter('RUNNABLE')}>Runnable&nbsp;
+        <Badge color="success" className="hand" onClick={this.updateBadgeFilter('RUNNABLE')}>Runnable&nbsp;
           <span className="badge badge-pill badge-default">{counters.threadDumpRunnable || 0}</span>
         </Badge>&nbsp;
-        <Badge color="info" onClick={this.updateBadgeFilter('WAITING')}>Waiting&nbsp;
+        <Badge color="info" className="hand" onClick={this.updateBadgeFilter('WAITING')}>Waiting&nbsp;
           <span className="badge badge-pill badge-default">{counters.threadDumpWaiting || 0}</span>
         </Badge>&nbsp;
-        <Badge color="warning" onClick={this.updateBadgeFilter('TIMED_WAITING')}>Timed Waiting&nbsp;
+        <Badge color="warning" className="hand" onClick={this.updateBadgeFilter('TIMED_WAITING')}>Timed Waiting&nbsp;
           <span className="badge badge-pill badge-default">{counters.threadDumpTimedWaiting || 0}</span>
         </Badge>&nbsp;
-        <Badge color="danger" onClick={this.updateBadgeFilter('BLOCKED')}>Blocked&nbsp;
+        <Badge color="danger" className="hand" onClick={this.updateBadgeFilter('BLOCKED')}>Blocked&nbsp;
           <span className="badge badge-pill badge-default">{counters.threadDumpBlocked || 0}</span>
         </Badge>&nbsp;
         <div className="mt-2">&nbsp;</div>
