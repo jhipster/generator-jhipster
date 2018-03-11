@@ -1,8 +1,5 @@
 const through = require('through2');
-const filter = require('gulp-filter');
 const prettier = require('prettier');
-
-const typescriptFilter = filter(['**/*.{ts,tsx}'], { restore: true });
 
 const defaultTsPrettierOptions = {
     printWidth: 140,
@@ -31,7 +28,6 @@ const prettierTransform = function (defaultOptions) {
 };
 
 module.exports = {
-    typescriptFilter,
     prettierTransform,
     defaultTsPrettierOptions
 };
