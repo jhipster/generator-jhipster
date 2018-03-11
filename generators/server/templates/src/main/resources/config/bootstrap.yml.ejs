@@ -43,7 +43,7 @@ spring:
                 format: yaml
                 profile-separator: "-"
             discovery:
-                tags: profile=${spring.profiles.active}, version=${info.project.version}
+                tags: profile=${spring.profiles.active}, version=${info.project.version:}
             host: localhost
             port: 8500
         <%_ } _%>
