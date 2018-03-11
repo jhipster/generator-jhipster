@@ -225,15 +225,15 @@ describe('User management reducer tests', () => {
         {
           type: REQUEST(ACTION_TYPES.CREATE_USER),
           meta: {
-            successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
-            errorMessage: messages.DATA_UPDATE_ERROR_ALERT
+            successMessage: 'A new user is created with identifier {{ param }}',
+            errorMessage: messages.DATA_ERROR_ALERT
           }
         },
         {
           type: SUCCESS(ACTION_TYPES.CREATE_USER),
           meta: {
-            successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
-            errorMessage: messages.DATA_UPDATE_ERROR_ALERT
+            successMessage: 'A new user is created with identifier {{ param }}',
+            errorMessage: messages.DATA_ERROR_ALERT
           },
           payload: resolvedObject
         },
@@ -252,15 +252,15 @@ describe('User management reducer tests', () => {
         {
           type: REQUEST(ACTION_TYPES.UPDATE_USER),
           meta: {
-            successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
-            errorMessage: messages.DATA_UPDATE_ERROR_ALERT
+            successMessage: 'A new user is created with identifier {{ param }}',
+            errorMessage: messages.DATA_ERROR_ALERT
           }
         },
         {
           type: SUCCESS(ACTION_TYPES.UPDATE_USER),
           meta: {
-            successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
-            errorMessage: messages.DATA_UPDATE_ERROR_ALERT
+            successMessage: 'A new user is created with identifier {{ param }}',
+            errorMessage: messages.DATA_ERROR_ALERT
           },
           payload: resolvedObject
         },
@@ -279,15 +279,15 @@ describe('User management reducer tests', () => {
         {
           type: REQUEST(ACTION_TYPES.DELETE_USER),
           meta: {
-            successMessage: messages.DATA_DELETE_SUCCESS_ALERT,
-            errorMessage: messages.DATA_UPDATE_ERROR_ALERT
+            successMessage: 'A new user is created with identifier {{ param }}',
+            errorMessage: messages.DATA_ERROR_ALERT
           }
         },
         {
           type: SUCCESS(ACTION_TYPES.DELETE_USER),
           meta: {
-            successMessage: messages.DATA_DELETE_SUCCESS_ALERT,
-            errorMessage: messages.DATA_UPDATE_ERROR_ALERT
+            successMessage: 'A new user is created with identifier {{ param }}',
+            errorMessage: messages.DATA_ERROR_ALERT
           },
           payload: resolvedObject
         },

@@ -50,8 +50,7 @@ export class NotificationInterceptor implements HttpInterceptor {
                     if (typeof alert === 'string') {
                         if (this.alertService) {
                             <%_ if (enableTranslation) { _%>
-                            const alertParam = alertParams;
-                            this.alertService.success(alert, { param : alertParam }, null);
+                            this.alertService.success(alert, { param : alertParams }, null);
                             <%_ } else { _%>
                             this.alertService.success(alert, null, null);
                             <%_ } _%>

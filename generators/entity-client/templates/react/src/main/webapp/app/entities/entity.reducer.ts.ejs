@@ -25,7 +25,7 @@
     let entityActionNamePlural = entityInstancePlural.toUpperCase();
 _%>
 import axios from 'axios';
-import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction, translate } from 'react-jhipster';
+import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import { messages, SERVER_API_URL } from 'app/config/constants';
@@ -54,8 +54,7 @@ const initialState = {
   entities: [],
   entity: {},
   updating: false,
-  updateSuccess: false,
-  updateFailure: false
+  updateSuccess: false
 };
 
 // Reducer
@@ -94,7 +93,6 @@ export default (state = initialState, action) => {
         loading: false,
         updating: false,
         updateSuccess: false,
-        updateFailure: true,
         errorMessage: action.payload
       };
     <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -167,9 +165,6 @@ export const getEntity: ICrudGetAction = id => {
 export const createEntity: ICrudPutAction = entity => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_<%= entityActionName %>,
-    meta: {
-      successMessage: translate('jhipsterApp.<%= entityInstance %>.created', { param: entity.id })
-    },
     payload: axios.post(apiUrl, entity)
   });
   dispatch(getEntities());
@@ -179,9 +174,6 @@ export const createEntity: ICrudPutAction = entity => async dispatch => {
 export const updateEntity: ICrudPutAction = entity => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_<%= entityActionName %>,
-    meta: {
-      successMessage: translate('jhipsterApp.<%= entityInstance %>.updated', { param: entity.id })
-    },
     payload: axios.put(apiUrl, entity)
   });
   dispatch(getEntities());
@@ -192,9 +184,6 @@ export const deleteEntity: ICrudDeleteAction = id => async dispatch => {
   const requestUrl = `${apiUrl}/${id}`;
   const result = await dispatch({
     type: ACTION_TYPES.DELETE_<%= entityActionName %>,
-    meta: {
-      successMessage: translate('jhipsterApp.<%= entityInstance %>.deleted', { param: id })
-    },
     payload: axios.delete(requestUrl)
   });
   dispatch(getEntities());

@@ -31,6 +31,7 @@ const extractSASS = new ExtractTextPlugin(`[name]-sass.[hash].css`);
 
 module.exports = webpackMerge(commonConfig({ env: ENV }), {
   // devtool: 'source-map', // Enable source maps. Please note that this will slow down the build
+  mode: 'production',
   entry: {
     main: './src/main/webapp/app/index'
   },

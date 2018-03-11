@@ -19,7 +19,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Alert, Button<% if (searchEngine === 'elasticsearch') { %>, InputGroup<% } %> } from 'reactstrap';
+import { Button<% if (searchEngine === 'elasticsearch') { %>, InputGroup<% } %> } from 'reactstrap';
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 <%_ } _%>
@@ -44,8 +44,6 @@ export interface I<%= entityReactName %>Props {
   <%_ } _%>
   <%=entityInstancePlural %>: any[];
   match: any;
-  updateFailure: boolean;
-  errorMessage: any;
 }
 <%_ if (searchEngine === 'elasticsearch') { _%>
 
@@ -83,7 +81,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   <%_ } _%>
 
   render() {
-    const { <%=entityInstancePlural %>, match, updateFailure, errorMessage } = this.props;
+    const { <%=entityInstancePlural %>, match } = this.props;
     return (
       <%_ const keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
       <div>
@@ -93,11 +91,6 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
             <FaPlus /> <Translate contentKey="<%= keyPrefix %>home.createLabel" />
           </Link>
         </h2>
-        {(updateFailure) ? (
-          <Alert color="danger">
-            <p>{errorMessage.toString()}</p>
-          </Alert>
-        ) : null}
         <%_ if (searchEngine === 'elasticsearch') { _%>
         <div className="row">
           <div className="col-sm-12">
@@ -240,9 +233,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
 }
 
 const mapStateToProps = ({ <%= entityInstance %> }) => ({
-  <%=entityInstancePlural %>: <%= entityInstance %>.entities,
-  updateFailure: <%= entityInstance %>.updateFailure,
-  errorMessage: <%= entityInstance %>.errorMessage
+  <%=entityInstancePlural %>: <%= entityInstance %>.entities
 });
 
 const mapDispatchToProps = {

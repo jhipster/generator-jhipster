@@ -30,6 +30,7 @@ const ENV = 'development';
 
 module.exports = webpackMerge(commonConfig({ env: ENV }), {
   devtool: 'cheap-module-source-map', // https://reactjs.org/docs/cross-origin-errors.html
+  mode: 'development',
   entry: [
     'react-hot-loader/patch',
     './src/main/webapp/app/index'
@@ -107,8 +108,6 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         reload: false
     }),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.NamedModulesPlugin(),
     new writeFilePlugin(),
     new webpack.WatchIgnorePlugin([
       utils.root('src/test'),
