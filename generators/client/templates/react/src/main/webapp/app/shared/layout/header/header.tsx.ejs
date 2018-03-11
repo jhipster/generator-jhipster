@@ -25,6 +25,9 @@ import {
 import { NavLink as Link } from 'react-router-dom';
 import LoadingBar from 'react-redux-loading-bar';
 
+<%_ if (authenticationType === 'oauth2') { _%>
+import { getLoginUrl } from 'app/shared/util/url-utils';
+<%_ } _%>
 <%_ if (enableTranslation) { _%>
 import { locales } from 'app/config/translation';
 <%_ } _%>
@@ -103,18 +106,26 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
     const accountMenuItems = [];
     if (isAuthenticated) {
       accountMenuItems.push(
+        <%_ if (authenticationType !== 'oauth2') { _%>
         <DropdownItem tag={Link} key="settings" to="/account/settings"><FaWrench /> Settings</DropdownItem>,
         <DropdownItem tag={Link} key="password" to="/account/password"><FaClockO /> Password</DropdownItem>,
+        <%_ } _%>
         <%_ if (authenticationType === 'session') { _%>
         <DropdownItem tag={Link} key="sessions" to="/account/sessions"><FaCloud /> Sessions</DropdownItem>,
         <%_ } _%>
         <DropdownItem tag={Link} key="logout" to="/logout"><FaSignOut /> Logout</DropdownItem>
       );
     } else {
+      <%_ if (authenticationType !== 'oauth2') { _%>
       accountMenuItems.push(
         <DropdownItem tag={Link} key="login" to="/login"><FaSignIn /> Login</DropdownItem>,
         <DropdownItem tag={Link} key="register" to="/register"><FaSignIn /> Register</DropdownItem>
       );
+      <%_ } else { _%>
+      accountMenuItems.push(
+        <DropdownItem tag="a" key="login" href={getLoginUrl()}><FaSignIn /> Login</DropdownItem>
+      );
+      <%_ } _%>
     }
 
     return (
