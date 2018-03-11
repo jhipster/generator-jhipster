@@ -20,6 +20,7 @@ const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const WorkboxPlugin = require('workbox-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const path = require('path');
 
 const utils = require('./utils.js');
@@ -27,13 +28,15 @@ const commonConfig = require('./webpack.common.js');
 
 const ENV = 'production';
 const extractCSS = new ExtractTextPlugin(`[name].[hash].css`);
+<%_ if (useSass) { _%>
 const extractSASS = new ExtractTextPlugin(`[name]-sass.[hash].css`);
+<%_ } _%>
 
 module.exports = webpackMerge(commonConfig({ env: ENV }), {
   // devtool: 'source-map', // Enable source maps. Please note that this will slow down the build
   mode: 'production',
   entry: {
-    main: './src/main/webapp/app/index'
+    main: './<%= MAIN_SRC_DIR %>app/index'
   },
   output: {
     path: utils.root('<%= BUILD_DIR %>www'),
@@ -47,6 +50,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         test: /\.s?css$/,
         loader: 'stripcomment-loader'
       },
+      <%_ if (useSass) { _%>
       {
         test: /\.scss$/,
         use: extractSASS.extract({
@@ -54,6 +58,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
           use: ['css-loader', 'postcss-loader', 'sass-loader']
         })
       },
+      <%_ } _%>
       {
         test: /\.css$/,
         use: extractCSS.extract({
@@ -63,34 +68,45 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
       }
     ]
   },
-  plugins: [
-    // this conflicts with -p option
-    new webpack.optimize.UglifyJsPlugin({
-      beautify: false,
-      comments: false,
-      // sourceMap: true, // Enable source maps. Please note that this will slow down the build
-      compress: {
-        screw_ie8: true,
-        warnings: false
-      },
-      mangle: {
-        keep_fnames: true,
-        screw_i8: true
+  optimization: {
+    runtimeChunk: false,
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all'
+        }
       }
-    }),
+    },
+    minimizer: [
+      new UglifyJsPlugin({
+        cache: true,
+        parallel: true,
+        // sourceMap: true, // Enable source maps. Please note that this will slow down the build
+        uglifyOptions: {
+          beautify: false,
+          comments: false,
+          compress: {
+            warnings: false
+          },
+          mangle: {
+            keep_fnames: true
+          }
+        }
+      })
+    ]
+  },
+  plugins: [
     extractCSS,
+    <%_ if (useSass) { _%>
     extractSASS,
+    <%_ } _%>
     new webpack.LoaderOptionsPlugin({
       minimize: true,
       debug: false
     }),
     new WorkboxPlugin.GenerateSW({
-      // to cache all under <%= BUILD_DIR %>www
-      globDirectory: utils.root('<%= BUILD_DIR %>www'),
-      // find these files and cache them
-      globPatterns: ['**/*.{html,bundle.js,css,png,svg,jpg,gif,json}'],
-      // create service worker at the <%= BUILD_DIR %>www
-      swDest: path.resolve(utils.root('<%= BUILD_DIR %>www'), 'sw.js'),
       clientsClaim: true,
       skipWaiting: true,
     })

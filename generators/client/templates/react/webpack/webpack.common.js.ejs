@@ -23,6 +23,32 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const utils = require('./utils.js');
 
+const getTsLoaderRule = env => {
+  const rules = [
+    { loader: 'cache-loader' },
+    {
+        loader: 'thread-loader',
+        options: {
+            // there should be 1 cpu for the fork-ts-checker-webpack-plugin
+            workers: require('os').cpus().length - 1
+        }
+    },
+    {
+      loader: 'ts-loader',
+      options: {
+        transpileOnly: true,
+        happyPackMode: true
+      }
+    }
+  ];
+  if (env === 'development') {
+    rules.unshift({
+      loader: 'react-hot-loader/webpack'
+    });
+  }
+  return rules;
+};
+
 module.exports = options => ({
   cache: options.env !== 'production',
   resolve: {
@@ -38,24 +64,7 @@ module.exports = options => ({
     rules: [
       {
         test: /\.tsx?$/,
-        use: [options.env === 'development' ? {
-          loader: 'react-hot-loader/webpack'
-        } : undefined,
-        { loader: 'cache-loader' },
-        {
-            loader: 'thread-loader',
-            options: {
-                // there should be 1 cpu for the fork-ts-checker-webpack-plugin
-                workers: require('os').cpus().length - 1
-            }
-        },
-        {
-          loader: 'ts-loader',
-          options: {
-            transpileOnly: true,
-            happyPackMode: true
-          }
-        }],
+        use: getTsLoaderRule(options.env),
         include: [utils.root('./src/main/webapp/app')],
         exclude: ['node_modules']
       },
