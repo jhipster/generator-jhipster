@@ -1,8 +1,7 @@
 import axios from 'axios';
-import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction, translate } from 'react-jhipster';
+import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
-import { messages } from 'app/config/constants';
 
 export const ACTION_TYPES = {
   FETCH_ROLES: 'userManagement/FETCH_ROLES',
@@ -132,10 +131,6 @@ export const getUser: ICrudGetAction = id => {
 export const createUser: ICrudPutAction = user => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_USER,
-    meta: {
-      successMessage: translate('userManagement.created', { param: user.id }),
-      errorMessage: messages.DATA_ERROR_ALERT
-    },
     payload: axios.post(apiUrl, user)
   });
   dispatch(getUsers());
@@ -145,9 +140,6 @@ export const createUser: ICrudPutAction = user => async dispatch => {
 export const updateUser: ICrudPutAction = user => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_USER,
-    meta: {
-      successMessage: translate('userManagement.updated', { param: user.id })
-    },
     payload: axios.put(apiUrl, user)
   });
   dispatch(getUsers());
@@ -158,10 +150,6 @@ export const deleteUser: ICrudDeleteAction = id => async dispatch => {
   const requestUrl = `${apiUrl}/${id}`;
   const result = await dispatch({
     type: ACTION_TYPES.DELETE_USER,
-    meta: {
-      successMessage: translate('userManagement.deleted', { param: id }),
-      errorMessage: messages.DATA_ERROR_ALERT
-    },
     payload: axios.delete(requestUrl)
   });
   dispatch(getUsers());
