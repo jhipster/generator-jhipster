@@ -50,13 +50,15 @@ module.exports = {
       },
       {
         test: /\.tsx?$/,
-        use: [{
-          loader: 'awesome-typescript-loader',
-          options: {
-            useCache: true,
-            ignoreDiagnostics: [2307] // due to a weird false error from json files
+        use: [
+          { loader: 'cache-loader' },
+          {
+            loader: 'ts-loader',
+            options: {
+              ignoreDiagnostics: [2307] // due to a weird false error from json files
+            }
           }
-        }],
+        ],
         include: [path.resolve('./src/main/webapp/app'), path.resolve('./src/test/javascript')],
         exclude: ['node_modules']
       }

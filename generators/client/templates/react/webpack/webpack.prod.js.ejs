@@ -48,17 +48,6 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         loader: 'stripcomment-loader'
       },
       {
-        test: /\.tsx?$/,
-        use: [{
-          loader: 'awesome-typescript-loader',
-          options: {
-            useCache: false
-          }
-        }],
-        include: [utils.root('./src/main/webapp/app')],
-        exclude: ['node_modules']
-      },
-      {
         test: /\.scss$/,
         use: extractSASS.extract({
           fallback: 'style-loader',
@@ -95,7 +84,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
       minimize: true,
       debug: false
     }),
-    new WorkboxPlugin({
+    new WorkboxPlugin.GenerateSW({
       // to cache all under <%= BUILD_DIR %>www
       globDirectory: utils.root('<%= BUILD_DIR %>www'),
       // find these files and cache them

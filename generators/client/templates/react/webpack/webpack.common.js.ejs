@@ -19,6 +19,7 @@ limitations under the License.
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const utils = require('./utils.js');
 
@@ -35,6 +36,29 @@ module.exports = options => ({
   },
   module: {
     rules: [
+      {
+        test: /\.tsx?$/,
+        use: [options.env === 'development' ? {
+          loader: 'react-hot-loader/webpack'
+        } : undefined,
+        { loader: 'cache-loader' },
+        {
+            loader: 'thread-loader',
+            options: {
+                // there should be 1 cpu for the fork-ts-checker-webpack-plugin
+                workers: require('os').cpus().length - 1
+            }
+        },
+        {
+          loader: 'ts-loader',
+          options: {
+            transpileOnly: true,
+            happyPackMode: true
+          }
+        }],
+        include: [utils.root('./src/main/webapp/app')],
+        exclude: ['node_modules']
+      },
       {
         test: /\.(jpe?g|png|gif|svg|woff2?|ttf|eot)$/i,
         loaders: ['file-loader?hash=sha512&digest=hex&name=[hash].[ext]']
@@ -68,6 +92,7 @@ module.exports = options => ({
         SERVER_API_URL: `''`
       }
     }),
+    new ForkTsCheckerWebpackPlugin({ tslint: true }),
     new CopyWebpackPlugin([
       { from: './node_modules/swagger-ui/dist/css', to: 'swagger-ui/dist/css' },
       { from: './node_modules/swagger-ui/dist/lib', to: 'swagger-ui/dist/lib' },

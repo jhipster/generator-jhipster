@@ -43,20 +43,6 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
-        use: [{
-          loader: 'react-hot-loader/webpack',
-        },
-        {
-          loader: 'awesome-typescript-loader',
-          options: {
-            useCache: true
-          }
-        }],
-        include: [utils.root('./src/main/webapp/app')],
-        exclude: ['node_modules']
-      },
-      {
         test: /\.scss$/,
         loaders: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
       },

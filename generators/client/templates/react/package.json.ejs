@@ -74,9 +74,9 @@ limitations under the License.
     "@types/selenium-webdriver": "3.0.7",
     <%_ } _%>
     "@types/webpack-env": "1.13.5",
-    "awesome-typescript-loader": "4.0.1",
     "browser-sync": "2.23.6",
     "browser-sync-webpack-plugin": "2.0.1",
+    "cache-loader": "1.2.2",
     "chai": "4.1.2",
     "chai-enzyme": "1.0.0-beta.0",
     "copy-webpack-plugin": "4.5.1",
@@ -87,6 +87,7 @@ limitations under the License.
     "enzyme-adapter-react-16": "1.1.1",
     "extract-text-webpack-plugin": "3.0.2",
     "file-loader": "1.1.11",
+    "fork-ts-checker-webpack-plugin": "0.4.1",
     "html-webpack-plugin": "3.0.6",
     "http-proxy-middleware": "0.17.4",
     "husky": "0.14.3",
@@ -128,6 +129,7 @@ limitations under the License.
     "stripcomment-loader": "0.1.0",
     "style-loader": "0.20.3",
     "swagger-ui": "2.2.10",
+    "thread-loader": "1.1.5",
     <%_ if (useSass) { _%>
     "sass-loader": "6.0.6",
     "node-sass": "4.5.3",
@@ -137,6 +139,7 @@ limitations under the License.
     "<%= module.name %>": "<%= module.version %>",
     <%_ }); _%>
     "to-string-loader": "1.1.5",
+    "ts-loader": "4.0.1",
     <%_ if (protractorTests) { _%>
     "ts-node": "3.3.0",
     <%_ } _%>
@@ -165,7 +168,7 @@ limitations under the License.
   },
   "scripts": {
     "precommit": "lint-staged",
-    "prettier:format":"<%= clientPackageManager %> prettier --write **/*.{ts,tsx}",
+    "prettier:format": "<%= clientPackageManager %> prettier --write **/*.{ts,tsx}",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "cleanup": "rimraf <%= BUILD_DIR %>www",
