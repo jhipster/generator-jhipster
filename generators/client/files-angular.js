@@ -32,7 +32,7 @@ const files = {
     common: [
         {
             templates: [
-                '.prettierrc',
+                '.prettierrc', // this needs to be the first file for prettier transform to work
                 '.prettierignore',
                 'package.json',
                 'proxy.conf.json',

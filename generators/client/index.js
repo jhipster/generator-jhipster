@@ -382,7 +382,6 @@ module.exports = class extends BaseGenerator {
         } else {
             this.installDependencies(installConfig).then(
                 () => {
-                    this.spawnCommandSync(this.clientPackageManager, ['run', 'prettier:format']);
                     this.buildResult = this.spawnCommandSync(this.clientPackageManager, ['run', 'webpack:build']);
                 },
                 (err) => {
