@@ -49,7 +49,7 @@ exports.config = {
 
     beforeLaunch: function() {
         require('ts-node').register({
-            project: ''
+            project: '<%= TEST_SRC_DIR %>tsconfig.e2e.json'
         });
     },
 

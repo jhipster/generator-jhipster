@@ -19,15 +19,15 @@
 {
     "compilerOptions": {
         "target": "es5",
-        "module": "commonjs",
+        "module": "es2015",
         "moduleResolution": "node",
         "sourceMap": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "removeComments": false,
         "noImplicitAny": false,
-        "skipLibCheck": true,
         "suppressImplicitAnyIndexErrors": true,
+        "skipLibCheck": true,
         "outDir": "<%= DIST_DIR %>app",
         "lib": ["es7", "dom"],
         "typeRoots": [
@@ -39,8 +39,9 @@
         },
         "importHelpers": true
     },
-    "include": [
-        "<%= MAIN_SRC_DIR %>app",
-        "<%= TEST_SRC_DIR %>"
-    ]
+    "angularCompilerOptions": {
+        "genDir": "<%= BUILD_DIR %>aot",
+        "skipMetadataEmit" : true,
+        "fullTemplateTypeCheck": true
+    }
 }

@@ -37,7 +37,6 @@ const files = {
                 'package.json',
                 'proxy.conf.json',
                 'tsconfig.json',
-                'tsconfig-aot.json',
                 'tslint.json',
                 '.angular-cli.json',
                 'webpack/utils.js',
@@ -551,7 +550,8 @@ const files = {
                 'e2e/account/account.spec.ts',
                 'e2e/admin/administration.spec.ts',
                 'e2e/page-objects/jhi-page-objects.ts',
-                'protractor.conf.js'
+                'protractor.conf.js',
+                'tsconfig.e2e.json'
             ]
         }
     ]
