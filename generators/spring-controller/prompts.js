@@ -31,7 +31,7 @@ function askForReactive() {
         {
             type: 'confirm',
             name: 'reactiveController',
-            message: `Do you want your controller to provide a reactive API, using Spring Webflux?`,
+            message: 'Do you want your controller to provide a reactive API, using Spring Webflux?',
             default: false
         }
     ];
