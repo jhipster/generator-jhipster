@@ -23,6 +23,7 @@ import { Button } from 'reactstrap';
 import {
   Translate,
   ICrudGetAllAction,
+  ICrudPutAction,
   TextFormat,
   JhiPagination,
   getPaginationItemsNumber,
@@ -33,10 +34,11 @@ import { FaPlus, FaEye, FaPencil, FaSort, FaTrash } from 'react-icons/lib/fa';
 
 import { APP_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
-import { getUsers } from './user-management.reducer';
+import { getUsers, updateUser } from './user-management.reducer';
 
 export interface IUserManagementProps {
   getUsers: ICrudGetAllAction;
+  updateUser: ICrudPutAction;
   users: any[];
   account: any;
   match: any;
@@ -72,6 +74,13 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
     const { activePage, itemsPerPage, sort, order } = this.state;
     this.props.getUsers(activePage - 1, itemsPerPage, `${sort},${order}`);
   }
+
+  toggleActive = user => () => {
+    this.props.updateUser({
+      ...user,
+      activated: !user.activated
+    });
+  };
 
   render() {
     const { users, account, match, totalItems } = this.props;
@@ -122,13 +131,15 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
                   <td>{user.login}</td>
                   <td>{user.email}</td>
                   <td>
-                    {
-                      user.activated ? (
-                        <span className="badge badge-success" style={{ cursor: 'pointer' }}>Activated</span>
-                      ) : (
-                        <span className="badge badge-danger" style={{ cursor: 'pointer' }}>Deactivated</span>
-                      )
-                    }
+                    {user.activated ? (
+                      <Button color="success" onClick={this.toggleActive(user) }>
+                        Activated
+                      </Button>
+                    ) : (
+                      <Button color="danger" onClick={this.toggleActive(user) }>
+                        Deactivated
+                      </Button>
+                    )}
                   </td>
                   <%_ if (enableTranslation) { _%>
                   <td>{user.langKey}</td>
@@ -195,6 +206,6 @@ const mapStateToProps = storeState => ({
   account: storeState.authentication.account
 });
 
-const mapDispatchToProps = { getUsers };
+const mapDispatchToProps = { getUsers, updateUser };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserManagement);

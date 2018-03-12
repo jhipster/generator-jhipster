@@ -16,7 +16,7 @@
       "node_modules/@types"
     ],
     "allowJs": true,
-    "checkJs": true,
+    "checkJs": false,
     "baseUrl": "./",
     "paths": {
         "app/*": ["<%= MAIN_SRC_DIR %>app/*"]
@@ -27,5 +27,8 @@
     "<%= MAIN_SRC_DIR %>app/typing.d.ts",
     "<%= MAIN_SRC_DIR %>app/**/*",
     "<%= TEST_SRC_DIR %>**/*"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

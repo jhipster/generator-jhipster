@@ -232,8 +232,8 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   }
 }
 
-const mapStateToProps = storeState => ({
-  <%=entityInstancePlural %>: storeState.<%= entityInstance %>.entities
+const mapStateToProps = ({ <%= entityInstance %> }) => ({
+  <%=entityInstancePlural %>: <%= entityInstance %>.entities
 });
 
 const mapDispatchToProps = {

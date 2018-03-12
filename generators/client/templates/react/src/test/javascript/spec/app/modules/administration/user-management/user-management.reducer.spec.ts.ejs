@@ -15,7 +15,6 @@ import userManagement, {
   updateUser,
   deleteUser
 } from 'app/modules/administration/user-management/user-management.reducer';
-import { messages } from 'app/config/constants';
 
 describe('User management reducer tests', () => {
   function isEmpty(element): boolean {
@@ -223,18 +222,10 @@ describe('User management reducer tests', () => {
     it('dispatches CREATE_USER_PENDING and CREATE_USER_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.CREATE_USER),
-          meta: {
-            successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
-            errorMessage: messages.DATA_UPDATE_ERROR_ALERT
-          }
+          type: REQUEST(ACTION_TYPES.CREATE_USER)
         },
         {
           type: SUCCESS(ACTION_TYPES.CREATE_USER),
-          meta: {
-            successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
-            errorMessage: messages.DATA_UPDATE_ERROR_ALERT
-          },
           payload: resolvedObject
         },
         {
@@ -250,18 +241,10 @@ describe('User management reducer tests', () => {
     it('dispatches UPDATE_USER_PENDING and UPDATE_USER_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.UPDATE_USER),
-          meta: {
-            successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
-            errorMessage: messages.DATA_UPDATE_ERROR_ALERT
-          }
+          type: REQUEST(ACTION_TYPES.UPDATE_USER)
         },
         {
           type: SUCCESS(ACTION_TYPES.UPDATE_USER),
-          meta: {
-            successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
-            errorMessage: messages.DATA_UPDATE_ERROR_ALERT
-          },
           payload: resolvedObject
         },
         {
@@ -277,18 +260,10 @@ describe('User management reducer tests', () => {
     it('dispatches DELETE_USER_PENDING and DELETE_USER_FULFILLED actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.DELETE_USER),
-          meta: {
-            successMessage: messages.DATA_DELETE_SUCCESS_ALERT,
-            errorMessage: messages.DATA_UPDATE_ERROR_ALERT
-          }
+          type: REQUEST(ACTION_TYPES.DELETE_USER)
         },
         {
           type: SUCCESS(ACTION_TYPES.DELETE_USER),
-          meta: {
-            successMessage: messages.DATA_DELETE_SUCCESS_ALERT,
-            errorMessage: messages.DATA_UPDATE_ERROR_ALERT
-          },
           payload: resolvedObject
         },
         {

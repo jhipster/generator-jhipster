@@ -165,7 +165,6 @@ module.exports = class extends BaseGenerator {
 
                 this.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no';
                 this.enableHibernateCache = this.config.get('enableHibernateCache') || (this.config.get('hibernateCache') !== undefined && this.config.get('hibernateCache') !== 'no');
-                this.cacheManagerIsAvailable = ['ehcache', 'hazelcast', 'infinispan'].includes(this.cacheProvider) || this.applicationType === 'gateway';
 
                 this.databaseType = this.config.get('databaseType');
                 if (this.databaseType === 'mongodb') {
@@ -347,6 +346,7 @@ module.exports = class extends BaseGenerator {
                 this.lowercaseBaseName = this.baseName.toLowerCase();
                 this.humanizedBaseName = _.startCase(this.baseName);
                 this.mainClass = this.getMainClassName();
+                this.cacheManagerIsAvailable = ['ehcache', 'hazelcast', 'infinispan'].includes(this.cacheProvider) || this.applicationType === 'gateway';
 
                 this.pkType = this.getPkType(this.databaseType);
 

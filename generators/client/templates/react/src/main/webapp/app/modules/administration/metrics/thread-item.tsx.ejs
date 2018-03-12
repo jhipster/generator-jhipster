@@ -31,7 +31,7 @@ export class ThreadItem extends React.Component<IThreadItemProps, IThreadItemSta
         <Card>
           <CardBody>
             <div className="row break" style={{ overflowX: 'scroll' }}>
-              {Object.entries(threadDumpInfo.stackTrace).map(([stK, stV]) => (
+              {Object.entries(threadDumpInfo.stackTrace).map(([stK, stV]: [string, any]) => (
                 <samp key={`detail-${stK}`}>
                   {stV.className}.{stV.methodName}
                   <code>({stV.fileName}:{stV.lineNumber})</code>

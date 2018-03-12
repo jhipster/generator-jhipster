@@ -32,7 +32,7 @@ const files = {
     common: [
         {
             templates: [
-                '.prettierrc',
+                '.prettierrc', // this needs to be the first file for prettier transform to work
                 '.prettierignore',
                 'package.json',
                 'tslint.json',
@@ -160,11 +160,15 @@ const files = {
         {
             path: REACT_DIR,
             templates: [
-                // home module
                 { file: 'modules/home/home.tsx', method: 'processJsx' },
-                // login module
-                { file: 'modules/login/login.tsx', method: 'processJsx' },
                 { file: 'modules/login/logout.tsx', method: 'processJsx' },
+            ]
+        },
+        {
+            condition: generator => generator.authenticationType !== 'oauth2',
+            path: REACT_DIR,
+            templates: [
+                { file: 'modules/login/login.tsx', method: 'processJsx' },
                 { file: 'modules/login/login-modal.tsx', method: 'processJsx' }
             ]
         },
@@ -305,6 +309,13 @@ const files = {
                 // components
                 // model
                 'shared/model/user.model.ts'
+            ]
+        },
+        {
+            condition: generator => generator.authenticationType === 'oauth2',
+            path: REACT_DIR,
+            templates: [
+                'shared/util/url-utils.ts'
             ]
         },
         {

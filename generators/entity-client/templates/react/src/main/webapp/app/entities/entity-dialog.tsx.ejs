@@ -31,9 +31,9 @@ _%>
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Label<% if (haveFieldWithJavadoc) { %>, UncontrolledTooltip<% } %> } from 'reactstrap';
-import { AvForm, AvGroup, AvInput, AvFeedback } from 'availity-reactstrap-validation';
+import { AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
 // tslint:disable-next-line:no-unused-variable
-import { Translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
 import { FaBan, FaFloppyO } from 'react-icons/lib/fa';
 
 <%_
@@ -138,12 +138,14 @@ export class <%= entityReactName %>Dialog extends React.Component<I<%= entityRea
     values.<%=fields[idx].fieldName%> = new Date(values.<%=fields[idx].fieldName%>);
     <%_ } _%>
     <%_ } _%>
-    if (this.state.isNew) {
-      this.props.createEntity(values);
-    } else {
-      this.props.updateEntity(values);
+    if (errors.length === 0) {
+      if (this.state.isNew) {
+        this.props.createEntity(values);
+      } else {
+        this.props.updateEntity(values);
+      }
+      this.handleClose();
     }
-    this.handleClose();
   }
 
   handleClose = () => {
@@ -241,7 +243,7 @@ _%>
       { loading ? <p>Loading...</p>
       : <AvForm model={isNew ? {} : <%= entityInstance %>} onSubmit={this.saveEntity} >
           <ModalBody>
-            { <%= entityInstance %>.id ?
+            { !isNew ?
               <AvGroup>
                 <Label for="id"><Translate contentKey="global.field.id">ID</Translate></Label>
                 <AvInput type="text" className="form-control" name="id" required readOnly/>
@@ -267,18 +269,24 @@ _%>
                 </Translate>
               </Label>
               <AvInput
-                type="datetime-local" className="form-control" name="<%= fieldName %>"
-                value={convertDateTimeFromServer(this.props.<%= entityInstance %>.<%= fieldName %>)} required
+                type="datetime-local"
+                className="form-control"
+                name="<%= fieldName %>"
+                value={isNew ? null : convertDateTimeFromServer(this.props.<%= entityInstance %>.<%= fieldName %>)}
+                <%- include react_validators %>
               />
-              <AvFeedback>This field is required.</AvFeedback>
             <%_ } else if (fieldType === 'LocalDate') { _%>
               <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
                 <Translate contentKey="<%= keyPrefix %><%= fieldName %>">
                   <%=fieldName%>
                 </Translate>
               </Label>
-              <AvInput type="date" className="form-control" name="<%= fieldName %>" required />
-              <AvFeedback>This field is required.</AvFeedback>
+              <AvField
+                type="date"
+                className="form-control"
+                name="<%= fieldName %>"
+                <%- include react_validators %>
+              />
             <%_ } else if (fields[idx].fieldIsEnum) { _%>
               <Label id="<%= fieldName %>Label">
                 <Translate contentKey="<%= keyPrefix %><%= fieldName %>">
@@ -305,18 +313,14 @@ _%>
                   <%=fieldName%>
                 </Translate>
               </Label>
-              <AvInput type="number" className="form-control" name="<%= fieldName %>" required />
-              <AvFeedback>This field is required.</AvFeedback>
-              <AvFeedback>This field cannot be longer than 50 characters.</AvFeedback>
+              <AvField type="number" className="form-control" name="<%= fieldName %>" <%- include react_validators %> />
             <%_ } else { _%>
               <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
                 <Translate contentKey="<%= keyPrefix %><%= fieldName %>">
                   <%=fieldName%>
                 </Translate>
               </Label>
-              <AvInput type="text" className="form-control" name="<%= fieldName %>" required />
-              <AvFeedback>This field is required.</AvFeedback>
-              <AvFeedback>This field cannot be longer than 50 characters.</AvFeedback>
+              <AvField type="text" name="<%= fieldName %>" <%- include react_validators %>/>
             <%_ } _%>
             <%_ if (fields[idx].javadoc) { _%>
             <UncontrolledTooltip target="<%= fieldName %>Label">
