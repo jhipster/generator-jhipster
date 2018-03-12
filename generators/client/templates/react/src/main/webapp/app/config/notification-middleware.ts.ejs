@@ -1,4 +1,4 @@
-import { isPromise, translate } from 'react-jhipster';
+import { isPromise<% if(enableTranslation) { %>, translate<% } %> } from 'react-jhipster';
 import { toast } from 'react-toastify';
 
 const addErrorAlert = (message, key?, data?) => {
