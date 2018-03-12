@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 const webpack = require('webpack');
-const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const rxPaths = require('rxjs/_esm5/path-mapping');
@@ -69,11 +68,6 @@ module.exports = (options) => ({
         ]
     },
     plugins: [
-        new AngularCompilerPlugin({
-            mainPath: utils.root('<%= MAIN_SRC_DIR %>app/app.main.ts'),
-            tsConfigPath: utils.root('tsconfig.json'),
-            sourceMap: true
-        }),
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: `'${options.env}'`,
