@@ -31,7 +31,9 @@ export interface IRegisterProps {
   registrationSuccess: boolean;
   registrationFailure: boolean;
   errorMessage: string;
+<%_ if (enableTranslation) { _%>
   currentLocale: string;
+<%_ } _%>
 }
 
 export interface IRegisterState {
@@ -168,11 +170,13 @@ export class RegisterPage extends React.Component<IRegisterProps, IRegisterState
   }
 }
 
-const mapStateToProps = ({ register, locale }) => ({
+const mapStateToProps = ({ register<%_ if (enableTranslation) { _%>, locale <%_ } _%>}) => ({
   registrationSuccess: register.registrationSuccess,
   registrationFailure: register.registrationFailure,
   errorMessage: register.errorMessage,
+<%_ if (enableTranslation) { _%>
   currentLocale: locale.currentLocale
+<%_ } _%>
 });
 
 const mapDispatchToProps = { handleRegister, reset };

@@ -3,11 +3,17 @@ import { Route } from 'react-router-dom';
 
 import Settings from './settings/settings';
 import Password from './password/password';
+<%_ if (authenticationType === 'session') { _%>
+import Sessions from './sessions/sessions';
+<%_ } _%>
 
 const Routes = ({ match }) => (
   <div>
     <Route path={`${match.url}/settings`} component={Settings}/>
     <Route path={`${match.url}/password`} component={Password}/>
+    <%_ if (authenticationType === 'session') { _%>
+    <Route path={`${match.url}/sessions`} component={Sessions} />
+    <%_ } _%>
   </div>
 );
 

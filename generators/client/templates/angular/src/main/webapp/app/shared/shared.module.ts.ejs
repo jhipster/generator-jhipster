@@ -18,7 +18,6 @@
 -%>
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
-import { DateFormatPipe, ParsePipe } from 'angular2-moment';
 
 import { NgbDateMomentAdapter } from './util/datepicker-adapter';
 import {
@@ -47,7 +46,7 @@ import {
         <%_ } _%>
         HasAnyAuthorityDirective
     ],
-    providers: [ ParsePipe, DateFormatPipe,
+    providers: [
         { provide: NgbDateAdapter, useClass: NgbDateMomentAdapter},
     ],
     <%_ if (authenticationType !== 'oauth2') { _%>

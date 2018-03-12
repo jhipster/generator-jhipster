@@ -126,6 +126,7 @@ module.exports = class extends BaseGenerator {
         this.useYarn = this.configOptions.useYarn = !this.options.npm;
         this.isDebugEnabled = this.configOptions.isDebugEnabled = this.options.debug;
         this.experimental = this.configOptions.experimental = this.options.experimental;
+        this.registerClientTransforms();
     }
 
     get initializing() {
@@ -206,7 +207,6 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
-
     get prompting() {
         return {
             askForInsightOptIn: prompts.askForInsightOptIn,
@@ -343,13 +343,9 @@ module.exports = class extends BaseGenerator {
                         });
                     });
                 }
-            }
-        };
-    }
+            },
 
-    get end() {
-        return {
-            localInstall() {
+            generatePackageForMS() {
                 if (this.skipClient) {
                     if (this.otherModules === undefined) {
                         this.otherModules = [];
@@ -358,7 +354,15 @@ module.exports = class extends BaseGenerator {
                     // of the generator as dependency
                     this.dasherizedBaseName = _.kebabCase(this.baseName);
                     this.template('skipClientApp.package.json.ejs', 'package.json');
+                }
+            }
+        };
+    }
 
+    get end() {
+        return {
+            localInstall() {
+                if (this.skipClient) {
                     if (!this.options['skip-install']) {
                         if (this.clientPackageManager === 'yarn') {
                             this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using yarn`));

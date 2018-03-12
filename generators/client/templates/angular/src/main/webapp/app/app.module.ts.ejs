@@ -34,7 +34,6 @@ import { <%=angularXAppName%>SharedModule } from 'app/shared';
 import { <%=angularXAppName%>CoreModule } from 'app/core';
 import { <%=angularXAppName%>AppRoutingModule} from './app-routing.module';
 import { <%=angularXAppName%>HomeModule } from './home/home.module';
-import { <%=angularXAppName%>AdminModule } from './admin/admin.module';
 <%_ if (authenticationType !== 'oauth2') { _%>
 import { <%=angularXAppName%>AccountModule } from './account/account.module';
 <%_ } _%>
@@ -64,7 +63,6 @@ import {
         <%=angularXAppName%>SharedModule,
         <%=angularXAppName%>CoreModule,
         <%=angularXAppName%>HomeModule,
-        <%=angularXAppName%>AdminModule,
         <%_ if (authenticationType !== 'oauth2') { _%>
         <%=angularXAppName%>AccountModule,
         <%_ } _%>

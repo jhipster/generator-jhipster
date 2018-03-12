@@ -8,13 +8,14 @@ import { FaBan, FaFloppyO } from 'react-icons/lib/fa';
 <%_ if (enableTranslation) { _%>
 import { locales } from 'app/config/translation';
 <%_ } _%>
-import { getUser, getRoles, updateUser, createUser } from './user-management.reducer';
+import { getUser, getRoles, updateUser, createUser, resetModal } from './user-management.reducer';
 
 export interface IUserManagementDialogProps {
   getUser: ICrudGetAction;
   getRoles: ICrudGetAllAction;
   updateUser: ICrudPutAction;
   createUser: ICrudPutAction;
+  resetModal: Function;
   loading: boolean;
   updating: boolean;
   user: any;
@@ -38,6 +39,10 @@ export class UserManagementDialog extends React.Component<IUserManagementDialogP
   componentDidMount() {
     !this.state.isNew && this.props.getUser(this.props.match.params.login);
     this.props.getRoles();
+  }
+
+  componentWillUnmount() {
+    this.props.resetModal();
   }
 
   saveUSer = (event, errors, values) => {
@@ -99,8 +104,8 @@ export class UserManagementDialog extends React.Component<IUserManagementDialogP
               <AvFeedback>This field cannot be longer than 254 characters.</AvFeedback>
               <AvFeedback>This field is required to be at least 5 characters.</AvFeedback>
             </AvGroup>
-            <AvGroup>
-              <Label check>
+            <AvGroup check inline>
+              <Label>
                 <AvInput type="checkbox" name="activated" /> <Translate contentKey="userManagement.activated">Activated</Translate>
               </Label>
               <AvFeedback>This field is required.</AvFeedback>
@@ -146,6 +151,6 @@ const mapStateToProps = storeState => ({
   updating: storeState.userManagement.updating
 });
 
-const mapDispatchToProps = { getUser, getRoles, updateUser, createUser };
+const mapDispatchToProps = { getUser, getRoles, updateUser, createUser, resetModal };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserManagementDialog);

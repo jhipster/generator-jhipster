@@ -28,10 +28,12 @@ const semver = require('semver');
 const exec = require('child_process').exec;
 const https = require('https');
 const jhiCore = require('jhipster-core');
+const filter = require('gulp-filter');
 
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
+const { prettierTransform, defaultTsPrettierOptions } = require('./generator-transforms');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 
@@ -1002,7 +1004,6 @@ module.exports = class extends Generator {
      */
     rebuildClient() {
         const done = this.async();
-        this.spawnCommandSync(this.clientPackageManager, ['run', 'prettier:format']);
         this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app\n')}`);
         this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build']).on('close', () => {
             done();
@@ -1058,5 +1059,21 @@ module.exports = class extends Generator {
             return '../';
         }
         return '';
+    }
+
+    /**
+     * Register file transforms for client side files
+     * @param {any} generator
+     */
+    registerClientTransforms(generator = this) {
+        if (!generator.skipClient) {
+            const typescriptFilter = filter(['**/*.{ts,tsx}'], { restore: true });
+            // this pipe will pass through (restore) anything that doesn't match typescriptFilter
+            generator.registerTransformStream([
+                typescriptFilter,
+                prettierTransform(defaultTsPrettierOptions),
+                typescriptFilter.restore
+            ]);
+        }
     }
 };

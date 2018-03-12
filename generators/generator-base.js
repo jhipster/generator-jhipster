@@ -235,7 +235,7 @@ module.exports = class extends PrivateBase {
                 const appName = this.getAngularXAppName();
                 let importName = `${appName}${entityAngularName}Module`;
                 if (microServiceName) {
-                    importName = `${importName} as ${_.upperFirst(_.camelCase(microServiceName))}${entityAngularName}Module`;
+                    importName = `${importName} as ${this.upperFirstCamelCase(microServiceName)}${entityAngularName}Module`;
                 }
                 let importStatement = `|import { ${importName} } from './${entityFolderName}/${entityFileName}.module';`;
                 if (importStatement.length > constants.LINE_LENGTH) {
@@ -257,7 +257,7 @@ module.exports = class extends PrivateBase {
                     file: entityModulePath,
                     needle: 'jhipster-needle-add-entity-module',
                     splicable: [
-                        this.stripMargin(microServiceName ? `|${_.upperFirst(_.camelCase(microServiceName))}${entityAngularName}Module,` : `|${appName}${entityAngularName}Module,`)
+                        this.stripMargin(microServiceName ? `|${this.upperFirstCamelCase(microServiceName)}${entityAngularName}Module,` : `|${appName}${entityAngularName}Module,`)
                     ]
                 }, this);
             } else {
@@ -1257,7 +1257,19 @@ module.exports = class extends PrivateBase {
      * @param {string} other - (optional) explicit other thing: scope, exclusions...
      */
     addMavenDependency(groupId, artifactId, version, other) {
-        const fullPath = 'pom.xml';
+        this.addMavenDependencyInDirectory('.', groupId, artifactId, version, other);
+    }
+
+    /**
+     * Add a new Maven dependency in a specific folder..
+     *
+     * @param {string} directory - the folder to add the dependency in
+     * @param {string} groupId - dependency groupId
+     * @param {string} artifactId - dependency artifactId
+     * @param {string} version - (optional) explicit dependency version number
+     * @param {string} other - (optional) explicit other thing: scope, exclusions...
+     */
+    addMavenDependencyInDirectory(directory, groupId, artifactId, version, other) {
         try {
             let dependency = `${'<dependency>\n' +
                 '            <groupId>'}${groupId}</groupId>\n` +
@@ -1270,14 +1282,15 @@ module.exports = class extends PrivateBase {
             }
             dependency += '        </dependency>';
             jhipsterUtils.rewriteFile({
-                file: fullPath,
+                path: directory,
+                file: 'pom.xml',
                 needle: 'jhipster-needle-maven-add-dependency',
                 splicable: [
                     dependency
                 ]
             }, this);
         } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}maven dependency (groupId: ${groupId}, artifactId:${artifactId}, version:${version})${chalk.yellow(' not added.\n')}`);
+            this.log(`${chalk.yellow('\nUnable to find ') + directory + chalk.yellow(' or missing required jhipster-needle. Reference to ')}maven dependency (groupId: ${groupId}, artifactId:${artifactId}, version:${version})${chalk.yellow(' not added.\n')}`);
             this.debug('Error:', e);
         }
     }
@@ -1426,21 +1439,33 @@ module.exports = class extends PrivateBase {
      * @param {string} version - (optional) explicit dependency version number
      */
     addGradleDependency(scope, group, name, version) {
-        const fullPath = 'build.gradle';
+        this.addGradleDependencyInDirectory('.', scope, group, name, version);
+    }
+
+    /**
+     * A new dependency to build.gradle file in a specific folder.
+     *
+     * @param {string} scope - scope of the new dependency, e.g. compile
+     * @param {string} group - maven GroupId
+     * @param {string} name - maven ArtifactId
+     * @param {string} version - (optional) explicit dependency version number
+     */
+    addGradleDependencyInDirectory(directory, scope, group, name, version) {
         let dependency = `${group}:${name}`;
         if (version) {
             dependency += `:${version}`;
         }
         try {
             jhipsterUtils.rewriteFile({
-                file: fullPath,
+                path: directory,
+                file: 'build.gradle',
                 needle: 'jhipster-needle-gradle-dependency',
                 splicable: [
                     `${scope} "${dependency}"`
                 ]
             }, this);
         } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + group}:${name}:${version}${chalk.yellow(' not added.\n')}`);
+            this.log(`${chalk.yellow('\nUnable to find ') + directory + chalk.yellow(' or missing required jhipster-needle. Reference to ') + group}:${name}:${version}${chalk.yellow(' not added.\n')}`);
             this.debug('Error:', e);
         }
     }
@@ -1796,7 +1821,7 @@ module.exports = class extends PrivateBase {
      * @param {string} microserviceName
      */
     getMicroserviceAppName(microserviceName) {
-        return _.camelCase(microserviceName, true) + (microserviceName.endsWith('App') ? '' : 'App');
+        return _.camelCase(microserviceName) + (microserviceName.endsWith('App') ? '' : 'App');
     }
 
     /**
@@ -2168,14 +2193,8 @@ module.exports = class extends PrivateBase {
      * @param {string} baseName of application
      */
     getAngularAppName(baseName = this.baseName) {
-        return _.camelCase(baseName, true) + (baseName.endsWith('App') ? '' : 'App');
-    }
-
-    /**
-     * get the Angular 2+ application name.
-     */
-    getAngular2AppName() {
-        return this.getAngularXAppName();
+        const name = _.camelCase(baseName) + (baseName.endsWith('App') ? '' : 'App');
+        return name.match(/^\d/) ? 'App' : name;
     }
 
     /**
@@ -2183,7 +2202,16 @@ module.exports = class extends PrivateBase {
      * @param {string} baseName of application
      */
     getAngularXAppName(baseName = this.baseName) {
-        return _.upperFirst(_.camelCase(baseName, true));
+        const name = this.upperFirstCamelCase(baseName);
+        return name.match(/^\d/) ? 'App' : name;
+    }
+
+    /**
+     * get the an upperFirst camelCase value.
+     * @param {string} value string to convert
+     */
+    upperFirstCamelCase(value) {
+        return _.upperFirst(_.camelCase(value));
     }
 
     /**
@@ -2191,7 +2219,7 @@ module.exports = class extends PrivateBase {
      * @param {string} baseName of application
      */
     getMainClassName(baseName = this.baseName) {
-        const main = _.upperFirst(this.getAngularAppName(baseName));
+        const main = _.upperFirst(this.getMicroserviceAppName(baseName));
         const acceptableForJava = new RegExp('^[A-Z][a-zA-Z0-9_]*$');
 
         return acceptableForJava.test(main) ? main : 'Application';

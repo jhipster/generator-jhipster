@@ -134,7 +134,7 @@ public class CacheConfiguration {
             <%_ if (authenticationType === 'oauth2' && applicationType === 'microservice') { _%>
             cm.createCache("oAuth2Authentication", jcacheConfiguration);
             <%_ } _%>
-            <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && applicationType === 'monolith')) { _%>
+            <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
             cm.createCache(<%=packageName%>.repository.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
             cm.createCache(<%=packageName%>.repository.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
                 <%_ if (enableHibernateCache) { _%>

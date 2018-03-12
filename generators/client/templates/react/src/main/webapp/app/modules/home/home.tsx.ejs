@@ -6,6 +6,9 @@ import { Translate } from 'react-jhipster';
 import { connect } from 'react-redux';
 
 import { getSession } from 'app/shared/reducers/authentication';
+<%_ if (authenticationType === 'oauth2') { _%>
+import { getLoginUrl } from 'app/shared/util/url-utils';
+<%_ } _%>
 
 export interface IHomeProp {
   account: any;
@@ -33,7 +36,6 @@ export class Home extends React.Component<IHomeProp, IHomeState> {
 
   render() {
     const { currentUser } = this.state;
-
     return (
       <div className="row">
         <div className="col-md-9">
@@ -50,7 +52,13 @@ export class Home extends React.Component<IHomeProp, IHomeState> {
               <div>
                 <div className="alert alert-warning">
                   <Translate contentKey="global.messages.info.authenticated.prefix">If you want to </Translate>
+                  <%_ if (authenticationType === 'oauth2') { _%>
+                  <a href={getLoginUrl()} className="alert-link">
+                    <Translate contentKey="global.messages.info.authenticated.link">sign in</Translate>
+                  </a>
+                  <%_ } else { _%>
                   <Link to="/login" className="alert-link"><Translate contentKey="global.messages.info.authenticated.link">sign in</Translate></Link>
+                  <%_ } _%>
                   <Translate contentKey="global.messages.info.authenticated.suffix">, you can try the default accounts:
                     Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;)
                     User (login=&quot;user&quot; and password=&quot;user&quot;).

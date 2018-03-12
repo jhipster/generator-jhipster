@@ -29,9 +29,6 @@ import { Translate, translate, ICrudGetAllAction, TextFormat } from 'react-jhips
 import { FaPlus, FaEye, FaPencil, FaTrash<% if (searchEngine === 'elasticsearch') { %>, FaSearch<% } %> } from 'react-icons/lib/fa';
 
 import {
-<%_ for (idx in relationships) { const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;const otherEntityNamePlural = relationships[idx].otherEntityNamePlural; _%>
-  get<%= otherEntityNamePlural %>,
-<%_ } _%>
   <%_ if (searchEngine === 'elasticsearch') { _%>
   getSearchEntities,
   <%_ } _%>
@@ -46,12 +43,6 @@ export interface I<%= entityReactName %>Props {
   getSearchEntities: ICrudGetAllAction;
   <%_ } _%>
   <%=entityInstancePlural %>: any[];
-  <%_ for (idx in relationships) {
-    const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-    const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-  _%>
-  get<%= otherEntityNamePlural %>: ICrudGetAllAction;
-  <%_ } _%>
   match: any;
 }
 <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -63,22 +54,13 @@ export interface I<%= entityReactName %>State {
 
 export class <%= entityReactName %> extends React.Component<I<%= entityReactName %>Props<% if (searchEngine === 'elasticsearch') { %>, I<%= entityReactName %>State<% } %>> {
 <%_ if (searchEngine === 'elasticsearch') { _%>
-  constructor(props) {
-    super(props);
-    this.state = {
-      search: ''
-    };
-  }
+  state: I<%= entityReactName %>State = {
+    search: ''
+  };
 
 <%_ } _%>
   componentDidMount() {
     this.props.getEntities();
-    <%_ for (idx in relationships) {
-      const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-      const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-    _%>
-    this.props.get<%= otherEntityNamePlural %>();
-    <%_ } _%>
   }
   <%_ if (searchEngine === 'elasticsearch') { _%>
 
@@ -250,13 +232,15 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   }
 }
 
-const mapStateToProps = storeState => ({
-  <%=entityInstancePlural %>: storeState.<%= entityInstance %>.entities
+const mapStateToProps = ({ <%= entityInstance %> }) => ({
+  <%=entityInstancePlural %>: <%= entityInstance %>.entities
 });
 
-const mapDispatchToProps = { <%_ for (idx in relationships) { const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;const otherEntityNamePlural = relationships[idx].otherEntityNamePlural; _%>
- get<%= otherEntityNamePlural %>,<%_ } _%><%_ if (searchEngine === 'elasticsearch') { _%>
- getSearchEntities,<%_ } _%>
- getEntities };
+const mapDispatchToProps = {
+ <%_ if (searchEngine === 'elasticsearch') { _%>
+ getSearchEntities,
+ <%_ } _%>
+ getEntities
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(<%= entityReactName %>);
