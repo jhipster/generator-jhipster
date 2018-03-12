@@ -1,5 +1,6 @@
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { DatePipe, registerLocaleData } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { Title } from '@angular/platform-browser';
 <%_ const localeId = getLocaleId(nativeLanguage); _%>
 import locale from '@angular/common/locales/<%= localeId %>';
@@ -35,7 +36,9 @@ import {
 } from 'app/shared';<%_ } _%>
 
 @NgModule({
-    imports: [],
+    imports: [
+        HttpClientModule
+    ],
     exports: [],
     declarations: [],
     providers: [
