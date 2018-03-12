@@ -31,7 +31,7 @@ const JHipsterApplicationParser = require('../../../lib/export/jhipster_applicat
 const JHipsterEntityExporter = require('../../../lib/export/jhipster_entity_exporter');
 const JDLExporter = require('../../../lib/export/jdl_exporter');
 
-describe('entity integration tests', () => {
+describe('integration tests', () => {
   context('when parsing a JDL and exporting JSON files', () => {
     const ENTITY_NAMES = ['Country', 'Department', 'Employee', 'Job', 'JobHistory', 'Location', 'Region', 'Task'];
     let filesExist = true;
@@ -403,8 +403,10 @@ describe('entity integration tests', () => {
       });
       JHipsterEntityExporter.exportEntities({
         entities: jsonEntities,
-        applicationName: 'MyApp',
-        applicationType: ApplicationTypes.MONOLITH
+        application: {
+          name: 'MyApp',
+          type: ApplicationTypes.MONOLITH
+        }
       });
       filesExist = ENTITY_NAMES.reduce((result, entityName) =>
         result && fs.statSync(path.join('.jhipster', `${entityName}.json`)).isFile());
@@ -654,6 +656,289 @@ describe('entity integration tests', () => {
         delete content['generator-jhipster'].jwtSecretKey;
       });
       expect(contents).to.deep.equal(expectedContents);
+    });
+  });
+  context('when parsing multiple JDL files with applications and entities', () => {
+    const APPLICATIONS_PATH = path.join('..', '..');
+    const APPLICATION_NAMES = ['myFirstApp', 'mySecondApp', 'myThirdApp'];
+    const ENTITY_NAMES = ['A', 'B', 'E', 'F']; // C & D don't get to be generated
+    const expectedApplications = [
+      {
+        entities: [
+          'A',
+          'B',
+          'E',
+          'F'
+        ],
+        'generator-jhipster': {
+          baseName: 'myFirstApp',
+          packageName: 'com.mycompany.myfirstapp',
+          packageFolder: 'com/mycompany/myfirstapp',
+          authenticationType: 'jwt',
+          hibernateCache: 'no',
+          clusteredHttpSession: 'no',
+          websocket: false,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'mysql',
+          useCompass: false,
+          buildTool: 'maven',
+          searchEngine: false,
+          enableTranslation: true,
+          applicationType: 'monolith',
+          testFrameworks: [],
+          languages: [
+            'en'
+          ],
+          serverPort: 8080,
+          enableSocialSignIn: false,
+          enableSwaggerCodegen: false,
+          useSass: false,
+          jhiPrefix: 'jhi',
+          messageBroker: false,
+          serviceDiscoveryType: false,
+          clientPackageManager: 'yarn',
+          clientFramework: 'angularX',
+          nativeLanguage: 'en',
+          skipUserManagement: false,
+          skipClient: false,
+          skipServer: false
+        }
+      },
+      {
+        entities: [
+          'E'
+        ],
+        'generator-jhipster': {
+          baseName: 'mySecondApp',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          authenticationType: 'jwt',
+          hibernateCache: 'no',
+          clusteredHttpSession: 'no',
+          websocket: false,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'mysql',
+          useCompass: false,
+          buildTool: 'maven',
+          searchEngine: false,
+          enableTranslation: true,
+          applicationType: 'microservice',
+          testFrameworks: [],
+          languages: [
+            'en'
+          ],
+          serverPort: 8091,
+          enableSocialSignIn: false,
+          enableSwaggerCodegen: false,
+          useSass: false,
+          jhiPrefix: 'jhi',
+          messageBroker: false,
+          serviceDiscoveryType: false,
+          clientPackageManager: 'yarn',
+          clientFramework: 'angularX',
+          nativeLanguage: 'en',
+          skipUserManagement: false,
+          skipClient: false,
+          skipServer: false
+        }
+      },
+      {
+        entities: [
+          'F'
+        ],
+        'generator-jhipster': {
+          baseName: 'myThirdApp',
+          packageName: 'com.mycompany.myapp',
+          packageFolder: 'com/mycompany/myapp',
+          authenticationType: 'jwt',
+          hibernateCache: 'no',
+          clusteredHttpSession: 'no',
+          websocket: false,
+          databaseType: 'sql',
+          devDatabaseType: 'h2Memory',
+          prodDatabaseType: 'mysql',
+          useCompass: false,
+          buildTool: 'maven',
+          searchEngine: false,
+          enableTranslation: true,
+          applicationType: 'microservice',
+          testFrameworks: [],
+          languages: [
+            'en'
+          ],
+          serverPort: 8092,
+          enableSocialSignIn: false,
+          enableSwaggerCodegen: false,
+          useSass: false,
+          jhiPrefix: 'jhi',
+          messageBroker: false,
+          serviceDiscoveryType: false,
+          clientPackageManager: 'yarn',
+          clientFramework: 'angularX',
+          nativeLanguage: 'en',
+          skipUserManagement: false,
+          skipClient: false,
+          skipServer: false
+        }
+      }
+    ];
+    const expectedEntities = [
+      {
+        fields: [],
+        relationships: [],
+        entityTableName: 'a',
+        dto: 'no',
+        pagination: 'no',
+        service: 'no',
+        jpaMetamodelFiltering: false,
+        fluentMethods: true,
+        clientRootFolder: '',
+        applications: [
+          'myFirstApp'
+        ]
+      },
+      {
+        fields: [],
+        relationships: [],
+        entityTableName: 'b',
+        dto: 'no',
+        pagination: 'no',
+        service: 'no',
+        jpaMetamodelFiltering: false,
+        fluentMethods: true,
+        clientRootFolder: '',
+        applications: [
+          'myFirstApp'
+        ]
+      },
+      {
+        fields: [],
+        relationships: [],
+        entityTableName: 'e',
+        dto: 'no',
+        pagination: 'no',
+        service: 'no',
+        jpaMetamodelFiltering: false,
+        fluentMethods: true,
+        clientRootFolder: '',
+        applications: [
+          'myFirstApp',
+          'mySecondApp'
+        ],
+        microserviceName: 'mySecondApp'
+      },
+      {
+        fields: [],
+        relationships: [],
+        entityTableName: 'f',
+        dto: 'no',
+        pagination: 'no',
+        service: 'no',
+        jpaMetamodelFiltering: false,
+        fluentMethods: true,
+        clientRootFolder: '',
+        applications: [
+          'myFirstApp',
+          'myThirdApp'
+        ]
+      }
+    ];
+
+    before(() => {
+      const parsed = JDLReader.parseFromFiles([
+        path.join('test', 'test_files', 'integration', 'file1.jdl'),
+        path.join('test', 'test_files', 'integration', 'file2.jdl')
+      ]);
+      const jdlObject = DocumentParser.parseFromConfigurationObject({
+        document: parsed,
+        databaseType: DatabaseTypes.SQL
+      });
+      const jsonEntities = EntityParser.parse({
+        jdlObject,
+        databaseType: DatabaseTypes.SQL
+      });
+      JHipsterApplicationParser.exportApplications({
+        applications: jdlObject.applications,
+        paths: {
+          myFirstApp: jdlObject.applications.myFirstApp.config.path,
+          mySecondApp: jdlObject.applications.mySecondApp.config.path,
+          myThirdApp: jdlObject.applications.myThirdApp.config.path,
+        }
+      });
+      JHipsterEntityExporter.exportEntitiesInApplications({
+        entities: jsonEntities,
+        applications: jdlObject.applications
+      });
+    });
+
+    after(() => {
+      fs.unlinkSync(path.join(APPLICATIONS_PATH, 'myFirstApp', '.jhipster', 'A.json'));
+      fs.unlinkSync(path.join(APPLICATIONS_PATH, 'myFirstApp', '.jhipster', 'B.json'));
+      fs.unlinkSync(path.join(APPLICATIONS_PATH, 'myFirstApp', '.jhipster', 'E.json'));
+      fs.unlinkSync(path.join(APPLICATIONS_PATH, 'myFirstApp', '.jhipster', 'F.json'));
+      fs.unlinkSync(path.join(APPLICATIONS_PATH, 'mySecondApp', '.jhipster', 'E.json'));
+      fs.unlinkSync(path.join(APPLICATIONS_PATH, 'myThirdApp', '.jhipster', 'F.json'));
+      APPLICATION_NAMES.forEach((applicationName) => {
+        fs.unlinkSync(path.join(APPLICATIONS_PATH, applicationName, '.yo-rc.json'));
+        fs.rmdirSync(path.join(APPLICATIONS_PATH, applicationName, '.jhipster'));
+        fs.rmdirSync(path.join(APPLICATIONS_PATH, applicationName));
+      });
+    });
+
+    it('exports the applications', () => {
+      APPLICATION_NAMES.forEach((applicationName, index) => {
+        expect(fs.statSync(path.join(APPLICATIONS_PATH, applicationName)).isDirectory()).to.be.true;
+        const appConfPath = path.join(APPLICATIONS_PATH, applicationName, '.yo-rc.json');
+        expect(fs.statSync(appConfPath).isFile()).to.be.true;
+        const readJSON = JSON.parse(fs.readFileSync(appConfPath, 'utf-8').toString());
+        expect(readJSON['generator-jhipster'].jwtSecretKey).not.to.be.undefined;
+        delete readJSON['generator-jhipster'].jwtSecretKey;
+        expect(readJSON).to.deep.equal(expectedApplications[index]);
+      });
+    });
+    it('exports the entities for each application', () => {
+      APPLICATION_NAMES.forEach((applicationName) => {
+        let readJSON = null;
+        expect(fs.statSync(path.join(APPLICATIONS_PATH, applicationName, '.jhipster')).isDirectory()).to.be.true;
+        switch (applicationName) {
+        case 'myFirstApp': // A, B, E, F
+          ENTITY_NAMES.forEach((entityName, index) => {
+            readJSON = JSON.parse(
+              fs.readFileSync(
+                path.join(APPLICATIONS_PATH, applicationName, '.jhipster', `${entityName}.json`),
+                'utf-8'
+              ).toString());
+            expect(readJSON.changelogDate).not.to.be.undefined;
+            delete readJSON.changelogDate;
+            expect(readJSON).to.deep.equal(expectedEntities[index]);
+          });
+          break;
+        case 'mySecondApp': // only E
+          readJSON = JSON.parse(
+            fs.readFileSync(
+              path.join(APPLICATIONS_PATH, applicationName, '.jhipster', 'E.json'),
+              'utf-8'
+            ).toString());
+          expect(readJSON.changelogDate).not.to.be.undefined;
+          delete readJSON.changelogDate;
+          expect(readJSON).to.deep.equal(expectedEntities[2]);
+          break;
+        case 'myThirdApp': // only F
+          readJSON = JSON.parse(
+            fs.readFileSync(
+              path.join(APPLICATIONS_PATH, applicationName, '.jhipster', 'F.json'),
+              'utf-8'
+            ).toString());
+          expect(readJSON.changelogDate).not.to.be.undefined;
+          delete readJSON.changelogDate;
+          expect(readJSON).to.deep.equal(expectedEntities[3]);
+          break;
+        default:
+          // nothing to do
+        }
+      });
     });
   });
 });

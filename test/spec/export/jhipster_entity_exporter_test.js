@@ -69,8 +69,10 @@ describe('JHipsterEntityExporter', () => {
           };
           JHipsterEntityExporter.exportEntities({
             entities,
-            applicationName: 'MyApp',
-            applicationType: ApplicationTypes.MONOLITH
+            application: {
+              name: 'MyApp',
+              type: ApplicationTypes.MONOLITH
+            }
           });
           aEntityContent = JSON.parse(fs.readFileSync(path.join('.jhipster', 'A.json'), { encoding: 'utf-8' }));
         });
@@ -112,15 +114,19 @@ describe('JHipsterEntityExporter', () => {
           };
           JHipsterEntityExporter.exportEntities({
             entities,
-            applicationName: 'MyApp',
-            applicationType: ApplicationTypes.MONOLITH
+            application: {
+              name: 'MyApp',
+              type: ApplicationTypes.MONOLITH
+            }
           });
           previousChangelogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', { encoding: 'utf-8' })).changelogDate;
           setTimeout(() => {
             JHipsterEntityExporter.exportEntities({
               entities,
-              applicationName: 'MyApp',
-              applicationType: ApplicationTypes.MONOLITH
+              application: {
+                name: 'MyApp',
+                type: ApplicationTypes.MONOLITH
+              }
             });
             newChangelogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', { encoding: 'utf-8' })).changelogDate;
             done();
@@ -234,8 +240,10 @@ describe('JHipsterEntityExporter', () => {
             };
             JHipsterEntityExporter.exportEntities({
               entities,
-              applicationName: 'client',
-              applicationType: ApplicationTypes.MONOLITH
+              application: {
+                name: 'client',
+                type: ApplicationTypes.MONOLITH
+              }
             });
           });
 
@@ -354,8 +362,10 @@ describe('JHipsterEntityExporter', () => {
               };
               JHipsterEntityExporter.exportEntities({
                 entities,
-                applicationName: 'client',
-                applicationType: ApplicationTypes.MICROSERVICE
+                application: {
+                  name: 'client',
+                  type: ApplicationTypes.MICROSERVICE
+                }
               });
             });
 
@@ -469,8 +479,10 @@ describe('JHipsterEntityExporter', () => {
               };
               JHipsterEntityExporter.exportEntities({
                 entities,
-                applicationName: 'client',
-                applicationType: ApplicationTypes.MICROSERVICE
+                application: {
+                  name: 'client',
+                  type: ApplicationTypes.MICROSERVICE
+                }
               });
             });
 

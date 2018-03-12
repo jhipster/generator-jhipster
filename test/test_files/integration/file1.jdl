@@ -1,0 +1,14 @@
+application {
+  config {
+    baseName myFirstApp,
+    applicationType monolith,
+    packageName com.mycompany.myfirstapp,
+    path "../../"
+  }
+  entities * except C, D
+}
+
+entity A
+entity B
+entity C
+entity D
