@@ -65,18 +65,19 @@
     "@types/selenium-webdriver": "3.0.4",
     <%_ } _%>
     "angular2-template-loader": "0.6.2",
-    "awesome-typescript-loader": "3.2.2",
-    "browser-sync": "2.18.13",
-    "browser-sync-webpack-plugin": "1.2.0",
-    "codelyzer": "4.0.1",
-    "copy-webpack-plugin": "4.4.1",
+    "browser-sync": "2.23.6",
+    "browser-sync-webpack-plugin": "2.0.1",
+    "cache-loader": "1.2.2",
+    "codelyzer": "4.2.1",
+    "copy-webpack-plugin": "4.5.1",
     "css-loader": "0.28.10",
-    "exports-loader": "0.6.4",
+    "exports-loader": "0.7.0",
     "extract-text-webpack-plugin": "4.0.0-beta.0",
-    "file-loader": "1.1.6",
+    "file-loader": "1.1.11",
+    "fork-ts-checker-webpack-plugin": "0.4.1",
     "generator-jhipster": "<%= packagejs.version %>",
-    "html-loader": "0.5.0",
-    "html-webpack-plugin": "3.0.0",
+    "html-loader": "0.5.5",
+    "html-webpack-plugin": "3.0.6",
     "husky": "0.14.3",
     "jasmine-core": "2.7.0",
     <%_ if (protractorTests) { _%>
@@ -92,11 +93,11 @@
     "karma-remap-istanbul": "0.6.0",
     "karma-sourcemap-loader": "0.3.7",
     "karma-webpack": "2.0.13",
-    "lint-staged": "6.0.0",
+    "lint-staged": "7.0.0",
     <%_ if (enableTranslation) { _%>
     "merge-jsons-webpack-plugin": "1.0.14",
     <%_ } _%>
-    "prettier": "1.9.2",
+    "prettier": "1.11.1",
     "puppeteer": "1.1.1",
     <%_ if (protractorTests) { _%>
     "protractor": "5.1.2",
@@ -105,16 +106,18 @@
     "proxy-middleware": "0.15.0",
     "rimraf": "2.6.1",
     "sourcemap-istanbul-instrumenter-loader": "0.2.0",
-    "style-loader": "0.20.2",
-    "tapable": "1.0.0-beta.5",
+    "style-loader": "0.20.3",
+    "tapable": "1.0.0",
     "to-string-loader": "1.1.5",
     <%_ if (protractorTests) { _%>
-    "ts-node": "3.3.0",
+    "ts-node": "5.0.1",
     <%_ } _%>
-    "tslint": "5.5.0",
+    "ts-loader": "4.0.1",
+    "tslint": "5.9.1",
     "tslint-config-prettier": "1.6.0",
-    "tslint-loader": "sendilkumarn/tslint-loader",
-    "typescript": "2.6.2",
+    "tslint-loader": "3.6.0",
+    "typescript": "2.7.2",
+    "thread-loader": "1.1.5",
     <%_ if (useSass) { _%>
     "sass-loader": "6.0.6",
     "node-sass": "4.5.3",
@@ -126,15 +129,15 @@
     <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
     <%_ }); _%>
-    "uglifyjs-webpack-plugin": "1.2.2",
-    "webpack": "4.0.0",
-    "webpack-cli": "2.0.10",
-    "webpack-dev-server": "3.0.1-beta.0",
-    "webpack-merge": "4.1.1",
-    "webpack-notifier": "1.5.1",
+    "uglifyjs-webpack-plugin": "1.2.3",
+    "webpack": "4.1.1",
+    "webpack-cli": "2.0.11",
+    "webpack-dev-server": "3.1.1",
+    "webpack-merge": "4.1.2",
+    "webpack-notifier": "1.6.0",
     "webpack-visualizer-plugin": "0.1.11",
     "workbox-webpack-plugin": "3.0.0-beta.1",
-    "write-file-webpack-plugin": "4.1.0"
+    "write-file-webpack-plugin": "4.2.0"
   },
   "engines": {
     "node": ">=8.9.0"
