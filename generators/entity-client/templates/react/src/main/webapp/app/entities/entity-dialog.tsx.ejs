@@ -67,7 +67,7 @@ Object.keys(differentRelationships).forEach(key => {
       entity: uniqueRel.otherEntityAngularName,
       reducer: uniqueRel.otherEntityAngularName === 'User' ? 'userManagement' : uniqueRel.otherEntityName
     });
-    if(uniqueRel.otherEntityAngularName === 'User') {
+    if (uniqueRel.otherEntityAngularName === 'User') {
 _%>
 import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/user.model';
 import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';

@@ -18,7 +18,7 @@
 -%>
 package <%=packageName%>.config;
 
-<%_ if(authenticationType === 'jwt') { _%>
+<%_ if (authenticationType === 'jwt') { _%>
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.security.jwt.JWTConfigurer;
 import <%=packageName%>.security.jwt.TokenProvider;
@@ -97,7 +97,7 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
     }
 }
 <%_ } _%>
-<%_ if(authenticationType === 'uaa') { _%>
+<%_ if (authenticationType === 'uaa') { _%>
 import <%=packageName%>.config.oauth2.OAuth2JwtAccessTokenConverter;
 import <%=packageName%>.config.oauth2.OAuth2Properties;
 import <%=packageName%>.security.oauth2.OAuth2SignatureVerifierClient;
@@ -191,10 +191,10 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
     }
 }
 <%_ } _%>
-<%_ if(authenticationType === 'oauth2') { _%>
+<%_ if (authenticationType === 'oauth2') { _%>
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.security.oauth2.*;
-<%_ if(applicationType === 'gateway') { _%>
+<%_ if (applicationType === 'gateway') { _%>
 import org.springframework.beans.factory.annotation.Qualifier;
 <%_ } _%>
 import org.springframework.boot.autoconfigure.security.oauth2.resource.*;
@@ -204,7 +204,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
-<%_ if(applicationType === 'gateway') { _%>
+<%_ if (applicationType === 'gateway') { _%>
 import org.springframework.security.web.util.matcher.RequestHeaderRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 <%_ } _%>
@@ -254,7 +254,7 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
     public AuthoritiesExtractor authoritiesExtractor() {
         return new SimpleAuthoritiesExtractor(OAUTH2_AUTHORITIES_ATTRIBUTE);
     }
-<%_ if(applicationType === 'gateway') { _%>
+<%_ if (applicationType === 'gateway') { _%>
 
     @Bean
     @Qualifier("authorizationHeaderRequestMatcher")
@@ -279,7 +279,7 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
-<%_ if(applicationType === 'gateway') { _%>
+<%_ if (applicationType === 'gateway') { _%>
             .requestMatcher(authorizationHeaderRequestMatcher())
 <%_ } _%>
             .authorizeRequests()
