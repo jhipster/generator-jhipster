@@ -98,8 +98,6 @@ module.exports = {
   isJDLFile: JDLReader.checkFileIsJDLFile,
   /* JSON utils */
   ObjectUtils,
-  createJHipsterJSONFolder: JHipsterEntityExporter.createJHipsterJSONFolder,
-  filterOutUnchangedEntities: JHipsterEntityExporter.filterOutUnchangedEntities,
   readEntityJSON: JSONFileReader.readEntityJSON,
   toFilePath: JSONFileReader.toFilePath,
   /* Objects */
