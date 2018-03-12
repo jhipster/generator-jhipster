@@ -43,7 +43,12 @@ module.exports = (WATCH) => ({
                 use: [
                     { loader: 'cache-loader' },
                     { loader: 'ts-loader' },
-                    { loader: 'angular2-template-loader?keepUrl=true' }
+                    {
+                        loader: 'angular2-template-loader',
+                        options: {
+                            keepUrl: true
+                        }
+                    }
                 ],
                 exclude: /node_modules/
             },
