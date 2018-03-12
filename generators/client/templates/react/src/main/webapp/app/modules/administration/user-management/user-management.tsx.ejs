@@ -89,7 +89,7 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
         <h2>
           <Translate contentKey="userManagement.home.title">Users</Translate>
           <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity">
-            <FaPlus /> <Translate contentKey="userManagement.home.createLabel" />
+            <FaPlus /> <Translate contentKey="userManagement.home.createLabel">Create a new user</Translate>
           </Link>
         </h2>
         <div className="table-responsive">
@@ -165,19 +165,19 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
                         tag={Link} to={`${match.url}/${user.login}`}
                         color="info" size="sm"
                       >
-                        <FaEye/> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view" /></span>
+                        <FaEye/> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
                       </Button>
                       <Button
                         tag={Link} to={`${match.url}/${user.login}/edit`}
                         color="primary" size="sm"
                       >
-                        <FaPencil/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit" /></span>
+                        <FaPencil/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
                       </Button>
                       <Button
                         tag={Link} to={`${match.url}/${user.login}/delete`}
                         color="danger" size="sm" disabled={account.login === user.login}
                       >
-                        <FaTrash/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete" /></span>
+                        <FaTrash/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
                       </Button>
                     </div>
                   </td>
