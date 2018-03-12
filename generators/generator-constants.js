@@ -40,7 +40,7 @@ const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v3.0.1';
 const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v3.0.1';
 const DOCKER_JHIPSTER_IMPORT_DASHBOARDS = 'jhipster/jhipster-import-dashboards:v3.0.1';
 const DOCKER_JHIPSTER_ZIPKIN = 'jhipster/jhipster-zipkin:v3.0.1';
-const DOCKER_TRAEFIK = 'traefik:1.4';
+const DOCKER_TRAEFIK = 'traefik:1.5.3';
 const DOCKER_CONSUL = 'consul:1.0.2';
 const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.2.2';
 const DOCKER_PROMETHEUS = 'prom/prometheus:v1.6.3';
@@ -57,7 +57,7 @@ const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the var
 const SCALA_VERSION = '2.12.1';
 
 // version of Node, Yarn, NPM
-const NODE_VERSION = '8.9.4';
+const NODE_VERSION = '8.10.0';
 const YARN_VERSION = '1.5.1';
 const NPM_VERSION = '5.7.1';
 

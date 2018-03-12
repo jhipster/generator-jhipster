@@ -124,7 +124,7 @@ public class <%= entityClass %>DTO implements Serializable {
         const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
         const fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod;
         const fieldName = fields[idx].fieldName; _%>
-        <%_ if(fieldTypeBlobContent !== 'text') { _%>
+        <%_ if (fieldTypeBlobContent !== 'text') { _%>
 
     public <%= fieldType %> <% if (fieldType.toLowerCase() === 'boolean') { %>is<% } else { %>get<%_ } _%><%= fieldInJavaBeanMethod %>() {
         <%_ } else { _%>
@@ -134,7 +134,7 @@ public class <%= entityClass %>DTO implements Serializable {
         return <%= fieldName %>;
     }
 
-        <%_ if(fieldTypeBlobContent !== 'text') { _%>
+        <%_ if (fieldTypeBlobContent !== 'text') { _%>
     public void set<%= fieldInJavaBeanMethod %>(<%= fieldType %> <%= fieldName %>) {
         <%_ } else { _%>
     public void set<%= fieldInJavaBeanMethod %>(String <%= fieldName %>) {
@@ -212,7 +212,7 @@ public class <%= entityClass %>DTO implements Serializable {
         }
 
         <%= entityClass %>DTO <%= entityInstance %>DTO = (<%= entityClass %>DTO) o;
-        if(<%= entityInstance %>DTO.getId() == null || getId() == null) {
+        if (<%= entityInstance %>DTO.getId() == null || getId() == null) {
             return false;
         }
         return Objects.equals(getId(), <%= entityInstance %>DTO.getId());

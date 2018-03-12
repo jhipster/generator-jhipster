@@ -22,7 +22,7 @@ services:
         image: <%= DOCKER_MSSQL %>
         # volumes are not supported on macOS
         # volumes:
-        #     - ~/volumes/jhipster/jhitest/mssql/:/var/opt/mssql/data/
+        #     - ~/volumes/jhipster/tempdb/mssql/:/var/opt/mssql/data/
         environment:
             - ACCEPT_EULA=Y
             - SA_PASSWORD=yourStrong(!)Password

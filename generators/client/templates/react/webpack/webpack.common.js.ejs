@@ -1,26 +1,53 @@
 <%#
  Copyright 2013-2018 the original author or authors from the JHipster project.
 
-    This file is part of the JHipster project, see http://www.jhipster.tech/
-    for more information.
+ This file is part of the JHipster project, see http://www.jhipster.tech/
+ for more information.
 
-        Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
 
-http://www.apache.org/licenses/LICENSE-2.0
+      http://www.apache.org/licenses/LICENSE-2.0
 
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-limitations under the License.
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
 -%>
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const utils = require('./utils.js');
+
+const getTsLoaderRule = env => {
+  const rules = [
+    { loader: 'cache-loader' },
+    {
+        loader: 'thread-loader',
+        options: {
+            // there should be 1 cpu for the fork-ts-checker-webpack-plugin
+            workers: require('os').cpus().length - 1
+        }
+    },
+    {
+      loader: 'ts-loader',
+      options: {
+        transpileOnly: true,
+        happyPackMode: true
+      }
+    }
+  ];
+  if (env === 'development') {
+    rules.unshift({
+      loader: 'react-hot-loader/webpack'
+    });
+  }
+  return rules;
+};
 
 module.exports = options => ({
   cache: options.env !== 'production',
@@ -35,6 +62,12 @@ module.exports = options => ({
   },
   module: {
     rules: [
+      {
+        test: /\.tsx?$/,
+        use: getTsLoaderRule(options.env),
+        include: [utils.root('./src/main/webapp/app')],
+        exclude: ['node_modules']
+      },
       {
         test: /\.(jpe?g|png|gif|svg|woff2?|ttf|eot)$/i,
         loaders: ['file-loader?hash=sha512&digest=hex&name=[hash].[ext]']
@@ -68,15 +101,7 @@ module.exports = options => ({
         SERVER_API_URL: `''`
       }
     }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      chunks: ['main'],
-      minChunks: module => utils.isExternalLib(module)
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: ['manifest'],
-      minChunks: Infinity
-    }),
+    new ForkTsCheckerWebpackPlugin({ tslint: true }),
     new CopyWebpackPlugin([
       { from: './node_modules/swagger-ui/dist/css', to: 'swagger-ui/dist/css' },
       { from: './node_modules/swagger-ui/dist/lib', to: 'swagger-ui/dist/lib' },

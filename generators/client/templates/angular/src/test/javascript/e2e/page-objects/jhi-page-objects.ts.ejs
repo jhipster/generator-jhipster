@@ -58,7 +58,7 @@ export class NavBarPage {
     }
 
     clickOnAdmin(entityName: string) {
-        return element(by.css('[routerLink="' + entityName + '"]')).click();
+        return element(by.css('[routerLink="admin/' + entityName + '"]')).click();
     }
 
     getSignInPage() {

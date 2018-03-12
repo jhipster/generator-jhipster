@@ -16,13 +16,67 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_
+const i18nToLoad = [entityInstance];
+for (const idx in fields) {
+    if (fields[idx].fieldIsEnum === true) {
+        i18nToLoad.push(fields[idx].enumInstance);
+    }
+}
+// const query = generateEntityQueries(relationships, entityInstance, dto);
+// const queries = query.queries;
+// const variables = query.variables;
+// let hasManyToMany = query.hasManyToMany;
+_%>
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Label<% if (haveFieldWithJavadoc) { %>, UncontrolledTooltip<% } %> } from 'reactstrap';
-import { AvForm, AvGroup, AvInput, AvFeedback } from 'availity-reactstrap-validation';
-import { Translate, ICrudGetAction, ICrudPutAction } from 'react-jhipster';
+import { AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
+// tslint:disable-next-line:no-unused-variable
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
 import { FaBan, FaFloppyO } from 'react-icons/lib/fa';
 
+<%_
+let hasRelationshipQuery = false;
+let otherEntityActions = new Set();
+let manyToManyOwners = new Set();
+let relFieldNames = new Set();
+let uniqueRealtionFields = new Set();
+Object.keys(differentRelationships).forEach(key => {
+
+  const hasAnyRelationshipQuery = differentRelationships[key].some(rel =>
+      (rel.relationshipType === 'one-to-one' && rel.ownerSide === true && rel.otherEntityName !== 'user')
+          || rel.relationshipType !== 'one-to-many'
+  );
+  if (hasAnyRelationshipQuery) {
+    hasRelationshipQuery = true;
+    differentRelationships[key].forEach(rel => {
+      if (rel.relationshipType === 'many-to-many' && rel.ownerSide === true) {
+        manyToManyOwners.add(rel);
+      } else {
+        relFieldNames.add(rel);
+      }
+    });
+  }
+  if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
+    const uniqueRel = differentRelationships[key][0];
+    uniqueRealtionFields.add(uniqueRel.otherEntityNamePlural);
+    otherEntityActions.add({
+      action: `get${upperFirstCamelCase(uniqueRel.otherEntityNamePlural)}`,
+      instance: `${uniqueRel.otherEntityNamePlural}`,
+      entity: uniqueRel.otherEntityAngularName,
+      reducer: uniqueRel.otherEntityAngularName === 'User' ? 'userManagement' : uniqueRel.otherEntityName
+    });
+    if (uniqueRel.otherEntityAngularName === 'User') {
+_%>
+import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/user.model';
+import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
+<%_ } else { _%>
+import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/<%= uniqueRel.otherEntityModelName %>.model';
+import { getEntities as get<%= upperFirstCamelCase(uniqueRel.otherEntityNamePlural) %> } from 'app/entities/<%= uniqueRel.otherEntityModulePath %>/<%= uniqueRel.otherEntityFileName %>.reducer';
+<%_ }
+  }
+}); _%>
 import { getEntity, updateEntity, createEntity } from './<%= entityFileName %>.reducer';
 // tslint:disable-next-line:no-unused-variable
 import { convertDateTimeFromServer } from 'app/shared/util/date-utils';
@@ -31,15 +85,13 @@ export interface I<%= entityReactName %>DialogProps {
   getEntity: ICrudGetAction;
   updateEntity: ICrudPutAction;
   createEntity: ICrudPutAction;
+  <%_ otherEntityActions.forEach(val => { _%>
+  <%= val.action %>: ICrudGetAllAction;
+  <%= val.instance %>: I<%= val.entity %>[];
+  <%_ }) _%>
+  <%= entityInstance %>: any;
   loading: boolean;
   updating: boolean;
-  <%= entityInstance %>: any;
-  <%_ for (idx in relationships) {
-    const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-    const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-  _%>
-  <%= otherEntityNamePlural %>: any[];
-  <%_ } _%>
   match: any;
   history: any;
 }
@@ -47,18 +99,12 @@ export interface I<%= entityReactName %>DialogProps {
 export interface I<%= entityReactName %>DialogState {
   showModal: boolean;
   isNew: boolean;
-  <%_ for (idx in relationships) {
-    const relationshipType = relationships[idx].relationshipType;
-    const relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
-    const otherEntityField = relationships[idx].otherEntityField;
-    const relationshipFieldName = relationships[idx].relationshipFieldName;
-  _%>
-  <%_ if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { _%>
-  ids<%= relationshipNameHumanized %>: any[];
-  <%_ } else { _%>
-  <%= relationshipFieldName %>Id: number;
-  <%_ } _%>
-  <%_ } _%>
+  <%_ manyToManyOwners.forEach(val => { _%>
+  ids<%= val.relationshipName %>: any[];
+  <%_ }) _%>
+  <%_ relFieldNames.forEach(val => { _%>
+  <%= val.relationshipFieldName %>Id: number;
+  <%_ }) _%>
 }
 
 export class <%= entityReactName %>Dialog extends React.Component<I<%= entityReactName %>DialogProps, I<%= entityReactName %>DialogState> {
@@ -67,23 +113,21 @@ export class <%= entityReactName %>Dialog extends React.Component<I<%= entityRea
     super(props);
     this.state = {
       isNew: !this.props.match.params || !this.props.match.params.id,
-      <%_ for (idx in relationships) {
-        const relationshipType = relationships[idx].relationshipType;
-        const relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
-        const relationshipFieldName = relationships[idx].relationshipFieldName;
-      _%>
-      <%_ if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { _%>
-      ids<%= relationshipNameHumanized %>: [],
-      <%_ } else { _%>
-      <%= relationshipFieldName %>Id: 0,
-      <%_ } _%>
-      <%_ } _%>
+      <%_ manyToManyOwners.forEach(val => { _%>
+      ids<%= val.relationshipName %>: [],
+      <%_ }) _%>
+      <%_ relFieldNames.forEach(val => { _%>
+      <%= val.relationshipFieldName %>Id: 0,
+      <%_ }) _%>
       showModal: true
     };
   }
 
   componentDidMount() {
     !this.state.isNew && this.props.getEntity(this.props.match.params.id);
+    <%_ otherEntityActions.forEach(val => { _%>
+    this.props.<%= val.action %>();
+    <%_ }) _%>
   }
 
   saveEntity = (event, errors, values) => {
@@ -94,12 +138,14 @@ export class <%= entityReactName %>Dialog extends React.Component<I<%= entityRea
     values.<%=fields[idx].fieldName%> = new Date(values.<%=fields[idx].fieldName%>);
     <%_ } _%>
     <%_ } _%>
-    if (this.state.isNew) {
-      this.props.createEntity(values);
-    } else {
-      this.props.updateEntity(values);
+    if (errors.length === 0) {
+      if (this.state.isNew) {
+        this.props.createEntity(values);
+      } else {
+        this.props.updateEntity(values);
+      }
+      this.handleClose();
     }
-    this.handleClose();
   }
 
   handleClose = () => {
@@ -109,18 +155,17 @@ export class <%= entityReactName %>Dialog extends React.Component<I<%= entityRea
     this.props.history.push('/<%= entityFileName %>');
   }
 
-<%_ for (idx in relationships) {
-const relationshipType = relationships[idx].relationshipType;
-const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-const relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
-const otherEntityField = relationships[idx].otherEntityField;
-const relationshipFieldName = relationships[idx].relationshipFieldName;
-const ownerSide = relationships[idx].ownerSide;
+<%_ relationships.forEach(rel => {
+const relationshipType = rel.relationshipType;
+const relationshipFieldNamePlural = rel.relationshipFieldNamePlural;
+const otherEntityNamePlural = rel.otherEntityNamePlural;
+const relationshipName = rel.relationshipName;
+const otherEntityField = rel.otherEntityField;
+const relationshipFieldName = rel.relationshipFieldName;
+const ownerSide = rel.ownerSide;
 _%>
-  <%_ if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { _%>
+  <%_ if (relationshipType === 'many-to-many' && ownerSide === true) { _%>
   <%= relationshipFieldName %>Update = element => {
-    const <%= otherEntityField %> = element.target.value;
     const list = [];
     for (const i in element.target.selectedOptions) {
         if (element.target.selectedOptions[i]) {
@@ -133,7 +178,7 @@ _%>
         }
     }
     this.setState({
-        ids<%= relationshipNameHumanized %>: list
+        ids<%= relationshipName %>: list
     });
   }
 
@@ -150,21 +195,20 @@ _%>
   }
 
   <%_ } _%>
-<%_ } _%>
-<%_ for (idx in relationships) {
-    const relationshipType = relationships[idx].relationshipType;
-    const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-    const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-    const relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
-    const otherEntityField = relationships[idx].otherEntityField;
-    _%>
-<%_ if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { _%>
-  display<%= relationshipNameHumanized %>(value: any) {
-    if (this.state.ids<%= relationshipNameHumanized %> && this.state.ids<%= relationshipNameHumanized %>.length !== 0) {
+<%_ }) _%>
+<%_ relationships.forEach(rel => {
+    const relationshipType = rel.relationshipType;
+    const relationshipFieldNamePlural = rel.relationshipFieldNamePlural;
+    const otherEntityNamePlural = rel.otherEntityNamePlural;
+    const relationshipName = rel.relationshipName;
+    const otherEntityField = rel.otherEntityField;
+    if (relationshipType === 'many-to-many' && rel.ownerSide === true) { _%>
+  display<%= relationshipName %>(value: any) {
+    if (this.state.ids<%= relationshipName %> && this.state.ids<%= relationshipName %>.length !== 0) {
         const list = [];
-        for (const i in this.state.ids<%= relationshipNameHumanized %>) {
-            if (this.state.ids<%= relationshipNameHumanized %>[i]) {
-                list.push(this.state.ids<%= relationshipNameHumanized %>[i].<%= otherEntityField %>);
+        for (const i in this.state.ids<%= relationshipName %>) {
+            if (this.state.ids<%= relationshipName %>[i]) {
+                list.push(this.state.ids<%= relationshipName %>[i].<%= otherEntityField %>);
             }
         }
         return list;
@@ -182,12 +226,12 @@ _%>
   }
 
 <%_ } _%>
-<%_ } _%>
+<%_ }) _%>
   render() {
     const isInvalid = false;
-    const { <%= entityInstance %>,<%_ for (idx in relationships) { const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;const otherEntityNamePlural = relationships[idx].otherEntityNamePlural; _%>
- <%= otherEntityNamePlural %>,<%_ } _%>
- loading, updating } = this.props;
+    const { <%= entityInstance %>,<%
+    uniqueRealtionFields.forEach(rel => {
+    %> <%= rel %>,<% }) %> loading, updating } = this.props;
     const { showModal, isNew } = this.state;
     return (
       <%_ const keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
@@ -199,7 +243,7 @@ _%>
       { loading ? <p>Loading...</p>
       : <AvForm model={isNew ? {} : <%= entityInstance %>} onSubmit={this.saveEntity} >
           <ModalBody>
-            { <%= entityInstance %>.id ?
+            { !isNew ?
               <AvGroup>
                 <Label for="id"><Translate contentKey="global.field.id">ID</Translate></Label>
                 <AvInput type="text" className="form-control" name="id" required readOnly/>
@@ -208,43 +252,50 @@ _%>
             }
             <%_ for (idx in fields) {
                 const fieldType = fields[idx].fieldType;
+                const fieldName = fields[idx].fieldName;
             _%>
             <AvGroup>
             <%_ if (fieldType === 'Boolean') { _%>
-              <Label id="<%= fields[idx].fieldName %>Label" check>
-                <AvInput type="checkbox" className="form-control" name="<%= fields[idx].fieldName %>" />
-                <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
-                  <%=fields[idx].fieldName%>
+              <Label id="<%= fieldName %>Label" check>
+                <AvInput type="checkbox" className="form-control" name="<%= fieldName %>" />
+                <Translate contentKey="<%= keyPrefix %><%= fieldName %>">
+                  <%=fieldName%>
                 </Translate>
               </Label>
             <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
-              <Label id="<%= fields[idx].fieldName %>Label" for="<%= fields[idx].fieldName %>">
-                <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
-                  <%=fields[idx].fieldName%>
+              <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
+                <Translate contentKey="<%= keyPrefix %><%= fieldName %>">
+                  <%=fieldName%>
                 </Translate>
               </Label>
               <AvInput
-                type="datetime-local" className="form-control" name="<%= fields[idx].fieldName %>"
-                value={convertDateTimeFromServer(this.props.<%= entityInstance %>.<%= fields[idx].fieldName %>)} required
+                type="datetime-local"
+                className="form-control"
+                name="<%= fieldName %>"
+                value={isNew ? null : convertDateTimeFromServer(this.props.<%= entityInstance %>.<%= fieldName %>)}
+                <%- include react_validators %>
               />
-              <AvFeedback>This field is required.</AvFeedback>
             <%_ } else if (fieldType === 'LocalDate') { _%>
-              <Label id="<%= fields[idx].fieldName %>Label" for="<%= fields[idx].fieldName %>">
-                <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
-                  <%=fields[idx].fieldName%>
+              <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
+                <Translate contentKey="<%= keyPrefix %><%= fieldName %>">
+                  <%=fieldName%>
                 </Translate>
               </Label>
-              <AvInput type="date" className="form-control" name="<%= fields[idx].fieldName %>" required />
-              <AvFeedback>This field is required.</AvFeedback>
+              <AvField
+                type="date"
+                className="form-control"
+                name="<%= fieldName %>"
+                <%- include react_validators %>
+              />
             <%_ } else if (fields[idx].fieldIsEnum) { _%>
-              <Label id="<%= fields[idx].fieldName %>Label">
-                <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
-                  <%=fields[idx].fieldName%>
+              <Label id="<%= fieldName %>Label">
+                <Translate contentKey="<%= keyPrefix %><%= fieldName %>">
+                  <%=fieldName%>
                 </Translate>
               </Label>
               <AvInput type="select"
                 className="form-control"
-                name="<%= fields[idx].fieldName %>"
+                name="<%= fieldName %>"
               >
               <%_
                 const enumPrefix = angularAppName + '.'+ fieldType;
@@ -256,20 +307,25 @@ _%>
                 </option>
               <%_ } _%>
               </AvInput>
-            <%_ } else { _%>
-              <Label id="<%= fields[idx].fieldName %>Label" for="<%= fields[idx].fieldName %>">
-                <Translate contentKey="<%= keyPrefix %><%= fields[idx].fieldName %>">
-                  <%=fields[idx].fieldName%>
+            <%_ } else if (['Integer', 'Long', 'Float', 'Double'].includes(fieldType)) { _%>
+              <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
+                <Translate contentKey="<%= keyPrefix %><%= fieldName %>">
+                  <%=fieldName%>
                 </Translate>
               </Label>
-              <AvInput type="text" className="form-control" name="<%= fields[idx].fieldName %>" required />
-              <AvFeedback>This field is required.</AvFeedback>
-              <AvFeedback>This field cannot be longer than 50 characters.</AvFeedback>
+              <AvField type="number" className="form-control" name="<%= fieldName %>" <%- include react_validators %> />
+            <%_ } else { _%>
+              <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
+                <Translate contentKey="<%= keyPrefix %><%= fieldName %>">
+                  <%=fieldName%>
+                </Translate>
+              </Label>
+              <AvField type="text" name="<%= fieldName %>" <%- include react_validators %>/>
             <%_ } _%>
             <%_ if (fields[idx].javadoc) { _%>
-            <UncontrolledTooltip target="<%= fields[idx].fieldName %>Label">
+            <UncontrolledTooltip target="<%= fieldName %>Label">
               <%_ if (enableTranslation) { _%>
-              <Translate contentKey="<%= keyPrefix %>help.<%= fields[idx].fieldName %>"/>
+              <Translate contentKey="<%= keyPrefix %>help.<%= fieldName %>"/>
               <%_ } else { _%>
               <%= fields[idx].javadoc %>
               <%_ } _%>
@@ -277,19 +333,19 @@ _%>
             <%_ } _%>
             </AvGroup>
             <%_ } _%>
-            <%_ for (idx in relationships) {
-                const relationshipType = relationships[idx].relationshipType;
-                const ownerSide = relationships[idx].ownerSide;
-                const otherEntityName = relationships[idx].otherEntityName;
-                const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-                const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
-                const relationshipName = relationships[idx].relationshipName;
-                const relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
-                const relationshipFieldName = relationships[idx].relationshipFieldName;
-                const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-                const otherEntityField = relationships[idx].otherEntityField;
-                const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
-                const relationshipRequired = relationships[idx].relationshipRequired;
+            <%_ relationships.forEach(rel => {
+                const relationshipType = rel.relationshipType;
+                const ownerSide = rel.ownerSide;
+                const otherEntityName = rel.otherEntityName;
+                const otherEntityNamePlural = rel.otherEntityNamePlural;
+                const otherEntityNameCapitalized = rel.otherEntityNameCapitalized;
+                const relationshipName = rel.relationshipName;
+                const relationshipNameHumanized = rel.relationshipNameHumanized;
+                const relationshipFieldName = rel.relationshipFieldName;
+                const relationshipFieldNamePlural = rel.relationshipFieldNamePlural;
+                const otherEntityField = rel.otherEntityField;
+                const otherEntityFieldCapitalized = rel.otherEntityFieldCapitalized;
+                const relationshipRequired = rel.relationshipRequired;
                 const translationKey = keyPrefix + relationshipName; _%>
                 <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true && otherEntityName === 'user')) { _%>
             <AvGroup>
@@ -304,13 +360,13 @@ _%>
                 onChange={this.<%= relationshipFieldName %>Update}>
                 <option value="" key="0" />
                 {
-                  <%= otherEntityNamePlural %>.map(otherEntity =>
+                  <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                     <option
                       value={otherEntity.<%=otherEntityField%>}
                       key={otherEntity.id}>
                       {otherEntity.<%=otherEntityField%>}
                     </option>
-                  )
+                  ) : null
                 }
               </AvInput>
               <AvInput type="hidden"
@@ -322,13 +378,13 @@ _%>
                 name="<%= relationshipFieldName %>.<%= otherEntityField %>"
                 onChange={this.<%= relationshipFieldName %>Update}>
                 {
-                  <%= otherEntityNamePlural %>.map(otherEntity =>
+                  <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                     <option
                       value={otherEntity.<%=otherEntityField%>}
                       key={otherEntity.id}>
                       {otherEntity.<%=otherEntityField%>}
                     </option>
-                  )
+                  ) : null
                 }
               </AvInput>
               <AvInput type="hidden"
@@ -343,13 +399,13 @@ _%>
                     onChange={this.<%= relationshipFieldName %>Update}>
                     <option value="" key="0" />
                     {
-                      <%= otherEntityNamePlural %>.map(otherEntity =>
+                      <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                         <option
                           value={otherEntity.id}
                           key={otherEntity.id}>
                           {otherEntity.<%=otherEntityField%>}
                         </option>
-                      )
+                      ) : null
                     }
                   </AvInput>
                 <%_ } else { _%>
@@ -358,13 +414,13 @@ _%>
                     name="<%= relationshipFieldName %>Id"
                     onChange={this.<%= relationshipFieldName %>Update}>
                     {
-                      <%= otherEntityNamePlural %>.map(otherEntity =>
+                      <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                         <option
                           value={otherEntity.id}
                           key={otherEntity.id}>
                           {otherEntity.<%=otherEntityField%>}
                         </option>
-                      )
+                      ) : null
                     }
                   </AvInput>
                 <%_ } _%>
@@ -382,13 +438,13 @@ _%>
                     onChange={this.<%= relationshipFieldName %>Update}>
                     <option value="" key="0" />
                     {
-                      <%= otherEntityNamePlural %>.map(otherEntity =>
+                      <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                         <option
                           value={otherEntity.<%=otherEntityField%>}
                           key={otherEntity.id}>
                           {otherEntity.<%=otherEntityField%>}
                         </option>
-                      )
+                      ) : null
                     }
                   </AvInput>
                   <AvInput type="hidden"
@@ -401,44 +457,44 @@ _%>
                     onChange={this.<%= relationshipFieldName %>Update}>
                     <option value="" key="0" />
                     {
-                      <%= otherEntityNamePlural %>.map(otherEntity =>
+                      <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                         <option
                           value={otherEntity.id}
                           key={otherEntity.id}>
                           {otherEntity.<%=otherEntityField%>}
                         </option>
-                      )
+                      ) : null
                     }
                   </AvInput>
                 <%_ } _%>
             </AvGroup>
-                <%_ } else if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { _%>
+                <%_ } else if (relationshipType === 'many-to-many' && rel.ownerSide === true) { _%>
             <AvGroup>
               <Label for="<%= otherEntityNamePlural %>"><Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate></Label>
               <AvInput type="select"
                 multiple
                 className="form-control"
                 name="fake<%= otherEntityNamePlural %>"
-                value={this.display<%= relationshipNameHumanized %>(<%= entityInstance %>)}
+                value={this.display<%= relationshipName %>(<%= entityInstance %>)}
                 onChange={this.<%= relationshipFieldName %>Update}>
                 <option value="" key="0" />
                 {
-                  (<%= otherEntityNamePlural %>) ? (<%=otherEntityNamePlural.toLowerCase() %>.map(otherEntity =>
+                  (<%= otherEntityNamePlural %>) ? <%=otherEntityNamePlural.toLowerCase() %>.map(otherEntity =>
                   <option
                       value={otherEntity.<%=otherEntityField%>}
                       key={otherEntity.id}>
                       {otherEntity.<%=otherEntityField%>}
                   </option>
-                  )) : null
+                  ) : null
                 }
               </AvInput>
               <AvInput type="hidden"
                 name="<%= otherEntityNamePlural %>"
-                value={this.state.ids<%= relationshipNameHumanized %>}
+                value={this.state.ids<%= relationshipName %>}
               />
             </AvGroup>
             <%_ } _%>
-          <%_ } _%>
+          <%_ }) _%>
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={this.handleClose}>
@@ -458,17 +514,21 @@ _%>
 }
 
 const mapStateToProps = storeState => ({
+  <%_ otherEntityActions.forEach(val => { _%>
+  <%= val.instance %>: storeState.<%= val.reducer %>.<%= val.instance %>,
+  <%_ }) _%>
   <%= entityInstance %>: storeState.<%= entityInstance %>.entity,
-  <%_ for (idx in relationships) {
-    const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-    const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-  _%>
-  <%= otherEntityNamePlural %>: storeState.<%= entityInstance %>.<%= otherEntityNamePlural %>,
-  <%_ } _%>
   loading: storeState.<%= entityInstance %>.loading,
   updating: storeState.<%= entityInstance %>.updating
 });
 
-const mapDispatchToProps = { getEntity, updateEntity, createEntity };
+const mapDispatchToProps = {
+  <%_ otherEntityActions.forEach(val => { _%>
+  <%= val.action %>,
+  <%_ }) _%>
+  getEntity,
+  updateEntity,
+  createEntity
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(<%= entityReactName %>Dialog);

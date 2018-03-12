@@ -1,3 +1,21 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see http://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Table, Progress } from 'reactstrap';
@@ -103,10 +121,13 @@ export class MetricsPage extends React.Component<any, IMetricsPageState> {
               max={metrics.gauges['jvm.memory.total.max'].value}
               color="success"
             >
-              <TextFormat
+              <span>
+                <TextFormat
                 value={metrics.gauges['jvm.memory.total.used'].value * 100 / metrics.gauges['jvm.memory.total.max'].value}
                 type="number"
-                format={APP_WHOLE_NUMBER_FORMAT} />%
+                format={APP_WHOLE_NUMBER_FORMAT} />
+                %
+              </span>
             </Progress>
             <p>
               <span>Heap Memory</span> (
@@ -126,11 +147,13 @@ export class MetricsPage extends React.Component<any, IMetricsPageState> {
               value={metrics.gauges['jvm.memory.heap.used'].value}
               color="success"
             >
-              <TextFormat
-                value={metrics.gauges['jvm.memory.heap.used'].value * 100 / metrics.gauges['jvm.memory.heap.max'].value}
-                type="number"
-                format={APP_WHOLE_NUMBER_FORMAT} />
-              %
+              <span>
+                <TextFormat
+                  value={metrics.gauges['jvm.memory.heap.used'].value * 100 / metrics.gauges['jvm.memory.heap.max'].value}
+                  type="number"
+                  format={APP_WHOLE_NUMBER_FORMAT} />
+                %
+              </span>
             </Progress>
 
             <p>
@@ -151,49 +174,59 @@ export class MetricsPage extends React.Component<any, IMetricsPageState> {
               value={metrics.gauges['jvm.memory.non-heap.used'].value}
               color="success"
             >
-              <TextFormat
-                value={metrics.gauges['jvm.memory.non-heap.used'].value * 100 / metrics.gauges['jvm.memory.non-heap.committed'].value}
-                type="number"
-                format={APP_WHOLE_NUMBER_FORMAT} />
-              %
+              <span>
+                <TextFormat
+                  value={metrics.gauges['jvm.memory.non-heap.used'].value * 100 / metrics.gauges['jvm.memory.non-heap.committed'].value}
+                  type="number"
+                  format={APP_WHOLE_NUMBER_FORMAT} />
+                %
+              </span>
             </Progress>
           </div>
           <div className="col-md-4">
             <b>Threads</b> (Total: {metrics.gauges['jvm.threads.count'].value}) <FaEye onClick={this.getThreadDump}/>
             <p><span>Runnable</span> {metrics.gauges['jvm.threads.runnable.count'].value}</p>
             <Progress animated min="0" value={metrics.gauges['jvm.threads.runnable.count'].value} max={metrics.gauges['jvm.threads.count'].value} color="success">
-              <TextFormat
-                value={metrics.gauges['jvm.threads.runnable.count'].value * 100 / metrics.gauges['jvm.threads.count'].value}
-                type="number"
-                format={APP_WHOLE_NUMBER_FORMAT} />
-              %
+              <span>
+                <TextFormat
+                  value={metrics.gauges['jvm.threads.runnable.count'].value * 100 / metrics.gauges['jvm.threads.count'].value}
+                  type="number"
+                  format={APP_WHOLE_NUMBER_FORMAT} />
+                %
+              </span>
             </Progress>
 
             <p><span>Timed Waiting</span> ({metrics.gauges['jvm.threads.timed_waiting.count'].value})</p>
             <Progress animated min="0" value={metrics.gauges['jvm.threads.timed_waiting.count'].value} max={metrics.gauges['jvm.threads.count'].value} color="warning">
-              <TextFormat
-                value={metrics.gauges['jvm.threads.timed_waiting.count'].value * 100 / metrics.gauges['jvm.threads.count'].value}
-                type="number"
-                format={APP_WHOLE_NUMBER_FORMAT} />
-              %
+              <span>
+                <TextFormat
+                  value={metrics.gauges['jvm.threads.timed_waiting.count'].value * 100 / metrics.gauges['jvm.threads.count'].value}
+                  type="number"
+                  format={APP_WHOLE_NUMBER_FORMAT} />
+                %
+              </span>
             </Progress>
 
             <p><span>Waiting</span> ({metrics.gauges['jvm.threads.waiting.count'].value})</p>
             <Progress animated min="0" value={metrics.gauges['jvm.threads.waiting.count'].value} max={metrics.gauges['jvm.threads.count'].value} color="warning">
-              <TextFormat
-                value={metrics.gauges['jvm.threads.waiting.count'].value * 100 / metrics.gauges['jvm.threads.count'].value}
-                type="number"
-                format={APP_WHOLE_NUMBER_FORMAT} />
-              %
+              <span>
+                <TextFormat
+                  value={metrics.gauges['jvm.threads.waiting.count'].value * 100 / metrics.gauges['jvm.threads.count'].value}
+                  type="number"
+                  format={APP_WHOLE_NUMBER_FORMAT} />
+                %
+              </span>
             </Progress>
 
             <p><span>Blocked</span> ({metrics.gauges['jvm.threads.blocked.count'].value})</p>
             <Progress animated min="0" value={metrics.gauges['jvm.threads.blocked.count'].value} max={metrics.gauges['jvm.threads.count'].value} color="success">
-              <TextFormat
-                value={metrics.gauges['jvm.threads.blocked.count'].value * 100 / metrics.gauges['jvm.threads.count'].value}
-                type="number"
-                format={APP_WHOLE_NUMBER_FORMAT} />
-              %
+              <span>
+                <TextFormat
+                  value={metrics.gauges['jvm.threads.blocked.count'].value * 100 / metrics.gauges['jvm.threads.count'].value}
+                  type="number"
+                  format={APP_WHOLE_NUMBER_FORMAT} />
+                %
+              </span>
             </Progress>
           </div>
           <div className="col-md-4">
@@ -510,11 +543,13 @@ export class MetricsPage extends React.Component<any, IMetricsPageState> {
                           max={metrics.gauges['HikariPool-1.pool.TotalConnections'].value}
                           value={metrics.gauges['HikariPool-1.pool.ActiveConnections'].value}
                         >
-                          <TextFormat
-                            value={metrics.gauges['HikariPool-1.pool.ActiveConnections'].value * 100 / metrics.gauges['HikariPool-1.pool.TotalConnections'].value}
-                            type="number"
-                            format={APP_WHOLE_NUMBER_FORMAT} />
-                          %
+                          <span>
+                            <TextFormat
+                              value={metrics.gauges['HikariPool-1.pool.ActiveConnections'].value * 100 / metrics.gauges['HikariPool-1.pool.TotalConnections'].value}
+                              type="number"
+                              format={APP_WHOLE_NUMBER_FORMAT} />
+                            %
+                          </span>
                         </Progress>
                       </td>
                       <td className="text-right">{metrics.histograms['HikariPool-1.pool.Usage'].count}</td>

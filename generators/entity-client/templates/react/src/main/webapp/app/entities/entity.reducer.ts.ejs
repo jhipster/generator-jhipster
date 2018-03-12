@@ -28,7 +28,7 @@ import axios from 'axios';
 import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
-import { messages, SERVER_API_URL } from 'app/config/constants';
+import { SERVER_API_URL } from 'app/config/constants';
 <%_ if (!(applicationType === 'gateway' && locals.microserviceName) && authenticationType !== 'uaa') { _%>
 
 <%_ } _%>
@@ -38,17 +38,10 @@ import { messages, SERVER_API_URL } from 'app/config/constants';
 // import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 
 export const ACTION_TYPES = {
-  FETCH_<%= entityActionNamePlural %>: '<%= entityInstance %>/FETCH_<%= entityActionNamePlural %>',
   <%_ if (searchEngine === 'elasticsearch') { _%>
   SEARCH_<%= entityActionNamePlural %>: '<%= entityInstance %>/SEARCH_<%= entityActionNamePlural %>',
   <%_ } _%>
-  <%_ for (idx in relationships) {
-    const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-    const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-   _%>
-  // TODO: this should be replaced by using the action and state from the related entity
-  FETCH_<%= otherEntityNamePlural.toUpperCase() %>: '<%= otherEntityNamePlural %>/FETCH_<%= otherEntityNamePlural.toUpperCase() %>',
-  <%_ } _%>
+  FETCH_<%= entityActionNamePlural %>: '<%= entityInstance %>/FETCH_<%= entityActionNamePlural %>',
   FETCH_<%= entityActionName %>:  '<%= entityInstance %>/FETCH_<%= entityActionName %>',
   CREATE_<%= entityActionName %>: '<%= entityInstance %>/CREATE_<%= entityActionName %>',
   UPDATE_<%= entityActionName %>: '<%= entityInstance %>/UPDATE_<%= entityActionName %>',
@@ -60,12 +53,6 @@ const initialState = {
   errorMessage: null,
   entities: [],
   entity: {},
-<%_ for (idx in relationships) {
-  const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-  const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-_%>
-  <%= otherEntityNamePlural %>: [],
-<%_ } _%>
   updating: false,
   updateSuccess: false
 };
@@ -73,16 +60,10 @@ _%>
 // Reducer
 export default (state = initialState, action) => {
   switch (action.type) {
-<%_ for (idx in relationships) {
-    const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-    const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-_%>
-    case REQUEST(ACTION_TYPES.FETCH_<%= otherEntityNamePlural.toUpperCase() %>):
-<%_ } _%>
-    case REQUEST(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
     <%_ if (searchEngine === 'elasticsearch') { _%>
     case REQUEST(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
     <%_ } _%>
+    case REQUEST(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
     case REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>):
       return {
         ...state,
@@ -99,16 +80,10 @@ _%>
         updateSuccess: false,
         updating: true
       };
-<%_ for (idx in relationships) {
-    const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-    const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-_%>
-    case FAILURE(ACTION_TYPES.FETCH_<%= otherEntityNamePlural.toUpperCase() %>):
-<%_ } _%>
-    case FAILURE(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
     <%_ if (searchEngine === 'elasticsearch') { _%>
     case FAILURE(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
     <%_ } _%>
+    case FAILURE(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
     case FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>):
     case FAILURE(ACTION_TYPES.CREATE_<%= entityActionName %>):
     case FAILURE(ACTION_TYPES.UPDATE_<%= entityActionName %>):
@@ -120,23 +95,6 @@ _%>
         updateSuccess: false,
         errorMessage: action.payload
       };
-<%_ for (idx in relationships) {
-    const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-    const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-_%>
-    case SUCCESS(ACTION_TYPES.FETCH_<%= otherEntityNamePlural.toUpperCase() %>):
-      return {
-        ...state,
-        loading: false,
-        <%= otherEntityNamePlural %>: action.payload.data
-      };
-<%_ } _%>
-    case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
-      return {
-        ...state,
-        loading: false,
-        entities: action.payload.data
-      };
     <%_ if (searchEngine === 'elasticsearch') { _%>
     case SUCCESS(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
       return {
@@ -145,6 +103,12 @@ _%>
         entities: action.payload.data
     };
     <%_ } _%>
+    case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
+      return {
+        ...state,
+        loading: false,
+        entities: action.payload.data
+      };
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>):
       return {
         ...state,
@@ -178,14 +142,10 @@ const apiSearchUrl = <% if (applicationType === 'gateway' && locals.microservice
 
 // Actions
 
-<%_ for (idx in relationships) {
-  const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-  const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-_%>
-// TODO use camelcase
-export const get<%= otherEntityNamePlural %>: ICrudGetAllAction = () => ({
-  type: ACTION_TYPES.FETCH_<%= otherEntityNamePlural.toUpperCase() %>,
-  payload: axios.get(`/api/<%= otherEntityNamePlural %>?cacheBuster=${new Date().getTime()}`)
+<%_ if (searchEngine === 'elasticsearch') { _%>
+export const getSearchEntities: ICrudGetAllAction = query => ({
+  type: ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>,
+  payload: axios.get(`${apiSearchUrl}?query=` + query)
 });
 
 <%_ } _%>
@@ -193,13 +153,6 @@ export const getEntities: ICrudGetAllAction = (page, size, sort) => ({
   type: ACTION_TYPES.FETCH_<%= entityActionNamePlural %>,
   payload: axios.get(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
 });
-<%_ if (searchEngine === 'elasticsearch') { _%>
-
-export const getSearchEntities: ICrudGetAllAction = query => ({
-  type: ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>,
-  payload: axios.get(`${apiSearchUrl}?query=` + query)
-});
-<%_ } _%>
 
 export const getEntity: ICrudGetAction = id => {
   const requestUrl = `${apiUrl}/${id}`;
@@ -212,10 +165,6 @@ export const getEntity: ICrudGetAction = id => {
 export const createEntity: ICrudPutAction = entity => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_<%= entityActionName %>,
-    meta: {
-      successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
-      errorMessage: messages.DATA_UPDATE_ERROR_ALERT
-    },
     payload: axios.post(apiUrl, entity)
   });
   dispatch(getEntities());
@@ -225,10 +174,6 @@ export const createEntity: ICrudPutAction = entity => async dispatch => {
 export const updateEntity: ICrudPutAction = entity => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_<%= entityActionName %>,
-    meta: {
-      successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
-      errorMessage: messages.DATA_UPDATE_ERROR_ALERT
-    },
     payload: axios.put(apiUrl, entity)
   });
   dispatch(getEntities());
@@ -239,10 +184,6 @@ export const deleteEntity: ICrudDeleteAction = id => async dispatch => {
   const requestUrl = `${apiUrl}/${id}`;
   const result = await dispatch({
     type: ACTION_TYPES.DELETE_<%= entityActionName %>,
-    meta: {
-      successMessage: messages.DATA_DELETE_SUCCESS_ALERT,
-      errorMessage: messages.DATA_UPDATE_ERROR_ALERT
-    },
     payload: axios.delete(requestUrl)
   });
   dispatch(getEntities());

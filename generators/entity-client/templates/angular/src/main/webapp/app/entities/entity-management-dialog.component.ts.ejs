@@ -34,7 +34,7 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ if ( fieldsContainInstant || fieldsContainZonedDateTime ) { _%>
-import { DateFormatPipe, ParsePipe } from 'angular2-moment';
+import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 <%_ } _%>
 import { JhiEventManager<% if (queries && queries.length > 0) { %>, JhiAlertService<% } %><% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
@@ -55,7 +55,7 @@ Object.keys(differentRelationships).forEach(key => {
     if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
         const uniqueRel = differentRelationships[key][0];
         if (uniqueRel.otherEntityAngularName !== entityAngularName) {
-            if(uniqueRel.otherEntityAngularName === 'User') {
+            if (uniqueRel.otherEntityAngularName === 'User') {
 _%>
 import { I<%= uniqueRel.otherEntityAngularName %>, <%= uniqueRel.otherEntityAngularName%>Service } from 'app/core';
 <%_         } else { _%>
@@ -106,10 +106,6 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
                 }
             }
         }); _%>
-        <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
-        private stringToMomentPipe: ParsePipe,
-        private momentToStringPipe: DateFormatPipe,
-        <%_ } _%>
         <%_ if (fieldsContainImageBlob) { _%>
         private elementRef: ElementRef,
         <%_ } _%>
@@ -154,7 +150,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
             const fieldName = fields[ idx ].fieldName;
             const fieldType = fields[idx].fieldType;
             if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType)) { _%>
-                this.<%= entityInstance %>.<%= fieldName %> = this.stringToMomentPipe.transform(this.<%= fieldName %>, DATE_TIME_FORMAT);
+                this.<%= entityInstance %>.<%= fieldName %> = moment(this.<%= fieldName %>, DATE_TIME_FORMAT);
         <%_ }
         } _%>
         if (this.<%= entityInstance %>.id !== undefined) {
@@ -190,7 +186,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     const entitiesSeen = [];
     for (idx in relationships) {
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
-        if(relationships[idx].relationshipType !== 'one-to-many' && !entitiesSeen.includes(otherEntityNameCapitalized)) {
+        if (relationships[idx].relationshipType !== 'one-to-many' && !entitiesSeen.includes(otherEntityNameCapitalized)) {
     _%>
 
     track<%= otherEntityNameCapitalized %>ById(index: number, item: I<%= relationships[idx].otherEntityAngularName %>) {
@@ -220,7 +216,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         const fieldName = fields[idx].fieldName;
         const fieldType = fields[idx].fieldType;
         if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-        this.<%= fieldName %> = this.momentToStringPipe.transform(<%= entityInstance %>.<%= fieldName %>);
+        this.<%= fieldName %> = moment(<%= entityInstance %>.<%= fieldName %>).format();
      <%_ } } _%>
     }
 }

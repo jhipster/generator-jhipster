@@ -1,8 +1,25 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see http://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 import axios from 'axios';
 import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
-import { messages } from 'app/config/constants';
 
 export const ACTION_TYPES = {
   FETCH_ROLES: 'userManagement/FETCH_ROLES',
@@ -10,7 +27,8 @@ export const ACTION_TYPES = {
   FETCH_USER:  'userManagement/FETCH_USER',
   CREATE_USER: 'userManagement/CREATE_USER',
   UPDATE_USER: 'userManagement/UPDATE_USER',
-  DELETE_USER: 'userManagement/DELETE_USER'
+  DELETE_USER: 'userManagement/DELETE_USER',
+  RESET_MODAL: 'userManagement/RESET_MODAL'
 };
 
 const initialState = {
@@ -95,6 +113,11 @@ export default (state = initialState, action) => {
         updateSuccess: true,
         user: {}
       };
+    case ACTION_TYPES.RESET_MODAL:
+      return {
+        ...state,
+        user: {}
+      };
     default:
       return state;
   }
@@ -126,10 +149,6 @@ export const getUser: ICrudGetAction = id => {
 export const createUser: ICrudPutAction = user => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_USER,
-    meta: {
-      successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
-      errorMessage: messages.DATA_UPDATE_ERROR_ALERT
-    },
     payload: axios.post(apiUrl, user)
   });
   dispatch(getUsers());
@@ -139,10 +158,6 @@ export const createUser: ICrudPutAction = user => async dispatch => {
 export const updateUser: ICrudPutAction = user => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_USER,
-    meta: {
-      successMessage: messages.DATA_CREATE_SUCCESS_ALERT,
-      errorMessage: messages.DATA_UPDATE_ERROR_ALERT
-    },
     payload: axios.put(apiUrl, user)
   });
   dispatch(getUsers());
@@ -153,12 +168,12 @@ export const deleteUser: ICrudDeleteAction = id => async dispatch => {
   const requestUrl = `${apiUrl}/${id}`;
   const result = await dispatch({
     type: ACTION_TYPES.DELETE_USER,
-    meta: {
-      successMessage: messages.DATA_DELETE_SUCCESS_ALERT,
-      errorMessage: messages.DATA_UPDATE_ERROR_ALERT
-    },
     payload: axios.delete(requestUrl)
   });
   dispatch(getUsers());
   return result;
 };
+
+export const resetModal = () => ({
+  type: ACTION_TYPES.RESET_MODAL
+});

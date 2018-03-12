@@ -32,7 +32,7 @@ const files = {
     common: [
         {
             templates: [
-                '.prettierrc',
+                '.prettierrc', // this needs to be the first file for prettier transform to work
                 '.prettierignore',
                 'package.json',
                 'tslint.json',
@@ -112,6 +112,13 @@ const files = {
             ]
         },
         {
+            condition: generator => generator.websocket === 'spring-websocket',
+            path: REACT_DIR,
+            templates: [
+                { file: 'config/websocket-middleware.ts', method: 'processJsx' }
+            ]
+        },
+        {
             condition: generator => generator.useSass,
             path: REACT_DIR,
             templates: [
@@ -153,11 +160,15 @@ const files = {
         {
             path: REACT_DIR,
             templates: [
-                // home module
                 { file: 'modules/home/home.tsx', method: 'processJsx' },
-                // login module
-                { file: 'modules/login/login.tsx', method: 'processJsx' },
                 { file: 'modules/login/logout.tsx', method: 'processJsx' },
+            ]
+        },
+        {
+            condition: generator => generator.authenticationType !== 'oauth2',
+            path: REACT_DIR,
+            templates: [
+                { file: 'modules/login/login.tsx', method: 'processJsx' },
                 { file: 'modules/login/login-modal.tsx', method: 'processJsx' }
             ]
         },
@@ -213,15 +224,15 @@ const files = {
                 'modules/account/password/password.reducer.ts',
                 'modules/account/settings/settings.reducer.ts'
             ]
-        }
-        // {
-        //   condition: generator => generator.authenticationType === 'session',
-        //   path: REACT_DIR,
-        //   templates: [
-        //     'account/sessions/_session.model.js',
-        //     { file: 'account/sessions/_sessions.component.js', method: 'processJsx' }
-        //   ]
-        // },
+        },
+        {
+            condition: generator => generator.authenticationType === 'session',
+            path: REACT_DIR,
+            templates: [
+                { file: 'modules/account/sessions/sessions.tsx', method: 'processJsx' },
+                { file: 'modules/account/sessions/sessions.reducer.ts', method: 'processJsx' }
+            ]
+        },
         // {
         //   condition: generator => generator.enableSocialSignIn,
         //   path: REACT_DIR,
@@ -253,16 +264,17 @@ const files = {
                 { file: 'modules/administration/logs/logs.tsx', method: 'processJsx' },
                 { file: 'modules/administration/metrics/metrics.tsx', method: 'processJsx' },
                 { file: 'modules/administration/metrics/metrics-modal.tsx', method: 'processJsx' },
+                { file: 'modules/administration/metrics/thread-item.tsx', method: 'processJsx' },
                 'modules/administration/administration.reducer.ts'
             ]
         },
-        // {
-        //   condition: generator => generator.websocket === 'spring-websocket',
-        //   path: REACT_DIR,
-        //   templates: [
-        //     { file: 'modules/administration/tracker/Tracker.js', method: 'processJsx' }
-        //   ]
-        // },
+        {
+            condition: generator => generator.websocket === 'spring-websocket',
+            path: REACT_DIR,
+            templates: [
+                { file: 'modules/administration/tracker/tracker.tsx', method: 'processJsx' }
+            ]
+        },
         {
             condition: generator => !generator.skipUserManagement,
             path: REACT_DIR,
@@ -297,6 +309,13 @@ const files = {
                 // components
                 // model
                 'shared/model/user.model.ts'
+            ]
+        },
+        {
+            condition: generator => generator.authenticationType === 'oauth2',
+            path: REACT_DIR,
+            templates: [
+                'shared/util/url-utils.ts'
             ]
         },
         {
@@ -385,7 +404,7 @@ const files = {
                 'spec/app/modules/account/activate/activate.reducer.spec.ts',
                 'spec/app/modules/account/password/password.reducer.spec.ts',
                 'spec/app/modules/account/settings/settings.reducer.spec.ts',
-                'spec/app/modules/administration/user-management/user-management.reducer.spec.ts',
+                'spec/app/modules/administration/administration.reducer.spec.ts',
                 // 'spec/app/account/activate/_activate.component.spec.js',
                 // 'spec/app/account/password/_password.component.spec.js',
                 // 'spec/app/account/password/_password-strength-bar.component.spec.js',
@@ -400,25 +419,25 @@ const files = {
                 // 'spec/helpers/_mock-route.service.js'
             ]
         },
-    //   {
-    //     condition: generator => generator.authenticationType === 'session',
-    //     path: TEST_SRC_DIR,
-    //     templates: [
-    //       'spec/app/account/sessions/_sessions.component.spec.js',
-    //     ]
-    //   },
+        {
+            condition: generator => !generator.skipUserManagement,
+            path: TEST_SRC_DIR,
+            templates: [
+                'spec/app/modules/administration/user-management/user-management.reducer.spec.ts'
+            ]
+        },
+        {
+            condition: generator => generator.authenticationType === 'session',
+            path: TEST_SRC_DIR,
+            templates: [
+                'spec/app/modules/account/sessions/sessions.reducer.spec.ts',
+            ]
+        }
     //   {
     //     condition: generator => generator.enableTranslation,
     //     path: TEST_SRC_DIR,
     //     templates: [
     //       'spec/helpers/_mock-language.service.js'
-    //     ]
-    //   },
-    //   {
-    //     condition: generator => generator.websocket === 'spring-websocket',
-    //     path: TEST_SRC_DIR,
-    //     templates: [
-    //       'spec/helpers/_mock-tracker.service.js'
     //     ]
     //   },
     //   {

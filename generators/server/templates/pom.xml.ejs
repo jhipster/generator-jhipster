@@ -111,7 +111,7 @@
         <profile.swagger />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>2.0.0-20180304.180935-37</jhipster-dependencies.version>
+        <jhipster-dependencies.version>2.0.0-20180308.204933-42</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
         <spring-boot.version>2.0.0.RELEASE</spring-boot.version>
@@ -548,6 +548,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <%_ if (reactive === true) { _%>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -1097,7 +1103,7 @@
                                         <ignore/>
                                     </action>
                                 </pluginExecution>
-                                <%_ if(!skipClient) { _%>
+                                <%_ if (!skipClient) { _%>
                                 <pluginExecution>
                                     <pluginExecutionFilter>
                                         <groupId>com.github.eirslett</groupId>

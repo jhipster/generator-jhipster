@@ -77,10 +77,10 @@ _%>
     @Mapping(target = "<%= relationshipName %>", ignore = true)
             <%_ } _%>
         <%_ } _%>
-    <%_ if(renMapAnotDto === true) { _%>
+    <%_ if (renMapAnotDto === true) { _%>
     <%= entityClass %> toEntity(<%= entityClass%>DTO <%= entityInstance %>DTO);
     <%_ } _%>
-    <%_ if(databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql') { _%>
 
     default <%= entityClass %> fromId(<% if (hasOAuthUser) { _%>String<%_ } else { _%>Long<% } %> id) {
         if (id == null) {
