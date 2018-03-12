@@ -152,7 +152,7 @@ applicationSubDecl
   }
   / SPACE* 'entities' SPACE* entityList:simpleEntityList SPACE* excluded:exclusion? SPACE* applicationSubDecl:applicationSubDecl {
     applicationSubDecl.config = applicationSubDecl.config || {};
-    applicationSubDecl.entities = { entityList, excluded };
+    applicationSubDecl.entities = { entityList: entityList || [], excluded: excluded || [] };
     return applicationSubDecl;
   }
   / '' { return { config: {}, entities: { entityList: [], excluded: [] } }; }
