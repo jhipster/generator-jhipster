@@ -188,13 +188,13 @@ applicationConfigDecl
   / WEBSOCKET SPACE* websocket:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'websocket', websocket.join(''));
   }
-  / DATABASE_TYPE SPACE* databaseType:[a-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+  / DATABASE_TYPE SPACE* databaseType:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'databaseType', databaseType.join(''));
   }
-  / DEV_DATABASE_TYPE SPACE* devDatabaseType:[A-z0-9]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+  / DEV_DATABASE_TYPE SPACE* devDatabaseType:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'devDatabaseType', devDatabaseType.join(''));
   }
-  / PROD_DATABASE_TYPE SPACE* prodDatabaseType:[A-z0-9]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+  / PROD_DATABASE_TYPE SPACE* prodDatabaseType:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'prodDatabaseType', prodDatabaseType.join(''));
   }
   / USE_COMPASS SPACE* useCompass:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
@@ -241,8 +241,8 @@ applicationConfigDecl
   / USE_SASS SPACE* useSass:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'useSass', useSass);
   }
-  / JHI_PREFIX SPACE* jhiPrefix:[A-z0-9_-]+ SPACE* applicationConfigDecl:applicationConfigDecl {
-    return addToApplicationDecl(applicationConfigDecl, 'jhiPrefix', jhiPrefix.join(''));
+  / JHI_PREFIX SPACE* jhiPrefixStart:[A-z] jhiPrefixEnd:[A-z0-9_-]* SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'jhiPrefix', `${jhiPrefixStart}${jhiPrefixEnd.join('')}`);
   }
   / MESSAGE_BROKER SPACE* messageBroker:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'messageBroker', messageBroker);
@@ -263,7 +263,7 @@ applicationConfigDecl
   / CLIENT_PACKAGE_MANAGER SPACE* clientPackageManager:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'clientPackageManager', clientPackageManager.join(''));
   }
-  / CLIENT_FRAMEWORK SPACE* clientFramework:[A-z0-9]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+  / CLIENT_FRAMEWORK SPACE* clientFramework:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'clientFramework', clientFramework.join(''));
   }
   / NATIVE_LANGUAGE SPACE* nativeLanguage:[a-z]+ applicationConfigDecl:applicationConfigDecl {
@@ -300,7 +300,7 @@ entityDecl
   / ENTITY SPACE* e:ENTITY_NAME SPACE* eb:entityBody? { return { name: e, body: eb, javadoc: '' }; }
 
 entityTableNameDecl
-  = '(' SPACE* name:[A-z0-9_-]+ SPACE* ')' { return name.join(''); }
+  = '(' SPACE* start:[A-z] end:[A-z0-9_-]* SPACE* ')' { return `${start}${end.join('')}`; }
 
 entityBody
   = '{' SPACE* fdl:fieldDeclList SPACE* '}' { return fdl; }
@@ -512,9 +512,12 @@ clientRootFolderDecl
 // common way to declare an entity list
 entityList
   = e:ENTITY_NAME SPACE* ',' SPACE* sub:entityList { return addUniqueElements([e], sub); }
-  / STAR SPACE* WITH SPACE* method:([A-z0-9-]+) { return ['*', method.toString().replace(/,/g,'')]; }
-  / ALL SPACE* WITH SPACE* method:([A-z0-9-]+) { return ['*', method.toString().replace(/,/g,'')]; }
-  / e:ENTITY_NAME SPACE* WITH SPACE* method:([A-z0-9-]+) { return [e, method.toString().replace(/,/g,'')]; }
+  / STAR SPACE* WITH SPACE* method:methodDecl { return ['*', method.toString().replace(/,/g,'')]; }
+  / ALL SPACE* WITH SPACE* method:methodDecl { return ['*', method.toString().replace(/,/g,'')]; }
+  / e:ENTITY_NAME SPACE* WITH SPACE* method:([A-z][A-z0-9-]*) { return [e, method.toString().replace(/,/g,'')]; }
+
+methodDecl
+  = methodStart:[A-z] methodEnd:[A-z0-9-]* { return `${methodStart}${methodEnd.join('')}`; }
 
 simpleEntityList
   = e:ENTITY_NAME SPACE* ',' SPACE* sub:simpleEntityList { return addUniqueElements([e], sub); }
