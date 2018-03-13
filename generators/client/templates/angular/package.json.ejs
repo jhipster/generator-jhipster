@@ -79,6 +79,7 @@
     "html-loader": "0.5.5",
     "html-webpack-plugin": "3.0.6",
     "husky": "0.14.3",
+    "istanbul-instrumenter-loader": "3.0.0",
     "jasmine-core": "2.7.0",
     <%_ if (protractorTests) { _%>
     "jasmine-reporters": "2.2.1",
@@ -150,7 +151,7 @@
     "prettier:format":"<%= clientPackageManager %> prettier --write **/*.ts",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
-    "ngc": "ngc -p tsconfig-aot.json",
+    "ngc": "ngc -p tsconfig.json",
     "cleanup": "rimraf <%= BUILD_DIR %>{aot,www}",
     "clean-www": "rimraf <%= BUILD_DIR %>/www/app/{src,<%= BUILD_DIR %>}",
     "start": "<%= clientPackageManager %> run webpack:dev",

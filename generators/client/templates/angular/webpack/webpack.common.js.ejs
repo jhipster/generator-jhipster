@@ -40,6 +40,10 @@ module.exports = (options) => ({
     },
     module: {
         rules: [
+            {
+                test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
+                use: [ '@ngtools/webpack' ]
+            },
             { test: /bootstrap\/dist\/js\/umd\//, loader: 'imports-loader?jQuery=jquery' },
             {
                 test: /\.html$/,

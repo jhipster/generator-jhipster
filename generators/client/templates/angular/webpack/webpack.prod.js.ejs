@@ -36,7 +36,7 @@ const extractCSS = new ExtractTextPlugin(`[name].[hash].css`);
 
 module.exports = webpackMerge(commonConfig({ env: ENV }), {
     // Enable source maps. Please note that this will slow down the build.
-    // You have to enable it in UglifyJSPlugin config below and in tsconfig-aot.json as well
+    // You have to enable it in UglifyJSPlugin config below and in tsconfig.json as well
     // devtool: 'source-map',
     entry: {
         polyfills: './<%= MAIN_SRC_DIR %>app/polyfills',
@@ -53,10 +53,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         chunkFilename: 'app/[id].[hash].chunk.js'
     },
     module: {
-        rules: [{
-            test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
-            use: [ '@ngtools/webpack' ]
-        },
+        rules: [
         <%_ if (useSass) { _%>
         {
             test: /\.scss$/,
@@ -135,7 +132,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         }),
         new AngularCompilerPlugin({
             mainPath: utils.root('<%= MAIN_SRC_DIR %>app/app.main.ts'),
-            tsConfigPath: utils.root('tsconfig-aot.json'),
+            tsConfigPath: utils.root('tsconfig.json'),
             sourceMap: true
         }),
         new webpack.LoaderOptionsPlugin({
