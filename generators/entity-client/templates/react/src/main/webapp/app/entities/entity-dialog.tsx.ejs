@@ -41,7 +41,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Label<% if (haveFie
     }
   }
 _%>
-import { AvForm, AvGroup, AvInput<%_ if (isLocalDate) { _%>, AvField <%_ } _%> } from 'availity-reactstrap-validation';
+import { AvForm, AvGroup, AvInput<% if (isLocalDate) { %>, AvField <% } %> } from 'availity-reactstrap-validation';
 // tslint:disable-next-line:no-unused-variable
 import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
 import { FaBan, FaFloppyO } from 'react-icons/lib/fa';

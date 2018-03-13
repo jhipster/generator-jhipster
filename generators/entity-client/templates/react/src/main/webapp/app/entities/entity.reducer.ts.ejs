@@ -54,8 +54,10 @@ const initialState = {
   entities: [],
   entity: {},
   updating: false,
+  <%_ if (pagination !== 'no') { _%> 
+  totalItems: 0,
+  <%_ } _%>
   updateSuccess: false
-  <%_ if (pagination !== 'no') { _%>, totalItems: 0<%_ } _%>
 };
 
 // Reducer
@@ -108,8 +110,10 @@ export default (state = initialState, action) => {
       return {
         ...state,
         loading: false,
+        <%_ if (pagination !== 'no') { _%>
+        totalItems: action.payload.headers['x-total-count'],
+        <%_ } _%>
         entities: action.payload.data
-        <%_ if (pagination !== 'no') { _%>, totalItems: action.payload.headers['x-total-count']<%_ } _%>
       };
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>):
       return {
@@ -152,14 +156,16 @@ export const getSearchEntities: ICrudGetAllAction = query => ({
 
 <%_ } _%>
 export const getEntities: ICrudGetAllAction = (page, size, sort) =>
-  <%_ if (pagination !== 'no') { _%> {
+<%_ if (pagination !== 'no') { _%>
+{
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
   return {
     type: ACTION_TYPES.FETCH_<%= entityActionNamePlural %>,
     payload: axios.get(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`)
   }
 }
-  <%_ } else {_%> ({
+<%_ } else { _%>
+({
   type: ACTION_TYPES.FETCH_<%= entityActionNamePlural %>,
   payload: axios.get(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
 });

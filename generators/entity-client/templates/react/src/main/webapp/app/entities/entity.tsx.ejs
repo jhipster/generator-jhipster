@@ -35,11 +35,9 @@ import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
     }
   }
 _%>
-import { Translate<% if (searchEngine === 'elasticsearch') { %>, translate<% } %>, ICrudGetAllAction
-<%_ if (fieldContainsDate) {_%>, TextFormat<%_ } _%>
-<%_ if (pagination !== 'no') { _%>, getSortState, IPaginationBaseState, getPaginationItemsNumber, JhiPagination<%_ } _%>
+import { Translate<% if (searchEngine === 'elasticsearch') { %>, translate<% } %>, ICrudGetAllAction<% if (fieldContainsDate) { %>, TextFormat<% } %><% if (pagination !== 'no') { %>, getSortState, IPaginationBaseState, getPaginationItemsNumber, JhiPagination<% } %>
 } from 'react-jhipster';
-import { FaPlus, FaEye, FaPencil, FaTrash<%_ if (pagination !== 'no') { _%>, FaSort<% } %><% if (searchEngine === 'elasticsearch') { %>, FaSearch<% } %> } from 'react-icons/lib/fa';
+import { FaPlus, FaEye, FaPencil, FaTrash<% if (pagination !== 'no') { %>, FaSort<% } %><% if (searchEngine === 'elasticsearch') { %>, FaSearch<% } %> } from 'react-icons/lib/fa';
 
 import {
   <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -79,15 +77,15 @@ export interface I<%= entityReactName %>State {
 export type I<%= entityReactName %>State = IPaginationBaseState;
 <%_ } _%>
 
-export class <%= entityReactName %> extends React.Component<I<%= entityReactName %>Props<% if (searchEngine === 'elasticsearch' || pagination !== 'no') { _%>, I<%= entityReactName %>State<%_ } _%>> {
-  <% if (searchEngine === 'elasticsearch' || pagination !== 'no') { _%>
+export class <%= entityReactName %> extends React.Component<I<%= entityReactName %>Props<% if (searchEngine === 'elasticsearch' || pagination !== 'no') { %>, I<%= entityReactName %>State<% } %>> {
+  <%_ if (searchEngine === 'elasticsearch' || pagination !== 'no') { _%>
   state: I<%= entityReactName %>State = {
     <%_ if (searchEngine === 'elasticsearch') { _%>
-      search: ''
-      <%_ if (pagination !== 'no') { _%>
-        , ...getSortState(this.props.location, ITEMS_PER_PAGE)
-      <%_ } _%>
-    <%_ } else if (pagination !== 'no') { _%>...getSortState(this.props.location, ITEMS_PER_PAGE)<%_ } _%>
+    search: '',
+    <%_ } _%>
+    <%_ if (pagination !== 'no') { _%>
+    ...getSortState(this.props.location, ITEMS_PER_PAGE)
+    <%_ } _%>
   };
   <%_ } _%>
 
@@ -141,7 +139,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   <%_ } _%>
 
   render() {
-    const { <%=entityInstancePlural %>, match <%_ if (pagination !== 'no') { _%>, totalItems<%_ } _%>} = this.props;
+    const { <%=entityInstancePlural %>, match<% if (pagination !== 'no') { %>, totalItems<% } %>} = this.props;
     return (
       <%_ const keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
       <div>
@@ -304,7 +302,9 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
 
 const mapStateToProps = ({ <%= entityInstance %> }) => ({
   <%=entityInstancePlural %>: <%= entityInstance %>.entities,
-  <%_ if (pagination !== 'no') { _%> totalItems: <%= entityInstance %>.totalItems<%_ } _%>
+  <%_ if (pagination !== 'no') { _%> 
+  totalItems: <%= entityInstance %>.totalItems
+  <%_ } _%>
 });
 
 const mapDispatchToProps = {
