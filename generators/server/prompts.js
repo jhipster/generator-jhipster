@@ -45,12 +45,6 @@ function askForServerSideOpts(meta) {
     }
     const prompts = [
         {
-            type: 'confirm',
-            name: 'reactive',
-            message: 'Do you want to build a reactive API, using Spring Webflux?',
-            default: false
-        },
-        {
             when: response => (applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa'),
             type: 'input',
             name: 'serverPort',
@@ -271,7 +265,6 @@ function askForServerSideOpts(meta) {
     const done = this.async();
 
     this.prompt(prompts).then((props) => {
-        this.reactive = props.reactive;
         this.serviceDiscoveryType = props.serviceDiscoveryType;
         this.authenticationType = props.authenticationType;
 
@@ -343,6 +336,10 @@ function askForOptionalItems(meta) {
     const applicationType = this.applicationType;
     const choices = [];
     const defaultChoice = [];
+    choices.push({
+        name: 'Reactive APIs, using Spring Webflux',
+        value: 'reactive:true'
+    });
     if (this.databaseType !== 'cassandra' && applicationType === 'monolith' && (this.authenticationType === 'session' || this.authenticationType === 'jwt')) {
         choices.push({
             name: 'Social login (Google, Facebook, Twitter)',
@@ -384,6 +381,7 @@ function askForOptionalItems(meta) {
     if (choices.length > 0) {
         this.prompt(PROMPTS).then((prompt) => {
             this.serverSideOptions = prompt.serverSideOptions;
+            this.reactive = this.getOptionFromArray(this.serverSideOptions, 'reactive');
             this.websocket = this.getOptionFromArray(this.serverSideOptions, 'websocket');
             this.searchEngine = this.getOptionFromArray(this.serverSideOptions, 'searchEngine');
             this.enableSocialSignIn = this.getOptionFromArray(this.serverSideOptions, 'enableSocialSignIn');
