@@ -43,7 +43,7 @@ function askForClient(meta) {
         },
         {
             value: 'react',
-            name: '[BETA] React'
+            name: 'React'
         }
     ];
 
