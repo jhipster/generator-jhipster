@@ -27,7 +27,7 @@ import { JhiEventManager } from 'ng-jhipster';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { UserMgmtDialogComponent } from 'app/admin/user-management/user-management-dialog.component';
-import { UserService, User<% if(enableTranslation) { %>, JhiLanguageHelper<% } %> } from 'app/core';
+import { UserService, User<% if (enableTranslation) { %>, JhiLanguageHelper<% } %> } from 'app/core';
 
 describe('Component Tests', () => {
 
@@ -37,7 +37,7 @@ describe('Component Tests', () => {
         let service: UserService;
         let mockEventManager: any;
         let mockActiveModal: any;
-        <%_ if(enableTranslation) { _%>
+        <%_ if (enableTranslation) { _%>
         let mockLanguageHelper: any;
         <%_ } _%>
 
@@ -59,7 +59,7 @@ describe('Component Tests', () => {
             service = fixture.debugElement.injector.get(UserService);
             mockEventManager = fixture.debugElement.injector.get(JhiEventManager);
             mockActiveModal = fixture.debugElement.injector.get(NgbActiveModal);
-            <%_ if(enableTranslation) { _%>
+            <%_ if (enableTranslation) { _%>
             mockLanguageHelper = fixture.debugElement.injector.get(JhiLanguageHelper);
             <%_ } _%>
         });
@@ -77,7 +77,7 @@ describe('Component Tests', () => {
                         // THEN
                         expect(service.authorities).toHaveBeenCalled();
                         expect(comp.authorities).toEqual(['USER']);
-                        <%_ if(enableTranslation) { _%>
+                        <%_ if (enableTranslation) { _%>
                         expect(mockLanguageHelper.getAllSpy).toHaveBeenCalled();
                         <%_ } _%>
                     })

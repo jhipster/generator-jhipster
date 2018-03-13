@@ -45,6 +45,12 @@ function askForServerSideOpts(meta) {
     }
     const prompts = [
         {
+            type: 'confirm',
+            name: 'reactive',
+            message: 'Do you want to build a reactive API, using Spring Webflux?',
+            default: false
+        },
+        {
             when: response => (applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa'),
             type: 'input',
             name: 'serverPort',
@@ -265,6 +271,7 @@ function askForServerSideOpts(meta) {
     const done = this.async();
 
     this.prompt(prompts).then((props) => {
+        this.reactive = props.reactive;
         this.serviceDiscoveryType = props.serviceDiscoveryType;
         this.authenticationType = props.authenticationType;
 

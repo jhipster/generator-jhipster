@@ -1,4 +1,4 @@
-# AWS JHipster Generator - _A new hope_
+# JHipster sub-generator for AWS Fargate
 
 ## AWS
 ### ECR

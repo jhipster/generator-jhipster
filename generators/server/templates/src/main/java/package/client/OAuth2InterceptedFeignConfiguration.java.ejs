@@ -18,7 +18,7 @@
 -%>
 package <%=packageName%>.client;
 
-<%_ if(authenticationType === 'uaa') { _%>
+<%_ if (authenticationType === 'uaa') { _%>
 import java.io.IOException;
 
 import org.springframework.cloud.security.oauth2.client.feign.OAuth2FeignRequestInterceptor;
@@ -44,7 +44,7 @@ public class OAuth2InterceptedFeignConfiguration {
     }
 }
 <%_ } _%>
-<%_ if(authenticationType === 'oauth2') { _%>
+<%_ if (authenticationType === 'oauth2') { _%>
 import java.io.IOException;
 
 import org.springframework.context.annotation.Bean;

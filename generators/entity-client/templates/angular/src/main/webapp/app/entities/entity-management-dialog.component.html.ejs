@@ -103,7 +103,7 @@ _%>
                 <input id="field_<%= fieldName %>" type="datetime-local" class="form-control" name="<%= fieldName %>" [(ngModel)]="<%= fieldName %>"
                 <%- include ng_validators %>/>
             </div>
-            <%_ } else if(fieldTypeBlobContent === 'text') { _%>
+            <%_ } else if (fieldTypeBlobContent === 'text') { _%>
             <textarea class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>"
                 [(ngModel)]="<%= entityInstance %>.<%= fieldName %>" <%- include ng_validators %>></textarea>
             <%_ } else { _%>

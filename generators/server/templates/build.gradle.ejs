@@ -309,6 +309,9 @@ dependencies {
     compile ("org.springframework.boot:spring-boot-starter-web") {
         exclude module: 'spring-boot-starter-tomcat'
     }
+    <%_ if (reactive === true) { _%>
+    compile "org.springframework.boot:spring-boot-starter-webflux"
+    <%_ } _%>
     compile "org.springframework.boot:spring-boot-starter-undertow"
     <%_ if (websocket === 'spring-websocket') { _%>
     compile "org.springframework.boot:spring-boot-starter-websocket"

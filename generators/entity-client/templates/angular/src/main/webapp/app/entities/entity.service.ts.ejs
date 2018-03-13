@@ -40,7 +40,7 @@ export type EntityArrayResponseType = HttpResponse<I<%= entityAngularName %>[]>;
 export class <%= entityAngularName %>Service {
 
     private resourceUrl =  SERVER_API_URL + '<% if (applicationType === 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';
-    <%_ if(searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
     private resourceSearchUrl = SERVER_API_URL + '<% if (applicationType === 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/_search/<%= entityApiUrl %>';
     <%_ } _%>
 
@@ -84,7 +84,7 @@ export class <%= entityAngularName %>Service {
     delete(id: <% if (pkType === 'String') { %>string<% } else { %>number<% } %>): Observable<HttpResponse<any>> {
         return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response'});
     }
-    <%_ if(searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
 
     search(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
