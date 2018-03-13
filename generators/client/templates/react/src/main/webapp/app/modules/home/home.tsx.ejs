@@ -59,10 +59,9 @@ export class Home extends React.Component<IHomeProp, IHomeState> {
                   <%_ } else { _%>
                   <Link to="/login" className="alert-link"><Translate contentKey="global.messages.info.authenticated.link">sign in</Translate></Link>
                   <%_ } _%>
-                  <Translate contentKey="global.messages.info.authenticated.suffix">, you can try the default accounts:
-                    Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;)
-                    User (login=&quot;user&quot; and password=&quot;user&quot;).
-                  </Translate>
+                  <Translate contentKey="global.messages.info.authenticated.suffix">, you can try the default accounts:</Translate>
+                  <br />- Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;)
+                  <br />- User (login=&quot;user&quot; and password=&quot;user&quot;).
                 </div>
 
                 <div className="alert alert-warning">
