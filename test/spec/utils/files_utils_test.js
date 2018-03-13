@@ -20,6 +20,7 @@
 /* eslint-disable no-unused-expressions */
 
 const fs = require('fs');
+const path = require('path');
 const FileUtils = require('../../../lib/utils/file_utils');
 const expect = require('chai').expect;
 
@@ -95,6 +96,23 @@ describe('FileUtils', () => {
 
       it('does nothing', () => {
         expect(fs.statSync('./test').isDirectory()).to.be.true;
+      });
+    });
+    context('when passing a path that does not contain more than one directory', () => {
+      before(() => {
+        FileUtils.createDirectory(path.join('toto', 'titi', 'tutu'));
+      });
+
+      after(() => {
+        fs.rmdirSync(path.join('toto', 'titi', 'tutu'));
+        fs.rmdirSync(path.join('toto', 'titi'));
+        fs.rmdirSync('toto');
+      });
+
+      it('creates the folder structure recursively', () => {
+        expect(fs.statSync('toto').isDirectory()).to.be.true;
+        expect(fs.statSync(path.join('toto', 'titi')).isDirectory()).to.be.true;
+        expect(fs.statSync(path.join('toto', 'titi', 'tutu')).isDirectory()).to.be.true;
       });
     });
   });

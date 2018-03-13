@@ -23,6 +23,7 @@ const fs = require('fs');
 const path = require('path');
 
 const fail = expect.fail;
+const JDLApplication = require('../../../lib/core/jdl_application');
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
 const JHipsterEntityExporter = require('../../../lib/export/jhipster_entity_exporter');
 const FileUtils = require('../../../lib/utils/file_utils');
@@ -498,6 +499,72 @@ describe('JHipsterEntityExporter', () => {
             });
           });
         });
+      });
+    });
+  });
+  describe('::exportEntitiesInApplications', () => {
+    context('when passing invalid parameters', () => {
+      context('such as undefined', () => {
+        it('throws an error', () => {
+          try {
+            JHipsterEntityExporter.exportEntitiesInApplications();
+            fail();
+          } catch (error) {
+            expect(error.name).to.eq('NullPointerException');
+          }
+        });
+      });
+    });
+    context('when passing valid arguments', () => {
+      let application = null;
+      let entities = null;
+      let aEntityContent = null;
+
+      before(() => {
+        entities = {
+          A: {
+            fields: [{
+              fieldName: 'myEnum',
+              fieldType: 'MyEnum',
+              fieldValues: 'FRENCH,ENGLISH'
+            }],
+            relationships: [],
+            changelogDate: '42',
+            javadoc: '',
+            entityTableName: 'a',
+            dto: 'no',
+            pagination: 'no',
+            service: 'no',
+            fluentMethods: true,
+            jpaMetamodelFiltering: false,
+            clientRootFolder: '',
+            applications: []
+          }
+        };
+        application = new JDLApplication({
+          config: {
+            baseName: 'toto',
+            path: '..'
+          },
+          entities: ['A']
+        });
+        JHipsterEntityExporter.exportEntitiesInApplications({
+          entities,
+          applications: {
+            toto: application
+          }
+        });
+        aEntityContent = JSON.parse(fs.readFileSync(path.join('..', 'toto', '.jhipster', 'A.json'), { encoding: 'utf-8' }));
+      });
+
+      after(() => {
+        fs.unlinkSync(path.join('..', 'toto', '.jhipster', 'A.json'));
+        fs.rmdirSync(path.join('..', 'toto', '.jhipster'));
+        fs.rmdirSync(path.join('..', 'toto'));
+      });
+
+      it('exports the entities', () => {
+        expect(aEntityContent).to.deep.equal(entities.A);
       });
     });
   });
