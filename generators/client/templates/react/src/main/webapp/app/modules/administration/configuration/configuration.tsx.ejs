@@ -48,13 +48,6 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
     this.props.getEnv();
   }
 
-  getConfigurationList = () => {
-    if (!this.props.isFetching) {
-      this.props.getConfigurations();
-      this.props.getEnv();
-    }
-  };
-
   setFilter = evt => {
     this.setState({
       filter: evt.target.value
@@ -63,12 +56,6 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
 
   envFilterFn = configProp => configProp.toUpperCase().includes(this.state.filter.toUpperCase());
   propsFilterFn = configProp => configProp.prefix.toUpperCase().includes(this.state.filter.toUpperCase());
-
-  reverseIf = (condition, data) => condition ? data.reverse() : data;
-
-  sortPrefix = (configProps, rev) => this.reverseIf(rev, Object.values(configProps).sort((a, b) => a['prefix'].localeCompare(b['prefix'])));
-
-  sortProperties = (configProps, rev) => this.reverseIf(rev, Object.keys(configProps).sort());
 
   reversePrefix = () => {
     this.setState({
@@ -84,7 +71,7 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
 
   render() {
     const { configuration } = this.props;
-    const { filter, reversePrefix, reverseProperties } = this.state;
+    const { filter } = this.state;
     const configProps = configuration && configuration.configProps ? configuration.configProps : {};
     const env = configuration && configuration.env ? configuration.env : {};
     return (
@@ -109,17 +96,17 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
             </tr>
           </thead>
           <tbody>
-            {configProps.contexts ? this.sortPrefix(configProps.contexts.<%= baseName %>.beans, reversePrefix)
+            {configProps.contexts ? Object.values(configProps.contexts.<%= baseName %>.beans)
               .filter(this.propsFilterFn)
               .map((property, propIndex) => (
                 <tr key={propIndex}>
-                  <td>{property.prefix}</td>
+                  <td>{property['prefix']}</td>
                   <td>
-                    {this.sortProperties(property.properties, reverseProperties).map((propKey, index) => (
+                    {Object.keys(property['properties']).map((propKey, index) => (
                       <Row key={index}>
                         <Col md="4">{propKey}</Col>
                         <Col md="8">
-                          <Badge className="float-right badge-secondary break">{JSON.stringify(property.properties[propKey])}</Badge>
+                          <Badge className="float-right badge-secondary break">{JSON.stringify(property['properties'][propKey])}</Badge>
                         </Col>
                       </Row>
                     ))}
