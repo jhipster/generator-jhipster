@@ -354,13 +354,25 @@ module.exports = class extends BaseGenerator {
                     const prompts = [
                         {
                             type: 'input',
-                            name: 'herokuJHipsterRegistry',
-                            message: 'What is the URL of your JHipster Registry?'
+                            name: 'herokuJHipsterRegistryApp',
+                            message: 'What is the name of your JHipster Registry Heroku app?'
+                        },
+                        {
+                            type: 'input',
+                            name: 'herokuJHipsterRegistryUsername',
+                            message: 'What is your JHipster Registry username?',
+                            default: 'admin'
+                        },
+                        {
+                            type: 'input',
+                            name: 'herokuJHipsterRegistryPassword',
+                            message: 'What is your JHipster Registry password?'
                         }];
 
                     this.log('');
                     this.prompt(prompts).then((props) => {
-                        const configSetCmd = `heroku config:set JHIPSTER_REGISTRY_URL=${props.herokuJHipsterRegistry} --app ${this.herokuAppName}`;
+                        const herokuJHipsterRegistry = `https://${props.herokuJHipsterRegistryUsername}:${props.herokuJHipsterRegistryPassword}@${props.herokuJHipsterRegistryApp}.herokuapp.com`;
+                        const configSetCmd = `heroku config:set JHIPSTER_REGISTRY_URL=${herokuJHipsterRegistry} --app ${this.herokuAppName}`;
                         const child = exec(configSetCmd, (err, stdout, stderr) => {
                             if (err) {
                                 this.abort = true;
