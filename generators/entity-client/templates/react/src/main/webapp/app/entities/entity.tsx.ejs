@@ -25,11 +25,11 @@ import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 <%_ } _%>
 // TODO import TextFormat only when fieldContainsDate
 // tslint:disable-next-line:no-unused-variable
-<%_ 
-  fieldContainsDate = false;
+<%_
+  let fieldContainsDate = false;
   for (idx in fields) {
     fieldType = fields[idx].fieldType;
-    if (fieldType === 'Instant' || fieldType === 'ZonedDateTime' || fieldType === 'LocalDate') {
+    if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fieldType)) {
       fieldContainsDate = true;
       break;
     }
@@ -302,7 +302,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
 
 const mapStateToProps = ({ <%= entityInstance %> }) => ({
   <%=entityInstancePlural %>: <%= entityInstance %>.entities,
-  <%_ if (pagination !== 'no') { _%> 
+  <%_ if (pagination !== 'no') { _%>
   totalItems: <%= entityInstance %>.totalItems
   <%_ } _%>
 });

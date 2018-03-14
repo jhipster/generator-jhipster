@@ -31,11 +31,11 @@ _%>
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Label<% if (haveFieldWithJavadoc) { %>, UncontrolledTooltip<% } %> } from 'reactstrap';
-<%_ 
-  isAvField = false;
+<%_
+  let isAvField = false;
   for (idx in fields) {
     fieldType = fields[idx].fieldType;
-    if (fieldType !== 'Instant' && fieldType !== 'ZonedDateTime' && fieldType !== 'Boolean') {
+    if (!['Instant', 'ZonedDateTime', 'Boolean'].includes(fieldType)) {
       isAvField = true;
       break;
     }
