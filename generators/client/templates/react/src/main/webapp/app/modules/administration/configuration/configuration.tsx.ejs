@@ -66,8 +66,7 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
 
   reverseIf = (condition, data) => condition ? data.reverse() : data;
 
-  sortPrefix = (configProps, rev) => this.reverseIf(rev, Object.values(configProps)
-                                                            .sort((a, b) => a['prefix'] && a['prefix'].localeCompare(b['prefix'])));
+  sortPrefix = (configProps, rev) => this.reverseIf(rev, Object.values(configProps).sort((a, b) => a['prefix'].localeCompare(b['prefix'])));
 
   sortProperties = (configProps, rev) => this.reverseIf(rev, Object.keys(configProps).sort());
 
