@@ -63,7 +63,7 @@ export class Home extends React.Component<IHomeProp, IHomeState> {
             (currentUser && currentUser.login) ? (
               <div>
                 <div className="alert alert-success">
-                  <Translate contentKey="home.logged.message" interpolate={{ username: currentUser.login }}>You are logged in as user </Translate>
+                  <Translate contentKey="home.logged.message" interpolate={{ username: currentUser.login }}>You are logged in as user {currentUser.login}.</Translate>
                 </div>
               </div>
             ) : (
@@ -78,8 +78,9 @@ export class Home extends React.Component<IHomeProp, IHomeState> {
                   <Link to="/login" className="alert-link"><Translate contentKey="global.messages.info.authenticated.link">sign in</Translate></Link>
                   <%_ } _%>
                   <Translate contentKey="global.messages.info.authenticated.suffix">, you can try the default accounts:
-                  <br />- Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;)
-                  <br />- User (login=&quot;user&quot; and password=&quot;user&quot;).</Translate>
+                    <br />- Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;)
+                    <br />- User (login=&quot;user&quot; and password=&quot;user&quot;).
+                  </Translate>
                 </div>
 
                 <div className="alert alert-warning">
@@ -123,6 +124,7 @@ export class Home extends React.Component<IHomeProp, IHomeState> {
 
           <p>
             <Translate contentKey="home.like">If you like JHipster, do not forget to give us a star on</Translate>
+            {' '}
             <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">Github</a>!
           </p>
         </div>

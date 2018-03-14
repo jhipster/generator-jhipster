@@ -84,7 +84,7 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
   <%_ } _%>
   renderDevRibbon = () => (
     process.env.NODE_ENV === 'development' ?
-      <div className="ribbon dev"><a href=""><Translate contentKey="global.ribbon.dev" /></a></div> :
+      <div className="ribbon dev"><a href=""><Translate contentKey="global.ribbon.dev">Development</Translate></a></div> :
       null
   )
 
