@@ -18,9 +18,8 @@
 -%>
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Table, Input } from 'reactstrap';
+import { Table, Input, Row, Col, Badge } from 'reactstrap';
 import { Translate } from 'react-jhipster';
-import { sortBy, reverse } from 'lodash';
 
 import { getConfigurations, getEnv } from '../administration.reducer';
 
@@ -49,114 +48,101 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
     this.props.getEnv();
   }
 
-  getConfigurationList = () => {
-    if (!this.props.isFetching) {
-      this.props.getConfigurations();
-      this.props.getEnv();
-    }
-  }
-
   setFilter = evt => {
     this.setState({
       filter: evt.target.value
     });
-  }
+  };
 
-  filterFn = prefix => prefix.toUpperCase().includes(this.state.filter.toUpperCase());
-
-  sortPrefix = (configProps, rev) => {
-    const { configuration } = this.props;
-    if (configuration && configuration.configProps) {
-      const listSorted = sortBy(configProps, [ prop => configuration.configProps[prop].prefix ]);
-      return rev ? reverse(listSorted) : listSorted;
-    }
-  }
-
-  sortProperties = (configProps, rev) => {
-    const { configuration } = this.props;
-    if (configuration && configuration.configProps) {
-      const listSorted = sortBy(configProps);
-      return rev ? reverse(listSorted) : listSorted;
-    }
-  }
+  envFilterFn = configProp => configProp.toUpperCase().includes(this.state.filter.toUpperCase());
+  propsFilterFn = configProp => configProp.prefix.toUpperCase().includes(this.state.filter.toUpperCase());
 
   reversePrefix = () => {
     this.setState({
       reversePrefix: !this.state.reversePrefix
     });
-  }
+  };
 
   reverseProperties = () => {
     this.setState({
       reverseProperties: !this.state.reverseProperties
     });
-  }
+  };
 
   render() {
     const { configuration } = this.props;
-    const { filter, reversePrefix, reverseProperties } = this.state;
-    const configProps = (configuration && configuration.configProps) ? configuration.configProps : {};
-    const env = (configuration && configuration.env) ? configuration.env : {};
+    const { filter } = this.state;
+    const configProps = configuration && configuration.configProps ? configuration.configProps : {};
+    const env = configuration && configuration.env ? configuration.env : {};
     return (
-        <div>
-          <h2><Translate contentKey="configuration.title">Configuration</Translate></h2>
-          <span>
-            <Translate contentKey="configuration.filter">Filter</Translate>
-          </span> <Input type="search" value={filter} onChange={this.setFilter} name="search" id="search" />
-          <label>Spring configuration</label>
-          <Table className="table table-striped table-bordered table-responsive d-table">
-            <thead>
-              <tr>
-                <th onClick={this.reversePrefix}><Translate contentKey="configuration.table.prefix">Prefix</Translate></th>
-                <th onClick={this.reverseProperties}><Translate contentKey="configuration.table.properties">Properties</Translate></th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.sortPrefix(Object.keys(configProps), reversePrefix).filter(this.filterFn).map((configPropKey, configPropIndex) => (
-                <tr key={configPropIndex}>
-                  <td><span>{configProps[configPropKey].prefix}</span></td>
+      <div>
+        <h2>
+          <Translate contentKey="configuration.title">Configuration</Translate>
+        </h2>
+        <span>
+          <Translate contentKey="configuration.filter">Filter</Translate>
+        </span>{' '}
+        <Input type="search" value={filter} onChange={this.setFilter} name="search" id="search" />
+        <label>Spring configuration</label>
+        <Table className="table table-striped table-bordered table-responsive d-table">
+          <thead>
+            <tr>
+              <th onClick={this.reversePrefix}>
+                <Translate contentKey="configuration.table.prefix">Prefix</Translate>
+              </th>
+              <th onClick={this.reverseProperties}>
+                <Translate contentKey="configuration.table.properties">Properties</Translate>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {configProps.contexts ? Object.values(configProps.contexts.<%= baseName %>.beans)
+              .filter(this.propsFilterFn)
+              .map((property, propIndex) => (
+                <tr key={propIndex}>
+                  <td>{property['prefix']}</td>
                   <td>
-                    {this.sortProperties(Object.keys(configProps[configPropKey].properties), reverseProperties).map((propKey, propIndex) => (
-                      <div key={propIndex} className="row">
-                        <div className="col-md-4">{propKey}</div>
-                        <div className="col-md-8">
-                            <span className="float-right badge badge-secondary break">{JSON.stringify(configProps[configPropKey].properties[propKey])}</span>
-                        </div>
-                      </div>
+                    {Object.keys(property['properties']).map((propKey, index) => (
+                      <Row key={index}>
+                        <Col md="4">{propKey}</Col>
+                        <Col md="8">
+                          <Badge className="float-right badge-secondary break">{JSON.stringify(property['properties'][propKey])}</Badge>
+                        </Col>
+                      </Row>
                     ))}
                   </td>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-          {Object.keys(env).map((envKey, envIndex) => (
-            <div key={envIndex}>
-              <label><span>{envKey}</span></label>
-              <Table className="table table-sm table-striped table-bordered table-responsive d-table">
-                <thead>
-                  <tr key={envIndex}>
-                    <th className="w-40">Property</th>
-                    <th className="w-60">Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {env[envKey] ?
-                    Object.keys(env[envKey]).filter(this.filterFn).map((propKey, propIndex) => (
-                      <tr key={propIndex}>
-                        <td className="break">{propKey}</td>
-                        <td className="break">
-                          <span className="float-right badge badge-secondary break">
-                            {JSON.stringify(env[envKey][propKey])}
-                          </span>
-                        </td>
-                      </tr>
-                    ))
-                  : ''}
-                </tbody>
-              </Table>
-            </div>
-          ))}
-        </div>
+              )) : null}
+          </tbody>
+        </Table>
+        {env.propertySources ? env.propertySources.map((envKey, envIndex) => (
+          <div key={envIndex}>
+            <h4>
+              <span>{envKey.name}</span>
+            </h4>
+            <Table className="table table-sm table-striped table-bordered table-responsive d-table">
+              <thead>
+                <tr key={envIndex}>
+                  <th className="w-40">Property</th>
+                  <th className="w-60">Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.keys(envKey.properties)
+                  .filter(this.envFilterFn)
+                  .map((propKey, propIndex) => (
+                    <tr key={propIndex}>
+                      <td className="break">{propKey}</td>
+                      <td className="break">
+                        <span className="float-right badge badge-secondary break">{envKey.properties[propKey].value}</span>
+                      </td>
+                    </tr>
+                ))}
+              </tbody>
+            </Table>
+          </div>
+        )) : null}
+      </div>
     );
   }
 }
