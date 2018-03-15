@@ -181,6 +181,17 @@ const reactFiles = {
                 }
             ]
         }
+    ],
+    test: [
+        {
+            path: CLIENT_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'spec/app/entities/entity-reducer.spec.ts',
+                    renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-reducer.spec.ts`
+                }
+            ]
+        }
     ]
 };
 
