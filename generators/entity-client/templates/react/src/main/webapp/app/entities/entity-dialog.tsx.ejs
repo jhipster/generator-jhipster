@@ -525,7 +525,7 @@ _%>
 
 const mapStateToProps = storeState => ({
   <%_ otherEntityActions.forEach(val => { _%>
-  <%= val.instance %>: storeState.<%= val.reducer %>.entities,
+    <%= val.instance %>: storeState.<%= val.reducer %>.<%= val.entity === 'User' ? val.instance : 'entities' %>,
   <%_ }) _%>
   <%= entityInstance %>: storeState.<%= entityInstance %>.entity,
   loading: storeState.<%= entityInstance %>.loading,
