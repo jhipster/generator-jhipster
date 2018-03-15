@@ -448,8 +448,7 @@ module.exports = class extends BaseGenerator {
                 this.buildCmd = child.buildCmd;
 
                 child.stdout.on('data', (data) => {
-                    const line = data.toString().trim();
-                    if (line.length !== 0) this.log(line);
+                    process.stdout.write(data.toString());
                 });
             },
 

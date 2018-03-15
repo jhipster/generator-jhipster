@@ -31,7 +31,17 @@ _%>
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Label<% if (haveFieldWithJavadoc) { %>, UncontrolledTooltip<% } %> } from 'reactstrap';
-import { AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
+<%_
+  let isAvField = false;
+  for (idx in fields) {
+    fieldType = fields[idx].fieldType;
+    if (!['Instant', 'ZonedDateTime', 'Boolean'].includes(fieldType)) {
+      isAvField = true;
+      break;
+    }
+  }
+_%>
+import { AvForm, AvGroup, AvInput<% if (isAvField) { %>, AvField <% } %> } from 'availity-reactstrap-validation';
 // tslint:disable-next-line:no-unused-variable
 import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
 import { FaBan, FaFloppyO } from 'react-icons/lib/fa';

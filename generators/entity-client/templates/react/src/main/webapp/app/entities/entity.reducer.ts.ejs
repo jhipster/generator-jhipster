@@ -54,6 +54,9 @@ const initialState = {
   entities: [],
   entity: {},
   updating: false,
+  <%_ if (pagination !== 'no') { _%> 
+  totalItems: 0,
+  <%_ } _%>
   updateSuccess: false
 };
 
@@ -107,6 +110,9 @@ export default (state = initialState, action) => {
       return {
         ...state,
         loading: false,
+        <%_ if (pagination !== 'no') { _%>
+        totalItems: action.payload.headers['x-total-count'],
+        <%_ } _%>
         entities: action.payload.data
       };
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>):
@@ -149,10 +155,21 @@ export const getSearchEntities: ICrudGetAllAction = query => ({
 });
 
 <%_ } _%>
-export const getEntities: ICrudGetAllAction = (page, size, sort) => ({
+export const getEntities: ICrudGetAllAction = (page, size, sort) =>
+<%_ if (pagination !== 'no') { _%>
+{
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
+  return {
+    type: ACTION_TYPES.FETCH_<%= entityActionNamePlural %>,
+    payload: axios.get(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`)
+  }
+}
+<%_ } else { _%>
+({
   type: ACTION_TYPES.FETCH_<%= entityActionNamePlural %>,
   payload: axios.get(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
 });
+<%_ } _%>
 
 export const getEntity: ICrudGetAction = id => {
   const requestUrl = `${apiUrl}/${id}`;

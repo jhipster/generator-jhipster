@@ -25,8 +25,19 @@ import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 <%_ } _%>
 // TODO import TextFormat only when fieldContainsDate
 // tslint:disable-next-line:no-unused-variable
-import { Translate, translate, ICrudGetAllAction, TextFormat } from 'react-jhipster';
-import { FaPlus, FaEye, FaPencil, FaTrash<% if (searchEngine === 'elasticsearch') { %>, FaSearch<% } %> } from 'react-icons/lib/fa';
+<%_
+  let fieldContainsDate = false;
+  for (idx in fields) {
+    fieldType = fields[idx].fieldType;
+    if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fieldType)) {
+      fieldContainsDate = true;
+      break;
+    }
+  }
+_%>
+import { Translate<% if (searchEngine === 'elasticsearch') { %>, translate<% } %>, ICrudGetAllAction<% if (fieldContainsDate) { %>, TextFormat<% } %><% if (pagination !== 'no') { %>, getSortState, IPaginationBaseState, getPaginationItemsNumber, JhiPagination<% } %>
+} from 'react-jhipster';
+import { FaPlus, FaEye, FaPencil, FaTrash<% if (pagination !== 'no') { %>, FaSort<% } %><% if (searchEngine === 'elasticsearch') { %>, FaSearch<% } %> } from 'react-icons/lib/fa';
 
 import {
   <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -36,6 +47,9 @@ import {
 } from './<%= entityFileName %>.reducer';
  // tslint:disable-next-line:no-unused-variable
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+<%_ if (pagination !== 'no') { _%>
+import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
+<%_ } _%>
 
 export interface I<%= entityReactName %>Props {
   getEntities: ICrudGetAllAction;
@@ -43,27 +57,47 @@ export interface I<%= entityReactName %>Props {
   getSearchEntities: ICrudGetAllAction;
   <%_ } _%>
   <%=entityInstancePlural %>: any[];
+  <%_ if (pagination === 'pagination') { _%>
+  totalItems: 0;
+  location: any;
+  history: any;
+  <%_ } _%>
   match: any;
 }
-<%_ if (searchEngine === 'elasticsearch') { _%>
 
+<% if (searchEngine === 'elasticsearch' && pagination !== 'no') { _%>
+export interface I<%= entityReactName %>State extends IPaginationBaseState {
+  search: string;
+}
+<%_ } else if (searchEngine === 'elasticsearch') { _%>
 export interface I<%= entityReactName %>State {
   search: string;
 }
+<%_ } else if (pagination !== 'no') { _%>
+export type I<%= entityReactName %>State = IPaginationBaseState;
 <%_ } _%>
 
-export class <%= entityReactName %> extends React.Component<I<%= entityReactName %>Props<% if (searchEngine === 'elasticsearch') { %>, I<%= entityReactName %>State<% } %>> {
-<%_ if (searchEngine === 'elasticsearch') { _%>
+export class <%= entityReactName %> extends React.Component<I<%= entityReactName %>Props<% if (searchEngine === 'elasticsearch' || pagination !== 'no') { %>, I<%= entityReactName %>State<% } %>> {
+  <%_ if (searchEngine === 'elasticsearch' || pagination !== 'no') { _%>
   state: I<%= entityReactName %>State = {
-    search: ''
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    search: '',
+    <%_ } _%>
+    <%_ if (pagination !== 'no') { _%>
+    ...getSortState(this.props.location, ITEMS_PER_PAGE)
+    <%_ } _%>
   };
+  <%_ } _%>
 
-<%_ } _%>
   componentDidMount() {
+    <%_ if (pagination === 'pagination') { _%>
+    this.getEntities();
+    <%_ } else { _%>
     this.props.getEntities();
+    <%_ } _%>
   }
-  <%_ if (searchEngine === 'elasticsearch') { _%>
 
+  <%_ if (searchEngine === 'elasticsearch') { _%>
   search = () => {
     if (this.state.search) {
       this.props.getSearchEntities(this.state.search);
@@ -80,8 +114,32 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   handleSearch = event => this.setState({ search: event.target.value });
   <%_ } _%>
 
+  <%_ if (pagination !== 'no') { _%>
+  sort = prop => () => {
+    this.setState(
+      {
+        order: this.state.order === 'asc' ? 'desc' : 'asc',
+        sort: prop
+      },
+      () => this.sortEntities()
+    );
+  };
+
+  sortEntities() {
+    this.getEntities();
+    this.props.history.push(`${this.props.location.pathname}?page=${this.state.activePage}&sort=${this.state.sort},${this.state.order}`);
+  }
+
+  handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
+
+  getEntities = () => {
+    const { activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(activePage - 1, itemsPerPage, `${sort},${order}`);
+  };
+  <%_ } _%>
+
   render() {
-    const { <%=entityInstancePlural %>, match } = this.props;
+    const { <%=entityInstancePlural %>, match<% if (pagination !== 'no') { %>, totalItems<% } %>} = this.props;
     return (
       <%_ const keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
       <div>
@@ -114,16 +172,16 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
           <table className="table table-striped">
             <thead>
               <tr>
-                <th><Translate contentKey="global.field.id">ID</Translate></th>
+                <th<% if (pagination !== 'no') { %> onClick={this.sort('id')} <%_ } _%>><Translate contentKey="global.field.id">ID</Translate><% if (pagination !== 'no') { %> <FaSort /><% } %></th>
                 <%_ for (idx in fields) { _%>
-                <th<% if (pagination !== 'no') { %> <% } %>><Translate contentKey="<%=keyPrefix + fields[idx].fieldName %>"><%= fields[idx].fieldNameHumanized %></Translate><% if (pagination !== 'no') { %> <span className="fa fa-sort"/><% } %></th>
+                <th<% if (pagination !== 'no') { %> onClick={this.sort('<%=fields[idx].fieldName%>')} <%_ } _%>><Translate contentKey="<%=keyPrefix + fields[idx].fieldName %>"><%= fields[idx].fieldNameHumanized %></Translate><% if (pagination !== 'no') { %> <FaSort /><% } %></th>
                 <%_ } _%>
                 <%_ for (idx in relationships) { _%>
                     <%_ if (relationships[idx].relationshipType === 'many-to-one'
                     || (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide === true)
                     || (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true && pagination === 'no')) {
                     const fieldName = dto === 'no' ? "." + relationships[idx].otherEntityField : relationships[idx].otherEntityFieldCapitalized;_%>
-                <th<% if (pagination !== 'no') { %> <% } %>><Translate contentKey="<%= keyPrefix + relationships[idx].relationshipName%>"><%= relationships[idx].relationshipNameHumanized %></Translate><% if (pagination !== 'no') { %> <span className="fa fa-sort"/><% } %></th>
+                <th<% if (pagination !== 'no') { %> <% } %>><Translate contentKey="<%= keyPrefix + relationships[idx].relationshipName%>"><%= relationships[idx].relationshipNameHumanized %></Translate><% if (pagination !== 'no') { %> <FaSort /><% } %></th>
                     <%_ } _%>
                 <%_ } _%>
                 <th />
@@ -227,13 +285,26 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
             </tbody>
           </table>
         </div>
+        <%_ if (pagination === 'pagination') { _%>
+        <div className="row justify-content-center">
+          <JhiPagination
+            items={getPaginationItemsNumber(totalItems, this.state.itemsPerPage)}
+            activePage={this.state.activePage}
+            onSelect={this.handlePagination}
+            maxButtons={5}
+          />
+        </div>
+        <% } _%>
       </div>
     );
   }
 }
 
 const mapStateToProps = ({ <%= entityInstance %> }) => ({
-  <%=entityInstancePlural %>: <%= entityInstance %>.entities
+  <%=entityInstancePlural %>: <%= entityInstance %>.entities,
+  <%_ if (pagination !== 'no') { _%>
+  totalItems: <%= entityInstance %>.totalItems
+  <%_ } _%>
 });
 
 const mapDispatchToProps = {

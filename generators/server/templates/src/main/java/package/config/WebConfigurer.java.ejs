@@ -38,6 +38,7 @@ import io.undertow.UndertowOptions;
 import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
 import org.springframework.boot.web.server.*;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -123,26 +124,26 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
     }
 
     private void setMimeMappings(WebServerFactory server) {
-        if (server instanceof UndertowServletWebServerFactory) {
+        if (server instanceof ConfigurableServletWebServerFactory) {
             MimeMappings mappings = new MimeMappings(MimeMappings.DEFAULT);
             // IE issue, see https://github.com/jhipster/generator-jhipster/pull/711
             mappings.add("html", MediaType.TEXT_HTML_VALUE + ";charset=" + StandardCharsets.UTF_8.name().toLowerCase());
             // CloudFoundry issue, see https://github.com/cloudfoundry/gorouter/issues/64
             mappings.add("json", MediaType.TEXT_HTML_VALUE + ";charset=" + StandardCharsets.UTF_8.name().toLowerCase());
-            UndertowServletWebServerFactory undertow = (UndertowServletWebServerFactory) server;
-            undertow.setMimeMappings(mappings);
+            ConfigurableServletWebServerFactory servletWebServer = (ConfigurableServletWebServerFactory) server;
+            servletWebServer.setMimeMappings(mappings);
         }
     }
     <%_ if (!skipClient) { _%>
 
     private void setLocationForStaticAssets(WebServerFactory server) {
-        if (server instanceof UndertowServletWebServerFactory) {
-            UndertowServletWebServerFactory undertow = (UndertowServletWebServerFactory) server;
+        if (server instanceof ConfigurableServletWebServerFactory) {
+            ConfigurableServletWebServerFactory servletWebServer = (ConfigurableServletWebServerFactory) server;
             File root;
             String prefixPath = resolvePathPrefix();
             root = new File(prefixPath + "<%= CLIENT_DIST_DIR %>");
             if (root.exists() && root.isDirectory()) {
-                undertow.setDocumentRoot(root);
+                servletWebServer.setDocumentRoot(root);
             }
         }
     }
