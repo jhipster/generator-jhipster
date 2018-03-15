@@ -1,89 +1,34 @@
 os:
   - linux
-services:
-  - docker
 language: node_js
 node_js:
-  - "8.10.0"
-jdk:
-  - oraclejdk8
-addons:
-  apt:
-    sources:
-      - google-chrome
-    packages:
-      - google-chrome-stable
+  - "6.9.2"
 cache:
   directories:
-    - $HOME/.m2
-    - $HOME/.gradle
-env:
-  global:
-    - PROFILE=dev
-    - RUN_APP=1
-    - PROTRACTOR=0
-    - JHIPSTER_TRAVIS=$TRAVIS_BUILD_DIR/travis
-    - JHIPSTER_SAMPLES=$JHIPSTER_TRAVIS/samples
-    - JHIPSTER_SCRIPTS=$JHIPSTER_TRAVIS/scripts
-    - APP_FOLDER=$HOME/app
-    - UAA_APP_FOLDER=$HOME/uaa
-    # environment properties
-    - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
-    - SPRING_JPA_SHOW_SQL=false
-
-    # if JHIPSTER_DEPENDENCIES_BRANCH value is release, use the release from Maven
-    - JHIPSTER_DEPENDENCIES_REPO=https://github.com/jhipster/jhipster-dependencies.git
-    - JHIPSTER_DEPENDENCIES_BRANCH=master
-    # if JHIPSTER_LIB_BRANCH value is release, use the release from Maven
-    - JHIPSTER_LIB_REPO=https://github.com/jhipster/jhipster.git
-    - JHIPSTER_LIB_BRANCH=master
-    # if JHIPSTER_BRANCH value is release, use the release from NPM
-    - JHIPSTER_REPO=https://github.com/jhipster/generator-jhipster.git
-    - JHIPSTER_BRANCH=release
-
-  matrix:
-    - JHIPSTER=ngx-default PROFILE=prod PROTRACTOR=1
-    - JHIPSTER=ngx-psql-es-noi18n PROFILE=prod PROTRACTOR=1
-    - JHIPSTER=ngx-gradle-fr PROFILE=prod PROTRACTOR=1
-    - JHIPSTER=ngx-mariadb-oauth2-sass-infinispan PROTRACTOR=1
-    - JHIPSTER=ngx-h2mem-social-ws-nol2
-    - JHIPSTER=ngx-mongodb-kafka-cucumber
-    - JHIPSTER=ngx-session-cassandra-fr
-    - JHIPSTER=ngx-couchbase
-    - JHIPSTER=ms-ngx-gateway-eureka
-    - JHIPSTER=ms-ngx-gateway-consul
-    - JHIPSTER=ms-ngx-gateway-uaa
-    - JHIPSTER=ms-micro-eureka
-    - JHIPSTER=ms-micro-consul
-    - JHIPSTER=react-default
+    - $HOME/.npm
+    - $HOME/.yarn-cache
+    - node_modules
+branches:
+  except:
+    - "/^v\\d+\\.\\d+\\.\\d+$/"
 
 before_install:
-  - jdk_switcher use oraclejdk8
-  - java -version
-  - export TZ=Australia/Canberra
-  - date
-  - sudo /etc/init.d/mysql stop
-  - sudo /etc/init.d/postgresql stop
-  # Use this for Protractor
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
-  # Install Yarn
+  - export CHROME_BIN=chromium-browser
+  # Repo for Yarn
   - curl -o- -L https://yarnpkg.com/install.sh | bash
   - export PATH=$HOME/.yarn/bin:$PATH
-  - yarn -v
 install:
-  - $JHIPSTER_SCRIPTS/00-install-jhipster.sh
-  - $JHIPSTER_SCRIPTS/01-generate-entities.sh
-  - $JHIPSTER_SCRIPTS/02-generate-project.sh
+  - yarn
+
+before_script:
+  - sudo chown root /opt/google/chrome/chrome-sandbox
+  - sudo chmod 4755 /opt/google/chrome/chrome-sandbox
+  - npm prune
 script:
-  - $JHIPSTER_SCRIPTS/03-docker-compose.sh
-  - travis_wait $JHIPSTER_SCRIPTS/04-tests.sh
-  - $JHIPSTER_SCRIPTS/05-run.sh
-  - $JHIPSTER_SCRIPTS/06-sonar.sh
+  - yarn test
+  - yarn build
+
 notifications:
-  webhooks:
-    urls:
-      - https://webhooks.gitter.im/e/479b810ad42c816679fb
-    on_success: always  # options: [always|never|change] default: always
-    on_failure: always  # options: [always|never|change] default: always
-    on_start: false     # default: false
+  email: true
