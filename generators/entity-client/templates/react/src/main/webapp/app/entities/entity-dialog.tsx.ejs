@@ -156,6 +156,7 @@ export class <%= entityReactName %>Dialog extends React.Component<I<%= entityRea
       testEntity[blobName] = null;
       testEntity[blobName + 'ContentType'] = null;
     }
+    this.forceUpdate();
   };
   <%_ } _%>
 
@@ -186,6 +187,16 @@ export class <%= entityReactName %>Dialog extends React.Component<I<%= entityRea
         values.<%= fName %>ContentType = <%= fName %>.contentType;
       }
       <%_ }) _%>
+      const entity = {
+        ...this.props.<%= entityInstance %>,
+        ...values
+      };
+
+      if (this.state.isNew) {
+        this.props.createEntity(entity);
+      } else {
+        this.props.updateEntity(entity);
+      }
       if (this.state.isNew) {
         this.props.createEntity(values);
       } else {
