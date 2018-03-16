@@ -31,6 +31,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -126,9 +127,12 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
 
     private final UaaProperties uaaProperties;
 
-    public UaaConfiguration(JHipsterProperties jHipsterProperties, UaaProperties uaaProperties) {
+    private final PasswordEncoder passwordEncoder;
+
+    public UaaConfiguration(JHipsterProperties jHipsterProperties, UaaProperties uaaProperties, PasswordEncoder passwordEncoder) {
         this.jHipsterProperties = jHipsterProperties;
         this.uaaProperties = uaaProperties;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -142,7 +146,7 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
          */
         clients.inMemory()
             .withClient(uaaProperties.getWebClientConfiguration().getClientId())
-            .secret(uaaProperties.getWebClientConfiguration().getSecret())
+            .secret(passwordEncoder.encode(uaaProperties.getWebClientConfiguration().getSecret()))
             .scopes("openid")
             .autoApprove(true)
             .authorizedGrantTypes("implicit","refresh_token", "password", "authorization_code")
