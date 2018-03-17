@@ -40,6 +40,9 @@ function cleanupOldFiles(generator, javaDir, testDir) {
         generator.removeFile(`${ANGULAR_DIR}components/form/uib-pager.config.js`);
         generator.removeFile(`${ANGULAR_DIR}components/form/uib-pagination.config.js`);
     }
+    if (generator.isJhipsterVersionLessThan('5.0.0')) {
+        generator.removeFile(`${ANGULAR_DIR}/app.route.ts`);
+    }
 }
 
 /**
