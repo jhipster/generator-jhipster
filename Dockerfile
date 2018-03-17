@@ -6,11 +6,9 @@ RUN \
   useradd jhipster -s /bin/bash -m -g jhipster -G sudo && \
   echo 'jhipster:jhipster' |chpasswd && \
   mkdir /home/jhipster/app && \
-
   # install open-jdk 8
   apt-get update && \
   apt-get install -y openjdk-8-jdk && \
-
   # install utilities
   apt-get install -y \
     wget \
@@ -61,21 +59,16 @@ RUN \
     libnss3 \
     lsb-release \
     xdg-utils && \
-
   # install node.js
   curl -sL https://deb.nodesource.com/setup_8.x | bash && \
   apt-get install -y nodejs && \
-
   # upgrade npm
   npm install -g npm && \
-
   # install yarn
   npm install -g yarn && \
   su -c "yarn config set prefix /home/jhipster/.yarn-global" jhipster && \
-
   # install yeoman bower gulp
   su -c "yarn global add yo bower gulp-cli" jhipster && \
-
   # cleanup
   apt-get clean && \
   rm -rf \
@@ -92,14 +85,12 @@ RUN \
   chown -R jhipster:jhipster \
     /home/jhipster \
     /usr/lib/node_modules && \
-
   # install jhipster
   rm -Rf /home/jhipster/generator-jhipster/node_modules \
     /home/jhipster/generator-jhipster/yarn.lock \
     /home/jhipster/generator-jhipster/yarn-error.log && \
   su -c "cd /home/jhipster/generator-jhipster && yarn install" jhipster && \
   su -c "yarn global add file:/home/jhipster/generator-jhipster" jhipster && \
-
   # cleanup
   rm -rf \
     /home/jhipster/.cache/ \
