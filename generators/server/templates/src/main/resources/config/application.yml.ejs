@@ -148,25 +148,6 @@ spring:
             enabled: false
     thymeleaf:
         mode: HTML
-<%_ if (enableSocialSignIn) { _%>
-    social:
-        # see https://developers.google.com/+/web/signin/server-side-flow#step_1_create_a_client_id_and_client_secret
-        google:
-            client-id: xxx
-            client-secret: xxx
-
-        # see https://developers.facebook.com/docs/facebook-login/v2.2
-        facebook:
-            client-id: xxx
-            client-secret: xxx
-
-        # see https://apps.twitter.com/app/
-        twitter:
-            client-id: xxx
-            client-secret: xxx
-
-        # jhipster-needle-add-social-configuration
-<%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
 
 # ===================================================================
@@ -270,14 +251,6 @@ jhipster:
         contact-email:
         license:
         license-url:
-<%_ if (enableSocialSignIn) { _%>
-    social:
-        <%_ if (authenticationType === 'jwt') { _%>
-        redirect-after-sign-in: "/#/social-auth"
-        <%_ } else { _%>
-        redirect-after-sign-in: "/#/"
-        <%_ } _%>
-<%_ } _%>
     ribbon:
         display-on-active-profiles: dev
 

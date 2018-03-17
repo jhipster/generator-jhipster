@@ -14,7 +14,6 @@
     "searchEngine": "no",
     "useSass": false,
     "enableTranslation": true,
-    "enableSocialSignIn": false,
     "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
     "buildTool": "gradle",
     "clientFramework": "angularX",

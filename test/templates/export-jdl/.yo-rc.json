@@ -14,7 +14,6 @@
     "prodDatabaseType": "postgresql",
     "searchEngine": false,
     "buildTool": "gradle",
-    "enableSocialSignIn": false,
     "rememberMeKey": "5f1100e7eae25e2abe32d7b2031ac1f2acc778d8",
     "useSass": false,
     "applicationType": "monolith",

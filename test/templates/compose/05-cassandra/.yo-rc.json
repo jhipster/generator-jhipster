@@ -26,7 +26,6 @@
     "languages": [
       "en"
     ],
-    "websocket": "no",
-    "enableSocialSignIn": false
+    "websocket": "no"
   }
 }

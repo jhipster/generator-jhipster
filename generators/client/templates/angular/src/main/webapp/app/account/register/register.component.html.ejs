@@ -43,11 +43,7 @@
         </div>
     </div>
     <div class="row justify-content-center">
-        <%_ if (enableSocialSignIn) { _%>
-        <div class="col-md-4">
-        <%_ } else { _%>
         <div class="col-md-8">
-        <%_ } _%>
             <form name="form" role="form" (ngSubmit)="register()" #registerForm="ngForm" *ngIf="!success">
                 <div class="form-group">
                     <label class="form-control-label" for="login" jhiTranslate="global.form.username">Username</label>
@@ -142,14 +138,5 @@
                 <a class="alert-link" (click)="openLogin()" jhiTranslate="global.messages.info.authenticated.link">sign in</a><span jhiTranslate="global.messages.info.authenticated.suffix">, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").</span>
             </div>
         </div>
-        <%_ if (enableSocialSignIn) { _%>
-        <div class="col-md-4">
-            <br/>
-            <<%= jhiPrefixDashed %>-social provider="google"></<%= jhiPrefixDashed %>-social>
-            <<%= jhiPrefixDashed %>-social provider="facebook"></<%= jhiPrefixDashed %>-social>
-            <<%= jhiPrefixDashed %>-social provider="twitter"></<%= jhiPrefixDashed %>-social>
-            <!-- jhipster-needle-add-social-button -->
-        </div>
-        <%_ } _%>
     </div>
 </div>

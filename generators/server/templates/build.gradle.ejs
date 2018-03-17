@@ -393,13 +393,6 @@ dependencies {
     compile "com.github.sabomichal:liquibase-mssql"
     <%_ } _%>
     compile "org.mapstruct:mapstruct-jdk8:${mapstruct_version}"
-    <%_ if (enableSocialSignIn) { _%>
-    compile "org.apache.httpcomponents:httpclient"
-    compile "org.springframework.social:spring-social-security"
-    compile "org.springframework.social:spring-social-google"
-    compile "org.springframework.social:spring-social-facebook"
-    compile "org.springframework.social:spring-social-twitter"
-    <%_ } _%>
     testCompile "com.jayway.jsonpath:json-path"
     <%_ if (databaseType === 'cassandra') { _%>
     testCompile ("org.cassandraunit:cassandra-unit-spring") {

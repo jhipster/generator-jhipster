@@ -200,7 +200,6 @@ module.exports = class extends BaseGenerator {
                 }
 
                 this.buildTool = this.config.get('buildTool');
-                this.enableSocialSignIn = this.config.get('enableSocialSignIn');
                 this.jhipsterVersion = packagejs.version;
                 if (this.jhipsterVersion === undefined) {
                     this.jhipsterVersion = this.config.get('jhipsterVersion');
@@ -252,11 +251,6 @@ module.exports = class extends BaseGenerator {
                         this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
                     }
 
-                    // If social sign in is not defined, it is disabled by default
-                    if (this.enableSocialSignIn === undefined) {
-                        this.enableSocialSignIn = false;
-                    }
-
                     // If translation is not defined, it is enabled by default
                     if (this.enableTranslation === undefined) {
                         this.enableTranslation = true;
@@ -302,7 +296,6 @@ module.exports = class extends BaseGenerator {
                 this.configOptions.messageBroker = this.messageBroker;
                 this.configOptions.serviceDiscoveryType = this.serviceDiscoveryType;
                 this.configOptions.buildTool = this.buildTool;
-                this.configOptions.enableSocialSignIn = this.enableSocialSignIn;
                 this.configOptions.enableSwaggerCodegen = this.enableSwaggerCodegen;
                 this.configOptions.authenticationType = this.authenticationType;
                 this.configOptions.uaaBaseName = this.uaaBaseName;
@@ -340,7 +333,6 @@ module.exports = class extends BaseGenerator {
                 insight.track('app/messageBroker', this.messageBroker);
                 insight.track('app/serviceDiscoveryType', this.serviceDiscoveryType);
                 insight.track('app/buildTool', this.buildTool);
-                insight.track('app/enableSocialSignIn', this.enableSocialSignIn);
                 insight.track('app/enableSwaggerCodegen', this.enableSwaggerCodegen);
             },
 
@@ -383,7 +375,6 @@ module.exports = class extends BaseGenerator {
                 this.config.set('messageBroker', this.messageBroker);
                 this.config.set('serviceDiscoveryType', this.serviceDiscoveryType);
                 this.config.set('buildTool', this.buildTool);
-                this.config.set('enableSocialSignIn', this.enableSocialSignIn);
                 this.config.set('enableSwaggerCodegen', this.enableSwaggerCodegen);
                 this.config.set('jwtSecretKey', this.jwtSecretKey);
                 this.config.set('rememberMeKey', this.rememberMeKey);
