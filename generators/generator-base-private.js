@@ -565,15 +565,21 @@ module.exports = class extends Generator {
      * Compose external blueprint module
      * @param {string} blueprint - name of the blueprint
      * @param {string} subGen - sub generator
+     * @param {any} options - options to pass to blueprint generator
      */
-    composeBlueprint(blueprint, subGen) {
+    composeBlueprint(blueprint, subGen, options = {}) {
         if (blueprint) {
             this.checkBlueprint(blueprint);
             try {
                 this.useBlueprint = true;
-                this.composeExternalModule(blueprint, subGen, {
-                    jhipsterContext: this
-                });
+                this.composeExternalModule(
+                    blueprint,
+                    subGen,
+                    Object.assign(
+                        { jhipsterContext: this },
+                        options
+                    )
+                );
                 return true;
             } catch (e) {
                 this.debug('Error', e);
