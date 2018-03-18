@@ -21,7 +21,6 @@
       "en",
       "fr"
     ],
-    "enableSocialSignIn": false,
     "testFrameworks": [
       "gatling"
     ],

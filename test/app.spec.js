@@ -628,7 +628,6 @@ describe('JHipster generator', () => {
                         prodDatabaseType: 'mysql',
                         searchEngine: false,
                         buildTool: 'maven',
-                        enableSocialSignIn: false,
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         useSass: false,
                         applicationType: 'monolith',
@@ -676,7 +675,6 @@ describe('JHipster generator', () => {
                         prodDatabaseType: 'mysql',
                         searchEngine: false,
                         buildTool: 'maven',
-                        enableSocialSignIn: false,
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         useSass: false,
                         applicationType: 'monolith',
@@ -724,7 +722,6 @@ describe('JHipster generator', () => {
                         prodDatabaseType: 'mysql',
                         searchEngine: false,
                         buildTool: 'gradle',
-                        enableSocialSignIn: false,
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         useSass: false,
                         applicationType: 'monolith',
@@ -940,91 +937,6 @@ describe('JHipster generator', () => {
         });
     });
 
-    context('social login', () => {
-        describe('social login for HTTP session', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
-                    .withPrompts({
-                        baseName: 'jhipster',
-                        packageName: 'com.mycompany.myapp',
-                        packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
-                        serviceDiscoveryType: false,
-                        authenticationType: 'session',
-                        cacheProvider: 'ehcache',
-                        enableHibernateCache: true,
-                        databaseType: 'sql',
-                        devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
-                        useSass: false,
-                        enableTranslation: true,
-                        nativeLanguage: 'en',
-                        languages: ['fr'],
-                        buildTool: 'maven',
-                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: [
-                            'enableSocialSignIn:true'
-                        ]
-                    })
-                    .on('end', done);
-            });
-
-            it('creates expected files with social login for HTTP session enabled', () => {
-                assert.file(expectedFiles.session);
-                assert.file(getFilesForOptions(angularFiles, {
-                    useSass: false,
-                    enableTranslation: true,
-                    serviceDiscoveryType: false,
-                    authenticationType: 'session',
-                    testFrameworks: [],
-                    enableSocialSignIn: true
-                }));
-            });
-        });
-
-        describe('social login for JWT authentication', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
-                    .withPrompts({
-                        baseName: 'jhipster',
-                        packageName: 'com.mycompany.myapp',
-                        packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
-                        serviceDiscoveryType: false,
-                        authenticationType: 'jwt',
-                        cacheProvider: 'ehcache',
-                        enableHibernateCache: true,
-                        databaseType: 'sql',
-                        devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
-                        useSass: false,
-                        enableTranslation: true,
-                        nativeLanguage: 'en',
-                        languages: ['fr'],
-                        buildTool: 'maven',
-                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: [
-                            'enableSocialSignIn:true'
-                        ]
-                    })
-                    .on('end', done);
-            });
-
-            it('creates expected files with social login for JWT authentication enabled', () => {
-                assert.file(getFilesForOptions(angularFiles, {
-                    useSass: false,
-                    enableTranslation: true,
-                    serviceDiscoveryType: false,
-                    authenticationType: 'jwt',
-                    testFrameworks: [],
-                    enableSocialSignIn: true
-                }));
-            });
-        });
-    });
-
     context('Auth options', () => {
         describe('JWT authentication', () => {
             beforeEach((done) => {
@@ -1126,7 +1038,6 @@ describe('JHipster generator', () => {
                         prodDatabaseType: 'mysql',
                         searchEngine: false,
                         buildTool: 'maven',
-                        enableSocialSignIn: false,
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         useSass: false,
                         applicationType: 'monolith',
@@ -1181,7 +1092,6 @@ describe('JHipster generator', () => {
                         prodDatabaseType: 'mysql',
                         searchEngine: false,
                         buildTool: 'maven',
-                        enableSocialSignIn: false,
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         useSass: false,
                         applicationType: 'monolith',

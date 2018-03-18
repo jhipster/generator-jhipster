@@ -394,19 +394,6 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
     ],
 
-    socialLogin: [
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/social/SocialConfiguration.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/SocialUserConnection.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/CustomSocialConnectionRepository.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/CustomSocialUsersConnectionRepository.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/SocialUserConnectionRepository.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/social/CustomSignInAdapter.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/SocialService.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/SocialController.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/CustomSocialUsersConnectionRepositoryIntTest.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/SocialServiceIntTest.java`
-    ],
-
     session: [
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/PersistentToken.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/PersistentTokenRepository.java`,

@@ -278,19 +278,6 @@ function writeFiles() {
             if (this.authenticationType === 'session') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/PersistentTokenRememberMeServices.java.ejs`, `${javaDir}security/PersistentTokenRememberMeServices.java`);
             }
-
-            if (this.enableSocialSignIn) {
-                this.template(`${SERVER_MAIN_SRC_DIR}package/security/social/package-info.java.ejs`, `${javaDir}security/social/package-info.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/config/social/SocialConfiguration.java.ejs`, `${javaDir}config/social/SocialConfiguration.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/domain/SocialUserConnection.java.ejs`, `${javaDir}domain/SocialUserConnection.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/repository/CustomSocialConnectionRepository.java.ejs`, `${javaDir}repository/CustomSocialConnectionRepository.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/repository/CustomSocialUsersConnectionRepository.java.ejs`, `${javaDir}repository/CustomSocialUsersConnectionRepository.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/repository/SocialUserConnectionRepository.java.ejs`, `${javaDir}repository/SocialUserConnectionRepository.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/security/social/CustomSignInAdapter.java.ejs`, `${javaDir}security/social/CustomSignInAdapter.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/security/social/package-info.java.ejs`, `${javaDir}security/social/package-info.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/service/SocialService.java.ejs`, `${javaDir}service/SocialService.java`);
-                this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/SocialController.java.ejs`, `${javaDir}web/rest/SocialController.java`);
-            }
         },
 
         writeServerJavaGatewayFiles() {
@@ -620,9 +607,6 @@ function writeFiles() {
             this.template(`${SERVER_MAIN_RES_DIR}templates/mail/activationEmail.html.ejs`, `${SERVER_MAIN_RES_DIR}templates/mail/activationEmail.html`);
             this.template(`${SERVER_MAIN_RES_DIR}templates/mail/creationEmail.html.ejs`, `${SERVER_MAIN_RES_DIR}templates/mail/creationEmail.html`);
             this.template(`${SERVER_MAIN_RES_DIR}templates/mail/passwordResetEmail.html.ejs`, `${SERVER_MAIN_RES_DIR}templates/mail/passwordResetEmail.html`);
-            if (this.enableSocialSignIn) {
-                this.copy(`${SERVER_MAIN_RES_DIR}templates/mail/socialRegistrationValidationEmail.html.ejs`, `${SERVER_MAIN_RES_DIR}templates/mail/socialRegistrationValidationEmail.html`);
-            }
 
             /* User management java domain files */
             this.template(`${SERVER_MAIN_SRC_DIR}package/domain/User.java.ejs`, `${javaDir}domain/User.java`);
@@ -674,11 +658,6 @@ function writeFiles() {
             this.template(`${SERVER_TEST_SRC_DIR}package/service/MailServiceIntTest.java.ejs`, `${testDir}service/MailServiceIntTest.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/service/UserServiceIntTest.java.ejs`, `${testDir}service/UserServiceIntTest.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/UserResourceIntTest.java.ejs`, `${testDir}web/rest/UserResourceIntTest.java`);
-
-            if (this.enableSocialSignIn) {
-                this.template(`${SERVER_TEST_SRC_DIR}package/repository/CustomSocialUsersConnectionRepositoryIntTest.java.ejs`, `${testDir}repository/CustomSocialUsersConnectionRepositoryIntTest.java`);
-                this.template(`${SERVER_TEST_SRC_DIR}package/service/SocialServiceIntTest.java.ejs`, `${testDir}service/SocialServiceIntTest.java`);
-            }
 
             this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/AccountResourceIntTest.java.ejs`, `${testDir}web/rest/AccountResourceIntTest.java`);
             this.template(`${SERVER_TEST_SRC_DIR}package/security/SecurityUtilsUnitTest.java.ejs`, `${testDir}security/SecurityUtilsUnitTest.java`);

@@ -232,23 +232,7 @@ const files = {
                 { file: 'modules/account/sessions/sessions.tsx', method: 'processJsx' },
                 { file: 'modules/account/sessions/sessions.reducer.ts', method: 'processJsx' }
             ]
-        },
-        // {
-        //   condition: generator => generator.enableSocialSignIn,
-        //   path: REACT_DIR,
-        //   templates: [
-        //             { file: 'account/social/_social-register.component.js', method: 'processJsx' },
-        //             { file: 'shared/social/_social.component.js', method: 'processJsx' },
-        //     'shared/social/_social.service.js'
-        //   ]
-        // },
-        // {
-        //   condition: generator => generator.enableSocialSignIn && generator.authenticationType === 'jwt',
-        //   path: REACT_DIR,
-        //   templates: [
-        //             { file: 'account/social/_social-auth.component.js', method: 'processJsx' },
-        //   ]
-        // },
+        }
     ],
     adminModule: [
         {

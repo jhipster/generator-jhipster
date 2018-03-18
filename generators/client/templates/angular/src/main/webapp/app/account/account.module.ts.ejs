@@ -38,12 +38,6 @@ import {
     PasswordResetInitComponent,
     PasswordResetFinishComponent,
     SettingsComponent,
-    <%_ if (enableSocialSignIn) { _%>
-    SocialRegisterComponent,
-        <%_ if (authenticationType === 'jwt') { _%>
-    SocialAuthComponent,
-        <%_ } _%>
-    <%_ } _%>
     accountState
 } from './';
 
@@ -53,12 +47,6 @@ import {
         RouterModule.forChild(accountState)
     ],
     declarations: [
-        <%_ if (enableSocialSignIn) { _%>
-        SocialRegisterComponent,
-            <%_ if (authenticationType === 'jwt') { _%>
-        SocialAuthComponent,
-            <%_ } _%>
-        <%_ } _%>
         ActivateComponent,
         RegisterComponent,
         PasswordComponent,

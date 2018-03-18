@@ -20,7 +20,6 @@
     "messageBroker": false,
     "serviceDiscoveryType": "eureka",
     "buildTool": "maven",
-    "enableSocialSignIn": false,
     "enableSwaggerCodegen": false,
     "jwtSecretKey": "6eb1d1054c4f0fd1e5a3abdd7a7a3d6f7a4ca6ef",
     "enableTranslation": false,

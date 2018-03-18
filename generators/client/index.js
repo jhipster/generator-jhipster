@@ -71,13 +71,6 @@ module.exports = class extends BaseGenerator {
             type: String
         });
 
-        // This adds support for a `--social` flag
-        this.option('social', {
-            desc: 'Provide development DB option for the application',
-            type: Boolean,
-            default: false
-        });
-
         // This adds support for a `--search-engine` flag
         this.option('search-engine', {
             desc: 'Provide development DB option for the application',
@@ -305,9 +298,6 @@ module.exports = class extends BaseGenerator {
                 }
                 if (this.configOptions.buildTool) {
                     this.buildTool = this.configOptions.buildTool;
-                }
-                if (this.configOptions.enableSocialSignIn !== undefined) {
-                    this.enableSocialSignIn = this.configOptions.enableSocialSignIn;
                 }
                 if (this.configOptions.authenticationType) {
                     this.authenticationType = this.configOptions.authenticationType;

@@ -252,25 +252,6 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.enableSocialSignIn,
-            path: ANGULAR_DIR,
-            templates: [
-                { file: 'account/social/social.route.ts', method: 'processJs' },
-                { file: 'account/social/social-register.component.ts', method: 'processJs' },
-                { file: 'account/social/social-register.component.html', method: 'processHtml' },
-                { file: 'shared/social/social.component.ts', method: 'processJs' },
-                { file: 'shared/social/social.component.html', method: 'processHtml' },
-                'core/social/social.service.ts'
-            ]
-        },
-        {
-            condition: generator => generator.enableSocialSignIn && generator.authenticationType === 'jwt',
-            path: ANGULAR_DIR,
-            templates: [
-                { file: 'account/social/social-auth.component.ts', method: 'processJs' },
-            ]
-        },
-        {
             condition: generator => generator.useSass && generator.authenticationType !== 'oauth2',
             path: ANGULAR_DIR,
             templates: [

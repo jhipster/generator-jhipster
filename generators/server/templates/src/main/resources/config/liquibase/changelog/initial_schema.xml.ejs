@@ -67,7 +67,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <%_ } _%>
-            <column name="login" type="varchar(<% if (enableSocialSignIn) { %>100<% } else { %>50<% } %>)">
+            <column name="login" type="varchar(50)">
                 <constraints unique="true" nullable="false" uniqueConstraintName="ux_user_login"/>
             </column>
             <%_ if (authenticationType !== 'oauth2') { _%>
@@ -105,7 +105,7 @@
         <createIndex indexName="idx_user_login"
             tableName="<%= jhiTablePrefix %>_user"
             unique="true">
-            <column name="login" type="varchar(<% if (enableSocialSignIn) { %>100<% } else { %>50<% } %>)"/>
+            <column name="login" type="varchar(50)"/>
         </createIndex>
 
         <createIndex indexName="idx_user_email"
@@ -199,7 +199,7 @@
             <column name="event_id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="principal" type="varchar(<% if (enableSocialSignIn) { %>100<% } else { %>50<% } %>)">
+            <column name="principal" type="varchar(50)">
                 <constraints nullable="false" />
             </column>
             <column name="event_date" type="timestamp"/>
@@ -220,7 +220,7 @@
         <createIndex indexName="idx_persistent_audit_event"
                      tableName="<%= jhiTablePrefix %>_persistent_audit_event"
                      unique="false">
-            <column name="principal" type="varchar(<% if (enableSocialSignIn) { %>100<% } else { %>50<% } %>)"/>
+            <column name="principal" type="varchar(50)"/>
             <column name="event_date" type="timestamp"/>
         </createIndex>
 
@@ -235,39 +235,5 @@
                                  constraintName="fk_evt_pers_audit_evt_data"
                                  referencedColumnNames="event_id"
                                  referencedTableName="<%= jhiTablePrefix %>_persistent_audit_event"/>
-    <%_ if (enableSocialSignIn) { _%>
-
-        <!-- Social -->
-        <createTable tableName="<%= jhiTablePrefix %>_social_user_connection">
-            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="user_id" type="varchar(191)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="provider_id" type="varchar(191)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="provider_user_id" type="varchar(191)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="rank" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="display_name" type="varchar(255)"/>
-            <column name="profile_url" type="varchar(255)"/>
-            <column name="image_url" type="varchar(255)"/>
-            <column name="access_token" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="secret" type="varchar(255)"/>
-            <column name="refresh_token" type="varchar(255)"/>
-            <column name="expire_time" type="bigint"/>
-        </createTable>
-
-        <addUniqueConstraint tableName="<%= jhiTablePrefix %>_social_user_connection" columnNames="user_id, provider_id, provider_user_id"/>
-
-        <addUniqueConstraint tableName="<%= jhiTablePrefix %>_social_user_connection" columnNames="user_id, provider_id, rank"/>
-    <%_ } _%>
     </changeSet>
 </databaseChangeLog>

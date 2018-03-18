@@ -340,12 +340,6 @@ function askForOptionalItems(meta) {
         name: 'Reactive APIs, using Spring Webflux',
         value: 'reactive:true'
     });
-    if (this.databaseType !== 'cassandra' && applicationType === 'monolith' && (this.authenticationType === 'session' || this.authenticationType === 'jwt')) {
-        choices.push({
-            name: 'Social login (Google, Facebook, Twitter)',
-            value: 'enableSocialSignIn:true'
-        });
-    }
     if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
         choices.push({
             name: 'Search engine using Elasticsearch',
@@ -384,7 +378,6 @@ function askForOptionalItems(meta) {
             this.reactive = this.getOptionFromArray(this.serverSideOptions, 'reactive');
             this.websocket = this.getOptionFromArray(this.serverSideOptions, 'websocket');
             this.searchEngine = this.getOptionFromArray(this.serverSideOptions, 'searchEngine');
-            this.enableSocialSignIn = this.getOptionFromArray(this.serverSideOptions, 'enableSocialSignIn');
             this.messageBroker = this.getOptionFromArray(this.serverSideOptions, 'messageBroker');
             this.enableSwaggerCodegen = this.getOptionFromArray(this.serverSideOptions, 'enableSwaggerCodegen');
             // Only set this option if it hasn't been set in a previous question, as it's only optional for monoliths

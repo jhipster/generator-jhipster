@@ -85,10 +85,6 @@ module.exports = class extends Generator {
             generator.copyI18nFilesByName(generator, webappDir, 'tracker.json', lang);
         }
 
-        if (this.enableSocialSignIn) {
-            generator.copyI18nFilesByName(generator, webappDir, 'social.json', lang);
-        }
-
         // Templates
         generator.template(`${webappDir}i18n/${lang}/activate.json.ejs`, `${webappDir}i18n/${lang}/activate.json`);
         generator.template(`${webappDir}i18n/${lang}/global.json.ejs`, `${webappDir}i18n/${lang}/global.json`);

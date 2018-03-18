@@ -27,12 +27,6 @@ import {
     <%_ if (authenticationType === 'session') { _%>
     sessionsRoute,
     <%_ } _%>
-    <%_ if (enableSocialSignIn) { _%>
-    socialRegisterRoute,
-        <%_ if (authenticationType === 'jwt') { _%>
-    socialAuthRoute,
-        <%_ } _%>
-    <%_ } _%>
     settingsRoute
 } from './';
 
@@ -44,12 +38,6 @@ const ACCOUNT_ROUTES = [
     registerRoute,
     <%_ if (authenticationType === 'session') { _%>
     sessionsRoute,
-    <%_ } _%>
-    <%_ if (enableSocialSignIn) { _%>
-    <%_ if (authenticationType === 'jwt') { _%>
-    socialAuthRoute,
-    <%_ } _%>
-    socialRegisterRoute,
     <%_ } _%>
     settingsRoute
 ];

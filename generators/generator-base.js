@@ -514,38 +514,6 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * Add new social configuration in the "application.yml".
-     *
-     * @param {string} name - social name (twitter, facebook, ect.)
-     * @param {string} clientId - clientId
-     * @param {string} clientSecret - clientSecret
-     * @param {string} comment - url of how to configure the social service
-     */
-    addSocialConfiguration(name, clientId, clientSecret, comment) {
-        const fullPath = `${SERVER_MAIN_RES_DIR}config/application.yml`;
-        try {
-            this.log(chalk.yellow('   update ') + fullPath);
-            let config = '';
-            if (comment) {
-                config += `# ${comment}\n        `;
-            }
-            config += `${name}:\n` +
-                `            clientId: ${clientId}\n` +
-                `            clientSecret: ${clientSecret}\n`;
-            jhipsterUtils.rewriteFile({
-                file: fullPath,
-                needle: 'jhipster-needle-add-social-configuration',
-                splicable: [
-                    config
-                ]
-            }, this);
-        } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}social configuration ${name}${chalk.yellow(' not added.\n')}`);
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
      * Add a new dependency in the "bower.json".
      *
      * @param {string} name - dependency name
@@ -899,122 +867,6 @@ module.exports = class extends PrivateBase {
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required jhipster-needle. Changeset not added.\n') + e);
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
-     * Add a new social button in the login and register modules
-     *
-     * @param {boolean} isUseSass - flag indicating if sass should be used
-     * @param {string} socialName - name of the social module. ex: 'facebook'
-     * @param {string} socialParameter - parameter to send to social connection ex: 'public_profile,email'
-     * @param {string} buttonColor - color of the social button. ex: '#3b5998'
-     * @param {string} buttonHoverColor - color of the social button when is hover. ex: '#2d4373'
-     * @param {string} clientFramework - The name of the client framework
-     */
-    addSocialButton(isUseSass, socialName, socialParameter, buttonColor, buttonHoverColor, clientFramework) {
-        const socialServicefullPath = `${CLIENT_MAIN_SRC_DIR}app/account/social/social.service.js`;
-        let loginfullPath;
-        let registerfullPath;
-        if (clientFramework === 'angularX') {
-            loginfullPath = `${CLIENT_MAIN_SRC_DIR}app/account/login/login.component.html`;
-            registerfullPath = `${CLIENT_MAIN_SRC_DIR}app/account/register/register.component.html`;
-        }
-        try {
-            this.log(chalk.yellow('\nupdate ') + socialServicefullPath);
-            const serviceCode = `case '${socialName}': return '${socialParameter}';`;
-            jhipsterUtils.rewriteFile({
-                file: socialServicefullPath,
-                needle: 'jhipster-needle-add-social-button',
-                splicable: [
-                    serviceCode
-                ]
-            }, this);
-
-            const buttonCode = `<jh-social ng-provider="${socialName}"></jh-social>`;
-            this.log(chalk.yellow('update ') + loginfullPath);
-            jhipsterUtils.rewriteFile({
-                file: loginfullPath,
-                needle: 'jhipster-needle-add-social-button',
-                splicable: [
-                    buttonCode
-                ]
-            }, this);
-            this.log(chalk.yellow('update ') + registerfullPath);
-            jhipsterUtils.rewriteFile({
-                file: registerfullPath,
-                needle: 'jhipster-needle-add-social-button',
-                splicable: [
-                    buttonCode
-                ]
-            }, this);
-
-            const buttonStyle = `.jh-btn-${socialName} {
-                    background-color: ${buttonColor};
-                    border-color: rgba(0, 0, 0, 0.2);
-                    color: #fff;
-                }\n
-                .jh-btn-${socialName}:hover, .jh-btn-${socialName}:focus, .jh-btn-${socialName}:active, .jh-btn-${socialName}.active, .open > .dropdown-toggle.jh-btn-${socialName} {
-                    background-color: ${buttonHoverColor};
-                    border-color: rgba(0, 0, 0, 0.2);
-                    color: #fff;
-                }`;
-            this.addMainCSSStyle(isUseSass, buttonStyle, `Add sign in style for ${socialName}`);
-        } catch (e) {
-            this.log(chalk.yellow(`\nUnable to add social button modification.\n${e}`));
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
-     * Add a new social connection factory in the SocialConfiguration.java file.
-     *
-     * @param {string} javaDir - default java directory of the project (JHipster const)
-     * @param {string} importPackagePath - package path of the ConnectionFactory class
-     * @param {string} socialName - name of the social module
-     * @param {string} connectionFactoryClassName - name of the ConnectionFactory class
-     * @param {string} configurationName - name of the section in the config yaml file
-     */
-    addSocialConnectionFactory(javaDir, importPackagePath, socialName, connectionFactoryClassName, configurationName) {
-        const fullPath = `${javaDir}config/social/SocialConfiguration.java`;
-        try {
-            this.log(chalk.yellow('\nupdate ') + fullPath);
-            const javaImport = `import ${importPackagePath};\n`;
-            jhipsterUtils.rewriteFile({
-                file: fullPath,
-                needle: 'jhipster-needle-add-social-connection-factory-import-package',
-                splicable: [
-                    javaImport
-                ]
-            }, this);
-
-            const clientId = `${socialName}ClientId`;
-            const clientSecret = `${socialName}ClientSecret`;
-            const javaCode = `// ${socialName} configuration\n` +
-                `        String ${clientId} = environment.getProperty("spring.social.${configurationName}.clientId");\n` +
-                `        String ${clientSecret} = environment.getProperty("spring.social.${configurationName}.clientSecret");\n` +
-                `        if (${clientId} != null && ${clientSecret} != null) {\n` +
-                `            log.debug("Configuring ${connectionFactoryClassName}");\n` +
-                '            connectionFactoryConfigurer.addConnectionFactory(\n' +
-                `                new ${connectionFactoryClassName}(\n` +
-                `                    ${clientId},\n` +
-                `                    ${clientSecret}\n` +
-                '                )\n' +
-                '            );\n' +
-                '        } else {\n' +
-                `            log.error("Cannot configure ${connectionFactoryClassName} id or secret null");\n` +
-                '        }\n';
-
-            jhipsterUtils.rewriteFile({
-                file: fullPath,
-                needle: 'jhipster-needle-add-social-connection-factory',
-                splicable: [
-                    javaCode
-                ]
-            }, this);
-        } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Social connection ') + e} ${chalk.yellow('not added.\n')}`);
             this.debug('Error:', e);
         }
     }
@@ -2439,7 +2291,6 @@ module.exports = class extends PrivateBase {
         generator.devDatabaseType = context.options.db || context.configOptions.devDatabaseType || context.config.get('devDatabaseType');
         generator.prodDatabaseType = context.options.db || context.configOptions.prodDatabaseType || context.config.get('prodDatabaseType');
         generator.databaseType = generator.getDBTypeFromDBValue(context.options.db) || context.configOptions.databaseType || context.config.get('databaseType');
-        generator.enableSocialSignIn = context.options.social || context.config.get('enableSocialSignIn');
         generator.searchEngine = context.options['search-engine'] || context.config.get('searchEngine');
         generator.cacheProvider = context.options['cache-provider'] || context.config.get('cacheProvider') || context.config.get('hibernateCache') || 'no';
         generator.enableHibernateCache = context.options['hb-cache'] || context.config.get('enableHibernateCache') || (context.config.get('hibernateCache') !== undefined && context.config.get('hibernateCache') !== 'no');

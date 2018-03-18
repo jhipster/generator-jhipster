@@ -26,10 +26,7 @@ import {
     <%_ if (authenticationType !== 'oauth2') { _%>
     <%=jhiPrefixCapitalized%>LoginModalComponent,
     <%_ } _%>
-    HasAnyAuthorityDirective,
-    <%_ if (enableSocialSignIn) { _%>
-    <%=jhiPrefixCapitalized%>SocialComponent
-    <%_ } _%>
+    HasAnyAuthorityDirective
 } from './';
 
 @NgModule({
@@ -38,9 +35,6 @@ import {
         <%=angularXAppName%>SharedCommonModule
     ],
     declarations: [
-        <%_ if (enableSocialSignIn) { _%>
-        <%=jhiPrefixCapitalized%>SocialComponent,
-        <%_ } _%>
         <%_ if (authenticationType !== 'oauth2') { _%>
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         <%_ } _%>
@@ -54,9 +48,6 @@ import {
     <%_ } _%>
     exports: [
         <%=angularXAppName%>SharedCommonModule,
-        <%_ if (enableSocialSignIn) { _%>
-        <%=jhiPrefixCapitalized%>SocialComponent,
-        <%_ } _%>
         <%_ if (authenticationType !== 'oauth2') { _%>
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         <%_ } _%>
