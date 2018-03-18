@@ -179,8 +179,8 @@ applicationConfigDecl
   / AUTHENTICATION_TYPE SPACE* authenticationType:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'authenticationType', authenticationType.join(''));
   }
-  / HIBERNATE_CACHE SPACE* hibernateCache:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
-    return addToApplicationDecl(applicationConfigDecl, 'hibernateCache', hibernateCache.join(''));
+  / ENABLE_HIBERNATE_CACHE SPACE* enableHibernateCache:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'enableHibernateCache', enableHibernateCache);
   }
   / CLUSTERED_HTTP_SESSION SPACE* clusteredHttpSession:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'clusteredHttpSession', clusteredHttpSession.join(''));
@@ -561,7 +561,7 @@ PATH = 'path'
 BASE_NAME = 'baseName'
 PACKAGE_NAME = 'packageName'
 AUTHENTICATION_TYPE = 'authenticationType'
-HIBERNATE_CACHE = 'hibernateCache'
+ENABLE_HIBERNATE_CACHE = 'enableHibernateCache'
 CLUSTERED_HTTP_SESSION = 'clusteredHttpSession'
 WEBSOCKET = 'websocket'
 DATABASE_TYPE = 'databaseType'
