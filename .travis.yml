@@ -31,12 +31,9 @@ env:
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
 
-    # if JHIPSTER_DEPENDENCIES_BRANCH value is release, use the release from Maven
-    - JHIPSTER_DEPENDENCIES_REPO=https://github.com/jhipster/jhipster-dependencies.git
-    - JHIPSTER_DEPENDENCIES_BRANCH=master
     # if JHIPSTER_LIB_BRANCH value is release, use the release from Maven
     - JHIPSTER_LIB_REPO=https://github.com/jhipster/jhipster.git
-    - JHIPSTER_LIB_BRANCH=master
+    - JHIPSTER_LIB_BRANCH=release
     # if JHIPSTER_BRANCH value is release, use the release from NPM
     - JHIPSTER_REPO=https://github.com/jhipster/generator-jhipster.git
     - JHIPSTER_BRANCH=release
@@ -73,8 +70,10 @@ before_install:
   - yarn -v
 install:
   - $JHIPSTER_SCRIPTS/00-install-jhipster.sh
+  # generate project and entities
   - $JHIPSTER_SCRIPTS/01-generate-entities.sh
   - $JHIPSTER_SCRIPTS/02-generate-project.sh
+  - $JHIPSTER_SCRIPTS/03-replace-version-generated-project.sh
 script:
   - $JHIPSTER_SCRIPTS/03-docker-compose.sh
   - travis_wait $JHIPSTER_SCRIPTS/04-tests.sh
