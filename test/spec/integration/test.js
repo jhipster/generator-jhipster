@@ -481,7 +481,6 @@ describe('integration tests', () => {
             'en', 'fr'
           ],
           serverPort: '8080',
-          enableSocialSignIn: false,
           enableSwaggerCodegen: false,
           enableHibernateCache: true,
           useSass: false,
@@ -517,7 +516,6 @@ describe('integration tests', () => {
             'en', 'fr'
           ],
           serverPort: '8080',
-          enableSocialSignIn: false,
           enableSwaggerCodegen: false,
           enableHibernateCache: true,
           useSass: false,
@@ -552,7 +550,6 @@ describe('integration tests', () => {
             'en', 'fr'
           ],
           serverPort: '8081',
-          enableSocialSignIn: false,
           enableSwaggerCodegen: false,
           enableHibernateCache: true,
           cacheProvider: 'hazelcast',
@@ -589,7 +586,6 @@ describe('integration tests', () => {
             'en', 'fr'
           ],
           serverPort: '8080',
-          enableSocialSignIn: false,
           enableSwaggerCodegen: false,
           enableHibernateCache: true,
           useSass: false,
@@ -686,7 +682,6 @@ describe('integration tests', () => {
             'en', 'fr'
           ],
           serverPort: '8080',
-          enableSocialSignIn: false,
           enableSwaggerCodegen: false,
           useSass: false,
           jhiPrefix: 'jhi',
@@ -724,7 +719,6 @@ describe('integration tests', () => {
             'en', 'fr'
           ],
           serverPort: '8091',
-          enableSocialSignIn: false,
           enableSwaggerCodegen: false,
           useSass: false,
           jhiPrefix: 'jhi',
@@ -762,7 +756,6 @@ describe('integration tests', () => {
             'en', 'fr'
           ],
           serverPort: '8092',
-          enableSocialSignIn: false,
           enableSwaggerCodegen: false,
           useSass: false,
           jhiPrefix: 'jhi',

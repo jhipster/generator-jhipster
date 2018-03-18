@@ -235,9 +235,6 @@ applicationConfigDecl
   / SERVER_PORT SPACE* serverPort:[0-9]+ SPACE* applicationConfigDecl:applicationConfigDecl {
   	return addToApplicationDecl(applicationConfigDecl, 'serverPort', serverPort.join(''), 10);
   }
-  / ENABLE_SOCIAL_SIGN_IN SPACE* enableSocialSignIn:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
-    return addToApplicationDecl(applicationConfigDecl, 'enableSocialSignIn', enableSocialSignIn);
-  }
   / USE_SASS SPACE* useSass:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'useSass', useSass);
   }
@@ -578,7 +575,6 @@ APPLICATION_TYPE = 'applicationType'
 TEST_FRAMEWORK = 'testFrameworks'
 LANGUAGES = 'languages'
 SERVER_PORT = 'serverPort'
-ENABLE_SOCIAL_SIGN_IN = 'enableSocialSignIn'
 USE_SASS = 'useSass'
 JHI_PREFIX = 'jhiPrefix'
 MESSAGE_BROKER = 'messageBroker'

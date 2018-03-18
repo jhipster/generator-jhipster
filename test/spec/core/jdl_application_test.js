@@ -50,7 +50,6 @@ describe('JDLApplication', () => {
           databaseType: 'sql',
           devDatabaseType: 'h2Disk',
           enableHibernateCache: true,
-          enableSocialSignIn: false,
           enableSwaggerCodegen: false,
           enableTranslation: true,
           jhiPrefix: 'jhi',
@@ -133,7 +132,6 @@ describe('JDLApplication', () => {
     databaseType sql
     devDatabaseType h2Disk
     enableHibernateCache true
-    enableSocialSignIn false
     enableSwaggerCodegen false
     enableTranslation true
     jhiPrefix jhi

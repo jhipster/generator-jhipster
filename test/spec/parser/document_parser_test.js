@@ -781,7 +781,6 @@ describe('DocumentParser', () => {
             databaseType: 'sql',
             devDatabaseType: 'h2Disk',
             enableHibernateCache: true,
-            enableSocialSignIn: false,
             enableSwaggerCodegen: false,
             enableTranslation: false,
             jhiPrefix: 'jhi',
