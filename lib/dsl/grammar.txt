@@ -158,11 +158,67 @@ applicationSubDecl
   / '' { return { config: {}, entities: { entityList: [], excluded: [] } }; }
 
 applicationConfigDecl
-  = BASE_NAME SPACE* baseName:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+  = APPLICATION_TYPE SPACE* applicationType:[a-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'applicationType', applicationType.join(''));
+  }
+  / AUTHENTICATION_TYPE SPACE* authenticationType:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'authenticationType', authenticationType.join(''));
+  }
+  / BASE_NAME SPACE* baseName:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'baseName', baseName.join(''));
   }
-  / PATH SPACE* '"' path:([^\n,"]+) '"' SPACE* applicationConfigDecl:applicationConfigDecl {
-    return addToApplicationDecl(applicationConfigDecl, 'path', path.join(''));
+  / BUILD_TOOL SPACE* buildTool:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'buildTool', buildTool.join(''));
+  }
+  / CACHE_PROVIDER SPACE* cacheProvider:[a-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'cacheProvider', cacheProvider.join(''));
+  }
+  / CLIENT_FRAMEWORK SPACE* clientFramework:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'clientFramework', clientFramework.join(''));
+  }
+  / CLIENT_PACKAGE_MANAGER SPACE* clientPackageManager:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'clientPackageManager', clientPackageManager.join(''));
+  }
+  / DATABASE_TYPE SPACE* databaseType:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'databaseType', databaseType.join(''));
+  }
+  / DEV_DATABASE_TYPE SPACE* devDatabaseType:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'devDatabaseType', devDatabaseType.join(''));
+  }
+  / ENABLE_HIBERNATE_CACHE SPACE* enableHibernateCache:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'enableHibernateCache', enableHibernateCache);
+  }
+  / ENABLE_SWAGGER_CODEGEN SPACE* enableSwaggerCodegen:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'enableSwaggerCodegen', enableSwaggerCodegen);
+  }
+  / ENABLE_TRANSLATION SPACE* enableTranslation:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'enableTranslation', enableTranslation);
+  }
+  / JHI_PREFIX SPACE* jhiPrefixStart:[A-z] jhiPrefixEnd:[A-z0-9_-]* SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'jhiPrefix', `${jhiPrefixStart}${jhiPrefixEnd.join('')}`);
+  }
+  / JHIPSTER_VERSION SPACE* jhipsterVersionMajor:[0-9]+ '.' jhipsterVersionMinor:[0-9]+ '.' jhipsterVersionPatch:[0-9]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'jhipsterVersion', `${jhipsterVersionMajor.join('')}.${jhipsterVersionMinor.join('')}.${jhipsterVersionPatch.join('')}`);
+  }
+  / LANGUAGES SPACE* '[' languages:[a-z, ]+ ']' SPACE* applicationConfigDecl:applicationConfigDecl {
+    const languageEntries = [];
+    const results = languages.join('').split(',');
+    for (let i = 0; i < results.length; i++) {
+      if (results[i].trim().length !== 0) {
+        languageEntries.push(results[i].trim());
+      }
+    }
+    return addToApplicationDecl(applicationConfigDecl, 'languages', languageEntries);
+  }
+  / MESSAGE_BROKER SPACE* messageBroker:[a-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    const broker = messageBroker.join('');
+    if (broker === 'false') {
+      return addToApplicationDecl(applicationConfigDecl, 'messageBroker', false);
+    }
+    return addToApplicationDecl(applicationConfigDecl, 'messageBroker', broker);
+  }
+  / NATIVE_LANGUAGE SPACE* nativeLanguage:[a-z]+ applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'nativeLanguage', nativeLanguage.join(''));
   }
   / PACKAGE_NAME SPACE* packageName:(([a-z]+'.')*[a-z]+) SPACE* applicationConfigDecl:applicationConfigDecl {
     applicationConfigDecl = addToApplicationDecl(
@@ -176,43 +232,39 @@ applicationConfigDecl
       applicationConfigDecl.packageName.replace(/[.]/g, '/')
     );
   }
-  / AUTHENTICATION_TYPE SPACE* authenticationType:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
-    return addToApplicationDecl(applicationConfigDecl, 'authenticationType', authenticationType.join(''));
-  }
-  / ENABLE_HIBERNATE_CACHE SPACE* enableHibernateCache:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
-    return addToApplicationDecl(applicationConfigDecl, 'enableHibernateCache', enableHibernateCache);
-  }
-  / CLUSTERED_HTTP_SESSION SPACE* clusteredHttpSession:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
-    return addToApplicationDecl(applicationConfigDecl, 'clusteredHttpSession', clusteredHttpSession.join(''));
-  }
-  / WEBSOCKET SPACE* websocket:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
-    return addToApplicationDecl(applicationConfigDecl, 'websocket', websocket.join(''));
-  }
-  / DATABASE_TYPE SPACE* databaseType:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
-    return addToApplicationDecl(applicationConfigDecl, 'databaseType', databaseType.join(''));
-  }
-  / DEV_DATABASE_TYPE SPACE* devDatabaseType:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
-    return addToApplicationDecl(applicationConfigDecl, 'devDatabaseType', devDatabaseType.join(''));
+  / PATH SPACE* '"' path:([^\n,"]+) '"' SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'path', path.join(''));
   }
   / PROD_DATABASE_TYPE SPACE* prodDatabaseType:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'prodDatabaseType', prodDatabaseType.join(''));
   }
-  / USE_COMPASS SPACE* useCompass:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
-    return addToApplicationDecl(applicationConfigDecl, 'useCompass', useCompass);
+  / SEARCH_ENGINE SPACE* searchEngine:[a-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    const engine = searchEngine.join('');
+    if (engine === 'false') {
+      return addToApplicationDecl(applicationConfigDecl, 'searchEngine', false);
+    }
+    return addToApplicationDecl(applicationConfigDecl, 'searchEngine', engine);
   }
-  / BUILD_TOOL SPACE* buildTool:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
-    return addToApplicationDecl(applicationConfigDecl, 'buildTool', buildTool.join(''));
+  / SERVER_PORT SPACE* serverPort:[0-9]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'serverPort', serverPort.join(''), 10);
   }
-  / SEARCH_ENGINE SPACE* searchEngine:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
-    return addToApplicationDecl(applicationConfigDecl, 'searchEngine', searchEngine);
+  / SERVICE_DISCOVERY_TYPE SPACE* serviceDiscoveryType:[a-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    const choice = serviceDiscoveryType.join('');
+    if (choice === 'false') {
+      return addToApplicationDecl(applicationConfigDecl, 'serviceDiscoveryType', false);
+    }
+    return addToApplicationDecl(applicationConfigDecl, 'serviceDiscoveryType', choice);
   }
-  / ENABLE_TRANSLATION SPACE* enableTranslation:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
-    return addToApplicationDecl(applicationConfigDecl, 'enableTranslation', enableTranslation);
+  / SKIP_CLIENT SPACE* skipClient:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'skipClient', skipClient);
   }
-  / APPLICATION_TYPE SPACE* applicationType:[a-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
-    return addToApplicationDecl(applicationConfigDecl, 'applicationType', applicationType.join(''));
+  / SKIP_SERVER SPACE* skipServer:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'skipServer', skipServer);
   }
-  / TEST_FRAMEWORK SPACE* '[' testFrameworks:[a-z, ]+ ']' SPACE* applicationConfigDecl:applicationConfigDecl {
+  / SKIP_USER_MANAGEMENT SPACE* skipUserManagement:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'skipUserManagement', skipUserManagement.join(''));
+  }
+  / TEST_FRAMEWORKS SPACE* '[' testFrameworks:[a-z, ]+ ']' SPACE* applicationConfigDecl:applicationConfigDecl {
     const testFrameworkEntries = [];
     const results = testFrameworks.join('').split(',');
     for (let i = 0; i < results.length; i++) {
@@ -222,61 +274,18 @@ applicationConfigDecl
     }
     return addToApplicationDecl(applicationConfigDecl, 'testFrameworks', testFrameworkEntries);
   }
-  / LANGUAGES SPACE* '[' languages:[a-z, ]+ ']' SPACE* applicationConfigDecl:applicationConfigDecl {
-    const languageEntries = [];
-    const results = languages.join('').split(',');
-    for (let i = 0; i < results.length; i++) {
-      if (results[i].trim().length !== 0) {
-        languageEntries.push(results[i].trim());
-      }
-    }
-    return addToApplicationDecl(applicationConfigDecl, 'languages', languageEntries);
-  }
-  / SERVER_PORT SPACE* serverPort:[0-9]+ SPACE* applicationConfigDecl:applicationConfigDecl {
-  	return addToApplicationDecl(applicationConfigDecl, 'serverPort', serverPort.join(''), 10);
+  / UAA_BASE_NAME SPACE* '"' uaaBaseName:([^\n,"]+) '"' SPACE* applicationConfigDecl:applicationConfigDecl {
+    return addToApplicationDecl(applicationConfigDecl, 'uaaBaseName', uaaBaseName.join(''));
   }
   / USE_SASS SPACE* useSass:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'useSass', useSass);
   }
-  / JHI_PREFIX SPACE* jhiPrefixStart:[A-z] jhiPrefixEnd:[A-z0-9_-]* SPACE* applicationConfigDecl:applicationConfigDecl {
-    return addToApplicationDecl(applicationConfigDecl, 'jhiPrefix', `${jhiPrefixStart}${jhiPrefixEnd.join('')}`);
-  }
-  / MESSAGE_BROKER SPACE* messageBroker:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
-    return addToApplicationDecl(applicationConfigDecl, 'messageBroker', messageBroker);
-  }
-  / SERVICE_DISCOVERY_TYPE SPACE* serviceDiscoveryType:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
-    const choice = serviceDiscoveryType.join('');
-    switch (choice) {
-    case 'true':
-      return addToApplicationDecl(applicationConfigDecl, 'serviceDiscoveryType', true);
-      break;
-    case 'false':
-      return addToApplicationDecl(applicationConfigDecl, 'serviceDiscoveryType', false);
-      break;
-    default:
-      return addToApplicationDecl(applicationConfigDecl, 'serviceDiscoveryType', choice.join(''));
+  / WEBSOCKET SPACE* websocket:[a-z-]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+    const socket = websocket.join('');
+    if (socket === 'false') {
+      return addToApplicationDecl(applicationConfigDecl, 'websocket', false);
     }
-  }
-  / CLIENT_PACKAGE_MANAGER SPACE* clientPackageManager:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
-    return addToApplicationDecl(applicationConfigDecl, 'clientPackageManager', clientPackageManager.join(''));
-  }
-  / CLIENT_FRAMEWORK SPACE* clientFramework:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
-    return addToApplicationDecl(applicationConfigDecl, 'clientFramework', clientFramework.join(''));
-  }
-  / NATIVE_LANGUAGE SPACE* nativeLanguage:[a-z]+ applicationConfigDecl:applicationConfigDecl {
-    return addToApplicationDecl(applicationConfigDecl, 'nativeLanguage', nativeLanguage.join(''));
-  }
-  / FRONT_END_BUILDER SPACE* frontEndBuilder:[A-z]+ applicationConfigDecl:applicationConfigDecl {
-    return addToApplicationDecl(applicationConfigDecl, 'frontEndBuilder', frontEndBuilder.join(''));
-  }
-  / SKIP_USER_MANAGEMENT SPACE* skipUserManagement:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
-    return addToApplicationDecl(applicationConfigDecl, 'skipUserManagement', skipUserManagement.join(''));
-  }
-  / SKIP_CLIENT SPACE* skipClient:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
-    return addToApplicationDecl(applicationConfigDecl, 'skipClient', skipClient);
-  }
-  / SKIP_SERVER SPACE* skipServer:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
-    return addToApplicationDecl(applicationConfigDecl, 'skipServer', skipServer);
+    return addToApplicationDecl(applicationConfigDecl, 'websocket', socket);
   }
   / comment SPACE* applicationConfigDecl:applicationConfigDecl { return applicationConfigDecl; }
   / ',' SPACE* applicationConfigDecl:applicationConfigDecl { return applicationConfigDecl; }
@@ -560,19 +569,20 @@ CONFIG = 'config'
 PATH = 'path'
 BASE_NAME = 'baseName'
 PACKAGE_NAME = 'packageName'
+CACHE_PROVIDER = 'cacheProvider'
 AUTHENTICATION_TYPE = 'authenticationType'
 ENABLE_HIBERNATE_CACHE = 'enableHibernateCache'
-CLUSTERED_HTTP_SESSION = 'clusteredHttpSession'
+ENABLE_SWAGGER_CODEGEN = 'enableSwaggerCodegen'
+JHIPSTER_VERSION = 'jhipsterVersion'
 WEBSOCKET = 'websocket'
 DATABASE_TYPE = 'databaseType'
 DEV_DATABASE_TYPE = 'devDatabaseType'
 PROD_DATABASE_TYPE = 'prodDatabaseType'
-USE_COMPASS = 'useCompass'
 BUILD_TOOL = 'buildTool'
 SEARCH_ENGINE = 'searchEngine'
 ENABLE_TRANSLATION = 'enableTranslation'
 APPLICATION_TYPE = 'applicationType'
-TEST_FRAMEWORK = 'testFrameworks'
+TEST_FRAMEWORKS = 'testFrameworks'
 LANGUAGES = 'languages'
 SERVER_PORT = 'serverPort'
 USE_SASS = 'useSass'
@@ -584,6 +594,7 @@ CLIENT_FRAMEWORK = 'clientFramework'
 NATIVE_LANGUAGE = 'nativeLanguage'
 FRONT_END_BUILDER = 'frontendBuilder'
 SKIP_USER_MANAGEMENT = 'skipUserManagement'
+UAA_BASE_NAME = 'uaaBaseName'
 ENTITIES = 'entities'
 // skipClient & skipServer are already defined
 TRUE = 'true'
