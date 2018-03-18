@@ -164,6 +164,11 @@ module.exports = class extends BaseGenerator {
                     this.baseName = baseName;
                 }
 
+                this.serviceDiscoveryType = this.config.get('serviceDiscoveryType') === 'no' ? false : this.config.get('serviceDiscoveryType');
+                if (this.serviceDiscoveryType === undefined) {
+                    this.serviceDiscoveryType = false;
+                }
+
                 const clientConfigFound = this.useSass !== undefined;
                 if (clientConfigFound) {
                     // If translation is not defined, it is enabled by default
