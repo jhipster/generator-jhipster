@@ -104,6 +104,18 @@ describe('JDLApplication', () => {
         expect(jdlApplicationConfig.jwtSecretKey).not.to.be.undefined;
       });
     });
+    context('when having session as authentication type', () => {
+      before(() => {
+        jdlApplicationConfig = new JDLApplication(
+          { config: { authenticationType: 'session' } }
+        ).config;
+      });
+
+      it('sets the remember me key', () => {
+        expect(jdlApplicationConfig.rememberMeKey).not.to.be.undefined;
+        expect(jdlApplicationConfig.jwtSecretKey).to.be.undefined;
+      });
+    });
   });
   describe('#toString', () => {
     let jdlApplication = null;
@@ -165,25 +177,85 @@ describe('JDLApplication', () => {
       });
       context('when having translations', () => {
         context('and no native language', () => {
-          it('returns false', () => {
+          let jdlApplication = null;
 
+          before(() => {
+            jdlApplication = new JDLApplication({});
+            delete jdlApplication.config.nativeLanguage;
           });
-        });
-        context('and a native language', () => {
-          it('returns true', () => {
 
+          it('returns false', () => {
+            expect(JDLApplication.isValid(jdlApplication)).to.be.false;
           });
         });
       });
       context('when having jwt as authentication type', () => {
         context('and no JWT secret key', () => {
-          it('returns false', () => {
+          let jdlApplication = null;
 
+          before(() => {
+            jdlApplication = new JDLApplication({
+              config: {
+                authenticationType: 'jwt'
+              }
+            });
+            delete jdlApplication.config.jwtSecretKey;
+          });
+
+          it('returns false', () => {
+            expect(JDLApplication.isValid(jdlApplication)).to.be.false;
           });
         });
-        context('and a JWT secret key', () => {
-          it('returns true', () => {
+      });
+      context('when having session as authentication type', () => {
+        context('and no remember me key', () => {
+          let jdlApplication = null;
 
+          before(() => {
+            jdlApplication = new JDLApplication({
+              config: {
+                authenticationType: 'session'
+              }
+            });
+            delete jdlApplication.config.rememberMeKey;
+          });
+
+          it('returns false', () => {
+            expect(JDLApplication.isValid(jdlApplication)).to.be.false;
+          });
+        });
+      });
+      context('when not skipping client', () => {
+        context('in a microservice app', () => {
+          let jdlApplication = null;
+
+          before(() => {
+            jdlApplication = new JDLApplication({
+              config: {
+                applicationType: 'microservice'
+              }
+            });
+            jdlApplication.config.skipClient = false;
+          });
+
+          it('returns false', () => {
+            expect(JDLApplication.isValid(jdlApplication)).to.be.false;
+          });
+        });
+        context('in a UAA app', () => {
+          let jdlApplication = null;
+
+          before(() => {
+            jdlApplication = new JDLApplication({
+              config: {
+                applicationType: 'uaa'
+              }
+            });
+            jdlApplication.config.skipClient = false;
+          });
+
+          it('returns false', () => {
+            expect(JDLApplication.isValid(jdlApplication)).to.be.false;
           });
         });
       });
