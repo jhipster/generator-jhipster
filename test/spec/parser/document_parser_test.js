@@ -48,7 +48,7 @@ describe('DocumentParser', () => {
             });
             fail();
           } catch (error) {
-            expect(error.name).to.eq('NullPointerException');
+            expect(error.name).to.equal('NullPointerException');
           }
         });
       });
@@ -60,7 +60,7 @@ describe('DocumentParser', () => {
             });
             fail();
           } catch (error) {
-            expect(error.name).to.eq('NullPointerException');
+            expect(error.name).to.equal('NullPointerException');
           }
         });
       });
@@ -73,7 +73,7 @@ describe('DocumentParser', () => {
             });
             fail();
           } catch (error) {
-            expect(error.name).to.eq('IllegalArgumentException');
+            expect(error.name).to.equal('IllegalArgumentException');
           }
         });
       });
@@ -763,38 +763,42 @@ describe('DocumentParser', () => {
         });
 
         it('parses it', () => {
-          expect(application.baseName).to.eq('toto');
-          expect(application.packageName).to.eq('com.mathieu.sample');
-          expect(application.packageFolder).to.eq('com/mathieu/sample');
-          expect(application.authenticationType).to.eq('jwt');
-          expect(application.hibernateCache).to.eq('no');
-          expect(application.clusteredHttpSession).to.eq('no');
-          expect(application.websocket).to.be.false;
-          expect(application.databaseType).to.eq(DatabaseTypes.SQL);
-          expect(application.devDatabaseType).to.eq('h2Memory');
-          expect(application.prodDatabaseType).to.eq('mysql');
-          expect(application.useCompass).to.be.false;
-          expect(application.buildTool).to.eq('maven');
-          expect(application.searchEngine).to.be.false;
-          expect(application.enableTranslation).to.be.false;
-          expect(application.applicationType).to.eq(ApplicationTypes.MONOLITH);
+          expect(application.languages.has('en') && application.languages.has('fr')).to.be.true;
+          expect(application.jwtSecretKey).not.to.be.undefined;
           expect(application.testFrameworks.size()).to.equal(0);
-          expect(
-            application.languages.has('en') && application.languages.has('fr')
-          ).be.true;
-          expect(application.serverPort).to.eq(8080);
-          expect(application.enableSocialSignIn).to.be.false;
-          expect(application.useSass).to.be.false;
-          expect(application.jhiPrefix).to.eq('jhi');
-          expect(application.messageBroker).to.be.false;
-          expect(application.serviceDiscoveryType).to.be.false;
-          expect(application.clientPackageManager).to.eq('yarn');
-          expect(application.clientFramework).to.eq('angularX');
-          expect(application.nativeLanguage).to.eq('en');
-          expect(application.frontEndBuilder).to.be.null;
-          expect(application.skipUserManagement).to.be.false;
-          expect(application.skipClient).to.be.false;
-          expect(application.skipServer).to.be.false;
+          delete application.languages;
+          delete application.jwtSecretKey;
+          delete application.testFrameworks;
+
+          expect(application).to.deep.equal({
+            applicationType: 'monolith',
+            authenticationType: 'jwt',
+            baseName: 'toto',
+            buildTool: 'maven',
+            cacheProvider: 'ehcache',
+            clientFramework: 'angularX',
+            clientPackageManager: 'yarn',
+            databaseType: 'sql',
+            devDatabaseType: 'h2Disk',
+            enableHibernateCache: true,
+            enableSocialSignIn: false,
+            enableSwaggerCodegen: false,
+            enableTranslation: false,
+            jhiPrefix: 'jhi',
+            messageBroker: false,
+            nativeLanguage: 'en',
+            packageFolder: 'com/mathieu/sample',
+            packageName: 'com.mathieu.sample',
+            prodDatabaseType: 'mysql',
+            searchEngine: false,
+            serverPort: '8080',
+            serviceDiscoveryType: false,
+            skipClient: false,
+            skipServer: false,
+            skipUserManagement: false,
+            useSass: false,
+            websocket: false
+          });
         });
       });
       context('when parsing filtered entities', () => {

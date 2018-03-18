@@ -32,40 +32,43 @@ describe('JDLApplication', () => {
 
     context('without specifying special options', () => {
       it('uses default values', () => {
-        expect(jdlApplicationConfig.jhipsterVersion).to.eq('4.9.0');
-        expect(jdlApplicationConfig.baseName).to.eq('jhipster');
-        expect(jdlApplicationConfig.packageName).to.eq('com.mycompany.myapp');
-        expect(jdlApplicationConfig.packageFolder).to.eq('com/mycompany/myapp');
-        expect(jdlApplicationConfig.authenticationType).to.eq('jwt');
-        expect(jdlApplicationConfig.hibernateCache).to.eq('no');
-        expect(jdlApplicationConfig.clusteredHttpSession).to.eq('no');
-        expect(jdlApplicationConfig.websocket).to.eq(false);
-        expect(jdlApplicationConfig.databaseType).to.eq('sql');
-        expect(jdlApplicationConfig.devDatabaseType).to.eq('h2Memory');
-        expect(jdlApplicationConfig.prodDatabaseType).to.eq('mysql');
-        expect(jdlApplicationConfig.useCompass).to.eq(false);
-        expect(jdlApplicationConfig.buildTool).to.eq('maven');
-        expect(jdlApplicationConfig.searchEngine).to.eq(false);
-        expect(jdlApplicationConfig.enableTranslation).to.eq(true);
-        expect(jdlApplicationConfig.applicationType).to.eq('monolith');
-        expect(jdlApplicationConfig.testFrameworks.size()).to.eq(0);
-        expect(jdlApplicationConfig.languages.has('en')).to.be.true;
-        expect(jdlApplicationConfig.serverPort).to.eq(8080);
-        expect(jdlApplicationConfig.enableSocialSignIn).to.eq(false);
-        expect(jdlApplicationConfig.useSass).to.eq(false);
-        expect(jdlApplicationConfig.jhiPrefix).to.eq('jhi');
-        expect(jdlApplicationConfig.messageBroker).to.eq(false);
-        expect(jdlApplicationConfig.serviceDiscoveryType).to.eq(false);
-        expect(jdlApplicationConfig.clientPackageManager).to.eq('yarn');
-        expect(jdlApplicationConfig.clientFramework).to.eq('angularX');
-        expect(jdlApplicationConfig.nativeLanguage).to.eq('en');
-        expect(jdlApplicationConfig.frontEndBuilder).to.be.null;
-        expect(jdlApplicationConfig.skipUserManagement).to.eq(false);
-        expect(jdlApplicationConfig.skipClient).to.eq(false);
-        expect(jdlApplicationConfig.skipServer).to.eq(false);
-        expect(jdlApplicationConfig.rememberMeKey).to.be.undefined;
+        expect(jdlApplicationConfig.languages.has('en') && jdlApplicationConfig.languages.has('fr')).to.be.true;
         expect(jdlApplicationConfig.jwtSecretKey).not.to.be.undefined;
-        expect(jdlApplicationConfig.path).to.equal('.');
+        expect(jdlApplicationConfig.testFrameworks).not.to.be.undefined;
+        delete jdlApplicationConfig.languages;
+        delete jdlApplicationConfig.jwtSecretKey;
+        delete jdlApplicationConfig.testFrameworks;
+
+        expect(jdlApplicationConfig).to.deep.equal({
+          applicationType: 'monolith',
+          authenticationType: 'jwt',
+          baseName: 'jhipster',
+          buildTool: 'maven',
+          cacheProvider: 'ehcache',
+          clientFramework: 'angularX',
+          clientPackageManager: 'yarn',
+          databaseType: 'sql',
+          devDatabaseType: 'h2Disk',
+          enableHibernateCache: true,
+          enableSocialSignIn: false,
+          enableSwaggerCodegen: false,
+          enableTranslation: true,
+          jhiPrefix: 'jhi',
+          jhipsterVersion: '4.9.0',
+          messageBroker: false,
+          nativeLanguage: 'en',
+          packageFolder: 'com/mycompany/myapp',
+          packageName: 'com.mycompany.myapp',
+          prodDatabaseType: 'mysql',
+          searchEngine: false,
+          serverPort: '8080',
+          serviceDiscoveryType: false,
+          skipClient: false,
+          skipServer: false,
+          skipUserManagement: false,
+          useSass: false,
+          websocket: false,
+        });
       });
     });
     context('when choosing session as authentication type', () => {
@@ -113,39 +116,37 @@ describe('JDLApplication', () => {
     it('stringifies the application object', () => {
       expect(jdlApplication.toString()).to.eq(`application {
   config {
-    baseName jhipster
-    path ../../
-    packageName com.mycompany.myapp
-    packageFolder com/mycompany/myapp
-    authenticationType jwt
-    hibernateCache no
-    clusteredHttpSession no
-    websocket false
-    databaseType sql
-    devDatabaseType h2Memory
-    prodDatabaseType mysql
-    useCompass false
-    buildTool maven
-    searchEngine false
-    enableTranslation true
     applicationType monolith
-    testFrameworks
-    languages en
-    serverPort 8080
+    clientPackageManager yarn
+    databaseType sql
+    devDatabaseType h2Disk
+    enableHibernateCache true
     enableSocialSignIn false
     enableSwaggerCodegen false
-    useSass false
+    enableTranslation true
     jhiPrefix jhi
+    languages en,fr
     messageBroker false
-    serviceDiscoveryType false
-    clientPackageManager yarn
-    clientFramework angularX
     nativeLanguage en
-    frontEndBuilder
-    skipUserManagement false
+    packageName com.mycompany.myapp
+    packageFolder com/mycompany/myapp
+    prodDatabaseType mysql
+    searchEngine false
+    serviceDiscoveryType false
     skipClient false
     skipServer false
+    testFrameworks
+    useSass false
+    websocket false
     jhipsterVersion 4.9.0
+    path ../../
+    authenticationType jwt
+    baseName jhipster
+    buildTool maven
+    cacheProvider ehcache
+    clientFramework angularX
+    serverPort 8080
+    skipUserManagement false
   }
 }`);
     });
@@ -162,35 +163,27 @@ describe('JDLApplication', () => {
           expect(JDLApplication.isValid({})).to.be.false;
         });
       });
-
-      const PROPERTIES = [
-        'baseName',
-        'packageName',
-        'packageFolder',
-        'authenticationType',
-        'databaseType',
-        'devDatabaseType',
-        'prodDatabaseType',
-        'buildTool',
-        'applicationType',
-        'clientFramework',
-        'hibernateCache',
-        'nativeLanguage'
-      ];
-      const basicApplicationConfig = new JDLApplication({ jhipsterVersion: '4.9.0' });
-
-      PROPERTIES.forEach((property) => {
-        context(`when not having the ${property} property`, () => {
-          const currentPropertyValue = basicApplicationConfig.config[property];
-          before(() => {
-            delete basicApplicationConfig.config[property];
-          });
-          after(() => {
-            basicApplicationConfig.config[property] = currentPropertyValue;
-          });
-
+      context('when having translations', () => {
+        context('and no native language', () => {
           it('returns false', () => {
-            expect(JDLApplication.isValid(basicApplicationConfig)).to.be.false;
+
+          });
+        });
+        context('and a native language', () => {
+          it('returns true', () => {
+
+          });
+        });
+      });
+      context('when having jwt as authentication type', () => {
+        context('and no JWT secret key', () => {
+          it('returns false', () => {
+
+          });
+        });
+        context('and a JWT secret key', () => {
+          it('returns true', () => {
+
           });
         });
       });

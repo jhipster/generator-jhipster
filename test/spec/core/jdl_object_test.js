@@ -64,8 +64,7 @@ describe('JDLObject', () => {
             expect(
               error.message
             ).to.eq('The application must be valid in order to be added.\n' +
-              'Errors: No package name or folder, No authentication type, No Hibernate cache, No database type, ' +
-              'No dev database type, No prod database type, No build tool, No application type, No client framework');
+              'Errors: No authentication type, No build tool');
           }
         });
       });

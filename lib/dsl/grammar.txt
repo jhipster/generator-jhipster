@@ -233,7 +233,7 @@ applicationConfigDecl
     return addToApplicationDecl(applicationConfigDecl, 'languages', languageEntries);
   }
   / SERVER_PORT SPACE* serverPort:[0-9]+ SPACE* applicationConfigDecl:applicationConfigDecl {
-  	return addToApplicationDecl(applicationConfigDecl, 'serverPort', parseInt(serverPort.join(''), 10));
+  	return addToApplicationDecl(applicationConfigDecl, 'serverPort', serverPort.join(''), 10);
   }
   / ENABLE_SOCIAL_SIGN_IN SPACE* enableSocialSignIn:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'enableSocialSignIn', enableSocialSignIn);
