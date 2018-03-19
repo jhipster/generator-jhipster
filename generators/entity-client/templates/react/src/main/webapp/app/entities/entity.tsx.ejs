@@ -35,7 +35,7 @@ import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
     }
   }
 _%>
-import { Translate<% if (searchEngine === 'elasticsearch') { %>, translate<% } %>, ICrudGetAllAction<% if (fieldContainsDate) { %>, TextFormat<% } %><% if (pagination !== 'no') { %>, getSortState, IPaginationBaseState, getPaginationItemsNumber, JhiPagination<% } %>
+import { Translate<% if (searchEngine === 'elasticsearch') { %>, translate<% } %>, ICrudGetAllAction<% if (fieldContainsDate) { %>, TextFormat<% } %><% if (pagination !== 'no') { %>, getSortState, IPaginationBaseState <% if (pagination === 'pagination' || pagination === 'pager') { %>, getPaginationItemsNumber, JhiPagination<% } %><% } %>
 } from 'react-jhipster';
 import { FaPlus, FaEye, FaPencil, FaTrash<% if (pagination !== 'no') { %>, FaSort<% } %><% if (searchEngine === 'elasticsearch') { %>, FaSearch<% } %> } from 'react-icons/lib/fa';
 
@@ -44,6 +44,9 @@ import {
   getSearchEntities,
   <%_ } _%>
   getEntities
+  <%_ if (pagination === 'infinite-scroll') { _%>
+  , reset
+  <%_ } _%>
 } from './<%= entityFileName %>.reducer';
  // tslint:disable-next-line:no-unused-variable
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
@@ -53,13 +56,23 @@ import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface I<%= entityReactName %>Props {
   getEntities: ICrudGetAllAction;
+  <%_ if (pagination === 'infinite-scroll') { _%>
+  reset: Function;
+  <%_ } _%>
   <%_ if (searchEngine === 'elasticsearch') { _%>
   getSearchEntities: ICrudGetAllAction;
   <%_ } _%>
   <%=entityInstancePlural %>: any[];
-  <%_ if (pagination === 'pagination') { _%>
+  <%_ if (pagination === 'infinite-scroll') { _%>
+  links: {
+    last: 0
+  };
+  <%_ } _%>
+  <%_ if (pagination !== 'no') { _%>
   totalItems: 0;
   location: any;
+  <%_ } _%>
+  <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
   history: any;
   <%_ } _%>
   match: any;
@@ -89,8 +102,18 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   };
   <%_ } _%>
 
+  <%_ if (pagination === 'infinite-scroll') { _%>
+  componentWillMount() {
+    this.props.reset();
+    this.setState({ activePage: 1 });
+  }
+  <%_ } _%>
+
   componentDidMount() {
-    <%_ if (pagination === 'pagination') { _%>
+    <%_ if (pagination !== 'no') { _%>
+      <%_ if (pagination === 'infinite-scroll') { _%>
+    window.onscroll = () => this.handleScroll();
+      <%_ } _%>
     this.getEntities();
     <%_ } else { _%>
     this.props.getEntities();
@@ -114,6 +137,21 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   handleSearch = event => this.setState({ search: event.target.value });
   <%_ } _%>
 
+  <%_ if (pagination === 'infinite-scroll') { _%>
+  handleScroll = () => {
+    if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight) && this.props.<%=entityInstancePlural %>.length) {
+      if(this.state.activePage <= this.props.links.last) {
+        this.setState(
+          {
+            activePage: this.state.activePage + 1
+          },
+          () => this.getEntities()
+        );
+      }
+    }
+  };
+  <%_ } _%>
+
   <%_ if (pagination !== 'no') { _%>
   sort = prop => () => {
     this.setState(
@@ -127,10 +165,14 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
 
   sortEntities() {
     this.getEntities();
+    <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
     this.props.history.push(`${this.props.location.pathname}?page=${this.state.activePage}&sort=${this.state.sort},${this.state.order}`);
+    <%_ } _%>
   }
 
+  <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
+  <%_ } _%>
 
   getEntities = () => {
     const { activePage, itemsPerPage, sort, order } = this.state;
@@ -139,7 +181,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   <%_ } _%>
 
   render() {
-    const { <%=entityInstancePlural %>, match<% if (pagination !== 'no') { %>, totalItems<% } %>} = this.props;
+    const { <%=entityInstancePlural %>, match<% if (pagination === 'pagination' || pagination === 'pager') { %>, totalItems<% } %>} = this.props;
     return (
       <%_ const keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
       <div>
@@ -172,9 +214,9 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
           <table className="table table-striped">
             <thead>
               <tr>
-                <th<% if (pagination !== 'no') { %> onClick={this.sort('id')} <%_ } _%>><Translate contentKey="global.field.id">ID</Translate><% if (pagination !== 'no') { %> <FaSort /><% } %></th>
+                <th<% if (pagination !== 'no') { %> className="hand" onClick={this.sort('id')} <%_ } _%>><Translate contentKey="global.field.id">ID</Translate><% if (pagination !== 'no') { %> <FaSort /><% } %></th>
                 <%_ for (idx in fields) { _%>
-                <th<% if (pagination !== 'no') { %> onClick={this.sort('<%=fields[idx].fieldName%>')} <%_ } _%>><Translate contentKey="<%=keyPrefix + fields[idx].fieldName %>"><%= fields[idx].fieldNameHumanized %></Translate><% if (pagination !== 'no') { %> <FaSort /><% } %></th>
+                <th<% if (pagination !== 'no') { %> className="hand" onClick={this.sort('<%=fields[idx].fieldName%>')} <%_ } _%>><Translate contentKey="<%=keyPrefix + fields[idx].fieldName %>"><%= fields[idx].fieldNameHumanized %></Translate><% if (pagination !== 'no') { %> <FaSort /><% } %></th>
                 <%_ } _%>
                 <%_ for (idx in relationships) { _%>
                     <%_ if (relationships[idx].relationshipType === 'many-to-one'
@@ -285,7 +327,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
             </tbody>
           </table>
         </div>
-        <%_ if (pagination === 'pagination') { _%>
+        <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
         <div className="row justify-content-center">
           <JhiPagination
             items={getPaginationItemsNumber(totalItems, this.state.itemsPerPage)}
@@ -303,7 +345,10 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
 const mapStateToProps = ({ <%= entityInstance %> }) => ({
   <%=entityInstancePlural %>: <%= entityInstance %>.entities,
   <%_ if (pagination !== 'no') { _%>
-  totalItems: <%= entityInstance %>.totalItems
+  totalItems: <%= entityInstance %>.totalItems,
+  <%_ } _%>
+  <%_ if (pagination === 'infinite-scroll') { _%>
+  links: <%= entityInstance %>.links
   <%_ } _%>
 });
 
@@ -311,7 +356,10 @@ const mapDispatchToProps = {
  <%_ if (searchEngine === 'elasticsearch') { _%>
  getSearchEntities,
  <%_ } _%>
- getEntities
+ getEntities,
+ <%_ if (pagination === 'infinite-scroll') { _%>
+ reset
+ <%_ } _%>
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(<%= entityReactName %>);

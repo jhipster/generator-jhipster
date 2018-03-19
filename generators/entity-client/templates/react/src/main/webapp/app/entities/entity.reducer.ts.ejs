@@ -29,6 +29,10 @@ import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } 
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import { SERVER_API_URL } from 'app/config/constants';
+<%_ if (pagination === 'infinite-scroll') { _%>
+import { parse } from 'app/shared/util/parsing-utils';
+import { uniqBy } from 'lodash';
+<%_ } _%>
 <%_ if (!(applicationType === 'gateway' && locals.microserviceName) && authenticationType !== 'uaa') { _%>
 
 <%_ } _%>
@@ -45,7 +49,8 @@ export const ACTION_TYPES = {
   FETCH_<%= entityActionName %>:  '<%= entityInstance %>/FETCH_<%= entityActionName %>',
   CREATE_<%= entityActionName %>: '<%= entityInstance %>/CREATE_<%= entityActionName %>',
   UPDATE_<%= entityActionName %>: '<%= entityInstance %>/UPDATE_<%= entityActionName %>',
-  DELETE_<%= entityActionName %>: '<%= entityInstance %>/DELETE_<%= entityActionName %>'
+  DELETE_<%= entityActionName %>: '<%= entityInstance %>/DELETE_<%= entityActionName %>',
+  <% if (pagination === 'infinite-scroll') { %>RESET_<%= entityActionNamePlural %>: '<%= entityInstance %>/RESET_<%= entityActionNamePlural %>'<% } %>
 };
 
 const initialState = {
@@ -53,6 +58,11 @@ const initialState = {
   errorMessage: null,
   entities: [],
   entity: {},
+  <%_ if (pagination === 'infinite-scroll') { _%>
+  links: {
+    last: 0
+  },
+  <%_ } _%>
   updating: false,
   <%_ if (pagination !== 'no') { _%> 
   totalItems: 0,
@@ -107,13 +117,23 @@ export default (state = initialState, action) => {
     };
     <%_ } _%>
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
+      <%_ if (pagination === 'infinite-scroll') { _%>
+      const link = parse(action.payload.headers['link']);
+      <%_ } _%>
       return {
         ...state,
+        <%_ if (pagination === 'infinite-scroll') { _%>
+        links: { last: link.last },
+        <%_ } _%>
         loading: false,
         <%_ if (pagination !== 'no') { _%>
         totalItems: action.payload.headers['x-total-count'],
         <%_ } _%>
-        entities: action.payload.data
+        <%_ if (pagination === 'infinite-scroll') { _%>
+        entities: uniqBy([...state.entities, ...action.payload.data], 'id')
+        <%_ } else { _%>
+        entities: action.payload.data          
+        <%_ } _%>
       };
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>):
       return {
@@ -206,3 +226,9 @@ export const deleteEntity: ICrudDeleteAction = id => async dispatch => {
   dispatch(getEntities());
   return result;
 };
+
+<%_ if (pagination === 'infinite-scroll') { _%>
+export const reset = () => ({
+  type: ACTION_TYPES.RESET_<%= entityActionNamePlural %>
+});
+<%_ } _%>
