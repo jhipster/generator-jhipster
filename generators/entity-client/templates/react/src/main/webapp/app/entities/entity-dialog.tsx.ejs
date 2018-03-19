@@ -34,7 +34,18 @@ const hasAnyBlobOrImage = blobs.filter(e => e.fieldTypeBlobContent !== 'text').l
 _%>
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Label<% if (haveFieldWithJavadoc) { %>, UncontrolledTooltip<% } %> } from 'reactstrap';
+import {
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  <%_ if (hasBlob) { _%>
+  Row,
+  Col,
+  <%_ } _%>
+  Label
+  <% if (haveFieldWithJavadoc) { %>, UncontrolledTooltip<% } %> } from 'reactstrap';
 <%_
   let isAvField = false;
   for (idx in fields) {
@@ -147,8 +158,15 @@ export class <%= entityReactName %>Dialog extends React.Component<I<%= entityRea
     };
   }
 
+  componentDidMount() {
+    !this.state.isNew && this.props.getEntity(this.props.match.params.id);
+    <%_ otherEntityActions.forEach(val => { _%>
+    this.props.<%= val.action %>();
+    <%_ }) _%>
+  }
+
   <%_ if (hasBlob) {_%>
-  onBlobChange = blobName => event => setFileData(event, this, blobName, true);
+  onBlobChange = (blobName, isAnImage) => event => setFileData(event, this, blobName, isAnImage);
 
   clearBlobField = blobName => () => {
     clearInputImage(this, blobName);
@@ -159,16 +177,7 @@ export class <%= entityReactName %>Dialog extends React.Component<I<%= entityRea
     }
     this.forceUpdate();
   };
-  <%_ } _%>
 
-  componentDidMount() {
-    !this.state.isNew && this.props.getEntity(this.props.match.params.id);
-    <%_ otherEntityActions.forEach(val => { _%>
-    this.props.<%= val.action %>();
-    <%_ }) _%>
-  }
-
-  <%_ if(hasBlob) { _%>
   setDataToValues = (dataKey, values, hasContentType) => {
     const data = this.state[dataKey];
     if (data) {
@@ -197,16 +206,10 @@ export class <%= entityReactName %>Dialog extends React.Component<I<%= entityRea
       this.setDataToValues('<%= fName %>', values, <%= b.fieldTypeBlobContent !== 'text' %>);
       <%_ }); _%>
 
-      const entity = {
-        ...this.props.<%= entityInstance %>,
-        ...values
-      };
-
       if (this.state.isNew) {
-        entity.id = null;
-        this.props.createEntity(entity);
+        this.props.createEntity({ ...values });
       } else {
-        this.props.updateEntity(entity);
+        this.props.updateEntity({ ...this.props.<%= entityInstance %>, ...values });
       }
       this.handleClose();
     }
@@ -387,6 +390,7 @@ _%>
 
               const fieldBlobType = fields[idx].fieldTypeBlobContent;
               if (fieldBlobType !== 'text') {
+                const isAnImage = fieldBlobType === 'image';
             _%>
 
             <AvGroup>
@@ -399,18 +403,24 @@ _%>
               {<%= fieldName %> ? (
                 <div>
                   <a onClick={openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)}>
-                  <%_ if (fieldBlobType === 'image') { _%>
+                  <%_ if (isAnImage) { _%>
                     <img src={`data:${<%= fieldName %>ContentType};base64,${<%= fieldName %>}`} style={{ maxHeight: '100px' }} />
                   <%_ } else { _%>
                     <Translate contentKey="entity.action.open">Open</Translate>
                   <%_ } _%>
                   </a>
                   <br />
-                  <span className="pull-left">{<%= fieldName %>ContentType}, {byteSize(<%= fieldName %>)}</span>
-                  <Button color="secondary" className="pull-right" onClick={this.clearBlobField('<%= fieldName %>')}><FaTimesCircle /></Button>
+                  <Row>
+                    <Col md="11">
+                      <span>{<%= fieldName %>ContentType}, {byteSize(<%= fieldName %>)}</span>
+                    </Col>
+                    <Col md="1">
+                      <Button color="danger" onClick={this.clearBlobField('<%= fieldName %>')}><FaTimesCircle /></Button>
+                    </Col>
+                  </Row>
                 </div>
               ) : null}
-              <input type="file" onChange={this.onBlobChange('<%= fieldName %>')} accept="image/*" />
+              <input type="file" onChange={this.onBlobChange('<%= fieldName %>', <%= isAnImage %>)} <% if (isAnImage) { %>accept="image/*"<% } %> />
             </AvGroup>
 
             <%_ } else { _%>
