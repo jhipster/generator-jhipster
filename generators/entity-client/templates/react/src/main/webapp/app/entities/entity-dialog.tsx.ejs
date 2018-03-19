@@ -180,6 +180,7 @@ export class <%= entityReactName %>Dialog extends React.Component<I<%= entityRea
       <%_
       blobs.forEach(b => {
         const fName = b.fieldName;
+        // TODO: Code duplication.
       _%>
       const { <%= fName %> } = this.state;
       if (<%= fName %>) {
@@ -196,11 +197,6 @@ export class <%= entityReactName %>Dialog extends React.Component<I<%= entityRea
         this.props.createEntity(entity);
       } else {
         this.props.updateEntity(entity);
-      }
-      if (this.state.isNew) {
-        this.props.createEntity(values);
-      } else {
-        this.props.updateEntity(values);
       }
       this.handleClose();
     }
