@@ -1,7 +1,7 @@
   /**
    * Method to open file
    */
-  const openFile = (contentType: string, data: string) => {
+  export const openFile = (contentType: string, data: string) => () => {
     const fileURL = `data:${contentType};base64,${data}`;
     const win = window.open();
     win.document.write(

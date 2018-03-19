@@ -20,6 +20,7 @@
 <%_
 const blobs = fields.filter(e => ['byte[]', 'ByteBuffer'].includes(e.fieldType));
 const hasBlob = blobs.length > 0;
+const hasAnyBlobOrImage = blobs.filter(e => e.fieldTypeBlobContent !== 'text').length != 0;
 _%>
 
 
@@ -36,7 +37,7 @@ import { getEntity } from './<%= entityFileName %>.reducer';
 // tslint:disable-next-line:no-unused-variable
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 <%_ if (hasBlob) { _%>
-import { byteSize } from 'app/shared/util/data-utils';
+import { <% if(hasAnyBlobOrImage) { %> openFile, <% } %>byteSize } from 'app/shared/util/data-utils';
 <%_ } _%>
 
 export interface I<%= entityReactName %>DetailProps {
@@ -91,12 +92,16 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
               } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) {
 
                 const fieldBlobType = fields[idx].fieldTypeBlobContent;
-                if (fieldBlobType === 'image') {
+                if (fieldBlobType !== 'text') {
           _%>
               {<%= entityInstance %>.<%=fieldName%> ? (
                 <div>
-                  <a>
-                    <img src={`data:${<%= entityInstance %>.<%=fieldName%>ContentType};base64,${<%= entityInstance %>.<%=fieldName%>}`} style={{ maxWidth: '100%' }} />
+                  <a onClick={openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)}>
+                  <%_ if (fieldBlobType === 'image') { _%>
+                    <img src={`data:${<%= entityInstance %>.<%= fieldName %>ContentType};base64,${<%= entityInstance %>.<%= fieldName %>}`} style={{ maxHeight: '30px' }} />
+                  <%_ } else { _%>
+                    <Translate contentKey="entity.action.open">Open</Translate>&nbsp;
+                  <%_ } _%>
                   </a>
                   <span>{<%= entityInstance %>.<%=fieldName%>ContentType}, {byteSize(<%= entityInstance %>.<%=fieldName%>)}</span>
                 </div>
