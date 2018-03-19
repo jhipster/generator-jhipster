@@ -250,7 +250,8 @@ function askForTableName() {
     // don't prompt if there are no relationships
     const entityTableName = context.entityTableName;
     const prodDatabaseType = context.prodDatabaseType;
-    if (!context.relationships || context.relationships.length === 0 ||
+    const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
+    if (skipCheckLengthOfIdentifier || !context.relationships || context.relationships.length === 0 ||
         !((prodDatabaseType === 'oracle' && entityTableName.length > 14) || entityTableName.length > 30)) {
         return;
     }
@@ -265,9 +266,9 @@ function askForTableName() {
                     return 'The table name cannot contain special characters';
                 } else if (input === '') {
                     return 'The table name cannot be empty';
-                } else if (prodDatabaseType === 'oracle' && input.length > 14) {
+                } else if (prodDatabaseType === 'oracle' && input.length > 14 && !skipCheckLengthOfIdentifier) {
                     return 'The table name is too long for Oracle, try a shorter name';
-                } else if (input.length > 30) {
+                } else if (input.length > 30 && !skipCheckLengthOfIdentifier) {
                     return 'The table name is too long, try a shorter name';
                 }
                 return true;
