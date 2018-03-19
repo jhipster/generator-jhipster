@@ -170,10 +170,10 @@ export class <%= entityReactName %>Dialog extends React.Component<I<%= entityRea
 
   clearBlobField = blobName => () => {
     clearInputImage(this, blobName);
-    const { testEntity } = this.props;
-    if (testEntity) {
-      testEntity[blobName] = null;
-      testEntity[blobName + 'ContentType'] = null;
+    const { <%= entityInstance %> } = this.props;
+    if (<%= entityInstance %>) {
+      <%= entityInstance %>[blobName] = null;
+      <%= entityInstance %>[blobName + 'ContentType'] = null;
     }
     this.forceUpdate();
   };
@@ -301,8 +301,8 @@ _%>
     %> <%= rel %>,<% }) %> loading, updating } = this.props;
     const { showModal, isNew } = this.state;
     <%_ blobs.forEach(b => {_%>
-    const <%= b.fieldName %> = (!isNew && testEntity.<%= b.fieldName %>) || (this.state.<%= b.fieldName %> && this.state.<%= b.fieldName %>.data);
-    <% if (b.fieldTypeBlobContent !== 'text') { %>const <%= b.fieldName %>ContentType = (!isNew && testEntity.<%= b.fieldName %>ContentType) || (this.state.<%= b.fieldName %> && this.state.<%= b.fieldName %>.contentType);<% } %>
+    const <%= b.fieldName %> = (!isNew && <%= entityInstance %>.<%= b.fieldName %>) || (this.state.<%= b.fieldName %> && this.state.<%= b.fieldName %>.data);
+    <% if (b.fieldTypeBlobContent !== 'text') { %>const <%= b.fieldName %>ContentType = (!isNew && <%= entityInstance %>.<%= b.fieldName %>ContentType) || (this.state.<%= b.fieldName %> && this.state.<%= b.fieldName %>.contentType);<% } %>
     <%_ }) _%>
     return (
       <%_ const keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
