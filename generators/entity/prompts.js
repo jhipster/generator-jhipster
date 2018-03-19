@@ -432,7 +432,6 @@ function askForField(done) {
     const prodDatabaseType = context.prodDatabaseType;
     const databaseType = context.databaseType;
     const fieldNamesUnderscored = context.fieldNamesUnderscored;
-    const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
     const prompts = [
         {
             type: 'confirm',
@@ -455,7 +454,7 @@ function askForField(done) {
                     return 'Your field name cannot use an already existing field name';
                 } else if (!skipServer && jhiCore.isReservedFieldName(input)) {
                     return 'Your field name cannot contain a Java or Angular reserved keyword';
-                } else if (prodDatabaseType === 'oracle' && input.length > 30 && !skipCheckLengthOfIdentifier) {
+                } else if (prodDatabaseType === 'oracle' && input.length > 30) {
                     return 'The field name cannot be of more than 30 characters';
                 }
                 return true;
