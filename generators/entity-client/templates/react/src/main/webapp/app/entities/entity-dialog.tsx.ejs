@@ -71,6 +71,7 @@ let manyToManyOwners = new Set();
 let relFieldNames = new Set();
 let uniqueRealtionFields = new Set();
 
+
 Object.keys(differentRelationships).forEach(key => {
 
   const hasAnyRelationshipQuery = differentRelationships[key].some(rel =>
@@ -106,7 +107,18 @@ import { getEntities as get<%= upperFirstCamelCase(uniqueRel.otherEntityNamePlur
 <%_ }
   }
 }); _%>
-import { getEntity, updateEntity, createEntity } from './<%= entityFileName %>.reducer';
+import {
+  getEntity,
+  updateEntity,
+  createEntity,
+  <%_
+    blobs.forEach(b => {
+      const capitalizedFirstLetter =  b.fieldName.charAt(0).toUpperCase() + b.fieldName.slice(1);
+  _%>
+  set<%= capitalizedFirstLetter %>,
+  <%_ }); _%>
+  reset
+} from './<%= entityFileName %>.reducer';
 // tslint:disable-next-line:no-unused-variable
 import { convertDateTimeFromServer } from 'app/shared/util/date-utils';
 
@@ -119,6 +131,13 @@ export interface I<%= entityReactName %>DialogProps {
   <%= val.instance %>: I<%= val.entity %>[];
   <%_ }) _%>
   <%= entityInstance %>: any;
+  <%_
+    blobs.forEach(b => {
+      const capitalizedFirstLetter =  b.fieldName.charAt(0).toUpperCase() + b.fieldName.slice(1);
+  _%>
+  set<%= capitalizedFirstLetter %>: Function;
+  <%_ }); _%>
+  reset: Function;
   loading: boolean;
   updating: boolean;
   match: any;
@@ -159,33 +178,24 @@ export class <%= entityReactName %>Dialog extends React.Component<I<%= entityRea
   }
 
   componentDidMount() {
-    !this.state.isNew && this.props.getEntity(this.props.match.params.id);
+    if (this.state.isNew) {
+      this.props.reset();
+    } else {
+      this.props.getEntity(this.props.match.params.id);
+    }
+
     <%_ otherEntityActions.forEach(val => { _%>
     this.props.<%= val.action %>();
     <%_ }) _%>
   }
 
   <%_ if (hasBlob) {_%>
-  onBlobChange = (blobName, isAnImage) => event => setFileData(event, this, blobName, isAnImage);
-
-  clearBlobField = blobName => () => {
-    clearInputImage(this, blobName);
-    const { <%= entityInstance %> } = this.props;
-    if (<%= entityInstance %>) {
-      <%= entityInstance %>[blobName] = null;
-      <%= entityInstance %>[blobName + 'ContentType'] = null;
-    }
-    this.forceUpdate();
+  onBlobChange = (isAnImage, reducerFunction) => event => {
+    setFileData(event, (contentType, data) => reducerFunction({ contentType, data }), isAnImage);
   };
 
-  setDataToValues = (dataKey, values, hasContentType) => {
-    const data = this.state[dataKey];
-    if (data) {
-      values[dataKey] = data.data;
-      if (hasContentType) {
-        values[dataKey + 'ContentType'] = data.contentType;
-      }
-    }
+  clearBlob = reducerFunction => () => {
+    reducerFunction({ data: undefined, contentType: undefined });
   };
   <%_ } _%>
 
@@ -199,17 +209,16 @@ export class <%= entityReactName %>Dialog extends React.Component<I<%= entityRea
     <%_ } _%>
     <%_ } _%>
     if (errors.length === 0) {
-      <%_
-      blobs.forEach(b => {
-        const fName = b.fieldName;
-        _%>
-      this.setDataToValues('<%= fName %>', values, <%= b.fieldTypeBlobContent !== 'text' %>);
-      <%_ }); _%>
+      const { <%= entityInstance %> } = this.props;
+      const entity = {
+        ...<%= entityInstance %>,
+        ...values
+      }
 
       if (this.state.isNew) {
-        this.props.createEntity({ ...values });
+        this.props.createEntity(entity);
       } else {
-        this.props.updateEntity({ ...this.props.<%= entityInstance %>, ...values });
+        this.props.updateEntity(entity);
       }
       this.handleClose();
     }
@@ -301,8 +310,8 @@ _%>
     %> <%= rel %>,<% }) %> loading, updating } = this.props;
     const { showModal, isNew } = this.state;
     <%_ blobs.forEach(b => {_%>
-    const <%= b.fieldName %> = (!isNew && <%= entityInstance %>.<%= b.fieldName %>) || (this.state.<%= b.fieldName %> && this.state.<%= b.fieldName %>.data);
-    <% if (b.fieldTypeBlobContent !== 'text') { %>const <%= b.fieldName %>ContentType = (!isNew && <%= entityInstance %>.<%= b.fieldName %>ContentType) || (this.state.<%= b.fieldName %> && this.state.<%= b.fieldName %>.contentType);<% } %>
+    const <%= b.fieldName %> = <%= entityInstance %> && <%= entityInstance %>.<%= b.fieldName %>;
+    <% if (b.fieldTypeBlobContent !== 'text') { %>const <%= b.fieldName %>ContentType = <%= entityInstance %> && <%= entityInstance %>.<%= b.fieldName %>ContentType;<% } %>
     <%_ }) _%>
     return (
       <%_ const keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
@@ -391,6 +400,8 @@ _%>
               const fieldBlobType = fields[idx].fieldTypeBlobContent;
               if (fieldBlobType !== 'text') {
                 const isAnImage = fieldBlobType === 'image';
+                const capitalizedFirstLetter =  fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
+
             _%>
 
             <AvGroup>
@@ -402,7 +413,7 @@ _%>
               <br />
               {<%= fieldName %> ? (
                 <div>
-                  <a onClick={openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)}>
+                  <a onClick={openFile(<%= fieldName %>ContentType, <%= fieldName %>)}>
                   <%_ if (isAnImage) { _%>
                     <img src={`data:${<%= fieldName %>ContentType};base64,${<%= fieldName %>}`} style={{ maxHeight: '100px' }} />
                   <%_ } else { _%>
@@ -415,12 +426,12 @@ _%>
                       <span>{<%= fieldName %>ContentType}, {byteSize(<%= fieldName %>)}</span>
                     </Col>
                     <Col md="1">
-                      <Button color="danger" onClick={this.clearBlobField('<%= fieldName %>')}><FaTimesCircle /></Button>
+                      <Button color="danger" onClick={this.clearBlob(this.props.set<%= capitalizedFirstLetter%>)}><FaTimesCircle /></Button>
                     </Col>
                   </Row>
                 </div>
               ) : null}
-              <input type="file" onChange={this.onBlobChange('<%= fieldName %>', <%= isAnImage %>)} <% if (isAnImage) { %>accept="image/*"<% } %> />
+              <input type="file" onChange={this.onBlobChange(<%= isAnImage %>, this.props.set<%= capitalizedFirstLetter %>)} <% if (isAnImage) { %>accept="image/*"<% } %> />
             </AvGroup>
 
             <%_ } else { _%>
@@ -645,7 +656,14 @@ const mapDispatchToProps = {
   <%_ }) _%>
   getEntity,
   updateEntity,
-  createEntity
+  <%_
+    blobs.forEach(b => {
+      const capitalizedFirstLetter =  b.fieldName.charAt(0).toUpperCase() + b.fieldName.slice(1);
+  _%>
+  set<%= capitalizedFirstLetter %>,
+  <%_ }); _%>
+  createEntity,
+  reset
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(<%= entityReactName %>Dialog);

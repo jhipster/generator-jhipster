@@ -52,20 +52,15 @@
 
   export const size = (value: string): number => value.length / 4 * 3 - paddingSize(value);
 
-  export const setFileData = (event, component, stateFieldName, isImage: boolean) => {
-    if (event && event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
-      if (isImage && !/^image\//.test(file.type)) {
-        return;
-      }
-
-      toBase64(file, base64Data => {
-        component.setState({
-          [stateFieldName]: {
-            data: base64Data,
-            contentType: file.type
-          }
-        });
-      });
+  export const setFileData = (event, callback: Function, isImage: boolean) => {
+  if (event && event.target.files && event.target.files[0]) {
+    const file = event.target.files[0];
+    if (isImage && !/^image\//.test(file.type)) {
+      return;
     }
-  };
+
+    toBase64(file, base64Data => {
+      callback(file.type, base64Data);
+    });
+  }
+};
