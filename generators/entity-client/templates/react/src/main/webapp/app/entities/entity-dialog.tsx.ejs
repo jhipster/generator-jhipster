@@ -168,6 +168,18 @@ export class <%= entityReactName %>Dialog extends React.Component<I<%= entityRea
     <%_ }) _%>
   }
 
+  <%_ if(hasBlob) { _%>
+  setDataToValues = (dataKey, values, hasContentType) => {
+    const data = this.state[dataKey];
+    if (data) {
+      values[dataKey] = data.data;
+      if (hasContentType) {
+        values[dataKey + 'ContentType'] = data.contentType;
+      }
+    }
+  };
+  <%_ } _%>
+
   saveEntity = (event, errors, values) => {
     <%_ for (idx in fields) {
         const fieldType = fields[idx].fieldType;
@@ -181,20 +193,17 @@ export class <%= entityReactName %>Dialog extends React.Component<I<%= entityRea
       <%_
       blobs.forEach(b => {
         const fName = b.fieldName;
-        // TODO: Code duplication.
-      _%>
-      const { <%= fName %> } = this.state;
-      if (<%= fName %>) {
-        values.<%= fName %> = <%= fName %>.data;
-        <% if (b.fieldTypeBlobContent !== 'text') { %>values.<%= fName %>ContentType = <%= fName %>.contentType;<% } %>
-      }
-      <%_ }) _%>
+        _%>
+      this.setDataToValues('<%= fName %>', values, <%= b.fieldTypeBlobContent !== 'text' %>);
+      <%_ }); _%>
+
       const entity = {
         ...this.props.<%= entityInstance %>,
         ...values
       };
 
       if (this.state.isNew) {
+        entity.id = null;
         this.props.createEntity(entity);
       } else {
         this.props.updateEntity(entity);
