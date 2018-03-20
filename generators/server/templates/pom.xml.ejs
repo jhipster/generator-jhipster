@@ -29,9 +29,9 @@
     <!-- TODO Remove snapshot repositories after final Spring Boot 2 release -->
     <repositories>
         <repository>
-            <id>jhipster-snapshot</id>
+            <id>sonatype-snapshot</id>
             <name>JHipster Snapshots</name>
-            <url>https://dl.bintray.com/jhipster/maven</url>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
@@ -95,7 +95,7 @@
         <profile.swagger />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>2.0.0-20180315.153125-5</jhipster-dependencies.version>
+        <jhipster-dependencies.version>2.0.0-SNAPSHOT</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
         <spring-boot.version>2.0.0.RELEASE</spring-boot.version>
