@@ -16,7 +16,9 @@
     "Hibernate",
     "React",
     "Angular",
-    "Twitter Bootstrap"
+    "Twitter Bootstrap",
+    "Webpack",
+    "Docker"
   ],
   "homepage": "http://www.jhipster.tech/",
   "bugs": "https://github.com/jhipster/generator-jhipster/issues",
