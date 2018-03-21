@@ -69,9 +69,7 @@ module.exports = class extends BaseGenerator {
                 this.devDatabaseType = this.config.get('devDatabaseType') || this.options.db;
                 this.skipClient = this.config.get('skipClient');
                 this.clientFramework = this.config.get('clientFramework');
-                if (!this.clientFramework) {
-                    this.clientFramework = 'angularX';
-                }
+                this.clientFramework = this.clientFramework || 'angularX';
                 this.clientPackageManager = this.config.get('clientPackageManager');
                 if (!this.clientPackageManager) {
                     if (this.useYarn) {
@@ -94,27 +92,45 @@ module.exports = class extends BaseGenerator {
             parseJDL() {
                 this.log('The jdl is being parsed.');
                 try {
+                    const parsed = jhiCore.parseFromFiles(this.jdlFiles);
                     const jdlObject = jhiCore.convertToJDLFromConfigurationObject({
-                        document: jhiCore.parseFromFiles(this.jdlFiles),
+                        document: parsed,
                         databaseType: this.prodDatabaseType,
                         applicationType: this.applicationType,
                         applicationName: this.baseName
                     });
+                    if (Object.keys(jdlObject.applications).length !== 0) {
+                        this.log('Writing application configuration files.');
+                        jhiCore.exportApplications({
+                            applications: jdlObject.applications,
+                            paths: getApplicationPaths(jdlObject.applications)
+                        });
+                    }
                     const entities = jhiCore.convertToJHipsterJSON({
                         jdlObject,
                         databaseType: this.prodDatabaseType,
                         applicationType: this.applicationType
                     });
                     this.log('Writing entity JSON files.');
-                    this.changedEntities = jhiCore.exportEntities({
-                        entities,
-                        forceNoFiltering: this.options.force,
-                        applicationType: this.applicationType,
-                        applicationName: this.baseName
-                    });
-                    this.updatedKeys = Object.keys(this.changedEntities);
-                    if (this.updatedKeys.length > 0) {
-                        this.log(`Updated entities are: ${chalk.yellow(this.updatedKeys)}`);
+                    if (Object.keys(jdlObject.applications).length !== 0) {
+                        this.changedEntities = jhiCore.exportEntitiesInApplications({
+                            entities,
+                            forceNoFiltering: this.options.force,
+                            applications: jdlObject.applications
+                        });
+                    } else {
+                        this.changedEntities = jhiCore.exportEntities({
+                            entities,
+                            forceNoFiltering: this.options.force,
+                            application: {
+                                type: this.applicationType,
+                                name: this.baseName
+                            }
+                        });
+                    }
+
+                    if (this.changedEntities.length > 0) {
+                        this.log(`Updated entities are: ${chalk.yellow(this.changedEntities)}`);
                     } else {
                         this.log(chalk.yellow('No change in entity configurations. No entities were updated'));
                     }
@@ -128,15 +144,17 @@ module.exports = class extends BaseGenerator {
             },
 
             generateEntities() {
-                if (this.updatedKeys.length === 0) return;
+                if (this.changedEntities.length === 0) {
+                    return;
+                }
                 if (this.options['json-only']) {
-                    this.log('Entity JSON files created. Entitiy generation skipped.');
+                    this.log('Entity JSON files created. Entity generation skipped.');
                     return;
                 }
                 this.log('Generating entities.');
                 try {
                     this.getExistingEntities().forEach((entity) => {
-                        if (this.updatedKeys.includes(entity.name)) {
+                        if (this.changedEntities.includes(entity.name)) {
                             this.composeWith(require.resolve('../entity'), {
                                 force: this.options.force,
                                 debug: this.options.debug,
@@ -151,9 +169,9 @@ module.exports = class extends BaseGenerator {
                             });
                         }
                     });
-                } catch (e) {
-                    this.debug('Error:', e);
-                    this.error(`Error while generating entities from parsed JDL\n${e}`);
+                } catch (error) {
+                    this.debug('Error:', error);
+                    this.error(`Error while generating entities from parsed JDL\n${error}`);
                 }
             }
         };
@@ -166,3 +184,11 @@ module.exports = class extends BaseGenerator {
         }
     }
 };
+
+function getApplicationPaths(jdlApplications) {
+    const paths = {};
+    Object.keys(jdlApplications).forEach((baseName) => {
+        paths[baseName] = jdlApplications[baseName].config.path;
+    });
+    return paths;
+}
