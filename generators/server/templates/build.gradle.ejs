@@ -208,7 +208,8 @@ dependencies {
     <%_ if (cacheProvider !== 'no') { _%>
     compile "org.springframework.boot:spring-boot-starter-cache"
     <%_ } _%>
-    compile "io.github.jhipster:jhipster"
+    // TODO remove the "changing: true" when the JHipster server library is released
+    compile group: "io.github.jhipster", name: "jhipster", version: jhipster_dependencies_version, changing: true
     compile "io.dropwizard.metrics:metrics-core"
     <%_ if (['ehcache', 'infinispan'].includes(cacheProvider)) { _%>
     compile "io.dropwizard.metrics:metrics-jcache"
