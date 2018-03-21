@@ -18,6 +18,10 @@
 -%>
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { JhiLanguageService } from 'ng-jhipster';
 
 import { <%=angularXAppName%>SharedModule } from 'app/shared';
 /* jhipster-needle-add-admin-module-import - JHipster will add admin modules imports here */
@@ -64,8 +68,22 @@ import {
     <%_ } _%>
 } from './';
 
+export function translatePartialLoader(http: HttpClient) {
+    // TODO: ideally this should load translations specific to lazy loaded module, however, few keys from lazy loaded modules are used in main bundle.
+    return new TranslateHttpLoader(http, 'i18n/', `.json?buildTimestamp=${process.env.BUILD_TIMESTAMP}`);
+}
+
 @NgModule({
     imports: [
+        TranslateModule.forChild({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: translatePartialLoader,
+                deps: [HttpClient]
+            },
+            // TODO: reuse missing translation handler from ng-jhipster
+            isolate: true
+        }),
         <%=angularXAppName%>SharedModule,
         RouterModule.forChild(adminState),
         /* jhipster-needle-add-admin-module - JHipster will add admin modules here */
@@ -124,4 +142,6 @@ import {
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class <%=angularXAppName%>AdminModule {}
+export class <%=angularXAppName%>AdminModule {
+    constructor(private languageService: JhiLanguageService) {}
+}
