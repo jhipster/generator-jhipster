@@ -22,7 +22,7 @@ import { cleanEntity } from 'app/shared/util/entity-utils';
 
 describe('Entity utils', () => {
   describe('cleanEntity', () => {
-    it('shouldn\'t remove fields with an id', () => {
+    it('should not remove fields with an id', () => {
       const entityA = {
         a: {
           id: 5
@@ -48,7 +48,7 @@ describe('Entity utils', () => {
       expect(cleanEntity({ ...entity })).to.eql({});
     });
 
-    it('shouldn\' remove fields that are not objects', () => {
+    it('should not remove fields that are not objects', () => {
       const entity = {
         a: '',
         b: 5,
