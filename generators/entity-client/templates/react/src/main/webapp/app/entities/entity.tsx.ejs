@@ -35,7 +35,7 @@ import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
     }
   }
 _%>
-import { Translate<% if (searchEngine === 'elasticsearch') { %>, translate<% } %>, ICrudGetAllAction<% if (fieldContainsDate) { %>, TextFormat<% } %><% if (pagination !== 'no') { %>, getSortState, IPaginationBaseState <% if (pagination === 'pagination' || pagination === 'pager') { %>, getPaginationItemsNumber, JhiPagination<% } %><% } %>
+import { Translate<% if (searchEngine === 'elasticsearch') { %>, translate<% } %>, ICrudGetAllAction<% if (fieldContainsDate) { %>, TextFormat<% } %><% if (pagination !== 'no') { %>, getSortState, IPaginationBaseState <% if (pagination === 'pagination' || pagination === 'pager') { %>, getPaginationItemsNumber, JhiPagination<% }} %>
 } from 'react-jhipster';
 import { FaPlus, FaEye, FaPencil, FaTrash<% if (pagination !== 'no') { %>, FaSort<% } %><% if (searchEngine === 'elasticsearch') { %>, FaSearch<% } %> } from 'react-icons/lib/fa';
 
@@ -102,23 +102,24 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   };
   <%_ } _%>
 
-  <%_ if (pagination === 'infinite-scroll') { _%>
-  componentWillMount() {
-    this.props.reset();
-    this.setState({ activePage: 1 });
-  }
-  <%_ } _%>
-
   componentDidMount() {
     <%_ if (pagination !== 'no') { _%>
       <%_ if (pagination === 'infinite-scroll') { _%>
-    window.onscroll = () => this.handleScroll();
-      <%_ } _%>
+    this.reset();
+    window.addEventListener('scroll', this.handleOnScroll);
+      <%_ } else { _%>
     this.getEntities();
+      <%_ } _%>
     <%_ } else { _%>
     this.props.getEntities();
     <%_ } _%>
   }
+
+  <%_ if (pagination === 'infinite-scroll') { _%>
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleOnScroll);
+  }
+  <%_ } _%>
 
   <%_ if (searchEngine === 'elasticsearch') { _%>
   search = () => {
@@ -138,8 +139,8 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   <%_ } _%>
 
   <%_ if (pagination === 'infinite-scroll') { _%>
-  handleScroll = () => {
-    if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight) && this.props.<%=entityInstancePlural %>.length) {
+  handleOnScroll = () => {
+    if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight && this.props.<%=entityInstancePlural %>.length) {
       if(this.state.activePage <= this.props.links.last) {
         this.setState(
           {
@@ -150,6 +151,11 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
       }
     }
   };
+
+  reset = () => {
+    this.props.reset();
+    this.setState({ activePage: 1 }, () => this.getEntities());
+  }
   <%_ } _%>
 
   <%_ if (pagination !== 'no') { _%>
@@ -159,16 +165,16 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
         order: this.state.order === 'asc' ? 'desc' : 'asc',
         sort: prop
       },
-      () => this.sortEntities()
+      () => <% if (pagination === 'infinite-scroll') { %>this.reset()<% } else { %>this.sortEntities()<% } %>
     );
   };
 
+  <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
   sortEntities() {
     this.getEntities();
-    <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
     this.props.history.push(`${this.props.location.pathname}?page=${this.state.activePage}&sort=${this.state.sort},${this.state.order}`);
-    <%_ } _%>
   }
+  <%_ } _%>
 
   <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());

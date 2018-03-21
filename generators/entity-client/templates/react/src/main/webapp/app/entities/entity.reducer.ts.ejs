@@ -30,7 +30,7 @@ import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import { SERVER_API_URL } from 'app/config/constants';
 <%_ if (pagination === 'infinite-scroll') { _%>
-import { parse } from 'app/shared/util/parsing-utils';
+import { parse } from 'react-jhipster';
 import { uniqBy } from 'lodash';
 <%_ } _%>
 <%_ if (!(applicationType === 'gateway' && locals.microserviceName) && authenticationType !== 'uaa') { _%>
@@ -71,6 +71,7 @@ const initialState = {
 };
 
 // Reducer
+
 export default (state = initialState, action) => {
   switch (action.type) {
     <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -114,11 +115,11 @@ export default (state = initialState, action) => {
         ...state,
         loading: false,
         entities: action.payload.data
-    };
+      };
     <%_ } _%>
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
       <%_ if (pagination === 'infinite-scroll') { _%>
-      const link = parse(action.payload.headers['link']);
+      const link = parse(action.payload.headers.link);
       <%_ } _%>
       return {
         ...state,
@@ -156,6 +157,12 @@ export default (state = initialState, action) => {
         updateSuccess: true,
         entity: {}
       };
+    <%_ if (pagination === 'infinite-scroll') { _%>
+    case ACTION_TYPES.RESET_<%= entityActionNamePlural %>:
+      return {
+        ...initialState
+      };
+    <%_ } _%>
     default:
       return state;
   }
