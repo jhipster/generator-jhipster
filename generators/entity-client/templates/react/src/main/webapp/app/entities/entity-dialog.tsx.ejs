@@ -58,11 +58,19 @@ import {
 _%>
 import { AvForm, AvGroup, AvInput<% if (isAvField) { %>, AvField <% } %> } from 'availity-reactstrap-validation';
 // tslint:disable-next-line:no-unused-variable
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import {
+  Translate,
+  translate,
+  ICrudGetAction,
+  ICrudGetAllAction,
+  <%_ if (hasBlob) { _%>
+  setFileData,
+  <% if(hasAnyBlobOrImage) { %> openFile,<% } %>
+  byteSize,
+  <%_ } _%>
+  ICrudPutAction
+} from 'react-jhipster';
 import { FaBan, <% if(hasBlob) { %>FaTimesCircle, <% } %>FaFloppyO } from 'react-icons/lib/fa';
-<%_ if (hasBlob) { _%>
-import { setFileData, clearInputImage,<% if(hasAnyBlobOrImage) { %> openFile,<% } %> byteSize } from 'app/shared/util/data-utils';
-<%_ } _%>
 
 <%_
 let hasRelationshipQuery = false;
@@ -113,7 +121,7 @@ import {
   createEntity,
   <%_
     blobs.forEach(b => {
-      const capitalizedFirstLetter =  b.fieldName.charAt(0).toUpperCase() + b.fieldName.slice(1);
+      const capitalizedFirstLetter = upperFirst(b.fieldName);
   _%>
   set<%= capitalizedFirstLetter %>,
   <%_ }); _%>
@@ -133,7 +141,7 @@ export interface I<%= entityReactName %>DialogProps {
   <%= entityInstance %>: any;
   <%_
     blobs.forEach(b => {
-      const capitalizedFirstLetter =  b.fieldName.charAt(0).toUpperCase() + b.fieldName.slice(1);
+      const capitalizedFirstLetter = upperFirst(b.fieldName);
   _%>
   set<%= capitalizedFirstLetter %>: Function;
   <%_ }); _%>

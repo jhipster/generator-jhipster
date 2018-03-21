@@ -34,8 +34,22 @@ import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
       break;
     }
   }
+
+  const blobs = fields.filter(e => ['byte[]', 'ByteBuffer'].includes(e.fieldType));
+  const hasAnyBlobOrImage = blobs.filter(e => e.fieldTypeBlobContent !== 'text').length != 0;
 _%>
-import { Translate<% if (searchEngine === 'elasticsearch') { %>, translate<% } %>, ICrudGetAllAction<% if (fieldContainsDate) { %>, TextFormat<% } %><% if (pagination !== 'no') { %>, getSortState, IPaginationBaseState, getPaginationItemsNumber, JhiPagination<% } %>
+import {
+  <%_ if (blobs.length > 0) { _%>
+  <% if(hasAnyBlobOrImage) { %> openFile, <% } %>
+  byteSize,
+  <%_ } _%>
+  Translate<% if (searchEngine === 'elasticsearch') { %>, translate<% } %>,
+  ICrudGetAllAction<% if (fieldContainsDate) { %>, TextFormat<% } %>
+  <% if (pagination !== 'no') { %>,
+  getSortState,
+  IPaginationBaseState,
+  getPaginationItemsNumber,
+  JhiPagination<% } %>
 } from 'react-jhipster';
 import { FaPlus, FaEye, FaPencil, FaTrash<% if (pagination !== 'no') { %>, FaSort<% } %><% if (searchEngine === 'elasticsearch') { %>, FaSearch<% } %> } from 'react-icons/lib/fa';
 
@@ -50,16 +64,6 @@ import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 <%_ if (pagination !== 'no') { _%>
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 <%_ } _%>
-
-<%_
-const blobs = fields.filter(e => ['byte[]', 'ByteBuffer'].includes(e.fieldType));
-const hasAnyBlobOrImage = blobs.filter(e => e.fieldTypeBlobContent !== 'text').length != 0;
-_%>
-
-<%_ if (blobs.length > 0) { _%>
-import { <% if(hasAnyBlobOrImage) { %> openFile, <% } %>byteSize } from 'app/shared/util/data-utils';
-<%_ } _%>
-
 
 export interface I<%= entityReactName %>Props {
   getEntities: ICrudGetAllAction;

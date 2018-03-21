@@ -30,15 +30,20 @@ import { Link } from 'react-router-dom';
 import { Button<% if (haveFieldWithJavadoc) { %>, UncontrolledTooltip<% } %> } from 'reactstrap';
 // TODO import TextFormat only when fieldContainsDate
 // tslint:disable-next-line:no-unused-variable
-import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
+import {
+  Translate,
+  ICrudGetAction,
+  <%_ if (hasBlob) { _%>
+  <% if(hasAnyBlobOrImage) { %> openFile, <% } %>
+  byteSize,
+  <%_ } _%>
+  TextFormat
+} from 'react-jhipster';
 import { FaArrowLeft } from 'react-icons/lib/fa';
 
 import { getEntity } from './<%= entityFileName %>.reducer';
 // tslint:disable-next-line:no-unused-variable
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
-<%_ if (hasBlob) { _%>
-import { <% if(hasAnyBlobOrImage) { %> openFile, <% } %>byteSize } from 'app/shared/util/data-utils';
-<%_ } _%>
 
 export interface I<%= entityReactName %>DetailProps {
   getEntity: ICrudGetAction;
