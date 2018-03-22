@@ -21,7 +21,7 @@
  * generate Spring-MVC endpoint stubs at compile time from a swagger definition file
  */
 
-apply plugin: "org.detoeuf.swagger-codegen"
+apply plugin: 'org.detoeuf.swagger-codegen'
 
 swagger {
     inputSpec = file('<%= SERVER_MAIN_RES_DIR %>swagger/api.yml').absolutePath
@@ -45,7 +45,7 @@ swagger {
 sourceSets {
     main {
         java {
-            srcDir file("${project.buildDir.path}/swagger/src/main/java")
+            srcDir file('${project.buildDir.path}/swagger/src/main/java')
         }
     }
 }
