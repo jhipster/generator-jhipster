@@ -19,11 +19,12 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateModule, TranslateLoader, MissingTranslationHandler } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { JhiLanguageService } from 'ng-jhipster';
+import { JhiLanguageService, JhiMissingTranslationHandler } from 'ng-jhipster';
+import { JhiConfigService } from 'ng-jhipster/src/config.service';
 
-import { <%=angularXAppName%>SharedModule } from 'app/shared';
+import { <%=angularXAppName%>SharedModule, i18nBundlePrefix, i18nBundleSuffix } from 'app/shared';
 /* jhipster-needle-add-admin-module-import - JHipster will add admin modules imports here */
 
 import {
@@ -68,20 +69,19 @@ import {
     <%_ } _%>
 } from './';
 
-export function translatePartialLoader(http: HttpClient) {
-    // TODO: ideally this should load translations specific to lazy loaded module, however, few keys from lazy loaded modules are used in main bundle.
-    return new TranslateHttpLoader(http, 'i18n/', `.json?buildTimestamp=${process.env.BUILD_TIMESTAMP}`);
-}
-
 @NgModule({
     imports: [
         TranslateModule.forChild({
             loader: {
                 provide: TranslateLoader,
-                useFactory: translatePartialLoader,
-                deps: [HttpClient]
+                useClass: TranslateHttpLoader,
+                deps: [HttpClient, i18nBundlePrefix, i18nBundleSuffix]
             },
-            // TODO: reuse missing translation handler from ng-jhipster
+            missingTranslationHandler: {
+                provide: MissingTranslationHandler,
+                useClass: JhiMissingTranslationHandler,
+                deps: [JhiConfigService]
+            },
             isolate: true
         }),
         <%=angularXAppName%>SharedModule,
@@ -123,6 +123,8 @@ export function translatePartialLoader(http: HttpClient) {
         <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent,
     ],
     providers: [
+        { provide: i18nBundlePrefix, useValue: 'i18n/' },
+        { provide: i18nBundleSuffix, useValue: `.json?buildTimestamp=${process.env.BUILD_TIMESTAMP}` },
         <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
         AuditResolvePagingParams,
         AuditsService,
