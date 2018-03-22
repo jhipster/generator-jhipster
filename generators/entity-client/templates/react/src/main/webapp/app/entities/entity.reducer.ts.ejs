@@ -30,8 +30,8 @@ import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import { SERVER_API_URL } from 'app/config/constants';
 <%_ if (pagination === 'infinite-scroll') { _%>
-import { parse } from 'react-jhipster';
-import { uniqBy } from 'lodash';
+import { parse } from 'app/shared/util/url-utils';
+import { uniqBy, isEqual } from 'lodash';
 <%_ } _%>
 <%_ if (!(applicationType === 'gateway' && locals.microserviceName) && authenticationType !== 'uaa') { _%>
 
@@ -120,6 +120,25 @@ export default (state = initialState, action) => {
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
       <%_ if (pagination === 'infinite-scroll') { _%>
       const link = parse(action.payload.headers.link);
+      const currentData = state.entities;
+      const incomingData = action.payload.data;
+      let data = null;
+      // if only one page
+      if(link.first === link.last) {
+        data = action.payload.data;
+      } else {
+        if (currentData.length === incomingData.length) {
+          // if removing element from first page
+          if(link.prev === undefined) {
+            data = incomingData;
+            // if scrolling to bottom
+          } else if(!isEqual(currentData, incomingData)) {
+            data = uniqBy([...currentData, ...incomingData], 'id');
+          }
+        } else {
+          data = uniqBy([...currentData, ...incomingData], 'id');
+        }
+      }
       <%_ } _%>
       return {
         ...state,
@@ -131,7 +150,7 @@ export default (state = initialState, action) => {
         totalItems: action.payload.headers['x-total-count'],
         <%_ } _%>
         <%_ if (pagination === 'infinite-scroll') { _%>
-        entities: uniqBy([...state.entities, ...action.payload.data], 'id')
+        entities: data
         <%_ } else { _%>
         entities: action.payload.data          
         <%_ } _%>

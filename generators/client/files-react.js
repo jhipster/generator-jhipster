@@ -290,6 +290,7 @@ const files = {
                 // util
                 'shared/util/date-utils.ts',
                 'shared/util/pagination.constants.ts',
+                'shared/util/url-utils.ts',
                 // components
                 // model
                 'shared/model/user.model.ts'
