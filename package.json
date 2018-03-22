@@ -58,7 +58,7 @@
   },
   "peerDependencies": {},
   "engines": {
-    "node": ">=6.9.0",
-    "npm": ">=2.14.2"
+    "node": ">=8.9.0",
+    "npm": ">=5.5.1"
   }
 }
