@@ -20,7 +20,7 @@
     "Webpack",
     "Docker"
   ],
-  "homepage": "http://www.jhipster.tech/",
+  "homepage": "https://www.jhipster.tech/",
   "bugs": "https://github.com/jhipster/generator-jhipster/issues",
   "author": {
     "name": "Julien Dubois",
