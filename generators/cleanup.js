@@ -121,5 +121,6 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         generator.removeFile(`${mainResourceDir}/mails/passwordResetEmail.html`);
         generator.removeFile(`${mainResourceDir}/mails/socialRegistrationValidationEmail.html`);
         generator.removeFile(`${testResourceDir}/mail/testEmail.html`);
+        generator.removeFile(`gradle/mapstruct.gradle`);
     }
 }

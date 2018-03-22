@@ -158,7 +158,6 @@ apply from: 'gradle/sonar.gradle'
 <%_ if (databaseType === 'sql') { _%>
 apply from: 'gradle/liquibase.gradle'
 <%_ } _%>
-apply from: 'gradle/mapstruct.gradle'
 <%_ if (enableSwaggerCodegen) { _%>
 apply from: 'gradle/swagger.gradle'
 <%_ } _%>
@@ -393,7 +392,8 @@ dependencies {
     compile "com.microsoft.sqlserver:mssql-jdbc"
     compile "com.github.sabomichal:liquibase-mssql"
     <%_ } _%>
-    annotationProcessor "org.mapstruct:mapstruct-jdk8:${mapstruct_version}"
+    compile "org.mapstruct:mapstruct-jdk8:${mapstruct_version}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
     <%_ if (databaseType === 'sql') { _%>
     annotationProcessor "org.hibernate:hibernate-jpamodelgen"
     <%_ } _%>
@@ -437,9 +437,6 @@ dependencies {
     <%_ if (messageBroker === 'kafka') { _%>
     testCompile "org.springframework.cloud:spring-cloud-stream-test-support"
     <%_ } _%>
-    optional ("org.springframework.boot:spring-boot-configuration-processor") {
-        exclude group: 'com.vaadin.external.google', module: 'android-json'
-    }
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 

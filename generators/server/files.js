@@ -128,7 +128,6 @@ function writeFiles() {
                 this.template('gradle/docker.gradle.ejs', 'gradle/docker.gradle');
                 this.template('gradle/profile_dev.gradle.ejs', 'gradle/profile_dev.gradle', this, { interpolate: INTERPOLATE_REGEX });
                 this.template('gradle/profile_prod.gradle.ejs', 'gradle/profile_prod.gradle', this, { interpolate: INTERPOLATE_REGEX });
-                this.template('gradle/mapstruct.gradle.ejs', 'gradle/mapstruct.gradle', this, { interpolate: INTERPOLATE_REGEX });
                 this.template('gradle/graphite.gradle.ejs', 'gradle/graphite.gradle');
                 this.template('gradle/prometheus.gradle.ejs', 'gradle/prometheus.gradle');
                 this.template('gradle/zipkin.gradle.ejs', 'gradle/zipkin.gradle');
