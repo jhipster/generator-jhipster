@@ -1083,6 +1083,6 @@ module.exports = class extends Generator {
      * @param {string} value
      */
     upperFirst(value) {
-        return _.capitalize(value);
+        return _.upperFirst(value);
     }
 };
