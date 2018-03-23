@@ -41,7 +41,7 @@ export const ACTION_TYPES = {
   <%_ if (searchEngine === 'elasticsearch') { _%>
   SEARCH_<%= entityActionNamePlural %>: '<%= entityInstance %>/SEARCH_<%= entityActionNamePlural %>',
   <%_ } _%>
-  FETCH_<%= entityActionNamePlural %>: '<%= entityInstance %>/FETCH_<%= entityActionNamePlural %>',
+  FETCH_ALL_<%= entityActionNamePlural %>: '<%= entityInstance %>/FETCH_ALL_<%= entityActionNamePlural %>',
   FETCH_<%= entityActionName %>:  '<%= entityInstance %>/FETCH_<%= entityActionName %>',
   CREATE_<%= entityActionName %>: '<%= entityInstance %>/CREATE_<%= entityActionName %>',
   UPDATE_<%= entityActionName %>: '<%= entityInstance %>/UPDATE_<%= entityActionName %>',
@@ -54,7 +54,7 @@ const initialState = {
   entities: [],
   entity: {},
   updating: false,
-  <%_ if (pagination !== 'no') { _%> 
+  <%_ if (pagination !== 'no') { _%>
   totalItems: 0,
   <%_ } _%>
   updateSuccess: false
@@ -66,7 +66,7 @@ export default (state = initialState, action) => {
     <%_ if (searchEngine === 'elasticsearch') { _%>
     case REQUEST(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
     <%_ } _%>
-    case REQUEST(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
+    case REQUEST(ACTION_TYPES.FETCH_ALL_<%= entityActionNamePlural %>):
     case REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>):
       return {
         ...state,
@@ -86,7 +86,7 @@ export default (state = initialState, action) => {
     <%_ if (searchEngine === 'elasticsearch') { _%>
     case FAILURE(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
     <%_ } _%>
-    case FAILURE(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
+    case FAILURE(ACTION_TYPES.FETCH_ALL_<%= entityActionNamePlural %>):
     case FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>):
     case FAILURE(ACTION_TYPES.CREATE_<%= entityActionName %>):
     case FAILURE(ACTION_TYPES.UPDATE_<%= entityActionName %>):
@@ -106,7 +106,7 @@ export default (state = initialState, action) => {
         entities: action.payload.data
     };
     <%_ } _%>
-    case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
+    case SUCCESS(ACTION_TYPES.FETCH_ALL_<%= entityActionNamePlural %>):
       return {
         ...state,
         loading: false,
@@ -160,13 +160,13 @@ export const getEntities: ICrudGetAllAction = (page, size, sort) =>
 {
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
   return {
-    type: ACTION_TYPES.FETCH_<%= entityActionNamePlural %>,
+    type: ACTION_TYPES.FETCH_ALL_<%= entityActionNamePlural %>,
     payload: axios.get(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`)
   }
 }
 <%_ } else { _%>
 ({
-  type: ACTION_TYPES.FETCH_<%= entityActionNamePlural %>,
+  type: ACTION_TYPES.FETCH_ALL_<%= entityActionNamePlural %>,
   payload: axios.get(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
 });
 <%_ } _%>
