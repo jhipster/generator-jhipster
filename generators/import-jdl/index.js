@@ -17,9 +17,11 @@
  * limitations under the License.
  */
 const shelljs = require('shelljs');
+const path = require('path');
 const chalk = require('chalk');
 const jhiCore = require('jhipster-core');
 const BaseGenerator = require('../generator-base');
+const packagejs = require('../../package.json');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -42,7 +44,7 @@ module.exports = class extends BaseGenerator {
 
         // This adds support for a `--skip-ui-grouping` flag
         this.option('skip-ui-grouping', {
-            desc: 'Disables the UI grouping behaviour for entity client side code',
+            desc: 'Disable the UI grouping behaviour for entity client side code',
             type: Boolean,
             defaults: false
         });
@@ -55,7 +57,7 @@ module.exports = class extends BaseGenerator {
                 if (this.jdlFiles) {
                     this.jdlFiles.forEach((key) => {
                         if (!shelljs.test('-f', key)) {
-                            this.env.error(chalk.red(`\nCould not find ${key}, make sure the path is correct!\n`));
+                            this.env.error(chalk.red(`\nCould not find ${key}, make sure the path is correct.\n`));
                         }
                     });
                 }
@@ -90,34 +92,36 @@ module.exports = class extends BaseGenerator {
             },
 
             parseJDL() {
-                this.log('The jdl is being parsed.');
+                this.log('The JDL is being parsed.');
                 try {
                     const parsed = jhiCore.parseFromFiles(this.jdlFiles);
-                    const jdlObject = jhiCore.convertToJDLFromConfigurationObject({
+                    this.jdlObject = jhiCore.convertToJDLFromConfigurationObject({
                         document: parsed,
                         databaseType: this.prodDatabaseType,
                         applicationType: this.applicationType,
                         applicationName: this.baseName
                     });
-                    if (Object.keys(jdlObject.applications).length !== 0) {
+                    if (shouldGenerateApplications(this.jdlObject)) {
                         this.log('Writing application configuration files.');
+                        this.jdlObject.applications =
+                            setGeneratorVersionInJDLApplications(this.jdlObject.applications, packagejs.version);
                         jhiCore.exportApplications({
-                            applications: jdlObject.applications,
-                            paths: getApplicationPaths(jdlObject.applications)
+                            applications: this.jdlObject.applications,
+                            paths: getApplicationPaths(this.jdlObject.applications)
                         });
                     }
                     const entities = jhiCore.convertToJHipsterJSON({
-                        jdlObject,
+                        jdlObject: this.jdlObject,
                         databaseType: this.prodDatabaseType,
                         applicationType: this.applicationType
                     });
                     this.log('Writing entity JSON files.');
-                    if (Object.keys(jdlObject.applications).length !== 0) {
+                    if (shouldGenerateApplications(this.jdlObject)) {
                         this.changedEntities = jhiCore.exportEntitiesInApplications({
                             entities,
                             forceNoFiltering: this.options.force,
-                            applications: jdlObject.applications
-                        });
+                            applications: this.jdlObject.applications
+                        }).toArray();
                     } else {
                         this.changedEntities = jhiCore.exportEntities({
                             entities,
@@ -130,16 +134,12 @@ module.exports = class extends BaseGenerator {
                     }
 
                     if (this.changedEntities.length > 0) {
-                        this.log(`Updated entities are: ${chalk.yellow(this.changedEntities)}`);
+                        this.log(`Updated entities are: ${chalk.yellow(this.changedEntities)}.`);
                     } else {
-                        this.log(chalk.yellow('No change in entity configurations. No entities were updated'));
+                        this.log(chalk.yellow('No change in entity configurations. No entities were updated.'));
                     }
-                } catch (e) {
-                    this.debug('Error:', e);
-                    if (e && e.message) {
-                        this.log(chalk.red(`${e.name || ''}: ${e.message}`));
-                    }
-                    this.error('\nError while parsing entities from JDL\n');
+                } catch (error) {
+                    this.error(`Error while parsing applications and entities from the JDL ${error}.`);
                 }
             },
 
@@ -151,39 +151,49 @@ module.exports = class extends BaseGenerator {
                     this.log('Entity JSON files created. Entity generation skipped.');
                     return;
                 }
-                this.log('Generating entities.');
                 try {
-                    this.getExistingEntities().forEach((entity) => {
-                        if (this.changedEntities.includes(entity.name)) {
-                            this.composeWith(require.resolve('../entity'), {
-                                force: this.options.force,
-                                debug: this.options.debug,
-                                regenerate: true,
-                                'skip-install': true,
-                                'skip-client': entity.definition.skipClient,
-                                'skip-server': entity.definition.skipServer,
-                                'no-fluent-methods': entity.definition.noFluentMethod,
-                                'skip-user-management': entity.definition.skipUserManagement,
-                                'skip-ui-grouping': this.options['skip-ui-grouping'],
-                                arguments: [entity.name],
-                            });
-                        }
-                    });
+                    if (shouldGenerateApplications(this.jdlObject)) {
+                        this.log('Generating applications.');
+                        Object.keys(this.jdlObject.applications).forEach((application) => {
+                            this.log(`Generating application ${application.baseName}.`);
+                            generateApplicationFiles(this, this.jdlObject.applications[application]);
+                        });
+                    }
+                    this.log('Generating entities.');
+                    this.getExistingEntities()
+                        .filter(entity => this.changedEntities.includes(entity.name))
+                        .forEach((entity) => {
+                            if (shouldGenerateApplications(this.jdlObject) && entity.applications !== '*') {
+                                entity.applications.forEach((applicationName) => {
+                                    const applicationPath = path.join(
+                                        shelljs.pwd().stdout,
+                                        this.jdlObject.applications[applicationName].config.path || ''
+                                    );
+                                    generateEntityFilesInPath(this, entity, applicationPath);
+                                });
+                            } else {
+                                generateEntityFiles(this, entity);
+                            }
+                        });
                 } catch (error) {
-                    this.debug('Error:', error);
-                    this.error(`Error while generating entities from parsed JDL\n${error}`);
+                    this.error(`While generating applications and entities from the parsed JDL\n${error}`);
                 }
             }
         };
     }
 
     end() {
-        if (!this.options['skip-install'] && !this.skipClient && !this.options['json-only']) {
+        if (!this.options['skip-install'] && !this.skipClient && !this.options['json-only']
+                && Object.keys(this.jdlObject.applications).length === 0) {
             this.debug('Building client');
             this.rebuildClient();
         }
     }
 };
+
+function shouldGenerateApplications(jdlObject) {
+    return Object.keys(jdlObject.applications).length !== 0;
+}
 
 function getApplicationPaths(jdlApplications) {
     const paths = {};
@@ -191,4 +201,50 @@ function getApplicationPaths(jdlApplications) {
         paths[baseName] = jdlApplications[baseName].config.path;
     });
     return paths;
+}
+
+function setGeneratorVersionInJDLApplications(jdlApplications, version) {
+    Object.keys(jdlApplications).forEach((applicationName) => {
+        jdlApplications[applicationName].config.jhipsterVersion = version;
+    });
+    return jdlApplications;
+}
+
+function generateApplicationFiles(generator, application) {
+    const initialWorkingDir = shelljs.pwd();
+    shelljs.cd(path.join(shelljs.pwd().stdout, application.path || ''));
+    callSubGenerator(generator, '..', 'app', {
+        force: generator.options.force,
+        debug: generator.options.debug,
+        'skip-install': generator.options['skip-install'],
+        'skip-user-management': application.config.skipUserManagement,
+        'jhi-prefix': application.config.jhiPrefix
+    });
+    shelljs.cd(initialWorkingDir);
+}
+
+function generateEntityFilesInPath(generator, entity, folderPath) {
+    const initialWorkingDir = shelljs.pwd();
+    shelljs.cd(folderPath);
+    generateEntityFiles(generator, entity);
+    shelljs.cd(initialWorkingDir);
+}
+
+function generateEntityFiles(generator, entity) {
+    callSubGenerator(generator, '..', 'entity', {
+        force: generator.options.force,
+        debug: generator.options.debug,
+        regenerate: true,
+        'skip-install': true,
+        'skip-client': entity.definition.skipClient,
+        'skip-server': entity.definition.skipServer,
+        'no-fluent-methods': entity.definition.noFluentMethod,
+        'skip-user-management': entity.definition.skipUserManagement,
+        'skip-ui-grouping': generator.options['skip-ui-grouping'],
+        arguments: [entity.name]
+    });
+}
+
+function callSubGenerator(currentGenerator, subgenPath, name, args) {
+    currentGenerator.composeWith(require.resolve(path.join(subgenPath, name)), args);
 }
