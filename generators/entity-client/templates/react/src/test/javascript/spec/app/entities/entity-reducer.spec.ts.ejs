@@ -80,7 +80,7 @@ describe('Entities reducer tests', () => {
     it('should set state to loading', () => {
       testMultipleTypes(
         [
-          REQUEST(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>),
+          REQUEST(ACTION_TYPES.FETCH_ALL_<%= entityActionNamePlural %>),
           REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>)
         ],
         {},
@@ -117,7 +117,7 @@ describe('Entities reducer tests', () => {
     it('should set a message in errorMessage', () => {
       testMultipleTypes(
         [
-          FAILURE(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>),
+          FAILURE(ACTION_TYPES.FETCH_ALL_<%= entityActionNamePlural %>),
           FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>),
           FAILURE(ACTION_TYPES.CREATE_<%= entityActionName %>),
           FAILURE(ACTION_TYPES.UPDATE_<%= entityActionName %>),
@@ -139,7 +139,7 @@ describe('Entities reducer tests', () => {
     it('should fetch all entities', () => {
       const payload = { data: { 1: 'fake', 2: 'feka' } };
       expect(reducer(undefined, {
-        type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>),
+        type: SUCCESS(ACTION_TYPES.FETCH_ALL_<%= entityActionNamePlural %>),
         payload
       })).to.eql({
       ...initialState,
@@ -188,13 +188,13 @@ describe('Entities reducer tests', () => {
       axios.delete = sinon.stub().returns(Promise.resolve(resolvedObject));
     });
 
-    it('dispatches ACTION_TYPES.FETCH_<%= entityActionNamePlural %> actions', async () => {
+    it('dispatches ACTION_TYPES.FETCH_ALL_<%= entityActionNamePlural %> actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>)
+          type: REQUEST(ACTION_TYPES.FETCH_ALL_<%= entityActionNamePlural %>)
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>),
+          type: SUCCESS(ACTION_TYPES.FETCH_ALL_<%= entityActionNamePlural %>),
           payload: resolvedObject
         }
       ];
@@ -224,10 +224,10 @@ describe('Entities reducer tests', () => {
           payload: resolvedObject
         },
         {
-          type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>)
+          type: REQUEST(ACTION_TYPES.FETCH_ALL_<%= entityActionNamePlural %>)
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>),
+          type: SUCCESS(ACTION_TYPES.FETCH_ALL_<%= entityActionNamePlural %>),
           payload: resolvedObject
         }
       ];
@@ -244,10 +244,10 @@ describe('Entities reducer tests', () => {
           payload: resolvedObject
         },
         {
-          type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>)
+          type: REQUEST(ACTION_TYPES.FETCH_ALL_<%= entityActionNamePlural %>)
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>),
+          type: SUCCESS(ACTION_TYPES.FETCH_ALL_<%= entityActionNamePlural %>),
           payload: resolvedObject
         }
       ];
@@ -264,10 +264,10 @@ describe('Entities reducer tests', () => {
           payload: resolvedObject
         },
         {
-          type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>)
+          type: REQUEST(ACTION_TYPES.FETCH_ALL_<%= entityActionNamePlural %>)
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>),
+          type: SUCCESS(ACTION_TYPES.FETCH_ALL_<%= entityActionNamePlural %>),
           payload: resolvedObject
         }
       ];
