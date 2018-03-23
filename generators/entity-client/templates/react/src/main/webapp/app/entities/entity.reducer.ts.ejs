@@ -31,7 +31,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { SERVER_API_URL } from 'app/config/constants';
 <%_ if (pagination === 'infinite-scroll') { _%>
 import { parse } from 'app/shared/util/url-utils';
-import { uniqBy, isEqual } from 'lodash';
+import { isEqual } from 'lodash';
 <%_ } _%>
 <%_ if (!(applicationType === 'gateway' && locals.microserviceName) && authenticationType !== 'uaa') { _%>
 
@@ -123,20 +123,17 @@ export default (state = initialState, action) => {
       const currentData = state.entities;
       const incomingData = action.payload.data;
       let data = null;
-      // if only one page
-      if(link.first === link.last) {
-        data = action.payload.data;
+      if (link.first === link.last) {
+        data = incomingData;
       } else {
         if (currentData.length === incomingData.length) {
-          // if removing element from first page
-          if(link.prev === undefined) {
+          if (link.prev === undefined) {
             data = incomingData;
-            // if scrolling to bottom
-          } else if(!isEqual(currentData, incomingData)) {
-            data = uniqBy([...currentData, ...incomingData], 'id');
+          } else if (!isEqual(currentData, incomingData)) {
+            data = [...currentData, ...incomingData];
           }
         } else {
-          data = uniqBy([...currentData, ...incomingData], 'id');
+          data = [...currentData, ...incomingData];
         }
       }
       <%_ } _%>
