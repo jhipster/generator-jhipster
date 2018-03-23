@@ -25,6 +25,7 @@ import { JhiLanguageService, JhiMissingTranslationHandler } from 'ng-jhipster';
 import { JhiConfigService } from 'ng-jhipster/src/config.service';
 
 import { <%=angularXAppName%>SharedModule, i18nBundlePrefix, i18nBundleSuffix } from 'app/shared';
+<% if (enableTranslation) { %>import { JhiLanguageHelper } from 'app/core';<% } %>
 /* jhipster-needle-add-admin-module-import - JHipster will add admin modules imports here */
 
 import {
@@ -145,5 +146,7 @@ import {
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class <%=angularXAppName%>AdminModule {
-    constructor(private languageService: JhiLanguageService) {}
+    constructor(private languageService: JhiLanguageService<% if (enableTranslation) { %>, private languageHelper: JhiLanguageHelper<% } %>) {
+        <% if (enableTranslation) { %> this.languageHelper.language.subscribe((languageKey: string) => this.languageService.changeLanguage(languageKey));<% } %>
+    }
 }
