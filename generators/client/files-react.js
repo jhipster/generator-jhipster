@@ -290,6 +290,7 @@ const files = {
                 // util
                 'shared/util/date-utils.ts',
                 'shared/util/pagination.constants.ts',
+                'shared/util/entity-utils.ts',
                 // components
                 // model
                 'shared/model/user.model.ts'
@@ -383,6 +384,7 @@ const files = {
                 'spec/app/config/notification-middleware.spec.ts',
                 'spec/app/shared/layout/header.spec.tsx',
                 'spec/app/shared/reducers/authentication.spec.ts',
+                'spec/app/shared/util/entity-utils.spec.ts',
                 'spec/app/modules/account/register/register.spec.tsx',
                 'spec/app/modules/account/register/register.reducer.spec.ts',
                 'spec/app/modules/account/activate/activate.reducer.spec.ts',

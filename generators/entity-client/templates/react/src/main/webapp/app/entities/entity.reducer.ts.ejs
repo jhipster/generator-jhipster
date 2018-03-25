@@ -27,6 +27,7 @@ _%>
 import axios from 'axios';
 import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
 
+import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import { SERVER_API_URL } from 'app/config/constants';
 <%_ if (!(applicationType === 'gateway' && locals.microserviceName) && authenticationType !== 'uaa') { _%>
@@ -54,7 +55,7 @@ const initialState = {
   entities: [],
   entity: {},
   updating: false,
-  <%_ if (pagination !== 'no') { _%> 
+  <%_ if (pagination !== 'no') { _%>
   totalItems: 0,
   <%_ } _%>
   updateSuccess: false
@@ -182,7 +183,7 @@ export const getEntity: ICrudGetAction = id => {
 export const createEntity: ICrudPutAction = entity => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_<%= entityActionName %>,
-    payload: axios.post(apiUrl, entity)
+    payload: axios.post(apiUrl, cleanEntity(entity))
   });
   dispatch(getEntities());
   return result;
@@ -191,7 +192,7 @@ export const createEntity: ICrudPutAction = entity => async dispatch => {
 export const updateEntity: ICrudPutAction = entity => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_<%= entityActionName %>,
-    payload: axios.put(apiUrl, entity)
+    payload: axios.put(apiUrl, cleanEntity(entity))
   });
   dispatch(getEntities());
   return result;
