@@ -139,7 +139,13 @@ module.exports = class extends BaseGenerator {
                         this.log(chalk.yellow('No change in entity configurations. No entities were updated.'));
                     }
                 } catch (error) {
-                    this.error(`Error while parsing applications and entities from the JDL ${error}.`);
+                    this.debug('Error:', error);
+                    if (error) {
+                        const errorName = `${error.name}:` || '';
+                        const errorMessage = error.message || '';
+                        this.log(chalk.red(`${errorName} ${errorMessage}`));
+                    }
+                    this.error(`Error while parsing applications and entities from the JDL ${error}`);
                 }
             },
 
@@ -184,7 +190,7 @@ module.exports = class extends BaseGenerator {
 
     end() {
         if (!this.options['skip-install'] && !this.skipClient && !this.options['json-only']
-                && Object.keys(this.jdlObject.applications).length === 0) {
+                && !shouldGenerateApplications(this.jdlObject)) {
             this.debug('Building client');
             this.rebuildClient();
         }
