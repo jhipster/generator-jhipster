@@ -408,7 +408,7 @@ _%>
               const fieldBlobType = fields[idx].fieldTypeBlobContent;
               if (fieldBlobType !== 'text') {
                 const isAnImage = fieldBlobType === 'image';
-                const capitalizedFirstLetter =  fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
+                const capitalizedFirstLetter =  upperFirst(fieldName);
 
             _%>
 
@@ -666,7 +666,7 @@ const mapDispatchToProps = {
   updateEntity,
   <%_
     blobs.forEach(b => {
-      const capitalizedFirstLetter =  b.fieldName.charAt(0).toUpperCase() + b.fieldName.slice(1);
+      const capitalizedFirstLetter =  upperFirst(fieldName);
   _%>
   set<%= capitalizedFirstLetter %>,
   <%_ }); _%>
