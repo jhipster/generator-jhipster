@@ -24,15 +24,14 @@
     let entityActionName = entityInstance.toUpperCase();
     let entityActionNamePlural = entityInstancePlural.toUpperCase();
 _%>
+<%_ if (pagination === 'infinite-scroll') { _%>
+  import { isEqual } from 'lodash';
+<%_ } _%>
 import axios from 'axios';
-import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
+import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction<% if (pagination === 'infinite-scroll') { %>, parse<%_ } _%> } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import { SERVER_API_URL } from 'app/config/constants';
-<%_ if (pagination === 'infinite-scroll') { _%>
-import { parse } from 'app/shared/util/url-utils';
-import { isEqual } from 'lodash';
-<%_ } _%>
 <%_ if (!(applicationType === 'gateway' && locals.microserviceName) && authenticationType !== 'uaa') { _%>
 
 <%_ } _%>
