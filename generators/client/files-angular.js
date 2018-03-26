@@ -383,7 +383,8 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 'core/language/language.constants.ts',
-                'core/language/language.helper.ts'
+                'core/language/language.helper.ts',
+                'shared/constants/i18n.constants.ts'
             ]
         }
     ],
@@ -398,7 +399,6 @@ const files = {
                 'shared/constants/error.constants.ts',
                 'shared/constants/input.constants.ts',
                 'shared/constants/pagination.constants.ts',
-                'shared/constants/i18n.constants.ts',
                 // models
                 'shared/util/request-util.ts',
                 // alert service code
