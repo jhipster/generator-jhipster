@@ -1077,6 +1077,32 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Add a remote Maven Repository to the Maven build.
+     *
+     * @param {string} id - id of the repository
+     * @param {string} url - url of the repository
+     */
+    addMavenRepository(id, url) {
+        const fullPath = 'pom.xml';
+        try {
+            const repository = `${'<repository>\n' +
+                '            <id>'}${id}</id>\n` +
+                `            <url>${url}</url>\n` +
+                '        </repository>';
+            jhipsterUtils.rewriteFile({
+                file: fullPath,
+                needle: 'jhipster-needle-maven-repository',
+                splicable: [
+                    repository
+                ]
+            }, this);
+        } catch (e) {
+            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}maven repository (id: ${id}, url:${url})${chalk.yellow(' not added.\n')}`);
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
      * Add a new Maven property.
      *
      * @param {string} name - property name
