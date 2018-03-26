@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2018 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see http://www.jhipster.tech/
+ This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +26,7 @@ buildscript {
         maven { url "https://plugins.gradle.org/m2/" }
         // TODO To remove after final Spring Boot 2 release
         maven { url "https://repo.spring.io/milestone" }
-        maven { url "https://dl.bintray.com/jhipster/maven" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
@@ -158,7 +158,6 @@ apply from: 'gradle/sonar.gradle'
 <%_ if (databaseType === 'sql') { _%>
 apply from: 'gradle/liquibase.gradle'
 <%_ } _%>
-apply from: 'gradle/mapstruct.gradle'
 <%_ if (enableSwaggerCodegen) { _%>
 apply from: 'gradle/swagger.gradle'
 <%_ } _%>
@@ -198,7 +197,7 @@ repositories {
     <%_ } _%>
     // TODO To remove after final Spring Boot 2 release
     maven { url "https://repo.spring.io/milestone" }
-    maven { url "https://dl.bintray.com/jhipster/maven" }
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     //jhipster-needle-gradle-repositories - JHipster will add additional repositories
 }
 
@@ -208,7 +207,8 @@ dependencies {
     <%_ if (cacheProvider !== 'no') { _%>
     compile "org.springframework.boot:spring-boot-starter-cache"
     <%_ } _%>
-    compile "io.github.jhipster:jhipster"
+    // TODO remove the "changing: true" when the JHipster server library is released
+    compile group: "io.github.jhipster", name: "jhipster", version: jhipster_dependencies_version, changing: true
     compile "io.dropwizard.metrics:metrics-core"
     <%_ if (['ehcache', 'infinispan'].includes(cacheProvider)) { _%>
     compile "io.dropwizard.metrics:metrics-jcache"
@@ -393,6 +393,13 @@ dependencies {
     compile "com.github.sabomichal:liquibase-mssql"
     <%_ } _%>
     compile "org.mapstruct:mapstruct-jdk8:${mapstruct_version}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
+    <%_ if (databaseType === 'sql') { _%>
+    annotationProcessor "org.hibernate:hibernate-jpamodelgen"
+    <%_ } _%>
+    annotationProcessor ("org.springframework.boot:spring-boot-configuration-processor") {
+        exclude group: 'com.vaadin.external.google', module: 'android-json'
+    }
     testCompile "com.jayway.jsonpath:json-path"
     <%_ if (databaseType === 'cassandra') { _%>
     testCompile ("org.cassandraunit:cassandra-unit-spring") {
@@ -430,9 +437,6 @@ dependencies {
     <%_ if (messageBroker === 'kafka') { _%>
     testCompile "org.springframework.cloud:spring-cloud-stream-test-support"
     <%_ } _%>
-    optional ("org.springframework.boot:spring-boot-configuration-processor") {
-        exclude group: 'com.vaadin.external.google', module: 'android-json'
-    }
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 

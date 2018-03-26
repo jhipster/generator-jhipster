@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -128,7 +128,6 @@ function writeFiles() {
                 this.template('gradle/docker.gradle.ejs', 'gradle/docker.gradle');
                 this.template('gradle/profile_dev.gradle.ejs', 'gradle/profile_dev.gradle', this, { interpolate: INTERPOLATE_REGEX });
                 this.template('gradle/profile_prod.gradle.ejs', 'gradle/profile_prod.gradle', this, { interpolate: INTERPOLATE_REGEX });
-                this.template('gradle/mapstruct.gradle.ejs', 'gradle/mapstruct.gradle', this, { interpolate: INTERPOLATE_REGEX });
                 this.template('gradle/graphite.gradle.ejs', 'gradle/graphite.gradle');
                 this.template('gradle/prometheus.gradle.ejs', 'gradle/prometheus.gradle');
                 this.template('gradle/zipkin.gradle.ejs', 'gradle/zipkin.gradle');
