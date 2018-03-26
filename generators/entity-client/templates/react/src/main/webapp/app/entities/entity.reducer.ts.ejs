@@ -156,7 +156,7 @@ export default (state = initialState, action) => {
           entity: {
             ...state.entity,
             <%= fieldName %>: action.payload.data,
-            <%= fieldName %>contentType: action.payload.contentType
+            <%= fieldName %>ContentType: action.payload.contentType
           }
         };
       <%_ }); _%>

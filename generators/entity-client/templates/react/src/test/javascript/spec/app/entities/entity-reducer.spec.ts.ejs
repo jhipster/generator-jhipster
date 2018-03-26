@@ -19,6 +19,8 @@
 <%_
     let entityActionName = entityInstance.toUpperCase();
     let entityActionNamePlural = entityInstancePlural.toUpperCase();
+    const blobs = fields.filter(e => ['byte[]', 'ByteBuffer'].includes(e.fieldType));
+    const hasBlob = blobs.length > 0;
 _%>
 import axios from 'axios';
 import { expect } from 'chai';
@@ -274,4 +276,27 @@ describe('Entities reducer tests', () => {
       await store.dispatch(deleteEntity(42666)).then(() => expect(store.getActions()).to.eql(expectedActions));
     });
   });
+
+  <%_ if (hasBlob) { _%>
+  describe('Blobs', () => {
+    <%_
+    blobs.forEach(b => {
+      const nameToUpper = b.fieldName.toUpperCase();
+    _%>
+    it('should properly set <%= b.fieldName %> in state.', () => {
+      const payload = { data: 'fake data', contentType: 'fake dataType' };
+      expect(reducer(undefined, {
+        type: ACTION_TYPES.SET_<%= nameToUpper %>,
+        payload
+      })).to.eql({
+        ...initialState,
+        entity: {
+          <%= b.fieldName %>: payload.data,
+          <%= b.fieldName %>ContentType: payload.contentType
+        }
+      });
+    });
+    <%_ }); _%>
+  });
+  <%_ } _%>
 });
