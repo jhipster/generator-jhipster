@@ -238,11 +238,11 @@ export const deleteEntity: ICrudDeleteAction = id => async dispatch => {
 <%_
   blobs.forEach(b => {
     const fieldName = b.fieldName;
-    const capitalizedFirstLetter =  fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
+    const upperFirstName =  upperFirst(fieldName);
     const upperFieldName = b.fieldName.toUpperCase();
 _%>
-  export const set<%= capitalizedFirstLetter %> = <%= fieldName %> => ({
-    type: ACTION_TYPES.SET_<%= upperFieldName%>,
+  export const set<%= upperFirstName %> = <%= fieldName %> => ({
+    type: ACTION_TYPES.SET_<%= upperFieldName %>,
     payload: <%= fieldName %>
   });
 <%_ }); _%>
