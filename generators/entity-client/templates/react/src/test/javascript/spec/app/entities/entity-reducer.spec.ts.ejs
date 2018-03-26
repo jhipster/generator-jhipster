@@ -25,7 +25,7 @@ import { expect } from 'chai';
 import reducer, {
   ACTION_TYPES, createEntity, deleteEntity, getEntities,
   getEntity, updateEntity
-} from 'app/entities/<%= entityFileName %>/<%= entityFileName %>.reducer';
+} from 'app/entities<% if (applicationType === 'gateway' && locals.microserviceName) { %>/<%= microserviceName.toLowerCase() %><% } %>/<%= entityFileName %>/<%= entityFileName %>.reducer';
 import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
 import thunk from 'redux-thunk';
