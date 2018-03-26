@@ -666,7 +666,7 @@ const mapDispatchToProps = {
   updateEntity,
   <%_
     blobs.forEach(b => {
-      const capitalizedFirstLetter =  upperFirst(fieldName);
+      const capitalizedFirstLetter =  upperFirst(b.fieldName);
   _%>
   set<%= capitalizedFirstLetter %>,
   <%_ }); _%>
