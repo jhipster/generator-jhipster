@@ -317,10 +317,25 @@ _%>
     uniqueRealtionFields.forEach(rel => {
     %> <%= rel %>,<% }) %> loading, updating } = this.props;
     const { showModal, isNew } = this.state;
-    <%_ blobs.forEach(b => {_%>
-    const <%= b.fieldName %> = <%= entityInstance %> && <%= entityInstance %>.<%= b.fieldName %>;
-    <% if (b.fieldTypeBlobContent !== 'text') { %>const <%= b.fieldName %>ContentType = <%= entityInstance %> && <%= entityInstance %>.<%= b.fieldName %>ContentType;<% } %>
-    <%_ }) _%>
+
+    <%_ for (var i = 0; i < blobs.length; i++) { _%>
+    <%_
+      const b = blobs[i];
+      if (i === 0) {
+    _%>
+      const {
+      <%_ } _%>
+      <%= b.fieldName %>
+      <%_ if (b.fieldTypeBlobContent !== 'text') { _%>
+      , <%= b.fieldName %>ContentType
+      <%_ } _%>
+      <%_ if (i+1 === blobs.length) { _%>
+      } = <%= entityInstance %>;
+      <%_ } else { _%>
+      ,
+      <%_ } _%>
+    <%_ } _%>
+
     return (
       <%_ const keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
       <Modal isOpen={showModal} modalTransition={{ timeout: 20 }} backdropTransition={{ timeout: 10 }}
@@ -419,7 +434,7 @@ _%>
                 </Translate>
               </Label>
               <br />
-              {<%= fieldName %> ? (
+              {!isNew && <%= fieldName %> ? (
                 <div>
                   <a onClick={openFile(<%= fieldName %>ContentType, <%= fieldName %>)}>
                   <%_ if (isAnImage) { _%>
