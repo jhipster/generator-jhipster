@@ -56,7 +56,7 @@ export interface I<%= entityReactName %>Props {
   <%_ if (searchEngine === 'elasticsearch') { _%>
   getSearchEntities: ICrudGetAllAction;
   <%_ } _%>
-  <%=entityInstancePlural %>: any[];
+  <%= entityInstance %>List: any[];
   <%_ if (pagination === 'pagination') { _%>
   totalItems: 0;
   location: any;
@@ -139,7 +139,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   <%_ } _%>
 
   render() {
-    const { <%=entityInstancePlural %>, match<% if (pagination !== 'no') { %>, totalItems<% } %>} = this.props;
+    const { <%= entityInstance %>List, match<% if (pagination !== 'no') { %>, totalItems<% } %>} = this.props;
     return (
       <%_ const keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
       <div>
@@ -189,7 +189,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
             </thead>
             <tbody>
               {
-                <%=entityInstancePlural %>.map((<%=entityInstance %>, i) => (
+                <%= entityInstance %>List.map((<%=entityInstance %>, i) => (
                 <tr key={`entity-${i}`}>
                   <td>
                     <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}`} color="link" size="sm">
@@ -301,7 +301,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
 }
 
 const mapStateToProps = ({ <%= entityInstance %> }) => ({
-  <%=entityInstancePlural %>: <%= entityInstance %>.entities,
+  <%= entityInstancePlural %>List: <%= entityInstance %>.entities,
   <%_ if (pagination !== 'no') { _%>
   totalItems: <%= entityInstance %>.totalItems
   <%_ } _%>
