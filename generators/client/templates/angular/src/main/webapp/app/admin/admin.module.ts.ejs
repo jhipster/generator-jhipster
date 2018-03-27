@@ -25,7 +25,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { JhiLanguageService, JhiMissingTranslationHandler } from 'ng-jhipster';
 import { JhiConfigService } from 'ng-jhipster/src/config.service';
 <%_ } _%>
-import { <%=angularXAppName%>SharedModule, <% if (enableTranslation) { %>i18nBundlePrefix, i18nBundleSuffix<% } %> } from 'app/shared';
+import { <%=angularXAppName%>SharedModule, <% if (enableTranslation) { %>i18nBundlePrefix, i18nBundleSuffix, i18nAdminModuleBundlePrefix, i18nBundleSuffixValue<% } %> } from 'app/shared';
 
 <% if (enableTranslation) { %>import { JhiLanguageHelper } from 'app/core';<% } %>
 /* jhipster-needle-add-admin-module-import - JHipster will add admin modules imports here */
@@ -129,8 +129,8 @@ import {
     ],
     providers: [
         <%_ if (enableTranslation) { _%>
-        { provide: i18nBundlePrefix, useValue: 'i18n/' },
-        { provide: i18nBundleSuffix, useValue: `.json?buildTimestamp=${process.env.BUILD_TIMESTAMP}` },
+        { provide: i18nBundlePrefix, useValue: i18nAdminModuleBundlePrefix },
+        { provide: i18nBundleSuffix, useValue: i18nBundleSuffixValue },
         <%_ } _%>
         <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
         AuditResolvePagingParams,
