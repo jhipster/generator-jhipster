@@ -47,7 +47,7 @@ const HealthModal = ({ handleClose, healthObject, showModal }) => {
             {Object.keys(data).map((key, index) => (
               <tr key={index}>
                 <td>{key}</td>
-                <td>{(healthObject.name === 'diskSpace') ? formatDiskSpaceOutput(data[key]) : data[key] }</td>
+                <td>{(healthObject.name === 'diskSpace') ? formatDiskSpaceOutput(data[key]) : JSON.stringify(data[key]) }</td>
               </tr>
             ))}
           </tbody>
