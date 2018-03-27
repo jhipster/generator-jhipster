@@ -383,8 +383,7 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 'core/language/language.constants.ts',
-                'core/language/language.helper.ts',
-                'shared/constants/i18n.constants.ts'
+                'core/language/language.helper.ts'
             ]
         }
     ],

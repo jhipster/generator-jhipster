@@ -22,7 +22,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const rxPaths = require('rxjs/_esm5/path-mapping');
 <%_ if (enableTranslation) { _%>
 const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin");
-const adminModules = 'audits|configuration|gateway|health|logs|metrics|user-management|global';
 <%_ } _%>
 
 const utils = require('./utils.js');
