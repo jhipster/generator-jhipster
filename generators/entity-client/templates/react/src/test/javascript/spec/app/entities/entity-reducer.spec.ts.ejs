@@ -18,13 +18,12 @@
 -%>
 <%_
     let entityActionName = entityInstance.toUpperCase();
-    let entityActionNamePlural = entityInstancePlural.toUpperCase();
 _%>
 import axios from 'axios';
 import { expect } from 'chai';
 import reducer, {
   ACTION_TYPES, createEntity, deleteEntity, getEntities, getEntity, updateEntity<% if (pagination === 'infinite-scroll') { %>, reset<% } %>
-} from 'app/entities/<%= entityFileName %>/<%= entityFileName %>.reducer';
+} from 'app/entities<% if (applicationType === 'gateway' && locals.microserviceName) { %>/<%= microserviceName.toLowerCase() %><% } %>/<%= entityFileName %>/<%= entityFileName %>.reducer';
 import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
 import thunk from 'redux-thunk';
@@ -90,7 +89,7 @@ describe('Entities reducer tests', () => {
     it('should set state to loading', () => {
       testMultipleTypes(
         [
-          REQUEST(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>),
+          REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
           REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>)
         ],
         {},
@@ -127,7 +126,7 @@ describe('Entities reducer tests', () => {
     it('should set a message in errorMessage', () => {
       testMultipleTypes(
         [
-          FAILURE(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>),
+          FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
           FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>),
           FAILURE(ACTION_TYPES.CREATE_<%= entityActionName %>),
           FAILURE(ACTION_TYPES.UPDATE_<%= entityActionName %>),
@@ -152,7 +151,7 @@ describe('Entities reducer tests', () => {
       const link = parse(payload.headers.link);
       <%_ } _%>
       expect(reducer(undefined, {
-        type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>),
+        type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
         payload
       })).to.eql({
       ...initialState,
@@ -207,13 +206,13 @@ describe('Entities reducer tests', () => {
       axios.delete = sinon.stub().returns(Promise.resolve(resolvedObject));
     });
 
-    it('dispatches ACTION_TYPES.FETCH_<%= entityActionNamePlural %> actions', async () => {
+    it('dispatches ACTION_TYPES.FETCH_<%= entityActionName %>_LIST actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>)
+          type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST)
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>),
+          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
           payload: resolvedObject
         }
       ];
@@ -243,10 +242,10 @@ describe('Entities reducer tests', () => {
           payload: resolvedObject
         },
         {
-          type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>)
+          type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST)
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>),
+          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
           payload: resolvedObject
         }
       ];
@@ -263,10 +262,10 @@ describe('Entities reducer tests', () => {
           payload: resolvedObject
         },
         {
-          type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>)
+          type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST)
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>),
+          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
           payload: resolvedObject
         }
       ];
@@ -283,10 +282,10 @@ describe('Entities reducer tests', () => {
           payload: resolvedObject
         },
         {
-          type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>)
+          type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST)
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>),
+          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
           payload: resolvedObject
         }
       ];
