@@ -58,7 +58,7 @@ module.exports = class extends BaseGenerator {
 
         // This adds support for a `--skip-check-length-of-identifier` flag
         this.option('skip-check-length-of-identifier', {
-            desc: 'Skip check the length of identifier',
+            desc: 'Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata',
             type: Boolean,
             defaults: false
         });
