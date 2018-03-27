@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2018 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see http://www.jhipster.tech/
+ This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -81,9 +81,6 @@ import java.util.UUID;
 
 <%_ if (databaseType === 'couchbase') { _%>
 import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
-<%_ } _%>
-<%_ if (enableSocialSignIn) { _%>
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 <%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;

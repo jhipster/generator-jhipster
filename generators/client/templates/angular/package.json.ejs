@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2018 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see http://www.jhipster.tech/
+ This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -153,6 +153,10 @@
     "ngc": "ngc -p tsconfig-aot.json",
     "cleanup": "rimraf <%= BUILD_DIR %>{aot,www}",
     "clean-www": "rimraf <%= BUILD_DIR %>/www/app/{src,<%= BUILD_DIR %>}",
+    <%_ if (protractorTests) { _%>
+    "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
+    "postinstall": "webdriver-manager update",
+    <%_ } _%>
     "start": "<%= clientPackageManager %> run webpack:dev",
     "serve": "<%= clientPackageManager %> run start",
     "build": "<%= clientPackageManager %> run webpack:prod",
@@ -165,12 +169,6 @@
     "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:prod:main && <%= clientPackageManager %> run clean-www",
     "webpack:test": "<%= clientPackageManager %> run test",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
-    <%_ if (protractorTests) { _%>
-    "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js",
-    "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
-    "postinstall": "webdriver-manager update"
-    <%_ } else { _%>
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"
-    <%_ } _%>
   }
 }

@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2018 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see http://www.jhipster.tech/
+ This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -126,7 +126,7 @@ export const displayAuthError = message => ({ type: ACTION_TYPES.ERROR_MESSAGE, 
 
 export const getSession = () => dispatch => dispatch({
   type: ACTION_TYPES.GET_SESSION,
-  payload: axios.get('/api/account')
+  payload: axios.get('/<% if (authenticationType === 'uaa') { %><%= apiUaaPath %><% } %>api/account')
 });
 
 <%_ if (authenticationType === 'session') { _%>
@@ -155,6 +155,14 @@ export const login = (username, password, rememberMe = false) => async (dispatch
   }
   dispatch(getSession());
 };
+<%_ } else if (authenticationType === 'uaa') { _%>
+export const login = (username, password, rememberMe = false) => async (dispatch, getState) => {
+  const result = await dispatch({
+    type: ACTION_TYPES.LOGIN,
+    payload: axios.post('/auth/login', { username, password })
+  });
+  dispatch(getSession());
+};
 <%_ } _%>
 
 <%_ if (authenticationType === 'jwt') { _%>
@@ -172,6 +180,14 @@ export const logout = () => dispatch => {
   dispatch({
     type: ACTION_TYPES.LOGOUT
   });
+};
+<%_ } else if (authenticationType === 'uaa') { _%>
+export const logout = () => async dispatch => {
+  await dispatch({
+    type: ACTION_TYPES.LOGOUT,
+    payload: axios.post('/auth/logout', {})
+  });
+  dispatch(getSession());
 };
 <%_ } else { _%>
 export const logout = () => async dispatch => {

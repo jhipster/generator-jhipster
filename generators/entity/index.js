@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -141,6 +141,7 @@ module.exports = class extends BaseGenerator {
                 context.languages = this.config.get('languages');
                 context.buildTool = this.config.get('buildTool');
                 context.jhiPrefix = this.config.get('jhiPrefix');
+                context.skipCheckLengthOfIdentifier = this.config.get('skipCheckLengthOfIdentifier');
                 context.jhiPrefixDashed = _.kebabCase(context.jhiPrefix);
                 context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
                 context.testFrameworks = this.config.get('testFrameworks');
@@ -237,6 +238,7 @@ module.exports = class extends BaseGenerator {
                 const prodDatabaseType = context.prodDatabaseType;
                 const entityTableName = context.entityTableName;
                 const jhiTablePrefix = context.jhiTablePrefix;
+                const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
                 const instructions = `You can specify a different table name in your JDL file or change it in .jhipster/${context.name}.json file and then run again 'jhipster entity ${context.name}.'`;
 
                 if (!(/^([a-zA-Z0-9_]*)$/.test(entityTableName))) {
@@ -246,9 +248,9 @@ module.exports = class extends BaseGenerator {
                 } else if (jhiCore.isReservedTableName(entityTableName, prodDatabaseType)) {
                     this.warning(chalk.red(`The table name cannot contain the '${entityTableName.toUpperCase()}' reserved keyword, so it will be prefixed with '${jhiTablePrefix}_'.\n${instructions}`));
                     context.entityTableName = `${jhiTablePrefix}_${entityTableName}`;
-                } else if (prodDatabaseType === 'oracle' && entityTableName.length > 26) {
+                } else if (prodDatabaseType === 'oracle' && entityTableName.length > 26 && !skipCheckLengthOfIdentifier) {
                     this.error(chalk.red(`The table name is too long for Oracle, try a shorter name.\n${instructions}`));
-                } else if (prodDatabaseType === 'oracle' && entityTableName.length > 14) {
+                } else if (prodDatabaseType === 'oracle' && entityTableName.length > 14 && !skipCheckLengthOfIdentifier) {
                     this.warning(`The table name is long for Oracle, long table names can cause issues when used to create constraint names and join table names.\n${instructions}`);
                 }
             }
@@ -342,10 +344,11 @@ module.exports = class extends BaseGenerator {
                         this.error(chalk.red(`otherEntityName is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(relationship, null, 4)}`));
                     }
 
-                    if (_.isUndefined(relationship.otherEntityRelationshipName)
-                        && (relationship.relationshipType === 'one-to-many' || (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) || (relationship.relationshipType === 'one-to-one'))) {
-                        relationship.otherEntityRelationshipName = _.lowerFirst(entityName);
-                        this.warning(`otherEntityRelationshipName is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(relationship, null, 4)}, using ${_.lowerFirst(entityName)} as fallback`);
+                    if (_.isUndefined(relationship.otherEntityRelationshipName)) {
+                        if ((relationship.relationshipType === 'one-to-many' || (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) || (relationship.relationshipType === 'one-to-one'))) {
+                            relationship.otherEntityRelationshipName = _.lowerFirst(entityName);
+                            this.warning(`otherEntityRelationshipName is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(relationship, null, 4)}, using ${_.lowerFirst(entityName)} as fallback`);
+                        }
                     }
 
                     if (_.isUndefined(relationship.otherEntityField)
@@ -641,6 +644,19 @@ module.exports = class extends BaseGenerator {
 
                     if (_.isUndefined(relationship.otherEntityNameCapitalized)) {
                         relationship.otherEntityNameCapitalized = _.upperFirst(relationship.otherEntityName);
+                    }
+
+                    if (_.isUndefined(relationship.otherEntityRelationshipNamePlural)) {
+                        if (relationship.relationshipType === 'many-to-one') {
+                            if (otherEntityData && otherEntityData.relationships) {
+                                otherEntityData.relationships.forEach((otherRelationship) => {
+                                    if (otherRelationship.otherEntityRelationshipName === relationship.relationshipName && otherRelationship.relationshipType === 'one-to-many') {
+                                        relationship.otherEntityRelationshipName = otherRelationship.relationshipName;
+                                        relationship.otherEntityRelationshipNamePlural = pluralize(otherRelationship.relationshipName);
+                                    }
+                                });
+                            }
+                        }
                     }
 
                     if (_.isUndefined(relationship.otherEntityAngularName)) {

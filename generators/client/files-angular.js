@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -248,25 +248,6 @@ const files = {
                 { file: 'account/sessions/sessions.component.ts', method: 'processJs' },
                 { file: 'account/sessions/sessions.component.html', method: 'processHtml' },
                 'account/sessions/sessions.service.ts'
-            ]
-        },
-        {
-            condition: generator => generator.enableSocialSignIn,
-            path: ANGULAR_DIR,
-            templates: [
-                { file: 'account/social/social.route.ts', method: 'processJs' },
-                { file: 'account/social/social-register.component.ts', method: 'processJs' },
-                { file: 'account/social/social-register.component.html', method: 'processHtml' },
-                { file: 'shared/social/social.component.ts', method: 'processJs' },
-                { file: 'shared/social/social.component.html', method: 'processHtml' },
-                'core/social/social.service.ts'
-            ]
-        },
-        {
-            condition: generator => generator.enableSocialSignIn && generator.authenticationType === 'jwt',
-            path: ANGULAR_DIR,
-            templates: [
-                { file: 'account/social/social-auth.component.ts', method: 'processJs' },
             ]
         },
         {

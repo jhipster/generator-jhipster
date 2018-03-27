@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,6 +52,13 @@ module.exports = class extends BaseGenerator {
         // This adds support for a `--skip-user-management` flag
         this.option('skip-user-management', {
             desc: 'Skip the user management module during app generation',
+            type: Boolean,
+            defaults: false
+        });
+
+        // This adds support for a `--skip-check-length-of-identifier` flag
+        this.option('skip-check-length-of-identifier', {
+            desc: 'Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata',
             type: Boolean,
             defaults: false
         });
@@ -119,6 +126,7 @@ module.exports = class extends BaseGenerator {
         this.skipClient = this.configOptions.skipClient = this.options['skip-client'] || this.config.get('skipClient');
         this.skipServer = this.configOptions.skipServer = this.options['skip-server'] || this.config.get('skipServer');
         this.skipUserManagement = this.configOptions.skipUserManagement = this.options['skip-user-management'] || this.config.get('skipUserManagement');
+        this.skipCheckLengthOfIdentifier = this.configOptions.skipCheckLengthOfIdentifier = this.options['skip-check-length-of-identifier'] || this.config.get('skipCheckLengthOfIdentifier');
         this.jhiPrefix = this.configOptions.jhiPrefix = _.camelCase(this.config.get('jhiPrefix') || this.options['jhi-prefix']);
         this.withEntities = this.options['with-entities'];
         this.skipChecks = this.options['skip-checks'];
@@ -310,6 +318,7 @@ module.exports = class extends BaseGenerator {
                 this.config.set('baseName', this.baseName);
                 this.config.set('testFrameworks', this.testFrameworks);
                 this.config.set('jhiPrefix', this.jhiPrefix);
+                this.config.set('skipCheckLengthOfIdentifier', this.skipCheckLengthOfIdentifier);
                 this.config.set('otherModules', this.otherModules);
                 this.config.set('enableTranslation', this.enableTranslation);
                 if (this.enableTranslation) {

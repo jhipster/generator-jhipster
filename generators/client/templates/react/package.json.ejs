@@ -1,7 +1,7 @@
 <%#
 Copyright 2013-2018 the original author or authors from the JHipster project.
 
-This file is part of the JHipster project, see http://www.jhipster.tech/
+This file is part of the JHipster project, see https://www.jhipster.tech/
 for more information.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -172,7 +172,13 @@ limitations under the License.
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "cleanup": "rimraf <%= BUILD_DIR %>www",
+    <%_ if (protractorTests) { _%>
+    "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
+    "postinstall": "webdriver-manager update",
+    <%_ } _%>
     "start": "<%= clientPackageManager %> run webpack:dev",
+    "test": "<%= clientPackageManager %> run lint && karma start src/test/javascript/karma.conf.js",
+    "test:watch": "<%= clientPackageManager %> test -- --watch",
     "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --progress --inline --profile --port=9060",
     "webpack:build:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --progress --profile",
     "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:main",
@@ -180,16 +186,6 @@ limitations under the License.
     "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:prod:main",
     "webpack:test": "<%= clientPackageManager %> run test",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
-    "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js",
-    "test": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> test:start -- --browsers Chrome",
-    "test:ci": "<%= clientPackageManager %> test:start -- --browsers ChromiumHeadless",
-    "test:start": "karma start src/test/javascript/karma.conf.js",
-    <%_ if (protractorTests) { _%>
-    "test:watch": "<%= clientPackageManager %> test:ci -- --watch",
-    "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
-    "postinstall": "webdriver-manager update"
-    <%_ } else { _%>
-    "test:watch": "<%= clientPackageManager %> test:ci -- --watch"
-    <%_ } _%>
+    "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"
   }
 }

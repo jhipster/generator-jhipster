@@ -232,23 +232,7 @@ const files = {
                 { file: 'modules/account/sessions/sessions.tsx', method: 'processJsx' },
                 { file: 'modules/account/sessions/sessions.reducer.ts', method: 'processJsx' }
             ]
-        },
-        // {
-        //   condition: generator => generator.enableSocialSignIn,
-        //   path: REACT_DIR,
-        //   templates: [
-        //             { file: 'account/social/_social-register.component.js', method: 'processJsx' },
-        //             { file: 'shared/social/_social.component.js', method: 'processJsx' },
-        //     'shared/social/_social.service.js'
-        //   ]
-        // },
-        // {
-        //   condition: generator => generator.enableSocialSignIn && generator.authenticationType === 'jwt',
-        //   path: REACT_DIR,
-        //   templates: [
-        //             { file: 'account/social/_social-auth.component.js', method: 'processJsx' },
-        //   ]
-        // },
+        }
     ],
     adminModule: [
         {
@@ -306,6 +290,7 @@ const files = {
                 // util
                 'shared/util/date-utils.ts',
                 'shared/util/pagination.constants.ts',
+                'shared/util/entity-utils.ts',
                 // components
                 // model
                 'shared/model/user.model.ts'
@@ -399,6 +384,7 @@ const files = {
                 'spec/app/config/notification-middleware.spec.ts',
                 'spec/app/shared/layout/header.spec.tsx',
                 'spec/app/shared/reducers/authentication.spec.ts',
+                'spec/app/shared/util/entity-utils.spec.ts',
                 'spec/app/modules/account/register/register.spec.tsx',
                 'spec/app/modules/account/register/register.reducer.spec.ts',
                 'spec/app/modules/account/activate/activate.reducer.spec.ts',

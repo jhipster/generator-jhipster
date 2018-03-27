@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -124,5 +124,6 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         generator.removeFile(`${mainResourceDir}/mails/passwordResetEmail.html`);
         generator.removeFile(`${mainResourceDir}/mails/socialRegistrationValidationEmail.html`);
         generator.removeFile(`${testResourceDir}/mail/testEmail.html`);
+        generator.removeFile('gradle/mapstruct.gradle');
     }
 }
