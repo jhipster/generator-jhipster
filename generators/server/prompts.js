@@ -172,8 +172,7 @@ function askForServerSideOpts(meta) {
                     }
                 ];
                 if (
-                    applicationType === 'microservice' || ((response.authenticationType === 'uaa' ||
-                    response.authenticationType === 'oauth2') && applicationType === 'gateway')
+                    applicationType === 'microservice' || (response.authenticationType === 'jwt' && applicationType === 'gateway')
                 ) {
                     opts.push({
                         value: 'no',
