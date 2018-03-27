@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2018 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see http://www.jhipster.tech/
+ This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +26,22 @@ const DEBUG = process.argv.indexOf('--debug') > -1;
 module.exports = config => {
   config.set({
     // Add any browsers here
-    // browsers: ['ChromiumHeadless'],
+    browsers: ['ChromiumHeadlessNoSandbox'],
+
+    customLaunchers: {
+        ChromiumHeadlessNoSandbox: {
+            base: 'ChromiumHeadless',
+                // the chrome setup is voluntarily permissive to accomodate various environments (different OSes, running inside docker, etc)
+                // feel free to enable the sandbox if it doesn't cause problems for you
+                // see https://www.jhipster.tech/running-tests for informations on how to troubleshoot your karma chrome configuration
+                flags: [
+                    '--no-sandbox',
+                    '--disable-gpu',
+                    '--remote-debugging-port=9222'
+                ],
+                debug: true
+        }
+    },
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: './',

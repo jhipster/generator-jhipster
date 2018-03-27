@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -92,7 +92,6 @@ module.exports = class extends BaseGenerator {
         this.messageBroker = this.config.get('messageBroker') === 'no' ? false : this.config.get('messageBroker');
         this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
         this.enableTranslation = this.config.get('enableTranslation');
-        this.enableSocialSignIn = this.config.get('enableSocialSignIn');
         this.currentLanguages = this.config.get('languages');
         this.clientFramework = this.config.get('clientFramework');
         this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
@@ -157,9 +156,6 @@ module.exports = class extends BaseGenerator {
                 }
                 if (configOptions.nativeLanguage) {
                     this.nativeLanguage = configOptions.nativeLanguage;
-                }
-                if (configOptions.enableSocialSignIn !== undefined) {
-                    this.enableSocialSignIn = configOptions.enableSocialSignIn;
                 }
                 if (configOptions.skipClient) {
                     this.skipClient = configOptions.skipClient;

@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2018 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see http://www.jhipster.tech/
+ This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,12 +26,12 @@
     <packaging>war</packaging>
     <name><%= humanizedBaseName %></name>
 
-    <!-- TODO Remove snapshot repositories after final Spring Boot 2 release -->
     <repositories>
+        <!-- TODO Remove snapshot repositories after final Spring Boot 2 release -->
         <repository>
-            <id>jhipster-snapshot</id>
+            <id>sonatype-snapshot</id>
             <name>JHipster Snapshots</name>
-            <url>https://dl.bintray.com/jhipster/maven</url>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
@@ -57,6 +57,7 @@
             </releases>
         </repository>
     <%_ } _%>
+        <!-- jhipster-needle-maven-repository -->
     </repositories>
     <pluginRepositories>
         <pluginRepository>
@@ -95,7 +96,7 @@
         <profile.swagger />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>2.0.0-20180315.153125-5</jhipster-dependencies.version>
+        <jhipster-dependencies.version>2.0.0-SNAPSHOT</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
         <spring-boot.version>2.0.0.RELEASE</spring-boot.version>
@@ -126,7 +127,7 @@
         <%_ if (!skipClient) { _%>
         <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
         <%_ } _%>
-        <jacoco-maven-plugin.version>0.8.0</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.1</jacoco-maven-plugin.version>
         <scala-maven-plugin.version>3.3.1</scala-maven-plugin.version>
         <sonar-maven-plugin.version>3.4.0.905</sonar-maven-plugin.version>
         <%_ if (enableSwaggerCodegen) { _%>
@@ -414,6 +415,12 @@
         <%_ if (databaseType === 'sql') { _%>
         <dependency>
             <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jpamodelgen</artifactId>
+            <version>${hibernate.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
             <artifactId>hibernate-envers</artifactId>
         </dependency>
         <dependency>
@@ -457,9 +464,15 @@
             <version>${mapstruct.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>${mapstruct.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -704,29 +717,6 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-messaging</artifactId>
-        </dependency>
-        <%_ } _%>
-        <%_ if (enableSocialSignIn) { _%>
-        <!-- Social -->
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.social</groupId>
-            <artifactId>spring-social-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.social</groupId>
-            <artifactId>spring-social-google</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.social</groupId>
-            <artifactId>spring-social-facebook</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.social</groupId>
-            <artifactId>spring-social-twitter</artifactId>
         </dependency>
         <%_ } _%>
         <%_ if (cucumberTests) { _%>

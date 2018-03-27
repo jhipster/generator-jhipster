@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2018 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see http://www.jhipster.tech/
+ This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,20 +23,12 @@
 </div>
 <div class="modal-body">
     <div class="row justify-content-center">
-        <%_ if (enableSocialSignIn) { _%>
-        <div class="col-12">
-        <%_ } else { _%>
         <div class="col-md-8">
-        <%_ } _%>
             <div class="alert alert-danger" *ngIf="authenticationError" jhiTranslate="login.messages.error.authentication">
                 <strong>Failed to sign in!</strong> Please check your credentials and try again.
             </div>
         </div>
-        <%_ if (enableSocialSignIn) { _%>
-        <div class="col-md-6">
-        <%_ } else { _%>
         <div class="col-md-8">
-        <%_ } _%>
             <form class="form" role="form" (ngSubmit)="login()">
                 <div class="form-group">
                     <label for="username" jhiTranslate="global.form.username">Login</label>
@@ -65,14 +57,5 @@
                 <a class="alert-link" (click)="register()" jhiTranslate="global.messages.info.register.link">Register a new account</a>
             </div>
         </div>
-        <%_ if (enableSocialSignIn) { _%>
-        <div class="col-md-6">
-            <br/>
-            <<%= jhiPrefixDashed %>-social provider="google"></<%= jhiPrefixDashed %>-social>
-            <<%= jhiPrefixDashed %>-social provider="facebook"></<%= jhiPrefixDashed %>-social>
-            <<%= jhiPrefixDashed %>-social provider="twitter"></<%= jhiPrefixDashed %>-social>
-            <!-- jhipster-needle-add-social-button -->
-        </div>
-        <%_ } _%>
     </div>
 </div>

@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2018 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see http://www.jhipster.tech/
+ This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,6 +29,7 @@ _%>
 import axios from 'axios';
 import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
 
+import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import { SERVER_API_URL } from 'app/config/constants';
 <%_ if (!(applicationType === 'gateway' && locals.microserviceName) && authenticationType !== 'uaa') { _%>
@@ -43,7 +44,7 @@ export const ACTION_TYPES = {
   <%_ if (searchEngine === 'elasticsearch') { _%>
   SEARCH_<%= entityActionNamePlural %>: '<%= entityInstance %>/SEARCH_<%= entityActionNamePlural %>',
   <%_ } _%>
-  FETCH_<%= entityActionNamePlural %>: '<%= entityInstance %>/FETCH_<%= entityActionNamePlural %>',
+  FETCH_<%= entityActionName %>_LIST: '<%= entityInstance %>/FETCH_<%= entityActionName %>_LIST',
   FETCH_<%= entityActionName %>:  '<%= entityInstance %>/FETCH_<%= entityActionName %>',
   CREATE_<%= entityActionName %>: '<%= entityInstance %>/CREATE_<%= entityActionName %>',
   UPDATE_<%= entityActionName %>: '<%= entityInstance %>/UPDATE_<%= entityActionName %>',
@@ -75,7 +76,7 @@ export default (state = initialState, action) => {
     <%_ if (searchEngine === 'elasticsearch') { _%>
     case REQUEST(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
     <%_ } _%>
-    case REQUEST(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
+    case REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST):
     case REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>):
       return {
         ...state,
@@ -95,7 +96,7 @@ export default (state = initialState, action) => {
     <%_ if (searchEngine === 'elasticsearch') { _%>
     case FAILURE(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
     <%_ } _%>
-    case FAILURE(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
+    case FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST):
     case FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>):
     case FAILURE(ACTION_TYPES.CREATE_<%= entityActionName %>):
     case FAILURE(ACTION_TYPES.UPDATE_<%= entityActionName %>):
@@ -115,7 +116,7 @@ export default (state = initialState, action) => {
         entities: action.payload.data
     };
     <%_ } _%>
-    case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
+    case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST):
       return {
         ...state,
         loading: false,
@@ -169,7 +170,7 @@ export default (state = initialState, action) => {
   }
 };
 
-const apiUrl = <% if (applicationType === 'gateway' && locals.microserviceName) { %>'/<%= microserviceName.toLowerCase() %>/<% } else if (authenticationType === 'uaa') { %>'<% } else { %>SERVER_API_URL + '<% } %>/api/<%= entityApiUrl %>';
+const apiUrl = <% if (applicationType === 'gateway' && locals.microserviceName) { %>'/<%= microserviceName.toLowerCase() %><% } else if (authenticationType === 'uaa') { %>'<% } else { %>SERVER_API_URL + '<% } %>/api/<%= entityApiUrl %>';
 <%_ if (searchEngine === 'elasticsearch') { _%>
 const apiSearchUrl = <% if (applicationType === 'gateway' && locals.microserviceName) { %>'/<%= microserviceName.toLowerCase() %>/<% } else if (authenticationType === 'uaa') { %>'<% } else { %>SERVER_API_URL + '<% } %>/api/_search/<%= entityApiUrl %>';
 <%_ } _%>
@@ -188,13 +189,13 @@ export const getEntities: ICrudGetAllAction = (page, size, sort) =>
 {
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
   return {
-    type: ACTION_TYPES.FETCH_<%= entityActionNamePlural %>,
+    type: ACTION_TYPES.FETCH_<%= entityActionName %>_LIST,
     payload: axios.get(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`)
   }
 }
 <%_ } else { _%>
 ({
-  type: ACTION_TYPES.FETCH_<%= entityActionNamePlural %>,
+  type: ACTION_TYPES.FETCH_<%= entityActionName %>_LIST,
   payload: axios.get(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
 });
 <%_ } _%>
@@ -210,7 +211,7 @@ export const getEntity: ICrudGetAction = id => {
 export const createEntity: ICrudPutAction = entity => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_<%= entityActionName %>,
-    payload: axios.post(apiUrl, entity)
+    payload: axios.post(apiUrl, cleanEntity(entity))
   });
   dispatch(getEntities());
   return result;
@@ -219,7 +220,7 @@ export const createEntity: ICrudPutAction = entity => async dispatch => {
 export const updateEntity: ICrudPutAction = entity => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_<%= entityActionName %>,
-    payload: axios.put(apiUrl, entity)
+    payload: axios.put(apiUrl, cleanEntity(entity))
   });
   dispatch(getEntities());
   return result;

@@ -6,7 +6,7 @@
     "serverPort": "9999",
     "authenticationType": "uaa",
     "cacheProvider": "hazelcast",
-    "enableHibernateCache": true,    
+    "enableHibernateCache": true,
     "websocket": false,
     "databaseType": "sql",
     "devDatabaseType": "h2Disk",
@@ -15,7 +15,6 @@
     "messageBroker": false,
     "serviceDiscoveryType": "eureka",
     "buildTool": "maven",
-    "enableSocialSignIn": false,
     "enableTranslation": true,
     "applicationType": "uaa",
     "testFrameworks": [

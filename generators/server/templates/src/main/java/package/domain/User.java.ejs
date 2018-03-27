@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2018 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see http://www.jhipster.tech/
+ This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -94,14 +94,10 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || 
     @PartitionKey<% } %>
     private String id;<% } %>
 
-    <%_ let columnMax = 50;
-        if (enableSocialSignIn) {
-            columnMax = 100;
-        } _%>
     @NotNull
     @Pattern(regexp = Constants.LOGIN_REGEX)
-    @Size(min = 1, max = <%=columnMax %>)<% if (databaseType === 'sql') { %>
-    @Column(length = <%=columnMax %>, unique = true, nullable = false)<% } %><% if (databaseType === 'mongodb') { %>
+    @Size(min = 1, max = 50)<% if (databaseType === 'sql') { %>
+    @Column(length = 50, unique = true, nullable = false)<% } %><% if (databaseType === 'mongodb') { %>
     @Indexed<% } %><% if (databaseType === 'couchbase') { %>
     @IdAttribute<% } %>
     private String login;

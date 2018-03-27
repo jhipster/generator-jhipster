@@ -1,5 +1,4 @@
-/* global describe, beforeEach, it */
-
+/* global describe, before, beforeEach, it */
 
 const path = require('path');
 const assert = require('yeoman-assert');
@@ -71,7 +70,34 @@ describe('JHipster generator import jdl', () => {
             assert.file(entityFiles);
         });
     });
+    describe('imports a JDL app and entities', () => {
+        before((done) => {
+            helpers.run(require.resolve('../generators/import-jdl'))
+                .inTmpDir((dir) => {
+                    fse.copySync(path.join(__dirname, '../test/templates/import-jdl'), dir);
+                })
+                .withArguments(['apps-and-entities.jdl'])
+                .on('end', done);
+        });
 
+        it('creates the applications', () => {
+            assert.file([
+                path.join('myFirstApp', '.yo-rc.json'),
+                path.join('mySecondApp', '.yo-rc.json'),
+                path.join('myThirdApp', '.yo-rc.json')
+            ]);
+        });
+        it('creates the entities', () => {
+            assert.file([
+                path.join('myFirstApp', '.jhipster', 'A.json'),
+                path.join('myFirstApp', '.jhipster', 'B.json'),
+                path.join('myFirstApp', '.jhipster', 'E.json'),
+                path.join('myFirstApp', '.jhipster', 'F.json'),
+                path.join('mySecondApp', '.jhipster', 'E.json'),
+                path.join('myThirdApp', '.jhipster', 'F.json')
+            ]);
+        });
+    });
     describe('imports a JDL model from multiple files', () => {
         beforeEach((done) => {
             helpers.run(require.resolve('../generators/import-jdl'))

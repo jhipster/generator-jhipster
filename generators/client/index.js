@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -69,13 +69,6 @@ module.exports = class extends BaseGenerator {
         this.option('db', {
             desc: 'Provide DB name for the application',
             type: String
-        });
-
-        // This adds support for a `--social` flag
-        this.option('social', {
-            desc: 'Provide development DB option for the application',
-            type: Boolean,
-            default: false
         });
 
         // This adds support for a `--search-engine` flag
@@ -169,6 +162,11 @@ module.exports = class extends BaseGenerator {
                 const baseName = this.config.get('baseName');
                 if (baseName) {
                     this.baseName = baseName;
+                }
+
+                this.serviceDiscoveryType = this.config.get('serviceDiscoveryType') === 'no' ? false : this.config.get('serviceDiscoveryType');
+                if (this.serviceDiscoveryType === undefined) {
+                    this.serviceDiscoveryType = false;
                 }
 
                 const clientConfigFound = this.useSass !== undefined;
@@ -305,9 +303,6 @@ module.exports = class extends BaseGenerator {
                 }
                 if (this.configOptions.buildTool) {
                     this.buildTool = this.configOptions.buildTool;
-                }
-                if (this.configOptions.enableSocialSignIn !== undefined) {
-                    this.enableSocialSignIn = this.configOptions.enableSocialSignIn;
                 }
                 if (this.configOptions.authenticationType) {
                     this.authenticationType = this.configOptions.authenticationType;

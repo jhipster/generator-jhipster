@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -342,10 +342,11 @@ module.exports = class extends BaseGenerator {
                         this.error(chalk.red(`otherEntityName is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(relationship, null, 4)}`));
                     }
 
-                    if (_.isUndefined(relationship.otherEntityRelationshipName)
-                        && (relationship.relationshipType === 'one-to-many' || (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) || (relationship.relationshipType === 'one-to-one'))) {
-                        relationship.otherEntityRelationshipName = _.lowerFirst(entityName);
-                        this.warning(`otherEntityRelationshipName is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(relationship, null, 4)}, using ${_.lowerFirst(entityName)} as fallback`);
+                    if (_.isUndefined(relationship.otherEntityRelationshipName)) {
+                        if ((relationship.relationshipType === 'one-to-many' || (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) || (relationship.relationshipType === 'one-to-one'))) {
+                            relationship.otherEntityRelationshipName = _.lowerFirst(entityName);
+                            this.warning(`otherEntityRelationshipName is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(relationship, null, 4)}, using ${_.lowerFirst(entityName)} as fallback`);
+                        }
                     }
 
                     if (_.isUndefined(relationship.otherEntityField)
@@ -641,6 +642,19 @@ module.exports = class extends BaseGenerator {
 
                     if (_.isUndefined(relationship.otherEntityNameCapitalized)) {
                         relationship.otherEntityNameCapitalized = _.upperFirst(relationship.otherEntityName);
+                    }
+
+                    if (_.isUndefined(relationship.otherEntityRelationshipNamePlural)) {
+                        if (relationship.relationshipType === 'many-to-one') {
+                            if (otherEntityData && otherEntityData.relationships) {
+                                otherEntityData.relationships.forEach((otherRelationship) => {
+                                    if (otherRelationship.otherEntityRelationshipName === relationship.relationshipName && otherRelationship.relationshipType === 'one-to-many') {
+                                        relationship.otherEntityRelationshipName = otherRelationship.relationshipName;
+                                        relationship.otherEntityRelationshipNamePlural = pluralize(otherRelationship.relationshipName);
+                                    }
+                                });
+                            }
+                        }
                     }
 
                     if (_.isUndefined(relationship.otherEntityAngularName)) {

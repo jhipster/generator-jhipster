@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2018 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see http://www.jhipster.tech/
+ This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,13 +18,13 @@
 -%>
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Translate, ICrudGetAction } from 'react-jhipster';
+import { Translate } from 'react-jhipster';
 import { FaRefresh } from 'react-icons/lib/fa';
 
 import { gatewayRoutes } from '../administration.reducer';
 
 export interface IGatewayPageProps {
-  gatewayRoutes: ICrudGetAction;
+  gatewayRoutes: Function;
   routes: any[];
   account: any;
   isFetching?: boolean;

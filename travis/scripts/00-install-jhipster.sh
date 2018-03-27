@@ -7,36 +7,7 @@ set -e
 ls -al "$HOME"
 
 #-------------------------------------------------------------------------------
-# Install JHipster Dependencies
-#-------------------------------------------------------------------------------
-cd "$HOME"
-if [[ "$TRAVIS_REPO_SLUG" == *"/jhipster-dependencies" ]]; then
-    echo "TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG"
-    echo "No need to clone jhipster-dependencies: use local version"
-
-    cd "$TRAVIS_BUILD_DIR"
-    ./mvnw clean install -Dgpg.skip=true
-
-elif [[ "$JHIPSTER_DEPENDENCIES_BRANCH" == "release" ]]; then
-    echo "No need to clone jhipster-dependencies: use release version"
-
-else
-    git clone "$JHIPSTER_DEPENDENCIES_REPO" jhipster-dependencies
-    cd jhipster-dependencies
-    if [ "$JHIPSTER_DEPENDENCIES_BRANCH" == "latest" ]; then
-        LATEST=$(git describe --abbrev=0)
-        git checkout -b "$LATEST" "$LATEST"
-    elif [ "$JHIPSTER_DEPENDENCIES_BRANCH" != "master" ]; then
-        git checkout -b "$JHIPSTER_DEPENDENCIES_BRANCH" origin/"$JHIPSTER_DEPENDENCIES_BRANCH"
-    fi
-    git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-
-    ./mvnw clean install -Dgpg.skip=true
-    ls -al ~/.m2/repository/io/github/jhipster/jhipster-dependencies/
-fi
-
-#-------------------------------------------------------------------------------
-# Install JHipster lib
+# Install JHipster Dependencies and Server-side library
 #-------------------------------------------------------------------------------
 cd "$HOME"
 if [[ "$TRAVIS_REPO_SLUG" == *"/jhipster" ]]; then
@@ -60,8 +31,12 @@ else
     fi
     git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 
+    travis/scripts/00-replace-version-jhipster.sh
+
     ./mvnw clean install -Dgpg.skip=true
     ls -al ~/.m2/repository/io/github/jhipster/jhipster/
+    ls -al ~/.m2/repository/io/github/jhipster/jhipster-dependencies/
+    ls -al ~/.m2/repository/io/github/jhipster/jhipster-parent/
 fi
 
 #-------------------------------------------------------------------------------

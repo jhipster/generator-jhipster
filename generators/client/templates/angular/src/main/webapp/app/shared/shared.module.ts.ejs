@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2018 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see http://www.jhipster.tech/
+ This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,10 +26,7 @@ import {
     <%_ if (authenticationType !== 'oauth2') { _%>
     <%=jhiPrefixCapitalized%>LoginModalComponent,
     <%_ } _%>
-    HasAnyAuthorityDirective,
-    <%_ if (enableSocialSignIn) { _%>
-    <%=jhiPrefixCapitalized%>SocialComponent
-    <%_ } _%>
+    HasAnyAuthorityDirective
 } from './';
 
 @NgModule({
@@ -38,9 +35,6 @@ import {
         <%=angularXAppName%>SharedCommonModule
     ],
     declarations: [
-        <%_ if (enableSocialSignIn) { _%>
-        <%=jhiPrefixCapitalized%>SocialComponent,
-        <%_ } _%>
         <%_ if (authenticationType !== 'oauth2') { _%>
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         <%_ } _%>
@@ -54,9 +48,6 @@ import {
     <%_ } _%>
     exports: [
         <%=angularXAppName%>SharedCommonModule,
-        <%_ if (enableSocialSignIn) { _%>
-        <%=jhiPrefixCapitalized%>SocialComponent,
-        <%_ } _%>
         <%_ if (authenticationType !== 'oauth2') { _%>
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         <%_ } _%>

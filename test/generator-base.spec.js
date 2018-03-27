@@ -55,10 +55,18 @@ describe('Generator Base', () => {
                         angularJSSuffix: 'mySuffix'
                     }
                 };
-                jhiCore.exportToJSON(entities, true);
+                jhiCore.exportEntities({
+                    entities,
+                    forceNoFiltering: true,
+                    application: {}
+                });
                 BaseGenerator.getExistingEntities();
                 entities.Region.fields.push({ fieldName: 'regionDesc', fieldType: 'String' });
-                jhiCore.exportToJSON(entities, true);
+                jhiCore.exportEntities({
+                    entities,
+                    forceNoFiltering: true,
+                    application: {}
+                });
             });
             it('returns an up-to-date state', () => {
                 expect(BaseGenerator.getExistingEntities()

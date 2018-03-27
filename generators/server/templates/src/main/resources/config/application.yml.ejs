@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2018 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see http://www.jhipster.tech/
+ This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,8 +22,8 @@
 # This configuration will be overridden by the Spring profile you use,
 # for example application-dev.yml if you use the "dev" profile.
 #
-# More information on profiles: http://www.jhipster.tech/profiles/
-# More information on configuration properties: http://www.jhipster.tech/common-application-properties/
+# More information on profiles: https://www.jhipster.tech/profiles/
+# More information on configuration properties: https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
 # ===================================================================
@@ -148,25 +148,6 @@ spring:
             enabled: false
     thymeleaf:
         mode: HTML
-<%_ if (enableSocialSignIn) { _%>
-    social:
-        # see https://developers.google.com/+/web/signin/server-side-flow#step_1_create_a_client_id_and_client_secret
-        google:
-            client-id: xxx
-            client-secret: xxx
-
-        # see https://developers.facebook.com/docs/facebook-login/v2.2
-        facebook:
-            client-id: xxx
-            client-secret: xxx
-
-        # see https://apps.twitter.com/app/
-        twitter:
-            client-id: xxx
-            client-secret: xxx
-
-        # jhipster-needle-add-social-configuration
-<%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
 
 # ===================================================================
@@ -237,7 +218,7 @@ info:
 # ===================================================================
 # JHipster specific properties
 #
-# Full reference is available at: http://www.jhipster.tech/common-application-properties/
+# Full reference is available at: https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
 jhipster:
@@ -270,14 +251,6 @@ jhipster:
         contact-email:
         license:
         license-url:
-<%_ if (enableSocialSignIn) { _%>
-    social:
-        <%_ if (authenticationType === 'jwt') { _%>
-        redirect-after-sign-in: "/#/social-auth"
-        <%_ } else { _%>
-        redirect-after-sign-in: "/#/"
-        <%_ } _%>
-<%_ } _%>
     ribbon:
         display-on-active-profiles: dev
 
@@ -287,7 +260,7 @@ jhipster:
 # to have type-safe configuration, like in the JHipsterProperties above
 #
 # More documentation is available at:
-# http://www.jhipster.tech/common-application-properties/
+# https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
 # application:
