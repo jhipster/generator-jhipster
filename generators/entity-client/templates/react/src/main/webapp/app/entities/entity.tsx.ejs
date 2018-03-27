@@ -301,7 +301,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
 }
 
 const mapStateToProps = ({ <%= entityInstance %> }) => ({
-  <%= entityInstancePlural %>List: <%= entityInstance %>.entities,
+  <%= entityInstance %>List: <%= entityInstance %>.entities,
   <%_ if (pagination !== 'no') { _%>
   totalItems: <%= entityInstance %>.totalItems
   <%_ } _%>
