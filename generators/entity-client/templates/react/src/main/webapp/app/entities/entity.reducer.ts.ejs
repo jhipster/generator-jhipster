@@ -28,7 +28,7 @@ _%>
   import { isEqual } from 'lodash';
 <%_ } _%>
 import axios from 'axios';
-import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction<% if (pagination === 'infinite-scroll') { %>, parse<% } %> } from 'react-jhipster';
+import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction<% if (pagination === 'infinite-scroll') { %>, parse, loadMoreData<% } %> } from 'react-jhipster';
 
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
@@ -119,35 +119,19 @@ export default (state = initialState, action) => {
     <%_ } _%>
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
       <%_ if (pagination === 'infinite-scroll') { _%>
-      const link = parse(action.payload.headers.link);
-      const currentData = state.entities;
-      const incomingData = action.payload.data;
-      let data = null;
-      if (link.first === link.last) {
-        data = incomingData;
-      } else {
-        if (currentData.length === incomingData.length) {
-          if (link.prev === undefined) {
-            data = incomingData;
-          } else if (!isEqual(currentData, incomingData)) {
-            data = [...currentData, ...incomingData];
-          }
-        } else {
-          data = [...currentData, ...incomingData];
-        }
-      }
+      const links = parse(action.payload.headers.link);
       <%_ } _%>
       return {
         ...state,
         <%_ if (pagination === 'infinite-scroll') { _%>
-        links: { last: link.last },
+        links: { last: links.last },
         <%_ } _%>
         loading: false,
         <%_ if (pagination !== 'no') { _%>
         totalItems: action.payload.headers['x-total-count'],
         <%_ } _%>
         <%_ if (pagination === 'infinite-scroll') { _%>
-        entities: data
+        entities: loadMoreData(state.entities, action.payload.data, links)
         <%_ } else { _%>
         entities: action.payload.data          
         <%_ } _%>
