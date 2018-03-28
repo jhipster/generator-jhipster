@@ -19,7 +19,7 @@
 <div>
     <h2>
         <span jhiTranslate="userManagement.home.title">Users</span>
-        <button class="btn btn-primary float-right jh-create-entity" [routerLink]="['/', { outlets: { popup: ['user-management-new'] } }]">
+        <button class="btn btn-primary float-right jh-create-entity" [routerLink]="['../', { outlets: { popup: ['user-management-new'] } }]">
             <span class="fa fa-plus"></span> <span jhiTranslate="userManagement.home.createLabel">Create a new User</span>
         </button>
     </h2>
@@ -75,7 +75,7 @@
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'user-management/'+ user.login + '/edit'} }]"
+                                [routerLink]="['../', { outlets: { popup: 'user-management/'+ user.login + '/edit'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-primary btn-sm">
@@ -83,7 +83,7 @@
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'user-management/'+ user.login + '/delete'} }]"
+                                [routerLink]="['../', { outlets: { popup: 'user-management/'+ user.login + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm" [disabled]="currentAccount.login === user.login">

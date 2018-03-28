@@ -1731,6 +1731,7 @@ module.exports = class extends PrivateBase {
         context.javadoc = context.fileData.javadoc;
         context.entityTableName = context.fileData.entityTableName;
         context.jhiPrefix = context.fileData.jhiPrefix || context.jhiPrefix;
+        context.skipCheckLengthOfIdentifier = context.fileData.skipCheckLengthOfIdentifier || context.skipCheckLengthOfIdentifier;
         context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
         this.copyFilteringFlag(context.fileData, context, context);
         if (_.isUndefined(context.entityTableName)) {
@@ -1895,11 +1896,11 @@ module.exports = class extends PrivateBase {
     getJoinTableName(entityName, relationshipName, prodDatabaseType) {
         const joinTableName = `${this.getTableName(entityName)}_${this.getTableName(relationshipName)}`;
         let limit = 0;
-        if (prodDatabaseType === 'oracle' && joinTableName.length > 30) {
+        if (prodDatabaseType === 'oracle' && joinTableName.length > 30 && !this.skipCheckLengthOfIdentifier) {
             this.warning(`The generated join table "${joinTableName}" is too long for Oracle (which has a 30 characters limit). It will be truncated!`);
 
             limit = 30;
-        } else if (prodDatabaseType === 'mysql' && joinTableName.length > 64) {
+        } else if (prodDatabaseType === 'mysql' && joinTableName.length > 64 && !this.skipCheckLengthOfIdentifier) {
             this.warning(`The generated join table "${joinTableName}" is too long for MySQL (which has a 64 characters limit). It will be truncated!`);
 
             limit = 64;
@@ -1930,11 +1931,11 @@ module.exports = class extends PrivateBase {
         }
         let limit = 0;
 
-        if (prodDatabaseType === 'oracle' && constraintName.length > 30) {
+        if (prodDatabaseType === 'oracle' && constraintName.length > 30 && !this.skipCheckLengthOfIdentifier) {
             this.warning(`The generated constraint name "${constraintName}" is too long for Oracle (which has a 30 characters limit). It will be truncated!`);
 
             limit = 28;
-        } else if (prodDatabaseType === 'mysql' && constraintName.length > 64) {
+        } else if (prodDatabaseType === 'mysql' && constraintName.length > 64 && !this.skipCheckLengthOfIdentifier) {
             this.warning(`The generated constraint name "${constraintName}" is too long for MySQL (which has a 64 characters limit). It will be truncated!`);
 
             limit = 62;
@@ -2372,6 +2373,7 @@ module.exports = class extends PrivateBase {
 
         dest.regenerate = context.options.regenerate;
         dest.fluentMethods = context.options['fluent-methods'];
+        dest.skipCheckLengthOfIdentifier = context.options['skip-check-length-of-identifier'];
         dest.entityTableName = generator.getTableName(context.options['table-name'] || dest.name);
         dest.entityNameCapitalized = _.upperFirst(dest.name);
         dest.entityAngularJSSuffix = context.options['angular-suffix'];
