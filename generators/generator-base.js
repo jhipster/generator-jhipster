@@ -1770,7 +1770,11 @@ module.exports = class extends PrivateBase {
         let entityJson = null;
 
         try {
-            entityJson = this.fs.readJSON(path.join(JHIPSTER_CONFIG_DIR, `${_.upperFirst(file)}.json`));
+            if (this.context.microservicePath) {
+                entityJson = this.fs.readJSON(path.join(this.context.microservicePath, JHIPSTER_CONFIG_DIR, `${_.upperFirst(file)}.json`));
+            } else {
+                entityJson = this.fs.readJSON(path.join(JHIPSTER_CONFIG_DIR, `${_.upperFirst(file)}.json`));
+            }   
         } catch (err) {
             this.log(chalk.red(`The JHipster entity configuration file could not be read for file ${file}!`) + err);
             this.debug('Error:', err);
@@ -2033,6 +2037,9 @@ module.exports = class extends PrivateBase {
         this.log(`${chalk.green('  ██╗   ██║')}${chalk.red(' ██╔═══██║    ██║    ██╔════╝   ╚═══██╗    ██║    ██╔═══╝   ██╔══██║')}`);
         this.log(`${chalk.green('  ╚██████╔╝')}${chalk.red(' ██║   ██║ ████████╗ ██║       ██████╔╝    ██║    ████████╗ ██║  ╚██╗')}`);
         this.log(`${chalk.green('   ╚═════╝ ')}${chalk.red(' ╚═╝   ╚═╝ ╚═══════╝ ╚═╝       ╚═════╝     ╚═╝    ╚═══════╝ ╚═╝   ╚═╝')}\n`);
+        
+        this.log(chalk.yellow.bold('\n\n                            Change in the generator \n\n'));
+        
         this.log(chalk.white.bold('                            https://www.jhipster.tech\n'));
         this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow(`v${packagejs.version}`));
         this.log(chalk.green(' _______________________________________________________________________________________________________________\n'));
