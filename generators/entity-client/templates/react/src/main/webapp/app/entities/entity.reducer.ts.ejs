@@ -28,7 +28,7 @@ _%>
   import { isEqual } from 'lodash';
 <%_ } _%>
 import axios from 'axios';
-import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction<% if (pagination === 'infinite-scroll') { %>, parse, loadMoreData<% } %> } from 'react-jhipster';
+import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction<% if (pagination === 'infinite-scroll') { %>, parseHeaderForLinks, loadMoreDataWhenScrolled<% } %> } from 'react-jhipster';
 
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
@@ -119,7 +119,7 @@ export default (state = initialState, action) => {
     <%_ } _%>
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST):
       <%_ if (pagination === 'infinite-scroll') { _%>
-      const links = parse(action.payload.headers.link);
+      const links = parseHeaderForLinks(action.payload.headers.link);
       <%_ } _%>
       return {
         ...state,
@@ -131,9 +131,9 @@ export default (state = initialState, action) => {
         totalItems: action.payload.headers['x-total-count'],
         <%_ } _%>
         <%_ if (pagination === 'infinite-scroll') { _%>
-        entities: loadMoreData(state.entities, action.payload.data, links)
+        entities: loadMoreDataWhenScrolled(state.entities, action.payload.data, links)
         <%_ } else { _%>
-        entities: action.payload.data          
+        entities: action.payload.data
         <%_ } _%>
       };
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>):

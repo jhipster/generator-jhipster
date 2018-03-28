@@ -31,7 +31,7 @@ import * as sinon from 'sinon';
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 <%_ if (pagination === 'infinite-scroll') { _%>
-import { parse, loadMoreData } from 'react-jhipster';
+import { parseHeaderForLinks } from 'react-jhipster';
 <%_ } _%>
 
 // tslint:disable no-invalid-template-strings
@@ -55,7 +55,7 @@ describe('Entities reducer tests', () => {
       last: 0
     },
     <%_ } _%>
-    <%_ if (pagination !== 'no') { _%> 
+    <%_ if (pagination !== 'no') { _%>
     totalItems: 0,
     <%_ } _%>
     updating: false,
@@ -148,7 +148,7 @@ describe('Entities reducer tests', () => {
     it('should fetch all entities', () => {
       const payload = { data: { 1: 'fake1', 2: 'fake2' }<% if (pagination !== 'no') { %>, headers: { 'x-total-count': 123<% if (pagination === 'infinite-scroll') { %>, link: ';'<% } %> }<% } %> };
       <%_ if (pagination === 'infinite-scroll') { _%>
-      const link = parse(payload.headers.link);
+      const link = parseHeaderForLinks(payload.headers.link);
       <%_ } _%>
       expect(reducer(undefined, {
         type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
