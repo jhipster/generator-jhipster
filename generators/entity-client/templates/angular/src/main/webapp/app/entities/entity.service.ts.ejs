@@ -95,9 +95,9 @@ export class <%= entityAngularName %>Service {
         <%_ for (idx in fields) { _%>
         <%_ if ( ['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType) ) { _%>
         <%= fields[idx].fieldName %>: <%= entityInstance %>.<%= fields[idx].fieldName %> != null && <%= entityInstance %>.<%= fields[idx].fieldName %>.isValid() ? <%= entityInstance %>.<%= fields[idx].fieldName %>.toJSON() : null,
+        <%_ } _%>
+        <%_ } _%>
         });
-        <%_ } _%>
-        <%_ } _%>
         return copy;
     }
 
