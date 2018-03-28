@@ -69,7 +69,7 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
     });
   };
 
-  getContextList = contexts => Object.values(contexts).map(v => v['beans']).reduce((acc, e) => ({ ...acc, ...e }));
+  getContextList = contexts => Object.values(contexts).map((v: any) => v.beans).reduce((acc, e) => ({ ...acc, ...e }));
 
 
   render() {
