@@ -1072,4 +1072,13 @@ module.exports = class extends Generator {
             ]);
         }
     }
+
+    /**
+     * Converts a String to camel case
+     * ie: camelcase -> camelCase
+     * @param {string} text
+     */
+    camelCase(text) {
+        return _.camelCase(text);
+    }
 };
