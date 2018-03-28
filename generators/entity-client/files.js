@@ -97,12 +97,7 @@ const angularFiles = {
                 {
                     file: 'entities/entity.service.ts',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityServiceFileName}.service.ts`
-                },
-                {
-                    file: 'entities/entity-popup.service.ts',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityServiceFileName}-popup.service.ts`
                 }
-
             ]
         }
     ],

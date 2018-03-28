@@ -22,9 +22,7 @@ _%>
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
-import { JhiEventManager } from 'ng-jhipster';
 
 import { <%=angularXAppName%>TestModule } from '../../../<%= entityParentPathAddition %>test.module';
 import { <%= entityAngularName %>DialogComponent } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.component';
@@ -59,8 +57,6 @@ describe('Component Tests', () => {
         let comp: <%= entityAngularName %>DialogComponent;
         let fixture: ComponentFixture<<%= entityAngularName %>DialogComponent>;
         let service: <%= entityAngularName %>Service;
-        let mockEventManager: any;
-        let mockActiveModal: any;
 
         beforeEach(() => {
             TestBed.configureTestingModule({
@@ -85,8 +81,6 @@ describe('Component Tests', () => {
             fixture = TestBed.createComponent(<%= entityAngularName %>DialogComponent);
             comp = fixture.componentInstance;
             service = fixture.debugElement.injector.get(<%= entityAngularName %>Service);
-            mockEventManager = fixture.debugElement.injector.get(JhiEventManager);
-            mockActiveModal = fixture.debugElement.injector.get(NgbActiveModal);
         });
 
         describe('save', () => {
@@ -103,8 +97,6 @@ describe('Component Tests', () => {
                     // THEN
                     expect(service.update).toHaveBeenCalledWith(entity);
                     expect(comp.isSaving).toEqual(false);
-                    expect(mockEventManager.broadcastSpy).toHaveBeenCalledWith({ name: '<%= entityInstance %>ListModification', content: 'OK'});
-                    expect(mockActiveModal.dismissSpy).toHaveBeenCalled();
                 })
             );
 
@@ -121,8 +113,6 @@ describe('Component Tests', () => {
                     // THEN
                     expect(service.create).toHaveBeenCalledWith(entity);
                     expect(comp.isSaving).toEqual(false);
-                    expect(mockEventManager.broadcastSpy).toHaveBeenCalledWith({ name: '<%= entityInstance %>ListModification', content: 'OK'});
-                    expect(mockActiveModal.dismissSpy).toHaveBeenCalled();
                 })
             );
         });
