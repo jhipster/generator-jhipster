@@ -114,7 +114,9 @@ function askForTestOpts(meta) {
     }
     if (meta || !this.skipClient) {
         // all client side test frameworks should be added here
-        choices.push({ name: 'Protractor', value: 'protractor' });
+        if (this.configOptions.clientFramework === 'angularX') {
+            choices.push({ name: 'Protractor', value: 'protractor' });
+        }
     }
     const PROMPT = {
         type: 'checkbox',

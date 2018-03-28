@@ -141,6 +141,7 @@ module.exports = class extends BaseGenerator {
                 context.languages = this.config.get('languages');
                 context.buildTool = this.config.get('buildTool');
                 context.jhiPrefix = this.config.get('jhiPrefix');
+                context.skipCheckLengthOfIdentifier = this.config.get('skipCheckLengthOfIdentifier');
                 context.jhiPrefixDashed = _.kebabCase(context.jhiPrefix);
                 context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
                 context.testFrameworks = this.config.get('testFrameworks');
@@ -237,6 +238,7 @@ module.exports = class extends BaseGenerator {
                 const prodDatabaseType = context.prodDatabaseType;
                 const entityTableName = context.entityTableName;
                 const jhiTablePrefix = context.jhiTablePrefix;
+                const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
                 const instructions = `You can specify a different table name in your JDL file or change it in .jhipster/${context.name}.json file and then run again 'jhipster entity ${context.name}.'`;
 
                 if (!(/^([a-zA-Z0-9_]*)$/.test(entityTableName))) {
@@ -246,9 +248,9 @@ module.exports = class extends BaseGenerator {
                 } else if (jhiCore.isReservedTableName(entityTableName, prodDatabaseType)) {
                     this.warning(chalk.red(`The table name cannot contain the '${entityTableName.toUpperCase()}' reserved keyword, so it will be prefixed with '${jhiTablePrefix}_'.\n${instructions}`));
                     context.entityTableName = `${jhiTablePrefix}_${entityTableName}`;
-                } else if (prodDatabaseType === 'oracle' && entityTableName.length > 26) {
+                } else if (prodDatabaseType === 'oracle' && entityTableName.length > 26 && !skipCheckLengthOfIdentifier) {
                     this.error(chalk.red(`The table name is too long for Oracle, try a shorter name.\n${instructions}`));
-                } else if (prodDatabaseType === 'oracle' && entityTableName.length > 14) {
+                } else if (prodDatabaseType === 'oracle' && entityTableName.length > 14 && !skipCheckLengthOfIdentifier) {
                     this.warning(`The table name is long for Oracle, long table names can cause issues when used to create constraint names and join table names.\n${instructions}`);
                 }
             }

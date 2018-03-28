@@ -1563,12 +1563,12 @@ isurl@^1.0.0-alpha5:
     has-to-string-tag-x "^1.2.0"
     is-object "^1.0.1"
 
-jhipster-core@1.4.6:
-  version "1.4.6"
-  resolved "https://registry.yarnpkg.com/jhipster-core/-/jhipster-core-1.4.6.tgz#480c850b2905910a64bab592f4ea3b47f1ed2f60"
+jhipster-core@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/jhipster-core/-/jhipster-core-2.0.1.tgz#0b8d1b433a99df901fe999f389c77ae50c7af6b7"
   dependencies:
-    lodash "4.17.4"
-    winston "2.4.0"
+    lodash "4.17.5"
+    winston "2.4.1"
 
 jodid25519@^1.0.0:
   version "1.0.2"
@@ -1799,6 +1799,10 @@ lodash.uniq@^4.5.0:
 lodash@4.17.4, lodash@^4.0.0, lodash@^4.11.1, lodash@^4.14.0, lodash@^4.17.2, lodash@^4.17.4, lodash@^4.3.0:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
+
+lodash@4.17.5:
+  version "4.17.5"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.5.tgz#99a92d65c0272debe8c96b6057bc8fbfa3bed511"
 
 lodash@^3.2.0, lodash@^3.3.1:
   version "3.10.1"
@@ -2934,9 +2938,9 @@ win-release@^1.0.0:
   dependencies:
     semver "^5.0.1"
 
-winston@2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/winston/-/winston-2.4.0.tgz#808050b93d52661ed9fb6c26b3f0c826708b0aee"
+winston@2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/winston/-/winston-2.4.1.tgz#a3a9265105564263c6785b4583b8c8aca26fded6"
   dependencies:
     async "~1.0.0"
     colors "1.0.x"
