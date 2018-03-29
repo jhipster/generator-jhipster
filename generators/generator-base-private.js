@@ -1072,4 +1072,13 @@ module.exports = class extends Generator {
             ]);
         }
     }
+
+    /**
+     * Put to first letter to uppercase.
+     * ie: upperFiest('foo') -> 'Foo'
+     * @param {string} value
+     */
+    upperFirst(value) {
+        return _.upperFirst(value);
+    }
 };
