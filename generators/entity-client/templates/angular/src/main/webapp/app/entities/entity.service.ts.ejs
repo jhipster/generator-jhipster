@@ -104,7 +104,9 @@ export class <%= entityAngularName %>Service {
     private convertDateFromServer(res: EntityResponseType): EntityResponseType {
         <%_ for (idx in fields) { _%>
         <%_ if ( ['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType) ) { _%>
-        res.body.<%= fields[idx].fieldName %> != null && res.body.<%= fields[idx].fieldName %>.isValid() ? res.body.<%= fields[idx].fieldName %>.toJSON() : null;
+        if (res.body.<%= fields[idx].fieldName %> != null && res.body.<%= fields[idx].fieldName %>.isValid()) {
+            res.body.<%= fields[idx].fieldName %>.toJSON()
+        }
         <%_ } _%>
         <%_ } _%>
         return res;
@@ -114,7 +116,9 @@ export class <%= entityAngularName %>Service {
         res.body.forEach ((<%= entityInstance %>: I<%= entityAngularName %>) => {
             <%_ for (idx in fields) { _%>
             <%_ if ( ['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType) ) { _%>
-            <%= entityInstance %>.<%= fields[idx].fieldName %> != null && <%= entityInstance %>.<%= fields[idx].fieldName %>.isValid() ? <%= entityInstance %>.<%= fields[idx].fieldName %>.toJSON() : null;
+            if (<%= entityInstance %>.<%= fields[idx].fieldName %> != null && <%= entityInstance %>.<%= fields[idx].fieldName %>.isValid()) {
+                <%= entityInstance %>.<%= fields[idx].fieldName %>.toJSON()
+            }
             <%_ } _%>
             <%_ } _%>
         });
