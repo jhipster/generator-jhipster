@@ -438,7 +438,7 @@ _%>
                 </Translate>
               </Label>
               <br />
-              {!isNew && <%= fieldName %> ? (
+              {<%= fieldName %> ? (
                 <div>
                   <a onClick={openFile(<%= fieldName %>ContentType, <%= fieldName %>)}>
                   <%_ if (isAnImage) { _%>

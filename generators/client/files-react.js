@@ -411,7 +411,9 @@ const files = {
             templates: [
                 'spec/app/modules/administration/user-management/user-management.reducer.spec.ts'
             ]
-        },
+        }
+        /*
+        ,
         {
             condition: generator => generator.authenticationType === 'session',
             path: TEST_SRC_DIR,
@@ -419,6 +421,7 @@ const files = {
                 'spec/app/modules/account/sessions/sessions.reducer.spec.ts',
             ]
         }
+        */
     //   {
     //     condition: generator => generator.enableTranslation,
     //     path: TEST_SRC_DIR,
