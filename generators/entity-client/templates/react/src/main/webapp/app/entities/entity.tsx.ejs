@@ -50,9 +50,9 @@ import {
   ICrudGetAllAction<% if (fieldContainsDate) { %>, TextFormat<% } %>
   <%_ if (pagination !== 'no') { _%>
   , getSortState, IPaginationBaseState
-  <% if (pagination === 'pagination' || pagination === 'pager') { %>
+  <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
   , getPaginationItemsNumber, JhiPagination
-  <% }} %>
+  <%_ }} _%>
 } from 'react-jhipster';
 import { FaPlus, FaEye, FaPencil, FaTrash<% if (pagination !== 'no') { %>, FaSort<% } %><% if (searchEngine === 'elasticsearch') { %>, FaSearch<% } %> } from 'react-icons/lib/fa';
 
