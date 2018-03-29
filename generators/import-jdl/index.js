@@ -42,6 +42,13 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
 
+        // Support for the '--ignore-application' flag
+        this.option('ignore-application', {
+            desc: 'Ignores application generation',
+            type: Boolean,
+            defaults: false
+        });
+
         // This adds support for a `--skip-ui-grouping` flag
         this.option('skip-ui-grouping', {
             desc: 'Disable the UI grouping behaviour for entity client side code',
@@ -101,7 +108,7 @@ module.exports = class extends BaseGenerator {
                         applicationType: this.applicationType,
                         applicationName: this.baseName
                     });
-                    if (shouldGenerateApplications(this.jdlObject)) {
+                    if (shouldGenerateApplications(this, this.jdlObject)) {
                         this.log('Writing application configuration files.');
                         this.jdlObject.applications =
                             setGeneratorVersionInJDLApplications(this.jdlObject.applications, packagejs.version);
@@ -116,7 +123,7 @@ module.exports = class extends BaseGenerator {
                         applicationType: this.applicationType
                     });
                     this.log('Writing entity JSON files.');
-                    if (shouldGenerateApplications(this.jdlObject)) {
+                    if (shouldGenerateApplications(this, this.jdlObject)) {
                         this.changedEntities = jhiCore.exportEntitiesInApplications({
                             entities,
                             forceNoFiltering: this.options.force,
@@ -158,7 +165,7 @@ module.exports = class extends BaseGenerator {
                     return;
                 }
                 try {
-                    if (shouldGenerateApplications(this.jdlObject)) {
+                    if (shouldGenerateApplications(this, this.jdlObject)) {
                         this.log('Generating applications.');
                         Object.keys(this.jdlObject.applications).forEach((application) => {
                             this.log(`Generating application ${application.baseName}.`);
@@ -169,7 +176,7 @@ module.exports = class extends BaseGenerator {
                     this.getExistingEntities()
                         .filter(entity => this.changedEntities.includes(entity.name))
                         .forEach((entity) => {
-                            if (shouldGenerateApplications(this.jdlObject) && entity.applications !== '*') {
+                            if (shouldGenerateApplications(this, this.jdlObject) && entity.applications !== '*') {
                                 entity.applications.forEach((applicationName) => {
                                     const applicationPath = path.join(
                                         shelljs.pwd().stdout,
@@ -190,15 +197,15 @@ module.exports = class extends BaseGenerator {
 
     end() {
         if (!this.options['skip-install'] && !this.skipClient && !this.options['json-only']
-                && !shouldGenerateApplications(this.jdlObject)) {
+                && !shouldGenerateApplications(this, this.jdlObject)) {
             this.debug('Building client');
             this.rebuildClient();
         }
     }
 };
 
-function shouldGenerateApplications(jdlObject) {
-    return Object.keys(jdlObject.applications).length !== 0;
+function shouldGenerateApplications(generationConfiguration, jdlObject) {
+    return !generationConfiguration.options['ignore-application'] && Object.keys(jdlObject.applications).length !== 0;
 }
 
 function getApplicationPaths(jdlApplications) {
