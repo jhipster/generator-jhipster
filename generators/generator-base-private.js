@@ -1081,4 +1081,13 @@ module.exports = class extends Generator {
     camelCase(text) {
         return _.camelCase(text);
     }
+
+    /**
+     * Put to first letter to uppercase.
+     * ie: upperFiest('foo') -> 'Foo'
+     * @param {string} value
+     */
+    upperFirst(value) {
+        return _.upperFirst(value);
+    }
 };

@@ -34,8 +34,22 @@ import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
       break;
     }
   }
+
+  const blobs = fields.filter(e => ['byte[]', 'ByteBuffer'].includes(e.fieldType));
+  const hasAnyBlobOrImage = blobs.filter(e => e.fieldTypeBlobContent !== 'text').length != 0;
 _%>
-import { Translate<% if (searchEngine === 'elasticsearch') { %>, translate<% } %>, ICrudGetAllAction<% if (fieldContainsDate) { %>, TextFormat<% } %><% if (pagination !== 'no') { %>, getSortState, IPaginationBaseState, getPaginationItemsNumber, JhiPagination<% } %>
+import {
+  <%_ if (blobs.length > 0) { _%>
+  <% if(hasAnyBlobOrImage) { %> openFile, <% } %>
+  byteSize,
+  <%_ } _%>
+  Translate<% if (searchEngine === 'elasticsearch') { %>, translate<% } %>,
+  ICrudGetAllAction<% if (fieldContainsDate) { %>, TextFormat<% } %>
+  <% if (pagination !== 'no') { %>,
+  getSortState,
+  IPaginationBaseState,
+  getPaginationItemsNumber,
+  JhiPagination<% } %>
 } from 'react-jhipster';
 import { FaPlus, FaEye, FaPencil, FaTrash<% if (pagination !== 'no') { %>, FaSort<% } %><% if (searchEngine === 'elasticsearch') { %>, FaSearch<% } %> } from 'react-icons/lib/fa';
 
@@ -198,16 +212,39 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                   </td>
                   <%_ for (idx in fields) {
                     const fieldType = fields[idx].fieldType;
+                    const fieldName = fields[idx].fieldName;
                   _%>
                   <td>
                   <%_ if (fieldType === 'Boolean') { _%>
                     {<%= entityInstance %>.<%=fields[idx].fieldName%> ? 'true' : 'false'}
                   <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
-                    <TextFormat type="date" value={<%= entityInstance %>.<%=fields[idx].fieldName%>} format={APP_DATE_FORMAT} />
+                    <TextFormat type="date" value={<%= entityInstance %>.<%=fieldName%>} format={APP_DATE_FORMAT} />
                   <%_ } else if (fieldType === 'LocalDate') { _%>
-                    <TextFormat type="date" value={<%= entityInstance %>.<%=fields[idx].fieldName%>} format={APP_LOCAL_DATE_FORMAT} />
+                    <TextFormat type="date" value={<%= entityInstance %>.<%=fieldName%>} format={APP_LOCAL_DATE_FORMAT} />
+                  <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
+                    <%_
+                      // Blobs
+                      const fieldBlobType = fields[idx].fieldTypeBlobContent;
+                      if (fieldBlobType !== 'text') {
+                    _%>
+                      {<%= entityInstance %>.<%= fieldName %> ? (
+                        <div>
+                            <a onClick={openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)}>
+                            <%_ if (fieldBlobType === 'image') { _%>
+                              <img src={`data:${<%= entityInstance %>.<%= fieldName %>ContentType};base64,${<%= entityInstance %>.<%= fieldName %>}`} style={{ maxHeight: '30px' }} />
+                            <%_ } else { _%>
+                              <Translate contentKey="entity.action.open">Open</Translate>
+                            <%_ } _%>
+                            &nbsp;
+                          </a>
+                          <span>{<%= entityInstance %>.<%= fieldName %>ContentType}, {byteSize(<%= entityInstance %>.<%= fieldName %>)}</span>
+                        </div>
+                      ) : null}
+                    <%_ } else { _%>
+                        {<%= entityInstance %>.<%= fieldName %>}
+                    <%_ } _%>
                   <%_ } else { _%>
-                    {<%= entityInstance %>.<%= fields[idx].fieldName %>}
+                    {<%= entityInstance %>.<%= fieldName %>}
                   <%_ } _%>
                   </td>
                   <%_ } _%>

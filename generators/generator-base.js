@@ -1770,7 +1770,11 @@ module.exports = class extends PrivateBase {
         let entityJson = null;
 
         try {
-            entityJson = this.fs.readJSON(path.join(JHIPSTER_CONFIG_DIR, `${_.upperFirst(file)}.json`));
+            if (this.context.microservicePath) {
+                entityJson = this.fs.readJSON(path.join(this.context.microservicePath, JHIPSTER_CONFIG_DIR, `${_.upperFirst(file)}.json`));
+            } else {
+                entityJson = this.fs.readJSON(path.join(JHIPSTER_CONFIG_DIR, `${_.upperFirst(file)}.json`));
+            }
         } catch (err) {
             this.log(chalk.red(`The JHipster entity configuration file could not be read for file ${file}!`) + err);
             this.debug('Error:', err);
