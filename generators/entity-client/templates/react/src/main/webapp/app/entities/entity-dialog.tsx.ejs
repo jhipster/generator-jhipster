@@ -27,10 +27,25 @@ for (const idx in fields) {
 // const queries = query.queries;
 // const variables = query.variables;
 // let hasManyToMany = query.hasManyToMany;
+
+const blobs = fields.filter(e => ['byte[]', 'ByteBuffer'].includes(e.fieldType));
+const hasBlob = blobs.length > 0;
+const hasAnyBlobOrImage = blobs.filter(e => e.fieldTypeBlobContent !== 'text').length != 0;
 _%>
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Label<% if (haveFieldWithJavadoc) { %>, UncontrolledTooltip<% } %> } from 'reactstrap';
+import {
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  <%_ if (hasBlob) { _%>
+  Row,
+  Col,
+  <%_ } _%>
+  Label
+  <% if (haveFieldWithJavadoc) { %>, UncontrolledTooltip<% } %> } from 'reactstrap';
 <%_
   let isAvField = false;
   for (idx in fields) {
@@ -43,8 +58,19 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Label<% if (haveFie
 _%>
 import { AvForm, AvGroup, AvInput<% if (isAvField) { %>, AvField <% } %> } from 'availity-reactstrap-validation';
 // tslint:disable-next-line:no-unused-variable
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
-import { FaBan, FaFloppyO } from 'react-icons/lib/fa';
+import {
+  Translate,
+  translate,
+  ICrudGetAction,
+  ICrudGetAllAction,
+  <%_ if (hasBlob) { _%>
+  setFileData,
+  <% if(hasAnyBlobOrImage) { %> openFile,<% } %>
+  byteSize,
+  <%_ } _%>
+  ICrudPutAction
+} from 'react-jhipster';
+import { FaBan, <% if(hasBlob) { %>FaTimesCircle, <% } %>FaFloppyO } from 'react-icons/lib/fa';
 
 <%_
 let hasRelationshipQuery = false;
@@ -52,6 +78,8 @@ let otherEntityActions = new Set();
 let manyToManyOwners = new Set();
 let relFieldNames = new Set();
 let uniqueRealtionFields = new Set();
+
+
 Object.keys(differentRelationships).forEach(key => {
 
   const hasAnyRelationshipQuery = differentRelationships[key].some(rel =>
@@ -87,7 +115,18 @@ import { getEntities as get<%= upperFirstCamelCase(uniqueRel.otherEntityNamePlur
 <%_ }
   }
 }); _%>
-import { getEntity, updateEntity, createEntity } from './<%= entityFileName %>.reducer';
+import {
+  getEntity,
+  updateEntity,
+  createEntity,
+  <%_
+    blobs.forEach(b => {
+      const capitalizedFirstLetter = upperFirst(b.fieldName);
+  _%>
+  set<%= capitalizedFirstLetter %>,
+  <%_ }); _%>
+  reset
+} from './<%= entityFileName %>.reducer';
 // tslint:disable-next-line:no-unused-variable
 import { convertDateTimeFromServer } from 'app/shared/util/date-utils';
 
@@ -100,6 +139,13 @@ export interface I<%= entityReactName %>DialogProps {
   <%= val.instance %>: I<%= val.entity %>[];
   <%_ }) _%>
   <%= entityInstance %>: any;
+  <%_
+    blobs.forEach(b => {
+      const capitalizedFirstLetter = upperFirst(b.fieldName);
+  _%>
+  set<%= capitalizedFirstLetter %>: Function;
+  <%_ }); _%>
+  reset: Function;
   loading: boolean;
   updating: boolean;
   match: any;
@@ -115,6 +161,9 @@ export interface I<%= entityReactName %>DialogState {
   <%_ relFieldNames.forEach(val => { _%>
   <%= val.relationshipFieldName %>Id: number;
   <%_ }) _%>
+  <%_ blobs.forEach(b => {_%>
+  <%= b.fieldName %>: any;
+  <%_ }) _%>
 }
 
 export class <%= entityReactName %>Dialog extends React.Component<I<%= entityReactName %>DialogProps, I<%= entityReactName %>DialogState> {
@@ -129,31 +178,56 @@ export class <%= entityReactName %>Dialog extends React.Component<I<%= entityRea
       <%_ relFieldNames.forEach(val => { _%>
       <%= val.relationshipFieldName %>Id: 0,
       <%_ }) _%>
+      <%_ blobs.forEach(b => { _%>
+      <%= b.fieldName %>: null,
+      <%_ }) _%>
       showModal: true
     };
   }
 
   componentDidMount() {
-    !this.state.isNew && this.props.getEntity(this.props.match.params.id);
+    if (this.state.isNew) {
+      this.props.reset();
+    } else {
+      this.props.getEntity(this.props.match.params.id);
+    }
+
     <%_ otherEntityActions.forEach(val => { _%>
     this.props.<%= val.action %>();
     <%_ }) _%>
   }
 
+  <%_ if (hasBlob) {_%>
+  onBlobChange = (isAnImage, reducerFunction) => event => {
+    setFileData(event, (contentType, data) => reducerFunction({ contentType, data }), isAnImage);
+  };
+
+  clearBlob = reducerFunction => () => {
+    reducerFunction({ data: undefined, contentType: undefined });
+  };
+  <%_ } _%>
+
   saveEntity = (event, errors, values) => {
     <%_ for (idx in fields) {
         const fieldType = fields[idx].fieldType;
+        const fieldName = fields[idx].fieldName;
     _%>
     <%_ if (fieldType === 'Instant' || fieldType === 'ZonedDateTime')  { _%>
-    values.<%=fields[idx].fieldName%> = new Date(values.<%=fields[idx].fieldName%>);
+    values.<%=fieldName%> = new Date(values.<%= fieldName %>);
     <%_ } _%>
     <%_ } _%>
 
     if (errors.length === 0) {
+      const { <%= entityInstance %> } = this.props;
+      const entity = {
+        ...<%= entityInstance %>,
+        ...values
+      }
+
       if (this.state.isNew) {
-        this.props.createEntity(values);
+        this.props.createEntity(entity);
       } else {
-        this.props.updateEntity(values);
+        this.props.updateEntity(entity);
       }
       this.handleClose();
     }
@@ -244,6 +318,25 @@ _%>
     uniqueRealtionFields.forEach(rel => {
     %> <%= rel %>,<% }) %> loading, updating } = this.props;
     const { showModal, isNew } = this.state;
+
+    <%_ for (var i = 0; i < blobs.length; i++) { _%>
+    <%_
+      const b = blobs[i];
+      if (i === 0) {
+    _%>
+      const {
+      <%_ } _%>
+      <%= b.fieldName %>
+      <%_ if (b.fieldTypeBlobContent !== 'text') { _%>
+      , <%= b.fieldName %>ContentType
+      <%_ } _%>
+      <%_ if (i+1 === blobs.length) { _%>
+      } = <%= entityInstance %>;
+      <%_ } else { _%>
+      ,
+      <%_ } _%>
+    <%_ } _%>
+
     return (
       <%_ const keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
       <Modal isOpen={showModal} modalTransition={{ timeout: 20 }} backdropTransition={{ timeout: 10 }}
@@ -273,7 +366,7 @@ _%>
                   <%=fieldName%>
                 </Translate>
               </Label>
-            <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
+            <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
               <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
                 <Translate contentKey="<%= keyPrefix %><%= fieldName %>">
                   <%=fieldName%>
@@ -328,6 +421,46 @@ _%>
                 </Translate>
               </Label>
               <AvField type="number" className="form-control" name="<%= fieldName %>" <%- include react_validators %> />
+            <%_
+             } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) {
+
+              const fieldBlobType = fields[idx].fieldTypeBlobContent;
+              if (fieldBlobType !== 'text') {
+                const isAnImage = fieldBlobType === 'image';
+                const capitalizedFirstLetter =  upperFirst(fieldName);
+
+            _%>
+
+            <AvGroup>
+              <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
+                <Translate contentKey="<%= keyPrefix %><%= fieldName %>">
+                  <%= fieldName %>
+                </Translate>
+              </Label>
+              <br />
+              {!isNew && <%= fieldName %> ? (
+                <div>
+                  <a onClick={openFile(<%= fieldName %>ContentType, <%= fieldName %>)}>
+                  <%_ if (isAnImage) { _%>
+                    <img src={`data:${<%= fieldName %>ContentType};base64,${<%= fieldName %>}`} style={{ maxHeight: '100px' }} />
+                  <%_ } else { _%>
+                    <Translate contentKey="entity.action.open">Open</Translate>
+                  <%_ } _%>
+                  </a>
+                  <br />
+                  <Row>
+                    <Col md="11">
+                      <span>{<%= fieldName %>ContentType}, {byteSize(<%= fieldName %>)}</span>
+                    </Col>
+                    <Col md="1">
+                      <Button color="danger" onClick={this.clearBlob(this.props.set<%= capitalizedFirstLetter%>)}><FaTimesCircle /></Button>
+                    </Col>
+                  </Row>
+                </div>
+              ) : null}
+              <input type="file" onChange={this.onBlobChange(<%= isAnImage %>, this.props.set<%= capitalizedFirstLetter %>)} <% if (isAnImage) { %>accept="image/*"<% } %> />
+            </AvGroup>
+
             <%_ } else { _%>
               <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
                 <Translate contentKey="<%= keyPrefix %><%= fieldName %>">
@@ -335,7 +468,15 @@ _%>
                 </Translate>
               </Label>
               <AvField type="text" name="<%= fieldName %>" <%- include react_validators %>/>
-            <%_ } _%>
+              <%_ } _%>
+            <%_ } else { _%>
+            <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
+              <Translate contentKey="<%= keyPrefix %><%= fieldName %>">
+                <%=fieldName%>
+              </Translate>
+            </Label>
+            <AvField type="text" name="<%= fieldName %>" <%- include react_validators %>/>
+          <%_ } _%>
             <%_ if (fields[idx].javadoc) { _%>
             <UncontrolledTooltip target="<%= fieldName %>Label">
               <%_ if (enableTranslation) { _%>
@@ -542,7 +683,14 @@ const mapDispatchToProps = {
   <%_ }) _%>
   getEntity,
   updateEntity,
-  createEntity
+  <%_
+    blobs.forEach(b => {
+      const capitalizedFirstLetter =  upperFirst(b.fieldName);
+  _%>
+  set<%= capitalizedFirstLetter %>,
+  <%_ }); _%>
+  createEntity,
+  reset
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(<%= entityReactName %>Dialog);

@@ -23,6 +23,8 @@
     }
     let entityActionName = entityInstance.toUpperCase();
     let entityActionNamePlural = entityInstancePlural.toUpperCase();
+
+    const blobs = fields.filter(e => ['byte[]', 'ByteBuffer'].includes(e.fieldType));
 _%>
 <%_ if (pagination === 'infinite-scroll') { _%>
   import { isEqual } from 'lodash';
@@ -50,7 +52,13 @@ export const ACTION_TYPES = {
   CREATE_<%= entityActionName %>: '<%= entityInstance %>/CREATE_<%= entityActionName %>',
   UPDATE_<%= entityActionName %>: '<%= entityInstance %>/UPDATE_<%= entityActionName %>',
   DELETE_<%= entityActionName %>: '<%= entityInstance %>/DELETE_<%= entityActionName %>',
-  <% if (pagination === 'infinite-scroll') { %>RESET_<%= entityActionNamePlural %>: '<%= entityInstance %>/RESET_<%= entityActionNamePlural %>'<% } %>
+  <%_
+  blobs.forEach(b => {
+    const upperFieldName = b.fieldName.toUpperCase();
+  _%>
+  SET_<%= upperFieldName %>: '<%= entityInstance %>/SET_<%= upperFieldName %>',
+  <%_ }); _%>
+  RESET: '<%= entityInstance %>/RESET'
 };
 
 const initialState = {
@@ -157,12 +165,25 @@ export default (state = initialState, action) => {
         updateSuccess: true,
         entity: {}
       };
-    <%_ if (pagination === 'infinite-scroll') { _%>
-    case ACTION_TYPES.RESET_<%= entityActionNamePlural %>:
+    <%_
+    blobs.forEach(b => {
+      const fieldName = b.fieldName;
+      const upperFieldName = fieldName.toUpperCase();
+    _%>
+    case ACTION_TYPES.SET_<%= upperFieldName %>:
+        return {
+          ...state,
+          entity: {
+            ...state.entity,
+            <%= fieldName %>: action.payload.data,
+            <%= fieldName %>ContentType: action.payload.contentType
+          }
+        };
+      <%_ }); _%>
+    case ACTION_TYPES.RESET:
       return {
         ...initialState
       };
-    <%_ } _%>
     default:
       return state;
   }
@@ -234,8 +255,18 @@ export const deleteEntity: ICrudDeleteAction = id => async dispatch => {
   return result;
 };
 
-<%_ if (pagination === 'infinite-scroll') { _%>
-export const reset = () => ({
-  type: ACTION_TYPES.RESET_<%= entityActionNamePlural %>
+<%_
+  blobs.forEach(b => {
+    const fieldName = b.fieldName;
+    const upperFirstName =  upperFirst(fieldName);
+    const upperFieldName = b.fieldName.toUpperCase();
+_%>
+export const set<%= upperFirstName %> = <%= fieldName %> => ({
+  type: ACTION_TYPES.SET_<%= upperFieldName %>,
+  payload: <%= fieldName %>
 });
-<%_ } _%>
+<%_ }); _%>
+
+export const reset = () => ({
+  type: ACTION_TYPES.RESET
+});
