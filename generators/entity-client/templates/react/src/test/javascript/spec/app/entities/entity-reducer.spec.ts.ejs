@@ -165,7 +165,7 @@ describe('Entities reducer tests', () => {
       <%_ if (pagination !== 'no') { _%>
       totalItems: payload.headers['x-total-count'],
       <%_ } _%>
-      entities: payload.data
+      entities: <% if (pagination === 'infinite-scroll') { %>[payload.data]<% } else { %>payload.data<% } %>
       });
     });
 
