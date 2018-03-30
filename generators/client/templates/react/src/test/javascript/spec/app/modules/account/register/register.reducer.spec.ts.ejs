@@ -19,7 +19,12 @@
 import { expect } from 'chai';
 
 import { FAILURE, REQUEST, SUCCESS } from 'app/shared/reducers/action-type.util';
-import register, { ACTION_TYPES } from 'app/modules/account/register/register.reducer';
+import register, { ACTION_TYPES, handleRegister } from 'app/modules/account/register/register.reducer';
+import thunk from 'redux-thunk';
+import axios from 'axios';
+import * as sinon from 'sinon';
+import configureStore from 'redux-mock-store';
+import promiseMiddleware from 'redux-promise-middleware';
 
 describe('Creating account tests', () => {
   const initialState = {
@@ -36,28 +41,23 @@ describe('Creating account tests', () => {
   });
 
   it('should detect a request', () => {
-    expect(register(
-      undefined,
-      { type: REQUEST(ACTION_TYPES.CREATE_ACCOUNT) })
-    ).to.eql({
+    expect(register(undefined, { type: REQUEST(ACTION_TYPES.CREATE_ACCOUNT) })).to.eql({
       ...initialState,
       loading: true
     });
   });
 
   it('should handle RESET', () => {
-    expect(register(
-      { loading: true, registrationSuccess: true, registrationFailure: true, errorMessage: '' },
-      { type: ACTION_TYPES.RESET })
+    expect(
+      register({ loading: true, registrationSuccess: true, registrationFailure: true, errorMessage: '' }, { type: ACTION_TYPES.RESET })
     ).to.eql({
       ...initialState
     });
   });
 
   it('should handle CREATE_ACCOUNT success', () => {
-    expect(register(
-      undefined,
-      {
+    expect(
+      register(undefined, {
         type: SUCCESS(ACTION_TYPES.CREATE_ACCOUNT),
         payload: 'fake payload'
       })
@@ -68,10 +68,9 @@ describe('Creating account tests', () => {
   });
 
   it('should handle CREATE_ACCOUNT failure', () => {
-    const payload = { response : { data : { errorKey : 'fake error' } } };
-    expect(register(
-      undefined,
-      {
+    const payload = { response: { data: { errorKey: 'fake error' } } };
+    expect(
+      register(undefined, {
         type: FAILURE(ACTION_TYPES.CREATE_ACCOUNT),
         payload
       })
@@ -79,6 +78,34 @@ describe('Creating account tests', () => {
       ...initialState,
       registrationFailure: true,
       errorMessage: payload.response.data.errorKey
+    });
+  });
+
+  describe('Actions', () => {
+    let store;
+
+    const resolvedObject = { value: 'whatever' };
+    beforeEach(() => {
+      const mockStore = configureStore([thunk, promiseMiddleware()]);
+      store = mockStore({});
+      axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.put = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.delete = sinon.stub().returns(Promise.resolve(resolvedObject));
+    });
+
+    it('dispatches CREATE_ACCOUNT_PENDING and CREATE_ACCOUNT_FULFILLED actions', async () => {
+
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.CREATE_ACCOUNT)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.CREATE_ACCOUNT),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(handleRegister('', '', '')).then(() => expect(store.getActions()).to.eql(expectedActions));
     });
   });
 });

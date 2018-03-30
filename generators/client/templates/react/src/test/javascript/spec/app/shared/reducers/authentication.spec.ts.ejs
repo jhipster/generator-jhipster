@@ -19,7 +19,13 @@
 import { expect } from 'chai';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 
-import authentication, { ACTION_TYPES } from 'app/shared/reducers/authentication';
+import authentication, { ACTION_TYPES, getSession, login } from 'app/shared/reducers/authentication';
+
+import thunk from 'redux-thunk';
+import axios from 'axios';
+import * as sinon from 'sinon';
+import configureStore from 'redux-mock-store';
+import promiseMiddleware from 'redux-promise-middleware';
 
 describe('Authentication reducer tests', () => {
   function isAccountEmpty(state): boolean {
@@ -33,24 +39,20 @@ describe('Authentication reducer tests', () => {
         loading: false,
         isAuthenticated: false,
         errorMessage: null, // Errors returned from server side
-        <%_ if (authenticationType !== 'oauth2') { _%>
         loginSuccess: false,
         loginError: false, // Errors returned from server side
         showModalLogin: false,
-        <%_ } _%>
         redirectMessage: null
       });
       expect(isAccountEmpty(toTest));
     });
   });
 
-  describe('Requests', () =>{
+  describe('Requests', () => {
     it('should detect a request', () => {
-      <%_ if (authenticationType !== 'oauth2') { _%>
       expect(authentication(undefined, { type: REQUEST(ACTION_TYPES.LOGIN) })).to.contain({
         loading: true
       });
-      <%_ } _%>
       expect(authentication(undefined, { type: REQUEST(ACTION_TYPES.GET_SESSION) })).to.contain({
         loading: true
       });
@@ -58,7 +60,6 @@ describe('Authentication reducer tests', () => {
   });
 
   describe('Success', () => {
-    <%_ if (authenticationType !== 'oauth2') { _%>
     it('should detect a success on login', () => {
       const toTest = authentication(undefined, { type: SUCCESS(ACTION_TYPES.LOGIN) });
       expect(toTest).to.contain({
@@ -69,7 +70,6 @@ describe('Authentication reducer tests', () => {
       });
     });
 
-    <%_ } _%>
     it('should detect a success on get session and be authenticated', () => {
       const payload = { data: { activated: true } };
       const toTest = authentication(undefined, { type: SUCCESS(ACTION_TYPES.GET_SESSION), payload });
@@ -92,7 +92,6 @@ describe('Authentication reducer tests', () => {
   });
 
   describe('Failure', () => {
-    <%_ if (authenticationType !== 'oauth2') { _%>
     it('should detect a failure on login', () => {
       const payload = 'Something happened.';
       const toTest = authentication(undefined, { type: FAILURE(ACTION_TYPES.LOGIN), payload });
@@ -105,7 +104,6 @@ describe('Authentication reducer tests', () => {
       expect(isAccountEmpty(toTest));
     });
 
-    <%_ } _%>
     it('should detect a failure', () => {
       const payload = 'Something happened.';
       const toTest = authentication(undefined, { type: FAILURE(ACTION_TYPES.GET_SESSION), payload });
@@ -159,6 +157,32 @@ describe('Authentication reducer tests', () => {
         isAuthenticated: false
       });
     });
+  });
 
+  describe('Actions', () => {
+    let store;
+
+    const resolvedObject = { value: 'whatever' };
+    beforeEach(() => {
+      const mockStore = configureStore([thunk, promiseMiddleware()]);
+      store = mockStore({});
+      axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.put = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.delete = sinon.stub().returns(Promise.resolve(resolvedObject));
+    });
+
+    it('dispatches GET_SESSION_PENDING and GET_SESSION_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.GET_SESSION)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.GET_SESSION),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(getSession()).then(() => expect(store.getActions()).to.eql(expectedActions));
+    });
   });
 });

@@ -19,7 +19,13 @@
 import { expect } from 'chai';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 
-import account, { ACTION_TYPES } from 'app/modules/account/settings/settings.reducer';
+import account, { ACTION_TYPES, saveAccountSettings } from 'app/modules/account/settings/settings.reducer';
+import { ACTION_TYPES as authActionTypes } from 'app/shared/reducers/authentication';
+import configureStore from 'redux-mock-store';
+import promiseMiddleware from 'redux-promise-middleware';
+import thunk from 'redux-thunk';
+import axios from 'axios';
+import * as sinon from 'sinon';
 
 describe('Settings reducer tests', () => {
   describe('Common tests', () => {
@@ -58,6 +64,40 @@ describe('Settings reducer tests', () => {
         updateFailure: true,
         loading: false
       });
+    });
+  });
+
+  describe('Actions', () => {
+    let store;
+
+    const resolvedObject = { value: 'whatever' };
+    beforeEach(() => {
+      const mockStore = configureStore([thunk, promiseMiddleware()]);
+      store = mockStore({});
+      axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.put = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.delete = sinon.stub().returns(Promise.resolve(resolvedObject));
+    });
+
+    it('dispatches UPDATE_ACCOUNT_PENDING and UPDATE_ACCOUNT_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.UPDATE_ACCOUNT)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.UPDATE_ACCOUNT),
+          payload: resolvedObject
+        },
+        {
+          type: REQUEST(authActionTypes.GET_SESSION)
+        },
+        {
+          type: SUCCESS(authActionTypes.GET_SESSION),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(saveAccountSettings({})).then(() => expect(store.getActions()).to.eql(expectedActions));
     });
   });
 });
