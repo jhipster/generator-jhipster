@@ -26,8 +26,11 @@
 
     const blobs = fields.filter(e => ['byte[]', 'ByteBuffer'].includes(e.fieldType));
 _%>
+<%_ if (pagination === 'infinite-scroll') { _%>
+  import { isEqual } from 'lodash';
+<%_ } _%>
 import axios from 'axios';
-import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
+import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction<% if (pagination === 'infinite-scroll') { %>, parseHeaderForLinks, loadMoreDataWhenScrolled<% } %> } from 'react-jhipster';
 
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
@@ -63,6 +66,11 @@ const initialState = {
   errorMessage: null,
   entities: [],
   entity: {},
+  <%_ if (pagination === 'infinite-scroll') { _%>
+  links: {
+    last: 0
+  },
+  <%_ } _%>
   updating: false,
   <%_ if (pagination !== 'no') { _%>
   totalItems: 0,
@@ -71,6 +79,7 @@ const initialState = {
 };
 
 // Reducer
+
 export default (state = initialState, action) => {
   switch (action.type) {
     <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -114,16 +123,26 @@ export default (state = initialState, action) => {
         ...state,
         loading: false,
         entities: action.payload.data
-    };
+      };
     <%_ } _%>
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST):
+      <%_ if (pagination === 'infinite-scroll') { _%>
+      const links = parseHeaderForLinks(action.payload.headers.link);
+      <%_ } _%>
       return {
         ...state,
+        <%_ if (pagination === 'infinite-scroll') { _%>
+        links: { last: links.last },
+        <%_ } _%>
         loading: false,
         <%_ if (pagination !== 'no') { _%>
         totalItems: action.payload.headers['x-total-count'],
         <%_ } _%>
+        <%_ if (pagination === 'infinite-scroll') { _%>
+        entities: loadMoreDataWhenScrolled(state.entities, action.payload.data, links)
+        <%_ } else { _%>
         entities: action.payload.data
+        <%_ } _%>
       };
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>):
       return {
@@ -146,12 +165,12 @@ export default (state = initialState, action) => {
         updateSuccess: true,
         entity: {}
       };
-      <%_
-      blobs.forEach(b => {
-        const fieldName = b.fieldName;
-        const upperFieldName = fieldName.toUpperCase();
-      _%>
-      case ACTION_TYPES.SET_<%= upperFieldName %>:
+    <%_
+    blobs.forEach(b => {
+      const fieldName = b.fieldName;
+      const upperFieldName = fieldName.toUpperCase();
+    _%>
+    case ACTION_TYPES.SET_<%= upperFieldName %>:
         return {
           ...state,
           entity: {
@@ -242,10 +261,10 @@ export const deleteEntity: ICrudDeleteAction = id => async dispatch => {
     const upperFirstName =  upperFirst(fieldName);
     const upperFieldName = b.fieldName.toUpperCase();
 _%>
-  export const set<%= upperFirstName %> = <%= fieldName %> => ({
-    type: ACTION_TYPES.SET_<%= upperFieldName %>,
-    payload: <%= fieldName %>
-  });
+export const set<%= upperFirstName %> = <%= fieldName %> => ({
+  type: ACTION_TYPES.SET_<%= upperFieldName %>,
+  payload: <%= fieldName %>
+});
 <%_ }); _%>
 
 export const reset = () => ({
