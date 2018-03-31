@@ -75,7 +75,7 @@ public class <%= entityClass %>Resource {
 
     <%_ let entityName = entityInstance;
     if (applicationType === 'microservice') {
-        entityName = `${baseName}${entityInstance}`;
+        entityName = `${baseName}${entityClass}`;
     } _%>
     private static final String ENTITY_NAME = "<%= entityName %>";
     <%_
