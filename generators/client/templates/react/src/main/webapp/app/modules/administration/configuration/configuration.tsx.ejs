@@ -69,6 +69,9 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
     });
   };
 
+  getContextList = contexts => Object.values(contexts).map((v: any) => v.beans).reduce((acc, e) => ({ ...acc, ...e }));
+
+
   render() {
     const { configuration } = this.props;
     const { filter } = this.state;
@@ -96,7 +99,7 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
             </tr>
           </thead>
           <tbody>
-            {configProps.contexts ? Object.values(configProps.contexts.<%= baseName %>.beans)
+            {configProps.contexts ? Object.values(this.getContextList(configProps.contexts))
               .filter(this.propsFilterFn)
               .map((property, propIndex) => (
                 <tr key={propIndex}>
