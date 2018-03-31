@@ -25,16 +25,37 @@ import UserManagementDetail from './user-management-detail';
 import UserManagementDialog from './user-management-dialog';
 import UserManagementDeleteDialog from './user-management-delete-dialog';
 
-const Routes = ({ match }) => (
-  <div>
-    <Switch>
-      <Route exact path={match.url} component={UserManagement} />
-      <ModalRoute exact parentPath={match.url} path={`${match.url}/new`} component={UserManagementDialog} />
-      <ModalRoute exact parentPath={match.url} path={`${match.url}/:login/delete`} component={UserManagementDeleteDialog} />
-      <ModalRoute exact parentPath={match.url} path={`${match.url}/:login/edit`} component={UserManagementDialog} />
-      <Route exact path={`${match.url}/:login`} component={UserManagementDetail} />
-    </Switch>
-  </div>
-);
+export interface IRoutesProps {
+  match: any;
+  location: any;
+}
+
+export class Routes extends React.Component<IRoutesProps> {
+  previousLocation = this.props.location;
+
+  componentWillUpdate(nextProps) {
+    const { location } = this.props;
+    if (nextProps.history.action !== "POP" && (!location.state || !location.state.modal)) {
+      this.previousLocation = this.props.location;
+    }
+  }
+  
+  render() {
+    const { match, location } = this.props;
+    const isModal = !!(location.state && location.state.modal && this.previousLocation !== location);
+
+    return (
+      <div>
+        <Switch location={isModal ? this.previousLocation: location}>
+          <Route exact path={match.url} component={UserManagement} />
+          <Route exact parentPath={match.url} path={`${match.url}/new`} component={UserManagementDialog} />
+          <Route exact parentPath={match.url} path={`${match.url}/:login/edit`} component={UserManagementDialog} />
+          <Route exact path={`${match.url}/:login`} component={UserManagementDetail} />
+        </Switch>
+        {isModal ? <Route exact parentPath={match.url} path={`${match.url}/:login/delete`} component={UserManagementDeleteDialog} /> : null}
+      </div>
+    )
+  }
+}
 
 export default Routes;

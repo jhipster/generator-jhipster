@@ -67,13 +67,23 @@ import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface I<%= entityReactName %>Props {
   getEntities: ICrudGetAllAction;
+  <%_ if (pagination === 'infinite-scroll') { _%>
+  reset: Function;
+  <%_ } _%>
   <%_ if (searchEngine === 'elasticsearch') { _%>
   getSearchEntities: ICrudGetAllAction;
   <%_ } _%>
   <%= entityInstance %>List: any[];
-  <%_ if (pagination === 'pagination') { _%>
+  <%_ if (pagination === 'infinite-scroll') { _%>
+  links: {
+    last: 0
+  };
+  <%_ } _%>
+  <%_ if (pagination !== 'no') { _%>
   totalItems: 0;
   location: any;
+  <%_ } _%>
+  <%_ if (pagination !== 'no') { _%>
   history: any;
   <%_ } _%>
   match: any;
@@ -311,7 +321,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                       <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/edit`} color="primary" size="sm">
                         <FaPencil/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit" /></span>
                       </Button>
-                      <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/delete`} color="danger" size="sm">
+                      <Button tag={Link} to={{ pathname: `${match.url}/${<%=entityInstance %>.id}/delete`, state: { modal: true }}} color="danger" size="sm">
                         <FaTrash/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete" /></span>
                       </Button>
                     </div>
