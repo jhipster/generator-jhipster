@@ -757,8 +757,7 @@ module.exports = class extends BaseGenerator {
                 const context = this.context;
                 const entityName = context.name;
                 if (this.isJhipsterVersionLessThan('5.0.0')) {
-                    this.removeFile(constants.ANGULAR_DIR + 'entities/' + entityName +
-                        '/' + entityName + '.model.ts');
+                    this.removeFile(`${constants.ANGULAR_DIR}entities/${entityName}/${entityName}.model.ts`);
                 }
             },
 
