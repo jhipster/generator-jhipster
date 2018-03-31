@@ -79,7 +79,7 @@ spec:
         # Registry configuration
         - name: SPRING_PROFILES_ACTIVE
           value: prod,native,k8s
-        - name: JHIPSTER_REGISTRY_PASSWORD
+        - name: SPRING_SECURITY_USER_PASSWORD
           valueFrom:
             secretKeyRef:
               name: registry-secret

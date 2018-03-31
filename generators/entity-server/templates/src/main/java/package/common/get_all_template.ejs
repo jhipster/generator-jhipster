@@ -47,7 +47,12 @@
         log.debug("REST request to get a page of <%= entityClassPlural %>");
     <%_ if (viaService) { _%>
         <%_ if (fieldsContainOwnerManyToMany) { _%>
-        Page<<%= instanceType %>> page = eagerload ? <%= entityInstance %>Service.findAllWithEagerRelationships(pageable) : <%= entityInstance %>Service.findAll(pageable);
+        Page<<%= instanceType %>> page;
+        if (eagerload) {
+            page = <%= entityInstance %>Service.findAllWithEagerRelationships(pageable);
+        } else {
+            page = <%= entityInstance %>Service.findAll(pageable);
+        }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, String.format("/api/<%= entityApiUrl %>?eagerload=%b", eagerload));
         <%_ } else { _%>
         Page<<%= instanceType %>> page = <%= entityInstance %>Service.findAll(pageable);
@@ -55,7 +60,12 @@
         <%_ } _%>
     <%_ } else { _%>
         <%_ if (fieldsContainOwnerManyToMany) { _%>
-        Page<<%= instanceType %>> page = eagerload ? <%= entityInstance %>Repository.findAllWithEagerRelationships(pageable)<% if (dto === 'mapstruct') {%>.map(<%= entityToDtoReference %>)<% } %> : <%= entityInstance %>Repository.findAll(pageable)<% if (dto !== 'mapstruct') { %>;<% } else { %>.map(<%= entityToDtoReference %>);<% } %>
+        Page<<%= instanceType %>> page;
+        if (eagerload) {
+            page = <%= entityInstance %>Repository.findAllWithEagerRelationships(pageable)<% if (dto === 'mapstruct') {%>.map(<%= entityToDtoReference %>)<% } %>;
+        } else {
+            page = <%= entityInstance %>Repository.findAll(pageable)<% if (dto !== 'mapstruct') { %>;<% } else { %>.map(<%= entityToDtoReference %>);<% } %>
+        }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, String.format("/api/<%= entityApiUrl %>?eagerload=%b", eagerload));
         <%_ } else { _%>
         Page<<%= instanceType %>> page = <%= entityInstance %>Repository.findAll(pageable)<% if (dto !== 'mapstruct') { %>;<% } else { %>.map(<%= entityToDtoReference %>);<% } %>
