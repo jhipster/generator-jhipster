@@ -50,7 +50,6 @@ export class <%= entityReactName %>DeleteDialog extends React.Component<I<%= ent
   render() {
     const { <%= entityInstance %> } = this.props;
     return (
-      <%_ const keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
       <Modal isOpen toggle={this.handleClose}>
       <ModalHeader toggle={this.handleClose}><Translate contentKey="entity.delete.title">Confirm delete operation</Translate></ModalHeader>
       <ModalBody>

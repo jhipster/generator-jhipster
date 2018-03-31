@@ -27,10 +27,6 @@ for (const idx in fields) {
 // const queries = query.queries;
 // const variables = query.variables;
 // let hasManyToMany = query.hasManyToMany;
-
-const blobs = fields.filter(e => ['byte[]', 'ByteBuffer'].includes(e.fieldType));
-const hasBlob = blobs.length > 0;
-const hasAnyBlobOrImage = blobs.filter(e => e.fieldTypeBlobContent !== 'text').length != 0;
 _%>
 import * as React from 'react';
 import { connect } from 'react-redux';
@@ -41,31 +37,21 @@ import {
   Col,
   Label
   <% if (haveFieldWithJavadoc) { %>, UncontrolledTooltip<% } %> } from 'reactstrap';
-<%_
-  let isAvField = false;
-  for (idx in fields) {
-    fieldType = fields[idx].fieldType;
-    if (!['Instant', 'ZonedDateTime', 'Boolean'].includes(fieldType)) {
-      isAvField = true;
-      break;
-    }
-  }
-_%>
-import { AvForm, AvGroup, AvInput<% if (isAvField) { %>, AvField <% } %> } from 'availity-reactstrap-validation';
+import { AvForm, AvGroup, AvInput<% if (fieldsIsReactAvField) { %>, AvField <% } %> } from 'availity-reactstrap-validation';
 // tslint:disable-next-line:no-unused-variable
 import {
   Translate,
   translate,
   ICrudGetAction,
   ICrudGetAllAction,
-  <%_ if (hasBlob) { _%>
+  <%_ if (fieldsContainBlob) { _%>
   setFileData,
-  <% if(hasAnyBlobOrImage) { %> openFile,<% } %>
+  <% if(fieldsContainBlobOrImage) { %> openFile,<% } %>
   byteSize,
   <%_ } _%>
   ICrudPutAction
 } from 'react-jhipster';
-import { FaBan, <% if(hasBlob) { %>FaTimesCircle, <% } %>FaFloppyO, FaArrowLeft } from 'react-icons/lib/fa';
+import { FaBan, <% if(fieldsContainBlob) { %>FaTimesCircle, <% } %>FaFloppyO, FaArrowLeft } from 'react-icons/lib/fa';
 
 <%_
 let hasRelationshipQuery = false;
@@ -115,7 +101,7 @@ import {
   updateEntity,
   createEntity,
   <%_
-    blobs.forEach(b => {
+    blobFields.forEach(b => {
       const capitalizedFirstLetter = upperFirst(b.fieldName);
   _%>
   set<%= capitalizedFirstLetter %>,
@@ -135,7 +121,7 @@ export interface I<%= entityReactName %>UpdateProps {
   <%_ }) _%>
   <%= entityInstance %>: any;
   <%_
-    blobs.forEach(b => {
+    blobFields.forEach(b => {
       const capitalizedFirstLetter = upperFirst(b.fieldName);
   _%>
   set<%= capitalizedFirstLetter %>: Function;
@@ -155,7 +141,7 @@ export interface I<%= entityReactName %>UpdateState {
   <%_ relFieldNames.forEach(val => { _%>
   <%= val.relationshipFieldName %>Id: number;
   <%_ }) _%>
-  <%_ blobs.forEach(b => {_%>
+  <%_ blobFields.forEach(b => {_%>
   <%= b.fieldName %>: any;
   <%_ }) _%>
 }
@@ -172,7 +158,7 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
       <%_ relFieldNames.forEach(val => { _%>
       <%= val.relationshipFieldName %>Id: 0,
       <%_ }) _%>
-      <%_ blobs.forEach(b => { _%>
+      <%_ blobFields.forEach(b => { _%>
       <%= b.fieldName %>: null,
       <%_ }) _%>
     };
@@ -190,7 +176,7 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
     <%_ }) _%>
   }
 
-  <%_ if (hasBlob) {_%>
+  <%_ if (fieldsContainBlob) {_%>
   onBlobChange = (isAnImage, reducerFunction) => event => {
     setFileData(event, (contentType, data) => reducerFunction({ contentType, data }), isAnImage);
   };
@@ -309,9 +295,9 @@ _%>
     %> <%= rel %>,<% }) %> loading, updating } = this.props;
     const { isNew } = this.state;
 
-    <%_ for (var i = 0; i < blobs.length; i++) { _%>
+    <%_ for (var i = 0; i < blobFields.length; i++) { _%>
     <%_
-      const b = blobs[i];
+      const b = blobFields[i];
       if (i === 0) {
     _%>
       const {
@@ -320,7 +306,7 @@ _%>
       <%_ if (b.fieldTypeBlobContent !== 'text') { _%>
       , <%= b.fieldName %>ContentType
       <%_ } _%>
-      <%_ if (i+1 === blobs.length) { _%>
+      <%_ if (i+1 === blobFields.length) { _%>
       } = <%= entityInstance %>;
       <%_ } else { _%>
       ,
@@ -328,7 +314,6 @@ _%>
     <%_ } _%>
 
     return (
-      <%_ const keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
       <div>
       <Row className="justify-content-center">
         <Col md="8">
@@ -678,7 +663,7 @@ const mapDispatchToProps = {
   getEntity,
   updateEntity,
   <%_
-    blobs.forEach(b => {
+    blobFields.forEach(b => {
       const capitalizedFirstLetter =  upperFirst(b.fieldName);
   _%>
   set<%= capitalizedFirstLetter %>,

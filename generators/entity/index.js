@@ -464,23 +464,29 @@ module.exports = class extends BaseGenerator {
                 context.entityTranslationKeyMenu = _.camelCase(context.clientRootFolder ? `${context.clientRootFolder}-${context.entityStateName}` : context.entityStateName);
                 context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
 
+                context.fieldsContainDate = false;
                 context.fieldsContainInstant = false;
                 context.fieldsContainZonedDateTime = false;
                 context.fieldsContainLocalDate = false;
                 context.fieldsContainBigDecimal = false;
                 context.fieldsContainBlob = false;
                 context.fieldsContainImageBlob = false;
+                context.fieldsContainBlobOrImage = false;
                 context.validation = false;
                 context.fieldsContainOwnerManyToMany = false;
                 context.fieldsContainNoOwnerOneToOne = false;
                 context.fieldsContainOwnerOneToOne = false;
                 context.fieldsContainOneToMany = false;
                 context.fieldsContainManyToOne = false;
+                context.fieldsIsReactAvField = false;
+                context.blobFields = [];
                 context.differentTypes = [context.entityClass];
                 if (!context.relationships) {
                     context.relationships = [];
                 }
                 context.differentRelationships = {};
+                context.i18nToLoad = [context.entityInstance];
+                context.keyPrefix = `${context.angularAppName}.${context.entityTranslationKey}`;
 
                 // Load in-memory data for fields
                 context.fields.forEach((field) => {
@@ -490,6 +496,10 @@ module.exports = class extends BaseGenerator {
                     }
                     const fieldType = field.fieldType;
 
+                    if (!['Instant', 'ZonedDateTime', 'Boolean'].includes(fieldType)) {
+                        context.fieldsIsReactAvField = true;
+                    }
+
                     const nonEnumType = [
                         'String', 'Integer', 'Long', 'Float', 'Double', 'BigDecimal',
                         'LocalDate', 'Instant', 'ZonedDateTime', 'Boolean', 'byte[]', 'ByteBuffer'
@@ -498,6 +508,10 @@ module.exports = class extends BaseGenerator {
                         field.fieldIsEnum = true;
                     } else {
                         field.fieldIsEnum = false;
+                    }
+
+                    if (field.fieldIsEnum === true) {
+                        context.i18nToLoad.push(field.enumInstance);
                     }
 
                     if (_.isUndefined(field.fieldNameCapitalized)) {
@@ -551,16 +565,23 @@ module.exports = class extends BaseGenerator {
 
                     if (fieldType === 'ZonedDateTime') {
                         context.fieldsContainZonedDateTime = true;
+                        context.fieldsContainDate = true;
                     } else if (fieldType === 'Instant') {
                         context.fieldsContainInstant = true;
+                        context.fieldsContainDate = true;
                     } else if (fieldType === 'LocalDate') {
                         context.fieldsContainLocalDate = true;
+                        context.fieldsContainDate = true;
                     } else if (fieldType === 'BigDecimal') {
                         context.fieldsContainBigDecimal = true;
                     } else if (fieldType === 'byte[]' || fieldType === 'ByteBuffer') {
+                        context.blobFields.push(field);
                         context.fieldsContainBlob = true;
                         if (field.fieldTypeBlobContent === 'image') {
                             context.fieldsContainImageBlob = true;
+                        }
+                        if (field.fieldTypeBlobContent !== 'text') {
+                            context.fieldsContainBlobOrImage = true;
                         }
                     }
 

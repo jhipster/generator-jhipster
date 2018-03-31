@@ -17,17 +17,11 @@
  limitations under the License.
 -%>
 <%_
-    let hasDate = false;
-    if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) {
-        hasDate = true;
-    }
     let entityActionName = entityInstance.toUpperCase();
     let entityActionNamePlural = entityInstancePlural.toUpperCase();
-
-    const blobs = fields.filter(e => ['byte[]', 'ByteBuffer'].includes(e.fieldType));
 _%>
 <%_ if (pagination === 'infinite-scroll') { _%>
-  import { isEqual } from 'lodash';
+import { isEqual } from 'lodash';
 <%_ } _%>
 import axios from 'axios';
 import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction<% if (pagination === 'infinite-scroll') { %>, parseHeaderForLinks, loadMoreDataWhenScrolled<% } %> } from 'react-jhipster';
@@ -38,8 +32,8 @@ import { SERVER_API_URL } from 'app/config/constants';
 <%_ if (!(applicationType === 'gateway' && locals.microserviceName) && authenticationType !== 'uaa') { _%>
 
 <%_ } _%>
-<%_ if (hasDate) { _%>
-// import { JhiDateUtils } from 'ng-jhipster';
+<%_ if (fieldsContainDate) { _%>
+
 <%_ } _%>
 // import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 
@@ -53,7 +47,7 @@ export const ACTION_TYPES = {
   UPDATE_<%= entityActionName %>: '<%= entityInstance %>/UPDATE_<%= entityActionName %>',
   DELETE_<%= entityActionName %>: '<%= entityInstance %>/DELETE_<%= entityActionName %>',
   <%_
-  blobs.forEach(b => {
+  blobFields.forEach(b => {
     const upperFieldName = b.fieldName.toUpperCase();
   _%>
   SET_<%= upperFieldName %>: '<%= entityInstance %>/SET_<%= upperFieldName %>',
@@ -166,7 +160,7 @@ export default (state = initialState, action) => {
         entity: {}
       };
     <%_
-    blobs.forEach(b => {
+    blobFields.forEach(b => {
       const fieldName = b.fieldName;
       const upperFieldName = fieldName.toUpperCase();
     _%>
@@ -256,7 +250,7 @@ export const deleteEntity: ICrudDeleteAction = id => async dispatch => {
 };
 
 <%_
-  blobs.forEach(b => {
+  blobFields.forEach(b => {
     const fieldName = b.fieldName;
     const upperFirstName =  upperFirst(fieldName);
     const upperFieldName = b.fieldName.toUpperCase();

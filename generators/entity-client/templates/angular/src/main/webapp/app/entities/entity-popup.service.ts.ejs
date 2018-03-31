@@ -22,12 +22,6 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { HttpResponse } from '@angular/common/http';
 import { I<%= entityAngularName %>, <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
-<%_
-let hasDate = false;
-if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) {
-    hasDate = true;
-}
-_%>
 
 @Injectable()
 export class <%= entityAngularName %>PopupService {

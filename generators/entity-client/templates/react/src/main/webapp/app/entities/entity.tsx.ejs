@@ -26,28 +26,16 @@ import { Button<% if (searchEngine === 'elasticsearch') { %>, InputGroup<% } %> 
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 <%_ } _%>
-// TODO import TextFormat only when fieldContainsDate
 // tslint:disable-next-line:no-unused-variable
-<%_
-  let fieldContainsDate = false;
-  for (idx in fields) {
-    fieldType = fields[idx].fieldType;
-    if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fieldType)) {
-      fieldContainsDate = true;
-      break;
-    }
-  }
-
-  const blobs = fields.filter(e => ['byte[]', 'ByteBuffer'].includes(e.fieldType));
-  const hasAnyBlobOrImage = blobs.filter(e => e.fieldTypeBlobContent !== 'text').length != 0;
-_%>
 import {
-  <%_ if (blobs.length > 0) { _%>
-  <% if(hasAnyBlobOrImage) { %> openFile, <% } %>
+  <%_ if (blobFields.length > 0) { _%>
+    <%_ if(fieldsContainBlobOrImage) { _%>
+  openFile,
+    <%_ } _%>
   byteSize,
   <%_ } _%>
   Translate<% if (searchEngine === 'elasticsearch') { %>, translate<% } %>,
-  ICrudGetAllAction<% if (fieldContainsDate) { %>, TextFormat<% } %>
+  ICrudGetAllAction<% if (fieldsContainDate) { %>, TextFormat<% } %>
   <%_ if (pagination !== 'no') { _%>
   , getSortState, IPaginationBaseState
   <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
@@ -190,7 +178,6 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   render() {
     const { <%=entityInstance %>List, match<% if (pagination === 'pagination' || pagination === 'pager') { %>, totalItems<% } %>} = this.props;
     return (
-      <%_ const keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
       <div>
         <h2>
           <Translate contentKey="<%= keyPrefix %>home.title"><%= entityClassPluralHumanized %></Translate>
@@ -266,7 +253,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                     <TextFormat type="date" value={<%= entityInstance %>.<%=fieldName%>} format={APP_LOCAL_DATE_FORMAT} />
                   <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
                     <%_
-                      // Blobs
+                      // blobFields
                       const fieldBlobType = fields[idx].fieldTypeBlobContent;
                       if (fieldBlobType !== 'text') {
                     _%>

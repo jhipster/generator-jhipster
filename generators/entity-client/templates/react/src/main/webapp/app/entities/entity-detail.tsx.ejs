@@ -16,28 +16,23 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-
-<%_
-const blobs = fields.filter(e => ['byte[]', 'ByteBuffer'].includes(e.fieldType));
-const hasBlob = blobs.length > 0;
-const hasAnyBlobOrImage = blobs.filter(e => e.fieldTypeBlobContent !== 'text').length != 0;
-_%>
-
-
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button<% if (haveFieldWithJavadoc) { %>, UncontrolledTooltip<% } %> } from 'reactstrap';
-// TODO import TextFormat only when fieldContainsDate
 // tslint:disable-next-line:no-unused-variable
 import {
   Translate,
   ICrudGetAction,
-  <%_ if (hasBlob) { _%>
-  <% if(hasAnyBlobOrImage) { %> openFile, <% } %>
+  <%_ if (fieldsContainBlob) { _%>
+    <%_ if(fieldsContainBlobOrImage) { _%>
+  openFile,
+    <%_ } _%>
   byteSize,
   <%_ } _%>
+  <%_ if (fieldsContainDate) { _%>
   TextFormat
+  <%_ } _%>
 } from 'react-jhipster';
 import { FaArrowLeft } from 'react-icons/lib/fa';
 
@@ -60,7 +55,6 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
   render() {
     const { <%= entityInstance %> } = this.props;
     return (
-      <%_ const keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
       <div>
         <h2>
           <Translate contentKey="<%= keyPrefix %>detail.title"><%= entityClass %></Translate> [<b>{<%= entityInstance %>.id}</b>]

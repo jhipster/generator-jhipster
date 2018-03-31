@@ -19,23 +19,21 @@
 <%_
     let entityActionName = entityInstance.toUpperCase();
     let entityActionNamePlural = entityInstancePlural.toUpperCase();
-    const blobs = fields.filter(e => ['byte[]', 'ByteBuffer'].includes(e.fieldType));
-    const hasBlob = blobs.length > 0;
 _%>
 import axios from 'axios';
 import { expect } from 'chai';
-import reducer, {
-  ACTION_TYPES, createEntity, deleteEntity, getEntities, getEntity, updateEntity<% if (pagination === 'infinite-scroll') { %>, reset<% } %>
-} from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.reducer';
 import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
 import thunk from 'redux-thunk';
 import * as sinon from 'sinon';
-
-import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 <%_ if (pagination === 'infinite-scroll') { _%>
 import { parseHeaderForLinks } from 'react-jhipster';
 <%_ } _%>
+
+import reducer, {
+  ACTION_TYPES, createEntity, deleteEntity, getEntities, getEntity, updateEntity<% if (pagination === 'infinite-scroll') { %>, reset<% } %>
+} from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.reducer';
+import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 
 // tslint:disable no-invalid-template-strings
 describe('Entities reducer tests', () => {
@@ -296,10 +294,10 @@ describe('Entities reducer tests', () => {
     });
   });
 
-  <%_ if (hasBlob) { _%>
-  describe('Blobs', () => {
+  <%_ if (fieldsContainBlob) { _%>
+  describe('blobFields', () => {
     <%_
-    blobs.forEach(b => {
+    blobFields.forEach(b => {
       const nameToUpper = b.fieldName.toUpperCase();
     _%>
     it('should properly set <%= b.fieldName %> in state.', () => {

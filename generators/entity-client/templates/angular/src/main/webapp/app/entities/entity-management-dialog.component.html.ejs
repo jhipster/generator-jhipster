@@ -16,11 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-const keyPrefix = angularAppName + '.'+ entityTranslationKey + '.';
-_%>
 <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
-
     <div class="modal-header">
         <h4 class="modal-title" id="my<%= entityClass %>Label" jhiTranslate="<%= keyPrefix %>home.createOrEditLabel">Create or edit a <%= entityClassHumanized %></h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"

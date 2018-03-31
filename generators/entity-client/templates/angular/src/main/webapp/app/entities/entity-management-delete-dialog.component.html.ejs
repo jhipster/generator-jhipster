@@ -16,7 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const keyPrefix = angularAppName + '.' + entityTranslationKey; _%>
 <form name="deleteForm" (ngSubmit)="confirmDelete(<%= entityInstance %>.id)">
     <div class="modal-header">
         <h4 class="modal-title" jhiTranslate="entity.delete.title">Confirm delete operation</h4>

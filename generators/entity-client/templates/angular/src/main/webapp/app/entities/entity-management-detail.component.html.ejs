@@ -16,7 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<% const keyPrefix = angularAppName + '.' + entityTranslationKey; %>
 <div *ngIf="<%= entityInstance %>">
     <h2><span jhiTranslate="<%= keyPrefix %>.detail.title"><%= entityClassHumanized %></span> {{<%= entityInstance %>.id}}</h2>
     <hr>
