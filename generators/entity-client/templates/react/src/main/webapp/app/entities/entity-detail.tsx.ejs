@@ -57,7 +57,7 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
     return (
       <div>
         <h2>
-          <Translate contentKey="<%= keyPrefix %>detail.title"><%= entityClass %></Translate> [<b>{<%= entityInstance %>.id}</b>]
+          <Translate contentKey="<%= keyPrefix %>.detail.title"><%= entityClass %></Translate> [<b>{<%= entityInstance %>.id}</b>]
         </h2>
         <dl className="row-md jh-entity-details">
         <%_ for (idx in fields) {
@@ -66,14 +66,14 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
         _%>
           <dt>
             <span id="<%= fieldName %>">
-              <Translate contentKey="<%= keyPrefix %><%= fieldName %>">
+              <Translate contentKey="<%= keyPrefix %>.<%= fieldName %>">
               <%=fields[idx].fieldName%>
               </Translate>
             </span>
             <%_ if (fields[idx].javadoc) { _%>
             <UncontrolledTooltip target="<%= fieldName %>">
               <%_ if (enableTranslation) { _%>
-              <Translate contentKey="<%= keyPrefix %>help.<%= fieldName %>"/>
+              <Translate contentKey="<%= keyPrefix %>.help.<%= fieldName %>"/>
               <%_ } else { _%>
               <%= fields[idx].javadoc %>
               <%_ } _%>
@@ -128,7 +128,7 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
               || (relationshipType === 'one-to-one' && ownerSide === true)
               || (relationshipType === 'many-to-many' && ownerSide === true)) { _%>
           <dt>
-            <Translate contentKey="<%= keyPrefix %><%= relationshipName %>">
+            <Translate contentKey="<%= keyPrefix %>.<%= relationshipName %>">
               <%= relationshipNameHumanized %>
             </Translate>
           </dt>
