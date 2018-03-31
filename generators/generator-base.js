@@ -203,7 +203,7 @@ module.exports = class extends PrivateBase {
                     needle: 'jhipster-needle-add-entity-to-menu',
                     splicable: [
                         this.stripMargin(`|(
-                        |        <DropdownItem tag={Link} key="${routerName}" to="/${routerName}">
+                        |        <DropdownItem tag={Link} key="${routerName}" to="/entity/${routerName}">
                         |          <FaAsterisk />&nbsp;
                         |          ${_.startCase(routerName)}
                         |        </DropdownItem>
@@ -276,7 +276,7 @@ module.exports = class extends PrivateBase {
                     file: indexModulePath,
                     needle: 'jhipster-needle-add-route-path',
                     splicable: [
-                        this.stripMargin(`|<Route path={'/${entityFileName}'} component={${entityAngularName}}/>`)
+                        this.stripMargin(`|<Route path={\`\${match.url}/${entityFileName}\`} component={${entityAngularName}}/>`)
                     ]
                 }, this);
 

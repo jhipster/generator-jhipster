@@ -183,8 +183,8 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
   }
 }
 
-const mapStateToProps = storeState => ({
-    <%= entityInstance %>: storeState.<%= entityInstance %>.entity
+const mapStateToProps = ({ <%= entityInstance %> }) => ({
+    <%= entityInstance %>: <%= entityInstance %>.entity
 });
 
 const mapDispatchToProps = { getEntity };

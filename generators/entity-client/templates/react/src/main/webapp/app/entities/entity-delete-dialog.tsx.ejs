@@ -73,8 +73,8 @@ export class <%= entityReactName %>DeleteDialog extends React.Component<I<%= ent
   }
 }
 
-const mapStateToProps = storeState => ({
-    <%= entityInstance %>: storeState.<%= entityInstance %>.entity
+const mapStateToProps = ({ <%= entityInstance %> }) => ({
+    <%= entityInstance %>: <%= entityInstance %>.entity
 });
 
 const mapDispatchToProps = { getEntity, deleteEntity };

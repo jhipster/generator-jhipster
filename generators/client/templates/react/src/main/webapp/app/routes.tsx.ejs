@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import * as React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { PrivateRoute } from 'react-jhipster';
 
 <%_ if (authenticationType !== 'oauth2') { _%>
@@ -35,18 +35,20 @@ import Entities from './entities';
 
 const Routes = () => (
   <div className="view-routes">
-    <Route exact path="/" component={Home}/>
     <%_ if (authenticationType !== 'oauth2') { _%>
     <Route path="/login" component={Login} />
     <%_ } _%>
-    <Route path="/logout" component={Logout} />
-    <Route path="/register" component={Register} />
-    <Route path="/activate/:key?" component={Activate} />
-    <Route path="/reset/request" component={PasswordResetInit} />
-    <Route path="/reset/finish/:key?" component={PasswordResetFinish} />
-    <PrivateRoute path="/admin" component={Admin} />
-    <PrivateRoute path="/account" component={Account} />
-    <Route path="**" component={Entities} />
+    <Switch>
+      <Route path="/logout" component={Logout} />
+      <Route path="/register" component={Register} />
+      <Route path="/activate/:key?" component={Activate} />
+      <Route path="/reset/request" component={PasswordResetInit} />
+      <Route path="/reset/finish/:key?" component={PasswordResetFinish} />
+      <PrivateRoute path="/admin" component={Admin} />
+      <PrivateRoute path="/account" component={Account} />
+      <PrivateRoute path="/entity" component={Entities} />
+      <Route path="/" component={Home}/>
+    </Switch>
   </div>
 );
 
