@@ -22,7 +22,7 @@ _%>
 <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
 
     <div>
-        <h2  id="my<%= entityClass %>Label" jhiTranslate="<%= keyPrefix %>home.createOrEditLabel">Create or edit a <%= entityClassHumanized %></h2>
+        <h4  id="my<%= entityClass %>Label" jhiTranslate="<%= keyPrefix %>home.createOrEditLabel">Create or edit a <%= entityClassHumanized %></h4>
     </div>
     <div>
         <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
