@@ -19,6 +19,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { ModalRoute } from 'react-router-modal';
 import { Button } from 'reactstrap';
 import {
   Translate,
@@ -35,6 +36,7 @@ import { FaPlus, FaEye, FaPencil, FaSort, FaTrash } from 'react-icons/lib/fa';
 import { APP_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { getUsers, updateUser } from './user-management.reducer';
+import UserManagementDeleteDialog from './user-management-delete-dialog';
 
 export interface IUserManagementProps {
   getUsers: ICrudGetAllAction;
@@ -86,6 +88,7 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
     const { users, account, match, totalItems } = this.props;
     return (
       <div>
+        <ModalRoute exact parentPath={match.url} path={`${match.url}/:login/delete`} component={UserManagementDeleteDialog} />
         <h2>
           <Translate contentKey="userManagement.home.title">Users</Translate>
           <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity">
@@ -174,7 +177,7 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
                         <FaPencil/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
                       </Button>
                       <Button
-                        tag={Link} to={{pathname: `${match.url}/${user.login}/delete`, state: { modal: true }}}
+                        tag={Link} to={`${match.url}/${user.login}/delete`}
                         color="danger" size="sm" disabled={account.login === user.login}
                       >
                         <FaTrash/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>

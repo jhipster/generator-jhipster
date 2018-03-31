@@ -18,44 +18,22 @@
 -%>
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { ModalRoute } from 'react-router-modal';
 
 import UserManagement from './user-management';
 import UserManagementDetail from './user-management-detail';
-import UserManagementDialog from './user-management-dialog';
+import UserManagementUpdate from './user-management-update';
 import UserManagementDeleteDialog from './user-management-delete-dialog';
 
-export interface IRoutesProps {
-  match: any;
-  location: any;
-}
-
-export class Routes extends React.Component<IRoutesProps> {
-  previousLocation = this.props.location;
-
-  componentWillUpdate(nextProps) {
-    const { location } = this.props;
-    if (nextProps.history.action !== "POP" && (!location.state || !location.state.modal)) {
-      this.previousLocation = this.props.location;
-    }
-  }
-  
-  render() {
-    const { match, location } = this.props;
-    const isModal = !!(location.state && location.state.modal && this.previousLocation !== location);
-
-    return (
-      <div>
-        <Switch location={isModal ? this.previousLocation: location}>
-          <Route exact path={match.url} component={UserManagement} />
-          <Route exact parentPath={match.url} path={`${match.url}/new`} component={UserManagementDialog} />
-          <Route exact parentPath={match.url} path={`${match.url}/:login/edit`} component={UserManagementDialog} />
-          <Route exact path={`${match.url}/:login`} component={UserManagementDetail} />
-        </Switch>
-        {isModal ? <Route exact parentPath={match.url} path={`${match.url}/:login/delete`} component={UserManagementDeleteDialog} /> : null}
-      </div>
-    )
-  }
-}
+const Routes = ({ match }) => (
+  <>
+    <Switch>
+      <Route exact path={`${match.url}/new`} component={UserManagementUpdate} />
+      <Route exact path={`${match.url}/:login/edit`} component={UserManagementUpdate} />
+      <Route exact path={`${match.url}/:login`} component={UserManagementDetail} />
+      <Route path={match.url} component={UserManagement} />
+    </Switch>
+    <Route path={`${match.url}/:login/delete`} component={UserManagementDeleteDialog} />
+  </>
+);
 
 export default Routes;

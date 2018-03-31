@@ -29,7 +29,7 @@ import { locales } from 'app/config/translation';
 <%_ } _%>
 import { getUser, getRoles, updateUser, createUser, reset } from './user-management.reducer';
 
-export interface IUserManagementDialogProps {
+export interface IUserManagementUpdateProps {
   getUser: ICrudGetAction;
   getRoles: ICrudGetAllAction;
   updateUser: ICrudPutAction;
@@ -43,13 +43,13 @@ export interface IUserManagementDialogProps {
   history: any;
 }
 
-export interface IUserManagementDialogState {
+export interface IUserManagementUpdateState {
   isNew: boolean;
 }
 
-export class UserManagementDialog extends React.Component<IUserManagementDialogProps, IUserManagementDialogState> {
+export class UserManagementUpdate extends React.Component<IUserManagementUpdateProps, IUserManagementUpdateState> {
 
-  state: IUserManagementDialogState = {
+  state: IUserManagementUpdateState = {
     isNew: !this.props.match.params || !this.props.match.params.login
   };
 
@@ -268,4 +268,4 @@ const mapStateToProps = storeState => ({
 
 const mapDispatchToProps = { getUser, getRoles, updateUser, createUser, reset };
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserManagementDialog);
+export default connect(mapStateToProps, mapDispatchToProps)(UserManagementUpdate);
