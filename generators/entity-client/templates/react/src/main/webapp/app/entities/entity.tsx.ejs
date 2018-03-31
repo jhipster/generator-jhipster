@@ -180,9 +180,9 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
     return (
       <div>
         <h2>
-          <Translate contentKey="<%= keyPrefix %>.home.title"><%= entityClassPluralHumanized %></Translate>
+          <Translate contentKey="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></Translate>
           <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity">
-            <FaPlus /> <Translate contentKey="<%= keyPrefix %>.home.createLabel" />
+            <FaPlus /> <Translate contentKey="<%= i18nKeyPrefix %>.home.createLabel" />
           </Link>
         </h2>
         <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -191,7 +191,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
             <AvForm onSubmit={this.search}>
               <AvGroup>
                 <InputGroup>
-                  <AvInput type="text" name="search" value={this.state.search} onChange={this.handleSearch} placeholder={translate('<%= keyPrefix %>.home.search')} />
+                  <AvInput type="text" name="search" value={this.state.search} onChange={this.handleSearch} placeholder={translate('<%= i18nKeyPrefix %>.home.search')} />
                   <Button className="input-group-addon">
                     <FaSearch/>
                   </Button>
@@ -218,14 +218,14 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
               <tr>
                 <th<% if (pagination !== 'no') { %> className="hand" onClick={this.sort('id')} <%_ } _%>><Translate contentKey="global.field.id">ID</Translate><% if (pagination !== 'no') { %> <FaSort /><% } %></th>
                 <%_ for (idx in fields) { _%>
-                <th<% if (pagination !== 'no') { %> className="hand" onClick={this.sort('<%=fields[idx].fieldName%>')} <%_ } _%>><Translate contentKey="<%= `${keyPrefix}.${fields[idx].fieldName}` %>"><%= fields[idx].fieldNameHumanized %></Translate><% if (pagination !== 'no') { %> <FaSort /><% } %></th>
+                <th<% if (pagination !== 'no') { %> className="hand" onClick={this.sort('<%=fields[idx].fieldName%>')} <%_ } _%>><Translate contentKey="<%= `${i18nKeyPrefix}.${fields[idx].fieldName}` %>"><%= fields[idx].fieldNameHumanized %></Translate><% if (pagination !== 'no') { %> <FaSort /><% } %></th>
                 <%_ } _%>
                 <%_ for (idx in relationships) { _%>
                     <%_ if (relationships[idx].relationshipType === 'many-to-one'
                     || (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide === true)
                     || (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true && pagination === 'no')) {
                     const fieldName = dto === 'no' ? "." + relationships[idx].otherEntityField : relationships[idx].otherEntityFieldCapitalized;_%>
-                <th<% if (pagination !== 'no') { %> <% } %>><Translate contentKey="<%= `${keyPrefix}.${relationships[idx].relationshipName}` %>"><%= relationships[idx].relationshipNameHumanized %></Translate><% if (pagination !== 'no') { %> <FaSort /><% } %></th>
+                <th<% if (pagination !== 'no') { %> <% } %>><Translate contentKey="<%= `${i18nKeyPrefix}.${relationships[idx].relationshipName}` %>"><%= relationships[idx].relationshipNameHumanized %></Translate><% if (pagination !== 'no') { %> <FaSort /><% } %></th>
                     <%_ } _%>
                 <%_ } _%>
                 <th />

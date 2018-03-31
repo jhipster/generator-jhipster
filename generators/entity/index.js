@@ -486,7 +486,7 @@ module.exports = class extends BaseGenerator {
                 }
                 context.differentRelationships = {};
                 context.i18nToLoad = [context.entityInstance];
-                context.keyPrefix = `${context.angularAppName}.${context.entityTranslationKey}`;
+                context.i18nKeyPrefix = `${context.angularAppName}.${context.entityTranslationKey}`;
 
                 // Load in-memory data for fields
                 context.fields.forEach((field) => {
