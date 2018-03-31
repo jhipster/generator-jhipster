@@ -18,22 +18,23 @@
 -%>
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Label } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import { Button, Label, Row, Col } from 'reactstrap';
 import { AvForm, AvGroup, AvInput, AvField, AvFeedback } from 'availity-reactstrap-validation';
 import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
-import { FaBan, FaFloppyO } from 'react-icons/lib/fa';
+import { FaBan, FaFloppyO, FaArrowLeft } from 'react-icons/lib/fa';
 
 <%_ if (enableTranslation) { _%>
 import { locales } from 'app/config/translation';
 <%_ } _%>
-import { getUser, getRoles, updateUser, createUser, resetModal } from './user-management.reducer';
+import { getUser, getRoles, updateUser, createUser, reset } from './user-management.reducer';
 
 export interface IUserManagementDialogProps {
   getUser: ICrudGetAction;
   getRoles: ICrudGetAllAction;
   updateUser: ICrudPutAction;
   createUser: ICrudPutAction;
-  resetModal: Function;
+  reset: Function;
   loading: boolean;
   updating: boolean;
   user: any;
@@ -43,14 +44,12 @@ export interface IUserManagementDialogProps {
 }
 
 export interface IUserManagementDialogState {
-  showModal: boolean;
   isNew: boolean;
 }
 
 export class UserManagementDialog extends React.Component<IUserManagementDialogProps, IUserManagementDialogState> {
 
   state: IUserManagementDialogState = {
-    showModal: true,
     isNew: !this.props.match.params || !this.props.match.params.login
   };
 
@@ -60,7 +59,7 @@ export class UserManagementDialog extends React.Component<IUserManagementDialogP
   }
 
   componentWillUnmount() {
-    this.props.resetModal();
+    this.props.reset();
   }
 
   saveUser = (event, values) => {
@@ -73,188 +72,189 @@ export class UserManagementDialog extends React.Component<IUserManagementDialogP
   }
 
   handleClose = () => {
-    this.setState({
-        showModal: false
-    });
     this.props.history.push('/admin/user-management');
   }
 
   render() {
     const isInvalid = false;
     const { user, loading, updating, roles } = this.props;
-    const { showModal, isNew } = this.state;
+    const { isNew } = this.state;
     return (
-      <Modal
-        isOpen={showModal} modalTransition={{ timeout: 20 }} backdropTransition={{ timeout: 10 }}
-        toggle={this.handleClose} size="lg"
-      >
-      <ModalHeader toggle={this.handleClose}><Translate contentKey="userManagement.home.createOrEditLabel">Create or edit a User</Translate></ModalHeader>
-      { loading ? <p>Loading...</p>
-      : <AvForm model={isNew ? {} : user} onValidSubmit={this.saveUser}>
-      <ModalBody>
-        {user.id ? (
-          <AvGroup>
-            <Label for="id">
-              <Translate contentKey="global.field.id">ID</Translate>
-            </Label>
-            <AvField type="text" className="form-control" name="id" required readOnly />
-          </AvGroup>
-        ) : null}
-        <AvGroup>
-          <Label for="login">
-            <Translate contentKey="userManagement.login">Login</Translate>
-          </Label>
-          <AvField
-            type="text"
-            className="form-control"
-            name="login"
-            validate={{
-              required: {
-                value: true,
-                errorMessage: translate('register.messages.validate.login.required', null, 'Your username is required.')
-              },
-              pattern: {
-                value: '^[_.@A-Za-z0-9-]*$',
-                errorMessage: translate(
-                  'register.messages.validate.login.pattern',
-                  null,
-                  'Your username can only contain letters and digits.'
-                )
-              },
-              minLength: {
-                value: 1,
-                errorMessage: translate(
-                  'register.messages.validate.login.minlength',
-                  null,
-                  'Your username is required to be at least 1 character.'
-                )
-              },
-              maxLength: {
-                value: 50,
-                errorMessage: translate(
-                  'register.messages.validate.login.maxlength',
-                  null,
-                  'Your username cannot be longer than 50 characters.'
-                )
-              }
-            }}
-          />
-        </AvGroup>
-        <AvGroup>
-          <Label for="firstName">
-            <Translate contentKey="userManagement.firstName">First Name</Translate>
-          </Label>
-          <AvField
-            type="text"
-            className="form-control"
-            name="firstName"
-            validate={{
-              maxLength: {
-                value: 50,
-                errorMessage: translate(
-                  'entity.validation.maxlength', { max: 50 }
-                )
-              }
-            }}
+      <div>
+        <Row className="justify-content-center">
+          <Col md="8">
+            <h1>
+              <Translate contentKey="userManagement.home.createOrEditLabel">Create or edit a User</Translate>
+            </h1>
+          </Col>
+        </Row>
+        <Row className="justify-content-center">
+          <Col md="8">
+          { loading ? <p>Loading...</p>
+          : <AvForm model={isNew ? {} : user} onValidSubmit={this.saveUser}>
+            {user.id ? (
+              <AvGroup>
+                <Label for="id">
+                  <Translate contentKey="global.field.id">ID</Translate>
+                </Label>
+                <AvField type="text" className="form-control" name="id" required readOnly />
+              </AvGroup>
+            ) : null}
+            <AvGroup>
+              <Label for="login">
+                <Translate contentKey="userManagement.login">Login</Translate>
+              </Label>
+              <AvField
+                type="text"
+                className="form-control"
+                name="login"
+                validate={{
+                  required: {
+                    value: true,
+                    errorMessage: translate('register.messages.validate.login.required', null, 'Your username is required.')
+                  },
+                  pattern: {
+                    value: '^[_.@A-Za-z0-9-]*$',
+                    errorMessage: translate(
+                      'register.messages.validate.login.pattern',
+                      null,
+                      'Your username can only contain letters and digits.'
+                    )
+                  },
+                  minLength: {
+                    value: 1,
+                    errorMessage: translate(
+                      'register.messages.validate.login.minlength',
+                      null,
+                      'Your username is required to be at least 1 character.'
+                    )
+                  },
+                  maxLength: {
+                    value: 50,
+                    errorMessage: translate(
+                      'register.messages.validate.login.maxlength',
+                      null,
+                      'Your username cannot be longer than 50 characters.'
+                    )
+                  }
+                }}
+              />
+            </AvGroup>
+            <AvGroup>
+              <Label for="firstName">
+                <Translate contentKey="userManagement.firstName">First Name</Translate>
+              </Label>
+              <AvField
+                type="text"
+                className="form-control"
+                name="firstName"
+                validate={{
+                  maxLength: {
+                    value: 50,
+                    errorMessage: translate(
+                      'entity.validation.maxlength', { max: 50 }
+                    )
+                  }
+                }}
+                />
+            </AvGroup>
+            <AvGroup>
+              <Label for="lastName">
+                <Translate contentKey="userManagement.lastName">Last Name</Translate>
+              </Label>
+              <AvField
+                type="text"
+                className="form-control"
+                name="lastName"
+                validate={{
+                  maxLength: {
+                    value: 50,
+                    errorMessage: translate(
+                      'entity.validation.maxlength', { max: 50 }
+                    )
+                  }
+                }}
+              />
+              <AvFeedback>This field cannot be longer than 50 characters.</AvFeedback>
+            </AvGroup>
+            <AvGroup>
+              <AvField
+                name="email"
+                label={<Translate contentKey="global.form.email">Email</Translate>}
+                placeholder={translate('global.form.email.placeholder', null, 'Your email')}
+                type="email"
+                validate={{
+                  required: {
+                    value: true,
+                    errorMessage: translate('global.messages.validate.email.required', null, 'Your email is required.')
+                  },
+                  email: {
+                    errorMessage: translate('global.messages.validate.email.invalid', null, 'Your email is invalid.')
+                  },
+                  minLength: {
+                    value: 5,
+                    errorMessage: translate(
+                      'global.messages.validate.email.minlength',
+                      null,
+                      'Your email is required to be at least 5 characters.'
+                    )
+                  },
+                  maxLength: {
+                    value: 254,
+                    errorMessage: translate(
+                      'global.messages.validate.email.maxlength',
+                      null,
+                      'Your email cannot be longer than 50 characters.'
+                    )
+                  }
+              }}
             />
-        </AvGroup>
-        <AvGroup>
-          <Label for="lastName">
-            <Translate contentKey="userManagement.lastName">Last Name</Translate>
-          </Label>
-          <AvField
-            type="text"
-            className="form-control"
-            name="lastName"
-            validate={{
-              maxLength: {
-                value: 50,
-                errorMessage: translate(
-                  'entity.validation.maxlength', { max: 50 }
-                )
-              }
-            }}
-          />
-          <AvFeedback>This field cannot be longer than 50 characters.</AvFeedback>
-        </AvGroup>
-        <AvGroup>
-          <AvField
-            name="email"
-            label={<Translate contentKey="global.form.email">Email</Translate>}
-            placeholder={translate('global.form.email.placeholder', null, 'Your email')}
-            type="email"
-            validate={{
-              required: {
-                value: true,
-                errorMessage: translate('global.messages.validate.email.required', null, 'Your email is required.')
-              },
-              email: {
-                errorMessage: translate('global.messages.validate.email.invalid', null, 'Your email is invalid.')
-              },
-              minLength: {
-                value: 5,
-                errorMessage: translate(
-                  'global.messages.validate.email.minlength',
-                  null,
-                  'Your email is required to be at least 5 characters.'
-                )
-              },
-              maxLength: {
-                value: 254,
-                errorMessage: translate(
-                  'global.messages.validate.email.maxlength',
-                  null,
-                  'Your email cannot be longer than 50 characters.'
-                )
-              }
-          }}
-        />
-        </AvGroup>
-        <AvGroup check inline>
-          <Label>
-            <AvField type="checkbox" name="activated" /> <Translate contentKey="userManagement.activated">Activated</Translate>
-          </Label>
-        </AvGroup>
-<%_ if (enableTranslation) { _%>
-        <AvGroup>
-          <Label for="langKey">
-            <Translate contentKey="userManagement.langKey">Language Key</Translate>
-          </Label>
-          <AvField type="select" className="form-control" name="langKey" defaultValue={locales[0]}>
-            {locales.map(lang => (
-              <option value={lang} key={lang}>
-                {lang}
-              </option>
-            ))}
-          </AvField>
-        </AvGroup>
-<%_ } _%>
-        <AvGroup>
-          <Label for="authorities">
-            <Translate contentKey="userManagement.profiles">Language Key</Translate>
-          </Label>
-          <AvInput type="select" className="form-control" name="authorities" value={user.authorities} multiple>
-            {roles.map(role => (
-              <option value={role} key={role}>
-                {role}
-              </option>
-            ))}
-          </AvInput>
-        </AvGroup>
-      </ModalBody>
-      <ModalFooter>
-        <Button color="secondary" onClick={this.handleClose}>
-          <FaBan />&nbsp;
-          <Translate contentKey="entity.action.cancel">Cancel</Translate>
-        </Button>
-        <Button color="primary" type="submit" disabled={isInvalid || updating}>
-          <FaFloppyO />&nbsp;
-          <Translate contentKey="entity.action.save">Save</Translate>
-        </Button>
-      </ModalFooter>
-    </AvForm>
-      }
-    </Modal>
+            </AvGroup>
+            <AvGroup check>
+              <Label>
+                <AvInput type="checkbox" name="activated" /> <Translate contentKey="userManagement.activated">Activated</Translate>
+              </Label>
+            </AvGroup>
+    <%_ if (enableTranslation) { _%>
+            <AvGroup>
+              <Label for="langKey">
+                <Translate contentKey="userManagement.langKey">Language Key</Translate>
+              </Label>
+              <AvField type="select" className="form-control" name="langKey" defaultValue={locales[0]}>
+                {locales.map(lang => (
+                  <option value={lang} key={lang}>
+                    {lang}
+                  </option>
+                ))}
+              </AvField>
+            </AvGroup>
+    <%_ } _%>
+            <AvGroup>
+              <Label for="authorities">
+                <Translate contentKey="userManagement.profiles">Language Key</Translate>
+              </Label>
+              <AvInput type="select" className="form-control" name="authorities" value={user.authorities} multiple>
+                {roles.map(role => (
+                  <option value={role} key={role}>
+                    {role}
+                  </option>
+                ))}
+              </AvInput>
+            </AvGroup>
+            <Button tag={Link} to="/admin/user-management" replace color="info" >
+              <FaArrowLeft />&nbsp;
+              <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
+            </Button>
+            &nbsp;
+            <Button color="primary" type="submit" disabled={isInvalid || updating}>
+              <FaFloppyO />&nbsp;
+              <Translate contentKey="entity.action.save">Save</Translate>
+            </Button>
+          </AvForm>
+          }
+          </Col>
+        </Row>
+      </div>
     );
   }
 }
@@ -266,6 +266,6 @@ const mapStateToProps = storeState => ({
   updating: storeState.userManagement.updating
 });
 
-const mapDispatchToProps = { getUser, getRoles, updateUser, createUser, resetModal };
+const mapDispatchToProps = { getUser, getRoles, updateUser, createUser, reset };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserManagementDialog);

@@ -420,22 +420,6 @@ const files = {
                 'spec/app/modules/account/sessions/sessions.reducer.spec.ts',
             ]
         }
-    //   {
-    //     condition: generator => generator.enableTranslation,
-    //     path: TEST_SRC_DIR,
-    //     templates: [
-    //       'spec/helpers/_mock-language.service.js'
-    //     ]
-    //   },
-    //   {
-    //     condition: generator => generator.protractorTests,
-    //     path: TEST_SRC_DIR,
-    //     templates: [
-    //       'e2e/account/_account.spec.js',
-    //       'e2e/admin/_administration.spec.js',
-    //       '_protractor.conf.js'
-    //     ]
-    //   }
     ]
 };
 

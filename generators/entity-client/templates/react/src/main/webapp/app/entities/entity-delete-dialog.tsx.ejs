@@ -32,43 +32,26 @@ export interface I<%= entityReactName %>DeleteDialogProps {
   history: any;
 }
 
-export interface I<%= entityReactName %>DeleteDialogState {
-  showModal: boolean;
-}
-export class <%= entityReactName %>DeleteDialog extends React.Component<I<%= entityReactName %>DeleteDialogProps, I<%= entityReactName %>DeleteDialogState> {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      showModal: true
-    };
-  }
-
+export class <%= entityReactName %>DeleteDialog extends React.Component<I<%= entityReactName %>DeleteDialogProps> {
   componentDidMount() {
     this.props.getEntity(this.props.match.params.id);
   }
 
-  confirmDelete = () => {
+  confirmDelete = event => {
     this.props.deleteEntity(this.props.<%= entityInstance %>.id);
-    this.handleClose();
+    this.handleClose(event);
   }
 
-  handleClose = () => {
-    this.setState({
-        showModal: false
-    });
-    this.props.history.push('/<%= entityFileName %>');
-  }
+  handleClose = event => {
+    event.stopPropagation();
+    this.props.history.goBack();
+  };
 
   render() {
     const { <%= entityInstance %> } = this.props;
-    const { showModal } = this.state;
     return (
       <%_ const keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
-      <Modal
-        isOpen={showModal} modalTransition={{ timeout: 20 }} backdropTransition={{ timeout: 10 }}
-        toggle={this.handleClose}
-      >
+      <Modal isOpen toggle={this.handleClose}>
       <ModalHeader toggle={this.handleClose}><Translate contentKey="entity.delete.title">Confirm delete operation</Translate></ModalHeader>
       <ModalBody>
         <Translate contentKey="<%= keyPrefix %>delete.question" interpolate={{ id: <%= entityInstance %>.id }}>

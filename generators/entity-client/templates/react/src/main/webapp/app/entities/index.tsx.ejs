@@ -25,16 +25,37 @@ import <%= entityReactName %>Detail from './<%= entityFileName %>-detail';
 import <%= entityReactName %>Dialog from './<%= entityFileName %>-dialog';
 import <%= entityReactName %>DeleteDialog from './<%= entityFileName %>-delete-dialog';
 
-const Routes = ({ match }) => (
-  <div>
-    <Switch>
-      <Route exact path={match.url} component={<%= entityReactName %>} />
-      <ModalRoute exact parentPath={match.url} path={`${match.url}/new`} component={<%= entityReactName %>Dialog} />
-      <ModalRoute exact parentPath={match.url} path={`${match.url}/:id/delete`} component={<%= entityReactName %>DeleteDialog} />
-      <ModalRoute exact parentPath={match.url} path={`${match.url}/:id/edit`} component={<%= entityReactName %>Dialog} />
-      <Route exact path={`${match.url}/:id`} component={<%= entityReactName %>Detail} />
-    </Switch>
-  </div>
-);
+export interface IRoutesProps {
+  match: any;
+  location: any;
+}
+
+export class Routes extends React.Component<IRoutesProps> {
+  previousLocation = this.props.location;
+
+  componentWillUpdate(nextProps) {
+    const { location } = this.props;
+    if (nextProps.history.action !== "POP" && (!location.state || !location.state.modal)) {
+      this.previousLocation = this.props.location;
+    }
+  }
+
+  render() {
+    const { match, location } = this.props;
+    const isModal = !!(location.state && location.state.modal && this.previousLocation !== location);
+
+    return (
+      <div>
+        <Switch location={isModal ? this.previousLocation : location}>
+          <Route exact path={match.url} component={<%= entityReactName %>} />
+          <Route exact parentPath={match.url} path={`${match.url}/new`} component={<%= entityReactName %>Dialog} />
+          <Route exact parentPath={match.url} path={`${match.url}/:id/edit`} component={<%= entityReactName %>Dialog} />
+          <Route exact path={`${match.url}/:id`} component={<%= entityReactName %>Detail}  />
+        </Switch>
+        {isModal ? <Route exact parentPath={match.url} path={`${match.url}/:id/delete`} component={<%= entityReactName %>DeleteDialog} /> : null}
+      </div>
+    );
+  }
+}
 
 export default Routes;
