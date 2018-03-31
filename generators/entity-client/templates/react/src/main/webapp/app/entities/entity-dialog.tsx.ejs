@@ -106,7 +106,7 @@ import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/user.
 import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
 <%_ } else { _%>
 import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/<%= uniqueRel.otherEntityModelName %>.model';
-import { getEntities as get<%= upperFirstCamelCase(uniqueRel.otherEntityNamePlural) %> } from 'app/entities/<%= uniqueRel.otherEntityModulePath %>/<%= uniqueRel.otherEntityFileName %>.reducer';
+import { getEntities as get<%= upperFirstCamelCase(uniqueRel.otherEntityNamePlural) %> } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.reducer';
 <%_ }
   }
 }); _%>
