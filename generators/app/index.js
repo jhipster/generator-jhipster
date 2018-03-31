@@ -337,7 +337,7 @@ module.exports = class extends BaseGenerator {
     get writing() {
         return {
             cleanup() {
-                cleanup.cleanupOldFiles(this, this.javaDir, this.testDir);
+                cleanup.cleanupOldFiles(this);
             },
 
             regenerateEntities() {

@@ -752,6 +752,16 @@ module.exports = class extends BaseGenerator {
     get writing() {
         if (useBlueprint) return;
         return {
+
+            cleanup() {
+                const context = this.context;
+                const entityName = context.name;
+                if (this.isJhipsterVersionLessThan('5.0.0')) {
+                    this.removeFile(constants.ANGULAR_DIR + 'entities/' + entityName +
+                        '/' + entityName + '.model.ts');
+                }
+            },
+
             composeServer() {
                 const context = this.context;
                 if (context.skipServer) return;
