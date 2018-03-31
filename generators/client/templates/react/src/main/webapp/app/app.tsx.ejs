@@ -22,7 +22,6 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Card } from 'reactstrap';
 import { HashRouter as Router } from 'react-router-dom';
-import { ModalContainer } from 'react-router-modal';
 import { ToastContainer, toast } from 'react-toastify';
 
 import { getSession, logout } from './shared/reducers/authentication';
@@ -76,7 +75,6 @@ export class App extends React.Component<IAppProps> {
             </Card>
             <Footer/>
           </div>
-          <ModalContainer />
         </div>
       </Router>
     );
