@@ -125,7 +125,7 @@ import {
 // tslint:disable-next-line:no-unused-variable
 import { convertDateTimeFromServer } from 'app/shared/util/date-utils';
 
-export interface I<%= entityReactName %>DialogProps {
+export interface I<%= entityReactName %>UpdateProps {
   getEntity: ICrudGetAction;
   updateEntity: ICrudPutAction;
   createEntity: ICrudPutAction;
@@ -147,7 +147,7 @@ export interface I<%= entityReactName %>DialogProps {
   history: any;
 }
 
-export interface I<%= entityReactName %>DialogState {
+export interface I<%= entityReactName %>UpdateState {
   isNew: boolean;
   <%_ manyToManyOwners.forEach(val => { _%>
   ids<%= val.relationshipName %>: any[];
@@ -160,7 +160,7 @@ export interface I<%= entityReactName %>DialogState {
   <%_ }) _%>
 }
 
-export class <%= entityReactName %>Dialog extends React.Component<I<%= entityReactName %>DialogProps, I<%= entityReactName %>DialogState> {
+export class <%= entityReactName %>Update extends React.Component<I<%= entityReactName %>UpdateProps, I<%= entityReactName %>UpdateState> {
 
   constructor(props) {
     super(props);
@@ -687,4 +687,4 @@ const mapDispatchToProps = {
   reset
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(<%= entityReactName %>Dialog);
+export default connect(mapStateToProps, mapDispatchToProps)(<%= entityReactName %>Update);

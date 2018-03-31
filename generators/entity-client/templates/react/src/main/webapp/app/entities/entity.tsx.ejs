@@ -354,7 +354,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                         <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/edit`} color="primary" size="sm">
                           <FaPencil/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit" /></span>
                         </Button>
-                        <Button tag={Link} to={{ pathname: `${match.url}/${<%=entityInstance %>.id}/delete`, state: { modal: true }}} color="danger" size="sm">
+                        <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/delete`} color="danger" size="sm">
                           <FaTrash/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete" /></span>
                         </Button>
                       </div>
@@ -366,7 +366,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
           </table>
           <%_ if (pagination === 'infinite-scroll') { _%>
           </InfiniteScroll>
-          <%_ } _%>  
+          <%_ } _%>
         </div>
         <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
         <div className="row justify-content-center">
