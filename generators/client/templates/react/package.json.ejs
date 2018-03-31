@@ -90,7 +90,9 @@ limitations under the License.
     "fork-ts-checker-webpack-plugin": "0.4.1",
     "html-webpack-plugin": "3.1.0",
     "http-proxy-middleware": "0.18.0",
+    <%_ if(!skipCommitHook) { _%>
     "husky": "0.14.3",
+    <%_ } _%>
     "image-webpack-loader": "4.2.0",
     <%_ if (protractorTests) { _%>
     "jasmine-reporters": "2.2.1",
@@ -107,7 +109,9 @@ limitations under the License.
     "karma-remap-istanbul": "0.6.0",
     "karma-sourcemap-loader": "0.3.7",
     "karma-webpack": "3.0.0",
+    <%_ if(!skipCommitHook) { _%>
     "lint-staged": "7.0.1",
+    <%_ } _%>
     <%_ if (enableTranslation) { _%>
     "merge-jsons-webpack-plugin": "1.0.14",
     <%_ } _%>
@@ -164,11 +168,15 @@ limitations under the License.
   "engines": {
     "node": ">=8.9.0"
   },
+  <%_ if(!skipCommitHook) { _%>
   "lint-staged": {
     "*.{ts,tsx}": ["prettier --write", "git add"]
   },
+  <%_ } _%>
   "scripts": {
+    <%_ if(!skipCommitHook) { _%>
     "precommit": "lint-staged",
+    <%_ } _%>
     "prettier:format": "<%= clientPackageManager %> prettier --write **/*.{ts,tsx}",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",

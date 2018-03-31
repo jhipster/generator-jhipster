@@ -2307,6 +2307,7 @@ module.exports = class extends PrivateBase {
     setupClientOptions(generator, context = generator) {
         generator.skipServer = context.configOptions.skipServer || context.config.get('skipServer');
         generator.skipUserManagement = context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
+        generator.skipCommitHook = context.options['skip-commit-hook'] || context.config.get('skipCommitHook');
         generator.authenticationType = context.options.auth || context.configOptions.authenticationType || context.config.get('authenticationType');
         if (generator.authenticationType === 'oauth2') {
             generator.skipUserManagement = true;
