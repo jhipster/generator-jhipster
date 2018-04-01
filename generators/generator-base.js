@@ -2257,7 +2257,7 @@ module.exports = class extends PrivateBase {
             for (let j = 0, blockTemplates = files[blocks[i]]; j < blockTemplates.length; j++) {
                 const blockTemplate = blockTemplates[j];
                 if (!blockTemplate.condition || blockTemplate.condition(_this)) {
-                    const path = blockTemplate.path ? blockTemplate.path : '';
+                    const path = blockTemplate.path || '';
                     blockTemplate.templates.forEach((templateObj) => {
                         let templatePath = path;
                         let method = 'template';
