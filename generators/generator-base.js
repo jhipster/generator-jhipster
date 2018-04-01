@@ -1472,6 +1472,17 @@ module.exports = class extends PrivateBase {
 
             jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, opt, template);
             break;
+        case 'stripJsx':
+            regex = new RegExp([
+                /(import { ?Translate, ?translate ?} from 'react-jhipster';?)/, // Translate imports
+                /(import { ?translate, ?Translate ?} from 'react-jhipster';?)/, // translate imports
+                /( Translate,|, ?Translate|import { ?Translate ?} from 'react-jhipster';?)/, // Translate import
+                /( translate,|, ?translate|import { ?translate ?} from 'react-jhipster';?)/, // translate import
+                /<Translate (component="[a-z]+" )?contentKey="([a-zA-Z0-9.\-_]+)" ?(component="[a-z]+")? ?(interpolate=\{\{[a-zA-Z0-9.: ]+\}\})? ?>|<\/Translate>/, // Translate component tag
+            ].map(r => r.source).join('|'), 'g');
+
+            jhipsterUtils.copyWebResource(source, dest, regex, 'jsx', _this, opt, template);
+            break;
         case 'copy':
             _this.copy(source, dest);
             break;
@@ -1516,7 +1527,7 @@ module.exports = class extends PrivateBase {
      * @param {boolean} template - flag to use template method instead of copy
      */
     processJsx(source, dest, generator, opt, template) {
-        this.copyTemplate(source, dest, 'stripJs', generator, opt, template);
+        this.copyTemplate(source, dest, 'stripJsx', generator, opt, template);
     }
 
     /**

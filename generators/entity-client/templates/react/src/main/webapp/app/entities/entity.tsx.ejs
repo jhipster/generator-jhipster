@@ -182,7 +182,10 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
         <h2>
           <Translate contentKey="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></Translate>
           <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity">
-            <FaPlus /> <Translate contentKey="<%= i18nKeyPrefix %>.home.createLabel" />
+            <FaPlus />
+            <Translate contentKey="<%= i18nKeyPrefix %>.home.createLabel">
+              Create new <%= entityClassHumanized %>
+            </Translate>
           </Link>
         </h2>
         <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -336,13 +339,13 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                     <td className="text-right">
                       <div className="btn-group flex-btn-group-container">
                         <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}`} color="info" size="sm">
-                          <FaEye/> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view" /></span>
+                          <FaEye/> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
                         </Button>
                         <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/edit`} color="primary" size="sm">
-                          <FaPencil/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit" /></span>
+                          <FaPencil/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
                         </Button>
                         <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/delete`} color="danger" size="sm">
-                          <FaTrash/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete" /></span>
+                          <FaTrash/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
                         </Button>
                       </div>
                     </td>

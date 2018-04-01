@@ -218,7 +218,7 @@ const files = {
                 'modules/account/register/register.reducer.ts',
                 'modules/account/activate/activate.reducer.ts',
                 'modules/account/password-reset/password-reset.reducer.ts',
-                'modules/account/password/password.reducer.ts',
+                { file: 'modules/account/password/password.reducer.ts', method: 'processJsx' },
                 'modules/account/settings/settings.reducer.ts'
             ]
         },

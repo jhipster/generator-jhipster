@@ -63,11 +63,12 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
         <%_ for (idx in fields) {
             const fieldType = fields[idx].fieldType;
             const fieldName = fields[idx].fieldName;
+            const fieldNameHumanized = fields[idx].fieldNameHumanized;
         _%>
           <dt>
             <span id="<%= fieldName %>">
               <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
-              <%=fields[idx].fieldName%>
+                <%= fieldNameHumanized %>
               </Translate>
             </span>
             <%_ if (fields[idx].javadoc) { _%>

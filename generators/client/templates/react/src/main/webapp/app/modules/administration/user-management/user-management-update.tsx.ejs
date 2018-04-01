@@ -111,31 +111,19 @@ export class UserManagementUpdate extends React.Component<IUserManagementUpdateP
                 validate={{
                   required: {
                     value: true,
-                    errorMessage: translate('register.messages.validate.login.required', null, 'Your username is required.')
+                    errorMessage: translate('register.messages.validate.login.required')
                   },
                   pattern: {
                     value: '^[_.@A-Za-z0-9-]*$',
-                    errorMessage: translate(
-                      'register.messages.validate.login.pattern',
-                      null,
-                      'Your username can only contain letters and digits.'
-                    )
+                    errorMessage: translate('register.messages.validate.login.pattern')
                   },
                   minLength: {
                     value: 1,
-                    errorMessage: translate(
-                      'register.messages.validate.login.minlength',
-                      null,
-                      'Your username is required to be at least 1 character.'
-                    )
+                    errorMessage: translate('register.messages.validate.login.minlength')
                   },
                   maxLength: {
                     value: 50,
-                    errorMessage: translate(
-                      'register.messages.validate.login.maxlength',
-                      null,
-                      'Your username cannot be longer than 50 characters.'
-                    )
+                    errorMessage: translate('register.messages.validate.login.maxlength')
                   }
                 }}
               />
@@ -151,9 +139,7 @@ export class UserManagementUpdate extends React.Component<IUserManagementUpdateP
                 validate={{
                   maxLength: {
                     value: 50,
-                    errorMessage: translate(
-                      'entity.validation.maxlength', { max: 50 }
-                    )
+                    errorMessage: translate('entity.validation.maxlength', { max: 50 })
                   }
                 }}
                 />
@@ -169,9 +155,7 @@ export class UserManagementUpdate extends React.Component<IUserManagementUpdateP
                 validate={{
                   maxLength: {
                     value: 50,
-                    errorMessage: translate(
-                      'entity.validation.maxlength', { max: 50 }
-                    )
+                    errorMessage: translate('entity.validation.maxlength', { max: 50 })
                   }
                 }}
               />
@@ -180,32 +164,24 @@ export class UserManagementUpdate extends React.Component<IUserManagementUpdateP
             <AvGroup>
               <AvField
                 name="email"
-                label={<Translate contentKey="global.form.email">Email</Translate>}
-                placeholder={translate('global.form.email.placeholder', null, 'Your email')}
+                label={translate('global.form.email')}
+                placeholder={translate('global.form.email.placeholder')}
                 type="email"
                 validate={{
                   required: {
                     value: true,
-                    errorMessage: translate('global.messages.validate.email.required', null, 'Your email is required.')
+                    errorMessage: translate('global.messages.validate.email.required')
                   },
                   email: {
-                    errorMessage: translate('global.messages.validate.email.invalid', null, 'Your email is invalid.')
+                    errorMessage: translate('global.messages.validate.email.invalid')
                   },
                   minLength: {
                     value: 5,
-                    errorMessage: translate(
-                      'global.messages.validate.email.minlength',
-                      null,
-                      'Your email is required to be at least 5 characters.'
-                    )
+                    errorMessage: translate('global.messages.validate.email.minlength')
                   },
                   maxLength: {
                     value: 254,
-                    errorMessage: translate(
-                      'global.messages.validate.email.maxlength',
-                      null,
-                      'Your email cannot be longer than 50 characters.'
-                    )
+                    errorMessage: translate('global.messages.validate.email.maxlength')
                   }
               }}
             />
