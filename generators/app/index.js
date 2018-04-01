@@ -49,6 +49,13 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
 
+        // This adds support for a `--skip-commit-hook` flag
+        this.option('skip-commit-hook', {
+            desc: 'Skip adding husky commit hooks',
+            type: Boolean,
+            defaults: false
+        });
+
         // This adds support for a `--skip-user-management` flag
         this.option('skip-user-management', {
             desc: 'Skip the user management module during app generation',
@@ -274,6 +281,7 @@ module.exports = class extends BaseGenerator {
 
                 this.composeWith(require.resolve('../client'), {
                     'skip-install': this.options['skip-install'],
+                    'skip-commit-hook': this.options['skip-commit-hook'],
                     configOptions: this.configOptions,
                     force: this.options.force,
                     debug: this.isDebugEnabled

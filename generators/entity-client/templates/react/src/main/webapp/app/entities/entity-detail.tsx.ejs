@@ -16,28 +16,23 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-
-<%_
-const blobs = fields.filter(e => ['byte[]', 'ByteBuffer'].includes(e.fieldType));
-const hasBlob = blobs.length > 0;
-const hasAnyBlobOrImage = blobs.filter(e => e.fieldTypeBlobContent !== 'text').length != 0;
-_%>
-
-
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button<% if (haveFieldWithJavadoc) { %>, UncontrolledTooltip<% } %> } from 'reactstrap';
-// TODO import TextFormat only when fieldContainsDate
 // tslint:disable-next-line:no-unused-variable
 import {
   Translate,
   ICrudGetAction,
-  <%_ if (hasBlob) { _%>
-  <% if(hasAnyBlobOrImage) { %> openFile, <% } %>
+  <%_ if (fieldsContainBlob) { _%>
+    <%_ if(fieldsContainBlobOrImage) { _%>
+  openFile,
+    <%_ } _%>
   byteSize,
   <%_ } _%>
+  <%_ if (fieldsContainDate) { _%>
   TextFormat
+  <%_ } _%>
 } from 'react-jhipster';
 import { FaArrowLeft } from 'react-icons/lib/fa';
 
@@ -60,10 +55,9 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
   render() {
     const { <%= entityInstance %> } = this.props;
     return (
-      <%_ const keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
       <div>
         <h2>
-          <Translate contentKey="<%= keyPrefix %>detail.title"><%= entityClass %></Translate> [<b>{<%= entityInstance %>.id}</b>]
+          <Translate contentKey="<%= i18nKeyPrefix %>.detail.title"><%= entityClass %></Translate> [<b>{<%= entityInstance %>.id}</b>]
         </h2>
         <dl className="row-md jh-entity-details">
         <%_ for (idx in fields) {
@@ -72,14 +66,14 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
         _%>
           <dt>
             <span id="<%= fieldName %>">
-              <Translate contentKey="<%= keyPrefix %><%= fieldName %>">
+              <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
               <%=fields[idx].fieldName%>
               </Translate>
             </span>
             <%_ if (fields[idx].javadoc) { _%>
             <UncontrolledTooltip target="<%= fieldName %>">
               <%_ if (enableTranslation) { _%>
-              <Translate contentKey="<%= keyPrefix %>help.<%= fieldName %>"/>
+              <Translate contentKey="<%= i18nKeyPrefix %>.help.<%= fieldName %>"/>
               <%_ } else { _%>
               <%= fields[idx].javadoc %>
               <%_ } _%>
@@ -134,7 +128,7 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
               || (relationshipType === 'one-to-one' && ownerSide === true)
               || (relationshipType === 'many-to-many' && ownerSide === true)) { _%>
           <dt>
-            <Translate contentKey="<%= keyPrefix %><%= relationshipName %>">
+            <Translate contentKey="<%= i18nKeyPrefix %>.<%= relationshipName %>">
               <%= relationshipNameHumanized %>
             </Translate>
           </dt>
@@ -183,8 +177,8 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
   }
 }
 
-const mapStateToProps = storeState => ({
-    <%= entityInstance %>: storeState.<%= entityInstance %>.entity
+const mapStateToProps = ({ <%= entityInstance %> }) => ({
+    <%= entityInstance %>: <%= entityInstance %>.entity
 });
 
 const mapDispatchToProps = { getEntity };

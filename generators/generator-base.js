@@ -203,7 +203,7 @@ module.exports = class extends PrivateBase {
                     needle: 'jhipster-needle-add-entity-to-menu',
                     splicable: [
                         this.stripMargin(`|(
-                        |        <DropdownItem tag={Link} key="${routerName}" to="/${routerName}">
+                        |        <DropdownItem tag={Link} key="${routerName}" to="/entity/${routerName}">
                         |          <FaAsterisk />&nbsp;
                         |          ${_.startCase(routerName)}
                         |        </DropdownItem>
@@ -276,7 +276,7 @@ module.exports = class extends PrivateBase {
                     file: indexModulePath,
                     needle: 'jhipster-needle-add-route-path',
                     splicable: [
-                        this.stripMargin(`|<Route path={'/${entityFileName}'} component={${entityAngularName}}/>`)
+                        this.stripMargin(`|<Route path={\`\${match.url}/${entityFileName}\`} component={${entityAngularName}}/>`)
                     ]
                 }, this);
 
@@ -2307,6 +2307,7 @@ module.exports = class extends PrivateBase {
     setupClientOptions(generator, context = generator) {
         generator.skipServer = context.configOptions.skipServer || context.config.get('skipServer');
         generator.skipUserManagement = context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
+        generator.skipCommitHook = context.options['skip-commit-hook'] || context.config.get('skipCommitHook');
         generator.authenticationType = context.options.auth || context.configOptions.authenticationType || context.config.get('authenticationType');
         if (generator.authenticationType === 'oauth2') {
             generator.skipUserManagement = true;

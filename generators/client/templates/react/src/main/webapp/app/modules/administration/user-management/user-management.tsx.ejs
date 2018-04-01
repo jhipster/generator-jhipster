@@ -174,7 +174,7 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
                         <FaPencil/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
                       </Button>
                       <Button
-                        tag={Link} to={{pathname: `${match.url}/${user.login}/delete`, state: { modal: true }}}
+                        tag={Link} to={`${match.url}/${user.login}/delete`}
                         color="danger" size="sm" disabled={account.login === user.login}
                       >
                         <FaTrash/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>

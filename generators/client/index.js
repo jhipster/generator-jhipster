@@ -105,6 +105,13 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
 
+        // This adds support for a `--skip-commit-hook` flag
+        this.option('skip-commit-hook', {
+            desc: 'Skip adding husky commit hooks',
+            type: Boolean,
+            defaults: false
+        });
+
         // This adds support for a `--npm` flag
         this.option('npm', {
             desc: 'Use npm instead of yarn',
@@ -249,6 +256,7 @@ module.exports = class extends BaseGenerator {
                 this.config.set('clientFramework', this.clientFramework);
                 this.config.set('useSass', this.useSass);
                 this.config.set('enableTranslation', this.enableTranslation);
+                this.config.set('skipCommitHook', this.skipCommitHook);
                 if (this.enableTranslation && !this.configOptions.skipI18nQuestion) {
                     this.config.set('nativeLanguage', this.nativeLanguage);
                     this.config.set('languages', this.languages);

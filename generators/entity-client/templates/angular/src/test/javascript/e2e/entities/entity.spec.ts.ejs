@@ -19,15 +19,9 @@
 import { browser, <% if ( fieldsContainInstant || fieldsContainZonedDateTime ) { %>protractor<% } %> } from 'protractor';
 import { NavBarPage } from './../../<%= entityParentPathAddition %>page-objects/jhi-page-objects';
 import { <%= entityClass %>ComponentsPage, <%= entityClass %>DialogPage } from './<%= entityFileName %>.page-object';
-<%_ let fieldHasByte = false;
-fields.forEach((field) => {
-    if (['byte[]', 'ByteBuffer'].includes(field.fieldType) && field.fieldTypeBlobContent !== 'text') {
-        fieldHasByte = true;
-    }
-});
-if (fieldHasByte) {
-    %>import * as path from 'path';
-<% } _%>
+<%_ if (fieldsContainBlobOrImage) { _%>
+import * as path from 'path';
+<%_ } _%>
 <%_
 let elementGetter = `getText()`;
 let openBlockComment = ``;
@@ -48,7 +42,7 @@ describe('<%= entityClass %> e2e test', () => {
     let navBarPage: NavBarPage;
     let <%= entityInstance %>DialogPage: <%= entityClass %>DialogPage;
     let <%= entityInstance %>ComponentsPage: <%= entityClass %>ComponentsPage;
-    <%_ if (fieldHasByte) { _%>
+    <%_ if (fieldsContainBlobOrImage) { _%>
     const fileToUpload = '../../../../../<%= entityParentPathAddition %>main/webapp/content/images/logo-jhipster.png';
     const absolutePath = path.resolve(__dirname, fileToUpload);
     <%_ } _%>

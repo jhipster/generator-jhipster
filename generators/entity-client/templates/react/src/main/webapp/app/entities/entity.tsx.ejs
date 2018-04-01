@@ -26,28 +26,16 @@ import { Button<% if (searchEngine === 'elasticsearch') { %>, InputGroup<% } %> 
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 <%_ } _%>
-// TODO import TextFormat only when fieldContainsDate
 // tslint:disable-next-line:no-unused-variable
-<%_
-  let fieldContainsDate = false;
-  for (idx in fields) {
-    fieldType = fields[idx].fieldType;
-    if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fieldType)) {
-      fieldContainsDate = true;
-      break;
-    }
-  }
-
-  const blobs = fields.filter(e => ['byte[]', 'ByteBuffer'].includes(e.fieldType));
-  const hasAnyBlobOrImage = blobs.filter(e => e.fieldTypeBlobContent !== 'text').length != 0;
-_%>
 import {
-  <%_ if (blobs.length > 0) { _%>
-  <% if(hasAnyBlobOrImage) { %> openFile, <% } %>
+  <%_ if (blobFields.length > 0) { _%>
+    <%_ if(fieldsContainBlobOrImage) { _%>
+  openFile,
+    <%_ } _%>
   byteSize,
   <%_ } _%>
   Translate<% if (searchEngine === 'elasticsearch') { %>, translate<% } %>,
-  ICrudGetAllAction<% if (fieldContainsDate) { %>, TextFormat<% } %>
+  ICrudGetAllAction<% if (fieldsContainDate) { %>, TextFormat<% } %>
   <%_ if (pagination !== 'no') { _%>
   , getSortState, IPaginationBaseState
   <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
@@ -190,12 +178,11 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   render() {
     const { <%=entityInstance %>List, match<% if (pagination === 'pagination' || pagination === 'pager') { %>, totalItems<% } %>} = this.props;
     return (
-      <%_ const keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
       <div>
         <h2>
-          <Translate contentKey="<%= keyPrefix %>home.title"><%= entityClassPluralHumanized %></Translate>
+          <Translate contentKey="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></Translate>
           <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity">
-            <FaPlus /> <Translate contentKey="<%= keyPrefix %>home.createLabel" />
+            <FaPlus /> <Translate contentKey="<%= i18nKeyPrefix %>.home.createLabel" />
           </Link>
         </h2>
         <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -204,7 +191,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
             <AvForm onSubmit={this.search}>
               <AvGroup>
                 <InputGroup>
-                  <AvInput type="text" name="search" value={this.state.search} onChange={this.handleSearch} placeholder={translate('<%= keyPrefix %>home.search')} />
+                  <AvInput type="text" name="search" value={this.state.search} onChange={this.handleSearch} placeholder={translate('<%= i18nKeyPrefix %>.home.search')} />
                   <Button className="input-group-addon">
                     <FaSearch/>
                   </Button>
@@ -231,14 +218,14 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
               <tr>
                 <th<% if (pagination !== 'no') { %> className="hand" onClick={this.sort('id')} <%_ } _%>><Translate contentKey="global.field.id">ID</Translate><% if (pagination !== 'no') { %> <FaSort /><% } %></th>
                 <%_ for (idx in fields) { _%>
-                <th<% if (pagination !== 'no') { %> className="hand" onClick={this.sort('<%=fields[idx].fieldName%>')} <%_ } _%>><Translate contentKey="<%=keyPrefix + fields[idx].fieldName %>"><%= fields[idx].fieldNameHumanized %></Translate><% if (pagination !== 'no') { %> <FaSort /><% } %></th>
+                <th<% if (pagination !== 'no') { %> className="hand" onClick={this.sort('<%=fields[idx].fieldName%>')} <%_ } _%>><Translate contentKey="<%= `${i18nKeyPrefix}.${fields[idx].fieldName}` %>"><%= fields[idx].fieldNameHumanized %></Translate><% if (pagination !== 'no') { %> <FaSort /><% } %></th>
                 <%_ } _%>
                 <%_ for (idx in relationships) { _%>
                     <%_ if (relationships[idx].relationshipType === 'many-to-one'
                     || (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide === true)
                     || (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true && pagination === 'no')) {
                     const fieldName = dto === 'no' ? "." + relationships[idx].otherEntityField : relationships[idx].otherEntityFieldCapitalized;_%>
-                <th<% if (pagination !== 'no') { %> <% } %>><Translate contentKey="<%= keyPrefix + relationships[idx].relationshipName%>"><%= relationships[idx].relationshipNameHumanized %></Translate><% if (pagination !== 'no') { %> <FaSort /><% } %></th>
+                <th<% if (pagination !== 'no') { %> <% } %>><Translate contentKey="<%= `${i18nKeyPrefix}.${relationships[idx].relationshipName}` %>"><%= relationships[idx].relationshipNameHumanized %></Translate><% if (pagination !== 'no') { %> <FaSort /><% } %></th>
                     <%_ } _%>
                 <%_ } _%>
                 <th />
@@ -266,7 +253,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                     <TextFormat type="date" value={<%= entityInstance %>.<%=fieldName%>} format={APP_LOCAL_DATE_FORMAT} />
                   <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
                     <%_
-                      // Blobs
+                      // blobFields
                       const fieldBlobType = fields[idx].fieldTypeBlobContent;
                       if (fieldBlobType !== 'text') {
                     _%>
@@ -354,7 +341,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                         <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/edit`} color="primary" size="sm">
                           <FaPencil/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit" /></span>
                         </Button>
-                        <Button tag={Link} to={{ pathname: `${match.url}/${<%=entityInstance %>.id}/delete`, state: { modal: true }}} color="danger" size="sm">
+                        <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/delete`} color="danger" size="sm">
                           <FaTrash/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete" /></span>
                         </Button>
                       </div>
@@ -366,7 +353,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
           </table>
           <%_ if (pagination === 'infinite-scroll') { _%>
           </InfiniteScroll>
-          <%_ } _%>  
+          <%_ } _%>
         </div>
         <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
         <div className="row justify-content-center">

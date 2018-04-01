@@ -160,8 +160,8 @@ const reactFiles = {
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.tsx`
                 },
                 {
-                    file: 'entities/entity-dialog.tsx',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-dialog.tsx`
+                    file: 'entities/entity-update.tsx',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-update.tsx`
                 },
                 {
                     file: 'entities/entity.tsx',
