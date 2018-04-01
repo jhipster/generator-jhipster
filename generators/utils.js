@@ -252,35 +252,24 @@ function replacePlaceholders(body, generator) {
  * @returns string with Translate components replaced
  */
 function replaceTranslation(body, generator) {
-    let re = /(\{translate\('([a-zA-Z0-9.\-_]+)'(, ?null, ?'.*')?\)\})/g;
-    let match;
+    const replaceRegex = (re, defultReplaceText) => {
+        let match;
+        while ((match = re.exec(body)) !== null) { // eslint-disable-line no-cond-assign
+            // match is now the next match, in array form and our key is at index 2, index 1 is replace target.
+            const key = match[2];
+            const target = match[1];
+            const jsonData = geti18nJson(key, generator);
+            let keyValue = jsonData !== undefined ? deepFind(jsonData, key) : undefined;
+            if (!keyValue) {
+                keyValue = deepFind(jsonData, key, true); // dirty fix to get placeholder as it is not in proper json format, name has a dot in it. Assuming that all placeholders are in similar format
+            }
 
-    while ((match = re.exec(body)) !== null) { // eslint-disable-line no-cond-assign
-        // match is now the next match, in array form and our key is at index 2, index 1 is replace target.
-        // console.info(match);
-        const key = match[2];
-        const target = match[1];
-        const jsonData = geti18nJson(key, generator);
-        let keyValue = jsonData !== undefined ? deepFind(jsonData, key) : undefined;
-        if (!keyValue) {
-            keyValue = deepFind(jsonData, key, true); // dirty fix to get placeholder as it is not in proper json format, name has a dot in it. Assuming that all placeholders are in similar format
+            body = body.replace(target, keyValue !== undefined ? `"${keyValue}"` : defultReplaceText);
         }
+    };
 
-        body = body.replace(target, keyValue !== undefined ? `"${keyValue}"` : '""');
-    }
-    re = /(translate\(\s*'([a-zA-Z0-9.\-_]+)'(,\s*(null|\{.*\}),?\s*('.*')?\s*)?\))/g;
-
-    while ((match = re.exec(body)) !== null) { // eslint-disable-line no-cond-assign
-        // match is now the next match, in array form and our key is at index 2, index 1 is replace target.
-        const key = match[2];
-        const target = match[1];
-        const jsonData = geti18nJson(key, generator);
-        let keyValue = jsonData !== undefined ? deepFind(jsonData, key) : undefined;
-        if (!keyValue) {
-            keyValue = deepFind(jsonData, key, true); // dirty fix to get placeholder as it is not in proper json format, name has a dot in it. Assuming that all placeholders are in similar format
-        }
-        body = body.replace(target, keyValue !== undefined ? `'${keyValue}'` : '\'\'');
-    }
+    replaceRegex(/(\{translate\('([a-zA-Z0-9.\-_]+)'(, ?null, ?'.*')?\)\})/g, '""');
+    replaceRegex(/(translate\(\s*'([a-zA-Z0-9.\-_]+)'(,\s*(null|\{.*\}),?\s*('.*')?\s*)?\))/g, '\'\'');
 
     return body;
 }
