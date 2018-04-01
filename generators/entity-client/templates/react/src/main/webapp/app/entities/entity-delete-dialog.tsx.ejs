@@ -22,12 +22,13 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { Translate, ICrudGetAction, ICrudDeleteAction } from 'react-jhipster';
 import { FaBan, FaTrash } from 'react-icons/lib/fa';
 
+import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { getEntity, deleteEntity } from './<%= entityFileName %>.reducer';
 
 export interface I<%= entityReactName %>DeleteDialogProps {
-  getEntity: ICrudGetAction;
-  deleteEntity: ICrudDeleteAction;
-  <%= entityInstance %>: any;
+  getEntity: ICrudGetAction<I<%= entityReactName %>>;
+  deleteEntity: ICrudDeleteAction<I<%= entityReactName %>>;
+  <%= entityInstance %>: I<%= entityReactName %>;
   match: any;
   history: any;
 }

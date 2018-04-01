@@ -106,13 +106,13 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
               <AvField
                 className="form-control"
                 name="firstName"
-                label={<Translate contentKey="settings.form.firstname">First name</Translate>}
+                label={translate('settings.form.firstname')}
                 id="firstName"
-                placeholder={translate('settings.form.firstname.placeholder', null, 'Your first name')}
+                placeholder={translate('settings.form.firstname.placeholder')}
                 validate={{
-                  required: { value: true, errorMessage: translate('settings.messages.validate.firstname.required', null, 'Your first name is required.') },
-                  minLength: { value: 1, errorMessage: translate('settings.messages.validate.firstname.minlength', null, 'Your first name is required to be at least 1 character') },
-                  maxLength: { value: 50, errorMessage: translate('settings.messages.validate.firstname.maxlength', null, 'Your first name cannot be longer than 50 characters') }
+                  required: { value: true, errorMessage: translate('settings.messages.validate.firstname.required') },
+                  minLength: { value: 1, errorMessage: translate('settings.messages.validate.firstname.minlength') },
+                  maxLength: { value: 50, errorMessage: translate('settings.messages.validate.firstname.maxlength') }
                 }}
                 value={account.firstName}
               />
@@ -120,26 +120,26 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
               <AvField
                 className="form-control"
                 name="lastName"
-                label={<Translate contentKey="settings.form.lastname">Last name</Translate>}
+                label={translate('settings.form.lastname')}
                 id="lastName"
-                placeholder={translate('settings.form.lastname.placeholder', null, 'Your last name')}
+                placeholder={translate('settings.form.lastname.placeholder')}
                 validate={{
-                  required: { value: true, errorMessage: translate('settings.messages.validate.lastname.required', null, 'Your last name is required.') },
-                  minLength: { value: 1, errorMessage: translate('settings.messages.validate.lastname.minlength', null, 'Your last name is required to be at least 1 character') },
-                  maxLength: { value: 50, errorMessage: translate('settings.messages.validate.lastname.maxlength', null, 'Your last name cannot be longer than 50 characters') }
+                  required: { value: true, errorMessage: translate('settings.messages.validate.lastname.required') },
+                  minLength: { value: 1, errorMessage: translate('settings.messages.validate.lastname.minlength') },
+                  maxLength: { value: 50, errorMessage: translate('settings.messages.validate.lastname.maxlength') }
                 }}
                 value={account.lastName}
               />
               {/* Email */}
               <AvField
                 name="email"
-                label={<Translate contentKey="global.form.email">Email</Translate>}
-                placeholder={translate('global.form.email.placeholder', null, 'Your email')}
+                label={translate('global.form.email')}
+                placeholder={translate('global.form.email.placeholder')}
                 type="email"
                 validate={{
-                  required: { value: true, errorMessage: translate('global.messages.validate.email.required', null, 'Your email is required.') },
-                  minLength: { value: 5, errorMessage: translate('global.messages.validate.email.minlength', null, 'Your email is required to be at least 5 characters.') },
-                  maxLength: { value: 254, errorMessage: translate('global.messages.validate.email.maxlength', null, 'Your email cannot be longer than 50 characters.') }
+                  required: { value: true, errorMessage: translate('global.messages.validate.email.required') },
+                  minLength: { value: 5, errorMessage: translate('global.messages.validate.email.minlength') },
+                  maxLength: { value: 254, errorMessage: translate('global.messages.validate.email.maxlength') }
                 }}
                 value={account.email}
               />
@@ -150,7 +150,7 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
                 id="langKey"
                 name="langKey"
                 className="form-control"
-                label={translate('settings.form.language', null, 'Language')}
+                label={translate('settings.form.language')}
                 onChange={this.setLangKey}
                 defaultValue={account.langKey}
               >

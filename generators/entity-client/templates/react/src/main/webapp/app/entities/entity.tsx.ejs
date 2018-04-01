@@ -34,7 +34,7 @@ import {
     <%_ } _%>
   byteSize,
   <%_ } _%>
-  Translate<% if (searchEngine === 'elasticsearch') { %>, translate<% } %>,
+  Translate<% if (searchEngine === 'elasticsearch') { %>, translate, ICrudSearchAction<% } %>,
   ICrudGetAllAction<% if (fieldsContainDate) { %>, TextFormat<% } %>
   <%_ if (pagination !== 'no') { _%>
   , getSortState, IPaginationBaseState
@@ -53,6 +53,7 @@ import {
   , reset
   <%_ } _%>
 } from './<%= entityFileName %>.reducer';
+import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
  // tslint:disable-next-line:no-unused-variable
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 <%_ if (pagination !== 'no') { _%>
@@ -60,14 +61,14 @@ import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 <%_ } _%>
 
 export interface I<%= entityReactName %>Props {
-  getEntities: ICrudGetAllAction;
+  getEntities: ICrudGetAllAction<I<%= entityReactName %>>;
   <%_ if (pagination === 'infinite-scroll') { _%>
   reset: Function;
   <%_ } _%>
   <%_ if (searchEngine === 'elasticsearch') { _%>
-  getSearchEntities: ICrudGetAllAction;
+  getSearchEntities: ICrudSearchAction<I<%= entityReactName %>>;
   <%_ } _%>
-  <%= entityInstance %>List: any[];
+  <%= entityInstance %>List: I<%= entityReactName %>[];
   <%_ if (pagination === 'infinite-scroll') { _%>
   links: {
     last: 0
@@ -182,7 +183,10 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
         <h2>
           <Translate contentKey="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></Translate>
           <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity">
-            <FaPlus /> <Translate contentKey="<%= i18nKeyPrefix %>.home.createLabel" />
+            <FaPlus />
+            <Translate contentKey="<%= i18nKeyPrefix %>.home.createLabel">
+              Create new <%= entityClassHumanized %>
+            </Translate>
           </Link>
         </h2>
         <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -191,7 +195,8 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
             <AvForm onSubmit={this.search}>
               <AvGroup>
                 <InputGroup>
-                  <AvInput type="text" name="search" value={this.state.search} onChange={this.handleSearch} placeholder={translate('<%= i18nKeyPrefix %>.home.search')} />
+                  <AvInput type="text" name="search" value={this.state.search} onChange={this.handleSearch}
+                    placeholder=<% if (enableTranslation) { %>{translate('<%= i18nKeyPrefix %>.home.search')}<% } else { %>"Search"<% } %>/>
                   <Button className="input-group-addon">
                     <FaSearch/>
                   </Button>
@@ -336,13 +341,13 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                     <td className="text-right">
                       <div className="btn-group flex-btn-group-container">
                         <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}`} color="info" size="sm">
-                          <FaEye/> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view" /></span>
+                          <FaEye/> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
                         </Button>
                         <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/edit`} color="primary" size="sm">
-                          <FaPencil/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit" /></span>
+                          <FaPencil/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
                         </Button>
                         <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/delete`} color="danger" size="sm">
-                          <FaTrash/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete" /></span>
+                          <FaTrash/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
                         </Button>
                       </div>
                     </td>

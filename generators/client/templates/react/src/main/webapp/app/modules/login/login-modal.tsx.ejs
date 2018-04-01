@@ -57,15 +57,15 @@ class LoginModal extends React.Component<ILoginModalProps> {
               <div className="col-md-12">
                 <AvField
                   name="username"
-                  label={<Translate contentKey="global.form.username">Username</Translate>}
-                  placeholder={translate('global.form.username.placeholder', null, 'Your username')}
+                  label={translate('global.form.username')}
+                  placeholder={translate('global.form.username.placeholder')}
                   required errorMessage="Username cannot be empty!"
                   autoFocus
                 />
                 <AvField
                   name="password" type="password"
-                  label={<Translate contentKey="login.form.password">Password</Translate>}
-                  placeholder={translate('login.form.password.placeholder', null, 'Your password')}
+                  label={translate('login.form.password')}
+                  placeholder={translate('login.form.password.placeholder')}
                   required errorMessage="Password cannot be empty!"
                 />
                 <AvGroup check inline>

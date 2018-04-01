@@ -153,18 +153,22 @@ const reactFiles = {
             templates: [
                 {
                     file: 'entities/entity-delete-dialog.tsx',
+                    method: 'processJsx',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.tsx`
                 },
                 {
                     file: 'entities/entity-detail.tsx',
+                    method: 'processJsx',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.tsx`
                 },
                 {
                     file: 'entities/entity-update.tsx',
+                    method: 'processJsx',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-update.tsx`
                 },
                 {
                     file: 'entities/entity.tsx',
+                    method: 'processJsx',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.tsx`
                 },
                 {
@@ -177,6 +181,7 @@ const reactFiles = {
                 },
                 {
                     file: 'entities/index.tsx',
+                    method: 'processJsx',
                     renameTo: generator => `entities/${generator.entityFolderName}/index.tsx`
                 }
             ]

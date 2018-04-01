@@ -108,18 +108,19 @@ import {
   <%_ }); _%>
   reset
 } from './<%= entityFileName %>.reducer';
+import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 // tslint:disable-next-line:no-unused-variable
 import { convertDateTimeFromServer } from 'app/shared/util/date-utils';
 
 export interface I<%= entityReactName %>UpdateProps {
-  getEntity: ICrudGetAction;
-  updateEntity: ICrudPutAction;
-  createEntity: ICrudPutAction;
+  getEntity: ICrudGetAction<I<%= entityReactName %>>;
+  updateEntity: ICrudPutAction<I<%= entityReactName %>>;
+  createEntity: ICrudPutAction<I<%= entityReactName %>>;
   <%_ otherEntityActions.forEach(val => { _%>
-  <%= val.action %>: ICrudGetAllAction;
+  <%= val.action %>: ICrudGetAllAction<I<%= val.entity %>>;
   <%= val.instance %>: I<%= val.entity %>[];
   <%_ }) _%>
-  <%= entityInstance %>: any;
+  <%= entityInstance %>: I<%= entityReactName %>;
   <%_
     blobFields.forEach(b => {
       const capitalizedFirstLetter = upperFirst(b.fieldName);
@@ -336,19 +337,20 @@ _%>
             <%_ for (idx in fields) {
                 const fieldType = fields[idx].fieldType;
                 const fieldName = fields[idx].fieldName;
+                const fieldNameHumanized = fields[idx].fieldNameHumanized;
             _%>
             <AvGroup>
             <%_ if (fieldType === 'Boolean') { _%>
               <Label id="<%= fieldName %>Label" check>
                 <AvInput type="checkbox" className="form-control" name="<%= fieldName %>" />
                 <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
-                  <%=fieldName%>
+                  <%= fieldNameHumanized %>
                 </Translate>
               </Label>
             <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
               <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
                 <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
-                  <%=fieldName%>
+                  <%= fieldNameHumanized %>
                 </Translate>
               </Label>
               <AvInput
@@ -361,7 +363,7 @@ _%>
             <%_ } else if (fieldType === 'LocalDate') { _%>
               <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
                 <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
-                  <%=fieldName%>
+                  <%= fieldNameHumanized %>
                 </Translate>
               </Label>
               <AvField
@@ -376,7 +378,7 @@ _%>
             _%>
               <Label id="<%= fieldName %>Label">
                 <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
-                  <%=fieldName%>
+                  <%= fieldNameHumanized %>
                 </Translate>
               </Label>
               <AvInput type="select"
@@ -396,7 +398,7 @@ _%>
             <%_ } else if (['Integer', 'Long', 'Float', 'Double'].includes(fieldType)) { _%>
               <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
                 <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
-                  <%=fieldName%>
+                  <%= fieldNameHumanized %>
                 </Translate>
               </Label>
               <AvField type="number" className="form-control" name="<%= fieldName %>" <%- include react_validators %> />
@@ -413,7 +415,7 @@ _%>
             <AvGroup>
               <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
                 <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
-                  <%= fieldName %>
+                  <%= fieldNameHumanized %>
                 </Translate>
               </Label>
               <br />
@@ -443,7 +445,7 @@ _%>
             <%_ } else { _%>
               <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
                 <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
-                  <%=fieldName%>
+                  <%= fieldNameHumanized %>
                 </Translate>
               </Label>
               <AvField type="text" name="<%= fieldName %>" <%- include react_validators %>/>
@@ -451,7 +453,7 @@ _%>
             <%_ } else { _%>
             <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
               <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
-                <%=fieldName%>
+                <%= fieldNameHumanized %>
               </Translate>
             </Label>
             <AvField type="text" name="<%= fieldName %>" <%- include react_validators %>/>

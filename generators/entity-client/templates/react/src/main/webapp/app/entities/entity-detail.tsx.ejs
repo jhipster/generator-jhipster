@@ -37,12 +37,13 @@ import {
 import { FaArrowLeft } from 'react-icons/lib/fa';
 
 import { getEntity } from './<%= entityFileName %>.reducer';
+import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 // tslint:disable-next-line:no-unused-variable
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
 export interface I<%= entityReactName %>DetailProps {
-  getEntity: ICrudGetAction;
-  <%= entityInstance %>: any;
+  getEntity: ICrudGetAction<I<%= entityReactName %>>;
+  <%= entityInstance %>: I<%= entityReactName %>;
   match: any;
 }
 
@@ -63,11 +64,12 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
         <%_ for (idx in fields) {
             const fieldType = fields[idx].fieldType;
             const fieldName = fields[idx].fieldName;
+            const fieldNameHumanized = fields[idx].fieldNameHumanized;
         _%>
           <dt>
             <span id="<%= fieldName %>">
               <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
-              <%=fields[idx].fieldName%>
+                <%= fieldNameHumanized %>
               </Translate>
             </span>
             <%_ if (fields[idx].javadoc) { _%>
