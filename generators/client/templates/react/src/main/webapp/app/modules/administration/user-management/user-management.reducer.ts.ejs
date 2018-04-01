@@ -130,20 +130,20 @@ export const getUsers: ICrudGetAllAction<IUser> = (page, size, sort) => {
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
   return {
     type: ACTION_TYPES.FETCH_USERS,
-    payload: axios.get(requestUrl)
+    payload: axios.get(requestUrl) as Promise<IUser>
   };
 };
 
-export const getRoles: ICrudGetAction<IUser> = () => ({
+export const getRoles: ICrudGetAction<any> = () => ({
   type: ACTION_TYPES.FETCH_ROLES,
-  payload: axios.get(`${apiUrl}/authorities`)
+  payload: axios.get(`${apiUrl}/authorities`) as Promise<any>
 });
 
 export const getUser: ICrudGetAction<IUser> = id => {
   const requestUrl = `${apiUrl}/${id}`;
   return {
     type: ACTION_TYPES.FETCH_USER,
-    payload: axios.get(requestUrl)
+    payload: axios.get(requestUrl) as Promise<IUser>
   };
 };
 
