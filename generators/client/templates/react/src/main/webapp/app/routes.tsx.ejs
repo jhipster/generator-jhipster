@@ -32,6 +32,7 @@ import PasswordResetInit from 'app/modules/account/password-reset/init/password-
 import PasswordResetFinish from 'app/modules/account/password-reset/finish/password-reset-finish';
 import Entities from 'app/entities';
 import PrivateRoute from 'app/shared/auth/private-route';
+import { AUTHORITIES } from 'app/config/constants';
 
 const Routes = () => (
   <div className="view-routes">
@@ -44,9 +45,9 @@ const Routes = () => (
       <Route path="/activate/:key?" component={Activate} />
       <Route path="/reset/request" component={PasswordResetInit} />
       <Route path="/reset/finish/:key?" component={PasswordResetFinish} />
-      <PrivateRoute path="/admin" component={Admin} hasAnyAuthorities={['ROLE_ADMIN']}/>
-      <PrivateRoute path="/account" component={Account} hasAnyAuthorities={['ROLE_USER']}/>
-      <PrivateRoute path="/entity" component={Entities} hasAnyAuthorities={['ROLE_USER']}/>
+      <PrivateRoute path="/admin" component={Admin} hasAnyAuthorities={[AUTHORITIES.ADMIN]}/>
+      <PrivateRoute path="/account" component={Account} hasAnyAuthorities={[AUTHORITIES.USER]}/>
+      <PrivateRoute path="/entity" component={Entities} hasAnyAuthorities={[AUTHORITIES.USER]}/>
       <Route path="/" component={Home}/>
     </Switch>
   </div>

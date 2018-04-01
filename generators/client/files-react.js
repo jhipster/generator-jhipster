@@ -193,8 +193,7 @@ const files = {
             templates: [
                 'shared/reducers/index.ts',
                 'shared/reducers/action-type.util.ts',
-                'shared/reducers/authentication.ts',
-                'shared/reducers/layout.ts'
+                'shared/reducers/authentication.ts'
             ]
         },
         {
