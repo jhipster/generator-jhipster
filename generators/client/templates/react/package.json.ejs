@@ -182,7 +182,7 @@ limitations under the License.
     "cleanup": "rimraf <%= BUILD_DIR %>www",
     <%_ if (protractorTests) { _%>
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
-    "postinstall": "webdriver-manager update",
+    "postinstall": "webdriver-manager update --gecko false",
     <%_ } _%>
     "start": "<%= clientPackageManager %> run webpack:dev",
     "test": "<%= clientPackageManager %> run lint && karma start src/test/javascript/karma.conf.js",

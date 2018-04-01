@@ -47,6 +47,7 @@ launchCurlOrProtractor() {
         if [[ -f "gulpfile.js" ]]; then
             gulp itest --no-notification
         elif [[ -f "tsconfig.json" ]]; then
+            ls -al node_modules/webdriver-manager/selenium/
             yarn e2e
         fi
         result=$?
