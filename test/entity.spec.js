@@ -27,7 +27,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/shared/model/foo.model.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo/foo-delete-dialog.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo/foo-detail.component.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo/foo-dialog.component.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo/foo-update.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo/foo.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo/foo.service.spec.ts`
     ],
