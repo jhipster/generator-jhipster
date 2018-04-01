@@ -27,8 +27,8 @@ import Sessions from './sessions/sessions';
 
 const Routes = ({ match }) => (
   <div>
-    <Route path={`${match.url}/settings`} component={Settings}/>
-    <Route path={`${match.url}/password`} component={Password}/>
+    <Route path={`${match.url}/settings`} component={Settings} />
+    <Route path={`${match.url}/password`} component={Password} />
     <%_ if (authenticationType === 'session') { _%>
     <Route path={`${match.url}/sessions`} component={Sessions} />
     <%_ } _%>

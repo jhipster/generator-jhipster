@@ -293,6 +293,7 @@ const files = {
                 'shared/util/url-utils.ts',
                 'shared/util/entity-utils.ts',
                 // components
+                'shared/auth/private-route.tsx',
                 // model
                 'shared/model/user.model.ts'
             ]
@@ -329,14 +330,6 @@ const files = {
     //     'shared/language/_language.pipe.js',
     //     'shared/language/_language.constants.js',
     //     'shared/language/_language.helper.js'
-    //   ]
-    // },
-    // {
-    //   condition: generator => !generator.skipUserManagement,
-    //   path: REACT_DIR,
-    //   templates: [
-    //     'shared/user/_user.model.js',
-    //     'shared/user/_user.service.js'
     //   ]
     // }
     ],
@@ -386,6 +379,7 @@ const files = {
                 'spec/app/shared/layout/header.spec.tsx',
                 'spec/app/shared/reducers/authentication.spec.ts',
                 'spec/app/shared/util/entity-utils.spec.ts',
+                'spec/app/shared/auth/private-route.spec.tsx',
                 'spec/app/modules/account/register/register.spec.tsx',
                 'spec/app/modules/account/register/register.reducer.spec.ts',
                 'spec/app/modules/account/activate/activate.reducer.spec.ts',
