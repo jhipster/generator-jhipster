@@ -648,7 +648,9 @@ module.exports = class extends BaseGenerator {
                         if (relationship.relationshipType === 'many-to-one') {
                             if (otherEntityData && otherEntityData.relationships) {
                                 otherEntityData.relationships.forEach((otherRelationship) => {
-                                    if (otherRelationship.otherEntityRelationshipName === relationship.relationshipName && otherRelationship.relationshipType === 'one-to-many') {
+                                    if (_.upperFirst(otherRelationship.otherEntityName) === entityName &&
+                                        otherRelationship.otherEntityRelationshipName === relationship.relationshipName &&
+                                        otherRelationship.relationshipType === 'one-to-many') {
                                         relationship.otherEntityRelationshipName = otherRelationship.relationshipName;
                                         relationship.otherEntityRelationshipNamePlural = pluralize(otherRelationship.relationshipName);
                                     }
