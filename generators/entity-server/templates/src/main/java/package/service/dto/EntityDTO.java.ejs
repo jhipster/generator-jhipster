@@ -233,6 +233,17 @@ public class <%= entityClass %>DTO implements Serializable {
                 const isNumeric = ['integer', 'long', 'float', 'double', 'bigdecimal'].includes(fieldType.toLowerCase()); _%>
             ", <%= fieldName %>=<% if (! isNumeric) { %>'<% } %>" + <% if (fieldType.toLowerCase() === 'boolean') { %>is<% } else { %>get<% } %><%= fields[idx].fieldInJavaBeanMethod %>() <% if (! isNumeric) { %>+ "'" <% } %>+
             <%_ } _%>
+            <%_ for (idx in relationships) {
+                const relationshipFieldName = relationships[idx].relationshipFieldName;
+                const relationshipType = relationships[idx].relationshipType;
+                const relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized;
+                const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
+                const ownerSide = relationships[idx].ownerSide; _%>
+                <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
+            ", <%= relationshipFieldName %>=<% if (relationshipFieldName === 'user' && authenticationType === 'oauth2') { %>'<% } %>" + get<%= relationshipNameCapitalized %>Id() <% if (relationshipFieldName === 'user' && authenticationType === 'oauth2') { %>+ "'" <% } %>+
+                    <%_ if (otherEntityFieldCapitalized !== 'Id' && otherEntityFieldCapitalized !== '') { _%>
+            ", <%= relationshipFieldName %>='" + get<%= relationshipNameCapitalized %><%= otherEntityFieldCapitalized %>() + "'" +
+            <%_ } } } _%>
             "}";
     }
 }
