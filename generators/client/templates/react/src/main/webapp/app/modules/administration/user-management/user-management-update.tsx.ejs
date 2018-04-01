@@ -27,17 +27,18 @@ import { FaBan, FaFloppyO, FaArrowLeft } from 'react-icons/lib/fa';
 <%_ if (enableTranslation) { _%>
 import { locales } from 'app/config/translation';
 <%_ } _%>
+import { IUser } from 'app/shared/model/user.model';
 import { getUser, getRoles, updateUser, createUser, reset } from './user-management.reducer';
 
 export interface IUserManagementUpdateProps {
-  getUser: ICrudGetAction;
-  getRoles: ICrudGetAllAction;
-  updateUser: ICrudPutAction;
-  createUser: ICrudPutAction;
+  getUser: ICrudGetAction<IUser>;
+  getRoles: ICrudGetAllAction<any>;
+  updateUser: ICrudPutAction<IUser>;
+  createUser: ICrudPutAction<IUser>;
   reset: Function;
   loading: boolean;
   updating: boolean;
-  user: any;
+  user: IUser;
   roles: any[];
   match: any;
   history: any;

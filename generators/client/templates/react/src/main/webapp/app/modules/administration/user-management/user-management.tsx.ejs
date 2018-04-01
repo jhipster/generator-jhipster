@@ -33,13 +33,14 @@ import {
 import { FaPlus, FaEye, FaPencil, FaSort, FaTrash } from 'react-icons/lib/fa';
 
 import { APP_DATE_FORMAT } from 'app/config/constants';
+import { IUser } from 'app/shared/model/user.model';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { getUsers, updateUser } from './user-management.reducer';
 
 export interface IUserManagementProps {
-  getUsers: ICrudGetAllAction;
-  updateUser: ICrudPutAction;
-  users: any[];
+  getUsers: ICrudGetAllAction<IUser>;
+  updateUser: ICrudPutAction<IUser>;
+  users: IUser[];
   account: any;
   match: any;
   totalItems: 0;
