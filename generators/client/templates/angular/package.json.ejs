@@ -39,7 +39,7 @@
     "font-awesome": "4.7.0",
     "jquery": "3.3.1",
     "moment": "2.21.0",
-    "ng-jhipster": "0.4.2",
+    "ng-jhipster": "0.4.5",
     "ngx-cookie": "2.0.1",
     "ngx-infinite-scroll": "0.5.1",
     "ngx-webstorage": "2.0.1",
@@ -50,7 +50,6 @@
     "sockjs-client": "1.1.4",
     "webstomp-client": "1.2.0",
     <%_ } _%>
-    "tether": "1.4.3",
     "tslib": "1.9.0",
     "zone.js": "0.8.20"
   },
@@ -66,7 +65,7 @@
     <%_ } _%>
     "angular2-template-loader": "0.6.2",
     "browser-sync": "2.23.6",
-    "browser-sync-webpack-plugin": "2.0.1",
+    "browser-sync-webpack-plugin": "2.2.2",
     "cache-loader": "1.2.2",
     "codelyzer": "4.2.1",
     "copy-webpack-plugin": "4.5.1",
@@ -78,7 +77,9 @@
     "generator-jhipster": "<%= packagejs.version %>",
     "html-loader": "0.5.5",
     "html-webpack-plugin": "3.0.6",
+    <%_ if(!skipCommitHook) { _%>
     "husky": "0.14.3",
+    <%_ } _%>
     "jasmine-core": "2.7.0",
     <%_ if (protractorTests) { _%>
     "jasmine-reporters": "2.2.1",
@@ -93,7 +94,9 @@
     "karma-remap-istanbul": "0.6.0",
     "karma-sourcemap-loader": "0.3.7",
     "karma-webpack": "2.0.13",
+    <%_ if(!skipCommitHook) { _%>
     "lint-staged": "7.0.0",
+    <%_ } _%>
     <%_ if (enableTranslation) { _%>
     "merge-jsons-webpack-plugin": "1.0.14",
     <%_ } _%>
@@ -142,11 +145,15 @@
   "engines": {
     "node": ">=8.9.0"
   },
+  <%_ if(!skipCommitHook) { _%>
   "lint-staged": {
     "*.ts": ["prettier --write", "git add"]
   },
+  <%_ } _%>
   "scripts": {
+    <%_ if(!skipCommitHook) { _%>
     "precommit": "lint-staged",
+    <%_ } _%>
     "prettier:format":"<%= clientPackageManager %> prettier --write **/*.ts",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",

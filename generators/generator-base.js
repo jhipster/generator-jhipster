@@ -203,7 +203,7 @@ module.exports = class extends PrivateBase {
                     needle: 'jhipster-needle-add-entity-to-menu',
                     splicable: [
                         this.stripMargin(`|(
-                        |        <DropdownItem tag={Link} key="${routerName}" to="/${routerName}">
+                        |        <DropdownItem tag={Link} key="${routerName}" to="/entity/${routerName}">
                         |          <FaAsterisk />&nbsp;
                         |          ${_.startCase(routerName)}
                         |        </DropdownItem>
@@ -276,7 +276,7 @@ module.exports = class extends PrivateBase {
                     file: indexModulePath,
                     needle: 'jhipster-needle-add-route-path',
                     splicable: [
-                        this.stripMargin(`|<Route path={'/${entityFileName}'} component={${entityAngularName}}/>`)
+                        this.stripMargin(`|<Route path={\`\${match.url}/${entityFileName}\`} component={${entityAngularName}}/>`)
                     ]
                 }, this);
 
@@ -1077,6 +1077,32 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Add a remote Maven Repository to the Maven build.
+     *
+     * @param {string} id - id of the repository
+     * @param {string} url - url of the repository
+     */
+    addMavenRepository(id, url) {
+        const fullPath = 'pom.xml';
+        try {
+            const repository = `${'<repository>\n' +
+                '            <id>'}${id}</id>\n` +
+                `            <url>${url}</url>\n` +
+                '        </repository>';
+            jhipsterUtils.rewriteFile({
+                file: fullPath,
+                needle: 'jhipster-needle-maven-repository',
+                splicable: [
+                    repository
+                ]
+            }, this);
+        } catch (e) {
+            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}maven repository (id: ${id}, url:${url})${chalk.yellow(' not added.\n')}`);
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
      * Add a new Maven property.
      *
      * @param {string} name - property name
@@ -1701,10 +1727,11 @@ module.exports = class extends PrivateBase {
         context.fluentMethods = context.fileData.fluentMethods;
         context.clientRootFolder = context.fileData.clientRootFolder;
         context.pagination = context.fileData.pagination;
-        context.searchEngine = context.fileData.searchEngine || context.searchEngine;
+        context.searchEngine = _.isUndefined(context.fileData.searchEngine) ? context.searchEngine : context.fileData.searchEngine;
         context.javadoc = context.fileData.javadoc;
         context.entityTableName = context.fileData.entityTableName;
         context.jhiPrefix = context.fileData.jhiPrefix || context.jhiPrefix;
+        context.skipCheckLengthOfIdentifier = context.fileData.skipCheckLengthOfIdentifier || context.skipCheckLengthOfIdentifier;
         context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
         this.copyFilteringFlag(context.fileData, context, context);
         if (_.isUndefined(context.entityTableName)) {
@@ -1743,7 +1770,11 @@ module.exports = class extends PrivateBase {
         let entityJson = null;
 
         try {
-            entityJson = this.fs.readJSON(path.join(JHIPSTER_CONFIG_DIR, `${_.upperFirst(file)}.json`));
+            if (this.context.microservicePath) {
+                entityJson = this.fs.readJSON(path.join(this.context.microservicePath, JHIPSTER_CONFIG_DIR, `${_.upperFirst(file)}.json`));
+            } else {
+                entityJson = this.fs.readJSON(path.join(JHIPSTER_CONFIG_DIR, `${_.upperFirst(file)}.json`));
+            }
         } catch (err) {
             this.log(chalk.red(`The JHipster entity configuration file could not be read for file ${file}!`) + err);
             this.debug('Error:', err);
@@ -1869,11 +1900,11 @@ module.exports = class extends PrivateBase {
     getJoinTableName(entityName, relationshipName, prodDatabaseType) {
         const joinTableName = `${this.getTableName(entityName)}_${this.getTableName(relationshipName)}`;
         let limit = 0;
-        if (prodDatabaseType === 'oracle' && joinTableName.length > 30) {
+        if (prodDatabaseType === 'oracle' && joinTableName.length > 30 && !this.skipCheckLengthOfIdentifier) {
             this.warning(`The generated join table "${joinTableName}" is too long for Oracle (which has a 30 characters limit). It will be truncated!`);
 
             limit = 30;
-        } else if (prodDatabaseType === 'mysql' && joinTableName.length > 64) {
+        } else if (prodDatabaseType === 'mysql' && joinTableName.length > 64 && !this.skipCheckLengthOfIdentifier) {
             this.warning(`The generated join table "${joinTableName}" is too long for MySQL (which has a 64 characters limit). It will be truncated!`);
 
             limit = 64;
@@ -1904,11 +1935,11 @@ module.exports = class extends PrivateBase {
         }
         let limit = 0;
 
-        if (prodDatabaseType === 'oracle' && constraintName.length > 30) {
+        if (prodDatabaseType === 'oracle' && constraintName.length > 30 && !this.skipCheckLengthOfIdentifier) {
             this.warning(`The generated constraint name "${constraintName}" is too long for Oracle (which has a 30 characters limit). It will be truncated!`);
 
             limit = 28;
-        } else if (prodDatabaseType === 'mysql' && constraintName.length > 64) {
+        } else if (prodDatabaseType === 'mysql' && constraintName.length > 64 && !this.skipCheckLengthOfIdentifier) {
             this.warning(`The generated constraint name "${constraintName}" is too long for MySQL (which has a 64 characters limit). It will be truncated!`);
 
             limit = 62;
@@ -2276,6 +2307,7 @@ module.exports = class extends PrivateBase {
     setupClientOptions(generator, context = generator) {
         generator.skipServer = context.configOptions.skipServer || context.config.get('skipServer');
         generator.skipUserManagement = context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
+        generator.skipCommitHook = context.options['skip-commit-hook'] || context.config.get('skipCommitHook');
         generator.authenticationType = context.options.auth || context.configOptions.authenticationType || context.config.get('authenticationType');
         if (generator.authenticationType === 'oauth2') {
             generator.skipUserManagement = true;
@@ -2346,6 +2378,7 @@ module.exports = class extends PrivateBase {
 
         dest.regenerate = context.options.regenerate;
         dest.fluentMethods = context.options['fluent-methods'];
+        dest.skipCheckLengthOfIdentifier = context.options['skip-check-length-of-identifier'];
         dest.entityTableName = generator.getTableName(context.options['table-name'] || dest.name);
         dest.entityNameCapitalized = _.upperFirst(dest.name);
         dest.entityAngularJSSuffix = context.options['angular-suffix'];

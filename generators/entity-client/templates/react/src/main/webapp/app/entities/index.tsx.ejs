@@ -18,23 +18,22 @@
 -%>
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { ModalRoute } from 'react-router-modal';
 
 import <%= entityReactName %> from './<%= entityFileName %>';
 import <%= entityReactName %>Detail from './<%= entityFileName %>-detail';
-import <%= entityReactName %>Dialog from './<%= entityFileName %>-dialog';
+import <%= entityReactName %>Update from './<%= entityFileName %>-update';
 import <%= entityReactName %>DeleteDialog from './<%= entityFileName %>-delete-dialog';
 
 const Routes = ({ match }) => (
-  <div>
+  <>
     <Switch>
-      <Route exact path={match.url} component={<%= entityReactName %>} />
-      <ModalRoute exact parentPath={match.url} path={`${match.url}/new`} component={<%= entityReactName %>Dialog} />
-      <ModalRoute exact parentPath={match.url} path={`${match.url}/:id/delete`} component={<%= entityReactName %>DeleteDialog} />
-      <ModalRoute exact parentPath={match.url} path={`${match.url}/:id/edit`} component={<%= entityReactName %>Dialog} />
-      <Route exact path={`${match.url}/:id`} component={<%= entityReactName %>Detail} />
+      <Route exact path={`${match.url}/new`} component={<%= entityReactName %>Update} />
+      <Route exact path={`${match.url}/:id/edit`} component={<%= entityReactName %>Update} />
+      <Route exact path={`${match.url}/:id`} component={<%= entityReactName %>Detail}  />
+      <Route path={match.url} component={<%= entityReactName %>} />
     </Switch>
-  </div>
+    <Route path={`${match.url}/:id/delete`} component={<%= entityReactName %>DeleteDialog} />
+  </>
 );
 
 export default Routes;

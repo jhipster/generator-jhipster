@@ -193,8 +193,7 @@ const files = {
             templates: [
                 'shared/reducers/index.ts',
                 'shared/reducers/action-type.util.ts',
-                'shared/reducers/authentication.ts',
-                'shared/reducers/layout.ts'
+                'shared/reducers/authentication.ts'
             ]
         },
         {
@@ -265,7 +264,7 @@ const files = {
             templates: [
                 { file: 'modules/administration/user-management/index.tsx', method: 'processJsx' },
                 { file: 'modules/administration/user-management/user-management.tsx', method: 'processJsx' },
-                { file: 'modules/administration/user-management/user-management-dialog.tsx', method: 'processJsx' },
+                { file: 'modules/administration/user-management/user-management-update.tsx', method: 'processJsx' },
                 { file: 'modules/administration/user-management/user-management-detail.tsx', method: 'processJsx' },
                 { file: 'modules/administration/user-management/user-management-delete-dialog.tsx', method: 'processJsx' },
                 'modules/administration/user-management/user-management.reducer.ts'
@@ -290,7 +289,10 @@ const files = {
                 // util
                 'shared/util/date-utils.ts',
                 'shared/util/pagination.constants.ts',
+                'shared/util/url-utils.ts',
+                'shared/util/entity-utils.ts',
                 // components
+                'shared/auth/private-route.tsx',
                 // model
                 'shared/model/user.model.ts'
             ]
@@ -327,14 +329,6 @@ const files = {
     //     'shared/language/_language.pipe.js',
     //     'shared/language/_language.constants.js',
     //     'shared/language/_language.helper.js'
-    //   ]
-    // },
-    // {
-    //   condition: generator => !generator.skipUserManagement,
-    //   path: REACT_DIR,
-    //   templates: [
-    //     'shared/user/_user.model.js',
-    //     'shared/user/_user.service.js'
     //   ]
     // }
     ],
@@ -383,6 +377,8 @@ const files = {
                 'spec/app/config/notification-middleware.spec.ts',
                 'spec/app/shared/layout/header.spec.tsx',
                 'spec/app/shared/reducers/authentication.spec.ts',
+                'spec/app/shared/util/entity-utils.spec.ts',
+                'spec/app/shared/auth/private-route.spec.tsx',
                 'spec/app/modules/account/register/register.spec.tsx',
                 'spec/app/modules/account/register/register.reducer.spec.ts',
                 'spec/app/modules/account/activate/activate.reducer.spec.ts',
@@ -417,22 +413,6 @@ const files = {
                 'spec/app/modules/account/sessions/sessions.reducer.spec.ts',
             ]
         }
-    //   {
-    //     condition: generator => generator.enableTranslation,
-    //     path: TEST_SRC_DIR,
-    //     templates: [
-    //       'spec/helpers/_mock-language.service.js'
-    //     ]
-    //   },
-    //   {
-    //     condition: generator => generator.protractorTests,
-    //     path: TEST_SRC_DIR,
-    //     templates: [
-    //       'e2e/account/_account.spec.js',
-    //       'e2e/admin/_administration.spec.js',
-    //       '_protractor.conf.js'
-    //     ]
-    //   }
     ]
 };
 

@@ -17,23 +17,23 @@
  limitations under the License.
 -%>
 <%_
-    let hasDate = false;
-    if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) {
-        hasDate = true;
-    }
     let entityActionName = entityInstance.toUpperCase();
     let entityActionNamePlural = entityInstancePlural.toUpperCase();
 _%>
+<%_ if (pagination === 'infinite-scroll') { _%>
+import { isEqual } from 'lodash';
+<%_ } _%>
 import axios from 'axios';
-import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
+import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction<% if (pagination === 'infinite-scroll') { %>, parseHeaderForLinks, loadMoreDataWhenScrolled<% } %> } from 'react-jhipster';
 
+import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import { SERVER_API_URL } from 'app/config/constants';
 <%_ if (!(applicationType === 'gateway' && locals.microserviceName) && authenticationType !== 'uaa') { _%>
 
 <%_ } _%>
-<%_ if (hasDate) { _%>
-// import { JhiDateUtils } from 'ng-jhipster';
+<%_ if (fieldsContainDate) { _%>
+
 <%_ } _%>
 // import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 
@@ -41,11 +41,18 @@ export const ACTION_TYPES = {
   <%_ if (searchEngine === 'elasticsearch') { _%>
   SEARCH_<%= entityActionNamePlural %>: '<%= entityInstance %>/SEARCH_<%= entityActionNamePlural %>',
   <%_ } _%>
-  FETCH_<%= entityActionNamePlural %>: '<%= entityInstance %>/FETCH_<%= entityActionNamePlural %>',
+  FETCH_<%= entityActionName %>_LIST: '<%= entityInstance %>/FETCH_<%= entityActionName %>_LIST',
   FETCH_<%= entityActionName %>:  '<%= entityInstance %>/FETCH_<%= entityActionName %>',
   CREATE_<%= entityActionName %>: '<%= entityInstance %>/CREATE_<%= entityActionName %>',
   UPDATE_<%= entityActionName %>: '<%= entityInstance %>/UPDATE_<%= entityActionName %>',
-  DELETE_<%= entityActionName %>: '<%= entityInstance %>/DELETE_<%= entityActionName %>'
+  DELETE_<%= entityActionName %>: '<%= entityInstance %>/DELETE_<%= entityActionName %>',
+  <%_
+  blobFields.forEach(b => {
+    const upperFieldName = b.fieldName.toUpperCase();
+  _%>
+  SET_<%= upperFieldName %>: '<%= entityInstance %>/SET_<%= upperFieldName %>',
+  <%_ }); _%>
+  RESET: '<%= entityInstance %>/RESET'
 };
 
 const initialState = {
@@ -53,20 +60,26 @@ const initialState = {
   errorMessage: null,
   entities: [],
   entity: {},
+  <%_ if (pagination === 'infinite-scroll') { _%>
+  links: {
+    last: 0
+  },
+  <%_ } _%>
   updating: false,
-  <%_ if (pagination !== 'no') { _%> 
+  <%_ if (pagination !== 'no') { _%>
   totalItems: 0,
   <%_ } _%>
   updateSuccess: false
 };
 
 // Reducer
+
 export default (state = initialState, action) => {
   switch (action.type) {
     <%_ if (searchEngine === 'elasticsearch') { _%>
     case REQUEST(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
     <%_ } _%>
-    case REQUEST(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
+    case REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST):
     case REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>):
       return {
         ...state,
@@ -86,7 +99,7 @@ export default (state = initialState, action) => {
     <%_ if (searchEngine === 'elasticsearch') { _%>
     case FAILURE(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
     <%_ } _%>
-    case FAILURE(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
+    case FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST):
     case FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>):
     case FAILURE(ACTION_TYPES.CREATE_<%= entityActionName %>):
     case FAILURE(ACTION_TYPES.UPDATE_<%= entityActionName %>):
@@ -104,16 +117,26 @@ export default (state = initialState, action) => {
         ...state,
         loading: false,
         entities: action.payload.data
-    };
+      };
     <%_ } _%>
-    case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionNamePlural %>):
+    case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST):
+      <%_ if (pagination === 'infinite-scroll') { _%>
+      const links = parseHeaderForLinks(action.payload.headers.link);
+      <%_ } _%>
       return {
         ...state,
+        <%_ if (pagination === 'infinite-scroll') { _%>
+        links: { last: links.last },
+        <%_ } _%>
         loading: false,
         <%_ if (pagination !== 'no') { _%>
         totalItems: action.payload.headers['x-total-count'],
         <%_ } _%>
+        <%_ if (pagination === 'infinite-scroll') { _%>
+        entities: loadMoreDataWhenScrolled(state.entities, action.payload.data, links)
+        <%_ } else { _%>
         entities: action.payload.data
+        <%_ } _%>
       };
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>):
       return {
@@ -136,12 +159,31 @@ export default (state = initialState, action) => {
         updateSuccess: true,
         entity: {}
       };
+    <%_
+    blobFields.forEach(b => {
+      const fieldName = b.fieldName;
+      const upperFieldName = fieldName.toUpperCase();
+    _%>
+    case ACTION_TYPES.SET_<%= upperFieldName %>:
+        return {
+          ...state,
+          entity: {
+            ...state.entity,
+            <%= fieldName %>: action.payload.data,
+            <%= fieldName %>ContentType: action.payload.contentType
+          }
+        };
+      <%_ }); _%>
+    case ACTION_TYPES.RESET:
+      return {
+        ...initialState
+      };
     default:
       return state;
   }
 };
 
-const apiUrl = <% if (applicationType === 'gateway' && locals.microserviceName) { %>'/<%= microserviceName.toLowerCase() %>/<% } else if (authenticationType === 'uaa') { %>'<% } else { %>SERVER_API_URL + '<% } %>/api/<%= entityApiUrl %>';
+const apiUrl = <% if (applicationType === 'gateway' && locals.microserviceName) { %>'/<%= microserviceName.toLowerCase() %><% } else if (authenticationType === 'uaa') { %>'<% } else { %>SERVER_API_URL + '<% } %>/api/<%= entityApiUrl %>';
 <%_ if (searchEngine === 'elasticsearch') { _%>
 const apiSearchUrl = <% if (applicationType === 'gateway' && locals.microserviceName) { %>'/<%= microserviceName.toLowerCase() %>/<% } else if (authenticationType === 'uaa') { %>'<% } else { %>SERVER_API_URL + '<% } %>/api/_search/<%= entityApiUrl %>';
 <%_ } _%>
@@ -160,13 +202,13 @@ export const getEntities: ICrudGetAllAction = (page, size, sort) =>
 {
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
   return {
-    type: ACTION_TYPES.FETCH_<%= entityActionNamePlural %>,
+    type: ACTION_TYPES.FETCH_<%= entityActionName %>_LIST,
     payload: axios.get(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`)
   }
 }
 <%_ } else { _%>
 ({
-  type: ACTION_TYPES.FETCH_<%= entityActionNamePlural %>,
+  type: ACTION_TYPES.FETCH_<%= entityActionName %>_LIST,
   payload: axios.get(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
 });
 <%_ } _%>
@@ -182,7 +224,7 @@ export const getEntity: ICrudGetAction = id => {
 export const createEntity: ICrudPutAction = entity => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_<%= entityActionName %>,
-    payload: axios.post(apiUrl, entity)
+    payload: axios.post(apiUrl, cleanEntity(entity))
   });
   dispatch(getEntities());
   return result;
@@ -191,7 +233,7 @@ export const createEntity: ICrudPutAction = entity => async dispatch => {
 export const updateEntity: ICrudPutAction = entity => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_<%= entityActionName %>,
-    payload: axios.put(apiUrl, entity)
+    payload: axios.put(apiUrl, cleanEntity(entity))
   });
   dispatch(getEntities());
   return result;
@@ -206,3 +248,19 @@ export const deleteEntity: ICrudDeleteAction = id => async dispatch => {
   dispatch(getEntities());
   return result;
 };
+
+<%_
+  blobFields.forEach(b => {
+    const fieldName = b.fieldName;
+    const upperFirstName =  upperFirst(fieldName);
+    const upperFieldName = b.fieldName.toUpperCase();
+_%>
+export const set<%= upperFirstName %> = <%= fieldName %> => ({
+  type: ACTION_TYPES.SET_<%= upperFieldName %>,
+  payload: <%= fieldName %>
+});
+<%_ }); _%>
+
+export const reset = () => ({
+  type: ACTION_TYPES.RESET
+});

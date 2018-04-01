@@ -16,13 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-const keyPrefix = angularAppName + '.'+ entityTranslationKey + '.';
-_%>
 <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
-
     <div>
-        <h2  id="my<%= entityClass %>Label" jhiTranslate="<%= keyPrefix %>home.createOrEditLabel">Create or edit a <%= entityClassHumanized %></h2>
+        <h2  id="my<%= entityClass %>Label" jhiTranslate="<%= i18nKeyPrefix %>.home.createOrEditLabel">Create or edit a <%= entityClassHumanized %></h2>
     </div>
     <div>
         <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
@@ -39,7 +35,7 @@ _%>
             const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
             let fieldInputType = 'text';
             let ngModelOption = '';
-            const translationKey = keyPrefix + fieldName;
+            const translationKey = `${i18nKeyPrefix}.${fieldName}`;
             if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) {
                 fieldInputType = 'number';
             } else if (fieldType === 'LocalDate') {
@@ -53,7 +49,7 @@ _%>
             }
         _%>
         <div class="form-group">
-            <label class="form-control-label" jhiTranslate="<%= translationKey %>" for="field_<%= fieldName %>"<% if (fields[idx].javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= keyPrefix %>help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= fields[idx].javadoc %>"<% } } %>><%= fieldNameHumanized %></label>
+            <label class="form-control-label" jhiTranslate="<%= translationKey %>" for="field_<%= fieldName %>"<% if (fields[idx].javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= fields[idx].javadoc %>"<% } } %>><%= fieldNameHumanized %></label>
             <%_ if (fields[idx].fieldIsEnum) { _%>
             <select class="form-control" name="<%= fieldName %>" [(ngModel)]="<%= entityInstance %>.<%= fieldName %>" id="field_<%= fieldName %>" <% if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('required')) { %> required<% } %>>
             <%_ const enumPrefix = angularAppName + '.'+ fieldType;
@@ -193,7 +189,7 @@ _%>
         const otherEntityField = relationships[idx].otherEntityField;
         const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
         const relationshipRequired = relationships[idx].relationshipRequired;
-        const translationKey = keyPrefix + relationshipName; _%>
+        const translationKey = `${i18nKeyPrefix}.${relationshipName}`; _%>
         <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true && otherEntityName === 'user')) { _%>
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>

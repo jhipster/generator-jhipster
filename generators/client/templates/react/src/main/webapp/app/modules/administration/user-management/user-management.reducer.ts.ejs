@@ -28,7 +28,7 @@ export const ACTION_TYPES = {
   CREATE_USER: 'userManagement/CREATE_USER',
   UPDATE_USER: 'userManagement/UPDATE_USER',
   DELETE_USER: 'userManagement/DELETE_USER',
-  RESET_MODAL: 'userManagement/RESET_MODAL'
+  RESET: 'userManagement/RESET'
 };
 
 const initialState = {
@@ -113,7 +113,7 @@ export default (state = initialState, action) => {
         updateSuccess: true,
         user: {}
       };
-    case ACTION_TYPES.RESET_MODAL:
+    case ACTION_TYPES.RESET:
       return {
         ...state,
         user: {}
@@ -174,6 +174,6 @@ export const deleteUser: ICrudDeleteAction = id => async dispatch => {
   return result;
 };
 
-export const resetModal = () => ({
-  type: ACTION_TYPES.RESET_MODAL
+export const reset = () => ({
+  type: ACTION_TYPES.RESET
 });

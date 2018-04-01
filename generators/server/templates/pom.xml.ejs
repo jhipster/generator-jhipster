@@ -26,8 +26,8 @@
     <packaging>war</packaging>
     <name><%= humanizedBaseName %></name>
 
-    <!-- TODO Remove snapshot repositories after final Spring Boot 2 release -->
     <repositories>
+        <!-- TODO Remove snapshot repositories after final Spring Boot 2 release -->
         <repository>
             <id>sonatype-snapshot</id>
             <name>JHipster Snapshots</name>
@@ -57,6 +57,7 @@
             </releases>
         </repository>
     <%_ } _%>
+        <!-- jhipster-needle-maven-repository -->
     </repositories>
     <pluginRepositories>
         <pluginRepository>
@@ -126,7 +127,7 @@
         <%_ if (!skipClient) { _%>
         <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
         <%_ } _%>
-        <jacoco-maven-plugin.version>0.8.0</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.1</jacoco-maven-plugin.version>
         <scala-maven-plugin.version>3.3.1</scala-maven-plugin.version>
         <sonar-maven-plugin.version>3.4.0.905</sonar-maven-plugin.version>
         <%_ if (enableSwaggerCodegen) { _%>
@@ -1406,7 +1407,7 @@
                 It allows automatic compilation of Java classes as soon as they are saved.
                 To use it, run in 3 terminals:
                 - './mvnw -Pcc scala:cc' for continuous compilation of your classes
-                - './mvnw -Pcc' for hot reload of Spring boot
+                - './mvnw -Pcc -Pdev' for hot reload of Spring boot
                 - 'npm start/yarn start' for hot reload of the HTML/JavaScript asset
                 Everything should hot reload automatically!
             -->

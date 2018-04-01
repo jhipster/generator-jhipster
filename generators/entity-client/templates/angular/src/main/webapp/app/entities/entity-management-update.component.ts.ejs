@@ -17,12 +17,6 @@
  limitations under the License.
 -%>
 <%_
-const i18nToLoad = [entityInstance];
-for (const idx in fields) {
-    if (fields[idx].fieldIsEnum === true) {
-        i18nToLoad.push(fields[idx].enumInstance);
-    }
-}
 const query = generateEntityQueries(relationships, entityInstance, dto);
 const queries = query.queries;
 const variables = query.variables;
@@ -58,7 +52,7 @@ _%>
 import { I<%= uniqueRel.otherEntityAngularName %>, <%= uniqueRel.otherEntityAngularName%>Service } from 'app/core';
 <%_         } else { _%>
 import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/<%= uniqueRel.otherEntityModelName %>.model';
-import { <%= uniqueRel.otherEntityAngularName%>Service } from '../<%= uniqueRel.otherEntityModulePath %>';
+import { <%= uniqueRel.otherEntityAngularName%>Service } from 'app/entities/<%= uniqueRel.otherEntityPath %>';
 <%_         }
         }
     }

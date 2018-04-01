@@ -16,9 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<% const keyPrefix = angularAppName + '.' + entityTranslationKey; %>
 <div *ngIf="<%= entityInstance %>">
-    <h2><span jhiTranslate="<%= keyPrefix %>.detail.title"><%= entityClassHumanized %></span> {{<%= entityInstance %>.id}}</h2>
+    <h2><span jhiTranslate="<%= i18nKeyPrefix %>.detail.title"><%= entityClassHumanized %></span> {{<%= entityInstance %>.id}}</h2>
     <hr>
     <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
     <dl class="row-md jh-entity-details">
@@ -26,7 +25,7 @@
         const fieldName = fields[idx].fieldName;
         const fieldType = fields[idx].fieldType;
         const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent; _%>
-        <dt><span jhiTranslate="<%= keyPrefix %>.<%= fieldName %>"<% if (fields[idx].javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= keyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= fields[idx].javadoc %>"<% } } %>><%= fields[idx].fieldNameHumanized %></span></dt>
+        <dt><span jhiTranslate="<%= i18nKeyPrefix %>.<%= fieldName %>"<% if (fields[idx].javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= fields[idx].javadoc %>"<% } } %>><%= fields[idx].fieldNameHumanized %></span></dt>
         <dd>
             <%_ if (fields[idx].fieldIsEnum) { _%>
             <span jhiTranslate="{{'<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>}}">{{<%= entityInstance %>.<%= fieldName %>}}</span>
@@ -61,7 +60,7 @@
         if (relationshipType === 'many-to-one'
         || (relationshipType === 'one-to-one' && ownerSide === true)
         || (relationshipType === 'many-to-many' && ownerSide === true)) { _%>
-        <dt><span jhiTranslate="<%= keyPrefix %>.<%= relationshipName %>"><%= relationshipNameHumanized %></span></dt>
+        <dt><span jhiTranslate="<%= i18nKeyPrefix %>.<%= relationshipName %>"><%= relationshipNameHumanized %></span></dt>
         <dd>
             <%_ if (otherEntityName === 'user') { _%>
             <%_ if (relationshipType === 'many-to-many') { _%>

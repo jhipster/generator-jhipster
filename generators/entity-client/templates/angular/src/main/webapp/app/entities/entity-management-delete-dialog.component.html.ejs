@@ -16,7 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const keyPrefix = angularAppName + '.' + entityTranslationKey; _%>
 <form name="deleteForm" (ngSubmit)="confirmDelete(<%= entityInstance %>.id)">
     <div class="modal-header">
         <h4 class="modal-title" jhiTranslate="entity.delete.title">Confirm delete operation</h4>
@@ -25,7 +24,7 @@
     </div>
     <div class="modal-body">
         <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
-        <p jhiTranslate="<%= keyPrefix %>.delete.question" translateValues="{id: '{{<%= entityInstance %>.id}}'}">Are you sure you want to delete this <%= entityClassHumanized %>?</p>
+        <p jhiTranslate="<%= i18nKeyPrefix %>.delete.question" translateValues="{id: '{{<%= entityInstance %>.id}}'}">Are you sure you want to delete this <%= entityClassHumanized %>?</p>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
