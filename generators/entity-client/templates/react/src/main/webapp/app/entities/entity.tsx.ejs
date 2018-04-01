@@ -194,7 +194,8 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
             <AvForm onSubmit={this.search}>
               <AvGroup>
                 <InputGroup>
-                  <AvInput type="text" name="search" value={this.state.search} onChange={this.handleSearch} placeholder={translate('<%= i18nKeyPrefix %>.home.search')} />
+                  <AvInput type="text" name="search" value={this.state.search} onChange={this.handleSearch}
+                    placeholder=<% if (enableTranslation) { %>{translate('<%= i18nKeyPrefix %>.home.search')}<% } else { %>"Search"<% } %>/>
                   <Button className="input-group-addon">
                     <FaSearch/>
                   </Button>
