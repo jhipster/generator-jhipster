@@ -25,7 +25,7 @@ import { HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
 import { <%=angularXAppName%>TestModule } from '../../../<%= entityParentPathAddition %>test.module';
-import { <%= entityAngularName %>DialogComponent } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.component';
+import { <%= entityAngularName %>UpdateComponent } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-update.component';
 import { <%= entityAngularName %>Service } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import { <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 
@@ -53,15 +53,15 @@ import { <%= uniqueRel.otherEntityAngularName%>Service } from '<%= modulePath %>
 
 describe('Component Tests', () => {
 
-    describe('<%= entityAngularName %> Management Dialog Component', () => {
-        let comp: <%= entityAngularName %>DialogComponent;
-        let fixture: ComponentFixture<<%= entityAngularName %>DialogComponent>;
+    describe('<%= entityAngularName %> Management Update Component', () => {
+        let comp: <%= entityAngularName %>UpdateComponent;
+        let fixture: ComponentFixture<<%= entityAngularName %>UpdateComponent>;
         let service: <%= entityAngularName %>Service;
 
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [<%=angularXAppName%>TestModule],
-                declarations: [<%= entityAngularName %>DialogComponent],
+                declarations: [<%= entityAngularName %>UpdateComponent],
                 providers: [
     <%_ Object.keys(differentRelationships).forEach(key => {
         if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
@@ -75,10 +75,10 @@ describe('Component Tests', () => {
                     <%= entityAngularName %>Service
                 ]
             })
-            .overrideTemplate(<%= entityAngularName %>DialogComponent, '')
+            .overrideTemplate(<%= entityAngularName %>UpdateComponent, '')
             .compileComponents();
 
-            fixture = TestBed.createComponent(<%= entityAngularName %>DialogComponent);
+            fixture = TestBed.createComponent(<%= entityAngularName %>UpdateComponent);
             comp = fixture.componentInstance;
             service = fixture.debugElement.injector.get(<%= entityAngularName %>Service);
         });

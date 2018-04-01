@@ -41,7 +41,7 @@ import { <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileNa
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 import { <%= entityAngularName %>Component } from './<%= entityFileName %>.component';
 import { <%= entityAngularName %>DetailComponent } from './<%= entityFileName %>-detail.component';
-import { <%= entityAngularName %>DialogComponent } from './<%= entityFileName %>-dialog.component';
+import { <%= entityAngularName %>UpdateComponent } from './<%= entityFileName %>-update.component';
 <%_ if (entityFileName.length <= 30) { _%>
 import { <%= entityAngularName %>DeletePopupComponent } from './<%= entityFileName %>-delete-dialog.component';
 <%_ } else { _%>
@@ -113,7 +113,7 @@ export const <%= entityInstance %>Route: Routes = [
     },
     {
         path: '<%= entityUrl %>/new',
-        component: <%= entityAngularName %>DialogComponent,
+        component: <%= entityAngularName %>UpdateComponent,
         resolve: {
             <%= entityInstance %>: <%= entityAngularName %>Resolve
         },
@@ -125,7 +125,7 @@ export const <%= entityInstance %>Route: Routes = [
     },
     {
         path: '<%= entityUrl %>/:id/edit',
-        component: <%= entityAngularName %>DialogComponent,
+        component: <%= entityAngularName %>UpdateComponent,
         resolve: {
             <%= entityInstance %>: <%= entityAngularName %>Resolve
         },

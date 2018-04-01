@@ -65,10 +65,10 @@ import { <%= uniqueRel.otherEntityAngularName%>Service } from '../<%= uniqueRel.
 }); _%>
 
 @Component({
-    selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-dialog',
-    templateUrl: './<%= entityFileName %>-dialog.component.html'
+    selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-update',
+    templateUrl: './<%= entityFileName %>-update.component.html'
 })
-export class <%= entityAngularName %>DialogComponent implements OnInit {
+export class <%= entityAngularName %>UpdateComponent implements OnInit {
 
     private _<%= entityInstance %>: I<%= entityAngularName %>;
     isSaving: boolean;
