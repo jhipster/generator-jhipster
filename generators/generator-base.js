@@ -2353,6 +2353,18 @@ module.exports = class extends PrivateBase {
         generator.experimental = context.configOptions.experimental || context.options.experimental;
     }
 
+
+    setupSpringServiceOptions(generator, context = generator) {
+        if (!context.options.name) {
+            if (context.options._) {
+                generator.name = context.options._;
+            } else {
+                this.argument('name', { type: String, required: true });
+                generator.name = context.options.name;
+            }
+        }
+    }
+
     /**
      * Setup Server instance level options from context.
      * @param {any} generator - generator instance
