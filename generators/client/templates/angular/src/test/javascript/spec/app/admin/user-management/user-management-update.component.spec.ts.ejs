@@ -21,22 +21,18 @@ const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
 _%>
 import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
-import { JhiEventManager } from 'ng-jhipster';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { UserMgmtDialogComponent } from 'app/admin/user-management/user-management-dialog.component';
+import { UserMgmtUpdateComponent } from 'app/admin/user-management/user-management-update.component';
 import { UserService, User<% if (enableTranslation) { %>, JhiLanguageHelper<% } %> } from 'app/core';
 
 describe('Component Tests', () => {
 
-    describe('User Management Dialog Component', () => {
-        let comp: UserMgmtDialogComponent;
-        let fixture: ComponentFixture<UserMgmtDialogComponent>;
+    describe('User Management Update Component', () => {
+        let comp: UserMgmtUpdateComponent;
+        let fixture: ComponentFixture<UserMgmtUpdateComponent>;
         let service: UserService;
-        let mockEventManager: any;
-        let mockActiveModal: any;
         <%_ if (enableTranslation) { _%>
         let mockLanguageHelper: any;
         <%_ } _%>
@@ -44,21 +40,19 @@ describe('Component Tests', () => {
         beforeEach(async(() => {
             TestBed.configureTestingModule({
                 imports: [<%=angularXAppName%>TestModule],
-                declarations: [UserMgmtDialogComponent],
+                declarations: [UserMgmtUpdateComponent],
                 providers: [
                     UserService
                 ]
             })
-            .overrideTemplate(UserMgmtDialogComponent, '')
+            .overrideTemplate(UserMgmtUpdateComponent, '')
             .compileComponents();
         }));
 
         beforeEach(() => {
-            fixture = TestBed.createComponent(UserMgmtDialogComponent);
+            fixture = TestBed.createComponent(UserMgmtUpdateComponent);
             comp = fixture.componentInstance;
             service = fixture.debugElement.injector.get(UserService);
-            mockEventManager = fixture.debugElement.injector.get(JhiEventManager);
-            mockActiveModal = fixture.debugElement.injector.get(NgbActiveModal);
             <%_ if (enableTranslation) { _%>
             mockLanguageHelper = fixture.debugElement.injector.get(JhiLanguageHelper);
             <%_ } _%>
@@ -102,8 +96,6 @@ describe('Component Tests', () => {
                         // THEN
                         expect(service.update).toHaveBeenCalledWith(entity);
                         expect(comp.isSaving).toEqual(false);
-                        expect(mockEventManager.broadcastSpy).toHaveBeenCalledWith({ name: 'userListModification', content: 'OK'});
-                        expect(mockActiveModal.dismissSpy).toHaveBeenCalled();
                     })
                 )
             );
@@ -122,8 +114,6 @@ describe('Component Tests', () => {
                         // THEN
                         expect(service.create).toHaveBeenCalledWith(entity);
                         expect(comp.isSaving).toEqual(false);
-                        expect(mockEventManager.broadcastSpy).toHaveBeenCalledWith({ name: 'userListModification', content: 'OK'});
-                        expect(mockActiveModal.dismissSpy).toHaveBeenCalled();
                     })
                 )
             );

@@ -19,9 +19,7 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
-            <div>
-                <h2 id="my<%= entityClass %>Label" jhiTranslate="<%= i18nKeyPrefix %>.home.createOrEditLabel">Create or edit a <%= entityClassHumanized %></h2>
-            </div>
+            <h2 id="my<%= entityClass %>Label" jhiTranslate="<%= i18nKeyPrefix %>.home.createOrEditLabel">Create or edit a <%= entityClassHumanized %></h2>
             <div>
                 <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
                 <div class="form-group" [hidden]="!<%=entityInstance %>.id">

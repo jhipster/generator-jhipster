@@ -27,8 +27,8 @@
         </button>
     </h2>
     <<%= jhiPrefixDashed %>-alert></<%= jhiPrefixDashed %>-alert>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
     <div class="row">
-        <%_ if (searchEngine === 'elasticsearch') { _%>
         <div class="col-sm-12">
             <form name="searchForm" class="form-inline">
                 <div class="input-group w-100 mt-3">
@@ -42,8 +42,8 @@
                 </div>
             </form>
         </div>
-        <%_ } _%>
     </div>
+    <%_ } _%>
     <br/>
     <div class="table-responsive" *ngIf="<%=entityInstancePlural %>">
         <table class="table table-striped">
@@ -66,7 +66,7 @@
             </thead>
             <tbody<% if (pagination === 'infinite-scroll') { %> infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0"<% } %>>
             <tr *ngFor="let <%=entityInstance %> of <%=entityInstancePlural %> ;trackBy: trackId">
-                <td><a [routerLink]="['../<%= entityUrl %>', <%= entityInstance %>.id, 'view' ]">{{<%=entityInstance %>.id}}</a></td>
+                <td><a [routerLink]="['/<%= entityUrl %>', <%= entityInstance %>.id, 'view' ]">{{<%=entityInstance %>.id}}</a></td>
                 <%_ for (idx in fields) {
                 const fieldName = fields[idx].fieldName;
                 const fieldNameCapitalized = fields[idx].fieldNameCapitalized;
