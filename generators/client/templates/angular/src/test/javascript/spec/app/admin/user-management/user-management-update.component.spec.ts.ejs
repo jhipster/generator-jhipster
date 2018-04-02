@@ -21,7 +21,9 @@ const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
 _%>
 import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { UserMgmtUpdateComponent } from 'app/admin/user-management/user-management-update.component';
@@ -36,13 +38,18 @@ describe('Component Tests', () => {
         <%_ if (enableTranslation) { _%>
         let mockLanguageHelper: any;
         <%_ } _%>
+        const route = ({data: of({user: new User(1, 'user', 'first', 'last', 'first@last.com', true, 'en', ['ROLE_USER'], 'admin', null, null, null)})} as any) as ActivatedRoute;
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
                 imports: [<%=angularXAppName%>TestModule],
                 declarations: [UserMgmtUpdateComponent],
                 providers: [
-                    UserService
+                    UserService,
+                    {
+                        provide: ActivatedRoute,
+                        useValue: route
+                    }
                 ]
             })
             .overrideTemplate(UserMgmtUpdateComponent, '')

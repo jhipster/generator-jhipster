@@ -185,7 +185,6 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management.route.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-modal.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/user/user.model.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/user/user.service.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-delete-dialog.component.spec.ts`,
