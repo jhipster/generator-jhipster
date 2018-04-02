@@ -19,7 +19,7 @@
 <div>
     <h2>
         <span jhiTranslate="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></span>
-        <button class="btn btn-primary float-right jh-create-entity create-<%= entityUrl %>" [routerLink]="['../<%= entityUrl %>/new']">
+        <button class="btn btn-primary float-right jh-create-entity create-<%= entityUrl %>" [routerLink]="['/<%= entityUrl %>/new']">
             <span class="fa fa-plus"></span>
             <span <% if (searchEngine === 'elasticsearch') { %>class="hidden-sm-down" <% } %> jhiTranslate="<%= i18nKeyPrefix %>.home.createLabel">
             Create new <%= entityClassHumanized %>
@@ -142,7 +142,7 @@
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
-                                [routerLink]="['../<%= entityUrl %>', <%= entityInstance %>.id,'view' ]"
+                                [routerLink]="['/<%= entityUrl %>', <%= entityInstance %>.id,'view' ]"
                                 class="btn btn-info btn-sm">
                             <span class="fa fa-eye"></span>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
