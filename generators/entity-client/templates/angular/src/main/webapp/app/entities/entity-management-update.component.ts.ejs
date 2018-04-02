@@ -22,19 +22,19 @@ const queries = query.queries;
 const variables = query.variables;
 let hasManyToMany = query.hasManyToMany;
 _%>
-import { Component, OnInit, OnDestroy<% if (fieldsContainImageBlob) { %>, ElementRef<% } %> } from '@angular/core';
+import { Component, OnInit<% if (fieldsContainImageBlob) { %>, ElementRef<% } %> } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ if ( fieldsContainInstant || fieldsContainZonedDateTime ) { _%>
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 <%_ } _%>
-import { JhiEventManager<% if (queries && queries.length > 0) { %>, JhiAlertService<% } %><% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
+<%_ if (queries && queries.length > 0 || fieldsContainBlob) { _%>
+import { <% if (queries && queries.length > 0) { %>JhiAlertService, <% } %><% if (fieldsContainBlob) { %>JhiDataUtils<% } %> } from 'ng-jhipster';
+<%_ } _%>
 
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
-import { <%= entityAngularName %>PopupService } from './<%= entityFileName %>-popup.service';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 <%_
 let hasRelationshipQuery = false;
@@ -61,10 +61,10 @@ import { <%= uniqueRel.otherEntityAngularName%>Service } from 'app/entities/<%= 
 }); _%>
 
 @Component({
-    selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-dialog',
-    templateUrl: './<%= entityFileName %>-dialog.component.html'
+    selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-update',
+    templateUrl: './<%= entityFileName %>-update.component.html'
 })
-export class <%= entityAngularName %>DialogComponent implements OnInit {
+export class <%= entityAngularName %>UpdateComponent implements OnInit {
 
     private _<%= entityInstance %>: I<%= entityAngularName %>;
     isSaving: boolean;
@@ -83,7 +83,6 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     <%_ } _%>
 
     constructor(
-        public activeModal: NgbActiveModal,
         <%_ if (fieldsContainBlob) { _%>
         private dataUtils: JhiDataUtils,
         <%_ } _%>
@@ -103,12 +102,15 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         <%_ if (fieldsContainImageBlob) { _%>
         private elementRef: ElementRef,
         <%_ } _%>
-        private eventManager: JhiEventManager
+        private route: ActivatedRoute
     ) {
     }
 
     ngOnInit() {
         this.isSaving = false;
+        this.route.data.subscribe(({<%= entityInstance %>}) => {
+            this.<%= entityInstance %> = <%= entityInstance %>.body ? <%= entityInstance %>.body : <%= entityInstance %>;
+        });
         <%_ for (idx in queries) { _%>
         <%- queries[idx] %>
         <%_ } _%>
@@ -134,8 +136,8 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
 
     <%_ } _%>
     <%_ } _%>
-    clear() {
-        this.activeModal.dismiss('cancel');
+    previousState() {
+        window.history.back();
     }
 
     save() {
@@ -162,9 +164,8 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     }
 
     private onSaveSuccess(result: I<%= entityAngularName %>) {
-        this.eventManager.broadcast({ name: '<%= entityInstance %>ListModification', content: 'OK'});
         this.isSaving = false;
-        this.activeModal.dismiss(result);
+        this.previousState();
     }
 
     private onSaveError() {
@@ -212,35 +213,5 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
         this.<%= fieldName %> = moment(<%= entityInstance %>.<%= fieldName %>).format();
      <%_ } } _%>
-    }
-}
-
-@Component({
-    selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-popup',
-    template: ''
-})
-export class <%= entityAngularName %>PopupComponent implements OnInit, OnDestroy {
-
-    routeSub: any;
-
-    constructor(
-        private route: ActivatedRoute,
-        private <%= entityInstance %>PopupService: <%= entityAngularName %>PopupService
-    ) {}
-
-    ngOnInit() {
-        this.routeSub = this.route.params.subscribe((params) => {
-            if ( params['id'] ) {
-                this.<%= entityInstance %>PopupService
-                    .open(<%= entityAngularName %>DialogComponent as Component, params['id']);
-            } else {
-                this.<%= entityInstance %>PopupService
-                    .open(<%= entityAngularName %>DialogComponent as Component);
-            }
-        });
-    }
-
-    ngOnDestroy() {
-        this.routeSub.unsubscribe();
     }
 }

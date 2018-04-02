@@ -17,9 +17,9 @@
  limitations under the License.
 -%>
 <div>
-    <h2>
+    <h2 id="page-heading">
         <span jhiTranslate="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></span>
-        <button class="btn btn-primary float-right jh-create-entity create-<%= entityUrl %>" [routerLink]="['/', { outlets: { popup: ['<%= entityUrl %>-new'] } }]">
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-<%= entityUrl %>" [routerLink]="['/<%= entityUrl %>/new']">
             <span class="fa fa-plus"></span>
             <span <% if (searchEngine === 'elasticsearch') { %>class="hidden-sm-down" <% } %> jhiTranslate="<%= i18nKeyPrefix %>.home.createLabel">
             Create new <%= entityClassHumanized %>
@@ -27,8 +27,8 @@
         </button>
     </h2>
     <<%= jhiPrefixDashed %>-alert></<%= jhiPrefixDashed %>-alert>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
     <div class="row">
-        <%_ if (searchEngine === 'elasticsearch') { _%>
         <div class="col-sm-12">
             <form name="searchForm" class="form-inline">
                 <div class="input-group w-100 mt-3">
@@ -42,8 +42,8 @@
                 </div>
             </form>
         </div>
-        <%_ } _%>
     </div>
+    <%_ } _%>
     <br/>
     <div class="table-responsive" *ngIf="<%=entityInstancePlural %>">
         <table class="table table-striped">
@@ -66,7 +66,7 @@
             </thead>
             <tbody<% if (pagination === 'infinite-scroll') { %> infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0"<% } %>>
             <tr *ngFor="let <%=entityInstance %> of <%=entityInstancePlural %> ;trackBy: trackId">
-                <td><a [routerLink]="['../<%= entityUrl %>', <%= entityInstance %>.id ]">{{<%=entityInstance %>.id}}</a></td>
+                <td><a [routerLink]="['/<%= entityUrl %>', <%= entityInstance %>.id, 'view' ]">{{<%=entityInstance %>.id}}</a></td>
                 <%_ for (idx in fields) {
                 const fieldName = fields[idx].fieldName;
                 const fieldNameCapitalized = fields[idx].fieldNameCapitalized;
@@ -142,15 +142,13 @@
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
-                                [routerLink]="['../<%= entityUrl %>', <%= entityInstance %>.id ]"
+                                [routerLink]="['/<%= entityUrl %>', <%= entityInstance %>.id,'view' ]"
                                 class="btn btn-info btn-sm">
                             <span class="fa fa-eye"></span>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: '<%= entityUrl %>/'+ <%= entityInstance %>.id + '/edit'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
+                                [routerLink]="['/<%= entityUrl %>',<%= entityInstance %>.id,'edit']"
                                 class="btn btn-primary btn-sm">
                             <span class="fa fa-pencil"></span>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>

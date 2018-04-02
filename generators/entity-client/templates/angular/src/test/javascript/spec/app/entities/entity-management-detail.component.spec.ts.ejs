@@ -21,12 +21,11 @@ const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
 _%>
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs/observable/of';
 
 import { <%=angularXAppName%>TestModule } from '../../../<%= entityParentPathAddition %>test.module';
 import { <%= entityAngularName %>DetailComponent } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-detail.component';
-import { <%= entityAngularName %>Service } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import { <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 
 describe('Component Tests', () => {
@@ -34,36 +33,30 @@ describe('Component Tests', () => {
     describe('<%= entityAngularName %> Management Detail Component', () => {
         let comp: <%= entityAngularName %>DetailComponent;
         let fixture: ComponentFixture<<%= entityAngularName %>DetailComponent>;
-        let service: <%= entityAngularName %>Service;
+        const route = ({data: of({<%= entityInstance %>: new <%= entityAngularName %>(<%- tsKeyId %>)})} as any) as ActivatedRoute;
 
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [<%=angularXAppName%>TestModule],
                 declarations: [<%= entityAngularName %>DetailComponent],
                 providers: [
-                    <%= entityAngularName %>Service
+                    {provide: ActivatedRoute, useValue: route}
                 ]
             })
             .overrideTemplate(<%= entityAngularName %>DetailComponent, '')
             .compileComponents();
             fixture = TestBed.createComponent(<%= entityAngularName %>DetailComponent);
             comp = fixture.componentInstance;
-            service = fixture.debugElement.injector.get(<%= entityAngularName %>Service);
         });
 
         describe('OnInit', () => {
             it('Should call load all on init', () => {
                 // GIVEN
 
-                spyOn(service, 'find').and.returnValue(Observable.of(new HttpResponse({
-                    body: new <%= entityAngularName %>(<%- tsKeyId %>)
-                })));
-
                 // WHEN
                 comp.ngOnInit();
 
                 // THEN
-                expect(service.find).toHaveBeenCalledWith(<%- tsKeyId %>);
                 expect(comp.<%= entityInstance %>).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
             });
         });

@@ -26,15 +26,14 @@ import { <%= angularXAppName %>AdminModule } from 'app/admin/admin.module';
 <%_ }}); _%>
 import {
     <%= entityAngularName %>Service,
-    <%= entityAngularName %>PopupService,
     <%= entityAngularName %>Component,
     <%= entityAngularName %>DetailComponent,
-    <%= entityAngularName %>DialogComponent,
-    <%= entityAngularName %>PopupComponent,
+    <%= entityAngularName %>UpdateComponent,
     <%= entityAngularName %>DeletePopupComponent,
     <%= entityAngularName %>DeleteDialogComponent,
     <%= entityInstance %>Route,
     <%= entityInstance %>PopupRoute,
+    <%= entityAngularName %>Resolve,
     <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
     <%= entityAngularName %>ResolvePagingParams,
     <%_ } _%>
@@ -57,21 +56,19 @@ const ENTITY_STATES = [
     declarations: [
         <%= entityAngularName %>Component,
         <%= entityAngularName %>DetailComponent,
-        <%= entityAngularName %>DialogComponent,
+        <%= entityAngularName %>UpdateComponent,
         <%= entityAngularName %>DeleteDialogComponent,
-        <%= entityAngularName %>PopupComponent,
         <%= entityAngularName %>DeletePopupComponent,
     ],
     entryComponents: [
         <%= entityAngularName %>Component,
-        <%= entityAngularName %>DialogComponent,
-        <%= entityAngularName %>PopupComponent,
+        <%= entityAngularName %>UpdateComponent,
         <%= entityAngularName %>DeleteDialogComponent,
         <%= entityAngularName %>DeletePopupComponent,
     ],
     providers: [
         <%= entityAngularName %>Service,
-        <%= entityAngularName %>PopupService,
+        <%= entityAngularName %>Resolve,
         <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
         <%= entityAngularName %>ResolvePagingParams,
         <%_ } _%>

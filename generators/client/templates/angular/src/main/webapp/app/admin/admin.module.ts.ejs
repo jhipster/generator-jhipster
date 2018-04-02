@@ -32,11 +32,10 @@ import {
     AuditsComponent,
     <%_ } _%>
     <%_ if (!skipUserManagement) { _%>
-    UserMgmtComponent,
-    UserDialogComponent,
     UserDeleteDialogComponent,
+    UserMgmtComponent,
     UserMgmtDetailComponent,
-    UserMgmtDialogComponent,
+    UserMgmtUpdateComponent,
     UserMgmtDeleteDialogComponent,
     <%_ } _%>
     LogsComponent,
@@ -62,8 +61,8 @@ import {
     LogsService,
     <%_ if (!skipUserManagement) { _%>
     UserResolvePagingParams,
-    UserResolve,
-    UserModalService
+    UserMgmtResolve,
+    UserResolve
     <%_ } _%>
 } from './';
 
@@ -78,11 +77,10 @@ import {
         AuditsComponent,
         <%_ } _%>
         <%_ if (!skipUserManagement) { _%>
-        UserMgmtComponent,
-        UserDialogComponent,
         UserDeleteDialogComponent,
+        UserMgmtComponent,
         UserMgmtDetailComponent,
-        UserMgmtDialogComponent,
+        UserMgmtUpdateComponent,
         UserMgmtDeleteDialogComponent,
         <%_ } _%>
         LogsComponent,
@@ -101,7 +99,7 @@ import {
     ],
     entryComponents: [
         <%_ if (!skipUserManagement) { _%>
-        UserMgmtDialogComponent,
+        UserMgmtUpdateComponent,
         UserMgmtDeleteDialogComponent,
         <%_ } _%>
         <%=jhiPrefixCapitalized%>HealthModalComponent,
@@ -122,7 +120,7 @@ import {
         <%_ if (!skipUserManagement) { _%>
         UserResolvePagingParams,
         UserResolve,
-        UserModalService
+        UserMgmtResolve
         <%_ } _%>
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
