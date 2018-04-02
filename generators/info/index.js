@@ -101,27 +101,6 @@ module.exports = class extends BaseGenerator {
                 });
             },
 
-            checkBower() {
-                const done = this.async();
-                shelljs.exec('bower -v', { silent: true }, (err, stdout, stderr) => {
-                    if (!err) {
-                        console.log(`bower: ${stdout}`);
-                    }
-                    done();
-                });
-            },
-
-            checkGulp() {
-                const done = this.async();
-                shelljs.exec('gulp -v', { silent: true }, (err, stdout, stderr) => {
-                    if (!err) {
-                        console.log('gulp:');
-                        console.log(stdout);
-                    }
-                    done();
-                });
-            },
-
             checkYeoman() {
                 const done = this.async();
                 shelljs.exec('yo --version', { silent: true }, (err, stdout, stderr) => {
