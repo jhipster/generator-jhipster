@@ -11,3 +11,4 @@ test/temp/
 .vscode
 .DS_Store
 /.jhipster
+yarn-error.log
