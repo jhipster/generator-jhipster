@@ -1,0 +1,33 @@
+import SignInPage from '../../page-objects/signin-page';
+
+const expect = chai.expect;
+
+describe('Account sign in', () => {
+  let signInPage: SignInPage;
+  const pageTitle = 'Sign in';
+
+  before(() => {
+    signInPage = new SignInPage();
+    signInPage.get();
+  });
+
+  it('should fail to login with bad password', async () => {
+    // Login page should appear
+    expect(await signInPage.getTitle()).to.equal(pageTitle);
+    signInPage.autoSignInUsing('admin', 'foo');
+    // Login page should stay open when login fails
+    expect(await signInPage.getTitle()).to.equal(pageTitle);
+  });
+  it('should login with admin account', async () => {
+    // Login page should appear
+    expect(await signInPage.getTitle()).to.equal(pageTitle);
+    signInPage.autoSignInUsing('admin', 'admin');
+    signInPage.waitUntilHidden();
+    // Login page should close when login success
+    expect(await signInPage.isHidden()()).to.equal(true);
+  });
+
+  after(() => {
+    signInPage.autoSignOut();
+  });
+});
