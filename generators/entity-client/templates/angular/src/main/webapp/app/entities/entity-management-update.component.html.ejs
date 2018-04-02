@@ -17,12 +17,10 @@
  limitations under the License.
 -%>
 <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
-    <div class="modal-header">
-        <h4 class="modal-title" id="my<%= entityClass %>Label" jhiTranslate="<%= i18nKeyPrefix %>.home.createOrEditLabel">Create or edit a <%= entityClassHumanized %></h4>
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                (click)="clear()">&times;</button>
+    <div>
+        <h2  id="my<%= entityClass %>Label" jhiTranslate="<%= i18nKeyPrefix %>.home.createOrEditLabel">Create or edit a <%= entityClassHumanized %></h2>
     </div>
-    <div class="modal-body">
+    <div>
         <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
         <div class="form-group" [hidden]="!<%=entityInstance %>.id">
             <label for="id" jhiTranslate="global.field.id">ID</label>
@@ -258,8 +256,8 @@
         <%_ } _%>
     <%_ } _%>
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+    <div>
+        <button type="button" class="btn btn-secondary"  (click)="previousState()">
             <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>
         <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">

@@ -12,13 +12,13 @@ describe('Generator Base Private', () => {
             const entityFolderName = 'entityFolderName';
             const entityFileName = 'entityFileName';
             const content =
-                `|export * from './${entityFolderName}/${entityFileName}-dialog.component';
+                `|export * from './${entityFolderName}/${entityFileName}-update.component';
                  |export * from './${entityFolderName}/${entityFileName}-delete-dialog.component';
                  |export * from './${entityFolderName}/${entityFileName}-detail.component';
                  |export * from './${entityFolderName}/${entityFileName}.component';
                  |export * from './${entityFolderName}/${entityFileName}.state';`;
             const out =
-`export * from './entityFolderName/entityFileName-dialog.component';
+`export * from './entityFolderName/entityFileName-update.component';
 export * from './entityFolderName/entityFileName-delete-dialog.component';
 export * from './entityFolderName/entityFileName-detail.component';
 export * from './entityFolderName/entityFileName.component';
