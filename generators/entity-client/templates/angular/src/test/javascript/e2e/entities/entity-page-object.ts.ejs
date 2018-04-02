@@ -33,8 +33,8 @@ for (let relationship of relationships) {
     }
 } _%>
 export class <%= entityClass %>ComponentsPage {
-    createButton = element(by.css('.jh-create-entity'));
-    title = element.all(by.css('<%= jhiPrefixDashed %>-<%= entityFileName %> div h2 span')).first();
+    createButton = element(by.css('#jh-create-entity'));
+    title = element.all(by.css('<%= jhiPrefixDashed %>-<%= entityFileName %> div h2#page-heading span')).first();
 
     clickOnCreateButton() {
         return this.createButton.click();
@@ -46,8 +46,9 @@ export class <%= entityClass %>ComponentsPage {
 }
 
 export class <%= entityClass %>UpdatePage {
-    PageTitle = element(by.css('h2#my<%= entityClass %>Label'));
-    saveButton = element(by.css('.btn.btn-primary'));
+    PageTitle = element(by.css('h2#<%= jhiPrefixDashed %>-<%= entityFileName %>-heading'));
+    saveButton = element(by.css('#save-entity'));
+    cancelButton = element(by.css('#cancel-save'));
     <%_ fields.forEach((field) => {
             const fieldName = field.fieldName;
             const fieldType = field.fieldType;
@@ -151,6 +152,10 @@ export class <%= entityClass %>UpdatePage {
     <%_ }); _%>
     save() {
         this.saveButton.click();
+    }
+
+    cancel() {
+        this.cancelButton.click();
     }
 
     getSaveButton() {

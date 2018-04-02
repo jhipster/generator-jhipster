@@ -72,7 +72,7 @@ describe('<%= entityClass %> e2e test', () => {
 
     });
 
-    it('should load create <%= entityClass %> dialog', () => {
+    it('should load create <%= entityClass %> page', () => {
         <%= entityInstance %>ComponentsPage.clickOnCreateButton();
         <%= entityInstance %>UpdatePage = new <%= entityClass %>UpdatePage();
         <%_ if (enableTranslation) { _%>
@@ -82,6 +82,7 @@ describe('<%= entityClass %> e2e test', () => {
         expect(<%= entityInstance %>UpdatePage.getPageTitle())
             .toMatch(/Create or edit a <%= entityClassHumanized %>/);
         <%_ } _%>
+        <%= entityClass %>UpdatePage.cancel();
     });
 
    <%= openBlockComment %> it('should create and save <%= entityClassPlural %>', () => {

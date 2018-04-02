@@ -19,7 +19,7 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
-            <h2 id="my<%= entityClass %>Label" jhiTranslate="<%= i18nKeyPrefix %>.home.createOrEditLabel">Create or edit a <%= entityClassHumanized %></h2>
+            <h2 id="<%= jhiPrefixDashed %>-<%= entityFileName %>-heading" jhiTranslate="<%= i18nKeyPrefix %>.home.createOrEditLabel">Create or edit a <%= entityClassHumanized %></h2>
             <div>
                 <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
                 <div class="form-group" [hidden]="!<%=entityInstance %>.id">
@@ -257,10 +257,10 @@
             <%_ } _%>
             </div>
             <div>
-                <button type="button" class="btn btn-secondary"  (click)="previousState()">
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
                     <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
                 </button>
-                <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
                     <span class="fa fa-save"></span>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
                 </button>
             </div>
