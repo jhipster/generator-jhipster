@@ -82,7 +82,7 @@ describe('<%= entityClass %> e2e test', () => {
         expect(<%= entityInstance %>UpdatePage.getPageTitle())
             .toMatch(/Create or edit a <%= entityClassHumanized %>/);
         <%_ } _%>
-        <%= entityClass %>UpdatePage.cancel();
+        <%= entityInstance %>UpdatePage.cancel();
     });
 
    <%= openBlockComment %> it('should create and save <%= entityClassPlural %>', () => {
