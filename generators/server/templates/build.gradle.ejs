@@ -95,9 +95,10 @@ springBoot {
 }
 
 if (OperatingSystem.current().isWindows()) {
-    task pathingJar(type: Jar) {
+    // https://stackoverflow.com/questions/40037487/the-filename-or-extension-is-too-long-error-using-gradle
+    task classpathJar(type: Jar) {
         dependsOn configurations.runtime
-        appendix = 'pathing'
+        appendix = 'classpath'
 
         doFirst {
             manifest {
@@ -109,9 +110,9 @@ if (OperatingSystem.current().isWindows()) {
     }
 
     bootRun {
-        dependsOn pathingJar
+        dependsOn classpathJar
         doFirst {
-            classpath += files("$buildDir/classes/java/main", "$buildDir/resources/main", pathingJar.archivePath)
+            classpath = files("$buildDir/classes/java/main", "$buildDir/resources/main", classpathJar.archivePath)
         }
     }
 }
