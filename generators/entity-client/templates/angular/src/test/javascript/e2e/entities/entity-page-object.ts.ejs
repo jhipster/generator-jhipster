@@ -45,10 +45,9 @@ export class <%= entityClass %>ComponentsPage {
     }
 }
 
-export class <%= entityClass %>DialogPage {
-    modalTitle = element(by.css('h4#my<%= entityClass %>Label'));
-    saveButton = element(by.css('.modal-footer .btn.btn-primary'));
-    closeButton = element(by.css('button.close'));
+export class <%= entityClass %>UpdatePage {
+    PageTitle = element(by.css('h2#my<%= entityClass %>Label'));
+    saveButton = element(by.css('.btn.btn-primary'));
     <%_ fields.forEach((field) => {
             const fieldName = field.fieldName;
             const fieldType = field.fieldType;
@@ -75,8 +74,8 @@ export class <%= entityClass %>DialogPage {
     <%_ } _%>
     <%_ }); _%>
 
-    getModalTitle() {
-        return this.modalTitle.<%- elementGetter %>;
+    getPageTitle() {
+        return this.PageTitle.<%- elementGetter %>;
     }
 
     <%_ fields.forEach((field) => {
@@ -152,10 +151,6 @@ export class <%= entityClass %>DialogPage {
     <%_ }); _%>
     save() {
         this.saveButton.click();
-    }
-
-    close() {
-        this.closeButton.click();
     }
 
     getSaveButton() {
