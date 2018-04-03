@@ -41,13 +41,13 @@ export const enum <%= field.fieldType %> {<%
 
 <%_ }
 }); _%>
-export interface I<%= entityAngularName %> {
+export interface I<%= entityReactName %> {
     <%_ variablesWithTypes.forEach(variablesWithType => { _%>
     <%- variablesWithType %>;
     <%_ }); _%>
 }
 
-export class <%= entityAngularName %> implements I<%= entityAngularName %> {
+export class <%= entityReactName %> implements I<%= entityReactName %> {
     constructor(<% variablesWithTypes.forEach(variablesWithType => { %>
         public <%- variablesWithType %>,<% }); %>
     ) {<% for (idx in defaultVariablesValues) { %>

@@ -16,15 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-const i18nToLoad = [entityInstance];
-for (const idx in fields) {
-    if (fields[idx].fieldIsEnum === true) {
-        i18nToLoad.push(fields[idx].enumInstance);
-    }
-}
-_%>
-
     currentAccount: any;
     <%= entityInstancePlural %>: I<%= entityAngularName %>[];
     error: any;

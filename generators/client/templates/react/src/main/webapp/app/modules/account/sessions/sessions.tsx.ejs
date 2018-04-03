@@ -53,18 +53,24 @@ export class SessionsPage extends React.Component<ISessionsProps> {
     return (
       <div>
         <h2>
-          <Translate contentKey="sessions.title" interpolate={{ username: account.login }}/>
+          <Translate contentKey="sessions.title" interpolate={{ username: account.login }}>
+            Active sessions for [<b>{account.login}</b>]
+          </Translate>
         </h2>
 
         {(updateSuccess) ? (
         <Alert color="success">
-          <Translate contentKey="sessions.messages.success"/>
+          <Translate contentKey="sessions.messages.success">
+            <strong>Session invalidated!</strong>
+          </Translate>
         </Alert>
         ) : null}
 
         {(updateFailure) ? (
         <Alert color="danger">
-          <Translate contentKey="sessions.messages.error"/>
+          <Translate contentKey="sessions.messages.error">
+            <span><strong>An error has occured!</strong> The session could not be invalidated.</span>
+          </Translate>
         </Alert>
         ) : null}
 
@@ -74,9 +80,9 @@ export class SessionsPage extends React.Component<ISessionsProps> {
           <Table className="table-striped">
             <thead>
             <tr>
-              <th><Translate contentKey="sessions.table.ipaddress"/></th>
-              <th><Translate contentKey="sessions.table.useragent"/></th>
-              <th><Translate contentKey="sessions.table.date"/></th>
+              <th><Translate contentKey="sessions.table.ipaddress">IP Address</Translate></th>
+              <th><Translate contentKey="sessions.table.useragent">User agent</Translate></th>
+              <th><Translate contentKey="sessions.table.date">Date</Translate></th>
               <th />
             </tr>
             </thead>
@@ -89,7 +95,7 @@ export class SessionsPage extends React.Component<ISessionsProps> {
                 <td>{s.tokenDate}</td>
                 <td>
                   <Button color="primary" onClick={this.doSessionInvalidation(s.series)}>
-                    <Translate contentKey="sessions.table.button"/>
+                    <Translate contentKey="sessions.table.button">Invalidate</Translate>
                   </Button>
                 </td>
               </tr>

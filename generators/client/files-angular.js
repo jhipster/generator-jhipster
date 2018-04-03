@@ -331,11 +331,10 @@ const files = {
                 { file: 'admin/user-management/user-management.component.html', method: 'processHtml' },
                 { file: 'admin/user-management/user-management-detail.component.ts', method: 'processJs' },
                 { file: 'admin/user-management/user-management-detail.component.html', method: 'processHtml' },
-                { file: 'admin/user-management/user-management-dialog.component.ts', method: 'processJs' },
-                { file: 'admin/user-management/user-management-dialog.component.html', method: 'processHtml' },
+                { file: 'admin/user-management/user-management-update.component.ts', method: 'processJs' },
+                { file: 'admin/user-management/user-management-update.component.html', method: 'processHtml' },
                 { file: 'admin/user-management/user-management-delete-dialog.component.ts', method: 'processJs' },
-                { file: 'admin/user-management/user-management-delete-dialog.component.html', method: 'processHtml' },
-                'admin/user-management/user-modal.service.ts'
+                { file: 'admin/user-management/user-management-delete-dialog.component.html', method: 'processHtml' }
             ]
         },
         {
@@ -497,7 +496,7 @@ const files = {
             templates: [
                 'spec/app/admin/user-management/user-management.component.spec.ts',
                 'spec/app/admin/user-management/user-management-detail.component.spec.ts',
-                'spec/app/admin/user-management/user-management-dialog.component.spec.ts',
+                'spec/app/admin/user-management/user-management-update.component.spec.ts',
                 'spec/app/admin/user-management/user-management-delete-dialog.component.spec.ts',
                 // user service tests
                 'spec/app/core/user/user.service.spec.ts'

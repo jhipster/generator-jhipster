@@ -1,0 +1,63 @@
+import { $, browser } from 'protractor';
+
+import BasePage from './base-component';
+export default class SignInPage extends BasePage {
+  selector = $('#login-page');
+  username = this.selector.$('#username');
+  password = this.selector.$('#password');
+  loginButton = this.selector.$('button[type=submit]');
+  title = this.selector.$('#login-title').$('.modal-title');
+
+  get() {
+    browser.get('#/login');
+    this.waitUntilDisplayed();
+  }
+
+  setUserName(username) {
+    this.username.sendKeys(username);
+  }
+
+  getUserName() {
+    return this.username.getAttribute('value');
+  }
+
+  clearUserName() {
+    this.username.clear();
+  }
+
+  setPassword(password) {
+    this.password.sendKeys(password);
+  }
+
+  getPassword() {
+    return this.password.getAttribute('value');
+  }
+
+  clearPassword() {
+    this.password.clear();
+  }
+
+  getTitle() {
+    return this.title.getText();
+  }
+  autoSignInUsing(username: string, password: string) {
+    this.clearUserName();
+    this.setUserName(username);
+    this.clearPassword();
+    this.setPassword(password);
+    return this.login();
+  }
+
+  autoSignOut() {
+    browser.get('#/logout');
+  }
+
+  clearForm() {
+    this.clearUserName();
+    this.clearPassword();
+  }
+
+  login() {
+    return this.loginButton.click();
+  }
+}

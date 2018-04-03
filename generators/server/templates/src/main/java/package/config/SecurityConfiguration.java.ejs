@@ -45,6 +45,7 @@ import org.springframework.http.HttpMethod;
 <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 <%_ } _%>
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -70,6 +71,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 <%_ } _%>
 import org.springframework.web.filter.CorsFilter;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
+<%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
+
+import javax.annotation.PostConstruct;
+<% } %>
 
 @Configuration
 <%_ if (authenticationType === 'oauth2') { _%>
@@ -77,6 +82,7 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 <%_ } else { _%>
 @EnableWebSecurity
 <%_ } _%>
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Import(SecurityProblemSupport.class)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
@@ -119,18 +125,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
     <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
 
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManager() {
+    @PostConstruct
+    public void init() {
         try {
-            return authenticationManagerBuilder
+            authenticationManagerBuilder
                 .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder())
-                .and()
-                .build();
+                .passwordEncoder(passwordEncoder());
         } catch (Exception e) {
             throw new BeanInitializationException("Security configuration failed", e);
         }
+    }
+
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
     <%_ } _%>
     <%_ if (authenticationType === 'session') { _%>

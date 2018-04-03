@@ -16,20 +16,16 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager } from 'ng-jhipster';
-
 import { <% if (enableTranslation) { %>JhiLanguageHelper,<% } %> User, UserService } from 'app/core';
-import { UserModalService } from './user-modal.service';
 
 @Component({
-    selector: '<%= jhiPrefixDashed %>-user-mgmt-dialog',
-    templateUrl: './user-management-dialog.component.html'
+    selector: '<%= jhiPrefixDashed %>-user-mgmt-update',
+    templateUrl: './user-management-update.component.html'
 })
-export class UserMgmtDialogComponent implements OnInit {
+export class UserMgmtUpdateComponent implements OnInit {
 
     user: User;
     languages: any[];
@@ -37,16 +33,18 @@ export class UserMgmtDialogComponent implements OnInit {
     isSaving: boolean;
 
     constructor(
-        public activeModal: NgbActiveModal,
         <%_ if (enableTranslation) { _%>
         private languageHelper: JhiLanguageHelper,
         <%_ } _%>
         private userService: UserService,
-        private eventManager: JhiEventManager
+        private route: ActivatedRoute
     ) {}
 
     ngOnInit() {
         this.isSaving = false;
+        this.route.data.subscribe(({user}) => {
+            this.user = user.body ? user.body : user;
+        });
         this.authorities = [];
         this.userService.authorities().subscribe((authorities) => {
             this.authorities = authorities;
@@ -58,8 +56,8 @@ export class UserMgmtDialogComponent implements OnInit {
         <%_ } _%>
     }
 
-    clear() {
-        this.activeModal.dismiss('cancel');
+    previousState() {
+        window.history.back();
     }
 
     save() {
@@ -73,40 +71,11 @@ export class UserMgmtDialogComponent implements OnInit {
     }
 
     private onSaveSuccess(result) {
-        this.eventManager.broadcast({ name: 'userListModification', content: 'OK' });
         this.isSaving = false;
-        this.activeModal.dismiss(result.body);
+        this.previousState();
     }
 
     private onSaveError() {
         this.isSaving = false;
-    }
-}
-
-@Component({
-    selector: '<%= jhiPrefixDashed %>-user-dialog',
-    template: ''
-})
-export class UserDialogComponent implements OnInit, OnDestroy {
-
-    routeSub: any;
-
-    constructor(
-        private route: ActivatedRoute,
-        private userModalService: UserModalService
-    ) {}
-
-    ngOnInit() {
-        this.routeSub = this.route.params.subscribe((params) => {
-            if ( params['login'] ) {
-                this.userModalService.open(UserMgmtDialogComponent as Component, params['login']);
-            } else {
-                this.userModalService.open(UserMgmtDialogComponent as Component);
-            }
-        });
-    }
-
-    ngOnDestroy() {
-        this.routeSub.unsubscribe();
     }
 }

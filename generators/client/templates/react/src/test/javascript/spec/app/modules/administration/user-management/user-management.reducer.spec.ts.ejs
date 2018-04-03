@@ -273,7 +273,7 @@ describe('User management reducer tests', () => {
           payload: resolvedObject
         }
       ];
-      await store.dispatch(updateUser({ userLogin: 'admin' })).then(() => expect(store.getActions()).to.eql(expectedActions));
+      await store.dispatch(updateUser({ login: 'admin' })).then(() => expect(store.getActions()).to.eql(expectedActions));
     });
     it('dispatches DELETE_USER_PENDING and DELETE_USER_FULFILLED actions', async () => {
       const expectedActions = [

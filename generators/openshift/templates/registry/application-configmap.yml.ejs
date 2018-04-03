@@ -79,5 +79,5 @@ objects:
           client:
             service-url:
               # This must contain a list of all Eureka server replicas for registry HA to work correctly
-              defaultZone: <% for(let i = 0; i < registryReplicas; i++){ %>http://admin:${jhipster.registry.password}@jhipster-registry-<%- i %>.jhipster-registry:8761/eureka/<% if (i < registryReplicas-1) { _%>,<% }} %>
+              defaultZone: <% for(let i = 0; i < registryReplicas; i++){ %>http://admin:${SPRING_SECURITY_USER_PASSWORD}@jhipster-registry-<%- i %>.jhipster-registry:8761/eureka/<% if (i < registryReplicas-1) { _%>,<% }} %>
       <%_ } _%>

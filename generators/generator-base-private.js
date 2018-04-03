@@ -49,6 +49,8 @@ module.exports = class extends Generator {
     constructor(args, opts) {
         super(args, opts);
         this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
+        // expose lodash to templates
+        this._ = _;
     }
 
     /* ======================================================================== */

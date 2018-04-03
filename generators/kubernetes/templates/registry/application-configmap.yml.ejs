@@ -51,5 +51,5 @@ data:
     eureka:
       client:
         service-url:
-          defaultZone: http://admin:${jhipster.registry.password}@jhipster-registry-0.jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/,http://admin:${jhipster.registry.password}@jhipster-registry-1.jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/
+          defaultZone: http://admin:${spring.security.user.password}@jhipster-registry-0.jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/,http://admin:${spring.security.user.password}@jhipster-registry-1.jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/
   <%_ } _%>

@@ -18,7 +18,10 @@
 -%>
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
-
+<%_ if (enableTranslation) { _%>
+import { JhiLanguageService } from 'ng-jhipster';
+import { JhiLanguageHelper } from 'app/core';
+<%_ } _%>
 import { <%=angularXAppName%>SharedModule } from 'app/shared';
 /* jhipster-needle-add-admin-module-import - JHipster will add admin modules imports here */
 
@@ -29,11 +32,10 @@ import {
     AuditsComponent,
     <%_ } _%>
     <%_ if (!skipUserManagement) { _%>
-    UserMgmtComponent,
-    UserDialogComponent,
     UserDeleteDialogComponent,
+    UserMgmtComponent,
     UserMgmtDetailComponent,
-    UserMgmtDialogComponent,
+    UserMgmtUpdateComponent,
     UserMgmtDeleteDialogComponent,
     <%_ } _%>
     LogsComponent,
@@ -59,8 +61,8 @@ import {
     LogsService,
     <%_ if (!skipUserManagement) { _%>
     UserResolvePagingParams,
-    UserResolve,
-    UserModalService
+    UserMgmtResolve,
+    UserResolve
     <%_ } _%>
 } from './';
 
@@ -75,11 +77,10 @@ import {
         AuditsComponent,
         <%_ } _%>
         <%_ if (!skipUserManagement) { _%>
-        UserMgmtComponent,
-        UserDialogComponent,
         UserDeleteDialogComponent,
+        UserMgmtComponent,
         UserMgmtDetailComponent,
-        UserMgmtDialogComponent,
+        UserMgmtUpdateComponent,
         UserMgmtDeleteDialogComponent,
         <%_ } _%>
         LogsComponent,
@@ -98,7 +99,7 @@ import {
     ],
     entryComponents: [
         <%_ if (!skipUserManagement) { _%>
-        UserMgmtDialogComponent,
+        UserMgmtUpdateComponent,
         UserMgmtDeleteDialogComponent,
         <%_ } _%>
         <%=jhiPrefixCapitalized%>HealthModalComponent,
@@ -119,9 +120,15 @@ import {
         <%_ if (!skipUserManagement) { _%>
         UserResolvePagingParams,
         UserResolve,
-        UserModalService
+        UserMgmtResolve
         <%_ } _%>
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class <%=angularXAppName%>AdminModule {}
+export class <%=angularXAppName%>AdminModule {
+    <%_ if (enableTranslation) { _%>
+    constructor(private languageService: JhiLanguageService, private languageHelper: JhiLanguageHelper) {
+        this.languageHelper.language.subscribe((languageKey: string) => this.languageService.changeLanguage(languageKey));
+    }
+    <%_ } _%>
+}

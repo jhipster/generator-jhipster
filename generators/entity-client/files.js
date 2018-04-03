@@ -50,10 +50,10 @@ const angularFiles = {
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.component.html`
                 },
                 {
-                    file: 'entities/entity-management-dialog.component.html',
+                    file: 'entities/entity-management-update.component.html',
                     method: 'processHtml',
                     template: true,
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-dialog.component.html`
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-update.component.html`
                 },
                 {
                     file: 'entities/entity-management-delete-dialog.component.html',
@@ -83,8 +83,8 @@ const angularFiles = {
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.component.ts`
                 },
                 {
-                    file: 'entities/entity-management-dialog.component.ts',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-dialog.component.ts`
+                    file: 'entities/entity-management-update.component.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-update.component.ts`
                 },
                 {
                     file: 'entities/entity-management-delete-dialog.component.ts',
@@ -97,12 +97,7 @@ const angularFiles = {
                 {
                     file: 'entities/entity.service.ts',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityServiceFileName}.service.ts`
-                },
-                {
-                    file: 'entities/entity-popup.service.ts',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityServiceFileName}-popup.service.ts`
                 }
-
             ]
         }
     ],
@@ -115,8 +110,8 @@ const angularFiles = {
                     renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-detail.component.spec.ts`
                 },
                 {
-                    file: 'spec/app/entities/entity-management-dialog.component.spec.ts',
-                    renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-dialog.component.spec.ts`
+                    file: 'spec/app/entities/entity-management-update.component.spec.ts',
+                    renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-update.component.spec.ts`
                 },
                 {
                     file: 'spec/app/entities/entity-management-delete-dialog.component.spec.ts',
@@ -153,18 +148,22 @@ const reactFiles = {
             templates: [
                 {
                     file: 'entities/entity-delete-dialog.tsx',
+                    method: 'processJsx',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.tsx`
                 },
                 {
                     file: 'entities/entity-detail.tsx',
+                    method: 'processJsx',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.tsx`
                 },
                 {
-                    file: 'entities/entity-dialog.tsx',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-dialog.tsx`
+                    file: 'entities/entity-update.tsx',
+                    method: 'processJsx',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-update.tsx`
                 },
                 {
                     file: 'entities/entity.tsx',
+                    method: 'processJsx',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.tsx`
                 },
                 {
@@ -177,6 +176,7 @@ const reactFiles = {
                 },
                 {
                     file: 'entities/index.tsx',
+                    method: 'processJsx',
                     renameTo: generator => `entities/${generator.entityFolderName}/index.tsx`
                 }
             ]
@@ -211,16 +211,14 @@ function writeFiles() {
                 // write client side files for angular 2.x +
                 this.writeFilesToDisk(angularFiles, this, false, CLIENT_NG2_TEMPLATES_DIR);
                 this.addEntityToModule(this.entityInstance, this.entityClass, this.entityAngularName, this.entityFolderName, this.entityFileName, this.enableTranslation, this.clientFramework, this.microserviceName);
-
-                if (this.applicationType === 'gateway' && !_.isUndefined(this.microserviceName)) {
-                    this.addEntityToWebpack(this.microserviceName, this.clientFramework);
-                }
             } else {
                 // write client side files for react
                 this.writeFilesToDisk(reactFiles, this, false, CLIENT_REACT_TEMPLATES_DIR);
                 this.addEntityToModule(this.entityInstance, this.entityClass, this.entityAngularName, this.entityFolderName, this.entityFileName, this.enableTranslation, this.clientFramework);
             }
-
+            if (this.applicationType === 'gateway' && !_.isUndefined(this.microserviceName)) {
+                this.addEntityToWebpack(this.microserviceName, this.clientFramework);
+            }
             this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
         }
     };
