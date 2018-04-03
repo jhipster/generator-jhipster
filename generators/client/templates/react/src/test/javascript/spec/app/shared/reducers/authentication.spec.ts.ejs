@@ -18,14 +18,13 @@
 -%>
 import { expect } from 'chai';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
-
-import authentication, { ACTION_TYPES, getSession, login } from 'app/shared/reducers/authentication';
-
 import thunk from 'redux-thunk';
 import axios from 'axios';
 import * as sinon from 'sinon';
 import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
+
+import authentication, { ACTION_TYPES, getSession, login } from 'app/shared/reducers/authentication';
 
 describe('Authentication reducer tests', () => {
   function isAccountEmpty(state): boolean {
@@ -167,9 +166,6 @@ describe('Authentication reducer tests', () => {
       const mockStore = configureStore([thunk, promiseMiddleware()]);
       store = mockStore({});
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
-      axios.put = sinon.stub().returns(Promise.resolve(resolvedObject));
-      axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
-      axios.delete = sinon.stub().returns(Promise.resolve(resolvedObject));
     });
 
     it('dispatches GET_SESSION_PENDING and GET_SESSION_FULFILLED actions', async () => {
