@@ -17,14 +17,14 @@
  limitations under the License.
 -%>
 import { expect } from 'chai';
-import { SUCCESS, FAILURE, REQUEST } from 'app/shared/reducers/action-type.util';
-
-import activate, { ACTION_TYPES, activateAction } from 'app/modules/account/activate/activate.reducer';
 import thunk from 'redux-thunk';
 import axios from 'axios';
 import * as sinon from 'sinon';
 import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
+
+import { SUCCESS, FAILURE, REQUEST } from 'app/shared/reducers/action-type.util';
+import activate, { ACTION_TYPES, activateAction } from 'app/modules/account/activate/activate.reducer';
 
 describe('Activate reducer tests', () => {
   it('should return the initial state', () => {
@@ -63,9 +63,6 @@ describe('Activate reducer tests', () => {
       const mockStore = configureStore([thunk, promiseMiddleware()]);
       store = mockStore({});
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
-      axios.put = sinon.stub().returns(Promise.resolve(resolvedObject));
-      axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
-      axios.delete = sinon.stub().returns(Promise.resolve(resolvedObject));
     });
 
     it('dispatches ACTIVATE_ACCOUNT_PENDING and ACTIVATE_ACCOUNT_FULFILLED actions', async () => {
