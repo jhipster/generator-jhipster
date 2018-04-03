@@ -214,7 +214,7 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
   }
 
   handleClose = () => {
-    this.props.history.push('/<%= entityFileName %>');
+    this.props.history.push('/entity/<%= entityFileName %>');
   }
 
 <%_ relationships.forEach(rel => {
@@ -631,7 +631,7 @@ _%>
             </AvGroup>
             <%_ } _%>
           <%_ }) _%>
-            <Button tag={Link} id="cancel-save" to="/<%= entityFileName %>" replace color="info">
+            <Button tag={Link} id="cancel-save" to="/entity/<%= entityFileName %>" replace color="info">
               <FaArrowLeft/>&nbsp;
               <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
             </Button>
