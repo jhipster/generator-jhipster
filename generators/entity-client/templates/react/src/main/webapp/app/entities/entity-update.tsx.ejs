@@ -102,7 +102,7 @@ import {
   createEntity,
   <%_
     blobFields.forEach(b => {
-      const capitalizedFirstLetter = upperFirst(b.fieldName);
+      const capitalizedFirstLetter = _.upperFirst(b.fieldName);
   _%>
   set<%= capitalizedFirstLetter %>,
   <%_ }); _%>
@@ -123,7 +123,7 @@ export interface I<%= entityReactName %>UpdateProps {
   <%= entityInstance %>: I<%= entityReactName %>;
   <%_
     blobFields.forEach(b => {
-      const capitalizedFirstLetter = upperFirst(b.fieldName);
+      const capitalizedFirstLetter = _.upperFirst(b.fieldName);
   _%>
   set<%= capitalizedFirstLetter %>: Function;
   <%_ }); _%>
@@ -408,7 +408,7 @@ _%>
               const fieldBlobType = fields[idx].fieldTypeBlobContent;
               if (fieldBlobType !== 'text') {
                 const isAnImage = fieldBlobType === 'image';
-                const capitalizedFirstLetter =  upperFirst(fieldName);
+                const capitalizedFirstLetter =  _.upperFirst(fieldName);
 
             _%>
 
@@ -666,7 +666,7 @@ const mapDispatchToProps = {
   updateEntity,
   <%_
     blobFields.forEach(b => {
-      const capitalizedFirstLetter =  upperFirst(b.fieldName);
+      const capitalizedFirstLetter =  _.upperFirst(b.fieldName);
   _%>
   set<%= capitalizedFirstLetter %>,
   <%_ }); _%>

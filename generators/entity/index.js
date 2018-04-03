@@ -395,7 +395,7 @@ module.exports = class extends BaseGenerator {
                         context.pagination = 'no';
                     }
                 }
-                if (!context.clientRootFolder && !context.options['skip-ui-grouping'] && context.applicationType === 'gateway' && context.useMicroserviceJson) {
+                if (!context.clientRootFolder && !context.skipUiGrouping && context.applicationType === 'gateway' && context.useMicroserviceJson) {
                     context.clientRootFolder = context.microserviceName;
                 }
             },
@@ -707,7 +707,7 @@ module.exports = class extends BaseGenerator {
                         if (relationship.otherEntityNameCapitalized !== 'User') {
                             relationship.otherEntityModuleName = `${context.angularXAppName + relationship.otherEntityNameCapitalized}Module`;
                             relationship.otherEntityFileName = _.kebabCase(relationship.otherEntityAngularName);
-                            if (context.options['skip-ui-grouping'] || otherEntityData === undefined) {
+                            if (context.skipUiGrouping || otherEntityData === undefined) {
                                 relationship.otherEntityClientRootFolder = '';
                             } else {
                                 relationship.otherEntityClientRootFolder = otherEntityData.clientRootFolder;

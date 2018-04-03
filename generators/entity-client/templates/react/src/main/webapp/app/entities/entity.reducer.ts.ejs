@@ -260,7 +260,7 @@ export const deleteEntity: ICrudDeleteAction<I<%= entityReactName %>> = id => as
 <%_
   blobFields.forEach(b => {
     const fieldName = b.fieldName;
-    const upperFirstName =  upperFirst(fieldName);
+    const upperFirstName =  _.upperFirst(fieldName);
     const upperFieldName = b.fieldName.toUpperCase();
 _%>
 export const set<%= upperFirstName %> = <%= fieldName %> => ({

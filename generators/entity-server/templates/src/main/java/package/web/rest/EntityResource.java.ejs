@@ -74,8 +74,8 @@ public class <%= entityClass %>Resource {
     private final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
 
     <%_ let entityName = entityInstance;
-    if (applicationType === 'microservice') {
-        entityName = `${baseName}${entityClass}`;
+    if (clientRootFolder && !skipUiGrouping) {
+        entityName = _.camelCase(`${clientRootFolder}${entityClass}`);
     } _%>
     private static final String ENTITY_NAME = "<%= entityName %>";
     <%_

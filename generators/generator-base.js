@@ -2393,6 +2393,7 @@ module.exports = class extends PrivateBase {
         dest.entityTableName = generator.getTableName(context.options['table-name'] || dest.name);
         dest.entityNameCapitalized = _.upperFirst(dest.name);
         dest.entityAngularJSSuffix = context.options['angular-suffix'];
+        dest.skipUiGrouping = context.options['skip-ui-grouping'];
         dest.clientRootFolder = context.options['skip-ui-grouping'] ? '' : context.options['client-root-folder'];
         dest.isDebugEnabled = context.options.debug;
         generator.experimental = context.options.experimental;
