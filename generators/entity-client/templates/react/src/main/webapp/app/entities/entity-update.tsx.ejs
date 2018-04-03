@@ -111,7 +111,9 @@ import {
 import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 // tslint:disable-next-line:no-unused-variable
 import { convertDateTimeFromServer } from 'app/shared/util/date-utils';
-
+<%_ if (relationships.filter(e => e.relationshipType === 'many-to-many') !== undefined) { _%>
+import { keysToValues } from 'app/shared/util/entity-utils';
+<%_ } _%>
 export interface I<%= entityReactName %>UpdateProps {
   getEntity: ICrudGetAction<I<%= entityReactName %>>;
   updateEntity: ICrudPutAction<I<%= entityReactName %>>;
@@ -228,19 +230,9 @@ const ownerSide = rel.ownerSide;
 _%>
   <%_ if (relationshipType === 'many-to-many' && ownerSide === true) { _%>
   <%= relationshipFieldName %>Update = element => {
-    const list = [];
-    for (const i in element.target.selectedOptions) {
-        if (element.target.selectedOptions[i]) {
-            const prop = element.target.selectedOptions[i].value;
-            for (const j in this.props.<%= otherEntityNamePlural %>) {
-                if (prop === this.props.<%= otherEntityNamePlural %>[j].<%= otherEntityField %>) {
-                    list.push(this.props.<%= otherEntityNamePlural %>[j]);
-                }
-            }
-        }
-    }
+    const selected = Array.from(element.target.selectedOptions).map((e: any) => e.value);
     this.setState({
-        ids<%= relationshipName %>: list
+      ids<%= relationshipName %>: keysToValues(selected, this.props.<%= otherEntityNamePlural %>, '<%= otherEntityField %>')
     });
   }
 
@@ -275,13 +267,16 @@ _%>
         }
         return list;
     }
-    if (value.<%= otherEntityNamePlural %> && value.<%= otherEntityNamePlural %>.length !== 0) {
+    if (value.<%= relationshipFieldNamePlural %> && value.<%= relationshipFieldNamePlural %>.length !== 0) {
         const list = [];
-        for (const i in value.<%= otherEntityNamePlural %>) {
-            if (value.<%= otherEntityNamePlural %>[i]) {
-                list.push(value.<%= otherEntityNamePlural %>[i].<%= otherEntityField %>);
+        for (const i in value.<%= relationshipFieldNamePlural %>) {
+            if (value.<%= relationshipFieldNamePlural %>[i]) {
+                list.push(value.<%= relationshipFieldNamePlural %>[i].<%= otherEntityField %>);
             }
         }
+        this.setState({
+          idsprofileGoal: keysToValues(list, this.props.<%= otherEntityNamePlural %>, '<%= otherEntityField %>')
+        });
         return list;
     }
     return null;
@@ -625,7 +620,7 @@ _%>
                 }
               </AvInput>
               <AvInput type="hidden"
-                name="<%= otherEntityNamePlural %>"
+                name="<%= relationshipFieldNamePlural %>"
                 value={this.state.ids<%= relationshipName %>}
               />
             </AvGroup>
