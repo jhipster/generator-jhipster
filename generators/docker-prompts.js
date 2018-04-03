@@ -129,6 +129,11 @@ function askForPath() {
 
     this.prompt(prompts).then((props) => {
         this.directoryPath = props.directoryPath;
+        // Patch the path if there is no trailing "/"
+        if (!this.directoryPath.endsWith('/')) {
+            this.log(chalk.yellow(`The path "${this.directoryPath}" does not end with a trailing "/", adding it anyway.`));
+            this.directoryPath += '/';
+        }
 
         this.appsFolders = getAppFolders.call(this, this.directoryPath, composeApplicationType);
 
