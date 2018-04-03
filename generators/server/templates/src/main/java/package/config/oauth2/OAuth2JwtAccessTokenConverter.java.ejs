@@ -95,4 +95,36 @@ public class OAuth2JwtAccessTokenConverter extends JwtAccessTokenConverter {
         }
         return false;
     }
+    /**
+     * Extracts jwt claims and sets it to OAuth2Authentication decoded details.
+     * You can get details like:
+     *
+     * <pre>
+     * <code>SecurityContext securityContext = SecurityContextHolder.getContext();
+     *  Authentication authentication = securityContext.getAuthentication();
+     *
+     *  if (authentication != null)
+     *  {
+     *      Object details = authentication.getDetails();
+     *      if(details instanceof OAuth2AuthenticationDetails) {
+     *          Object decodedDetails = ((OAuth2AuthenticationDetails) details).getDecodedDetails();
+     *          if(decodedDetails != null &amp;&amp; decodedDetails instanceof Map)
+     *          {
+     *             String detailFoo = ((Map) decodedDetails).get("foo");
+     *          }
+     *      }
+     *  }
+
+     * </code>
+     *  </pre>
+     * @param claims OAuth2JWTToken claims
+     * @return OAuth2Authentication
+     */
+    @Override
+    public OAuth2Authentication extractAuthentication(Map<String, ?> claims) {
+        OAuth2Authentication authentication
+            = super.extractAuthentication(claims);
+        authentication.setDetails(claims);
+        return authentication;
+    }
 }
