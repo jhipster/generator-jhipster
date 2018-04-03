@@ -90,8 +90,12 @@ Object.keys(differentRelationships).forEach(key => {
 _%>
 import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/user.model';
 import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
-<%_ } else { _%>
+<%_
+  } else {
+    if (uniqueRel.otherEntityAngularName !== entityReactName) {
+_%>
 import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/<%= uniqueRel.otherEntityModelName %>.model';
+  <%_ } _%>
 import { getEntities as get<%= upperFirstCamelCase(uniqueRel.otherEntityNamePlural) %> } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.reducer';
 <%_ }
   }
