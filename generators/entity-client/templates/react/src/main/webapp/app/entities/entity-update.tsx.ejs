@@ -114,6 +114,7 @@ import { convertDateTimeFromServer } from 'app/shared/util/date-utils';
 <%_ if (relationships.filter(e => e.relationshipType === 'many-to-many') !== undefined) { _%>
 import { keysToValues } from 'app/shared/util/entity-utils';
 <%_ } _%>
+
 export interface I<%= entityReactName %>UpdateProps {
   getEntity: ICrudGetAction<I<%= entityReactName %>>;
   updateEntity: ICrudPutAction<I<%= entityReactName %>>;
@@ -275,7 +276,7 @@ _%>
             }
         }
         this.setState({
-          idsprofileGoal: keysToValues(list, this.props.<%= otherEntityNamePlural %>, '<%= otherEntityField %>')
+          ids<%= relationshipName %>: keysToValues(list, this.props.<%= otherEntityNamePlural %>, '<%= otherEntityField %>')
         });
         return list;
     }
