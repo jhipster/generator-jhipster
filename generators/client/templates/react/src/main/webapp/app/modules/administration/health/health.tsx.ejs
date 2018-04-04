@@ -19,7 +19,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-jhipster';
-import { Table } from 'reactstrap';
+import { Table, Badge } from 'reactstrap';
 import { FaEye, FaRefresh } from 'react-icons/lib/fa';
 
 import { systemHealth } from '../administration.reducer';
@@ -100,13 +100,22 @@ export class HealthPage extends React.Component<IHealthPageProps, IHealthPageSta
                </thead>
                <tbody>
               {Object.keys(data).map((configPropKey, configPropIndex) =>
-                (configPropKey !== 'status') ?
+                configPropKey !== 'status' ? (
                   <tr key={configPropIndex}>
                     <td>{configPropKey}</td>
-                    <td><button type="button" className={data[configPropKey].status !== 'UP' ? 'btn btn-danger' : 'btn btn-success'}>{data[configPropKey].status}</button></td>
-                    <td><a onClick={this.getSystemHealthInfo(configPropKey, data[configPropKey])}><FaEye /></a></td>
+                    <td>
+                      <Badge color={data[configPropKey].status !== 'UP' ? 'danger' : 'success'}>
+                        {data[configPropKey].status}
+                      </Badge>
+                    </td>
+                    <td>
+                      {data[configPropKey].details ? (
+                      <a onClick={this.getSystemHealthInfo(configPropKey, data[configPropKey])}>
+                        <FaEye />
+                      </a>) : null}
+                    </td>
                   </tr>
-                : null
+                ) : null
                 )}
               </tbody>
              </Table>

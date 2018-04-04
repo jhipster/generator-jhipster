@@ -49,29 +49,29 @@ elif [[ "$JHIPSTER" == *"micro"* ]]; then
     moveEntity FieldTestPaginationEntity
 
 elif [[ "$JHIPSTER" == *"react"* ]]; then
-    # moveEntity BankAccount
-    # moveEntity Label
-    # moveEntity Operation
+    moveEntity BankAccount
+    moveEntity Label
+    moveEntity Operation
 
     moveEntity FieldTestEntity
     moveEntity FieldTestMapstructEntity
     moveEntity FieldTestServiceClassEntity
     moveEntity FieldTestServiceImplEntity
-    # moveEntity FieldTestInfiniteScrollEntity
-    # moveEntity FieldTestPagerEntity
-    # moveEntity FieldTestPaginationEntity
+    moveEntity FieldTestInfiniteScrollEntity
+    moveEntity FieldTestPagerEntity
+    moveEntity FieldTestPaginationEntity
 
-    # moveEntity EntityWithDTO
-    # moveEntity EntityWithPagination
-    # moveEntity EntityWithPaginationAndDTO
-    # moveEntity EntityWithServiceClass
-    # moveEntity EntityWithServiceClassAndDTO
-    # moveEntity EntityWithServiceClassAndPagination
-    # moveEntity EntityWithServiceClassPaginationAndDTO
-    # moveEntity EntityWithServiceImpl
-    # moveEntity EntityWithServiceImplAndDTO
-    # moveEntity EntityWithServiceImplAndPagination
-    # moveEntity EntityWithServiceImplPaginationAndDTO
+    moveEntity EntityWithDTO
+    moveEntity EntityWithPagination
+    moveEntity EntityWithPaginationAndDTO
+    moveEntity EntityWithServiceClass
+    moveEntity EntityWithServiceClassAndDTO
+    moveEntity EntityWithServiceClassAndPagination
+    moveEntity EntityWithServiceClassPaginationAndDTO
+    moveEntity EntityWithServiceImpl
+    moveEntity EntityWithServiceImplAndDTO
+    moveEntity EntityWithServiceImplAndPagination
+    moveEntity EntityWithServiceImplPaginationAndDTO
 
 elif [[ "$JHIPSTER" == *"uaa"* ]]; then
     moveEntity FieldTestEntity

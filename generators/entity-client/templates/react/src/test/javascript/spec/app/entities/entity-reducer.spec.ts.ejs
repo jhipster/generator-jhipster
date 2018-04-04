@@ -19,20 +19,20 @@
 <%_
     let entityActionName = entityInstance.toUpperCase();
     let entityActionNamePlural = entityInstancePlural.toUpperCase();
-    const blobs = fields.filter(e => ['byte[]', 'ByteBuffer'].includes(e.fieldType));
-    const hasBlob = blobs.length > 0;
 _%>
 import axios from 'axios';
 import { expect } from 'chai';
-import reducer, {
-  ACTION_TYPES, createEntity, deleteEntity, getEntities,
-  getEntity, updateEntity
-} from 'app/entities<% if (applicationType === 'gateway' && locals.microserviceName) { %>/<%= microserviceName.toLowerCase() %><% } %>/<%= entityFileName %>/<%= entityFileName %>.reducer';
 import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
 import thunk from 'redux-thunk';
 import * as sinon from 'sinon';
+<%_ if (pagination === 'infinite-scroll') { _%>
+import { parseHeaderForLinks } from 'react-jhipster';
+<%_ } _%>
 
+import reducer, {
+  ACTION_TYPES, createEntity, deleteEntity, getEntities, getEntity, updateEntity<% if (pagination === 'infinite-scroll') { %>, reset<% } %>
+} from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.reducer';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 
 // tslint:disable no-invalid-template-strings
@@ -51,6 +51,14 @@ describe('Entities reducer tests', () => {
     errorMessage: null,
     entities: [],
     entity: {},
+    <%_ if (pagination === 'infinite-scroll') { _%>
+    links: {
+      last: 0
+    },
+    <%_ } _%>
+    <%_ if (pagination !== 'no') { _%>
+    totalItems: 0,
+    <%_ } _%>
     updating: false,
     updateSuccess: false
   };
@@ -139,14 +147,23 @@ describe('Entities reducer tests', () => {
 
   describe('Successes', () => {
     it('should fetch all entities', () => {
-      const payload = { data: { 1: 'fake', 2: 'feka' } };
+      const payload = { data: { 1: 'fake1', 2: 'fake2' }<% if (pagination !== 'no') { %>, headers: { 'x-total-count': 123<% if (pagination === 'infinite-scroll') { %>, link: ';'<% } %> }<% } %> };
+      <%_ if (pagination === 'infinite-scroll') { _%>
+      const link = parseHeaderForLinks(payload.headers.link);
+      <%_ } _%>
       expect(reducer(undefined, {
         type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
         payload
       })).to.eql({
       ...initialState,
+      <%_ if (pagination === 'infinite-scroll') { _%>
+      links: { last: link.last },
+      <%_ } _%>
       loading: false,
-      entities: payload.data
+      <%_ if (pagination !== 'no') { _%>
+      totalItems: payload.headers['x-total-count'],
+      <%_ } _%>
+      entities: <% if (pagination === 'infinite-scroll') { %>[payload.data]<% } else { %>payload.data<% } %>
       });
     });
 
@@ -233,7 +250,7 @@ describe('Entities reducer tests', () => {
           payload: resolvedObject
         }
       ];
-      await store.dispatch(createEntity({ '<%= entityActionName %>': 'fake' })).then(() => expect(store.getActions()).to.eql(expectedActions));
+      await store.dispatch(createEntity({ id: 1 })).then(() => expect(store.getActions()).to.eql(expectedActions));
     });
 
     it('dispatches ACTION_TYPES.UPDATE_<%= entityActionName %> actions', async () => {
@@ -253,7 +270,7 @@ describe('Entities reducer tests', () => {
           payload: resolvedObject
         }
       ];
-      await store.dispatch(updateEntity({ '1': 'fake' })).then(() => expect(store.getActions()).to.eql(expectedActions));
+      await store.dispatch(updateEntity({ id: 1 })).then(() => expect(store.getActions()).to.eql(expectedActions));
     });
 
     it('dispatches ACTION_TYPES.DELETE_<%= entityActionName %> actions', async () => {
@@ -277,10 +294,10 @@ describe('Entities reducer tests', () => {
     });
   });
 
-  <%_ if (hasBlob) { _%>
-  describe('Blobs', () => {
+  <%_ if (fieldsContainBlob) { _%>
+  describe('blobFields', () => {
     <%_
-    blobs.forEach(b => {
+    blobFields.forEach(b => {
       const nameToUpper = b.fieldName.toUpperCase();
     _%>
     it('should properly set <%= b.fieldName %> in state.', () => {

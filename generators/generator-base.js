@@ -203,7 +203,7 @@ module.exports = class extends PrivateBase {
                     needle: 'jhipster-needle-add-entity-to-menu',
                     splicable: [
                         this.stripMargin(`|(
-                        |        <DropdownItem tag={Link} key="${routerName}" to="/${routerName}">
+                        |        <DropdownItem tag={Link} key="${routerName}" to="/entity/${routerName}">
                         |          <FaAsterisk />&nbsp;
                         |          ${_.startCase(routerName)}
                         |        </DropdownItem>
@@ -276,7 +276,7 @@ module.exports = class extends PrivateBase {
                     file: indexModulePath,
                     needle: 'jhipster-needle-add-route-path',
                     splicable: [
-                        this.stripMargin(`|<Route path={'/${entityFileName}'} component={${entityAngularName}}/>`)
+                        this.stripMargin(`|<Route path={\`\${match.url}/${entityFileName}\`} component={${entityAngularName}}/>`)
                     ]
                 }, this);
 
@@ -1472,6 +1472,17 @@ module.exports = class extends PrivateBase {
 
             jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, opt, template);
             break;
+        case 'stripJsx':
+            regex = new RegExp([
+                /(import { ?Translate, ?translate ?} from 'react-jhipster';?)/, // Translate imports
+                /(import { ?translate, ?Translate ?} from 'react-jhipster';?)/, // translate imports
+                /( Translate,|, ?Translate|import { ?Translate ?} from 'react-jhipster';?)/, // Translate import
+                /( translate,|, ?translate|import { ?translate ?} from 'react-jhipster';?)/, // translate import
+                /<Translate (component="[a-z]+" )?contentKey="([a-zA-Z0-9.\-_]+)" ?(component="[a-z]+")? ?(interpolate=\{\{[a-zA-Z0-9.: ]+\}\})? ?>|<\/Translate>/, // Translate component tag
+            ].map(r => r.source).join('|'), 'g');
+
+            jhipsterUtils.copyWebResource(source, dest, regex, 'jsx', _this, opt, template);
+            break;
         case 'copy':
             _this.copy(source, dest);
             break;
@@ -1516,7 +1527,7 @@ module.exports = class extends PrivateBase {
      * @param {boolean} template - flag to use template method instead of copy
      */
     processJsx(source, dest, generator, opt, template) {
-        this.copyTemplate(source, dest, 'stripJs', generator, opt, template);
+        this.copyTemplate(source, dest, 'stripJsx', generator, opt, template);
     }
 
     /**
@@ -1727,7 +1738,7 @@ module.exports = class extends PrivateBase {
         context.fluentMethods = context.fileData.fluentMethods;
         context.clientRootFolder = context.fileData.clientRootFolder;
         context.pagination = context.fileData.pagination;
-        context.searchEngine = context.fileData.searchEngine || context.searchEngine;
+        context.searchEngine = _.isUndefined(context.fileData.searchEngine) ? context.searchEngine : context.fileData.searchEngine;
         context.javadoc = context.fileData.javadoc;
         context.entityTableName = context.fileData.entityTableName;
         context.jhiPrefix = context.fileData.jhiPrefix || context.jhiPrefix;
@@ -2257,7 +2268,7 @@ module.exports = class extends PrivateBase {
             for (let j = 0, blockTemplates = files[blocks[i]]; j < blockTemplates.length; j++) {
                 const blockTemplate = blockTemplates[j];
                 if (!blockTemplate.condition || blockTemplate.condition(_this)) {
-                    const path = blockTemplate.path ? blockTemplate.path : '';
+                    const path = blockTemplate.path || '';
                     blockTemplate.templates.forEach((templateObj) => {
                         let templatePath = path;
                         let method = 'template';
@@ -2307,6 +2318,7 @@ module.exports = class extends PrivateBase {
     setupClientOptions(generator, context = generator) {
         generator.skipServer = context.configOptions.skipServer || context.config.get('skipServer');
         generator.skipUserManagement = context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
+        generator.skipCommitHook = context.options['skip-commit-hook'] || context.config.get('skipCommitHook');
         generator.authenticationType = context.options.auth || context.configOptions.authenticationType || context.config.get('authenticationType');
         if (generator.authenticationType === 'oauth2') {
             generator.skipUserManagement = true;
@@ -2381,6 +2393,7 @@ module.exports = class extends PrivateBase {
         dest.entityTableName = generator.getTableName(context.options['table-name'] || dest.name);
         dest.entityNameCapitalized = _.upperFirst(dest.name);
         dest.entityAngularJSSuffix = context.options['angular-suffix'];
+        dest.skipUiGrouping = context.options['skip-ui-grouping'];
         dest.clientRootFolder = context.options['skip-ui-grouping'] ? '' : context.options['client-root-folder'];
         dest.isDebugEnabled = context.options.debug;
         generator.experimental = context.options.experimental;

@@ -24,11 +24,12 @@ import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FaArrowLeft } from 'react-icons/lib/fa';
 
 import { APP_DATE_FORMAT } from 'app/config/constants';
+import { IUser } from 'app/shared/model/user.model';
 import { getUser } from './user-management.reducer';
 
 export interface IUserManagementDetailProps {
-  getUser: ICrudGetAction;
-  user: any;
+  getUser: ICrudGetAction<IUser>;
+  user: IUser;
   match: any;
 }
 

@@ -16,56 +16,36 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-const i18nToLoad = [entityInstance];
-for (const idx in fields) {
-    if (fields[idx].fieldIsEnum === true) {
-        i18nToLoad.push(fields[idx].enumInstance);
-    }
-}
-_%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HttpResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs/Subscription';
-import { JhiEventManager<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
+<%_ if (fieldsContainBlob) { _%>
+import { JhiDataUtils } from 'ng-jhipster';
+<%_ } _%>
 
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
-import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-detail',
     templateUrl: './<%= entityFileName %>-detail.component.html'
 })
-export class <%= entityAngularName %>DetailComponent implements OnInit, OnDestroy {
+export class <%= entityAngularName %>DetailComponent implements OnInit {
 
     <%= entityInstance %>: I<%= entityAngularName %>;
-    private subscription: Subscription;
-    private eventSubscriber: Subscription;
 
     constructor(
-        private eventManager: JhiEventManager,
         <%_ if (fieldsContainBlob) { _%>
         private dataUtils: JhiDataUtils,
         <%_ } _%>
-        private <%= entityInstance %>Service: <%= entityAngularName %>Service,
         private route: ActivatedRoute
     ) {
     }
 
     ngOnInit() {
-        this.subscription = this.route.params.subscribe((params) => {
-            this.load(params['id']);
+        this.route.data.subscribe(({<%= entityInstance %>}) => {
+            this.<%= entityInstance %> = <%= entityInstance %>.body ? <%= entityInstance %>.body : <%= entityInstance %>;
         });
-        this.registerChangeIn<%= entityClassPlural %>();
     }
 
-    load(id) {
-        this.<%= entityInstance %>Service.find(id)
-            .subscribe((<%= entityInstance %>Response: HttpResponse<I<%= entityAngularName %>>) => {
-                this.<%= entityInstance %> = <%= entityInstance %>Response.body;
-            });
-    }
     <%_ if (fieldsContainBlob) { _%>
     byteSize(field) {
         return this.dataUtils.byteSize(field);
@@ -79,15 +59,4 @@ export class <%= entityAngularName %>DetailComponent implements OnInit, OnDestro
         window.history.back();
     }
 
-    ngOnDestroy() {
-        this.subscription.unsubscribe();
-        this.eventManager.destroy(this.eventSubscriber);
-    }
-
-    registerChangeIn<%= entityClassPlural %>() {
-        this.eventSubscriber = this.eventManager.subscribe(
-            '<%= entityInstance %>ListModification',
-            (response) => this.load(this.<%= entityInstance %>.id)
-        );
-    }
 }

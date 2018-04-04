@@ -49,6 +49,8 @@ module.exports = class extends Generator {
     constructor(args, opts) {
         super(args, opts);
         this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
+        // expose lodash to templates
+        this._ = _;
     }
 
     /* ======================================================================== */
@@ -1071,14 +1073,5 @@ module.exports = class extends Generator {
                 typescriptFilter.restore
             ]);
         }
-    }
-
-    /**
-     * Put to first letter to uppercase.
-     * ie: upperFiest('foo') -> 'Foo'
-     * @param {string} value
-     */
-    upperFirst(value) {
-        return _.upperFirst(value);
     }
 };

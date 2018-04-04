@@ -1,0 +1,46 @@
+import { $, ElementFinder } from 'protractor';
+
+import BasePage from './base-component';
+import SignInPage from './signin-page';
+
+const selector = $('#app-header');
+export default class NavBarPage extends BasePage {
+  selector: ElementFinder;
+  signInPage: SignInPage;
+  adminMenu: ElementFinder;
+
+  constructor(asAdmin?: Boolean) {
+    super(selector);
+    this.selector = selector;
+    if (asAdmin) {
+      this.adminMenu = this.selector.$('#admin-menu');
+    }
+    this.signInPage = new SignInPage();
+  }
+
+  clickOnTabMenu(item: string) {
+    return this.selector
+      .$('.header-tabs')
+      .$(`.nav-link[href="#/${item}"]`)
+      .click();
+  }
+
+  clickOnAdminMenu() {
+    return this.adminMenu.click();
+  }
+
+  clickOnAdminMenuItem(item: string) {
+    this.adminMenu.click();
+    return this.selector.$(`.dropdown-item[href="#/admin/${item}"]`).click();
+  }
+
+  autoSignIn() {
+    this.signInPage.get();
+    this.signInPage.autoSignInUsing('admin', 'admin');
+    return this.signInPage.waitUntilHidden();
+  }
+
+  autoSignOut() {
+    this.signInPage.autoSignOut();
+  }
+}

@@ -16,22 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-const i18nToLoad = [entityInstance];
-for (const idx in fields) {
-    if (fields[idx].fieldIsEnum === true) {
-        i18nToLoad.push(fields[idx].enumInstance);
-    }
-}
-_%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
-import { <%= entityAngularName %>PopupService } from './<%= entityFileName %>-popup.service';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 
 @Component({
@@ -70,21 +61,31 @@ export class <%= entityAngularName %>DeleteDialogComponent {
 })
 export class <%= entityAngularName %>DeletePopupComponent implements OnInit, OnDestroy {
 
-    routeSub: any;
+    private ngbModalRef: NgbModalRef;
 
     constructor(
         private route: ActivatedRoute,
-        private <%= entityInstance %>PopupService: <%= entityAngularName %>PopupService
+        private router: Router,
+        private modalService: NgbModal
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe((params) => {
-            this.<%= entityInstance %>PopupService
-                .open(<%= entityAngularName %>DeleteDialogComponent as Component, params['id']);
+        this.route.data.subscribe(({<%= entityInstance %>}) => {
+            setTimeout(() => {
+                this.ngbModalRef = this.modalService.open(<%= entityAngularName %>DeleteDialogComponent as Component, { size: 'lg', backdrop: 'static'});
+                this.ngbModalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>.body;
+                this.ngbModalRef.result.then((result) => {
+                    this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true, queryParamsHandling: 'merge' });
+                    this.ngbModalRef = null;
+                }, (reason) => {
+                    this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true, queryParamsHandling: 'merge' });
+                    this.ngbModalRef = null;
+                });
+            }, 0);
         });
     }
 
     ngOnDestroy() {
-        this.routeSub.unsubscribe();
+        this.ngbModalRef = null;
     }
 }

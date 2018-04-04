@@ -20,6 +20,7 @@ import axios from 'axios';
 import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
+import { IUser } from 'app/shared/model/user.model';
 
 export const ACTION_TYPES = {
   FETCH_ROLES: 'userManagement/FETCH_ROLES',
@@ -28,7 +29,7 @@ export const ACTION_TYPES = {
   CREATE_USER: 'userManagement/CREATE_USER',
   UPDATE_USER: 'userManagement/UPDATE_USER',
   DELETE_USER: 'userManagement/DELETE_USER',
-  RESET_MODAL: 'userManagement/RESET_MODAL'
+  RESET: 'userManagement/RESET'
 };
 
 const initialState = {
@@ -113,7 +114,7 @@ export default (state = initialState, action) => {
         updateSuccess: true,
         user: {}
       };
-    case ACTION_TYPES.RESET_MODAL:
+    case ACTION_TYPES.RESET:
       return {
         ...state,
         user: {}
@@ -125,28 +126,28 @@ export default (state = initialState, action) => {
 
 const apiUrl = '/api/users';
 // Actions
-export const getUsers: ICrudGetAllAction = (page, size, sort) => {
+export const getUsers: ICrudGetAllAction<IUser> = (page, size, sort) => {
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
   return {
     type: ACTION_TYPES.FETCH_USERS,
-    payload: axios.get(requestUrl)
+    payload: axios.get(requestUrl) as Promise<IUser>
   };
 };
 
-export const getRoles: ICrudGetAction = () => ({
+export const getRoles: ICrudGetAction<any> = () => ({
   type: ACTION_TYPES.FETCH_ROLES,
-  payload: axios.get(`${apiUrl}/authorities`)
+  payload: axios.get(`${apiUrl}/authorities`) as Promise<any>
 });
 
-export const getUser: ICrudGetAction = id => {
+export const getUser: ICrudGetAction<IUser> = id => {
   const requestUrl = `${apiUrl}/${id}`;
   return {
     type: ACTION_TYPES.FETCH_USER,
-    payload: axios.get(requestUrl)
+    payload: axios.get(requestUrl) as Promise<IUser>
   };
 };
 
-export const createUser: ICrudPutAction = user => async dispatch => {
+export const createUser: ICrudPutAction<IUser> = user => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_USER,
     payload: axios.post(apiUrl, user)
@@ -155,7 +156,7 @@ export const createUser: ICrudPutAction = user => async dispatch => {
   return result;
 };
 
-export const updateUser: ICrudPutAction = user => async dispatch => {
+export const updateUser: ICrudPutAction<IUser> = user => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_USER,
     payload: axios.put(apiUrl, user)
@@ -164,7 +165,7 @@ export const updateUser: ICrudPutAction = user => async dispatch => {
   return result;
 };
 
-export const deleteUser: ICrudDeleteAction = id => async dispatch => {
+export const deleteUser: ICrudDeleteAction<IUser> = id => async dispatch => {
   const requestUrl = `${apiUrl}/${id}`;
   const result = await dispatch({
     type: ACTION_TYPES.DELETE_USER,
@@ -174,6 +175,6 @@ export const deleteUser: ICrudDeleteAction = id => async dispatch => {
   return result;
 };
 
-export const resetModal = () => ({
-  type: ACTION_TYPES.RESET_MODAL
+export const reset = () => ({
+  type: ACTION_TYPES.RESET
 });
