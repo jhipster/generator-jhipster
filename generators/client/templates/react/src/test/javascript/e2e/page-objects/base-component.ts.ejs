@@ -1,4 +1,4 @@
-import { ElementFinder } from 'protractor';
+import { $, ElementFinder } from 'protractor';
 
 import { isDisplayed, isHidden, waitUntilDisplayed, waitUntilHidden } from '../util/utils';
 /**
@@ -48,5 +48,9 @@ export default class BasePage {
   waitUntilHidden() {
     this.checkSelectorExist();
     waitUntilHidden(this.selector, this.constructor.name);
+  }
+
+  getAlertMessage() {
+    return $('div[role="alert"]');
   }
 }

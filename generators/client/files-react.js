@@ -410,6 +410,20 @@ const files = {
             templates: [
                 'spec/app/modules/account/sessions/sessions.reducer.spec.ts',
             ]
+        },
+        {
+            condition: generator => generator.protractorTests,
+            path: TEST_SRC_DIR,
+            templates: [
+                'e2e/modules/account/login.spec.ts',
+                'e2e/modules/account/password.spec.ts',
+                'e2e/util/utils.ts',
+                'e2e/page-objects/base-component.ts',
+                'e2e/page-objects/navbar-page.ts',
+                'e2e/page-objects/signin-page.ts',
+                'e2e/page-objects/password-page.ts',
+                'protractor.conf.js'
+            ]
         }
     ]
 };

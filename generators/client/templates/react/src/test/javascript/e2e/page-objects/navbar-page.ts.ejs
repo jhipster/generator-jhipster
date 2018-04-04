@@ -3,11 +3,12 @@ import { $, ElementFinder } from 'protractor';
 import BasePage from './base-component';
 import SignInPage from './signin-page';
 
-const selector = $('#app-header');
+const selector: ElementFinder = $('#app-header');
 export default class NavBarPage extends BasePage {
   selector: ElementFinder;
   signInPage: SignInPage;
-  adminMenu: ElementFinder;
+  adminMenu: ElementFinder = this.selector.$('#admin-menu');
+  accountMenu: ElementFinder = this.selector.$('#account-menu');
 
   constructor(asAdmin?: Boolean) {
     super(selector);
@@ -32,6 +33,11 @@ export default class NavBarPage extends BasePage {
   clickOnAdminMenuItem(item: string) {
     this.adminMenu.click();
     return this.selector.$(`.dropdown-item[href="#/admin/${item}"]`).click();
+  }
+
+  clickOnAccountMenuItem(item: string) {
+    this.accountMenu.click();
+    return this.selector.$(`.dropdown-item[href="#/account/${item}"`).click();
   }
 
   autoSignIn() {
