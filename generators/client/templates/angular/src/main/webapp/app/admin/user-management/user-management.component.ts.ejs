@@ -18,17 +18,18 @@
 -%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 <%_ if (prodDatabaseType !== 'cassandra') { _%>
 import { ActivatedRoute, Router } from '@angular/router';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
 import { ITEMS_PER_PAGE } from 'app/shared';
-import { Principal, UserService, User } from 'app/core';
 <%_ } else { _%>
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
-
-import { Principal, UserService, User } from 'app/core';
 <%_ } _%>
+import { Principal, UserService, User } from 'app/core';
+import { UserMgmtDeleteDialogComponent } from 'app/admin';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-user-mgmt',
@@ -61,7 +62,8 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private router: Router,
         <%_ } _%>
-        private eventManager: JhiEventManager
+        private eventManager: JhiEventManager,
+        private modalService: NgbModal,
     ) {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.itemsPerPage = ITEMS_PER_PAGE;
@@ -139,7 +141,7 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
     }
 
     transition() {
-        this.router.navigate(['/user-management'], {
+        this.router.navigate(['/admin/user-management'], {
             queryParams: {
                 page: this.page,
                 sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
@@ -149,6 +151,20 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
     }
 
     <%_ } _%>
+
+    deleteUser(user: User) {
+        const modalRef = this.modalService.open(UserMgmtDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+        modalRef.componentInstance.user = user;
+        modalRef.result.then(
+            result => {
+            // Left blank intentionally, nothing to do here
+            },
+            reason => {
+            // Left blank intentionally, nothing to do here
+            }
+        );
+    }
+
     private onSuccess(data, headers) {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.links = this.parseLinks.parse(headers.get('link'));
