@@ -150,7 +150,7 @@
             if (fields[idx].fieldType === 'ZonedDateTime' || fields[idx].fieldType === 'Instant') { 
                 if (prodDatabaseType === 'mysql') {_%>
         <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%=fields[idx].fieldNameAsDatabaseColumn %>" columnDataType="datetime"/>
-            <%_ } else () <%_ {
+            <%_ } else { <%_
         <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%=fields[idx].fieldNameAsDatabaseColumn %>" columnDataType="timestamp"/>
             <%_ }
         <%_ }
