@@ -371,7 +371,9 @@ public class UserService {
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
                 String currentEncryptedPassword = user.getPassword();
-                assertClearTextPasswordMatchesEncryptedPassword(currentClearTextPassword, currentEncryptedPassword);
+                if (!passwordEncoder.matches(currentClearTextPassword, currentEncryptedPassword)) {
+                    throw new InvalidPasswordException();
+                }
                 String encryptedPassword = passwordEncoder.encode(newPassword);
                 user.setPassword(encryptedPassword);
                 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { _%>
@@ -383,12 +385,6 @@ public class UserService {
                 log.debug("Changed password for User: {}", user);
             });
     }
-        private void assertClearTextPasswordMatchesEncryptedPassword(String clearTextPassword, String encryptedPassword) {
-            if (!passwordEncoder.matches(clearTextPassword,encryptedPassword)){
-                throw new InvalidPasswordException();
-            }
-        }
-
 <%_ } _%>
 
     <%_ if (databaseType === 'sql') { _%>
