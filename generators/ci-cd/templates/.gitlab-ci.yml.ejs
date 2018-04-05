@@ -122,7 +122,6 @@ maven-test:
 maven-front-test:
     stage: test
     script:
-        - ./mvnw com.github.eirslett:frontend-maven-plugin:gulp -Dfrontend.gulp.arguments=test
         <%_ if (clientPackageManager === 'yarn') { _%>
         - ./mvnw com.github.eirslett:frontend-maven-plugin:yarn -Dfrontend.yarn.arguments=test
         <%_ } else if (clientPackageManager === 'npm') { _%>

@@ -189,7 +189,6 @@ module.exports = class extends BaseGenerator {
 
                 exec(`cf restart ${this.cloudfoundryDeployedName}`, (err, stdout, stderr) => {
                     this.log(chalk.green('\nYour app should now be live'));
-                    this.log(chalk.yellow(`After application modification, re-deploy it with\n\t${chalk.bold('gulp deploycloudfoundry')}`));
                 });
             }
         };

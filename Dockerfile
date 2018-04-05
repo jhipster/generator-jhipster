@@ -67,8 +67,8 @@ RUN \
   # install yarn
   npm install -g yarn && \
   su -c "yarn config set prefix /home/jhipster/.yarn-global" jhipster && \
-  # install yeoman bower gulp
-  su -c "yarn global add yo bower gulp-cli" jhipster && \
+  # install yeoman
+  su -c "yarn global add yo" jhipster && \
   # cleanup
   apt-get clean && \
   rm -rf \

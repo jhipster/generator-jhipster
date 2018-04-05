@@ -45,9 +45,6 @@ elif [ -f "gradlew" ]; then
         -Dlogging.level.io.github.jhipster.sample=OFF \
         -Dlogging.level.io.github.jhipster.travis=OFF
 fi
-if [ -f "gulpfile.js" ]; then
-    gulp test --no-notification
-fi
 if [ -f "tsconfig.json" ]; then
     yarn test
 fi

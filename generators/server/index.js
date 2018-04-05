@@ -37,7 +37,7 @@ module.exports = class extends BaseGenerator {
 
         // This adds support for a `--[no-]client-hook` flag
         this.option('client-hook', {
-            desc: 'Enable gulp and bower hook from maven/gradle build',
+            desc: 'Enable Webpack hook from maven/gradle build',
             type: Boolean,
             defaults: false
         });
