@@ -342,9 +342,13 @@ function writeFiles() {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/client/AuthorizedFeignClient.java.ejs`, `${javaDir}client/AuthorizedFeignClient.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/client/OAuth2InterceptedFeignConfiguration.java.ejs`, `${javaDir}client/OAuth2InterceptedFeignConfiguration.java`);
                 this.template(`${SERVER_MAIN_SRC_DIR}package/client/TokenRelayRequestInterceptor.java.ejs`, `${javaDir}client/TokenRelayRequestInterceptor.java`);
-            }
-            if (this.authenticationType === 'oauth2' && this.applicationType === 'gateway') {
-                this.template(`${SERVER_MAIN_SRC_DIR}package/config/OAuth2SsoConfiguration.java.ejs`, `${javaDir}config/OAuth2SsoConfiguration.java`);
+                if (this.applicationType === 'gateway') {
+                    this.template(`${SERVER_MAIN_SRC_DIR}package/config/OAuth2SsoConfiguration.java.ejs`, `${javaDir}config/OAuth2SsoConfiguration.java`);
+                }
+                if (this.applicationType === 'microservice') {
+                    this.template(`${SERVER_MAIN_SRC_DIR}package/config/UserEntityConfiguration.java.ejs`, `${javaDir}config/UserEntityConfiguration.java`);
+                    this.template(`${SERVER_MAIN_SRC_DIR}package/domain/UserEntityListener.java.ejs`, `${javaDir}domain/UserEntityListener.java`);
+                }
             }
             if (this.applicationType === 'microservice') {
                 this.copy(`${SERVER_MAIN_RES_DIR}static/microservices_index.html.ejs`, `${SERVER_MAIN_RES_DIR}static/index.html`);

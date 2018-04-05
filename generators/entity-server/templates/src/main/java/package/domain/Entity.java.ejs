@@ -103,7 +103,8 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 <%_         }
         }
-} if (databaseType === 'mongodb') { _%>
+}
+if (databaseType === 'mongodb') { _%>
 @Document(collection = "<%= entityTableName %>")
 <%_ } if (databaseType === 'couchbase') { _%>
 @Document
@@ -113,6 +114,16 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "<%= entityInstance.toLowerCase() %>")
 <%_ } if (searchEngine === 'elasticsearch' && databaseType !== 'mongodb') { _%>
 @Document(indexName = "<%= entityInstance.toLowerCase() %>")
+<%_ }
+let hasUserField = false;
+for (idx in relationships) {
+    const relationshipType = relationships[idx].otherEntityNameCapitalized;
+    if (relationshipType === 'User') {
+        hasUserField = true;
+    }
+}
+if (hasUserField && databaseType === 'sql') { _%>
+@EntityListeners(UserEntityListener.class)
 <%_ } _%>
 public class <%= entityClass %> implements Serializable {
 
