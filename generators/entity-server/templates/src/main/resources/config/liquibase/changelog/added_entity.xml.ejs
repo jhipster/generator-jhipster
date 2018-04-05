@@ -82,9 +82,17 @@
             } else if (fieldType === 'LocalDate') {
                 columnType="date";
             } else if (fieldType === 'Instant') {
-                columnType="timestamp";
+                if (prodDatabaseType === 'mysql') {
+                    columnType="datetime";
+                } else {
+                    columnType="timestamp";
+                }
             } else if (fieldType === 'ZonedDateTime') {
-                columnType="timestamp";
+                if (prodDatabaseType === 'mysql') {
+                    columnType="datetime";
+                } else {
+                    columnType="timestamp";
+                }
             } else if (fieldType === 'byte[]' && fieldTypeBlobContent !== 'text') {
                 if (prodDatabaseType === 'mysql' || prodDatabaseType === 'postgresql') {
                     columnType="longblob";
@@ -131,8 +139,12 @@
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
         <%_ for (const idx in fields) {
-            if (fields[idx].fieldType === 'ZonedDateTime' || fields[idx].fieldType === 'Instant') { _%>
+            if (fields[idx].fieldType === 'ZonedDateTime' || fields[idx].fieldType === 'Instant') { 
+                if (prodDatabaseType === 'mysql') {_%>
         <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%=fields[idx].fieldNameAsDatabaseColumn %>" columnDataType="datetime"/>
+            <%_ } else () <%_ {
+        <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%=fields[idx].fieldNameAsDatabaseColumn %>" columnDataType="timestamp"/>
+            <%_ }
         <%_ }
         } _%>
         <% for (idx in relationships) {
