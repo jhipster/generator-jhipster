@@ -345,7 +345,7 @@ function writeFiles() {
                 if (this.applicationType === 'gateway') {
                     this.template(`${SERVER_MAIN_SRC_DIR}package/config/OAuth2SsoConfiguration.java.ejs`, `${javaDir}config/OAuth2SsoConfiguration.java`);
                 }
-                if (this.applicationType === 'microservice') {
+                if (this.applicationType === 'microservice' && this.databaseType === 'sql') {
                     this.template(`${SERVER_MAIN_SRC_DIR}package/config/UserEntityConfiguration.java.ejs`, `${javaDir}config/UserEntityConfiguration.java`);
                     this.template(`${SERVER_MAIN_SRC_DIR}package/domain/UserEntityListener.java.ejs`, `${javaDir}domain/UserEntityListener.java`);
                 }

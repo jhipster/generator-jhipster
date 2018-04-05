@@ -115,16 +115,18 @@ if (databaseType === 'mongodb') { _%>
 <%_ } if (searchEngine === 'elasticsearch' && databaseType !== 'mongodb') { _%>
 @Document(indexName = "<%= entityInstance.toLowerCase() %>")
 <%_ }
-let hasUserField = false;
-for (idx in relationships) {
-    const relationshipType = relationships[idx].otherEntityNameCapitalized;
-    if (relationshipType === 'User') {
-        hasUserField = true;
+if (authenticationType === 'oauth2' && applicationType === 'microservice' && databaseType === 'sql') {
+    let hasUserField = false;
+    for (idx in relationships) {
+        const relationshipType = relationships[idx].otherEntityNameCapitalized;
+        if (relationshipType === 'User') {
+            hasUserField = true;
+        }
     }
-}
-if (hasUserField && databaseType === 'sql') { _%>
+    if (hasUserField) { _%>
 @EntityListeners(UserEntityListener.class)
-<%_ } _%>
+<%_ }
+} _%>
 public class <%= entityClass %> implements Serializable {
 
     private static final long serialVersionUID = 1L;
