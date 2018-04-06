@@ -489,6 +489,7 @@ public class UserService {
      */
     @SuppressWarnings("unchecked")
     public UserDTO getUserFromAuthentication(OAuth2Authentication authentication) {
+        Object oauth2AuthenticationDetails = authentication.getDetails(); // should be an OAuth2AuthenticationDetails
         Map<String, Object> details = (Map<String, Object>) authentication.getUserAuthentication().getDetails();
         User user = getUser(details);
         Set<<% if (databaseType === 'couchbase') { %>String<% } else { %>Authority<% } %>> userAuthorities = extractAuthorities(authentication, details);
@@ -504,6 +505,7 @@ public class UserService {
 
         UsernamePasswordAuthenticationToken token = getToken(details, user, grantedAuthorities);
         authentication = new OAuth2Authentication(authentication.getOAuth2Request(), token);
+        authentication.setDetails(oauth2AuthenticationDetails); // must be present in a gateway for TokenRelayFilter to work
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return new UserDTO(syncUserWithIdP(details, user));
