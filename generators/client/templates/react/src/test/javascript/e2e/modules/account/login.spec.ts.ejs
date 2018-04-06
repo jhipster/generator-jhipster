@@ -13,21 +13,20 @@ describe('Account sign in', () => {
 
   it('should fail to login with bad password', async () => {
     // Login page should appear
-    expect(await signInPage.getTitle()).to.equal(pageTitle);
+    expect(await signInPage.getTitle()).to.eq(pageTitle);
     signInPage.autoSignInUsing('admin', 'foo');
     // Login page should stay open when login fails
-    expect(await signInPage.getTitle()).to.equal(pageTitle);
+    expect(await signInPage.getTitle()).to.eq(pageTitle);
   });
+
   it('should login with admin account', async () => {
     // Login page should appear
-    expect(await signInPage.getTitle()).to.equal(pageTitle);
+    expect(await signInPage.getTitle()).to.eq(pageTitle);
     signInPage.autoSignInUsing('admin', 'admin');
     signInPage.waitUntilHidden();
     // Login page should close when login success
-    expect(await signInPage.isHidden()()).to.equal(true);
+    expect(await signInPage.isHidden()()).to.eq(true);
   });
 
-  after(() => {
-    signInPage.autoSignOut();
-  });
+  after(() => signInPage.autoSignOut());
 });

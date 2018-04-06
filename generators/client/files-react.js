@@ -417,11 +417,15 @@ const files = {
             templates: [
                 'e2e/modules/account/login.spec.ts',
                 'e2e/modules/account/password.spec.ts',
+                'e2e/modules/account/settings.spec.ts',
+                'e2e/modules/account/register.spec.ts',
                 'e2e/util/utils.ts',
                 'e2e/page-objects/base-component.ts',
                 'e2e/page-objects/navbar-page.ts',
                 'e2e/page-objects/signin-page.ts',
                 'e2e/page-objects/password-page.ts',
+                'e2e/page-objects/settings-page.ts',
+                'e2e/page-objects/register-page.ts',
                 'protractor.conf.js'
             ]
         }

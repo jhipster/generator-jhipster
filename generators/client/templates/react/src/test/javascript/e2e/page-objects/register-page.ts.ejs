@@ -1,0 +1,65 @@
+import { ElementFinder, browser, $ } from 'protractor';
+
+import BasePage from './base-component';
+
+export default class RegisterPage extends BasePage {
+  selector: ElementFinder = $('#register-form');
+  username: ElementFinder = this.selector.$('#username');
+  email: ElementFinder = this.selector.$('#email');
+  firstPassword: ElementFinder = this.selector.$('#firstPassword');
+  secondPassword: ElementFinder = this.selector.$('#secondPassword');
+  saveButton: ElementFinder = this.selector.$('button[type=submit]');
+
+  get() {
+    browser.get('#/register');
+    this.waitUntilDisplayed();
+  }
+
+  setUserName(username) {
+    this.username.sendKeys(username);
+  }
+
+  clearUserName() {
+    this.username.clear();
+  }
+
+  setEmail(email) {
+    this.email.sendKeys(email);
+  }
+
+  clearEmail() {
+    this.email.clear();
+  }
+
+  setFirstPassword(password) {
+    this.firstPassword.sendKeys(password);
+  }
+
+  clearFirstPassword() {
+    this.firstPassword.clear();
+  }
+
+  setSecondPassword(password) {
+    this.secondPassword.sendKeys(password);
+  }
+
+  clearSecondPassword() {
+    this.secondPassword.clear();
+  }
+
+  autoSignUpUsing(username: string, email: string, password: string) {
+    this.clearUserName();
+    this.setUserName(username);
+    this.clearEmail();
+    this.setEmail(email);
+    this.clearFirstPassword();
+    this.setFirstPassword(password);
+    this.clearSecondPassword();
+    this.setSecondPassword(password);
+    return this.save();
+  }
+
+  save() {
+    return this.saveButton.click();
+  }
+}

@@ -1,0 +1,54 @@
+import SignInPage from '../../page-objects/signin-page';
+import NavBarPage from '../../page-objects/navbar-page';
+
+import { SettingsPage } from '../../page-objects/settings-page';
+import { protractor, browser } from 'protractor';
+
+const expect = chai.expect;
+
+describe('Settings change', () => {
+  let signInPage: SignInPage;
+  let navBarPage: NavBarPage;
+  let settingsPage: SettingsPage;
+  const until = protractor.ExpectedConditions;
+
+  before(() => {
+    navBarPage = new NavBarPage();
+    settingsPage = new SettingsPage();
+    signInPage = new SignInPage();
+
+    browser.refresh();
+    signInPage.get();
+  });
+
+  it('should be able to change settings', async () => {
+    signInPage.autoSignInUsing('user', 'user');
+    signInPage.waitUntilHidden();
+
+    navBarPage.clickOnAccountMenuItem('settings');
+    settingsPage.clearEmail();
+    settingsPage.setEmail('admin@localhost.fr');
+    settingsPage.save();
+
+    const errorMessage = 'settings.messages.success';
+    browser.wait(until.elementToBeClickable(settingsPage.getToast()), 5000);
+    expect(await settingsPage.getToast().getText()).to.eq('Settings saved!');
+
+    navBarPage.autoSignOut();
+  });
+
+  it('should not be able to change settings if email already exists', async () => {
+    navBarPage.autoSignIn();
+
+    navBarPage.clickOnAccountMenuItem('settings');
+    settingsPage.clearEmail();
+    settingsPage.setEmail('admin@localhost.fr');
+    settingsPage.save();
+
+    const errorMessage = 'settings.messages.error.emailexists';
+    browser.wait(until.elementToBeClickable(settingsPage.getToast()), 5000);
+    expect(await settingsPage.getToast().getText()).to.eq('Email is already in use!');
+  });
+
+  after(() => signInPage.autoSignOut());
+});

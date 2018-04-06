@@ -214,7 +214,7 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
             <span className="navbar-version">{appConfig.VERSION}</span>
           </NavbarBrand>
           <Collapse isOpen={this.state.menuOpen} navbar>
-            <Nav className="ml-auto" navbar>
+            <Nav id="header-tabs" className="ml-auto" navbar>
               <NavItem>
                 <NavLink tag={Link} to="/" className="d-flex align-items-center">
                   <FaHome />

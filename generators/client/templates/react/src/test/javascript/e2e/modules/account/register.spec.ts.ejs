@@ -1,0 +1,39 @@
+import NavBarPage from '../../page-objects/navbar-page';
+
+import RegisterPage from '../../page-objects/register-page';
+import { protractor, $, browser } from 'protractor';
+
+const expect = chai.expect;
+
+describe('Password change', () => {
+  let registerPage: RegisterPage;
+  let navBarPage: NavBarPage;
+  const until = protractor.ExpectedConditions;
+
+  before(() => {
+    navBarPage = new NavBarPage();
+    registerPage = new RegisterPage();
+  });
+
+  it('should be able to sign up', async () => {
+    navBarPage.clickOnAccountMenu();
+    navBarPage.clickOnTabMenu('register');
+
+    registerPage.autoSignUpUsing("ptdrrdr", "xddrrd@xdd.xdd", "lolee");
+
+    const successMessage = "register.messages.success";
+    browser.wait(until.elementToBeClickable($('.alert-success')), 5000);
+    expect(await $('.alert-success').getText()).to.eq('Registration saved! Please check your email for confirmation.');
+  });
+
+  it('should not be able to sign up if login already taken', async () => {
+    navBarPage.clickOnAccountMenu();
+    navBarPage.clickOnTabMenu('register');
+
+    registerPage.autoSignUpUsing("ptdr", "xdd@xdd.xdd", "lolee");
+
+    const errorMessage = "register.messages.success";
+    browser.wait(until.elementToBeClickable($('.alert-warning')), 5000);
+    expect(await $('.alert-warning').getText()).to.eq('If you want to sign in, you can try the default accounts:\n- Administrator (login="admin" and password="admin")\n- User (login="user" and password="user").');
+  });
+});

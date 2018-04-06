@@ -21,9 +21,13 @@ export default class NavBarPage extends BasePage {
 
   clickOnTabMenu(item: string) {
     return this.selector
-      .$('.header-tabs')
-      .$(`.nav-link[href="#/${item}"]`)
+      .$('#header-tabs')
+      .$(`.dropdown-item[href="#/${item}"]`)
       .click();
+  }
+
+  clickOnAccountMenu() {
+    return this.accountMenu.click();
   }
 
   clickOnAdminMenu() {

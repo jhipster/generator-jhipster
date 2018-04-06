@@ -50,7 +50,7 @@ export default class BasePage {
     waitUntilHidden(this.selector, this.constructor.name);
   }
 
-  getAlertMessage() {
+  getToast() {
     return $('div[role="alert"]');
   }
 }

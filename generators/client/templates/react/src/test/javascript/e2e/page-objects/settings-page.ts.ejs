@@ -1,0 +1,57 @@
+import BasePage from './base-component';
+
+import { $, browser, ElementFinder } from 'protractor';
+
+export class SettingsPage extends BasePage {
+  selector: ElementFinder = $('#settings-form');
+  firstName: ElementFinder = this.selector.$('#firstName');
+  lastName: ElementFinder = this.selector.$('#lastName');
+  email: ElementFinder = this.selector.$('#email');
+  saveButton: ElementFinder = this.selector.$('button[type=submit]');
+  title: ElementFinder = this.selector.$('#title');
+
+  get() {
+    browser.get('#/account/settings');
+    this.waitUntilDisplayed();
+  }
+
+  setFirstName(firstName) {
+    this.firstName.sendKeys(firstName);
+  }
+
+  getFirstName() {
+    return this.firstName.getAttribute('value');
+  }
+
+  clearFirstName() {
+    this.firstName.clear();
+  }
+
+  setLastName(lastName) {
+    this.lastName.sendKeys(lastName);
+  }
+
+  getLastName() {
+    return this.lastName.getAttribute('value');
+  }
+
+  clearLastName() {
+    this.lastName.clear();
+  }
+
+  setEmail(email) {
+    this.email.sendKeys(email);
+  }
+
+  getEmail() {
+    return this.email.getAttribute('value');
+  }
+
+  clearEmail() {
+    this.email.clear();
+  }
+
+  save() {
+    return this.saveButton.click();
+  }
+}

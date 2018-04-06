@@ -101,7 +101,7 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
               <Translate contentKey="settings.title" interpolate={{ username: account.login }}>User settings for {account.login}</Translate>
             </h2>
             { updateSuccess ? successAlert : null }
-            <AvForm onValidSubmit={this.handleValidSubmit}>
+            <AvForm id="settings-form" onValidSubmit={this.handleValidSubmit}>
               {/* First name */}
               <AvField
                 className="form-control"
