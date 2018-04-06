@@ -93,7 +93,7 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     Optional<User> findOneByActivationKey(String activationKey);
     <%_ } _%>
 
-    List<User> findAllByActivatedIsFalseAndCreatedDateBefore(Instant dateTime);
+    List<User> findAllByActivatedIsFalseAndLastModifiedDateBefore(Instant dateTime);
     <%_ if (authenticationType !== 'oauth2') { _%>
 
     Optional<User> findOneByResetKey(String resetKey);

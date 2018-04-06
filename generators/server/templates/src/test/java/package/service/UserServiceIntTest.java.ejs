@@ -255,12 +255,12 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         Instant now = Instant.now();
         user.setActivated(false);
         User dbUser = userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
-        dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
+        dbUser.setLastModifiedDate(now.minus(4, ChronoUnit.DAYS));
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
-        List<User> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS));
+        List<User> users = userRepository.findAllByActivatedIsFalseAndLastModifiedDateBefore(now.minus(3, ChronoUnit.DAYS));
         assertThat(users).isNotEmpty();
         userService.removeNotActivatedUsers();
-        users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS));
+        users = userRepository.findAllByActivatedIsFalseAndLastModifiedDateBefore(now.minus(3, ChronoUnit.DAYS));
         assertThat(users).isEmpty();
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
@@ -313,7 +313,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         user.setActivated(false);
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
         // Let the audit first set the creation date but then update it
-        user.setCreatedDate(Instant.now().minus(30, ChronoUnit.DAYS));
+        user.setLastModifiedDate(Instant.now().minus(30, ChronoUnit.DAYS));
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
 
         assertThat(userRepository.findOneByLogin("johndoe")).isPresent();
