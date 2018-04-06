@@ -318,7 +318,6 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"
     compile "org.zalando:problem-spring-web"
     <%_ if (databaseType === 'cassandra') { _%>
-    compile "com.google.guava:guava:18.0"
     compile "com.datastax.cassandra:cassandra-driver-core"
     compile "com.datastax.cassandra:cassandra-driver-extras"
     compile "com.datastax.cassandra:cassandra-driver-mapping"
@@ -362,6 +361,9 @@ dependencies {
     compile "org.springframework.security:spring-security-jwt"
         <%_ } _%>
     <%_ } _%>
+    <%_ if (authenticationType === 'session') { _%>
+    compile "com.google.guava:guava"
+    <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>
     compile "io.jsonwebtoken:jjwt"
     <%_ } _%>
@@ -371,7 +373,6 @@ dependencies {
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
     compile "com.github.mongobee:mongobee"
-    compile "com.google.guava:guava"
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
         compile "com.github.differentway:couchmove"
