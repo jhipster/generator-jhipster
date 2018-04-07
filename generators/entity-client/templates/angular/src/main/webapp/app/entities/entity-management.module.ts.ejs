@@ -33,10 +33,7 @@ import {
     <%= entityAngularName %>DeleteDialogComponent,
     <%= entityInstance %>Route,
     <%= entityInstance %>PopupRoute,
-    <%= entityAngularName %>Resolve,
-    <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
-    <%= entityAngularName %>ResolvePagingParams,
-    <%_ } _%>
+    <%= entityAngularName %>Resolve
 } from './';
 
 const ENTITY_STATES = [
@@ -68,10 +65,7 @@ const ENTITY_STATES = [
     ],
     providers: [
         <%= entityAngularName %>Service,
-        <%= entityAngularName %>Resolve,
-        <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
-        <%= entityAngularName %>ResolvePagingParams,
-        <%_ } _%>
+        <%= entityAngularName %>Resolve
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
