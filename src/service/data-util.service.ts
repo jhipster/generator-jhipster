@@ -49,6 +49,7 @@ export class JhiDataUtils {
      */
     openFile(contentType: string, data: string) {
         if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            // To support IE and Edge
             const byteCharacters = atob(data);
             const byteNumbers = new Array(byteCharacters.length);
             for (let i = 0; i < byteCharacters.length; i++) {
@@ -60,6 +61,7 @@ export class JhiDataUtils {
             });
             window.navigator.msSaveOrOpenBlob(blob);
         } else {
+            // Other browsers
             const fileURL = `data:${contentType};base64,${data}`;
             const win = window.open();
             win.document.write(
