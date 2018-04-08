@@ -79,7 +79,16 @@ module.exports = class extends BaseGenerator {
 
         this.setupServerOptions(this);
         const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
-        useBlueprint = this.composeBlueprint(blueprint, 'server'); // use global variable since getters dont have access to instance property
+        // use global variable since getters dont have access to instance property
+        useBlueprint = this.composeBlueprint(
+            blueprint,
+            'server',
+            {
+                'client-hook': !this.skipClient,
+                configOptions: this.configOptions,
+                force: this.options.force
+            }
+        );
     }
 
     get initializing() {
@@ -349,7 +358,6 @@ module.exports = class extends BaseGenerator {
                 this.pkType = this.getPkType(this.databaseType);
 
                 this.packageFolder = this.packageName.replace(/\./g, '/');
-                this.testDir = `${constants.SERVER_TEST_SRC_DIR + this.packageFolder}/`;
                 if (!this.nativeLanguage) {
                     // set to english when translation is set to false
                     this.nativeLanguage = 'en';
