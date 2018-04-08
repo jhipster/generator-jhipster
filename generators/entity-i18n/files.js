@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,7 +32,7 @@ function writeFiles() {
         writeEnumFiles() {
             this.fields.forEach((field) => {
                 if (field.fieldIsEnum === true) {
-                    const enumInfo = utils.buildEnumInfo(field, this.angularAppName, this.packageName);
+                    const enumInfo = utils.buildEnumInfo(field, this.angularAppName, this.packageName, this.clientRootFolder);
 
                     // Copy for each
                     if (!this.skipClient && this.enableTranslation) {

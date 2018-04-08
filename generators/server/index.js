@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,7 +37,7 @@ module.exports = class extends BaseGenerator {
 
         // This adds support for a `--[no-]client-hook` flag
         this.option('client-hook', {
-            desc: 'Enable gulp and bower hook from maven/gradle build',
+            desc: 'Enable Webpack hook from maven/gradle build',
             type: Boolean,
             defaults: false
         });
@@ -79,7 +79,16 @@ module.exports = class extends BaseGenerator {
 
         this.setupServerOptions(this);
         const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
-        useBlueprint = this.composeBlueprint(blueprint, 'server'); // use global variable since getters dont have access to instance property
+        // use global variable since getters dont have access to instance property
+        useBlueprint = this.composeBlueprint(
+            blueprint,
+            'server',
+            {
+                'client-hook': !this.skipClient,
+                configOptions: this.configOptions,
+                force: this.options.force
+            }
+        );
     }
 
     get initializing() {
@@ -139,6 +148,10 @@ module.exports = class extends BaseGenerator {
                     this.applicationType = 'monolith';
                 }
 
+                this.reactive = this.config.get('reactive');
+                if (this.reactive === undefined) {
+                    this.reactive = false;
+                }
                 this.packageName = this.config.get('packageName');
                 this.serverPort = this.config.get('serverPort');
                 if (this.serverPort === undefined) {
@@ -196,7 +209,6 @@ module.exports = class extends BaseGenerator {
                 }
 
                 this.buildTool = this.config.get('buildTool');
-                this.enableSocialSignIn = this.config.get('enableSocialSignIn');
                 this.jhipsterVersion = packagejs.version;
                 if (this.jhipsterVersion === undefined) {
                     this.jhipsterVersion = this.config.get('jhipsterVersion');
@@ -248,11 +260,6 @@ module.exports = class extends BaseGenerator {
                         this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
                     }
 
-                    // If social sign in is not defined, it is disabled by default
-                    if (this.enableSocialSignIn === undefined) {
-                        this.enableSocialSignIn = false;
-                    }
-
                     // If translation is not defined, it is enabled by default
                     if (this.enableTranslation === undefined) {
                         this.enableTranslation = true;
@@ -286,6 +293,7 @@ module.exports = class extends BaseGenerator {
             askFori18n: prompts.askFori18n,
 
             setSharedConfigOptions() {
+                this.configOptions.reactive = this.reactive;
                 this.configOptions.packageName = this.packageName;
                 this.configOptions.cacheProvider = this.cacheProvider;
                 this.configOptions.enableHibernateCache = this.enableHibernateCache;
@@ -297,7 +305,6 @@ module.exports = class extends BaseGenerator {
                 this.configOptions.messageBroker = this.messageBroker;
                 this.configOptions.serviceDiscoveryType = this.serviceDiscoveryType;
                 this.configOptions.buildTool = this.buildTool;
-                this.configOptions.enableSocialSignIn = this.enableSocialSignIn;
                 this.configOptions.enableSwaggerCodegen = this.enableSwaggerCodegen;
                 this.configOptions.authenticationType = this.authenticationType;
                 this.configOptions.uaaBaseName = this.uaaBaseName;
@@ -323,6 +330,7 @@ module.exports = class extends BaseGenerator {
             insight() {
                 const insight = this.insight();
                 insight.trackWithEvent('generator', 'server');
+                insight.track('app/reactive', this.reactive);
                 insight.track('app/authenticationType', this.authenticationType);
                 insight.track('app/cacheProvider', this.cacheProvider);
                 insight.track('app/enableHibernateCache', this.enableHibernateCache);
@@ -334,7 +342,6 @@ module.exports = class extends BaseGenerator {
                 insight.track('app/messageBroker', this.messageBroker);
                 insight.track('app/serviceDiscoveryType', this.serviceDiscoveryType);
                 insight.track('app/buildTool', this.buildTool);
-                insight.track('app/enableSocialSignIn', this.enableSocialSignIn);
                 insight.track('app/enableSwaggerCodegen', this.enableSwaggerCodegen);
             },
 
@@ -346,11 +353,11 @@ module.exports = class extends BaseGenerator {
                 this.lowercaseBaseName = this.baseName.toLowerCase();
                 this.humanizedBaseName = _.startCase(this.baseName);
                 this.mainClass = this.getMainClassName();
+                this.cacheManagerIsAvailable = ['ehcache', 'hazelcast', 'infinispan'].includes(this.cacheProvider) || this.applicationType === 'gateway';
 
                 this.pkType = this.getPkType(this.databaseType);
 
                 this.packageFolder = this.packageName.replace(/\./g, '/');
-                this.testDir = `${constants.SERVER_TEST_SRC_DIR + this.packageFolder}/`;
                 if (!this.nativeLanguage) {
                     // set to english when translation is set to false
                     this.nativeLanguage = 'en';
@@ -360,6 +367,7 @@ module.exports = class extends BaseGenerator {
             saveConfig() {
                 this.config.set('jhipsterVersion', packagejs.version);
                 this.config.set('baseName', this.baseName);
+                this.config.set('reactive', this.reactive);
                 this.config.set('packageName', this.packageName);
                 this.config.set('packageFolder', this.packageFolder);
                 this.config.set('serverPort', this.serverPort);
@@ -375,7 +383,6 @@ module.exports = class extends BaseGenerator {
                 this.config.set('messageBroker', this.messageBroker);
                 this.config.set('serviceDiscoveryType', this.serviceDiscoveryType);
                 this.config.set('buildTool', this.buildTool);
-                this.config.set('enableSocialSignIn', this.enableSocialSignIn);
                 this.config.set('enableSwaggerCodegen', this.enableSwaggerCodegen);
                 this.config.set('jwtSecretKey', this.jwtSecretKey);
                 this.config.set('rememberMeKey', this.rememberMeKey);

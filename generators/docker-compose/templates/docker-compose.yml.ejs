@@ -1,0 +1,123 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
+services:
+<%_ for(let i = 0; i < appConfigs.length; i++) { _%>
+<%- appsYaml[i] %>
+<%_ } _%>
+<%_ if (useKafka) { _%>
+    zookeeper:
+        extends:
+            file: kafka.yml
+            service: zookeeper
+    kafka:
+        extends:
+            file: kafka.yml
+            service: kafka
+<%_ } _%>
+<%_ if (serviceDiscoveryType === 'eureka') { _%>
+    jhipster-registry:
+        extends:
+            file: jhipster-registry.yml
+            service: jhipster-registry
+<%_ } _%>
+<%_ if (serviceDiscoveryType === 'consul') { _%>
+    consul:
+        extends:
+            file: consul.yml
+            service: consul
+    consul-config-loader:
+        extends:
+            file: consul.yml
+            service: consul-config-loader
+<%_ } _%>
+<%_ if (gatewayType === 'traefik') { _%>
+    traefik:
+        extends:
+            file: traefik.yml
+            service: traefik
+<%_ } _%>
+<%_ if (monitoring === 'elk') { _%>
+
+    jhipster-elasticsearch:
+        extends:
+            file: jhipster-console.yml
+            service: jhipster-elasticsearch
+    jhipster-logstash:
+        extends:
+            file: jhipster-console.yml
+            service: jhipster-logstash
+        depends_on:
+            - jhipster-elasticsearch
+    jhipster-console:
+        extends:
+            file: jhipster-console.yml
+            service: jhipster-console
+        depends_on:
+            - jhipster-elasticsearch
+    jhipster-import-dashboards:
+        extends:
+            file: jhipster-console.yml
+            service: jhipster-import-dashboards
+        depends_on:
+            - jhipster-elasticsearch
+    <%_ if (consoleOptions.includes('curator')) { _%>
+    jhipster-curator:
+        extends:
+            file: jhipster-console.yml
+            service: jhipster-curator
+        depends_on:
+            - jhipster-elasticsearch
+    <%_ } _%>
+    <%_ if (consoleOptions.includes('zipkin')) { _%>
+    jhipster-zipkin:
+        extends:
+            file: jhipster-console.yml
+            service: jhipster-zipkin
+        depends_on:
+            - jhipster-elasticsearch
+    <%_ } _%>
+<%_ } _%>
+<%_ if (authenticationType === 'oauth2') { _%>
+    keycloak:
+        extends:
+            file: keycloak.yml
+            service: keycloak
+<%_ } _%>
+<%_ if (monitoring === 'prometheus') { _%>
+
+    prometheus:
+        extends:
+            file: prometheus.yml
+            service: prometheus
+
+    alertmanager:
+        extends:
+            file: prometheus.yml
+            service: alertmanager
+
+    grafana:
+        extends:
+            file: prometheus.yml
+            service: grafana
+
+volumes:
+    prometheus_data: {}
+    grafana_data: {}
+<%_ } _%>

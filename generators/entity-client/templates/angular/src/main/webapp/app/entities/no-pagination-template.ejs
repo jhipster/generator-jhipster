@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2018 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see http://www.jhipster.tech/
+ This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,15 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-const i18nToLoad = [entityInstance];
-for (const idx in fields) {
-    if (fields[idx].fieldIsEnum === true) {
-        i18nToLoad.push(fields[idx].enumInstance);
-    }
-}
-_%>
-<%= entityInstancePlural %>: <%= entityAngularName %>[];
+    <%= entityInstancePlural %>: I<%= entityAngularName %>[];
     currentAccount: any;
     eventSubscriber: Subscription;
     <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -55,14 +47,14 @@ _%>
             this.<%= entityInstance %>Service.search({
                 query: this.currentSearch,
                 }).subscribe(
-                    (res: HttpResponse<<%= entityAngularName %>[]>) => this.<%= entityInstancePlural %> = res.body,
+                    (res: HttpResponse<I<%= entityAngularName %>[]>) => this.<%= entityInstancePlural %> = res.body,
                     (res: HttpErrorResponse) => this.onError(res.message)
                 );
             return;
        }
        <%_ } _%>
         this.<%= entityInstance %>Service.query().subscribe(
-            (res: HttpResponse<<%= entityAngularName %>[]>) => {
+            (res: HttpResponse<I<%= entityAngularName %>[]>) => {
                 this.<%= entityInstancePlural %> = res.body;
                 <%_ if (searchEngine === 'elasticsearch') { _%>
                 this.currentSearch = '';

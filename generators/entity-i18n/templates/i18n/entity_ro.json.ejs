@@ -1,0 +1,57 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%><%
+let helpBlocks = 0; %>
+{
+    "<%= angularAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "home": {
+                "title": "<%= entityClassPluralHumanized  %>",
+                "createLabel": "Creeare o nouă entitate <%= entityClassHumanized %>",
+                "createOrEditLabel": "Creeare sau editare <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
+                "search": "Căutare după <%= entityClassHumanized %>"<% } %>
+            },<% if (!microserviceAppName) { %>
+            "created": "A fost creată o nouă entitate <%= entityClassHumanized %> cu identificatorul {{ param }}",
+            "updated": "<%= entityClassHumanized %> cu identificatorul {{ param }} a fost actualizată",
+            "deleted": "<%= entityClassHumanized %> cu identificatorul {{ param }} a fost ștearsă",<% } %>
+            "delete": {
+                "question": "Sunteți sigur că doriți să ștergeți <%= entityClassHumanized %> {{ id }}?"
+            },
+            "detail": {
+                "title": "<%= entityClassHumanized %>"
+            }<% for (idx in fields) {
+            if (typeof fields[idx].javadoc !== 'undefined') ++helpBlocks; %>,
+            "<%=fields[idx].fieldName%>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0){%>,
+            "help": {<% for (idx in fields) {
+                if (fields[idx].javadoc) {
+                    --helpBlocks; %>
+                "<%=fields[idx].fieldName%>": "<%= fields[idx].javadoc %>"<% if (helpBlocks > 0) { %>,<%}
+                }
+            } %>
+            }<% } %>
+        }
+    }<% if (microserviceAppName) { %>,
+    "<%= microserviceAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "created": "A fost creată o nouă entitate <%= entityClassHumanized %> cu identificatorul {{ param }}",
+            "updated": "Entitatea <%= entityClassHumanized %> cu identificatorul {{ param }} a fost actualizată",
+            "deleted": "Entitatea <%= entityClassHumanized %> cu identificatorul {{ param }} a fost ștearsă"
+        }
+    }<% } %>
+}

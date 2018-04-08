@@ -1,0 +1,266 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+# ===================================================================
+# Spring Boot configuration.
+#
+# This configuration will be overridden by the Spring profile you use,
+# for example application-dev.yml if you use the "dev" profile.
+#
+# More information on profiles: https://www.jhipster.tech/profiles/
+# More information on configuration properties: https://www.jhipster.tech/common-application-properties/
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+<%_ if (serviceDiscoveryType === 'eureka') { _%>
+eureka:
+    client:
+        enabled: true
+        healthcheck:
+            enabled: true
+        fetch-registry: true
+        register-with-eureka: true
+        instance-info-replication-interval-seconds: 10
+        registry-fetch-interval-seconds: 10
+    instance:
+        appname: <%= baseName %>
+        instanceId: <%= baseName %>:${spring.application.instance-id:${random.value}}
+        lease-renewal-interval-in-seconds: 5
+        lease-expiration-duration-in-seconds: 10
+        status-page-url-path: ${management.endpoints.web.base-path}/info
+        health-check-url-path: ${management.endpoints.web.base-path}/health
+        metadata-map:
+            zone: primary # This is needed for the load balancer
+            profile: ${spring.profiles.active}
+            version: ${info.project.version}
+ribbon:
+    eureka:
+        enabled: true
+<%_ } _%>
+<%_ if (applicationType === 'gateway') { _%>
+# See http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html
+zuul: # those values must be configured depending on the application specific needs
+    host:
+        max-total-connections: 1000
+        max-per-route-connections: 100
+    semaphore:
+        max-semaphores: 500
+    <%_ if (serviceDiscoveryType === 'consul') { _%>
+    ignoredServices: 'consul,<%= baseName %>' # Prevent Consul and the "<%= baseName %>" app itself from having a Zuul route automatically created for them
+    <%_ } _%>
+
+# See https://github.com/Netflix/Hystrix/wiki/Configuration
+hystrix:
+    command:
+        default:
+            execution:
+                isolation:
+                    thread:
+                        timeoutInMilliseconds: 10000
+
+<%_ } _%>
+<%_ if (applicationType === 'microservice') { _%>
+# See https://github.com/Netflix/Hystrix/wiki/Configuration
+#hystrix:
+#    command:
+#        default:
+#            execution:
+#                isolation:
+#                    thread:
+#                        timeoutInMilliseconds: 10000
+# See https://github.com/spring-cloud/spring-cloud-netflix/issues/1330
+feign:
+    hystrix:
+        enabled: true
+
+hystrix:
+    share-security-context: true
+
+<%_ } _%>
+management:
+    endpoints:
+        web:
+            base-path: /management
+            exposure:
+                include: ["configprops", "env", "health", "info", "threaddump"]
+    endpoint:
+        health:
+            show-details: when_authorized
+    info:
+        git:
+            mode: full
+    health:
+        mail:
+            enabled: false # When using the MailService, configure an SMTP server and set this to true
+    metrics:
+        enabled: false # http://micrometer.io/ is disabled by default, as we use http://metrics.dropwizard.io/ instead
+
+spring:
+    application:
+        name: <%= baseName %>
+    <%_ if (serviceDiscoveryType === 'consul') { _%>
+    cloud:
+        consul:
+            discovery:
+                healthCheckPath: /management/health
+                instanceId: ${spring.application.name}:${spring.application.instance-id:${random.value}}
+    <%_ } _%>
+    <%_ if (!serviceDiscoveryType) { _%>
+    profiles:
+        # The commented value for `active` can be replaced with valid Spring profiles to load.
+        # Otherwise, it will be filled in by <%= buildTool %> when building the WAR file
+        # Either way, it can be overridden by `--spring.profiles.active` value passed in the commandline or `-Dspring.profiles.active` set in `JAVA_OPTS`
+        active: #spring.profiles.active#
+    <%_ } _%>
+    <%_ if (databaseType === 'sql') { _%>
+    jpa:
+        open-in-view: false
+        hibernate:
+            ddl-auto: none
+            naming:
+                physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+                implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+    <%_ } _%>
+    messages:
+        basename: i18n/messages
+    mvc:
+        favicon:
+            enabled: false
+    thymeleaf:
+        mode: HTML
+<%_ if (authenticationType === 'oauth2') { _%>
+
+# ===================================================================
+# OpenID Connect Settings. Default settings are for Keycloak in Docker.
+# Start Keycloak using `docker-compose -f src/main/docker/keycloak.yml up`.
+#
+# To use Okta, your settings should resemble the following:
+#
+# accessTokenUri: https://{yourOktaDomain}.com/oauth2/default/v1/token
+# userAuthorizationUri: https://{yourOktaDomain}.com/oauth2/default/v1/authorize
+# clientId: {copy after creating an OIDC app}
+# clientSecret: {copy after creating an OIDC app}
+# userInfoUri: https://{yourOktaDomain}.com/oauth2/default/v1/userinfo
+# tokenInfoUri: https://{yourOktaDomain}.com/oauth2/default/v1/introspect
+#
+# You can also override these properties using environment variables.
+# For example:
+#
+# export SECURITY_OAUTH2_CLIENT_CLIENT_ID="jhipster"
+# export SECURITY_OAUTH2_CLIENT_CLIENT_SECRET="38561a05"
+# ===================================================================
+<%_ } _%>
+<%_ if (authenticationType === 'uaa' || authenticationType === 'oauth2') { _%>
+security:
+<%_ } _%>
+    <%_ if (authenticationType === 'uaa') { _%>
+    oauth2:
+        resource:
+            filter-order: 3
+    <%_ } _%>
+    <%_ if (authenticationType === 'oauth2') {  _%>
+    oauth2:
+        client:
+            access-token-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token
+            user-authorization-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/auth
+            <%_ if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
+            client-id: web_app
+            client-secret: web_app
+            client-authentication-scheme: form
+            scope: openid profile email
+            <%_ } _%>
+            <%_ if (applicationType === 'microservice') { _%>
+            client-id: internal
+            client-secret: internal
+            authentication-scheme: header
+            client-authentication-scheme: header
+            <%_ } _%>
+        resource:
+            user-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
+            token-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token/introspect
+            prefer-token-info: false
+            <%_ if (applicationType === 'gateway' || applicationType === 'microservice') {  _%>
+            jwk:
+                key-set-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/certs
+            <%_ } _%>
+    <%_ } _%>
+
+server:
+    servlet:
+        session:
+            cookie:
+                http-only: true
+
+info:
+    project:
+        version: #project.version#
+
+# ===================================================================
+# JHipster specific properties
+#
+# Full reference is available at: https://www.jhipster.tech/common-application-properties/
+# ===================================================================
+
+jhipster:
+    async:
+        core-pool-size: 2
+        max-pool-size: 50
+        queue-capacity: 10000
+    # By default CORS is disabled. Uncomment to enable.
+    #cors:
+        #allowed-origins: "*"
+        #allowed-methods: "*"
+        #allowed-headers: "*"
+        <%_ if (authenticationType === 'session') { _%>
+        #exposed-headers: "Link,X-Total-Count"
+        <%_ } else { _%>
+        #exposed-headers: "Authorization,Link,X-Total-Count"
+        <%_ } _%>
+        #allow-credentials: true
+        #max-age: 1800
+    mail:
+        from: <%= baseName %>@localhost
+    swagger:
+        default-include-pattern: /api/.*
+        title: <%=baseName%> API
+        description: <%=baseName%> API documentation
+        version: 0.0.1
+        terms-of-service-url:
+        contact-name:
+        contact-url:
+        contact-email:
+        license:
+        license-url:
+    ribbon:
+        display-on-active-profiles: dev
+
+# ===================================================================
+# Application specific properties
+# Add your own application properties here, see the ApplicationProperties class
+# to have type-safe configuration, like in the JHipsterProperties above
+#
+# More documentation is available at:
+# https://www.jhipster.tech/common-application-properties/
+# ===================================================================
+
+# application:

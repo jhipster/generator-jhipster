@@ -55,10 +55,18 @@ describe('Generator Base', () => {
                         angularJSSuffix: 'mySuffix'
                     }
                 };
-                jhiCore.exportToJSON(entities, true);
+                jhiCore.exportEntities({
+                    entities,
+                    forceNoFiltering: true,
+                    application: {}
+                });
                 BaseGenerator.getExistingEntities();
                 entities.Region.fields.push({ fieldName: 'regionDesc', fieldType: 'String' });
-                jhiCore.exportToJSON(entities, true);
+                jhiCore.exportEntities({
+                    entities,
+                    forceNoFiltering: true,
+                    application: {}
+                });
             });
             it('returns an up-to-date state', () => {
                 expect(BaseGenerator.getExistingEntities()
@@ -167,7 +175,7 @@ describe('Generator Base', () => {
     describe('writeFilesToDisk', () => {
         describe('when called with default angular client options', () => {
             it('should produce correct files', () => {
-                const files = require('../generators/client/files-angularjs').files; // eslint-disable-line global-require
+                const files = require('../generators/client/files-angular').files; // eslint-disable-line global-require
                 const generator = {
                     useSass: false,
                     enableTranslation: true,
@@ -184,7 +192,7 @@ describe('Generator Base', () => {
         });
         describe('when called with default angular client options skipping user-management', () => {
             it('should produce correct files', () => {
-                const files = require('../generators/client/files-angularjs').files; // eslint-disable-line global-require
+                const files = require('../generators/client/files-angular').files; // eslint-disable-line global-require
                 const generator = {
                     useSass: false,
                     enableTranslation: true,

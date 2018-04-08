@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -83,10 +83,10 @@ function askForMicroserviceJson() {
             } else {
                 context.microservicePath = path.resolve(props.microservicePath);
             }
-            context.fromPath = `${context.microservicePath}/${context.jhipsterConfigDirectory}/${context.entityNameCapitalized}.json`;
             context.useConfigurationFile = true;
             context.useMicroserviceJson = true;
-            this.loadEntityJson();
+            const fromPath = `${context.microservicePath}/${context.jhipsterConfigDirectory}/${context.entityNameCapitalized}.json`;
+            this.loadEntityJson(fromPath);
         }
         done();
     });
@@ -250,7 +250,8 @@ function askForTableName() {
     // don't prompt if there are no relationships
     const entityTableName = context.entityTableName;
     const prodDatabaseType = context.prodDatabaseType;
-    if (!context.relationships || context.relationships.length === 0 ||
+    const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
+    if (skipCheckLengthOfIdentifier || !context.relationships || context.relationships.length === 0 ||
         !((prodDatabaseType === 'oracle' && entityTableName.length > 14) || entityTableName.length > 30)) {
         return;
     }
@@ -265,9 +266,9 @@ function askForTableName() {
                     return 'The table name cannot contain special characters';
                 } else if (input === '') {
                     return 'The table name cannot be empty';
-                } else if (prodDatabaseType === 'oracle' && input.length > 14) {
+                } else if (prodDatabaseType === 'oracle' && input.length > 14 && !skipCheckLengthOfIdentifier) {
                     return 'The table name is too long for Oracle, try a shorter name';
-                } else if (input.length > 30) {
+                } else if (input.length > 30 && !skipCheckLengthOfIdentifier) {
                     return 'The table name is too long, try a shorter name';
                 }
                 return true;
@@ -392,7 +393,7 @@ function askForPagination() {
         return;
     }
     const done = this.async();
-    let prompts = [
+    const prompts = [
         {
             type: 'list',
             name: 'pagination',
@@ -401,10 +402,6 @@ function askForPagination() {
                 {
                     value: 'no',
                     name: 'No'
-                },
-                {
-                    value: 'pager',
-                    name: 'Yes, with a simple pager'
                 },
                 {
                     value: 'pagination',
@@ -418,31 +415,6 @@ function askForPagination() {
             default: 0
         }
     ];
-    // Check the issue https://github.com/jhipster/generator-jhipster/issues/5007 for more details
-    if (context.clientFramework !== 'angular1') {
-        prompts = [
-            {
-                type: 'list',
-                name: 'pagination',
-                message: 'Do you want pagination on your entity?',
-                choices: [
-                    {
-                        value: 'no',
-                        name: 'No'
-                    },
-                    {
-                        value: 'pagination',
-                        name: 'Yes, with pagination links'
-                    },
-                    {
-                        value: 'infinite-scroll',
-                        name: 'Yes, with infinite scroll'
-                    }
-                ],
-                default: 0
-            }
-        ];
-    }
     this.prompt(prompts).then((props) => {
         context.pagination = props.pagination;
         this.log(chalk.green('\nEverything is configured, generating the entity...\n'));
@@ -460,6 +432,7 @@ function askForField(done) {
     const prodDatabaseType = context.prodDatabaseType;
     const databaseType = context.databaseType;
     const fieldNamesUnderscored = context.fieldNamesUnderscored;
+    const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
     const prompts = [
         {
             type: 'confirm',
@@ -482,7 +455,7 @@ function askForField(done) {
                     return 'Your field name cannot use an already existing field name';
                 } else if (!skipServer && jhiCore.isReservedFieldName(input)) {
                     return 'Your field name cannot contain a Java or Angular reserved keyword';
-                } else if (prodDatabaseType === 'oracle' && input.length > 30) {
+                } else if (prodDatabaseType === 'oracle' && input.length > 30 && !skipCheckLengthOfIdentifier) {
                     return 'The field name cannot be of more than 30 characters';
                 }
                 return true;
@@ -563,6 +536,9 @@ function askForField(done) {
                 } else if (jhiCore.isReservedKeyword(input, 'JAVA')) {
                     return 'Your enum name cannot contain a Java reserved keyword';
                 }
+                if (!/^[A-Za-z0-9_]*$/.test(input)) {
+                    return 'Your enum name cannot contain special characters (allowed characters: A-Z, a-z, 0-9 and _)';
+                }
                 if (context.enums.includes(input)) {
                     context.existingEnum = true;
                 } else {
@@ -584,7 +560,8 @@ function askForField(done) {
                 if (input === '') {
                     return 'You must specify values for your enumeration';
                 }
-                if (!/^[A-Za-z0-9_,\s]*$/.test(input)) {
+                // Commas allowed so that user can input a list of values split by commas.
+                if (!/^[A-Za-z0-9_,]+$/.test(input)) {
                     return 'Enum values cannot contain special characters (allowed characters: A-Z, a-z, 0-9 and _)';
                 }
                 const enums = input.replace(/\s/g, '').split(',');
@@ -604,9 +581,9 @@ function askForField(done) {
             },
             message: (answers) => {
                 if (!context.existingEnum) {
-                    return 'What are the values of your enumeration (separated by comma)?';
+                    return 'What are the values of your enumeration (separated by comma, no spaces)?';
                 }
-                return 'What are the new values of your enumeration (separated by comma)?\nThe new values will replace the old ones.\nNothing will be done if there are no new values.';
+                return 'What are the new values of your enumeration (separated by comma, no spaces)?\nThe new values will replace the old ones.\nNothing will be done if there are no new values.';
             }
         },
         {
@@ -705,7 +682,7 @@ function askForField(done) {
             default: 0
         },
         {
-            when: response => response.fieldAdd === true,
+            when: response => response.fieldAdd === true && response.fieldType !== 'byte[]' && response.fieldType !== 'ByteBuffer',
             type: 'confirm',
             name: 'fieldValidate',
             message: 'Do you want to add validation rules to your field?',
@@ -859,6 +836,7 @@ function askForField(done) {
         if (props.fieldAdd) {
             if (props.fieldIsEnum) {
                 props.fieldType = _.upperFirst(props.fieldType);
+                props.fieldValues = props.fieldValues.toUpperCase();
             }
 
             const field = {
@@ -995,7 +973,7 @@ function askForRelationship(done) {
                 (response.relationshipType === 'one-to-one' && response.ownerSide === true))),
             type: 'input',
             name: 'otherEntityField',
-            message: response => `When you display this relationship with Angular, which field from '${response.otherEntityName}' do you want to use? This field will be displayed as a String, so it cannot be a Blob`,
+            message: response => `When you display this relationship on client-side, which field from '${response.otherEntityName}' do you want to use? This field will be displayed as a String, so it cannot be a Blob`,
             default: 'id'
         },
         {

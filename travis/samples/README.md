@@ -18,7 +18,7 @@ To generate test applications, either automatically by Travis or locally on the 
 - app-ng2-couchbase
 - app-ng2-gateway-eureka
 - app-ng2-mongodb
-- app-ng2-social-websocket
+- app-ng2-websocket
 - app-hazelcast-cucumber
 - app-microservice-eureka
 - app-ng2-cache-nol2

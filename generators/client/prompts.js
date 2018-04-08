@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,21 +40,12 @@ function askForClient(meta) {
         {
             value: 'angularX',
             name: 'Angular 5'
+        },
+        {
+            value: 'react',
+            name: 'React'
         }
     ];
-
-    if (this.authenticationType !== 'oauth2') {
-        choices.push({
-            value: 'angular1',
-            name: 'AngularJS 1.x'
-        });
-        if (this.experimental) {
-            choices.push({
-                value: 'react',
-                name: '[EXPERIMENTAL] React'
-            });
-        }
-    }
 
     const PROMPT = {
         type: 'list',

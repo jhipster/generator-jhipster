@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,14 +36,17 @@ module.exports = class extends BaseGenerator {
     initializing() {
         this.log(`The spring-controller ${this.name} is being created.`);
         this.baseName = this.config.get('baseName');
+        this.reactive = this.config.get('reactive');
         this.packageName = this.config.get('packageName');
         this.packageFolder = this.config.get('packageFolder');
         this.databaseType = this.config.get('databaseType');
+        this.reactiveController = false;
         this.controllerActions = [];
     }
 
     get prompting() {
         return {
+            askForReactive: prompts.askForReactive,
             askForControllerActions: prompts.askForControllerActions
         };
     }
@@ -53,6 +56,9 @@ module.exports = class extends BaseGenerator {
             insight() {
                 const insight = this.insight();
                 insight.trackWithEvent('generator', 'spring-controller');
+                if (this.reactiveController) {
+                    insight.track('spring-controller/reactive', this.reactiveController);
+                }
             }
         };
     }
@@ -89,12 +95,12 @@ module.exports = class extends BaseGenerator {
         });
 
         this.template(
-            `${SERVER_MAIN_SRC_DIR}package/web/rest/_Resource.java`,
+            `${SERVER_MAIN_SRC_DIR}package/web/rest/Resource.java.ejs`,
             `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}Resource.java`
         );
 
         this.template(
-            `${SERVER_TEST_SRC_DIR}package/web/rest/_ResourceIntTest.java`,
+            `${SERVER_TEST_SRC_DIR}package/web/rest/ResourceIntTest.java.ejs`,
             `${SERVER_TEST_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}ResourceIntTest.java`
         );
     }

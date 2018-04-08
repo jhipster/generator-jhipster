@@ -1,0 +1,88 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import './app.<%= styleSheetExt %>';
+
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { Card } from 'reactstrap';
+import { HashRouter as Router } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+
+import { getSession } from 'app/shared/reducers/authentication';
+<%_ if (enableTranslation) { _%>
+import { setLocale } from 'app/shared/reducers/locale';
+<%_ } _%>
+import Header from 'app/shared/layout/header/header';
+import Footer from 'app/shared/layout/footer/footer';
+import { hasAnyAuthority } from 'app/shared/auth/private-route';
+import { AUTHORITIES } from 'app/config/constants';
+import AppRoutes from 'app/routes';
+
+export interface IAppProps {
+  isAuthenticated: boolean;
+  isAdmin: boolean;
+  <%_ if (enableTranslation) { _%>
+  currentLocale: string;
+  setLocale: Function;
+  <%_ } _%>
+  getSession: Function;
+}
+
+export class App extends React.Component<IAppProps> {
+  componentDidMount() {
+    this.props.getSession();
+  }
+
+  render() {
+    const paddingTop = '60px';
+    return (
+      <Router>
+        <div className="app-container" style={{ paddingTop }}>
+          <ToastContainer position={ toast.POSITION.BOTTOM_CENTER } />
+          <Header
+            isAuthenticated={this.props.isAuthenticated}
+            isAdmin={this.props.isAdmin}
+          <%_ if (enableTranslation) { _%>
+            currentLocale={this.props.currentLocale}
+            onLocaleChange={this.props.setLocale}
+          <%_ } _%>
+          />
+          <div className="container-fluid view-container" id="app-view-container">
+            <Card className="jh-card">
+              <AppRoutes/>
+            </Card>
+            <Footer/>
+          </div>
+        </div>
+      </Router>
+    );
+  }
+}
+
+const mapStateToProps = ({ authentication<% if (enableTranslation) { %>, locale<% } %> }) => ({
+  <%_ if (enableTranslation) { _%>
+  currentLocale: locale.currentLocale,
+  <%_ } _%>
+  isAuthenticated: authentication.isAuthenticated,
+  isAdmin: hasAnyAuthority(authentication.account.authorities, [AUTHORITIES.ADMIN])
+});
+
+const mapDispatchToProps = { <% if (enableTranslation) { %>setLocale, <% } %>getSession };
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

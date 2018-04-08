@@ -21,6 +21,4 @@ Example:
         /webapp/i18n/{lang}/reset.json
         /webapp/i18n/{lang}/sessions.json
         /webapp/i18n/{lang}/settings.json
-        /webapp/i18n/{lang}/social.json (if Social Login has been selected)
-        /webapp/i18n/{lang}/tracker.json (if Spring Websocket has been selected)
         /webapp/i18n/{lang}/user-management.json

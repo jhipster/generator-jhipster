@@ -1,0 +1,110 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+apiVersion: v1
+kind: Secret
+metadata:
+  name: jhipster-grafana-credentials
+  namespace: <%= kubernetesNamespace %>
+data:
+  username: amhpcHN0ZXI=
+  password: amhpcHN0ZXI=
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jhipster-grafana
+  namespace: <%= kubernetesNamespace %>
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jhipster-grafana
+    spec:
+      containers:
+      - name: jhipster-grafana
+        image: <%= DOCKER_GRAFANA %>
+        ports:
+        - containerPort: 3000
+          name: http
+          protocol: TCP
+        env:
+        - name: GF_SECURITY_ADMIN_USER
+          valueFrom:
+            secretKeyRef:
+              name: jhipster-grafana-credentials
+              key: username
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: jhipster-grafana-credentials
+              key: password
+        - name: GF_USERS_ALLOW_SIGN_UP
+          value: "false"
+        resources:
+          requests:
+            memory: "100Mi"
+            cpu: "100m"
+          limits:
+            memory: "250Mi"
+            cpu: "200m"
+        volumeMounts:
+        - name: grafana-storage
+          mountPath: /var/grafana-storage
+      volumes:
+      - name: grafana-storage
+        emptyDir: {}
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jhipster-grafana
+  namespace: <%= kubernetesNamespace %>
+  labels:
+    app: jhipster-grafana
+spec:
+  ports:
+  - name: http
+    port: 3000
+    targetPort: 3000
+  <%_ if (kubernetesServiceType !== 'Ingress') { _%>
+  type: <%= kubernetesServiceType %>
+  <%_ } else { _%>
+  type: ClusterIP
+  <%_ } _%>
+  selector:
+    app: jhipster-grafana
+---
+<%_ if (kubernetesServiceType === 'Ingress') { _%>
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: jhipster-grafana
+  namespace: <%= kubernetesNamespace %>
+spec:
+  rules:
+  - host: jhipster-grafana.<%= ingressDomain %>
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: jhipster-grafana
+          servicePort: 3000
+<%_ } _%>

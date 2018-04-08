@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,8 +19,27 @@
 const jhiCore = require('jhipster-core');
 
 module.exports = {
-    askForControllerActions
+    askForControllerActions,
+    askForReactive
 };
+
+function askForReactive() {
+    if (!this.reactive) return;
+
+    const done = this.async();
+    const prompts = [
+        {
+            type: 'confirm',
+            name: 'reactiveController',
+            message: 'Do you want your controller to provide a reactive API, using Spring Webflux?',
+            default: false
+        }
+    ];
+    this.prompt(prompts).then((props) => {
+        this.reactiveController = props.reactiveController;
+        done();
+    });
+}
 
 function askForControllerActions() {
     const askForControllerAction = (done) => {
@@ -96,4 +115,3 @@ function askForControllerActions() {
     const done = this.async();
     askForControllerAction(done);
 }
-

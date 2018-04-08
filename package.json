@@ -1,6 +1,6 @@
 {
   "name": "generator-jhipster",
-  "version": "4.13.3",
+  "version": "5.0.0-beta.0",
   "description": "Spring Boot + Angular in one handy generator",
   "files": [
     "cli",
@@ -14,11 +14,13 @@
     "Spring Security",
     "JPA",
     "Hibernate",
-    "AngularJS",
+    "React",
     "Angular",
-    "Twitter Bootstrap"
+    "Twitter Bootstrap",
+    "Webpack",
+    "Docker"
   ],
-  "homepage": "http://www.jhipster.tech/",
+  "homepage": "https://www.jhipster.tech/",
   "bugs": "https://github.com/jhipster/generator-jhipster/issues",
   "author": {
     "name": "Julien Dubois",
@@ -43,8 +45,7 @@
     "pretest": "npm run lint",
     "test": "npm run test:unit -- test/*.spec.js",
     "test:unit": "mocha --timeout 20000 --slow 0 --reporter spec",
-    "jsdoc": "jsdoc --configure jsdoc-conf.json",
-    "postinstall": "opencollective postinstall"
+    "jsdoc": "jsdoc --configure jsdoc-conf.json"
   },
   "dependencies": {
     "chalk": "2.3.0",
@@ -53,19 +54,21 @@
     "didyoumean": "1.2.1",
     "ejs": "2.5.7",
     "glob": "7.1.2",
+    "gulp-filter": "5.1.0",
     "html-wiring": "1.2.0",
     "insight": "0.8.4",
-    "jhipster-core": "1.4.3",
+    "jhipster-core": "2.0.1",
     "js-yaml": "3.10.0",
     "lodash": "4.17.4",
     "meow": "3.7.0",
     "mkdirp": "0.5.1",
-    "opencollective": "1.0.3",
     "pluralize": "7.0.0",
+    "prettier": "1.11.1",
     "randexp": "0.4.6",
     "semver": "5.4.1",
     "shelljs": "0.7.8",
     "tabtab": "2.2.2",
+    "through2": "2.0.3",
     "yeoman-environment": "2.0.5",
     "yeoman-generator": "2.0.1"
   },
@@ -78,12 +81,13 @@
     "fs-extra": "4.0.3",
     "jsdoc": "3.5.5",
     "mocha": "4.0.1",
+    "sinon": "2.4.1",
     "yeoman-assert": "3.1.0",
     "yeoman-test": "1.7.0"
   },
   "engines": {
-    "node": ">=6.9.0",
-    "npm": ">=2.14.2"
+    "node": ">=8.9.0",
+    "npm": ">=5.5.1"
   },
   "license": "Apache-2.0",
   "collective": {

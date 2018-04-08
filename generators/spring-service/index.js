@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -70,13 +70,13 @@ module.exports = class extends BaseGenerator {
         this.serviceInstance = _.lowerCase(this.name);
 
         this.template(
-            `${SERVER_MAIN_SRC_DIR}package/service/_Service.java`,
+            `${SERVER_MAIN_SRC_DIR}package/service/Service.java.ejs`,
             `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/${this.serviceClass}Service.java`
         );
 
         if (this.useInterface) {
             this.template(
-                `${SERVER_MAIN_SRC_DIR}package/service/impl/_ServiceImpl.java`,
+                `${SERVER_MAIN_SRC_DIR}package/service/impl/ServiceImpl.java.ejs`,
                 `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/impl/${this.serviceClass}ServiceImpl.java`
             );
         }

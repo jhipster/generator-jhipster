@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -97,21 +97,21 @@ module.exports = class extends BaseGenerator {
 
     writing() {
         if (this.pipelines.includes('jenkins')) {
-            this.template('jenkins/_Jenkinsfile', 'Jenkinsfile');
-            this.template('jenkins/_jenkins.yml', `${this.DOCKER_DIR}jenkins.yml`);
+            this.template('jenkins/Jenkinsfile.ejs', 'Jenkinsfile');
+            this.template('jenkins/jenkins.yml.ejs', `${this.DOCKER_DIR}jenkins.yml`);
             this.template('jenkins/idea.gdsl', `${this.SERVER_MAIN_RES_DIR}idea.gdsl`);
             if (this.jenkinsIntegrations.includes('publishDocker')) {
-                this.template('_docker-registry.yml', `${this.DOCKER_DIR}docker-registry.yml`);
+                this.template('docker-registry.yml.ejs', `${this.DOCKER_DIR}docker-registry.yml`);
             }
         }
         if (this.pipelines.includes('gitlab')) {
-            this.template('_.gitlab-ci.yml', '.gitlab-ci.yml');
+            this.template('.gitlab-ci.yml.ejs', '.gitlab-ci.yml');
         }
         if (this.pipelines.includes('circle')) {
-            this.template('_circle.yml', 'circle.yml');
+            this.template('circle.yml.ejs', 'circle.yml');
         }
         if (this.pipelines.includes('travis')) {
-            this.template('_travis.yml', '.travis.yml');
+            this.template('travis.yml.ejs', '.travis.yml');
         }
     }
 };

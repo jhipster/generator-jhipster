@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -126,7 +126,11 @@ module.exports = class extends BaseGenerator {
 
                 s3.createBucket({ bucket: this.bucketName }, (err, data) => {
                     if (err) {
-                        this.error(chalk.red(err.message));
+                        if (err.message == null) {
+                            this.error(chalk.red(('The S3 bucket could not be created. Are you sure its name is not already used?')));
+                        } else {
+                            this.error(chalk.red(err.message));
+                        }
                     } else {
                         this.log(data.message);
                         cb();

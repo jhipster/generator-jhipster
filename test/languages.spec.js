@@ -47,11 +47,6 @@ describe('JHipster generator languages', () => {
                         `${SERVER_MAIN_RES_DIR}i18n/messages_${language.value.replace('-', '_')}.properties`
                     ]);
                 });
-                it('doesnt create social.json', () => {
-                    assert.noFile([
-                        `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/social.json`
-                    ]);
-                });
                 it('contains 3 needles in global.json', () => {
                     assert.fileContent(
                         `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/global.json`,
@@ -65,47 +60,6 @@ describe('JHipster generator languages', () => {
                         `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/global.json`,
                         '"jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"'
                     );
-                });
-            });
-        });
-    });
-    context('Cretes default i18n files with social login enabled', () => {
-        ['en', 'ar-ly', 'zh-cn'].forEach((language) => {
-            describe(`for ${language}`, () => {
-                beforeEach((done) => {
-                    helpers.run(require.resolve('../generators/languages'))
-                        .inTmpDir((dir) => {
-                            fse.copySync(path.join(__dirname, '../test/templates/social'), dir);
-                        })
-                        .withOptions({ 'skip-install': true })
-                        .withPrompts({
-                            languages: [language]
-                        })
-                        .on('end', done);
-                });
-
-                it('creates expected files', () => {
-                    assert.file([
-                        `${CLIENT_MAIN_SRC_DIR}i18n/${language}/activate.json`,
-                        `${CLIENT_MAIN_SRC_DIR}i18n/${language}/audits.json`,
-                        `${CLIENT_MAIN_SRC_DIR}i18n/${language}/configuration.json`,
-                        `${CLIENT_MAIN_SRC_DIR}i18n/${language}/error.json`,
-                        `${CLIENT_MAIN_SRC_DIR}i18n/${language}/gateway.json`,
-                        `${CLIENT_MAIN_SRC_DIR}i18n/${language}/login.json`,
-                        `${CLIENT_MAIN_SRC_DIR}i18n/${language}/logs.json`,
-                        `${CLIENT_MAIN_SRC_DIR}i18n/${language}/home.json`,
-                        `${CLIENT_MAIN_SRC_DIR}i18n/${language}/metrics.json`,
-                        `${CLIENT_MAIN_SRC_DIR}i18n/${language}/password.json`,
-                        `${CLIENT_MAIN_SRC_DIR}i18n/${language}/register.json`,
-                        `${CLIENT_MAIN_SRC_DIR}i18n/${language}/sessions.json`,
-                        `${CLIENT_MAIN_SRC_DIR}i18n/${language}/settings.json`,
-                        `${CLIENT_MAIN_SRC_DIR}i18n/${language}/reset.json`,
-                        `${CLIENT_MAIN_SRC_DIR}i18n/${language}/user-management.json`,
-                        `${CLIENT_MAIN_SRC_DIR}i18n/${language}/global.json`,
-                        `${CLIENT_MAIN_SRC_DIR}i18n/${language}/health.json`,
-                        `${CLIENT_MAIN_SRC_DIR}i18n/${language}/social.json`,
-                        `${SERVER_MAIN_RES_DIR}i18n/messages_${language.replace('-', '_')}.properties`
-                    ]);
                 });
             });
         });

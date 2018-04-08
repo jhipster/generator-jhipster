@@ -12,13 +12,13 @@ describe('Generator Base Private', () => {
             const entityFolderName = 'entityFolderName';
             const entityFileName = 'entityFileName';
             const content =
-                `|export * from './${entityFolderName}/${entityFileName}-dialog.component';
+                `|export * from './${entityFolderName}/${entityFileName}-update.component';
                  |export * from './${entityFolderName}/${entityFileName}-delete-dialog.component';
                  |export * from './${entityFolderName}/${entityFileName}-detail.component';
                  |export * from './${entityFolderName}/${entityFileName}.component';
                  |export * from './${entityFolderName}/${entityFileName}.state';`;
             const out =
-`export * from './entityFolderName/entityFileName-dialog.component';
+`export * from './entityFolderName/entityFileName-update.component';
 export * from './entityFolderName/entityFileName-delete-dialog.component';
 export * from './entityFolderName/entityFileName-detail.component';
 export * from './entityFolderName/entityFileName.component';
@@ -61,6 +61,45 @@ export * from './entityFolderName/entityFileName.state';`;
         describe('when called with cassandra', () => {
             it('return cassandra', () => {
                 expect(BaseGenerator.getDBTypeFromDBValue('cassandra')).to.equal('cassandra');
+            });
+        });
+    });
+
+    describe('generateEntityClientImports', () => {
+        const relationships = [
+            {
+                otherEntityAngularName: 'User'
+            },
+            {
+                otherEntityAngularName: 'AnEntity'
+            }
+        ];
+        describe('when called with dto option', () => {
+            it('return an empty Map', () => {
+                const imports = BaseGenerator.generateEntityClientImports(relationships, 'yes');
+                expect(imports.size).to.eql(0);
+            });
+        });
+        describe('when called with 2 distinct relationships without dto option', () => {
+            it('return a Map with 2 imports', () => {
+                const imports = BaseGenerator.generateEntityClientImports(relationships, 'no');
+                expect(imports).to.have.all.keys('IUser', 'IAnEntity');
+                expect(imports.size).to.eql(relationships.length);
+            });
+        });
+        describe('when called with 2 identical relationships without dto option', () => {
+            const relationships = [
+                {
+                    otherEntityAngularName: 'User'
+                },
+                {
+                    otherEntityAngularName: 'User'
+                }
+            ];
+            it('return a Map with 1 import', () => {
+                const imports = BaseGenerator.generateEntityClientImports(relationships, 'no');
+                expect(imports).to.have.key('IUser');
+                expect(imports.size).to.eql(1);
             });
         });
     });

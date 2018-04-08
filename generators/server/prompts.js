@@ -1,7 +1,7 @@
 /**
  * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -172,8 +172,7 @@ function askForServerSideOpts(meta) {
                     }
                 ];
                 if (
-                    applicationType === 'microservice' || ((response.authenticationType === 'uaa' ||
-                    response.authenticationType === 'oauth2') && applicationType === 'gateway')
+                    applicationType === 'microservice' || (response.authenticationType === 'jwt' && applicationType === 'gateway')
                 ) {
                     opts.push({
                         value: 'no',
@@ -336,12 +335,10 @@ function askForOptionalItems(meta) {
     const applicationType = this.applicationType;
     const choices = [];
     const defaultChoice = [];
-    if (this.databaseType !== 'cassandra' && applicationType === 'monolith' && (this.authenticationType === 'session' || this.authenticationType === 'jwt')) {
-        choices.push({
-            name: 'Social login (Google, Facebook, Twitter)',
-            value: 'enableSocialSignIn:true'
-        });
-    }
+    choices.push({
+        name: 'Reactive APIs, using Spring Webflux',
+        value: 'reactive:true'
+    });
     if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
         choices.push({
             name: 'Search engine using Elasticsearch',
@@ -377,9 +374,9 @@ function askForOptionalItems(meta) {
     if (choices.length > 0) {
         this.prompt(PROMPTS).then((prompt) => {
             this.serverSideOptions = prompt.serverSideOptions;
+            this.reactive = this.getOptionFromArray(this.serverSideOptions, 'reactive');
             this.websocket = this.getOptionFromArray(this.serverSideOptions, 'websocket');
             this.searchEngine = this.getOptionFromArray(this.serverSideOptions, 'searchEngine');
-            this.enableSocialSignIn = this.getOptionFromArray(this.serverSideOptions, 'enableSocialSignIn');
             this.messageBroker = this.getOptionFromArray(this.serverSideOptions, 'messageBroker');
             this.enableSwaggerCodegen = this.getOptionFromArray(this.serverSideOptions, 'enableSwaggerCodegen');
             // Only set this option if it hasn't been set in a previous question, as it's only optional for monoliths

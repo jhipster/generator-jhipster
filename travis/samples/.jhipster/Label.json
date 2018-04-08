@@ -23,5 +23,6 @@
     "changelogDate": "20150805124936",
     "dto": "no",
     "pagination": "pagination",
-    "service": "serviceClass"
+    "service": "serviceClass",
+    "clientRootFolder": "test-root"
 }
