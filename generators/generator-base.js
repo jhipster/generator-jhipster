@@ -2278,7 +2278,11 @@ module.exports = class extends PrivateBase {
                         if (typeof templateObj === 'string') {
                             templatePath += templateObj;
                         } else {
-                            templatePath += templateObj.file;
+                            if (typeof templateObj.file === 'string') {
+                                templatePath += templateObj.file;
+                            } else if (typeof templateObj.file === 'function') {
+                                templatePath += templateObj.file(_this);
+                            }
                             method = templateObj.method ? templateObj.method : method;
                             useTemplate = templateObj.template ? templateObj.template : useTemplate;
                             options = templateObj.options ? templateObj.options : options;

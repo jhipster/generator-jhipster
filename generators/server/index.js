@@ -358,7 +358,6 @@ module.exports = class extends BaseGenerator {
                 this.pkType = this.getPkType(this.databaseType);
 
                 this.packageFolder = this.packageName.replace(/\./g, '/');
-                this.testDir = `${constants.SERVER_TEST_SRC_DIR + this.packageFolder}/`;
                 if (!this.nativeLanguage) {
                     // set to english when translation is set to false
                     this.nativeLanguage = 'en';
