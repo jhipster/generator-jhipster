@@ -31,10 +31,10 @@ module.exports = class extends BaseGenerator {
         const blueprint = this.config.get('blueprint');
         // use global variable since getters dont have access to instance property
         useBlueprint = this.composeBlueprint(blueprint, 'entity-client', {
-            context: this.options.context,
-            'skip-install': this.options.context.options['skip-install'],
-            force: this.options.context.options.force,
-            debug: this.options.context.isDebugEnabled
+            context: opts.context,
+            force: opts.force,
+            debug: opts.context.isDebugEnabled,
+            'skip-install': opts.context.options['skip-install']
         });
     }
 

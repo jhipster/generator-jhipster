@@ -26,7 +26,8 @@
             "program": "${workspaceFolder}/cli/jhipster.js",
             "args": [
                 "entity",
-                "foo"
+                "BankAccount",
+                "--force"
             ],
             "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/"
         },

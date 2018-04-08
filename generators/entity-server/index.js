@@ -27,13 +27,13 @@ let useBlueprint;
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
-        utils.copyObjectProps(this, this.options.context);
+        utils.copyObjectProps(this, opts.context);
         const blueprint = this.config.get('blueprint');
         // use global variable since getters dont have access to instance property
         useBlueprint = this.composeBlueprint(blueprint, 'entity-server', {
-            context: this.options.context,
-            force: this.options.context.options.force,
-            debug: this.options.context.isDebugEnabled
+            context: opts.context,
+            force: opts.force,
+            debug: opts.context.isDebugEnabled
         });
     }
 
