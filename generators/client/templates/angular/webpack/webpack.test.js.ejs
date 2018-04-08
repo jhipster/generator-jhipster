@@ -69,7 +69,13 @@ module.exports = (WATCH) => ({
                 enforce: 'post',
                 exclude: /node_modules/,
                 loader: 'sourcemap-istanbul-instrumenter-loader?force-sourcemap=true'
-            }]
+            },
+            // Ignore warnings about System.import in Angular
+            {
+                test: /[\/\\]@angular[\/\\].+\.js$/,
+                parser: { system: true }
+            },
+        ]
     },
     plugins: [
         new webpack.DefinePlugin({
