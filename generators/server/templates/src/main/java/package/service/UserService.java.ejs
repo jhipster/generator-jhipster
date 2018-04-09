@@ -517,7 +517,7 @@ public class UserService {
         List<String> userAuthorities = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toList());
         for (String authority :userAuthorities) {
             if (!dbAuthorities.contains(authority)) {
-                log.debug("Saving authority '{}' in local database ...", authority);
+                log.debug("Saving authority '{}' in local database", authority);
                 Authority authoritytoSave = new Authority();
                 authoritytoSave.setName(authority);
                 authorityRepository.save(authoritytoSave);
@@ -531,18 +531,18 @@ public class UserService {
                 Instant dbModifiedDate = existingUser.get().getLastModifiedDate();
                 Instant idpModifiedDate = new Date(Long.valueOf((Integer) details.get("updated_at"))).toInstant();
                 if (idpModifiedDate.isAfter(dbModifiedDate)) {
-                    log.debug("Updating user '{}' in local database...", user.getLogin());
+                    log.debug("Updating user '{}' in local database", user.getLogin());
                     updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
                         user.getLangKey(), user.getImageUrl());
                 }
                 // no last updated info, blindly update
             } else {
-                log.debug("Updating user '{}' in local database...", user.getLogin());
+                log.debug("Updating user '{}' in local database", user.getLogin());
                 updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
                     user.getLangKey(), user.getImageUrl());
             }
         } else {
-            log.debug("Saving user '{}' in local database...", user.getLogin());
+            log.debug("Saving user '{}' in local database", user.getLogin());
             userRepository.save(user);
             <%_ if (cacheManagerIsAvailable === true) { _%>
             this.clearUserCaches(user);
