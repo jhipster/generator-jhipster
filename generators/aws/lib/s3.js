@@ -23,7 +23,7 @@ S3.prototype.createBucket = function createBucket(params, callback) {
         CreateBucketConfiguration: { LocationConstraint: region }
     };
 
-    if (region.toLowerCase() === S3_STANDARD_REGION) {
+    if (region === S3_STANDARD_REGION) {
         s3Params.CreateBucketConfiguration = undefined;
     }
 
