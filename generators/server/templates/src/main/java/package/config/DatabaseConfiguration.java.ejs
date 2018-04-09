@@ -53,9 +53,6 @@ import org.springframework.boot.autoconfigure.mongo.MongoReactiveAutoConfigurati
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 import org.springframework.boot.autoconfigure.couchbase.CouchbaseAutoConfiguration;
-    <%_ if (reactive) { _%>
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseReactiveAutoConfiguration;
-    <%_ } _%>
 <%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -162,10 +159,8 @@ import java.util.List;
 @EnableCouchbaseRepositories(repositoryBaseClass = CustomN1qlCouchbaseRepository.class, basePackages = "<%=packageName%>.repository")
     <%_ if (reactive) { _%>
 @EnableReactiveCouchbaseRepositories("<%=packageName%>.repository.reactive")
-@Import(value = {CouchbaseAutoConfiguration.class, CouchbaseReactiveAutoConfiguration.class})
-    <%_ } else { _%>
-@Import(value = CouchbaseAutoConfiguration.class)
     <%_ } _%>
+@Import(value = CouchbaseAutoConfiguration.class)
 @EnableCouchbaseAuditing(auditorAwareRef = "springSecurityAuditorAware")
 <%_ } _%>
 public class DatabaseConfiguration {
