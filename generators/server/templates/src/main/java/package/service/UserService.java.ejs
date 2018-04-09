@@ -520,6 +520,7 @@ public class UserService {
         <%_ } else { _%>
         Collection<String> userAuthorities = user.getAuthorities();
         <%_ } _%>
+        for (String authority : userAuthorities) {
             if (!dbAuthorities.contains(authority)) {
                 log.debug("Saving authority '{}' in local database", authority);
                 Authority authoritytoSave = new Authority();
