@@ -522,7 +522,13 @@
         <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-<%=databaseType%></artifactId>
+            <artifactId>spring-boot-starter-data-<%=databaseType%><% if (reactive === true) { %>-reactive<% } %></artifactId>
+        </dependency>
+        <%_ } _%>
+        <%_ if (databaseType === 'cassandra') { _%>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-cassandra-reactive</artifactId>
         </dependency>
         <%_ } _%>
         <dependency>

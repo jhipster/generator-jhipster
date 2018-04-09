@@ -47,10 +47,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 <%_ } _%>
+<%_ if (reactiveRepositories) { _%>
+import org.springframework.http.MediaType;
+<%_ } _%>
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-<% if (validation) { %>
-import javax.validation.Valid;<% } %>
+<%_ if (reactiveRepositories) { _%>
+import reactor.core.publisher.Flux;
+<%_ } _%>
+
+<%_ if (validation) { _%>
+import javax.validation.Valid;
+<%_ } _%>
 import java.net.URI;
 import java.net.URISyntaxException;
 <%_ const viaService = service !== 'no';
@@ -135,6 +143,23 @@ public class <%= entityClass %>Resource {
     @GetMapping("/<%= entityApiUrl %>")
     @Timed<%- include('../../common/get_all_template', {viaService: viaService}); -%>
 
+    <%_ if (reactiveRepositories) { _%>
+    /**
+     * GET  /<%= entityApiUrl %> : get all the <%= entityInstancePlural %> as a stream.
+     * @return the Flux of <%= entityInstancePlural %>
+     */
+    @GetMapping("/<%= entityApiUrl %>", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
+    @Timed
+    public Flux<<%= instanceType %>> getAll<%= entityClassPlural %>AsStream() {
+        log.debug("REST request to get all <%= entityClassPlural %> as a stream");
+        <%_ if (viaService) { _%>
+        return <%= entityInstance %>Service.findAllAsFlux();
+        <%_ } else { _%>
+        return <%= entityInstance %>ReactiveRepository.findAll();
+        <%_ } _%>
+    }
+
+    <%_ } _%>
     /**
      * GET  /<%= entityApiUrl %>/:id : get the "id" <%= entityInstance %>.
      *

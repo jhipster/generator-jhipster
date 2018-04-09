@@ -46,8 +46,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
-import org.springframework.boot.autoconfigure.mongo.MongoProperties;<% } %><% if (databaseType === 'couchbase') { %>
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseAutoConfiguration;<% } %><% if (databaseType === 'sql') { %>
+import org.springframework.boot.autoconfigure.mongo.MongoProperties;
+    <%_ if (reactive) { _%>
+import org.springframework.boot.autoconfigure.mongo.MongoReactiveAutoConfiguration;
+    <%_ } _%>
+<%_ } _%>
+<%_ if (databaseType === 'couchbase') { _%>
+import org.springframework.boot.autoconfigure.couchbase.CouchbaseAutoConfiguration;
+    <%_ if (reactive) { _%>
+import org.springframework.boot.autoconfigure.couchbase.CouchbaseReactiveAutoConfiguration;
+    <%_ } _%>
+<%_ } _%>
+<%_ if (databaseType === 'sql') { _%>
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;<% } %>
 import org.springframework.context.annotation.Bean;
@@ -55,7 +65,7 @@ import org.springframework.context.annotation.Configuration;
 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import org.springframework.context.annotation.Import;
 <%_ } _%>
-<%_ if (searchEngine === 'elasticsearch' && databaseType === 'mongodb') { _%>
+<%_ if ((searchEngine === 'elasticsearch' || reactive) && databaseType === 'mongodb') { _%>
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
 <%_ } _%>
@@ -64,9 +74,6 @@ import org.springframework.context.annotation.Profile;<% } %><% if (databaseType
 import org.springframework.core.env.Environment;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
 import org.springframework.core.convert.converter.Converter;<% } %>
 <%_ if (searchEngine === 'elasticsearch') { _%>
-    <%_ if (databaseType === 'mongodb') { _%>
-import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
-    <%_ } _%>
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
@@ -74,10 +81,15 @@ import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine === 'elasticsearch' || reactive) { _%>
 import org.springframework.data.mongodb.repository.MongoRepository;
     <%_ } _%>
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;<% } %><% if (databaseType === 'couchbase') { %>
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+    <%_ if (reactive) { _%>
+import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
+    <%_ } _%>
+<%_ } _%>
+<%_ if (databaseType === 'couchbase') { _%>
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
 import org.springframework.data.couchbase.config.BeanNames;
@@ -113,30 +125,44 @@ import java.util.Date;
 import java.util.List;
 <%_ } _%>
 
-@Configuration<% if (databaseType === 'sql') { %>
+@Configuration
+<%_ if (databaseType === 'sql') { _%>
 @EnableJpaRepositories("<%=packageName%>.repository")
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
-@EnableTransactionManagement<% } %>
-<%_ if (searchEngine === 'elasticsearch' && databaseType === 'mongodb') { _%>
-@EnableElasticsearchRepositories(basePackages = "<%=packageName%>.repository.search", excludeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = MongoRepository.class))
-@EnableMongoRepositories(basePackages = "<%=packageName%>.repository", excludeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = ElasticsearchRepository.class))
+@EnableTransactionManagement
 <%_ } _%>
-<%_ if (searchEngine === 'elasticsearch' && databaseType != 'mongodb') { _%>
+<%_ if (searchEngine === 'elasticsearch') { _%>
 @EnableElasticsearchRepositories("<%=packageName%>.repository.search")
 <%_ } _%>
-<%_ if (searchEngine != 'elasticsearch' && databaseType === 'mongodb') { _%>
+<%_ if (databaseType === 'mongodb') { _%>
+    <%_ if (searchEngine === 'elasticsearch' || reactive) { _%>
+@EnableMongoRepositories(basePackages = "<%=packageName%>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = MongoRepository.class))
+    <%_ } else { _%>
 @EnableMongoRepositories("<%=packageName%>.repository")
+    <%_ } _%>
+    <%_ if (reactive) { _%>
+@EnableReactiveMongoRepositories("<%=packageName%>.repository.reactive")
+    <%_ } _%>
 <%_ } _%>
 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 @Profile("!" + JHipsterConstants.SPRING_PROFILE_CLOUD)
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
+    <%_ if (reactive) { _%>
+@Import(value = {MongoAutoConfiguration.class, MongoReactiveAutoConfiguration.class})
+    <%_ } else { _%>
 @Import(value = MongoAutoConfiguration.class)
+    <%_ } _%>
 @EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 @EnableCouchbaseRepositories(repositoryBaseClass = CustomN1qlCouchbaseRepository.class, basePackages = "<%=packageName%>.repository")
+    <%_ if (reactive) { _%>
+@EnableReactiveCouchbaseRepositories("<%=packageName%>.repository.reactive")
+@Import(value = {CouchbaseAutoConfiguration.class, CouchbaseReactiveAutoConfiguration.class})
+    <%_ } else { _%>
 @Import(value = CouchbaseAutoConfiguration.class)
+    <%_ } _%>
 @EnableCouchbaseAuditing(auditorAwareRef = "springSecurityAuditorAware")
 <%_ } _%>
 public class DatabaseConfiguration {

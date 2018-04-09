@@ -53,6 +53,10 @@ import static java.util.Objects.nonNull;
 @Configuration<% if (applicationType === 'gateway' && databaseType !== 'cassandra') { %>
 @ConditionalOnProperty("jhipster.gateway.rate-limiting.enabled")<% } %>
 @EnableConfigurationProperties(CassandraProperties.class)
+<%_ if (reactive) { _%>
+@EnableReactiveCassandraRepositories("<%=packageName%>.repository.reactive")
+@Import(value = ReactiveCassandraAutoConfiguration.class)
+<%_ } _%>
 @Profile({JHipsterConstants.SPRING_PROFILE_DEVELOPMENT, JHipsterConstants.SPRING_PROFILE_PRODUCTION})
 public class CassandraConfiguration {
 

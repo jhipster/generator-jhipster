@@ -133,6 +133,7 @@ module.exports = class extends BaseGenerator {
                 this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
                 context.options = this.options;
                 context.baseName = this.config.get('baseName');
+                context.reactive = this.config.get('reactive');
                 context.capitalizedBaseName = _.upperFirst(context.baseName);
                 context.packageName = this.config.get('packageName');
                 context.applicationType = this.config.get('applicationType');
@@ -473,6 +474,7 @@ module.exports = class extends BaseGenerator {
                 context.entityTranslationKey = context.clientRootFolder ? _.camelCase(`${context.clientRootFolder}-${context.entityInstance}`) : context.entityInstance;
                 context.entityTranslationKeyMenu = _.camelCase(context.clientRootFolder ? `${context.clientRootFolder}-${context.entityStateName}` : context.entityStateName);
                 context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
+                context.reactiveRepositories = context.reactive && context.databaseType !== 'sql';
 
                 context.fieldsContainDate = false;
                 context.fieldsContainInstant = false;
