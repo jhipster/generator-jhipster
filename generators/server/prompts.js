@@ -163,10 +163,6 @@ function askForServerSideOpts(meta) {
                         name: 'MongoDB'
                     },
                     {
-                        value: 'cassandra',
-                        name: 'Cassandra'
-                    },
-                    {
                         value: 'couchbase',
                         name: '[BETA] Couchbase'
                     }
@@ -177,6 +173,12 @@ function askForServerSideOpts(meta) {
                     opts.push({
                         value: 'no',
                         name: 'No database'
+                    });
+                }
+                if (response.authenticationType !== 'oauth2') {
+                    opts.push({
+                        value: 'cassandra',
+                        name: 'Cassandra'
                     });
                 }
                 return opts;
