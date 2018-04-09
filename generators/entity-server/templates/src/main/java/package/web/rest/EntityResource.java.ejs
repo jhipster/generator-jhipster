@@ -23,9 +23,16 @@ import com.codahale.metrics.annotation.Timed;
 import <%=packageName%>.domain.<%= entityClass %>;
 <%_ } _%>
 <%_ if (service !== 'no') { _%>
-import <%=packageName%>.service.<%= entityClass %>Service;<% } else { %>
-import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine === 'elasticsearch') { %>
-import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% }} %>
+import <%=packageName%>.service.<%= entityClass %>Service;
+<%_ } else { _%>
+import <%=packageName%>.repository.<%= entityClass %>Repository;
+    <%_ if (reactiveRepositories) { _%>
+import <%=packageName%>.repository.reactive.<%= entityClass %>ReactiveRepository;
+    <%_ } _%>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;
+    <%_ } _%>
+<%_ } _%>
 import <%=packageName%>.web.rest.errors.BadRequestAlertException;
 import <%=packageName%>.web.rest.util.HeaderUtil;<% if (pagination !== 'no') { %>
 import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
@@ -148,7 +155,7 @@ public class <%= entityClass %>Resource {
      * GET  /<%= entityApiUrl %> : get all the <%= entityInstancePlural %> as a stream.
      * @return the Flux of <%= entityInstancePlural %>
      */
-    @GetMapping("/<%= entityApiUrl %>", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
+    @GetMapping(value = "/<%= entityApiUrl %>", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
     @Timed
     public Flux<<%= instanceType %>> getAll<%= entityClassPlural %>AsStream() {
         log.debug("REST request to get all <%= entityClassPlural %> as a stream");

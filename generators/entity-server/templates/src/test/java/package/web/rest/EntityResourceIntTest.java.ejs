@@ -30,11 +30,19 @@ import <%=packageName%>.domain.<%= entityClass %>;
         if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering) { _%>
 import <%=packageName%>.domain.<%= otherEntityNameCapitalized %>;
 <%_ } } _%>
-import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (service !== 'no') { %>
-import <%=packageName%>.service.<%= entityClass %>Service;<% } if (searchEngine === 'elasticsearch') { %>
-import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } if (dto === 'mapstruct') { %>
+import <%=packageName%>.repository.<%= entityClass %>Repository;
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;
+<%_ } _%>
+<%_ if (service !== 'no') { _%>
+import <%=packageName%>.service.<%= entityClass %>Service;
+<%_ } else if (reactiveRepositories) { _%>
+import <%=packageName%>.repository.reactive.<%= entityClass %>ReactiveRepository;
+<%_ } _%>
+<%_ if (dto === 'mapstruct') { _%>
 import <%=packageName%>.service.dto.<%= entityClass %>DTO;
-import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;<% } %>
+import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;
+<%_ } _%>
 import <%=packageName%>.web.rest.errors.ExceptionTranslator;
 <%_ if (jpaMetamodelFiltering) { _%>
 import <%=packageName%>.service.dto.<%= entityClass %>Criteria;
@@ -267,6 +275,11 @@ _%>
     @Autowired
     private <%= entityClass %>Repository <%= entityInstance %>Repository;
 
+    <%_ if (reactiveRepositories && service === 'no') { _%>
+    @Autowired
+    private <%= entityClass %>ReactiveRepository <%= entityInstance %>ReactiveRepository;
+
+    <%_ } _%>
     <%_ if (fieldsContainOwnerManyToMany === true) { _%>
     @Mock
     private <%= entityClass %>Repository <%= entityInstance %>RepositoryMock;<%_ } _%><% if (dto === 'mapstruct') { %>
@@ -317,7 +330,7 @@ _%>
         <%_ if (service !== 'no') { _%>
         final <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Service<% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %>);
         <%_ } else { _%>
-        final <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Repository<% if (dto === 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, mock<%= entityClass %>SearchRepository<% } %><% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %>);
+        final <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Repository<% if (dto === 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, mock<%= entityClass %>SearchRepository<% } %><% if (reactiveRepositories) { %>, <%= entityInstance %>ReactiveRepository<% } %><% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %>);
         <%_ } _%>
         this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
