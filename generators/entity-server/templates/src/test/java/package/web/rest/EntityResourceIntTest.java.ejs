@@ -706,6 +706,7 @@ _%>
 
 <%_  } _%>
 <%_ if (reactiveRepositories) { _%>
+
     @Test
     public void getAll<%= entityClassPlural %>AsStream() {
         // Initialize the database
@@ -720,7 +721,7 @@ _%>
 
         List<<%= entityClass %>> <%= entityInstance %>List = client.get().uri("/api/<%= entityApiUrl %>").accept(MediaType.APPLICATION_STREAM_JSON).exchange()
             .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.APPLICATION_STREAM_JSON)
+            .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_STREAM_JSON)
             .returnResult(<%= entityClass %><% if (dto !== 'no') { %>DTO<% } %>.class)
             .getResponseBody()
             <%_ if (dto !== 'no') { _%>
