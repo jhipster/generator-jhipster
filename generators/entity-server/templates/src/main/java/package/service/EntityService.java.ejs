@@ -81,7 +81,7 @@ public interface <%= entityClass %>Service {
      * Get all the <%= entityInstancePlural %>.
      * @return the Flux of entities
      */
-    Flux<<%= instanceType %>> findAllAsStream();
+    Flux<<%= instanceType %>> findAllAsFlux();
 
     <%_ } _%>
     /**
