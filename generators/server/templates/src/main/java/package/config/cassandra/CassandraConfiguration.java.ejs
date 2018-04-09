@@ -26,22 +26,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;
-<%_ if (reactive) { _%>
-import org.springframework.boot.autoconfigure.cassandra.CassandraReactiveAutoConfiguration;
-<%_ } _%>
 <%_ if (applicationType === 'gateway' && databaseType !== 'cassandra') { _%>
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 <%_ } _%>
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-<%_ if (reactive) { _%>
-import org.springframework.context.annotation.Import;
-<%_ } _%>
 import org.springframework.context.annotation.Profile;
-<%_ if (reactive) { _%>
-import org.springframework.data.cassandra.repository.config.EnableReactiveCassandraRepositories;
-<%_ } _%>
 import org.springframework.util.StringUtils;
 
 import com.codahale.metrics.MetricRegistry;
@@ -64,10 +55,6 @@ import static java.util.Objects.nonNull;
 @Configuration<% if (applicationType === 'gateway' && databaseType !== 'cassandra') { %>
 @ConditionalOnProperty("jhipster.gateway.rate-limiting.enabled")<% } %>
 @EnableConfigurationProperties(CassandraProperties.class)
-<%_ if (reactive) { _%>
-@EnableReactiveCassandraRepositories("<%=packageName%>.repository.reactive")
-@Import(value = CassandraReactiveAutoConfiguration.class)
-<%_ } _%>
 @Profile({JHipsterConstants.SPRING_PROFILE_DEVELOPMENT, JHipsterConstants.SPRING_PROFILE_PRODUCTION})
 public class CassandraConfiguration {
 
