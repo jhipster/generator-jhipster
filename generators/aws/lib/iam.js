@@ -20,6 +20,21 @@ const createRole = (RoleName, Description, AssumeRolePolicyDocument) => {
     }).promise();
 };
 
+const createInstanceProfile = (InstanceProfileName) => {
+    const iam = new aws.IAM();
+    return iam.createInstanceProfile({
+        InstanceProfileName,
+    }).promise();
+};
+
+const addRoleToInstanceProfile = (InstanceProfileName, RoleName) => {
+    const iam = new aws.IAM();
+    return iam.addRoleToInstanceProfile({
+        InstanceProfileName,
+        RoleName
+    }).promise();
+};
+
 const attachRolePolicy = (PolicyArn, RoleName) => {
     const iam = new aws.IAM();
     return iam.attachRolePolicy({ PolicyArn, RoleName }).promise();
@@ -93,6 +108,8 @@ const createInstanceProfileWithAttachedPolicies = () => {
 }`;
 
     return createRole(roleName, description, assumedPolicyDoc)
+        .then(() => createInstanceProfile(roleName))
+        .then(() => addRoleToInstanceProfile(roleName, roleName))
         .then(() => {
             const policiesToAttach = [
                 attachPolicyToRole('AWSElasticBeanstalkWebTier', roleName),
