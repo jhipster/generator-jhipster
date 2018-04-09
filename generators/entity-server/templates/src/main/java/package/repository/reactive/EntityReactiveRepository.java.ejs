@@ -23,7 +23,7 @@ import <%=packageName%>.domain.<%=entityClass%>;
 import org.springframework.data.cassandra.repository.ReactiveCassandraRepository;
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
-import org.springframework.data.couchbase.repository.support.ReactiveN1qlCouchbaseRepository;
+import org.springframework.data.couchbase.repository.ReactiveCouchbaseSortingRepository;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
@@ -35,5 +35,5 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface <%=entityClass%>ReactiveRepository extends Reactive<% if (databaseType === 'mongodb') { %>Mongo<% } if (databaseType === 'couchbase') { %>N1qlCouchbase<% } if (databaseType === 'cassandra') { %>Cassandra<% } %>Repository<<%=entityClass%>, <%= pkType %>> {
+public interface <%=entityClass%>ReactiveRepository extends Reactive<% if (databaseType === 'mongodb') { %>Mongo<% } if (databaseType === 'couchbase') { %>CouchbaseSorting<% } if (databaseType === 'cassandra') { %>Cassandra<% } %>Repository<<%=entityClass%>, <%= pkType %>> {
 }
