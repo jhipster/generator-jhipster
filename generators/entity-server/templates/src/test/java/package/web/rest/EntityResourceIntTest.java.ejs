@@ -720,8 +720,11 @@ _%>
 
         List<<%= entityClass %>> <%= entityInstance %>List = client.get().uri("/api/<%= entityApiUrl %>").accept(MediaType.APPLICATION_STREAM_JSON).exchange()
             .expectStatus().isOk()
-            .returnResult(<%= entityClass %>.class)
+            .returnResult(<%= entityClass %><% if (dto !== 'no') { %>DTO<% } %>.class)
             .getResponseBody()
+            <%_ if (dto !== 'no') { _%>
+            .map(<%= entityInstance %>Mapper::toEntity)
+            <%_ } _%>
             .filter(<%= entityInstance %>::equals)
             .collectList()
             .block(Duration.ofSeconds(5));
