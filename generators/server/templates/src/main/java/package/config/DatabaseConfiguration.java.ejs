@@ -97,6 +97,9 @@ import org.springframework.data.couchbase.core.convert.CouchbaseCustomConversion
 import org.springframework.data.couchbase.core.mapping.event.ValidatingCouchbaseEventListener;
 import org.springframework.data.couchbase.repository.auditing.EnableCouchbaseAuditing;
 import org.springframework.data.couchbase.repository.config.EnableCouchbaseRepositories;
+    <%_ if (reactive) { _%>
+import org.springframework.data.couchbase.repository.config.EnableReactiveCouchbaseRepositories;
+    <%_ } _%>
 import org.springframework.util.StringUtils;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;<% } %>
 <%_ if (databaseType === 'sql') { _%>
