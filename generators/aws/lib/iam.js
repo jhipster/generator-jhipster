@@ -122,7 +122,7 @@ Iam.prototype.verifyRoles = function verifyRoles(params, callback) {
                 return createInstanceProfileWithAttachedPolicies();
             }
 
-            return new Promise();
+            return instanceProfileExists;
         })
         .then(() => hasServiceProfile())
         .then((serviceProfileExists) => {
@@ -131,7 +131,7 @@ Iam.prototype.verifyRoles = function verifyRoles(params, callback) {
                 return createServiceProfileWithAttachedPolicies();
             }
 
-            return new Promise();
+            return serviceProfileExists;
         })
         .then(() => callback(null, null))
         .catch((err) => {
