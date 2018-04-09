@@ -159,11 +159,6 @@ function createEnvironment(params, callback) {
                     Namespace: 'aws:autoscaling:launchconfiguration',
                     OptionName: 'InstanceType',
                     Value: instanceType
-                },
-                {
-                    Namespace: 'aws:autoscaling:launchconfiguration',
-                    OptionName: 'IamInstanceProfile',
-                    Value: 'aws-elasticbeanstalk-ec2-role'
                 }
             ],
             SolutionStackName: solutionStackName,
