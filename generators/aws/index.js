@@ -209,6 +209,19 @@ module.exports = class extends BaseGenerator {
                     }
                 });
             },
+            verifyRoles() {
+                const cb = this.async();
+                this.log();
+                this.log(chalk.bold('Verifying ElasticBeanstalk Roles'));
+                const iam = this.awsFactory.getIam();
+                iam.verifyRoles({}, (err) => {
+                    if (err) {
+                        this.error(chalk.red(err.message));
+                    } else {
+                        cb();
+                    }
+                });
+            },
             createApplication() {
                 const cb = this.async();
                 this.log();
