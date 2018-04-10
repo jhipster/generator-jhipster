@@ -30,11 +30,19 @@ import <%=packageName%>.domain.<%= entityClass %>;
         if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering) { _%>
 import <%=packageName%>.domain.<%= otherEntityNameCapitalized %>;
 <%_ } } _%>
-import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (service !== 'no') { %>
-import <%=packageName%>.service.<%= entityClass %>Service;<% } if (searchEngine === 'elasticsearch') { %>
-import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } if (dto === 'mapstruct') { %>
+import <%=packageName%>.repository.<%= entityClass %>Repository;
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;
+<%_ } _%>
+<%_ if (service !== 'no') { _%>
+import <%=packageName%>.service.<%= entityClass %>Service;
+<%_ } else if (reactiveRepositories) { _%>
+import <%=packageName%>.repository.reactive.<%= entityClass %>ReactiveRepository;
+<%_ } _%>
+<%_ if (dto === 'mapstruct') { _%>
 import <%=packageName%>.service.dto.<%= entityClass %>DTO;
-import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;<% } %>
+import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;
+<%_ } _%>
 import <%=packageName%>.web.rest.errors.ExceptionTranslator;
 <%_ if (jpaMetamodelFiltering) { _%>
 import <%=packageName%>.service.dto.<%= entityClass %>Criteria;
@@ -56,6 +64,9 @@ import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit4.SpringRunner;
+<%_ if (reactiveRepositories) { _%>
+import org.springframework.test.web.reactive.server.WebTestClient;
+<%_ } _%>
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;<% if (databaseType === 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %><% if (fieldsContainBlob === true) { %>
@@ -63,7 +74,8 @@ import org.springframework.util.Base64Utils;<% } %>
 <% if (databaseType === 'sql') { %>
 import javax.persistence.EntityManager;<% } %><% if (fieldsContainBigDecimal === true) { %>
 import java.math.BigDecimal;<% } %><% if (fieldsContainBlob === true && databaseType === 'cassandra') { %>
-import java.nio.ByteBuffer;<% } %><% if (fieldsContainLocalDate === true) { %>
+import java.nio.ByteBuffer;<% } %><% if (reactiveRepositories) { %>
+import java.time.Duration;<% } %><% if (fieldsContainLocalDate === true) { %>
 import java.time.LocalDate;<% } %><% if (fieldsContainInstant === true || fieldsContainZonedDateTime === true) { %>
 import java.time.Instant;<% } %><% if (fieldsContainZonedDateTime === true) { %>
 import java.time.ZonedDateTime;
@@ -267,6 +279,11 @@ _%>
     @Autowired
     private <%= entityClass %>Repository <%= entityInstance %>Repository;
 
+    <%_ if (reactiveRepositories && service === 'no') { _%>
+    @Autowired
+    private <%= entityClass %>ReactiveRepository <%= entityInstance %>ReactiveRepository;
+
+    <%_ } _%>
     <%_ if (fieldsContainOwnerManyToMany === true) { _%>
     @Mock
     private <%= entityClass %>Repository <%= entityInstance %>RepositoryMock;<%_ } _%><% if (dto === 'mapstruct') { %>
@@ -317,7 +334,7 @@ _%>
         <%_ if (service !== 'no') { _%>
         final <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Service<% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %>);
         <%_ } else { _%>
-        final <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Repository<% if (dto === 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, mock<%= entityClass %>SearchRepository<% } %><% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %>);
+        final <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Repository<% if (dto === 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, mock<%= entityClass %>SearchRepository<% } %><% if (reactiveRepositories) { %>, <%= entityInstance %>ReactiveRepository<% } %><% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %>);
         <%_ } _%>
         this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -688,7 +705,48 @@ _%>
     }
 
 <%_  } _%>
+<%_ if (reactiveRepositories) { _%>
 
+    @Test
+    public void getAll<%= entityClassPlural %>AsStream() {
+        // Initialize the database
+        <%= entityInstance %>Repository.save(<%= entityInstance %>);
+
+        <%_ if (service !== 'no') { _%>
+        final <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Service<% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %>);
+        <%_ } else { _%>
+        final <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Repository<% if (dto === 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, mock<%= entityClass %>SearchRepository<% } %><% if (reactiveRepositories) { %>, <%= entityInstance %>ReactiveRepository<% } %><% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %>);
+        <%_ } _%>
+        WebTestClient client = WebTestClient.bindToController(<%= entityInstance %>Resource).build();
+
+        List<<%= entityClass %>> <%= entityInstance %>List = client.get().uri("/api/<%= entityApiUrl %>").accept(MediaType.APPLICATION_STREAM_JSON).exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_STREAM_JSON)
+            .returnResult(<%= entityClass %><% if (dto !== 'no') { %>DTO<% } %>.class)
+            .getResponseBody()
+            <%_ if (dto !== 'no') { _%>
+            .map(<%= entityInstance %>Mapper::toEntity)
+            <%_ } _%>
+            .filter(<%= entityInstance %>::equals)
+            .collectList()
+            .block(Duration.ofSeconds(5));
+
+        assertThat(<%= entityInstance %>List).isNotNull();
+        assertThat(<%= entityInstance %>List).hasSize(1);
+        <%= entityClass %> test<%= entityClass %> = <%= entityInstance %>List.get(0);
+        <%_ for (idx in fields) { if (fields[idx].fieldType === 'ZonedDateTime') { _%>
+        assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
+        <%_ } else if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
+        assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
+        assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>ContentType()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE);
+        <%_ } else if (fields[idx].fieldType.toLowerCase() === 'boolean') { _%>
+        assertThat(test<%= entityClass %>.is<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
+        <%_ } else { _%>
+        assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
+        <%_ }} _%>
+    }
+
+    <%_  } _%>
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void getNonExisting<%= entityClass %>() throws Exception {
