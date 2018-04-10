@@ -37,7 +37,10 @@ const addRoleToInstanceProfile = (InstanceProfileName, RoleName) => {
 
 const attachRolePolicy = (PolicyArn, RoleName) => {
     const iam = new aws.IAM();
-    return iam.attachRolePolicy({ PolicyArn, RoleName }).promise();
+    return iam.attachRolePolicy({
+        PolicyArn,
+        RoleName
+    }).promise();
 };
 
 
@@ -46,7 +49,9 @@ const attachPolicyToRole = (policySuffix, roleName) => attachRolePolicy(AWS_POLI
 
 const getRole = (RoleName) => {
     const iam = new aws.IAM();
-    return iam.getRole({ RoleName }).promise();
+    return iam.getRole({
+        RoleName
+    }).promise();
 };
 
 const hasRole = roleName => getRole(roleName).then(() => true).catch((err) => {
@@ -56,11 +61,29 @@ const hasRole = roleName => getRole(roleName).then(() => true).catch((err) => {
     throw err;
 });
 
-const hasInstanceProfile = () => hasRole(INSTANCE_PROFILE_ROLE);
-const hasServiceProfile = () => hasRole(SERVICE_PROFILE_ROLE);
+const hasInstanceProfileName = (InstanceProfileName) => {
+    const iam = new aws.IAM();
+    return iam.getInstanceProfile({
+        InstanceProfileName
+    }).promise()
+        .then(() => true)
+        .catch((err) => {
+            if (err && err.code === 'NoSuchEntity') {
+                return false;
+            }
+            throw err;
+        });
+};
 
+const hasInstanceProfile = () => hasInstanceProfileName(INSTANCE_PROFILE_ROLE);
+const hasInstanceRole = () => hasRole(INSTANCE_PROFILE_ROLE);
+const hasServiceProfileRole = () => hasRole(SERVICE_PROFILE_ROLE);
 
-const createServiceProfileWithAttachedPolicies = () => {
+const createInstanceProfileWithAttachment = () =>
+    createInstanceProfile(INSTANCE_PROFILE_ROLE)
+        .then(() => addRoleToInstanceProfile(INSTANCE_PROFILE_ROLE, INSTANCE_PROFILE_ROLE));
+
+const createServiceProfileRoleWithAttachedPolicies = () => {
     const roleName = SERVICE_PROFILE_ROLE;
     const description = 'Default Elastic Beanstalk Service profile created by JHipster.';
     const assumedPolicyDoc = `{
@@ -91,7 +114,7 @@ const createServiceProfileWithAttachedPolicies = () => {
         });
 };
 
-const createInstanceProfileWithAttachedPolicies = () => {
+const createInstanceRoleWithAttachedPolicies = () => {
     const roleName = INSTANCE_PROFILE_ROLE;
     const description = 'Default Elastic Beanstalk instance profile created by JHipster.';
     const assumedPolicyDoc = `{
@@ -108,8 +131,6 @@ const createInstanceProfileWithAttachedPolicies = () => {
 }`;
 
     return createRole(roleName, description, assumedPolicyDoc)
-        .then(() => createInstanceProfile(roleName))
-        .then(() => addRoleToInstanceProfile(roleName, roleName))
         .then(() => {
             const policiesToAttach = [
                 attachPolicyToRole('AWSElasticBeanstalkWebTier', roleName),
@@ -132,26 +153,37 @@ const createInstanceProfileWithAttachedPolicies = () => {
  * @param callback
  */
 Iam.prototype.verifyRoles = function verifyRoles(params, callback) {
-    hasInstanceProfile()
+    hasInstanceRole()
+        .then((instanceRole) => {
+            if (!instanceRole) {
+                log(`Instance role '${INSTANCE_PROFILE_ROLE}' does not exist. Creating based on defaults.`);
+                return createInstanceRoleWithAttachedPolicies();
+            }
+
+            return instanceRole;
+        })
+        .then(() => hasInstanceProfile())
         .then((instanceProfileExists) => {
             if (!instanceProfileExists) {
                 log(`Instance profile '${INSTANCE_PROFILE_ROLE}' does not exist. Creating based on defaults.`);
-                return createInstanceProfileWithAttachedPolicies();
+                return createInstanceProfileWithAttachment();
             }
 
             return instanceProfileExists;
         })
-        .then(() => hasServiceProfile())
+        .then(() => hasServiceProfileRole())
         .then((serviceProfileExists) => {
             if (!serviceProfileExists) {
                 log(`Service Profile profile '${SERVICE_PROFILE_ROLE}' does not exist. Creating based on defaults.`);
-                return createServiceProfileWithAttachedPolicies();
+                return createServiceProfileRoleWithAttachedPolicies();
             }
 
             return serviceProfileExists;
         })
         .then(() => callback(null, null))
         .catch((err) => {
-            callback({ message: err.message }, null);
+            callback({
+                message: err.message
+            }, null);
         });
 };
