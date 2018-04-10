@@ -17,10 +17,12 @@
  limitations under the License.
 -%>
 // Override Boostrap variables
-@import "bootstrap-variables";
+@import 'bootstrap-variables';
 // Import Bootstrap source files from node_modules
 @import 'node_modules/bootstrap/scss/bootstrap';
-
+<%_ if (enableI18nRTL) { _%>
+@import 'rtl.scss';
+<%_ } _%>
 body {
   background: #fafafa;
   margin: 0;
