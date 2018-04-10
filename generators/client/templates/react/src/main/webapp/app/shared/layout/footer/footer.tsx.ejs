@@ -20,12 +20,17 @@ import './footer.<%= styleSheetExt %>';
 
 import * as React from 'react';
 import { Translate } from 'react-jhipster';
+import { Col, Row } from 'reactstrap'; 
 
 const Footer = props => (
   <div className="footer page-content">
-    <div className="row">
-      <p className="col-md-12"><Translate contentKey="footer">Your footer</Translate></p>
-    </div>
+    <Row>
+      <Col md="12">
+        <p>
+          <Translate contentKey="footer">Your footer</Translate>
+        </p>
+      </Col>
+    </Row>
   </div>
 );
 
