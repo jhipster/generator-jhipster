@@ -117,6 +117,8 @@ spec:
                     couchbase-cli cluster-init --cluster ${CB_POD_NAME}:8091 --cluster-name=jhipster-couchbase --cluster-username=${COUCHBASE_ADMIN_USER} --cluster-password=${COUCHBASE_ADMIN_PASSWORD} --cluster-ramsize=500 --cluster-index-ramsize=300 --index-storage-setting default --services=data,index,query
                     echo "Setup bucket $BUCKET"
                     couchbase-cli bucket-create -c ${CB_POD_NAME}:8091 -u ${COUCHBASE_ADMIN_USER} -p ${COUCHBASE_ADMIN_PASSWORD} --bucket=$BUCKET --bucket-type=couchbase --bucket-ramsize=300 --bucket-replica=$REPLICA_CNT --enable-index-replica=1
+                    echo "Setup bucket $BUCKET admin user"
+                    couchbase-cli bucket-create -c ${CB_POD_NAME}:8091 -u ${COUCHBASE_ADMIN_USER} -p ${COUCHBASE_ADMIN_PASSWORD} --rbac-username=$BUCKET --rbac-password=${COUCHBASE_ADMIN_PASSWORD} --rbac-name=$BUCKET --roles=bucket_admin[$BUCKET]
                 fi
 
                 couchbase-cli setting-autofailover -c ${CB_POD_NAME}:8091 -u ${COUCHBASE_ADMIN_USER} -p ${COUCHBASE_ADMIN_PASSWORD} --enable-auto-failover 1 --auto-failover-timeout 30

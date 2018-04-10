@@ -375,7 +375,8 @@ dependencies {
     compile "com.github.mongobee:mongobee"
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
-        compile "com.github.differentway:couchmove"
+    compile "com.github.differentway:couchmove"
+    compile "com.couchbase.client:java-client"
     <%_ } _%>
     compile ("io.springfox:springfox-swagger2") {
         exclude module: 'mapstruct'
