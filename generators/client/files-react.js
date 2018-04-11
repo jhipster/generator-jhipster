@@ -415,10 +415,8 @@ const files = {
             condition: generator => generator.protractorTests,
             path: TEST_SRC_DIR,
             templates: [
-                'e2e/modules/account/login.spec.ts',
-                'e2e/modules/account/password.spec.ts',
-                'e2e/modules/account/settings.spec.ts',
-                'e2e/modules/account/register.spec.ts',
+                'e2e/modules/account/account.spec.ts',
+                'e2e/modules/administration/administration.spec.ts',
                 'e2e/util/utils.ts',
                 'e2e/page-objects/base-component.ts',
                 'e2e/page-objects/navbar-page.ts',

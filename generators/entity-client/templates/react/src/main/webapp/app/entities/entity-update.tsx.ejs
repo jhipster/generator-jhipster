@@ -310,7 +310,7 @@ _%>
       <div>
       <Row className="justify-content-center">
         <Col md="8">
-          <h2 id="<%= jhiPrefixDashed %>-<%= entityFileName %>-heading">
+          <h2 id="page-heading">
             <Translate contentKey="<%= i18nKeyPrefix %>.home.createOrEditLabel">Create or edit a <%= entityClass %></Translate>
           </h2>
         </Col>
@@ -322,7 +322,7 @@ _%>
             { !isNew ?
               <AvGroup>
                 <Label for="id"><Translate contentKey="global.field.id">ID</Translate></Label>
-                <AvInput type="text" className="form-control" name="id" required readOnly/>
+                <AvInput id="field_id" type="text" className="form-control" name="id" required readOnly/>
               </AvGroup>
               : null
             }
@@ -334,7 +334,7 @@ _%>
             <AvGroup>
             <%_ if (fieldType === 'Boolean') { _%>
               <Label id="<%= fieldName %>Label" check>
-                <AvInput type="checkbox" className="form-control" name="<%= fieldName %>" />
+                <AvInput id="field_<%= fieldName %>" type="checkbox" className="form-control" name="<%= fieldName %>" />
                 <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
                   <%= fieldNameHumanized %>
                 </Translate>
@@ -346,6 +346,7 @@ _%>
                 </Translate>
               </Label>
               <AvInput
+                id="field_<%= fieldName %>"
                 type="datetime-local"
                 className="form-control"
                 name="<%= fieldName %>"
@@ -359,6 +360,7 @@ _%>
                 </Translate>
               </Label>
               <AvField
+                id="field_<%= fieldName %>"
                 type="date"
                 className="form-control"
                 name="<%= fieldName %>"
@@ -373,7 +375,9 @@ _%>
                   <%= fieldNameHumanized %>
                 </Translate>
               </Label>
-              <AvInput type="select"
+              <AvInput 
+                id="field_<%= fieldName %>"
+                type="select"
                 className="form-control"
                 name="<%= fieldName %>"
                 value={(!isNew && <%= entityInstance %>.<%= fieldName%>) || '<%= values[0] %>'}
@@ -393,7 +397,7 @@ _%>
                   <%= fieldNameHumanized %>
                 </Translate>
               </Label>
-              <AvField type="number" className="form-control" name="<%= fieldName %>" <%- include react_validators %> />
+              <AvField id="field_<%= fieldName %>" type="number" className="form-control" name="<%= fieldName %>" <%- include react_validators %> />
             <%_
             } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) {
 
@@ -440,7 +444,7 @@ _%>
                   <%= fieldNameHumanized %>
                 </Translate>
               </Label>
-              <AvField type="text" name="<%= fieldName %>" <%- include react_validators %>/>
+              <AvField id="field_<%= fieldName %>" type="text" name="<%= fieldName %>" <%- include react_validators %>/>
               <%_ } _%>
             <%_ } else { _%>
             <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
@@ -448,7 +452,7 @@ _%>
                 <%= fieldNameHumanized %>
               </Translate>
             </Label>
-            <AvField type="text" name="<%= fieldName %>" <%- include react_validators %>/>
+            <AvField id="field_<%= fieldName %>" type="text" name="<%= fieldName %>" <%- include react_validators %>/>
           <%_ } _%>
             <%_ if (fields[idx].javadoc) { _%>
             <UncontrolledTooltip target="<%= fieldName %>Label">
@@ -482,7 +486,9 @@ _%>
               </Label>
               <%_ if (dto === 'no') { _%>
                   <%_ if (!relationshipRequired) { _%>
-              <AvInput type="select"
+              <AvInput
+                id="field_<%= relationshipName %>"
+                type="select"
                 className="form-control"
                 name="<%= relationshipFieldName %>.<%= otherEntityField %>"
                 onChange={this.<%= relationshipFieldName %>Update}>
@@ -497,11 +503,15 @@ _%>
                   ) : null
                 }
               </AvInput>
-              <AvInput type="hidden"
+              <AvInput 
+                id="field_<%= relationshipName %>"
+                type="hidden"
                 name="<%= relationshipFieldName %>.id"
                 value={this.state.<%= relationshipFieldName %>Id} />
                 <%_ } else { _%>
-              <AvInput type="select"
+              <AvInput 
+                id="field_<%= relationshipName %>"
+                type="select"
                 className="form-control"
                 name="<%= relationshipFieldName %>.<%= otherEntityField %>"
                 onChange={this.<%= relationshipFieldName %>Update}>
@@ -515,13 +525,17 @@ _%>
                   ) : null
                 }
               </AvInput>
-              <AvInput type="hidden"
+              <AvInput 
+                id="field_<%= relationshipName %>"
+                type="hidden"
                 name="<%= relationshipFieldName %>.id"
                 value={this.state.<%= relationshipFieldName %>Id} />
                 <%_ } _%>
               <%_ } else { _%>
                 <%_ if (!relationshipRequired) { _%>
-                  <AvInput type="select"
+                  <AvInput 
+                    id="field_<%= relationshipName %>"
+                    type="select"
                     className="form-control"
                     name="<%= relationshipFieldName %>Id"
                     onChange={this.<%= relationshipFieldName %>Update}>
@@ -537,7 +551,9 @@ _%>
                     }
                   </AvInput>
                 <%_ } else { _%>
-                  <AvInput type="select"
+                  <AvInput 
+                    id="field_<%= relationshipName %>"
+                    type="select"
                     className="form-control"
                     name="<%= relationshipFieldName %>Id"
                     onChange={this.<%= relationshipFieldName %>Update}>
@@ -560,7 +576,9 @@ _%>
                 <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
               </Label>
                 <%_ if (dto === 'no') { _%>
-                  <AvInput type="select"
+                  <AvInput 
+                    id="field_<%= relationshipName %>"
+                    type="select"
                     className="form-control"
                     name="<%= relationshipFieldName %>.<%=otherEntityField%>"
                     onChange={this.<%= relationshipFieldName %>Update}>
@@ -575,11 +593,15 @@ _%>
                       ) : null
                     }
                   </AvInput>
-                  <AvInput type="hidden"
+                  <AvInput 
+                    id="field_<%= relationshipName %>"
+                    type="hidden"
                     name="<%= relationshipFieldName %>.id"
                     value={this.state.<%= relationshipFieldName %>Id} />
                 <%_ } else { _%>
-                  <AvInput type="select"
+                  <AvInput 
+                    id="field_<%= relationshipName %>"
+                    type="select"
                     className="form-control"
                     name="<%= relationshipFieldName %>Id"
                     onChange={this.<%= relationshipFieldName %>Update}>
@@ -599,7 +621,9 @@ _%>
                 <%_ } else if (relationshipType === 'many-to-many' && rel.ownerSide === true) { _%>
             <AvGroup>
               <Label for="<%= otherEntityNamePlural %>"><Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate></Label>
-              <AvInput type="select"
+              <AvInput 
+                id="field_<%= relationshipName %>"
+                type="select"
                 multiple
                 className="form-control"
                 name="fake<%= otherEntityNamePlural %>"
@@ -616,7 +640,9 @@ _%>
                   ) : null
                 }
               </AvInput>
-              <AvInput type="hidden"
+              <AvInput 
+                id="field_<%= relationshipName %>"
+                type="hidden"
                 name="<%= relationshipFieldNamePlural %>"
                 value={this.state.ids<%= relationshipName %>}
               />

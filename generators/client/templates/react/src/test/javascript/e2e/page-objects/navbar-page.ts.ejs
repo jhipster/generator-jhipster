@@ -2,13 +2,17 @@ import { $, ElementFinder } from 'protractor';
 
 import BasePage from './base-component';
 import SignInPage from './signin-page';
+import PasswordPage from './password-page';
+import RegisterPage from './register-page';
+import { SettingsPage } from './settings-page';
 
 const selector: ElementFinder = $('#app-header');
 export default class NavBarPage extends BasePage {
   selector: ElementFinder;
   signInPage: SignInPage;
-  adminMenu: ElementFinder = this.selector.$('#admin-menu');
+  adminMenu: ElementFinder;
   accountMenu: ElementFinder = this.selector.$('#account-menu');
+  entityMenu = this.selector.$('#entity-menu');
 
   constructor(asAdmin?: Boolean) {
     super(selector);
@@ -34,6 +38,10 @@ export default class NavBarPage extends BasePage {
     return this.adminMenu.click();
   }
 
+  clickOnEntityMenu() {
+    return this.entityMenu.click();
+  }
+
   clickOnAdminMenuItem(item: string) {
     this.adminMenu.click();
     return this.selector.$(`.dropdown-item[href="#/admin/${item}"]`).click();
@@ -42,6 +50,37 @@ export default class NavBarPage extends BasePage {
   clickOnAccountMenuItem(item: string) {
     this.accountMenu.click();
     return this.selector.$(`.dropdown-item[href="#/account/${item}"`).click();
+  }
+
+  clickOnEntity(entityName: string) {
+    return this.selector.$(`.dropdown-item[href="#/entity/${entityName}"]`).click();
+  }
+
+  getPasswordPage() {
+    this.clickOnAccountMenuItem('password');
+    return new PasswordPage();
+  }
+
+  getSettingsPage() {
+    this.clickOnAccountMenuItem('settings');
+    return new SettingsPage();
+  }
+
+  getRegisterPage() {
+    this.clickOnAccountMenu();
+    this.clickOnTabMenu('register');
+    return new RegisterPage();
+  }
+
+  getSignInPage() {
+    this.clickOnAccountMenu();
+    this.clickOnTabMenu('login');
+    return new SignInPage();
+  }
+
+  getEntityPage(entityName: string) {
+    this.clickOnEntityMenu();
+    return this.clickOnEntity(entityName);
   }
 
   autoSignIn() {

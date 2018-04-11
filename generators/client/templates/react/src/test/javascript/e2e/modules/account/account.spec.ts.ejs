@@ -1,0 +1,154 @@
+import SignInPage from '../../page-objects/signin-page';
+import PasswordPage from '../../page-objects/password-page';
+import NavBarPage from '../../page-objects/navbar-page';
+import RegisterPage from '../../page-objects/register-page';
+import { SettingsPage } from '../../page-objects/settings-page';
+
+import { $, browser } from 'protractor';
+import { waitUntilDisplayed } from '../../util/utils';
+
+const expect = chai.expect;
+
+describe('Account', () => {
+  let navBarPage: NavBarPage;
+  let signInPage: SignInPage;
+  let passwordPage: PasswordPage;
+  let settingsPage: SettingsPage;
+  let registerPage: RegisterPage;
+
+  const pageTitle = 'Sign in';
+
+  before(() => {
+    signInPage = new SignInPage();
+    navBarPage = new NavBarPage();
+
+    signInPage.get();
+  });
+
+  it('should fail to login with bad password', async () => {
+    // Login page should appear
+    expect(await signInPage.getTitle()).to.eq(pageTitle);
+    signInPage.autoSignInUsing('admin', 'foo');
+    // Login page should stay open when login fails
+    expect(await signInPage.getTitle()).to.eq(pageTitle);
+  });
+
+  it('should login with admin account', async () => {
+    // Login page should appear
+    expect(await signInPage.getTitle()).to.eq(pageTitle);
+    signInPage.autoSignInUsing('admin', 'admin');
+    signInPage.waitUntilHidden();
+    // Login page should close when login success
+    expect(await signInPage.isHidden()()).to.eq(true);
+
+    navBarPage.autoSignOut();
+  });
+
+  it('should be able to sign up', async () => {
+    browser.refresh();
+
+    registerPage = navBarPage.getRegisterPage();
+    registerPage.autoSignUpUsing('user_test', 'usertest@jhipster.com', 'user_test');
+
+    waitUntilDisplayed($('.alert-success'), 'alert-success');
+    expect(await $('.alert-success').getText()).to.eq('Registration saved! Please check your email for confirmation.');
+  });
+
+  it('should not be able to sign up if login already taken', async () => {
+    registerPage = navBarPage.getRegisterPage();
+    registerPage.autoSignUpUsing('user_test', 'usertest@jhipster.com', 'lolee');
+
+    waitUntilDisplayed(registerPage.getToast(), 'toast');
+    expect(await registerPage.getToast().getText()).to.eq('Login already in use');
+  });
+
+  it('should not be able to sign up if email already taken', async () => {
+    registerPage = navBarPage.getRegisterPage();
+    registerPage.autoSignUpUsing('user_test2', 'usertest@jhipster.com', 'user_test2');
+
+    waitUntilDisplayed(registerPage.getToast(), 'toast');
+    expect(await registerPage.getToast().getText()).to.eq('Email address already in use');
+  });
+
+  /* it('should be able to log in with new registered account', async () => {
+    signInPage = navBarPage.getSignInPage();
+    signInPage.autoSignInUsing('azzzza', 'lolee');
+
+    const errorMessage = 'register.messages.success';
+    waitUntilDisplayed($('.alert-warning'), 'alert-warning');
+    signInPage.waitUntilHidden();
+    expect(await signInPage.isHidden()()).to.eq(true);
+
+    navBarPage.autoSignOut();
+  }); */
+
+  it('should fail to update password when using incorrect current password', async () => {
+    browser.refresh();
+
+    navBarPage.autoSignIn();
+    passwordPage = navBarPage.getPasswordPage();
+    passwordPage.autoChangePassword('wront_current_password', 'new_password', 'new_password');
+
+    waitUntilDisplayed(passwordPage.getToast(), 'toast');
+    expect(await passwordPage.getToast().getText()).to.eq('<strong>An error has occurred!</strong> The password could not be changed.');
+  });
+
+  it('should be able to update password', async () => {
+    browser.refresh();
+
+    passwordPage = navBarPage.getPasswordPage();
+    passwordPage.autoChangePassword('admin', 'newpassword', 'newpassword');
+
+    waitUntilDisplayed(passwordPage.getToast(), 'toast');
+    expect(await passwordPage.getToast().getText()).to.eq('<strong>Password changed!</strong>');
+
+    navBarPage.autoSignOut();
+  });
+
+  it('should be able to log in with new password', async () => {
+    browser.refresh();
+
+    signInPage.get();
+    signInPage.autoSignInUsing('admin', 'newpassword');
+    signInPage.waitUntilHidden();
+    // expect(await signInPage.isHidden()()).to.eq(true);
+
+    // change back to default
+    passwordPage = navBarPage.getPasswordPage();
+    passwordPage.autoChangePassword('newpassword', 'admin', 'admin');
+
+    navBarPage.autoSignOut();
+  });
+
+  it('should be able to change settings', async () => {
+    browser.refresh();
+
+    navBarPage.autoSignIn();
+
+    settingsPage = navBarPage.getSettingsPage();
+    settingsPage.clearEmail();
+    settingsPage.setEmail('admin@jhipster.com');
+    settingsPage.save();
+
+    waitUntilDisplayed(settingsPage.getToast(), 'toast');
+    expect(await settingsPage.getToast().getText()).to.eq('Settings saved!');
+
+    navBarPage.autoSignOut();
+  });
+
+  it('should not be able to change settings if email already exists', async () => {
+    signInPage = navBarPage.getSignInPage();
+    signInPage.autoSignInUsing('user', 'user');
+    signInPage.waitUntilHidden();
+
+    settingsPage = navBarPage.getSettingsPage();
+    settingsPage.clearEmail();
+    settingsPage.setEmail('admin@jhipster.com');
+    settingsPage.save();
+
+    waitUntilDisplayed(settingsPage.getToast(), 'toast');
+    expect(await settingsPage.getToast().getText()).to.eq('Email address already in use');
+  });
+
+  after(() => signInPage.autoSignOut());
+});

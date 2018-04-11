@@ -178,7 +178,7 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
     }
 
     const entitiesMenu = (
-      <UncontrolledDropdown nav inNavbar key="entities">
+      <UncontrolledDropdown id="entity-menu" nav inNavbar key="entities">
         <DropdownToggle nav caret className="d-flex align-items-center">
           <FaThList />
           <span>Entities</span>
@@ -187,7 +187,7 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
       </UncontrolledDropdown>
     );
     const adminMenu = (
-      <UncontrolledDropdown nav inNavbar key="admin">
+      <UncontrolledDropdown id="admin-menu" nav inNavbar key="admin">
         <DropdownToggle nav caret className="d-flex align-items-center">
           <FaUserPlus />
           <span>Administration</span>
