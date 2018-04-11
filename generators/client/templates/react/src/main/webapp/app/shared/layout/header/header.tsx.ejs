@@ -126,9 +126,10 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
       <DropdownItem tag={Link} key="metrics" to="/admin/metrics"><FaDashboard /> Metrics</DropdownItem>,
       <DropdownItem tag={Link} key="health" to="/admin/health"><FaHeart /> Health</DropdownItem>,
       <DropdownItem tag={Link} key="configuration" to="/admin/configuration"><FaList /> Configuration</DropdownItem>,
-    <%_ if (databaseType !== 'cassandra') { _%>
+      <%_ if (databaseType !== 'cassandra') { _%>
       <DropdownItem tag={Link} key="audits" to="/admin/audits"><FaBell /> Audits</DropdownItem>,
-      <%_ } _%>/* jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here */  
+      <%_ } _%>
+      /* jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here */  
       <DropdownItem tag={Link} key="logs" to="/admin/logs"><FaTasks /> Logs</DropdownItem>
     ];
 
