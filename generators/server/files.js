@@ -603,7 +603,7 @@ const serverFiles = {
             path: SERVER_MAIN_RES_DIR,
             templates: [
                 { file: 'package/config/UserEntityConfiguration.java.ejs', renameTo: generator => `${generator.javaDir}config/UserEntityConfiguration.java` },
-                { file: 'package/domain/UserEntityListener.java.ejs', renameTo: generator => `${generator.javaDir}domain/UserEntityListener.java.ejs` }
+                { file: 'package/domain/UserEntityListener.java.ejs', renameTo: generator => `${generator.javaDir}domain/UserEntityListener.java` }
             ]
         },
         {
