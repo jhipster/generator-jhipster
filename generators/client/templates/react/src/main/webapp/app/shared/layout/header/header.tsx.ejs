@@ -19,6 +19,7 @@
 import './header.<%= styleSheetExt %>';
 
 import * as React from 'react';
+import { connect } from 'react-redux';
 import { Translate } from 'react-jhipster';
 import {
   Navbar, Nav, NavItem, NavLink, NavbarToggler, NavbarBrand, Collapse,
@@ -49,11 +50,17 @@ import { getLoginUrl } from 'app/shared/util/url-utils';
 <%_ if (enableTranslation) { _%>
 import { locales } from 'app/config/translation';
 <%_ } _%>
+import { getProfile } from 'app/shared/reducers/profile';
 import appConfig from 'app/config/constants';
 
 export interface IHeaderProps {
   isAuthenticated: boolean;
   isAdmin: boolean;
+  activeProfiles: string[];
+  ribbonEnv: string;
+  isInProduction: boolean;
+  isSwaggerEnabled: boolean;
+  getProfile: Function;
 <%_ if (enableTranslation) { _%>
   currentLocale: string;
   onLocaleChange: Function;
@@ -77,17 +84,23 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
       menuOpen: false
   };
 
+  componentDidMount() {
+    this.props.getProfile();
+  }
+
   <%_ if (enableTranslation) { _%>
   handleLocaleChange = event => {
     this.props.onLocaleChange(event.target.value);
   }
 
   <%_ } _%>
-  renderDevRibbon = () => (
-    process.env.NODE_ENV === 'development' ?
-      <div className="ribbon dev"><a href=""><Translate contentKey="global.ribbon.dev">Development</Translate></a></div> :
-      null
-  )
+  renderDevRibbon = () => this.props.isInProduction === false ? (
+    <div className="ribbon dev">
+      <a href="">
+        <Translate contentKey={`global.ribbon.${this.props.ribbonEnv}`}>{this.props.ribbonEnv}</Translate>
+      </a>
+    </div>
+  ) : null;
 
   toggleMenu = () => {
     this.setState({ menuOpen: !this.state.menuOpen });
@@ -118,11 +131,20 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
       <%_ } _%>/* jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here */  
       <DropdownItem tag={Link} key="logs" to="/admin/logs"><FaTasks /> Logs</DropdownItem>
     ];
-    const devAdminItems = [
-      <DropdownItem tag={Link} key="docs" to="/admin/docs"><FaBook /> API Docs</DropdownItem><% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>, 
-      <DropdownItem tag="a" key="h2-console" href="./h2-console" target="_tab"><FaHddO /> Database</DropdownItem>
-      <%_ } _%>
+
+    const swaggerItem = (
+      <DropdownItem tag={Link} key="docs" to="/admin/docs">
+        <FaBook /> API Docs
+      </DropdownItem>
+    );
+    
+    <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>
+    const databaseItem = [
+      <DropdownItem tag="a" key="h2-console" href="./h2-console" target="_tab">
+        <FaHddO /> Database
+      </DropdownItem>
     ];
+    <%_ } _%>
 
     const accountMenuItems = [];
     if (isAuthenticated) {
@@ -166,7 +188,10 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
         </DropdownToggle>
         <DropdownMenu right style={{ width: '130%' }}>
           {adminMenuItems}
-          {process.env.NODE_ENV === 'development' ? devAdminItems : null}
+          {this.props.isSwaggerEnabled ? swaggerItem : null}
+          <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>
+          {!this.props.isInProduction ? databaseItem : null}
+          <%_ } _%>
         </DropdownMenu>
       </UncontrolledDropdown>
     );
@@ -221,4 +246,13 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
   }
 }
 
-export default Header;
+const mapStateToProps = ({ profile }) => ({
+  activeProfiles: profile.activeProfiles,
+  ribbonEnv: profile.ribbonEnv,
+  isInProduction: profile.inProduction,
+  isSwaggerEnabled: profile.isSwaggerEnabled
+});
+
+const mapDispatchToProps = { getProfile };
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
