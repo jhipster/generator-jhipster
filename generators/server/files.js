@@ -605,7 +605,7 @@ const serverFiles = {
                 { file: 'package/config/UserEntityConfiguration.java.ejs', renameTo: generator => `${generator.javaDir}config/UserEntityConfiguration.java` },
                 { file: 'package/domain/UserEntityListener.java.ejs', renameTo: generator => `${generator.javaDir}domain/UserEntityListener.java.ejs` }
             ]
-        }
+        },
         {
             condition: generator => !(generator.applicationType !== 'microservice' && !(generator.applicationType === 'gateway' && (generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2')))
                 && (generator.applicationType === 'microservice'),
