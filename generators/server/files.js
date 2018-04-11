@@ -600,10 +600,10 @@ const serverFiles = {
         },
         {
             condition: generator => generator.authenticationType === 'oauth2' && generator.applicationType === 'microservice' && generator.databaseType === 'sql',
-            path: SERVER_MAIN_RES_DIR,
+            path: SERVER_MAIN_SRC_DIR,
             templates: [
-                { file: 'package/config/UserEntityConfiguration.java.ejs', renameTo: generator => `${generator.javaDir}config/UserEntityConfiguration.java` },
-                { file: 'package/domain/UserEntityListener.java.ejs', renameTo: generator => `${generator.javaDir}domain/UserEntityListener.java` }
+                { file: 'package/config/UserEntityConfiguration.java', renameTo: generator => `${generator.javaDir}config/UserEntityConfiguration.java` },
+                { file: 'package/domain/UserEntityListener.java', renameTo: generator => `${generator.javaDir}domain/UserEntityListener.java` }
             ]
         },
         {
