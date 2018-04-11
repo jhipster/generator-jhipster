@@ -34,7 +34,7 @@ else
     travis/scripts/00-replace-version-jhipster.sh
 
     ./mvnw clean install -Dgpg.skip=true
-    ls -al ~/.m2/repository/io/github/jhipster/jhipster/
+    ls -al ~/.m2/repository/io/github/jhipster/jhipster-framework/
     ls -al ~/.m2/repository/io/github/jhipster/jhipster-dependencies/
     ls -al ~/.m2/repository/io/github/jhipster/jhipster-parent/
 fi

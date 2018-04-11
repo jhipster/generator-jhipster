@@ -69,7 +69,7 @@ apply plugin: 'idea'
 
 dependencyManagement {
   imports {
-    mavenBom 'io.github.jhipster:jhipster-dependencies:' + jhipster_dependencies_version
+    mavenBom 'io.github.jhipster:jhipster-dependencies:' + jhipster_framework_version
     //jhipster-needle-gradle-dependency-management - JHipster will add additional dependencies management here
   }
 }
@@ -203,13 +203,14 @@ repositories {
 }
 
 dependencies {
+    // TODO remove the "changing: true" when the JHipster server library is released
+    compile group: "io.github.jhipster", name: "jhipster-framework", version: jhipster_framework_version, changing: true
+
     // TODO To remove after final Spring Boot 2 release
     compile "javax.xml.bind:jaxb-api"
     <%_ if (cacheProvider !== 'no') { _%>
     compile "org.springframework.boot:spring-boot-starter-cache"
     <%_ } _%>
-    // TODO remove the "changing: true" when the JHipster server library is released
-    compile group: "io.github.jhipster", name: "jhipster", version: jhipster_dependencies_version, changing: true
     compile "io.dropwizard.metrics:metrics-core"
     <%_ if (['ehcache', 'infinispan'].includes(cacheProvider)) { _%>
     compile "io.dropwizard.metrics:metrics-jcache"
