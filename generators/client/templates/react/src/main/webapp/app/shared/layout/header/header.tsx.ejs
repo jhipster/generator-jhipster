@@ -115,13 +115,15 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
       <DropdownItem tag={Link} key="configuration" to="/admin/configuration"><FaList /> Configuration</DropdownItem>,
     <%_ if (databaseType !== 'cassandra') { _%>
       <DropdownItem tag={Link} key="audits" to="/admin/audits"><FaBell /> Audits</DropdownItem>,
-    <%_ } _%>
-      <DropdownItem tag={Link} key="logs" to="/admin/logs"><FaTasks /> Logs</DropdownItem>,
-      /* jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here */
-      <DropdownItem tag={Link} key="docs" to="/admin/docs"><FaBook /> API Docs</DropdownItem><% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>,
-      <DropdownItem tag="a" key="h2-console" href="./h2-console" target="_tab"><FaHddO /> Database</DropdownItem>
-    <%_ } _%>
+      <%_ } _%>/* jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here */  
+      <DropdownItem tag={Link} key="logs" to="/admin/logs"><FaTasks /> Logs</DropdownItem>
     ];
+    const devAdminItems = [
+      <DropdownItem tag={Link} key="docs" to="/admin/docs"><FaBook /> API Docs</DropdownItem><% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>, 
+      <DropdownItem tag="a" key="h2-console" href="./h2-console" target="_tab"><FaHddO /> Database</DropdownItem>
+      <%_ } _%>
+    ];
+
     const accountMenuItems = [];
     if (isAuthenticated) {
       accountMenuItems.push(
@@ -164,6 +166,7 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
         </DropdownToggle>
         <DropdownMenu right style={{ width: '130%' }}>
           {adminMenuItems}
+          {process.env.NODE_ENV === 'development' ? devAdminItems : null}
         </DropdownMenu>
       </UncontrolledDropdown>
     );
