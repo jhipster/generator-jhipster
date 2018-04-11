@@ -56,7 +56,6 @@ import appConfig from 'app/config/constants';
 export interface IHeaderProps {
   isAuthenticated: boolean;
   isAdmin: boolean;
-  activeProfiles: string[];
   ribbonEnv: string;
   isInProduction: boolean;
   isSwaggerEnabled: boolean;
@@ -248,7 +247,6 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
 }
 
 const mapStateToProps = ({ profile }) => ({
-  activeProfiles: profile.activeProfiles,
   ribbonEnv: profile.ribbonEnv,
   isInProduction: profile.inProduction,
   isSwaggerEnabled: profile.isSwaggerEnabled

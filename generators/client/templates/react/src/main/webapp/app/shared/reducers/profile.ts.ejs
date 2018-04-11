@@ -25,7 +25,6 @@ export const ACTION_TYPES = {
 };
 
 const initialState = {
-  activeProfiles: [],
   ribbonEnv: '',
   isInProduction: true,
   isSwaggerEnabled: false
@@ -37,7 +36,6 @@ export default (state = initialState, action) => {
       const { data } = action.payload;
       return {
         ...state,
-        activeProfiles: data.activeProfiles,
         ribbonEnv: data.ribbonEnv,
         inProduction: data.activeProfiles.includes('prod'),
         isSwaggerEnabled: data.activeProfiles.includes('swagger')
