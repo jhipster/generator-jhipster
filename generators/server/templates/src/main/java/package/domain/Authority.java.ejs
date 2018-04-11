@@ -52,8 +52,10 @@ import java.io.Serializable;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 @Document(collection = "<%= jhiTablePrefix %>_authority")
-<%_ } _%><% if (databaseType === 'couchbase') { %>
-@Document<% } %>
+<%_ } _%>
+<%_ if (databaseType === 'couchbase') { _%>
+@Document
+<%_ } _%>
 public class Authority implements Serializable {
 
     private static final long serialVersionUID = 1L;

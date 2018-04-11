@@ -346,6 +346,10 @@
             <artifactId>couchbase-testcontainer</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.couchbase.client</groupId>
+            <artifactId>java-client</artifactId>
+        </dependency>
         <%_ } _%>
         <%_ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || applicationType === 'gateway') { _%>
         <dependency>
@@ -438,10 +442,6 @@
         </dependency>
         <%_ if (databaseType === 'mongodb') { _%>
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.github.mongobee</groupId>
             <artifactId>mongobee</artifactId>
         </dependency>
@@ -522,7 +522,7 @@
         <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-<%=databaseType%></artifactId>
+            <artifactId>spring-boot-starter-data-<%=databaseType%><% if (reactive === true) { %>-reactive<% } %></artifactId>
         </dependency>
         <%_ } _%>
         <dependency>
@@ -607,6 +607,12 @@
             <artifactId>spring-security-jwt</artifactId>
         </dependency>
             <%_ } _%>
+        <%_ } _%>
+        <%_ if (authenticationType === 'session') { _%>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
         <%_ } _%>
         <%_ if (authenticationType === 'jwt') { _%>
         <dependency>

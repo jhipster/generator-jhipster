@@ -46,7 +46,7 @@ const Routes = () => (
       <Route path="/reset/request" component={PasswordResetInit} />
       <Route path="/reset/finish/:key?" component={PasswordResetFinish} />
       <PrivateRoute path="/admin" component={Admin} hasAnyAuthorities={[AUTHORITIES.ADMIN]}/>
-      <PrivateRoute path="/account" component={Account} hasAnyAuthorities={[AUTHORITIES.USER]}/>
+      <PrivateRoute path="/account" component={Account} hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}/>
       <PrivateRoute path="/entity" component={Entities} hasAnyAuthorities={[AUTHORITIES.USER]}/>
       <Route path="/" component={Home}/>
     </Switch>

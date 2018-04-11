@@ -180,6 +180,7 @@ spring:
         bootstrap-hosts: localhost
         bucket:
             name: <%= baseName %>
+            password: changeit
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     liquibase:

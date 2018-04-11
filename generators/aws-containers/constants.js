@@ -17,15 +17,12 @@
  * limitations under the License.
  */
 
-const AWS_SSM_VERSION = '1.11.247';
-
 const configuration = {
     aws: 'aws'
 };
 
 const constants = {
-    conf: configuration,
-    AWS_SSM_VERSION
+    conf: configuration
 };
 
 module.exports = constants;

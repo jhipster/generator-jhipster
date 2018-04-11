@@ -26,6 +26,9 @@ curl -u Administrator:password -X POST http://127.0.0.1:8091/settings/indexes -d
 echo "Setup bucket $BUCKET"
 curl -u Administrator:password -X POST http://127.0.0.1:8091/pools/default/buckets -d name=$BUCKET -d bucketType=couchbase -d ramQuotaMB=300 -dauthType=sasl
 
+echo "Setup bucket $BUCKET admin user"
+curl -u Administrator:password -X PUT http://127.0.0.1:8091/settings/rbac/users/local/$BUCKET -d name=$BUCKET -d password=password -d roles=bucket_admin%5B$BUCKET%5D
+
 # Load travel-sample bucket
 #curl -u Administrator:password -X POST http://127.0.0.1:8091/sampleBuckets/install -d '["travel-sample"]'
 

@@ -291,6 +291,9 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
     @WithAnonymousUser
     <%_ } _%>
     public void assertThatAnonymousUserIsNotGet() {
+        <%_ if (authenticationType === 'oauth2') { _%>
+        user.setId(Constants.ANONYMOUS_USER);
+        <%_ } _%>
         user.setLogin(Constants.ANONYMOUS_USER);
         if (!userRepository.findOneByLogin(Constants.ANONYMOUS_USER).isPresent()) {
             userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);

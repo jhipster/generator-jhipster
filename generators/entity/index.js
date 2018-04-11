@@ -110,9 +110,18 @@ module.exports = class extends BaseGenerator {
 
         this.context = {};
         this.setupEntityOptions(this, this, this.context);
-        const blueprint = this.config.get('blueprint');
-        useBlueprint = this.composeBlueprint(blueprint, 'entity'); // use global variable since getters dont have access to instance property
         this.registerClientTransforms();
+        const blueprint = this.config.get('blueprint');
+        // use global variable since getters dont have access to instance property
+        useBlueprint = this.composeBlueprint(
+            blueprint,
+            'entity',
+            {
+                'skip-install': this.options['skip-install'],
+                force: this.options.force,
+                arguments: [this.context.name]
+            }
+        );
     }
 
     get initializing() {
@@ -124,6 +133,7 @@ module.exports = class extends BaseGenerator {
                 this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
                 context.options = this.options;
                 context.baseName = this.config.get('baseName');
+                context.reactive = this.config.get('reactive');
                 context.capitalizedBaseName = _.upperFirst(context.baseName);
                 context.packageName = this.config.get('packageName');
                 context.applicationType = this.config.get('applicationType');
@@ -464,6 +474,7 @@ module.exports = class extends BaseGenerator {
                 context.entityTranslationKey = context.clientRootFolder ? _.camelCase(`${context.clientRootFolder}-${context.entityInstance}`) : context.entityInstance;
                 context.entityTranslationKeyMenu = _.camelCase(context.clientRootFolder ? `${context.clientRootFolder}-${context.entityStateName}` : context.entityStateName);
                 context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
+                context.reactiveRepositories = context.reactive && ['mongodb', 'couchbase'].includes(context.databaseType);
 
                 context.fieldsContainDate = false;
                 context.fieldsContainInstant = false;

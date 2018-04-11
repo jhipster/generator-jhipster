@@ -297,7 +297,7 @@ dependencies {
     compile "net.java.dev.jna:jna"
     <%_ } _%>
     <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-    compile "org.springframework.boot:spring-boot-starter-data-<%=databaseType%>"
+    compile "org.springframework.boot:spring-boot-starter-data-<%=databaseType%><% if (reactive === true) { %>-reactive<% } %>"
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
     compile "org.springframework.cloud:spring-cloud-stream"
@@ -318,7 +318,6 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"
     compile "org.zalando:problem-spring-web"
     <%_ if (databaseType === 'cassandra') { _%>
-    compile "com.google.guava:guava:18.0"
     compile "com.datastax.cassandra:cassandra-driver-core"
     compile "com.datastax.cassandra:cassandra-driver-extras"
     compile "com.datastax.cassandra:cassandra-driver-mapping"
@@ -362,6 +361,9 @@ dependencies {
     compile "org.springframework.security:spring-security-jwt"
         <%_ } _%>
     <%_ } _%>
+    <%_ if (authenticationType === 'session') { _%>
+    compile "com.google.guava:guava"
+    <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>
     compile "io.jsonwebtoken:jjwt"
     <%_ } _%>
@@ -371,10 +373,10 @@ dependencies {
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
     compile "com.github.mongobee:mongobee"
-    compile "com.google.guava:guava"
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
-        compile "com.github.differentway:couchmove"
+    compile "com.github.differentway:couchmove"
+    compile "com.couchbase.client:java-client"
     <%_ } _%>
     compile ("io.springfox:springfox-swagger2") {
         exclude module: 'mapstruct'
