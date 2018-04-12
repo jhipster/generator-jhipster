@@ -78,6 +78,7 @@ const BrandIcon = props => (
     />
   </div>
 );
+
 export class Header extends React.Component<IHeaderProps, IHeaderState> {
   state: IHeaderState = {
       menuOpen: false
@@ -91,12 +92,12 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
   handleLocaleChange = event => {
     this.props.onLocaleChange(event.target.value);
   }
-
   <%_ } _%>
+
   renderDevRibbon = () => this.props.isInProduction === false ? (
     <div className="ribbon dev">
       <a href="">
-        <Translate contentKey={`global.ribbon.${this.props.ribbonEnv}`}>{this.props.ribbonEnv}</Translate>
+        <Translate contentKey={`global.ribbon.${this.props.ribbonEnv}`} />
       </a>
     </div>
   ) : null;
