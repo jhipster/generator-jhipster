@@ -25,7 +25,7 @@ describe('private-route component', () => {
     const error = comp.find('div.insufficient-authority');
     expect(error.length).to.equal(1);
     expect(error.find('.alert-danger').html()).to.equal(
-      '<div class="alert alert-danger">You are not authorized to access this page.</div>'
+      '<div class="alert alert-danger"><span>You are not authorized to access this page.</span></div>'
     );
   });
 
