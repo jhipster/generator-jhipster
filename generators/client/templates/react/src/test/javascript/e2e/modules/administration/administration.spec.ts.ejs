@@ -1,6 +1,7 @@
-import { element, by, browser, $ } from 'protractor';
-import { waitUntilDisplayed, waitUntilHidden } from '../../util/utils';
+import { element, by, browser } from 'protractor';
+
 import NavBarPage from '../../page-objects/navbar-page';
+import { waitUntilDisplayed } from '../../util/utils';
 
 const expect = chai.expect;
 
@@ -15,70 +16,41 @@ describe('Administration', () => {
   describe('User management', () => {
     it('should load user management', async () => {
       navBarPage.clickOnAdminMenuItem('user-management');
-      expect(
-        await element
-          .all(by.css('h2'))
-          .first()
-          .getText()
-      ).to.contain('Users');
+      expect(await element(by.css('h2#page-heading')).getText()).to.contain('Users');
     });
 
     it('should delete previously created fake user', async () => {
       browser.get('#/admin/user-management/user_test/delete');
-      waitUntilDisplayed($('.modal'), 'modal');
-      $('.modal .btn-danger').click();
-      expect(await $('.modal').isPresent()).to.be.false;
+      const deleteModal = element(by.className('modal'));
+      waitUntilDisplayed(deleteModal, 'modal');
+      element(by.buttonText('Delete')).click();
+      expect(await deleteModal.isPresent()).to.be.false;
     });
   });
 
   it('should load metrics', async () => {
     navBarPage.clickOnAdminMenuItem('metrics');
-    expect(
-      await element
-        .all(by.css('h2'))
-        .first()
-        .getText()
-    ).to.contain('Application Metrics');
+    expect(await element(by.css('h2#page-heading')).getText()).to.contain('Application Metrics');
   });
 
   it('should load health', async () => {
     navBarPage.clickOnAdminMenuItem('health');
-    expect(
-      await element
-        .all(by.css('h2'))
-        .first()
-        .getText()
-    ).to.contain('Health Checks');
+    expect(await element(by.css('h2#page-heading')).getText()).to.contain('Health Checks');
   });
 
   it('should load configuration', async () => {
     navBarPage.clickOnAdminMenuItem('configuration');
-    expect(
-      await element
-        .all(by.css('h2'))
-        .first()
-        .getText()
-    ).to.contain('Configuration');
+    expect(await element(by.css('h2#page-heading')).getText()).to.contain('Configuration');
   });
 
   it('should load audits', async () => {
     navBarPage.clickOnAdminMenuItem('audits');
-    expect(
-      await element
-        .all(by.css('h2'))
-        .first()
-        .getText()
-    ).to.contain('Audits');
+    expect(await element(by.css('h2#page-heading')).getText()).to.contain('Audits');
   });
 
   it('should load logs', async () => {
     navBarPage.clickOnAdminMenuItem('logs');
-    expect(
-      await element
-        .all(by.css('h2'))
-        .first()
-        .getText()
-    ).to.contain('Logs');
+    expect(await element(by.css('h2#page-heading')).getText()).to.contain('Logs');
   });
 
   after(() => {

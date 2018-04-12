@@ -1,10 +1,10 @@
+import { element, by, $, browser } from 'protractor';
+
 import SignInPage from '../../page-objects/signin-page';
 import PasswordPage from '../../page-objects/password-page';
 import NavBarPage from '../../page-objects/navbar-page';
 import RegisterPage from '../../page-objects/register-page';
 import { SettingsPage } from '../../page-objects/settings-page';
-
-import { $, browser } from 'protractor';
 import { waitUntilDisplayed } from '../../util/utils';
 
 const expect = chai.expect;
@@ -70,17 +70,25 @@ describe('Account', () => {
     expect(await registerPage.getToast().getText()).to.eq('Email address already in use');
   });
 
-  /* it('should be able to log in with new registered account', async () => {
-    signInPage = navBarPage.getSignInPage();
-    signInPage.autoSignInUsing('azzzza', 'lolee');
+  it('should activate the new registered user', async () => {
+    navBarPage.autoSignIn();
 
-    const errorMessage = 'register.messages.success';
-    waitUntilDisplayed($('.alert-warning'), 'alert-warning');
+    browser.get('#/admin/user-management');
+    element(by.buttonText('Deactivated')).click();
+    expect(await element(by.buttonText('Activated')).getText()).to.eq('Activated');
+
+    navBarPage.autoSignOut();
+  });
+
+  it('should be able to log in with new registered account', async () => {
+    signInPage = navBarPage.getSignInPage();
+    signInPage.autoSignInUsing('user_test', 'user_test');
     signInPage.waitUntilHidden();
+
     expect(await signInPage.isHidden()()).to.eq(true);
 
     navBarPage.autoSignOut();
-  }); */
+  });
 
   it('should fail to update password when using incorrect current password', async () => {
     browser.refresh();

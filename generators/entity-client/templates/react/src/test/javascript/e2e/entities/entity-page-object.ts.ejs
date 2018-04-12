@@ -16,25 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { element, by, $ } from 'protractor';
+import { element, by, ElementFinder } from 'protractor';
 
-<%_
-let elementGetter = `getText()`;
-let openBlockComment = ``;
-let closeBlockComment = ``;
-if (enableTranslation) {
-    elementGetter = `getAttribute('jhiTranslate')`;
-}
-for (let relationship of relationships) {
-    if (relationship.relationshipRequired) {
-        openBlockComment = `/*`;
-        closeBlockComment = `*/`;
-        break;
-    }
-} _%>
 export default class <%= entityClass %>ComponentsPage {
-    createButton = $('#jh-create-entity');
-    title = element.all(by.id('page-heading')).first();
+    createButton: ElementFinder = element(by.id('jh-create-entity'));
+    title: ElementFinder = element(by.id('<%= entityFileName %>-heading'));
 
     clickOnCreateButton() {
         return this.createButton.click();
