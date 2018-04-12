@@ -182,7 +182,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).clear();
         cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).clear();
         <%_ } _%>
-        UserResource userResource = new UserResource(userRepository, userService<% if (authenticationType !== 'oauth2') { %>, mailService<% } %><% if (searchEngine === 'elasticsearch') { %>, mockUserSearchRepository<% } %>);
+        UserResource userResource = new UserResource(<% if (authenticationType !== 'oauth2') { %>userRepository, <%_ } _%>userService<% if (authenticationType !== 'oauth2') { %>, mailService<% } %><% if (searchEngine === 'elasticsearch') { %>, mockUserSearchRepository<% } %>);
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
