@@ -171,14 +171,14 @@ limitations under the License.
   },
   <%_ if(!skipCommitHook) { _%>
   "lint-staged": {
-    "*.{ts,tsx}": ["prettier --write", "git add"]
+    "src/**/*.{ts,tsx,css,scss}": ["prettier --write", "git add"]
   },
   <%_ } _%>
   "scripts": {
     <%_ if(!skipCommitHook) { _%>
     "precommit": "lint-staged",
     <%_ } _%>
-    "prettier:format": "<%= clientPackageManager %> prettier --write **/*.{ts,tsx}",
+    "prettier:format": "<%= clientPackageManager %> prettier --write 'src/**/*.{ts,tsx,css,scss}'",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "cleanup": "rimraf <%= BUILD_DIR %>www",
