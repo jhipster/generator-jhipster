@@ -24,7 +24,7 @@ import * as sinon from 'sinon';
 import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
 
-import authentication, { ACTION_TYPES, getSession, login } from 'app/shared/reducers/authentication';
+import authentication, { ACTION_TYPES, getSession<% if (authenticationType !== 'oauth2') { %>, login<% } %> } from 'app/shared/reducers/authentication';
 
 describe('Authentication reducer tests', () => {
   function isAccountEmpty(state): boolean {
@@ -47,6 +47,7 @@ describe('Authentication reducer tests', () => {
     });
   });
 
+  <%_ if (authenticationType !== 'oauth2') { _%>
   describe('Requests', () => {
     it('should detect a request', () => {
       expect(authentication(undefined, { type: REQUEST(ACTION_TYPES.LOGIN) })).to.contain({
@@ -57,8 +58,10 @@ describe('Authentication reducer tests', () => {
       });
     });
   });
+  <%_ } _%>
 
   describe('Success', () => {
+    <%_ if (authenticationType !== 'oauth2') { _%>
     it('should detect a success on login', () => {
       const toTest = authentication(undefined, { type: SUCCESS(ACTION_TYPES.LOGIN) });
       expect(toTest).to.contain({
@@ -68,6 +71,7 @@ describe('Authentication reducer tests', () => {
         loginSuccess: true
       });
     });
+    <%_ } _%>
 
     it('should detect a success on get session and be authenticated', () => {
       const payload = { data: { activated: true } };
@@ -91,6 +95,7 @@ describe('Authentication reducer tests', () => {
   });
 
   describe('Failure', () => {
+    <%_ if (authenticationType !== 'oauth2') { _%>
     it('should detect a failure on login', () => {
       const payload = 'Something happened.';
       const toTest = authentication(undefined, { type: FAILURE(ACTION_TYPES.LOGIN), payload });
@@ -102,6 +107,7 @@ describe('Authentication reducer tests', () => {
       });
       expect(isAccountEmpty(toTest));
     });
+    <%_ } _%>
 
     it('should detect a failure', () => {
       const payload = 'Something happened.';
