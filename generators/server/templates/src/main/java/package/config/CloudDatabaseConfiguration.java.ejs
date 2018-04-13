@@ -68,8 +68,10 @@ import java.util.List;
 <%_ } _%>
 @Profile(JHipsterConstants.SPRING_PROFILE_CLOUD)
 public class CloudDatabaseConfiguration extends AbstractCloudConfig {
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 
     private final Logger log = LoggerFactory.getLogger(CloudDatabaseConfiguration.class);
+    <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
 
     @Bean

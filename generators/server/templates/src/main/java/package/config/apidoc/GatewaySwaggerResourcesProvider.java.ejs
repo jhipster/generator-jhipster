@@ -44,15 +44,10 @@ import springfox.documentation.swagger.web.SwaggerResourcesProvider;
 @Profile(JHipsterConstants.SPRING_PROFILE_SWAGGER)
 public class GatewaySwaggerResourcesProvider implements SwaggerResourcesProvider {
 
-    private final Logger log = LoggerFactory.getLogger(GatewaySwaggerResourcesProvider.class);
-
     private final RouteLocator routeLocator;
 
-    private final DiscoveryClient discoveryClient;
-
-    public GatewaySwaggerResourcesProvider(RouteLocator routeLocator, DiscoveryClient discoveryClient) {
+    public GatewaySwaggerResourcesProvider(RouteLocator routeLocator) {
         this.routeLocator = routeLocator;
-        this.discoveryClient = discoveryClient;
     }
 
     @Override

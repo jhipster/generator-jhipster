@@ -40,8 +40,6 @@ import com.codahale.metrics.annotation.Timed;
 @RequestMapping("/api/gateway")
 public class GatewayResource {
 
-    private final Logger log = LoggerFactory.getLogger(GatewayResource.class);
-
     private final RouteLocator routeLocator;
 
     private final DiscoveryClient discoveryClient;

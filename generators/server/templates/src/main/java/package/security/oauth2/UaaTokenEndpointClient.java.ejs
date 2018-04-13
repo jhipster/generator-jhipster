@@ -36,7 +36,6 @@ import java.nio.charset.StandardCharsets;
  */
 @Component
 public class UaaTokenEndpointClient extends OAuth2TokenEndpointClientAdapter implements OAuth2TokenEndpointClient {
-    private final Logger log = LoggerFactory.getLogger(UaaTokenEndpointClient.class);
 
     public UaaTokenEndpointClient(@Qualifier("loadBalancedRestTemplate") RestTemplate restTemplate,
                                   JHipsterProperties jHipsterProperties, OAuth2Properties oAuth2Properties) {

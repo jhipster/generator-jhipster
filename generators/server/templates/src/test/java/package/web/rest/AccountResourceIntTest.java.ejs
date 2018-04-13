@@ -224,7 +224,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
 
     @Autowired
     private UserRepository userRepository;
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 
     @Autowired
     private AuthorityRepository authorityRepository;
