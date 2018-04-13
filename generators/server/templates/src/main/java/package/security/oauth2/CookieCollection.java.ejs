@@ -73,8 +73,8 @@ public class CookieCollection implements Collection<Cookie> {
         return cookieMap.values().iterator();
     }
 
-    public Cookie []toArray() {
-        Cookie []cookies=new Cookie[cookieMap.size()];
+    public Cookie[] toArray() {
+        Cookie[] cookies = new Cookie[cookieMap.size()];
         return toArray(cookies);
     }
 
@@ -85,7 +85,7 @@ public class CookieCollection implements Collection<Cookie> {
 
     @Override
     public boolean add(Cookie cookie) {
-        if (cookie==null) {
+        if (cookie == null) {
             return false;
         }
         cookieMap.put(cookie.getName(), cookie);
@@ -98,7 +98,7 @@ public class CookieCollection implements Collection<Cookie> {
             return cookieMap.remove((String)o) != null;
         }
         if (o instanceof Cookie) {
-            Cookie c=(Cookie)o;
+            Cookie c = (Cookie)o;
             return cookieMap.remove(c.getName()) != null;
         }
         return false;
@@ -138,13 +138,13 @@ public class CookieCollection implements Collection<Cookie> {
 
     @Override
     public boolean retainAll(Collection<?> collection) {
-        boolean result=false;
-        Iterator<Map.Entry<String, Cookie>> it=cookieMap.entrySet().iterator();
+        boolean result = false;
+        Iterator<Map.Entry<String, Cookie>> it = cookieMap.entrySet().iterator();
         while(it.hasNext()) {
-            Map.Entry<String, Cookie> e=it.next();
+            Map.Entry<String, Cookie> e = it.next();
             if (!collection.contains(e.getKey()) && !collection.contains(e.getValue())) {
                 it.remove();
-                result=true;
+                result = true;
             }
         }
         return result;

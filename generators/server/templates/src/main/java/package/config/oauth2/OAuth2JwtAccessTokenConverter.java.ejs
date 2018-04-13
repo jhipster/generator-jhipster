@@ -84,7 +84,7 @@ public class OAuth2JwtAccessTokenConverter extends JwtAccessTokenConverter {
         }
         try {
             SignatureVerifier verifier = signatureVerifierClient.getSignatureVerifier();
-            if (verifier!=null) {
+            if (verifier != null) {
                 setVerifier(verifier);
                 lastKeyFetchTimestamp = t;
                 log.debug("Public key retrieved from OAuth2 server to create SignatureVerifier");
