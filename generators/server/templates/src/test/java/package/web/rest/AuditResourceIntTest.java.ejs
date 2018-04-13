@@ -39,7 +39,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;<% if (databas
 import org.springframework.transaction.annotation.Transactional;<% } %>
 
 import java.time.Instant;
-import java.time.format.DateTimeFormatter;
 
 <%_ if (databaseType === 'couchbase') { _%>
 import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;

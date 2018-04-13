@@ -22,9 +22,6 @@ package <%= packageName %>.web.rest;
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
-<%_ if (cacheManagerIsAvailable === true) { _%>
-import <%=packageName%>.config.CacheConfiguration;
-<%_ } _%>
 <%_ if (databaseType !== 'cassandra' && databaseType !== 'couchbase') { _%>
 import <%= packageName %>.domain.Authority;
 <%_ } _%>
@@ -39,9 +36,6 @@ import <%= packageName %>.service.MailService;<% } %>
 import <%= packageName %>.service.UserService;
 import <%= packageName %>.service.dto.UserDTO;
 import <%= packageName %>.service.mapper.UserMapper;
-<%_ if (databaseType === 'cassandra') { _%>
-import <%= packageName %>.service.util.RandomUtil;
-<%_ } _%>
 import <%= packageName %>.web.rest.errors.ExceptionTranslator;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import <%= packageName %>.web.rest.vm.ManagedUserVM;
@@ -85,8 +79,10 @@ import java.util.UUID;
 import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
 <%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import static org.hamcrest.Matchers.containsInAnyOrder;
+<%_ } _%>
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 

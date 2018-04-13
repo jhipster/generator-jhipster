@@ -52,7 +52,9 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
+<%_ if (authenticationType !== 'oauth2') { _%>
 import java.time.Instant;
+<%_ } _%>
 
 <%_ if (databaseType === 'couchbase') { _%>
 import static <%=packageName%>.config.Constants.ID_DELIMITER;

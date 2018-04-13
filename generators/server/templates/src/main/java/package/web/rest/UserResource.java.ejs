@@ -23,7 +23,9 @@ import com.codahale.metrics.annotation.Timed;
 <%_ if (authenticationType !== 'oauth2' || searchEngine === 'elasticsearch') { _%>
 import <%=packageName%>.domain.User;
 <%_ } _%>
+<%_ if (authenticationType !== 'oauth2') { _%>
 import <%=packageName%>.repository.UserRepository;
+<%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import <%=packageName%>.repository.search.UserSearchRepository;
 <%_ } _%>
