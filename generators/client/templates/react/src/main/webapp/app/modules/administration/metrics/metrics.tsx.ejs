@@ -513,7 +513,7 @@ export class MetricsPage extends React.Component<any, IMetricsPageState> {
             </Row>
           : ''}
 
-          { metrics.gauges && metrics.gauges['HikariPool-1.pool.TotalConnections'].value > 0 ?
+          { metrics.gauges && metrics.gauges['HikariPool-1.pool.TotalConnections'] && metrics.gauges['HikariPool-1.pool.TotalConnections'].value > 0 ?
             <Row>
               <Col sm="12">
                 <h3>DataSource statistics (time in millisecond)</h3>
