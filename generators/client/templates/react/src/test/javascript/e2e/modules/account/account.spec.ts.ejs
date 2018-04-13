@@ -74,8 +74,9 @@ describe('Account', () => {
     navBarPage.autoSignIn();
 
     browser.get('#/admin/user-management');
-    element(by.buttonText('Deactivated')).click();
-    expect(await element(by.buttonText('Activated')).getText()).to.eq('Activated');
+    const deactivated = element(by.buttonText('Deactivated'));
+    deactivated.click();
+    expect(await deactivated.getText()).to.eq('Activated');
 
     navBarPage.autoSignOut();
   });
