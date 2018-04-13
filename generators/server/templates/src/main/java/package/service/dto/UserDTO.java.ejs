@@ -31,7 +31,9 @@ import javax.validation.constraints.*;
 import java.time.Instant;
 <%_ } _%>
 import java.util.Set;
+<%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
 import java.util.stream.Collectors;
+<%_ } _%>
 
 /**
  * A DTO representing a user, with his authorities.

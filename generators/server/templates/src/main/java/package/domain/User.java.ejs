@@ -52,7 +52,9 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
+<%_ if (authenticationType !== 'oauth2') { _%>
 import java.time.Instant;
+<%_ } _%>
 
 <%_ if (databaseType === 'couchbase') { _%>
 import static <%=packageName%>.config.Constants.ID_DELIMITER;
@@ -85,7 +87,6 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || 
     private <% if (authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id;<% } else { %><% if (databaseType === 'couchbase') { %>
     public static final String PREFIX = "user";
 
-    @SuppressWarnings("unused")
     @IdPrefix
     private String prefix = PREFIX;<% } %>
 <% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
