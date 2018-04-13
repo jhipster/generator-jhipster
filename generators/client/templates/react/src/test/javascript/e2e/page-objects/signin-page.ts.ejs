@@ -41,10 +41,10 @@ export default class SignInPage extends BasePage {
   getTitle() {
     return this.title.getText();
   }
+
   autoSignInUsing(username: string, password: string) {
-    this.clearUserName();
+    this.clearForm();
     this.setUserName(username);
-    this.clearPassword();
     this.setPassword(password);
     return this.login();
   }
