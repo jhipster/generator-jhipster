@@ -96,13 +96,13 @@
         <profile.swagger />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>2.0.0-SNAPSHOT</jhipster-dependencies.version>
+        <jhipster-framework.version>2.0.0-SNAPSHOT</jhipster-framework.version>
         <!-- The spring-boot version should match the one managed by
-        https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
+        https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-framework.version} -->
         <spring-boot.version>2.0.0.RELEASE</spring-boot.version>
         <%_ if (databaseType === 'sql') { _%>
         <!-- The hibernate version should match the one managed by
-        https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
+        https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-framework.version} -->
         <hibernate.version>5.2.14.Final</hibernate.version>
         <!-- The javassist version should match the one managed by
         https://mvnrepository.com/artifact/org.hibernate/hibernate-core/${hibernate.version} -->
@@ -163,7 +163,7 @@
             <dependency>
                 <groupId>io.github.jhipster</groupId>
                 <artifactId>jhipster-dependencies</artifactId>
-                <version>${jhipster-dependencies.version}</version>
+                <version>${jhipster-framework.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -172,6 +172,11 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>io.github.jhipster</groupId>
+            <artifactId>jhipster-framework</artifactId>
+        </dependency>
+
         <!-- TODO To remove after final Spring Boot 2 release -->
         <dependency>
             <groupId>javax.xml.bind</groupId>
@@ -184,10 +189,6 @@
             <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
         <%_ } _%>
-        <dependency>
-            <groupId>io.github.jhipster</groupId>
-            <artifactId>jhipster</artifactId>
-        </dependency>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-core</artifactId>
