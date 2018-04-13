@@ -50,7 +50,7 @@ import { getLoginUrl } from 'app/shared/util/url-utils';
 <%_ if (enableTranslation) { _%>
 import { locales } from 'app/config/translation';
 <%_ } _%>
-import { getProfile } from 'app/shared/reducers/profile';
+import { getProfile } from 'app/shared/reducers/application-profile';
 import appConfig from 'app/config/constants';
 
 export interface IHeaderProps {
@@ -129,7 +129,7 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
       <%_ if (databaseType !== 'cassandra') { _%>
       <DropdownItem tag={Link} key="audits" to="/admin/audits"><FaBell /> Audits</DropdownItem>,
       <%_ } _%>
-      /* jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here */  
+      /* jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here */
       <DropdownItem tag={Link} key="logs" to="/admin/logs"><FaTasks /> Logs</DropdownItem>
     ];
 
@@ -138,7 +138,7 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
         <FaBook /> API Docs
       </DropdownItem>
     );
-    
+
     <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>
     const databaseItem = [
       <DropdownItem tag="a" key="h2-console" href="./h2-console" target="_tab">
@@ -247,10 +247,10 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
   }
 }
 
-const mapStateToProps = ({ profile }) => ({
-  ribbonEnv: profile.ribbonEnv,
-  isInProduction: profile.inProduction,
-  isSwaggerEnabled: profile.isSwaggerEnabled
+const mapStateToProps = ({ applicationProfile }) => ({
+  ribbonEnv: applicationProfile.ribbonEnv,
+  isInProduction: applicationProfile.inProduction,
+  isSwaggerEnabled: applicationProfile.isSwaggerEnabled
 });
 
 const mapDispatchToProps = { getProfile };

@@ -194,7 +194,7 @@ const files = {
                 'shared/reducers/index.ts',
                 'shared/reducers/action-type.util.ts',
                 'shared/reducers/authentication.ts',
-                'shared/reducers/profile.ts'
+                'shared/reducers/application-profile.ts'
             ]
         },
         {
@@ -344,7 +344,7 @@ const files = {
                 'spec/entry.ts',
                 'spec/app/utils.ts',
                 'spec/app/config/notification-middleware.spec.ts',
-                'spec/app/shared/reducers/profile.spec.ts',
+                'spec/app/shared/reducers/application-profile.spec.ts',
                 'spec/app/shared/reducers/authentication.spec.ts',
                 'spec/app/shared/util/entity-utils.spec.ts',
                 'spec/app/shared/auth/private-route.spec.tsx',
