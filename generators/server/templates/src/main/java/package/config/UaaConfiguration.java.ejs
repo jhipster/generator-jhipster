@@ -167,7 +167,7 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
         //pick up all  TokenEnhancers incl. those defined in the application
         //this avoids changes to this class if an application wants to add its own to the chain
         Collection<TokenEnhancer> tokenEnhancers = applicationContext.getBeansOfType(TokenEnhancer.class).values();
-        TokenEnhancerChain tokenEnhancerChain=new TokenEnhancerChain();
+        TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
         tokenEnhancerChain.setTokenEnhancers(new ArrayList<>(tokenEnhancers));
         endpoints
             .authenticationManager(authenticationManager)
