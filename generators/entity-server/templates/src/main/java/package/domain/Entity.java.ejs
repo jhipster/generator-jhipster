@@ -103,8 +103,7 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 <%_         }
         }
-}
-if (databaseType === 'mongodb') { _%>
+} if (databaseType === 'mongodb') { _%>
 @Document(collection = "<%= entityTableName %>")
 <%_ } if (databaseType === 'couchbase') { _%>
 @Document
