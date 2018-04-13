@@ -85,7 +85,6 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || 
     private <% if (authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id;<% } else { %><% if (databaseType === 'couchbase') { %>
     public static final String PREFIX = "user";
 
-    @SuppressWarnings("unused")
     @IdPrefix
     private String prefix = PREFIX;<% } %>
 <% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
