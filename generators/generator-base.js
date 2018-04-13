@@ -1763,6 +1763,7 @@ module.exports = class extends PrivateBase {
                 context.hasUserField = true;
             }
         });
+        context.saveIdentitySnapshot = context.applicationType === 'microservice' && context.authenticationType === 'oauth2' && context.hasUserField;
         if (context.fileData.angularJSSuffix !== undefined) {
             context.entityAngularJSSuffix = context.fileData.angularJSSuffix;
         }
