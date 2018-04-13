@@ -1756,8 +1756,12 @@ module.exports = class extends PrivateBase {
             context.fieldNamesUnderscored.push(_.snakeCase(field.fieldName));
             context.fieldNameChoices.push({ name: field.fieldName, value: field.fieldName });
         });
+        context.hasUserField = false;
         context.relationships.forEach((rel) => {
             context.relNameChoices.push({ name: `${rel.relationshipName}:${rel.relationshipType}`, value: `${rel.relationshipName}:${rel.relationshipType}` });
+            if (rel.relationshipName === 'user') {
+                context.hasUserField = true;
+            }
         });
         if (context.fileData.angularJSSuffix !== undefined) {
             context.entityAngularJSSuffix = context.fileData.angularJSSuffix;
