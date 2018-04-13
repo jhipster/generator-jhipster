@@ -15,30 +15,35 @@ addons:
       - google-chrome-stable
 cache:
   directories:
-    - $HOME/.m2
-    - $HOME/.gradle
+    - "$HOME/.m2"
+    - "$HOME/.gradle"
 env:
   global:
+    # If you add some global variables, please add it also at the end of ./travis/build-samples.sh - PROFILE=dev
     - PROFILE=dev
     - RUN_APP=1
     - PROTRACTOR=0
-    - JHIPSTER_TRAVIS=$TRAVIS_BUILD_DIR/travis
-    - JHIPSTER_SAMPLES=$JHIPSTER_TRAVIS/samples
-    - JHIPSTER_SCRIPTS=$JHIPSTER_TRAVIS/scripts
-    - APP_FOLDER=$HOME/app
-    - UAA_APP_FOLDER=$HOME/uaa
+    - JHIPSTER_TRAVIS="$TRAVIS_BUILD_DIR/travis"
+    - JHIPSTER_SAMPLES="$JHIPSTER_TRAVIS/samples"
+    - JHIPSTER_SCRIPTS="$JHIPSTER_TRAVIS/scripts"
+    - APP_FOLDER="$HOME/app"
+    - UAA_APP_FOLDER="$HOME/uaa"
     # environment properties
-    - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
-    - SPRING_JPA_SHOW_SQL=false
+    - SPRING_OUTPUT_ANSI_ENABLED="ALWAYS"
+    - SPRING_JPA_SHOW_SQL="false"
 
+    # Below, not used in ./travis/build-samples.sh
     # if JHIPSTER_LIB_BRANCH value is release, use the release from Maven
     - JHIPSTER_LIB_REPO=https://github.com/jhipster/jhipster.git
-    - JHIPSTER_LIB_BRANCH=release
+    - JHIPSTER_LIB_BRANCH="release"
     # if JHIPSTER_BRANCH value is release, use the release from NPM
-    - JHIPSTER_REPO=https://github.com/jhipster/generator-jhipster.git
-    - JHIPSTER_BRANCH=release
+    - JHIPSTER_REPO="https://github.com/jhipster/generator-jhipster.git"
+    - JHIPSTER_BRANCH="release"
 
   matrix:
+    # In ./travis/build-samples.sh we match '^    - JHIPSTER=sample_name VAR1=whatever VAR2=whatever … VARN=whatever".
+    # If you reindent, at end of file ./travis/build-samples.sh please update statement:
+    # `grep --color=never -E '^    - JHIPSTER=' "$travisDotYml" | sed -n -e 's/    - JHIPSTER=//p'`
     - JHIPSTER=ngx-default PROFILE=prod PROTRACTOR=1
     - JHIPSTER=ngx-psql-es-noi18n PROFILE=prod PROTRACTOR=1
     - JHIPSTER=ngx-gradle-fr PROFILE=prod PROTRACTOR=1
@@ -67,19 +72,23 @@ before_install:
   - sh -e /etc/init.d/xvfb start
   # Install Yarn
   - curl -o- -L https://yarnpkg.com/install.sh | bash
-  - export PATH=$HOME/.yarn/bin:$PATH
+  - export PATH="$HOME/.yarn/bin:$PATH"
   - yarn -v
 install:
-  - $JHIPSTER_SCRIPTS/00-install-jhipster.sh
+  - "$JHIPSTER_SCRIPTS/00-install-jhipster.sh"
   # generate project and entities
-  - $JHIPSTER_SCRIPTS/01-generate-entities.sh
-  - $JHIPSTER_SCRIPTS/02-generate-project.sh
-  - $JHIPSTER_SCRIPTS/03-replace-version-generated-project.sh
+  - "$JHIPSTER_SCRIPTS/01-generate-entities.sh"
+  - "$JHIPSTER_SCRIPTS/02-generate-project.sh"
+  - "$JHIPSTER_SCRIPTS/03-replace-version-generated-project.sh"
 script:
-  - $JHIPSTER_SCRIPTS/03-docker-compose.sh
-  - travis_wait $JHIPSTER_SCRIPTS/04-tests.sh
-  - $JHIPSTER_SCRIPTS/05-run.sh
-  - $JHIPSTER_SCRIPTS/06-sonar.sh
+  - "$JHIPSTER_SCRIPTS/03-docker-compose.sh"
+  - "travis_wait $JHIPSTER_SCRIPTS/04-tests.sh"
+  - "$JHIPSTER_SCRIPTS/05-run.sh"
+  - "$JHIPSTER_SCRIPTS/06-sonar.sh"
+  - "$JHIPSTER_SCRIPTS/03-docker-compose.sh"
+  - travis_wait "$JHIPSTER_SCRIPTS/04-tests.sh"
+  - "$JHIPSTER_SCRIPTS/05-run.sh"
+  - "$JHIPSTER_SCRIPTS/06-sonar.sh"
 before_cache:
   - rm -rf $HOME/.m2/repository/io/github/jhipster/jhipster-framework/
   - rm -rf $HOME/.m2/repository/io/github/jhipster/jhipster-dependencies/

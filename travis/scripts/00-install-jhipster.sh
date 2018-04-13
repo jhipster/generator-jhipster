@@ -1,14 +1,45 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+
+#  Copyright 2013-2018 the original author or authors from the JHipster project.
+#
+# This file is part of the JHipster project, see https://www.jhipster.tech/
+# for more information.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+set -ex
+function echoSetX() {
+    echo -e "\n-------------------------------------------------------------------------------\n" \
+        "\n$1\n" \
+        "\n-------------------------------------------------------------------------------\n"
+}
 
 #-------------------------------------------------------------------------------
 # List HOME
 #-------------------------------------------------------------------------------
+set +x
+echoSetX "List HOME"
+set -x
+
 ls -al "$HOME"
 
 #-------------------------------------------------------------------------------
 # Install JHipster Dependencies and Server-side library
 #-------------------------------------------------------------------------------
+set +x
+echoSetX "Install JHipster Dependencies and Server-side library"
+set -x
+
 cd "$HOME"
 if [[ "$TRAVIS_REPO_SLUG" == *"/jhipster" ]]; then
     echo "TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG"
@@ -40,9 +71,14 @@ else
 fi
 
 #-------------------------------------------------------------------------------
-# Install JHipster Generator
+# Install and test JHipster Generator
 #-------------------------------------------------------------------------------
+set +x
+echoSetX "Install and test (not at each Travis Build) JHipster Generator"
+set -x
+
 cd "$HOME"
+
 if [[ "$TRAVIS_REPO_SLUG" == *"/generator-jhipster" ]]; then
     echo "TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG"
     echo "No need to clone generator-jhipster: use local version"
@@ -51,6 +87,7 @@ if [[ "$TRAVIS_REPO_SLUG" == *"/generator-jhipster" ]]; then
     yarn install
     yarn global add file:"$TRAVIS_BUILD_DIR"
     if [[ "$JHIPSTER" == "" || "$JHIPSTER" == "ngx-default" ]]; then
+        # If this change, please update also ../build-samples.sh, function generateProject().
         yarn test
     fi
 
@@ -75,4 +112,8 @@ fi
 #-------------------------------------------------------------------------------
 # List HOME
 #-------------------------------------------------------------------------------
+set +x
+echoSetX "List HOME"
+set -x
+
 ls -al "$HOME"

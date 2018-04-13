@@ -236,7 +236,7 @@ It is also possible to debug sub generators by selecting one of the other debug 
 
 You can run the travis builds locally by following below commands
 
-CD into the travis folder `cd travis` from the generator source code root folder
+CD into the [./travis](./travis) folder `cd travis` from the generator source code root folder
 
 Run `./build-samples.sh [command_name] [sample_name:optional]`
 
@@ -246,10 +246,12 @@ Sample name is optional and can be any of the folder name in the `travis/samples
 
 Command name can be as below
 
-    `list`: List all sample names
+    `help`: display the help (recommended to read it)
     `generate`: Generate the sample if specified else generate all samples
-    `build` : Generate and test the sample if specified else generate and test all samples
+    `buildandtest` : Generate and test the sample if specified else generate and test all samples
     `clean` : Clean the generated code for the sample if specified else clean all samples
+
+*NOTES FOR OLD DEVELOPERS: ./travis/build-samples.sh has been rewritten. Now it spawns several generation/build in same time. Improve performance.*
 
 ## <a name="rules"></a> Coding Rules
 To ensure consistency throughout the source code, keep these rules in mind as you are working:
