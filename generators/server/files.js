@@ -61,7 +61,6 @@ const serverFiles = {
             path: DOCKER_DIR,
             templates: [
                 'Dockerfile',
-                '.dockerignore',
                 'app.yml',
                 'sonar.yml'
             ]
