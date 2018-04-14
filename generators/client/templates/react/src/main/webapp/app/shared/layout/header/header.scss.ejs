@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-$header-color:                  #fff;
-$header-color-secondary:        #bbb;
-$header-color-hover:              darken( $header-color, 20% );
+$header-color: #fff;
+$header-color-secondary: #bbb;
+$header-color-hover: darken($header-color, 20%);
 
 /* ==========================================================================
 Developement Ribbon
@@ -57,14 +57,16 @@ Navbar styles
 ========================================================================== */
 .jh-navbar {
   background-color: #353d47;
-  padding: .2em 1em;
+  padding: 0.2em 1em;
   .profile-image {
     margin: -10px 0px;
     height: 40px;
     width: 40px;
     border-radius: 50%;
   }
-  .dropdown-item.active, .dropdown-item.active:focus, .dropdown-item.active:hover {
+  .dropdown-item.active,
+  .dropdown-item.active:focus,
+  .dropdown-item.active:hover {
     background-color: #353d47;
   }
   .dropdown-toggle::after {
@@ -122,8 +124,8 @@ Navbar styles
 
 .loading-bar {
   height: 3px;
-  background-color: #009CD8;
+  background-color: #009cd8;
   position: absolute;
   top: 0px;
-  z-index: 1031
+  z-index: 1031;
 }

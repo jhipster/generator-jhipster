@@ -147,14 +147,14 @@
   },
   <%_ if(!skipCommitHook) { _%>
   "lint-staged": {
-    "*.ts": ["prettier --write", "git add"]
+    "src/**/*.{ts,css,scss}": ["prettier --write", "git add"]
   },
   <%_ } _%>
   "scripts": {
     <%_ if(!skipCommitHook) { _%>
     "precommit": "lint-staged",
     <%_ } _%>
-    "prettier:format":"<%= clientPackageManager %> prettier --write **/*.ts",
+    "prettier:format":"<%= clientPackageManager %> prettier --write 'src/**/*.{ts,css,scss}'",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "ngc": "ngc -p tsconfig-aot.json",
