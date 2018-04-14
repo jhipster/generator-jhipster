@@ -408,6 +408,9 @@ module.exports = class extends BaseGenerator {
                 if (!context.clientRootFolder && !context.skipUiGrouping && context.applicationType === 'gateway' && context.useMicroserviceJson) {
                     context.clientRootFolder = context.microserviceName;
                 }
+                // setup variable to hold flag for determining if user should be saved in a microservice
+                // this is overridden in generator-base#loadEntityJson()
+                context.saveIdentitySnapshot = false;
             },
 
             writeEntityJson() {
