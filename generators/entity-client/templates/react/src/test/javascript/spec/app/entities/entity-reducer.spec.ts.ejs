@@ -250,7 +250,7 @@ describe('Entities reducer tests', () => {
           payload: resolvedObject
         }
       ];
-      await store.dispatch(createEntity({ id: 1 })).then(() => expect(store.getActions()).to.eql(expectedActions));
+      await store.dispatch(createEntity({ id: <% if (databaseType === 'sql') { %>1<%} else {%>'1'<%}%> })).then(() => expect(store.getActions()).to.eql(expectedActions));
     });
 
     it('dispatches ACTION_TYPES.UPDATE_<%= entityActionName %> actions', async () => {
@@ -270,7 +270,7 @@ describe('Entities reducer tests', () => {
           payload: resolvedObject
         }
       ];
-      await store.dispatch(updateEntity({ id: 1 })).then(() => expect(store.getActions()).to.eql(expectedActions));
+      await store.dispatch(updateEntity({ id: <% if (databaseType === 'sql') { %>1<%} else {%>'1'<%}%> })).then(() => expect(store.getActions()).to.eql(expectedActions));
     });
 
     it('dispatches ACTION_TYPES.DELETE_<%= entityActionName %> actions', async () => {
