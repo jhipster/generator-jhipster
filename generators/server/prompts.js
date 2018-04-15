@@ -227,7 +227,7 @@ function askForServerSideOpts(meta) {
                 },
                 {
                     value: 'infinispan',
-                    name: '[BETA] Yes, with the Infinispan (hybrid cache, for multiple nodes)'
+                    name: '[BETA] Yes, with the Infinispan implementation (hybrid cache, for multiple nodes)'
                 },
                 {
                     value: 'no',

@@ -22,9 +22,6 @@ package <%= packageName %>.web.rest;
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
-<%_ if (cacheManagerIsAvailable === true) { _%>
-import <%=packageName%>.config.CacheConfiguration;
-<%_ } _%>
 <%_ if (databaseType !== 'cassandra' && databaseType !== 'couchbase') { _%>
 import <%= packageName %>.domain.Authority;
 <%_ } _%>
@@ -39,11 +36,10 @@ import <%= packageName %>.service.MailService;<% } %>
 import <%= packageName %>.service.UserService;
 import <%= packageName %>.service.dto.UserDTO;
 import <%= packageName %>.service.mapper.UserMapper;
-<%_ if (databaseType === 'cassandra') { _%>
-import <%= packageName %>.service.util.RandomUtil;
-<%_ } _%>
 import <%= packageName %>.web.rest.errors.ExceptionTranslator;
+<%_ if (authenticationType !== 'oauth2') { _%>
 import <%= packageName %>.web.rest.vm.ManagedUserVM;
+<%_ } _%>
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -83,8 +79,10 @@ import java.util.UUID;
 import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
 <%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import static org.hamcrest.Matchers.containsInAnyOrder;
+<%_ } _%>
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -98,7 +96,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     private static final String DEFAULT_LOGIN = "johndoe";
+    <%_ if (authenticationType !== 'oauth2') { _%>
     private static final String UPDATED_LOGIN = "jhipster";
+    <%_ } _%>
 
     <%_ if (databaseType === 'sql' && authenticationType !== 'oauth2') { _%>
     private static final Long DEFAULT_ID = 1L;
@@ -109,24 +109,36 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
     <%_ } _%>
 
     private static final String DEFAULT_PASSWORD = "passjohndoe";
+    <%_ if (authenticationType !== 'oauth2') { _%>
     private static final String UPDATED_PASSWORD = "passjhipster";
+    <%_ } _%>
 
     private static final String DEFAULT_EMAIL = "johndoe@localhost";
+    <%_ if (authenticationType !== 'oauth2') { _%>
     private static final String UPDATED_EMAIL = "jhipster@localhost";
+    <%_ } _%>
 
     private static final String DEFAULT_FIRSTNAME = "john";
+    <%_ if (authenticationType !== 'oauth2') { _%>
     private static final String UPDATED_FIRSTNAME = "jhipsterFirstName";
+    <%_ } _%>
 
     private static final String DEFAULT_LASTNAME = "doe";
+    <%_ if (authenticationType !== 'oauth2') { _%>
     private static final String UPDATED_LASTNAME = "jhipsterLastName";
+    <%_ } _%>
 
     <%_ if (databaseType !== 'cassandra') { _%>
     private static final String DEFAULT_IMAGEURL = "http://placehold.it/50x50";
+    <%_ if (authenticationType !== 'oauth2') { _%>
     private static final String UPDATED_IMAGEURL = "http://placehold.it/40x40";
+    <%_ } _%>
 
     <%_ } _%>
     private static final String DEFAULT_LANGKEY = "en";
+    <%_ if (authenticationType !== 'oauth2') { _%>
     private static final String UPDATED_LANGKEY = "fr";
+    <%_ } _%>
 
     @Autowired
     private UserRepository userRepository;
@@ -182,7 +194,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).clear();
         cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).clear();
         <%_ } _%>
-        UserResource userResource = new UserResource(userRepository, userService<% if (authenticationType !== 'oauth2') { %>, mailService<% } %><% if (searchEngine === 'elasticsearch') { %>, mockUserSearchRepository<% } %>);
+        UserResource userResource = new UserResource(userService<% if (authenticationType !== 'oauth2') { %>, userRepository, mailService<% } %><% if (searchEngine === 'elasticsearch') { %>, mockUserSearchRepository<% } %>);
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

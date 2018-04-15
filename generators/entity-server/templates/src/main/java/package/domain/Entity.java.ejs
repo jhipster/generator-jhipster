@@ -173,7 +173,7 @@ public class <%= entityClass %> implements Serializable {
         if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fieldType)) { _%>
     @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (required) { %>, nullable = false<% } %>)
         <%_ } else if (fieldType === 'BigDecimal') { _%>
-    @Column(name = "<%-fieldNameAsDatabaseColumn %>", precision=10, scale=2<% if (required) { %>, nullable = false<% } %>)
+    @Column(name = "<%-fieldNameAsDatabaseColumn %>", precision = 10, scale = 2<% if (required) { %>, nullable = false<% } %>)
         <%_ } else { _%>
     @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (fieldValidate === true) { %><% if (fieldValidateRules.includes('maxlength')) { %>, length = <%= fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% } %>)
         <%_ }
@@ -255,8 +255,8 @@ public class <%= entityClass %> implements Serializable {
     <%- include relationship_validators -%>
         <%_ }_%>
     @JoinTable(name = "<%= joinTableName %>",
-               joinColumns = @JoinColumn(name="<%= getPluralColumnName(name) %>_id", referencedColumnName="id"),
-               inverseJoinColumns = @JoinColumn(name="<%= getPluralColumnName(relationships[idx].relationshipName) %>_id", referencedColumnName="id"))
+               joinColumns = @JoinColumn(name = "<%= getPluralColumnName(name) %>_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "<%= getPluralColumnName(relationships[idx].relationshipName) %>_id", referencedColumnName = "id"))
         <%_ } _%>
     private Set<<%= otherEntityNameCapitalized %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
 

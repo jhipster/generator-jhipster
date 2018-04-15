@@ -266,7 +266,6 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/app.constants.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/app.main.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/app.module.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/app.route.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/blocks/config/prod.config.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/blocks/config/uib-pagination.config.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/blocks/interceptor/auth-expired.interceptor.ts`,

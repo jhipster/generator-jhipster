@@ -52,11 +52,12 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 @Document(collection = "<%= jhiTablePrefix %>_persistent_audit_event")<% } %><% if (databaseType === 'couchbase') { %>
 @Document<% } %>
 public class PersistentAuditEvent implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 <%_ if (databaseType === 'couchbase') { _%>
 
     public static final String PREFIX = "audit";
 
-    @SuppressWarnings("unused")
     @IdPrefix
     private String prefix = PREFIX;
 <%_ } _%>

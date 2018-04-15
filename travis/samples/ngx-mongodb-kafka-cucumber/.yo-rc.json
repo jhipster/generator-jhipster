@@ -11,6 +11,7 @@
     "databaseType": "mongodb",
     "devDatabaseType": "mongodb",
     "prodDatabaseType": "mongodb",
+    "reactive": true,
     "searchEngine": false,
     "useSass": false,
     "buildTool": "maven",

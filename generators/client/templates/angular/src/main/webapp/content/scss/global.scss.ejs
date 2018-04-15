@@ -1,28 +1,27 @@
-<%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+<%#Copyright 2013-2018 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://www.jhipster.tech/
- for more information.
-
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
+ This file is part of the JHipster project, see https://www.jhipster.tech/ for
+        more information. Licensed under the Apache License,
+    Version 2 (the "License");
+youmay not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--%>
-@import 'bootstrap-variables';
+      http://www.apache.org/licenses/LICENSE-2.0 Unless
+        required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+    either express or implied. See the License for the specific language
+        governing permissions and limitations under the License. -%> @import "bootstrap-variables";
 
 /* ==============================================================
 Bootstrap tweaks
 ===============================================================*/
 
-body, h1, h2, h3, h4 {
+body,
+h1,
+h2,
+h3,
+h4 {
     font-weight: 300;
 }
 
@@ -51,12 +50,13 @@ Generic styles
 ========================================================================== */
 
 /* Error highlight on input fields */
-.ng-valid[required], .ng-valid.required  {
-  border-left: 5px solid green;
+.ng-valid[required],
+.ng-valid.required {
+    border-left: 5px solid green;
 }
 
-.ng-invalid:not(form)  {
-  border-left: 5px solid red;
+.ng-invalid:not(form) {
+    border-left: 5px solid red;
 }
 
 /* other generic styles */
@@ -86,7 +86,7 @@ Generic styles
 
 .break {
     white-space: normal;
-    word-break:break-all;
+    word-break: break-all;
 }
 
 .readonly {
@@ -95,17 +95,18 @@ Generic styles
 }
 
 .footer {
-    border-top: 1px solid rgba(0,0,0,.125);
+    border-top: 1px solid rgba(0, 0, 0, 0.125);
 }
 
 /* ==========================================================================
 make sure browsers use the pointer cursor for anchors, even with no href
 ========================================================================== */
 a:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
-.hand, [jhisortby] {
+.hand,
+[jhisortby] {
     cursor: pointer;
 }
 
@@ -115,7 +116,7 @@ Custom alerts for notification
 .alerts {
     .alert {
         text-overflow: ellipsis;
-        pre{
+        pre {
             background: none;
             border: none;
             font: inherit;
@@ -156,9 +157,9 @@ entity tables helpers
 ========================================================================== */
 
 /* Remove Bootstrap padding from the element
-   http://stackoverflow.com/questions/19562903/remove-padding-from-columns-in-bootstrap-3 */
+http://stackoverflow.com/questions/19562903/remove-padding-from-columns-in-bootstrap-3 */
 @mixin no-padding($side) {
-    @if $side == 'all' {
+    @if $side == "all" {
         .no-padding {
             padding: 0 !important;
         }
@@ -175,18 +176,20 @@ entity tables helpers
 @include no-padding("all");
 
 /* bootstrap 3 input-group 100% width
-   http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
-.width-min { width: 1% !important; }
+http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
+.width-min {
+    width: 1% !important;
+}
 
 /* Makes toolbar not wrap on smaller screens
-   http://www.sketchingwithcss.com/samplechapter/cheatsheet.html#right */
+http://www.sketchingwithcss.com/samplechapter/cheatsheet.html#right */
 .flex-btn-group-container {
-   display: -webkit-flex;
-   display: flex;
-   -webkit-flex-direction: row;
-   flex-direction: row;
-   -webkit-justify-content: flex-end;
-   justify-content: flex-end;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
 }
 
 /* ==========================================================================
@@ -214,17 +217,20 @@ entity detail page css
 /* ==========================================================================
 ui bootstrap tweaks
 ========================================================================== */
-.nav, .pagination, .carousel, .panel-title a {
+.nav,
+.pagination,
+.carousel,
+.panel-title a {
     cursor: pointer;
 }
 
 .datetime-picker-dropdown > li.date-picker-menu div > table .btn-default,
-.uib-datepicker-popup  > li > div.uib-datepicker > table .btn-default {
+.uib-datepicker-popup > li > div.uib-datepicker > table .btn-default {
     border: 0;
 }
 
 .datetime-picker-dropdown > li.date-picker-menu div > table:focus,
-.uib-datepicker-popup  > li > div.uib-datepicker > table:focus {
+.uib-datepicker-popup > li > div.uib-datepicker > table:focus {
     outline: none;
 }
 
@@ -233,6 +239,6 @@ ui bootstrap tweaks
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
- }
+}
 
 /* jhipster-needle-scss-add-main JHipster will add new css style */

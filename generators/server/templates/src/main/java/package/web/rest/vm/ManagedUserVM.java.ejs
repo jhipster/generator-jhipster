@@ -19,7 +19,9 @@
 package <%=packageName%>.web.rest.vm;
 
 import <%=packageName%>.service.dto.UserDTO;
+<%_ if (authenticationType !== 'oauth2') { _%>
 import javax.validation.constraints.Size;
+<%_ } _%>
 
 /**
  * View Model extending the UserDTO, which is meant to be used in the user management UI.

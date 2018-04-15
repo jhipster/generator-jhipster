@@ -77,7 +77,7 @@ describe('Service Tests', () => {
 
             it('should return a <%= entityAngularName %>', () => {
 
-                service.find(<%- tsKeyId %>).subscribe((received) => {
+                service.find(<%- tsKeyId %>).subscribe(received => {
                     expect(received.body.id).toEqual(<%- tsKeyId %>);
                 });
 

@@ -45,8 +45,6 @@ import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 <%_ } _%>
 <%_ if (applicationType === 'microservice' && authenticationType === 'uaa') { _%>
 import org.springframework.context.annotation.ComponentScan;
-<%_ } _%>
-<%_ if (authenticationType === 'uaa') { _%>
 import org.springframework.context.annotation.FilterType;
 <%_ } _%>
 import org.springframework.core.env.Environment;

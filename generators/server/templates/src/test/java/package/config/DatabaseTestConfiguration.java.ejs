@@ -38,7 +38,7 @@ public class DatabaseTestConfiguration extends AbstractCouchbaseConfiguration {
 
     private CouchbaseProperties couchbaseProperties;
 
-    private static CouchbaseContainer couchbaseContainer;
+    private static CouchbaseContainer<? extends CouchbaseContainer<?>> couchbaseContainer;
 
     public DatabaseTestConfiguration(CouchbaseProperties couchbaseProperties) {
         this.couchbaseProperties = couchbaseProperties;
@@ -75,11 +75,12 @@ public class DatabaseTestConfiguration extends AbstractCouchbaseConfiguration {
         return this;
     }
 
-    private CouchbaseContainer getCouchbaseContainer() {
+    private CouchbaseContainer<? extends CouchbaseContainer<?>> getCouchbaseContainer() {
         if (couchbaseContainer != null) {
             return couchbaseContainer;
         }
-        couchbaseContainer = new CouchbaseContainer("<%= DOCKER_COUCHBASE %>")
+        couchbaseContainer = new CouchbaseContainer<>("<%= DOCKER_COUCHBASE %>");
+        couchbaseContainer
             .withNewBucket(DefaultBucketSettings.builder()
                 .name(getBucketName())
                 .password(getBucketPassword())

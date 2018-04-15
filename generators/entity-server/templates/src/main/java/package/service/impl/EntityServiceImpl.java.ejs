@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.service<% if (service === 'serviceImpl') { %>.impl<% } %>;
+package <%= packageName %>.service<% if (service === 'serviceImpl') { %>.impl<% } %>;
 <%  const serviceClassName = service === 'serviceImpl' ? entityClass + 'ServiceImpl' : entityClass + 'Service';
     let viaService = false;
     const instanceType = (dto === 'mapstruct') ? entityClass + 'DTO' : entityClass;
@@ -28,12 +28,19 @@ package <%=packageName%>.service<% if (service === 'serviceImpl') { %>.impl<% } 
     const repository = entityInstance  + 'Repository';
     const searchRepository = entityInstance  + 'SearchRepository';
     if (service === 'serviceImpl') { %>
-import <%=packageName%>.service.<%= entityClass %>Service;<% } %>
-import <%=packageName%>.domain.<%= entityClass %>;
-import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine === 'elasticsearch') { %>
-import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } if (dto === 'mapstruct') { %>
-import <%=packageName%>.service.dto.<%= entityClass %>DTO;
-import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;<% } %>
+import <%= packageName %>.service.<%= entityClass %>Service;<% } %>
+import <%= packageName %>.domain.<%= entityClass %>;
+import <%= packageName %>.repository.<%= entityClass %>Repository;
+<%_ if (reactiveRepositories) { _%>
+import <%= packageName %>.repository.reactive.<%= entityClass %>ReactiveRepository;
+<%_ } _%>
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import <%= packageName %>.repository.search.<%= entityClass %>SearchRepository;
+<%_ } _%>
+<%_ if (dto === 'mapstruct') { _%>
+import <%= packageName %>.service.dto.<%= entityClass %>DTO;
+import <%= packageName %>.service.mapper.<%= entityClass %>Mapper;
+<%_ } _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,11 +52,14 @@ import org.springframework.stereotype.Service;
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
+<%_ if (reactiveRepositories) { _%>
+import reactor.core.publisher.Flux;
+<%_ } _%>
 
-import java.util.Optional;
 <%_ if (dto === 'mapstruct' && (pagination === 'no' ||  fieldsContainNoOwnerOneToOne === true)) { _%>
 import java.util.LinkedList;<% } %><% if (pagination === 'no' ||  fieldsContainNoOwnerOneToOne === true) { %>
-import java.util.List;<% } %><% if (databaseType === 'cassandra') { %>
+import java.util.List;<% } %>
+import java.util.Optional;<% if (databaseType === 'cassandra') { %>
 import java.util.UUID;<% } %><% if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && ((searchEngine === 'elasticsearch' && !viaService) || dto === 'mapstruct'))) { %>
 import java.util.stream.Collectors;<% } %><% if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && searchEngine === 'elasticsearch' && !viaService)) { %>
 import java.util.stream.StreamSupport;<% } %><% if (searchEngine === 'elasticsearch') { %>
@@ -103,6 +113,18 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
             .map(<%= entityToDtoReference %>);<% } %>
         <%_ } _%>
     }
+    <%_ if (reactiveRepositories) { _%>
+
+    /**
+     * Get all the <%= entityInstancePlural %>.
+     * @return the Flux of entities
+     */
+    public Flux<<%= instanceType %>> findAllAsFlux() {
+        log.debug("Request to get all <%= entityClassPlural %> as a flux");
+        return <%= entityInstance %>ReactiveRepository.findAll()<% if (dto === 'mapstruct') { %>
+            .map(<%= entityToDtoReference %>)<% } %>;
+    }
+    <%_ } _%>
     <%_ if (fieldsContainOwnerManyToMany === true) { _%>
 
     /**
