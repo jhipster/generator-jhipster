@@ -408,9 +408,6 @@ module.exports = class extends BaseGenerator {
                 if (!context.clientRootFolder && !context.skipUiGrouping && context.applicationType === 'gateway' && context.useMicroserviceJson) {
                     context.clientRootFolder = context.microserviceName;
                 }
-                // setup variable to hold flag for determining if user should be saved in a microservice
-                // this is overridden in generator-base#loadEntityJson()
-                context.saveIdentitySnapshot = false;
             },
 
             writeEntityJson() {
@@ -604,6 +601,7 @@ module.exports = class extends BaseGenerator {
                         context.validation = true;
                     }
                 });
+                context.hasUserField = context.saveUserSnapshot = false;
                 // Load in-memory data for relationships
                 context.relationships.forEach((relationship) => {
                     if (_.isUndefined(relationship.relationshipNameCapitalized)) {
@@ -663,6 +661,7 @@ module.exports = class extends BaseGenerator {
 
                     if (otherEntityName === 'user') {
                         relationship.otherEntityTableName = `${jhiTablePrefix}_user`;
+                        context.hasUserField = true;
                     } else {
                         relationship.otherEntityTableName = otherEntityData ? otherEntityData.entityTableName : null;
                         if (!relationship.otherEntityTableName) {
@@ -673,6 +672,7 @@ module.exports = class extends BaseGenerator {
                             relationship.otherEntityTableName = `${jhiTablePrefix}_${otherEntityTableName}`;
                         }
                     }
+                    context.saveUserSnapshot = context.applicationType === 'microservice' && context.authenticationType === 'oauth2' && context.hasUserField;
 
                     if (_.isUndefined(relationship.otherEntityNamePlural)) {
                         relationship.otherEntityNamePlural = pluralize(relationship.otherEntityName);

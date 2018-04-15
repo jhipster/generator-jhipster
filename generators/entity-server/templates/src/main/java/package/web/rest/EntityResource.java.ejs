@@ -33,7 +33,7 @@ import <%=packageName%>.repository.reactive.<%= entityClass %>ReactiveRepository
 import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;
     <%_ } _%>
 <%_ } _%>
-<%_ if (saveIdentitySnapshot) { _%>
+<%_ if (saveUserSnapshot) { _%>
 import <%=packageName%>.repository.UserRepository;
 <%_ } _%>
 import <%=packageName%>.web.rest.errors.BadRequestAlertException;
@@ -114,7 +114,7 @@ public class <%= entityClass %>Resource {
         log.debug("REST request to save <%= entityClass %> : {}", <%= instanceName %>);
         if (<%= instanceName %>.getId() != null) {
             throw new BadRequestAlertException("A new <%= entityInstance %> cannot already have an ID", ENTITY_NAME, "idexists");
-        }<%_ if (saveIdentitySnapshot) { %>
+        }<%_ if (saveUserSnapshot) { %>
         // Save user in case it's new and only exists in gateway
         userRepository.save(<%= instanceName %>.getUser());<%_ } _%>
         <%- include('../../common/save_template', {viaService: viaService, returnDirectly: false}); -%>
@@ -138,7 +138,7 @@ public class <%= entityClass %>Resource {
         log.debug("REST request to update <%= entityClass %> : {}", <%= instanceName %>);
         if (<%= instanceName %>.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }<%_ if (saveIdentitySnapshot) { %>
+        }<%_ if (saveUserSnapshot) { %>
         // Save user in case it's new and only exists in gateway
         userRepository.save(<%= instanceName %>.getUser());<%_ } _%>
         <%- include('../../common/save_template', {viaService: viaService, returnDirectly: false}); -%>
