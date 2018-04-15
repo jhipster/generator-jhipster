@@ -1,0 +1,189 @@
+/* ==========================================================================
+Right-to-Left support
+========================================================================== */
+
+html[dir=rtl] .col,
+html[dir=rtl] .col-auto,
+html[dir=rtl] .col-1,
+html[dir=rtl] .col-2,
+html[dir=rtl] .col-3,
+html[dir=rtl] .col-4,
+html[dir=rtl] .col-5,
+html[dir=rtl] .col-6,
+html[dir=rtl] .col-7,
+html[dir=rtl] .col-8,
+html[dir=rtl] .col-9,
+html[dir=rtl] .col-10,
+html[dir=rtl] .col-11,
+html[dir=rtl] .col-12,
+html[dir=rtl] .col-sm-1,
+html[dir=rtl] .col-sm-2,
+html[dir=rtl] .col-sm-3,
+html[dir=rtl] .col-sm-4,
+html[dir=rtl] .col-sm-5,
+html[dir=rtl] .col-sm-6,
+html[dir=rtl] .col-sm-7,
+html[dir=rtl] .col-sm-8,
+html[dir=rtl] .col-sm-9,
+html[dir=rtl] .col-sm-10,
+html[dir=rtl] .col-sm-11,
+html[dir=rtl] .col-sm-12,
+html[dir=rtl] .col-md-1,
+html[dir=rtl] .col-md-2,
+html[dir=rtl] .col-md-3,
+html[dir=rtl] .col-md-4,
+html[dir=rtl] .col-md-5,
+html[dir=rtl] .col-md-6,
+html[dir=rtl] .col-md-7,
+html[dir=rtl] .col-md-8,
+html[dir=rtl] .col-md-9,
+html[dir=rtl] .col-md-10,
+html[dir=rtl] .col-md-11,
+html[dir=rtl] .col-md-12,
+html[dir=rtl] .col-lg-1,
+html[dir=rtl] .col-lg-2,
+html[dir=rtl] .col-lg-3,
+html[dir=rtl] .col-lg-4,
+html[dir=rtl] .col-lg-5,
+html[dir=rtl] .col-lg-6,
+html[dir=rtl] .col-lg-7,
+html[dir=rtl] .col-lg-8,
+html[dir=rtl] .col-lg-9,
+html[dir=rtl] .col-lg-10,
+html[dir=rtl] .col-lg-11,
+html[dir=rtl] .col-lg-12,
+html[dir=rtl] .col-xl-1,
+html[dir=rtl] .col-xl-2,
+html[dir=rtl] .col-xl-3,
+html[dir=rtl] .col-xl-4,
+html[dir=rtl] .col-xl-5,
+html[dir=rtl] .col-xl-6,
+html[dir=rtl] .col-xl-7,
+html[dir=rtl] .col-xl-8,
+html[dir=rtl] .col-xl-9,
+html[dir=rtl] .col-xl-10,
+html[dir=rtl] .col-xl-11,
+html[dir=rtl] .col-xl-12 {
+  float: right;
+}
+
+html[dir=rtl] body {
+  text-align: right;
+}
+
+html[dir=rtl] .navbar-nav>li {
+  float: right;
+}
+
+html[dir=rtl] .dl-horizontal dt {
+  float: right;
+}
+
+html[dir=rtl] th {
+  text-align: right;
+}
+
+html[dir=rtl] .dropdown-menu {
+  text-align: right;
+}
+
+html[dir=rtl] .modal-header .close {
+  margin-left: 0rem;
+}
+
+html[dir=rtl] .modal-footer {
+  text-align: left;
+}
+
+html[dir=rtl] .jh-create-entity {
+  float: left !important;
+}
+
+html[dir=rtl] .form-check-input {
+  margin-left: 0rem;
+  margin-right: -1.25rem;
+}
+
+html[dir=rtl] .form-check-label {
+  padding-left: 0rem;
+  padding-right: 1.25rem;
+}
+
+html[dir=rtl] .input-group .form-control:not(:last-child),
+html[dir=rtl] .input-group-prepend,
+html[dir=rtl] .input-group-btn:not(:last-child)>.btn,
+html[dir=rtl] .input-group-btn:not(:last-child)>.btn-group>.btn,
+html[dir=rtl] .input-group-btn:not(:last-child)>.dropdown-toggle,
+html[dir=rtl] .input-group-btn:not(:first-child)>.btn:not(:last-child):not(.dropdown-toggle),
+html[dir=rtl] .input-group-btn:not(:first-child)>.btn-group:not(:last-child)>.btn {
+  border-bottom-right-radius: 0.25rem;
+  border-bottom-left-radius: 0.0rem;
+  border-top-right-radius: 0.25rem;
+  border-top-left-radius: 0.0rem;
+}
+
+html[dir=rtl] .input-group-prepend {
+  border-left: 0;
+  border-right: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+html[dir=rtl] .input-group .form-control:not(:first-child),
+html[dir=rtl] .input-group-append,
+html[dir=rtl] .input-group-btn:not(:first-child)>.btn,
+html[dir=rtl] .input-group-btn:not(:first-child)>.btn-group>.btn,
+html[dir=rtl] .input-group-btn:not(:first-child)>.dropdown-toggle,
+html[dir=rtl] .input-group-btn:not(:last-child)>.btn:not(:first-child),
+html[dir=rtl] .input-group-btn:not(:last-child)>.btn-group:not(:first-child)>.btn {
+  border-bottom-right-radius: 0.0rem;
+  border-bottom-left-radius: 0.25rem;
+  border-top-right-radius: 0.0rem;
+  border-top-left-radius: 0.25rem;
+}
+
+html[dir=rtl] .form-control+.input-group-append {
+  border-right: 0;
+  border-left: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+html[dir=rtl] .modal-footer> :not(:first-child) {
+  margin-left: 0rem;
+  margin-right: .25rem;
+}
+
+html[dir=rtl] .btn-group>.btn:first-child:not(:last-child):not(.dropdown-toggle) {
+  border-bottom-right-radius: 0.25rem;
+  border-bottom-left-radius: 0.0rem;
+  border-top-right-radius: 0.25rem;
+  border-top-left-radius: 0.0rem;
+}
+
+html[dir=rtl] .btn-group>.btn:last-child:not(:first-child),
+html[dir=rtl] .btn-group>.dropdown-toggle:not(:first-child) {
+  border-bottom-right-radius: 0.0rem;
+  border-bottom-left-radius: 0.25rem;
+  border-top-right-radius: 0.0rem;
+  border-top-left-radius: 0.25rem;
+}
+
+html[dir=rtl] .btn-group>.btn:first-child {
+  margin-right: 0;
+}
+
+html[dir=rtl] .page-item:first-child .page-link {
+  margin-right: 0;
+  margin-left: -1px;
+}
+
+html[dir=rtl] .pagination-sm .page-item:first-child .page-link {
+  border-bottom-left-radius: 0rem;
+  border-top-left-radius: 0rem;
+  border-bottom-right-radius: .2rem;
+  border-top-right-radius: .2rem;
+}
+
+.pagination-sm .page-item:last-child .page-link {
+  border-bottom-right-radius: 0.0rem;
+  border-top-right-radius: 0.0rem;
+  border-bottom-left-radius: .2rem;
+  border-top-left-radius: .2rem;
+}
