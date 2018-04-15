@@ -115,8 +115,10 @@ public class <%= entityClass %>Resource {
         if (<%= instanceName %>.getId() != null) {
             throw new BadRequestAlertException("A new <%= entityInstance %> cannot already have an ID", ENTITY_NAME, "idexists");
         }<%_ if (saveUserSnapshot) { %>
-        // Save user in case it's new and only exists in gateway
-        userRepository.save(<%= instanceName %>.getUser());<%_ } _%>
+        if (<%= instanceName %>.getUser() != null) {
+            // Save user in case it's new and only exists in gateway
+            userRepository.save(<%= instanceName %>.getUser());
+        }<%_ } _%>
         <%- include('../../common/save_template', {viaService: viaService, returnDirectly: false}); -%>
         return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -139,8 +141,10 @@ public class <%= entityClass %>Resource {
         if (<%= instanceName %>.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }<%_ if (saveUserSnapshot) { %>
-        // Save user in case it's new and only exists in gateway
-        userRepository.save(<%= instanceName %>.getUser());<%_ } _%>
+        if (<%= instanceName %>.getUser() != null) {
+            // Save user in case it's new and only exists in gateway
+            userRepository.save(<%= instanceName %>.getUser());
+        }<%_ } _%>
         <%- include('../../common/save_template', {viaService: viaService, returnDirectly: false}); -%>
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, <%= instanceName %>.getId().toString()))
