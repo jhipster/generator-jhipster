@@ -17,10 +17,12 @@
  limitations under the License.
 -%>
 // Override Boostrap variables
-@import "bootstrap-variables";
+@import 'bootstrap-variables';
 // Import Bootstrap source files from node_modules
-@import 'node_modules/bootstrap/scss/bootstrap';
-
+@import "node_modules/bootstrap/scss/bootstrap";
+<%_ if (enableI18nRTL) { _%>
+@import 'rtl.scss';
+<%_ } _%>
 body {
   background: #fafafa;
   margin: 0;
@@ -63,7 +65,6 @@ a:hover {
         height: 100%;
       }
     }
-
   }
 }
 
@@ -77,7 +78,6 @@ a:hover {
   z-index: 1000;
   padding: 5px 25px 50px 25px !important;
 }
-
 
 /* ==========================================================================
 Browser Upgrade Prompt
@@ -153,25 +153,22 @@ Generic styles
 /* padding helpers */
 
 @mixin pad($size, $side) {
-  @if $size=='' {
-    @if $side=='' {
+  @if $size== "" {
+    @if $side== "" {
       .pad {
         padding: 10px !important;
       }
-    }
-    @else {
+    } @else {
       .pad {
         padding-#{$side}: 10px !important;
       }
     }
-  }
-  @else {
-    @if $side=='' {
+  } @else {
+    @if $side== "" {
       .pad-#{$size} {
         padding: #{$size}px !important;
       }
-    }
-    @else {
+    } @else {
       .pad-#{$side}-#{$size} {
         padding-#{$side}: #{$size}px !important;
       }
@@ -226,12 +223,11 @@ Generic styles
 @include pad("100", "left");
 
 @mixin no-padding($side) {
-  @if $side=='all' {
+  @if $side== "all" {
     .no-padding {
       padding: 0 !important;
     }
-  }
-  @else {
+  } @else {
     .no-padding-#{$side} {
       padding-#{$side}: 0 !important;
     }
@@ -250,12 +246,11 @@ Generic styles
   margin: 0px;
 }
 @mixin voffset($size) {
-  @if $size=='' {
+  @if $size== "" {
     .voffset {
       margin-top: 2px !important;
     }
-  }
-  @else {
+  } @else {
     .voffset-#{$size} {
       margin-top: #{$size}px !important;
     }
@@ -277,7 +272,6 @@ Generic styles
   background-color: #eee;
   opacity: 1;
 }
-
 
 /* ==========================================================================
 make sure browsers use the pointer cursor for anchors, even with no href
@@ -349,7 +343,7 @@ ul#strengthBar {
 }
 
 .point {
-  background: #DDD;
+  background: #ddd;
   border-radius: 2px;
   display: inline-block;
   height: 5px;
@@ -357,9 +351,8 @@ ul#strengthBar {
   width: 20px;
 }
 
-
 /* bootstrap 3 input-group 100% width
-   http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
+http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
 
 .width-min {
   width: 1% !important;
