@@ -15,8 +15,8 @@
             "otherEntityRelationshipName": "testMapstruct"
         },
         {
-            "relationshipName": "testManyRelWithPaginationAndDTO",
-            "otherEntityName": "testManyRelWithPaginationAndDTO",
+            "relationshipName": "testManyRelPaginDTO",
+            "otherEntityName": "testManyRelPaginDTO",
             "relationshipType": "many-to-many",
             "ownerSide": false,
             "otherEntityRelationshipName": "testMapstruct"
