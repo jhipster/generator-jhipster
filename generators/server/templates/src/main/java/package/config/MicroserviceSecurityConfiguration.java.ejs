@@ -119,14 +119,14 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 @EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerAdapter {
+public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
     private final OAuth2Properties oAuth2Properties;
 
     <%_ if (applicationType === 'gateway') { _%>
     private final CorsFilter corsFilter;
 
     <%_ } _%>
-    public MicroserviceSecurityConfiguration(OAuth2Properties oAuth2Properties<%_ if (applicationType === 'gateway') { _%>, CorsFilter corsFilter<%_ } _%>) {
+    public SecurityConfiguration(OAuth2Properties oAuth2Properties<%_ if (applicationType === 'gateway') { _%>, CorsFilter corsFilter<%_ } _%>) {
         this.oAuth2Properties = oAuth2Properties;
         <%_ if (applicationType === 'gateway') { _%>
         this.corsFilter = corsFilter;
@@ -204,7 +204,7 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 @Import(SecurityProblemSupport.class)
 @EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerAdapter {
+public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
 
     private static final String OAUTH2_PRINCIPAL_ATTRIBUTE = "preferred_username";
 
@@ -214,7 +214,7 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
 
     private final SecurityProblemSupport problemSupport;
 
-    public MicroserviceSecurityConfiguration(ResourceServerProperties resourceServerProperties,
+    public SecurityConfiguration(ResourceServerProperties resourceServerProperties,
         SecurityProblemSupport problemSupport) {
         this.resourceServerProperties = resourceServerProperties;
         this.problemSupport = problemSupport;
