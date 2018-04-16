@@ -28,8 +28,10 @@ import io.github.jhipster.domain.util.JSR310DateConverters.*;
 import io.github.jhipster.config.JHipsterConstants;
 <%_ } _%>
 
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+<%_ } _%>
 <%_ if (cacheProvider === 'hazelcast') { _%>
 import org.springframework.cache.CacheManager;
 <%_ } _%>
@@ -68,8 +70,10 @@ import java.util.List;
 <%_ } _%>
 @Profile(JHipsterConstants.SPRING_PROFILE_CLOUD)
 public class CloudDatabaseConfiguration extends AbstractCloudConfig {
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 
     private final Logger log = LoggerFactory.getLogger(CloudDatabaseConfiguration.class);
+    <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
 
     @Bean

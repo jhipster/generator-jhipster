@@ -53,6 +53,13 @@ const files = {
             templates: [
                 { file: 'postcss.config.js', method: 'copy' }
             ]
+        },
+        {
+            condition: generator => generator.useSass && generator.enableI18nRTL,
+            path: MAIN_SRC_DIR,
+            templates: [
+                'app/rtl.scss',
+            ]
         }
     ],
     image: [
@@ -133,6 +140,13 @@ const files = {
                 'app.css'
             ]
         },
+        {
+            condition: generator => !generator.useSass && generator.enableI18nRTL,
+            path: MAIN_SRC_DIR,
+            templates: [
+                'app/rtl.css'
+            ]
+        }
     // {
     //   condition: generator => generator.authenticationType === 'oauth2' || generator.authenticationType === 'jwt' || generator.authenticationType === 'uaa',
     //   path: REACT_DIR,

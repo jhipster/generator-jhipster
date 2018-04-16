@@ -23,7 +23,9 @@ import com.codahale.metrics.annotation.Timed;
 <%_ if (authenticationType !== 'oauth2' || searchEngine === 'elasticsearch') { _%>
 import <%=packageName%>.domain.User;
 <%_ } _%>
+<%_ if (authenticationType !== 'oauth2') { _%>
 import <%=packageName%>.repository.UserRepository;
+<%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import <%=packageName%>.repository.search.UserSearchRepository;
 <%_ } _%>
@@ -99,10 +101,10 @@ public class UserResource {
 
     private final Logger log = LoggerFactory.getLogger(UserResource.class);
 
-    private final UserRepository userRepository;
-
     private final UserService userService;
 <%_ if (authenticationType !== 'oauth2') { _%>
+
+    private final UserRepository userRepository;
 
     private final MailService mailService;
 <%_ } _%>
@@ -111,11 +113,11 @@ public class UserResource {
     private final UserSearchRepository userSearchRepository;
 <%_ } _%>
 
-    public UserResource(UserRepository userRepository, UserService userService<% if (authenticationType !== 'oauth2') { %>, MailService mailService<% } %><% if (searchEngine === 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %>) {
+    public UserResource(UserService userService<% if (authenticationType !== 'oauth2') { %>, UserRepository userRepository, MailService mailService<% } %><% if (searchEngine === 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %>) {
 
-        this.userRepository = userRepository;
         this.userService = userService;
         <%_ if (authenticationType !== 'oauth2') { _%>
+        this.userRepository = userRepository;
         this.mailService = mailService;
         <%_ } _%>
         <%_ if (searchEngine === 'elasticsearch') { _%>
