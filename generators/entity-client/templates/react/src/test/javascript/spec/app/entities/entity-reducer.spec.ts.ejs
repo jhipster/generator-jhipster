@@ -296,24 +296,19 @@ describe('Entities reducer tests', () => {
 
   <%_ if (fieldsContainBlob) { _%>
   describe('blobFields', () => {
-    <%_
-    blobFields.forEach(b => {
-      const nameToUpper = b.fieldName.toUpperCase();
-    _%>
-    it('should properly set <%= b.fieldName %> in state.', () => {
-      const payload = { data: 'fake data', contentType: 'fake dataType' };
+    it('should properly set a blob in state.', () => {
+      const payload = { name: 'fancyBlobName', data: 'fake data', contentType: 'fake dataType' };
       expect(reducer(undefined, {
-        type: ACTION_TYPES.SET_<%= nameToUpper %>,
+        type: ACTION_TYPES.SET_BLOB,
         payload
       })).to.eql({
         ...initialState,
         entity: {
-          <%= b.fieldName %>: payload.data,
-          <%= b.fieldName %>ContentType: payload.contentType
+          fancyBlobName: payload.data,
+          fancyBlobNameContentType: payload.contentType
         }
       });
     });
-    <%_ }); _%>
   });
   <%_ } _%>
 });
