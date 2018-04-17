@@ -24,7 +24,8 @@ let importSet = false;
 const uniqueEnums = {}; %><%- include imports -%>
 
 <%_ if (databaseType === 'cassandra') { _%>
-import com.datastax.driver.mapping.annotations.*;
+import org.springframework.data.cassandra.core.mapping.PrimaryKey;
+import org.springframework.data.cassandra.core.mapping.Table;
 <%_ } if (importJsonIgnore === true) { _%>
 import com.fasterxml.jackson.annotation.JsonIgnore;
 <%_ } if (importJsonIgnoreProperties === true) { _%>
@@ -108,7 +109,7 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <%_ } if (databaseType === 'couchbase') { _%>
 @Document
 <%_ } if (databaseType === 'cassandra') { _%>
-@Table(name = "<%= entityInstance %>")
+@Table("<%= entityInstance %>")
 <%_ } if (searchEngine === 'elasticsearch' && databaseType === 'mongodb') { _%>
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "<%= entityInstance.toLowerCase() %>")
 <%_ } if (searchEngine === 'elasticsearch' && databaseType !== 'mongodb') { _%>
@@ -137,7 +138,7 @@ public class <%= entityClass %> implements Serializable {
     @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)<% } %>
     private String id;
 <%_ } if (databaseType === 'cassandra') { %>
-    @PartitionKey
+    @PrimaryKey
     private UUID id;
 <%_ } _%>
 

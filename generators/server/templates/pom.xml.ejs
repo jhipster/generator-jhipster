@@ -511,7 +511,7 @@
             <scope>runtime</scope>
         </dependency>
         <%_ } _%>
-        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+        <%_ if (['mongodb', 'cassandra', 'couchbase'].includes(databaseType)) { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-<%=databaseType%><% if (applicationType === 'reactive') { %>-reactive<% } %></artifactId>
@@ -624,10 +624,6 @@
         <%_ } _%>
         <%_ if (databaseType === 'cassandra') { _%>
         <!-- DataStax driver -->
-        <dependency>
-            <groupId>com.datastax.cassandra</groupId>
-            <artifactId>cassandra-driver-core</artifactId>
-        </dependency>
         <dependency>
             <groupId>com.datastax.cassandra</groupId>
             <artifactId>cassandra-driver-extras</artifactId>
