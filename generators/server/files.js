@@ -961,7 +961,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2' && generator.applicationType === 'gateway',
+            condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2' && ['monolith', 'gateway'].includes(generator.applicationType),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 { file: 'package/web/rest/AccountResource.java', renameTo: generator => `${generator.javaDir}web/rest/AccountResource.java` },
@@ -977,7 +977,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2' && generator.applicationType === 'gateway',
+            condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2' && ['monolith', 'gateway'].includes(generator.applicationType),
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 { file: 'package/web/rest/AccountResourceIntTest.java', renameTo: generator => `${generator.testDir}web/rest/AccountResourceIntTest.java` },
