@@ -33,6 +33,9 @@ import <%=packageName%>.repository.reactive.<%= entityClass %>ReactiveRepository
 import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;
     <%_ } _%>
 <%_ } _%>
+<%_ if (saveUserSnapshot) { _%>
+import <%=packageName%>.repository.UserRepository;
+<%_ } _%>
 import <%=packageName%>.web.rest.errors.BadRequestAlertException;
 import <%=packageName%>.web.rest.util.HeaderUtil;<% if (pagination !== 'no') { %>
 import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
@@ -111,7 +114,12 @@ public class <%= entityClass %>Resource {
         log.debug("REST request to save <%= entityClass %> : {}", <%= instanceName %>);
         if (<%= instanceName %>.getId() != null) {
             throw new BadRequestAlertException("A new <%= entityInstance %> cannot already have an ID", ENTITY_NAME, "idexists");
-        }<%- include('../../common/save_template', {viaService: viaService, returnDirectly: false}); -%>
+        }<%_ if (saveUserSnapshot) { %>
+        if (<%= instanceName %>.getUser() != null) {
+            // Save user in case it's new and only exists in gateway
+            userRepository.save(<%= instanceName %>.getUser());
+        }<%_ } _%>
+        <%- include('../../common/save_template', {viaService: viaService, returnDirectly: false}); -%>
         return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -132,7 +140,12 @@ public class <%= entityClass %>Resource {
         log.debug("REST request to update <%= entityClass %> : {}", <%= instanceName %>);
         if (<%= instanceName %>.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }<%- include('../../common/save_template', {viaService: viaService, returnDirectly: false}); -%>
+        }<%_ if (saveUserSnapshot) { %>
+        if (<%= instanceName %>.getUser() != null) {
+            // Save user in case it's new and only exists in gateway
+            userRepository.save(<%= instanceName %>.getUser());
+        }<%_ } _%>
+        <%- include('../../common/save_template', {viaService: viaService, returnDirectly: false}); -%>
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, <%= instanceName %>.getId().toString()))
             .body(result);
