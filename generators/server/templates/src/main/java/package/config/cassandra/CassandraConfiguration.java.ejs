@@ -36,9 +36,20 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.cassandra.core.convert.CassandraCustomConversions;
+import org.springframework.data.convert.ReadingConverter;
+import org.springframework.data.convert.WritingConverter;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Configuration<% if (applicationType === 'gateway' && databaseType !== 'cassandra') { %>
 @ConditionalOnProperty("jhipster.gateway.rate-limiting.enabled")<% } %>
@@ -69,6 +80,44 @@ public class CassandraConfiguration {
         if (metricRegistry != null) {
             cluster.init();
             metricRegistry.registerAll(cluster.getMetrics().getRegistry());
+        }
+    }
+
+    @Bean
+    public CassandraCustomConversions cassandraCustomConversions(Cluster cluster) {
+        List<Converter<?, ?>> converters = new ArrayList<>();
+        converters.add(TupleToZonedDateTimeConverter.INSTANCE);
+        converters.add(new ZonedDateTimeToTupleConverter(protocolVersion, cluster.getConfiguration().getCodecRegistry()));
+        return new CassandraCustomConversions(converters);
+    }
+
+    @ReadingConverter
+    enum TupleToZonedDateTimeConverter implements Converter<TupleValue, ZonedDateTime> {
+        INSTANCE;
+
+        @Override
+        public ZonedDateTime convert(TupleValue source) {
+            java.util.Date timestamp = source.getTimestamp(0);
+            ZoneId zoneId = ZoneId.of(source.getString(1));
+            return timestamp.toInstant().atZone(zoneId);
+        }
+    }
+
+    @WritingConverter
+    class ZonedDateTimeToTupleConverter implements Converter<ZonedDateTime, TupleValue> {
+
+        private TupleType type;
+
+        public ZonedDateTimeToTupleConverter(ProtocolVersion version, CodecRegistry codecRegistry) {
+            type = TupleType.of(version, codecRegistry, DataType.timestamp(), DataType.text());
+        }
+
+        @Override
+        public TupleValue convert(@Nonnull ZonedDateTime source) {
+            TupleValue tupleValue = type.newValue();
+            tupleValue.setTimestamp(0, Date.from(source.toLocalDateTime().toInstant(ZoneOffset.UTC)));
+            tupleValue.setString(1, source.getZone().toString());
+            return tupleValue;
         }
     }
 

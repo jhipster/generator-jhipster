@@ -785,6 +785,9 @@ _%>
     @Transactional<% } %>
     public void update<%= entityClass %>() throws Exception {
         // Initialize the database
+        <%_ if (databaseType === 'cassandra') { _%>
+        <%= entityInstance %>.setId(UUID.randomUUID());
+        <%_ } _%>
 <%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
         <%= entityInstance %>Service.save(<%= entityInstance %>);
     <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -792,9 +795,6 @@ _%>
         reset(mock<%= entityClass %>SearchRepository);
     <%_ } _%>
 <%_ } else { _%>
-        <%_ if (databaseType === 'cassandra') { _%>
-        <%= entityInstance %>.setId(UUID.randomUUID());
-        <%_ } _%>
         <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 <%_ } _%>
 
@@ -874,12 +874,12 @@ _%>
     @Transactional<% } %>
     public void delete<%= entityClass %>() throws Exception {
         // Initialize the database
-<%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
-        <%= entityInstance %>Service.save(<%= entityInstance %>);
-<%_ } else { _%>
         <%_ if (databaseType === 'cassandra') { _%>
         <%= entityInstance %>.setId(UUID.randomUUID());
         <%_ } _%>
+<%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
+        <%= entityInstance %>Service.save(<%= entityInstance %>);
+<%_ } else { _%>
         <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 <%_ } _%>
 
@@ -905,12 +905,12 @@ _%>
     @Transactional<% } %>
     public void search<%= entityClass %>() throws Exception {
         // Initialize the database
-<%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
-        <%= entityInstance %>Service.save(<%= entityInstance %>);
-<%_ } else { _%>
         <%_ if (databaseType === 'cassandra') { _%>
         <%= entityInstance %>.setId(UUID.randomUUID());
         <%_ } _%>
+<%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
+        <%= entityInstance %>Service.save(<%= entityInstance %>);
+<%_ } else { _%>
         <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch' && pagination !== 'no') { _%>
