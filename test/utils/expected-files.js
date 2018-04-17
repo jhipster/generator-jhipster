@@ -455,7 +455,9 @@ const expectedFiles = {
 
     microservice: [
         `${SERVER_MAIN_RES_DIR}static/index.html`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/MicroserviceSecurityConfiguration.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/SecurityConfiguration.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/FeignConfiguration.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/client/UserFeignClientInterceptor.java`,
         'package.json'
     ],
 

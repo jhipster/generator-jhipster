@@ -534,7 +534,7 @@ const serverFiles = {
             condition: generator => !(generator.applicationType !== 'microservice' && !(generator.applicationType === 'gateway' && (generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2'))),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
-                { file: 'package/config/MicroserviceSecurityConfiguration.java', renameTo: generator => `${generator.javaDir}config/MicroserviceSecurityConfiguration.java` }
+                { file: 'package/config/MicroserviceSecurityConfiguration.java', renameTo: generator => `${generator.javaDir}config/SecurityConfiguration.java` }
             ]
         },
         {
@@ -557,8 +557,16 @@ const serverFiles = {
                 { file: 'package/client/AuthorizedFeignClient.java', renameTo: generator => `${generator.javaDir}client/AuthorizedFeignClient.java` },
                 { file: 'package/client/OAuth2InterceptedFeignConfiguration.java', renameTo: generator => `${generator.javaDir}client/OAuth2InterceptedFeignConfiguration.java` },
                 { file: 'package/client/AuthorizedUserFeignClient.java', renameTo: generator => `${generator.javaDir}client/AuthorizedUserFeignClient.java` },
-                { file: 'package/client/UserFeignClientInterceptor.java', renameTo: generator => `${generator.javaDir}client/UserFeignClientInterceptor.java` },
+                { file: 'package/client/OAuth2_UserFeignClientInterceptor.java', renameTo: generator => `${generator.javaDir}client/UserFeignClientInterceptor.java` },
                 { file: 'package/client/OAuth2UserClientFeignConfiguration.java', renameTo: generator => `${generator.javaDir}client/OAuth2UserClientFeignConfiguration.java` }
+            ]
+        },
+        {
+            condition: generator => generator.applicationType === 'microservice' && generator.authenticationType === 'jwt',
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                { file: 'package/config/FeignConfiguration.java', renameTo: generator => `${generator.javaDir}config/FeignConfiguration.java` },
+                { file: 'package/client/JWT_UserFeignClientInterceptor.java', renameTo: generator => `${generator.javaDir}client/UserFeignClientInterceptor.java` }
             ]
         },
         {
