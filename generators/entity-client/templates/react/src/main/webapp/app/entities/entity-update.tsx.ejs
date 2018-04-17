@@ -143,9 +143,6 @@ export interface I<%= entityReactName %>UpdateState {
   <%_ relFieldNames.forEach(val => { _%>
   <%= val.relationshipFieldName %>Id: number;
   <%_ }) _%>
-  <%_ blobFields.forEach(b => {_%>
-  <%= b.fieldName %>: any;
-  <%_ }) _%>
 }
 
 export class <%= entityReactName %>Update extends React.Component<I<%= entityReactName %>UpdateProps, I<%= entityReactName %>UpdateState> {
@@ -153,16 +150,13 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
   constructor(props) {
     super(props);
     this.state = {
-      isNew: !this.props.match.params || !this.props.match.params.id,
       <%_ manyToManyOwners.forEach(val => { _%>
       ids<%= val.relationshipName %>: [],
       <%_ }) _%>
       <%_ relFieldNames.forEach(val => { _%>
       <%= val.relationshipFieldName %>Id: 0,
       <%_ }) _%>
-      <%_ blobFields.forEach(b => { _%>
-      <%= b.fieldName %>: null,
-      <%_ }) _%>
+      isNew: !this.props.match.params || !this.props.match.params.id,
     };
   }
 
