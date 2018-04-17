@@ -947,7 +947,6 @@ const serverFiles = {
             condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
-                { file: 'package/web/rest/AccountResource.java', renameTo: generator => `${generator.javaDir}web/rest/AccountResource.java` },
                 { file: 'package/domain/User.java', renameTo: generator => `${generator.javaDir}domain/User.java` },
                 { file: 'package/domain/Authority.java', renameTo: generator => `${generator.javaDir}domain/Authority.java` },
                 { file: 'package/service/UserService.java', renameTo: generator => `${generator.javaDir}service/UserService.java` },
@@ -962,13 +961,26 @@ const serverFiles = {
             ]
         },
         {
+            condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2' && generator.applicationType === 'gateway',
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                { file: 'package/web/rest/AccountResource.java', renameTo: generator => `${generator.javaDir}web/rest/AccountResource.java` },
+            ]
+        },
+        {
             condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2',
             path: SERVER_TEST_SRC_DIR,
             templates: [
-                { file: 'package/web/rest/AccountResourceIntTest.java', renameTo: generator => `${generator.testDir}web/rest/AccountResourceIntTest.java` },
                 { file: 'package/security/SecurityUtilsUnitTest.java', renameTo: generator => `${generator.testDir}security/SecurityUtilsUnitTest.java` },
                 { file: 'package/service/UserServiceIntTest.java', renameTo: generator => `${generator.testDir}service/UserServiceIntTest.java` },
                 { file: 'package/web/rest/UserResourceIntTest.java', renameTo: generator => `${generator.testDir}web/rest/UserResourceIntTest.java` },
+            ]
+        },
+        {
+            condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2' && generator.applicationType === 'gateway',
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                { file: 'package/web/rest/AccountResourceIntTest.java', renameTo: generator => `${generator.testDir}web/rest/AccountResourceIntTest.java` },
             ]
         },
         {
