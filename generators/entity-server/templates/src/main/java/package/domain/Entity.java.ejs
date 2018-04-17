@@ -25,6 +25,9 @@ const uniqueEnums = {}; %><%- include imports -%>
 
 <%_ if (databaseType === 'cassandra') { _%>
 import org.springframework.data.annotation.Id;
+    <%_ if (fieldsContainBlob) { _%>
+import org.springframework.data.cassandra.core.mapping.Column;
+    <%_ } _%>
 import org.springframework.data.cassandra.core.mapping.Table;
 <%_ } if (importJsonIgnore === true) { _%>
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -188,7 +191,7 @@ public class <%= entityClass %> implements Serializable {
 
     <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { _%>
       <%_ if (databaseType === 'sql' || databaseType === 'cassandra') { _%>
-    @Column(name = "<%-fieldNameAsDatabaseColumn %>_content_type"<% if (required && databaseType !== 'cassandra') { %>, nullable = false<% } %>)
+    @Column(<% if (databaseType !== 'cassandra') { %>name = <% } %>"<%-fieldNameAsDatabaseColumn %>_content_type"<% if (required && databaseType !== 'cassandra') { %>, nullable = false<% } %>)
         <%_ if (required && databaseType === 'cassandra') { _%>
     @NotNull
         <%_ } _%>
