@@ -18,7 +18,7 @@
  */
 const _ = require('lodash');
 const chalk = require('chalk');
-const databaseTypes = require('jhipster-core').JHipsterDatabaseTypes.Types;
+const databaseTypes = require('jhipster-core').JHipsterDatabaseTypes;
 
 const BaseGenerator = require('../generator-base');
 const docker = require('../docker-base');
@@ -301,7 +301,7 @@ module.exports = class extends BaseGenerator {
                 if (this.abort) return;
                 this.appConfigs.forEach((appConfig) => {
                     const app = this.aws.apps.find(a => a.baseName === appConfig.baseName);
-                    const postgresqlType = databaseTypes.postgresql;
+                    const postgresqlType = databaseTypes.POSTGRESQL;
                     app.dbType = appConfig.prodDatabaseType;
 
                     app.auroraEngine = appConfig.prodDatabaseType === postgresqlType ? 'aurora-postgresql' : 'aurora-mysql';
