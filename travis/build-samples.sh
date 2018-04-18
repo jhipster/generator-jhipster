@@ -17,6 +17,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# option -x for debug purpose.
+# set -x
+# TODO modifing source to accept this parameter if a ./samples/-*.sh fail
 set -e
 set -o nounset
 
@@ -40,7 +43,6 @@ set -o nounset
 # *********
 # *********
 
-# misc {{{2
 # Works sometime
 trap ctrl_c INT
 function ctrl_c() {
@@ -160,6 +162,7 @@ function usage() {
 function testRequierments() {
     # Why "nodejs --version"? For Ubuntu users, please see
     # https://askubuntu.com/a/521571"
+    echo -e "\n\n"
     local argument=`echo -e "FATAL ERROR: please install Node. " \
         "If Node is already installed, please add it in your PATH."`
     printCommandAndEval "node --version" \
@@ -182,9 +185,14 @@ function testRequierments() {
     unset argument
 }
 
-function printGlobalVariables() {
+# function printVariablesBeforeLaunch() {{{2
+function printVariablesBeforeLaunch() {
     # echo value used
-    echo -e "JHIPSTER_MATRIX='$JHIPSTER_MATRIX'" \
+    echo -e "LOGFILENAME='$LOGFILENAME'" \
+            "(variable not used in ./travis/script/*.sh." \
+            "The end of this filename shoule be renamed errored or passed" \
+            "at the end of this script)\n" \
+        "JHIPSTER_MATRIX='$JHIPSTER_MATRIX'" \
             "(variable not used in ./travis/script/*.sh)\n" \
         "JHIPSTER='$JHIPSTER'\n" \
         "PROFILE='$PROFILE'\n" \
@@ -201,16 +209,17 @@ function printGlobalVariables() {
 
 # createlogfile {{{2
 function createLogFile() {
-    local logfilename="$1"
-    touch "$logfilename" || exitScriptWithError "FATAL ERROR: could not " \
-        "create '$logfilename'"
+    local LOGFILENAME="$1"
+    touch "$LOGFILENAME" || exitScriptWithError "FATAL ERROR: could not " \
+        "create '$LOGFILENAME'"
     if [ $workOnAllProjects -eq 0 ] ; then
-        exec > >(tee "${logfilename}") 2> >(tee "${logfilename}")
+        exec > >(tee "${LOGFILENAME}") 2> >(tee "${LOGFILENAME}")
     else
-        printGlobalVariables
-        exec > "${logfilename}" 2> >(tee "${logfilename}")
+        printVariablesBeforeLaunch
+        # TODO why don't show errors on console?
+        exec > "$(echo -e "${LOGFILENAME}")" 2> >(tee "${LOGFILENAME}")
     fi
-    echo -e "\n\n* Your log file will be '$logfilename'"
+    echo -e "\n\n* Your log file will be '$LOGFILENAME'"
     export PROMPT_COMMAND=""
     export PS1="+ "
     echo -e "* During tests and build, line started by '$PS1' are bash" \
@@ -218,7 +227,8 @@ function createLogFile() {
     # Otherwise folowing command is started before function createLogFile is
     # finished.
     sleep 2
-    printGlobalVariables
+    printVariablesBeforeLaunch
+    testRequierments
 }
 
 # function testIfLocalSampleIsReady() {{{2
@@ -255,7 +265,6 @@ function retrieveVariablesInFileDotTravisSectionMatrix() {
     else
         JHIPSTER_MATRIX=$1
         JHIPSTER=`cut -d ' ' -f 1 <<< "$JHIPSTER_MATRIX"`
-        echo $JHIPSTER
     fi
 
     # PROFILE AND PROTRACTOR REDEFINITION
@@ -310,6 +319,7 @@ function yarnLink() {
 function testGeneratorJhipster() {
 
     echo -e "\n\n*********************** yarn test in generator-jhipster\n"
+    local -i confirmation=0
     if [ "$workOnAllProjects" -eq 0 ] ; then
         # Corresponding to "Install and test JHipster Generator" in
         # ./scripts/00-install-jhipster.sh
@@ -322,20 +332,10 @@ function testGeneratorJhipster() {
             "generator-jhipster before generate the project " \
             "(skip 1° if you havn't \\\`docker-compose' installed" \
             "2° if you want only generate a new project)? [y/n] "`
-        local execConfirmed=`echo -e "command -v " \
-            "docker-compose && " \
-            "yarn test " \
-            "|| exitScriptWithError " \
-            "FATAL ERROR: docker-compose not installed. Please install it."`
         confirmationUser "$confirmationFirstParameter" \
-            "$execConfirmed"
-        unset confirmationFirstParameter execConfirmed
-    fi
-    # Below executed if ("$workOnAllProjects" -eq 1) and ("$workOnAllProjects"
-    # -eq 0 AND response of the question above is 'y')
-    yarn test
-    if [ $? -gt 0 ] ; then
-        return 1
+            "confirmation=1" \
+            "confirmation=0"
+        unset confirmationFirstParameter
     fi
 }
 
@@ -484,18 +484,15 @@ function launchScriptForOnlyOneSample() {
     APP_FOLDER="$JHIPSTER_SAMPLES/""$JHIPSTER""-sample"
 
     time {
-        echo -e "When this build and test will be finished," \
-            "the end of this file will be 'errored' (for error) " \
-            "or 'finished' (for sucess)." \
-            "\n\n'$JHIPSTER_MATRIX' ready to launch!\n" \
+        echo -e "\n\n'$JHIPSTER_MATRIX' ready to launch!\n" \
             "**********************\n\n"
 
-        # Instantiate logfilename
+        # Instantiate LOGFILENAME
         local branchName=`git rev-parse --abbrev-ref HEAD`
         local beginLogfilename=`echo -e \
             "${JHIPSTER_TRAVIS}"/"$branchName"-"$DATEBININSCRIPT"-"$JHIPSTER"`
-        local logfilename="${beginLogfilename}.pending.local-travis.log"
-        createLogFile "$logfilename" "$JHIPSTER"
+        local LOGFILENAME="${beginLogfilename}.pending.local-travis.log"
+        createLogFile "$LOGFILENAME" "$JHIPSTER"
         echo -e  "\n\n'$JHIPSTER_MATRIX' is launched!\n"
 
         testIfLocalSampleIsReady
@@ -508,11 +505,11 @@ function launchScriptForOnlyOneSample() {
 
     if [ $? -gt 0 ] ; then
         local logrenamed="${beginLogfilename}.errored.local-travis.log"
-        mv "$logfilename" "$logrenamed"
+        mv "$LOGFILENAME" "$logrenamed"
         unset logrenamed
     else
         local logrenamed="${beginLogfilename}.passed.local-travis.log"
-        mv "$logfilename" "$logrenamed"
+        mv "$LOGFILENAME" "$logrenamed"
         unset logrenamed
     fi
 }
@@ -527,14 +524,10 @@ function launchScriptForOnlyOneSample() {
 function wrapperLaunchScript() {
     # Display stderr on terminal.
     echo -e "\n$localJHIPSTER_MATRIX launched in background at " \
-        "`date +%r`! \n\n" \
-        "See logfiles in `pwd`\n" \
-        "When this build and test will be finished," \
-        "the end of file will be 'errored' (for error) " \
-        "or 'finished' (for sucess)."
+        "`date +%r`! \n\n"
     launchScriptForOnlyOneSample "$methodToExecute" \
         "$localJHIPSTER_MATRIX" &
-    # exec > >(tee "${logfilename}") 2> >(tee "${logfilename}")
+    # exec > >(tee "${LOGFILENAME}") 2> >(tee "${LOGFILENAME}")
     wait $!
     if [ $? -eq 0 ] ; then
         echo -e "\n\n'$localJHIPSTER_MATRIX' passed."
