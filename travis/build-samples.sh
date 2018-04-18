@@ -19,7 +19,7 @@
 
 # option -x for debug purpose.
 # set -x
-# TODO modifing source to accept this parameter if a ./samples/-*.sh fail
+# DO NOT REMOVE `set -e`
 set -e
 set -o nounset
 
@@ -158,6 +158,24 @@ function usage() {
 # ********************
 # ********************
 
+# function finishSampleWithError() {{{2
+function finishSampleWithError() {
+    >&2 echo -e "$JHIPSTER_MATRIX has faild."
+    >&2 echo -e "$@" # print in stderr
+    # Thanks option `set -e`
+    local logrenamed="${beginLogfilename}"".errored.""${endofLogfilename}"
+    mv "$LOGFILENAME" "$logrenamed"
+    unset logrenamed
+    exit 15
+}
+
+function launchSourceAndTreatError() {
+    local pathOfScript=$1
+    time source "$pathOfScript" || \
+        finishSampleWithError "'$pathOfScript' finish with error."
+    unset pathOfScript
+}
+
 # function testRequierments() {{{2
 function testRequierments() {
     # Why "nodejs --version"? For Ubuntu users, please see
@@ -234,14 +252,14 @@ function createLogFile() {
 # function testIfLocalSampleIsReady() {{{2
 function testIfLocalSampleIsReady() {
     if [ ! -f "$JHIPSTER_SAMPLES/""$JHIPSTER""/.yo-rc.json" ]; then
-        exitScriptWithError "FATAL ERROR: not a JHipster project."
+        finishSampleWithError "FATAL ERROR: not a JHipster project."
     fi
     [[ "$workOnAllProjects" -eq 1 ]] && rm -rf "${APP_FOLDER}"
     if [[ -e "$APP_FOLDER" ]] ; then
         local confirmationFirstParameter=`echo -e  \
             "Warning: '${APP_FOLDER}' exists. Do you want delete it? [y/n] "`
         local argument="ABORTED: rename this folder, then restart script."
-        local execInfirmed="exitScriptWithError '$argument'"
+        local execInfirmed="finishSampleWithError '$argument'"
         confirmationUser "$confirmationFirstParameter" \
             "rm -rf '${APP_FOLDER}'" \
             "echo '$execInfirmed'"
@@ -286,7 +304,7 @@ function yarnLink() {
     cd "${APP_FOLDER}"
     yarn init -y
     command yarn link "generator-jhipster" || \
-        exitScriptWithError "FATAL ERROR: " \
+        finishSampleWithError "FATAL ERROR: " \
             "you havn't execute \`yarn link' in a folder " \
             "named 'generator-jhipster'. " \
             "Please read https://yarnpkg.com/lang/en/docs/cli/link/."
@@ -298,7 +316,7 @@ function yarnLink() {
     cd "$GENERATOR_JHIPSTER_FOLDER"
     local GENERATOR_JHIPSTER_FOLDER_REAL=`pwd -P`
     if [ "$JHIPSTER_TRAVISReal" != "$GENERATOR_JHIPSTER_FOLDER_REAL" ] ; then
-        exitScriptWithError "FATAL ERROR: " \
+        finishSampleWithError "FATAL ERROR: " \
             "'$JHIPSTER_TRAVISReal and '$GENERATOR_JHIPSTER_FOLDER_REAL' " \
             "are not the same folders"
     else
@@ -343,6 +361,8 @@ function testGeneratorJhipster() {
 # Corresponding of the entry "install" in ../.travis.yml
 function generateProject() {
 
+    sleep 20
+
     testGeneratorJhipster
     # Script below is done with function testGeneratorJhipster() launched above.
     # time source ./scripts/00-install-jhipster.sh
@@ -350,20 +370,14 @@ function generateProject() {
     echo -e "\n\n*********************** Copying entities for '$APP_FOLDER'\n"
     set -x
     cd "${JHIPSTER_TRAVIS}"
-    time source ./scripts/01-generate-entities.sh
+    launchSourceAndTreatError "./scripts/01-generate-entities.sh"
     set +x
-    if [ $? -gt 0 ] ; then
-        return 1
-    fi
 
     echo -e "\n\n*********************** Building $APP_FOLDER\n"
     set -x
     cd "${JHIPSTER_TRAVIS}"
-    time source ./scripts/02-generate-project.sh
+    launchSourceAndTreatError "./scripts/02-generate-project.sh"
     set +x
-    if [ $? -gt 0 ] ; then
-        return 1
-    fi
 
     # Do not run command below for this script (this script is only for Travis)
     # time source ./scripts/03-replace-version-generated-project.sh
@@ -383,51 +397,40 @@ function buildAndTestProject() {
     # GENERATE PROJECT
     # ********
     # Corresponding of the entry "install" in ../.travis.yml
+
     generateProject "$1"
-    if [ $? -gt 0 ] ; then
-        return 1
-    fi
     # BUILD AND TEST
     # ********
     # Corresponding of the entry "script" in .travis.yml
 
-
     echo -e "\n\n*********************** Start docker container\n"
     set -x
     cd "${JHIPSTER_TRAVIS}"
-    command -v docker-compose && \
-        time source ./scripts/03-docker-compose.sh || \
-        echo "\`docker-compose' not installed. Please install it."
+    [ ! `command -v docker-compose` ] || \
+        finishSampleWithError "\`docker-compose'" \
+            " not installed. Please install it."
+
+    launchSourceAndTreatError "./scripts/03-docker-compose.sh"
+
     set +x
     echo -e "\n\n*********************** Testing '$DIR-sample'\n"
-
     set -x
     cd "${JHIPSTER_TRAVIS}"
-    time source ./scripts/04-tests.sh
-    set +x
-    if [ $? -gt 0 ] ; then
-        return 1
-    fi
+    launchSourceAndTreatError "./scripts/04-tests.sh"
 
+    set +x
     echo -e "\n\n*********************** Run and test '$DIR-sample'\n"
     set -x
     cd "${JHIPSTER_TRAVIS}"
-    time source ./scripts/05-run.sh
-    set +x
-    if [ $? -gt 0 ] ; then
-        return 1
-    fi
+    launchSourceAndTreatError "./scripts/05-run.sh"
 
+    set +x
     echo -e "\n\n*********************** Launch Sonar analysis\n"
     set -x
     cd "${JHIPSTER_TRAVIS}"
-    time source ./scripts/06-sonar.sh
-    set +x
-    if [ $? -gt 0 ] ; then
-        return 1
-    fi
+    launchSourceAndTreatError "./scripts/06-sonar.sh"
 
-    return 2
+    set +x
 }
 
 # CLEAN SAMPLES {{{1
@@ -481,37 +484,36 @@ function launchScriptForOnlyOneSample() {
     retrieveVariablesInFileDotTravisSectionMatrix "$2"
 
     # redifine APP_FOLDER as explained in MAIN section
-    APP_FOLDER="$JHIPSTER_SAMPLES/""$JHIPSTER""-sample"
+    APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
 
     time {
-        echo -e "\n\n'$JHIPSTER_MATRIX' ready to launch!\n" \
+        echo -e "\n\n'${JHIPSTER_MATRIX}' ready to launch!\n" \
             "**********************\n\n"
 
         # Instantiate LOGFILENAME
         local branchName=`git rev-parse --abbrev-ref HEAD`
         local beginLogfilename=`echo -e \
-            "${JHIPSTER_TRAVIS}"/"$branchName"-"$DATEBININSCRIPT"-"$JHIPSTER"`
-        local LOGFILENAME="${beginLogfilename}.pending.local-travis.log"
-        createLogFile "$LOGFILENAME" "$JHIPSTER"
-        echo -e  "\n\n'$JHIPSTER_MATRIX' is launched!\n"
+            "${JHIPSTER_TRAVIS}"/"${branchName}"."${DATEBININSCRIPT}"`
+        local endofLogfilename=`echo -e "${JHIPSTER}"".local-travis.log"`
+        local LOGFILENAME="${beginLogfilename}"".pending.""${endofLogfilename}"
+        createLogFile "${LOGFILENAME}" "${JHIPSTER}"
+        echo -e  "\n\n'${JHIPSTER_MATRIX}' is launched!\n"
 
         testIfLocalSampleIsReady
         yarnLink
-        oldPATH="$PATH"
+        local oldPATH="${PATH}"
         export PATH="${APP_FOLDER}"/node_modules:"$PATH"
-        "$methodToExecute"
-        PATH="$oldPATH"
+        "${methodToExecute}"
+        PATH="${oldPATH}"
+        unset oldPATH
     }
 
-    if [ $? -gt 0 ] ; then
-        local logrenamed="${beginLogfilename}.errored.local-travis.log"
-        mv "$LOGFILENAME" "$logrenamed"
-        unset logrenamed
-    else
-        local logrenamed="${beginLogfilename}.passed.local-travis.log"
-        mv "$LOGFILENAME" "$logrenamed"
-        unset logrenamed
-    fi
+    # Thanks option `set -e`, if we are here we are sure it's a success!
+    local logrenamed="${beginLogfilename}"".passed.""${endofLogfilename}"
+    mv "${LOGFILENAME}" "${logrenamed}"
+    unset logrenamed methodToExecute
+    # do not unset beginLogfilename and endofLogfilename, unsed in another
+    # function
 }
 
 # LAUNCH SCRIPT FOR ALL SAMPLES {{{1
@@ -523,26 +525,21 @@ function launchScriptForOnlyOneSample() {
 # function wrapperLaunchScript() {{{2
 function wrapperLaunchScript() {
     # Display stderr on terminal.
-    echo -e "\n$localJHIPSTER_MATRIX launched in background at " \
+    echo -e "\n${localJHIPSTER_MATRIX} launched in background at " \
         "`date +%r`! \n\n"
-    launchScriptForOnlyOneSample "$methodToExecute" \
-        "$localJHIPSTER_MATRIX" &
+    launchScriptForOnlyOneSample "${methodToExecute}" \
+        "${localJHIPSTER_MATRIX}" &
     # exec > >(tee "${LOGFILENAME}") 2> >(tee "${LOGFILENAME}")
-    wait $!
-    if [ $? -eq 0 ] ; then
-        echo -e "\n\n'$localJHIPSTER_MATRIX' passed."
-    else
-        echo -e "\n\n'$localJHIPSTER_MATRIX' errored."
-    fi
 }
 
+# function launchScriptForAllSamples() {{{2
 function launchScriptForAllSamples() {
-    local methodToExecute="$1"
+    local methodToExecute="${1}"
     echo -e "\nWarning: if you run all scripts it could take long time!\n" \
         "Don't forget to check \`./build-samples.sh help"
     local confirmationFirstParameter=`echo -e "Warning: are you sure to run" \
-        "'$methodToExecute' and delete all samples/*-sample [y/n]? "`
-    confirmationUser "$confirmationFirstParameter" \
+        "'${methodToExecute}' and delete all samples/*-sample [y/n]? "`
+    confirmationUser "${confirmationFirstParameter}" \
         'echo ""' \
         'exitScriptWithError "ABORTED."'
     unset confirmationFirstParameter
@@ -556,7 +553,7 @@ function launchScriptForAllSamples() {
     while [[ "$typeAnswer" -eq 1 ]] ; do
         read -p "$question" -n 1 -r
         if [[ "$REPLY" =~ [1-9] ]] ; then
-            local -i numberOfProcess=$REPLY
+            local -i numberOfProcess="${REPLY}"
             echo "" ;
             typeAnswer=0
         else
@@ -583,7 +580,6 @@ function launchScriptForAllSamples() {
         echo -e "\n$ELAPSED\n\n"
         wrapperLaunchScript &
     done <<< "$TRAVIS_DOT_YAML_PARSED"
-    wait $!
 }
 
 # MAIN {{{1
