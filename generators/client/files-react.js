@@ -216,6 +216,13 @@ const files = {
             templates: [
                 'shared/reducers/locale.ts'
             ]
+        },
+        {
+            condition: generator => generator.authenticationType === 'oauth2',
+            path: REACT_DIR,
+            templates: [
+                'shared/reducers/user-service.ts'
+            ]
         }
     ],
     accountModule: [
