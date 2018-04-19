@@ -17,15 +17,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# option -x for debug purpose.
-# set -x
-# DO NOT REMOVE `set -e`
-set -e
-set -o nounset
-
 #-------------------------------------------------------------------------------
 # Local "Travis Build".
 #-------------------------------------------------------------------------------
+
 # Disclaimer: this script emulate Travis builds: it isn't executed on remote
 # Travis instance. Only scripts under ./travis/script are executed by Travis CI.
 # For a real local Travis build, see
@@ -34,14 +29,27 @@ set -o nounset
 # Notes for developpers of this script: all variables are escaped, it's a good
 # practice because if there is space between world, it could cause errors.
 # Check if all variables are escaped thanks perl and regex look around :
-# $ perl -ne "printf if /(?<\!\")(?<\!')(?<\!\\\\\`)\\\$(?\!\()(?\!\s)/"
-        # ./build-samples.sh
+# $ perl -ne "printf if /(?<\!\")(?<\!')(?<\!\\\\\`)\\\$(?\!\()(?\!\s)(?\!\?)(?\!\\')/" build-samples.sh
+
+# TODO check if variables are properly unsetted in functions belong of a scope.
+# In bash, inner functions belong same scope than outer function (we could
+# see that with keyword "local"
+# keyword "source" launch script in current execution context.
+# TODO check if all escapes of set -e with `command || commandIfFailure' are goode. Otherwise replace it by if statement. Be careful, sometimes it is necessary (for source).
+# TODO in ./scripts/* add basename. For example, if we are under /home/react/generator-jhipster/travis/*-sample we could have strange tests ;-). Tet it in /tmp if you have enough size in this folder.
+# TODO add a test to check if we have enough size.
 
 # PREPARE SCRIPT {{{1
 # *********
 # *********
 # *********
 # *********
+
+# option -x for debug purpose.
+# set -x
+# DO NOT REMOVE `set -e`
+set -e
+set -o nounset
 
 # Works sometime
 trap ctrl_c INT
@@ -117,6 +125,7 @@ function usage() {
         "You could install it and start tests in a new terminal." \
         "Few tests need \`docker-compose' avaible in your path " \
         "(not mandatory).\n"
+    # TODO test if you docker is launched.
 
     echo -e "\nUsage: '$me' generate [sample_name] " \
         "| buildandtest [sample_name]|clean [sample_name] | help\n" \
@@ -147,7 +156,8 @@ function usage() {
         "travis/samples/*-sample corresponding of samples listed above.\n" \
     "\`$ ./build-samples.sh clean' " \
         "=> delete all folders travis/samples/*-sample\n" \
-    "\`$ ./build-samples.sh help' => display the previous message \n"
+    "\`$ ./build-samples.sh help' => display the previous message \n" \n
+    "\n\nNote: We recommand to use Node.Js LTS. Check if you use it.\n"
 
     exit 0
 }
@@ -169,11 +179,33 @@ function finishSampleWithError() {
     exit 15
 }
 
+# function launchSourceAndTreatError() {{{2
 function launchSourceAndTreatError() {
     local pathOfScript=$1
     time source "$pathOfScript" || \
         finishSampleWithError "'$pathOfScript' finish with error."
     unset pathOfScript
+}
+
+# function printWarningUseCacheNodeModules() {{{2
+function printWarningUseCacheNodeModules() {
+    # TODO add a git pull hook to delete automatically "generated" file
+    # TODO if we build only one sample
+    # (eg. `./build-samples.sh generate react-default')
+    # test if it is a react sample.
+    # TODO when above done modify below
+    if [[ -d "${NODE_MODULES_CACHE_SAMPLE}" ]] ; then
+        echo -e "\n\nBE CARREFUL LOCAL BUILD FOR ANGULAR SAMPLES " \
+            "USE CACHED NODE_MODULES\n." \
+            "So if you done a \`git pull' " \
+            "or if you modifiy something relative to \`package.json', " \
+            "you could not see bugs\n. " \
+            "In this case, remove '${NODE_MODULES_CACHE_SAMPLE}', " \
+            "then launch tests again" \
+            "(e.g. \`./build-samples.sh buildandtest ngx-default'): " \
+            "it will don't use node_modules cache. \n\n"
+        sleep 3
+    fi
 }
 
 # function testRequierments() {{{2
@@ -186,11 +218,18 @@ function testRequierments() {
     printCommandAndEval "node --version" \
         || printCommandAndEval "nodejs --version" \
         || exitScriptWithError "$argument"
+    echo "We recommand to use Node.Js LTS. Check if you use it."
 
     local argument=`echo -e "FATAL ERROR: please install Yarn. " \
         "If Yarn is already installed, please add it in your PATH."`
     printCommandAndEval "yarn -v" \
         || "exitScriptWithError '$argument'"
+    unset argument
+
+    local argument=`echo -e "FATAL ERROR: please install JHipster globally. " \
+        "(\\\`$ yarn global install jhipster') " \
+        "If JHipster is already installed, please add it in your PATH."`
+    jhipster --version > /dev/null || "exitScriptWithError '$argument'"
     unset argument
 
     # TODO test if it works on mac
@@ -225,17 +264,19 @@ function printVariablesBeforeLaunch() {
         "SPRING_JPA_SHOW_SQL='$SPRING_JPA_SHOW_SQL'"
 }
 
-# createlogfile {{{2
+# createlogfile() {{{2
 function createLogFile() {
-    local LOGFILENAME="$1"
+    cd "${JHIPSTER_TRAVIS}"
     touch "$LOGFILENAME" || exitScriptWithError "FATAL ERROR: could not " \
         "create '$LOGFILENAME'"
-    if [ $workOnAllProjects -eq 0 ] ; then
+    if [ "$workOnAllProjects" -eq 0 ] ; then
         exec > >(tee "${LOGFILENAME}") 2> >(tee "${LOGFILENAME}")
     else
-        printVariablesBeforeLaunch
+        if [[ -z "${generateNode_Modules_Cache_Var+x}" ]] ; then
+            printVariablesBeforeLaunch
+        fi
         # TODO why don't show errors on console?
-        exec > "$(echo -e "${LOGFILENAME}")" 2> >(tee "${LOGFILENAME}")
+        exec 1> "$(echo -e "${LOGFILENAME}")" 2> >(tee "${LOGFILENAME}")
     fi
     echo -e "\n\n* Your log file will be '$LOGFILENAME'"
     export PROMPT_COMMAND=""
@@ -245,7 +286,10 @@ function createLogFile() {
     # Otherwise folowing command is started before function createLogFile is
     # finished.
     sleep 2
-    printVariablesBeforeLaunch
+    printWarningUseCacheNodeModules
+    if [[ -z "${generateNode_Modules_Cache_Var+x}" ]] ; then
+        printVariablesBeforeLaunch
+    fi
     testRequierments
 }
 
@@ -272,7 +316,7 @@ function testIfLocalSampleIsReady() {
 function retrieveVariablesInFileDotTravisSectionMatrix() {
 
     # For variable "$JHIPSTER_MATRIX", see section "matrix" of ../.travis.yml
-    if [ $workOnAllProjects -eq 0 ] ; then
+    if [[ "$workOnAllProjects" -eq 0 ]] ; then
         JHIPSTER="$1"
         JHIPSTER_MATRIX=`grep --color=never "$JHIPSTER\s" \
             <<< "$TRAVIS_DOT_YAML_PARSED"` \
@@ -300,12 +344,12 @@ function retrieveVariablesInFileDotTravisSectionMatrix() {
 # function yarnLink() {{{2
 function yarnLink() {
     echo -e "\n\n*********************** yarn link\n"
-    mkdir -p "$APP_FOLDER"/.jhipster/
+    mkdir -p "$APP_FOLDER"/
     cd "${APP_FOLDER}"
     yarn init -y
     command yarn link "generator-jhipster" || \
         finishSampleWithError "FATAL ERROR: " \
-            "you havn't execute \`yarn link' in a folder " \
+            "you havn't executed \`yarn link' in a folder " \
             "named 'generator-jhipster'. " \
             "Please read https://yarnpkg.com/lang/en/docs/cli/link/."
     local GENERATOR_JHIPSTER_FOLDER="`pwd`/node_modules/generator-jhipster"
@@ -322,6 +366,66 @@ function yarnLink() {
     else
         echo "Command \`yarn link' seems corect."
     fi
+    unset GENERATOR_JHIPSTER_FOLDER JHIPSTER_TRAVISReal
+}
+
+# function generateNode_Modules_Cache() {{{2
+function generateNode_Modules_Cache() {
+    # Display stderr on terminal.
+    if ls "${NODE_MODULES_CACHE_SAMPLE}"/*."${BRANCH_NAME}".*.local-travis.log \
+        1> /dev/null 2>&1
+    then
+        return 0
+    fi
+
+    echo -e "\n\n*********************** Before start, " \
+        "'$NODE_MODULES_CACHE_SAMPLE' should be created.\n"
+
+    rm -Rf "${NODE_MODULES_CACHE_SAMPLE}"
+    local shortDate=`date +%m-%dT%H_%M`
+    local beginLogfilename=`echo -e \
+        "${JHIPSTER_TRAVIS}"/node_modules_cache."${shortDate}"."${BRANCH_NAME}"`
+    local endofLogfilename="local-travis.log"
+
+    printWarningUseCacheNodeModules
+
+    local LOGFILENAME="${beginLogfilename}"".pending.""${endofLogfilename}"
+
+    local generateNode_Modules_Cache_Var=1
+    createLogFile
+    unset generateNode_Modules_Cache_Var
+
+    mkdir -p "${NODE_MODULES_CACHE_SAMPLE}"
+    cd "${JHIPSTER_TRAVIS}"
+    cp './samples/node_modules_cache/.yo-rc.json' \
+        "${NODE_MODULES_CACHE_SAMPLE}" || \
+        finishSampleWithError "FATAL ERROR: not a JHipster project."
+
+
+    echo -e "\nGenerate empty sample in foreground to cache node_modules at " \
+        "`date +%r`! \n\n"
+
+    APP_FOLDER="${NODE_MODULES_CACHE_SAMPLE}"
+    cd "$APP_FOLDER"
+    yarnLink || finishSampleWithError
+    unset APP_FOLDER
+
+    echo -e "\n\n*********************** Generate project " \
+        "for retrieve its folder node_modules\n"
+    cd "${NODE_MODULES_CACHE_SAMPLE}"
+    jhipster --force --no-insight --skip-checks --with-entities --skip-git \
+        --skip-commit-hook  && local -i fail=0 || local -i fail=1
+    if [[ "${fail}" -eq 0 ]] ; then
+        echo "All done."
+        local logrenamed="${beginLogfilename}"".passed.""${endofLogfilename}"
+        mv "${LOGFILENAME}" "${logrenamed}"
+        cp "${logrenamed}" "${NODE_MODULES_CACHE_SAMPLE}"
+    else
+        finishSampleWithError "FATAL ERROR: " \
+            "Failure during generation of the no-entity sample"
+    fi
+
+    unset shortDate beginLogfilename endofLogfilename fail
 }
 
 # GENERATE SAMPLES {{{1
@@ -333,26 +437,22 @@ function yarnLink() {
 # Executed when the first argument of the script is "generate" and "buildandtest"
 # ********************
 
-# function testGeneratorJhipster() {{{2
-function testGeneratorJhipster() {
+# function doestItTestGeneratorJHipster() {{{2
+function doestItTestGeneratorJHipster() {
 
     echo -e "\n\n*********************** yarn test in generator-jhipster\n"
-    local -i confirmation=0
     if [ "$workOnAllProjects" -eq 0 ] ; then
-        # Corresponding to "Install and test JHipster Generator" in
-        # ./scripts/00-install-jhipster.sh
-        cd -P "$JHIPSTER_TRAVIS"
         cd "../"
-        echo "We are at path: '`pwd`'".
-        echo "Your branch is: '" `git rev-parse --abbrev-ref HEAD` "'."
         local confirmationFirstParameter=`echo -e "Do you want execute " \
             "\\\`yarn test' in " \
             "generator-jhipster before generate the project " \
             "(skip 1° if you havn't \\\`docker-compose' installed" \
             "2° if you want only generate a new project)? [y/n] "`
         confirmationUser "$confirmationFirstParameter" \
-            "confirmation=1" \
-            "confirmation=0"
+            "TESTGENERATOR=1 ; \
+        echo Generator test will be test after generation or link of \
+            generator-jhipster/scripts/node_modules_cache-sample." \
+            "echo -e '\n\nSKIP test generator.\n'"
         unset confirmationFirstParameter
     fi
 }
@@ -361,10 +461,19 @@ function testGeneratorJhipster() {
 # Corresponding of the entry "install" in ../.travis.yml
 function generateProject() {
 
-    sleep 20
-
-    testGeneratorJhipster
-    # Script below is done with function testGeneratorJhipster() launched above.
+    if [[ "${TESTGENERATOR}" -eq 1 ]] \
+        || ( [[ "$workOnAllProjects" -eq 1 ]] && \
+        [[ "${JHipster}" == "ngx-default"  ]] ) ; then
+        # Corresponding to "Install and test JHipster Generator" in
+        # ./scripts/00-install-jhipster.sh
+    echo -e "\n\n*********************** yarn test in generator-jhipster\n"
+        echo "We are at path: '`pwd`'".
+        echo "Your branch is: '$BRANCH_NAME'."
+        cd -P "$JHIPSTER_TRAVIS"
+        # TODO should we add yarn install?
+        yarn test || finishSampleWithError "Fail during test of the Generator."
+    fi
+    # Script below is done with function code above.
     # time source ./scripts/00-install-jhipster.sh
 
     echo -e "\n\n*********************** Copying entities for '$APP_FOLDER'\n"
@@ -398,7 +507,7 @@ function buildAndTestProject() {
     # ********
     # Corresponding of the entry "install" in ../.travis.yml
 
-    generateProject "$1"
+    generateProject
     # BUILD AND TEST
     # ********
     # Corresponding of the entry "script" in .travis.yml
@@ -406,20 +515,19 @@ function buildAndTestProject() {
     echo -e "\n\n*********************** Start docker container\n"
     set -x
     cd "${JHIPSTER_TRAVIS}"
-    [ ! `command -v docker-compose` ] || \
-        finishSampleWithError "\`docker-compose'" \
-            " not installed. Please install it."
-
-    launchSourceAndTreatError "./scripts/03-docker-compose.sh"
+    # TODO it seems we must be sudo
+    # Maybe a problem with .dockignore:
+    # https://unix.stackexchange.com/questions/413015/docker-compose-cannot-build-without-sudo-but-i-can-run-containers-without-it
+    # launchSourceAndTreatError "./scripts/03-docker-compose.sh"
 
     set +x
-    echo -e "\n\n*********************** Testing '$DIR-sample'\n"
+    echo -e "\n\n*********************** Testing '${JHIPSTER}-sample'\n"
     set -x
     cd "${JHIPSTER_TRAVIS}"
     launchSourceAndTreatError "./scripts/04-tests.sh"
 
     set +x
-    echo -e "\n\n*********************** Run and test '$DIR-sample'\n"
+    echo -e "\n\n*********************** Run and test '${JHIPSTER}-sample'\n"
     set -x
     cd "${JHIPSTER_TRAVIS}"
     launchSourceAndTreatError "./scripts/05-run.sh"
@@ -480,27 +588,38 @@ function cleanAllProjects() {
 function launchScriptForOnlyOneSample() {
     local methodToExecute="$1"
 
+
     # define JHIPSTER, and redifine if necessary PROFIL and PROTRACTOR
     retrieveVariablesInFileDotTravisSectionMatrix "$2"
 
     # redifine APP_FOLDER as explained in MAIN section
     APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
+    testIfLocalSampleIsReady
 
+    declare -i TESTGENERATOR=0
+    doestItTestGeneratorJHipster
+
+    generateNode_Modules_Cache
+    # Redefined APP_FOLDER, because erased in generateNode_Modules_Cache() above
+    APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
+    # ${APP_FOLDER} defined outer this function
     time {
         echo -e "\n\n'${JHIPSTER_MATRIX}' ready to launch!\n" \
             "**********************\n\n"
 
         # Instantiate LOGFILENAME
-        local branchName=`git rev-parse --abbrev-ref HEAD`
         local beginLogfilename=`echo -e \
-            "${JHIPSTER_TRAVIS}"/"${branchName}"."${DATEBININSCRIPT}"`
+            "${JHIPSTER_TRAVIS}"/"${BRANCH_NAME}"."${DATEBININSCRIPT}"`
         local endofLogfilename=`echo -e "${JHIPSTER}"".local-travis.log"`
         local LOGFILENAME="${beginLogfilename}"".pending.""${endofLogfilename}"
-        createLogFile "${LOGFILENAME}" "${JHIPSTER}"
+        createLogFile
         echo -e  "\n\n'${JHIPSTER_MATRIX}' is launched!\n"
 
-        testIfLocalSampleIsReady
-        yarnLink
+        echo -e "\n\n*********************** Link " \
+            "'$NODE_MODULES_CACHE_SAMPLE' to '$APP_FOLDER'\n"
+        mkdir -p ${APP_FOLDER}
+        ln -sf "${NODE_MODULES_CACHE_SAMPLE}/node_modules" \
+            "${APP_FOLDER}"
         local oldPATH="${PATH}"
         export PATH="${APP_FOLDER}"/node_modules:"$PATH"
         "${methodToExecute}"
@@ -521,6 +640,7 @@ function launchScriptForOnlyOneSample() {
 # ********************
 # ********************
 # ********************
+
 
 # function wrapperLaunchScript() {{{2
 function wrapperLaunchScript() {
@@ -609,8 +729,9 @@ SPRING_JPA_SHOW_SQL="false"
 
 # GLOBAL CONSTANTS SPECIFIC TO ./build-samples.sh (this script)
 # **********
-# Should be unique thanks command `date'.
-DATEBININSCRIPT=`date +%Y-%m-%dT%H_%M_%S_%N`
+# Should be unique thanks command `date'. Thanks lot of `sleep' in this script
+# we sure DATEBININSCRIPT will be unique.
+DATEBININSCRIPT=`date +%Y-%m-%dT%H_%M_%S`
 
 ## Retrieve ../.travis.yml and parse it
 travisDotYml="${JHIPSTER_TRAVIS}/../.travis.yml"
@@ -623,6 +744,13 @@ unset travisDotYml
 
 # Count time in this script
 SECONDS=0
+
+BRANCH_NAME=`git rev-parse --abbrev-ref HEAD`
+
+# See also ./scripts/02-generate-project.sh.
+# The string "node_modules_cache-sample" is used.
+NODE_MODULES_CACHE_SAMPLE="${JHIPSTER_SAMPLES}/node_modules_cache-sample"
+
 # Argument parser {{{2
 # ****************
 

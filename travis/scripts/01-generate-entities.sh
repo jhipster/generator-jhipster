@@ -44,8 +44,8 @@ set -x
 
 if [[ "${BASH_SOURCE[*]}" != *"build-samples.sh"* ]] ; then
     rm -Rf "$APP_FOLDER"
-    mkdir -p "$APP_FOLDER"/.jhipster/
 fi
+mkdir -p "$APP_FOLDER"/.jhipster/
 
 if [[ ("$JHIPSTER" == *"mongodb"*) || ("$JHIPSTER" == *"couchbase"*) ]]; then
     moveEntity DocumentBankAccount
