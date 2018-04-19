@@ -31,11 +31,6 @@ const initialState = {
   loading: false,
   errorMessage: null,
   users: [],
-  authorities: [],
-  user: {},
-  updating: false,
-  updateSuccess: false,
-  totalItems: 0
 };
 
 // Reducer
@@ -44,16 +39,12 @@ export default (state = initialState, action) => {
     case REQUEST(ACTION_TYPES.FETCH_USERS):
       return {
         ...state,
-        errorMessage: null,
-        updateSuccess: false,
         loading: true
       };
     case FAILURE(ACTION_TYPES.FETCH_USERS):
       return {
         ...state,
         loading: false,
-        updating: false,
-        updateSuccess: false,
         errorMessage: action.payload
       };
     case SUCCESS(ACTION_TYPES.FETCH_USERS):
@@ -61,7 +52,6 @@ export default (state = initialState, action) => {
         ...state,
         loading: false,
         users: action.payload.data,
-        totalItems: action.payload.headers['x-total-count']
       };
     case ACTION_TYPES.RESET:
       return {

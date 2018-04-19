@@ -396,6 +396,13 @@ const files = {
             ]
         },
         {
+            condition: generator => generator.skipUserManagement,
+            path: TEST_SRC_DIR,
+            templates: [
+                'spec/app/shared/reducers/user-service.spec.ts'
+            ]
+        },
+        {
             condition: generator => generator.authenticationType === 'session',
             path: TEST_SRC_DIR,
             templates: [
