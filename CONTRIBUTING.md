@@ -251,7 +251,7 @@ Command name can be as below
     `buildandtest` : Generate and test the sample if specified else generate and test all samples
     `clean` : Clean the generated code for the sample if specified else clean all samples
 
-*NOTES FOR OLD DEVELOPERS: ./travis/build-samples.sh has been rewritten. Now it spawns several generation/build in same time. Improve performance.*
+*NOTES FOR OLD DEVELOPERS: ./travis/build-samples.sh has been rewritten. Now it spawns several generation/build in same time and use a node_modules cache. Improve speed.*
 
 ## <a name="rules"></a> Coding Rules
 To ensure consistency throughout the source code, keep these rules in mind as you are working:

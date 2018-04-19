@@ -29,14 +29,15 @@
 # Notes for developpers of this script: all variables are escaped, it's a good
 # practice because if there is space between world, it could cause errors.
 # Check if all variables are escaped thanks perl and regex look around :
-# $ perl -ne "printf if /(?<\!\")(?<\!')(?<\!\\\\\`)\\\$(?\!\()(?\!\s)(?\!\?)(?\!\\')/" build-samples.sh
+# $ perl -ne "printf if /(?<\!\(\()(?<\!\")(?<\!')(?<\!\\\\\`)\\\$(?\!\()(?\!\s)(?\!\?)(?\!\\')/" build-samples.sh
 
 # TODO check if variables are properly unsetted in functions belong of a scope.
 # In bash, inner functions belong same scope than outer function (we could
 # see that with keyword "local"
 # keyword "source" launch script in current execution context.
-# TODO check if all escapes of set -e with `command || commandIfFailure' are goode. Otherwise replace it by if statement. Be careful, sometimes it is necessary (for source).
-# TODO in ./scripts/* add basename. For example, if we are under /home/react/generator-jhipster/travis/*-sample we could have strange tests ;-). Tet it in /tmp if you have enough size in this folder.
+# TODO check if all escapes of set -e with `command || commandIfFailure' are
+# goode. Otherwise replace it by if statement. Be careful, sometimes it is
+# necessary (for source).
 # TODO add a test to check if we have enough size.
 
 # PREPARE SCRIPT {{{1
@@ -47,13 +48,18 @@
 
 # option -x for debug purpose.
 # set -x
-# DO NOT REMOVE `set -e`
+# # DO NOT REMOVE `set -e`
 set -e
 set -o nounset
 
 # Works sometime
 trap ctrl_c INT
 function ctrl_c() {
+    cd "${JHIPSTER_TRAVIS}"
+    find -maxdepth 1 -name "*local-travis.log" -print0 | \
+        while IFS= read -d '' -i file ; do
+            mv "$file" `sed 's/pending/errored/g' <<< "$file"`
+        done
     echo "Exit by user."
     exit 130
 }
@@ -135,6 +141,9 @@ function usage() {
             "one sample_name below.\n" \
     "\n'sample_name' could be:\n" \
     "${list_of_samples}\n" \
+    "\nThis samples could be deleted generator-jhipster/.travis.yml" \
+    "under section 'matrix'. Do not hesitate to delete some build to improve" \
+    "speed!"
     "\nUse always \`./build-samples.sh build ngx-default' " \
             "(the more complete test). " \
             "Useful for test Server side and Angular client.\n" \
@@ -168,20 +177,32 @@ function usage() {
 # ********************
 # ********************
 
+function treatEndOfBuild() {
+    # TODO treat for REACT. React has its own node_modules.
+    # React should not be symlinked.
+    mv "${LOGFILENAME}" "${logrenamed}"
+    # Because take 1.1 Go ! Too much !
+    if [[ ! -z "${generateNode_Modules_Cache_Var+x}" ]] ; then
+        rm -Rf "${APP_FOLDER}/node_modules"
+        ln -s "${NODE_MODULES_CACHE_SAMPLE}/node_modules" \
+            "${APP_FOLDER}"
+    fi
+    unset logrenamed
+}
+
 # function finishSampleWithError() {{{2
 function finishSampleWithError() {
     >&2 echo -e "$JHIPSTER_MATRIX has faild."
     >&2 echo -e "$@" # print in stderr
     # Thanks option `set -e`
     local logrenamed="${beginLogfilename}"".errored.""${endofLogfilename}"
-    mv "$LOGFILENAME" "$logrenamed"
-    unset logrenamed
+    treatEndOfBuild
     exit 15
 }
 
 # function launchSourceAndTreatError() {{{2
 function launchSourceAndTreatError() {
-    local pathOfScript=$1
+    local pathOfScript="$1"
     time source "$pathOfScript" || \
         finishSampleWithError "'$pathOfScript' finish with error."
     unset pathOfScript
@@ -325,7 +346,7 @@ function retrieveVariablesInFileDotTravisSectionMatrix() {
             "$JHIPSTER is not a correct sample." \
             "Please read \`$ ./build-samples.sh help'."
     else
-        JHIPSTER_MATRIX=$1
+        JHIPSTER_MATRIX="$1"
         JHIPSTER=`cut -d ' ' -f 1 <<< "$JHIPSTER_MATRIX"`
     fi
 
@@ -393,39 +414,41 @@ function generateNode_Modules_Cache() {
 
     local generateNode_Modules_Cache_Var=1
     createLogFile
-    unset generateNode_Modules_Cache_Var
 
-    mkdir -p "${NODE_MODULES_CACHE_SAMPLE}"
-    cd "${JHIPSTER_TRAVIS}"
-    cp './samples/node_modules_cache/.yo-rc.json' \
-        "${NODE_MODULES_CACHE_SAMPLE}" || \
-        finishSampleWithError "FATAL ERROR: not a JHipster project."
+    time {
+        mkdir -p "${NODE_MODULES_CACHE_SAMPLE}"
+        cd "${JHIPSTER_TRAVIS}"
+        cp './samples/node_modules_cache/.yo-rc.json' \
+            "${NODE_MODULES_CACHE_SAMPLE}" || \
+            finishSampleWithError "FATAL ERROR: not a JHipster project."
 
 
-    echo -e "\nGenerate empty sample in foreground to cache node_modules at " \
-        "`date +%r`! \n\n"
+        echo -e "\nGenerate empty sample in foreground " \
+            "to cache node_modules at `date +%r`! \n\n"
 
-    APP_FOLDER="${NODE_MODULES_CACHE_SAMPLE}"
-    cd "$APP_FOLDER"
-    yarnLink || finishSampleWithError
-    unset APP_FOLDER
+        APP_FOLDER="${NODE_MODULES_CACHE_SAMPLE}"
+        cd "$APP_FOLDER"
+        yarnLink || finishSampleWithError
 
-    echo -e "\n\n*********************** Generate project " \
-        "for retrieve its folder node_modules\n"
-    cd "${NODE_MODULES_CACHE_SAMPLE}"
-    jhipster --force --no-insight --skip-checks --with-entities --skip-git \
-        --skip-commit-hook  && local -i fail=0 || local -i fail=1
-    if [[ "${fail}" -eq 0 ]] ; then
-        echo "All done."
-        local logrenamed="${beginLogfilename}"".passed.""${endofLogfilename}"
-        mv "${LOGFILENAME}" "${logrenamed}"
-        cp "${logrenamed}" "${NODE_MODULES_CACHE_SAMPLE}"
-    else
-        finishSampleWithError "FATAL ERROR: " \
-            "Failure during generation of the no-entity sample"
-    fi
+        echo -e "\n\n*********************** Generate project " \
+            "for retrieve its folder node_modules\n"
+        cd "${NODE_MODULES_CACHE_SAMPLE}"
+        jhipster --force --no-insight --skip-checks --with-entities --skip-git \
+            --skip-commit-hook  && local -i fail=0 || local -i fail=1
+        if [[ "${fail}" -eq 0 ]] ; then
+            echo "All done."
+            local logrenamed="${beginLogfilename}".passed."${endofLogfilename}"
+            treatEndOfBuild
+            cp "${logrenamed}" "${NODE_MODULES_CACHE_SAMPLE}"
+            else
+            finishSampleWithError "FATAL ERROR: " \
+                "Failure during generation of the no-entity sample"
+        fi
+        unset generateNode_Modules_Cache_Var
+    }
 
     unset shortDate beginLogfilename endofLogfilename fail
+    unset APP_FOLDER
 }
 
 # GENERATE SAMPLES {{{1
@@ -434,14 +457,15 @@ function generateNode_Modules_Cache() {
 # ********************
 # ********************
 
-# Executed when the first argument of the script is "generate" and "buildandtest"
+# Executed when the first argument of the script is "generate" and
+# "buildandtest"
 # ********************
 
 # function doestItTestGeneratorJHipster() {{{2
 function doestItTestGeneratorJHipster() {
 
-    echo -e "\n\n*********************** yarn test in generator-jhipster\n"
     if [ "$workOnAllProjects" -eq 0 ] ; then
+        echo -e "\n\n*********************** yarn test in generator-jhipster\n"
         cd "../"
         local confirmationFirstParameter=`echo -e "Do you want execute " \
             "\\\`yarn test' in " \
@@ -482,7 +506,7 @@ function generateProject() {
     launchSourceAndTreatError "./scripts/01-generate-entities.sh"
     set +x
 
-    echo -e "\n\n*********************** Building $APP_FOLDER\n"
+    echo -e "\n\n*********************** Building '$APP_FOLDER'\n"
     set -x
     cd "${JHIPSTER_TRAVIS}"
     launchSourceAndTreatError "./scripts/02-generate-project.sh"
@@ -599,10 +623,13 @@ function launchScriptForOnlyOneSample() {
     declare -i TESTGENERATOR=0
     doestItTestGeneratorJHipster
 
-    generateNode_Modules_Cache
-    # Redefined APP_FOLDER, because erased in generateNode_Modules_Cache() above
-    APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
-    # ${APP_FOLDER} defined outer this function
+    if [[ "$workOnAllProjects" -eq 0 ]] ; then
+        generateNode_Modules_Cache
+        # Redefined APP_FOLDER, because erased in generateNode_Modules_Cache()
+        # above
+        APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
+    fi
+
     time {
         echo -e "\n\n'${JHIPSTER_MATRIX}' ready to launch!\n" \
             "**********************\n\n"
@@ -617,8 +644,11 @@ function launchScriptForOnlyOneSample() {
 
         echo -e "\n\n*********************** Link " \
             "'$NODE_MODULES_CACHE_SAMPLE' to '$APP_FOLDER'\n"
-        mkdir -p ${APP_FOLDER}
-        ln -sf "${NODE_MODULES_CACHE_SAMPLE}/node_modules" \
+        mkdir -p "${APP_FOLDER}"
+        # No `ln -s' due to
+        # https://github.com/ng-bootstrap/ng-bootstrap/issues/2283
+        # But `cp -R' works good ! ;-) ! Probably more reliable.
+        cp -R "${NODE_MODULES_CACHE_SAMPLE}/node_modules" \
             "${APP_FOLDER}"
         local oldPATH="${PATH}"
         export PATH="${APP_FOLDER}"/node_modules:"$PATH"
@@ -629,7 +659,7 @@ function launchScriptForOnlyOneSample() {
 
     # Thanks option `set -e`, if we are here we are sure it's a success!
     local logrenamed="${beginLogfilename}"".passed.""${endofLogfilename}"
-    mv "${LOGFILENAME}" "${logrenamed}"
+    treatEndOfBuild
     unset logrenamed methodToExecute
     # do not unset beginLogfilename and endofLogfilename, unsed in another
     # function
@@ -645,7 +675,7 @@ function launchScriptForOnlyOneSample() {
 # function wrapperLaunchScript() {{{2
 function wrapperLaunchScript() {
     # Display stderr on terminal.
-    echo -e "\n${localJHIPSTER_MATRIX} launched in background at " \
+    echo -e "\n'${localJHIPSTER_MATRIX}' launched in background at " \
         "`date +%r`! \n\n"
     launchScriptForOnlyOneSample "${methodToExecute}" \
         "${localJHIPSTER_MATRIX}" &
@@ -683,6 +713,8 @@ function launchScriptForAllSamples() {
         echo "" ;
     done
 
+    workOnAllProjects=0 && generateNode_Modules_Cache && workOnAllProjects=1
+
     timeSpan=15
     while IFS=$'\n' read -r localJHIPSTER_MATRIX ; do
         # TODO ask how many process to launch in same time.
@@ -697,7 +729,7 @@ function launchScriptForAllSamples() {
         ELAPSED=`echo -e "Elapsed: $(($SECONDS / 3600))" \ "hrs " \
             "$((($SECONDS / 60) % 60)) min " \
             "$(($SECONDS % 60))sec"`
-        echo -e "\n$ELAPSED\n\n"
+        echo -e "\n'$ELAPSED'\n\n"
         wrapperLaunchScript &
     done <<< "$TRAVIS_DOT_YAML_PARSED"
 }
