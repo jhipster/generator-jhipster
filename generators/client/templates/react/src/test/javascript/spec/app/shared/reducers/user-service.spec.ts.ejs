@@ -36,14 +36,6 @@ describe('User service reducer tests', () => {
     errorMessage: null
   };
 
-  function isEmpty(element): boolean {
-    if (element instanceof Array) {
-      return element.length === 0;
-    } else {
-      return Object.keys(element).length === 0;
-    }
-  }
-
   describe('Common', () => {
     it('should return the initial state', () => {
       expect(userService(undefined, {})).to.eql({ ...initialState });
