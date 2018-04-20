@@ -84,13 +84,13 @@ Object.keys(differentRelationships).forEach(key => {
       action: `get${upperFirstCamelCase(uniqueRel.otherEntityNamePlural)}`,
       instance: `${uniqueRel.otherEntityNamePlural}`,
       entity: uniqueRel.otherEntityAngularName,
-      reducer: uniqueRel.otherEntityAngularName === 'User' ? (authenticationType !== 'oauth2' ? 'userManagement' : 'userService') : uniqueRel.otherEntityName
+      reducer: uniqueRel.otherEntityAngularName === 'User' ? 'userManagement' : uniqueRel.otherEntityName
     });
     if (uniqueRel.otherEntityAngularName === 'User') {
 _%>
 import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/user.model';
 <%_ if (authenticationType === 'oauth2') { _%>
-import { getUsers } from 'app/shared/reducers/user-service';
+import { getUsers } from 'app/shared/reducers/user-management';
 <%_ } else { _%>
 import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
 <%_ } _%>

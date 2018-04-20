@@ -221,7 +221,7 @@ const files = {
             condition: generator => generator.authenticationType === 'oauth2',
             path: REACT_DIR,
             templates: [
-                'shared/reducers/user-service.ts'
+                'shared/reducers/user-management.ts'
             ]
         }
     ],
@@ -399,7 +399,7 @@ const files = {
             condition: generator => generator.skipUserManagement,
             path: TEST_SRC_DIR,
             templates: [
-                'spec/app/shared/reducers/user-service.spec.ts'
+                'spec/app/shared/reducers/user-management.spec.ts'
             ]
         },
         {

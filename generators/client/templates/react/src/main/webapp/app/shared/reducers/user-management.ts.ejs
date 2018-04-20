@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import axios from 'axios';
-import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
+import { ICrudGetAllAction } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import { IUser } from 'app/shared/model/user.model';
@@ -28,7 +28,6 @@ export const ACTION_TYPES = {
 };
 
 const initialState = {
-  loading: false,
   errorMessage: null,
   users: [],
 };
@@ -39,18 +38,15 @@ export default (state = initialState, action) => {
     case REQUEST(ACTION_TYPES.FETCH_USERS):
       return {
         ...state,
-        loading: true
       };
     case FAILURE(ACTION_TYPES.FETCH_USERS):
       return {
         ...state,
-        loading: false,
         errorMessage: action.payload
       };
     case SUCCESS(ACTION_TYPES.FETCH_USERS):
       return {
         ...state,
-        loading: false,
         users: action.payload.data,
       };
     case ACTION_TYPES.RESET:
