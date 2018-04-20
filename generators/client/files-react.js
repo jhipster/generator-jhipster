@@ -237,11 +237,11 @@ const files = {
                 { file: 'modules/account/password-reset/init/password-reset-init.tsx', method: 'processJsx' },
                 { file: 'modules/account/password-reset/finish/password-reset-finish.tsx', method: 'processJsx' },
                 { file: 'modules/account/settings/settings.tsx', method: 'processJsx' },
-                'modules/account/register/register.reducer.ts',
-                'modules/account/activate/activate.reducer.ts',
-                'modules/account/password-reset/password-reset.reducer.ts',
+                { file: 'modules/account/register/register.reducer.ts', method: 'processJsx' },
+                { file: 'modules/account/activate/activate.reducer.ts', method: 'processJsx' },
+                { file: 'modules/account/password-reset/password-reset.reducer.ts', method: 'processJsx' },
                 { file: 'modules/account/password/password.reducer.ts', method: 'processJsx' },
-                'modules/account/settings/settings.reducer.ts'
+                { file: 'modules/account/settings/settings.reducer.ts', method: 'processJsx' }
             ]
         },
         {

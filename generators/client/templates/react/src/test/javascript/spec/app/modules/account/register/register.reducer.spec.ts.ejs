@@ -26,18 +26,13 @@ import promiseMiddleware from 'redux-promise-middleware';
 import { FAILURE, REQUEST, SUCCESS } from 'app/shared/reducers/action-type.util';
 import register, { ACTION_TYPES, handleRegister } from 'app/modules/account/register/register.reducer';
 
-describe('Creating account tests', () => {
+describe('Register reducer tests', () => {
   const initialState = {
-    loading: false,
-    registrationSuccess: false,
-    registrationFailure: false,
-    errorMessage: null
+    loading: false
   };
 
   it('should return the initial state', () => {
-    expect(register(undefined, {})).to.eql({
-      ...initialState
-    });
+    expect(register(undefined, {})).to.eql({ ...initialState });
   });
 
   it('should detect a request', () => {
@@ -49,7 +44,7 @@ describe('Creating account tests', () => {
 
   it('should handle RESET', () => {
     expect(
-      register({ loading: true, registrationSuccess: true, registrationFailure: true, errorMessage: '' }, { type: ACTION_TYPES.RESET })
+      register({ loading: true }, { type: ACTION_TYPES.RESET })
     ).to.eql({
       ...initialState
     });
@@ -62,8 +57,7 @@ describe('Creating account tests', () => {
         payload: 'fake payload'
       })
     ).to.eql({
-      ...initialState,
-      registrationSuccess: true
+      ...initialState
     });
   });
 
@@ -75,9 +69,7 @@ describe('Creating account tests', () => {
         payload
       })
     ).to.eql({
-      ...initialState,
-      registrationFailure: true,
-      errorMessage: payload.response.data.errorKey
+      ...initialState
     });
   });
 
@@ -92,14 +84,23 @@ describe('Creating account tests', () => {
     });
 
     it('dispatches CREATE_ACCOUNT_PENDING and CREATE_ACCOUNT_FULFILLED actions', async () => {
+      const meta = {
+        <%_ if (enableTranslation) { _%>
+        successMessage: 'translation-not-found[register.messages.success]'
+        <%_ } else { _%>
+        successMessage: '<strong>Registration saved!</strong> Please check your email for confirmation.'
+        <%_ } _%>
+      };
 
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.CREATE_ACCOUNT)
+          type: REQUEST(ACTION_TYPES.CREATE_ACCOUNT),
+          meta
         },
         {
           type: SUCCESS(ACTION_TYPES.CREATE_ACCOUNT),
-          payload: resolvedObject
+          payload: resolvedObject,
+          meta
         }
       ];
       await store.dispatch(handleRegister('', '', '')).then(() => expect(store.getActions()).to.eql(expectedActions));

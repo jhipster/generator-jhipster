@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import axios from 'axios';
+import { translate } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import { getSession } from 'app/shared/reducers/authentication';
@@ -27,10 +28,7 @@ export const ACTION_TYPES = {
 };
 
 const initialState = {
-  loading: false,
-  errorMessage: null,
-  updateSuccess: false,
-  updateFailure: false
+  loading: false
 };
 
 // Reducer
@@ -39,23 +37,13 @@ export default (state = initialState, action) => {
     case REQUEST(ACTION_TYPES.UPDATE_ACCOUNT):
       return {
         ...state,
-        errorMessage: null,
-        updateSuccess: false,
         loading: true
       };
     case FAILURE(ACTION_TYPES.UPDATE_ACCOUNT):
-      return {
-        ...state,
-        loading: false,
-        updateSuccess: false,
-        updateFailure: true
-      };
     case SUCCESS(ACTION_TYPES.UPDATE_ACCOUNT):
       return {
         ...state,
         loading: false,
-        updateSuccess: true,
-        updateFailure: false
       };
     case ACTION_TYPES.RESET:
       return {
@@ -72,9 +60,12 @@ const apiUrl = '/api/account';
 export const saveAccountSettings = account => async dispatch => {
   await dispatch({
     type: ACTION_TYPES.UPDATE_ACCOUNT,
-    payload: axios.post(apiUrl, account)
-  })
-  dispatch(getSession())
+    payload: axios.post(apiUrl, account),
+    meta: {
+      successMessage: translate('settings.messages.success')
+    }
+  });
+  dispatch(getSession());
 };
 
 export const reset = () => ({
