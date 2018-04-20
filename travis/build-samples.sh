@@ -34,11 +34,15 @@
 # TODO check if variables are properly unsetted in functions belong of a scope.
 # In bash, inner functions belong same scope than outer function (we could
 # see that with keyword "local"
-# keyword "source" launch script in current execution context.
+# TODO say to the original author of this script: don't use keyword "source"
+# it launches script in current execution context. So exit 0 exit all!
 # TODO check if all escapes of set -e with `command || commandIfFailure' are
-# goode. Otherwise replace it by if statement. Be careful, sometimes it is
-# necessary (for source).
+# goode. Otherwise replace it by if statement.
 # TODO add a test to check if we have enough size.
+# TODO check https://google.github.io/styleguide/shell.xml
+
+# TODO improve separations in log files between start of ./scripts/*.sh
+# log file
 
 # PREPARE SCRIPT {{{1
 # *********
@@ -52,14 +56,23 @@
 set -e
 set -o nounset
 
+function erroredAllPendingLog() {
+    # Wait all
+    sleep 5
+    find -maxdepth 1 -name "*local-travis.log" -print0 | \
+        while IFS= read -d '' -r file ; do
+            if [[ $file == *".pending."* ]] ; then
+                mv "$file" `sed 's/.pending./.errored./g' <<< "$file"`
+            fi
+        done
+}
+
 # Works sometime
+# TODO ADD THIS TRAP ON ./script/*.sh, because doesn't raised here.
 trap ctrl_c INT
 function ctrl_c() {
     cd "${JHIPSTER_TRAVIS}"
-    find -maxdepth 1 -name "*local-travis.log" -print0 | \
-        while IFS= read -d '' -i file ; do
-            mv "$file" `sed 's/pending/errored/g' <<< "$file"`
-        done
+    erroredAllPendingLog
     echo "Exit by user."
     exit 130
 }
@@ -67,9 +80,10 @@ function ctrl_c() {
 # Works sometime
 trap finish EXIT
 function finish() {
-    # echo -e "\n\n\nSee logs files under '${JHIPSTER_TRAVIS}'" \
-    #     " to retrieve logs.\n\n\n"
-    cd "${JHIPSTER_TRAVIS}"
+    # Do not add line below, because this script finish before
+    # all its childs finish (background processes).
+    # erroredAllPendingLog
+    echo "It's the end of this process."
 }
 
 trap 'errorInScript "$LINENO"' ERR
@@ -85,8 +99,8 @@ function exitScriptWithError() {
 }
 
 function printCommandAndEval() {
-    echo "$1"
-    eval "$1"
+    echo "$@"
+    eval "$@"
     return "$?"
 }
 
@@ -143,7 +157,7 @@ function usage() {
     "${list_of_samples}\n" \
     "\nThis samples could be deleted generator-jhipster/.travis.yml" \
     "under section 'matrix'. Do not hesitate to delete some build to improve" \
-    "speed!"
+    "speed!" \
     "\nUse always \`./build-samples.sh build ngx-default' " \
             "(the more complete test). " \
             "Useful for test Server side and Angular client.\n" \
@@ -165,7 +179,7 @@ function usage() {
         "travis/samples/*-sample corresponding of samples listed above.\n" \
     "\`$ ./build-samples.sh clean' " \
         "=> delete all folders travis/samples/*-sample\n" \
-    "\`$ ./build-samples.sh help' => display the previous message \n" \n
+    "\`$ ./build-samples.sh help' => display the previous message" \
     "\n\nNote: We recommand to use Node.Js LTS. Check if you use it.\n"
 
     exit 0
@@ -177,34 +191,33 @@ function usage() {
 # ********************
 # ********************
 
+# function treatEndOfBuild() {{{2
 function treatEndOfBuild() {
     # TODO treat for REACT. React has its own node_modules.
     # React should not be symlinked.
-    mv "${LOGFILENAME}" "${logrenamed}"
+    printCommandAndEval mv "${LOGFILENAME}" "${logrenamed}"
     # Because take 1.1 Go ! Too much !
-    if [[ ! -z "${generateNode_Modules_Cache_Var+x}" ]] ; then
-        rm -Rf "${APP_FOLDER}/node_modules"
-        ln -s "${NODE_MODULES_CACHE_SAMPLE}/node_modules" \
+    if [[ -z "${generateNode_Modules_Cache_Var+x}" ]] ; then
+        printCommandAndEval rm -Rf "${APP_FOLDER}/node_modules"
+        printCommandAndEval ln -s "${NODE_MODULES_CACHE_SAMPLE}/node_modules" \
             "${APP_FOLDER}"
     fi
-    unset logrenamed
 }
 
 # function finishSampleWithError() {{{2
 function finishSampleWithError() {
-    >&2 echo -e "$JHIPSTER_MATRIX has faild."
-    >&2 echo -e "$@" # print in stderr
-    # Thanks option `set -e`
+    >&2 echo -e "$JHIPSTER_MATRIX has faild.\n$@" | tee /dev/fd/4
     local logrenamed="${beginLogfilename}"".errored.""${endofLogfilename}"
     treatEndOfBuild
+    unset logrenamed
     exit 15
 }
 
-# function launchSourceAndTreatError() {{{2
-function launchSourceAndTreatError() {
+# function launchNewBash() {{{2
+function launchNewBash() {
     local pathOfScript="$1"
-    time source "$pathOfScript" || \
-        finishSampleWithError "'$pathOfScript' finish with error."
+    time bash "$pathOfScript" || \
+        finishSampleWithError "'$pathOfScript' finished with error."
     unset pathOfScript
 }
 
@@ -234,55 +247,80 @@ function testRequierments() {
     # Why "nodejs --version"? For Ubuntu users, please see
     # https://askubuntu.com/a/521571"
     echo -e "\n\n"
-    local argument=`echo -e "FATAL ERROR: please install Node. " \
-        "If Node is already installed, please add it in your PATH."`
+
     printCommandAndEval "node --version" \
         || printCommandAndEval "nodejs --version" \
-        || exitScriptWithError "$argument"
+        || exitScriptWithError "FATAL ERROR: please install Node. " \
+        "If Node is already installed, please add it in your PATH."
     echo "We recommand to use Node.Js LTS. Check if you use it."
+    echo
 
-    local argument=`echo -e "FATAL ERROR: please install Yarn. " \
-        "If Yarn is already installed, please add it in your PATH."`
     printCommandAndEval "yarn -v" \
-        || "exitScriptWithError '$argument'"
-    unset argument
+        || exitScriptWithError "FATAL ERROR: please install Yarn. " \
+        "If Yarn is already installed, please add it in your PATH."
+    echo
 
-    local argument=`echo -e "FATAL ERROR: please install JHipster globally. " \
-        "(\\\`$ yarn global install jhipster') " \
-        "If JHipster is already installed, please add it in your PATH."`
-    jhipster --version > /dev/null || "exitScriptWithError '$argument'"
-    unset argument
+    printCommandAndEval "java -version" || "exitScriptWithError '$argument'" \
+        "FATAL ERROR: please install java."
+    echo
+
+    printCommandAndEval "javac -version" || "exitScriptWithError" \
+        "FATAL ERROR: please install JDK. "
+    echo
+
+    # TODO
+    # Ask or search wich version is needed. Java 10 doesn't work also
+    javaVersion="$(java -version 2>&1)"
+    grep "OpenJDK" <<< "$javaVersion" && exitScriptWithError \
+        'Do not use OpenJDK, please install Oracle Java.'
+    echo
+
+    jhipster --version > /dev/null || exitScriptWithError \
+        "FATAL ERROR: please install JHipster globally. " \
+        "(\`$ yarn global install jhipster') " \
+        "If JHipster is already installed, please add it in your PATH."
+    echo
 
     # TODO test if it works on mac
-    local argument=`echo -e \ "FATAL ERROR: " \
+    printCommandAndEval "google-chrome-stable --version" \
+        || exitScriptWithError "FATAL ERROR: " \
             "please install google-chrome-stable. " \
             "If google-chrome-stable is already installed, "\
-            "please add it in your PATH".`
-    printCommandAndEval "google-chrome-stable --version" \
-        || exitScriptWithError "$argument"
-    unset argument
+            "please add it in your PATH".
+    echo
+
 }
 
-# function printVariablesBeforeLaunch() {{{2
-function printVariablesBeforeLaunch() {
+# function printInfoBeforeLaunch() {{{2
+function printInfoBeforeLaunch() {
+    export PROMPT_COMMAND=""
+    export PS1="+ "
+    echo -e "\n\n* Your log file will be '$LOGFILENAME'\n" \
+        "* When build will finish, The end of this filename shoule be renamed" \
+        "'errored' or 'passed'.\n" \
+        "* On this file lines started by '$PS1' are bash" \
+        "command. Useful to know which command fail.\n" \
+        "* See progress in this file. Do not forget to refresh it!"
     # echo value used
-    echo -e "LOGFILENAME='$LOGFILENAME'" \
-            "(variable not used in ./travis/script/*.sh." \
-            "The end of this filename shoule be renamed errored or passed" \
-            "at the end of this script)\n" \
-        "JHIPSTER_MATRIX='$JHIPSTER_MATRIX'" \
-            "(variable not used in ./travis/script/*.sh)\n" \
-        "JHIPSTER='$JHIPSTER'\n" \
-        "PROFILE='$PROFILE'\n" \
-        "PROTRACTOR='$PROTRACTOR'\n" \
-        "RUN_APP='$RUN_APP'\n" \
-        "JHIPSTER_TRAVIS='$JHIPSTER_TRAVIS'\n" \
-        "JHIPSTER_SAMPLES='$JHIPSTER_SAMPLES'\n" \
-        "JHIPSTER_SCRIPTS='$JHIPSTER_SCRIPTS'\n" \
-        "APP_FOLDER='$APP_FOLDER'\n" \
-        "UAA_APP_FOLDER='$UAA_APP_FOLDER'\n" \
-        "SPRING_OUTPUT_ANSI_ENABLED='$SPRING_OUTPUT_ANSI_ENABLED'\n" \
-        "SPRING_JPA_SHOW_SQL='$SPRING_JPA_SHOW_SQL'"
+    if [[ -z "${generateNode_Modules_Cache_Var+x}" ]] ; then
+        echo -e "LOGFILENAME='$LOGFILENAME'" \
+                "(variable not used in ./travis/script/*.sh." \
+                "The end of this filename shoule be renamed errored or passed" \
+                "at the end of this script)\n" \
+            "JHIPSTER_MATRIX='$JHIPSTER_MATRIX'" \
+                "(variable not used in ./travis/script/*.sh)\n" \
+            "JHIPSTER='$JHIPSTER'\n" \
+            "PROFILE='$PROFILE'\n" \
+            "PROTRACTOR='$PROTRACTOR'\n" \
+            "RUN_APP='$RUN_APP'\n" \
+            "JHIPSTER_TRAVIS='$JHIPSTER_TRAVIS'\n" \
+            "JHIPSTER_SAMPLES='$JHIPSTER_SAMPLES'\n" \
+            "JHIPSTER_SCRIPTS='$JHIPSTER_SCRIPTS'\n" \
+            "APP_FOLDER='$APP_FOLDER'\n" \
+            "UAA_APP_FOLDER='$UAA_APP_FOLDER'\n" \
+            "SPRING_OUTPUT_ANSI_ENABLED='$SPRING_OUTPUT_ANSI_ENABLED'\n" \
+            "SPRING_JPA_SHOW_SQL='$SPRING_JPA_SHOW_SQL'"
+    fi
 }
 
 # createlogfile() {{{2
@@ -293,24 +331,13 @@ function createLogFile() {
     if [ "$workOnAllProjects" -eq 0 ] ; then
         exec > >(tee "${LOGFILENAME}") 2> >(tee "${LOGFILENAME}")
     else
-        if [[ -z "${generateNode_Modules_Cache_Var+x}" ]] ; then
-            printVariablesBeforeLaunch
-        fi
-        # TODO why don't show errors on console?
-        exec 1> "$(echo -e "${LOGFILENAME}")" 2> >(tee "${LOGFILENAME}")
+        printInfoBeforeLaunch
+        exec > "${LOGFILENAME}" 2> "${LOGFILENAME}"
     fi
-    echo -e "\n\n* Your log file will be '$LOGFILENAME'"
-    export PROMPT_COMMAND=""
-    export PS1="+ "
-    echo -e "* During tests and build, line started by '$PS1' are bash" \
-        "command.Useful to know which command fail.\n"
     # Otherwise folowing command is started before function createLogFile is
     # finished.
-    sleep 2
-    printWarningUseCacheNodeModules
-    if [[ -z "${generateNode_Modules_Cache_Var+x}" ]] ; then
-        printVariablesBeforeLaunch
-    fi
+    sleep 5
+    printInfoBeforeLaunch
     testRequierments
 }
 
@@ -338,7 +365,7 @@ function retrieveVariablesInFileDotTravisSectionMatrix() {
 
     # For variable "$JHIPSTER_MATRIX", see section "matrix" of ../.travis.yml
     if [[ "$workOnAllProjects" -eq 0 ]] ; then
-        JHIPSTER="$1"
+        export JHIPSTER="$1"
         JHIPSTER_MATRIX=`grep --color=never "$JHIPSTER\s" \
             <<< "$TRAVIS_DOT_YAML_PARSED"` \
             || exitScriptWithError \
@@ -347,7 +374,7 @@ function retrieveVariablesInFileDotTravisSectionMatrix() {
             "Please read \`$ ./build-samples.sh help'."
     else
         JHIPSTER_MATRIX="$1"
-        JHIPSTER=`cut -d ' ' -f 1 <<< "$JHIPSTER_MATRIX"`
+        export JHIPSTER=`cut -d ' ' -f 1 <<< "$JHIPSTER_MATRIX"`
     fi
 
     # PROFILE AND PROTRACTOR REDEFINITION
@@ -356,9 +383,14 @@ function retrieveVariablesInFileDotTravisSectionMatrix() {
     # have this option, for this reason (we want display the first column,
     # even if there isn't several columns.
     local travisVars=`cut -s -d ' ' -f 2- <<< "$JHIPSTER_MATRIX"`
-    while IFS=$' ' read -r defVar ; do
-        eval "$defVar"
-    done <<< "$travisVars"
+    echo "$travisVars"
+    # https://stackoverflow.com/questions/2821043/allowed-characters-in-linux-environment-variable-names
+    if [[ -z "$travisVars" ]] && \
+        [[ "$travisVars" =~ "[a-zA-Z0-9_].*" ]] ; then
+        while IFS=$' ' read -r defVar ; do
+            export "$defVar"
+        done <<< "$travisVars"
+    fi
 
 }
 
@@ -390,6 +422,12 @@ function yarnLink() {
     unset GENERATOR_JHIPSTER_FOLDER JHIPSTER_TRAVISReal
 }
 
+# GENERATE SAMPLES {{{1
+# ********************
+# ********************
+# ********************
+# ********************
+
 # function generateNode_Modules_Cache() {{{2
 function generateNode_Modules_Cache() {
     # Display stderr on terminal.
@@ -412,7 +450,11 @@ function generateNode_Modules_Cache() {
 
     local LOGFILENAME="${beginLogfilename}"".pending.""${endofLogfilename}"
 
-    local generateNode_Modules_Cache_Var=1
+    local -i generateNode_Modules_Cache_Var=1
+    # We need to have saved the original descriptors them somewhere to restore
+    # the original descriptors.
+    # Behaviour changed in below createLogFile()
+    exec 3>&1 4>&2
     createLogFile
 
     time {
@@ -444,22 +486,17 @@ function generateNode_Modules_Cache() {
             finishSampleWithError "FATAL ERROR: " \
                 "Failure during generation of the no-entity sample"
         fi
-        unset generateNode_Modules_Cache_Var
     }
 
+    # Restore the originals descriptors.
+    # Behaviour changed in createLogFile()
+    exec 1>&3 2>&4
+
     unset shortDate beginLogfilename endofLogfilename fail
-    unset APP_FOLDER
+    unset APP_FOLDER logrenamed
+    unset generateNode_Modules_Cache_Var
 }
 
-# GENERATE SAMPLES {{{1
-# ********************
-# ********************
-# ********************
-# ********************
-
-# Executed when the first argument of the script is "generate" and
-# "buildandtest"
-# ********************
 
 # function doestItTestGeneratorJHipster() {{{2
 function doestItTestGeneratorJHipster() {
@@ -482,38 +519,39 @@ function doestItTestGeneratorJHipster() {
 }
 
 # function generateProject() {{{2
+# Executed when the first argument of the script is "generate" and
+# "buildandtest"
+# ********************
 # Corresponding of the entry "install" in ../.travis.yml
 function generateProject() {
 
     if [[ "${TESTGENERATOR}" -eq 1 ]] \
         || ( [[ "$workOnAllProjects" -eq 1 ]] && \
-        [[ "${JHipster}" == "ngx-default"  ]] ) ; then
+        [[ "${JHIPSTER}" == "ngx-default"  ]] ) ; then
         # Corresponding to "Install and test JHipster Generator" in
         # ./scripts/00-install-jhipster.sh
     echo -e "\n\n*********************** yarn test in generator-jhipster\n"
         echo "We are at path: '`pwd`'".
         echo "Your branch is: '$BRANCH_NAME'."
         cd -P "$JHIPSTER_TRAVIS"
+        printCommandAndEval pwd
         # TODO should we add yarn install?
-        yarn test || finishSampleWithError "Fail during test of the Generator."
+        yarn test || finishSampleWithError "Fail during test of the Generator." \
+            " (command 'yarn test' in `pwd`)"
     fi
     # Script below is done with function code above.
-    # time source ./scripts/00-install-jhipster.sh
+    # time bash ./scripts/00-install-jhipster.sh
 
     echo -e "\n\n*********************** Copying entities for '$APP_FOLDER'\n"
-    set -x
     cd "${JHIPSTER_TRAVIS}"
-    launchSourceAndTreatError "./scripts/01-generate-entities.sh"
-    set +x
+    launchNewBash "./scripts/01-generate-entities.sh"
 
     echo -e "\n\n*********************** Building '$APP_FOLDER'\n"
-    set -x
     cd "${JHIPSTER_TRAVIS}"
-    launchSourceAndTreatError "./scripts/02-generate-project.sh"
-    set +x
+    launchNewBash "./scripts/02-generate-project.sh"
 
     # Do not run command below for this script (this script is only for Travis)
-    # time source ./scripts/03-replace-version-generated-project.sh
+    # time bash ./scripts/03-replace-version-generated-project.sh
 
 }
 
@@ -542,27 +580,20 @@ function buildAndTestProject() {
     # TODO it seems we must be sudo
     # Maybe a problem with .dockignore:
     # https://unix.stackexchange.com/questions/413015/docker-compose-cannot-build-without-sudo-but-i-can-run-containers-without-it
-    # launchSourceAndTreatError "./scripts/03-docker-compose.sh"
+    # launchNewBash "./scripts/03-docker-compose.sh"
 
-    set +x
     echo -e "\n\n*********************** Testing '${JHIPSTER}-sample'\n"
-    set -x
     cd "${JHIPSTER_TRAVIS}"
-    launchSourceAndTreatError "./scripts/04-tests.sh"
+    launchNewBash "./scripts/04-tests.sh"
 
-    set +x
     echo -e "\n\n*********************** Run and test '${JHIPSTER}-sample'\n"
-    set -x
     cd "${JHIPSTER_TRAVIS}"
-    launchSourceAndTreatError "./scripts/05-run.sh"
+    launchNewBash "./scripts/05-run.sh"
 
-    set +x
     echo -e "\n\n*********************** Launch Sonar analysis\n"
-    set -x
     cd "${JHIPSTER_TRAVIS}"
-    launchSourceAndTreatError "./scripts/06-sonar.sh"
+    launchNewBash "./scripts/06-sonar.sh"
 
-    set +x
 }
 
 # CLEAN SAMPLES {{{1
@@ -612,12 +643,11 @@ function cleanAllProjects() {
 function launchScriptForOnlyOneSample() {
     local methodToExecute="$1"
 
-
     # define JHIPSTER, and redifine if necessary PROFIL and PROTRACTOR
     retrieveVariablesInFileDotTravisSectionMatrix "$2"
 
     # redifine APP_FOLDER as explained in MAIN section
-    APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
+    export APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
     testIfLocalSampleIsReady
 
     declare -i TESTGENERATOR=0
@@ -627,7 +657,7 @@ function launchScriptForOnlyOneSample() {
         generateNode_Modules_Cache
         # Redefined APP_FOLDER, because erased in generateNode_Modules_Cache()
         # above
-        APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
+        export APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
     fi
 
     time {
@@ -639,6 +669,10 @@ function launchScriptForOnlyOneSample() {
             "${JHIPSTER_TRAVIS}"/"${BRANCH_NAME}"."${DATEBININSCRIPT}"`
         local endofLogfilename=`echo -e "${JHIPSTER}"".local-travis.log"`
         local LOGFILENAME="${beginLogfilename}"".pending.""${endofLogfilename}"
+        # We need to have saved the original descriptors them somewhere to restore
+        # the original descriptors.
+        # Behaviour changed in below createLogFile()
+        exec 3>&1 4>&2
         createLogFile
         echo -e  "\n\n'${JHIPSTER_MATRIX}' is launched!\n"
 
@@ -655,12 +689,16 @@ function launchScriptForOnlyOneSample() {
         "${methodToExecute}"
         PATH="${oldPATH}"
         unset oldPATH
+
+        # Restore the originals descriptors.
+        # Behaviour changed in createLogFile()
+        exec 1>&3 2>&4
     }
 
     # Thanks option `set -e`, if we are here we are sure it's a success!
     local logrenamed="${beginLogfilename}"".passed.""${endofLogfilename}"
     treatEndOfBuild
-    unset logrenamed methodToExecute
+    unset methodToExecute logrenamed
     # do not unset beginLogfilename and endofLogfilename, unsed in another
     # function
 }
@@ -685,9 +723,9 @@ function wrapperLaunchScript() {
 # function launchScriptForAllSamples() {{{2
 function launchScriptForAllSamples() {
     local methodToExecute="${1}"
-    echo -e "\nWarning: if you run all scripts it could take long time!\n" \
-        "Don't forget to check \`./build-samples.sh help"
-    local confirmationFirstParameter=`echo -e "Warning: are you sure to run" \
+    local confirmationFirstParameter=`echo -e "Don't forget to " \
+        "check \\\`./build-samples.sh help.'\n" \
+        "Warning: are you sure to run" \
         "'${methodToExecute}' and delete all samples/*-sample [y/n]? "`
     confirmationUser "${confirmationFirstParameter}" \
         'echo ""' \
@@ -696,14 +734,14 @@ function launchScriptForAllSamples() {
 
     read -t 1 -n 10000 discard || echo ""
     echo
-    local question=`echo -e "How many process" \
-        "do you want to launch in same time (Travis CI launch 4 process)? " \
+    local question=`echo -e "How many processes" \
+        "do you want to launch in same time (Travis CI launch 4 processes)? " \
         ""`
     local -i typeAnswer=1
     while [[ "$typeAnswer" -eq 1 ]] ; do
         read -p "$question" -n 1 -r
         if [[ "$REPLY" =~ [1-9] ]] ; then
-            local -i numberOfProcess="${REPLY}"
+            local -i numberOfProcesses="${REPLY}"
             echo "" ;
             typeAnswer=0
         else
@@ -713,25 +751,29 @@ function launchScriptForAllSamples() {
         echo "" ;
     done
 
-    workOnAllProjects=0 && generateNode_Modules_Cache && workOnAllProjects=1
+    generateNode_Modules_Cache
 
     timeSpan=15
     while IFS=$'\n' read -r localJHIPSTER_MATRIX ; do
-        # TODO ask how many process to launch in same time.
-        # Do not use `ps -o pid,stat,command -C "build-samples.sh"'
-        # because display zombie process.
+        # TODO ask how many processes to launch in same time.
+        # Do not use `ps -o pid,stat,command -C "…"'
+        # because display zombie processes.
         while [ `ps -o pid,command \
-                | grep --color=never build-samples.sh \
-                | wc -l` -ge $(($numberOfProcess+4)) ] ; do
-            # ps -o pid,stat,command | grep "build-samples.sh"
+                | grep --color=never bash \
+                | wc -l` -gt $(($numberOfProcesses+2)) ] ; do
+            # do not forget there is also `grep bash` returned by `ps` !
+            ps -o pid,stat,command | grep "bash"
             sleep "$timeSpan"
         done
         ELAPSED=`echo -e "Elapsed: $(($SECONDS / 3600))" \ "hrs " \
             "$((($SECONDS / 60) % 60)) min " \
             "$(($SECONDS % 60))sec"`
-        echo -e "\n'$ELAPSED'\n\n"
+        echo -e "\n'$ELAPSED'\n" \
+            "=========end of "$localJHIPSTER_MATRIX" ===========\n\n\n" ;
+        sleep 10
         wrapperLaunchScript &
     done <<< "$TRAVIS_DOT_YAML_PARSED"
+    wait
 }
 
 # MAIN {{{1
@@ -744,20 +786,32 @@ function launchScriptForAllSamples() {
 
 # GLOBAL CONSTANTS COPIED FROM ../.travis.yml
 # ***********
-# PROFILE and PROTRACTOR could be redifined in buildAndTestProject
-PROFILE="dev"
-PROTRACTOR=0
+# PROFILE and PROTRACTOR could be redifined in function
+# retrieveVariablesInFileDotTravisSectionMatrix()
+# In ../.travis.yml, under section matrix
+# its value corresponding to second and third column if they exists
+export PROFILE="dev"
+export PROTRACTOR=0
 
-RUN_APP=1
-JHIPSTER_TRAVIS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-JHIPSTER_SAMPLES="$JHIPSTER_TRAVIS/samples"
-JHIPSTER_SCRIPTS="$JHIPSTER_TRAVIS/scripts"
-# APP_FOLDER redefined in function launchScriptForOnlyOneSample()
-# APP_FOLDER="$HOME/app"
-UAA_APP_FOLDER="$JHIPSTER_SAMPLES/uaa-sample"
+# Defined in function retrieveVariablesInFileDotTravisSectionMatrix()
+# In ../.travis.yml, under section matrix,
+# its value corresponding to the first column
+# export JHIPSTER=ngx-default
+
+export RUN_APP=1
+export JHIPSTER_TRAVIS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+export JHIPSTER_SAMPLES="$JHIPSTER_TRAVIS/samples"
+export JHIPSTER_SCRIPTS="$JHIPSTER_TRAVIS/scripts"
+# export APP_FOLDER redefined in function launchScriptForOnlyOneSample()
+export UAA_APP_FOLDER="$JHIPSTER_SAMPLES/uaa-sample"
 # environment properties
-SPRING_OUTPUT_ANSI_ENABLED="ALWAYS"
-SPRING_JPA_SHOW_SQL="false"
+export SPRING_OUTPUT_ANSI_ENABLED="ALWAYS"
+export SPRING_JPA_SHOW_SQL="false"
+
+# Send a variable to ./scripts/*.sh to test if the parent is this script
+# (./build-samples.sh)
+export localTravis=1
+
 
 # GLOBAL CONSTANTS SPECIFIC TO ./build-samples.sh (this script)
 # **********
@@ -771,7 +825,7 @@ if [ ! -f "$travisDotYml" ] ; then
     exitScriptWithError "'$travisDotYml' doesn't exist."
 fi
 TRAVIS_DOT_YAML_PARSED="`grep --color=never -E \
-    '^    - JHIPSTER=' "$travisDotYml" | sed -n -e 's/    - JHIPSTER=//p'`"
+    '^    - JHIPSTER=' "$travisDotYml" | sed 's/    - JHIPSTER=//p'`"
 unset travisDotYml
 
 # Count time in this script
@@ -803,18 +857,18 @@ if [ ! -z "${1+x}" ] ; then
     if [ "$1" = "generate" ]; then
         if [ ! -z "${2+x}" ] ; then
             workOnAllProjects=0
-            launchScriptForOnlyOneSample generateProject "$2"
+            launchScriptForOnlyOneSample "generateProject" "$2"
         else
             workOnAllProjects=1
-            time launchScriptForAllSamples generateProject
+            time launchScriptForAllSamples "generateProject"
         fi
     elif [ "$1" = "buildandtest" ]; then
         if [ ! -z "${2+x}" ] ; then
             workOnAllProjects=0
-            launchScriptForOnlyOneSample buildAndTestProject "$2"
+            launchScriptForOnlyOneSample "buildAndTestProject" "$2"
         else
             workOnAllProjects=1
-            time launchScriptForAllSamples buildAndTestProject
+            time launchScriptForAllSamples "buildAndTestProject"
         fi
     elif [ "$1" = "clean" ]; then
         # Don't test with ../.travis.yml, contrary to above

@@ -41,10 +41,18 @@ env:
     - JHIPSTER_BRANCH="release"
 
   matrix:
-    # In ./travis/build-samples.sh we match '^    - JHIPSTER=sample_name VAR1=whatever VAR2=whatever … VARN=whatever".
-    # If you reindent, at end of file ./travis/build-samples.sh please update statement:
+
+    # In ./travis/build-samples.sh we match:
+    # '^    - JHIPSTER=sample_name VAR1=whatever VAR2=whatever … VARN=whatever".
+    # In the actual file (./.travis.yml), if the indentation change please update
+    # ./travis/build-samples.sh.
+    # At the end of build-samples.sh, you must update statement:
     # `grep --color=never -E '^    - JHIPSTER=' "$travisDotYml" | sed -n -e 's/    - JHIPSTER=//p'`
+
+    # File ./travis/build-samples.sh target explicitly ngx-default. Please
+    # do not rename this sample. All others samples could be renamed.
     - JHIPSTER=ngx-default PROFILE=prod PROTRACTOR=1
+
     - JHIPSTER=ngx-psql-es-noi18n PROFILE=prod PROTRACTOR=1
     - JHIPSTER=ngx-gradle-fr PROFILE=prod PROTRACTOR=1
     - JHIPSTER=ngx-mariadb-oauth2-sass-infinispan PROTRACTOR=1

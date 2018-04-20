@@ -42,7 +42,7 @@ echoSetX "Copy entities json"
 set -x
 
 
-if [[ "${BASH_SOURCE[*]}" != *"build-samples.sh"* ]] ; then
+if [[ -z "$localTravis" ]] ; then
     rm -Rf "$APP_FOLDER"
 fi
 mkdir -p "$APP_FOLDER"/.jhipster/
