@@ -54,7 +54,7 @@ fi
 mkdir -p "$APP_FOLDER"
 cp -f "$JHIPSTER_SAMPLES"/"$JHIPSTER"/.yo-rc.json "$APP_FOLDER"/
 cd "$APP_FOLDER"
-if [[ -z "$localTravis" ]] && \
+if [[ -z "${localTravis+x}" ]] && \
     [[ "$JHIPSTER" != *"react"* ]] && \
     [[ -d  "${JHIPSTER_SAMPLES}/node_modules_cache-sample/node_modules" ]]
 then
