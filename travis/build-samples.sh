@@ -182,6 +182,7 @@
 # TODO do not printCommandAndEval() several times testRequierments in console.
 # TODO replace all references of the name of this script by local
 # me='$(basename "$0")' or ${BASH_SOURCE[0]}. (see reference of me in function usage()
+# TODO java send to STDOUT and STDERR
 
 # PREPARE SCRIPT {{{1
 # ==============================================================================
@@ -293,11 +294,14 @@ function testRequierments() {
         "If Yarn is already installed, please add it in your PATH."
     echo
 
-    printCommandAndEval "java -version" || "exitScriptWithError '$argument'" \
-        "FATAL ERROR: please install java."
+    # java send question of this version to stderr. Redirect to stdout.
+    printCommandAndEval "java -version 2> /dev/fd/1" || \
+        "exitScriptWithError '$argument'" \
+            "FATAL ERROR: please install java."
     echo
 
-    printCommandAndEval "javac -version" || "exitScriptWithError" \
+    # java send question of this version to stderr. Redirect to stdout.
+    printCommandAndEval "javac -version 2> /dev/fd/1" || "exitScriptWithError" \
         "FATAL ERROR: please install JDK. "
     echo
 
