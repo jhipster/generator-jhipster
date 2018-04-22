@@ -18,42 +18,42 @@
 -%>
 {
     "health": {
-        "title": "Состояние",
-        "refresh.button": "Обновить",
-        "stacktrace": "Трассировки стека",
+        "title": "Xolati",
+        "refresh.button": "Yangila",
+        "stacktrace": "Stacktrace",
         "details": {
-            "details": "Детали",
-            "properties": "Параметры",
-            "name": "Имя",
-            "value": "Значение",
-            "error": "Ошибка"
+            "details": "Batafsil",
+            "properties": "Parametrlari",
+            "name": "Nomi",
+            "value": "Qiymati",
+            "error": "Xatolik"
         },
         "indicator": {
             <%_ if (messageBroker === 'kafka') { _%>
-            "binders": "Брокер сообщений",
+            "binders": "Xabar brokeri",
             <%_ } _%>
             <%_ if (applicationType === 'gateway') { _%>
             "discoveryComposite": "Discovery Composite",
-            "refreshScope": "Область обновления микросервиса",
-            "configServer": "Сервер конфигурации микросервиса",
+            "refreshScope": "Qayta yuklash doirasi",
+            "configServer": "Microservice Config Server",
             "hystrix": "Hystrix",<% if (serviceDiscoveryType === 'consul') { %>
             "consul": "Consul",<% } %>
             <%_ } _%>
-            "diskSpace": "Место на диске",
+            "diskSpace": "Diskdagi joy",
             "mail": "Email"<% if (searchEngine === 'elasticsearch') { %>,
             "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql') { %>,
-            "db": "База данных"<% } %><% if (databaseType === 'mongodb') { %>,
+            "db": "Ma`lumotlar bazasi"<% } %><% if (databaseType === 'mongodb') { %>,
             "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
             "cassandra": "Cassandra"<% } %><% if (databaseType === 'couchbase') { %>,
             "couchbase": "Couchbase"<% } %>
         },
         "table": {
-            "service": "Название сервиса",
-            "status": "Статус"
+            "service": "Servis",
+            "status": "Holat"
         },
         "status": {
-            "UP": "UP",
-            "DOWN": "DOWN"
+            "UP": "Faol",
+            "DOWN": "Faol emas"
         }
     }
 }

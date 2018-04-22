@@ -148,6 +148,9 @@ const LANGUAGES = [
     {
         name: 'Ukrainian', dispName: 'Українська', value: 'ua', localeId: 'uk'
     },
+    {
+        name: 'Uzbek (latin)', dispName: 'O`zbekcha', value: 'uz-lat', localeId: 'uz'
+    },
     { name: 'Vietnamese', dispName: 'Tiếng Việt', value: 'vi' }
 ];
 
