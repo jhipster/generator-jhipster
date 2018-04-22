@@ -50,6 +50,8 @@
 # 6) [[ ! -z "${myUnboundVar} ]] return true if "$myUnboundVar" is
 #       unbound/unsetted.
 #       In JavaScript, corresponding to test "typeof myVar === 'undefined'"
+# 7) Do not return something > 0 caused of `set -e`
+# 8) files descriptors are not shared between shells
 
 # HOW WORKS THIS SCRIPT. {{{2
 # ============
@@ -175,8 +177,11 @@
 # TODO add a test to check if we have enough size.
 # TODO check https://google.github.io/styleguide/shell.xml
 # TODO See others todo in this file.
-# TODO How in generator-jhipster `yarn test' fail randomly? Try to investigate.
 #   See corresponding TODO in function generateProject().
+# TODO too much echo /dev/fd/[34]. Factorize it, remove not useful.
+# TODO do not printCommandAndEval() several times testRequierments in console.
+# TODO replace all references of the name of this script by local
+# me='$(basename "$0")' or ${BASH_SOURCE[0]}. (see reference of me in function usage()
 
 # PREPARE SCRIPT {{{1
 # ==============================================================================
@@ -193,8 +198,6 @@ set -o nounset
 # Treat end of script {{{2
 
 function erroredAllPendingLog() {
-    # Wait all
-    sleep 5
     find -maxdepth 1 -name "*local-travis.log" -print0 | \
         while IFS= read -d '' -r file ; do
             if [[ "$file" == *".pending."* ]] ; then
@@ -203,29 +206,33 @@ function erroredAllPendingLog() {
         done
 }
 
-# Works sometime
-# TODO ADD THIS TRAP ON ./script/*.sh, because doesn't raised here.
+# Seems work if there is not several <CTRL-c>
+# Do not add `sleep'!
 trap ctrl_c INT
 function ctrl_c() {
     cd "${JHIPSTER_TRAVIS}"
     erroredAllPendingLog
-    echo "Exit by user."
-    exit 130
+    # TODO ln -s all node_modules folders
+    1>&2 echo "Exit by user."
+    if [[ -e /dev/fd/4 ]] ; then
+        >&4 echo "Exit by user."
+    fi
+    exit 131
 }
 
-# Works sometime
 trap finish EXIT
 function finish() {
 
     # https://en.wikipedia.org/wiki/Defensive_programming
     erroredAllPendingLog
 
-    echo "It's the end of this process."
+    echo "It's the end of ./build-samples.sh."
 }
 
+# Not raise unbound variables.
 trap 'errorInScript "$LINENO"' ERR
 errorInScript() {
-    1>&2 echo "Error on line '$1'"
+    1>&2 echo "In ./build-samples.sh, error on line: '$1'"
     cd "${JHIPSTER_TRAVIS}"
     exit 5
 }
@@ -248,7 +255,6 @@ function printCommandAndEval() {
         # says don't use eval. But doesn't work without.
         eval "$@"
     fi
-    return "$?"
 }
 
 # function confirmationUser() {{{2
@@ -450,7 +456,7 @@ function echoTitleBuildStep() {
         "================================================================" \
         "================================================================" \
         "\n'$@'" \
-        "('$ELAPSED')\n" \
+        "(`date +%H:%M:%S`, '$ELAPSED')\n" \
         "================================================================" \
         "================================================================" \
         "================================================================" \
@@ -465,7 +471,7 @@ function echoTitleBuildStep() {
         [[ -z "${generationOfNodeModulesCacheMarker+x}" ]] ; then
         >&3 echo -e "\n\n\n" \
             "\n'$@'" \
-            "('$ELAPSED')\n" \
+            "(`date +%H:%M:%S`, '$ELAPSED')\n" \
             "================================================================" \
             "\n"
     fi
@@ -546,8 +552,8 @@ function errorInBuild() {
     # tee print in stdout (either logfile or console) and /dev/fd/4
     # for /dev/fd/4 see function launchScriptForAllSamples()
     if [ -e dev/fd/4 ] ; then
-        >&2 echo -e "'$JHIPSTER_MATRIX' has faild.\n'$@'" | \
-            tee --append /dev/fd/4
+        echo -e "'$JHIPSTER_MATRIX' has faild.\n'$@'"  \
+            > >(> tee --append /dev/fd/2 /dev/fd/4 > /dev/null)
     else
         >&2 echo -e "'$JHIPSTER_MATRIX' has faild.\n'$@'"
     fi
@@ -555,6 +561,34 @@ function errorInBuild() {
     local logrenamed="${beginLogfilename}"".errored.""${endofLogfilename}"
     treatEndOfBuild
     unset logrenamed
+}
+
+# function errorInBuildStopCurrentSample() {{{3
+function errorInBuildStopCurrentSample() {
+
+    errorInBuild
+
+    local ELAPSED=`echo -e "Elapsed: $(($SECONDS / 3600))" \ "hrs " \
+        "$((($SECONDS / 60) % 60)) min " \
+        "$(($SECONDS % 60))sec"`
+    if [[ -e /dev/fd/4 ]] ; then
+        >2& echo "$@ Error in '$JHIPSTER' at `date +%H:%M:%S`" \
+            "(elapsed: '$ELAPSED')" \
+            > >(tee --append /dev/fd/2 /dev/fd/4 > /dev/null)
+    else
+        >2& echo "$@ Error in '$JHIPSTER' at `date +%H:%M:%S`" \
+            "(elapsed: '$ELAPSED')"
+    fi
+    unset ELAPSED
+
+    # Thanks this variable set to 1, following steps will not start
+    # in function launchNewBash above()
+    STOPTHISAMPLE=1
+
+    # Do not exit, otherwise we stop this script!
+    # exit 15
+    # Do not return something > 0 caused of set -e
+    return 0
 }
 
 # function launchNewBash() {{{3
@@ -571,40 +605,28 @@ function launchNewBash() {
     # launchScriptForOnlyOneSample()
     if [[ "${STOPTHISAMPLE}" -eq 0 ]] ; then
         cd "${JHIPSTER_TRAVIS}"
-        time bash "$pathOfScript" "$JHIPSTER" || \
+        time bash "$pathOfScript" "$JHIPSTER"
+        if [[ $? -ne 0 ]] ; then
             errorInBuildStopCurrentSample "'$pathOfScript' finished with error."
+        fi
     else
         # tee print in stdout (either logfile or console) and /dev/fd/4
         # for /dev/fd/4 see function launchScriptForAllSamples()
-        if [ -e dev/fd/4 ] ; then
-            >&2 echo -e "SKIP '${2}' cause of previous error." | \
-                tee --append /dev/fd/4
+        if [[ -e /dev/fd/4 ]] ; then
+            >&2 echo -e "SKIP '${2}' cause of previous error." \
+                > >(tee --append /dev/fd/2 /dev/fd/4 > /dev/null)
         else
-            >&2 echo -e "SKIP '${2}' cause of previous error." | \
-                tee --append /dev/fd/4
+            >&2 echo -e "SKIP '${2}' cause of previous error."
         fi
     fi
     unset pathOfScript
-}
-
-# function errorInBuildStopCurrentSample() {{{3
-function errorInBuildStopCurrentSample() {
-
-    errorInBuild
-
-    # Thanks this variable set to 1, following steps will not start
-    # in function launchNewBash above()
-    STOPTHISAMPLE=1
-
-    # Do not exit, otherwise we stop this script!
-    # exit 15
-    return 15
 }
 
 # function treatEndOfBuild() {{{3
 function treatEndOfBuild() {
     # TODO treat for REACT. React has its own node_modules.
     # React should not be symlinked.
+
     printCommandAndEval mv "${LOGFILENAME}" "${logrenamed}"
     # Test if we launch not this function in generateNode_Modules_Cache().
     # True if launched from functions generateProject() and
@@ -661,16 +683,28 @@ function generateProject() {
         # Corresponding to "Install and test JHipster Generator" in
         # ./scripts/00-install-jhipster.sh
         echoTitleBuildStep "\\\`yarn test' in generator-jhipster"
-        # TODO
-        # Randomly I have error:
-        # 10 silly lifecycle   'mocha --timeout 20000 --slow 0 --reporter spec "test/app.spec.js" "test/ci-cd.spec.js" "test/client.spec.js" "test/cli.spec.js" "test/cli-utils.spec.js" "test/docker-compose.spec.js" "test/entity.spec.js" "test/export-jdl.spec.js" "test/generator-base-private.spec.js" "test/generator-base.spec.js" "test/heroku.spec.js" "test/import-jdl.spec.js" "test/kubernetes.spec.js" "test/languages.spec.js" "test/load.spec.js" "test/openshift.spec.js" "test/rancher-compose.spec.js" "test/server.spec.js" "test/service.spec.js" "test/spring-controller.spec.js" "test/utils.spec.js"' ]
         cd -P "$JHIPSTER_TRAVIS"
         echo "We are at path: '`pwd`'".
         echo "Your branch is: '$BRANCH_NAME'."
         # TODO should we add yarn install?
-        yarn test || errorInBuildStopCurrentSample \
-            "Fail during test of the Generator." \
-            " (command 'yarn test' in `pwd`)"
+
+        # Do not use syntax below.
+        # Yarn test launch some processes in background:
+        # <CTRL+C> doesn't kill it immediately.
+        # Doesn't use syntax below.
+        # yarn test || errorInBuildStopCurrentSample \
+        #         "Fail during test of the Generator." \
+        #         " (command 'yarn test' in `pwd`)"
+
+        set +e
+        yarn test
+        if [[ $? -ne 0 ]] ; then
+            errorInBuildStopCurrentSample \
+                "Fail during test of the Generator." \
+                " (command 'yarn test' in `pwd`)"
+        fi
+        set -e
+
     fi
     # Script below is done with code above.
     # launchNewBash "./scripts/00-install-jhipster.sh" \
@@ -705,8 +739,8 @@ function buildAndTestProject() {
     # TODO it seems we must be sudo
     # Maybe a problem with .dockignore:
     # https://unix.stackexchange.com/questions/413015/docker-compose-cannot-build-without-sudo-but-i-can-run-containers-without-it
-    # launchNewBash "./scripts/03-docker-compose.sh" \
-    #    "Start docker container-compose.sh for '${JHIPSTER}'"
+    launchNewBash "./scripts/03-docker-compose.sh" \
+       "Start docker container-compose.sh for '${JHIPSTER}'"
     launchNewBash "./scripts/04-tests.sh"  "Testing '${JHIPSTER}-sample'"
     launchNewBash "./scripts/05-run.sh" "Run and test '${JHIPSTER}-sample'"
     launchNewBash "./scripts/06-sonar.sh" \
@@ -961,9 +995,12 @@ function launchScriptForOnlyOneSample() {
 
     }
 
-    # Thanks option `set -e`, if we are here we are sure it's a success!
     local logrenamed="${beginLogfilename}"".passed.""${endofLogfilename}"
-    treatEndOfBuild
+    # If there is an error raised, in function errorInBuildStopCurrentSample()
+    # "$STOPTHISAMPLE" takes a value of 1. Initialised to 0 in current function.
+    if [[ "$STOPTHISAMPLE" -eq 0 ]] ; then
+        treatEndOfBuild
+    fi
     unset methodToExecute logrenamed
     # do not unset beginLogfilename and endofLogfilename, unsed in another
     # function
@@ -977,12 +1014,12 @@ function launchScriptForOnlyOneSample() {
 function restoreSTDERRandSTDOUTtoConsole() {
     # Restore the originals descriptors.
     # Behaviour changed in function launchScriptForAllSamples()
-    exec 1>&3 2>&4
-
     if [[ -e /dev/fd/3 ]] ; then
+        exec 1>&3
         3<&-
     fi
     if [[ -e /dev/fd/4 ]] ; then
+        exec 2>&4
         4<&-
     fi
 
@@ -1055,7 +1092,6 @@ function launchScriptForAllSamples() {
         wrapperLaunchScript &
         # ps -o pid,stat,command,%cpu,%mem -C "bash ./build-samples.sh"
         # Sleep to not have too much log at start up.
-        echo $localJHIPSTER_MATRIX
         sleep 25
     done <<< "$TRAVIS_DOT_YAML_PARSED"
     # Wait background process before continuing

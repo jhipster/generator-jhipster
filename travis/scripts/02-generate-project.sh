@@ -18,6 +18,7 @@
 # limitations under the License.
 
 set -ex
+
 function echoSetX() {
     echo -e "\n-------------------------------------------------------------------------------\n" \
         "\n$1\n" \
