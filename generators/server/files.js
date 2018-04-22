@@ -592,6 +592,14 @@ const serverFiles = {
         },
         {
             condition: generator => !(generator.applicationType !== 'microservice' && !(generator.applicationType === 'gateway' && (generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2')))
+                && (generator.authenticationType === 'oauth2' && generator.applicationType === 'gateway'),
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                { file: 'package/config/OAuth2SsoConfiguration.java', renameTo: generator => `${generator.javaDir}config/OAuth2SsoConfiguration.java` }
+            ]
+        },
+        {
+            condition: generator => !(generator.applicationType !== 'microservice' && !(generator.applicationType === 'gateway' && (generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2')))
                 && (generator.applicationType === 'microservice'),
             path: SERVER_MAIN_RES_DIR,
             templates: [
@@ -635,6 +643,13 @@ const serverFiles = {
                 { file: 'package/config/LoggingAspectConfiguration.java', renameTo: generator => `${generator.javaDir}config/LoggingAspectConfiguration.java` },
                 { file: 'package/config/MetricsConfiguration.java', renameTo: generator => `${generator.javaDir}config/MetricsConfiguration.java` },
                 { file: 'package/config/WebConfigurer.java', renameTo: generator => `${generator.javaDir}config/WebConfigurer.java` }
+            ]
+        },
+        {
+            condition: generator => ['ehcache', 'hazelcast', 'infinispan'].includes(generator.cacheProvider) || generator.applicationType === 'gateway',
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                { file: 'package/config/CacheConfiguration.java', renameTo: generator => `${generator.javaDir}config/CacheConfiguration.java` }
             ]
         },
         {
