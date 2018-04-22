@@ -104,12 +104,9 @@ import {
   getEntity,
   updateEntity,
   createEntity,
-  <%_
-    blobFields.forEach(b => {
-      const capitalizedFirstLetter = _.upperFirst(b.fieldName);
-  _%>
-  set<%= capitalizedFirstLetter %>,
-  <%_ }); _%>
+  <%_ if (fieldsContainBlob) { _%>
+    setBlob,
+  <%_ } _%>
   reset
 } from './<%= entityFileName %>.reducer';
 import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
@@ -128,12 +125,9 @@ export interface I<%= entityReactName %>UpdateProps {
   <%= val.instance %>: I<%= val.entity %>[];
   <%_ }) _%>
   <%= entityInstance %>: I<%= entityReactName %>;
-  <%_
-    blobFields.forEach(b => {
-      const capitalizedFirstLetter = _.upperFirst(b.fieldName);
-  _%>
-  set<%= capitalizedFirstLetter %>: Function;
-  <%_ }); _%>
+  <%_ if (fieldsContainBlob) { _%>
+  setBlob: Function;
+  <%_ } _%>
   reset: Function;
   loading: boolean;
   updating: boolean;
@@ -149,9 +143,6 @@ export interface I<%= entityReactName %>UpdateState {
   <%_ relFieldNames.forEach(val => { _%>
   <%= val.relationshipFieldName %>Id: number;
   <%_ }) _%>
-  <%_ blobFields.forEach(b => {_%>
-  <%= b.fieldName %>: any;
-  <%_ }) _%>
 }
 
 export class <%= entityReactName %>Update extends React.Component<I<%= entityReactName %>UpdateProps, I<%= entityReactName %>UpdateState> {
@@ -159,16 +150,13 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
   constructor(props) {
     super(props);
     this.state = {
-      isNew: !this.props.match.params || !this.props.match.params.id,
       <%_ manyToManyOwners.forEach(val => { _%>
       ids<%= val.relationshipName %>: [],
       <%_ }) _%>
       <%_ relFieldNames.forEach(val => { _%>
       <%= val.relationshipFieldName %>Id: 0,
       <%_ }) _%>
-      <%_ blobFields.forEach(b => { _%>
-      <%= b.fieldName %>: null,
-      <%_ }) _%>
+      isNew: !this.props.match.params || !this.props.match.params.id,
     };
   }
 
@@ -185,12 +173,12 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
   }
 
   <%_ if (fieldsContainBlob) {_%>
-  onBlobChange = (isAnImage, reducerFunction) => event => {
-    setFileData(event, (contentType, data) => reducerFunction({ contentType, data }), isAnImage);
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
   };
 
-  clearBlob = reducerFunction => () => {
-    reducerFunction({ data: undefined, contentType: undefined });
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
   };
   <%_ } _%>
 
@@ -434,12 +422,12 @@ _%>
                       <span>{<%= fieldName %>ContentType}, {byteSize(<%= fieldName %>)}</span>
                     </Col>
                     <Col md="1">
-                      <Button color="danger" onClick={this.clearBlob(this.props.set<%= capitalizedFirstLetter%>)}><FaTimesCircle /></Button>
+                      <Button color="danger" onClick={this.clearBlob('<%= fieldName %>')}><FaTimesCircle /></Button>
                     </Col>
                   </Row>
                 </div>
               ) : null}
-              <input type="file" onChange={this.onBlobChange(<%= isAnImage %>, this.props.set<%= capitalizedFirstLetter %>)} <% if (isAnImage) { %>accept="image/*"<% } %> />
+              <input type="file" onChange={this.onBlobChange(<%= isAnImage %>, '<%= fieldName %>')} <% if (isAnImage) { %>accept="image/*"<% } %> />
             </AvGroup>
 
             <%_ } else { _%>
@@ -664,12 +652,9 @@ const mapDispatchToProps = {
   <%_ }) _%>
   getEntity,
   updateEntity,
-  <%_
-    blobFields.forEach(b => {
-      const capitalizedFirstLetter =  _.upperFirst(b.fieldName);
-  _%>
-  set<%= capitalizedFirstLetter %>,
-  <%_ }); _%>
+  <%_ if (fieldsContainBlob) { _%>
+  setBlob,
+  <%_ } _%>
   createEntity,
   reset
 };
