@@ -191,7 +191,7 @@
 # ==============================================================================
 
 # option -x for debug purpose.
-# set -x
+set -x
 # # DO NOT REMOVE `set -e`
 set -e
 set -o nounset
@@ -295,13 +295,13 @@ function testRequierments() {
     echo
 
     # java send question of this version to stderr. Redirect to stdout.
-    printCommandAndEval "java -version 2> /dev/fd/1" || \
+    printCommandAndEval "java -version 2>&1" || \
         "exitScriptWithError '$argument'" \
             "FATAL ERROR: please install java."
     echo
 
     # java send question of this version to stderr. Redirect to stdout.
-    printCommandAndEval "javac -version 2> /dev/fd/1" || "exitScriptWithError" \
+    printCommandAndEval "javac -version 2>&1" || "exitScriptWithError" \
         "FATAL ERROR: please install JDK. "
     echo
 
@@ -460,7 +460,7 @@ function echoTitleBuildStep() {
         "================================================================" \
         "================================================================" \
         "\n'$@'" \
-        "(`date +%H:%M:%S`, '$ELAPSED')\n" \
+        "(`date +%r`, '$ELAPSED')\n" \
         "================================================================" \
         "================================================================" \
         "================================================================" \
@@ -475,7 +475,7 @@ function echoTitleBuildStep() {
         [[ -z "${generationOfNodeModulesCacheMarker+x}" ]] ; then
         >&3 echo -e "\n\n\n" \
             "\n'$@'" \
-            "(`date +%H:%M:%S`, '$ELAPSED')\n" \
+            "(`date +%r`, '$ELAPSED')\n" \
             "================================================================" \
             "\n"
     fi
@@ -576,11 +576,11 @@ function errorInBuildStopCurrentSample() {
         "$((($SECONDS / 60) % 60)) min " \
         "$(($SECONDS % 60))sec"`
     if [[ -e /dev/fd/4 ]] ; then
-        >2& echo "$@ Error in '$JHIPSTER' at `date +%H:%M:%S`" \
+        >&2 echo "$@ Error in '$JHIPSTER' at `date +%r`" \
             "(elapsed: '$ELAPSED')" \
             > >(tee --append /dev/fd/2 /dev/fd/4 > /dev/null)
     else
-        >2& echo "$@ Error in '$JHIPSTER' at `date +%H:%M:%S`" \
+        >&2 echo "$@ Error in '$JHIPSTER' at `date +%r`" \
             "(elapsed: '$ELAPSED')"
     fi
     unset ELAPSED
@@ -743,8 +743,8 @@ function buildAndTestProject() {
     # TODO it seems we must be sudo
     # Maybe a problem with .dockignore:
     # https://unix.stackexchange.com/questions/413015/docker-compose-cannot-build-without-sudo-but-i-can-run-containers-without-it
-    launchNewBash "./scripts/03-docker-compose.sh" \
-       "Start docker container-compose.sh for '${JHIPSTER}'"
+    # launchNewBash "./scripts/03-docker-compose.sh" \
+    #    "Start docker container-compose.sh for '${JHIPSTER}'"
     launchNewBash "./scripts/04-tests.sh"  "Testing '${JHIPSTER}-sample'"
     launchNewBash "./scripts/05-run.sh" "Run and test '${JHIPSTER}-sample'"
     launchNewBash "./scripts/06-sonar.sh" \
@@ -832,6 +832,7 @@ function generateNode_Modules_Cache() {
             "was found. Skip generation of a cached node_modules."
         return 0
     fi
+    echo aa
     sleep 100
     unset beginLogfilename endofLogfilename
 
@@ -969,7 +970,7 @@ function launchScriptForOnlyOneSample() {
         # Redefined APP_FOLDER, because erased in generateNode_Modules_Cache()
         # above
         export APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
-        echoTitleBuildStep "\n\n'${JHIPSTER_MATRIX}' is launched at `date +%r`!!"
+        echoTitleBuildStep "\n\n'${JHIPSTER_MATRIX}' is launched!!"
     fi
 
     time {
@@ -1031,9 +1032,10 @@ function restoreSTDERRandSTDOUTtoConsole() {
 
 # function wrapperLaunchScript() {{{3
 function wrapperLaunchScript() {
+    echo coucou
     # Display stderr on terminal.
     echoTitleBuildStep \
-        "'${localJHIPSTER_MATRIX}' is launched in background at `date +%r`!"
+        "'${localJHIPSTER_MATRIX}' is launched in background!"
     launchScriptForOnlyOneSample "${methodToExecute}" \
         "${localJHIPSTER_MATRIX}" || echo "ERROR IN '${localJHIPSTER_MATRIX}'"
     echoTitleBuildStep "End of '$localJHIPSTER_MATRIX'" ;
@@ -1077,8 +1079,24 @@ function launchScriptForAllSamples() {
 
     generateNode_Modules_Cache
 
-    timeSpan=15
+    local -a jhipsterArray
+    local -i i=0
+    # We need to use an array.
+    # For a complex script, loop below doesn't work.
+    # Works only for simple loops.
+    # It lost the iterator when we use this syntax loop
+    # with inner loop and background processes.
     while IFS=$'\n' read -r localJHIPSTER_MATRIX ; do
+        jhipsterArray[i]="$localJHIPSTER_MATRIX"
+        i=$((i+1))
+    done <<< "$TRAVIS_DOT_YAML_PARSED"
+    unset i
+
+    local -i i=0
+    timeSpan=15
+    # Execute accordingly to the array.
+    while [[ i -lt "${#jhipsterArray[*]}" ]] ; do
+        localJHIPSTER_MATRIX=${jhipsterArray[i]}
         # `ps -o pid,stat,command -C "…"' seems
         # displays more zombies processes (constation of JulioJu).
 
@@ -1091,15 +1109,22 @@ function launchScriptForAllSamples() {
             # Do not forget we must count head line of `ps'!
             # If we use `grep bash', do not forget than grep is also returned by
             # `ps'.
+            echo coucou
             sleep "$timeSpan"
         done
         wrapperLaunchScript &
         # ps -o pid,stat,command,%cpu,%mem -C "bash ./build-samples.sh"
-        # Sleep to not have too much log at start up.
+        # Sleep to not have too much logs at start up.
         sleep 25
-    done <<< "$TRAVIS_DOT_YAML_PARSED"
+        i=$((i+1))
+    done
+
     # Wait background process before continuing
+    # Do not return the focus to the user.
+    # If we delete line before, when all samples are launched,
+    # this foreground script ./build-samples.sh is ended. Not very cool.
     wait
+
     echo "All build are finished"
 
     restoreSTDERRandSTDOUTtoConsole
