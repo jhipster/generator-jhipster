@@ -48,15 +48,19 @@ export default class RegisterPage extends BasePage {
   }
 
   autoSignUpUsing(username: string, email: string, password: string) {
-    this.clearUserName();
+    this.clearForm();
     this.setUserName(username);
-    this.clearEmail();
     this.setEmail(email);
-    this.clearFirstPassword();
     this.setFirstPassword(password);
-    this.clearSecondPassword();
     this.setSecondPassword(password);
     return this.save();
+  }
+
+  clearForm() {
+    this.clearUserName();
+    this.clearEmail();
+    this.clearFirstPassword();
+    this.clearSecondPassword();
   }
 
   save() {

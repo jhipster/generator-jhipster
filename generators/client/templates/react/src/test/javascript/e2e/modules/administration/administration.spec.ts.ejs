@@ -23,7 +23,7 @@ describe('Administration', () => {
     it('should delete previously created fake user', async () => {
       browser.get('#/admin/user-management/user_test/delete');
       const deleteModal = element(by.className('modal'));
-      waitUntilDisplayed(deleteModal, 'modal');
+      waitUntilDisplayed(deleteModal);
       element(by.buttonText('Delete')).click();
       expect(await deleteModal.isPresent()).to.be.false;
     });

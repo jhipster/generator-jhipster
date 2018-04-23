@@ -62,7 +62,7 @@ export const saveAccountSettings = account => async dispatch => {
     type: ACTION_TYPES.UPDATE_ACCOUNT,
     payload: axios.post(apiUrl, account),
     meta: {
-      successMessage: translate('settings.messages.success')
+      successMessage: <% if (enableTranslation) { %>'settings.messages.success'<% } else { %>translate('settings.messages.success')<% } %>
     }
   });
   dispatch(getSession());

@@ -1,4 +1,4 @@
-import { $, ElementFinder } from 'protractor';
+import { by, element, ElementFinder } from 'protractor';
 
 import { isDisplayed, isHidden, waitUntilDisplayed, waitUntilHidden } from '../util/utils';
 /**
@@ -50,7 +50,13 @@ export default class BasePage {
     waitUntilHidden(this.selector, this.constructor.name);
   }
 
-  getToast() {
-    return $('div[role="alert"]');
+  <%_ if (enableTranslation) { _%>
+  getToastByClassName(className: string) {
+    return element(by.className(className));
   }
+  <%_ } else { _%>
+  getToastByInnerText(text: string) {
+    return element(by.cssContainingText('.alert', text));
+  }
+  <%_ } _%>
 }

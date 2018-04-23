@@ -119,7 +119,7 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
           <tbody>
             {
             users.map((user, i) => (
-              <tr key={`user-${i}`}>
+              <tr id={user.login} key={`user-${i}`}>
                 <td>
                   <Button
                     tag={Link} to={`${match.url}/${user.login}`}

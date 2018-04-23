@@ -1,45 +1,51 @@
-import { $, browser } from 'protractor';
+import { $, browser, ElementFinder } from 'protractor';
 
 import BasePage from './base-component';
+import { waitUntilDisplayed } from '../util/utils';
 
+const selector: ElementFinder = $('#login-page');
 export default class SignInPage extends BasePage {
-  selector = $('#login-page');
-  username = this.selector.$('#username');
-  password = this.selector.$('#password');
-  loginButton = this.selector.$('button[type=submit]');
-  title = this.selector.$('#login-title').$('.modal-title');
+  selector: ElementFinder;
+  username: ElementFinder = this.selector.$('#username');
+  password: ElementFinder = this.selector.$('#password');
+  loginButton: ElementFinder = this.selector.$('button[type=submit]');
+  title: ElementFinder = this.selector.$('#login-title').$('.modal-title');
+
+  constructor() {
+    super(selector);
+  }
 
   get() {
     browser.get('#/login');
-    this.waitUntilDisplayed();
+    waitUntilDisplayed(this.title);
   }
 
-  setUserName(username) {
-    this.username.sendKeys(username);
+  getTitle() {
+    return this.title.getText();
   }
 
   getUserName() {
     return this.username.getAttribute('value');
   }
 
-  clearUserName() {
-    this.username.clear();
+  setUserName(username) {
+    this.username.sendKeys(username);
   }
 
-  setPassword(password) {
-    this.password.sendKeys(password);
+  clearUserName() {
+    this.username.clear();
   }
 
   getPassword() {
     return this.password.getAttribute('value');
   }
 
-  clearPassword() {
-    this.password.clear();
+  setPassword(password) {
+    this.password.sendKeys(password);
   }
 
-  getTitle() {
-    return this.title.getText();
+  clearPassword() {
+    this.password.clear();
   }
 
   autoSignInUsing(username: string, password: string) {

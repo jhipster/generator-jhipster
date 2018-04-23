@@ -1,11 +1,11 @@
-import { element, by, $, browser } from 'protractor';
+import { browser } from 'protractor';
 
 import SignInPage from '../../page-objects/signin-page';
 import PasswordPage from '../../page-objects/password-page';
 import NavBarPage from '../../page-objects/navbar-page';
 import RegisterPage from '../../page-objects/register-page';
 import { SettingsPage } from '../../page-objects/settings-page';
-import { waitUntilDisplayed } from '../../util/utils';
+import { getDeactivatedButtonbyLogin, waitUntilDisplayed } from '../../util/utils';
 
 const expect = chai.expect;
 
@@ -19,9 +19,8 @@ describe('Account', () => {
   const pageTitle = 'Sign in';
 
   before(() => {
-    signInPage = new SignInPage();
     navBarPage = new NavBarPage();
-
+    signInPage = navBarPage.signInPage;
     signInPage.get();
   });
 
@@ -31,6 +30,7 @@ describe('Account', () => {
     signInPage.autoSignInUsing('admin', 'foo');
     // Login page should stay open when login fails
     expect(await signInPage.getTitle()).to.eq(pageTitle);
+    signInPage.clearForm();
   });
 
   it('should login with admin account', async () => {
@@ -45,44 +45,58 @@ describe('Account', () => {
   });
 
   it('should be able to sign up', async () => {
-    browser.refresh();
-
     registerPage = navBarPage.getRegisterPage();
     registerPage.autoSignUpUsing('user_test', 'usertest@jhipster.com', 'user_test');
+    <%_ if (enableTranslation) { _%>
+    const toast = registerPage.getToastByClassName('register.messages.success');
+    <%_ } else { _%>
+    const toast = registerPage.getToastByInnerText('<strong>Registration saved!</strong> Please check your email for confirmation.');
+    <%_ } _%>
+    waitUntilDisplayed(toast);
 
-    waitUntilDisplayed($('.alert-success'), 'alert-success');
-    expect(await $('.alert-success').getText()).to.eq('Registration saved! Please check your email for confirmation.');
+    expect(await toast.isPresent()).to.eq(true);
+    registerPage.clearForm();
   });
 
   it('should not be able to sign up if login already taken', async () => {
-    registerPage = navBarPage.getRegisterPage();
-    registerPage.autoSignUpUsing('user_test', 'usertest@jhipster.com', 'lolee');
+    registerPage.autoSignUpUsing('user_test', 'usertest@jhipster.com', 'user_test');
+    <%_ if (enableTranslation) { _%>
+    const toast = registerPage.getToastByClassName('error.userexists');
+    <%_ } else { _%>
+    const toast = registerPage.getToastByInnerText('Login already in use');
+    <%_ } _%>
+    waitUntilDisplayed(toast);
 
-    waitUntilDisplayed(registerPage.getToast(), 'toast');
-    expect(await registerPage.getToast().getText()).to.eq('Login already in use');
+    expect(await toast.isPresent()).to.eq(true);
   });
 
   it('should not be able to sign up if email already taken', async () => {
-    registerPage = navBarPage.getRegisterPage();
     registerPage.autoSignUpUsing('user_test2', 'usertest@jhipster.com', 'user_test2');
+    <%_ if (enableTranslation) { _%>
+    const toast = registerPage.getToastByClassName('error.emailexists');
+    <%_ } else { _%>
+    const toast = registerPage.getToastByInnerText('Email address already in use');
+    <%_ } _%>
+    waitUntilDisplayed(toast);
 
-    waitUntilDisplayed(registerPage.getToast(), 'toast');
-    expect(await registerPage.getToast().getText()).to.eq('Email address already in use');
+    expect(await toast.isPresent()).to.eq(true);
   });
 
   it('should activate the new registered user', async () => {
     navBarPage.autoSignIn();
 
     browser.get('#/admin/user-management');
-    const deactivated = element(by.buttonText('Deactivated'));
-    deactivated.click();
-    expect(await deactivated.getText()).to.eq('Activated');
+    const deactivatedButton = getDeactivatedButtonbyLogin('user_test');
+    deactivatedButton.click();
+
+    expect(await deactivatedButton.isPresent()).to.eq(false);
 
     navBarPage.autoSignOut();
   });
 
   it('should be able to log in with new registered account', async () => {
-    signInPage = navBarPage.getSignInPage();
+    signInPage.get();
+
     signInPage.autoSignInUsing('user_test', 'user_test');
     signInPage.waitUntilHidden();
 
@@ -92,31 +106,36 @@ describe('Account', () => {
   });
 
   it('should fail to update password when using incorrect current password', async () => {
-    browser.refresh();
-
     navBarPage.autoSignIn();
     passwordPage = navBarPage.getPasswordPage();
     passwordPage.autoChangePassword('wront_current_password', 'new_password', 'new_password');
+    <%_ if (enableTranslation) { _%>
+    const toast = passwordPage.getToastByClassName('password.messages.error');
+    <%_ } else { _%>
+    const toast = passwordPage.getToastByInnerText('<strong>An error has occurred!</strong> The password could not be changed.');
+    <%_ } _%>
+    waitUntilDisplayed(toast);
 
-    waitUntilDisplayed(passwordPage.getToast(), 'toast');
-    expect(await passwordPage.getToast().getText()).to.eq('<strong>An error has occurred!</strong> The password could not be changed.');
+    expect(await toast.isPresent()).to.eq(true);
+    passwordPage.clearForm();
   });
 
   it('should be able to update password', async () => {
-    browser.refresh();
-
     passwordPage = navBarPage.getPasswordPage();
     passwordPage.autoChangePassword('admin', 'newpassword', 'newpassword');
+    <%_ if (enableTranslation) { _%>
+    const toast = passwordPage.getToastByClassName('password.messages.success');
+    <%_ } else { _%>
+    const toast = passwordPage.getToastByInnerText('<strong>Password changed!</strong>');
+    <%_ } _%>
+    waitUntilDisplayed(toast);
 
-    waitUntilDisplayed(passwordPage.getToast(), 'toast');
-    expect(await passwordPage.getToast().getText()).to.eq('<strong>Password changed!</strong>');
+    expect(await toast.isPresent()).to.eq(true);
 
     navBarPage.autoSignOut();
   });
 
   it('should be able to log in with new password', async () => {
-    browser.refresh();
-
     signInPage.get();
     signInPage.autoSignInUsing('admin', 'newpassword');
     signInPage.waitUntilHidden();
@@ -130,8 +149,6 @@ describe('Account', () => {
   });
 
   it('should be able to change settings', async () => {
-    browser.refresh();
-
     navBarPage.autoSignIn();
 
     settingsPage = navBarPage.getSettingsPage();
@@ -139,14 +156,21 @@ describe('Account', () => {
     settingsPage.setEmail('admin@jhipster.com');
     settingsPage.save();
 
-    waitUntilDisplayed(settingsPage.getToast(), 'toast');
-    expect(await settingsPage.getToast().getText()).to.eq('Settings saved!');
+    <%_ if (enableTranslation) { _%>
+    const toast = settingsPage.getToastByClassName('settings.messages.success');
+    <%_ } else { _%>
+    const toast = settingsPage.getToastByInnerText('<strong>Settings saved!</strong>');
+    <%_ } _%>
+    waitUntilDisplayed(toast);
+
+    expect(await toast.isPresent()).to.eq(true);
 
     navBarPage.autoSignOut();
   });
 
   it('should not be able to change settings if email already exists', async () => {
-    signInPage = navBarPage.getSignInPage();
+    signInPage.get();
+
     signInPage.autoSignInUsing('user', 'user');
     signInPage.waitUntilHidden();
 
@@ -155,8 +179,14 @@ describe('Account', () => {
     settingsPage.setEmail('admin@jhipster.com');
     settingsPage.save();
 
-    waitUntilDisplayed(settingsPage.getToast(), 'toast');
-    expect(await settingsPage.getToast().getText()).to.eq('Email address already in use');
+    <%_ if (enableTranslation) { _%>
+    const toast = passwordPage.getToastByClassName('error.emailexists');
+    <%_ } else { _%>
+    const toast = settingsPage.getToastByInnerText('<strong>Email is already in use!</strong> Please choose another one.');
+    <%_ } _%>
+    waitUntilDisplayed(toast);
+
+    expect(await toast.isPresent()).to.eq(true);
   });
 
   after(() => signInPage.autoSignOut());
