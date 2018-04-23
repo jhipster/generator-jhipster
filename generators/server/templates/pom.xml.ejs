@@ -1097,6 +1097,21 @@
                                     </action>
                                 </pluginExecution>
                                 <%_ } _%>
+                                <%_ if (enableSwaggerCodegen) { _%>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>io.swagger</groupId>
+                                        <artifactId>swagger-codegen-maven-plugin</artifactId>
+                                        <versionRange>${swagger-codegen-maven-plugin.version}</versionRange>
+                                        <goals>
+                                            <goal>generate</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                                <%_ } _%>
                             </pluginExecutions>
                         </lifecycleMappingMetadata>
                     </configuration>
