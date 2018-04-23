@@ -92,13 +92,13 @@ export class UserManagementUpdate extends React.Component<IUserManagementUpdateP
         <Row className="justify-content-center">
           <Col md="8">
           { loading ? <p>Loading...</p>
-          : <AvForm model={isNew ? {} : user} onValidSubmit={this.saveUser}>
+          : <AvForm onValidSubmit={this.saveUser}>
             {user.id ? (
               <AvGroup>
                 <Label for="id">
                   <Translate contentKey="global.field.id">ID</Translate>
                 </Label>
-                <AvField type="text" className="form-control" name="id" required readOnly />
+                <AvField type="text" className="form-control" name="id" required readOnly value={user.id} />
               </AvGroup>
             ) : null}
             <AvGroup>
@@ -127,6 +127,7 @@ export class UserManagementUpdate extends React.Component<IUserManagementUpdateP
                     errorMessage: translate('register.messages.validate.login.maxlength')
                   }
                 }}
+                value={user.login}
               />
             </AvGroup>
             <AvGroup>
@@ -143,6 +144,7 @@ export class UserManagementUpdate extends React.Component<IUserManagementUpdateP
                     errorMessage: translate('entity.validation.maxlength', { max: 50 })
                   }
                 }}
+                value={user.firstName}
                 />
             </AvGroup>
             <AvGroup>
@@ -159,6 +161,7 @@ export class UserManagementUpdate extends React.Component<IUserManagementUpdateP
                     errorMessage: translate('entity.validation.maxlength', { max: 50 })
                   }
                 }}
+                value={user.lastName}
               />
               <AvFeedback>This field cannot be longer than 50 characters.</AvFeedback>
             </AvGroup>
@@ -185,6 +188,7 @@ export class UserManagementUpdate extends React.Component<IUserManagementUpdateP
                     errorMessage: translate('global.messages.validate.email.maxlength')
                   }
               }}
+              value={user.email}
             />
             </AvGroup>
             <AvGroup check>
