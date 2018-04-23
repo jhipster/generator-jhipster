@@ -50,7 +50,6 @@ import { getLoginUrl } from 'app/shared/util/url-utils';
 <%_ if (enableTranslation) { _%>
 import { locales<% if (enableI18nRTL) { %>, isRTL<% } %> } from 'app/config/translation';
 <%_ } _%>
-import { getProfile } from 'app/shared/reducers/application-profile';
 import appConfig from 'app/config/constants';
 
 export interface IHeaderProps {
@@ -59,7 +58,6 @@ export interface IHeaderProps {
   ribbonEnv: string;
   isInProduction: boolean;
   isSwaggerEnabled: boolean;
-  getProfile: Function;
 <%_ if (enableTranslation) { _%>
   currentLocale: string;
   onLocaleChange: Function;
@@ -79,7 +77,7 @@ const BrandIcon = props => (
   </div>
 );
 
-export class Header extends React.Component<IHeaderProps, IHeaderState> {
+export default class Header extends React.Component<IHeaderProps, IHeaderState> {
   state: IHeaderState = {
       menuOpen: false
   };
@@ -88,10 +86,6 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
     document.querySelector('html').setAttribute('dir', isRTL(Storage.local.get('locale')) ? 'rtl' : 'ltr');
   };
   <%_ } _%>
-
-  componentDidMount() {
-    this.props.getProfile();
-  }
 
   <%_ if (enableTranslation) { _%>
   handleLocaleChange = event => {
@@ -105,7 +99,11 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
   renderDevRibbon = () => this.props.isInProduction === false ? (
     <div className="ribbon dev">
       <a href="">
+        <%_ if (enableTranslation) { _%>
         <Translate contentKey={`global.ribbon.${this.props.ribbonEnv}`} />
+        <%_ } else { _%>
+        Development
+        <%_ } _%>
       </a>
     </div>
   ) : null;
@@ -254,13 +252,3 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
     );
   }
 }
-
-const mapStateToProps = ({ applicationProfile }) => ({
-  ribbonEnv: applicationProfile.ribbonEnv,
-  isInProduction: applicationProfile.inProduction,
-  isSwaggerEnabled: applicationProfile.isSwaggerEnabled
-});
-
-const mapDispatchToProps = { getProfile };
-
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
