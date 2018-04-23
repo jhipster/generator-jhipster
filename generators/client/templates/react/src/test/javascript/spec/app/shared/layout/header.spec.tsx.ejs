@@ -80,7 +80,7 @@ describe('Header', () => {
     expect(ribbon.length).to.equal(1);
   });
 
-  it('Renders a Header component in prod profile with LoadingBar, Navbar, Nav and dev ribbon.', () => {
+  it('Renders a Header component in prod profile with LoadingBar, Navbar, Nav.', () => {
     const navbar = prodWrapper().find(Navbar);
     expect(navbar.length).to.equal(1);
     expect(navbar.find(NavbarBrand).find('.brand-logo').length).to.equal(1);
