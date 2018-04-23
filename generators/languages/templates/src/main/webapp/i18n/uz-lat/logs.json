@@ -1,0 +1,11 @@
+{
+    "logs": {
+        "title": "Loglar",
+        "nbloggers": "Jami loggerlar soni : {{ total }} ta.",
+        "filter": "Filtr",
+        "table": {
+            "name": "Nomi",
+            "level": "Darajasi"
+        }
+    }
+}

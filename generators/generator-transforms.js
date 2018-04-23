@@ -1,12 +1,14 @@
 const through = require('through2');
 const prettier = require('prettier');
 
-const defaultTsPrettierOptions = {
+const prettierOptions = {
     printWidth: 140,
     singleQuote: true,
-    jsxBracketSameLine: false,
-    parser: 'typescript',
+    useTabs: false,
+    // js and ts rules:
     arrowParens: 'avoid',
+    // jsx and tsx rules:
+    jsxBracketSameLine: false,
 };
 
 const prettierTransform = function (defaultOptions) {
@@ -29,5 +31,5 @@ const prettierTransform = function (defaultOptions) {
 
 module.exports = {
     prettierTransform,
-    defaultTsPrettierOptions
+    prettierOptions
 };

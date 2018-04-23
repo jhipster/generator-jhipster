@@ -20,7 +20,7 @@
     <h2>
         <span jhiTranslate="health.title">Health Checks</span>
         <button class="btn btn-primary float-right" (click)="refresh()">
-            <span class="fa fa-refresh"></span> <span jhiTranslate="health.refresh.button">Refresh</span>
+            <span class="fas fa-sync"></span> <span jhiTranslate="health.refresh.button">Refresh</span>
         </button>
     </h2>
     <div class="table-responsive">
@@ -42,7 +42,7 @@
                     </td>
                     <td class="text-center">
                         <a class="hand" (click)="showHealth(health)" *ngIf="health.details || health.error">
-                            <i class="fa fa-eye"></i>
+                            <i class="fas fa-eye"></i>
                         </a>
                     </td>
                 </tr>

@@ -88,11 +88,12 @@ export class LogsPage extends React.Component<ILogsPageProps, ILogsPageState> {
                 <tr key={`log-row-${i}`}>
                   <td><small>{logger.name}</small></td>
                   <td>
-                    <button disabled={isFetching} onClick={this.changeLevel(logger.name, 'TRACE')} className={this.getClassName(logger.level, 'TRACE', 'danger')}>TRACE</button>
-                    <button disabled={isFetching} onClick={this.changeLevel(logger.name, 'DEBUG')} className={this.getClassName(logger.level, 'DEBUG', 'warning')}>DEBUG</button>
+                    <button disabled={isFetching} onClick={this.changeLevel(logger.name, 'TRACE')} className={this.getClassName(logger.level, 'TRACE', 'primary')}>TRACE</button>
+                    <button disabled={isFetching} onClick={this.changeLevel(logger.name, 'DEBUG')} className={this.getClassName(logger.level, 'DEBUG', 'success')}>DEBUG</button>
                     <button disabled={isFetching} onClick={this.changeLevel(logger.name, 'INFO')} className={this.getClassName(logger.level, 'INFO', 'info')}>INFO</button>
-                    <button disabled={isFetching} onClick={this.changeLevel(logger.name, 'WARN')} className={this.getClassName(logger.level, 'WARN', 'success')}>WARN</button>
-                    <button disabled={isFetching} onClick={this.changeLevel(logger.name, 'ERROR')} className={this.getClassName(logger.level, 'ERROR', 'primary')}>ERROR</button>
+                    <button disabled={isFetching} onClick={this.changeLevel(logger.name, 'WARN')} className={this.getClassName(logger.level, 'WARN', 'warning')}>WARN</button>
+                    <button disabled={isFetching} onClick={this.changeLevel(logger.name, 'ERROR')} className={this.getClassName(logger.level, 'ERROR', 'danger')}>ERROR</button>
+                    <button disabled={isFetching} onClick={this.changeLevel(logger.name, 'OFF')} className={this.getClassName(logger.level, 'OFF', 'secondary')}>OFF</button>
                   </td>
                 </tr>
               )

@@ -58,7 +58,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
 
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
@@ -291,6 +291,9 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
     @WithAnonymousUser
     <%_ } _%>
     public void assertThatAnonymousUserIsNotGet() {
+        <%_ if (authenticationType === 'oauth2') { _%>
+        user.setId(Constants.ANONYMOUS_USER);
+        <%_ } _%>
         user.setLogin(Constants.ANONYMOUS_USER);
         if (!userRepository.findOneByLogin(Constants.ANONYMOUS_USER).isPresent()) {
             userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);

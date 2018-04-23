@@ -61,6 +61,6 @@
     ],
     "changelogDate": "20150805124838",
     "dto": "mapstruct",
-    "service": "no",
+    "service": "serviceImpl",
     "pagination": "no"
 }

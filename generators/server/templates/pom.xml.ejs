@@ -29,14 +29,6 @@
     <repositories>
         <!-- TODO Remove snapshot repositories after final Spring Boot 2 release -->
         <repository>
-            <id>sonatype-snapshot</id>
-            <name>JHipster Snapshots</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <repository>
             <id>spring-milestones</id>
             <name>Spring Milestones</name>
             <url>http://repo.spring.io/milestone</url>
@@ -96,14 +88,14 @@
         <profile.swagger />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>2.0.0-SNAPSHOT</jhipster-dependencies.version>
+        <jhipster-dependencies.version>2.0.1</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-        <spring-boot.version>2.0.0.RELEASE</spring-boot.version>
+        <spring-boot.version>2.0.1.RELEASE</spring-boot.version>
         <%_ if (databaseType === 'sql') { _%>
         <!-- The hibernate version should match the one managed by
-        https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-        <hibernate.version>5.2.14.Final</hibernate.version>
+        https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
+        <hibernate.version>5.2.16.Final</hibernate.version>
         <!-- The javassist version should match the one managed by
         https://mvnrepository.com/artifact/org.hibernate/hibernate-core/${hibernate.version} -->
         <javassist.version>3.22.0-GA</javassist.version>
@@ -172,6 +164,11 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>io.github.jhipster</groupId>
+            <artifactId>jhipster-framework</artifactId>
+        </dependency>
+
         <!-- TODO To remove after final Spring Boot 2 release -->
         <dependency>
             <groupId>javax.xml.bind</groupId>
@@ -184,10 +181,6 @@
             <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
         <%_ } _%>
-        <dependency>
-            <groupId>io.github.jhipster</groupId>
-            <artifactId>jhipster</artifactId>
-        </dependency>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-core</artifactId>
@@ -346,6 +339,10 @@
             <artifactId>couchbase-testcontainer</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.couchbase.client</groupId>
+            <artifactId>java-client</artifactId>
+        </dependency>
         <%_ } _%>
         <%_ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || applicationType === 'gateway') { _%>
         <dependency>
@@ -438,10 +435,6 @@
         </dependency>
         <%_ if (databaseType === 'mongodb') { _%>
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.github.mongobee</groupId>
             <artifactId>mongobee</artifactId>
         </dependency>
@@ -522,7 +515,7 @@
         <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-<%=databaseType%></artifactId>
+            <artifactId>spring-boot-starter-data-<%=databaseType%><% if (reactive === true) { %>-reactive<% } %></artifactId>
         </dependency>
         <%_ } _%>
         <dependency>
@@ -607,6 +600,12 @@
             <artifactId>spring-security-jwt</artifactId>
         </dependency>
             <%_ } _%>
+        <%_ } _%>
+        <%_ if (authenticationType === 'session') { _%>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
         <%_ } _%>
         <%_ if (authenticationType === 'jwt') { _%>
         <dependency>
@@ -1095,6 +1094,21 @@
                                     </pluginExecutionFilter>
                                     <action>
                                         <ignore/>
+                                    </action>
+                                </pluginExecution>
+                                <%_ } _%>
+                                <%_ if (enableSwaggerCodegen) { _%>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>io.swagger</groupId>
+                                        <artifactId>swagger-codegen-maven-plugin</artifactId>
+                                        <versionRange>${swagger-codegen-maven-plugin.version}</versionRange>
+                                        <goals>
+                                            <goal>generate</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                                 <%_ } _%>

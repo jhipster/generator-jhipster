@@ -18,7 +18,7 @@
  */
 const _ = require('lodash');
 const chalk = require('chalk');
-const databaseTypes = require('jhipster-core').JHipsterDatabaseTypes.Types;
+const databaseTypes = require('jhipster-core').JHipsterDatabaseTypes;
 
 const BaseGenerator = require('../generator-base');
 const docker = require('../docker-base');
@@ -289,10 +289,10 @@ module.exports = class extends BaseGenerator {
                 this.appConfigs.forEach((config) => {
                     const directory = `${this.directoryPath}${config.appFolder}`;
                     if (config.buildTool === 'maven') {
-                        this.addMavenDependencyInDirectory(directory, AWS_SSM_GROUP, AWS_SSM_ARTIFACT, awsConstants.AWS_SSM_VERSION);
+                        this.addMavenDependencyInDirectory(directory, AWS_SSM_GROUP, AWS_SSM_ARTIFACT);
                         this.addMavenDependencyInDirectory(directory, SPRING_CLOUD_GROUP, SPRING_CLOUD_ARTIFACT);
                     } else if (config.buildTool === 'gradle') {
-                        this.addGradleDependencyInDirectory(directory, 'compile', AWS_SSM_GROUP, AWS_SSM_ARTIFACT, awsConstants.AWS_SSM_VERSION);
+                        this.addGradleDependencyInDirectory(directory, 'compile', AWS_SSM_GROUP, AWS_SSM_ARTIFACT);
                         this.addGradleDependencyInDirectory(directory, 'compile', SPRING_CLOUD_GROUP, SPRING_CLOUD_ARTIFACT);
                     }
                 });
@@ -301,7 +301,7 @@ module.exports = class extends BaseGenerator {
                 if (this.abort) return;
                 this.appConfigs.forEach((appConfig) => {
                     const app = this.aws.apps.find(a => a.baseName === appConfig.baseName);
-                    const postgresqlType = databaseTypes.postgresql;
+                    const postgresqlType = databaseTypes.POSTGRESQL;
                     app.dbType = appConfig.prodDatabaseType;
 
                     app.auroraEngine = appConfig.prodDatabaseType === postgresqlType ? 'aurora-postgresql' : 'aurora-mysql';

@@ -11,6 +11,7 @@
     "databaseType": "cassandra",
     "devDatabaseType": "cassandra",
     "prodDatabaseType": "cassandra",
+    "reactive": true,
     "searchEngine": false,
     "useSass": false,
     "buildTool": "maven",

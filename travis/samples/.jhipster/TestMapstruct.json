@@ -15,6 +15,13 @@
             "otherEntityRelationshipName": "testMapstruct"
         },
         {
+            "relationshipName": "testManyRelPaginDTO",
+            "otherEntityName": "testManyRelPaginDTO",
+            "relationshipType": "many-to-many",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "testMapstruct"
+        },
+        {
             "relationshipName": "testOneToOne",
             "otherEntityName": "testOneToOne",
             "relationshipType": "one-to-one",

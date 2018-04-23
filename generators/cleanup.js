@@ -45,6 +45,7 @@ function cleanupOldFiles(generator) {
         generator.removeFile(`${ANGULAR_DIR}components/form/uib-pagination.config.js`);
     }
     if (generator.isJhipsterVersionLessThan('5.0.0')) {
+        generator.removeFile(`${ANGULAR_DIR}/app.route.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/auth/account.service.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/auth/auth-jwt.service.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/auth/auth-session.service.ts`);

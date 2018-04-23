@@ -19,7 +19,7 @@
 import './header.<%= styleSheetExt %>';
 
 import * as React from 'react';
-import { Translate } from 'react-jhipster';
+import { Translate<% if (enableI18nRTL) { %>, Storage<% } %> } from 'react-jhipster';
 import {
   Navbar, Nav, NavItem, NavLink, NavbarToggler, NavbarBrand, Collapse,
   UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem
@@ -47,7 +47,7 @@ import LoadingBar from 'react-redux-loading-bar';
 import { getLoginUrl } from 'app/shared/util/url-utils';
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
-import { locales } from 'app/config/translation';
+import { locales<% if (enableI18nRTL) { %>, isRTL<% } %> } from 'app/config/translation';
 <%_ } _%>
 import appConfig from 'app/config/constants';
 
@@ -76,10 +76,18 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
   state: IHeaderState = {
       menuOpen: false
   };
+  <%_ if (enableI18nRTL) { _%>
+  componentDidMount () {
+    document.querySelector('html').setAttribute('dir', isRTL(Storage.local.get('locale')) ? 'rtl' : 'ltr');
+  };
+  <%_ } _%>
 
   <%_ if (enableTranslation) { _%>
   handleLocaleChange = event => {
     this.props.onLocaleChange(event.target.value);
+    <%_ if (enableI18nRTL) { _%>
+    document.querySelector('html').setAttribute('dir', isRTL(event.target.value) ? 'rtl' : 'ltr');
+    <%_ } _%>
   }
 
   <%_ } _%>

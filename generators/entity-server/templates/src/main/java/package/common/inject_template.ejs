@@ -27,6 +27,10 @@
 
     private final <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;
     <%_ } _%>
+    <%_ if (reactiveRepositories) { _%>
+
+    private final <%= entityClass %>ReactiveRepository <%= entityInstance %>ReactiveRepository;
+    <%_ } _%>
 <%_  } else { _%>
 
     private final <%= entityClass %>Service <%= entityInstance %>Service;
@@ -35,8 +39,12 @@
     private final <%= entityClass %>QueryService <%= entityInstance %>QueryService;
     <%_ } _%>
 <%_ } _%>
+<%_ if (saveUserSnapshot) { _%>
 
-    public <%= constructorName %>(<% if (!viaService) { %><%= entityClass %>Repository <%= entityInstance %>Repository<% if (dto === 'mapstruct') { %>, <%= entityClass %>Mapper <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository<% } %><%  } else { %><%= entityClass %>Service <%= entityInstance %>Service<% } %><% if (queryService && viaService) { %>, <%= entityClass %>QueryService <%= entityInstance %>QueryService<% } %>) {
+    private final UserRepository userRepository;
+<%_ } _%>
+
+    public <%= constructorName %>(<% if (!viaService) { %><%= entityClass %>Repository <%= entityInstance %>Repository<% if (dto === 'mapstruct') { %>, <%= entityClass %>Mapper <%= entityInstance %>Mapper<% } %><% if (saveUserSnapshot) { %>, UserRepository userRepository<% } %><% if (searchEngine === 'elasticsearch') { %>, <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository<% } %><% if (reactiveRepositories) { %>, <%= entityClass %>ReactiveRepository <%= entityInstance %>ReactiveRepository<% } %><%  } else { %><%= entityClass %>Service <%= entityInstance %>Service<% } %><% if (queryService && viaService) { %>, <%= entityClass %>QueryService <%= entityInstance %>QueryService<% } %>) {
         <%_ if (!viaService) { _%>
         this.<%= entityInstance %>Repository = <%= entityInstance %>Repository;
             <%_ if (dto === 'mapstruct') { _%>
@@ -45,10 +53,16 @@
             <%_ if (searchEngine === 'elasticsearch') { _%>
         this.<%= entityInstance %>SearchRepository = <%= entityInstance %>SearchRepository;
             <%_ } _%>
+            <%_ if (reactiveRepositories) { _%>
+        this.<%= entityInstance %>ReactiveRepository = <%= entityInstance %>ReactiveRepository;
+            <%_ } _%>
         <%_  } else { _%>
         this.<%= entityInstance %>Service = <%= entityInstance %>Service;
             <%_ if (queryService) {  _%>
         this.<%= entityInstance %>QueryService = <%= entityInstance %>QueryService;
             <%_ } _%>
+        <%_ }
+        if (saveUserSnapshot) { _%>
+        this.userRepository = userRepository;
         <%_ } _%>
     }

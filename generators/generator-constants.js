@@ -24,7 +24,7 @@ const DOCKER_MYSQL = 'mysql:5.7.20';
 const DOCKER_MARIADB = 'mariadb:10.1.17';
 const DOCKER_POSTGRESQL = 'postgres:9.6.5';
 const DOCKER_MONGODB = 'mongo:3.6.3';
-const DOCKER_COUCHBASE = 'couchbase/server:4.6.2';
+const DOCKER_COUCHBASE = 'couchbase/server:5.0.1';
 const DOCKER_CASSANDRA = 'cassandra:3.9';
 const DOCKER_MSSQL = 'microsoft/mssql-server-linux:latest';
 const DOCKER_ORACLE = 'sath89/oracle-12c:latest';
@@ -57,9 +57,9 @@ const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the var
 const SCALA_VERSION = '2.12.1';
 
 // version of Node, Yarn, NPM
-const NODE_VERSION = '8.10.0';
+const NODE_VERSION = '8.11.1';
 const YARN_VERSION = '1.5.1';
-const NPM_VERSION = '5.7.1';
+const NPM_VERSION = '5.8.0';
 
 // all constants used throughout all generators
 
@@ -147,6 +147,9 @@ const LANGUAGES = [
     { name: 'Thai', dispName: 'ไทย', value: 'th' },
     {
         name: 'Ukrainian', dispName: 'Українська', value: 'ua', localeId: 'uk'
+    },
+    {
+        name: 'Uzbek (latin)', dispName: 'O`zbekcha', value: 'uz-lat', localeId: 'uz'
     },
     { name: 'Vietnamese', dispName: 'Tiếng Việt', value: 'vi' }
 ];

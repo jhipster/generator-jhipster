@@ -56,8 +56,8 @@ public class OAuth2Configuration {
     private final Logger log = LoggerFactory.getLogger(OAuth2Configuration.class);
 
     @Bean
-    public FilterRegistrationBean saveLoginOriginFilter() {
-        Filter filter = new OncePerRequestFilter() {
+    public FilterRegistrationBean<OncePerRequestFilter> saveLoginOriginFilter() {
+        OncePerRequestFilter filter = new OncePerRequestFilter() {
             @Override
             protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain filterChain)
@@ -73,7 +73,7 @@ public class OAuth2Configuration {
                 filterChain.doFilter(request, response);
             }
         };
-        FilterRegistrationBean bean = new FilterRegistrationBean(filter);
+        FilterRegistrationBean<OncePerRequestFilter> bean = new FilterRegistrationBean<>(filter);
         bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return bean;
     }

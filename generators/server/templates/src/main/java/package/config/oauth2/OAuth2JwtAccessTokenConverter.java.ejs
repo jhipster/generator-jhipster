@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.jwt.crypto.sign.SignatureVerifier;
 import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
 import java.util.Map;
 
@@ -84,7 +85,7 @@ public class OAuth2JwtAccessTokenConverter extends JwtAccessTokenConverter {
         }
         try {
             SignatureVerifier verifier = signatureVerifierClient.getSignatureVerifier();
-            if (verifier!=null) {
+            if (verifier != null) {
                 setVerifier(verifier);
                 lastKeyFetchTimestamp = t;
                 log.debug("Public key retrieved from OAuth2 server to create SignatureVerifier");
@@ -94,5 +95,33 @@ public class OAuth2JwtAccessTokenConverter extends JwtAccessTokenConverter {
             log.error("could not get public key from OAuth2 server to create SignatureVerifier", ex);
         }
         return false;
+    }
+    /**
+     * Extract JWT claims and set it to OAuth2Authentication decoded details.
+     * Here is how to get details:
+     *
+     * <pre>
+     * <code>
+     *  SecurityContext securityContext = SecurityContextHolder.getContext();
+     *  Authentication authentication = securityContext.getAuthentication();
+     *  if (authentication != null) {
+     *      Object details = authentication.getDetails();
+     *      if(details instanceof OAuth2AuthenticationDetails) {
+     *          Object decodedDetails = ((OAuth2AuthenticationDetails) details).getDecodedDetails();
+     *          if(decodedDetails != null &amp;&amp; decodedDetails instanceof Map) {
+     *             String detailFoo = ((Map) decodedDetails).get("foo");
+     *          }
+     *      }
+     *  }
+     * </code>
+     *  </pre>
+     * @param claims OAuth2JWTToken claims
+     * @return OAuth2Authentication
+     */
+    @Override
+    public OAuth2Authentication extractAuthentication(Map<String, ?> claims) {
+        OAuth2Authentication authentication = super.extractAuthentication(claims);
+        authentication.setDetails(claims);
+        return authentication;
     }
 }

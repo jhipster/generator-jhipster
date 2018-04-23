@@ -34,7 +34,7 @@
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 eureka:
     client:
-        enabled: true
+        enabled: false
     instance:
         appname: <%= baseName %>
         instanceId: <%= baseName %>:${spring.application.instance-id:${random.value}}
@@ -103,6 +103,7 @@ spring:
     couchbase:
         bucket:
             name: jhipster
+            password: password
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     liquibase:
