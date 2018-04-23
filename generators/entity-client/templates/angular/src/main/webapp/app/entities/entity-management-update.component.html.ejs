@@ -78,7 +78,7 @@
                             <button type="button" (click)="<%= entityInstance %>.<%= fieldName %>=null;<%= entityInstance %>.<%= fieldName %>ContentType=null;"
                                     class="btn btn-secondary btn-xs pull-right">
                             <%_ } _%>
-                                <span class="fa fa-times"></span>
+                                <span class="fas fa-times"></span>
                             </button>
                         </div>
                         <input type="file" id="file_<%= fieldName %>" (change)="setFileData($event, <%= entityInstance %>, '<%= fieldName %>', <% if (fieldTypeBlobContent === 'image') { %>true)" accept="image/*" jhiTranslate="entity.action.addimage"<% } else { %>false)" jhiTranslate="entity.action.addblob"<% } %>/>
@@ -89,7 +89,7 @@
                         <input id="field_<%= fieldName %>" type="text" class="form-control" name="<%= fieldName %>" ngbDatepicker  #<%= fieldName %>Dp="ngbDatepicker" [(ngModel)]="<%= entityInstance %>.<%= fieldName %>"
                         <%- include ng_validators %>/>
                         <span class="input-group-append">
-                            <button type="button" class="btn btn-secondary" (click)="<%= fieldName %>Dp.toggle()"><i class="fa fa-calendar"></i></button>
+                            <button type="button" class="btn btn-secondary" (click)="<%= fieldName %>Dp.toggle()"><i class="fas fa-calendar-alt"></i></button>
                         </span>
                     </div>
                     <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
@@ -258,10 +258,10 @@
             </div>
             <div>
                 <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
-                    <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                    <span class="fas fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
                 </button>
                 <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
-                    <span class="fa fa-save"></span>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                    <span class="fas fa-save"></span>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
                 </button>
             </div>
         </form>
