@@ -293,8 +293,6 @@ function confirmationUser() {
 function usage() {
     local me='$(basename "$0")'
     local list_of_samples=`cut -d ' ' -f 1 <<< "$TRAVIS_DOT_YAML_PARSED"`
-    # TODO add info about `yarn link'
-    # TODO add info about "*-sample" folders
     echo -e "\n\nScript than emulate well remote Travis CI build " \
         " https://travis-ci.org/jhipster/generator-jhipster.\n"
     # TODO test if it works on MAC
@@ -311,7 +309,15 @@ function usage() {
 
     echo -e "\nUsage: '$me' generate [sample_name] " \
         "| buildandtest [sample_name]|clean | help\n\n" \
-    " \`./build-samples.sh generate/buildandtest'" \
+    " \`./build-samples.sh generate/buildandtest'\n" \
+        "* They will create the travis sample project under the './samples'" \
+        "folder with folder name \`[sample_name]-sample'." \
+        "* 'generate' generate only a JHipster project with entities. " \
+            "It will ask you if you want execute \`yarn test' in" \
+            "the folder generate-project before launch generation.\n" \
+            "You will can open this application in your " \
+            "editor or IDE to check it further." \
+        "* 'buildandtest' generate then test project(s), as Travis CI.\n" \
     "  * Without optional parameter, 'generate', and 'buildandtest' " \
             "operate for all samples listed below.\n" \
     "  * Arguments 'generate', 'buildandtest' could be apply for " \
@@ -322,10 +328,13 @@ function usage() {
             "will contain 'errored'. If it finishes with success, its name" \
             "will contain 'passed'\n" \
     "   * When all samples are launched, there are launched in parralel." \
-            "The program will ask you how much you want launch in same time" \
+            "The program will ask you how much you want launch in same time\n " \
+        "* Before launch this commands, type \`yarn link' in the folder" \
+            "./genertor-jhipster. Now you will test this generator, and not" \
+            "the npm genertor-jhipster." \
     "\n\n'[sample_name]' could be:\n" \
     "${list_of_samples}\n" \
-    "\nThis samples could be skip. In section 'matrix'" \
+    "\nThis samples could be skipped. In section 'matrix'" \
     " generator-jhipster/.travis.yml simply comment it" \
     " Do not hesitate to comment some samples in ../.travis.yml to improve" \
     "speed!" \
@@ -334,7 +343,12 @@ function usage() {
             "Useful for test Server side and Angular client.\n" \
     "  * If you work on the React client try the previous and also " \
             "\`./build-samples.sh buildandtest react-default\n" \
-    "  * If you work on an other functionality, chose the corresponding one\n"
+    "  * If you work on an other functionality, chose the corresponding one\n" \
+    "Name of samples indicate their test goal. They have different " \
+    "application configurations (defined in '.yo-rc.json') and different entity" \
+    "configurations (defined in the folder .jhipster of a " \
+    "'./scripts/sample-name-sample' folder)."
+
 
     usageClean
 
@@ -370,7 +384,7 @@ function usage() {
 
 function usageClean() {
     local NODE_MODULE_SHORT_NAME='./samples/node_modules_cache-sample'
-    echo -e "\n\n\`./build-samples.sh clean'" \
+    echo -e "\n\n\`./build-samples.sh clean'\n" \
         "1) Before each new build, ./sample/[sample-name]-sample " \
         "is systematically erased, contrary to " \
         "'${NODE_MODULE_SHORT_NAME}'.\n" \
@@ -379,8 +393,7 @@ function usageClean() {
         "3) After a build, [sample-name]-sample/node_modules is a" \
         "symbolic link. " \
         "Therefore, a folder [sample-name]-sample doesn't take" \
-        "lot of size (just some megabytes)\n" \
-        "4) Do not forget to read \`./build-samples.sh help'\n"
+        "lot of size (just some megabytes)\n"
 }
 
 # CLEAN SAMPLES `./build-samples.sh/ clean' {{{1
@@ -398,6 +411,7 @@ function usageClean() {
 function cleanAllProjects() {
 
     usageClean
+    echo -e "4) Do not forget to read \`./build-samples.sh help'\n"
 
     local confirmationFirstParameter=`echo -e "Warning: " \
         "are you sure to delete " \
@@ -690,22 +704,17 @@ function treatEndOfBuild() {
 
 # function doestItTestGeneratorJHipster() {{{3
 function doestItTestGeneratorJHipster() {
+    local confirmationFirstParameter=`echo -e "Do you want execute " \
+        "\\\`yarn test' in " \
+        "generator-jhipster $1 " \
+        "(skip 1° if you havn't \\\`docker-compose' installed" \
+        "2° if you want only generate a new project)? [y/n] "`
+    confirmationUser "$confirmationFirstParameter" \
+        "TESTGENERATOR=1 ; \
+        echo Generator test will be test later." \
+        "TESTGENERATOR=0 ; echo -e '\n\nSKIP test generator.\n'"
+    unset confirmationFirstParameter
 
-    if [ "$workOnAllProjects" -eq 0 ] ; then
-        echoTitleBuildStep "\\\`yarn test' in generator-jhipster"
-        cd "../"
-        local confirmationFirstParameter=`echo -e "Do you want execute " \
-            "\\\`yarn test' in " \
-            "generator-jhipster before generate the project " \
-            "(skip 1° if you havn't \\\`docker-compose' installed" \
-            "2° if you want only generate a new project)? [y/n] "`
-        confirmationUser "$confirmationFirstParameter" \
-            "TESTGENERATOR=1 ; \
-        echo Generator test will be test after generation or link of \
-            generator-jhipster/scripts/node_modules_cache-sample." \
-            "echo -e '\n\nSKIP test generator.\n'"
-        unset confirmationFirstParameter
-    fi
 }
 
 # function generateProject() {{{3
@@ -715,10 +724,14 @@ function doestItTestGeneratorJHipster() {
 # Corresponding of the entry "install" in ../.travis.yml
 function generateProject() {
 
-    # TODO: when `./build-samples.sh generate', confirmationUser
+    # `./build-samples.sh generate', confirmationUser
     # if he wants test it.
-    if [[ "${TESTGENERATOR}" -eq 1 ]] \
-        || ( [[ "$workOnAllProjects" -eq 1 ]] && \
+    # `./build-samples.sh generate/buildandtest sample-name', confirmationUser
+    # if he wants test it.
+    if ([[ "${TESTGENERATOR}" -eq 1 ]] && \
+        [[ "${workOnAllProjects}" -eq 0 ]] ) || \
+        ( [[ "${TESTGENERATOR}" -eq 1 ]] && \
+        [[ "$workOnAllProjects" -eq 1 ]] && \
         [[ "${JHIPSTER}" == "ngx-default"  ]] )
     then
         # Corresponding to "Install and test JHipster Generator" in
@@ -912,7 +925,7 @@ function retrieveVariablesInFileDotTravisSectionMatrix() {
     # For variable "$JHIPSTER_MATRIX", see section "matrix" of ../.travis.yml
     if [[ "$workOnAllProjects" -eq 0 ]] ; then
         export JHIPSTER="$1"
-        JHIPSTER_MATRIX=`grep --color=never "$JHIPSTER\s" \
+        JHIPSTER_MATRIX=`grep --color=never "$JHIPSTER" \
             <<< "$TRAVIS_DOT_YAML_PARSED"` \
             || exitScriptWithError \
             "\n\nFATAL ERROR: " \
@@ -974,8 +987,12 @@ function launchScriptForOnlyOneSample() {
     export APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
     testIfLocalSampleIsReady
 
-    local -i TESTGENERATOR=0
-    doestItTestGeneratorJHipster
+    # if "$workOnAllProjects" -eq 1, done in function
+    # launchScriptForAllSamples()
+    if [[ "$workOnAllProjects" -eq 0 ]] ; then
+        local -i TESTGENERATOR=1
+        doestItTestGeneratorJHipster "before generate the project".
+    fi
 
     if [[ "$workOnAllProjects" -eq 0 ]] ; then
         generateNode_Modules_Cache
@@ -1066,6 +1083,11 @@ function launchScriptForAllSamples() {
         'echo ""' \
         'exitScriptWithError "ABORTED."'
     unset confirmationFirstParameter
+
+    local -i TESTGENERATOR=1
+    if [[ "$methodToExecute" == "generateProject" ]] ; then
+        doestItTestGeneratorJHipster "during generation of 'ngx-default'"
+    fi
 
     read -t 1 -n 10000 discard || echo ""
     echo

@@ -1,6 +1,6 @@
 # Sample application generation
 
-To generate test applications, either automatically by Travis or locally on the developper machine, a number of pre-defined configuratiosn have been prepared.
+To generate test applications, either automatically by Travis or locally on the developer machine, a number of pre-defined configurations have been prepared.
 
 ## Local Travis Build
 
@@ -17,4 +17,4 @@ Those are described in `.yo-rc.json` files which is the descriptor file created 
 
 ## Entity configurations
 
-We also have a number of `Entity.json` files for testing different entity configurations.
+We also have a number of `Entity.json` files for testing different entity configurations. They are in folder .jhipster of a generated sample.
