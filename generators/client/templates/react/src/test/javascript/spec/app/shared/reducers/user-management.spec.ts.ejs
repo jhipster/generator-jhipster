@@ -41,9 +41,6 @@ describe('User management reducer tests', () => {
     });
   });
 
-  describe('Requests', () => {
-  });
-
   describe('Failures', () => {
     it('should set state to failed and put an error message in errorMessage', () => {
       expect(userManagement(undefined, { type: FAILURE(ACTION_TYPES.FETCH_USERS), payload: 'something happened' })).to.eql
