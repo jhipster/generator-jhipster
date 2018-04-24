@@ -39,6 +39,10 @@
         <queueSize>512</queueSize>
         <appender-ref ref="FILE"/>
     </appender>
+
+    <root level="${logging.level.root}">
+        <appender-ref ref="ASYNC"/>
+    </root>
 -->
 
     <%_ if (databaseType === 'cassandra') { _%>
