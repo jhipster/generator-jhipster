@@ -54,6 +54,9 @@ import appConfig from 'app/config/constants';
 export interface IHeaderProps {
   isAuthenticated: boolean;
   isAdmin: boolean;
+  ribbonEnv: string;
+  isInProduction: boolean;
+  isSwaggerEnabled: boolean;
 <%_ if (enableTranslation) { _%>
   currentLocale: string;
   onLocaleChange: Function;
@@ -72,7 +75,8 @@ const BrandIcon = props => (
     />
   </div>
 );
-export class Header extends React.Component<IHeaderProps, IHeaderState> {
+
+export default class Header extends React.Component<IHeaderProps, IHeaderState> {
   state: IHeaderState = {
       menuOpen: false
   };
@@ -89,13 +93,19 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
     document.querySelector('html').setAttribute('dir', isRTL(event.target.value) ? 'rtl' : 'ltr');
     <%_ } _%>
   }
-
   <%_ } _%>
-  renderDevRibbon = () => (
-    process.env.NODE_ENV === 'development' ?
-      <div className="ribbon dev"><a href=""><Translate contentKey="global.ribbon.dev">Development</Translate></a></div> :
-      null
-  )
+
+  renderDevRibbon = () => this.props.isInProduction === false ? (
+    <div className="ribbon dev">
+      <a href="">
+        <%_ if (enableTranslation) { _%>
+        <Translate contentKey={`global.ribbon.${this.props.ribbonEnv}`} />
+        <%_ } else { _%>
+        Development
+        <%_ } _%>
+      </a>
+    </div>
+  ) : null;
 
   toggleMenu = () => {
     this.setState({ menuOpen: !this.state.menuOpen });
@@ -121,15 +131,27 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
       <DropdownItem tag={Link} key="metrics" to="/admin/metrics"><FaDashboard /> Metrics</DropdownItem>,
       <DropdownItem tag={Link} key="health" to="/admin/health"><FaHeart /> Health</DropdownItem>,
       <DropdownItem tag={Link} key="configuration" to="/admin/configuration"><FaList /> Configuration</DropdownItem>,
-    <%_ if (databaseType !== 'cassandra') { _%>
+      <%_ if (databaseType !== 'cassandra') { _%>
       <DropdownItem tag={Link} key="audits" to="/admin/audits"><FaBell /> Audits</DropdownItem>,
-    <%_ } _%>
-      <DropdownItem tag={Link} key="logs" to="/admin/logs"><FaTasks /> Logs</DropdownItem>,
+      <%_ } _%>
       /* jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here */
-      <DropdownItem tag={Link} key="docs" to="/admin/docs"><FaBook /> API Docs</DropdownItem><% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>,
-      <DropdownItem tag="a" key="h2-console" href="./h2-console" target="_tab"><FaHddO /> Database</DropdownItem>
-    <%_ } _%>
+      <DropdownItem tag={Link} key="logs" to="/admin/logs"><FaTasks /> Logs</DropdownItem>
     ];
+
+    const swaggerItem = (
+      <DropdownItem tag={Link} key="docs" to="/admin/docs">
+        <FaBook /> API Docs
+      </DropdownItem>
+    );
+
+    <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>
+    const databaseItem = [
+      <DropdownItem tag="a" key="h2-console" href="./h2-console" target="_tab">
+        <FaHddO /> Database
+      </DropdownItem>
+    ];
+    <%_ } _%>
+
     const accountMenuItems = [];
     if (isAuthenticated) {
       accountMenuItems.push(
@@ -172,6 +194,10 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
         </DropdownToggle>
         <DropdownMenu right style={{ width: '130%' }}>
           {adminMenuItems}
+          {this.props.isSwaggerEnabled ? swaggerItem : null}
+          <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>
+          {!this.props.isInProduction ? databaseItem : null}
+          <%_ } _%>
         </DropdownMenu>
       </UncontrolledDropdown>
     );
@@ -225,5 +251,3 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
     );
   }
 }
-
-export default Header;

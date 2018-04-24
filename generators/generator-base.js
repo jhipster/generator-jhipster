@@ -1478,7 +1478,7 @@ module.exports = class extends PrivateBase {
                 /(import { ?translate, ?Translate ?} from 'react-jhipster';?)/, // translate imports
                 /( Translate,|, ?Translate|import { ?Translate ?} from 'react-jhipster';?)/, // Translate import
                 /( translate,|, ?translate|import { ?translate ?} from 'react-jhipster';?)/, // translate import
-                /<Translate (component="[a-z]+" )?contentKey="([a-zA-Z0-9.\-_]+)" ?(component="[a-z]+")? ?(interpolate=\{\{[a-zA-Z0-9.: ]+\}\})? ?>|<\/Translate>/, // Translate component tag
+                /<Translate(\s*)?((component="[a-z]+")(\s*)|(contentKey=("[a-zA-Z0-9.\-_]+"|\{.*\}))(\s*)|(interpolate=\{.*\})(\s*))*(\s*)\/?>|<\/Translate>/, // Translate component tag
             ].map(r => r.source).join('|'), 'g');
 
             jhipsterUtils.copyWebResource(source, dest, regex, 'jsx', _this, opt, template);

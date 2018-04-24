@@ -23,6 +23,7 @@ import { loadingBarReducer as loadingBar } from 'react-redux-loading-bar';
 import locale from './locale';
 <%_ } _%>
 import authentication from './authentication';
+import applicationProfile from './application-profile';
 
 import administration from 'app/modules/administration/administration.reducer';
 <%_ if (!skipUserManagement) { _%>
@@ -45,6 +46,7 @@ export default combineReducers({
   <%_ if (enableTranslation) { _%>
   locale,
   <%_ } _%>
+  applicationProfile,
   administration,
   <%_ if (!skipUserManagement) { _%>
   userManagement,
