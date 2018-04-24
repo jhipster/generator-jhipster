@@ -17,7 +17,9 @@
  limitations under the License.
 -%>
 /* tslint:disable no-unused-expression */
-import { browser, <% if ( fieldsContainInstant || fieldsContainZonedDateTime ) { %>protractor<% } %> } from 'protractor';
+<%_ if ( fieldsContainInstant || fieldsContainZonedDateTime ) { _%>
+import { protractor } from 'protractor';
+<%_ } _%>
 
 import NavBarPage from './../../<%= entityParentPathAddition %>page-objects/navbar-page';
 import <%= entityClass %>ComponentsPage from './<%= entityFileName %>.page-object';

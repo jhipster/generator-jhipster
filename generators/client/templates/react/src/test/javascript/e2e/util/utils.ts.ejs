@@ -40,5 +40,11 @@ export const waitUntilHidden = (selector: ElementFinder, classname = '', timeout
   );
 };
 
-export const getDeactivatedButtonbyLogin = (login: string) =>
+export const getDeactivatedButtonByLogin = (login: string): ElementFinder =>
   element(by.css('table > tbody')).element(by.id(login)).element(by.buttonText('Deactivated'));
+
+<%_ if (enableTranslation) { _%>
+export const getToastByClassName = (className: string): ElementFinder => element(by.className(className));
+<%_ } else { _%>
+export const getToastByInnerText = (text: string): ElementFinder => element(by.cssContainingText('div[role=alert]', text));
+<%_ } _%>

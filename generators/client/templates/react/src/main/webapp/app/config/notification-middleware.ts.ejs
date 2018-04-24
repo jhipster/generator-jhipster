@@ -74,9 +74,9 @@ export default () => next => action => {
     .catch(error => {
       if (action.meta && action.meta.errorMessage) {
         <%_ if (enableTranslation) { _%>
-        toast.success(translate(action.meta.errorMessage), { className: action.meta.errorMessage });
+        toast.error(translate(action.meta.errorMessage), { className: action.meta.errorMessage });
         <%_ } else { _%>
-        toast.success(action.meta.errorMessage);
+        toast.error(action.meta.errorMessage);
         <%_ } _%>
       } else if (error && error.response) {
         const response = error.response;

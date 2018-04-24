@@ -48,7 +48,6 @@ export default class RegisterPage extends BasePage {
   }
 
   autoSignUpUsing(username: string, email: string, password: string) {
-    this.clearForm();
     this.setUserName(username);
     this.setEmail(email);
     this.setFirstPassword(password);

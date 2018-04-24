@@ -49,7 +49,6 @@ export default class SignInPage extends BasePage {
   }
 
   autoSignInUsing(username: string, password: string) {
-    this.clearForm();
     this.setUserName(username);
     this.setPassword(password);
     return this.login();
