@@ -161,28 +161,28 @@ applicationConfigDecl
   = APPLICATION_TYPE SPACE* applicationType:[a-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'applicationType', applicationType.join(''));
   }
-  / AUTHENTICATION_TYPE SPACE* authenticationType:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+  / AUTHENTICATION_TYPE SPACE* authenticationType:[A-Za-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'authenticationType', authenticationType.join(''));
   }
-  / BASE_NAME SPACE* baseName:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+  / BASE_NAME SPACE* baseName:[A-Za-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'baseName', baseName.join(''));
   }
-  / BUILD_TOOL SPACE* buildTool:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+  / BUILD_TOOL SPACE* buildTool:[A-Za-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'buildTool', buildTool.join(''));
   }
   / CACHE_PROVIDER SPACE* cacheProvider:[a-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'cacheProvider', cacheProvider.join(''));
   }
-  / CLIENT_FRAMEWORK SPACE* clientFramework:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+  / CLIENT_FRAMEWORK SPACE* clientFramework:[A-Za-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'clientFramework', clientFramework.join(''));
   }
-  / CLIENT_PACKAGE_MANAGER SPACE* clientPackageManager:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+  / CLIENT_PACKAGE_MANAGER SPACE* clientPackageManager:[A-Za-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'clientPackageManager', clientPackageManager.join(''));
   }
-  / DATABASE_TYPE SPACE* databaseType:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+  / DATABASE_TYPE SPACE* databaseType:[A-Za-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'databaseType', databaseType.join(''));
   }
-  / DEV_DATABASE_TYPE SPACE* devDatabaseType:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+  / DEV_DATABASE_TYPE SPACE* devDatabaseType:[A-Za-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'devDatabaseType', devDatabaseType.join(''));
   }
   / ENABLE_HIBERNATE_CACHE SPACE* enableHibernateCache:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
@@ -194,7 +194,7 @@ applicationConfigDecl
   / ENABLE_TRANSLATION SPACE* enableTranslation:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'enableTranslation', enableTranslation);
   }
-  / JHI_PREFIX SPACE* jhiPrefixStart:[A-z] jhiPrefixEnd:[A-z0-9_-]* SPACE* applicationConfigDecl:applicationConfigDecl {
+  / JHI_PREFIX SPACE* jhiPrefixStart:[A-Za-z] jhiPrefixEnd:[A-Za-z0-9_-]* SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'jhiPrefix', `${jhiPrefixStart}${jhiPrefixEnd.join('')}`);
   }
   / JHIPSTER_VERSION SPACE* jhipsterVersionMajor:[0-9]+ '.' jhipsterVersionMinor:[0-9]+ '.' jhipsterVersionPatch:[0-9]+ SPACE* applicationConfigDecl:applicationConfigDecl {
@@ -235,7 +235,7 @@ applicationConfigDecl
   / PATH SPACE* '"' path:([^\n,"]+) '"' SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'path', path.join(''));
   }
-  / PROD_DATABASE_TYPE SPACE* prodDatabaseType:[A-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+  / PROD_DATABASE_TYPE SPACE* prodDatabaseType:[A-Za-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'prodDatabaseType', prodDatabaseType.join(''));
   }
   / SEARCH_ENGINE SPACE* searchEngine:[a-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
@@ -306,7 +306,7 @@ entityDecl
   / ENTITY SPACE* e:ENTITY_NAME SPACE* eb:entityBody? { return { name: e, body: eb, javadoc: '' }; }
 
 entityTableNameDecl
-  = '(' SPACE* start:[A-z] end:[A-z0-9_-]* SPACE* ')' { return `${start}${end.join('')}`; }
+  = '(' SPACE* start:[A-Za-z] end:[A-Za-z0-9_-]* SPACE* ')' { return `${start}${end.join('')}`; }
 
 entityBody
   = '{' SPACE* fdl:fieldDeclList SPACE* '}' { return fdl; }
@@ -520,10 +520,10 @@ entityList
   = e:ENTITY_NAME SPACE* ',' SPACE* sub:entityList { return addUniqueElements([e], sub); }
   / STAR SPACE* WITH SPACE* method:methodDecl { return ['*', method.toString().replace(/,/g,'')]; }
   / ALL SPACE* WITH SPACE* method:methodDecl { return ['*', method.toString().replace(/,/g,'')]; }
-  / e:ENTITY_NAME SPACE* WITH SPACE* method:([A-z][A-z0-9-]*) { return [e, method.toString().replace(/,/g,'')]; }
+  / e:ENTITY_NAME SPACE* WITH SPACE* method:([A-Za-z][A-Za-z0-9-]*) { return [e, method.toString().replace(/,/g,'')]; }
 
 methodDecl
-  = methodStart:[A-z] methodEnd:[A-z0-9-]* { return `${methodStart}${methodEnd.join('')}`; }
+  = methodStart:[A-Za-z] methodEnd:[A-Za-z0-9-]* { return `${methodStart}${methodEnd.join('')}`; }
 
 simpleEntityList
   = e:ENTITY_NAME SPACE* ',' SPACE* sub:simpleEntityList { return addUniqueElements([e], sub); }
@@ -537,7 +537,7 @@ relationshipType
 / MANY_TO_ONE { return 'many-to-one'; }
 / MANY_TO_MANY { return 'many-to-many'; }
 
-type = head:[A-Z]tail:[A-z0-9]* { return `${head}${tail.join('')}`; }
+type = head:[A-Z]tail:[A-Za-z0-9]* { return `${head}${tail.join('')}`; }
 
 validation
   = REQUIRED { return { key: 'required', value: '' }; }
@@ -636,15 +636,15 @@ PATTERN = 'pattern'
 
 REGEX = pattern:[^\n\r/]* { return pattern.join(''); }
 
-ENUMNAME = head:[A-Z]tail:[A-z0-9]* { return `${head}${tail.join('')}`; }
-ENUMPROP = head:[A-z_]tail:[A-z0-9_]* {
+ENUMNAME = head:[A-Z]tail:[A-Za-z0-9]* { return `${head}${tail.join('')}`; }
+ENUMPROP = head:[A-Za-z_]tail:[A-Za-z0-9_]* {
     return `${head}${tail.join('')}`;
   }
 CONSTANT_NAME = name:[A-Z_]+ { return name.join(''); }
 INTEGER = negative:'-'?int:[0-9]+ { return parseInt(`${(negative ? negative : '') + int.join('')}`, 10); }
-INJECTED_FIELD_NAME = head:[a-zA-Z]tail:[A-z0-9()]* { return `${head}${tail.join('')}`; }
-ENTITY_NAME = head:[A-Z]tail:[A-z0-9]* { return `${head}${tail.join('')}`; }
-FIELD_NAME = head:[a-zA-Z]tail:[A-z0-9]* { return `${head}${tail.join('')}`; }
+INJECTED_FIELD_NAME = head:[a-zA-Z]tail:[A-Za-z0-9()]* { return `${head}${tail.join('')}`; }
+ENTITY_NAME = head:[A-Z]tail:[A-Za-z0-9]* { return `${head}${tail.join('')}`; }
+FIELD_NAME = head:[a-zA-Z]tail:[A-Za-z0-9]* { return `${head}${tail.join('')}`; }
 SPACE = ['\n'|'\t'|'\r'|' '|\u2028|\u2029]
 SPACE_WITHOUT_NEWLINE = ['\t'|' '|\u2028|\u2029]
 FORWARD_SLASH = [/]
