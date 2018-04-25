@@ -310,7 +310,7 @@ _%>
       <div>
       <Row className="justify-content-center">
         <Col md="8">
-          <h2 id="<%= entityFileName %>-heading">
+          <h2 id="<%= i18nKeyPrefix %>.home.createOrEditLabel">
             <Translate contentKey="<%= i18nKeyPrefix %>.home.createOrEditLabel">Create or edit a <%= entityClass %></Translate>
           </h2>
         </Col>
@@ -375,7 +375,7 @@ _%>
                   <%= fieldNameHumanized %>
                 </Translate>
               </Label>
-              <AvInput 
+              <AvInput
                 id="<%= entityFileName %>-<%= fieldName %>"
                 type="select"
                 className="form-control"
@@ -503,13 +503,13 @@ _%>
                   ) : null
                 }
               </AvInput>
-              <AvInput 
+              <AvInput
                 id="<%= entityFileName %>-<%= relationshipName %>"
                 type="hidden"
                 name="<%= relationshipFieldName %>.id"
                 value={this.state.<%= relationshipFieldName %>Id} />
                 <%_ } else { _%>
-              <AvInput 
+              <AvInput
                 id="<%= entityFileName %>-<%= relationshipName %>"
                 type="select"
                 className="form-control"
@@ -525,7 +525,7 @@ _%>
                   ) : null
                 }
               </AvInput>
-              <AvInput 
+              <AvInput
                 id="<%= entityFileName %>-<%= relationshipName %>"
                 type="hidden"
                 name="<%= relationshipFieldName %>.id"
@@ -533,7 +533,7 @@ _%>
                 <%_ } _%>
               <%_ } else { _%>
                 <%_ if (!relationshipRequired) { _%>
-                  <AvInput 
+                  <AvInput
                     id="<%= entityFileName %>-<%= relationshipName %>"
                     type="select"
                     className="form-control"
@@ -551,7 +551,7 @@ _%>
                     }
                   </AvInput>
                 <%_ } else { _%>
-                  <AvInput 
+                  <AvInput
                     id="<%= entityFileName %>-<%= relationshipName %>"
                     type="select"
                     className="form-control"
@@ -576,7 +576,7 @@ _%>
                 <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
               </Label>
                 <%_ if (dto === 'no') { _%>
-                  <AvInput 
+                  <AvInput
                     id="<%= entityFileName %>-<%= relationshipName %>"
                     type="select"
                     className="form-control"
@@ -593,13 +593,13 @@ _%>
                       ) : null
                     }
                   </AvInput>
-                  <AvInput 
+                  <AvInput
                     id="<%= entityFileName %>-<%= relationshipName %>"
                     type="hidden"
                     name="<%= relationshipFieldName %>.id"
                     value={this.state.<%= relationshipFieldName %>Id} />
                 <%_ } else { _%>
-                  <AvInput 
+                  <AvInput
                     id="<%= entityFileName %>-<%= relationshipName %>"
                     type="select"
                     className="form-control"
@@ -621,7 +621,7 @@ _%>
                 <%_ } else if (relationshipType === 'many-to-many' && rel.ownerSide === true) { _%>
             <AvGroup>
               <Label for="<%= otherEntityNamePlural %>"><Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate></Label>
-              <AvInput 
+              <AvInput
                 id="<%= entityFileName %>-<%= relationshipName %>"
                 type="select"
                 multiple
@@ -640,7 +640,7 @@ _%>
                   ) : null
                 }
               </AvInput>
-              <AvInput 
+              <AvInput
                 id="<%= entityFileName %>-<%= relationshipName %>"
                 type="hidden"
                 name="<%= relationshipFieldNamePlural %>"

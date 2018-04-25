@@ -42,7 +42,6 @@ describe('Account', () => {
     signInPage.waitUntilHidden();
     // Login page should close when login success
     expect(await signInPage.isHidden()()).to.be.true;
-
     navBarPage.autoSignOut();
   });
 
@@ -55,7 +54,6 @@ describe('Account', () => {
     const toast = getToastByInnerText('<strong>Registration saved!</strong> Please check your email for confirmation.');
     <%_ } _%>
     waitUntilDisplayed(toast);
-
     expect(await toast.isPresent()).to.be.true;
   });
 
@@ -67,13 +65,11 @@ describe('Account', () => {
     const toast = getToastByInnerText('Login already in use');
     <%_ } _%>
     waitUntilDisplayed(toast);
-
     expect(await toast.isPresent()).to.be.true;
   });
 
   it('should not be able to sign up if email already taken', async () => {
     await registerPage.username.clear();
-
     registerPage.setUserName('user_test2');
     await registerPage.save();
     <%_ if (enableTranslation) { _%>
@@ -82,49 +78,39 @@ describe('Account', () => {
     const toast = getToastByInnerText('Email address already in use');
     <%_ } _%>
     waitUntilDisplayed(toast);
-
     expect(await toast.isPresent()).to.be.true;
   });
 
   it('should activate the new registered user', async () => {
     navBarPage.autoSignIn();
-
     browser.get('#/admin/user-management');
     const deactivatedButton = getDeactivatedButtonByLogin('user_test');
     await deactivatedButton.click();
-
     expect(await deactivatedButton.isPresent()).to.be.false;
-
     navBarPage.autoSignOut();
   });
 
   it('should be able to log in with new registered account', async () => {
     signInPage.get();
-
     signInPage.autoSignInUsing('user_test', 'user_test');
     signInPage.waitUntilHidden();
-
     expect(await signInPage.isHidden()()).to.be.true;
-
     navBarPage.autoSignOut();
   });
 
   it('should fail to update password when using incorrect current password', async () => {
     navBarPage.autoSignIn();
     passwordPage = navBarPage.getPasswordPage();
-
-    passwordPage.autoChangePassword('wront_current_password', 'new_password', 'new_password');
+    passwordPage.autoChangePassword('wrong_current_password', 'new_password', 'new_password');
     <%_ if (enableTranslation) { _%>
     const toast = getToastByClassName('password.messages.error');
     <%_ } else { _%>
     const toast = getToastByInnerText('<strong>An error has occurred!</strong> The password could not be changed.');
     <%_ } _%>
     waitUntilDisplayed(toast);
-
     await passwordPage.currentPassword.clear();
     await passwordPage.password.clear();
     await passwordPage.confirmPassword.clear();
-
     expect(await toast.isPresent()).to.be.true;
   });
 
@@ -136,9 +122,7 @@ describe('Account', () => {
     const toast = getToastByInnerText('<strong>Password changed!</strong>');
     <%_ } _%>
     waitUntilDisplayed(toast);
-
     expect(await toast.isPresent()).to.be.true;
-
     navBarPage.autoSignOut();
   });
 
@@ -149,9 +133,8 @@ describe('Account', () => {
     // expect(await signInPage.isHidden()()).to.be.true;
 
     // change back to default
-    passwordPage = navBarPage.getPasswordPage();
+    passwordPage.get();
     passwordPage.autoChangePassword('newpassword', 'admin', 'admin');
-
     navBarPage.autoSignOut();
   });
 
@@ -159,11 +142,9 @@ describe('Account', () => {
   signInPage.get();
   signInPage.autoSignInUsing('user_test', 'user_test');
   settingsPage = navBarPage.getSettingsPage();
-
   settingsPage.setFirstName('jhipster');
   settingsPage.setLastName('retspihj');
   settingsPage.save();
-
   <%_ if (enableTranslation) { _%>
   const toast = getToastByClassName('settings.messages.success');
   <%_ } else { _%>
@@ -171,18 +152,15 @@ describe('Account', () => {
   <%_ } _%>
   waitUntilDisplayed(toast);
   expect(await toast.isPresent()).to.be.true;
-
   navBarPage.autoSignOut();
 });
 
 it('should not be able to change settings if email already exists', async () => {
   navBarPage.autoSignIn();
   settingsPage = navBarPage.getSettingsPage();
-
   await settingsPage.email.clear();
   settingsPage.setEmail('usertest@jhipster.com');
   settingsPage.save();
-
   <%_ if (enableTranslation) { _%>
   const toast = getToastByClassName('error.emailexists');
   <%_ } else { _%>

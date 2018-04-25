@@ -74,8 +74,13 @@ describe('<%= entityClass %> e2e test', () => {
     it('should load create <%= entityClass %> page', async () => {
         <%= entityInstance %>ComponentsPage.clickOnCreateButton();
         <%= entityInstance %>UpdatePage = new <%= entityClass %>UpdatePage();
+        <%_ if (enableTranslation) { _%>
+        expect(await <%= entityInstance %>UpdatePage.getPageTitle().getAttribute('id'))
+            .to.match(/<%= i18nKeyPrefix %>.home.createOrEditLabel/);
+        <%_ } else { _%>
         expect(await <%= entityInstance %>UpdatePage.getPageTitle().getText())
             .to.match(/Create or edit a <%= entityClassHumanized %>/);
+        <%_ } _%>
     });
 
    <%= openBlockComment %> it('should create and save <%= entityClassPlural %>', async () => {

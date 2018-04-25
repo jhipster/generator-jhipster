@@ -63,7 +63,7 @@ export default () => next => action => {
         if (alert) {
           <%_ if (enableTranslation) { _%>
           const alertParam = alertParams;
-          toast.success(translate(alert, { param: alertParam }));
+          toast.success(translate(alert, { param: alertParam }), { className: alert });
           <%_ } else { _%>
           toast.success(alert);
           <%_ } _%>

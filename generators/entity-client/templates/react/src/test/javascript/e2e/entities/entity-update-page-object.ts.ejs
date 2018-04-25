@@ -33,7 +33,7 @@ for (let relationship of relationships) {
     }
 } _%>
 export default class <%= entityClass %>UpdatePage {
-    PageTitle: ElementFinder = element(by.id('<%= entityFileName %>-heading'));
+    pageTitle: ElementFinder = element(by.id('<%= i18nKeyPrefix %>.home.createOrEditLabel'));
     saveButton: ElementFinder = element(by.id('save-entity'));
     cancelButton: ElementFinder = element(by.id('cancel-save'));
     <%_ fields.forEach((field) => {
@@ -63,7 +63,7 @@ export default class <%= entityClass %>UpdatePage {
     <%_ }); _%>
 
     getPageTitle() {
-        return this.PageTitle;
+        return this.pageTitle;
     }
 
     <%_ fields.forEach((field) => {
