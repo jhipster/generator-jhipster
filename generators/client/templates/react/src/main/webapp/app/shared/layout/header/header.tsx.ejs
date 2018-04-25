@@ -24,22 +24,41 @@ import {
   Navbar, Nav, NavItem, NavLink, NavbarToggler, NavbarBrand, Collapse,
   UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem
 } from 'reactstrap';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import {
-  FaHome, FaThList, FaUserPlus, FaUser, <%_ if (enableTranslation) { _%>FaFlag,<%_ } _%> FaHeart,
-  FaList, FaTasks, FaDashboard, FaBook, FaWrench, FaSignIn, FaSignOut,
-  FaClockO, FaHddO,
-  <%_ if (authenticationType === 'session') { _%>
-  FaCloud,
-  <%_ } _%>
+  faUser,
+  faTachometerAlt,
+  faHeart,
+  faList,
+  faTasks,
+  faBook,
+  faHdd,
+  faClock,
+  faSignInAlt,
+  faSignOutAlt,
+  faWrench,
+  faThList,
+  faUserPlus,
   // tslint:disable-next-line
-  FaRoad,
-  // tslint:disable-next-line
-  FaEye,
-  // tslint:disable-next-line
-  FaAsterisk,
-  // tslint:disable-next-line
-  FaBell
-} from 'react-icons/lib/fa';
+  faAsterisk,
+<%_ if (enableTranslation) { _%>
+  faFlag,
+<%_ } _%>
+<%_ if (authenticationType === 'session') { _%>
+  faCloud,
+<%_ } _%>
+<%_ if (applicationType === 'gateway') { _%>
+  faRoad,
+<%_ } _%>
+<%_ if (websocket === 'spring-websocket') { _%>
+  faEye,
+<%_ } _%>
+<%_ if (databaseType !== 'cassandra') { _%>
+  faBell,
+<%_ } _%>
+  faHome
+} from '@fortawesome/fontawesome-free-solid';
+
 import { NavLink as Link } from 'react-router-dom';
 import LoadingBar from 'react-redux-loading-bar';
 
@@ -120,34 +139,34 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
     /* jhipster-needle-add-element-to-menu - JHipster will add entities to the menu here */
     const adminMenuItems = [
     <%_ if (applicationType === 'gateway') { _%>
-      <DropdownItem tag={Link} key="gateway" to="/admin/gateway"><FaRoad /> Gateway</DropdownItem>,
+      <DropdownItem tag={Link} key="gateway" to="/admin/gateway"><FontAwesomeIcon icon={faRoad} /> Gateway</DropdownItem>,
     <%_ } _%>
     <%_ if (!skipUserManagement) { _%>
-      <DropdownItem tag={Link} key="user-management" to="/admin/user-management"><FaUser /> User Management</DropdownItem>,
+      <DropdownItem tag={Link} key="user-management" to="/admin/user-management"><FontAwesomeIcon icon={faUser} /> User Management</DropdownItem>,
     <%_ } _%>
     <%_ if (websocket === 'spring-websocket') { _%>
-      <DropdownItem tag={Link} key="tracker" to="/admin/tracker"><FaEye /> Tracker</DropdownItem>,
+      <DropdownItem tag={Link} key="tracker" to="/admin/tracker"><FontAwesomeIcon icon={faEye} /> Tracker</DropdownItem>,
     <%_ } _%>
-      <DropdownItem tag={Link} key="metrics" to="/admin/metrics"><FaDashboard /> Metrics</DropdownItem>,
-      <DropdownItem tag={Link} key="health" to="/admin/health"><FaHeart /> Health</DropdownItem>,
-      <DropdownItem tag={Link} key="configuration" to="/admin/configuration"><FaList /> Configuration</DropdownItem>,
+      <DropdownItem tag={Link} key="metrics" to="/admin/metrics"><FontAwesomeIcon icon={faTachometerAlt} /> Metrics</DropdownItem>,
+      <DropdownItem tag={Link} key="health" to="/admin/health"><FontAwesomeIcon icon={faHeart} /> Health</DropdownItem>,
+      <DropdownItem tag={Link} key="configuration" to="/admin/configuration"><FontAwesomeIcon icon={faList} /> Configuration</DropdownItem>,
       <%_ if (databaseType !== 'cassandra') { _%>
-      <DropdownItem tag={Link} key="audits" to="/admin/audits"><FaBell /> Audits</DropdownItem>,
+      <DropdownItem tag={Link} key="audits" to="/admin/audits"><FontAwesomeIcon icon={faBell} /> Audits</DropdownItem>,
       <%_ } _%>
       /* jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here */
-      <DropdownItem tag={Link} key="logs" to="/admin/logs"><FaTasks /> Logs</DropdownItem>
+      <DropdownItem tag={Link} key="logs" to="/admin/logs"><FontAwesomeIcon icon={faTasks} /> Logs</DropdownItem>
     ];
 
     const swaggerItem = (
       <DropdownItem tag={Link} key="docs" to="/admin/docs">
-        <FaBook /> API Docs
+        <FontAwesomeIcon icon={faBook} /> API Docs
       </DropdownItem>
     );
 
     <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>
     const databaseItem = [
       <DropdownItem tag="a" key="h2-console" href="./h2-console" target="_tab">
-        <FaHddO /> Database
+        <FontAwesomeIcon icon={faHdd} /> Database
       </DropdownItem>
     ];
     <%_ } _%>
@@ -156,23 +175,23 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
     if (isAuthenticated) {
       accountMenuItems.push(
         <%_ if (authenticationType !== 'oauth2') { _%>
-        <DropdownItem tag={Link} key="settings" to="/account/settings"><FaWrench /> Settings</DropdownItem>,
-        <DropdownItem tag={Link} key="password" to="/account/password"><FaClockO /> Password</DropdownItem>,
+        <DropdownItem tag={Link} key="settings" to="/account/settings"><FontAwesomeIcon icon={faWrench} /> Settings</DropdownItem>,
+        <DropdownItem tag={Link} key="password" to="/account/password"><FontAwesomeIcon icon={faClock} /> Password</DropdownItem>,
         <%_ } _%>
         <%_ if (authenticationType === 'session') { _%>
-        <DropdownItem tag={Link} key="sessions" to="/account/sessions"><FaCloud /> Sessions</DropdownItem>,
+        <DropdownItem tag={Link} key="sessions" to="/account/sessions"><FontAwesomeIcon icon={faCloud} /> Sessions</DropdownItem>,
         <%_ } _%>
-        <DropdownItem tag={Link} key="logout" to="/logout"><FaSignOut /> Logout</DropdownItem>
+        <DropdownItem tag={Link} key="logout" to="/logout"><FontAwesomeIcon icon={faSignOutAlt} /> Logout</DropdownItem>
       );
     } else {
       <%_ if (authenticationType !== 'oauth2') { _%>
       accountMenuItems.push(
-        <DropdownItem tag={Link} key="login" to="/login"><FaSignIn /> Login</DropdownItem>,
-        <DropdownItem tag={Link} key="register" to="/register"><FaSignIn /> Register</DropdownItem>
+        <DropdownItem tag={Link} key="login" to="/login"><FontAwesomeIcon icon={faSignInAlt} /> Login</DropdownItem>,
+        <DropdownItem tag={Link} key="register" to="/register"><FontAwesomeIcon icon={faSignInAlt} /> Register</DropdownItem>
       );
       <%_ } else { _%>
       accountMenuItems.push(
-        <DropdownItem tag="a" key="login" href={getLoginUrl()}><FaSignIn /> Login</DropdownItem>
+        <DropdownItem tag="a" key="login" href={getLoginUrl()}><FontAwesomeIcon icon={faSignInAlt} /> Login</DropdownItem>
       );
       <%_ } _%>
     }
@@ -180,7 +199,7 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
     const entitiesMenu = (
       <UncontrolledDropdown nav inNavbar key="entities">
         <DropdownToggle nav caret className="d-flex align-items-center">
-          <FaThList />
+          <FontAwesomeIcon icon={faThList} />
           <span>Entities</span>
         </DropdownToggle>
         <DropdownMenu right>{entityMenuItems}</DropdownMenu>
@@ -189,7 +208,7 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
     const adminMenu = (
       <UncontrolledDropdown nav inNavbar key="admin">
         <DropdownToggle nav caret className="d-flex align-items-center">
-          <FaUserPlus />
+          <FontAwesomeIcon icon={faUserPlus} />
           <span>Administration</span>
         </DropdownToggle>
         <DropdownMenu right style={{ width: '130%' }}>
@@ -217,7 +236,7 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
             <Nav className="ml-auto" navbar>
               <NavItem>
                 <NavLink tag={Link} to="/" className="d-flex align-items-center">
-                  <FaHome />
+                  <FontAwesomeIcon icon={faHome} />
                   <span>Home</span>
                 </NavLink>
               </NavItem>
@@ -226,7 +245,7 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
               { locales.length > 1 ?
                 <UncontrolledDropdown nav inNavbar>
                   <DropdownToggle nav caret className="d-flex align-items-center">
-                    <FaFlag />
+                    <FontAwesomeIcon icon={faFlag} />
                     <span>{currentLocale.toUpperCase()}</span>
                   </DropdownToggle>
                   <DropdownMenu right>
@@ -237,7 +256,7 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
             <%_ } _%>
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret className="d-flex align-items-center">
-                  <FaUser />
+                  <FontAwesomeIcon icon={faUser} />
                   <span>Account</span>
                 </DropdownToggle>
                 <DropdownMenu right>
