@@ -50,7 +50,7 @@ describe('<%= entityClass %> e2e test', () => {
     let <%= entityInstance %>UpdatePage: <%= entityClass %>UpdatePage;
     let <%= entityInstance %>ComponentsPage: <%= entityClass %>ComponentsPage;
     <%_ if (fieldsContainBlobOrImage) { _%>
-    const fileToUpload = '../../../../../<%= entityParentPathAddition %>main/webapp/content/images/logo-jhipster.png';
+    const fileToUpload = '../../../../../<%= entityParentPathAddition %>main/webapp/static/images/logo-jhipster.png';
     const absolutePath = path.resolve(__dirname, fileToUpload);
     <%_ } _%>
 
@@ -112,7 +112,7 @@ describe('<%= entityClass %> e2e test', () => {
         expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('1995-11-21');
         <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
         <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('01/01/2001' + protractor.Key.TAB + '02:30AM');
-        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).toContain('2001-01-01T02:30');
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.contain('2001-01-01T02:30');
         <%_ } else if (fieldType === 'Boolean') { _%>
         const selected = await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected();
         if (selected) {
