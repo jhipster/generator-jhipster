@@ -55,11 +55,13 @@ fi
 mkdir -p "$APP_FOLDER"
 cp -f "$JHIPSTER_SAMPLES"/"$JHIPSTER"/.yo-rc.json "$APP_FOLDER"/
 cd "$APP_FOLDER"
-if [[ -z "${localTravis+x}" ]] && \
-    [[ "$JHIPSTER" != *"react"* ]] && \
-    [[ -d  "${JHIPSTER_SAMPLES}/node_modules_cache-sample/node_modules" ]]
+if [[ ! -z "${localTravis+x}" ]] && \
+    [[ "$JHIPSTER" != *"react"* ]]
 then
     jhipster --force --no-insight --skip-checks --with-entities --skip-git --skip-commit-hook --skip-install
+elif [[ ! -z "${localTravis+x}" ]] ; then
+    echo "Not already implemented. Skip tests on react projects"
+    exit 100
 else
     jhipster --force --no-insight --skip-checks --with-entities --skip-git --skip-commit-hook
 fi
