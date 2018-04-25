@@ -803,8 +803,6 @@ const serverFiles = {
                 { file: 'package/web/rest/package-info.java', renameTo: generator => `${generator.javaDir}web/rest/package-info.java` },
 
                 { file: 'package/web/rest/LogsResource.java', renameTo: generator => `${generator.javaDir}web/rest/LogsResource.java` },
-                { file: 'package/web/rest/ProfileInfoResource.java', renameTo: generator => `${generator.javaDir}web/rest/ProfileInfoResource.java` },
-
             ]
         },
 
@@ -853,7 +851,6 @@ const serverFiles = {
                 { file: 'package/config/WebConfigurerTestController.java', renameTo: generator => `${generator.testDir}config/WebConfigurerTestController.java` },
                 { file: 'package/web/rest/TestUtil.java', renameTo: generator => `${generator.testDir}web/rest/TestUtil.java` },
                 { file: 'package/web/rest/LogsResourceIntTest.java', renameTo: generator => `${generator.testDir}web/rest/LogsResourceIntTest.java` },
-                { file: 'package/web/rest/ProfileInfoResourceIntTest.java', renameTo: generator => `${generator.testDir}web/rest/ProfileInfoResourceIntTest.java` },
                 { file: 'package/web/rest/errors/ExceptionTranslatorIntTest.java', renameTo: generator => `${generator.testDir}web/rest/errors/ExceptionTranslatorIntTest.java` },
                 { file: 'package/web/rest/errors/ExceptionTranslatorTestController.java', renameTo: generator => `${generator.testDir}web/rest/errors/ExceptionTranslatorTestController.java` },
                 { file: 'package/web/rest/util/PaginationUtilUnitTest.java', renameTo: generator => `${generator.testDir}web/rest/util/PaginationUtilUnitTest.java` },
