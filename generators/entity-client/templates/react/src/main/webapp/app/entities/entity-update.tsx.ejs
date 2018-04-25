@@ -435,7 +435,7 @@ _%>
                   </Row>
                 </div>
               ) : null}
-              <input type="file" onChange={this.onBlobChange(<%= isAnImage %>, '<%= fieldName %>')} <% if (isAnImage) { %>accept="image/*"<% } %> />
+              <input id="file_<%= fieldName %>" type="file" onChange={this.onBlobChange(<%= isAnImage %>, '<%= fieldName %>')} <% if (isAnImage) { %>accept="image/*"<% } %> />
             </AvGroup>
 
             <%_ } else { _%>
