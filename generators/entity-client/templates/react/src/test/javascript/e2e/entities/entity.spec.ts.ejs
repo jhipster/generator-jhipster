@@ -114,8 +114,8 @@ describe('<%= entityClass %> e2e test', () => {
         <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('01/01/2001' + protractor.Key.TAB + '02:30AM');
         expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.contain('2001-01-01T02:30');
         <%_ } else if (fieldType === 'Boolean') { _%>
-        const selected = await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected();
-        if (selected) {
+        const selected<%= fieldNameCapitalized %> = await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected();
+        if (selected<%= fieldNameCapitalized %>) {
             <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().click();
             expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected()).to.be.false;
         } else {
