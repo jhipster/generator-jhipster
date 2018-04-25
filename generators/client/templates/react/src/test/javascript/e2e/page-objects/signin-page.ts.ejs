@@ -41,6 +41,7 @@ export default class SignInPage extends BasePage {
   }
 
   setPassword(password) {
+    this.clearPassword();
     this.password.sendKeys(password);
   }
 

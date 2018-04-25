@@ -26,13 +26,18 @@ import promiseMiddleware from 'redux-promise-middleware';
 import { FAILURE, REQUEST, SUCCESS } from 'app/shared/reducers/action-type.util';
 import register, { ACTION_TYPES, handleRegister } from 'app/modules/account/register/register.reducer';
 
-describe('Register reducer tests', () => {
+describe('Creating account tests', () => {
   const initialState = {
-    loading: false
+    loading: false,
+    registrationSuccess: false,
+    registrationFailure: false,
+    errorMessage: null
   };
 
   it('should return the initial state', () => {
-    expect(register(undefined, {})).to.eql({ ...initialState });
+    expect(register(undefined, {})).to.eql({
+      ...initialState
+    });
   });
 
   it('should detect a request', () => {
@@ -44,7 +49,7 @@ describe('Register reducer tests', () => {
 
   it('should handle RESET', () => {
     expect(
-      register({ loading: true }, { type: ACTION_TYPES.RESET })
+      register({ loading: true, registrationSuccess: true, registrationFailure: true, errorMessage: '' }, { type: ACTION_TYPES.RESET })
     ).to.eql({
       ...initialState
     });
@@ -57,7 +62,8 @@ describe('Register reducer tests', () => {
         payload: 'fake payload'
       })
     ).to.eql({
-      ...initialState
+      ...initialState,
+      registrationSuccess: true
     });
   });
 
@@ -69,7 +75,9 @@ describe('Register reducer tests', () => {
         payload
       })
     ).to.eql({
-      ...initialState
+      ...initialState,
+      registrationFailure: true,
+      errorMessage: payload.response.data.errorKey
     });
   });
 
@@ -86,7 +94,7 @@ describe('Register reducer tests', () => {
     it('dispatches CREATE_ACCOUNT_PENDING and CREATE_ACCOUNT_FULFILLED actions', async () => {
       const meta = {
         <%_ if (enableTranslation) { _%>
-        successMessage: 'translation-not-found[register.messages.success]'
+        successMessage: 'register.messages.success'
         <%_ } else { _%>
         successMessage: '<strong>Registration saved!</strong> Please check your email for confirmation.'
         <%_ } _%>

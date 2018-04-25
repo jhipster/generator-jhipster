@@ -17,6 +17,7 @@ describe('Administration', () => {
   describe('User management', () => {
     it('should load user management', async () => {
       navBarPage.clickOnAdminMenuItem('user-management');
+      // Title should contain 'Users'
       expect(await element(by.css('h2#page-heading')).getText()).to.contain('Users');
     });
 
@@ -25,6 +26,7 @@ describe('Administration', () => {
       const deleteModal = element(by.className('modal'));
       waitUntilDisplayed(deleteModal);
       element(by.buttonText('Delete')).click();
+      // Delete modal should disappear
       expect(await deleteModal.isPresent()).to.be.false;
     });
   });

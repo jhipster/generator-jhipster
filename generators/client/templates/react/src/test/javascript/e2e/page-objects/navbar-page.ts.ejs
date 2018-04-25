@@ -66,10 +66,6 @@ export default class NavBarPage extends BasePage {
     return this.selector.$(`.dropdown-item[href="#/account/${item}"`).click();
   }
 
-  clickOnAdminMenu() {
-    return this.adminMenu.click();
-  }
-
   clickOnAdminMenuItem(item: string) {
     this.adminMenu.click();
     return this.selector.$(`.dropdown-item[href="#/admin/${item}"]`).click();

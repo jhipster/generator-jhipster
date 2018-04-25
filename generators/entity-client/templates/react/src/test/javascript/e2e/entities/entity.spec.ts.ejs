@@ -124,7 +124,7 @@ describe('<%= entityClass %> e2e test', () => {
         }
         <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
         <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldName %>');
-        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match('<%= fieldName %>');
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('<%= fieldName %>');
         <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
         <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input(absolutePath);
         <%_ } else if (fieldIsEnum) { _%>

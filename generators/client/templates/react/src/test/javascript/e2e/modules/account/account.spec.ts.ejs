@@ -6,7 +6,7 @@ import PasswordPage from '../../page-objects/password-page';
 import NavBarPage from '../../page-objects/navbar-page';
 import RegisterPage from '../../page-objects/register-page';
 import { SettingsPage } from '../../page-objects/settings-page';
-import { getDeactivatedButtonByLogin, waitUntilDisplayed, <% if (enableTranslation) { %>getToastByClassName<% } else { %>getToastByInnerText<% } %> } from '../../util/utils';
+import { getDeactivatedButtonByLogin, waitUntilDisplayed, waitUntilHidden, waitUntilTextIsPresentInElementValue, <% if (enableTranslation) { %>getToastByClassName<% } else { %>getToastByInnerText<% } %> } from '../../util/utils';
 
 const expect = chai.expect;
 
@@ -54,6 +54,7 @@ describe('Account', () => {
     const toast = getToastByInnerText('<strong>Registration saved!</strong> Please check your email for confirmation.');
     <%_ } _%>
     waitUntilDisplayed(toast);
+    // Success toast should appear
     expect(await toast.isPresent()).to.be.true;
   });
 
@@ -65,6 +66,7 @@ describe('Account', () => {
     const toast = getToastByInnerText('Login already in use');
     <%_ } _%>
     waitUntilDisplayed(toast);
+    // Error toast should appear
     expect(await toast.isPresent()).to.be.true;
   });
 
@@ -78,6 +80,7 @@ describe('Account', () => {
     const toast = getToastByInnerText('Email address already in use');
     <%_ } _%>
     waitUntilDisplayed(toast);
+    // Error toast should appear
     expect(await toast.isPresent()).to.be.true;
   });
 
@@ -86,6 +89,8 @@ describe('Account', () => {
     browser.get('#/admin/user-management');
     const deactivatedButton = getDeactivatedButtonByLogin('user_test');
     await deactivatedButton.click();
+    waitUntilHidden(deactivatedButton);
+    // Deactivated button should disappear
     expect(await deactivatedButton.isPresent()).to.be.false;
     navBarPage.autoSignOut();
   });
@@ -94,6 +99,7 @@ describe('Account', () => {
     signInPage.get();
     signInPage.autoSignInUsing('user_test', 'user_test');
     signInPage.waitUntilHidden();
+    // Login page should close when login success
     expect(await signInPage.isHidden()()).to.be.true;
     navBarPage.autoSignOut();
   });
@@ -111,6 +117,7 @@ describe('Account', () => {
     await passwordPage.currentPassword.clear();
     await passwordPage.password.clear();
     await passwordPage.confirmPassword.clear();
+    // Error toast should appear
     expect(await toast.isPresent()).to.be.true;
   });
 
@@ -122,6 +129,7 @@ describe('Account', () => {
     const toast = getToastByInnerText('<strong>Password changed!</strong>');
     <%_ } _%>
     waitUntilDisplayed(toast);
+    // Success toast should appear
     expect(await toast.isPresent()).to.be.true;
     navBarPage.autoSignOut();
   });
@@ -151,6 +159,7 @@ describe('Account', () => {
   const toast = getToastByInnerText('<strong>Settings saved!</strong>');
   <%_ } _%>
   waitUntilDisplayed(toast);
+  // Success toast should appear
   expect(await toast.isPresent()).to.be.true;
   navBarPage.autoSignOut();
 });
@@ -158,6 +167,7 @@ describe('Account', () => {
 it('should not be able to change settings if email already exists', async () => {
   navBarPage.autoSignIn();
   settingsPage = navBarPage.getSettingsPage();
+  waitUntilTextIsPresentInElementValue(settingsPage.email, 'admin@localhost');
   await settingsPage.email.clear();
   settingsPage.setEmail('usertest@jhipster.com');
   settingsPage.save();
@@ -167,6 +177,7 @@ it('should not be able to change settings if email already exists', async () => 
   const toast = getToastByInnerText('Email address already in use');
   <%_ } _%>
   waitUntilDisplayed(toast);
+  // Error toast should appear
   expect(await toast.isPresent()).to.be.true;
 });
 
