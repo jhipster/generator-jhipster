@@ -33,7 +33,7 @@ env:
 
     # if JHIPSTER_LIB_BRANCH value is release, use the release from Maven
     - JHIPSTER_LIB_REPO=https://github.com/jhipster/jhipster.git
-    - JHIPSTER_LIB_BRANCH=release
+    - JHIPSTER_LIB_BRANCH=master
     # if JHIPSTER_BRANCH value is release, use the release from NPM
     - JHIPSTER_REPO=https://github.com/jhipster/generator-jhipster.git
     - JHIPSTER_BRANCH=release
