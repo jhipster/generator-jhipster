@@ -75,6 +75,7 @@ module.exports = class extends BaseGenerator {
                 this.monitoring = this.config.get('monitoring');
                 this.kubernetesServiceType = this.config.get('kubernetesServiceType');
                 this.ingressDomain = this.config.get('ingressDomain');
+                this.useKafka = false;
 
                 this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
                 this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
@@ -157,9 +158,12 @@ module.exports = class extends BaseGenerator {
             configureImageNames: docker.configureImageNames,
             setAppsFolderPaths: docker.setAppsFolderPaths,
 
-            setDistributedDBReplicaCount() {
+            setPostPromptProp() {
                 this.appConfigs.forEach((element) => {
                     element.clusteredDb ? element.dbPeerCount = 3 : element.dbPeerCount = 1;
+                    if (element.messageBroker === 'kafka') {
+                        this.useKafka = true;
+                    }
                 });
             },
 
@@ -207,6 +211,9 @@ module.exports = class extends BaseGenerator {
         if (this.kubernetesNamespace !== 'default') {
             this.log(`  ${chalk.cyan(`kubectl apply -f ${this.directoryPath}k8s/namespace.yml`)}`);
         }
+        if (this.useKafka === true) {
+            this.log(`  ${chalk.cyan(`kubectl apply -f ${this.directoryPath}k8s/messagebroker`)}`);
+        }
         if (this.monitoring === 'elk') {
             this.log(`  ${chalk.cyan(`kubectl apply -f ${this.directoryPath}k8s/console`)}`);
         }
@@ -215,7 +222,7 @@ module.exports = class extends BaseGenerator {
         }
         for (let i = 0, regIndex = 0; i < this.appsFolders.length; i++) {
             this.log(`  ${chalk.cyan(`kubectl apply -f ${this.directoryPath}k8s/${this.appConfigs[i].baseName.toLowerCase()}`)}`);
-            if (regIndex++ === 0 && this.appConfigs[i].serviceDiscoveryType !== false) {
+            if (this.appConfigs[i].serviceDiscoveryType !== false && regIndex++ === 0) {
                 this.log(`  ${chalk.cyan(`kubectl apply -f ${this.directoryPath}k8s/registry`)}`);
             }
         }
