@@ -28,8 +28,8 @@ export class JhiSortDirective {
     @Input() callback: Function;
 
     sortIcon = 'fa-sort';
-    sortAscIcon = 'fa-sort-asc';
-    sortDescIcon = 'fa-sort-desc';
+    sortAscIcon = 'fa-sort-up';
+    sortDescIcon = 'fa-sort-down';
     sortIconSelector = 'span.fa';
 
     @Output() predicateChange: EventEmitter<any> = new EventEmitter();
