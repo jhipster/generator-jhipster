@@ -27,8 +27,8 @@ export class JhiSortByDirective implements AfterViewInit {
 
     @Input() jhiSortBy: string;
 
-    sortAscIcon = 'fa-sort-asc';
-    sortDescIcon = 'fa-sort-desc';
+    sortAscIcon = 'fa-sort-up';
+    sortDescIcon = 'fa-sort-down';
 
     jhiSort: JhiSortDirective;
 
