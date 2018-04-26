@@ -2,9 +2,11 @@ import { $, ElementFinder } from 'protractor';
 
 import BasePage from './base-component';
 import SignInPage from './signin-page';
-import PasswordPage from './password-page';
 import RegisterPage from './register-page';
-import { SettingsPage } from './settings-page';
+<%_ if (authenticationType !== 'oauth2') { _%>
+import PasswordPage from '../../page-objects/password-page';
+import { SettingsPage } from '../../page-objects/settings-page';
+<%_ } _%>
 
 const selector: ElementFinder = $('#app-header');
 export default class NavBarPage extends BasePage {
@@ -23,6 +25,7 @@ export default class NavBarPage extends BasePage {
     this.signInPage = new SignInPage();
   }
 
+  <%_ if (authenticationType !== 'oauth2') { _%>
   getPasswordPage() {
     this.clickOnAccountMenuItem('password');
     return new PasswordPage();
@@ -38,10 +41,15 @@ export default class NavBarPage extends BasePage {
     this.clickOnTabMenu('register');
     return new RegisterPage();
   }
+  <%_ } _%>
 
   getSignInPage() {
     this.clickOnAccountMenu();
+    <%_ if (authenticationType !== 'oauth2') { _%>
     this.clickOnTabMenu('login');
+    <%_ } else { _%>
+    this.clickOnLogin();
+    <%_ } _%>
     return new SignInPage();
   }
 
@@ -56,6 +64,12 @@ export default class NavBarPage extends BasePage {
       .$(`.dropdown-item[href="#/${item}"]`)
       .click();
   }
+
+  <%_ if (authenticationType === 'oauth2') { _%>
+  clickOnLogin() {
+    return this.selector.$('#header-tabs').$('#login').click();
+  }
+  <%_ } _%>
 
   clickOnAccountMenu() {
     return this.accountMenu.click();
@@ -81,7 +95,11 @@ export default class NavBarPage extends BasePage {
 
   autoSignIn() {
     this.signInPage.get();
+    <%_ if (authenticationType !== 'oauth2') { _%>
     this.signInPage.autoSignInUsing('admin', 'admin');
+    <%_ } else { _%>
+    this.signInPage.loginWithOAuth('admin', 'admin');
+    <%_ } _%>
     return this.signInPage.waitUntilHidden();
   }
 

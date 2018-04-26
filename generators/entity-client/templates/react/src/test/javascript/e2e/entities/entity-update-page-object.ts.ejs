@@ -138,7 +138,7 @@ export default class <%= entityClass %>UpdatePage {
     <%_ } _%>
     <%_ }); _%>
     save() {
-        this.saveButton.click();
+        return this.saveButton.click();
     }
 
     cancel() {

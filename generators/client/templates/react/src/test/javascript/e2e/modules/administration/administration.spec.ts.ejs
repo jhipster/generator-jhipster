@@ -2,18 +2,32 @@
 import { element, by, browser } from 'protractor';
 
 import NavBarPage from '../../page-objects/navbar-page';
+<%_ if (authenticationType === 'oauth2') { _%>
+import SignInPage from '../../page-objects/signin-page';
+<%_ } else { _%>
 import { waitUntilDisplayed } from '../../util/utils';
+<%_ } _%>
 
 const expect = chai.expect;
 
 describe('Administration', () => {
   let navBarPage: NavBarPage;
+  <%_ if (authenticationType === 'oauth2') { _%>
+  let signInPage: SignInPage;
+  <%_ } _%>
 
   before(() => {
+    <%_ if (authenticationType !== 'oauth2') { _%>
     navBarPage = new NavBarPage(true);
     navBarPage.autoSignIn();
+    <%_ } else { _%>
+    browser.get('/');
+    navBarPage = new NavBarPage(true);
+    signInPage = navBarPage.getSignInPage();
+    <%_ } _%>
   });
 
+  <%_ if (authenticationType !== 'oauth2') { _%>
   describe('User management', () => {
     it('should load user management', async () => {
       navBarPage.clickOnAdminMenuItem('user-management');
@@ -30,6 +44,7 @@ describe('Administration', () => {
       expect(await deleteModal.isPresent()).to.be.false;
     });
   });
+  <%_ } _%>
 
   it('should load metrics', async () => {
     navBarPage.clickOnAdminMenuItem('metrics');

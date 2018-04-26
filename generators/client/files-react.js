@@ -412,7 +412,7 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.protractorTests,
+            condition: generator => generator.protractorTests && generator.authenticationType !== 'oauth2',
             path: TEST_SRC_DIR,
             templates: [
                 'e2e/modules/account/account.spec.ts',
@@ -423,6 +423,20 @@ const files = {
                 'e2e/page-objects/signin-page.ts',
                 'e2e/page-objects/password-page.ts',
                 'e2e/page-objects/settings-page.ts',
+                'e2e/page-objects/register-page.ts',
+                'protractor.conf.js'
+            ]
+        },
+        {
+            condition: generator => generator.protractorTests && generator.authenticationType === 'oauth2',
+            path: TEST_SRC_DIR,
+            templates: [
+                'e2e/modules/account/account.spec.ts',
+                'e2e/modules/administration/administration.spec.ts',
+                'e2e/util/utils.ts',
+                'e2e/page-objects/base-component.ts',
+                'e2e/page-objects/navbar-page.ts',
+                'e2e/page-objects/signin-page.ts',
                 'e2e/page-objects/register-page.ts',
                 'protractor.conf.js'
             ]

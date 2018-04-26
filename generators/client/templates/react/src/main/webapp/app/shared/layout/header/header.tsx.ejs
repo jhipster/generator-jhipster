@@ -172,7 +172,7 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
       );
       <%_ } else { _%>
       accountMenuItems.push(
-        <DropdownItem tag="a" key="login" href={getLoginUrl()}><FaSignIn /> Login</DropdownItem>
+        <DropdownItem id="login" tag="a" key="login" href={getLoginUrl()}><FaSignIn /> Login</DropdownItem>
       );
       <%_ } _%>
     }
