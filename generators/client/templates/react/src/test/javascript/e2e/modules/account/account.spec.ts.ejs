@@ -21,13 +21,9 @@ describe('Account', () => {
   let passwordPage: PasswordPage;
   let settingsPage: SettingsPage;
   let registerPage: RegisterPage;
-
-    <%_ if (enableTranslation) { _%>
-    const pageTitle = 'home.title';
-    <%_ } else { _%>
-    const pageTitle = 'Welcome, Java Hipster!';
-    <%_ } _%>
   <%_ } _%>
+
+  const pageTitle = 'login.title';
 
   before(() => {
     browser.get('/');
@@ -45,8 +41,17 @@ describe('Account', () => {
     <%_ } else { _%>
     signInPage.loginWithOAuth('admin', 'foo');
     const alert = element(by.css('.alert-error'));
-    // Keycloak
-    expect(await alert.getText()).to.eq('Invalid username or password.');
+    if (await alert.isPresent()) {
+      // Keycloak
+      expect(await alert.getText()).to.eq('Invalid username or password.');
+    } else {
+      // Okta
+      const error = element(by.css('.infobox-error'));
+      waitUntilDisplayed(error);
+      expect(await error.getText()).to.eq('Sign in failed!');
+    }
+    await signInPage.username.clear();
+    await signInPage.password.clear();
     <%_ } _%>
   });
 
@@ -62,19 +67,13 @@ describe('Account', () => {
     expect(await signInPage.isHidden()()).to.be.true;
     navBarPage.autoSignOut();
     <%_ } else { _%>
-    signInPage.loginWithOAuth('', 'admin');
-    <%_ if (enableTranslation) { _%>
+    // Keycloak credentials by default, change them to be able to use oauth2 with Okta
+    signInPage.loginWithOAuth('admin', 'admin');
     const success = element(by.id('home.logged.message'));
-    <%_ } else { _%>
-    const success = element(by.cssContainingText('.alert-success', 'You are logged in as user admin.'));
-    <%_ } _%>
     waitUntilDisplayed(success);
     // Success alert should appear in home page
-    <%_ if (enableTranslation) { _%>
     expect(await success.getAttribute('id')).to.eq('home.logged.message');
-    <%_ } else { _%>
-    expect(await success.getText()).to.eq('You are logged in as user admin.');
-    <%_ }} _%>
+    <%_ } _%>
   });
 
   <%_ if (authenticationType !== 'oauth2') { _%>
@@ -101,10 +100,10 @@ describe('Account', () => {
     waitUntilDisplayed(toast);
     // Error toast should appear
     expect(await toast.isPresent()).to.be.true;
+    await registerPage.username.clear();
   });
 
   it('should not be able to sign up if email already taken', async () => {
-    await registerPage.username.clear();
     registerPage.setUserName('user_test2');
     await registerPage.save();
     <%_ if (enableTranslation) { _%>
@@ -147,11 +146,11 @@ describe('Account', () => {
     const toast = getToastByInnerText('<strong>An error has occurred!</strong> The password could not be changed.');
     <%_ } _%>
     waitUntilDisplayed(toast);
+    // Error toast should appear
+    expect(await toast.isPresent()).to.be.true;
     await passwordPage.currentPassword.clear();
     await passwordPage.password.clear();
     await passwordPage.confirmPassword.clear();
-    // Error toast should appear
-    expect(await toast.isPresent()).to.be.true;
   });
 
   it('should be able to update password', async () => {
@@ -198,7 +197,7 @@ describe('Account', () => {
 
   it('should not be able to change settings if email already exists', async () => {
     navBarPage.autoSignIn();
-    settingsPage = navBarPage.getSettingsPage();
+    settingsPage.get();
     waitUntilTextIsPresentInElementValue(settingsPage.email, 'admin@localhost');
     await settingsPage.email.clear();
     settingsPage.setEmail('usertest@jhipster.com');
@@ -214,5 +213,5 @@ describe('Account', () => {
   });
   <%_ } _%>
 
-  after(() => signInPage.autoSignOut());
+  after(() => navBarPage.autoSignOut());
 });

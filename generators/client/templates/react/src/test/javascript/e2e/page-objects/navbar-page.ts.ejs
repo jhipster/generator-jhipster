@@ -4,8 +4,8 @@ import BasePage from './base-component';
 import SignInPage from './signin-page';
 import RegisterPage from './register-page';
 <%_ if (authenticationType !== 'oauth2') { _%>
-import PasswordPage from '../../page-objects/password-page';
-import { SettingsPage } from '../../page-objects/settings-page';
+import PasswordPage from './password-page';
+import { SettingsPage } from './settings-page';
 <%_ } _%>
 
 const selector: ElementFinder = $('#app-header');

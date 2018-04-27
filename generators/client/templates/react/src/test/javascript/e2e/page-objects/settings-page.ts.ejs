@@ -1,14 +1,20 @@
 import { $, browser, ElementFinder } from 'protractor';
 
 import BasePage from './base-component';
+import { waitUntilDisplayed } from '../util/utils';
 
+const selector: ElementFinder = $('#settings-form');
 export class SettingsPage extends BasePage {
-  selector: ElementFinder = $('#settings-form');
+  selector: ElementFinder;
   firstName: ElementFinder = this.selector.$('#firstName');
   lastName: ElementFinder = this.selector.$('#lastName');
   email: ElementFinder = this.selector.$('#email');
   saveButton: ElementFinder = this.selector.$('button[type=submit]');
   title: ElementFinder = this.selector.$('#title');
+
+  constructor() {
+    super(selector);
+  }
 
   get() {
     browser.get('#/account/settings');

@@ -41,7 +41,7 @@ class LoginModal extends React.Component<ILoginModalProps> {
     return (
       <Modal isOpen={this.props.showModal} toggle={handleClose} backdrop="static" id="login-page" autoFocus={false}>
         <AvForm onSubmit={this.handleSubmit}>
-          <ModalHeader toggle={handleClose} id="login-title"><Translate contentKey="login.title">Sign in</Translate></ModalHeader>
+          <ModalHeader id="login.title" toggle={handleClose}><Translate contentKey="login.title">Sign in</Translate></ModalHeader>
           <ModalBody>
             <Row>
               <Col md="12">

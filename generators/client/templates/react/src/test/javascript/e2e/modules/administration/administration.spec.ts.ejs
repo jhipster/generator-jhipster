@@ -2,9 +2,7 @@
 import { element, by, browser } from 'protractor';
 
 import NavBarPage from '../../page-objects/navbar-page';
-<%_ if (authenticationType === 'oauth2') { _%>
-import SignInPage from '../../page-objects/signin-page';
-<%_ } else { _%>
+<%_ if (authenticationType !== 'oauth2') { _%>
 import { waitUntilDisplayed } from '../../util/utils';
 <%_ } _%>
 
@@ -12,18 +10,15 @@ const expect = chai.expect;
 
 describe('Administration', () => {
   let navBarPage: NavBarPage;
-  <%_ if (authenticationType === 'oauth2') { _%>
-  let signInPage: SignInPage;
-  <%_ } _%>
 
   before(() => {
+    browser.get('/');
     <%_ if (authenticationType !== 'oauth2') { _%>
     navBarPage = new NavBarPage(true);
     navBarPage.autoSignIn();
     <%_ } else { _%>
-    browser.get('/');
     navBarPage = new NavBarPage(true);
-    signInPage = navBarPage.getSignInPage();
+    navBarPage.getSignInPage();
     <%_ } _%>
   });
 
@@ -71,7 +66,5 @@ describe('Administration', () => {
     expect(await element(by.css('h2#page-heading')).getText()).to.contain('Logs');
   });
 
-  after(() => {
-    navBarPage.autoSignOut();
-  });
+  after(() => navBarPage.autoSignOut());
 });
