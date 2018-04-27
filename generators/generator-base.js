@@ -1922,8 +1922,8 @@ module.exports = class extends PrivateBase {
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
-            const entityTable = _.snakeCase(this.getTableName(entityName).substring(0, halfLimit));
-            const relationTable = _.snakeCase(this.getTableName(relationshipName).substring(0, halfLimit - 1));
+            const entityTable = this.getTableName(entityName).substring(0, halfLimit);
+            const relationTable = this.getTableName(relationshipName).substring(0, halfLimit - 1);
             return `${entityTable}_${relationTable}`;
         }
         return joinTableName;
@@ -1957,8 +1957,8 @@ module.exports = class extends PrivateBase {
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
-            const entityTable = noSnakeCase ? entityName.substring(0, halfLimit) : _.snakeCase(this.getTableName(entityName).substring(0, halfLimit));
-            const relationTable = noSnakeCase ? relationshipName.substring(0, halfLimit - 1) : _.snakeCase(this.getTableName(relationshipName).substring(0, halfLimit - 1));
+            const entityTable = noSnakeCase ? entityName.substring(0, halfLimit) : this.getTableName(entityName).substring(0, halfLimit);
+            const relationTable = noSnakeCase ? relationshipName.substring(0, halfLimit - 2) : this.getTableName(relationshipName).substring(0, halfLimit - 2);
             return `${entityTable}_${relationTable}_id`;
         }
         return constraintName;
