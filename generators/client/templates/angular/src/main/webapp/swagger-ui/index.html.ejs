@@ -116,7 +116,7 @@
                     };
                     window.swaggerUi.options.requestInterceptor = interceptor.requestInterceptor
                 <%_ } else if (authenticationType === 'jwt') { _%>
-                    var authToken = JSON.parse(localStorage.getItem("<%=jhiPrefixDashed %>-authenticationtoken") || sessionStorage.getItem("<%=jhiPrefixDashed %>-authenticationtoken"));
+                    var authToken = JSON.parse(localStorage.getItem("<%=jhiPrefixDashed %>-authenticationToken") || sessionStorage.getItem("<%=jhiPrefixDashed %>-authenticationToken"));
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization", "Bearer " + authToken, "header");
                     window.swaggerUi.api.clientAuthorizations.add("bearer", apiKeyAuth);
                 <%_ } _%>
