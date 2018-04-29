@@ -629,7 +629,8 @@ const serverFiles = {
         {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
-                { file: 'package/Application.java', renameTo: generator => `${generator.javaDir}${generator.mainClass}.java` }
+                { file: 'package/Application.java', renameTo: generator => `${generator.javaDir}${generator.mainClass}.java` },
+                { file: 'package/ApplicationWebXml.java', renameTo: generator => `${generator.javaDir}ApplicationWebXml.java` }
 
             ]
         }
