@@ -70,7 +70,8 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         '/auth'
       ],
       target: 'http://127.0.0.1:<%= serverPort %>',
-      secure: false
+      secure: false,
+      headers: { host: 'localhost:9000' }
     }<% if (websocket === 'spring-websocket') { %>,{
       context: [
         '/websocket'
