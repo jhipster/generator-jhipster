@@ -89,7 +89,11 @@ Object.keys(differentRelationships).forEach(key => {
     if (uniqueRel.otherEntityAngularName === 'User') {
 _%>
 import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/user.model';
+<%_ if (authenticationType === 'oauth2') { _%>
+import { getUsers } from 'app/shared/reducers/user-management';
+<%_ } else { _%>
 import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
+<%_ } _%>
 <%_
   } else {
     if (uniqueRel.otherEntityAngularName !== entityReactName) {

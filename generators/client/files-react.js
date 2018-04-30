@@ -217,6 +217,13 @@ const files = {
             templates: [
                 'shared/reducers/locale.ts'
             ]
+        },
+        {
+            condition: generator => generator.authenticationType === 'oauth2',
+            path: REACT_DIR,
+            templates: [
+                'shared/reducers/user-management.ts'
+            ]
         }
     ],
     accountModule: [
@@ -388,6 +395,13 @@ const files = {
             path: TEST_SRC_DIR,
             templates: [
                 'spec/app/modules/administration/user-management/user-management.reducer.spec.ts'
+            ]
+        },
+        {
+            condition: generator => generator.skipUserManagement,
+            path: TEST_SRC_DIR,
+            templates: [
+                'spec/app/shared/reducers/user-management.spec.ts'
             ]
         },
         {
