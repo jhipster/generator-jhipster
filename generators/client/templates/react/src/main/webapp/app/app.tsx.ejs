@@ -25,6 +25,7 @@ import { HashRouter as Router } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 
 import { getSession } from 'app/shared/reducers/authentication';
+import { getProfile } from 'app/shared/reducers/application-profile';
 <%_ if (enableTranslation) { _%>
 import { setLocale } from 'app/shared/reducers/locale';
 <%_ } _%>
@@ -37,16 +38,21 @@ import AppRoutes from 'app/routes';
 export interface IAppProps {
   isAuthenticated: boolean;
   isAdmin: boolean;
+  ribbonEnv: string;
+  isInProduction: boolean;
+  isSwaggerEnabled: boolean;
   <%_ if (enableTranslation) { _%>
   currentLocale: string;
   setLocale: Function;
   <%_ } _%>
   getSession: Function;
+  getProfile: Function;
 }
 
 export class App extends React.Component<IAppProps> {
   componentDidMount() {
     this.props.getSession();
+    this.props.getProfile();
   }
 
   render() {
@@ -62,6 +68,9 @@ export class App extends React.Component<IAppProps> {
             currentLocale={this.props.currentLocale}
             onLocaleChange={this.props.setLocale}
           <%_ } _%>
+            ribbonEnv={this.props.ribbonEnv}
+            isInProduction={this.props.isInProduction}
+            isSwaggerEnabled={this.props.isSwaggerEnabled}
           />
           <div className="container-fluid view-container" id="app-view-container">
             <Card className="jh-card">
@@ -75,14 +84,17 @@ export class App extends React.Component<IAppProps> {
   }
 }
 
-const mapStateToProps = ({ authentication<% if (enableTranslation) { %>, locale<% } %> }) => ({
+const mapStateToProps = ({ authentication, applicationProfile<% if (enableTranslation) { %>, locale<% } %> }) => ({
   <%_ if (enableTranslation) { _%>
   currentLocale: locale.currentLocale,
   <%_ } _%>
   isAuthenticated: authentication.isAuthenticated,
-  isAdmin: hasAnyAuthority(authentication.account.authorities, [AUTHORITIES.ADMIN])
+  isAdmin: hasAnyAuthority(authentication.account.authorities, [AUTHORITIES.ADMIN]),
+  ribbonEnv: applicationProfile.ribbonEnv,
+  isInProduction: applicationProfile.inProduction,
+  isSwaggerEnabled: applicationProfile.isSwaggerEnabled
 });
 
-const mapDispatchToProps = { <% if (enableTranslation) { %>setLocale, <% } %>getSession };
+const mapDispatchToProps = { <% if (enableTranslation) { %>setLocale, <% } %>getSession, getProfile };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

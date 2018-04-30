@@ -35,9 +35,6 @@ function writeFiles() {
                 if (this.app.searchEngine === 'elasticsearch') {
                     this.template('db/elasticsearch.yml.ejs', `${this.directoryPath}/k8s/${appName}/${appName}-elasticsearch.yml`);
                 }
-                if (this.app.messageBroker === 'kafka') {
-                    this.template('db/kafka.yml.ejs', `${this.directoryPath}/k8s/${appName}/${appName}-kafka.yml`);
-                }
                 if ((this.app.applicationType === 'gateway' || this.app.applicationType === 'monolith') && this.kubernetesServiceType === 'Ingress') {
                     this.template('ingress.yml.ejs', `${this.directoryPath}/k8s/${appName}/${appName}-ingress.yml`);
                 }
@@ -55,6 +52,11 @@ function writeFiles() {
             if (this.kubernetesNamespace !== 'default') {
                 this.template('namespace.yml.ejs', `${this.directoryPath}/k8s/namespace.yml`);
             }
+        },
+
+        writeMessagingBroker() {
+            if (!this.useKafka) return;
+            this.template('messagebroker/kafka.yml.ejs', `${this.directoryPath}/k8s/messagebroker/kafka.yml`);
         },
 
         writeJhipsterConsole() {

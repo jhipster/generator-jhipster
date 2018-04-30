@@ -22,6 +22,8 @@ You can deploy your apps by running:
 kubectl apply -f <%-directoryPath%>k8s/namespace.yml
 <%_ } _%> <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
 kubectl apply -f <%-directoryPath%>k8s/registry/
+<%_ } _%> <%_ if (useKafka === true) { _%>
+kubectl apply -f <%-directoryPath%>k8s/messagebroker/
 <%_ } _%> <%_ if (monitoring === 'elk') { _%>
 kubectl apply -f <%-directoryPath%>k8s/console/
 <%_ } _%> <%_ if (monitoring === 'prometheus') { _%>
@@ -55,7 +57,7 @@ $ kubectl get svc <%= appConfigs[i].baseName.toLowerCase() %><%= kubernetesNames
 
 ## Scaling your deployments
 
-You can scale your apps using 
+You can scale your apps using
 
 ```
 $ kubectl scale deployment <app-name> --replicas <replica-count><%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
@@ -82,7 +84,7 @@ Your application logs can be found in JHipster console (powered by Kibana). You 
 $ kubectl get svc jhipster-console<%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
-* If you have chosen *Ingress*, then you should be able to access Kibana using the given ingress domain. 
+* If you have chosen *Ingress*, then you should be able to access Kibana using the given ingress domain.
 * If you have chosen *NodePort*, then point your browser to an IP of any of your nodes and use the node port described in the output.
 * If you have chosen *LoadBalancer*, then use the IaaS provided LB IP
 <%_ } _%>
@@ -90,7 +92,7 @@ $ kubectl get svc jhipster-console<%= kubernetesNamespace === 'default' ? '' : `
 
 ### Prometheus metrics
 
-Generator is also packaged with [Prometheus operator by CoreOS](https://github.com/coreos/prometheus-operator). 
+Generator is also packaged with [Prometheus operator by CoreOS](https://github.com/coreos/prometheus-operator).
 
 **hint**: use must build your apps with `prometheus` profile active!
 
@@ -105,7 +107,7 @@ Also the visualisation can be explored in Grafana which is pre-configured with a
 $ kubectl get svc jhipster-grafana<%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
-* If you have chosen *Ingress*, then you should be able to access Grafana using the given ingress domain. 
+* If you have chosen *Ingress*, then you should be able to access Grafana using the given ingress domain.
 * If you have chosen *NodePort*, then point your browser to an IP of any of your nodes and use the node port described in the output.
 * If you have chosen *LoadBalancer*, then use the IaaS provided LB IP
 

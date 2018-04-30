@@ -52,7 +52,10 @@ eureka:
         metadata-map:
             zone: primary # This is needed for the load balancer
             profile: ${spring.profiles.active}
-            version: ${info.project.version}
+            version: ${info.project.version:}
+            git-version: ${git.commit.id.describe:}
+            git-commit: ${git.commit.id.abbrev:}
+            git-branch: ${git.branch:}
 ribbon:
     eureka:
         enabled: true
@@ -216,9 +219,10 @@ server:
             cookie:
                 http-only: true
 
+# Properties to be exposed on the /info management endpoint
 info:
-    project:
-        version: #project.version#
+    # Comma separated list of profiles that will trigger the ribbon to show
+    display-ribbon-on-profiles: "dev"
 
 # ===================================================================
 # JHipster specific properties
@@ -256,8 +260,6 @@ jhipster:
         contact-email:
         license:
         license-url:
-    ribbon:
-        display-on-active-profiles: dev
 
 # ===================================================================
 # Application specific properties

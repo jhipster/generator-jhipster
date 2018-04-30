@@ -23,6 +23,8 @@
 kubectl apply -f <%-directoryPath%>k8s/namespace.yml
 <%_ } _%> <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
 kubectl apply -f <%-directoryPath%>k8s/registry/
+<%_ } _%> <%_ if (useKafka === true) { _%>
+kubectl apply -f <%-directoryPath%>k8s/messagebroker/
 <%_ } _%> <%_ if (monitoring === 'elk') { _%>
 kubectl apply -f <%-directoryPath%>k8s/console/
 <%_ } _%> <%_ if (monitoring === 'prometheus') { _%>

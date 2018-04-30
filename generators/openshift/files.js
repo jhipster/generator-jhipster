@@ -18,10 +18,12 @@ function writeFiles() {
                 if (this.app.searchEngine === 'elasticsearch') {
                     this.template('db/elasticsearch.yml.ejs', `${this.directoryPath}/ocp/${appName}/${appName}-elasticsearch.yml`);
                 }
-                if (this.app.messageBroker === 'kafka') {
-                    this.template('db/kafka.yml.ejs', `${this.directoryPath}/ocp/${appName}/${appName}-kafka.yml`);
-                }
             }
+        },
+
+        writeMessagingBroker() {
+            if (!this.useKafka) return;
+            this.template('messagebroker/kafka.yml.ejs', `${this.directoryPath}/ocp/messagebroker/kafka.yml`);
         },
 
         writeRegistryFiles() {

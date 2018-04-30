@@ -111,6 +111,8 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
         <%_ if (databaseType === 'sql') { _%>
         if (hikariDataSource != null) {
             log.debug("Monitoring the datasource");
+            // remove the factory created by HikariDataSourceMetricsPostProcessor until JHipster migrate to Micrometer
+            hikariDataSource.setMetricsTrackerFactory(null);
             hikariDataSource.setMetricRegistry(metricRegistry);
         }
         <%_ } _%>

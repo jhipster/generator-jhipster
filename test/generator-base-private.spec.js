@@ -181,7 +181,54 @@ export * from './entityFolderName/entityFileName.state';`;
             describe('when having quotes', () => {
                 it('formats the text to make the string valid', () => {
                     // eslint-disable-next-line quotes
-                    expect(BaseGenerator.formatAsApiDescription("JHipster is \"the\" best")).to.equal("JHipster is \"the\" best");
+                    expect(BaseGenerator.formatAsApiDescription('JHipster is "the" best')).to.equal('JHipster is \\"the\\" best');
+                });
+            });
+        });
+    });
+
+    describe('formatAsLiquibaseRemarks', () => {
+        describe('when formatting a nil text', () => {
+            it('returns it', () => {
+                expect(BaseGenerator.formatAsLiquibaseRemarks()).to.equal(undefined);
+            });
+        });
+        describe('when formatting an empty text', () => {
+            it('returns it', () => {
+                expect(BaseGenerator.formatAsLiquibaseRemarks('')).to.equal('');
+            });
+        });
+        describe('when formatting normal texts', () => {
+            describe('when having empty lines', () => {
+                it('discards them', () => {
+                    expect(BaseGenerator.formatAsLiquibaseRemarks('First line\n \nSecond line\n\nThird line')).to.equal('First line Second line Third line');
+                });
+            });
+            describe('when having a plain text', () => {
+                it('puts a space before each line', () => {
+                    expect(BaseGenerator.formatAsLiquibaseRemarks('JHipster is\na great generator')).to.equal('JHipster is a great generator');
+                });
+            });
+            describe('when having ampersand', () => {
+                it('formats the text to escape it', () => {
+                    expect(BaseGenerator.formatAsLiquibaseRemarks('JHipster uses Spring & Hibernate')).to.equal('JHipster uses Spring &amp; Hibernate');
+                });
+            });
+            describe('when having quotes', () => {
+                it('formats the text to escape it', () => {
+                    // eslint-disable-next-line quotes
+                    expect(BaseGenerator.formatAsLiquibaseRemarks('JHipster is "the" best')).to.equal('JHipster is &quot;the&quot; best');
+                });
+            });
+            describe('when having apostrophe', () => {
+                it('formats the text to escape it', () => {
+                    // eslint-disable-next-line quotes
+                    expect(BaseGenerator.formatAsLiquibaseRemarks("JHipster is 'the' best")).to.equal("JHipster is &apos;the&apos; best");
+                });
+            });
+            describe('when having HTML tags < and >', () => {
+                it('formats the text to escape it', () => {
+                    expect(BaseGenerator.formatAsLiquibaseRemarks('Not boldy\n<b>boldy</b>')).to.equal('Not boldy&lt;b&gt;boldy&lt;/b&gt;');
                 });
             });
         });
