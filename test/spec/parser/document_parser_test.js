@@ -52,31 +52,6 @@ describe('DocumentParser', () => {
           }
         });
       });
-      context('because there is no database type', () => {
-        it('fails', () => {
-          try {
-            DocumentParser.parseFromConfigurationObject({
-              document: 42
-            });
-            fail();
-          } catch (error) {
-            expect(error.name).to.equal('NullPointerException');
-          }
-        });
-      });
-      context('because the database type doesn\'t exist', () => {
-        it('fails', () => {
-          try {
-            DocumentParser.parseFromConfigurationObject({
-              document: 42,
-              databaseType: 'oops'
-            });
-            fail();
-          } catch (error) {
-            expect(error.name).to.equal('IllegalArgumentException');
-          }
-        });
-      });
     });
     context('when passing valid args', () => {
       context('with no error', () => {
