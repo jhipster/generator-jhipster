@@ -248,7 +248,7 @@ public class CacheConfiguration {
             config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(false);
         }
         <%_ } _%>
-        config.getMapConfigs().put("default", initializeDefaultMapConfig());
+        config.getMapConfigs().put("default", initializeDefaultMapConfig(jHipsterProperties));
 
         // Full reference is available at: http://docs.hazelcast.org/docs/management-center/3.9/manual/html/Deploying_and_Starting.html
         config.setManagementCenterConfig(initializeDefaultManagementCenterConfig(jHipsterProperties));
@@ -266,8 +266,8 @@ public class CacheConfiguration {
         return managementCenterConfig;
     }
 
-    private MapConfig initializeDefaultMapConfig() {
-        MapConfig mapConfig = new MapConfig();
+    private MapConfig initializeDefaultMapConfig(JHipsterProperties jHipsterProperties) {
+        mapConfig.setBackupCount(jHipsterProperties.getCache().getHazelcast().getBackupCount());
 
     /*
         Number of backups. If 1 is set as the backup-count for example,
