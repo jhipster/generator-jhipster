@@ -68,10 +68,11 @@ function askForApplicationType(meta) {
                 value: 'gateway',
                 name: 'Microservice gateway'
             },
-        //    {
-        //        value: 'reactive',
-        //        name: 'Reactive application'
-        //    },
+            // Reactive applications are not yet supported!
+            //    {
+            //        value: 'reactive',
+            //        name: 'Reactive application'
+            //    },
             {
                 value: 'uaa',
                 name: 'JHipster UAA server (for microservice OAuth2 authentication)'
