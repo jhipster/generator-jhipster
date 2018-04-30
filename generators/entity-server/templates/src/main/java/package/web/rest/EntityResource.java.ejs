@@ -61,6 +61,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 <%_ } _%>
 import org.springframework.http.ResponseEntity;
+<%_ if (databaseType === 'sql') { _%>
+import org.springframework.transaction.annotation.Transactional;
+<%_ } _%>
 import org.springframework.web.bind.annotation.*;
 <%_ if (reactiveRepositories) { _%>
 import reactor.core.publisher.Flux;
@@ -161,7 +164,9 @@ public class <%= entityClass %>Resource {
      * @return the ResponseEntity with status 200 (OK) and the list of <%= entityInstancePlural %> in body
      */
     @GetMapping("/<%= entityApiUrl %>")
-    @Timed<%- include('../../common/get_all_template', {viaService: viaService}); -%>
+    @Timed
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional(readOnly = true)<%_ } _%><%- include('../../common/get_all_template', {viaService: viaService}); -%>
 
     <%_ if (reactiveRepositories) { _%>
     /**
