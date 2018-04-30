@@ -59,6 +59,7 @@ describe('Account', () => {
     <%_ if (authenticationType !== 'oauth2') { _%>
     // Login page should appear
     expect(await signInPage.getTitle()).to.eq(pageTitle);
+    waitUntilTextIsPresentInElementValue(signInPage.password, 'foo');
     await signInPage.password.clear();
     signInPage.setPassword('admin');
     await signInPage.login();
