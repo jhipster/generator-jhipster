@@ -731,8 +731,7 @@ describe('DocumentParser', () => {
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/application.jdl']);
           const content = DocumentParser.parseFromConfigurationObject({
-            document: input,
-            databaseType: DatabaseTypes.SQL
+            document: input
           });
           application = content.applications.toto.config;
         });
@@ -871,10 +870,7 @@ describe('DocumentParser', () => {
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/application_with_entities.jdl']);
           content = DocumentParser.parseFromConfigurationObject({
-            document: input,
-            databaseType: DatabaseTypes.SQL,
-            applicationType: ApplicationTypes.MICROSERVICE,
-            applicationName: 'MyApp'
+            document: input
           });
         });
 
