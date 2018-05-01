@@ -19,27 +19,8 @@
 const jhiCore = require('jhipster-core');
 
 module.exports = {
-    askForControllerActions,
-    askForReactive
+    askForControllerActions
 };
-
-function askForReactive() {
-    if (!this.reactive) return;
-
-    const done = this.async();
-    const prompts = [
-        {
-            type: 'confirm',
-            name: 'reactiveController',
-            message: 'Do you want your controller to provide a reactive API, using Spring Webflux?',
-            default: false
-        }
-    ];
-    this.prompt(prompts).then((props) => {
-        this.reactiveController = props.reactiveController;
-        done();
-    });
-}
 
 function askForControllerActions() {
     const askForControllerAction = (done) => {

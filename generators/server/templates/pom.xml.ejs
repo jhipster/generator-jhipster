@@ -88,7 +88,7 @@
         <profile.swagger />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>2.0.1</jhipster-dependencies.version>
+        <jhipster-dependencies.version>2.0.2</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
         <spring-boot.version>2.0.1.RELEASE</spring-boot.version>
@@ -515,7 +515,7 @@
         <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-<%=databaseType%><% if (reactive === true) { %>-reactive<% } %></artifactId>
+            <artifactId>spring-boot-starter-data-<%=databaseType%><% if (applicationType === 'reactive') { %>-reactive<% } %></artifactId>
         </dependency>
         <%_ } _%>
         <dependency>
@@ -538,7 +538,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <%_ if (reactive === true) { _%>
+        <%_ if (applicationType === 'reactive') { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>

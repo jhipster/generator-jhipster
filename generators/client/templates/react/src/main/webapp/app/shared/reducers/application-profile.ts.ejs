@@ -36,9 +36,9 @@ export default (state = initialState, action) => {
       const { data } = action.payload;
       return {
         ...state,
-        ribbonEnv: data.ribbonEnv,
-        inProduction: data.activeProfiles.includes('prod'),
-        isSwaggerEnabled: data.activeProfiles.includes('swagger')
+        ribbonEnv: data['display-ribbon-on-profiles'],
+        inProduction: data['active-profiles'].includes('prod'),
+        isSwaggerEnabled: data['active-profiles'].includes('swagger')
       };
     default:
       return state;
@@ -47,5 +47,5 @@ export default (state = initialState, action) => {
 
 export const getProfile = () => ({
   type: ACTION_TYPES.GET_PROFILE,
-  payload: axios.get('/api/profile-info')
+  payload: axios.get('/management/info')
 });

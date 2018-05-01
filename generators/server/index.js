@@ -147,11 +147,6 @@ module.exports = class extends BaseGenerator {
                 if (!this.applicationType) {
                     this.applicationType = 'monolith';
                 }
-
-                this.reactive = this.config.get('reactive');
-                if (this.reactive === undefined) {
-                    this.reactive = false;
-                }
                 this.packageName = this.config.get('packageName');
                 this.serverPort = this.config.get('serverPort');
                 if (this.serverPort === undefined) {
@@ -293,7 +288,6 @@ module.exports = class extends BaseGenerator {
             askFori18n: prompts.askFori18n,
 
             setSharedConfigOptions() {
-                this.configOptions.reactive = this.reactive;
                 this.configOptions.packageName = this.packageName;
                 this.configOptions.cacheProvider = this.cacheProvider;
                 this.configOptions.enableHibernateCache = this.enableHibernateCache;
@@ -330,7 +324,6 @@ module.exports = class extends BaseGenerator {
             insight() {
                 const insight = this.insight();
                 insight.trackWithEvent('generator', 'server');
-                insight.track('app/reactive', this.reactive);
                 insight.track('app/authenticationType', this.authenticationType);
                 insight.track('app/cacheProvider', this.cacheProvider);
                 insight.track('app/enableHibernateCache', this.enableHibernateCache);
@@ -367,7 +360,6 @@ module.exports = class extends BaseGenerator {
             saveConfig() {
                 this.config.set('jhipsterVersion', packagejs.version);
                 this.config.set('baseName', this.baseName);
-                this.config.set('reactive', this.reactive);
                 this.config.set('packageName', this.packageName);
                 this.config.set('packageFolder', this.packageFolder);
                 this.config.set('serverPort', this.serverPort);

@@ -51,7 +51,8 @@ import {
   <%_ } _%>
   ICrudPutAction
 } from 'react-jhipster';
-import { FaBan, <% if(fieldsContainBlob) { %>FaTimesCircle, <% } %>FaFloppyO, FaArrowLeft } from 'react-icons/lib/fa';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import { faBan, <% if(fieldsContainBlob) { %>faTimesCircle, <% } %>faSave, faArrowLeft } from '@fortawesome/fontawesome-free-solid';
 
 <%_
 let hasRelationshipQuery = false;
@@ -430,7 +431,7 @@ _%>
                       <span>{<%= fieldName %>ContentType}, {byteSize(<%= fieldName %>)}</span>
                     </Col>
                     <Col md="1">
-                      <Button color="danger" onClick={this.clearBlob('<%= fieldName %>')}><FaTimesCircle /></Button>
+                      <Button color="danger" onClick={this.clearBlob('<%= fieldName %>')}><FontAwesomeIcon icon={faTimesCircle} /></Button>
                     </Col>
                   </Row>
                 </div>
@@ -650,12 +651,12 @@ _%>
             <%_ } _%>
           <%_ }) _%>
             <Button tag={Link} id="cancel-save" to="/entity/<%= entityFileName %>" replace color="info">
-              <FaArrowLeft/>&nbsp;
+              <FontAwesomeIcon icon={faArrowLeft} />&nbsp;
               <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
             </Button>
             &nbsp;
             <Button color="primary" id="save-entity" type="submit" disabled={isInvalid || updating}>
-              <FaFloppyO/>&nbsp;
+              <FontAwesomeIcon icon={faSave} />&nbsp;
               <Translate contentKey="entity.action.save">Save</Translate>
             </Button>
           </AvForm>

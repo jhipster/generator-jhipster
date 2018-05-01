@@ -297,7 +297,7 @@ dependencies {
     compile "net.java.dev.jna:jna"
     <%_ } _%>
     <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-    compile "org.springframework.boot:spring-boot-starter-data-<%=databaseType%><% if (reactive === true) { %>-reactive<% } %>"
+    compile "org.springframework.boot:spring-boot-starter-data-<%=databaseType%><% if (applicationType === 'reactive') { %>-reactive<% } %>"
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
     compile "org.springframework.cloud:spring-cloud-stream"
@@ -308,7 +308,7 @@ dependencies {
     compile ("org.springframework.boot:spring-boot-starter-web") {
         exclude module: 'spring-boot-starter-tomcat'
     }
-    <%_ if (reactive === true) { _%>
+    <%_ if (applicationType === 'reactive') { _%>
     compile "org.springframework.boot:spring-boot-starter-webflux"
     <%_ } _%>
     compile "org.springframework.boot:spring-boot-starter-undertow"
