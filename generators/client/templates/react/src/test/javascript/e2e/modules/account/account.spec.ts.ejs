@@ -21,23 +21,26 @@ describe('Account', () => {
   let passwordPage: PasswordPage;
   let settingsPage: SettingsPage;
   let registerPage: RegisterPage;
-  <%_ } _%>
 
-  const pageTitle = 'login.title';
+  const registerPageTitle = 'register-title';
+  const passwordPageTitle = 'password-title';
+  const settingsPageTitle = 'settings-title';
+  <%_ } _%>
+  const loginPageTitle = 'login-title';
 
   before(() => {
     browser.get('/');
-    navBarPage = new NavBarPage();
+    navBarPage = new NavBarPage(true);
     signInPage = navBarPage.getSignInPage();
   });
 
   it('should fail to login with bad password', async () => {
     <%_ if (authenticationType !== 'oauth2') { _%>
     // Login page should appear
-    expect(await signInPage.getTitle()).to.eq(pageTitle);
+    expect(await signInPage.getTitle()).to.eq(loginPageTitle);
     signInPage.autoSignInUsing('admin', 'foo');
     // Login page should stay open when login fails
-    expect(await signInPage.getTitle()).to.eq(pageTitle);
+    expect(await signInPage.getTitle()).to.eq(loginPageTitle);
     <%_ } else { _%>
     signInPage.loginWithOAuth('admin', 'foo');
     const alert = element(by.css('.alert-error'));
@@ -58,7 +61,7 @@ describe('Account', () => {
   it('should login with admin account', async () => {
     <%_ if (authenticationType !== 'oauth2') { _%>
     // Login page should appear
-    expect(await signInPage.getTitle()).to.eq(pageTitle);
+    expect(await signInPage.getTitle()).to.eq(loginPageTitle);
     waitUntilTextIsPresentInElementValue(signInPage.password, 'foo');
     await signInPage.password.clear();
     signInPage.setPassword('admin');
@@ -80,6 +83,7 @@ describe('Account', () => {
   <%_ if (authenticationType !== 'oauth2') { _%>
   it('should be able to sign up', async () => {
     registerPage = navBarPage.getRegisterPage();
+    expect(await registerPage.getTitle()).to.eq(registerPageTitle);
     registerPage.autoSignUpUsing('user_test', 'usertest@jhipster.com', 'user_test');
     <%_ if (enableTranslation) { _%>
     const toast = getToastByClassName('register.messages.success');
@@ -119,7 +123,7 @@ describe('Account', () => {
 
   it('should activate the new registered user', async () => {
     navBarPage.autoSignIn();
-    browser.get('#/admin/user-management');
+    navBarPage.clickOnAdminMenuItem('user-management');
     const deactivatedButton = getDeactivatedButtonByLogin('user_test');
     await deactivatedButton.click();
     waitUntilHidden(deactivatedButton);
@@ -130,6 +134,7 @@ describe('Account', () => {
 
   it('should be able to log in with new registered account', async () => {
     signInPage.get();
+    expect(await signInPage.getTitle()).to.eq(loginPageTitle);
     signInPage.autoSignInUsing('user_test', 'user_test');
     signInPage.waitUntilHidden();
     // Login page should close when login success
@@ -140,6 +145,7 @@ describe('Account', () => {
   it('should fail to update password when using incorrect current password', async () => {
     navBarPage.autoSignIn();
     passwordPage = navBarPage.getPasswordPage();
+    expect(await passwordPage.getTitle()).to.eq(passwordPageTitle);
     passwordPage.autoChangePassword('wrong_current_password', 'new_password', 'new_password');
     <%_ if (enableTranslation) { _%>
     const toast = getToastByClassName('password.messages.error');
@@ -155,6 +161,7 @@ describe('Account', () => {
   });
 
   it('should be able to update password', async () => {
+    expect(await passwordPage.getTitle()).to.eq(passwordPageTitle);
     passwordPage.autoChangePassword('admin', 'newpassword', 'newpassword');
     <%_ if (enableTranslation) { _%>
     const toast = getToastByClassName('password.messages.success');
@@ -182,6 +189,7 @@ describe('Account', () => {
     signInPage.get();
     signInPage.autoSignInUsing('user_test', 'user_test');
     settingsPage = navBarPage.getSettingsPage();
+    expect(await settingsPage.getTitle()).to.eq(settingsPageTitle);
     settingsPage.setFirstName('jhipster');
     settingsPage.setLastName('retspihj');
     settingsPage.save();
@@ -199,6 +207,7 @@ describe('Account', () => {
   it('should not be able to change settings if email already exists', async () => {
     navBarPage.autoSignIn();
     settingsPage.get();
+    expect(await settingsPage.getTitle()).to.eq(settingsPageTitle);
     waitUntilTextIsPresentInElementValue(settingsPage.email, 'admin@localhost');
     await settingsPage.email.clear();
     settingsPage.setEmail('usertest@jhipster.com');

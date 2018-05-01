@@ -10,7 +10,7 @@ export class SettingsPage extends BasePage {
   lastName: ElementFinder = this.selector.$('#lastName');
   email: ElementFinder = this.selector.$('#email');
   saveButton: ElementFinder = this.selector.$('button[type=submit]');
-  title: ElementFinder = this.selector.$('#title');
+  title: ElementFinder = $('#settings-title');
 
   constructor() {
     super(selector);
@@ -19,6 +19,10 @@ export class SettingsPage extends BasePage {
   get() {
     browser.get('#/account/settings');
     this.waitUntilDisplayed();
+  }
+
+  getTitle() {
+    return this.title.getAttribute('id');
   }
 
   setFirstName(firstName) {
