@@ -286,7 +286,7 @@ describe('DocumentParser', () => {
           }
         });
       });
-      context('with User entity as from for a relationship', () => {
+      context('with User entity as source for a relationship', () => {
         let input = null;
 
         before(() => {
@@ -305,7 +305,7 @@ describe('DocumentParser', () => {
           }
         });
       });
-      context('with User entity as to for a relationship', () => {
+      context('with User entity as destination for a relationship', () => {
         let content = null;
 
         before(() => {
