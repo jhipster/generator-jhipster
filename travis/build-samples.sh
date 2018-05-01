@@ -1155,6 +1155,7 @@ function launchScriptForAllSamples() {
         # associated with the same terminal as the invoker."
         while [ `ps -o pid,command  \
                 | grep "build-samples.sh" \
+                | grep -v "grep" \
                 | wc -l` -gt $(($numberOfProcesses+2)) ] ; do
             # If we use `grep build-samples.sh', do not forget than grep is also
             # returned by `ps'.
