@@ -26,8 +26,8 @@ describe('Administration', () => {
   describe('User management', () => {
     it('should load user management', async () => {
       navBarPage.clickOnAdminMenuItem('user-management');
-      // Title should contain 'Users'
-      expect(await element(by.css('h2#page-heading')).getText()).to.contain('Users');
+      // Title should be equal to 'Users'
+      expect(await element(by.className('userManagement-page-heading')).isPresent()).to.be.true;
     });
 
     it('should delete previously created fake user', async () => {
@@ -43,27 +43,27 @@ describe('Administration', () => {
 
   it('should load metrics', async () => {
     navBarPage.clickOnAdminMenuItem('metrics');
-    expect(await element(by.css('h2#page-heading')).getText()).to.contain('Application Metrics');
+    expect(await element(by.className('metrics-page-heading')).getText()).to.eq('Application Metrics');
   });
 
   it('should load health', async () => {
     navBarPage.clickOnAdminMenuItem('health');
-    expect(await element(by.css('h2#page-heading')).getText()).to.contain('Health Checks');
+    expect(await element(by.className('health-page-heading')).getText()).to.eq('Health Checks');
   });
 
   it('should load configuration', async () => {
     navBarPage.clickOnAdminMenuItem('configuration');
-    expect(await element(by.css('h2#page-heading')).getText()).to.contain('Configuration');
+    expect(await element(by.className('configuration-page-heading')).getText()).to.eq('Configuration');
   });
 
   it('should load audits', async () => {
     navBarPage.clickOnAdminMenuItem('audits');
-    expect(await element(by.css('h2#page-heading')).getText()).to.contain('Audits');
+    expect(await element(by.className('audits-page-heading')).getText()).to.eq('Audits');
   });
 
   it('should load logs', async () => {
     navBarPage.clickOnAdminMenuItem('logs');
-    expect(await element(by.css('h2#page-heading')).getText()).to.contain('Logs');
+    expect(await element(by.className('logs-page-heading')).getText()).to.eq('Logs');
   });
 
   after(() => navBarPage.autoSignOut());

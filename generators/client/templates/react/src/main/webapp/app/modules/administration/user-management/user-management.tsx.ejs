@@ -87,7 +87,7 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
     const { users, account, match, totalItems } = this.props;
     return (
       <div>
-        <h2 id="page-heading">
+        <h2 className="userManagement-page-heading">
           <Translate contentKey="userManagement.home.title">Users</Translate>
           <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity">
             <FaPlus /> <Translate contentKey="userManagement.home.createLabel">Create a new user</Translate>
