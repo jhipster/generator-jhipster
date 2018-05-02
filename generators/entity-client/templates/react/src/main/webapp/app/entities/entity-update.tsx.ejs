@@ -235,14 +235,21 @@ _%>
 
   <%_ } else if (relationshipType === 'many-to-one' || relationshipType === 'one-to-one' && ownerSide === true) { _%>
   <%= relationshipFieldName %>Update = element => {
-    const <%= otherEntityField %> = element.target.value;
-    for (const i in this.props.<%= otherEntityNamePlural %>) {
-        if (<%= otherEntityField %>.toString() === this.props.<%= otherEntityNamePlural %>[i].<%= otherEntityField %>.toString()) {
-            this.setState({
-                <%= relationshipFieldName %>Id: this.props.<%= otherEntityNamePlural %>[i].id
-            });
-        }
+    const <%= otherEntityField %> = element.target.value.toString();
+    if (<%= otherEntityField %> === '') {
+      this.setState({
+        <%= relationshipFieldName %>Id: -1
+      })
+    } else {
+      for (const i in this.props.<%= otherEntityNamePlural %>) {
+          if (<%= otherEntityField %> === this.props.<%= otherEntityNamePlural %>[i].<%= otherEntityField %>.toString()) {
+              this.setState({
+                  <%= relationshipFieldName %>Id: this.props.<%= otherEntityNamePlural %>[i].id
+              });
+          }
+      }
     }
+
   }
 
   <%_ } _%>
