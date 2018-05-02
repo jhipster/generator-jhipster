@@ -195,7 +195,7 @@ module.exports = class extends PrivateBase {
                              |                    </li>`)
                     ]
                 }, this);
-            } else {
+            } else if (this.clientFramework === 'react')  {
                 // React
                 entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/shared/layout/header/header.tsx`;
                 jhipsterUtils.rewriteFile({
@@ -257,7 +257,7 @@ module.exports = class extends PrivateBase {
                         this.stripMargin(microServiceName ? `|${this.upperFirstCamelCase(microServiceName)}${entityAngularName}Module,` : `|${appName}${entityAngularName}Module,`)
                     ]
                 }, this);
-            } else {
+            } else if (clientFramework === 'react') {
                 // React
                 const indexModulePath = `${CLIENT_MAIN_SRC_DIR}app/entities/index.tsx`;
 

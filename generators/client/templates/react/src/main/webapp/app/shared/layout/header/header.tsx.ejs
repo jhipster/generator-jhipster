@@ -133,10 +133,10 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
   render() {
     const {<%_ if (enableTranslation) { _%>currentLocale,<%_ } _%> isAuthenticated, isAdmin } = this.props;
     const entityMenuItems = [
-      /* jhipster-needle-add-entity-to-menu - - JHipster will add entities to the menu here */
+      /* jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here */
       <span key="dummy-placeholder"/> /* workaround to avoid error when there are no entities */
     ];
-    /* jhipster-needle-add-element-to-menu - JHipster will add entities to the menu here */
+    /* jhipster-needle-add-element-to-menu - JHipster will add new menu items here */
     const adminMenuItems = [
     <%_ if (applicationType === 'gateway') { _%>
       <DropdownItem tag={Link} key="gateway" to="/admin/gateway"><FontAwesomeIcon icon={faRoad} /> Gateway</DropdownItem>,
