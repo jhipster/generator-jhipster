@@ -184,7 +184,7 @@ export class MetricsPage extends React.Component<any, IMetricsPageState> {
             </Progress>
           </Col>
           <Col md="4">
-            <b>Threads</b> (Total: {metrics.gauges['jvm.threads.count'].value})<FontAwesomeIcon icon="eye" className="hand" onClick={this.getThreadDump} />
+            <b>Threads</b> (Total: {metrics.gauges['jvm.threads.count'].value}) <FontAwesomeIcon icon="eye" className="hand" onClick={this.getThreadDump} />
             <p><span>Runnable</span> {metrics.gauges['jvm.threads.runnable.count'].value}</p>
             <Progress animated min="0" value={metrics.gauges['jvm.threads.runnable.count'].value} max={metrics.gauges['jvm.threads.count'].value} color="success">
               <span>

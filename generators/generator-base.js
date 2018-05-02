@@ -204,7 +204,7 @@ module.exports = class extends PrivateBase {
                     splicable: [
                         this.stripMargin(`|(
                         |        <DropdownItem tag={Link} key="${routerName}" to="/entity/${routerName}">
-                        |          <FontAwesomeIcon icon={faAsterisk} />&nbsp;
+                        |          <FontAwesomeIcon icon="asterisk" />&nbsp;
                         |          ${_.startCase(routerName)}
                         |        </DropdownItem>
                         |      ),`)
