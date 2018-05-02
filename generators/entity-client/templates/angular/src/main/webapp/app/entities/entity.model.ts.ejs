@@ -35,7 +35,7 @@ fields.forEach(field => {
 export const enum <%= field.fieldType %> {<%
         const enums = field.fieldValues.split(',');
         for (let i = 0; i < enums.length; i++) { %>
-    '<%= enums[i] %>'<%if (i < enums.length - 1) { %>,<% }
+    <%= enums[i] %> = '<%= enums[i] %>'<%if (i < enums.length - 1) { %>,<% }
         } %>
 }
 
