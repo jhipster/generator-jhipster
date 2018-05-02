@@ -21,7 +21,6 @@ import { connect } from 'react-redux';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { Translate, ICrudGetAction, ICrudDeleteAction } from 'react-jhipster';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import { faBan, faTrash } from '@fortawesome/fontawesome-free-solid';
 
 import { IUser } from 'app/shared/model/user.model';
 import { getUser, deleteUser } from './user-management.reducer';
@@ -58,15 +57,15 @@ export class UserManagementDeleteDialog extends React.Component<IUserManagementD
         <Translate contentKey="userManagement.delete.question" interpolate={{ login: user.login }}>Are you sure you want to delete this User?</Translate>
       </ModalBody>
       <ModalFooter>
-        <Button color="secondary" onClick={this.handleClose}>
-          <FontAwesomeIcon icon={faBan} />&nbsp;
-          <Translate contentKey="entity.action.cancel">Cancel</Translate>
-        </Button>
-        <Button color="danger" onClick={this.confirmDelete}>
-          <FontAwesomeIcon icon={faTrash} />&nbsp;
-          <Translate contentKey="entity.action.delete">Delete</Translate>
-        </Button>
-      </ModalFooter>
+          <Button color="secondary" onClick={this.handleClose}>
+            <FontAwesomeIcon icon="ban"/>&nbsp;
+            <Translate contentKey="entity.action.cancel">Cancel</Translate>
+          </Button>
+          <Button color="danger" onClick={this.confirmDelete}>
+            <FontAwesomeIcon icon="trash" />&nbsp;
+            <Translate contentKey="entity.action.delete">Delete</Translate>
+          </Button>
+        </ModalFooter>
     </Modal>
     );
   }
