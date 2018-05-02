@@ -38,7 +38,7 @@ export default class NavBarPage extends BasePage {
 
   getRegisterPage() {
     this.clickOnAccountMenu();
-    this.clickOnTabMenu('register');
+    this.clickOnTabMenu('#/register');
     return new RegisterPage();
   }
   <%_ } _%>
@@ -46,9 +46,9 @@ export default class NavBarPage extends BasePage {
   getSignInPage() {
     this.clickOnAccountMenu();
     <%_ if (authenticationType !== 'oauth2') { _%>
-    this.clickOnTabMenu('login');
+    this.clickOnTabMenu('#/login');
     <%_ } else { _%>
-    this.clickOnLogin();
+    this.clickOnTabMenu('//localhost:8080/login');
     <%_ } _%>
     return new SignInPage();
   }
@@ -59,10 +59,10 @@ export default class NavBarPage extends BasePage {
   }
 
   clickOnTabMenu(item: string) {
-    return this.selector
-      .$('#header-tabs')
-      .$(`.dropdown-item[href="#/${item}"]`)
-      .click();
+  return this.selector
+    .$('#header-tabs')
+    .$(`.dropdown-item[href="${item}"]`)
+    .click();
   }
 
   <%_ if (authenticationType === 'oauth2') { _%>

@@ -73,10 +73,10 @@ describe('Account', () => {
     <%_ } else { _%>
     // Keycloak credentials by default, change them to be able to use oauth2 with Okta
     signInPage.loginWithOAuth('admin', 'admin');
-    const success = element(by.id('home.logged.message'));
+    const success = element(by.className('alert-success'));
     waitUntilDisplayed(success);
     // Success alert should appear in home page
-    expect(await success.getAttribute('id')).to.eq('home.logged.message');
+    expect(await success.isPresent()).to.be.true;
     <%_ } _%>
   });
 

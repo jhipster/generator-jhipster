@@ -55,22 +55,17 @@ export default class SignInPage extends BasePage {
   }
 
   <%_ if (authenticationType !== 'oauth2') { _%>
-
   autoSignInUsing(username: string, password: string) {
     this.setUserName(username);
     this.setPassword(password);
     return this.login();
   }
   <%_ } else { _%>
-
   loginWithOAuth(username: string, password: string) {
-    // Entering non angular site, tell webdriver to switch to synchronous mode.
-    browser.waitForAngularEnabled(false);
-
     this.username.isPresent().then(() => {
         this.username.sendKeys(username);
         this.password.sendKeys(password);
-        this.loginButton.click();
+        this.login();
     });
   }
   <%_ } _%>

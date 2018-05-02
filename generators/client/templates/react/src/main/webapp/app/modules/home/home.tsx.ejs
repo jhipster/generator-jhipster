@@ -63,7 +63,7 @@ export class Home extends React.Component<IHomeProp, IHomeState> {
           {
             (currentUser && currentUser.login) ? (
               <div>
-                <Alert id="home.logged.message" color="success">
+                <Alert color="success">
                   <Translate contentKey="home.logged.message" interpolate={{ username: currentUser.login }}>You are logged in as user {currentUser.login}.</Translate>
                 </Alert>
               </div>
