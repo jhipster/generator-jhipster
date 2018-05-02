@@ -140,7 +140,6 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         generator.config.delete('hibernateCache');
     }
     if (generator.isJhipsterVersionLessThan('5.0.0')) {
-        generator.removeFile(`${javaDir}/ApplicationWebXml.java`);
         generator.removeFile(`${javaDir}/config/ThymeleafConfiguration.java`);
         generator.removeFile(`${mainResourceDir}/mails/activationEmail.html`);
         generator.removeFile(`${mainResourceDir}/mails/creationEmail.html`);
