@@ -5,7 +5,6 @@
     },
     "jhipsterVersion": "4.14.0",
     "baseName": "sampleMicroservice",
-    "reactive": false,
     "packageName": "com.mycompany.myapp",
     "packageFolder": "com/mycompany/myapp",
     "serverPort": "8081",

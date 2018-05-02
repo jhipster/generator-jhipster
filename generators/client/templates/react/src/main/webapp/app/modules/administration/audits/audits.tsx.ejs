@@ -27,7 +27,8 @@ import {
   getSortState,
   IPaginationBaseState
 } from 'react-jhipster';
-import { FaSort } from 'react-icons/lib/fa';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import { faSort } from '@fortawesome/fontawesome-free-solid';
 
 import { APP_TIMESTAMP_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
@@ -120,9 +121,9 @@ export class AuditsPage extends React.Component<IAuditsPageProps, IAuditsPageSta
         <Table striped responsive>
           <thead>
             <tr>
-              <th onClick={this.sort('auditEventDate')}><Translate contentKey="audits.table.header.date">Date</Translate><FaSort /></th>
-              <th onClick={this.sort('principal')}><Translate contentKey="audits.table.header.principal">User</Translate><FaSort /></th>
-              <th onClick={this.sort('auditEventType')}><Translate contentKey="audits.table.header.status">State</Translate><FaSort /></th>
+              <th onClick={this.sort('auditEventDate')}><Translate contentKey="audits.table.header.date">Date</Translate><FontAwesomeIcon icon={faSort} /></th>
+              <th onClick={this.sort('principal')}><Translate contentKey="audits.table.header.principal">User</Translate><FontAwesomeIcon icon={faSort} /></th>
+              <th onClick={this.sort('auditEventType')}><Translate contentKey="audits.table.header.status">State</Translate><FontAwesomeIcon icon={faSort} /></th>
               <th><Translate contentKey="audits.table.header.data">Extra data</Translate></th>
             </tr>
           </thead>

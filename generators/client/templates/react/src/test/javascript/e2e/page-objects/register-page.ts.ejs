@@ -9,10 +9,15 @@ export default class RegisterPage extends BasePage {
   firstPassword: ElementFinder = this.selector.$('#firstPassword');
   secondPassword: ElementFinder = this.selector.$('#secondPassword');
   saveButton: ElementFinder = this.selector.$('button[type=submit]');
+  title: ElementFinder = $('#register-title');
 
   get() {
     browser.get('#/register');
     this.waitUntilDisplayed();
+  }
+
+  getTitle() {
+    return this.title.getAttribute('id');
   }
 
   setUserName(username) {

@@ -15,7 +15,7 @@ export default class SignInPage extends BasePage {
   password: ElementFinder = element(by.name('password'));
   loginButton: ElementFinder = element(by.css('input[type=submit]'));
   <%_ } _%>
-  title: ElementFinder = this.selector.$('#login\\.title');
+  title: ElementFinder = this.selector.$('#login-title');
 
   constructor() {
     super(selector);

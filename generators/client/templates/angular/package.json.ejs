@@ -33,11 +33,11 @@
     "@angular/platform-browser": "5.2.8",
     "@angular/platform-browser-dynamic": "5.2.8",
     "@angular/router": "5.2.8",
+    "@fortawesome/fontawesome": "1.1.5",
+    "@fortawesome/fontawesome-free-solid": "5.0.10",
     "@ng-bootstrap/ng-bootstrap": "1.0.1",
     "bootstrap": "4.0.0",
     "core-js": "2.5.3",
-    "@fortawesome/fontawesome": "1.1.5",
-    "@fortawesome/fontawesome-free-solid": "5.0.10",
     "jquery": "3.3.1",
     "moment": "2.21.0",
     "ng-jhipster": "0.4.5",
@@ -102,16 +102,17 @@
     "merge-jsons-webpack-plugin": "1.0.14",
     <%_ } _%>
     "prettier": "1.11.1",
-    "puppeteer": "1.1.1",
     <%_ if (protractorTests) { _%>
     "protractor": "5.1.2",
     "protractor-jasmine2-screenshot-reporter": "0.4.0",
     <%_ } _%>
     "proxy-middleware": "0.15.0",
+    "puppeteer": "1.1.1",
     "rimraf": "2.6.1",
     "sourcemap-istanbul-instrumenter-loader": "0.2.0",
     "style-loader": "0.20.3",
     "tapable": "1.0.0",
+    "thread-loader": "1.1.5",
     "to-string-loader": "1.1.5",
     <%_ if (protractorTests) { _%>
     "ts-node": "5.0.1",
@@ -121,7 +122,6 @@
     "tslint-config-prettier": "1.9.0",
     "tslint-loader": "3.6.0",
     "typescript": "2.7.2",
-    "thread-loader": "1.1.5",
     <%_ if (useSass) { _%>
     "sass-loader": "6.0.7",
     "node-sass": "4.7.2",
@@ -155,7 +155,7 @@
     <%_ if(!skipCommitHook) { _%>
     "precommit": "lint-staged",
     <%_ } _%>
-    "prettier:format":"<%= clientPackageManager %> prettier --write 'src/**/*.{ts,css,scss}'",
+    "prettier:format": "<%= clientPackageManager %> prettier --write 'src/**/*.{ts,css,scss}'",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "ngc": "ngc -p tsconfig-aot.json",
