@@ -77,10 +77,24 @@ describe('ReservedKeywords', () => {
         expect(ReservedKeywords.isReservedFieldName('mySuperField')).to.be.false;
       });
     });
-    context('when passing an invalid field name', () => {
+    context('when passing an invalid Java field name', () => {
       it('returns true', () => {
         expect(ReservedKeywords.isReservedFieldName('private')).to.be.true;
         expect(ReservedKeywords.isReservedFieldName('class')).to.be.true;
+      });
+    });
+    context('when passing an invalid Angular field name', () => {
+      it('returns true', () => {
+        expect(ReservedKeywords.isReservedFieldName('injectable')).to.be.true;
+        expect(ReservedKeywords.isReservedFieldName('injectable', 'angularX')).to.be.true;
+        expect(ReservedKeywords.isReservedFieldName('status', 'angularX')).to.be.false;
+      });
+    });
+    context('when passing an invalid React field name', () => {
+      it('returns true', () => {
+        expect(ReservedKeywords.isReservedFieldName('status')).to.be.true;
+        expect(ReservedKeywords.isReservedFieldName('status', 'react')).to.be.true;
+        expect(ReservedKeywords.isReservedFieldName('injectable', 'react')).to.be.false;
       });
     });
   });
