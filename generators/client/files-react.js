@@ -306,6 +306,11 @@ const files = {
                 // layouts
                 { file: 'shared/layout/footer/footer.tsx', method: 'processJsx' },
                 { file: 'shared/layout/header/header.tsx', method: 'processJsx' },
+                { file: 'shared/layout/header/header-components.tsx', method: 'processJsx' },
+                'shared/layout/header/menus/index.ts',
+                { file: 'shared/layout/header/menus/admin.tsx', method: 'processJsx' },
+                { file: 'shared/layout/header/menus/account.tsx', method: 'processJsx' },
+                { file: 'shared/layout/header/menus/entities.tsx', method: 'processJsx' },
                 { file: 'shared/layout/password/password-strength-bar.tsx', method: 'processJsx' },
                 // util
                 'shared/util/date-utils.ts',
@@ -316,6 +321,13 @@ const files = {
                 { file: 'shared/auth/private-route.tsx', method: 'processJsx' },
                 // model
                 'shared/model/user.model.ts'
+            ]
+        },
+        {
+            condition: generator => generator.enableTranslation,
+            path: REACT_DIR,
+            templates: [
+                { file: 'shared/layout/header/menus/locale.tsx', method: 'processJsx' },
             ]
         },
         {
@@ -357,6 +369,7 @@ const files = {
                 'spec/app/shared/util/entity-utils.spec.ts',
                 'spec/app/shared/auth/private-route.spec.tsx',
                 'spec/app/shared/layout/header.spec.tsx',
+                'spec/app/shared/layout/menus/account.spec.tsx',
                 'spec/app/modules/account/register/register.spec.tsx',
                 'spec/app/modules/account/register/register.reducer.spec.ts',
                 'spec/app/modules/account/activate/activate.reducer.spec.ts',
