@@ -195,7 +195,7 @@ module.exports = class extends PrivateBase {
                              |                    </li>`)
                     ]
                 }, this);
-            } else if (this.clientFramework === 'react')  {
+            } else if (this.clientFramework === 'react') {
                 // React
                 entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/shared/layout/header/header.tsx`;
                 jhipsterUtils.rewriteFile({
