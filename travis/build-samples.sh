@@ -608,18 +608,16 @@ function printInfoBeforeLaunch() {
 # function createlogfile() {{{3
 function createLogFile() {
 
-    # save the originals descriptor (stdout to console and stderr to console).
-    exec 3>&1 4>&2
-
     cd "${JHIPSTER_TRAVIS}"
     touch "$LOGFILENAME" || exitScriptWithError "FATAL ERROR: could not " \
         "create '$LOGFILENAME'"
 
     if [[ "$workOnAllProjects" -eq 0 ]] ; then
         echoSmallTitle "Create log file and save output in '${LOGFILENAME}'"
-        exec 1>> >(tee --append "${LOGFILENAME}") 2>> \
-            >(tee --append "${LOGFILENAME}")
+        exec 1>> >(tee --append "${LOGFILENAME}") 2>&1
     else
+        # save the originals descriptor (stdout to console and stderr to console).
+        exec 3>&1 4>&2
         echoSmallTitle "Create log file and redirect output in '${LOGFILENAME}'"
         exec 1>> "${LOGFILENAME}" 2>> "${LOGFILENAME}"
     fi
@@ -758,7 +756,9 @@ function treatEndOfBuild() {
         fi
     fi
 
-    restoreSTDERRandSTDOUTtoConsole
+    if [[ "$workOnAllProjects" -eq 1 ]] ; then
+        restoreSTDERRandSTDOUTtoConsole
+    fi
 
     unset logrenamed
 }
@@ -996,13 +996,11 @@ function launchScriptForOnlyOneSample() {
     retrieveVariablesInFileDotTravisSectionMatrix "$2"
 
     # if "$workOnAllProjects" -eq 1
-    # doesItTestGenerator and generateNode_Modules_Cache are done done in
+    # doesItTestGenerator and generateNode_Modules_Cache are done in
     # function launchScriptForAllSamples()
     if [[ "$workOnAllProjects" -eq 0 ]] ; then
         export APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
-        if [[ "$methodToExecute" == "generateProject" ]]; then
-            doesItTestGenerator "before generate the project".
-        fi
+        doesItTestGenerator "before generate the project".
         if [[ -e "$APP_FOLDER" ]] ; then
             local confirmationFirstParameter=`echo -e  \
                 "Warning: '${APP_FOLDER}' exists. Do you want delete it?" \
@@ -1178,8 +1176,6 @@ function launchScriptForAllSamples() {
     wait
 
     echo "All build are finished"
-
-    restoreSTDERRandSTDOUTtoConsole
 
 }
 
