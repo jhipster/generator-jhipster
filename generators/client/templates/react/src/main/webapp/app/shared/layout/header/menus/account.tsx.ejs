@@ -28,7 +28,7 @@ import { getLoginUrl } from 'app/shared/util/url-utils';
 import { NavDropdown } from '../header-components';
 
 const accountMenuItemsAuthenticated = (
-  <React.Fragment>
+  <>
   <%_ if (authenticationType !== 'oauth2') { _%>
     <DropdownItem tag={Link} to="/account/settings"><FontAwesomeIcon icon="wrench" /> Settings</DropdownItem>
     <DropdownItem tag={Link} to="/account/password"><FontAwesomeIcon icon="clock" /> Password</DropdownItem>
@@ -37,18 +37,18 @@ const accountMenuItemsAuthenticated = (
     <DropdownItem tag={Link} to="/account/sessions"><FontAwesomeIcon icon="cloud" /> Sessions</DropdownItem>
   <%_ } _%>
     <DropdownItem tag={Link} to="/logout"><FontAwesomeIcon icon="sign-out-alt" /> Logout</DropdownItem>
-  </React.Fragment>
+  </>
   );
 
 const accountMenuItems = (
-  <React.Fragment>
+  <>
   <%_ if (authenticationType !== 'oauth2') { _%>
     <DropdownItem tag={Link} to="/login"><FontAwesomeIcon icon="sign-in-alt" /> Login</DropdownItem>
     <DropdownItem tag={Link} to="/register"><FontAwesomeIcon icon="sign-in-alt" /> Register</DropdownItem>
   <%_ } else { _%>
     <DropdownItem tag="a" href={getLoginUrl()}><FontAwesomeIcon icon="sign-in-alt" /> Login</DropdownItem>
   <%_ } _%>
-  </React.Fragment>
+  </>
 );
 
 export const AccountMenu = ({ isAuthenticated = false }) => (

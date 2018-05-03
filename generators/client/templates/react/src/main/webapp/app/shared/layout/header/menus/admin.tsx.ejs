@@ -25,7 +25,7 @@ import { NavLink as Link } from 'react-router-dom';
 import { NavDropdown } from '../header-components';
 
 const adminMenuItems = (
-  <React.Fragment>
+  <>
   <%_ if (applicationType === 'gateway') { _%>
     <DropdownItem tag={Link} to="/admin/gateway"><FontAwesomeIcon icon="road" /> Gateway</DropdownItem>
   <%_ } _%>
@@ -43,7 +43,7 @@ const adminMenuItems = (
     <%_ } _%>
   {/* jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here */}
     <DropdownItem tag={Link} to="/admin/logs"><FontAwesomeIcon icon="tasks" /> Logs</DropdownItem>
-  </React.Fragment>
+  </>
 );
 
 const swaggerItem = (
