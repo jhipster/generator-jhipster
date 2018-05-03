@@ -199,27 +199,27 @@ export const getSearchEntities: ICrudSearchAction<I<%= entityReactName %>> = que
 });
 
 <%_ } _%>
-export const getEntities: ICrudGetAllAction<I<%= entityReactName %>> = (page, size, sort) =>
+export const getEntities = (<% if (pagination !== 'no') { %>page, size, sort<% } %>) =>
 <%_ if (pagination !== 'no') { _%>
 {
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
   return {
     type: ACTION_TYPES.FETCH_<%= entityActionName %>_LIST,
-    payload: axios.get(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`) as Promise<I<%= entityReactName %>>
+    payload: axios.get(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`)
   }
 }
 <%_ } else { _%>
 ({
   type: ACTION_TYPES.FETCH_<%= entityActionName %>_LIST,
-  payload: axios.get(`${apiUrl}?cacheBuster=${new Date().getTime()}`) as Promise<I<%= entityReactName %>>
+  payload: axios.get(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
 });
 <%_ } _%>
 
-export const getEntity: ICrudGetAction<I<%= entityReactName %>> = id => {
+export const getEntity = id => {
   const requestUrl = `${apiUrl}/${id}`;
   return {
     type: ACTION_TYPES.FETCH_<%= entityActionName %>,
-    payload: axios.get(requestUrl) as Promise<I<%= entityReactName %>>
+    payload: axios.get(requestUrl)
   };
 };
 
