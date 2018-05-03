@@ -43,7 +43,7 @@ function askForControllerActions() {
                     } else if (input.charAt(0) === input.charAt(0).toUpperCase()) {
                         return 'Your action name cannot start with an upper case letter';
                     } else if (jhiCore.isReservedFieldName(input)) {
-                        return 'Your action name cannot contain a Java or Angular reserved keyword';
+                        return 'Your action name cannot contain a Java, Angular or React reserved keyword';
                     }
 
                     return true;
