@@ -54,8 +54,16 @@
 # 8) files descriptors are not shared between shells.
 # 9) For logs files, always use `tee --append' and `1>>' and `2>>' !!
 #        otherwise do strange things if files (without overwrite previous logs).
+#       See examples in function createLogFile().
 # 10) Do not use `while read' or `for' for complexes loops. It losts the
 #       iterator in the loop. Use arrays.
+# 11) Do not use syntax below:
+#       Yarn test launch some processes in background:
+#       <CTRL+C> doesn't kill it immediately.
+#       yarn test || errorInBuildStopCurrentSample \
+#               "Fail during test of the Generator." \
+#               " (command 'yarn test' in `pwd`)"
+
 
 # HOW WORKS THIS SCRIPT. {{{2
 # ============
@@ -100,7 +108,8 @@
 #       * Notes for function treatEndOfBuild().
 #           * If there was an error during build, log file is renamed "errored".
 #           Otherwise it is renamed "passed"
-#           * Each node_modules takes 1.1 Go. To save disk space, at the and of
+#           * When "skipClient= false",
+#           Each node_modules takes 1.1 Go. To save disk space, at the and of
 #           generation or testandbuild I symlink
 #           ./samples/sample-name-sample/node_modules to
 #       .   /samples/node_modules_cache-sample/node_modules
@@ -248,7 +257,7 @@ errorInScript() {
 }
 
 function exitScriptWithError() {
-    1>&2 echo -e "$@" # print in stderr
+    1>&2 echo -e "\n\n$@" # print in stderr
     exit 10
 }
 
@@ -290,6 +299,20 @@ function confirmationUser() {
 # ==============================================================================
 # ==============================================================================
 # ==============================================================================
+
+function usageClean() {
+    local NODE_MODULE_SHORT_NAME='./samples/node_modules_cache-sample'
+    echo -e "\n\n\`./build-samples.sh clean'\n" \
+        "1) Before each new build, ./sample/[sample-name]-sample " \
+        "is systematically erased, contrary to " \
+        "'${NODE_MODULE_SHORT_NAME}'.\n" \
+        "2) Actually '${NODE_MODULE_SHORT_NAME} takes more " \
+        "than 1 Go\n" \
+        "3) After a build, [sample-name]-sample/node_modules is a" \
+        "symbolic link. " \
+        "Therefore, a folder [sample-name]-sample doesn't take" \
+        "lot of size (just some megabytes)\n"
+}
 
 # Executed when the first argument of the script is "usage" or when there isn't
 # argument who match.
@@ -374,7 +397,9 @@ function usage() {
         "(samples/node_modules_cache-sample) to sanitize.\n" \
     "\`$ ./build-samples.sh help' => display the previous message" \
     "\n\nNote1: We recommand to use Node.Js LTS. Check if you use it.\n" \
-    "\n\nNote2: each node_modules takes actually (version 5) 1.1 Go." \
+    "\n\nNote2: for tests with a client (ngx-*, react-*): " \
+    "each node_modules takes actually " \
+    "(version 5) 1.1 Go." \
     "A symbolic link (symlink) is done at the end of this script between" \
     "./samples/node_modules_cache-sample/node_modules and" \
     "./samples/[sample-name]-sample/node_modules to preserve disk space." \
@@ -385,20 +410,6 @@ function usage() {
     "\`yarn install' isn't perform before test to increase speed".
 
     exit 0
-}
-
-function usageClean() {
-    local NODE_MODULE_SHORT_NAME='./samples/node_modules_cache-sample'
-    echo -e "\n\n\`./build-samples.sh clean'\n" \
-        "1) Before each new build, ./sample/[sample-name]-sample " \
-        "is systematically erased, contrary to " \
-        "'${NODE_MODULE_SHORT_NAME}'.\n" \
-        "2) Actually '${NODE_MODULE_SHORT_NAME} takes more " \
-        "than 1 Go\n" \
-        "3) After a build, [sample-name]-sample/node_modules is a" \
-        "symbolic link. " \
-        "Therefore, a folder [sample-name]-sample doesn't take" \
-        "lot of size (just some megabytes)\n"
 }
 
 # CLEAN SAMPLES `./build-samples.sh/ clean' {{{1
@@ -633,8 +644,19 @@ function createLogFile() {
 # ====================
 # ====================
 
+# function isSkipClientInFileYoRcDotConf() {{{3
+# test if skipClient=true in ./samples/"$JHIPSTER"/.yo-rc.conf
+function isSkipClientInFileYoRcDotConf() {
+    pushd "$JHIPSTER_SAMPLES/""$JHIPSTER"
+    [[ $(grep -E '"skipClient":\s*true' .yo-rc.json) ]] && \
+        return 0 || \
+        return 1
+    popd
+}
+
 # function yarnLink() {{{3
 function yarnLink() {
+    cd "$APP_FOLDER"
     echoTitleBuildStep "yarn link"
     yarn init -y
     command yarn link "generator-jhipster" || \
@@ -699,10 +721,12 @@ function launchNewBash() {
     # launchScriptForOnlyOneSample() or generateNode_Modules_Cache()
     if [[ "${ERROR_IN_SAMPLE}" -eq 0 ]] ; then
         cd "${JHIPSTER_TRAVIS}"
+        set +e
         time bash "$pathOfScript" "$JHIPSTER"
         if [[ $? -ne 0 ]] ; then
             errorInBuildStopCurrentSample "'$pathOfScript' finished with error."
         fi
+        set -e
     else
         # tee print in stdout (either logfile or console) and /dev/fd/4
         # for /dev/fd/4 see function launchScriptForAllSamples()
@@ -738,15 +762,15 @@ function treatEndOfBuild() {
     # True if launched from functions generateProject() and
     # buildAndTestProject().
     if [[ -z "${generationOfNodeModulesCacheMarker+x}" ]] ; then
-        # Maybe to let time to fetch disk cache and unlock the folder.
-        # For slow computers.
         sleep 2
-        # Because node_modules takes 1.1 Go ! Too much !
-        if [[ "$JHIPSTER" != *"react"* ]] ; then
-            printCommandAndEval "rm -Rf '${APP_FOLDER}/node_modules'"
-            printCommandAndEval ln -s \
-                "${NODE_MODULES_CACHE_ANGULAR}/node_modules" \
-                "${APP_FOLDER}"
+        if [[ ! isSkipClientInFileYorcconf ]] ; then
+            # Because node_modules takes 1.1 Go ! Too much !
+            if [[ "$JHIPSTER" != *"react"* ]] ; then
+                printCommandAndEval "rm -Rf '${APP_FOLDER}/node_modules'"
+                printCommandAndEval ln -s \
+                    "${NODE_MODULES_CACHE_ANGULAR}/node_modules" \
+                    "${APP_FOLDER}"
+            fi
         fi
     else
         if [[ "${ERROR_IN_SAMPLE}" -eq 0 ]] ; then
@@ -806,14 +830,6 @@ function generateProject() {
         echo "We are at path: '`pwd`'".
         echo "Your branch is: '$BRANCH_NAME'."
         # TODO should we add yarn install?
-
-        # Do not use syntax below.
-        # Yarn test launch some processes in background:
-        # <CTRL+C> doesn't kill it immediately.
-        # Doesn't use syntax below.
-        # yarn test || errorInBuildStopCurrentSample \
-        #         "Fail during test of the Generator." \
-        #         " (command 'yarn test' in `pwd`)"
 
         set +e
         yarn test
@@ -985,6 +1001,38 @@ function retrieveVariablesInFileDotTravisSectionMatrix() {
 
 }
 
+
+# function createFolderNodeModulesAndLaunchBuild() {{{3
+function createFolderNodeModulesAndLaunchBuild() {
+    if [[ ! isSkipClientInFileYorcconf ]] ; then
+
+        generateNode_Modules_Cache
+        # Redifine APP_FOLDER, as it is unsetted in function
+        # generateNode_Modules_Cache
+        export APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
+
+        createLogFile
+
+        # TODO make for react
+        if [[ "$JHIPSTER" != *"react"* ]] ; then
+            echoTitleBuildStep \
+                "Copy '$NODE_MODULES_CACHE_ANGULAR/node_modules' to" \
+                "'$APP_FOLDER'"
+            # No `ln -s' due to
+            # https://github.com/ng-bootstrap/ng-bootstrap/issues/2283
+            # But `cp -R' works good ! ;-) ! Probably more reliable.
+            cp -R "${NODE_MODULES_CACHE_ANGULAR}/node_modules" \
+                "${APP_FOLDER}"
+        fi
+        # Even if there is already a correct symlink, we must launch it again.
+        yarnLink
+    else
+        createLogFile
+        yarnLink
+        yarn install
+    fi
+}
+
 # function launchScriptForOnlyOneSample() {{{3
 function launchScriptForOnlyOneSample() {
 
@@ -996,10 +1044,11 @@ function launchScriptForOnlyOneSample() {
     retrieveVariablesInFileDotTravisSectionMatrix "$2"
 
     # if "$workOnAllProjects" -eq 1
-    # doesItTestGenerator and generateNode_Modules_Cache are done in
+    # doesItTestGenerator is done in
     # function launchScriptForAllSamples()
     if [[ "$workOnAllProjects" -eq 0 ]] ; then
         export APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
+        local -i TESTGENERATOR=1
         doesItTestGenerator "before generate the project".
         if [[ -e "$APP_FOLDER" ]] ; then
             local confirmationFirstParameter=`echo -e  \
@@ -1014,10 +1063,6 @@ function launchScriptForOnlyOneSample() {
             unset confirmationFirstParameter confirmationFirstParameter
             unset argument
         fi
-        generateNode_Modules_Cache
-        # Redifine APP_FOLDER, as it is unsetted in function
-        # generateNode_Modules_Cache
-        export APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
     else
         # Defined "$APP_FOLDER" as explained in the MAIN section of this file.
         export APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
@@ -1033,29 +1078,14 @@ function launchScriptForOnlyOneSample() {
 
     time {
 
+        cd "${APP_FOLDER}"
+
         # Instantiate LOGFILENAME
         local beginLogfilename=`echo -e \
             "${JHIPSTER_TRAVIS}"/"${BRANCH_NAME}"."${DATEBININSCRIPT}"`
         local endofLogfilename=`echo -e "${JHIPSTER}"".local-travis.log"`
         local LOGFILENAME="${beginLogfilename}"".pending.""${endofLogfilename}"
-        # We need to have saved the original descriptors them somewhere to
-        # restore
-        createLogFile
-
-        cd "${APP_FOLDER}"
-        if [[ "$JHIPSTER" != *"react"* ]] ; then
-            echoTitleBuildStep \
-                "Copy '$NODE_MODULES_CACHE_ANGULAR/node_modules' to" \
-            "'$APP_FOLDER'"
-            # No `ln -s' due to
-            # https://github.com/ng-bootstrap/ng-bootstrap/issues/2283
-            # But `cp -R' works good ! ;-) ! Probably more reliable.
-            cp -R "${NODE_MODULES_CACHE_ANGULAR}/node_modules" \
-                "${APP_FOLDER}"
-        fi
-
-        # Even if there is already a correct symlink, we must launch it again.
-        yarnLink
+        createFolderNodeModulesAndLaunchBuild
 
         local oldPATH="${PATH}"
         export PATH="${APP_FOLDER}"/node_modules:"$PATH"
@@ -1105,7 +1135,6 @@ function launchScriptForAllSamples() {
         'exitScriptWithError "ABORTED."'
     unset confirmationFirstParameter
 
-
     read -t 1 -n 10000 discard || echo ""
     echo
     local question=`echo -e "How many processes" \
@@ -1125,7 +1154,9 @@ function launchScriptForAllSamples() {
         echo "" ;
     done
 
-    generateNode_Modules_Cache
+    # TODO
+    # Perform it first when we will could spawn several build in same time.
+    # generateNode_Modules_Cache
 
     local -a jhipsterArray
     local -i i=0
@@ -1154,7 +1185,7 @@ function launchScriptForAllSamples() {
         while [ `ps -o pid,command  \
                 | grep "build-samples.sh" \
                 | grep -v "grep" \
-                | wc -l` -gt $(($numberOfProcesses+2)) ] ; do
+                | wc -l` -gt $(($numberOfProcesses+1)) ] ; do
             # If we use `grep build-samples.sh', do not forget than grep is also
             # returned by `ps'.
             sleep "$timeSpan"
