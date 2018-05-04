@@ -6,7 +6,7 @@ import NavBarPage from '../../page-objects/navbar-page';
 <%_ if (authenticationType !== 'oauth2') { _%>
 import RegisterPage from '../../page-objects/register-page';
 import PasswordPage from '../../page-objects/password-page';
-import { SettingsPage } from '../../page-objects/settings-page';
+import SettingsPage from '../../page-objects/settings-page';
 import { getDeactivatedButtonByLogin, waitUntilDisplayed, waitUntilHidden, waitUntilTextIsPresentInElementValue, <% if (enableTranslation) { %>getToastByClassName<% } else { %>getToastByInnerText<% } %> } from '../../util/utils';
 <%_ } else { _%>
 import { waitUntilDisplayed } from '../../util/utils';
@@ -32,13 +32,18 @@ describe('Account', () => {
     browser.get('/');
     navBarPage = new NavBarPage(true);
     signInPage = navBarPage.getSignInPage();
+    signInPage.waitUntilDisplayed();
   });
 
   it('should fail to login with bad password', async () => {
     <%_ if (authenticationType !== 'oauth2') { _%>
     // Login page should appear
     expect(await signInPage.getTitle()).to.eq(loginPageTitle);
-    signInPage.autoSignInUsing('admin', 'foo');
+
+    await signInPage.setUserName('admin');
+    await signInPage.setPassword('foo');
+    await signInPage.login();
+
     // Login page should stay open when login fails
     expect(await signInPage.getTitle()).to.eq(loginPageTitle);
     <%_ } else { _%>
@@ -62,11 +67,15 @@ describe('Account', () => {
     <%_ if (authenticationType !== 'oauth2') { _%>
     // Login page should appear
     expect(await signInPage.getTitle()).to.eq(loginPageTitle);
-    waitUntilTextIsPresentInElementValue(signInPage.password, 'foo');
-    await signInPage.password.clear();
-    signInPage.setPassword('admin');
+
+    await signInPage.clearUserName();
+    await signInPage.setUserName('admin');
+    await signInPage.clearPassword();
+    await signInPage.setPassword('admin');
     await signInPage.login();
+
     signInPage.waitUntilHidden();
+
     // Login page should close when login success
     expect(await signInPage.isHidden()()).to.be.true;
     navBarPage.autoSignOut();
@@ -84,6 +93,7 @@ describe('Account', () => {
   it('should be able to sign up', async () => {
     registerPage = navBarPage.getRegisterPage();
     expect(await registerPage.getTitle()).to.eq(registerPageTitle);
+
     registerPage.autoSignUpUsing('user_test', 'usertest@jhipster.com', 'user_test');
     <%_ if (enableTranslation) { _%>
     const toast = getToastByClassName('register.messages.success');
@@ -91,25 +101,30 @@ describe('Account', () => {
     const toast = getToastByInnerText('<strong>Registration saved!</strong> Please check your email for confirmation.');
     <%_ } _%>
     waitUntilDisplayed(toast);
+
     // Success toast should appear
     expect(await toast.isPresent()).to.be.true;
   });
 
   it('should not be able to sign up if login already taken', async () => {
     await registerPage.save();
+
     <%_ if (enableTranslation) { _%>
     const toast = getToastByClassName('error.userexists');
     <%_ } else { _%>
     const toast = getToastByInnerText('Login already in use');
     <%_ } _%>
     waitUntilDisplayed(toast);
+
     // Error toast should appear
     expect(await toast.isPresent()).to.be.true;
-    await registerPage.username.clear();
   });
 
   it('should not be able to sign up if email already taken', async () => {
-    registerPage.setUserName('user_test2');
+    expect(await registerPage.getTitle()).to.eq(registerPageTitle);
+
+    await registerPage.username.clear();
+    await registerPage.setUserName('user_test2');
     await registerPage.save();
     <%_ if (enableTranslation) { _%>
     const toast = getToastByClassName('error.emailexists');
@@ -117,6 +132,7 @@ describe('Account', () => {
     const toast = getToastByInnerText('Email address already in use');
     <%_ } _%>
     waitUntilDisplayed(toast);
+
     // Error toast should appear
     expect(await toast.isPresent()).to.be.true;
   });
@@ -127,6 +143,7 @@ describe('Account', () => {
     const deactivatedButton = getDeactivatedButtonByLogin('user_test');
     await deactivatedButton.click();
     waitUntilHidden(deactivatedButton);
+
     // Deactivated button should disappear
     expect(await deactivatedButton.isPresent()).to.be.false;
     navBarPage.autoSignOut();
@@ -135,8 +152,10 @@ describe('Account', () => {
   it('should be able to log in with new registered account', async () => {
     signInPage.get();
     expect(await signInPage.getTitle()).to.eq(loginPageTitle);
+
     signInPage.autoSignInUsing('user_test', 'user_test');
     signInPage.waitUntilHidden();
+
     // Login page should close when login success
     expect(await signInPage.isHidden()()).to.be.true;
     navBarPage.autoSignOut();
@@ -146,6 +165,7 @@ describe('Account', () => {
     navBarPage.autoSignIn();
     passwordPage = navBarPage.getPasswordPage();
     expect(await passwordPage.getTitle()).to.eq(passwordPageTitle);
+
     passwordPage.autoChangePassword('wrong_current_password', 'new_password', 'new_password');
     <%_ if (enableTranslation) { _%>
     const toast = getToastByClassName('password.messages.error');
@@ -153,22 +173,28 @@ describe('Account', () => {
     const toast = getToastByInnerText('<strong>An error has occurred!</strong> The password could not be changed.');
     <%_ } _%>
     waitUntilDisplayed(toast);
+
     // Error toast should appear
     expect(await toast.isPresent()).to.be.true;
-    await passwordPage.currentPassword.clear();
-    await passwordPage.password.clear();
-    await passwordPage.confirmPassword.clear();
   });
 
   it('should be able to update password', async () => {
     expect(await passwordPage.getTitle()).to.eq(passwordPageTitle);
-    passwordPage.autoChangePassword('admin', 'newpassword', 'newpassword');
+
+    await passwordPage.clearCurrentPassword();
+    await passwordPage.setCurrentPassword('admin');
+    await passwordPage.clearNewPassword();
+    await passwordPage.setNewPassword('newpassword');
+    await passwordPage.clearConfirmPassword();
+    await passwordPage.setConfirmPassword('newpassword');
+    await passwordPage.save();
     <%_ if (enableTranslation) { _%>
     const toast = getToastByClassName('password.messages.success');
     <%_ } else { _%>
     const toast = getToastByInnerText('<strong>Password changed!</strong>');
     <%_ } _%>
     waitUntilDisplayed(toast);
+
     // Success toast should appear
     expect(await toast.isPresent()).to.be.true;
     navBarPage.autoSignOut();
@@ -176,12 +202,24 @@ describe('Account', () => {
 
   it('should be able to log in with new password', async () => {
     signInPage.get();
-    signInPage.autoSignInUsing('admin', 'newpassword');
+    expect(await signInPage.getTitle()).to.eq(loginPageTitle);
+
+    await signInPage.setUserName('admin');
+    await signInPage.setPassword('newpassword');
+    await signInPage.login();
     signInPage.waitUntilHidden();
     // expect(await signInPage.isHidden()()).to.be.true;
+
     // change back to default
     passwordPage.get();
-    passwordPage.autoChangePassword('newpassword', 'admin', 'admin');
+    expect(await passwordPage.getTitle()).to.eq(passwordPageTitle);
+
+    await passwordPage.clearCurrentPassword();
+    await passwordPage.setCurrentPassword('newpassword');
+    await passwordPage.setNewPassword('admin');
+    await passwordPage.setConfirmPassword('admin');
+    await passwordPage.save();
+
     navBarPage.autoSignOut();
   });
 
@@ -190,9 +228,10 @@ describe('Account', () => {
     signInPage.autoSignInUsing('user_test', 'user_test');
     settingsPage = navBarPage.getSettingsPage();
     expect(await settingsPage.getTitle()).to.eq(settingsPageTitle);
-    settingsPage.setFirstName('jhipster');
-    settingsPage.setLastName('retspihj');
-    settingsPage.save();
+
+    await settingsPage.setFirstName('jhipster');
+    await settingsPage.setLastName('retspihj');
+    await settingsPage.save();
     <%_ if (enableTranslation) { _%>
     const toast = getToastByClassName('settings.messages.success');
     <%_ } else { _%>
@@ -208,16 +247,17 @@ describe('Account', () => {
     navBarPage.autoSignIn();
     settingsPage.get();
     expect(await settingsPage.getTitle()).to.eq(settingsPageTitle);
-    waitUntilTextIsPresentInElementValue(settingsPage.email, 'admin@localhost');
-    await settingsPage.email.clear();
-    settingsPage.setEmail('usertest@jhipster.com');
-    settingsPage.save();
+
+    await settingsPage.clearEmail();
+    await settingsPage.setEmail('usertest@jhipster.com');
+    await settingsPage.save();
     <%_ if (enableTranslation) { _%>
     const toast = getToastByClassName('error.emailexists');
     <%_ } else { _%>
     const toast = getToastByInnerText('Email address already in use');
     <%_ } _%>
     waitUntilDisplayed(toast);
+
     // Error toast should appear
     expect(await toast.isPresent()).to.be.true;
   });

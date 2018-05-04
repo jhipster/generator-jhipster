@@ -1,7 +1,6 @@
 import { $, browser, ElementFinder<% if (authenticationType === 'oauth2') { _%>, element, by<% } %> } from 'protractor';
 
 import BasePage from './base-component';
-import { waitUntilDisplayed } from '../util/utils';
 
 const selector: ElementFinder = $('#login-page');
 export default class SignInPage extends BasePage {
@@ -19,39 +18,32 @@ export default class SignInPage extends BasePage {
 
   constructor() {
     super(selector);
+    this.selector = selector;
   }
 
   get() {
     browser.get('#/login');
-    waitUntilDisplayed(this.title);
+    this.waitUntilDisplayed();
   }
 
   getTitle() {
     return this.title.getAttribute('id');
   }
 
-  getUserName() {
-    return this.username.getAttribute('value');
-  }
-
-  setUserName(username) {
-    this.username.sendKeys(username);
+  setUserName(username: string) {
+    return this.username.sendKeys(username);
   }
 
   clearUserName() {
-    this.username.clear();
+    return this.username.clear();
   }
 
-  getPassword() {
-    return this.password.getAttribute('value');
-  }
-
-  setPassword(password) {
-    this.password.sendKeys(password);
+  setPassword(password: string) {
+    return this.password.sendKeys(password);
   }
 
   clearPassword() {
-    this.password.clear();
+    return this.password.clear();
   }
 
   <%_ if (authenticationType !== 'oauth2') { _%>
@@ -70,14 +62,7 @@ export default class SignInPage extends BasePage {
   }
   <%_ } _%>
 
-  autoSignOut() {
-    browser.get('#/logout');
-  }
-
-  clearForm() {
-    this.clearUserName();
-    this.clearPassword();
-  }
+  autoSignOut = () => browser.get('#/logout');
 
   login() {
     return this.loginButton.click();

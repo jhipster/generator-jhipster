@@ -1,11 +1,12 @@
 import { $, ElementFinder } from 'protractor';
+import { promise } from 'selenium-webdriver';
 
 import BasePage from './base-component';
 import SignInPage from './signin-page';
 <%_ if (authenticationType !== 'oauth2') { _%>
 import RegisterPage from './register-page';
 import PasswordPage from './password-page';
-import { SettingsPage } from './settings-page';
+import SettingsPage from './settings-page';
 <%_ } _%>
 
 const selector: ElementFinder = $('#app-header');

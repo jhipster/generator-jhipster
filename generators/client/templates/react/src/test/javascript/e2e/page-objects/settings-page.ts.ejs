@@ -1,10 +1,10 @@
 import { $, browser, ElementFinder } from 'protractor';
+import { promise } from 'selenium-webdriver';
 
 import BasePage from './base-component';
-import { waitUntilDisplayed } from '../util/utils';
 
 const selector: ElementFinder = $('#settings-form');
-export class SettingsPage extends BasePage {
+export default class SettingsPage extends BasePage {
   selector: ElementFinder;
   firstName: ElementFinder = this.selector.$('#firstName');
   lastName: ElementFinder = this.selector.$('#lastName');
@@ -14,6 +14,7 @@ export class SettingsPage extends BasePage {
 
   constructor() {
     super(selector);
+    this.selector = selector;
   }
 
   get() {
@@ -26,40 +27,19 @@ export class SettingsPage extends BasePage {
   }
 
   setFirstName(firstName) {
-    this.firstName.sendKeys(firstName);
-  }
-
-  getFirstName() {
-    return this.firstName.getAttribute('value');
-  }
-
-  clearFirstName() {
-    this.firstName.clear();
+    return this.firstName.sendKeys(firstName);
   }
 
   setLastName(lastName) {
-    this.lastName.sendKeys(lastName);
-  }
-
-  getLastName() {
-    return this.lastName.getAttribute('value');
-  }
-
-  clearLastName() {
-    this.lastName.clear();
+    return this.lastName.sendKeys(lastName);
   }
 
   setEmail(email) {
-    this.clearEmail();
-    this.email.sendKeys(email);
-  }
-
-  getEmail() {
-    return this.email.getAttribute('value');
+    return this.email.sendKeys(email);
   }
 
   clearEmail() {
-    this.email.clear();
+    return this.email.clear();
   }
 
   save() {
